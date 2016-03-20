@@ -626,6 +626,8 @@ var Tickets = {
 		//Fetching all groups, assignees and appending them to select dropdown
 		fillSelect('ticket-assignee', '/core/api/tickets/groups', '', function(collection){
 
+			Tickets.groupsList = collection.toJSON();
+			
 			$('#ticket-assignee', el).html(getTemplate('select-assignee-ticket-dropdown', collection.toJSON()));
 
 			var selectedAssignee = App_Ticket_Module.ticketView.model.toJSON().assigneeID;
@@ -637,7 +639,8 @@ var Tickets = {
       		 	$('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[data-assignee-id='"+selectedAssignee+"']").attr('selected', 'selected');
       		
 			// If current user not 
-      		if(selectedAssignee != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(selectedGroup, Tickets.groupsList))
+      		if(selectedAssignee != CURRENT_DOMAIN_USER.id 
+      			&& Tickets.isCurrentUserExistInGroup(selectedGroup, Tickets.groupsList))
       			$('.assign-to-me', el).show();
       		else
 				$('.assign-to-me', el).hide();
@@ -763,21 +766,20 @@ var Tickets = {
 
 	isCurrentUserExistInGroup : function(selectedGroupId, groupsList){
 
-			var isExist = false;
+		var isExist = false;
 
-			$.each(groupsList, function(index, data){
+		$.each(groupsList, function(index, data){
 
-				$.each(data.group_users, function(index2, userData){
+			$.each(data.group_users, function(index2, userData){
 
-				if(data.id == selectedGroupId && userData.id == CURRENT_DOMAIN_USER.id)
-					isExist = true;
+			if(data.id == selectedGroupId && userData.id == CURRENT_DOMAIN_USER.id)
+				isExist = true;
 
-				});
-				
 			});
+			
+		});
 
-			return isExist;
-
+		return isExist;
 	},
 
 	// changeTicketType: function(event){

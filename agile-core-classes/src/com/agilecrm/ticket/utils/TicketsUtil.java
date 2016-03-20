@@ -969,11 +969,10 @@ public class TicketsUtil
 					new ArrayList<String>(), plainText, Status.NEW, Type.PROBLEM, Priority.MEDIUM, Source.EMAIL,
 					CreatedBy.CUSTOMER, false, "[142.152.23.23]", new ArrayList<Key<TicketLabels>>());
 
-			String htmlText = plainText.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
-
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, group.id, null, CREATED_BY.REQUESTER, "Customer",
-					"customer@domain.com", plainText, htmlText, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
+					"customer@domain.com", plainText, TicketNotesUtil.convertNewLinesToBreakTags(plainText),
+					NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
 			notes.save();
 		}
 		catch (Exception e)

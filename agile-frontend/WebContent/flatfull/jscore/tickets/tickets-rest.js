@@ -231,10 +231,11 @@ var Tickets_Rest={
 			var modelData = data.toJSON();
 
 			try{
-				if(modelData.assigneeID != CURRENT_DOMAIN_USER.id && Tickets.isCurrentUserExistInGroup(groupId, Tickets.groupsList))
-				$('.assign-to-me').show();
-			else
-				$('.assign-to-me').hide();
+				if(modelData.assigneeID != CURRENT_DOMAIN_USER.id 
+					&& Tickets.isCurrentUserExistInGroup(groupId, Tickets.groupsList))
+					$('.assign-to-me').show();
+				else
+					$('.assign-to-me').hide();
 			}
 			catch(e){
 				console.log(e);
