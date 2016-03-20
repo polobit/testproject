@@ -52,6 +52,8 @@ var Tickets_Notes = {
 
 			success : function(model) {
 
+				enable_save_button($save_btn);
+				
 				var notes_json = model.toJSON();
 
 				// Remove draft message from local staorage
@@ -81,25 +83,28 @@ var Tickets_Notes = {
                 }
 	            if( App_Ticket_Module.ticketsCollection){
 
-	                var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+	            	var ticket_model = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
 
-					//Update model in collection
-					if(notes_json.note_type != 'PRIVATE'){
-	                    
-						var current_date = new Date().getTime();
-	                    
-	                    json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
-	   					json.last_updated_time = current_date;
-						json.closed_time= (is_ticket_closed) ? current_date : '';
-						json.last_reply_text = notes_json.plain_text;
-						json.last_updated_by = 'AGENT';
-						json.user_replies_count = notes_json.user_replies_count;
-					    json.assigneeID = model.attributes.assignee_id;
+	            	if(ticket_model){
+	                
+						//Update model in collection
+						if(notes_json.note_type != 'PRIVATE'){
+		                    
+							var current_date = new Date().getTime();
+		                    
+		                    json.status = (is_ticket_closed) ? 'CLOSED' : 'PENDING'; 
+		   					json.last_updated_time = current_date;
+							json.closed_time= (is_ticket_closed) ? current_date : '';
+							json.last_reply_text = notes_json.plain_text;
+							json.last_updated_by = 'AGENT';
+							json.user_replies_count = notes_json.user_replies_count;
+						    json.assigneeID = model.attributes.assignee_id;
+						}
+
+						ticket_model.set(json, {
+							silent : true
+						});
 					}
-
-					ticket_model.set(json, {
-						silent : true
-					});
 
 					var next_ticket_url = $(".navigation .next-ticket").attr("href");
 
@@ -108,7 +113,6 @@ var Tickets_Notes = {
 							trigger : true
 						});
                     else{
-                    	
                     	Tickets.renderExistingCollection();
 			        } 
 
