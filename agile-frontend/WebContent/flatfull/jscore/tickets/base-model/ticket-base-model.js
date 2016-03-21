@@ -107,7 +107,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 			$('#ticket-assignee option:selected').attr('selected', false);
 			
        		$('#ticket-assignee').find("optgroup[data-group-id='" + groupId + "']")
-       			.find("option[data-assignee-id='" + assigneeId + "']").attr('selected', 'selected');
+       			.find("option[data-assignee-id='" + assigneeId + "']").prop("selected",true);
           	
           	$('.assign-to-me').hide();
 		});
