@@ -307,7 +307,7 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("ticket") == 0)
 	{
-		template_relative_urls.push("1-tickets.js");
+		template_relative_urls.push("tickets.js");
 	}
 	if (templateName.indexOf("billing-settings") == 0 || templateName.indexOf("creditcard-update") == 0)
 	{
