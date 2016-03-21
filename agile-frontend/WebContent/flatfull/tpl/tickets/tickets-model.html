@@ -36,7 +36,7 @@
               {{#if contact.properties}}
                 {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
               {{else}}
-                {{requester_email}}
+                {{requester_name}}
               {{/if}}
             </a>
           </td>
@@ -218,7 +218,7 @@
       {{#if contact.properties}}
         {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
       {{else}}
-        {{requester_email}}
+        {{requester_name}}
       {{/if}}
     </td>
   {{/is_column_selected}}
