@@ -13,6 +13,8 @@
 <%@page import="com.agilecrm.user.util.OnlineCalendarUtil"%>
 <%@page import="com.agilecrm.user.OnlineCalendarPrefs"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
+<%@page import="com.agilecrm.projectedpojos.DomainUserPartial"%>
+<%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.AgileUser"%>
@@ -74,7 +76,7 @@ if(document!=null)
 	 sContactName=contact.first_name + " " + contact.last_name;
 	
 
-	DomainUser domainUser =document.getOwner();
+	DomainUserPartial domainUser =document.getOwner();
 	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
 
 	UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
@@ -82,7 +84,7 @@ if(document!=null)
 	user_name = domainUser.name;
 	user_id = domainUser.id;
 	agile_user_id = agileUser.id;
-	domain_name = domainUser.domain;
+	
 
 }
 

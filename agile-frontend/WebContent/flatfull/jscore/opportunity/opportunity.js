@@ -767,7 +767,7 @@ function populate_deal_products(el, value,form_id){
 					objButtonSpan.text(sText);
 					objButtonInput.val(sText);	
 					//$(".discounttype-select","#opportunityForm").trigger("click");
-					me.toggleDiscountButton();
+					me.toggleDiscountButton(e);
 					me.calculateGrandTotal();
 				}
 				this.processProductsClick=function(e)
@@ -950,11 +950,16 @@ function ValidateDealDiscountAmt(_form_id)
 				}
 				else
 				{
-					var iTotal=0
-					if($("input[name='currency_conversion_value']",$(_form_id)).length)
-						iTotal=$("input[name='currency_conversion_value']",$(_form_id)).val(iTotal);
-					else
-						iTotal=$("input[name='expected_value']",$(_form_id)).val();	
+					var iTotal=0;
+					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
+					{
+						var iQtyPriceTotal= parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("qty")) *parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("price"))
+						App_Deal_Details.deal_products_collection_view.collection.models[key].set("total",iQtyPriceTotal)
+						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
+						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
+							iTotal+=iQtyPriceTotal;		
+					}
+
 					if(parseFloat(iDiscountValue)>parseFloat(iTotal))
 					{
 						$(".calculation-error-status",_form_id).html("Discount Value cannot be greater than Total Products Value")

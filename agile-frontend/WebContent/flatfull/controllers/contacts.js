@@ -1354,10 +1354,10 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 		}	
 	}
 	
-		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
+//		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
 		
 		// Call setupTypeAhead to get contacts
-		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+//		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
 
 		$("#content").html('<div id="send-email-listener-container"></div>');
@@ -1390,7 +1390,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 						$('#emailForm').find('#attachment_id').find("#attachment_fname").removeClass("text-ellipsis")
 						$('#emailForm').find('#attachment_id').find("#attachment_fname").attr("href","#documents/" + model.id)
 						$('#emailForm').find('#attachment_id').find("#attachment_fname").css( 'cursor', 'pointer' );
-				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<div title=' + model.name + ' class="line-clamp activity-tag">' + model.name +'</div>');
+				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<div title=' + model.name + ' class="line-clamp activity-tag" style="display:inline;">' + model.name +'</div>');
 				    	$('#emailForm').find(".attachment-document-select").css('display','none');
 				    	$('#emailForm').find('#eattachment_key').attr('name',"edoc_key");
 				    	$('#emailForm').find('#eattachment_key').attr('value',model.id);
@@ -1402,11 +1402,40 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 				    	var first_name ="",last_name="";
 				    	if(model.contacts && model.contacts.length>0)
 				    	{
+
+				    		var url = '/core/api/contacts/'+ model.contacts[0].id;
+							$.ajax({
+								url : url,
+								type: 'GET',
+								dataType: 'json',
+								success: function(data){
+									model_json=data;
+									var email=getPropertyValue(model_json.properties, "email");
+									var first_name = getPropertyValue(model_json.properties, "first_name");
+									var last_name = getPropertyValue(model_json.properties, "last_name");
+									var name="";
+									if (first_name || last_name)
+									{
+										name = first_name ? first_name : "";
+										name = (name + " " + (last_name ? last_name : "")).trim();
+									}
+									// If already appended with name, skip
+									if(email && email.indexOf('<') == -1 && email.indexOf('>') == -1)
+										email = name + ' <' + email.trim() + '>';
+
+									$('#to', el)
+											.closest("div.controls")
+											.find(".tags")
+											.append(
+													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
+												}
+							});
 					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
 					    	$("#doc_type","#emailForm").val(model.doc_type);
+					    	/*
 			               	first_name = getPropertyValue(model.contacts[0].properties, "first_name");
 							last_name = getPropertyValue(model.contacts[0].properties, "last_name");
-							id=getPropertyValue(model.contacts[0].properties, "email");
+							id=getPropertyValue(model.contacts[0].properties, "email");*/
 						}
 						if (first_name || last_name)
 						{
@@ -1439,7 +1468,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 					var data = id;
 
 					// If already appended with name, skip
-					if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+					if(id && id.indexOf('<') == -1 && id.indexOf('>') == -1)
 						data = name + ' <' + id.trim() + '>';
 
 					$('#to', el)
@@ -1448,7 +1477,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 							.append(
 									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
 				}
-				else
+				else if(!id_type)
 					$("#emailForm", el).find('input[name="to"]').val(id);
 			}
 			else
