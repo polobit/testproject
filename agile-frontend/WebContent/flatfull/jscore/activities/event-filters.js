@@ -663,10 +663,10 @@ function showLoadingOnCalendar(loading)
 		$("#user_calendars *").addClass('disable-cp');
 		$("#user_cal_sub *").addClass('disable-cp');
 
-		$('.fc-header-left').append(
+		$('.fc-header-left','#calendar_event').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
-		$('.fc-header-left').show();
+		$('.fc-header-left','#calendar_event').show();
 	}
 	else if(popLoading() <= 0)
 	{

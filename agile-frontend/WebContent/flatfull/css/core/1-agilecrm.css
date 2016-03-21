@@ -2247,6 +2247,7 @@ li.error {
 	border-radius: 10px;
 }
 
+
 .list-bottom {
 /*	-webkit-border-radius: 0 0 3px 3px;
 	-moz-border-radius: 0 0 3px 3px;
@@ -3083,6 +3084,7 @@ table.hide-head-checkbox th label.i-checks {
       visibility: hidden;
 }
 
+
 .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th,.table-striped>tbody>tr:hover>td{
   background-color: #f9f9f9 !important;
   
@@ -3367,6 +3369,20 @@ table.hide-head-checkbox th label.i-checks {
  .modal-cbx-m-t {
     margin-top: -9px;
 }
+#portlets::-webkit-scrollbar {
+    width: 5px;
+}
+#portlets::-webkit-scrollbar-thumb {
+	background: #999;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.route_Portlet {
+	padding-left: 20px;
+	padding-right : 20px;
+}
 
 #dashboard-video
 {
@@ -3510,4 +3526,50 @@ text-align:left;
 {
 	margin-top: 6px;
 	margin-bottom: 6px;
+}
+#send-cancellation #cancel_subscription_modal{
+	width: 70%;
+	margin: 0px auto;
+}
+#send-cancellation #account_cancel_options .wrapper{
+	border: 1px solid #ccc;
+}
+#send-cancellation #account_cancel_options .wrapper .bg-box{
+	font-size: 70px;
+	color: white;
+	height: 127px;
+}
+#send-cancellation .display-center{
+	display: table;
+    width: 90%;
+    margin: 0 auto;
+}
+#account_cancel_chat a:hover{
+	background-color: #50c7a7;
+	border-color: #50c7a7;
+	color: white !important;
+}
+#account_cancel_support a:hover{
+	background-color: #5fa2dd;
+	border-color: #5fa2dd;
+	color: white !important;
+}
+#account_pause a:hover{
+	background-color: #f76c51;
+	border-color: #f76c51;
+	color: white !important;
+}
+
+.pause-count-control {
+    display: none;
+    position: absolute;
+    top: 0px;
+    font-size: 11px;
+    left: -2px;
+}
+#pause_settings:hover .pause-count-control{
+	display: block!important;
+}
+#pause_settings:hover #month_id{
+	margin-left: 10px!important;
 }

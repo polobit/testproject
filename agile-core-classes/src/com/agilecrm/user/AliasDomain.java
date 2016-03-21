@@ -44,6 +44,13 @@ public class AliasDomain {
 
 	}
 	
+	/**
+	 * 	getter method
+	 */
+	public List<String> getAlias(){
+		return this.alias;
+	}
+	
 	public AliasDomain(String domain, List<String> alias)
 	{
 		this.domain = domain;

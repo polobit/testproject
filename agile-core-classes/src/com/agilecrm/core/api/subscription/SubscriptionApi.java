@@ -26,6 +26,7 @@ import net.sf.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.limits.plan.FreePlanLimits;
@@ -39,6 +40,7 @@ import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -518,5 +520,34 @@ public class SubscriptionApi {
 		}
 	}
 	
+	/**
+	 * Pause or resume subscriptions by adding trial
+	 * @param period in months
+	 * as {@link Integer} 
+	 */
+	@Path("/pauseOrResumeSubscriptions")
+	@POST
+	public void pauseOrResumeSubscription(@QueryParam("period") Integer period)
+	{
+		try{
+			Subscription subscription = SubscriptionUtil.getSubscription();
+			Long trialEnd = 0L;
+			if(period == 0){
+				subscription.addTrial(trialEnd);
+				System.out.println("Added trial to::"+trialEnd);
+			}
+			else{
+				trialEnd = System.currentTimeMillis() / 1000 + period * 2592000;
+				subscription.addTrial(trialEnd);
+				subscription.status = Subscription.BillingStatus.BILLING_PAUSED;
+				System.out.println("Added trial to::"+trialEnd+" and set subscription status to ACCOUNT_PAUSED");
+				subscription.save();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+				    .build());
+		}
+	}
 
 }

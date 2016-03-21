@@ -23,6 +23,7 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.portlets.Portlet;
+import com.agilecrm.portlets.Portlet.PortletRoute;
 import com.agilecrm.portlets.util.PortletUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -61,9 +62,9 @@ public class PortletsAPI {
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Portlet> getPortlets()throws Exception{
+	public List<Portlet> getPortlets(@QueryParam("route") PortletRoute route)throws Exception{
 		// Returns list of portlets saved by current user
-		return PortletUtil.getAddedPortletsForCurrentUser();
+		return PortletUtil.getAddedPortletsForCurrentUser(route);
 	}
 	/**
 	 * Adding of new portlet
@@ -79,12 +80,16 @@ public class PortletsAPI {
 	public Portlet createPortlet(Portlet portlet) {
 		try {
 			if(portlet!=null){	
+				/*if(portlet.portlet_route.equals(Portlet.PortletRoute.DashBoard))
+					portlet.portlet_route=null;*/
+				//for(Portlet portlet:portlets)
 				portlet.save();
 				
 				if(portlet.prefs!=null){
 					JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
 					portlet.settings=json;
 				}
+				//}
 				//PortletUtil.setPortletContent(portlet);
 			}
 		} catch (Exception e) {
@@ -105,17 +110,33 @@ public class PortletsAPI {
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Portlet createPortletforAll(Portlet portlet) {
 		try {
-			Portlet p=null;
+			List<Portlet> p=null;
+			
 			if(portlet!=null){
 				DomainUserUtil du=new DomainUserUtil();
 				List<DomainUser> domainusers=du.getUsers();
 				for(DomainUser domainuser:domainusers)	{
-					if(portlet.name.equalsIgnoreCase("Mini Calendar"))	{
-					  p=PortletUtil.getPortlet(portlet.name,AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id).id);
+					boolean flag=true;
+					/*if(portlet.name.equalsIgnoreCase("Mini Calendar"))	{
+						AgileUser aUser = AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
+						if(aUser!=null)
+					  p=PortletUtil.getPortlet(portlet.name,aUser.id);
 					  if(p==null)
 						  portlet.saveAll(domainuser);
+					  else{
+						  for(Portlet po:p){
+						  if(po.portlet_route==portlet.portlet_route)
+						  {
+							  flag=false;
+							  break;
+						  }
+						  }
+						  if(flag)
+							  portlet.saveAll(domainuser);  
+						  
+					  }
 					  continue;
-					}
+					}*/
 					portlet.saveAll(domainuser);
 				}
 				if(portlet.prefs!=null){
