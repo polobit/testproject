@@ -22,6 +22,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -270,7 +271,7 @@ public class EventUtil
     @Deprecated
     public static void sendIcal(Event event)
     {
-	List<Contact> contacts = event.getContacts();
+	List<Contact> contacts = event.relatedContacts();
 
 	String subject = "Invitation:" + event.title;
 
@@ -580,7 +581,7 @@ public class EventUtil
     public static void sendMailToWebEventAttendee(Event event, String cancel_reason)
     {
 
-	Contact contact = event.getContacts().get(0);
+	Contact contact = event.relatedContacts().get(0);
 	String contactEmail = contact.getContactFieldValue("EMAIL");
 	String first_name = contact.getContactFieldValue("FIRST_NAME");
 	String last_name = contact.getContactFieldValue("LAST_NAME");
@@ -609,7 +610,7 @@ public class EventUtil
 
 	try
 	{
-	    DomainUser domain_user = event.getOwner();
+	    DomainUser domain_user = event.eventOwner();
 
 	    String domain_user_name = domain_user.name;
 	    String calendar_url = domain_user.getCalendarURL();
@@ -623,7 +624,7 @@ public class EventUtil
 		    event.start * 1000, new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a (z)"));
 	    String event_title = event.title;
 	    Long duration = (event.end - event.start) / 60;
-	    List<Contact> contacts = event.getContacts();
+	    List<Contact> contacts = event.relatedContacts();
 	    String client_name = contacts.get(0).getContactFieldValue("FIRST_NAME");
 	    if (StringUtils.isNotEmpty(contacts.get(0).getContactFieldValue("LAST_NAME")))
 	    {

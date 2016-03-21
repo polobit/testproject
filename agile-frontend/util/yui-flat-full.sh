@@ -20,7 +20,6 @@ cat ../WebContent/tpl/min/precompiled/flatfull/socialsuite.js >  ../WebContent/t
 cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/tpl/min/precompiled/flatfull/socialsuite-all.js
 #rm ../WebContent/tpl/min/precompiled/flatfull/temp.js
 
-
 ## Webrules into templates
 #cat ../WebContent/flatfull/jscore/web-rules/*.js > ../WebContent/jscore/min/flatfull/web-rules-min.js
 #java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/web-rules-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/web-rules-min.js

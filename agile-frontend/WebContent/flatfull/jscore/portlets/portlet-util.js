@@ -1106,12 +1106,8 @@ var portlet_utility = {
 			break;
 		}
 		case "Mini Calendar": {
-			head
-					.js(
-							LIB_PATH + 'lib/jquery-ui.min.js',
-							'lib/fullcalendar.min.js',
-							function() {
-								$('.portlet_body_calendar', $('#portlet-res'))
+
+								$('.portlet_body_calendar', $("#ui-id-"+column_position+"-"+row_position))
 										.attr(
 												'id',
 												'p-body-calendar'
@@ -1130,7 +1126,14 @@ var portlet_utility = {
 																	getRandomLoadingImg());
 													setPortletContentHeight(base_model);
 													App_Portlets.refetchEvents = false;
-													minicalendar($(this));
+													App_Portlets.eventCalendar=$(this);
+													var that=$(this);
+																head
+					.js(
+							LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 
+							'lib/fullcalendar.min.js',
+							function() {
+													minicalendar(that);
 												});
 							});
 			break;
@@ -1836,7 +1839,7 @@ var portlet_utility = {
 				var options = '';
 				$.ajax({
 					type : 'GET',
-					url : '/core/api/users',
+					url : '/core/api/users/partial',
 					dataType : 'json',
 					success : function(data) {
 						$.each(data, function(index, domainUser) {
@@ -1868,7 +1871,7 @@ var portlet_utility = {
 				var options = '';
 				$.ajax({
 					type : 'GET',
-					url : '/core/api/users',
+					url : '/core/api/users/partial',
 					dataType : 'json',
 					success : function(data) {
 						$.each(data, function(index, domainUser) {
@@ -2255,11 +2258,11 @@ var portlet_utility = {
 				base_model.get("size_y"), base_model.get("column_position"),
 				base_model.get("row_position"));
 
-		gridster.set_dom_grid_height();
+		/*gridster.set_dom_grid_height();
 		window
 				.scrollTo(
 						0,
-						((parseInt($('#' + portletId).attr('data-row')) - 1) * 200) + 5);
+						((parseInt($('#' + portletId).attr('data-row')) - 1) * 200) + 5);*/
 
 	},
 
@@ -2329,7 +2332,7 @@ var portlet_utility = {
 		var options = '<option value="">All</option>';
 		$.ajax({
 			type : 'GET',
-			url : '/core/api/users',
+			url : '/core/api/users/partial',
 			dataType : 'json',
 			success : function(data) {
 				$.each(data, function(index, domainUser) {

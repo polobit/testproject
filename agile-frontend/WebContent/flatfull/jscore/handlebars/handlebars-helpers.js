@@ -1665,8 +1665,7 @@ $(function()
 
 	Handlebars.registerHelper('safe_string', function(data)
 	{
-		console.log("data = " + data);
-		if (data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
+		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
 				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 		
 		data = data.replace(/\n/, "<br/>");
@@ -3720,12 +3719,34 @@ $(function()
 
 	});
 
+	Handlebars.registerHelper('is_property_custom_field', function(field_name, options)
+	{
+		if(field_name.indexOf("CUSTOM_") != -1)
+		        return options.fn(this);
+		else
+		return options.inverse(this);
+
+	});
+
+	Handlebars.registerHelper('is_property_custom_field_date_type', function(custom_fields, properties, field_name, options)
+	{
+		if(field_name){
+			field_name = field_name.split("CUSTOM_")[1]; 
+		}
+        var property = getProperty(properties, field_name);
+        
+        if(isDateCustomField(custom_fields,property))
+        	return options.fn(property);
+		else
+			return options.inverse(property);
+	});
+
 	Handlebars.registerHelper('is_link', function(value, options)
 	{
 
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
-		if (value.search(exp) != -1)
+		if (value && value.search(exp) != -1)
 			return options.fn(this);
 		else
 			return options.inverse(this);
@@ -7142,8 +7163,7 @@ Handlebars.registerHelper('multiple_Property_Element_List', function(name, prope
 				return options.fn(matching_properties_list);
 		});
 
-Handlebars.registerHelper('getDomainFromURL', function(options) {
-	var domain = getDomainFromURL();
-	return domain;
+Handlebars.registerHelper('getAliasFromArry', function(array, options) {
+	return array[0];
 });
 

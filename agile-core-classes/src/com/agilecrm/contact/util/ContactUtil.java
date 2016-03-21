@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -32,6 +33,10 @@ import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -50,7 +55,13 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.SearchException;
@@ -59,6 +70,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>ContactUtil</code> is a utility class to process the data of contact
@@ -77,6 +89,9 @@ public class ContactUtil
 {
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+    
+    // Partial Dao
+    private static PartialDAO<ContactPartial> partialDAO = new PartialDAO<ContactPartial>(ContactPartial.class);
 
     /**
      * Gets the number of contacts (count) present in the database with given
@@ -1361,7 +1376,7 @@ public class ContactUtil
 	if (contact == null)
 	    return null;
 
-	DomainUser contactOwner = contact.getOwner();
+	DomainUser contactOwner = contact.getContactOwner();
 
 	// if contactOwner is null, return
 	if (contactOwner == null)
@@ -1856,4 +1871,34 @@ public class ContactUtil
 	return image_email;
     }
     
+    /**
+     * Gets a partial opportunity based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<ContactPartial> getPartialContacts(List<Key<Contact>> ids_list)
+    {
+    	List<ContactPartial> list = new ArrayList<ContactPartial>();
+    	if(ids_list == null || ids_list.size() == 0)
+    		 return list;
+		try
+		{
+			List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
+			if(keys.size() == 0)
+				return list;
+			
+			Map map = new HashMap();
+			map.put("__key__ IN", keys);
+			
+			return partialDAO.listByProperty(map);
+	    	
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return list;
+		}
+    }
 }

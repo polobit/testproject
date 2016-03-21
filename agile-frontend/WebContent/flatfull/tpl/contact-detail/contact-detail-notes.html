@@ -43,8 +43,8 @@
 <div  class="activity block pos-rlt">
 <div class="thumb-xs pull-left m-r-sm b-light b avatar">
 {{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img r r-2x"  alt="" src="{{ownerPic}}" >
+			{{#if domainOwner.pic}}
+				<img class="user-img r r-2x"  alt="" src="{{domainOwner.pic}}" >
 			{{else}}
 				<img class="user-img r r-2x"  alt="" src="{{defaultGravatarurl 40}}" >
 			{{/if}}
@@ -112,7 +112,7 @@
        	{{/each}}
 	
 </div>
-<div align="right" class="pos-abs pos-r-0 pos-b-0">
+<div align="right" class="pos-abs pos-r-0 pos-b-0" style="right:19px;">
 {{#if callType}}
 
 	{{#if_equals callType ""}}

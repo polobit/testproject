@@ -103,7 +103,7 @@ var ContactsRouter = Backbone.Router.extend({
 					$("#chrome-extension-button").removeClass('hide');
 				}
 
-				loadPortlets(el);
+				loadPortlets('DashBoard',el);
 
 		}, "#content");
 
@@ -327,6 +327,7 @@ var ContactsRouter = Backbone.Router.extend({
 					setupViews(cel);
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
+					loadPortlets('Contacts',cel);
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
 						// Call to get Count 
@@ -882,6 +883,9 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		console.log("customView");
 
+		// Load contact detail js file
+		tpl_directory.loadTemplates(["contact-detail"], function () {});
+
 		SELECT_ALL = false;
 		App_Contacts.tag_id = tag_id;
 
@@ -944,6 +948,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
+			//loadPortlets('Contacts',el);
 			if(agile_is_mobile_browser()) {
 			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 			}
@@ -961,6 +966,8 @@ var ContactsRouter = Backbone.Router.extend({
 			setupViews(el, view_data.name);
 			setupContactFilterList(el, tag_id);
 			setUpContactView(el);
+			//loadPortlets('Contacts',el);
+
 
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
@@ -1029,6 +1036,7 @@ var ContactsRouter = Backbone.Router.extend({
 				setUpContactView(el);
 
 				abortCountQueryCall();
+				
 
 				if(is_lhs_filter) {
 
@@ -1047,6 +1055,7 @@ var ContactsRouter = Backbone.Router.extend({
 							count_message = "<small> (" + count + " Total) </small>";
 						$('#contacts-count').html(count_message);
 					}
+
 					
 				} else {	
 
@@ -1056,6 +1065,7 @@ var ContactsRouter = Backbone.Router.extend({
 					}
 
 					setupLhsFilters(el);
+					loadPortlets('Contacts',el);
 				}
 
 				if(agile_is_mobile_browser()) {
@@ -1105,6 +1115,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(this.contact_custom_view.el);
 			contactFiltersListeners();
+			//loadPortlets('Contacts',el);
 		} else {
 			$('#contacts-listener-container').find('.contacts-inner-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
@@ -1114,10 +1125,9 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				$("#select_grid_contacts1").attr("checked", false);
 			}
-
 			CONTACTS_HARD_RELOAD = true;
 		}
-		
+			
 		// Activate Contacts Navbar tab
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");

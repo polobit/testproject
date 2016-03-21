@@ -17,6 +17,7 @@ import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.user.AgileUser;
@@ -248,42 +249,6 @@ public class ContactFilter extends SearchFilter implements Serializable, Compara
     }
 
     /**
-     * Gets picture of owner who created filter. Owner picture is retrieved from
-     * user prefs of domain user who created filter and is used to display owner
-     * picture in filters list.
-     * 
-     * @return picture of owner.
-     * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key.
-     */
-    @XmlElement(name = "ownerPic")
-    public String getOwnerPic() throws Exception
-    {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    if (owner != null)
-		agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner.getId());
-
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-
-	    if (userprefs != null)
-		return userprefs.pic;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-
-	}
-
-	return "";
-    }
-
-    /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
      * @return Domain user object.
@@ -291,14 +256,14 @@ public class ContactFilter extends SearchFilter implements Serializable, Compara
      *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "filterOwner")
-    public DomainUser getFilterOwner() throws Exception
+    public DomainUserPartial getFilterOwner() throws Exception
     {
 	if (owner != null)
 	{
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(owner.getId());
+		return DomainUserUtil.getPartialDomainUser(owner.getId());
 	    }
 	    catch (Exception e)
 	    {

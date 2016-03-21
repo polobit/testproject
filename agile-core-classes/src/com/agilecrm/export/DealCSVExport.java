@@ -91,7 +91,7 @@ public class DealCSVExport
 	    }
 
 	    String relatedTo = "";
-	    List<Contact> relatedContacts = deal.getContacts();
+	    List<Contact> relatedContacts = deal.relatedContacts();
 	    for (Contact contact : relatedContacts)
 	    {
 		relatedTo += getContactFieldValue("email", contact) + ",";

@@ -34,8 +34,8 @@
 
 <td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
     <div class="thumb-sm agile-img m-r-sm">
-	{{#if ownerPic}}
-        	<img class="img-inital r r-2x" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{#if eventOwner.pic}}
+        	<img class="img-inital r r-2x" src="{{eventOwner.pic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
 	{{else}}
 			<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
 	{{/if}}
@@ -100,8 +100,8 @@
 <script id="events-model-template" type="text/html">
  <td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
  <div class="thumb-sm agile-img m-r-sm">
-	{{#if ownerPic}}
-        	<img class="img-inital r r-2x" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{#if eventOwner.pic}}
+        	<img class="img-inital r r-2x" src="{{eventOwner.pic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
 	{{else}}
 			<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
 	{{/if}}

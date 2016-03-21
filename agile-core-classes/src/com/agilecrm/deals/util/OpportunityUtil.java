@@ -33,12 +33,17 @@ import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -50,6 +55,13 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Document.Builder;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -57,6 +69,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>OpportunityUtil</code> is the utility class to fetch opportunities with
@@ -79,6 +92,11 @@ public class OpportunityUtil
      * ObjectifyDao of Opportunity.
      */
     private static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
+    
+    /**
+     * ObjectifyDao of OpportunityPartial.
+     */
+    private static PartialDAO<OpportunityPartial> partialDAO = new PartialDAO<OpportunityPartial>(OpportunityPartial.class);
 
     /**
      * Gets opportunity based on id.
@@ -1944,7 +1962,6 @@ public class OpportunityUtil
 			    .filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
 			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    ;
 		    count += dao.getCount(q);
 		}
 		else
@@ -1953,7 +1970,6 @@ public class OpportunityUtil
 			    .filter("won_date >= ", minTime).filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
 			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    ;
 		    count += dao.getCount(q);
 		}
 	    }
@@ -2209,7 +2225,6 @@ public class OpportunityUtil
      * 
      * @return List
      */
-
     public static List<Opportunity> getDealsWithOwnerandPipeline(Long ownerId, Long pipelineId, long minTime,
 	    long maxTime)
     {
@@ -2952,10 +2967,43 @@ public class OpportunityUtil
 	   	
 	   	if(expectedValue.length()!=0 && expectedValue!=null)   
     		opportunityObj.expected_value=expectedValueD;
-    	
+	   	
+	   	System.out.println("updateDeal------------Checking ACLs for creating deal");
+	   	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunityObj, CRUDOperation.CREATE, true);
+	   	
     	opportunityObj.save();
 
     	return opportunityObj.name;
     }
 	
+    /**
+     * Gets a partial opportunity based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<OpportunityPartial> getPartialOpportunities(List<Key<Opportunity>> ids_list)
+    {
+    	List<OpportunityPartial> list = new ArrayList<OpportunityPartial>();
+    	if(ids_list == null || ids_list.size() == 0)
+   		 return list;
+		
+		try
+		{
+			List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
+			if(keys.size() == 0)
+				return list;
+			
+			Map map = new HashMap();
+			map.put("__key__ IN", keys);
+			
+			return partialDAO.listByProperty(map);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return list;
+		}
+    }
 }

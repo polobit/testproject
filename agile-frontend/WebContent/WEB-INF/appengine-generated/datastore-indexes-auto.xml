@@ -2,6 +2,31 @@
 
 <datastore-indexes>
 
+    <datastore-index kind="DomainUser" ancestor="true" source="manual">
+        <property name="email" direction="asc"/>
+        <property name="name" direction="asc"/>
+        <property name="pic" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="DomainUser" ancestor="false" source="manual">
+        <property name="domain" direction="asc"/>
+        <property name="email" direction="asc"/>
+        <property name="name" direction="asc"/>
+        <property name="pic" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Contact" ancestor="false" source="manual">
+        <property name="__key__" direction="asc"/>
+        <property name="first_name" direction="asc"/>
+        <property name="last_name" direction="asc"/>
+        <property name="name" direction="asc"/>
+        <property name="type" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="__key__" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+    
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
@@ -294,9 +319,10 @@
         <property name="task_completed_time" direction="asc"/>
     </datastore-index>
     
+
     <datastore-index kind="Task" ancestor="false" source="auto">
-        <property name="is_complete" direction="asc"/>
-        <property name="created_time" direction="desc"/>
+        <property name="owner" direction="asc"/>
+        <property name="created_time" direction="asc"/>
     </datastore-index>
     
     <datastore-index kind="Category" ancestor="false" source="manual">
@@ -449,11 +475,13 @@
         <property name="related_contacts" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
-    
     <datastore-index kind="AliasDomain" ancestor="false" source="auto">
         <property name="alias" direction="asc"/>
         <property name="domain" direction="asc"/>
     </datastore-index>
-    
+     <datastore-index kind="Portlet" ancestor="true" source="manual">
+        <property name="portlet_route" direction="asc"/>
+        <property name="row_position" direction="asc"/>
+    </datastore-index>
     
 </datastore-indexes>

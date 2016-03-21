@@ -116,4 +116,8 @@ cron:
 - description: All Domain stats report
   url: /backend/stats-report
   schedule: every day 03:00
- 
+
+- description: DomainUser db Update
+  url: /backend/domainuserdbupdate
+  schedule: every 30 mins
+  target: agile-normal-bulk 

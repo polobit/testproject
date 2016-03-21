@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
@@ -53,7 +54,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 	doc.addField(Field.newBuilder().setName("type").setText(Type.OPPORTUNITY.toString()));
 
-	DomainUser opportunityOwner = null;
+	DomainUserPartial opportunityOwner = null;
 
 	try
 	{
