@@ -5,13 +5,13 @@
 <div class="p-t-xxs p-b-xxs public-notes-container">
 	<span class="pull-left thumb-sm">
 		{{#if_equals created_by 'REQUESTER'}}
-			{{#if ticket_contact_exists}}
+			{{#ticket_contact_exists}}
 		 		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." 
 		 			onerror="image_error(this);" _data-name="{{getInitials requester_name}}">
 		 	{{else}}
 		 		<img src="" class="r-5x" alt="{{requester_name}}" onerror="image_error(this);" 
 		 			_data-name="{{getInitials requester_name}}">
-		 	{{/if}}
+		 	{{/ticket_contact_exists}}
 	    {{else}}
 	 		<img src="{{domain_user.pic}}" class="r-5x" alt="{{domain_user.name}}">
 	 	{{/if_equals}}
