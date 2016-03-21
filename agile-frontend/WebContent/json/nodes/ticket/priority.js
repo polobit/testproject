@@ -2,8 +2,8 @@
     "name": "Priority",
     "thumbnail": "json/nodes/images/ticket/priority.png",
     "icon": "json/nodes/icons/ticket/priority.png",
-    "info": "Set the priority of a ticket as low,medium or high.",
-    "help": "Set the priority of a ticket as low,medium or high.",
+    "info": "Set the priority of a ticket as low, medium or high.",
+    "help": "Set the priority of a ticket as low, medium or high.",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -27,7 +27,7 @@
                "type": "select"
            },
            {
-               "label": "Set the priority of a ticket as low,medium or high.",
+               "label": "Set the priority of a ticket as low, medium or high.",
                "category": "Help",
                "fieldType": "label",
                "type": "label"

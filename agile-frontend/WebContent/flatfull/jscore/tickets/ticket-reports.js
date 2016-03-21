@@ -77,11 +77,11 @@ var Ticket_Reports = {
 			report_type = $(this).find('option:selected').val();
 
 			var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
-			    report_title = 'Priority report';
+			    report_title = 'Priority Report';
 
 			if(report_type == 'status'){
 				url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time;
-			    report_title = 'Status report';
+			    report_title = 'Status Report';
 			}
 
 			Ticket_Reports.pieforReports(url,'report-chart', '', true);
@@ -91,11 +91,10 @@ var Ticket_Reports = {
 		//report_type = $(this).find('option:selected').val();
 
 		var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
-		    report_title = 'Priority report';
-
+		    report_title = 'Priority Report';
 		if(report_type == 'status'){
 			url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time;
-		    report_title = 'Status report';
+		    report_title = 'Status Report';
 		}
 
 		Ticket_Reports.pieforReports(url,'report-chart', '', true);

@@ -359,16 +359,16 @@ Handlebars.registerHelper('get_status_label', function(status, options) {
 
 	switch(status){
 		case 'NEW':
-			return '<span class="label label-warning cus-pad">n</span>';
+			return '<span class="label label-warning cus-pad">N</span>';
 			break;
 		case 'OPEN':
-			return '<span class="label label-danger cus-pad">o</span>';
+			return '<span class="label label-danger cus-pad">O</span>';
 			break;
 		case 'PENDING':
-			return '<span class="label label-info cus-pad">p</span>';
+			return '<span class="label label-info cus-pad">P</span>';
 			break;
 		case 'CLOSED':
-			return '<span class="label label-success cus-pad">c</span>';
+			return '<span class="label label-success cus-pad">C</span>';
 			break;
 	}
 });
