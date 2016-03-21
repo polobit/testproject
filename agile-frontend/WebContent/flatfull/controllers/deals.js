@@ -100,6 +100,7 @@ var DealsRouter = Backbone.Router.extend({
 						setupDealFilters(cel);
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
+						loadPortlets('Deals',el);
 						setTimeout(function(){
 							$('#delete-checked',el).attr("id","deal-delete-checked");
 						},500);
