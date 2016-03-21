@@ -461,10 +461,8 @@ var Ticket_Custom_Filters = {
 			condition.LHS = "created_between";
 			condition.RHS = Math.floor(new Date(start).getTime()/1000);
 			condition.RHS_NEW =  Math.floor(new Date(end).getTime()/1000);
-
-			//If selected for one day add secs to end time
-			if(condition.RHS == condition.RHS_NEW)
-				condition.RHS_NEW += 86400;
+			
+			condition.RHS_NEW += 86400;
 
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}
