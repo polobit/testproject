@@ -1948,7 +1948,14 @@ public class ActivityUtil
 			{
 				DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
 
-				activity.setUser(new Key<DomainUser>(DomainUser.class, domainUser.id));
+				try
+				{
+					activity.setUser(new Key<DomainUser>(DomainUser.class, 123));
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
 			}
 
 			activity.save();
