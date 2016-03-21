@@ -1,0 +1,35 @@
+<!-- To add new ip-->
+<script id="add-new-ip-template" type="text/html">
+    <div class="modal-dialog modal-xs" id="newip-modal-width">
+      <form id="newip-add-modal" class="form-horizontal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">IP Address</h4>
+        </div>
+        <div class="modal-body">
+         <p style=" padding-left: 9px;">Add an IP Address to provide access </p>
+          <!--<span>Add an IP Address to provide access.</span>
+            <div class="show_field">
+              IP Address <input type="text" id="iplist"  style="width:250px;display:inline-block;" class="form-control input-sm ipValidation" placeholder="New IP Address">
+               
+            </div>-->
+            <div class="control-group form-group">
+                    <label class="control-label col-sm-3">IP Address</label>
+                    <div class="controls col-sm-7">
+                        <input type="text" id="iplist"  class="form-control input-sm ipValidation" placeholder="New IP Address">
+                    </div>
+            </div>
+         
+        </div>
+        
+        <div class="modal-footer">
+         
+          <a  type="submit"  id="ip-add" class="save  btn btn-sm btn-primary " style="margin-top:-1px;" >Save</a>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+
+</script>

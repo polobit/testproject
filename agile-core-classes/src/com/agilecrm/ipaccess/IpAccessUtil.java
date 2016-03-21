@@ -1,5 +1,6 @@
 package com.agilecrm.ipaccess;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,14 @@ public class IpAccessUtil {
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
 		try {
+			if(isDevelopmentMode()){
+				List<IpAccess> list = dao.fetchAll();
+				if(list == null || list.size() == 0)
+					  return null;
+				
+				return list.get(0);
+			}
+			
 			return dao.getByProperty("domain", domain);
 		} finally {
 			NamespaceManager.set(oldNamespace);
@@ -34,11 +43,8 @@ public class IpAccessUtil {
 
 	}
 	
-	public static String getPanelIpAccessNamespaceName(){
-		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-			 return "localhost";
-		else 
-			return NamespaceManager.get();
+	public static boolean isDevelopmentMode(){
+		return SystemProperty.environment.value() == SystemProperty.Environment.Value.Development;
 	}
 
 	/**
@@ -49,7 +55,7 @@ public class IpAccessUtil {
 	public static  boolean isValidIpOpenPanel(HttpServletRequest request){
 		
 		// Gets the IP's
-		IpAccess ipAccess = IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
+		IpAccess ipAccess = getIPListByDomainName(NamespaceManager.get());
 		
 		//Checks the wheather iplist is null or not  
 		if(ipAccess == null || ipAccess.ipList == null || ipAccess.ipList.size() == 0)

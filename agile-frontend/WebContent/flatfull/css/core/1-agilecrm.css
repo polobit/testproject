@@ -3484,3 +3484,7 @@ text-align:left;
 	font-size: 11px;
     margin-top: -2px;
 }
+#newip-modal-width{
+	margin-top:90px;
+	width:33%;
+}

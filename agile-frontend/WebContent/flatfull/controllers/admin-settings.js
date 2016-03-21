@@ -178,7 +178,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			$('.settings-account-ips').addClass('active');
 			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
-			$('.settings-account-ips').parent().removeClass('b-b-none');
+			//$('.settings-account-ips').parent().removeClass('b-b-none');
 
 		}, "#account-pref");
 	},

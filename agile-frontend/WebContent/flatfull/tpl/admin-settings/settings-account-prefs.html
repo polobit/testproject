@@ -12,7 +12,7 @@
 
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 <script id="admin-settings-account-prefs-template" type="text/html">
-<div class="panel panel-default">
+<div class="col-sm-9 panel ">
     <!--<div class="panel-heading">Preferences</div>-->
     <div class="panel-body">
     <form id="accountPrefs" class="form-horizontal">
@@ -91,10 +91,11 @@
 
 
 <script id="admin-settings-ip-prefs-template" type="text/html">
-<div id="ip_access" class="panel panel-default" style="overflow-x:auto; border-left:none;">
+<div id="ip_access" class="col-sm-9 panel " >
     <!--<div class="panel-heading">Ip</div>-->
-    <div class="dta-contatiner table-responsive m-r-sm contacts-inner-div" >
-    <form id="access-ip" class="form-horizontal">
+    
+    <div class=" table-responsive" >
+    <form id="access-ip" class="form-horizontal" >
         <fieldset>
             {{#if id}}
                 <input name="id"  class="form-control" type="hidden" value="{{id}}" />
@@ -104,7 +105,7 @@
             <table class="table table-striped showCheckboxes  no-sorting panel agile-table noDelete" >
                 <thead>
                     <tr>
-                        <th style="width:5%;"><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
+                        <th style="width:5%;"><label class="i-checks i-checks-sm" style="margin-bottom:1px;"><input class="thead_check" type="checkbox"/><i></i></label></th>
                         <th>IP Address</th>              
                     </tr>
                 </thead>
@@ -112,7 +113,7 @@
                    {{#each ipList}}
                     <tr data="{{this}}" >
                         <td class="v-middle checkbox" style="cursor:default;">
-                        <label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label>
+                        <label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value="" name=""><i></i></label>
                         </td>
                         <td>
                             <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
@@ -121,31 +122,34 @@
                        
                     </tr>
                     {{/each}}
-                    <tr data="{{this}}" >
+                    <tr data="{{this}}" style="display:none;" >
                         <td></td>
                         <td>
-                        <div>
-                             IP Address    <input id="ipList"  type="text" placeholder="IP" />   
-                             <a href="#" type="submit" class="save btn btn-sm btn-primary delete_ip">Add</a>         
+                        
+                        <div class="show_field" style="visibility:hidden;">
+                        <input type="text" id="ipList"  style="width:250px;display:inline-block;" class="form-control input-sm ipValidation newip" placeholder="New IP Address">
+                        <a href="#" type="submit"  class="save  btn btn-sm btn-primary " >Add</a>
                         </div>
                         </td>
                         
                     </tr>
                     
-                    <tr>
-                    <td></td>
-                    <td>
-                    <div>
-                    <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-xs btn btn-danger" data-toggle="modal" role="button" href="#">Delete</a>
-                    </div>
-                    </td>
-                    </tr>
                     
                 </tbody>
-            </table>  
+            </table>
+            
+            <footer class="panel-footer">
+             <a href="#" class="blocked-panel-ip-delete btn btn-danger btn-sm" data-toggle="modal" role="button"  > Delete</a>
+            <a href="#" class="btn btn-sm btn-primary " data-toggle="modal" role="button" id="newip-add" > Add</a>
+           
+            
+            
+            </footer>  
            
         </fieldset>
     </form>
+    </div>
+
 </div>
-</div>
+
 </script>

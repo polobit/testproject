@@ -89,6 +89,17 @@ function isValidForm(form) {
 		
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
 	}," This field is required.");
+
+	//IP validation
+	jQuery.validator.addMethod("ipValidation", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+
+		return is_valid_ip(value);
+	
+	}," Please enter a valid IP Address.");
+
 	
 	jQuery.validator.addMethod("formulaData", function(value, element){
 		var source = $(element).val();

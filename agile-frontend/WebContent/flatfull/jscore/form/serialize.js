@@ -98,7 +98,8 @@ function serializeForm(form_id) {
 		// Gets list of options, selected and pushes the field values in to an
 		// array fields_set
 		$.each($(this).find('input'), function(index, data) {
-			fields_set.push($(data).val());
+			if($(data).val())
+				fields_set.push($(data).val());
 		});
 
 		// The array of selected values are mapped with the field name and

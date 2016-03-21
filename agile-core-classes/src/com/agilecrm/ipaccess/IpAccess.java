@@ -43,7 +43,7 @@ public class IpAccess {
 		if(this.created_time == null)
 			   this.created_time = Calendar.getInstance().getTimeInMillis() / 1000;
 		
-		domain = IpAccessUtil.getPanelIpAccessNamespaceName();
+		domain = NamespaceManager.get();
 		
 		String oldNamespace = NamespaceManager.get();
 		try {

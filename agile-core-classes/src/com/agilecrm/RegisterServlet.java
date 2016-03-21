@@ -91,7 +91,7 @@ public class RegisterServlet extends HttpServlet
 	{
 		// Check ip with allowed ones
 		if(!IpAccessUtil.isValidIpOpenPanel(request))
-			throw new Exception("Invalid IP");
+			throw new Exception("Please provide valid IP Address.");
 		
 	    if (type != null)
 	    {

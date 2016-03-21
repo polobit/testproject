@@ -16,6 +16,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
+
 import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/allowedips")
@@ -24,7 +26,7 @@ public class IpAccessAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public  IpAccess getIPAccess(){
-		 String domainName = IpAccessUtil.getPanelIpAccessNamespaceName();
+		 String domainName = NamespaceManager.get();
 		 return IpAccessUtil.getIPListByDomainName(domainName);
 	}
 	
@@ -56,16 +58,30 @@ public class IpAccessAPI {
 		
 	}
 	
+	// To delete IP's
 	@Path("/delete_ip")
 	@DELETE
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public void deleteIPAccess(@QueryParam("id") Long id, @FormParam("ip") Set<String> iplist){
+	public void deleteIPAccess( @QueryParam("iplist") String iplist){
 		IpAccess ipAccess = IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
-		for (String ips : iplist) {
-			ipAccess.ipList.remove(ips);
+		System.out.println(iplist);
+		System.out.println(ipAccess.ipList);
+		
+		try {
+			JSONArray ipArray = new JSONArray(iplist);
+			
+			for (int i = 0; i < ipArray.length(); i++) {
+				String ip = ipArray.getString(i).trim();
+				ipAccess.ipList.remove(ip);
+			}
+			
+			ipAccess.Save();
+			
+			System.out.println(ipAccess.ipList);
+		} catch (Exception e) {
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+				    .entity(e.getMessage()).build());
 		}
-		//ipAccess.ipList.remove(ip);
-		ipAccess.Save();
 	}
 
 }

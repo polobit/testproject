@@ -433,57 +433,61 @@ $(function(){
 
 function loadip_access_events()
 {
+	//To delete IP
 	$(".blocked-panel-ip-delete").on('click', function(e) {
         e.preventDefault();
-        var formId = $(this).closest('form');
-
-       /* var ip = $(this).closest("tr").find('input').val();
-        var id = $(this).closest("form").find('input[name="id"]').val();
-        var $that = $(this);
-        $.ajax({ url : 'core/api/allowedips/delete_ip?id='+id+'&ip='+ip,
-			type : 'DELETE',
-		success : function()
-		{
-			$that.closest("tr").remove(); 
-
-		},error : function(response)
-			{
-
-				console.log(response);
-			}
-
-		});*/
 
 		var data_array = [];
-		var index_array = [];
 		var checked = false;
-		var ip = $(this).closest("tr").find('input').val();
-        var id = $(this).closest("form").find('input[name="id"]').val();
-		var table = $('body').find('.showCheckboxes');
-		 var $that = $(this);
-		$(table).find('tr .tbody_check').each(function(id, ip){
-			
-			// If element is checked store it's id in an array 
-			if($(id).is(':checked')){
-				$(id).closest('tr').on("mouseenter", false);
-				index_array.push(id);
-				data_array.push(ip);
+
+		var tableEle = $(this).closest("form").find(".multiple-input");
+		$.each($(tableEle).find('input[type="checkbox"]'), function(index, data) {
+			if($(data).is(":checked")){
+				$(data).closest('tr').on("mouseenter", false);
+				data_array.push($(data).closest("tr").attr("data"));
 				checked = true;
 			}
-          });
-		  $.ajax({ url : 'core/api/allowedips/delete_ip?id='+id+'&iplist='+data_array,
+				
+		});
+
+		if(!checked){
+			// Show error
+			return;
+		}
+
+		$.ajax({ url : 'core/api/allowedips/delete_ip?iplist='+JSON.stringify(data_array),
 			type : 'DELETE',
-		  success : function()
-		  {
-				$that.closest("tr").remove(); 
+			success : function()
+		  	{
+		  		// Refresh container
+		  		App_Admin_Settings.ipaccess();
 
-		  },error : function(response)
+		  	},error : function(response)
 			{
-
 				console.log(response);
+				// Show error
 			}
 
-			});
+		});
     });
+
+	//To add new ip to allow access
+
+    $("#newip-add").on('click',function(e){
+		//$("#ipaccess-modal").modal('show');
+		$("#ipaccess-modal").html(getTemplate('add-new-ip', {})).modal('show');
+			$("#ip-add").on('click',function(e){
+				var form = $(this).closest("form");
+				if (!isValidForm(form)) {
+					return;
+				}
+
+				$(".newip").val($("#iplist").val());
+				form.trigger("reset");
+				$('.newip').closest('form').find('.save').trigger("click");
+			});
+	});
+
 }
+
 	

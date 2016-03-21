@@ -75,7 +75,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	try
 	{
 		if(!IpAccessUtil.isValidIpOpenPanel(request))
-			throw new Exception("Invalid IP");
+			throw new Exception("Please provide valid IP Address.");
 	    if (isTrottleLimitReached(userIp) && !IPlIST.contains(userIp))
 	    {
 		System.out.println("Throttle reached" + userIp);
