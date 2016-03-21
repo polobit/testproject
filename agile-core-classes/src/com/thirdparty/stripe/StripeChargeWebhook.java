@@ -83,6 +83,12 @@ public class StripeChargeWebhook extends HttpServlet
 	    System.out.println("Removing amount attribute in json");
 	    stripeJson.getJSONObject("data").getJSONObject("object").put("amount", Double.parseDouble(amount)/100);
 	    System.out.println("Calculating amount in dollars and updating it in json");
+	    if (stripeJson.getJSONObject("data").getJSONObject("object").has("amount_refunded")){
+	    	String amount_refunded = stripeJson.getJSONObject("data").getJSONObject("object").getString("amount_refunded");
+	    	stripeJson.getJSONObject("data").getJSONObject("object").remove("amount_refunded");
+	    	stripeJson.getJSONObject("data").getJSONObject("object").put("amount_refunded", Double.parseDouble(amount_refunded)/100);
+	    }
+	    
 
 	    String eventType = stripeJson.getString("type");
 	    System.out.println("stripe post event type is " + eventType);
