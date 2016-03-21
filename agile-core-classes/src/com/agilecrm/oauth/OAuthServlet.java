@@ -59,7 +59,7 @@ public class OAuthServlet extends HttpServlet {
 			}
 			
 			if (serviceType != null) {
-				setupOAuth(req, resp, serviceType);
+				setupOAuth(req, resp, serviceType,linkType);
 			}
 
 		} catch (Exception e) {
@@ -152,25 +152,40 @@ public class OAuthServlet extends HttpServlet {
 	}
 
 	private void setupOAuth(HttpServletRequest req, HttpServletResponse resp,
-			String serviceType) throws Exception {
-		OAuthConsumer consumer = getOAuthConsumer(serviceType);
+			String serviceType,String linkType) throws Exception {
+		OAuthConsumer consumer = getOAuthConsumer(serviceType,linkType);
 		OAuthProvider provider = getOAuthProvider(serviceType);
-
-		System.out.println("Prepared consumer & provider......");
-
+	
+		System.out.println("Prepared consumer & provider......"+req);
+		
 		req.getSession().setAttribute("consumer", consumer);
 		req.getSession().setAttribute("provider", provider);
 		req.getSession().setAttribute("service", serviceType);
 
 		System.out.println("Saved in session.............");
-
 		String authUrl = "";
-		try {
-			authUrl = provider.retrieveRequestToken(consumer,
-					getRedirectURI(req));
-		} catch (Exception e) {
-			throw new ServletException(e.getMessage());
+		if (linkType != null && linkType.equals("widget")) {
+			try {
+				String Widget_authUrl = provider.retrieveRequestToken(consumer,
+						getRedirectURI(req));
+				authUrl= Widget_authUrl;
+			} 
+			catch (Exception e) {
+				throw new ServletException(e.getMessage());
+			}
 		}
+		else{
+			try {
+				String sync_authUrl = provider.retrieveRequestToken(consumer,
+						getRedirectURI(req));
+						authUrl= sync_authUrl;;
+			} 
+			catch (Exception e) {
+				throw new ServletException(e.getMessage());
+			}
+			
+		}
+		
 
 		// System.out.println("Access token: " + consumer.getToken());
 		// System.out.println("Token secret: " + consumer.getTokenSecret());
@@ -203,13 +218,16 @@ public class OAuthServlet extends HttpServlet {
 				"https://appcenter.intuit.com/Connect/Begin");
 	}
 
-	public OAuthConsumer getOAuthConsumer(String serviceType) {
-		// if (StringUtils.equalsIgnoreCase(serviceType, "quickbooks"))
-		return new DefaultOAuthConsumer(Globals.QUICKBOOKS_CONSUMER_KEY,
-				Globals.QUICKBOOKS_CONSUMER_SECRET);
-
-		// return new DefaultOAuthConsumer("qyprdHZrAT1Ud51gPM4xN32ipsGxmq",
-		// "5YoQSFM8t3l0a38gTLWSW3ZNpeJROuuVn7Vzd62f");
+	public OAuthConsumer getOAuthConsumer(String serviceType, String linkType) {
+		OAuthConsumer oauth_conusumer = null;
+		if (linkType != null && linkType.equals("widget")) {
+			oauth_conusumer = new DefaultOAuthConsumer(Globals.QUICKBOOKS_WIDGET_CONSUMER_KEY,
+					Globals.QUICKBOOKS_WIDGET_CONSUMER_SECRET);
+		} else {
+			oauth_conusumer = new DefaultOAuthConsumer(Globals.QUICKBOOKS_CONSUMER_KEY,
+					Globals.QUICKBOOKS_CONSUMER_SECRET);
+		}
+		return oauth_conusumer;
 	}
 
 	public String getRedirectURI(HttpServletRequest request) {

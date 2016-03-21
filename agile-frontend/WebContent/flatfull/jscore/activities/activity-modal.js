@@ -47,9 +47,9 @@ $(function() {
 
 			save_task('taskForm', 'activityTaskModal', false, this);
 		} else {
-
+			var currentDiv = $('#activityModal').find("#current_div").val();
 			// Save functionality for event
-			save_event('activityForm', 'activityModal', false, this,function(data){
+			save_event('activityForm', 'activityModal', false, this,currentDiv,function(data){
 						//	eventCollectionView.collection.comparator ='start';
 									eventCollectionView.collection.add(data.toJSON());
 									eventCollectionView.collection.sort();

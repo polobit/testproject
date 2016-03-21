@@ -56,7 +56,7 @@ DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 System.out.println("Domain user " + domainUser);
 
-DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.name);
+DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
 // Add to queue
 Queue queue = QueueFactory.getDefaultQueue();
 queue.add(TaskOptions.Builder.withPayload(task));
@@ -707,7 +707,7 @@ var Agile_Contact = {};
 head.ready(function() {
 	
 if(!HANDLEBARS_PRECOMPILATION){
-    downloadTemplate("tpl-combined.js", function(){             
+    downloadTemplate("tpl.js", function(){             
     });
 }
  

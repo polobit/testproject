@@ -238,8 +238,12 @@ public class UserPrefs
 		// Assigning Random avatar
 		if (pic == null)
 			pic = chooseRandomAvatar();
+		
+		boolean isDomainUserUpdated = false;
+		
 		try
 		{
+			
 			if ((currentDomainUser != null)
 					&& (currentDomainUser.name == null || !currentDomainUser.name.equals(this.name)))
 			{
@@ -249,6 +253,8 @@ public class UserPrefs
 				currentDomainUser.save();
 				
 				this.name = null;
+				isDomainUserUpdated = true;
+				
 			}
 		}
 		catch (Exception e)
@@ -256,6 +262,15 @@ public class UserPrefs
 			e.printStackTrace();
 		}
 
+		try {
+			if(!isDomainUserUpdated){
+				// Add pic also
+				currentDomainUser.pic = pic;
+				currentDomainUser.save();
+			}
+		}catch(Exception e){}
+		
+		
 		dao.put(this);
 	}
 

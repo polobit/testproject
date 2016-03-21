@@ -355,6 +355,11 @@ function initializePortletsListeners() {
 				$(this).find('.fc-button').css('visibility', 'hidden');
 			});
 
+	$('.portlet_body_calendar').on('click', '.fc-button-content',
+			function(e) {
+				App_Portlets.eventCalendar=$(this).parents('.portlet_body_calendar');
+			});
+
 	$('.events_show')
 			.off(
 					'click',
@@ -376,11 +381,7 @@ function initializePortletsListeners() {
 						if (id && !isNaN(id)) {
 							var events_array = $(
 									'#calendar_container',
-									$(this)
-											.parentsUntil('.mini-cal')
-											.eq(
-													$(this).parentsUntil(
-															'.mini-cal').length - 1))
+									$(this).parents('.portlet_body_calendar'))
 									.fullCalendar(
 											'clientEvents',
 											id,
@@ -417,7 +418,7 @@ function initializePortletsListeners() {
 												deserializeForm(
 														model,
 														$("#updateActivityForm"));
-
+												$('#current_div','#updateActivityModal').val("Mini Calendar");
 												$("#update-event-date-1").val(
 														getDateInFormat(start));
 												$("#update-event-date-2").val(
@@ -520,6 +521,8 @@ function initializePortletsListeners() {
 												// Show edit modal for the event
 												$("#updateActivityModal")
 														.modal('show');
+
+
 												$(
 														'#' + id,
 														$('#calendar_container'))
@@ -554,6 +557,8 @@ function initializePortletsListeners() {
 				$('#task-date-1').val(getDateInFormat(start));
 				$("#event-date-1").val(getDateInFormat(start));
 				$("#event-date-2").val(getDateInFormat(start));
+				$('#current_div','#activityModal').val("Mini Calendar");
+
 
 				// Set Time for Event
 				// if ((start.getHours() == 00) && (start.getHours() == 00) &&
@@ -611,7 +616,11 @@ function initializePortletsListeners() {
 						}, 500);
 
 						$('#' + portlet.get("id")).parent().remove();
-
+						if(portlet.get('portlet_route')!='DashBoard')
+						{
+							if ($('.gridster-portlets > div').length == 0)
+							$('#no-portlets').parents('.route_Portlet').hide();
+						}
 						if ($('.gridster-portlets > div').length == 0)
 							$('#no-portlets').show();
 
@@ -747,6 +756,7 @@ $('.portlet_body')
 							var startDate = new Date(model.get('start') * 1000);
 							var endDate = new Date(model.get('end') * 1000)
 							// Set time for update Event
+							$('#current_div',"#updateActivityModal").val("Events Dashlet");
 							$('#update-event-time-1')
 									.val(
 											(startDate.getHours() < 10 ? "0"
@@ -911,6 +921,7 @@ $('.portlet_body')
 							'.gs-resize-handle').remove();
 				}
 			});
+	
 
 }
 
@@ -918,6 +929,9 @@ $('.portlet_body')
  *Listener function for Event handling
  */
 function initializeAddPortletsListeners() {
+
+	//$('#ms-category-list', elData).remove();
+
 
 	$('.col-md-3')
 			.on(
@@ -983,27 +997,140 @@ function initializeAddPortletsListeners() {
 						$(this).popover('show');
 					});
 
-		$('#portlets-add-listener').on(
+$('.show_screeshot').off('click touchstart').on(
+			"click touchstart",
+			'.add-portlet-direct',
+			function() {
+				var route=[];
+				var url='core/api/portlets/add';
+
+													route.push('DashBoard');
+												
+				var forAll=false;
+				clickfunction($(this),url,forAll,route);
+			});
+	$('.col-md-3').off('click touchstart').on('click touchstart',
+			'.add_to_all',
+			function() {
+				var route=[];
+			route.push('DashBoard');
+				var forAll=true;
+				var url='core/api/portlets/addforAll';
+				clickfunction($(this),url,forAll,route);
+				
+			});
+	
+	$('#portlets-add-listener').on('click','.configure-portlets',function(e){
+		e.preventDefault();
+		  
+					//var route=$(this).attr("route");
+					//route=route.substr(1,route.length-2);
+					//var routes=route.split(',');
+		var portlet_type = $(this).attr("portlet_type");
+				var p_name = $(this).attr("portlet_name");
+				
+				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo'));
+				
+
+					  
+					
+			
+
+				head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
+						$('#ms-route-list' ).remove();
+				$('#route-list' , $('#portletStreamModalNew')).multiSelect();
+				$('#ms-route-list .ms-selection').children('ul')
+						.addClass('multiSelect').attr("name", "route-list")
+						.attr("id", "route");
+				$('#ms-route-list .ms-selectable .ms-list').css(
+						"height", "105px");
+				$('#ms-route-list .ms-selection .ms-list').css(
+						"height", "105px");
+				$('#ms-route-list').addClass(
+						'portlet-category-ms-container');
+			});
+				$(".add-portlet").attr('portlet_type',
+				portlet_type);
+		$(".add-portlet").attr('portlet_name',p_name);
+		$(".add_to_all").attr('portlet_type',
+				portlet_type);
+		$(".add_to_all").attr('portlet_name',p_name);
+		$("#portletStreamModalNew").modal('show');
+		
+	});
+
+	$('#portletStreamModalNew').on('shown.bs.modal', function(event){
+		insideAddListener();
+	});
+
+
+}
+
+function insideAddListener()
+{
+
+	 $('.modal-content').off('click', '#route-select-all');
+  $('.modal-content').on('click', '#route-select-all',
+      function(e) {
+        e.preventDefault();
+        $('#route-list').multiSelect('select_all');
+      });
+  $('.modal-content').off('click', '#route-select-none');
+  $('.modal-content').on('click', '#route-select-none',
+      function(e) {
+        e.preventDefault();
+        $('#route-list').multiSelect('deselect_all');
+      });
+  
+    $('.modal-content').off('click', '.add-portlet');
+		$('.modal-content').on(
 			"click",
 			'.add-portlet',
 			function() {
+				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
+				 if (!isValidForm("#" + id)) {
+           			 return false
+       			 }
+				var route=[];
 				var url='core/api/portlets/add';
+				$('#route-list', $(this).parents('.modal'))
+									.find('option')
+									.each(
+											function() {
+												if ($(this).is(':selected'))
+													route.push($(this).val());
+												
+											});
 				var forAll=false;
-				clickfunction($(this),url,forAll);
+				clickfunction($(this),url,forAll,route);
 			});
-	$('#portlets-add-listener').on(
-			"click touchstart",
+		
+	$('.modal-footer').off('click touchstart').on('click touchstart',
 			'.add_to_all',
 			function() {
+				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
+				 if (!isValidForm("#" + id)) {
+           			 return false
+       			 }
+				var route=[];
+				$('#route-list', $(this).parents('.modal'))
+									.find('option')
+									.each(
+											function() {
+												if ($(this).is(':selected'))
+													route.push($(this).val());
+												
+											});
 				var forAll=true;
 				var url='core/api/portlets/addforAll';
-				clickfunction($(this),url,forAll);
+				clickfunction($(this),url,forAll,route);
 				
 			});
-
 }
-function clickfunction(that,url,forAll){
+function clickfunction(that,url,forAll,route){
 
+	$("#portletStreamModalNew").modal('hide');
+	$('.modal-backdrop').hide();
 	var portlet_type = that.attr("portlet_type");
 				var p_name = that.attr("portlet_name");
 
@@ -1016,8 +1143,8 @@ function clickfunction(that,url,forAll){
 				obj.portlet_type = portlet_type;
 				var max_row_position = 0;
 				var next_position = gridster.next_position(1, 1);
-				obj.column_position = next_position.col;
-				obj.row_position = next_position.row;
+				obj.column_position = -1;
+				obj.row_position = -1;
 				obj.size_x = next_position.size_x;
 				obj.size_y = next_position.size_y;
 
@@ -1034,15 +1161,20 @@ function clickfunction(that,url,forAll){
 						obj.row_position=obj.row_position+1;
 					}*/
 				}
-
-				var portlet = new BaseModel();
+				var models = [];
+				$.each(route,function(e){
+					var portlet = new BaseModel();
 				portlet.url = url;
 				portlet.set({
 					"prefs" : JSON.stringify(json),
-					"isForAll" : forAll
+					"isForAll" : forAll,
+
+					"portlet_route" : this.toString(),
 				}, {
 					silent : true
 				});
+
+				
 				var model;
 				var scrollPosition;
 				portlet.save(obj, {
@@ -1052,12 +1184,15 @@ function clickfunction(that,url,forAll){
 							$('#zero-portlets').hide();
 						if ($('#no-portlets').is(':visible'))
 							$('#no-portlets').hide();
+						if(data.toJSON().name=='Mini Calendar' || data.toJSON().name=='Agenda'){
 						App_Portlets.navigate("dashboard", {
 							trigger : true
 						});
+					}
 					},
 					error : function(model, response) {
 						alert("Failed to add.");
 					}
 				});
+			});
 				}

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,6 +43,7 @@ import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.portlets.Portlet;
+import com.agilecrm.portlets.Portlet.PortletRoute;
 import com.agilecrm.portlets.Portlet.PortletType;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
@@ -128,7 +130,7 @@ public class PortletUtil {
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 			allPortlets.add(new Portlet("Account Details",PortletType.ACCOUNT));
 			
-			setIsAddedStatus(allPortlets);
+			//setIsAddedStatus(allPortlets);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,26 +141,42 @@ public class PortletUtil {
 	 *  
 	 * @return {@link List} of {@link Portlet}s
 	 */
-	public static List<Portlet> getAddedPortletsForCurrentUser()throws Exception{
+	public static List<Portlet> getAddedPortletsForCurrentUser(PortletRoute route)throws Exception{
 		
 		Objectify ofy = ObjectifyService.begin();
 		
 		List<Portlet> added_portlets = new ArrayList<Portlet>();
 
+		
 		// Creates Current AgileUser key
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
 
 		/*
 		 * Fetches list of portlets related to AgileUser key
 		 */
-		List<Portlet> portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
+		List<Portlet> portlets;
+		if(route==null){
+			route= Portlet.PortletRoute.DashBoard;
+		}
+
+		if(route.equals(Portlet.PortletRoute.DashBoard)){
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
 		//If user first time login after portlets code deploy, we add some portlets by default
 		//in DB and one null portlet also
-		if(portlets!=null && portlets.size()==0){
-			addDefaultPortlets();
-			portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
+		if(portlets!=null && portlets.size()>0){
+			for(Portlet portlet : portlets){
+				if(portlet.portlet_route==null)
+					portlet.portlet_route=Portlet.PortletRoute.DashBoard;
+				portlet.save();
+			}
 		}
-		
+		}
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route", route).list();
+		if(portlets!=null && portlets.size()==0 && route.equals(Portlet.PortletRoute.DashBoard))
+			{addDefaultPortlets();
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",Portlet.PortletRoute.DashBoard ).list();
+		}
+
 		for(Portlet portlet : portlets){
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
@@ -216,14 +234,27 @@ public class PortletUtil {
 	 * @return {@link List} of {@link Portlet}
 	 */
 	public static List<Portlet> setIsAddedStatus(List<Portlet> portlets)throws Exception{
-		List<Portlet> currentPortlets = getAddedPortletsForCurrentUser();
+		
 
-		for (Portlet portlet : portlets){
-			for (Portlet currentPortlet : currentPortlets){
-				if (currentPortlet.name.equals(portlet.name) && currentPortlet.portlet_type.equals(portlet.portlet_type))
-					portlet.is_added = true;
-			}
+			
+		List<Portlet> currentPortlets = getAddedPortletsForCurrentUser(Portlet.PortletRoute.DashBoard);
+		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Contacts));
+		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Deals));
+		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Tasks));
+		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Events));
+			for (Portlet portlet : portlets){
+				HashSet<String> s = new HashSet<String>();
+				for (Portlet currentPortlet : currentPortlets){
+					if (currentPortlet.name.equals(portlet.name) && currentPortlet.portlet_type.equals(portlet.portlet_type)){
+						portlet.is_added = true;
+						//s.add(currentPortlet.portlet_route.toString());
+					}	
+				}
+				//portlet.is_routeadded=s.toString();
+				
+			
 		}
+		
 		return portlets;
 	}
 	
@@ -234,7 +265,7 @@ public class PortletUtil {
 	 *            {@link String}. Name of the portlet
 	 * @return {@link Portlet}
 	 */
-	public static Portlet getPortlet(String name){
+	public static List<Portlet> getPortlet(String name){
 		try{
 			return getPortlet(name, AgileUser.getCurrentAgileUser().id);
 		}
@@ -252,7 +283,7 @@ public class PortletUtil {
 	 *            {@link Long} agile user id
 	 * @return {@link Portlet}
 	 */
-	public static Portlet getPortlet(String name, Long agileUserId){
+	public static List<Portlet> getPortlet(String name, Long agileUserId){
 		try{
 			Objectify ofy = ObjectifyService.begin();
 
@@ -260,7 +291,7 @@ public class PortletUtil {
 			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUserId);
 
 			// Queries on widget name, with current AgileUser Key
-			return ofy.query(Portlet.class).ancestor(userKey).filter("name", name).get();
+			return ofy.query(Portlet.class).ancestor(userKey).filter("name", name).list();
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -850,18 +881,18 @@ public class PortletUtil {
 		try {
 			//Added dummy portlet for recognizing whether Agile CRM Blog 
 			//portlet is deleted by user or not
-			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1);
-			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1);
-			Portlet dealGoalsPortlet = new Portlet("Deal Goals",PortletType.DEALS,2,1,1,1);
-			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,5,1,1);
-			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,3,1,2);
-			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1);
-			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1);
-			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,4,2,1);
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1);
-			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,1,5,1,1);
-			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2);
-			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,3,5,1,1);
+			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.DashBoard);
+			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.DashBoard);
+			Portlet dealGoalsPortlet = new Portlet("Deal Goals",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.DashBoard);
+			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,5,1,1,Portlet.PortletRoute.DashBoard);
+			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,3,1,2,Portlet.PortletRoute.DashBoard);
+			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1,Portlet.PortletRoute.DashBoard);
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1,Portlet.PortletRoute.DashBoard);
+			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,4,2,1,Portlet.PortletRoute.DashBoard);
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1,Portlet.PortletRoute.DashBoard);
+			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,1,5,1,1,Portlet.PortletRoute.DashBoard);
+			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2,Portlet.PortletRoute.DashBoard);
+			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,3,5,1,1,Portlet.PortletRoute.DashBoard);
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");

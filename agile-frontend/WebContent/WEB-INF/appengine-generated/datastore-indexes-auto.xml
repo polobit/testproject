@@ -319,9 +319,10 @@
         <property name="task_completed_time" direction="asc"/>
     </datastore-index>
     
+
     <datastore-index kind="Task" ancestor="false" source="auto">
-        <property name="is_complete" direction="asc"/>
-        <property name="created_time" direction="desc"/>
+        <property name="owner" direction="asc"/>
+        <property name="created_time" direction="asc"/>
     </datastore-index>
     
     <datastore-index kind="Category" ancestor="false" source="manual">
@@ -483,13 +484,15 @@
         <property name="related_contacts" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
-    
     <datastore-index kind="AliasDomain" ancestor="false" source="auto">
         <property name="alias" direction="asc"/>
         <property name="domain" direction="asc"/>
     </datastore-index>
-    
+     <datastore-index kind="Portlet" ancestor="true" source="manual">
+        <property name="portlet_route" direction="asc"/>
+        <property name="row_position" direction="asc"/>
     </datastore-index>
+    
     <datastore-index kind="TicketActivity" ancestor="false" source="manual">
         <property name="ticket_key" direction="asc"/>
         <property name="created_time" direction="desc"/>

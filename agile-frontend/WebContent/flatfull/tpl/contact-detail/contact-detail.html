@@ -11,7 +11,681 @@
 
   <div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
 
-  <div class="vbox">
+{{#is_mobile}}
+
+<div class="vbox">
+  <div class="row-row">
+  <div>
+  <div>
+    <div class=" contactView details-mobile-view text-center-mobile-view">
+	
+
+<!-- starting section one -->
+<div class="wrapper">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+
+    					<div class="pos-rlt w-full">
+						<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
+						<div class="clearfix"></div>
+    				    </div>
+                        <div class="text-center   pos-rlt">
+						<div class="thumb-lg">
+							<form id="contact-container">
+								<a href="#" class="tooltip_info contact-image-view" data-placement="top"
+									data-toggle="tooltip"
+									title="<i class='icon-edit icon-white icon'></i> Change Picture"> 
+									<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
+									src="{{gravatarurl properties 80}}" /></a> 
+									<input type="hidden" id="upload_url" name="gravatarurl">
+								<a style="display: none;" class="save_img submit" type="submit">Save</a>
+							</form>
+						</div>
+						 <div class="pos-abs pos-r-0 m-t-sm isotope-item">
+						<div>
+								
+								
+								<a class="dropdown-toggle" data-toggle="dropdown"><span class="caret" style="margin-top:-6px;opacity:0.8;"></span></a>
+								<ul class="dropdown-menu pull-right text-sm">
+                                   <li><a href='#contact-edit'>
+                                     <div class="pull-left"><i class="fa fa-pencil-square"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
+                                     <div class='shortcuts pull-right'>Shift + E</div>
+                                     {{/if_keyboard_shortcuts_enabled}}
+                                     <div class="clearfix"></div>
+                                     </a></li>
+
+                                     
+                                     
+<li class="divider"></li>
+									<li><a href='#' class="contact-add-note"><i
+											class="fa fa-file-text"></i> Add Note</a></li>
+									<li><a href='#' class="contact-add-task"><i
+											class="icon-tasks"></i> Add Task</a></li>
+									{{#hasMenuScope 'DEALS'}}
+									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
+											Add Deal</a></li>
+									{{/hasMenuScope}}
+							{{#canEditContact owner.id}}
+									<li class='divider'></li>
+									<li><a href='#bulk-campaigns' class="contact-add-campaign"
+										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
+											to Campaign</a></li>
+									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
+											class="fa fa-envelope"></i> Send Email</a></li>
+
+									<li class='divider'></li>
+									<li><a href='#contact-duplicate'><i class="fa fa-clipboard"></i>
+											Duplicate</a></li>
+											
+									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
+											Merge Duplicates</a></li>
+											<li class='divider'></li>
+
+							
+									<li><a href='#' id='contact-actions-delete'><i
+											class="fa fa-trash"></i> Delete</a></li>
+								{{/canEditContact}}
+									
+
+                                    {{#property_is_exists "phone" properties}}
+                                    <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
+										"first_name"}}" lname="{{getPropertyValue properties "last_name"}}" image="{{getPropertyValue properties
+										"image"}}" phone="{{getPropertyValue properties "phone"}}"><i class="icon-phone"></i> Call</a></li>
+                                    {{/property_is_exists}}
+								</ul>
+							</div>
+                            </div>  
+						
+						
+                           
+						
+
+
+					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:5px;" id ="contactName">
+
+								<span class="text-capitalize ">{{getPropertyValue properties
+										"first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
+
+								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
+								</div>
+							<div class=" m-b-xs text-cap" style="padding-right:5px;">	
+
+						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
+
+									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+								{{else}}
+									{{getPropertyValue properties "company"}}
+								{{/if}}</div>
+								
+								
+							<div class="clearfix"></div>	
+								
+								
+						<!-- <div class="contact-company-name text-ellipsis pull-left w-half font-thin">
+														
+                         {{#if contact_company_id}} 
+									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+								{{else}}
+									{{getPropertyValue properties "company"}}
+								{{/if}}
+                         </div> -->
+                         <div class="clearfix"></div>
+                         </div>
+						</div>
+	<!-- ending section one -->					
+						
+						
+	
+	<div class="clearfix"></div>
+	<div class="contact-website   text-base text-center m-b-xs">
+					
+                                    
+						            {{#property_is_exists "website" properties}}
+									{{#multiple_Property_Element "website" properties}} {{#each
+									this}} {{#if_equals subtype "TWITTER"}}
+									
+									 <span class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Twitter"
+										href="https://twitter.com/{{getTwitterHandleByURL value}}"
+										style="text-decoration: none"> <i
+											class="{{get_social_icon "
+											TWITTER"}}    text-base text-muted tooltip_info" ></i>
+									</a>
+									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
+										class="m-r-xs"><a class="text-l-none tooltip_info" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype"
+										href="{{getSkypeURL value}}"> <i
+											class="{{get_social_icon "
+											SKYPE"}}   text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
+										class="m-r-xs"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook"
+										href="{{buildFacebookProfileURL value}}"> <i
+											class="{{get_social_icon "
+											FACEBOOK"}}   text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "LINKEDIN"}} <span
+										class="m-r-xs"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="LinkedIn"
+										href="{{getHyperlinkFromURL value}}"> <i
+											class="{{get_social_icon "
+											LINKEDIN"}}   text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}	{{#if_equals subtype "GOOGLE-PLUS"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Google+"
+										href="https://plus.google.com/{{getTwitterHandleByURL value}}/" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "
+											GOOGLE-PLUS"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}	{{#if_equals subtype "URL"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon subtype}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "XING"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Xing"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "XING"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FEED"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Blog"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "FEED"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FLICKR"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Flickr"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "FLICKR"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "GITHUB"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="GitHub"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "GITHUB"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "YOUTUBE"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="YouTube"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "YOUTUBE"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}
+									<span class="m-r-xs"> <a
+										target="_blank" href="{{getHyperlinkFromURL value}}" class="text-l-none">
+											<i class="{{get_social_icon subtype}} text-base text-muted"></i>
+									</a>
+									</span>
+								
+									 {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}} {{/each}}
+									
+
+                                       
+
+									  {{/multiple_Property_Element}}
+									{{/property_is_exists}}
+									</div>
+											
+							<div class="clearfix"></div>
+						
+						<!--  starting section 3  -->
+                     
+<div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> Call </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> Email </a> </div>
+
+                    <div class=" panel-middle-align-mobile">	
+
+					<div class="row">
+					<div class="col-xs-12 col-sm-7 text-center">
+					 <div id='star' class="contact-star"></div>
+					</div>		
+
+
+		<div class="text-right hidden-xs col-sm-5" style="left:5px;width: 90px;padding-left: 1px;padding-right: 1px;">		
+								<!--  starting score -->
+						<div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
+							<div class="text-lg score-view text-left">
+							<div style="position:relative;">
+
+ 								<span class="m-l-n-xs pos-rlt" style="font-size:14px;float:left;margin-left:8px;top:6px">
+								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover" ></i>
+								</span>
+
+							  		{{#canEditContact owner.id}}
+								<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
+									{{#if lead_score}}<span title="{{lead_score}}" id="lead-score"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+										{{/if}}
+									</span>
+
+									<span class="inline-block v-middle">
+									<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control" id="scorebox">
+									</span>
+									
+									<span class="contact-score-control m-l-xs" style="left:79px;position:absolute;top:5px;">
+										<ul class="inline-block list-none m-n p-n">
+											<li style="height: 12px"><i class="icon-sort-up c-p" id="add" style="height: 6px;"></i></li>
+											<li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+										</ul>
+								</span>
+								{{else}}
+								<span class="inline-block v-middle" style="margin-left:21px">
+
+									{{#if lead_score}} <span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+									{{/if}}		
+								</span>
+								
+							{{/canEditContact}}
+							</div>
+							</div>
+							</div>
+
+						</div>
+						</div>
+						</div>
+						
+
+		</div>
+	</div>
+
+
+<!--  start more details tab section -->	
+
+	<div class="content-tabs-show moreDetailsTab" id="contactDetailsTab" role="tablist" aria-multiselectable="true">
+	 <div class="panel panel-default m-b-none"> <div class="panel-heading" role="tab" id="headingOne"> 
+	 <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> More Details</a> </h4> 
+	 </div> <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;"> 
+	 <div class="panel-body">
+
+			<div class="wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+			<small class="text-muted text-base">Owner</small>
+			<div class="change-owner-succes"></div>
+			<div title="Owner">
+			<div class="contact-owner text-xs" id="change-owner-element">
+
+			{{#if owner}}
+			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+			{{else}}
+			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">Assign Owner</a></span>
+			{{/if}}
+			<a id="contact-owner" class="custom-color text-xs" data={{owner.id}}>{{owner.name}}</a>
+
+			{{#canEditContact owner.id}}
+			<div class="dropdown" id="change-owner-ul"  style="display: none">
+			<a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+			<ul id='contact-detail-owner' class="dropdown-menu"></ul>
+			</div> 
+			{{/canEditContact}}
+			</div>
+			</div>
+			</div>
+			</div>
+			</div>
+
+
+<div class="wrapper text-left m-b-sm p-none">
+<div class="panel panel-default m-b-none">
+<div class="panel-body">
+
+<small class="text-muted text-base">Tags</small>
+<div class="contact-tags m-b-xs m-t-xs">
+<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+{{#if tagsWithTime.length}} 
+{{#canEditContact owner.id}}
+{{#each tagsWithTime}}
+<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}"><span><a
+class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+{{/each}}
+{{else}}
+{{#each tagsWithTime}}
+<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+{{/each}}
+{{/canEditContact}}
+{{/if}}
+
+
+</ul>
+<div class="inline-block m-t-xs">
+<div id="addTagsForm" style="display: none;" class="m-b-none">
+<div class="control-group save-tag m-b-none">
+<input name="" type="text" id="addTags"
+class="tags-typeahead ignore-comma-keydown form-control inline-block text-xs pull-left addInput"
+style="width: 60%" placeholder="Enter tag" />
+<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">Add</a></span>
+</div>
+</div>
+{{#canEditContact owner.id}}
+<a href="#" id="add-tags" rel="tooltip"
+data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
+class="icon-plus"></i> <span >Add</span></a>
+{{/canEditContact}}
+
+
+</div>
+</div>	
+
+</div>
+</div>
+</div>	
+
+
+
+			<!--  starting section 5 -->		
+
+
+
+
+			{{#property_is_exists "phone" properties}}
+
+
+			<div class="widget_container contact-rightpanel phone m-t-sm" id="{{name}}-container">
+			{{else}} 
+			{{#property_is_exists "skypePhone" properties}}
+			<div class="widget_container contact-rightpanel skypePhone m-t-sm" id="{{name}}-container">
+			{{else}} 
+			{{#property_is_exists "email" properties}}
+			<div class="widget_container contact-rightpanel email m-t-sm" id="{{name}}-container">
+			{{else}} 
+			{{#property_is_exists "address" properties}}
+			<div class="widget_container contact-right-panel address m-t-sm" id="{{name}}-container">
+			{{else}}
+			{{#getContactCustomProperties properties}}
+			<div class="widget_container contact-right  customfiled m-t-sm" id="{{name}}-container">
+			{{else}}
+			<div class="widget_container hide m-t-sm" id="{{name}}-container">
+			{{/getContactCustomProperties }}
+			{{/property_is_exists}} 
+			{{/property_is_exists}}
+			{{/property_is_exists}} 
+			{{/property_is_exists}}
+			<h4 class="m-t-xs m-b-xs hide">
+
+			<i class="icon-user text-lg"></i>Contact
+			<span class="text-cap">{{getPropertyValue properties "first_name"}}</span>
+
+			</h4>
+			<!-- <div id="qrcode"><img src="{{getS3ImagePath 'img/1-0.gif'}}"></div>
+			For refreshing the contact in the model list -->
+			<div id="refresh_contact" class="m-t-sm m-r-md m-l-md text-sm" style="display:none;">This contact has been updated
+			<a id="action_refresh_contact" class="c-p">
+			<i class="icon-refresh" rel="popover" data-placement="top" data-title="Refresh Contact" data-content="Click to get updated contact details." data-trigger="hover"></i>
+			</a>
+			</div>
+
+			<div class="clearfix"></div>
+
+
+			{{#property_is_exists "phone" properties}}
+
+			<div class="wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+			{{#multiple_Property_Element "phone" properties}}
+
+			<!-- <div style="display: inline-block; text-align: right" class="span4">
+			<span><strong style="color: gray">Phone</strong><span>
+			</div> -->
+
+
+
+
+
+			<small class="text-muted text-base" >Contact Info</small>				
+
+			<div class="contact-phone">
+			{{#each this}}
+			<div class="pull-left contact-phone-icon hide">
+			<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+			</div>
+			<div class="text-sm">
+
+			<!--
+			<a href='#' class="contact-make-sip-call" style="display:none;" phone="{{value}}">
+			{{value}}
+			</a>            
+			<a href='#' class="contact-make-twilio-call" style="display:none;"                                           
+			phone="{{value}}">
+			{{value}}
+			</a>    
+
+			<span class="contact-call-button-div"  data-toggle="tooltip" data-placement="top" title="">
+			<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
+			{{#if subtype}}<span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
+			</span>
+			-->
+			<div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+
+
+			<a class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
+			</div>
+
+
+			</div>
+			<div class="clearfix"></div>
+			{{/each}}
+			</div>
+
+
+			{{/multiple_Property_Element}}
+
+			<div class="clearfix"></div>
+			{{/property_is_exists}}
+
+			<!-- added by prakash for skype field.. -->
+			<!--
+			{{#property_is_exists "skypePhone" properties}}
+			<div>
+			{{#multiple_Property_Element "skypePhone" properties}}
+
+			{{#property_is_exists "phone" ../properties}}
+
+
+			{{else}}
+
+			<small class="text-muted text-base">Contact Info</small>	
+			{{/property_is_exists}}
+
+			<div class="contact-phone">
+			{{#each this}}
+			<div class="pull-left contact-phone-icon hide">
+			<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+			</div>
+			<div class="text-sm">
+
+
+			<span class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+			<a class="contact-make-skype-call c-progress" phone="{{value}}">{{value}}</a> 
+
+			</span>
+
+			</div>
+			<div class="clearfix"></div>
+			{{/each}}
+			</div>
+
+
+			{{/multiple_Property_Element}}
+			</div>
+			<div class="clearfix"></div>
+			{{/property_is_exists}}
+			-->
+			<!-- editing done for skype-->
+			{{#property_is_exists "email" properties}}
+
+			{{#multiple_Property_Element "email" properties}}
+			<!--  <div style="display: inline-block; text-align: right" class="span4">
+			<span><strong style="color: gray">Email</strong></span>
+			</div> -->
+
+
+			{{#property_is_exists "phone" ../properties}}
+
+			{{else}}
+			<div class="wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+
+			<small class="text-muted text-base" >Contact Info</small>
+
+			{{/property_is_exists}}
+			<div class="contact-email text-sm l-h"> 
+			{{#each this}}
+
+			<div class="pull-left contact-email-icon m-r-xs hide"><i class="icon icon-envelope text-sm v-middle"></i></div>
+			<div class="text-ellipsis text-xs">
+			<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
+			</div>
+
+			<div class="clearfix"></div>
+			{{/each}}
+			</div>
+
+
+
+			{{/multiple_Property_Element}}
+
+
+			{{/property_is_exists}}
+			{{#property_is_exists "phone" properties}}
+			</div></div></div>
+			{{else}}
+			{{#property_is_exists "email" ../properties}}
+			</div></div></div>
+			{{/property_is_exists}}
+			{{/property_is_exists}}
+
+
+
+
+
+			{{#getContactCustomPropertiesExclusively
+			properties}}
+
+
+
+			<div class="custom-data">
+			<div class="wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+
+
+
+			<small class=" text-muted text-base" >Custom Info</small>
+
+			<div>
+			<div class="contact-custom-icon pull-left hide" style="width:19px;"><i class="icon icon-info text-sm"></i></div>			
+			<div class="l-h">
+			{{#each_with_index this}}
+
+
+			{{#if custom_field_type}}
+			<div class="m-b-xs">
+			<span class="contact-custom-name custom-color word-break ">
+			<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+			</span>
+			</div>
+			{{else}}
+			<span class="contact-custom-name custom-color word-break ">
+			<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+			</span>
+			{{/if}}
+
+
+			{{#if_equals index ../this.length}}
+			<span class="contact-custom-value  word-break custom-color custom-value text-xs" name="{{name}}">
+			{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+			{{else}}
+			{{#if custom_field_type}}
+			{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+			{{else}}
+			{{value}}
+			{{/if}}
+			{{/if_equals}}
+			</span>
+			{{else}}
+			<span class="contact-custom-value text-base word-break custom-color custom-value text-xs" name="{{name}}">
+			{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+			{{else}}
+			{{#if custom_field_type}}
+			{{getContactTypeCustomFields custom_field_type value name}}
+			{{else}}
+			{{value}}
+			{{/if}}
+			{{/if_equals}}
+			</span>
+			{{/if_equals}}
+
+
+
+			<div class="clearfix"></div>
+
+
+			{{/each_with_index}}
+			</div>
+			</div>
+			</div>
+
+			</div>
+			</div>
+			</div>
+			{{/getContactCustomPropertiesExclusively}}
+
+			<div class="clearfix"></div>
+
+			{{#property_is_exists "address" properties}} 
+			<div class=" wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+
+
+			{{#property_json_is_not_empty "address" properties}}
+
+			<small class="text-base text-muted">Location</small>
+
+			<div>{{#address_Element properties}}{{/address_Element}}</div>
+			<div class="clearfix"></div>
+			<div class="pull-left m-t-sm m-b-sm w-full text-xs">
+			<div id="map" class="w-auto m-n" style="height: 200px; display: none;">
+			</div>
+			<div id="contacts-local-time" class="text-xs" style="display:none;">                                             
+			<div class="contacts-time" style="width:89%"></div>                                               
+			</div>
+			</div> 
+			<div class="clearfix"></div> 
+			</div>                                       
+			{{/property_json_is_not_empty}}
+			</div>
+			</div>
+			</div>  
+			{{/property_is_exists}}
+
+
+
+			<div class="clearfix"></div>
+			</div>	
+
+
+
+
+			<!-- ending section 5 -->	
+		
+
+       </div> </div> </div>   </div>
+
+       <!--  end more details tab section -->
+</div>
+						
+ 	<!--  ending section 3 -->
+ 
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{{else}}
+
+<div class="vbox">
   <div class="row-row">
   <div>
   <div>
@@ -279,11 +953,16 @@
 
 		</div>
 	</div>
+
+
+ 
 </div>
 						
-						<!--  ending section 3 -->
-					
+	 <!--  ending section 3 -->
 
+ 				
+		
+		
 <div class="text-md ">
 <div class="p-t-none p-r-xs p-b-none p-l-xs" style="display:none;"> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
 <div class="clearfix"></div>
@@ -672,8 +1351,16 @@
 </div>
 </div>
 </div>
+
+
+{{/is_mobile}}
+
+
 </div>
 		<!--  ending top header  view -->
+
+
+
 <div class="col bg-white">
  <div class="vbox" style="display:block">
   <div class="row-row" style="display:block">

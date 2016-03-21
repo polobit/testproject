@@ -46,8 +46,8 @@ public class DomainUserAddPicDeferredTask implements DeferredTask {
 			
 			for (DomainUser domainUser : domainUsers) {
 				
-				if(StringUtils.isNotBlank(domainUser.pic))
-					continue;
+				/*if(StringUtils.isNotBlank(domainUser.pic))
+					continue;*/
 				
 				String pic = domainUser.getOwnerPic();
 				
