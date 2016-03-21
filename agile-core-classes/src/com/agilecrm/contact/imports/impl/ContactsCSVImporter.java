@@ -53,7 +53,7 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
 	    StatusProcessor<String> statusProcessor = (StatusProcessor<String>) ImportFactory.getStatusProcessor();
 
 	    System.out.println(statusProcessor);
-	    statusProcessor.setTaskQueue("dummy-pull-queue");
+	    statusProcessor.setTaskQueue("contact-import-queue");
 	    csvUtil.setStatusProcessor(statusProcessor);
 
 	    csvUtil.createContactsFromCSV(getInputStream(), getMapperEntity(), String.valueOf(domainUserId));
