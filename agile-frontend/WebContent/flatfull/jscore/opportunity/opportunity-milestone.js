@@ -68,6 +68,9 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 		DEALS_LIST_COLLECTION.collection.add(newDealList);// main-collection
 	}
 
+	// Over write append function
+	DEALS_LIST_COLLECTION.appendItem = dealAppend;
+
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
 	initializeDealsListeners();
@@ -107,16 +110,15 @@ function initDealListCollection(milestones)
 			
 		} });
 
-	// Over write append function
-	DEALS_LIST_COLLECTION.appendItem = dealAppend;
-
 }
 
 // Append sub collection and model
 function dealAppend(base_model)
 {
 	milestonesCollectionView(base_model, this.el, function(){
-		dealsFetch(base_model);
+		dealsFetch(base_model, function(){
+			dealsCountFetch(base_model);
+		});
 	});
 	
 }
@@ -140,7 +142,7 @@ function milestonesCollectionView(base_model, ele, callback)
  * Create sub collection, ad to model in main collection, fetch tasks from DB
  * for sub collection and update UI.
  */
-function dealsFetch(base_model)
+function dealsFetch(base_model, callback)
 {
 	if (!base_model)
 		return;
@@ -181,7 +183,7 @@ function dealsFetch(base_model)
 		console.log($('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
 		var heading =  base_model.get("heading");
-		try
+		/*try
 		{
 			var count = data.at(0) ? data.at(0).toJSON().count : 0;
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
@@ -190,7 +192,7 @@ function dealsFetch(base_model)
         catch (err)
 		{
 			console.log(err);
-		}  
+		}*/  
         
         $('a.deal-notes').tooltip();
         	// Counter to fetch next sub collection
@@ -198,7 +200,9 @@ function dealsFetch(base_model)
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
 		dealTotalCountForPopover(heading);
 				
-		
+		if(callback){
+			return callback();
+		}
 		
 	} });
 }
@@ -348,4 +352,28 @@ console.log('------popover pipeline id-----', pipeline_id);
 			});
 	
 
+}
+
+function dealsCountFetch(base_model)
+{
+	if (!base_model)
+		return;
+
+	// Define sub collection
+	var dealCount = new Base_Model_View({ url : base_model.get("url").replace("/based", "/based/count"), template : "" });
+
+	dealCount.model.fetch({ success : function(data)
+	{
+		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
+		var count = data.get("count") ? data.get("count") : 0;
+		if(count > 10000)
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text((count-1)+"+");
+		}
+		else
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(count);
+		}
+	} });
+	
 }

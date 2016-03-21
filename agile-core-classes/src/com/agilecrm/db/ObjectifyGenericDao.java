@@ -120,7 +120,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 public class ObjectifyGenericDao<T> extends DAOBase
 {
 
-    static final String[] countRestrictedClassNames = new String[] { "contact", "activity" };
+    static final String[] countRestrictedClassNames = new String[] { "contact", "activity", "opportunity" };
 
     static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
 
@@ -1056,6 +1056,25 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		}
 		
 		return keys;
+    }
+    
+    /**
+     * Convenience method to get number of entities with max limit based on properties map
+     * 
+     * @param map
+     * @return T matching object
+     */
+    public int getCountByPropertyWithLimit(Map<String, Object> map, int limit)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+	
+	q.limit(limit);
+
+	return getCount(q);
     }
     
 
