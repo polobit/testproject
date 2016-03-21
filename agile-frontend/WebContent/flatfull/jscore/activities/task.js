@@ -444,6 +444,47 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 								}
 							});
 						}
+
+						else if (App_Companies.companyDetailView && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'))
+						{
+
+							/*
+							 * Verifies whether the added task is related to the
+							 * company in company detail view or not
+							 */
+							$.each(task.contacts, function(index, contact)
+							{
+								if (contact.id == App_Companies.companyDetailView.model.get('id'))
+								{
+
+									// Add model to collection. Disabled sort
+									// while adding and called
+									// sort explicitly, as sort is not working
+									// when it is called by add
+									// function
+									if (tasksView && tasksView.collection)
+									{
+										if (tasksView.collection.get(data.id))
+										{
+											tasksView.collection.get(data.id).set(new BaseModel(data));
+										}
+										else
+										{
+											tasksView.collection.add(new BaseModel(data), { sort : false });
+											tasksView.collection.sort();
+										}
+									}
+
+									// Activates "Timeline" tab and its tab
+									// content in
+									// contact detail view
+									// activate_timeline_tab();
+									add_entity_to_timeline(data);
+
+									return false;
+								}
+							});
+						}
 						else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
 						{
 							if (isUpdate)

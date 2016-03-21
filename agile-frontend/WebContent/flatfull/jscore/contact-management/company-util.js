@@ -652,6 +652,67 @@
 	        $('#documents', App_Companies.companyDetailView.el).html(documentsView.render().el);
 	        company_detail_tab.activateCurrentTab($('#documents'));
 	};
+
+	company_detail_tab.load_company_events = function()
+		{
+			id = App_Companies.companyDetailView.model.id;
+			eventsView = new Base_Collection_View({
+	            url: '/core/api/contacts/' + id + "/events",
+	            restKey: "event",
+	            templateKey: "contact-events",
+	            individual_tag_name: 'li',
+	            sortKey:"created_time",
+	            descending: true,
+	            postRenderCallback: function(el) {
+	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	            		 $(".event-created-time", el).timeago();
+	              	});
+	            	$('li',el).each(function(){
+	            	if($(this).find('.priority_type').text().trim() == "High") {
+            			$(this).css("border-left","3px solid #f05050");
+            		}else if($(this).find('.priority_type').text().trim() == "Normal"){
+            			$(this).css("border-left","3px solid #7266ba");
+            		}else if($(this).find('.priority_type').text().trim() == "Low") {
+            			$(this).css("border-left","3px solid #fad733");
+            		}
+	            	});
+	            }
+	        });
+			eventsView.collection.fetch();
+	        $('#company-events', App_Companies.companyDetailView.el).html(eventsView.render().el);
+	        company_detail_tab.activateCurrentTab($('#company-events'));
+		};
+
+		company_detail_tab.load_company_tasks = function()
+		{
+			   id = App_Companies.companyDetailView.model.id;
+				tasksView = new Base_Collection_View({
+		            url: '/core/api/contacts/' + id + "/tasks",
+		            restKey: "task",
+		            templateKey: "contact-tasks",
+		            individual_tag_name: 'li',
+		            sortKey:"created_time",
+		            descending: true,
+		            postRenderCallback: function(el) {
+		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+		            		 $(".task-created-time", el).timeago();
+		              	});
+		            	$('li',el).each(function(){
+		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
+		            			$(this).css("border-left","3px solid #f05050");
+		            		}else if($(this).find('.priority_type').text().trim() == "NORMAL"){
+		            			$(this).css("border-left","3px solid #7266ba");
+		            		}else if($(this).find('.priority_type').text().trim() == "LOW") {
+		            			$(this).css("border-left","3px solid #fad733");
+		            		}
+		            	});
+		            }
+		            
+		        });
+				tasksView.collection.fetch();
+		        $('#company-tasks', App_Companies.companyDetailView.el).html(tasksView.render().el);
+	        company_detail_tab.activateCurrentTab($('#company-tasks'));
+		};
 	
 
 }(window.company_detail_tab = window.company_detail_tab || {}, $));

@@ -289,6 +289,8 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contactDetailsTab a[href="#company-cases"]' : 'listCompanyCases',
     	'click #contactDetailsTab a[href="#company-notes"]' : 'listCompanyNotes',
     	'click #contactDetailsTab a[href="#company-documents"]' : 'listCompanyDocuments',
+    	'click #contactDetailsTab a[href="#company-events"]' : 'listCompanyEvents',
+    	'click #contactDetailsTab a[href="#company-tasks"]' : 'listCompanyTasks',
     	'click #company-add-tags' : 'addCompanytags',
     	'keydown #companyAddTags' : 'companyAddTags',
     	'click #company-actions-delete' : 'companyDelete',
@@ -1098,7 +1100,31 @@ getScore:  function(e){
 		save_contact_tab_position_in_cookie("documents");
 		company_detail_tab.load_company_documents();
 	},
+
+    /**
+	 * Fetches all the events related to the company and shows the events
+	 * collection as a table in its tab-content, when "Event" tab is
+	 * clicked.
+	 */
+	listCompanyEvents : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("events");
+		company_detail_tab.load_company_events();
+	},
+
+	 /**
+	 * Fetches all the tasks related to the company and shows the tasks
+	 * collection as a table in its tab-content, when "Task" tab is
+	 * clicked.
+	 */
 	
+	listCompanyTasks : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("tasks");
+		company_detail_tab.load_company_tasks();
+	},
 	/**
 	 * "click" event of add button of tags form in contact detail view
 	 * Pushes the added tags into tags array attribute of the contact and saves it

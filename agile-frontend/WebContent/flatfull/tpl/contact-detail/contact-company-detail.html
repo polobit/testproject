@@ -26,7 +26,12 @@
 								<a class="dropdown-toggle" data-toggle="dropdown"><span style="opacity:0.8;margin-top:91px;"class="caret text-lg"></span></a>
 								<ul class="dropdown-menu pull-right">
 <li> <a href="#company-edit"><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
-<li class="divider"></li>
+<li class="divider"></li>            
+                                   <li><a href='#' class="contact-add-note"><i
+											class="fa fa-file-text"></i> Add Note</a></li>
+									<li><a href='#' class="contact-add-task"><i
+											class="icon-tasks"></i> Add Task</a></li>
+
 									<li><a href='#' class="contact-add-case"><i
 											class="icon-folder-close" style="margin-right:2px"></i> Add Case</a></li>
 									{{#hasMenuScope 'DEALS'}}
@@ -376,6 +381,8 @@
 				<li class=""><a data-toggle="tab" href="#company-deals">Deals</a></li>
 				<li class=""><a data-toggle="tab" href="#company-cases">Cases</a></li>
                 <li class=""><a data-toggle="tab" href="#company-notes">Notes</a></li>
+                <li class=""><a data-toggle="tab" role="tab" href="#company-events">Events</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#company-tasks">Tasks</a></li>
                 <li class=""><a data-toggle="tab" href="#company-documents">Documents</a></li>				
 			</ul>
 			</div>
@@ -385,6 +392,8 @@
 				<div class="tab-pane" id="cases">...</div>
                 <div class="tab-pane" id="notes"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
                <div class="tab-pane" id="documents"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+           <div class="tab-pane" id="company-events"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+			<div class="tab-pane" id="company-tasks"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
 			</div>
 		
 	</div>
