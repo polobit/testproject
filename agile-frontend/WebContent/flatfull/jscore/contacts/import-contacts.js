@@ -308,6 +308,36 @@ $('#' + id).on('click', '#import-comp', function(e)
 					var model = {};
 
 					// Add Tags
+					// Add Tags
+					var tags = get_tags('import-contact-tags');
+					console.log(tags);
+					var tags_valid = true;
+					if (tags != undefined)
+					{
+						$.each(tags[0].value, function(index, value)
+						{
+							if(!isValidTag(value, false)) {
+								tags_valid = false;
+								return false;
+							}
+							if (!model.tags)
+								model.tags = [];
+
+							console.log(model);
+
+							model.tags.push(value);
+						});
+					}
+					if(!tags_valid) {
+						getTemplate("import-contacts-validation-message", upload_valudation_errors.invalid_tag, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							$('#import-validation-error').html($(template_ui));	
+						}, "#import-validation-error");
+
+						return false;
+					}
+					
 
 					$('td.import-contact-fields').each(function(index, element)
 					{
