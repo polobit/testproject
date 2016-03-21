@@ -566,6 +566,7 @@ function update_zones_ports($zones_tbl, $updated_td, old_text, updated_text)
 
     if(old_text == updated_text)
         return;
+    var territories = {};
 
     // Update text for all other rows
     $($zones_tbl).find('tbody tr').each(function(index, tr){
@@ -576,13 +577,20 @@ function update_zones_ports($zones_tbl, $updated_td, old_text, updated_text)
         {
             $(tr).find('td').eq(1).text(updated_text);
         }
+
+        // Add table's old territories
+        territories[td_text] = true;
     });
 
     var nodeId = $("#nodeui").data('nodeId');
     var nodeObject = workflow.getFigure(nodeId);
     var ports = getPorts(nodeObject);
 
-    editPort(nodeObject, ports.indexOf(old_text), updated_text);
+    // If renamed with already existing names, then remove port
+    if(!territories[updated_text])
+        editPort(nodeObject, ports.indexOf(old_text), updated_text);
+    else
+        removePort(nodeObject, ports.indexOf(old_text) - 1);
 
     alignDynamicNodePorts(nodeObject);
 
