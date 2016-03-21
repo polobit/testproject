@@ -490,10 +490,11 @@ function get_zones($table)
 }
 
 function zones_popup_handler($popup, $this){
+    
+    var $zone_comparator = $popup.find('[name="in_zone_compare"]');
+    var options = $zone_comparator.find('option');
 
-    var options = $popup.find('[name="in_zone_compare"]').find('option');
-        
-    $this.find('input:first').focusout(function(e){
+    $popup.find('input:first').focusout(function(e){
             e.preventDefault();
 
             var given_value = $(this).val();
@@ -502,21 +503,31 @@ function zones_popup_handler($popup, $this){
 
             if(zones[given_value])
             {
-                $popup.find('[name="in_zone_compare"]').val(zones[given_value]).attr('selected', 'selected');
-                $popup.find('[name="in_zone_compare"]').find("option[value!="+zones[given_value]+"]").remove();
+                $zone_comparator.val(zones[given_value]).attr('disabled', 'disabled');
             }
             else
             {
-                $popup.find('[name="in_zone_compare"]').find('option').remove();
-                $popup.find('[name="in_zone_compare"]').html(options);
+                $zone_comparator.removeAttr('disabled');
+                $zone_comparator.parent().find('input').remove();
+
+                $zone_comparator.find('option').remove();
+                $zone_comparator.html(options);
             }
+
+            if($zone_comparator.attr('disabled'))
+                $zone_comparator.parent().append('<input type="hidden" name="in_zone_compare" value='+zones[given_value]+'>');  
         });
 }
 
 function getPorts(nodeObject)
 {
-    var ports = nodeObject.getPorts();
+
     var portsJSON = [];
+    
+    if(!nodeObject)
+        return portsJSON;
+
+    var ports = nodeObject.getPorts();
     
     // Removes all ports except Source
     for(var i=0; i < ports.size; i++){
