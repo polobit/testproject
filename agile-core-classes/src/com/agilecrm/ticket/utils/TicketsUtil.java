@@ -636,6 +636,10 @@ public class TicketsUtil
 				if (ticket.assigneeID != null && ticket.assigneeID.longValue() == assignee_id.longValue())
 					return ticket;
 			}
+			else
+			{
+				return ticket;
+			}
 		}
 
 		// Copying old data to create ticket activity
