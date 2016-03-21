@@ -89,14 +89,19 @@ var Widget_Model_Events = Base_Model_View.extend({
    	  e.preventDefault();
 
       var shopName = $('#shop').val();
-		if (shopName != ""){
+		if (shopName != "" && !validateEmail(shopName)){
 			var domain = window.location.origin;
 			window.location = "/scribe?service_type=shopify&url=shopify&isForAll="+isForAll+"&shop=" + shopName + "&domain=" + domain + "";
 		}else{
-			alert("Enter Shop name");
+			alert("Please enter proper shop name");
 			$('#shop').focus();
 			return false;
 		}
    }
 
 });
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
