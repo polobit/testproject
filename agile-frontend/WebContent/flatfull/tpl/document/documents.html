@@ -52,14 +52,13 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Documents List</div>
                 <div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view" url="core/api/documents/bulk" id="document-list">
+                <table data-resizable-columns-id="document-list" class="table table-striped tableHeader showCheckboxes m-b-none panel agile-table table-layout-mob-view" url="core/api/documents/bulk" id="document-list" style="table-layout:auto">
                     <thead>
                         <tr>
-                           <th style="width:30%">Title</th>
-                            <th style="width:25%">Related Contacts</th>
-                            <th style="width:20%">Uploaded Date</th>
-                            <th style="width:15%">Owner</th>
-                            <th style="width:10%">Send</th>
+                            <th data-resizable-column-id="title">Title</th>
+                            <th data-resizable-column-id="related_contacts">Related Contacts</th>
+                            <th data-resizable-column-id="uploaded_date">Uploaded Date</th>
+                            <th data-resizable-column-id="owner">Owner</th>
                         </tr>
                     </thead>
                     <tbody id="documents-model-list" class="c-p">
@@ -73,7 +72,7 @@
 
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
-<div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;"><a class="text-cap">{{name}}</a></div>
+<div class="pull-left overflow-hidden line-clamp no-wrap"><a class="text-cap">{{name}}</a></div>
 <div class="pull-left m-l-xs">
 <b class="activate-link" style="display:none;">{{#if url}}<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/if}}</b>
 </div>
@@ -84,7 +83,7 @@
     </div>
 </td>
 <td class="overflow-hidden no-wrap">
-    <div class="text-ellipsis inline-block" style="width:128px">
+<div class="text-ellipsis inline-block">
 <div  style="width:128px">
         {{#each contacts}}
             {{#if_contact_type "PERSON"}}
@@ -93,6 +92,7 @@
             {{#if_contact_type "COMPANY"}}
                 <a href="#company/{{id}}" class="activate-link thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
             {{/if_contact_type}}
+
         {{/each}}
     </div>
 </div>
@@ -107,8 +107,8 @@
     <div class="thumb-sm avatar">
        {{#if owner.pic}}
         <img class="r r-2x" src="{{owner.pic}}"  title="{{owner.name}}" />
-	   {{else}}
-             <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;">{{owner.name}}</div>
+       {{else}}
+            <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;">{{owner.name}}</div>
        {{/if}}
     </div>
 </td>
@@ -121,24 +121,45 @@
 </td>
 </script>
 <script id="document-etype-select-collection-template" type="text/html">
-    <div class="wrapper-md lter bg-light b-b">
-            <div class="row">
-                <div class="col-md-12" >
-                        <h3 class="pull-left font-thin h3">Select Document Template</h3>
-                        <a href="#document-template-add" class="btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add Document Template</a>
+{{#unless this.length}}
+        <div class="bg-light lter b-b wrapper-md">
+            <h1 class="m-n font-thin h3"><i class="icon-plus-sign">
+            </i> Select Document Template </h1>
+            <a href="#document-template-add" class="btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add Document Template</a>
                         <div class="clearfix"></div>
+        </div>
+        <div class="alert bg-white">
+            <div class="slate-content  p-md">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">There are no document templates </h3>
+                    <div class="text">
+                        You can add document templates through preferences.
+                    </div>
+                </div>
+                <div class="clearfix">
                 </div>
             </div>
-    </div>
-    
-    <div class="wrapper-md">
-        <div class="row">
-            <div class="col-md-12">
-                <div id="document-etype-select-list"></div>          
-                
-            </div>
         </div>
-    </div>
+        {{/unless}}
+        {{#if this.length}}
+                <div class="bg-light lter b-b wrapper-md">
+                    <h1 class="m-n font-thin h3"><i class="icon-plus-sign">
+                    </i> Select Document Template </h1>
+                </div>
+                <div class="wrapper-md">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="document-etype-select-list"></div>          
+                            
+                        </div>
+                    </div>
+                </div>
+
+        {{/if}}
+
 </script>
 <script id="document-etype-select-model-template" type="text/html">
     <div pos="1" pos1="{{getIndexIncrementByOne @index}}" class="panel panel-default document-template-go pos-rlt" data="{{id}}" style="height: 220px;">

@@ -637,8 +637,10 @@ function get_pricingtable_from_deal(model_json)
 		if(sProductsTR!="")
 		{
 			sProductsHead="<thead><tr><th style='background:#dedede;'><b>Name</b></th><th style='background:#dedede;'><b>Price</b></th><th style='background:#dedede;'><b>QTY</b></th><th align='right' style='background:#dedede;'><b>Subtotal</b></th></tr></thead>"
-			
+			if(model_json.apply_discount)	
 			sProductsTR+= "<tr><td colspan='3' align='right'><b>Current Subtotal</b></td><td  align='right' style='align:right;'>" + sCurrency + iTotal.toFixed(2) + "</tr></tbody>"
+			else
+			sProductsTR+= "<tr><td colspan='3' align='right'><b>Grand Total</b></td><td  align='right' style='align:right;'>" + sCurrency + iTotal.toFixed(2) + "</tr></tbody>"	
 		}
 		if(model_json.apply_discount)
 		{
@@ -782,7 +784,49 @@ function load_document_from_edit_model(model)
 							// Register focus
 							register_focus_on_tinymce('signdoc-template-html');
 							// Reset tinymce
+						},
+						function(contact_json)
+						{
+							if($("#documents-listener-container").data("contact_model_json"))
+							{
+								contact_json=get_contact_json_for_merge_fields($("#documents-listener-container").data("contact_model_json"));
+							}
+							else
+								contact_json={}										
+							if($("#documents-listener-container").data("deal_model_json"))
+							{
+								contact_json["pricing_table"]=get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
+							}										
+							return contact_json;
 						});
+
+						if(model.contact_ids && model.contact_ids.length >0)
+						{
+							var url = '/core/api/contacts/'+ model.contact_ids[0];
+							$.ajax({
+								url : url,
+								type: 'GET',
+								dataType: 'json',
+								success: function(data)
+								{
+									$("#documents-listener-container").data("contact_model_json",data)
+									
+								}
+							});			
+						}
+						if(model.deal_ids && model.deal_ids.length >0)
+						{
+								var url = '/core/api/opportunity/'+ model.deal_ids[0];
+								$.ajax({
+									url : url,
+									type: 'GET',
+									dataType: 'json',
+									success: function(data){
+										$("#documents-listener-container").data("deal_model_json",data)
+										
+									}
+								});
+						}
 				}
 				else
 				{
@@ -791,14 +835,11 @@ function load_document_from_edit_model(model)
 						$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");				
 				}
 
-						
-				
-
 				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
 				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#EDEDED");
-		}, "#documents-listener-container");		
 
-		var fxn_process_added_contact = function(data, item)
+				
+			var fxn_process_added_contact = function(data, item)
 		     {
 		      $("#content [name='contact_ids']")
 		        .html(
@@ -815,6 +856,7 @@ function load_document_from_edit_model(model)
 						}
 					});
 		     }
+			
 			// Contacts type-ahead
 			agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead,fxn_process_added_contact);
 		     
@@ -839,4 +881,7 @@ function load_document_from_edit_model(model)
 			agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
 
 			initializeDocumentsListeners();	
+		}, "#documents-listener-container");		
+
+
 }

@@ -357,7 +357,8 @@ function populateMilestones(el, dealsDetails, pipeline, value, callback, default
  */
 function setupDealsTracksList(cel){
 	this.trackListView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "opportunity-track-list", individual_tag_name : 'li', postRenderCallback : function(el){
-		
+		trigger_dropdown_select($(".pipeline-tour-dropdown", el));
+		trigger_dropdown_select($(".opportunity-track-dropdown", el));
 		var tracksArray = trackListView.collection.models;
 		$.each(tracksArray,function(i,value){
 			console.log(value.toJSON());
@@ -600,7 +601,7 @@ function populate_deal_products(el, value,form_id){
 					},
 					postRenderCallback : function(el)
 					{
-						$(el).addClass("table-responsive");
+						//$(el).addClass("table-responsive");
 						console.log("loaded products : ", el);
 						$(me._form_id).on("click",".dealproducts_td_checkbox",
 						function(e)
@@ -653,12 +654,15 @@ function populate_deal_products(el, value,form_id){
 					App_Deal_Details.deal_products_collection_view.collection.fetch({
 					success : function(data)
 					{
+						var bProductsFound=false;
 						for(var key in data.models)
 						{
-							var _found=false
-							var _id=data.models[key].get("id")
+							var _found=false;
+							bProductsFound=true;
+							var _id=data.models[key].get("id");
 							if(me._value && me._value.products)
 							{
+								
 								for(var key1 in me._value.products)
 								{
 									if(me._value.products[key1].id	==_id)
@@ -684,8 +688,9 @@ function populate_deal_products(el, value,form_id){
 						{
 							for(var key1 in me._value.products)
 							{
-								var _found=false
-								var _id=me._value.products[key1].id 
+								bProductsFound=true;
+								var _found=false;
+								var _id=me._value.products[key1].id; 
 								
 								for(var key in data.models)
 								{
@@ -714,6 +719,12 @@ function populate_deal_products(el, value,form_id){
 									//data.models[key].set("isChecked",false);
 								}	
 							}
+						}
+						if(bProductsFound==false)
+						{
+
+							var sHTML='<tr><td colspan="6"><center>You do not have any Products currently setup.</center></td></tr>';
+							$("#deal-products-model-list").append(sHTML);
 						}
 					}
 				});
