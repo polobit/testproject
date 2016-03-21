@@ -536,7 +536,7 @@
       {{#if properties}}
       <img src="{{gravatarurl properties 24}}" class="r-5x" onerror="image_error(this);">
       {{else}}
-      <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
+      <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{getInitials requester_name}}">
       {{/if}}
 
     </div>
