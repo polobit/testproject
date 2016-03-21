@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -176,7 +177,7 @@ public class AnalyticsServlet extends HttpServlet
     {
 	try
 	{
-	    String[] blockedIpsArr = APIKey.getAPIKeyRelatedToDomain(domain).blocked_ips.split(",");
+	    String[] blockedIpsArr = APIKeyUtil.getAPIKeyRelatedToDomain(domain).blocked_ips.split(",");
 	    for (int i = 0; i < blockedIpsArr.length; i++)
 	    {
 		if (ipMatch(clientIp, blockedIpsArr[i].trim()))

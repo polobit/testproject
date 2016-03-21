@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -178,7 +179,7 @@ public class BasicAuthFilter implements Filter
     boolean isValidAPIKey(String apiKey, DomainUser user)
     {
 	// Gets APIKey, to authenticate the user
-	APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
+	APIKey key = APIKeyUtil.getAPIKeyRelatedToUser(user.id);
 
 	if (key == null)
 	    return false;

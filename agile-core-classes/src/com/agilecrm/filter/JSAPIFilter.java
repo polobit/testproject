@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -65,17 +67,13 @@ public class JSAPIFilter implements Filter
 	if (agileId != null)
 	{
 	    // Check if ApiKey
-	    if (APIKey.isValidJSKey(agileId) || APIKey.isPresent(agileId))
+	    if (APIKeyUtil.isValidJSOrRestAPIKey(agileId))
 	    {
 		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(
 		        SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Get AgileUser
-		DomainUser domainUser = null;
-		if (APIKey.isPresent(agileId))
-		    domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
-		if (APIKey.isValidJSKey(agileId))
-		    domainUser = APIKey.getDomainUserRelatedToJSAPIKey(agileId);
+		DomainUserPartial domainUser = APIKeyUtil.getAPIKeyDomainUser(agileId);
 
 		// Domain becomes null if user is deleted
 		if (domainUser != null)
@@ -99,7 +97,7 @@ public class JSAPIFilter implements Filter
 	    {
 		// If domain user exists and the APIKey matches, request is
 		// given access
-		if (isValidPassword(password, domainUser) || APIKey.isPresent(password))
+		if (isValidPassword(password, domainUser) || APIKeyUtil.isPresent(password))
 		{
 		    UserInfo userInfo = new UserInfo("agilecrm.com/js", domainUser.email, domainUser.name);
 
@@ -196,7 +194,7 @@ public class JSAPIFilter implements Filter
     boolean isValidAPIKey(String apiKey, DomainUser user)
     {
 	// Gets APIKey, to authenticate the user
-	APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
+	APIKey key = APIKeyUtil.getAPIKeyRelatedToUser(user.id);
 
 	if (key == null)
 	    return false;

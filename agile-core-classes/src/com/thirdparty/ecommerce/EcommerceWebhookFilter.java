@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 
 /**
  * 
@@ -53,7 +54,7 @@ public class EcommerceWebhookFilter implements Filter
 	if (agileId != null)
 	{
 	    // Check if ApiKey
-	    if (APIKey.isValidJSKey(agileId) || APIKey.isPresent(agileId))
+	    if (APIKeyUtil.isValidJSOrRestAPIKey(agileId))
 	    {
 		System.out.println("OK");
 		chain.doFilter(req, res);

@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
@@ -1375,7 +1376,7 @@ public class JSAPI
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(APIKey.getAllowedDomains());
+	    return mapper.writeValueAsString(APIKeyUtil.getAllowedDomains());
 	}
 	catch (Exception e)
 	{

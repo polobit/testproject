@@ -23,6 +23,7 @@ import net.fortuna.ical4j.util.UidGenerator;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.user.AgileUser;
@@ -131,7 +132,7 @@ public class ICalendarServlet extends HttpServlet
 	    NamespaceManager.set(namespace);
 
 	    // Gets AgileUser with respect to APIKey.
-	    AgileUser agileUser = APIKey.getAgileUserRelatedToAPIKey(apiKey);
+	    AgileUser agileUser = APIKeyUtil.getAgileUserRelatedToAPIKey(apiKey);
 
 	    if (agileUser == null)
 		return null;

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -71,8 +72,7 @@ public class DevAPIFilter implements Filter
 	    {
 		// If domain user exists and the APIKey matches, request is
 		// given access
-		if (isValidPassword(password, domainUser) || APIKey.isValidJSKey(password)
-		        || APIKey.isPresent(password))
+		if (isValidPassword(password, domainUser) || APIKeyUtil.isValidJSOrRestAPIKey(password))
 		{
 		    UserInfo userInfo = new UserInfo("agilecrm.com/js", domainUser.email, domainUser.name);
 
@@ -135,7 +135,7 @@ public class DevAPIFilter implements Filter
     boolean isValidAPIKey(String apiKey, DomainUser user)
     {
 	// Gets APIKey, to authenticate the user
-	APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
+	APIKey key = APIKeyUtil.getAPIKeyRelatedToUser(user.id);
 
 	if (key == null)
 	    return false;

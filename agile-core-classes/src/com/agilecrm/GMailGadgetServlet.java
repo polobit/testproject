@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -62,7 +63,7 @@ public class GMailGadgetServlet extends HttpServlet
 	SessionManager.set(userInfo);
 
 	// Get API Key
-	String apiKey = APIKey.getAPIKey().api_key;
+	String apiKey = APIKeyUtil.getAPIKey().api_key;
 
 	// Send API Key and domain for the gadget to start using Javascript API
 	JSONObject result = new JSONObject();

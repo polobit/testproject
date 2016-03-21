@@ -9,6 +9,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 
 @Path("/api")
 public class API
@@ -35,7 +36,7 @@ public class API
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public APIKey getAPIKey()
     {
-	return APIKey.getAPIKey();
+	return APIKeyUtil.getAPIKey();
     }
 
     @Path("api-key/key")
@@ -59,7 +60,7 @@ public class API
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public APIKey updateAllowedDomains(@QueryParam("allowed_domains") String allowedDomains)
     {
-	return APIKey.updateAllowedDomains(allowedDomains);
+	return APIKeyUtil.updateAllowedDomains(allowedDomains);
     }
     
     @Path("api-key/blocked-ips")
@@ -67,6 +68,6 @@ public class API
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public APIKey updateBlockedIps(@QueryParam("blocked_ips") String blockedIps)
     {
-	return APIKey.updateBlockedIps(blockedIps);
+	return APIKeyUtil.updateBlockedIps(blockedIps);
     }
 }

@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 
 /**
  * <code>JSONRequestFilter</code> handles requests sent to JSAPI. It handles the
@@ -116,7 +117,7 @@ public class JSONPRequestFilter implements Filter
     {
 	try
 	{
-	    String[] allowedDomains = APIKey.getAllowedDomains().split(",");
+	    String[] allowedDomains = APIKeyUtil.getAllowedDomains().split(",");
 	    for (int i = 0; i < allowedDomains.length; i++)
 	    {
 		String allowedDomain = allowedDomains[i].trim();
