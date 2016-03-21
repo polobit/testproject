@@ -7163,8 +7163,7 @@ Handlebars.registerHelper('multiple_Property_Element_List', function(name, prope
 				return options.fn(matching_properties_list);
 		});
 
-Handlebars.registerHelper('getDomainFromURL', function(options) {
-	var domain = getDomainFromURL();
-	return domain;
+Handlebars.registerHelper('getAliasFromArry', function(array, options) {
+	return array[0];
 });
 

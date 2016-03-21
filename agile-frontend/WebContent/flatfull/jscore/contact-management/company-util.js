@@ -67,11 +67,17 @@
 		}*/
 	};
 	
-	company_util.updateDealsList = function(deal,isCompany){
+	company_util.updateDealsList = function(deal,isCompany, isUpdate){
 		// Add model to collection. Disabled sort while adding and called
 		// sort explicitly, as sort is not working when it is called by add
 		// function
 		var current = App_Companies.companyDetailView.model.toJSON();
+
+		var owner = deal.owner_id;
+
+	  	if(!owner){
+	  		owner = deal.owner.id;
+	  	}
 
 		/*
 		 * Verifies whether the added deal is related to the contact in
@@ -82,28 +88,34 @@
 			if (contact.id == current.id) {
 				
 				
+				if(hasScope("VIEW_DEALS") || CURRENT_DOMAIN_USER.id == owner){
+					if (dealsView && dealsView.collection)
+					{
+						if(deal.archived == true)
+						{
+							dealsView.collection.remove(deal.id);
+							dealsView.collection.sort();
+						}
+						else if(dealsView.collection.get(deal.id))
+						{
+							dealsView.collection.get(deal.id).set(new BaseModel(deal));
+							$("#"+deal.id).closest("li").removeAttr("class");
+							$("#"+deal.id).closest("li").addClass("deal-color");
+							$("#"+deal.id).closest("li").addClass(deal.colorName);
 
-				if (dealsView && dealsView.collection)
-				{
-					if(deal.archived == true)
-					{
-						dealsView.collection.remove(deal.id);
-						dealsView.collection.sort();
-					}
-					else if(dealsView.collection.get(deal.id))
-					{
-						dealsView.collection.get(deal.id).set(new BaseModel(deal));
-						$("#"+deal.id).closest("li").removeAttr("class");
-						$("#"+deal.id).closest("li").addClass("deal-color");
-						$("#"+deal.id).closest("li").addClass(deal.colorName);
-
-					}
-					else
-					{
-						dealsView.collection.add(new BaseModel(deal), { sort : false });
-						dealsView.collection.sort();
+						}
+						else
+						{
+							dealsView.collection.add(new BaseModel(deal), { sort : false });
+							dealsView.collection.sort();
+						}
 					}
 				}
+				if(!hasScope("VIEW_DEALS") && CURRENT_DOMAIN_USER.id != owner && isUpdate){
+					dealsView.collection.remove(deal.id);
+					dealsView.collection.sort();
+				}
+				
 				
 				return false;
 			}

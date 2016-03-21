@@ -160,8 +160,24 @@
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
-                               <div>
-                               <div class="pull-left" style="width:40%;">
+                             <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Deals
+                                    
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Deals
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small></div>
+                              </div>
+                              <div>
+                              <div class="pull-left" style="width:40%;">
                                <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     View All Events
@@ -209,8 +225,23 @@
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
-                               <div>
-                               <div class="pull-left" style="width:40%;">
+                             <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Deals
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Deals
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small></div>
+                              </div>
+                              <div>
+                              <div class="pull-left" style="width:40%;">
                                <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="temp" value="VIEW_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     View All Events
@@ -256,8 +287,23 @@
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
-                               <div>
-                               <div class="pull-left" style="width:40%;">
+                             <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Deals
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Deals
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small></div>
+                              </div>
+                              <div>
+                              <div class="pull-left" style="width:40%;">
                                <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="temp" value="VIEW_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     View All Events
@@ -288,7 +334,7 @@
                         		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Calendar<br/><div style="margin-left:6px;"><small>Manage your tasks and events</small></div></label> 
 								<label class="i-checks i-checks-sm checkbox">
-            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
         	                    	Deals<br/>
 									<div style="margin-left:6px;"><small> Track sales opportunities</small></div>
     	                       </label><label class="i-checks i-checks-sm checkbox">
@@ -336,7 +382,7 @@
                         		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Calendar<br/><div style="margin-left:6px;"><small>Manage your tasks and events</small></div></label> 
 								<label class="i-checks i-checks-sm checkbox">
-            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
         	                    	Deals<br/>
 									<div style="margin-left:6px;"><small> Track sales opportunities</small></div>
     	                       </label><label class="i-checks i-checks-sm checkbox">

@@ -74,6 +74,7 @@ var PortletsRouter = Backbone.Router
 								]);
 								// Event initializers
 								initializeAddPortletsListeners();
+								//initializePortletsListeners();
 							}
 						});
 

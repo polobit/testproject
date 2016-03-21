@@ -121,14 +121,12 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 		},
 		error : function(model, response) {
 			$('ul.milestones').sortable("enable");
-			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly.")) {
+			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly." || response && response.status == 403)) {
 				showModalConfirmation("Deals", response.responseText, function(element){
 					App_Deals.deals();	
 				},
 				"",
-				function(element){
-					App_Deals.deals();
-				}, "Ok", "");
+				"", "Cancel", "");
 			}
 		}
 	});
