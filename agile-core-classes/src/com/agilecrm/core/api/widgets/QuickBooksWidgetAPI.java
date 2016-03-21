@@ -49,7 +49,7 @@ public class QuickBooksWidgetAPI
 		if (widget != null)
 		{
 			QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
-			        Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, widget.getProperty("company"));
+			        Globals.QUICKBOOKS_WIDGET_CONSUMER_KEY, Globals.QUICKBOOKS_WIDGET_CONSUMER_SECRET, widget.getProperty("company"));
 			try
 			{
 			    // Calls QuickBooksUtil method to retrieve invoices
@@ -88,9 +88,12 @@ public class QuickBooksWidgetAPI
 	{
 		try
 		{
+			String c_key=Globals.QUICKBOOKS_WIDGET_CONSUMER_KEY;
+			String c_secret=Globals.QUICKBOOKS_WIDGET_CONSUMER_SECRET;
+			
 		    QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
-			    Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, widget.getProperty("company"));
-
+			    c_key,c_secret, widget.getProperty("company"));
+		    		  
 		    // Calls XeroUtil method to add Contact to Xero account
 		    return utilObj.createCustomer(firstName, lastName, email);
 		}
