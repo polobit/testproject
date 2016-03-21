@@ -51,7 +51,7 @@ function showFacebookMatchingProfile(contact_id, first_name)
 					// Web url of twitter for this profile
 					var url = "@" + Facebook_id;
 
-					web_url = url;
+					facebook_web_url = url;
 					console.log(url);
 
 					var propertiesArray = [
@@ -236,17 +236,17 @@ function startFacebookWidget(contact_id)
 	SEARCH_STRING = first_name + ' ' + last_name;
 	console.log("    SEARCH_STRING" + SEARCH_STRING)
 
-	web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
-	console.log(web_url);
+	facebook_web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+	console.log(facebook_web_url);
 
 	$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);
 
-	if (web_url)
+	if (facebook_web_url)
 	{
 
 		// Get Twitter id from URL and show profile
-		console.log("profile attched" + web_url)
-		var fbProfileLink = buildFacebookProfileURL(web_url);
+		console.log("profile attched" + facebook_web_url)
+		var fbProfileLink = buildFacebookProfileURL(facebook_web_url);
 		var userNameOrId = getUserNameOrUserID(fbProfileLink);
 		var fbUserId = userNameOrId;
 		console.log(fbUserId);
@@ -320,9 +320,9 @@ function startFacebookWidget(contact_id)
 	$("#"+WIDGET_PARENT_ID).on("click", "#Facebook_plugin_delete", function(e)
 	{
 		e.preventDefault();
-		web_url = agile_widget_contact_property_by_subtype('website', 'FACEBOOK');
-		console.log('deleting facebook acct.',web_url);		
-		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data){
+		facebook_web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+		console.log('deleting facebook acct.',facebook_web_url);		
+		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', facebook_web_url, function(data){
 			console.log("In facebook delete callback");
 			showFacebookMatchingProfile(contact_id);
 		});
