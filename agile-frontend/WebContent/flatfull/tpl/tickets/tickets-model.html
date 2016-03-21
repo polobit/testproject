@@ -1,0 +1,351 @@
+<script id="ticket-model-template" type="text/html">
+	<td id="{{id}}" class="{{#if_equals priority 'HIGH'}}b-l b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data ticket no-border v-middle cursor-default" data-id="{{id}}" 
+      style="width: 6%;">
+    <label class="i-checks i-checks-sm" style="margin-top: 3px;">
+      <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}"
+      {{#selected_all_tickets}}checked="checked"{{/selected_all_tickets}}><i></i>
+    </label>
+  </td>
+  <td class="v-middle p-l-none show-notes" style="width: 3%;padding-top: 0px !important;">
+    {{{get_status_label status}}}
+  </td>
+  <td class="v-middle p-l-none p-r-none show-notes" style="width: 6%;">
+    <a class="thumb cursor-pointer" href="javascript:void(0);">
+      {{#if contact.properties}}
+        <img class="r-5x" src="{{gravatarurl contact.properties 24}}" onerror="image_error(this);" 
+          style="height: 45px; width: 45px;">
+      {{else}}
+        <img class="r-5x"  src="{{getGravatarFromEmail requester_email 42}}" onerror="image_error(this);"
+          _data-name="{{getInitials requester_name}}" style="height: 45px; width: 45px;">
+      {{/if}}
+    </a>
+  </td>
+  <td class="v-middle p-l-none p-r-none open-ticket show-notes pos-rlt notes-container" style="width: 55%;">
+     <table class="ticket-data" style="background-color: inherit;">
+        <tr>
+          <td>
+            <div class="text-ellipsis">
+              <div class="text-ellipsis pull-left text-sm" style="color: #697073;max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
+              <div class="pull-left text-sm">&nbsp;#{{id}}</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a class="custom-link subject-row text-ellipsis text-xs" style="color: #697073;">
+              {{#if contact.properties}}
+                {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
+              {{else}}
+                {{requester_name}}
+              {{/if}}
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <small class="text-muted text-xs">
+              {{#if_equals status 'NEW'}}
+                created 
+                <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
+                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+                </time>
+              {{else}}
+                {{#if_equals status 'CLOSED'}}
+                  closed 
+                  <time class="time-ago" datetime="{{epochToHumanDate "" closed_time}}">
+                    {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" closed_time}}
+                  </time>
+                {{else}}
+                  {{#if_equals user_replies_count 1}}
+                      created 
+                      <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
+                        {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+                      </time>
+                  {{else}}
+                    {{#if_equals last_updated_by 'AGENT'}}
+                      assignee replied 
+                    {{else}}
+                      customer responded 
+                    {{/if_equals}}
+                    <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
+                      {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
+                    </time>
+                  {{/if_equals}}
+                {{/if_equals}}
+              {{/if_equals}}
+              {{#if_equals status 'CLOSED'}}
+              {{else}}
+                {{#if due_time}}
+                  , <span class="">{{calculate_due_date due_time}}</span>
+                {{/if}}
+              {{/if_equals}}
+              {{#if attachments_exists}}
+                <i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>
+              {{/if}}
+            </small>
+          </td>
+        </tr>
+      </table>
+      <div id="ticket-last-notes" class="ticket-last-notes animated popup-fadeInUp" style="max-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
+        <div class="row m-n mar-btm-md">
+          <div class="col-md-12 p-b-sm">
+            <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
+            <span class="v-middle txt-small">Ticket #{{id}}</span>
+            <span class="text-light pull-right" style="margin-top: 2px;">
+              <time class="time-ago txt-small" datetime="{{epochToHumanDate "" created_time}}">
+                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+              </time>
+            </span>
+          </div>
+          <div class="col-md-12 p-b-sm div-max-width">
+            <strong>{{subject}}</strong>
+          </div>
+          <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
+            <div id="recent-reply-notes" class="recent-reply-notes">
+              {{{first_notes_text}}}
+            </div>
+          </div>
+          {{#if_equals status 'NEW'}}
+          {{else}}
+           {{#if_equals user_replies_count '1'}}
+            {{else}}
+            <div class="col-md-12 pad-all-sm">
+              <span class="text-muted">Last comment</span>
+              <hr class="m-t-xs m-b-xs">
+            </div>
+            <div class="col-md-12 pad-all-sm">
+              <span class="v-middle txt-small">
+                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+              </span>
+              <span class="text-light pull-right txt-small">
+                <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
+                  {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
+                </time>
+              </span>
+            </div>
+            <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
+              {{replace_br_with_space last_reply_text}}
+            </div>
+            {{/if_equals}}
+          {{/if_equals}}
+        </div>
+      </div>
+  </td>
+  <td class="v-middle p-l-none cursor-default" style="width: 27%;">
+    <table class="ticket-data txt-small full-width" style="background-color: inherit;">
+      <tr>
+        <td style="width: 20%;"><span class="text-muted cursor-default">Assignee: </span></td>
+        <td class="p-l-sm cursor-pointer" style="width: 80%;">
+          <div class="assignee-change pos-rlt show-caret" data-action="assignee">
+            <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee txt-color-light" data-toggle="dropdown">
+              {{#if assigneeID}}
+                {{assignee.name}}
+              {{else}}
+                {{#if assigned_to_group}}
+                  {{group.group_name}}
+                {{else}}-{{/if}}
+              {{/if}}
+            </a>
+            <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-toggle="dropdown" aria-expanded="false">
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right ul-select ul-select-assignee" data-ticket-id="{{id}}">  
+            </ul>
+          </div>
+        </td>
+      </tr>
+      <tr><td style="width: 20%;"><span class="text-muted cursor-default">Status: </span></td>
+          <td class="p-l-sm cursor-pointer" style="width: 80%;">
+            <div class="assignee-change pos-rlt show-caret" data-action="status">
+              <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs status txt-color-light" data-toggle="dropdown">
+                {{status}}
+              </a>
+              <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-btn="caret-btn" data-toggle="dropdown" aria-expanded="false">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right ul-select" data-ticket-id="{{id}}">
+                <li><a href="javascript:void(0);" value="OPEN" data-field="status">Open</a></li>
+                <li><a href="javascript:void(0);" value="PENDING" data-field="status">Pending</a></li>
+                <li><a href="javascript:void(0);" value="CLOSED" data-field="status">Closed</a></li>
+              </ul>
+            </div>
+          </td>
+      </tr>
+      <tr><td style="width: 20%;"><span class="text-muted cursor-default">Priority: </span></td>
+          <td class="p-l-sm cursor-pointer" style="width: 80%;">
+            <div class="assignee-change pos-rlt show-caret" data-action="priority">
+              <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs priority txt-color-light" data-toggle="dropdown">
+                {{priority}}
+              </a>
+              <a class="btn btn-sm p-n dropdown-toggle b-n caret-btn pull-right display-none" data-toggle="dropdown" aria-expanded="false">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right ul-select" data-ticket-id="{{id}}">
+                <li><a href="javascript:void(0);" value="LOW" data-field="priority">Low</a></li>
+                <li><a href="javascript:void(0);" value="MEDIUM" data-field="priority">Medium</a></li>
+                <li><a href="javascript:void(0);" value="HIGH" data-field="priority">High</a></li>
+              </ul>
+            </div>
+          </td>
+      </tr>
+    </table>
+  </td>
+</script>
+<script id="ticket-single-row-model-template" type="text/html">
+  <td class="data select_checkbox c-p pos-rlt p-r-none" data-id="{{id}}">
+    <label class="i-checks i-checks-sm" style="vertical-align: sub;">    
+       <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}"
+       {{#selected_all_tickets}}checked="checked"{{/selected_all_tickets}}><i></i>
+    </label>
+  </td>
+  <td class="ticket_attachment">{{#if attachments_exists}}<i class="fa fa-paperclip m-l-sm ticket_attachment" aria-hidden="false"></i>{{/if}}</td> 
+  <td style="padding: 8px; padding-top: 5px;padding-left: 0px;">
+    {{{get_status_label status}}}
+  </td>
+  {{#is_column_selected 'id'}}
+    <td class="first-letter-cap open-ticket id">
+      <div class="text-ellipsis">#{{id}}</div>
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'subject'}}
+    <td class="open-ticket subject max-width-250 text-ellipsis">
+      <div class="text-ellipsis">{{subject}}</div>
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'requester_name'}}
+    <td class="open-ticket requester_name width-9em text-ellipsis">
+    <div class="text-ellipsis">
+      {{#if contact.properties}}
+        {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
+      {{else}}
+        {{requester_name}}
+      {{/if}}
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'requester_email'}}
+    <td class="open-ticket requester_email width-9em text-ellipsis">
+      <div class="text-ellipsis">{{requester_email}}</div>
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'due_date'}}
+    <td class="first-letter-cap open-ticket text-ellipsis due_date">
+      {{#if due_time}}{{epochToHumanDate 'mmm dd, yyyy' due_time}}{{else}}-{{/if}}
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'priority'}}
+    <td class="open-ticket priority">
+      {{#if_equals priority 'HIGH'}}
+        <span class="label bg-danger first-letter-cap inline-block">HIGH</span>
+      {{else}}
+        <span class="first-letter-cap inline-block">{{priority}}</span>
+    {{/if_equals}}
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'status'}}
+    <td class="first-letter-cap open-ticket status">
+      {{status}}
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'assignee'}}
+    <td class="open-ticket assignee">
+      <div class="text-ellipsis width-9em">{{#if assignee}}{{assignee.name}}{{else}}-{{/if}}</div>
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'group'}}
+    <td class="open-ticket group">
+      <div class="text-ellipsis width-9em">{{#if group}}{{group.group_name}}{{else}}-{{/if}}</div>
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'assigned_time'}}
+    <td class="first-letter-cap open-ticket text-ellipsis assigned_time">
+      {{#if assigned_time}}{{epochToHumanDate 'mmm dd, yyyy' assigned_time}}{{else}}-{{/if}}
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'ticket_type'}}
+    <td class="first-letter-cap open-ticket ticket_type">
+      {{type}}
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'last_updated_time'}}
+    <td class="first-letter-cap open-ticket text-ellipsis last_updated_time">
+      {{#if last_updated_time}}{{epochToHumanDate 'mmm dd, yyyy' last_updated_time}}{{else}}-{{/if}}
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'closed_time'}}
+    <td class="first-letter-cap open-ticket text-ellipsis closed_time">
+      
+       {{#if_equals status 'CLOSED'}}
+         {{#if closed_time}}{{epochToHumanDate 'mmm dd, yyyy' closed_time}}{{else}}-{{/if}}
+        {{else}}-
+        {{/if_equals}}
+    </td>
+  {{/is_column_selected}}
+  {{#is_column_selected 'created_time'}}
+    <td class="first-letter-cap open-ticket text-ellipsis created_time">
+      {{epochToHumanDate 'mmm dd, yyyy' created_time}}
+    </td>
+  {{/is_column_selected}}
+</script>
+<script id="ticket-model-change-assignee-template" type="text/html">
+  {{#each this}}
+    <li class="dropdown-header">{{group_name}}</li>
+    <li>
+      <a href="javascript:void(0);" data-field="assignee" data-group-id="{{id}}" data-name="{{group_name}}" value="0">
+        Assign to group
+      </a>
+    </li>
+    {{#group_users}}
+      <li>
+        <a href="javascript:void(0);" data-field="assignee" data-name="{{name}}" data-group-name="{{../group_name}}" data-group-id="{{../id}}" value="{{id}}">
+          {{name}}
+        </a>
+      </li>
+    {{/group_users}}
+  {{/each}}  
+</script>
+<script id="ticket-single-row-popup-template" type="text/html">
+<div id="ticket-last-notes" class="ticket-last-notes animated popup-fadeInUp" style="max-height: {{#if_equals status 'NEW'}}170px;{{else}}270px;{{/if_equals}};">
+    <div class="row m-n mar-btm-md">
+          <div class="col-md-12 p-b-sm">
+            <span class="label bg-{{toLowerCase status}} first-letter-cap inline-block">{{toLowerCase status}}</span>&nbsp;&nbsp;&nbsp;
+            <span class="v-middle txt-small">Ticket #{{id}}</span>
+            <span class="text-light pull-right" style="margin-top: 2px;">
+              <time class="time-ago txt-small" datetime="{{epochToHumanDate "" created_time}}">
+                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+              </time>
+            </span>
+          </div>
+          <div class="col-md-12 p-b-sm div-max-width">
+            <strong>{{subject}}</strong>
+          </div>
+          <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
+            <div id="recent-reply-notes" class="recent-reply-notes">
+              {{{first_notes_text}}}
+            </div>
+          </div>
+          {{#if_equals status 'NEW'}}
+          {{else}}
+           {{#if_equals user_replies_count '1'}}
+            {{else}}
+            <div class="col-md-12 pad-all-sm">
+              <span class="text-muted">Last comment</span>
+              <hr class="m-t-xs m-b-xs">
+            </div>
+            <div class="col-md-12 pad-all-sm">
+              <span class="v-middle txt-small">
+                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+              </span>
+              <span class="text-light pull-right txt-small">
+                <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
+                  {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}
+                </time>
+              </span>
+            </div>
+            <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
+              {{replace_br_with_space last_reply_text}}  
+            </div>
+           {{/if_equals}}
+          {{/if_equals}}
+        </div>
+  </div>
+</script>

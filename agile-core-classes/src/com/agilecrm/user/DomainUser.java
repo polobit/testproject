@@ -27,6 +27,7 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.ticket.entitys.HelpdeskSettings;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
@@ -136,7 +137,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	// menu scopes in future
 	@NotSaved(IfDefault.class)
 	public HashSet<NavbarConstants> restricted_menu_scopes = null;
-
+	
 	/**
 	 * Pic of the domain user
 	 */
@@ -236,6 +237,11 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	public boolean is_forms_updated = false;
 
+	/** Helpdesk settings */
+
+	@Embedded
+	public HelpdeskSettings helpdeskSettings = null;
+	
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
@@ -826,7 +832,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			loadScopes();
 
 			loadMenuScopes();
-
+			
+			if(helpdeskSettings == null)
+				helpdeskSettings = new HelpdeskSettings().defaultSettings();
 		}
 		catch (Exception e)
 		{

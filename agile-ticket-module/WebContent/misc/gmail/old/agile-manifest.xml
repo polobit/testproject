@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ApplicationManifest
+	xmlns="http://schemas.google.com/ApplicationManifest/2009">
+
+	<!-- Name and description pulled from message bundles -->
+	<Name>Agile CRM Contextual Gadget</Name>
+	<Description>AgileCRM for Gmail users</Description>
+
+	<!-- EXTRACTOR -->
+	
+	<Extension id="FromEmailAddressExtractor" type="contextExtractor">
+		<Name>Email ids in From</Name>
+	  	<!--<Url>750034002094:Agile</Url>   devika123.mygbiz.com -->
+	  	<!--<Url>811897315629:Agile</Url>   devika-main -->
+		<Url>149676608039:Agile</Url>   <!--dhanraj123.mygbiz.com  -->
+	  	<!--<Url>555292128199:Agile</Url>   agilecrm.com-->
+	  	<Triggers ref="AgileCRMGadget"/>
+  		<Scope ref="fromEmail"/>
+   		<Scope ref="fromName"/>
+   		<Scope ref="toEmail"/>
+   		<Scope ref="toName"/>
+   		<Scope ref="ccEmail"/>
+   		<Scope ref="ccName"/>
+   		<Container name="mail"/>
+	</Extension>
+
+	<Extension id="SubjectBodyEmailAddressExtractor" type="contextExtractor">
+  		<Name>Email ids in Subject or body</Name>
+  		<Url>google.com:EmailAddressExtractor</Url>
+  		<Triggers ref="AgileCRMGadget"/>
+  		<Scope ref="emailSubject"/>
+  		<Scope ref="emailBody"/>
+  		<Container name="mail"/>
+	</Extension>
+	
+ 	<!-- GADGET -->
+	<Extension id="AgileCRMGadget" type="gadget">
+		<Name>AgileCRM - Sell &amp; Market like Fortune 500 - contextual
+			gadget</Name>
+		<Url>https://www.agilecrm.com/agile-gadget.xml</Url>
+		<Container name="mail" />
+	</Extension>
+
+	<!-- SCOPE -->
+	<Scope id="fromEmail">
+  		<Url>tag:google.com,2010:auth/contextual/extractor/FROM_ADDRESS</Url>
+  		<Reason>AgileCRM looks at from address to determine if there is a match in CRM.</Reason>
+	</Scope>
+
+	<Scope id="fromName">
+  		<Url>tag:google.com,2010:auth/contextual/extractor/FROM_PERSONAL</Url>
+  		<Reason>AgileCRM looks at sender's name to prefill the new-contact information.</Reason>
+	</Scope>
+
+	<Scope id="toEmail">
+  		<Url>tag:google.com,2010:auth/contextual/extractor/TO_ADDRESS</Url>
+  		<Reason>AgileCRM looks at to address to determine if there is a match in CRM.</Reason>
+	</Scope>
+
+	<Scope id="toName">
+  		<Url>tag:google.com,2010:auth/contextual/extractor/TO_PERSONAL</Url>
+  		<Reason>AgileCRM looks at receiver's name to prefill the new-contact information.</Reason>
+	</Scope>
+
+	<Scope id="ccEmail">
+  		<Url>tag:google.com,2010:auth/contextual/extractor/CC_EMAIL</Url>
+  		<Reason>AgileCRM looks at from address to determine if there is a match in CRM.</Reason>
+	</Scope>
+
+	<Scope id="ccName">
+  		<Url>tag:google.com,2010:auth/contextual/extractor/CC_PERSONAL</Url>
+  		<Reason>AgileCRM looks at sender's name to prefill the new-contact information.</Reason>
+	</Scope>
+	
+	<Scope id="emailSubject">
+  		<Url>tag:google.com,2010:auth/contextual/extractor/SUBJECT</Url>
+  		<Reason>AgileCRM looks for any email in subject looking for matches in AgileCRM.</Reason>
+	</Scope>
+
+	<Scope id="emailBody">
+  		<Url>tag:google.com,2010:auth/contextual/extractor/BODY</Url>
+  		<Reason>AgileCRM looks for any email in body looking for matches in AgileCRM.</Reason>
+	</Scope>
+
+</ApplicationManifest>

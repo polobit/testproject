@@ -102,6 +102,7 @@ public class UserInfo implements Serializable
 	    setDomainId(domainUser.id);
 
 	    this.email = domainUser.email;
+	    this.name = domainUser.name;
 
 	    try
 	    {

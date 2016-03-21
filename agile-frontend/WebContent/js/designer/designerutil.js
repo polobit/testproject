@@ -19,8 +19,7 @@
 
 var _CONTACT_CUSTOM_FIELDS = undefined;
 
-function insertSelectedMergeField(ele, target_id)
-{
+function insertSelectedMergeField(ele, target_id) {
 	// current value
 	var curValue = $(ele).find(':selected').val();
 
@@ -35,22 +34,41 @@ function insertSelectedMergeField(ele, target_id)
  *            to add specific fields for specific nodes like unsubscribe link to
  *            SendEmail node
  */
-function getMergeFields(type, callback)
-{
+function getMergeFields(type, callback) {
 
-	var options = { "Select Merge Field" : "", "First Name" : "{{first_name}}", "First Name Fix" : "{{first_name_fix}}", "Last Name" : "{{last_name}}", "Last Name Fix" : "{{last_name_fix}}", "Name Fix" : "{{name_fix}}", "Score" : "{{score}}",
-		"Created Date" : "{{created_date}}", "Modified Date" : "{{modified_date}}", "Email" : "{{email}}", "Company" : "{{company}}", "Title" : "{{title}}",
-		"Website" : "{{website}}", "Phone" : "{{phone}}", "City" : "{{location.city}}", "State" : "{{location.state}}", "Country" : "{{location.country}}",
-		"Twitter Id" : "{{twitter_id}}", "LinkedIn Id" : "{{linkedin_id}}", "Owner Name" : "{{owner.name}}", "Owner Email" : "{{owner.email}}" , "Owner calendar URL" : "{{owner.calendar_url}}" , "Owner Signature" : "{{{owner.signature}}}" };
+	var options = {
+		"Select Merge Field" : "",
+		"First Name" : "{{first_name}}",
+		"First Name Fix" : "{{first_name_fix}}",
+		"Last Name" : "{{last_name}}",
+		"Last Name Fix" : "{{last_name_fix}}",
+		"Name Fix" : "{{name_fix}}",
+		"Score" : "{{score}}",
+		"Created Date" : "{{created_date}}",
+		"Modified Date" : "{{modified_date}}",
+		"Email" : "{{email}}",
+		"Company" : "{{company}}",
+		"Title" : "{{title}}",
+		"Website" : "{{website}}",
+		"Phone" : "{{phone}}",
+		"City" : "{{location.city}}",
+		"State" : "{{location.state}}",
+		"Country" : "{{location.country}}",
+		"Twitter Id" : "{{twitter_id}}",
+		"LinkedIn Id" : "{{linkedin_id}}",
+		"Owner Name" : "{{owner.name}}",
+		"Owner Email" : "{{owner.email}}",
+		"Owner calendar URL" : "{{owner.calendar_url}}",
+		"Owner Signature" : "{{{owner.signature}}}"
+	};
 
 	// Get Custom Fields in template format
 	var custom_fields;
-	
+
 	// Cache Contact Custom fields
-	if(_CONTACT_CUSTOM_FIELDS)
+	if (_CONTACT_CUSTOM_FIELDS)
 		custom_fields = _CONTACT_CUSTOM_FIELDS
-	else
-	{
+	else {
 		_CONTACT_CUSTOM_FIELDS = get_custom_fields();
 		custom_fields = _CONTACT_CUSTOM_FIELDS;
 	}
@@ -63,24 +81,24 @@ function getMergeFields(type, callback)
 	var merged_json = merge_jsons({}, options, custom_fields);
 
 	// If type is send_email add unsubscribe link
-	if (type !== undefined && type == "send_email")
-	{
+	if (type !== undefined && type == "send_email") {
 		// Rename Select Merge field for Send Email
 		var json_str = JSON.stringify(merged_json);
 
-		var replaced_json = json_str.replace("Select Merge Field", "Add Merge Field");
+		var replaced_json = json_str.replace("Select Merge Field",
+				"Add Merge Field");
 
 		// Parsing the altered string
 		merged_json = JSON.parse(replaced_json);
 
 		merged_json["Unsubscribe Link"] = "{{{unsubscribe_link}}}";
-		
+
 		merged_json["Online Link"] = "{{{online_link}}}";
 	}
 
 	merged_json["Powered by"] = "{{{powered_by}}}";
 
-	if(callback)
+	if (callback)
 		return callback(merged_json);
 
 	return merged_json;
@@ -91,13 +109,18 @@ function getMergeFields(type, callback)
  * 
  */
 
-function getUpdateFields(type)
-{
+function getUpdateFields(type) {
 
 	var options = {
 
-	"First Name" : "first_name", "Last Name" : "last_name", "Email" : "email", "Company" : "company", "Title" : "title", "Website" : "website",
-		"Phone" : "phone", };
+		"First Name" : "first_name",
+		"Last Name" : "last_name",
+		"Email" : "email",
+		"Company" : "company",
+		"Title" : "title",
+		"Website" : "website",
+		"Phone" : "phone",
+	};
 
 	// Get Custom Fields in template format
 	var custom_fields = get_custom_fields(type);
@@ -112,18 +135,17 @@ function getUpdateFields(type)
 	return merged_json;
 }
 
-function getTwilioIncomingList(type)
-{
+function getTwilioIncomingList(type) {
 	var numbers;
 	$.ajax({
-		  url: 'core/api/sms-gateway/numbers',
-		  type: "GET",
-		  async:false,
-		  dataType:'json',
-		  success: function (twilioNumbers) {
-			  numbers=  twilioNumbers;
+		url : 'core/api/sms-gateway/numbers',
+		type : "GET",
+		async : false,
+		dataType : 'json',
+		success : function(twilioNumbers) {
+			numbers = twilioNumbers;
 		}
-		
+
 	});
 
 	if (numbers == null)
@@ -131,31 +153,34 @@ function getTwilioIncomingList(type)
 
 	var numbersList = {};
 	var length = numbers.length;
-	if (length > 0)
-	{
-		for (var i = 0; i < length; i++)
+	if (length > 0) {
+		for ( var i = 0; i < length; i++)
 			numbersList[numbers[i]] = numbers[i];
 	}
 	// Parse stringify json
 	return numbersList;
 }
 
-function getCampaignList(type)
-{
-	
+function getCampaignList(type) {
 
-	var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
+	var workflows = $.ajax({
+		type : "GET",
+		url : '/core/api/workflows',
+		async : false,
+		dataType : 'json'
+	}).responseText;
 
 	// Parse stringify json
 	var data = JSON.parse(workflows);
-	//changed to all
-	var listOfWorkflows = {"All":"All"};
+	// changed to all
+	var listOfWorkflows = {
+		"All" : "All"
+	};
 
-	$.each(data, function(index, obj)
-	{
+	$.each(data, function(index, obj) {
 
-			//if (key == 'name')
-				listOfWorkflows[obj["name"]] = obj["id"];
+		// if (key == 'name')
+		listOfWorkflows[obj["name"]] = obj["id"];
 
 	});
 
@@ -165,30 +190,32 @@ function getCampaignList(type)
 /**
  * Returns count of workflow list
  */
- function getCampaignCount(type)
- {
+function getCampaignCount(type) {
 
- 	try{
+	try {
 		var count = (window.parent.App_Workflows.workflow_list_view.collection.length);
-			return count;
-	}
-	catch(err){
+		return count;
+	} catch (err) {
 		return 0;
 	}
 	return 0;
-	
- }
+
+}
 
 /**
  * Returns custom fields in format required for merge fields. E.g., Nick
  * Name:{{Nick Name}}
  */
-function get_custom_fields(type)
-{
+function get_custom_fields(type) {
 	var url = window.location.protocol + '//' + window.location.host;
 
 	// Sends GET request for customfields.
-	var msg = $.ajax({ type : "GET", url : url + '/core/api/custom-fields/scope?scope=CONTACT', async : false, dataType : 'json' }).responseText;
+	var msg = $.ajax({
+		type : "GET",
+		url : url + '/core/api/custom-fields/scope?scope=CONTACT',
+		async : false,
+		dataType : 'json'
+	}).responseText;
 
 	// Parse stringify json
 	var data = JSON.parse(msg);
@@ -196,17 +223,13 @@ function get_custom_fields(type)
 	var customfields = {};
 
 	// Iterate over data and get field labels of each custom field
-	$.each(data, function(index, obj)
-	{
-		if (obj['field_type'] != "FORMULA")
-		{
+	$.each(data, function(index, obj) {
+		if (obj['field_type'] != "FORMULA") {
 			// Iterate over single custom field to get field-label
-			$.each(obj, function(key, value)
-			{
+			$.each(obj, function(key, value) {
 
 				// Needed only field labels for merge fields
-				if (key == 'field_label')
-				{
+				if (key == 'field_label') {
 					if (type == "update_field")
 						customfields[value] = value
 					else
@@ -222,8 +245,7 @@ function get_custom_fields(type)
 /**
  * Returns merged json of two json objects
  */
-function merge_jsons(target, object1, object2)
-{
+function merge_jsons(target, object1, object2) {
 	return $.extend(target, object1, object2);
 }
 
@@ -237,37 +259,32 @@ function merge_jsons(target, object1, object2)
  * @param text -
  *            text to be inserted, here like merge field
  */
-function insertAtCaret(textareaId, text)
-{
+function insertAtCaret(textareaId, text) {
 	var txtarea = document.getElementById(textareaId);
 	var scrollPos = txtarea.scrollTop;
 	var strPos = 0;
-	var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? "ff" : (document.selection ? "ie" : false));
-	if (br == "ie")
-	{
+	var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? "ff"
+			: (document.selection ? "ie" : false));
+	if (br == "ie") {
 		txtarea.focus();
 		var range = document.selection.createRange();
 		range.moveStart('character', -txtarea.value.length);
 		strPos = range.text.length;
-	}
-	else if (br == "ff")
+	} else if (br == "ff")
 		strPos = txtarea.selectionStart;
 
 	var front = (txtarea.value).substring(0, strPos);
 	var back = (txtarea.value).substring(strPos, txtarea.value.length);
 	txtarea.value = front + text + back;
 	strPos = strPos + text.length;
-	if (br == "ie")
-	{
+	if (br == "ie") {
 		txtarea.focus();
 		var range = document.selection.createRange();
 		range.moveStart('character', -txtarea.value.length);
 		range.moveStart('character', strPos);
 		range.moveEnd('character', 0);
 		range.select();
-	}
-	else if (br == "ff")
-	{
+	} else if (br == "ff") {
 		txtarea.selectionStart = strPos;
 		txtarea.selectionEnd = strPos;
 		txtarea.focus();
@@ -285,39 +302,84 @@ function insertAtCaret(textareaId, text)
  * @param target_id -
  *            id of target element where changes should affect.
  */
-function url_visited_select_callback(ele, target_id)
-{
+function url_visited_select_callback(ele, target_id) {
 	// current value
 	var curValue = $(ele).find(':selected').val();
 
 	var tempObj = $('<span />').insertBefore('#' + target_id);
 
 	// if 'contains' selected, make type attribute 'text'
-	if (curValue === 'contains')
-	{
+	if (curValue === 'contains') {
 		// replacing type attribute from url to text
-		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj).focus();
+		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj)
+				.focus();
 	}
 
 	// if 'exact_match' selected, make type attribute 'url'
-	if (curValue === 'exact_match')
-	{
+	if (curValue === 'exact_match') {
 		// replacing type attribute to url.
-		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj).focus();
+		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj)
+				.focus();
 	}
 
 	tempObj.remove();
 }
 
 /**
+ * Retrieves label objects from labelsAPI. Inserts each label value within label object
+ * into an array.
+ */
+function get_labels() {
+
+	var url = window.location.protocol + '//' + window.location.host;
+
+	// Sends GET request for labels.
+	var msg = $.ajax({
+		type : "GET",
+		url : url + '/core/api/tickets/labels',
+		async : false,
+		dataType : 'json'
+	}).responseText;
+
+	// Parse stringify json
+	var data = JSON.parse(msg);
+
+	return get_labels_array(data);
+}
+
+/**
+ * Returns array of tags. Separates tags from tag objects and inserts each tag
+ * into an array.
+ * 
+ * @param data -
+ *            Tag objects
+ */
+function get_labels_array(data) {
+	var labels = [];
+
+	// Iterate over data and insert label values into labels array.
+	$.each(data, function(index, obj) {
+		// Iterate over single label object to get labels value.
+		$.each(obj, function(key, value) {
+
+			// Needed only label values.
+			if (key == 'label')
+				labels[index] = value;
+
+		});
+	});
+
+	return labels;
+
+}
+
+/**
  * Retrieves tag objects from TagsAPI. Inserts each tag value within tag object
  * into an array.
  */
-function get_tags()
-{
+function get_tags() {
 	// Fetch tags from collection if defined
-	if (window.parent.tagsCollection)
-	{
+	if (window.parent.tagsCollection) {
 		console.log("Fetching tags from collection...");
 
 		var tags_JSON = window.parent.tagsCollection.toJSON();
@@ -327,7 +389,12 @@ function get_tags()
 	var url = window.location.protocol + '//' + window.location.host;
 
 	// Sends GET request for tags.
-	var msg = $.ajax({ type : "GET", url : url + '/core/api/tags', async : false, dataType : 'json' }).responseText;
+	var msg = $.ajax({
+		type : "GET",
+		url : url + '/core/api/tags',
+		async : false,
+		dataType : 'json'
+	}).responseText;
 
 	// Parse stringify json
 	var data = JSON.parse(msg);
@@ -342,16 +409,13 @@ function get_tags()
  * @param data -
  *            Tag objects
  */
-function get_tags_array(data)
-{
+function get_tags_array(data) {
 	var tags = [];
 
 	// Iterate over data and insert tag values into tags array.
-	$.each(data, function(index, obj)
-	{
+	$.each(data, function(index, obj) {
 		// Iterate over single tag object to get tag value.
-		$.each(obj, function(key, value)
-		{
+		$.each(obj, function(key, value) {
 
 			// Needed only tag values.
 			if (key == 'tag')
@@ -368,64 +432,72 @@ function get_tags_array(data)
  * Initialize tags typeahead using jquery ui auto-complete. Shows typeahead on
  * multiple tags separated by comma.
  */
-function init_tags_typeahead()
-{
-	// fetch array of tags.
-	var tags_array = get_tags();
+function init_tags_typeahead(tag_ids, type) {
+
+	var tags_array;
+
+	// fetch array of tags or labels.
+	if (type && type == "labels")
+		tags_array = get_labels();
+	else
+		var tags_array = get_tags();
 
 	// Initialize tags typeahead for Tags and CheckTags node
 	// $('#tag_names, #tag_value').autocomplete({source: tags_array});
+	$(tag_ids).autocomplete(
+			{
+				minLength : 0,
+				source : function(request, response) {
+					// delegate back to autocomplete, but extract the last term
+					response($.ui.autocomplete.filter(tags_array,
+							extractLast(request.term)));
+				},
+				focus : function() {
+					// prevent value inserted on focus
+					return false;
+				},
+				select : function(event, ui) {
 
-	$("#tag_names, #tag_value").autocomplete({ minLength : 0, source : function(request, response)
-	{
-		// delegate back to autocomplete, but extract the last term
-		response($.ui.autocomplete.filter(tags_array, extractLast(request.term)));
-	}, focus : function()
-	{
-		// prevent value inserted on focus
-		return false;
-	}, select : function(event, ui)
-	{
+					var terms = split(this.value);
 
-		var terms = split(this.value);
+					// remove the current input
+					terms.pop();
 
-		// remove the current input
-		terms.pop();
+					// Prevent duplicate tags to insert
+					if ($.inArray(ui.item.value, terms) === -1) {
+						// add the selected item
+						terms.push(ui.item.value);
+					}
 
-		// Prevent duplicate tags to insert
-		if ($.inArray(ui.item.value, terms) === -1)
-		{
-			// add the selected item
-			terms.push(ui.item.value);
-		}
+					// add placeholder to get the comma-and-space at the end
+					terms.push("");
+					this.value = terms.join(", ");
 
-		// add placeholder to get the comma-and-space at the end
-		terms.push("");
-		this.value = terms.join(", ");
-
-		return false;
-	} });
+					return false;
+				}
+			});
 
 	// Add scroll for tags list
-	$('#tag_names, #tag_value').parents('body').find('.ui-autocomplete').css({ 'max-height' : '200px', 'overflow-y' : 'scroll',
-	/* prevent horizontal scrollbar */
-	'overflow-x' : 'hidden' });
+	$(tag_ids).parents('body').find('.ui-autocomplete').css({
+		'max-height' : '200px',
+		'overflow-y' : 'scroll',
+		/* prevent horizontal scrollbar */
+		'overflow-x' : 'hidden'
+	});
 
 }
 
 /**
  * Utility function to split string based on comma
  */
-function split(val)
-{
+function split(val) {
 	return val.split(/,\s*/);
 }
 
 /**
  * Utility function for array to get last element
  */
-function extractLast(term)
-{
+function extractLast(term) {
 	return split(term).pop();
 }
 
@@ -440,18 +512,17 @@ function extractLast(term)
  *            prefilled data
  * 
  */
-function prefill_from_details(nodeJSONDefinition)
-{
-	try
-	{
+function prefill_from_details(nodeJSONDefinition) {
+	try {
 		var current_domain_user = window.parent.CURRENT_DOMAIN_USER;
 
-		var from_json = { "from_name" : current_domain_user["name"], "from_email" : current_domain_user["email"] }
+		var from_json = {
+			"from_name" : current_domain_user["name"],
+			"from_email" : current_domain_user["email"]
+		}
 
 		return JSON.parse(JSON.stringify(from_json));
-	}
-	catch (err)
-	{
+	} catch (err) {
 		console.log("Error occured in prefill_from_details...");
 		console.log(err);
 		return {};
@@ -464,18 +535,17 @@ function prefill_from_details(nodeJSONDefinition)
  * @param selector -
  *            nodeui element
  */
-function disable_text_required_property(selector)
-{
+function disable_text_required_property(selector) {
 	// Remove 'required' property of 'text' if 'html' is not empty and 'text' is
 	// empty
-	if (selector.find('#tinyMCEhtml_email').val() != "" && selector.find('#text_email').val() == "")
+	if (selector.find('#tinyMCEhtml_email').val() != ""
+			&& selector.find('#text_email').val() == "")
 		selector.find('#text_email').removeProp("required");
 }
 
 // Bhasuri 10/25/2014
-function getDate(selector)
-{
-	if(!selector)
+function getDate(selector) {
+	if (!selector)
 		selector = '#duration';
 	
 	$(selector).datepicker({ changeMonth : true, changeYear : true, yearRange: "2010:2050",  constrainInput : false
@@ -484,27 +554,26 @@ function getDate(selector)
 
 }
 
-function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
-{
-	var options={
+function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler) {
+	var options = {
 		"Select Merge Field" : "",
-		"Name" :{
-			"First Name" : "{{first_name}}", 
-			"First Name Fix" : "{{first_name_fix}}", 
-			"Last Name" : "{{last_name}}", 
-			"Last Name Fix" : "{{last_name_fix}}", 
+		"Name" : {
+			"First Name" : "{{first_name}}",
+			"First Name Fix" : "{{first_name_fix}}",
+			"Last Name" : "{{last_name}}",
+			"Last Name Fix" : "{{last_name_fix}}",
 			"Name Fix" : "{{name_fix}}"
 		},
-		"Properties":{
+		"Properties" : {
 			"Score" : "{{score}}",
-			"Created Date" : "{{created_date}}", 
-			"Modified Date" : "{{modified_date}}", 
+			"Created Date" : "{{created_date}}",
+			"Modified Date" : "{{modified_date}}",
 			"Email" : "{{email}}",
-			"Email Work":"{{email_work}}", 
-			"Email Personal":"{{email_home}}", 
-			"Company" : "{{company}}", 
+			"Email Work" : "{{email_work}}",
+			"Email Personal" : "{{email_home}}",
+			"Company" : "{{company}}",
 			"Title" : "{{title}}",
-			"Website" : "{{website}}", 
+			"Website" : "{{website}}",
 			"Phone" : "{{phone}}",
 			"Phone Work" : "{{phone_work}}",
 			"Phone Home" : "{{phone_home}}",
@@ -514,41 +583,39 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 			"Phone Work fax" : "{{phone_work_fax}}",
 			"Phone Other" : "{{phone_other}}"
 		},
-		"Custom Fields":{
-		},
-		"Address":{
-			"City" : "{{location.city}}", 
-			"State" : "{{location.state}}", 
+		"Custom Fields" : {},
+		"Address" : {
+			"City" : "{{location.city}}",
+			"State" : "{{location.state}}",
 			"Country" : "{{location.country}}"
 		},
-		"Web":{
-			"Twitter Id" : "{{twitter_id}}", 
+		"Web" : {
+			"Twitter Id" : "{{twitter_id}}",
 			"LinkedIn Id" : "{{linkedin_id}}"
 		},
-		"Owner":{
-			"Owner Name" : "{{owner.name}}", 
-			"Owner Email" : "{{owner.email}}" , 
-			"Owner calendar URL" : "{{owner.calendar_url}}" , 
+		"Owner" : {
+			"Owner Name" : "{{owner.name}}",
+			"Owner Email" : "{{owner.email}}",
+			"Owner calendar URL" : "{{owner.calendar_url}}",
 			"Owner Signature" : "{{{owner.signature}}}"
 		},
-		"Misc":{
+		"Misc" : {
 			"Unsubscribe Link" : "{{{unsubscribe_link}}}",
 			"Online Link" : "{{{online_link}}}",
 			"Powered by" : "{{{powered_by}}}"
 		}
 	};
 
-	//Get Custom Fields in template format
+	// Get Custom Fields in template format
 	var custom_fields;
 
 	// Cache Contact Custom fields
-	if(_CONTACT_CUSTOM_FIELDS)
+	if (_CONTACT_CUSTOM_FIELDS)
 		custom_fields = _CONTACT_CUSTOM_FIELDS
-	else
-		{
-			_CONTACT_CUSTOM_FIELDS = get_custom_fields();
-			custom_fields = _CONTACT_CUSTOM_FIELDS;
-		}
+	else {
+		_CONTACT_CUSTOM_FIELDS = get_custom_fields();
+		custom_fields = _CONTACT_CUSTOM_FIELDS;
+	}
 
 	options["Custom Fields"] = custom_fields;
 	
@@ -562,30 +629,32 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 
 
 	$.each(options, function(name, option_value) {
-		if(typeof(option_value)== 'object')
-			{
-				var optgroup ="<optgroup></optgroup>";
-				optgroup = $(optgroup).attr("label",name);
-				$.each(option_value, function(subtype_key, subtype_value) {
-					var title=subtype_key;
-					if(subtype_key.length>18)
-						subtype_key = subtype_key.substr(0,15)+"..." ;
-					$(optgroup).append("<option value='" + subtype_value + "' title = '"+title+"'>" + subtype_key + "</option>");
-				});
-				selectoption = $(selectoption).append(optgroup);
-			}
-		else
-			{
-				if(name.indexOf("*") == 0)
-					{
-						name  = name.substr(1);
-						selectoption = $(selectoption).append("<option selected value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
-					}
-				else
-					selectoption = $(selectoption).append("<option value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
-			}
+		if (typeof (option_value) == 'object') {
+			var optgroup = "<optgroup></optgroup>";
+			optgroup = $(optgroup).attr("label", name);
+			$.each(option_value, function(subtype_key, subtype_value) {
+				var title = subtype_key;
+				if (subtype_key.length > 18)
+					subtype_key = subtype_key.substr(0, 15) + "...";
+				$(optgroup).append(
+						"<option value='" + subtype_value + "' title = '"
+								+ title + "'>" + subtype_key + "</option>");
+			});
+			selectoption = $(selectoption).append(optgroup);
+		} else {
+			if (name.indexOf("*") == 0) {
+				name = name.substr(1);
+				selectoption = $(selectoption).append(
+						"<option selected value='" + option_value
+								+ "' title = '" + name + "'>" + name
+								+ "</option>");
+			} else
+				selectoption = $(selectoption).append(
+						"<option value='" + option_value + "' title = '" + name
+								+ "'>" + name + "</option>");
+		}
 	});
-	
+
 	console.log(selectoption);
 	if(uiFieldDefinition.invisible)
 		selectoption = $(selectoption).attr("invisible", uiFieldDefinition.invisible);
@@ -593,134 +662,149 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 	return selectoption;
 }
 
-function get_domain_user()
-{
+function get_domain_user() {
 	return window.parent.CURRENT_DOMAIN_USER;
 }
 
-function openVerifyEmailModal(el)
-{
+function openVerifyEmailModal(el) {
 	if (window.parent.$('#workflow-verify-email').size() != 0)
 		window.parent.$('#workflow-verify-email').remove();
-	
+
 	var selected = $(el).find(':selected').val();
-	
-	if(selected == 'verify_email')
-		window.parent.workflow_alerts("Verify a new From address", undefined , "workflow-verify-email-modal"
 
-			,function(modal){
+	if (selected == 'verify_email')
+		window.parent.workflow_alerts("Verify a new From address", undefined,
+				"workflow-verify-email-modal"
 
-				// Focus on input
-				modal.on('shown.bs.modal', function () {
-  					$(this).find('input').focus();
+				, function(modal) {
 
-  					parent.send_verify_email();
+					// Focus on input
+					modal.on('shown.bs.modal', function() {
+						$(this).find('input').focus();
+
+						parent.send_verify_email();
+					});
+
+					// On hidden
+					modal.on('hidden.bs.modal', function(e) {
+
+						var given_email = $(this).find('input').val();
+
+						resetAndFillFromSelect(given_email);
+					});
 				});
-
-				// On hidden
-				modal.on('hidden.bs.modal', function (e) {
-  
-  					var given_email = $(this).find('input').val();
-  					
-  					resetAndFillFromSelect(given_email);
-				});
-			});
 }
 
-function rearrange_from_email_options($select, data)
-{
+function rearrange_from_email_options($select, data) {
 
-	if(!data)
+	if (!data)
 		return;
 
 	var unverified = [];
 
-	$.each(data, function(index, obj){
+	$.each(data, function(index, obj) {
 
-			if(obj.verified == "NO")
-				unverified.push(obj.email);
+		if (obj.verified == "NO")
+			unverified.push(obj.email);
 
 	});
 
-  	$select.find('option').each(function(){
+	$select.find('option').each(function() {
 
-  			var email = $(this).val()
+		var email = $(this).val()
 
-  			if(unverified.indexOf(email) != -1)
-  			{
-  				$(this).attr('unverified', 'unverified');
-  				$(this).text(email + ' (unverified)');
-  			}
-  	});
+		if (unverified.indexOf(email) != -1) {
+			$(this).attr('unverified', 'unverified');
+			$(this).text(email + ' (unverified)');
+		}
+	});
 
 }
 
-function resetAndFillFromSelect(selected_val)
-{
+function resetAndFillFromSelect(selected_val) {
 	// Make send email node from email empty
 	$('#from_email').empty();
-		
-		var options =   {
-						"+ Add new": "verify_email"
-					};
 
-		fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, options, $('#from_email'), "prepend", function($select, data){
-		  	
-			$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+	var options = {
+		"+ Add new" : "verify_email"
+	};
 
-			if(selected_val)
-				$select.val(selected_val).attr("selected", "selected");
-			else
-				$select.val("Contact's Owner").attr("selected", "selected");
+	fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
 
-			rearrange_from_email_options($select, data);
-		});
+				$select
+						.find("option:first")
+						.before(
+								"<option value='{{owner.email}}'>Contact's Owner</option>");
+
+				if (selected_val)
+					$select.val(selected_val).attr("selected", "selected");
+				else
+					$select.val("Contact's Owner").attr("selected", "selected");
+
+				rearrange_from_email_options($select, data);
+			});
 }
 
 // On Click, fetch verified emails and update
-$('#from_email').die('click').live('click', function(e){
-		
-		e.preventDefault();
-		
-		// current value selected
-		var selected_val = $(this).val();
-		
-		if(selected_val == "{{owner.email}}" || selected_val == "verify_email")
-			return;
+$('#from_email').die('click').live(
+		'click',
+		function(e) {
 
-		// If not unverified, no need to check
-		if(!($('#from_email').find('option[value="'+selected_val+'"]').attr("unverified")))
-			return;
+			e.preventDefault();
 
-		// resetAndFillFromSelect(selected_val);
+			// current value selected
+			var selected_val = $(this).val();
 
-		$.getJSON('core/api/account-prefs/verified-emails/'+ selected_val, function(data){
+			if (selected_val == "{{owner.email}}"
+					|| selected_val == "verify_email")
+				return;
 
-				if(data && data["verified"] == "YES")
-					$('#from_email').find('option[value="'+selected_val+'"]').attr("selected", "selected").removeAttr("unverified").text(""+selected_val+"");
+			// If not unverified, no need to check
+			if (!($('#from_email').find('option[value="' + selected_val + '"]')
+					.attr("unverified")))
+				return;
 
+			// resetAndFillFromSelect(selected_val);
+
+			$.getJSON('core/api/account-prefs/verified-emails/' + selected_val,
+					function(data) {
+
+						if (data && data["verified"] == "YES")
+							$('#from_email').find(
+									'option[value="' + selected_val + '"]')
+									.attr("selected", "selected").removeAttr(
+											"unverified").text(
+											"" + selected_val + "");
+
+					});
 		});
-});
 
-function getTaskCategories(type)
-{
+function getTaskCategories(type) {
 	var categories = {};
 	$.ajax({
-		  url: '/core/api/categories?entity_type=TASK',
-		  type: "GET",
-		  async:false,
-		  dataType:'json',
-		  success: function (tasks) {
-			  try{
-				  $.each (tasks,function(name,value){
-					  categories[value.label]=value.name;
-					  });
-			  }catch(e){
-				  categories = null;
-			  }
-			 
+		url : '/core/api/categories?entity_type=TASK',
+		type : "GET",
+		async : false,
+		dataType : 'json',
+		success : function(tasks) {
+			try {
+				$.each(tasks, function(name, value) {
+					categories[value.label] = value.name;
+				});
+			} catch (e) {
+				categories = null;
+			}
+
 		}
-		
+
 	});
 
 	if (categories == null)
@@ -728,10 +812,9 @@ function getTaskCategories(type)
 
 	// Parse stringify json
 	return categories;
-} 
+}
 
-function show_templates(ele, target_id)
-{
+function show_templates(ele, target_id) {
 	// current value
 	var curValue = $(ele).find(':selected').val();
 

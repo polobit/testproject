@@ -798,6 +798,11 @@ function appendItemInResult(item)
 			$("#document-typeahead-heading", this.el).show();
 			$("#document-results", this.el).append(i);
 		}
+		if (type == "tickets")
+		{
+			$("#tickets-typeahead-heading", this.el).show();
+			$("#ticket-results", this.el).append(i);
+		}
 	}
 
 }

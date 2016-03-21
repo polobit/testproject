@@ -52,6 +52,40 @@ function serializeForm(form_id) {
 	}).get());
 	console.log(arr);
 	
+	//Included to set content editable data
+	arr = arr.concat($('#' + form_id + ' div[contenteditable="true"]').map(function() {
+
+		var $editable_div = $('div[contenteditable="true"]');
+
+		return {
+			"name" : $editable_div.attr('data-name'),
+			"value" : $editable_div.html()
+		};
+	}).get());
+
+	// Serialize cc_emails
+	arr = arr.concat($('#' + form_id + ' [name="cc_emails"]').map(function() {
+
+        var array = [];
+        $.each($(this).children(), function(g, h) {
+
+    		if($(h).attr("data"))
+        		array.push(($(h).attr("data")).toString());
+	    });
+
+	    return { name: 'cc_emails', value: array };
+
+	}).get());
+
+	// Serialize sortable widget data
+	arr = arr.concat($('#' + form_id + ' .selected_columns').map(function() {
+
+	    return { name: $(this).attr('name'), value: $(this).sortable("toArray") };
+
+	}).get());
+
+	//Serialize attachments list
+	arr = arr.concat(Ticket_Attachments.serializeList(form_id));
 
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
@@ -83,6 +117,18 @@ function serializeForm(form_id) {
 		return {
 			"name" : $(this).attr('name'),
 			"value" : fields_set
+		};
+	}).get());
+
+
+	arr = arr.concat($('#' + form_id + ' .chosen-select').map(function() {
+		var fields_set = [];
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : $(this).val()
 		};
 	}).get());
 	
