@@ -1280,9 +1280,12 @@ var Tickets = {
 	},
 
 	updateDueDate : function(timeInMilli, callback){
-
+          
 		var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
-
+          
+        if(currentTicketJSON.due_time == timeInMilli)   
+				return;
+			
 		var due_date_present = currentTicketJSON.due_time ? true : false;
 
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-due-date";
@@ -1329,6 +1332,7 @@ var Tickets = {
 		
 		var ticket = App_Ticket_Module.ticketView.model.toJSON();
 
+         		
   		if(ticket.status == "CLOSED")
   			return;
 
@@ -1342,7 +1346,8 @@ var Tickets = {
 				
 				var selected_date = $('#ticket_change_sla', el).val();
 				var selected_date_epoch_time = Date.parse(selected_date).getTime();
-
+                 
+                  
 				//Show alert if selected date is less than today start time
 				if(selected_date_epoch_time < Date.today().getTime()){
 
