@@ -603,7 +603,8 @@
 <script id="ticket-contact-fallback-template" type="text/html">
 <div class="inline">
     <div class="thumb-sm">
-      <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{requester_name}}">
+      <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" 
+        onerror="image_error(this);" _data-name="{{getInitials requester_name}}">
     </div>
     <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none" style="max-width: 230px"> <span class="">
         {{requester_name}}
