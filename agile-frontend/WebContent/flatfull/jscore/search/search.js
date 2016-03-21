@@ -95,6 +95,29 @@ function navigateToDetailsPage(data, name)
 		updateDocument(new BaseModel(model));
 		return;
 	}
+
+	if(model.entity_type == "tickets")
+	{
+		/*if(!tight_acl.checkPermission('DOCUMENT')){
+			var obj = {};
+			obj.entity = 'Documents';
+
+			getTemplate('no-permission',obj, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$(template_ui).modal('show');
+			}, null);
+
+			return;
+		}*/
+
+		var url = '#ticket/' +  model.id;
+
+		Backbone.history.navigate(url, {trigger : true});
+
+		return;
+	}
 		
 	if(!tight_acl.checkPermission('CASES')){
 		var obj = {};

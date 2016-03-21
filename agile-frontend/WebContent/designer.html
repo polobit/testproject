@@ -85,7 +85,9 @@
 
 	<!-- Deserialize -->
 	<script src="js/lib/deserialize/deserializeform.js" type="text/javascript"></script>
-
+	
+	<!-- Ticket -->
+	<script src="js/designer/ticket.js" type="text/javascript"></script>
 	
 	<!-- Block UI -->
 	<script src="js/lib/blockui/jquery.blockUI.js"></script>
@@ -110,8 +112,7 @@
 
 	<!-- Uploadify -->
 	<link rel="stylesheet" href="css/designer/uploadify/uploadify.css" type="text/css"/>
-
-
+	
 	<!-- Draw 2d -->
 	<link rel="stylesheet" type="text/css" href="css/designer/draw2d.css" />
 
@@ -141,6 +142,7 @@
 <!-- Place holder for the toolkit - designer and toolbars -->
 
 <div id = "maincontainer">
+
 	<div id = "designercontainer">
 
 		<div id="designer" class="ui-widget-content">
@@ -149,7 +151,7 @@
 			<div id = "paintarea" style="padding-top:15px">
 				
 				<!-- Toolbar fixed to LHS-->
-				<div class="toolbar_content" style="position: fixed;top: 12px;">
+				<div class="toolbar_content">
 				
 				<!-- Tool bar Padding, name & Horizontal line (Yasin/3-09-10) -->
 				 <div id="toolbartabs" style="width:70px;margin:0 6px 6px;font-size:9px;">
@@ -186,7 +188,7 @@
 				  
 				  
 <!-- Catalog Add more image(below toolbar)  (yasin/3-09-10)  --> 
-<div class="addmorebutton ui-widget ui-widget-content ui-corner-all" style="position: fixed; top: 700px;"> 
+<div class="addmorebutton ui-widget ui-widget-content ui-corner-all"> 
 	     <div align="center"> 
 		 <img  style="cursor:pointer;" id="showcatalog" src="css/designer/images/draw2d/add-more.png" /></div> 
 </div> 
@@ -344,7 +346,8 @@
 		 <!--    <li><a href="#socialAddons">Social</a><br /></li> 
 		 <li><a href="#urlAddons">URL</a><br /></li> -->
 		<li><a href="#utilitiesAddons">Utilities</a><br /></li> 
-		<li><a href="#developersAddons">Developers</a><br /></li> 
+		<li><a href="#developersAddons">Developers</a><br /></li>
+		<li><a href="#serviceAddons">Service</a><br /></li> 
 	</ul> 
 	
 	<div id="crmAddons"></div> 
@@ -355,7 +358,8 @@
 	 <!--   <div id="socialAddons"></div> 
 	<div id="urlAddons"></div>  -->
 	<div id="utilitiesAddons"></div> 
- 	<div id="developersAddons"></div> 
+ 	<div id="developersAddons"></div>
+ 	<div id="serviceAddons"></div> 
  
  
 </div> 

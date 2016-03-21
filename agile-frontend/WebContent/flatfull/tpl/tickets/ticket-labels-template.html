@@ -1,0 +1,104 @@
+<script id="ticket-label-collection-template" type="text/html">
+{{#unless this.length}}
+<div class="col panel wrapper">
+    <div class="hbox h-auto m-b-sm">
+        <div class="text-center padder-v">
+            <h4 class="m-t-none m-b-xs">You don&#39;t have any labels</h4>
+            <div class="m-b-xs">
+                Create lables to streamline your tickets
+            </div>
+            <div>
+                <a href="#add-ticket-label" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                    Create Labels
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="pull-right">
+                <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span> Add
+                </a>
+            </div>
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/labels/bulk" data-bulk-delete-title="Delete"
+                data-bulk-delete-msg="Are you sure you want to delete?">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th style="width:20%">Label</th>
+                            <th style="width:35%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-label-model-list" route="ticket-label/" class="c-p"> </tbody>
+            </table>
+        </div>
+    </div>
+{{/if}}
+</script>
+<script id="ticket-label-model-template" type="text/html">
+<td class="hide data" data="{{id}}">
+    {{id}}
+</td>
+<td>
+    {{label}}
+</td>
+<td>
+    <div class="table-resp">
+        <small class="edit-hover text-muted"> 
+            <i class="fa fa-clock-o m-r-xs"></i>
+            <span>Last updated on&nbsp;</span>
+            <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+        </small>
+    </div>
+</td> 
+</script>
+<script id="ticket-label-add-edit-template" type="text/html">
+<div class="wrapper">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{#if id}}Edit{{else}}Add{{/if}} Ticket Label
+                </div>
+                <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+                    {{#if id}}
+                        <input type="text" name="id" class="hide" value={{id}} >
+                    {{/if}}
+                    <fieldset class="wrapper"><br/>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="label">Label <span class="field_req">*</span></label> 
+                            <div class="col-md-6">
+                                <div class="controls">
+                                     <input type="text" name="label" id="label" value="{{label}}" class="required form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><hr></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-actions col-sm-offset-3 col-md-9">
+                                <div class="form-actions">
+                                    <a type="reset" href='#ticket-labels' class="btn btn-default btn-sm">Cancel</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">Save Changes</button>
+                                    <div class="text-base error_message_label inline-block err-msg-color">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+<script id="ticket-label-option-template" type="text/html">
+    <option value="{{id}}">{{label}}</option>
+</script>

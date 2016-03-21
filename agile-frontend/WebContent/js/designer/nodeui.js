@@ -44,6 +44,8 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     var newJSONDefinition = JSON.parse(JSON.stringify(nodeJSONDefinition));
     if(jsonData != undefined)
 	    newJSONDefinition = changeDefaultValues(newJSONDefinition, jsonData);
+
+	
         
     // Change Grid default values       
     constructUI($("#nodeui"), newJSONDefinition);
@@ -84,10 +86,14 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     // Init tags typeahead for Tags or Check Tags node. Naresh 30/10/2013
     if(nodeJSONDefinition.name === "Tags" || nodeJSONDefinition.name === "Check Tags")
     {
-    	init_tags_typeahead();
+    	init_tags_typeahead("#tag_names, #tag_value", "tags");
     }
     
-    nodeJSONDefinition.parentY = window.parent.scrollY;
+    // Init labels typeahead for labels or Check labels node. Vaishnavi 24/11/15
+    if(nodeJSONDefinition.name === "Labels" || nodeJSONDefinition.name === "Check Labels")
+    {
+    	init_tags_typeahead("#label_names, #label_value", "labels");
+    }
     
     if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
         $("#nodeui").find("[name=to]").val("{{phone}}");
@@ -133,8 +139,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         }
     });
     
-     window.parent.scrollTo(0,0);
-     
+
     if (nodeJSONDefinition.language != undefined) 
     	$("#nodeui .translate").val(nodeJSONDefinition.language);
 
@@ -150,6 +155,17 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 	
 	//.removeClass('ui-button-text-only').addClass('ui-button-text-icon').append("<span class='ui-icon ui-icon-disk'></span>");        
 	
+	// Treat as opened second time, So trigger the events attached to ui
+	// elements
+	$.each(nodeJSONDefinition.ui, function(index, data) {
+		try {
+			if (data.triggerEventOnLoad)
+				window[data.eventHandlerOnLoad]($("*[name='" + data.name + "']"),
+						jsonData);
+		} catch (e) {
+			console.log(e);
+		}
+	});
 }
 
 function loadForwardingEmail(element)
@@ -199,7 +215,7 @@ function saveNode(e) {
         	jsonDefinition = jsonDefinition.org;
         
         // Get Display name
-        var displayName = $("#nodeui").find("[name=nodename]").val();  
+        var displayName = $("#nodeui").find("[name=nodename]").val();
                        
         
         // Get the node id and update the old node id
@@ -208,40 +224,7 @@ function saveNode(e) {
 		// Check if node id is undefined or not 
 		if( nodeId == undefined || nodeId == null ) {
 			// Add designer at given location
-			if(jsonDefinition.x && jsonDefinition.y){
-				jsonDefinition.x += $('#designercontainer').scrollLeft();
-				jsonDefinition.y += $('#designercontainer').scrollTop();
-				window.parent.scrollTo(0,jsonDefinition.parentY);
-				addNode(jsonDefinition, displayName, jsonValues, jsonDefinition.x, jsonDefinition.y);
-			}
-			else{
-					var designer = window.parent.document.getElementById("designer").contentWindow.document.body;
-					var x_coordinate = $('#designercontainer').scrollLeft();
-					var y_coordinate = $('#designercontainer').scrollTop();
-					//var cordinates = (x_coordinate + y_coordinate)/2;
-					//window.parent.scrollTo(0,y_coordinate);
-					//$('#designercontainer').scrollTop(cordinates);  
-					//$(designer).find('#designercontainer').scrollLeft(cordinates);
-					var a = window.parent.document.getElementById("designer").contentWindow.document.body;
-					if($(a).find("#addontabs").attr("data")){
-						window.parent.scrollTo(0,$(a).find("#addontabs").attr("data")); 
-						y_coordinate += 300; 
-						//jsonDefinition.parentY = $(a).find("#addontabs").attr("data");
-					}
-					else
-					window.parent.scrollTo(0,jsonDefinition.parentY);
-					
-					
-					if(jsonDefinition.parentY==0)
-						jsonDefinition.parentY=250;
-					
-					if(jsonDefinition.parentX==0)
-						jsonDefinition.parentX=250;
-					if(x_coordinate !=undefined && y_coordinate  !=undefined )
-						addNode(jsonDefinition, displayName, jsonValues, x_coordinate+250,y_coordinate+jsonDefinition.parentY);
-					else
-						addNode(jsonDefinition, displayName, jsonValues, 200, 200);
-				}
+			addNode(jsonDefinition, displayName, jsonValues, 200, 200);
 		}
 		else {					
 	
