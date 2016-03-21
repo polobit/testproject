@@ -1,0 +1,210 @@
+<script id="ticket-timeline-template" type="text/html">
+<div class="ticket-timeline-container bg-light lter m-t-md m-b-md"> 
+     
+    <div class="m-b b-l m-l-md streamline">
+
+    	{{#each this}} 
+
+    		{{#get_template "ticket-model-timeline" this}}{{/get_template}}
+
+    	{{/each}}
+
+    </div>
+
+</div>
+
+</script>                    
+<script id="ticket-model-timeline-template" type="text/html">
+
+    		{{#is_ticket_reply_activity activity_type}}
+
+    			<div class="comment">
+
+			        <a class="pull-left thumb-xs m-l-n-md">
+
+			        	{{#if_equals activity_type 'TICKET_CREATED'}}
+			        		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
+		
+			        	{{/if_equals}}
+
+			        	{{#if_equals activity_type 'TICKET_REQUESTER_REPLIED'}}
+			        			<img src="{{get_contact_image 24}}" class="r-5x" alt="..." onerror="image_error(this);" _data-name="{{requester_name}}">
+		
+			        	{{/if_equals}}
+
+			        	{{#if_equals activity_type 'TICKET_ASSIGNEE_REPLIED'}}
+			        		<img class="r-5x" src="{{#if domainUser.pic}}{{domainUser.pic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" data-original-title="{{domainUser.name}}"/>
+			        	{{/if_equals}}
+
+			        </a>  
+			        <div class="m-l-lg panel b-a bg-f6f8f8">
+			          <div class="panel-heading pos-rlt b-b b-light">
+			            <span class="arrow left arrow-light arrow-light lter"></span>
+
+			            <span class="text-muted m-l-sm pull-right">
+			                <i class="fa fa-clock-o"></i>
+			            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" time}}">
+			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" time}}
+			              	</time>
+			            </span>
+
+			            <a href="javascript:;">
+
+			           	 {{#if_equals activity_type 'TICKET_ASSIGNEE_REPLIED'}}
+				            <span class="inline-block">{{user_name}}</span> replied to ticket
+				         {{/if_equals}}
+
+				         {{#if_equals activity_type 'TICKET_REQUESTER_REPLIED'}}
+				            <span class="inline-block">
+					            {{#if contact}}
+					                {{getPropertyValue contact.properties "first_name"}} 
+					                    {{getPropertyValue contact.properties "last_name"}}
+					                 {{else}}
+					                    Requester
+					                {{/if}}
+					        </span> replied to ticket
+				         {{/if_equals}}
+
+				         {{#if_equals activity_type 'TICKET_CREATED'}}
+				    		Ticket Created
+				    	 {{/if_equals}}
+			            </a>
+			          </div>
+			          
+			          <div class="panel-body">
+			          	<div class="word-break-full">
+			          		{{#if custom1}}
+				  				{{{replace_br_with_space custom1}}}
+				  			{{else}}
+				  			<iframe id="ticket_comment_frame" width="100%" height="20px" scrolling="no" frameborder="0" style="border:none" src="about:blank" srcdoc="{{custom2}}" onload="Tickets.updateIframeHeight(this);">
+							</iframe >
+							{{/if}}
+			          	</div>
+			          </div>
+			          
+			      </div>
+
+	        </div>
+
+
+	        {{else}}
+
+	        	<div class="{{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}comment{{else}}activity{{/if_equals}} m-l-lg">
+
+			        <a class="pull-left thumb-xs m-l-n-md">
+
+		        		<img class="r-5x" src="{{#if domainUser.pic}}{{domainUser.pic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" data-original-title="{{domainUser.name}}"/>
+			        	
+			        </a>  
+			        <div class="m-l-lg panel b-a {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}bg-lightyellow{{/if_equals}} ">
+			          <div class="panel-heading pos-rlt b-b b-light ">
+			            <span class="arrow left {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}arrow-lightyellow{{/if_equals}} "></span>
+
+			            <span class="text-muted m-l-sm pull-right">
+			                <i class="fa fa-clock-o"></i>
+			            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" time}}">
+			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" time}}
+			              	</time>
+			            </span>
+			            <a href="javascript:;">
+
+			               {{#if_equals activity_type 'TICKET_ASSIGNED'}}
+						        Ticket assigned to <span>{{custom2}}</span>
+						    {{/if_equals}}
+
+						    {{#if_equals activity_type 'TICKET_ASSIGNEE_CHANGED'}}
+				            	Ticket assignee changed to <span>{{custom2}}</span>
+						    {{/if_equals}}
+
+						    {{#if_equals activity_type 'TICKET_GROUP_CHANGED'}}
+					                Ticket group changed to <span>{{custom2}}</span>
+						    {{/if_equals}}
+
+						    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
+			                    Status changed from <span class="first-letter-cap inline-block">{{custom1}}</span> to <span class="first-letter-cap inline-block">{{custom2}}</span>
+			                {{/if_equals}}
+
+			                {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
+		                       Priority changed from <span class="first-letter-cap inline-block">{{custom1}}</span> to <span class="first-letter-cap inline-block">{{custom2}}</span>
+		                    {{/if_equals}}
+
+						    {{#if_equals activity_type 'TICKET_TYPE_CHANGE'}}
+		                        Type changed from <span class="first-letter-cap inline-block">{{custom1}}</span> to <span class="first-letter-cap inline-block">{{custom2}}</span>
+		                     {{/if_equals}}
+						                        
+		                    {{#if_equals activity_type 'TICKET_LABEL_ADD'}}
+		                        Label added - <label class="label bg-success m-l-xs">{{custom2}}</label>
+		                     {{/if_equals}}
+
+		                    {{#if_equals activity_type 'TICKET_LABEL_REMOVE'}}
+		                        Label removed - <label class="label bg-info m-l-xs">{{custom2}}</label>
+		                     {{/if_equals}}
+
+		                     {{#if_equals activity_type 'TICKET_CC_EMAIL_ADD'}}
+		                        CC email added - <label class="label bg-success m-l-xs">{{custom2}}</label>
+		                     {{/if_equals}}
+
+		                    {{#if_equals activity_type 'TICKET_CC_EMAIL_REMOVE'}}
+		                        CC email removed - <label class="label bg-info m-l-xs">{{custom2}}</label>
+		                     {{/if_equals}}
+
+
+		                    {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
+		                        <span>{{domainUser.name}}</span>  added a note
+		                    {{/if_equals}}
+
+		                    {{#if_equals activity_type 'TICKET_MARKED_FAVORITE'}}
+		                    	<!-- <span class="first-letter-cap inline-block">{{domainUser.name}}</span>--> 
+		                        Marked as favorite
+		                    {{/if_equals}}
+
+		                    {{#if_equals activity_type 'TICKET_MARKED_UNFAVORITE'}}
+		                        <!-- <span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Marked as unfavorite
+		                    {{/if_equals}}
+
+		                    {{#if_equals activity_type 'TICKET_MARKED_SPAM'}}
+		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Marked as spam
+		                    {{/if_equals}}
+
+		                    {{#if_equals activity_type 'TICKET_MARKED_UNSPAM'}}
+		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Marked as not spam
+		                    {{/if_equals}}
+		                    {{#if_equals activity_type 'SET_DUE_DATE'}}
+		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Due date set to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+		                    {{/if_equals}}
+		                    {{#if_equals activity_type 'DUE_DATE_CHANGED'}}
+		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Changed due date to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+		                    {{/if_equals}}
+		                    {{#if_equals activity_type 'DUE_DATE_REMOVED'}}
+		                        <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
+		                        Due date removed
+		                    {{/if_equals}}
+		                    {{#if_equals activity_type 'TICKET_NOTES_FORWARD'}}
+		                       Ticket has been forwarded to {{custom2}}
+		                    {{/if_equals}}
+				        </a>
+			          </div>
+			          
+			          {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
+			          <div class="panel-body">
+			          	<div class="word-break-full">
+			          		{{#if custom1}}
+				  				{{{replace_br_with_space custom1}}}
+				  			{{else}}
+				  			<iframe id="ticket_comment_frame" width="100%" height="20px" scrolling="no" frameborder="0" style="border:none" src="about:blank" srcdoc="{{custom2}}" onload="Tickets.updateIframeHeight(this);">
+							</iframe >
+							{{/if}}
+						</div>
+			          </div>
+			          {{/if_equals}}
+			      </div>
+	        </div>
+
+    		{{/is_ticket_reply_activity}}
+
+</script>                    

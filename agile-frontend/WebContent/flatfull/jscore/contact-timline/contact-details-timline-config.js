@@ -49,7 +49,7 @@ function customize_isotope()
 						if($this.find('.year').text()==currentDate.getMonthName()){
 							$this.find('.inner2').addClass('inner2-top');
 							$this.find('.inner2').removeClass('inner2');
-							$this.find('.year').text('Now');
+							$this.find('.year').text('Now'); 
 						}
 					}
 					props.colA += $this.outerHeight(true);
@@ -122,12 +122,12 @@ function customize_isotope()
 	};
 }	
 
-function configure_timeline()
+function configure_timeline(el)
 {
 	var cnt = 0;
 	customize_isotope();
 
-	var $container = $("#timeline", App_Contacts.contactDetailView.el);
+	var $container = $("#timeline", (el ? el : App_Contacts.contactDetailView.el));
 	var elemen="";
 
 	// Initializes isotope with options (sorts the data based on created time)
