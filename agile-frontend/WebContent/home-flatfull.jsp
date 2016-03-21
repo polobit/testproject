@@ -331,11 +331,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
-  <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
-  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+  <li class="line dk m-t-none m-b-none" style="height: 1px; display: none;"></li>
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs" style="display: none;">
     <span>Support</span>
   </li>
-  <li id="tickets">
+  <li id="tickets" style="display: none;">
     <a  href="#tickets">
       <i class="icon icon-ticket"></i>
       <span>Help Desk</span>
