@@ -3,7 +3,7 @@
   <label class="agile-label" for="<%= name %>"><%= label %></label>
   <div class="agile-field agile-field-xlarge agile-height-default"><% _.each(radios, function(radio, i){ %>
     <label for="<%= name+'-'+i %>">
-      <input type="radio" name="<%if(agilefield){%><%= agilefield %><%}else{%><%= name+'-'+i %><%}%>" id="<%= name+'-'+i %>" value="<%= radio %>" <% if(i < 1) { %>checked="checked" <% } %>>
+      <input type="radio" name="<%if(agilefield){%><%= agilefield %><%}else{%><%= name+'-'+'1' %><%}%>" id="<%= name+'-'+i %>" value="<%= radio %>" <% if(i < 1) { %>checked="checked" <% } %>>
       <%= radio %>
     </label><% }); %>
   </div>
