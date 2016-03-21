@@ -254,21 +254,9 @@ function loadSavedTemplate(templateURL){
 					showError("Please enter a valid html message");
 					return;
 				}
-				data = remove_script_tags(data);
                 $("#tinyMCEhtml_email").text(data);
             }
         });
-}
-
-function remove_script_tags(content)
-{
-	try{
-		return content.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gm,'');
-	}
-	catch(err){
-		console.log(err);
-		return content;
-	}
 }
 
 function isNotValid(value)
