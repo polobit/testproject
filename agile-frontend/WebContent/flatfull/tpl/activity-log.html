@@ -907,7 +907,7 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{#if_equals "TICKET_CREATED" activity_type}}
 			New <a href="#ticket/{{entity_id}}" >ticket#{{entity_id}}</a> created<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted {{user_name}}{{/if}}
 			</small>
 		{{/if_equals}}
 		{{#if_equals "TICKET_DELETED" activity_type}}
@@ -1032,7 +1032,7 @@ Deleted  {{custom1}} Campaigns<br/>
 				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> marked as favorite
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted by {{user_name}}{{/if}}
+				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted {{user_name}}{{/if}}
 			</small>    
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_UNFAVORITE" activity_type}}

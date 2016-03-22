@@ -200,7 +200,9 @@ public class TicketNotes
 		this.original_html_text = original_html_text;
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
-		this.created_time = Calendar.getInstance().getTimeInMillis();
+		
+		//Removing 1 sec time from current time to show created notes first and status changed activity next
+		this.created_time = (Calendar.getInstance().getTimeInMillis() - 60000);
 
 		this.plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text);
 		this.html_text = TicketNotesUtil.removedQuotedRepliesFromHTMLText(original_html_text);
