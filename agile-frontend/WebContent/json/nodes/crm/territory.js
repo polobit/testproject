@@ -87,6 +87,7 @@
                 "name" : "in_zone_compare",
                 "fieldType":"select",
                 "type": "select",
+                "required":"required",
                 "options": {
                   "And": "and",
                   "Or": "or"

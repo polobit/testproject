@@ -1,4 +1,4 @@
-function constructGridPopup(uiFieldDefinition, callback, jsonValues) {   
+function constructGridPopup(uiFieldDefinition, callback, jsonValues, editRowIndex) {   
    
     // Clone the grid popup template
     var gridPopup = $('#gridpopup').clone();
@@ -47,7 +47,7 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues) {
 		$(this).css({'max-height': 500, 'overflow-y': 'auto'}); 
 
         // event handlers for zones
-        zones_popup_handler($popup, $(this));
+        zones_popup_handler($popup, editRowIndex);
 
 	},
 	modal: true,
@@ -346,7 +346,6 @@ function initGridHandlers(selector)
 	     
 	     var rowJSON = serializeRow(selectedTR);
 	     
-	     
 	    // Editing audio picker
 	 	if(nodeUIDefinition.type == "audiogrid") {
 			$("#audiopicker").data('ui', nodeUIDefinition);
@@ -356,11 +355,8 @@ function initGridHandlers(selector)
 		}
      
      	constructGridPopup(nodeUIDefinition, function(e, selector){                    
-     		editGrid(e, selector, rowIndex);  
-
-             
-            
-     	}, rowJSON);    
+     		editGrid(e, selector, rowIndex);      
+     	}, rowJSON, rowIndex);    
           
      });
      
@@ -489,17 +485,42 @@ function get_zones($table)
    return zones;
 }
 
-function zones_popup_handler($popup, $this){
+function zones_popup_handler($popup, edit_row_index){
     
     var $zone_comparator = $popup.find('[name="in_zone_compare"]');
     var options = $zone_comparator.find('option');
 
-    $popup.find('input:first').focusout(function(e){
+    var $territory = $popup.find('input:first');
+    var zones = $popup.data('zones');
+
+    var first_row = true;
+
+    $('#territories-table tbody tr').each(function(index, tr){
+
+        if(index != 0 && index < edit_row_index)
+        {
+            if($territory.val() == $(tr).find('td').eq(1).text())
+            {    
+                first_row = false;
+                return false;
+            }
+        }
+
+    });
+
+
+    // Make zones operator selected
+    if(!first_row && zones[$territory.val()])
+    {
+        $zone_comparator.val(zones[$territory.val()]).attr('disabled', 'disabled');
+        $zone_comparator.parent().append('<input type="hidden" name="in_zone_compare" value='+zones[$territory.val()]+'>')
+    }
+
+
+    $territory.focusout(function(e){
             e.preventDefault();
 
             var given_value = $(this).val();
-
-            var zones = $popup.data('zones');
 
             if(zones[given_value])
             {
