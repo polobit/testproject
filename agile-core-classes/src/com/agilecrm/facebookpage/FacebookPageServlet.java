@@ -43,8 +43,8 @@ public class FacebookPageServlet extends HttpServlet
 	    case GET_DETAILS:
 		try
 		{
-		    response.setContentType("application/json");
-		    out.print(getAuthAndPages(request));
+		    response.setContentType("application/json; charset=UTF-8");
+		    out.write(getAuthAndPages(request));
 		}
 		catch (JSONException e)
 		{
