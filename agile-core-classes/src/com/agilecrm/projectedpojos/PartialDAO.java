@@ -39,6 +39,7 @@ public class PartialDAO<T extends ProjectionEntityParse> {
 			add("id");
 			add("properties");
 			add("group_email");
+			add("domain");
 		}
 	};
     		
