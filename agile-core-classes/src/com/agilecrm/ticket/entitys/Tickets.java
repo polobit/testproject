@@ -394,7 +394,9 @@ public class Tickets extends Cursor implements Serializable
 			this.source = source;
 			this.created_by = createdBy;
 
-			Long epochTime = Calendar.getInstance().getTimeInMillis();
+			// Adding 1 min extra time make its creation time greater than
+			// contact creation time otherwise ticket creation will show first rather than contact creation in ticket timeline
+			Long epochTime = Calendar.getInstance().getTimeInMillis() + 60000;
 
 			if (assignee_id != null)
 			{
@@ -418,9 +420,9 @@ public class Tickets extends Cursor implements Serializable
 			this.last_updated_by = LAST_UPDATED_BY.REQUESTER;
 			this.requester_ip_address = ipAddress;
 			this.user_replies_count = 1;
-			
+
 			Contact contact = this.getTicketRelatedContact();
-			
+
 			this.contact_key = new Key<Contact>(Contact.class, contact.id);
 			this.contactID = contact.id;
 

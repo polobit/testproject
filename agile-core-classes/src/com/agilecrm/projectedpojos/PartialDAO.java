@@ -2,9 +2,11 @@ package com.agilecrm.projectedpojos;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -29,6 +31,17 @@ public class PartialDAO<T extends ProjectionEntityParse> {
      */
     protected Class<T> clazz;
     
+    private static Set<String> ignoreFields = new HashSet<String>()
+	{
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("id");
+			add("properties");
+			add("group_email");
+		}
+	};
+    		
     /**
      * We've got to get the associated domain class somehow
      * 
@@ -122,9 +135,10 @@ public class PartialDAO<T extends ProjectionEntityParse> {
      */
     private Query addProjectionFields(Query query){
     	for(Field f : this.clazz.getFields()) {
-      	   if(f.getName().equals("id") || f.getName().equalsIgnoreCase("properties"))
-      		    continue;
-      	   
+/*      	   if(f.getName().equals("id") || f.getName().equalsIgnoreCase("properties"))
+      		    continue;*/
+    		if(ignoreFields.contains(f.getName().toLowerCase()))
+				continue;
       	  query.addProjection(new PropertyProjection(f.getName(), f.getType()));
       	}
     	

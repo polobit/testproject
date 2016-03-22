@@ -628,9 +628,10 @@ public class TicketsUtil
 		System.out.println("current groupID: " + ticket.groupID);
 		System.out.println("current assigneeID: " + ticket.assigneeID);
 
-		//Return if same group is selected
-		if (ticket.assignee_id == null && ticket.groupID.longValue() == group_id.longValue())
-			return ticket;
+		// Return if same group is selected
+		// if (assignee_id == null && ticket.groupID.longValue() ==
+		// group_id.longValue())
+		// return ticket;
 
 		// Verifying if ticket assigned to same Group and Assignee
 		if ((ticket.groupID != null && ticket.groupID.longValue() == group_id.longValue()))
@@ -662,6 +663,14 @@ public class TicketsUtil
 		// is NEW.
 		if (assignee_id == null || assignee_id == 0)
 		{
+			// If ticket is already assigned to same group then ignore the
+			// action
+			if (ticket.assignee_id == null)
+			{
+				if (ticket.groupID.longValue() == group_id.longValue())
+					return ticket;
+			}
+
 			// Assigning new group to ticket
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 			ticket.groupID = group_id;
