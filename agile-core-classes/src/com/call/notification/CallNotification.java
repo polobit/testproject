@@ -38,7 +38,7 @@ public class CallNotification extends HttpServlet
 	    res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: API Key is missing");
 	    return;
 	}
-	if (!APIKeyUtil.isPresent(apiKey))
+	if (!APIKey.isPresent(apiKey))
 	{
 	    res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Invalid API Key");
 	    return;

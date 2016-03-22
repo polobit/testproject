@@ -36,7 +36,7 @@ public class API
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public APIKey getAPIKey()
     {
-	return APIKeyUtil.getAPIKey();
+	return APIKey.getAPIKey();
     }
 
     @Path("api-key/key")
@@ -60,7 +60,7 @@ public class API
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public APIKey updateAllowedDomains(@QueryParam("allowed_domains") String allowedDomains)
     {
-	return APIKeyUtil.updateAllowedDomains(allowedDomains);
+	return APIKey.updateAllowedDomains(allowedDomains);
     }
     
     @Path("api-key/blocked-ips")
@@ -68,6 +68,6 @@ public class API
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public APIKey updateBlockedIps(@QueryParam("blocked_ips") String blockedIps)
     {
-	return APIKeyUtil.updateBlockedIps(blockedIps);
+	return APIKey.updateBlockedIps(blockedIps);
     }
 }

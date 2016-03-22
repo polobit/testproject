@@ -177,7 +177,7 @@ public class AnalyticsServlet extends HttpServlet
     {
 	try
 	{
-	    String[] blockedIpsArr = APIKeyUtil.getAPIKeyRelatedToDomain(domain).blocked_ips.split(",");
+	    String[] blockedIpsArr = APIKey.getAPIKeyRelatedToDomain(domain).blocked_ips.split(",");
 	    for (int i = 0; i < blockedIpsArr.length; i++)
 	    {
 		if (ipMatch(clientIp, blockedIpsArr[i].trim()))

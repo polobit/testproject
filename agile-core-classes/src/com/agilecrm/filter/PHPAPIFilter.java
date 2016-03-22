@@ -36,10 +36,10 @@ public class PHPAPIFilter implements Filter
 	String agileId = req.getParameter("id");
 	if (agileId != null)
 	{
-	    if (APIKeyUtil.isPresent(agileId))
+	    if (APIKey.isPresent(agileId))
 	    {
 		UserInfo userInfo = (UserInfo) req.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-		DomainUser domainUser = APIKeyUtil.getDomainUserRelatedToAPIKey(agileId);
+		DomainUser domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
 		if (userInfo == null || !userInfo.getEmail().equalsIgnoreCase(domainUser.email))
 		{
 		    userInfo = new UserInfo("agilecrm.com/php", domainUser.email, domainUser.name);

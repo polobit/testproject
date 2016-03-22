@@ -1376,7 +1376,7 @@ public class JSAPI
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(APIKeyUtil.getAllowedDomains());
+	    return mapper.writeValueAsString(APIKey.getAllowedDomains());
 	}
 	catch (Exception e)
 	{

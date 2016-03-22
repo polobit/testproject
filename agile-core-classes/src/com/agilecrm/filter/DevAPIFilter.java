@@ -135,7 +135,7 @@ public class DevAPIFilter implements Filter
     boolean isValidAPIKey(String apiKey, DomainUser user)
     {
 	// Gets APIKey, to authenticate the user
-	APIKey key = APIKeyUtil.getAPIKeyRelatedToUser(user.id);
+	APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
 
 	if (key == null)
 	    return false;

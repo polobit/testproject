@@ -117,7 +117,7 @@ public class JSONPRequestFilter implements Filter
     {
 	try
 	{
-	    String[] allowedDomains = APIKeyUtil.getAllowedDomains().split(",");
+	    String[] allowedDomains = APIKey.getAllowedDomains().split(",");
 	    for (int i = 0; i < allowedDomains.length; i++)
 	    {
 		String allowedDomain = allowedDomains[i].trim();

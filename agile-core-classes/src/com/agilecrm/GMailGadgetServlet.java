@@ -63,7 +63,7 @@ public class GMailGadgetServlet extends HttpServlet
 	SessionManager.set(userInfo);
 
 	// Get API Key
-	String apiKey = APIKeyUtil.getAPIKey().api_key;
+	String apiKey = APIKey.getAPIKey().api_key;
 
 	// Send API Key and domain for the gadget to start using Javascript API
 	JSONObject result = new JSONObject();
