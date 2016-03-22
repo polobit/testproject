@@ -97,7 +97,7 @@ public class JSAPIFilter implements Filter
 	    {
 		// If domain user exists and the APIKey matches, request is
 		// given access
-		if (isValidPassword(password, domainUser) || APIKey.isPresent(password))
+		if (isValidPassword(password, domainUser) || APIKeyUtil.isPresent(password))
 		{
 		    UserInfo userInfo = new UserInfo("agilecrm.com/js", domainUser.email, domainUser.name);
 

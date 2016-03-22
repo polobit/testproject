@@ -36,7 +36,27 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 public class APIKeyUtil
 {
-
+	
+	 /**
+     * Dao
+     */
+    private static ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
+    
+    /**
+     * Checks whether api is related to this domain, used while verifying JsAPI
+     * request in JsAPiFilter
+     * 
+     * @param key
+     *            APIKey to be verified
+     * @return {@link Boolean} Returns true if APIKey exists in current domain
+     *         and vice-versa
+     */
+    public static Boolean isPresent(String key)
+    {
+	// Queries APIKey entities with the apikey parameter
+	return dao.ofy().query(APIKey.class).filter("api_key", key).count() > 0;	
+    }
+    
     /**
      * Checks whether api is related to this domain, used while verifying JSAPI
      * request in JSAPI filter
@@ -110,8 +130,8 @@ public class APIKeyUtil
     	if(entity == null || !entity.hasProperty("owner"))
     		  return null;
     	
-    	return (Key<DomainUser>) entity.getProperty("owner");
-    	
+    	com.google.appengine.api.datastore.Key domainUserKey = (com.google.appengine.api.datastore.Key) entity.getProperty("owner");
+    	return new Key<DomainUser>(DomainUser.class, domainUserKey.getId());
     }
     
     /**

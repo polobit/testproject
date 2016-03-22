@@ -96,9 +96,9 @@ public class AnalyticsServlet extends HttpServlet
 	if (StringUtils.isBlank(domain))
 	    return;
 	
-	if(isBlockedIp(ip, domain))
+	/*if(isBlockedIp(ip, domain))
 	    return;
-	    
+	 */  
 	Long timeBeforeLog = System.currentTimeMillis();
 	System.out.println("Before log " + timeBeforeLog);
 	
