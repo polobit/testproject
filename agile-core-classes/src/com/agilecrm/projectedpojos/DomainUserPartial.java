@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Entity;
 import com.googlecode.objectify.annotation.Cached;
 
@@ -26,7 +27,7 @@ public class DomainUserPartial extends ProjectionEntityParse{
 	public DomainUserPartial parseEntity(Entity entity)
 	{
 		id = entity.getKey().getId();
-		domain = (String) getPropertyValue(entity, "domain");
+		domain = NamespaceManager.get();
 		name = (String) getPropertyValue(entity, "name");
 		email = (String) getPropertyValue(entity, "email");
 		pic = (String) getPropertyValue(entity, "pic");
