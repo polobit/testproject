@@ -294,8 +294,12 @@
 <script id = "contacts-custom-view-popover-template" type="text/html">
        <div class="data panel-default" data={{id}} style="width:260px">
 	   
-       	<div class="text-cap panel-heading text-ellipsis"><div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}}</div>
+       	<div class="text-cap panel-heading text-ellipsis">
+         {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}}</div>{{/if_contact_type}}
+             {{#if_contact_type "COMPANY"}}
+             <div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "name"}}">{{getPropertyValue properties "name"}}
+            </div>{{/if_contact_type}}
 				 <div class="pull-left" style="width:80%"><div id='star' class="contact-star"></div></div>
         		<div>
 	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
@@ -347,6 +351,7 @@
 			{{/canEditContact}}
        </div>
        </div>
+       {{#if_contact_type "PERSON"}}
        		{{#property_is_exists "company" properties}}
        		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
@@ -362,13 +367,25 @@
      		{{/property_is_exists}}
        		
        		{{/property_is_exists}}
+          {{/if_contact_type}}
+
+          {{#if_contact_type "COMPANY"}}
+          {{#property_is_exists "url" properties}}
+          <div class="b-b b-light p-b-xs">
+          <div class="pull-left"><i class="fa fa-globe text-sm v-middle"></i></div>
+          <a class="m-l-sm" title="{{getPropertyValue properties "url"}}" href="{{getPropertyValue properties "url"}}" target="_blank">{{getPropertyValue properties "url"}}</a> 
+         </div>
+          
+          {{/property_is_exists}}
+          {{/if_contact_type}}
+
        			{{#property_is_exists "phone" properties}}
         					<div class="b-b b-light p-b-xs">
         					<div class="pull-left"><i class="icon icon-call-end text-sm v-middle"></i></div>
         					{{#multiple_Property_Element_List "phone" properties id}}
         					{{#each this}}
        					<div class="text-ellipsis m-l-md" style="width:13em;">
-    		<span class="text-cap"title="{{value}}" >{{value}}</a>
+    		<span class="text-cap"title="{{value}}" >{{value}}</span>
         </div>
         {{/each}}
         {{/multiple_Property_Element_List}}
@@ -617,4 +634,3 @@
 
  {{/each}}
 </script>
->>>>>>> 385a8cd... Contact view template updates

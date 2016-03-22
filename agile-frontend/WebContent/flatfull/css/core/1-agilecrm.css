@@ -3191,10 +3191,10 @@ table.hide-head-checkbox th label.i-checks {
 	//width : 260px;
 }
 
-#contacts-table .popover-content{
+.contact_popover .popover-content{
 	padding: 0px;
 }
-#contacts-table .popover{
+.contact_popover .popover{
 	max-width:100%;
 }
 
