@@ -3,6 +3,7 @@ package com.thirdparty.stripe;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandlerImpl;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -111,6 +113,9 @@ public class StripeChargeWebhook extends HttpServlet
 
 //		System.out.println("Namespace for event : " + newNamespace);
 
+	    URL url = new URL(request.getRequestURL().toString());
+		String namespace = NamespaceUtil.getNamespaceFromURL(url);
+		
 	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);
 	    if (stripeEventJson == null)
 	    {
@@ -136,11 +141,18 @@ public class StripeChargeWebhook extends HttpServlet
 				// TODO Auto-generated catch block
 				System.out.println("Exception occured in fetching event from json:"+ e1.getMessage());
 			}
-		    StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
-		    webhookHandlerImpl.init(stripeJson.toString(), event);
+		    //StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
+		    //webhookHandlerImpl.init(stripeJson.toString(), event);
 		    
 		    //StripeWebhookHandlerImpl stripeWebhookHandlerImpl = new StripeWebhookHandlerImpl();
-			Contact contact = webhookHandlerImpl.getContactFromOurDomain();
+		    Contact contact = null;
+		    if(namespace.equals("our")){
+		    	StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
+			    webhookHandlerImpl.init(stripeJson.toString(), event);
+			    contact = webhookHandlerImpl.getContactFromOurDomain();
+		    }else{
+		    	contact = ContactUtil.searchContactByEmail(email);
+		    }
 			if(contact!=null)
 			{
 			email = contact.getContactFieldValue(contact.EMAIL);
@@ -212,9 +224,10 @@ public class StripeChargeWebhook extends HttpServlet
 		    else
 			contact.properties = updateAgileContactProperties(contact.properties, contactProperties);
 
+		    if(!namespace.equals("our")){
 		    contact.setContactOwner(owner);
+		    }
 		    contact.save();
-
 		    if (getTriggerRunResult(newContact, trigger))
 		    {
 			System.out.println("Assigning campaign to contact ... ");
