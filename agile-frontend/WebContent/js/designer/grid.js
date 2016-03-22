@@ -7,7 +7,7 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues, editRowInde
     // Store UIfielddefinition for add and edit for table definition
     gridPopup.data('ui', uiFieldDefinition);
 
-    if(uiFieldDefinition.name = NODES_CONSTANTS.TERRITORIES)
+    if(uiFieldDefinition.name == NODES_CONSTANTS.TERRITORIES)
     {
         var zones = get_zones($('#'+NODES_CONSTANTS.TERRITORIES+'-table'));
 
@@ -242,7 +242,7 @@ function generateGridUI(container, uiFieldDefinition) {
     }
     else
     {
-	var uiFieldDiv = $("<div style='width:500px;height:150px;overflow:auto;margin-bottom:10px;' class='ui-widget-content ui-corner-all'></div>");
+	var uiFieldDiv = $("<div style='width:550px;height:150px;overflow:auto;margin-bottom:10px;' class='ui-widget-content ui-corner-all'></div>");
 	uiFieldDiv.appendTo(container);
 
     var uiField = $("<table class='ui-widget ' id='" + tableId + "'>" + thead + "<tbody>" + tbody + "</tbody></table>");
