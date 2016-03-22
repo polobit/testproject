@@ -1,39 +1,26 @@
 BLOB_KEY = undefined;
+function initializeImportEvents(id){
 
-var CONTACTS_IMPORT_VIEW = Base_Model_View.extend({
-	events : {
-		"click .upload" :  "initializeImportButton",
-		"#import-cancel" : "importCancel"
-	},
-	initializeImportButton : function(e)
+if(!id)
+	  id = "content";
+
+$('#' + id  + " .upload").off('click');
+$('#' + id).on('click', '.upload', function(e)
 	{
-		e.preventDefault();
-		var element = e.target;
 
 		// get hidden value file type
-		var type = $(element).parents('form').children("#type").val();
+		var type = $(this).parents('form').children("#type").val();
 
+		e.preventDefault();
 		var newwindow = window.open("upload-contacts.jsp?type=" + type + "", 'name', 'height=310,width=500');
 
 		if (window.focus)
 		{
 			newwindow.focus();
 		}
-	},
-	importCancel : function(e)
-	{
-		// Sends empty JSON to remove
-		// contact uploaded
-		App_Contacts.importContacts.render(true);
-	}
+		return false;
+	});
 
-
-});
-
-function initializeImportEvents(id){
-
-if(!id)
-	  id = "content";
 
 // Cancels import, removes the contacts uploaded in to
 	// table, still calls
@@ -45,7 +32,14 @@ if(!id)
 		// Sends empty JSON to remove
 		// contact uploaded
 		var $firstDiv = $('#content').children().first();
-		App_Contacts.importContacts.render(true);
+		getTemplate('import-contacts', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$firstDiv.html($(template_ui));	
+					initializeImportEvents($firstDiv.attr('id'));
+
+				}, $firstDiv);
+		
 	});
 	
 	// cancel option for deals import
@@ -221,16 +215,6 @@ $('#' + id).on('click', '#import-contacts', function(e)
 								// contact uploaded
 								var $firstDiv = $('#content').first();
 
-								App_Contacts.importContacts.model.fetch({
-									success : function(data)
-									{
-										showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
-										addTagAgile(IMPORT_TAG);
-										console.log(data);
-									}
-
-								})
-/*
 								getTemplate("import-contacts", {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
@@ -240,10 +224,10 @@ $('#' + id).on('click', '#import-contacts', function(e)
 									showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
 									addTagAgile(IMPORT_TAG);
 
-								}, $firstDiv);*/
+								}, $firstDiv);
 
 								
-							}});
+							}, });
 
 					})
 
@@ -417,8 +401,14 @@ $('#' + id).on('click', '#import-comp', function(e)
 							// contact uploaded
 							var $firstDiv = $('#content').first();
 
-							App_Contacts.importContacts.render(true);
-							showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
+							getTemplate("import-contacts", {}, undefined, function(template_ui){
+									if(!template_ui)
+										  return;
+									$firstDiv.html($(template_ui));
+									initializeImportEvents($firstDiv.attr('id'));
+									showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
+							}, $firstDiv);	
+
 						}, });
 
 				});
