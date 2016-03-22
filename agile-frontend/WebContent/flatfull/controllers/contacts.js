@@ -797,13 +797,22 @@ var ContactsRouter = Backbone.Router.extend({
 			postRenderCallback: function(el)
 			{
 				initializeImportEvents("import-contacts-event-listener");
+
+				if(import_tab_Id) {
+					 $('#import-tabs-content a[href="#'+import_tab_Id+'"]', el).tab('show');
+					 import_tab_Id=undefined;
+				}
+				else{
+					$('#import-tabs-content a[href="#csv-tab"]', el).tab('show');
+				}
 			}
 
 		});
 
 		$('#content').html(App_Contacts.importContacts.render().el);
-
-/*		$('#content').html('<div id="import-contacts-event-listener"></div>');
+		
+/*
+$('#content').html('<div id="import-contacts-event-listener"></div>');
 		getTemplate("import-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -818,7 +827,8 @@ var ContactsRouter = Backbone.Router.extend({
 				$('#import-tabs-content a[href="#csv-tab"]').tab('show');
 			}
 
-		}, "#import-contacts-event-listener");  */     
+		}, "#import-contacts-event-listener");      
+		*/ 
 	},
 	
 

@@ -1,0 +1,246 @@
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Popup</title>
+<link
+	href="https://fonts.googleapis.com/css?family=Varela:400|Montserrat:700"
+	rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+	background: #fff;
+	width: 310px;
+	height: 350px;
+}
+
+#popup {
+	background: #f9a937;
+	-webkit-border-radius: 8px 8px 0 0;
+	-moz-border-radius: 8px 8px 0 0;
+	border-radius: 8px 8px 0 0;
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+	color: #333 !important;
+	font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
+	letter-spacing: 0;
+	width: 300px;
+	position: fixed;
+	bottom: 0;
+}
+
+#popup-header {
+	color: #fff !important;
+	cursor: pointer;
+	font: bold 13px/19px "Montserrat", Arial, Helvetica,
+		sans-serif !important;
+	padding: 12px 50px 10px 20px;
+	position: relative;
+}
+
+#popup-header-arrow {
+	border: 6px solid transparent;
+	border-bottom-color: #fff;
+	height: 0;
+	position: absolute;
+	right: 20px;
+	top: 14px;
+	width: 0;
+}
+
+#popup-body {
+	background: #fff;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	margin: 5px;
+	padding: 20px 15px 5px;
+	position: relative;
+}
+
+#popup-close {
+	color: #848484;
+	cursor: pointer;
+	font: 28px/28px Arial, Helvetica, sans-serif !important;
+	opacity: .6;
+	position: absolute;
+	right: 15px;
+	top: 8px;
+}
+
+#popup-close:hover {
+	opacity: 1;
+}
+
+#popup-title {
+	color: #7c5553 !important;
+	font: bold 18px/24px "Montserrat", Arial, Helvetica,
+		sans-serif !important;
+	padding-right: 60px;
+}
+
+#popup-body p {
+	margin: 15px 0;
+}
+
+#popup-form p:last-child {
+	margin-top: -5px;
+}
+
+#popup-form input.popup-text {
+	border: 1px solid #c4c4c4;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.18);
+	font: 13px/19px "Varela", Arial, Helvetical, sans-serif !important;
+	outline: 0;
+	padding: 6px;
+	width: 100%;
+}
+
+#popup-form input.popup-text.popup-text-error {
+	border-color: #c00;
+	color: #c00;
+}
+
+#popup-form input.popup-button {
+	background: #7c5553;
+	border: 0;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	color: #fff;
+	cursor: pointer;
+	font: bold 13px/19px "Montserat", Arial, Helvetica,
+		sans-serif !important;
+	padding: 3px 12px;
+}
+
+#popup-form input.popup-button:hover {
+	background: #6b403d;
+}
+
+#popup-footer {
+	color: #fff !important;
+	font: bold 10px/10px "Montserat", Arial, Helvetica,
+		sans-serif !important;
+	letter-spacing: 1px;
+	padding: 8px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+#popup-footer a {
+	color: #fff;
+}
+
+#closed {
+	display: block;
+}
+
+#opened {
+	display: none;
+}
+</style>
+</head>
+<body>
+	<div id="closed">
+		<div id="popup">
+			<div id="popup-header">
+				Referral Program Crash Course
+				<div id="popup-header-arrow"></div>
+			</div>
+		</div>
+	</div>
+	<div id="opened">
+		<div id="popup">
+			<div id="popup-body">
+				<div id="popup-title">Referral Program Crash Course</div>
+				<div id="popup-content">
+					<p>You know referral programs work, but only when done right!
+						Find out how to achieve amazing results from your program in this
+						ridiculously actionable (and totally free) 5-part email course and
+						weekly articles from our blog</p>
+					<form id="popup-form">
+						<p>
+							<input type="text" name="email" agile-field="email"
+								class="popup-text" placeholder="Email address" />
+						</p>
+						<p>
+							<input type="submit" class="popup-button" value="Sign Up" />
+						</p>
+					</form>
+				</div>
+				<div id="popup-close">x</div>
+			</div>
+			<div id="popup-footer">
+				Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
+					CRM</a>
+			</div>
+		</div>
+	</div>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
+	<script type="text/javascript">
+	window.parent._agile_hide_close_button();
+	var email = window.parent.agile_read_cookie('agile-email');
+	if (email)
+	    document.getElementsByName('email')[0].value = email;
+	jQuery.validator.setDefaults({ debug: true });
+	$('#popup-form').validate({
+	    rules: {
+	        email: {
+	            required: true,
+	            email: true
+	        }
+	    },
+	    errorPlacement: function (error, element) {
+	        document.getElementsByClassName('popup-text')[0].style.borderColor = '#dd0000'
+	    },
+	    submitHandler: function () {
+	        return false
+	    },
+	    success: function () {
+	        document.getElementsByClassName('popup-text')[0].style.borderColor = '#00dd00';
+	        return false
+	    },
+	    error: function () {
+	        return false
+	    }
+	});
+	var iframe_div = window.parent.document.body.getElementsByClassName('simple-modal-body')[0];
+	var iframe_doc = iframe_div.getElementsByTagName('iframe')[0].contentWindow.document || iframe_div.getElementsByTagName('iframe')[0].contentDocument;
+	iframe_doc.getElementById('popup-header').onclick = function (e) {
+	    e.preventDefault();
+	    iframe_doc.getElementById('closed').style.display = 'none';
+	    iframe_doc.getElementById('opened').style.display = 'block';
+	    iframe_doc.getElementsByClassName('popup-button')[0].onclick = function () {
+	        if ($('#popup-form').valid()) {
+	            var email = iframe_doc.getElementsByName('email')[0].value;
+	            window.parent._agile.set_email(email);
+	            var contact = {};
+	            contact.email = email;
+	            window.parent._agile.create_contact(contact);
+	            iframe_doc.getElementById('popup-title').innerHTML = 'Thank you for signingup!';
+	            iframe_doc.getElementById('popup-content').innerHTML = '<p>Please check your email and click the link provided to confirm you subscription.</p>';
+	            iframe_doc.getElementById('popup-close').onclick = function (e) {
+	                e.preventDefault();
+	                iframe_doc.getElementById('opened').style.display = 'none';
+	                window.parent.document.getElementById('simple-modal').style.display = 'none'
+	            };
+	            return false
+	        } else
+	            return false
+	    }
+	};
+	iframe_doc.getElementById('popup-close').onclick = function (e) {
+	    e.preventDefault();
+	    iframe_doc.getElementById('opened').style.display = 'none';
+	    iframe_doc.getElementById('closed').style.display = 'block'
+	}
+	</script>
+
+</body>
+</html>

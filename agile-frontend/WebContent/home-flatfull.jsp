@@ -123,6 +123,7 @@ if(is_free_plan && is_first_time_user)
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
+
 %>
 
 
@@ -287,7 +288,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
-  <li class="line dk"></li>
+  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span>Marketing</span>
               </li>
@@ -330,6 +331,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
+  <li class="line dk m-t-none m-b-none" style="height: 1px; display: none;"></li>
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs" style="display: none;">
+    <span>Support</span>
+  </li>
+  <li id="tickets" style="display: none;">
+    <a  href="#tickets">
+      <i class="icon icon-ticket"></i>
+      <span>Help Desk</span>
+    </a>
+  </li>            
   </ul>
 
 
@@ -709,6 +720,10 @@ head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-mi
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
 	 $('[data-toggle="tooltip"]').tooltip();  
+	//Code to display alerts of widgets.
+  try{
+	   showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+    }catch(e){}
    
    try{
     //Code to display alerts of widgets.

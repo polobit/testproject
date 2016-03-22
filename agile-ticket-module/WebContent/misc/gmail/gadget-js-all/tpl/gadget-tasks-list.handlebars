@@ -1,0 +1,54 @@
+<!-- Tasks list tab -->
+<ul style="list-style-type:none; margin-right:25px;">
+{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+<li style="padding:5px;margin:5px;border:1px solid #ddd;">
+	<div class="activity" style="display:block;">
+		{{#if is_complete}}
+			<div id="tasks" class="activity-text-block" style="background-color:#FFFAFA">
+		{{else}}
+			<div id="tasks" class="activity-text-block">
+		{{/if}}	
+			{{#if is_complete}}
+				<div style="margin-bottom: 10px;">
+					<h4 class="task-subject" style="text-decoration:line-through;display:inline;">
+						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
+						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+					</h4>
+				</div>
+			{{else}}
+				<div style="margin-bottom: 10px;">
+					<h4 class="task-subject" style="display:inline;">
+						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
+						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>	
+					</h4>
+				</div>
+			{{/if}}
+			<div>
+				<p>
+					<i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}
+					<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span>
+				</p>
+				<div class="clear">
+					<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;"> 
+						<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+					</small>
+				</div>
+			</div>
+		</div>
+	</div>
+</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4 style="display:inline; margin-right:10px;">You have no tasks for this contact.</h4>
+					<a class="action-add-task" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Task</span></a>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>	

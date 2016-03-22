@@ -1,0 +1,142 @@
+[
+  {
+    "title": "Select Basic",
+    "fields": {
+      "id": {
+        "label": "ID",
+        "type": "input",
+        "value": "selectbasic"
+      },
+      "label": {
+        "label": "Label Text",
+        "type": "input",
+        "value": "Select Basic"
+      },
+      "options": {
+        "label": "Options",
+        "type": "textarea-split",
+        "value": [
+          "Option one",
+          "Option two"
+        ]
+      },
+      "inputheight": {
+        "label": "Input Height",
+        "type": "select",
+        "value": [
+          {
+            "value": "agile-height-small",
+            "label": "Small",
+            "selected": false
+          },
+          {
+            "value": "agile-height-default",
+            "label": "Default",
+            "selected": true
+          },
+          {
+            "value": "agile-height-large",
+            "label": "Large",
+            "selected": false
+          }
+        ]
+      },
+      "inputsize": {
+        "label": "Input Size",
+        "type": "select",
+        "value": [
+        {
+          "value": "agile-field-small",
+          "label": "Small",
+          "selected": false
+        },
+        {
+          "value": "agile-field-medium",
+          "label": "Medium",
+          "selected": false
+        },
+        {
+          "value": "agile-field-large",
+          "label": "Large",
+          "selected": false
+        },
+        {
+          "value": "agile-field-xlarge",
+          "label": "Xlarge",
+          "selected": true
+        }
+        ]
+      }
+    }
+  },
+  {
+    "title": "Select Multiple",
+    "fields": {
+      "id": {
+        "label": "ID",
+        "type": "input",
+        "value": "selectmultiple"
+      },
+      "label": {
+        "label": "Label Text",
+        "type": "input",
+        "value": "Select Multiple"
+      },
+      "options": {
+        "label": "Options",
+        "type": "textarea-split",
+        "value": [
+          "Option one",
+          "Option two"
+        ]
+      },
+      "inputheight": {
+        "label": "Input Height",
+        "type": "select",
+        "value": [
+          {
+            "value": "agile-height-small",
+            "label": "Small",
+            "selected": false
+          },
+          {
+            "value": "agile-height-default",
+            "label": "Default",
+            "selected": true
+          },
+          {
+            "value": "agile-height-large",
+            "label": "Large",
+            "selected": false
+          }
+        ]
+      },
+      "inputsize": {
+        "label": "Input Size",
+        "type": "select",
+        "value": [
+        {
+          "value": "agile-field-small",
+          "label": "Small",
+          "selected": false
+        },
+        {
+          "value": "agile-field-medium",
+          "label": "Medium",
+          "selected": false
+        },
+        {
+          "value": "agile-field-large",
+          "label": "Large",
+          "selected": false
+        },
+        {
+          "value": "agile-field-xlarge",
+          "label": "Xlarge",
+          "selected": true
+        }
+        ]
+      }
+    }
+  }
+]

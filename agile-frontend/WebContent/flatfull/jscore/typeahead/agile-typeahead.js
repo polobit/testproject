@@ -178,7 +178,15 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 						{
 							self.$menu.empty();
 							/* Sets css to html data to be displayed */
-							self.$menu.css("width", 300);							
+							if(self.$element.attr("id") == "searchText")
+							{
+								self.$menu.css({"width" : 300, "max-height" : "calc(100vh - 50px)", "overflow-y" : "auto"});
+								self.$menu.addClass("dashboard-search-scroll-bar");	
+							}
+							else
+							{
+								self.$menu.css("width", 300);
+							}					
 
 							/*
 							 * Calls render because menu needs to be initialized
@@ -192,6 +200,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							 */
 							if (!$(self.$menu.find('li').last()).hasClass('loading-results'))
 							{
+								self.$menu
 								self.$menu.html('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
 								self.render();
 							}
@@ -797,6 +806,11 @@ function appendItemInResult(item)
 		{
 			$("#document-typeahead-heading", this.el).show();
 			$("#document-results", this.el).append(i);
+		}
+		if (type == "tickets")
+		{
+			$("#tickets-typeahead-heading", this.el).show();
+			$("#ticket-results", this.el).append(i);
 		}
 	}
 

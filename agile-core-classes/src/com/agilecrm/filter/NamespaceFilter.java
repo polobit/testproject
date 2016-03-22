@@ -118,6 +118,7 @@ public class NamespaceFilter implements Filter
 	// If my or any special domain - support etc, choose subdomain
 	if (Arrays.asList(Globals.LOGIN_DOMAINS).contains(subdomain))
 	{
+		
 	    redirectToChooseDomain(request, response);
 	    return false;
 	}
@@ -247,7 +248,17 @@ public class NamespaceFilter implements Filter
 
 	// Chain into the next request if not redirected
 	if (handled)
-	    chain.doFilter(request, response);
+		try
+		{
+
+	    	chain.doFilter(request, response);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			throw e;
+
+		}
     }
 
     @Override

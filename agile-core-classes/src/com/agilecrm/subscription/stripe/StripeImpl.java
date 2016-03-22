@@ -357,7 +357,7 @@ public class StripeImpl implements AgileBilling {
 
 		// Updates customer with changed card details
 		customer = customer.update(updateParams);
-
+		payPendingInvoices(stripeCustomer);
 		return StripeUtil.getJSONFromCustomer(customer);
 	}
 
