@@ -906,5 +906,43 @@ function insertSelectedOption1(ele ,target_id)
     	}
 	}
 
+	function show_location_type(ele, target)
+	{
+		insertSelectedOption1(ele,target);
+
+		// if($(ele).find(':selected').val() == "CUSTOM_FIELD")
+		// 	$(target).show();
+		// else
+		// 	$(target).hide();
+	}
+
+	// Converts name-value pairs json array to single json
+	function parse_serialize_data(jsonArr)
+	{
+		var json = {}
+
+		if(!jsonArr)
+			return json;
+
+		for(var i=0; i<jsonArr.length; i++)
+			json[jsonArr[i].name] = jsonArr[i].value;
+
+		return json;
+	}
+
+	function is_duplicate(cache_arr, value)
+	{
+		if(!cache_arr)
+			return false;
+		
+		if(cache_arr.indexOf(value) != -1)
+        	return true;
+
+        cache_arr.push(value);
+
+        return false;
+	}
+
+
 	
 
