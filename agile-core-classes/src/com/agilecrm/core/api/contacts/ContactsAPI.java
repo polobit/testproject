@@ -1378,7 +1378,8 @@ public class ContactsAPI
 		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount, statusDAO);
 
 	    PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
-	    return statusDAO.getImportStatus(NamespaceManager.get());
+	    statusDAO.deleteStatus();
+	    return null;
 	}
 
 	catch (IOException e)
