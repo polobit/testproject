@@ -46,7 +46,12 @@
 					// {{/if_equals}}	         
 				{{/each}}
 			</div>
-			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}</time></small>
+			<small class="text-muted">
+				<i class="fa fa-clock-o m-r-xs"></i>
+				<time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">					
+					{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}
+				</time>
+			</small>
 		</li>
 	{{/each}}
 {{else}}
