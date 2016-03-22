@@ -1091,7 +1091,7 @@ public class OpportunityUtil
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
-
+	   
 	    /*
 	     * Map<String, Object> customFilters =
 	     * getCustomFieldFilters(filterJson.getJSONObject("customFields"));
@@ -1171,18 +1171,31 @@ public class OpportunityUtil
 		    query.addFilter("probability",FilterOperator.LESS_THAN, probability);
 		}
 	    }
-	    if (checkJsonString(filterJson, "close_date")) {
-	    	    	 String fieldName = filterJson.getString("close_date");
+	    if (checkJsonString(filterJson, "close_date_filter")) {
+	    	    	 String fieldName = "close_date" ;
 		    if (checkJsonString(filterJson, fieldName + "_filter"))
 		    {
-			if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("equals")
-				&& checkJsonString(filterJson, fieldName))
+			if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("on")
+				&& checkJsonString(filterJson, fieldName + "_start"))
 			{
-			    long closeDate = Long.parseLong(filterJson.getString(fieldName));
+			    long closeDate = Long.parseLong(filterJson.getString(fieldName+"_start"));
 			    query.addFilter(fieldName,FilterOperator.EQUAL,closeDate );
 			}
+			else if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("before")
+					&& checkJsonString(filterJson, fieldName + "_start"))
+				{
+				    long closeDate = Long.parseLong(filterJson.getString(fieldName+"_start"));
+				    query.addFilter(fieldName,FilterOperator.LESS_THAN,closeDate );
+				}
+			else if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("after")
+					&& checkJsonString(filterJson, fieldName + "_start"))
+				{
+				    long closeDate = Long.parseLong(filterJson.getString(fieldName+"_start"));
+				    query.addFilter(fieldName,FilterOperator.GREATER_THAN,closeDate );
+				}
 			else
 			{
+				if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("between") ||( filterJson.getString(fieldName + "_filter").equalsIgnoreCase("last") || filterJson.getString(fieldName + "_filter").equalsIgnoreCase("next")) ){
 			    if (checkJsonString(filterJson, fieldName + "_start"))
 			    {
 				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_start"));
@@ -1193,6 +1206,7 @@ public class OpportunityUtil
 				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_end"));
 				 query.addFilter(fieldName,FilterOperator.LESS_THAN,closeDate );
 			    }
+			}
 			}
 		    }
 		
@@ -1321,26 +1335,42 @@ public class OpportunityUtil
 	{
 	    if (checkJsonString(json, fieldName + "_filter"))
 	    {
-		if (json.getString(fieldName + "_filter").equalsIgnoreCase("equals")
-			&& checkJsonString(json, fieldName))
+		if (json.getString(fieldName + "_filter").equalsIgnoreCase("on")
+			&& checkJsonString(json, fieldName +"_start"))
 		{
-		    long closeDate = Long.parseLong(json.getString(fieldName));
+		    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
 		    searchMap.put(fieldName, closeDate);
 		}
+		else if (json.getString(fieldName + "_filter").equalsIgnoreCase("after")
+				&& checkJsonString(json, fieldName +"_start"))
+			{
+			    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
+			    searchMap.put(fieldName+">", closeDate);
+			}
+		else if (json.getString(fieldName + "_filter").equalsIgnoreCase("before")
+				&& checkJsonString(json, fieldName +"_start"))
+			{
+			    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
+			    searchMap.put(fieldName+"<", closeDate);
+			}
 		else
-		{
-		    if (checkJsonString(json, fieldName + "_start"))
-		    {
-			long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-			searchMap.put(fieldName + " >", closeDate);
-		    }
-		    if (checkJsonString(json, fieldName + "_end"))
-		    {
-			long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
-			searchMap.put(fieldName + " <", closeDate);
-		    }
+		{ 
+			if (json.getString(fieldName + "_filter").equalsIgnoreCase("between") ||( json.getString(fieldName + "_filter").equalsIgnoreCase("last") || json.getString(fieldName + "_filter").equalsIgnoreCase("next")) ){
+			    if (checkJsonString(json, fieldName + "_start"))
+			    {
+				long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
+				searchMap.put(fieldName + " >", closeDate);
+			    }
+			    if (checkJsonString(json, fieldName + "_end"))
+			    {
+				long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
+				searchMap.put(fieldName + " <", closeDate);
+			    }
+			}
 		}
-	    }
+		
+		
+	   }
 	}
 	catch (NumberFormatException e)
 	{

@@ -1,5 +1,8 @@
 package com.agilecrm.deals.filter;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -54,6 +57,18 @@ public class DealFilter {
     @NotSaved(IfDefault.class)
     public String value_end = null;
     
+    @NotSaved(IfDefault.class)
+    public String close_date_filter = null;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_start = 0L;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_end = 0L;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_value = 0L;
+     
     @NotSaved(IfDefault.class)
     public String archived = null;
     
@@ -110,6 +125,22 @@ public class DealFilter {
     	this.value_start=value_start;
     	this.value_end=value_end;
     	this.archived=archived;
+    }
+    public DealFilter(String name, String view_type, Long owner_id, Long pipeline_id, String milestone, String value_filter, String value, String value_start, String value_end, String archived,String close_date_filter,Long close_date_start,Long close_date_end,Long close_date_value){
+    	this.name=name;
+    	this.view_type=view_type;
+    	this.owner_id=owner_id;
+    	this.pipeline_id=pipeline_id;
+    	this.milestone=milestone;
+    	this.value_filter=value_filter;
+    	this.value=value;
+    	this.value_start=value_start;
+    	this.value_end=value_end;
+    	this.archived=archived;
+    	this.close_date_filter = close_date_filter;
+    	this.close_date_start = close_date_start;
+    	this.close_date_end = close_date_end;
+    	this.close_date_value = close_date_value;
     }
     
     /**
@@ -170,7 +201,48 @@ public class DealFilter {
 	    // Saves domain user key
 	    if (filter_owner_id != null)
 	    	owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(filter_owner_id));
+	    if(close_date_value != null ){
+	    	int value = (int) (close_date_value-1);
+	    	if((close_date_filter).equalsIgnoreCase("last")){
+	    		//today
+	 		   	Calendar date = new GregorianCalendar();
+	 		   // reset hour, minutes, seconds and millis
+	 		   date.add(Calendar.DAY_OF_MONTH, -value);
+	 		   date.set(Calendar.HOUR_OF_DAY, 0);
+	 		   date.set(Calendar.MINUTE, 0);
+	 		   date.set(Calendar.SECOND, 0);
+	 		   date.set(Calendar.MILLISECOND, 0);
+	 		   close_date_start = date.getTimeInMillis()  / 1000;
+	 		   
+	 		 	Calendar date1 = new GregorianCalendar();
+		 		   // reset hour, minutes, seconds and millis
+	 		 	date1.set(Calendar.HOUR_OF_DAY, 23);
+	 		 	date1.set(Calendar.MINUTE, 59);
+	 		 	date1.set(Calendar.SECOND, 59);
+	 		 	date1.set(Calendar.MILLISECOND, 59);
+	 		 	close_date_end = date1.getTimeInMillis()  / 1000;
+	 		  
+	    	  }
+	    	else if((close_date_filter).equalsIgnoreCase("next")){
+	    		//today
+	 		   	Calendar date = new GregorianCalendar();
+	 		   // reset hour, minutes, seconds and millis
+	 		   date.set(Calendar.HOUR_OF_DAY, 0);
+	 		   date.set(Calendar.MINUTE, 0);
+	 		   date.set(Calendar.SECOND, 0);
+	 		   date.set(Calendar.MILLISECOND, 0);
+	 		   close_date_start = date.getTimeInMillis()  / 1000;
+	 		   
+	 		 	Calendar date1 = new GregorianCalendar();
+		 		   // reset hour, minutes, seconds and millis
+	 		 	date1.add(Calendar.DAY_OF_MONTH, value);
+	 		 	date1.set(Calendar.HOUR_OF_DAY, 23);
+	 		 	date1.set(Calendar.MINUTE, 59);
+	 		 	date1.set(Calendar.SECOND, 59);
+	 		 	date1.set(Calendar.MILLISECOND, 59);
+	 		 	close_date_end = date1.getTimeInMillis()  / 1000;
+	 		  
+	    	  }
+	     }
     }
-    
-
 }

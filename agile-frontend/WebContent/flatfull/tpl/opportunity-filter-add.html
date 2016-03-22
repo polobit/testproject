@@ -73,6 +73,39 @@
 								<input type="number" id="value_end" name="value_end" placeholder="Max Value" class="between form-control positive_number" />
 						</div>
 					</div>
+					<div class="control-group form-group" id="deal-close-date">
+						<label class="control-label col-sm-2">Close Date</label>
+						<div class="controls col-sm-2" id="value_div">
+								<div id="deal-cd-condition" name="CONDITION">
+												<select name="close_date_filter" class="form-control deal-cd-value" id="cdCondtion">								
+													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">on</option>
+													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
+														after</option>
+													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
+														before</option>
+													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
+														between</option>
+													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">in
+														last</option>
+													<option value="NEXT" class="created_time updated_time">in next
+														</option>												
+												</select>
+								</div>
+						</div>
+						<div class="controls col-sm-2  between">
+							<div id="deal-cd-rhs" class="rhs" name="RHS">										
+								<input id="deal-cd-first" type="text" name="close_date_start" class="ON AFTER BEFORE BETWEEN input required date form-control" placeholder="Select Date" data-date-format="Select Date">
+											</div>
+						</div>
+						<div class="controls col-sm-2 hide between"> 
+							<div id="deal-cd-rhs-new" name="RHS_NEW">
+								<input id="deal-cd-second" type="text" name="close_date_end" class="ON AFTER BEFORE BETWEEN input required date form-control" placeholder="Select Date" data-date-format="Select Date">
+							</div>
+						</div>
+						<div class="controls col-sm-2 equals hide">
+							<input type="number" id="cd-value" name="close_date_value" placeholder="Number of days" class="equals form-control positive_number">
+						</div>
+					</div>
 					<div class="control-group form-group">
 						<label class="control-label col-sm-2">State</label>
 						<div class="controls col-sm-6" id="archived_div">
