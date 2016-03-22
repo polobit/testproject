@@ -141,15 +141,17 @@ public class StripeChargeWebhook extends HttpServlet
 				// TODO Auto-generated catch block
 				System.out.println("Exception occured in fetching event from json:"+ e1.getMessage());
 			}
-		    StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
-		    webhookHandlerImpl.init(stripeJson.toString(), event);
+		    //StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
+		    //webhookHandlerImpl.init(stripeJson.toString(), event);
 		    
 		    //StripeWebhookHandlerImpl stripeWebhookHandlerImpl = new StripeWebhookHandlerImpl();
 		    Contact contact = null;
 		    if(namespace.equals("our")){
-			 contact = webhookHandlerImpl.getContactFromOurDomain();
+		    	StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
+			    webhookHandlerImpl.init(stripeJson.toString(), event);
+			    contact = webhookHandlerImpl.getContactFromOurDomain();
 		    }else{
-		     contact = ContactUtil.searchContactByEmail(email);
+		    	contact = ContactUtil.searchContactByEmail(email);
 		    }
 			if(contact!=null)
 			{
