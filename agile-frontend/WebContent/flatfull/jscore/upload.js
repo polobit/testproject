@@ -65,7 +65,7 @@ function setContactImageURL(url)
 	$('#' + id).find('.contact-image-view').html('');
 	$('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;" type="submit" />');
 	if($(".toggle-contact-image .contact-delete-option").length == 0) {
- 	$('#' + id).find('.toggle-contact-image').append('<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
+ 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
 	$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").removeAttr('style');
 	$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("float","left");
 	}
@@ -113,10 +113,18 @@ function deleteContactImage(){
 		$('#' + id).find('.contact-image-view').html('');
 		$('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;"/>');
 		if($(".toggle-contact-image .contact-delete-option").length > 0) {
- 		$('#' + id).find('.toggle-contact-image').find(".contact-delete-option").remove();
+		$('#' + id).find('.toggle-contact-image').empty();
+		$('#' + id).find('.toggle-contact-image').append('<div style="float:left" class="contact-edit-option"><a name="Delete" class="tooltip_info  edit-pic" data-placement="bottom" data-toggle="tooltip" title="Change"><i class="glyphicon glyphicon-edit"></i></a></div>');
  		$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("margin-left","10px");
-		}
-
+ 		}
+ 		var properties = App_Contacts.contactsListView.collection.get($("#contact_delete_image").text()).get("properties");
+ 		var i;
+		for (i = 0; i < properties.length; i++) {
+   			 if(properties[i].name == "image"){
+   			 	properties.splice(i,1);
+   			 }
+		}  
+ 
 	},error: function() {
      	console.log('An error occurred');
 	}
