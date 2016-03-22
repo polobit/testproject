@@ -4,7 +4,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
@@ -42,24 +44,31 @@ public class QuickBooksWidgetAPI
     @Path("contacts/{widget-id}/{email}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getInvoicesFromQuickBooks(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
+    public String getInvoicesFromQuickBooks(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)throws Exception
     {
 	// Retrieves widget based on its id
+    String result=null;
 	Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget != null)
+	String widget_version = widget.getProperty("version");
+		if (widget != null && widget_version.equals("v2"))
 		{
 			QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
 			        Globals.QUICKBOOKS_WIDGET_CONSUMER_KEY, Globals.QUICKBOOKS_WIDGET_CONSUMER_SECRET, widget.getProperty("company"));
 			try
 			{
 			    // Calls QuickBooksUtil method to retrieve invoices
-			    return utilObj.getQuickBooksProfile(email);
+			    result = utilObj.getQuickBooksProfile(email);
 			}catch (Exception e)
 			{
 			    throw ExceptionUtil.catchWebException(e);
 			}
 		}
-		return null;
+		else
+		{
+			//result="Please reconfigure the Quickbooks widget.";//throw new Exception("");
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("We have updated our Quickbooks widget API. Please reconfigure the Quickbooks widget.").build());
+		}
+		return result;
     }
 
     /**
@@ -80,11 +89,13 @@ public class QuickBooksWidgetAPI
     @Produces(MediaType.TEXT_PLAIN)
     public String addContactToQuickBooks(@PathParam("widget-id") Long widgetId,
 	    @PathParam("first_name") String firstName, @PathParam("last_name") String lastName,
-	    @PathParam("email") String email)
+	    @PathParam("email") String email)throws Exception
     {
+    String result=null;
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget != null)
+	String widget_version = widget.getProperty("version");
+	if ((widget != null) && (widget_version.equals("v2")))
 	{
 		try
 		{
@@ -95,13 +106,16 @@ public class QuickBooksWidgetAPI
 			    c_key,c_secret, widget.getProperty("company"));
 		    		  
 		    // Calls XeroUtil method to add Contact to Xero account
-		    return utilObj.createCustomer(firstName, lastName, email);
+		    result = utilObj.createCustomer(firstName, lastName, email);
 		}
 		catch (Exception e)
 		{
 		    throw ExceptionUtil.catchWebException(e);
 		}
 	}
-	return null;
+	else{
+		 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("We have updated our Quickbooks widget API. Please reconfigure the Quickbooks widget.").build());
+	}
+	return result;
     }
 }
