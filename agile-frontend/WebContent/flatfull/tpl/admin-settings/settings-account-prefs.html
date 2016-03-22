@@ -135,16 +135,32 @@
                     </tr>
                     
                     
+                    
                 </tbody>
             </table>
+            {{#unless ipList.length}}
+
+                    <div class="panel panel-default" style="overflow-x:auto; border-left:none;">
+                     <div class="m-l-sm" id="slate">
+                     <div class="alert bg-white ">
+                     <div class="slate-content p-md">
+                    <div class="box-left pull-left m-r-md">
+                        <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
+                    </div>
+                <div class="box-right pull-left">
+
+                <h4 class="m-t-none">You do not added any IP Addresses.</h4>
+                <div class="text">Add an IP Address to provide access to added IP Addresses only</div>
+                </div>
+                </div>
+            <div class="clearfix"></div>
+            </div></div></div>
+                    {{/unless}}
             
             <footer class="panel-footer">
              <a href="#" class="blocked-panel-ip-delete btn btn-danger btn-sm" data-toggle="modal" role="button"  > Delete</a>
             <a href="#" class="btn btn-sm btn-primary " data-toggle="modal" role="button" id="newip-add" > Add</a>
-           
-            
-            
-            </footer>  
+        </footer>  
            
         </fieldset>
     </form>
