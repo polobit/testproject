@@ -1742,6 +1742,7 @@ public class ContactsAPI
 	public void deleteContactImage(@QueryParam("id") Long id) 
     {  
     	Contact contact = ContactUtil.getContact(id);
+    	if(contact != null){
     	List<ContactField> properties = contact.properties;
     	System.out.println(properties.size());
     	for(int i=0 ; i <properties.size(); i++){
@@ -1750,5 +1751,6 @@ public class ContactsAPI
     			properties.remove(i);
     	}
     	contact.save();
+    }
     }
 }

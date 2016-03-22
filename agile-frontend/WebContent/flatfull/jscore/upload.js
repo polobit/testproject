@@ -74,8 +74,11 @@ function setContactImageURL(url)
 	agile_crm_update_contact("image", url);
 }
 function deleteContactImage(){
-
-	var contactId = $('#contact_delete_image').text();
+	var url = window.location.href;
+	//get rid of the trailing / before doing a simple split on /
+	var url_parts = url.replace(/\/\s*$/,'').split('/'); 
+	//since we do not need example.com
+	contactId = url_parts[url_parts.length - 1] ;	
 	var url = "/core/api/contacts/deleteContactImage?id="+contactId
 	$.ajax({ type : 'PUT', url : url, success : function(){
                 
@@ -117,7 +120,7 @@ function deleteContactImage(){
 		$('#' + id).find('.toggle-contact-image').append('<div style="float:left" class="contact-edit-option"><a name="Delete" class="tooltip_info  edit-pic" data-placement="bottom" data-toggle="tooltip" title="Change"><i class="glyphicon glyphicon-edit"></i></a></div>');
  		$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("margin-left","10px");
  		}
- 		var properties = App_Contacts.contactsListView.collection.get($("#contact_delete_image").text()).get("properties");
+ 		var properties = App_Contacts.contactsListView.collection.get(contactId).get("properties");
  		var i;
 		for (i = 0; i < properties.length; i++) {
    			 if(properties[i].name == "image"){
