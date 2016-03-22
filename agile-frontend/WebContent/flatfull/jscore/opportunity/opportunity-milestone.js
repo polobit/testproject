@@ -116,9 +116,7 @@ function initDealListCollection(milestones)
 function dealAppend(base_model)
 {
 	milestonesCollectionView(base_model, this.el, function(){
-		dealsFetch(base_model, function(){
-			dealsCountFetch(base_model);
-		});
+		dealsFetch(base_model);
 	});
 	
 }
@@ -142,7 +140,7 @@ function milestonesCollectionView(base_model, ele, callback)
  * Create sub collection, ad to model in main collection, fetch tasks from DB
  * for sub collection and update UI.
  */
-function dealsFetch(base_model, callback)
+function dealsFetch(base_model)
 {
 	if (!base_model)
 		return;
@@ -198,12 +196,9 @@ function dealsFetch(base_model, callback)
         	// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
-		dealTotalCountForPopover(heading);
-				
-		if(callback){
-			return callback();
-		}
-		
+		dealsCountFetch(base_model, function(){
+			dealTotalCountForPopover(heading);
+		});
 	} });
 }
 
@@ -324,7 +319,7 @@ console.log('------popover pipeline id-----', pipeline_id);
                 if(data){
 					var json = JSON.parse(data); 
 					var dealcount = json.total;
-					var count = $('#'+json.milestone.replace(/ +/g, '')+'_count').text();
+					var count = json.count;
 					var countoto = 3;
 			        var heading = json.milestone.replace(/ +/g, '');
 			        var i;
@@ -354,17 +349,16 @@ console.log('------popover pipeline id-----', pipeline_id);
 
 }
 
-function dealsCountFetch(base_model)
+function dealsCountFetch(base_model, callback)
 {
 	if (!base_model)
 		return;
 
 	// Define sub collection
-	var dealCount = new Base_Model_View({ url : base_model.get("url").replace("/based", "/based/count"), template : "" });
+	var dealCount = new Base_Model_View({ url : base_model.get("url").replace("/based", "/based/count"), template : "", isNew : true });
 
 	dealCount.model.fetch({ success : function(data)
 	{
-		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
 		var count = data.get("count") ? data.get("count") : 0;
 		if(count > 10000)
 		{
@@ -373,6 +367,10 @@ function dealsCountFetch(base_model)
 		else
 		{
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(count);
+		}
+		if(callback)
+		{
+			return callback();
 		}
 	} });
 	

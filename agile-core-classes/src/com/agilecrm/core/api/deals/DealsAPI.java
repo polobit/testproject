@@ -193,6 +193,8 @@ public class DealsAPI
     JSONObject obj = new JSONObject();
     System.out.println(count);
     obj.put("id", "100");
+    JSONObject value_count_obj = null;
+    int totalCount = 0;
 	if (filters != null)
 	{
 	    System.out.println(filters);
@@ -202,9 +204,15 @@ public class DealsAPI
 			if (milestone != null)
 				json.put("milestone", milestone);
 			System.out.println(json.toString());			
-			totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
+			value_count_obj =  OpportunityUtil.getTotalValueOfDeals(json);
+			if(value_count_obj != null)
+			{
+				totalValue = value_count_obj.getDouble("deals_total");
+				totalCount = value_count_obj.getInt("deals_count");
+			}
 			obj.put("total", totalValue);	
 			obj.put("milestone", milestone);
+			obj.put("count", totalCount);
 			return obj;
 	     }	    
 	    catch (JSONException e)
