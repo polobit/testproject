@@ -125,14 +125,23 @@ function isValidForm(form) {
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
 
-	//positive number validation
+	//Positive Number validation
 	jQuery.validator.addMethod("positive_number", function(value, element){
-			
-		if(value=="")
-			return false;
 		
-		return /^\+?([1-9]\d*)$/.test(value);
-	}," Please enter a number greater than 0.");
+		if(value=="")
+			return true;
+
+		if(isNaN(value))
+		{
+			return false;
+		}
+		if(!isNaN(value) && parseFloat(value) >= 0)
+		{
+			return true;
+		}
+
+	}," Please enter a value greater than or equal to 0.");
+
 
 	
 	jQuery.validator.addMethod("multi-select", function(value, element){
