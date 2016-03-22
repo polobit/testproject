@@ -3328,6 +3328,17 @@ table.hide-head-checkbox th label.i-checks {
 #lhs_filters_conatiner #lhs-filters-header i{
 	top : 3px;
 }
+
+#lhs_filters_segmentation .panel-body{
+	padding: 5px 15px;
+	min-height: 35px;
+}
+#lhs_filters_segmentation #lhs-filters-header{
+	font-size : 14px;
+}
+#lhs_filters_segmentation #lhs-filters-header i{
+	top : 3px;
+}
 /* Modals New  Look  UI Starting */
  
  .modal-footer {

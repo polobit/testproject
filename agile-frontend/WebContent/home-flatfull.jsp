@@ -327,6 +327,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Reports</span>
     </a>
   </li>
+   <li id="segmentationmenu">
+    <a  href="#visitorssegmentation">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Segmentation</span>
+    </a>
+  </li>
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
@@ -603,7 +609,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
 
-   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+   
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>

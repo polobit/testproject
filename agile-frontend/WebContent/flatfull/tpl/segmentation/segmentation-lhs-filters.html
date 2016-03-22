@@ -1,0 +1,254 @@
+<script id="segmentation-lhs-filters-template" type="text/html">
+  <form id="lhs-contact-filter-form" name="lhs-contact-filter-form" class="m-t-xs">
+  <input type="hidden" name="contact_type" class="form-control" id="contact_type" value="VISITOR" />
+  
+  <fieldset>
+  <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs ">
+    <div class="panel panel-default m-b-none">
+    
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+    <a  id="lhs-filters-header" 
+        class="c-p text-l-none text-l-none-hover" >
+        Page Viewed
+        <i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+     <div class="controls m-t-xs hide" id="page_viewed_div">
+              <div class="lhs-contact-filter-row pos-rlt m-t-xs">
+                 <input class="form-control" type="hidden" name="LHS" value="page_viewed" />
+                 <select id="between_filter" class="form-control" name="CONDITION">
+                     <option value="IS_EQUAL_TO">Is Equal to</option>
+                      <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+                      <option value="CONTAINS">Contains</option>
+                      <option value="DOES_NOT_CONTAIN">Does not Contain</option>
+                 </select>
+                 <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO CONTAINS DOES_NOT_CONTAIN condition_container m-t-xs">
+                    <span id="RHS">
+                        <input type="text"  placeholder="Value" prev-val="" class="form-control required">
+                    </span>
+                 </div>
+                 
+                
+              </div>
+     </div>
+  </div>  
+   </div>
+  </div>  
+   </div>
+   
+  
+  <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+    <div class="panel panel-default m-b-none">
+    
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+     <a  id="lhs-filters-header" 
+        class="c-p text-l-none text-l-none-hover" >
+        Referred from 
+        <i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+     <div class="controls hide m-t-xs" id="referred_from_div">
+        <div class="lhs-contact-filter-row pos-rlt">
+        <input type="hidden" name="LHS" class="form-control" value="referred_from" />
+        <select id="between_filter" name="CONDITION" class="form-control" >
+            <option value="IS_EQUAL_TO">Is Equal to</option>
+              <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+              <option value="CONTAINS">Contains</option>
+              <option value="DOES_NOT_CONTAIN">Does not Contain</option>
+        </select>
+         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO  CONTAINS DOES_NOT_CONTAIN condition_container m-t-xs">
+                    <span id="RHS">
+                        <input type="text"  placeholder="Value" prev-val="" class="form-control required">
+                    </span>
+                 </div>
+        
+         </div>
+     </div>
+  </div>
+  </div>
+  </div>  
+   </div>
+  
+  <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+    <div class="panel panel-default m-b-none">
+    
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+     <a  id="lhs-filters-header"  class="c-p text-l-none text-l-none-hover" >
+         Web Stats
+        <i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+     <div class="controls hide m-t-xs" id="webstats_div">
+        <div class="lhs-contact-filter-row pos-rlt">
+        <input type="hidden" name="LHS" class="form-control" value="webstats" />
+       <select id="between_filter" name="CONDITION" class="form-control" >
+               <option value="IS_EQUAL_TO">Is Equal to</option>
+               <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+               <option value="IS_GREATER_THAN">Is Greater than</option>
+               <option value="IS_LESS_THAN">Is Less than</option>
+               <option value="IN_BETWEEN">In Between</option>
+               <option value="IS_GREATER_THAN_OR_EQUAL_TO">Is Greater than or Equal To</option>
+               <option value="IS_LESS_THAN_OR_EQUAL_TO">Is Less than or Equal To</option>
+        </select>
+          <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO  IS_GREATER_THAN_OR_EQUAL_TO IS_LESS_THAN_OR_EQUAL_TO IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
+           <span id="RHS">
+              <input type="number" placeholder="Value" prev-val="" class="form-control required">
+           </span>
+        </div>
+        <div class="IN_BETWEEN condition_container hide m-t-xs">
+        <div class="clear"></div>
+        <span id="RHS">
+          <input type="number" min="0" class="required form-control text-xs" prev-val="" placeholder="Min Value" name="temp-3" id="temp-3" style="height:30px;"> 
+        </span>
+        <span id="RHS_NEW">
+          <input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control text-xs" name="temp-4" id="temp-4" style="height:30px;">
+        </span>
+      </div>
+        
+        </div>
+     </div>
+  </div>
+  </div>
+  </div>  
+   </div>
+  
+  <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+    <div class="panel panel-default m-b-none">
+    
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">   <a  id="lhs-filters-header" 
+        class="c-p text-l-none text-l-none-hover" >
+        Country
+        <i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+     <div class="controls m-t-xs hide" id="ip_country_div">
+        <div class="lhs-contact-filter-row pos-rlt">
+        <input type="hidden" name="LHS" value="ip_country" class="form-control"/>
+        <select id="between_filter" name="CONDITION" class="form-control" >
+          <option value="IS_EQUAL_TO">Is Equal to</option>
+               <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+               <option value="STARTS_WITH">Starts With</option>
+               <option value="ENDS_WITH">Ends With</option>
+               <option value="CONTAINS">Contains</option>
+               <option value="DOES_NOT_CONTAIN">Does Not Contains</option>
+               
+        </select>
+       <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO   STARTS_WITH  ENDS_WITH  CONTAINS DOES_NOT_CONTAIN condition_container  m-t-xs">
+        <span id="RHS">
+          <input type="text" placeholder="Value" prev-val="" class="form-control required">
+        </span>
+      </div>
+      </div>
+     </div>
+  </div>
+  </div>
+  </div>  
+   </div>
+  
+  <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+    <div class="panel panel-default m-b-none">
+    
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+           <a  id="lhs-filters-header" 
+        class="c-p text-l-none text-l-none-hover" >
+         Region
+        <i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+     <div class="controls m-t-xs hide" id="ip_states_div">
+        <div class="lhs-contact-filter-row pos-rlt">
+        <input type="hidden" name="LHS" value="ip_states" class="form-control"/>
+        <select id="between_filter" name="CONDITION" class="form-control" >
+          <option value="IS_EQUAL_TO">Is Equal to</option>
+               <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+               <option value="STARTS_WITH">Starts With</option>
+               <option value="ENDS_WITH">Ends With</option>
+               <option value="CONTAINS">Contains</option>
+               <option value="DOES_NOT_CONTAIN">Does Not Contains</option>
+               
+        </select>
+       <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO   STARTS_WITH  ENDS_WITH  CONTAINS DOES_NOT_CONTAIN condition_container  m-t-xs">
+        <span id="RHS">
+          <input type="text" placeholder="Value" prev-val="" class="form-control required">
+        </span>
+      </div>
+        <div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+        <div class="clearfix"></div>
+        </div>
+     </div>
+  </div>
+  </div>
+  </div>  
+   </div>
+  
+  <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+    <div class="panel panel-default m-b-none">
+    
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+     <a  id="lhs-filters-header" 
+        class="c-p text-l-none text-l-none-hover" >
+         City
+        <i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+     <div class="controls m-t-xs hide" id="ip_city_div">
+        <div class="lhs-contact-filter-row pos-rlt">
+        <input type="hidden" name="LHS" value="ip_city" class="form-control"/>
+        <select id="between_filter" name="CONDITION" class="form-control" >
+              <option value="IS_EQUAL_TO">Is Equal to</option>
+               <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+               <option value="STARTS_WITH">Starts With</option>
+               <option value="ENDS_WITH">Ends With</option>
+               <option value="CONTAINS">Contains</option>
+               <option value="DOES_NOT_CONTAIN">Does Not Contains</option>
+               
+        </select>
+       <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO   STARTS_WITH  ENDS_WITH  CONTAINS DOES_NOT_CONTAIN condition_container  m-t-xs">
+        <span id="RHS">
+          <input type="text" placeholder="Value" prev-val="" class="form-control required">
+        </span>
+      </div>
+        <div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+        <div class="clearfix"></div>
+        </div>
+     </div>
+  </div>
+  </div>
+  </div>  
+   </div>
+  
+  <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
+    <div class="panel panel-default m-b-none">
+    
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
+     <a  id="lhs-filters-header" 
+        class="c-p text-l-nonestext-l-none-hover" >
+       OS
+        <i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+     <div class="controls m-t-xs hide" id="os_div">
+        <div class="lhs-contact-filter-row pos-rlt">
+        <input type="hidden" name="LHS" value="os" class="form-control"/>
+        <select id="between_filter" name="CONDITION" class="form-control" >
+              <option value="CONTAINS">Is Equal to</option>
+               <option value="DOES_NOT_CONTAIN">Is Not Equal to</option>                         
+        </select>
+       <div class="CONTAINS DOES_NOT_CONTAIN condition_container m-t-xs">
+        <span id="RHS">
+          <input type="text" placeholder="Value" prev-val="" class="form-control required">
+        </span>
+      </div>
+          </div>
+     </div>
+  </div>
+  </div>
+  </div>  
+   </div></div>
+  </div>  
+   </div>
+  
+  
+  <div class="bg-light">
+    <span class="pull-left m-l-md">
+  
+    <a id="clear-lhs-segmentation-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear</a>
+    </span>
+  <div class="clearfix"></div>
+     
+  </fieldset>
+  </form>
+</script>

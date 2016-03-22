@@ -189,7 +189,16 @@ function submitLhsFilter()
 		}
 		COMPANIES_HARD_RELOAD=true;
 		App_Companies.companies(undefined, undefined, undefined, true);
-	} else {
+	} else if(contact_type == 'VISITOR') {
+
+		_agile_delete_prefs('dynamic_visitors_filter');
+		if (formData != null && formData.rules.length > 0)
+			_agile_set_prefs('dynamic_visitors_filter', JSON.stringify(formData));
+
+		VISITORS_HARD_RELOAD=true;
+		App_VisitorsSegmentation.visitorssegmentation(getTimeWebstats(),true);
+	}else {
+		
 		_agile_delete_prefs('contact_filter');
 		_agile_delete_prefs('contact_filter_type');
 		_agile_delete_prefs('dynamic_contact_filter');
@@ -272,6 +281,14 @@ $('#' + container_id).on('click', '#clear-lhs-company-filters', function(e)
 	_agile_delete_prefs('dynamic_company_filter');
 	COMPANIES_HARD_RELOAD=true;
 	App_Companies.companies();
+});
+$('#' + container_id).on('click', '#clear-lhs-segmentation-filters', function(e)
+{
+	e.preventDefault();
+	_agile_delete_prefs('dynamic_visitors_filter');
+	_agile_delete_prefs('duration');
+	VISITORS_HARD_RELOAD=true;
+	 App_VisitorsSegmentation.visitorssegmentation();
 });
 
 $('#' + container_id).on('click', '#lhs-filters-header', function(e)
@@ -611,6 +628,26 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 			}
 
 		});
+
+ 	$('body').on('click', '#segmentation-left-filters-toggle', function(e)
+		{
+
+			e.preventDefault();
+
+			if ($('#segmentation-lhs-filters-toggle').is(':visible'))
+			{
+				$('#segmentation-lhs-filters-toggle').hide();
+				_agile_set_prefs('segmentationFilterStatus','display:none');
+				e.preventDefault();
+			}
+			else
+			{
+				$('#segmentation-lhs-filters-toggle').show();
+				_agile_set_prefs('segmentationFilterStatus','');
+				e.preventDefault();
+			}
+
+		});
      	
 
 
@@ -721,3 +758,27 @@ function bindChangeEvent(ele){
 
 
 }
+
+//for segmentation lhs filters
+ function setupAnalyticsLhsFilters (cel){   
+	
+		getTemplate("segmentation-lhs-filters", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$('#lhs_filters_segmentation', cel).html($(template_ui));
+			$("input.date", cel).datepicker({ format :CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+			 setTimeout(function() {
+			if(_agile_get_prefs('dynamic_visitors_filter')!=null)	
+				deserializeLhsFilters($('#lhs-contact-filter-form'), _agile_get_prefs('dynamic_visitors_filter'));
+			
+			if(_agile_get_prefs('duration')!=null)
+    			deserializeRhsFilters($('#reportrange'),_agile_get_prefs('duration'));
+    		},500)
+   
+			initWebstatsDateRange();
+									
+		}, $('#lhs_filters_segmentation', cel));
+
+
+  }

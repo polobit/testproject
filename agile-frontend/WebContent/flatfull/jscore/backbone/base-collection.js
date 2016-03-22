@@ -477,7 +477,8 @@ var Base_Collection_View = Backbone.View
 
 				if ($('table', this.el).hasClass('onlySorting'))
 					return;
-
+				if ($('table', this.el).hasClass('noCheckbox'))
+					return;
 				append_checkboxes(this.model_list_element);
 
 			},

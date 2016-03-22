@@ -1,22 +1,24 @@
 package com.agilecrm.core.api.analytics;
 
 import java.util.List;
-
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
-
+import com.agilecrm.contact.Contact;
 import com.agilecrm.util.EmailUtil;
 import com.analytics.Analytics;
 import com.analytics.util.AnalyticsSQLUtil;
 import com.analytics.util.AnalyticsUtil;
 import com.campaignio.reports.CampaignReportsUtil;
 import com.google.appengine.api.NamespaceManager;
+
 
 /**
  * <code>AnalyticsAPI</code> is the API class that handles web-stats requests.
@@ -84,6 +86,17 @@ public class AnalyticsAPI
 	
 	return sessionsCount.toString();
 	
+    }
+
+
+    @POST
+    @Path("/filter/dynamic-filter")
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Contact> filterCustomers(@FormParam("filterJson") String filterJson,
+        @FormParam("page_size") String count, @FormParam("cursor") String cursor , @FormParam("start_time") Long startTime , @FormParam("end_time") Long endTime) 
+    {
+        return null;
     }
     
 }
