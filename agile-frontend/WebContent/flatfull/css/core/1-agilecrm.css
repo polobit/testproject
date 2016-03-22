@@ -3571,5 +3571,26 @@ text-align:left;
   display: block!important;
 }
 #pause_settings:hover #month_id{
-  margin-left: 10px!important;
+	margin-left: 10px!important;
 }
+
+.txt-small{
+	font-size: 12px;
+}
+
+.txt-lg-label{
+ font-size: 13px !important;
+}
+
+/* Dashboard Search Custom Scrollbar Start */
+
+.dashboard-search-scroll-bar::-webkit-scrollbar {
+	width: 6px;
+	margin-right: 4px !important;
+	background:#eee;
+}
+.dashboard-search-scroll-bar::-webkit-scrollbar-thumb {
+	 background: #bebebe;
+}
+
+/* Dashboard Search Custom Scrollbar End */

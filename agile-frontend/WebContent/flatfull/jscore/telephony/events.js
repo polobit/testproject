@@ -19,7 +19,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 	}
 	case 'failed_to_start':
 	{
-		showCallNotyPopup("disconnected", 'error', "SIP: There was an error registering your account. Please modify and try again.", false);
+		showCallNotyPopup("disconnected", 'error', "SIP: There was an error registering your account. Please modify and try again.", 5000);
 	}
 	case 'failed_to_stop':
 	case 'stopping':
@@ -66,7 +66,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 		stopRingTone();
 
 		// Display
-		showCallNotyPopup("mediaDeny", 'warning', "SIP: Media stream permission denied.", false);
+		showCallNotyPopup("mediaDeny", 'warning', "SIP: Media stream permission denied.", 5000);
 
 		// SIP hangup call.
 		hangupCall();
@@ -110,11 +110,11 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			showCallNotyPopup("register", 'information', "SIP: You are now registered to make and receive calls successfully.", 5000);
 
 			// call action and telephone icon, Make visible.
-			$(".contact-make-sip-call").show();
+			//$(".contact-make-sip-call").show();
 			
 			// Contact with tel: is hidden
-			$(".contact-make-call").hide();		
-			$(".contact-make-twilio-call").hide();
+			//$(".contact-make-call").hide();		
+			//$(".contact-make-twilio-call").hide();
 			
 			// enable notifications if not already done
 			if (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0)
@@ -176,23 +176,23 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 
 			// Show state of call.
 			if (e.description == "Request Cancelled")
-				showCallNotyPopup("missedCall", "error", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Missed call </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
+				showCallNotyPopup("missedCall", "error", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Missed call </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
 			else if (e.description == "PSTN calls are forbidden")
-				showCallNotyPopup("forbidden", "error", "SIP: PSTN calls are forbidden.", false);
+				showCallNotyPopup("forbidden", "error", "SIP: PSTN calls are forbidden.", 5000);
 			else if (e.description == "Not acceptable here")
-				showCallNotyPopup("noresponce", "error", "SIP: Not acceptable here.", false);
+				showCallNotyPopup("noresponce", "error", "SIP: Not acceptable here.", 5000);
 			else if (e.description == "Media stream permission denied")
-				showCallNotyPopup("permissiondenied", "error", "SIP: Media stream permission denied.");
+				showCallNotyPopup("permissiondenied", "error", "SIP: Media stream permission denied.",5000);
 			else if (e.description == "Call terminated")
-				showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Call ended with  <b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
+				showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Call ended with  <b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
 			else if (e.description == "Decline")
-				showCallNotyPopup("decline", "error", "Call Decline.", false);
+				showCallNotyPopup("decline", "error", "Call Decline.", 5000);
 			else if (e.description == "Request Timeout")
-				showCallNotyPopup("requestTimeout", "error", "SIP: Request Timeout.", false);
+				showCallNotyPopup("requestTimeout", "error", "SIP: Request Timeout.", 5000);
 			else if (e.description == "Hackers Forbidden")
-				showCallNotyPopup("hackersForbidden", "error", "SIP: Hackers Forbidden.", false);
+				showCallNotyPopup("hackersForbidden", "error", "SIP: Hackers Forbidden.", 5000);
 			else if (e.description == "User not found")
-				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", false);
+				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", 5000);
 			else if(e.description == "Call terminating...")
 			    console.log("SIP : Terminated because " + e.description);
 			else if(!Is_Ignore)

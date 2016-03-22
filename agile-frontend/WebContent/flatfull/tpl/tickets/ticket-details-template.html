@@ -84,13 +84,13 @@
                     <a class="add-me-to-cc link-color pull-right text-xs" href="javascript:void(0);" style="{{#containsScope requester_email cc_emails}} display:none {{/containsScope}}">CC Me</a>
                   </div>
                   <div class="col-md-12  ticket-email b-a p-xs p-b-none r text-xs">
-                    <div class="v-top" >
+                    <div class="v-top farword_remove_email">
                       <ul class="cc-emails m-n p-n" name="cc_emails">
                           {{#each cc_emails}}
                             <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{this}}" >
                               <span class="farword_remove_email">
                                 <a class="m-r-xs" href="javascript:void(0);" >{{this}}</a>
-                                <a class="close remove-ticket-cc-emails text-lg">&times</a>
+                                <a class="close farword_remove_email remove-ticket-cc-emails text-lg">&times</a>
                               </span>
                             </li>
                           {{/each}}

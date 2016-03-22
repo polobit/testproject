@@ -483,7 +483,8 @@ table.ticket-data > tbody > tr > td {
 }
 
 body .app-content, #notes-collection-container {
-  line-height: 1.35;
+  /*line-height: 1.35;*/
+  line-height: 1.42857143;
 }
 
 .public-notes-container .show-original-div{

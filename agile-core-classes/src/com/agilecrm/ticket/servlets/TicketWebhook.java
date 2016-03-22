@@ -1,3 +1,4 @@
+
 package com.agilecrm.ticket.servlets;
 
 import java.io.IOException;
@@ -182,7 +183,7 @@ public class TicketWebhook extends HttpServlet
 
 			List<String> ccEmails = (List<String>) getValueFromJSON(msgJSON, "cc");
 
-			String plainText = (String) getValueFromJSON(msgJSON, "text"), html = (String) getValueFromJSON(msgJSON,
+			String plainText = (String) getValueFromJSON(msgJSON, "text"), htmlText = (String) getValueFromJSON(msgJSON,
 					"html");
 
 			// Check if any attachments exists
@@ -225,7 +226,7 @@ public class TicketWebhook extends HttpServlet
 
 					// Creating dom object from HTML to replace image src with
 					// storage URL
-					Document doc = Jsoup.parse(html, "UTF-8");
+					Document doc = Jsoup.parse(htmlText, "UTF-8");
 
 					// Iterate images array, save images to GCS and store URLs
 					// in document object
@@ -248,10 +249,18 @@ public class TicketWebhook extends HttpServlet
 						Element element = elements.first();
 
 						plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
-						html = html.replace("[image: " + element.attr("alt") + "]", "");
+						
+						try
+						{
+							element.remove();
+						}
+						catch (Exception e)
+						{
+							System.out.println(ExceptionUtils.getFullStackTrace(e));
+						}
 					}
 
-					// html = doc.toString();
+					htmlText = doc.toString();
 				}
 			}
 			catch (Exception e)
@@ -335,7 +344,7 @@ public class TicketWebhook extends HttpServlet
 
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName,
-					fromEmail, plainText, html, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
+					fromEmail, plainText, htmlText, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
 			notes.save();
 
 			NamespaceManager.set(oldNamespace);
