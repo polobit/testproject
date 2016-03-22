@@ -10,7 +10,7 @@
 <div class="wrapper p-t">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-<div class="h3 font-thin custom-color m-b-xs text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
+<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
 {{#if expected_value}}
 <div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
@@ -47,8 +47,8 @@
 						  <div class="change-owner-succes"></div>
               <div title="Owner">
           	     <div class="contact-owner" id="change-owner-element">
-            	   <div><small class="text-xs text-muted"> Owner:&nbsp;&nbsp;</small></div>
-            	   <a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d">{{owner.name}}</a>
+            	   <div><small class="text-base text-muted"> Owner:&nbsp;&nbsp;</small></div>
+            	   <a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d text-xs">      {{owner.name}}</a>
               </div>
               </div>
     					</div>
@@ -87,10 +87,12 @@
 						<div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner" id="change-owner-element">
-        	<div><small class="text-xs text-muted">Owner:&nbsp;&nbsp;</small></div>
+        	<div><small class="text-base text-muted">Owner:&nbsp;&nbsp;</small></div>
 		
-        	<div id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name c-p">{{owner.name}}</div>
+
+        	<div id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name c-p text-xs">{{owner.name}}</div>
           {{#hasScope "MANAGE_DEALS"}}
+
         	<div class="btn-group v-middle" id="change-deal-owner-ul" style="display: none">
         		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
         		 <ul id='deal-detail-owner' class="dropdown-menu"></ul>
@@ -114,9 +116,9 @@
     <div class="m-t-sm">
 
       <div>
-         <small class="text-xs text-muted">Won Date</small>
+         <small class="text-base text-muted">Won Date</small>
       </div>
-      <div>{{epochToHumanDateInFormat won_date}}</div>
+      <div class="text-xs">{{epochToHumanDateInFormat won_date}}</div>
     </div>
     </div>
     </div>
@@ -128,9 +130,9 @@
     <div class="panel-body">
       <div class="m-t-sm">
         <div>
-          <small class="text-xs text-muted">Won Date</small>
+          <small class="text-base text-muted">Won Date</small>
         </div>
-        <div>{{epochToHumanDateInFormat milestone_changed_time}}</div>
+        <div class="text-xs">{{epochToHumanDateInFormat milestone_changed_time}}</div>
       </div>
     </div>
     </div>
@@ -151,26 +153,26 @@
                   <div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
                   <div class="panel panel-default m-b-none">
                     <div class="panel-body">
-                                      <div class="m-t-sm">
-                                      <small class="text-xs text-muted">Custom Data</small>
-                                       </div>
+                                     
+                                      <small class="text-base text-muted">Custom Data</small>
+                                      
 									{{#getDealCustomProperties custom_data}}
 									{{#each_with_index this}}             	
                       {{#if custom_field_type}}
                         <div class="m-b-xs">
                           <span class="contact-custom-name">
-                            <span class="text-light" title="{{name}}">{{name}}</span>
+                            <span class="text-light text-xs" title="{{name}}">{{name}}</span>
                           </span>
                         </div>
-                        <div class="note-created-time custom-value" title="" name="{{name}}">
+                        <div class="note-created-time custom-value text-xs" title="" name="{{name}}">
                           {{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
                         </div>
                       {{else}}
                         <span class="contact-custom-name">
-                          <span class="text-light" title="{{name}}">{{name}}</span>
+                          <span class="text-light text-xs" title="{{name}}">{{name}}</span>
                         </span>
                         <span class="contact-custom-value">
-                          <span class="note-created-time custom-value" title="{{value}}" name="{{name}}">
+                          <span class="note-created-time custom-value text-xs" title="{{value}}" name="{{name}}">
                             {{value}}
                           </span>
                         </span>
@@ -194,12 +196,12 @@
 
 {{#if contacts}}
 <div class="m-b-xs">
-        	<small class="text-xs text-muted">Related to</small>
+        	<small class="text-base text-muted">Related to</small>
 </div>
 {{/if}}
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		<a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
         		<a href="#company/{{id}}" class="activate-link thumb m-b-xs"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
@@ -218,9 +220,9 @@
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 <div>
-        	<small class="text-xs text-muted">Description</small>
+        	<small class="text-base text-muted">Description</small>
 </div>
-<div>{{{show_link_in_statement description}}}</div>
+<div class="text-xs">{{{show_link_in_statement description}}}</div>
 </div>
 </div>
 </div>
