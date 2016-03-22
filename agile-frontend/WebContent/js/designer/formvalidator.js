@@ -97,6 +97,11 @@ function initValidator(selector, callback) {
               
                //get the name of the field
                var name = error.input.attr("name");
+               var err_name = error.input.attr("name_on_error");
+               
+               // Changes name attribute e.g., dynamic-grid
+               if(err_name)
+                   name = err_name;
 
                if(name == "html_email" || name == "text_email")
                    name = name.replace('_email', '').toUpperCase();
