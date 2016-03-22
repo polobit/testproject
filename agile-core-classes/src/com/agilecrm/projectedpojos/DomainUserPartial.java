@@ -13,6 +13,7 @@ import com.googlecode.objectify.annotation.Cached;
 @Cached
 public class DomainUserPartial extends ProjectionEntityParse{
 	public Long id;
+	public String domain;
 	public String email;
 	public String name;
 	public String pic;
@@ -25,6 +26,7 @@ public class DomainUserPartial extends ProjectionEntityParse{
 	public DomainUserPartial parseEntity(Entity entity)
 	{
 		id = entity.getKey().getId();
+		domain = (String) getPropertyValue(entity, "domain");
 		name = (String) getPropertyValue(entity, "name");
 		email = (String) getPropertyValue(entity, "email");
 		pic = (String) getPropertyValue(entity, "pic");
