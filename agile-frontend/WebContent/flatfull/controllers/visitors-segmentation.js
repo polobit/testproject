@@ -174,7 +174,8 @@ var VisitorsSegmentationRouter = Backbone.Router
 
                         } else {
                             $('#content')
-                                .find('.visitors-div')
+ 					          .find('.visitors-div')
+
                                 .html(
                                     web_scope.webstatsListView.el);
                             VISITORS_HARD_RELOAD = true;
