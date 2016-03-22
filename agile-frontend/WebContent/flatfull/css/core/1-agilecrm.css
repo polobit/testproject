@@ -3577,6 +3577,20 @@ text-align:left;
 .txt-small{
 	font-size: 12px;
 }
+
 .txt-lg-label{
 	font-size: 13px !important;
 }
+
+/* Dashboard Search Custom Scrollbar Start */
+
+.dashboard-search-scroll-bar::-webkit-scrollbar {
+	width: 6px;
+	margin-right: 4px !important;
+	background:#eee;
+}
+.dashboard-search-scroll-bar::-webkit-scrollbar-thumb {
+	 background: #bebebe;
+}
+
+/* Dashboard Search Custom Scrollbar End */
