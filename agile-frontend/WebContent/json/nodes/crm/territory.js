@@ -34,7 +34,7 @@
              {
                 "label": "Type",
                 "category": "Settings",
-                "title": "Select location",
+                "title": "Select a type",
                 "options": {
                     "Select a type": "",
                     "country": "{{location.country}}",
@@ -78,7 +78,7 @@
                   "required": "required",
                   "category": "Settings",
                   "name": "location_value",
-                  "title": "You can also provide your own custom field. E.g. {{your custom field}}",
+                  "title": "Enter a value. Please make sure that codes (e.g., IN) are compared by default for country type.",
                   "fieldType": "input",                    
                   "type": "text"
               },
@@ -109,7 +109,7 @@
 					 ]
 		},
     {
-            "label": "Compares the contact’s address against the territories defined. Each territory can have multiple criteria and the Operator (And/OR) with in each territory can also be defined. If No Match happens, then a Default Nomatch Route will be taken.",
+            "label": "Compares the contact’s address against the territories defined. Each territory can take multiple criteria and also allows defining the operator (AND/OR) within each territory. If there’s no match, then a default No match route will be taken.<br/><br/> In Agile, countries are saved with their respective 2 letter codes by default as per ISO 3166-1 standard (e.g., IN for India, AU for Australia etc).",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

@@ -1,7 +1,6 @@
 package com.campaignio.tasklets.agile;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -103,7 +102,7 @@ public class Territory extends TaskletAdapter
     	catch(Exception e)
     	{
     		e.printStackTrace();
-    		System.err.println("Exception occured while executing CheckLocation..." + e.getMessage());
+    		System.err.println("Exception occured while executing Territory..." + e.getMessage());
     	}
     	
     	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, NO_MATCH);
