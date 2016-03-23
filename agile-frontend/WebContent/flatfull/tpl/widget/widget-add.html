@@ -121,14 +121,7 @@
 												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
 											{{else}}
 								<div class="btn-group">
-  									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
-  									</a>
-  									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
-  									</ul>
+  									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>  									
 								</div>
 										{{/if_equals}}
 									{{/if_equals}}
@@ -155,14 +148,7 @@
 												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
 											{{else}}																			
 											<div class="btn-group">
-  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
-  												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    												<span class="caret"></span>
-    												<span class="sr-only">Toggle Dropdown</span>
-  												</a>
-  												<ul class="dropdown-menu" role="menu">
-    												<li><a class="btn btn-sm add_to_all" href="#callscript" widget-name="{{name}}">Add for all users</a></li>    									
-  												</ul>
+  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>										
 											</div>
 												{{/if_equals}}
 											{{/if_equals}}
@@ -189,14 +175,7 @@
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
 											{{else}}											
 												<div class="btn-group">
-  													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-  													<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    													<span class="caret"></span>
-    													<span class="sr-only">Toggle Dropdown</span>
-  													</a>
-  													<ul class="dropdown-menu" role="menu">
-    													<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
-  													</ul>
+  													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>								
 												</div>
 												{{/if_equals}}
 												{{/if_equals}}
@@ -224,13 +203,6 @@
 									{{else}}	
 											<div class="btn-group">										
   												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-  												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    												<span class="caret"></span>
-    												<span class="sr-only">Toggle Dropdown</span>
-  												</a>
-  												<ul class="dropdown-menu" role="menu">
-    												<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
-  												</ul>
 											</div>
 												{{/if_equals}}
 											{{/if_equals}}
@@ -275,13 +247,6 @@
 									
 								<div class="btn-group">										
   									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
-  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
-  									</a>
-  									<ul class="dropdown-menu" role="menu">    							
-										<li><a class="btn btn-sm _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add for all users</a></li>    									
-  									</ul>
 								</div>
 								{{/if_equals}}
 							{{/if_equals}}
@@ -352,14 +317,7 @@
     					 <div class="text-center">
 							{{#isAdmin}}											
 								<div class="btn-group" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
-  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
-  									</a>
-  									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all users</a></li>    									
-  									</ul>
+  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>  									
 								</div>
 							{{else}}
 								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
@@ -450,14 +408,7 @@
     					 <div class="text-center">
 							{{#isAdmin}}											
 								<div class="btn-group m-t-md" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
-  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
-  									</a>
-  									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all users</a></li>    									
-  									</ul>
+  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>  									
 								</div>
 							{{else}}
 								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
