@@ -3612,6 +3612,18 @@ opacity: .3;
   margin-right: 214px;
 }
 .deal-edit-dropdown{
-	 top: 33px!important;
-     right: 22px;
+	left: 260px;
+    top: 35px;
+    opacity:0.8;
 }
+.deal-track{
+	margin-top:-8px;
+}
+
+
+@media(max-width:630px){
+	.deal-detail-dropdown{
+		left: 350px;
+	}
+
+	}

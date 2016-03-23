@@ -3,7 +3,7 @@
 <div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
 <div class="hbox hbox-auto-xs {{#is_mobile}} wrapper-md {{else}} bg-light {{/is_mobile}}">
 <div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
-<div class="vbox">
+
 <div class="row-row">
 <div  id="deal-detail-actions-dropdown">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
@@ -12,9 +12,9 @@
     <div class="panel-body">
 <div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
 {{#if expected_value}}
-<div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+<div class="m-b-sm text-lg font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
-<div class="m-b-sm text-muted">
+<div class=" text-muted deal-track">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
 	
 {{#getTracksCount}}<span>{{pipeline.name}} , </span>{{/getTracksCount}}					
@@ -47,7 +47,7 @@
 						  <div class="change-owner-succes"></div>
               <div title="Owner">
           	     <div class="contact-owner" id="change-owner-element">
-            	   <div><small class="text-base text-muted"> Owner:&nbsp;&nbsp;</small></div>
+            	   <div><small class="text-base text-muted"> Owner&nbsp;&nbsp;</small></div>
             	   <a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d text-xs">      {{owner.name}}</a>
               </div>
               </div>
@@ -61,7 +61,7 @@
 
 
 {{else}}                       
-<div class="pos-abs deal-edit-dropdown">
+<div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown">
 								
 								
 								<a class=" dropdown-toggle" data-toggle="dropdown"><span class="caret text-lg"></span></a>
@@ -80,21 +80,25 @@
 </div>
 </div>
 </div>
-<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+<div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
               <div class="panel panel-default m-b-none">
               <div class="panel-body">
 <div  class="deal-owner-position deal-owner-block">
 						<div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner" id="change-owner-element">
-        	<div><small class="text-base text-muted">Owner:&nbsp;&nbsp;</small></div>
+        	<div><small class="text-base text-muted">Owner&nbsp;&nbsp;</small></div>
 		
 
         	<div id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name c-p text-xs">{{owner.name}}</div>
+
           {{#hasScope "MANAGE_DEALS"}}
 
-        	<div class="btn-group v-middle" id="change-deal-owner-ul" style="display: none">
-        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+ 
+        
+        	<div class="btn-group v-middle dropdown deal-owner" id="change-deal-owner-ul" style="display: none">
+        		 <a href="javascript:void(0);" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+
         		 <ul id='deal-detail-owner' class="dropdown-menu"></ul>
         	</div>
           {{/hasScope}} 
@@ -110,16 +114,15 @@
 <div>
 {{#if_equals pipeline.won_milestone milestone}}
   {{#if won_date}}
-    <div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
+    <div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:10px;">
     <div class="panel panel-default m-b-none">
     <div class="panel-body">
-    <div class="m-t-sm">
+   
 
       <div>
          <small class="text-base text-muted">Won Date</small>
       </div>
       <div class="text-xs">{{epochToHumanDateInFormat won_date}}</div>
-    </div>
     </div>
     </div>
     </div>
@@ -144,13 +147,13 @@
 
                            
 
-<div class="deal-custom-data"> 
+<div class="deal-custom-data p-t-sm"> 
 								
 					
 								<div class="l-h">
 									
 									{{#if custom_data}}
-                  <div class="wrapper hidden-sm hidden-xs p-b-xs p-t-xs" >
+                  <div class="wrapper hidden-sm hidden-xs p-b-md p-t-none" >
                   <div class="panel panel-default m-b-none">
                     <div class="panel-body">
                                      
@@ -191,7 +194,7 @@
 
 					</div>
 
-<div class="wrapper hidden-sm hidden-xs p-b-xs" >
+<div class="wrapper hidden-sm hidden-xs p-b-xs p-t-xxs" >
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 
@@ -215,9 +218,9 @@
   </div>
 </div>
 
-<div class="m-t-sm">
+
 {{#if description}}
-<div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
+<div class="wrapper hidden-sm hidden-xs p-t-sm" >
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 <div>
@@ -228,7 +231,7 @@
 </div>
 </div>
 {{/if}}
-</div>
+
 
 
 
@@ -236,7 +239,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			
 			
 <div class="col  {{#is_mobile}}  {{else}} bg-white {{/is_mobile}}">
 <div class="vbox" style="display:block">
