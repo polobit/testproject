@@ -53,7 +53,7 @@ body {
 			List<TicketDocuments> documents = notes.attachments_list;
 			
 			for(TicketDocuments document : documents)
-				out.println("<a href="+ document.url +"  target=\"_blank\">" + document.name + "</a>");
+				out.println("<a href="+ document.url +"  target=\"_blank\">" + document.name + "</a><br/>");
 		}
 	}else{
 
