@@ -1,5 +1,5 @@
 <script id="settings-email-templates-collection-template" type="text/html">
-    <div class="col">
+    <div class="col" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
 	<div class="hbox h-auto m-b-lg">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -14,12 +14,12 @@
 	<div id="slate"></div>
 	{{#if this.length}}
     <div class="table-responsive">
-        <table class="table table-bordered table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates"  url="core/api/email/templates/bulk" >
+        <table class="table table-bordered table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates emailTemplates"  url="core/api/email/templates/bulk" >
            
             <thead>
                 <tr>
                     <th class="hide">Id</th>                    
-					<th style="width:30%;" class="{{#is_mobile}} p-l-none {{/is_mobile}}">Name {{#is_mobile}} & Subject {{/is_mobile}} </th>
+					<th style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">Name {{#is_mobile}} & Subject {{/is_mobile}} </th>
                     {{#is_mobile}}
                     {{else}}
                     <th style="width:30%;">Subject</th>
@@ -36,7 +36,7 @@
     </div>
 </div>
 </div>
-    <div class="col w-md">
+    <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
         <div class="data-block">
         <div class="p-l p-r">
             <h4 class="m-t-none">

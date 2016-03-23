@@ -1538,6 +1538,7 @@ color: #98a6ad;
 .app-details-width {
   width:299px;
 }
+.table thead tr th{vertical-align: top;}
 }
 
 @media (max-width:767px){
@@ -1635,6 +1636,7 @@ a#email-reply{
 .details-mobile-view {
   width: 100%;
 }
+
 }
 
 @media all and (max-width: 767px) {
@@ -1996,6 +1998,10 @@ width: 1%!important;
   width: 100% !important;
 }
 
+.social-video{ width: 100% !important;}
+#socialsuite-tabs-content .social-app-content { padding-bottom: 0px ;}
+.emailTemplates .namethead { padding: 8px 15px 8px 5px;}
+
 }
 
 @media all and (min-width: 768px) {
@@ -2241,10 +2247,44 @@ color:#484848!important;
 }
 
  /* Safari 6.1+ (9.0 is the latest version of Safari at this time) */
-
 @media screen and (min-color-index:0) and (-webkit-min-device-pixel-ratio:0) { @media
 {
     .safari_only {margin-top: 0px !important;}
 }}
-
  /* Safari 6.1+ (9.0 is the latest version of Safari at this time) */
+
+.social-video{ width: 50%; margin: 0px auto;}
+.social-video .embed-responsive-item{ max-height: 368px;}
+.emailTemplates tr th:first-child{ width: 1.6% !important;}
+
+
+@media all and (min-width: 768px) and (max-width: 1024px) { 
+
+  .navbar-nav li a{ padding-left: 14px; padding-right: 14px;}
+  /*#document-list.table thead tr th:first-child, .webrulesListView.table thead tr th:first-child{ width: 8% !important;}*/
+  #contacts-custom-view-model-list tr td:first-child, #opportunities-model-list tr td:first-child,
+  #companies-custom-view-model-list tr td:first-child{
+
+  display: none;
+  }
+  #workflows-listener-container .pull-left.font-thin.h3 small{ font-size: 55%;}
+  #landingpages-model-list tr td:first-child{ vertical-align: top !important;}
+
+
+}
+
+
+@media all and (min-width: 768px) and (max-width: 1100px) { 
+
+  #activities-listners .custom-animated.custom-fadeInUp > .bg-light .pull-left, #activities-listners .custom-animated.custom-fadeInUp > 
+  .bg-light .pull-right:not(.dropdown-menu), #activities-listners .bg-light.lter.b-b.wrapper-md .pull-left, #activities-listners .bg-light.lter.b-b.wrapper-md 
+  .pull-right:not(.dropdown-menu), #activities-listners .bg-light.lter.b-b.wrapper-md .right {
+  float: none!important;
+  text-align: center;
+  margin-bottom: 7px!important;
+  }
+}
+
+
+
+

@@ -214,7 +214,7 @@ if(isSafari && isWin)
 </div>
 <div class="wrapper-md">
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3 col-sm-offset-3 col-sm-6 col-xs-12">
+		<div class="col-md-10 col-md-offset-1 col-sm-offset-1 col-sm-10 col-xs-12">
 	<form class="form-horizontal" method="post" onsubmit="return isValid(this);">
 <div class="panel panel-default">
 <div class="panel-heading text-center"> It's time to configure your account </div>
