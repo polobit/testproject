@@ -643,7 +643,7 @@ function startClickDeskWidget(contact_id) {
 		console.log(clickdesk_widget);
 
 		// ID of the ClickDesk widget as global variable
-		ClickDesk_Plugin_Id = WIDGET_LOADED_CONTACT.id;
+		ClickDesk_Plugin_Id = clickdesk_widget.id;
 
 		// Stores email of the contact as global variable
 		Email = agile_crm_get_contact_property('email');
