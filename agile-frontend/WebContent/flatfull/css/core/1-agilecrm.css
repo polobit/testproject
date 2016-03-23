@@ -3194,9 +3194,10 @@ table.hide-head-checkbox th label.i-checks {
 .reports_tab_content{
 	 width: 420px;
     left: 200px;
-    top: 71px;
-    position: fixed;
-    z-index: 1000
+    top: 0px;
+    position: absolute;
+    z-index: 1000;
+    height : 400px;
 
 }
 

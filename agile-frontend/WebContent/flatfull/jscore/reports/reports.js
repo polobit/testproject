@@ -133,7 +133,7 @@ function initializeReportsListeners(){
 
 			$('#reports-listerners-container')
 			.on(
-					"mouseenter",'#reports-tab-container>div>ul>li',function(e){
+					"click",'#reports-tab-container>div>ul>li',function(e){
 						$(this).find('.sub-nav-tab').show();
 						//$('.reports_tab_content').show();
 					});
@@ -158,7 +158,7 @@ function initializeReportsListeners(){
 			$('#reports-listerners-container')
 			.on(
 					"mouseover",
-					'.nav-tabs a',
+					'.sub-nav-tab a',
 					function(e) {
 						
 						$(this).trigger('click');

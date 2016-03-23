@@ -23,12 +23,12 @@ var ReportsRouter = Backbone.Router
 			{
 				report_utility.loadReportsTemplate(function(){
 				var tab_active=$('.nav-tabs li:first-child>a').attr('href').substring(1);
-				var tav_inner = $('.nav-tabs li li:first-child>').attr('href').substring(1);
+				var tav_inner = $('.nav-tabs li li:first-child>a').attr('href').substring(1);
 				$.each($('.tab-content .tab-pane'),function()
 				{
 					if($(this).attr('id')==tav_inner)
 					{
-						var route=$('.btn-default',this).attr('href').substring(1);
+						var route=$('a',this).attr('href').substring(1);
 						_agile_set_prefs("reports_tab",tab_active);
 						$('#reports-tab-container a[href="#'+tab_active+'"]').parent().addClass('report-selected');
 						Backbone.history.loadUrl(route);
