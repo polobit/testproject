@@ -342,6 +342,7 @@ public class Tickets extends Cursor implements Serializable
 	/**
 	 * Stores ticket last public notes id
 	 */
+	@JsonIgnore
 	public Key<TicketNotes> last_notes_key = null;
 
 	/**
@@ -800,6 +801,7 @@ public class Tickets extends Cursor implements Serializable
 			}
 			catch (Exception e)
 			{
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
 			}
 		}
 		

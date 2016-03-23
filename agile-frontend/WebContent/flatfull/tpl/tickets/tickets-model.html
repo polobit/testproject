@@ -115,7 +115,13 @@
             </div>
             <div class="col-md-12 pad-all-sm">
               <span class="v-middle txt-small">
-                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+                <strong>
+                  {{#if_equals last_updated_by 'AGENT'}}
+                    {{last_ticket_notes.ticket_notes_assinee.name}}
+                  {{else}}
+                    {{requester_name}}
+                  {{/if_equals}}
+                </strong>
               </span>
               <span class="text-light pull-right txt-small">
                 <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
@@ -124,7 +130,7 @@
               </span>
             </div>
             <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-              {{replace_br_with_space last_reply_text}}
+              {{replace_br_with_space last_ticket_notes.plain_text}}
             </div>
             {{/if_equals}}
           {{/if_equals}}
@@ -333,7 +339,13 @@
             </div>
             <div class="col-md-12 pad-all-sm">
               <span class="v-middle txt-small">
-                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+                <strong>
+                  {{#if_equals last_updated_by 'AGENT'}}
+                    {{last_ticket_notes.ticket_notes_assinee.name}}
+                  {{else}}
+                    {{requester_name}}
+                  {{/if_equals}}
+                </strong>
               </span>
               <span class="text-light pull-right txt-small">
                 <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
@@ -342,7 +354,7 @@
               </span>
             </div>
             <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-              {{replace_br_with_space last_reply_text}}  
+              {{replace_br_with_space last_ticket_notes.plain_text}}
             </div>
            {{/if_equals}}
           {{/if_equals}}
