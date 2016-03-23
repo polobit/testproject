@@ -48,7 +48,10 @@ public class AgileQueues
     // Campaign pull queues
     public static final String BULK_CAMPAIGN_PULL_QUEUE = "bulk-campaign-pull-queue";
     public static final String NORMAL_CAMPAIGN_PULL_QUEUE = "normal-campaign-pull-queue";
-
+    
+    // Campaign push queues
+    public static final String NORMAL_CAMPAIGN_PUSH_QUEUE = "normal-campaign-push-queue";
+    
     // Email pull queues
     public static final String BULK_EMAIL_PULL_QUEUE = "bulk-email-pull-queue";
     public static final String NORMAL_EMAIL_PULL_QUEUE = "normal-email-pull-queue";
