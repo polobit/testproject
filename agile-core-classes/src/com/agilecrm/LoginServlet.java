@@ -86,7 +86,7 @@ public class LoginServlet extends HttpServlet {
 			// Check ip with allowed ones
 			if(!IpAccessUtil.isValidIpOpenPanel(request))
 				throw new Exception(
-						"Please provide valid IP Address.");
+						"The IP address you have provided is not authorized to access this account.");
 			
 			if (!StringUtils.isEmpty(multipleLogin)) {
 				handleMulipleLogin(response);
