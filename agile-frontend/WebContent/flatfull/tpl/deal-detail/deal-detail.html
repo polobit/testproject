@@ -10,7 +10,7 @@
 <div class="wrapper p-t">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
+<div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
 {{#if expected_value}}
 <div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
@@ -61,7 +61,7 @@
 
 
 {{else}}                       
-<div class="pos-abs pos-r-md pos-t-lg">
+<div class="pos-abs deal-edit-dropdown">
 								
 								
 								<a class=" dropdown-toggle" data-toggle="dropdown"><span class="caret text-lg"></span></a>
@@ -150,12 +150,12 @@
 								<div class="l-h">
 									
 									{{#if custom_data}}
-                  <div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
+                  <div class="wrapper hidden-sm hidden-xs p-b-xs p-t-xs" >
                   <div class="panel panel-default m-b-none">
                     <div class="panel-body">
                                      
                                       <small class="text-base text-muted">Custom Data</small>
-                                      
+                      <div>                
 									{{#getDealCustomProperties custom_data}}
 									{{#each_with_index this}}             	
                       {{#if custom_field_type}}
@@ -183,6 +183,7 @@
                   </div>
                   </div>
                   </div>
+                  </div>
 
                  {{/if}}
                            <div class="clearfix"></div>
@@ -190,7 +191,7 @@
 
 					</div>
 
-<div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
+<div class="wrapper hidden-sm hidden-xs p-b-xs" >
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 
