@@ -51,7 +51,7 @@ public class QuickBooksWidgetAPI
 	Widget widget = WidgetUtil.getWidget(widgetId);
 	String widget_version = widget.getProperty("version");
 	
-		if ((widget != null) && (widget_version.equals("v2")) && (widget_version!=null))
+		if ((widget != null)&&(widget_version!=null)&&(widget_version.equals("v2")))
 		{
 			QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
 			        Globals.QUICKBOOKS_WIDGET_CONSUMER_KEY, Globals.QUICKBOOKS_WIDGET_CONSUMER_SECRET, widget.getProperty("company"));
@@ -96,7 +96,7 @@ public class QuickBooksWidgetAPI
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
 	String widget_version = widget.getProperty("version");
-	if ((widget != null) && (widget_version.equals("v2")) && (widget_version!=null))
+	if ((widget != null)&&(widget_version!=null)&&(widget_version.equals("v2")))
 	{
 		try
 		{
