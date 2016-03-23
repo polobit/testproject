@@ -53,10 +53,10 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+							<a class="text-info text-capitalize" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        					<a href="#company/{{id}}" class="text-capitalize">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		

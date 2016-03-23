@@ -242,15 +242,16 @@ function saveNode(e) {
 			  	// Connects to older ports automatically
 			  	if( nodeObject.isDynamicPorts == "yes" )
 			  	{
-					editDynamicNode(nodeObject);
-					
+			  		if(nodeObject.name == NODES_CONSTANTS.TERRITORY)
+			  			update_location_ports(nodeObject, jsonValues);
+			  		else
+						editDynamicNode(nodeObject);
 				}	  
 			  				  	
 		}
 		
 		
-		
-		 templateContinue(nodeId);
+		 //templateContinue(nodeId);
 		 
 		 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
 		 
@@ -310,8 +311,16 @@ function serializeTable(selector, jsonValues)
 		$(eachTR).find("td").each(function (index, eachTD) {
 		
 		 	// Index 0 is edit, delete
-			if(index != 0)
-				eachRowJSON[keys[index]] = $(eachTD).text();
+			if(index != 0){
+
+				if($(eachTD).find('select').length > 0)
+                    eachRowJSON[keys[index]] = $(eachTD).find('select option:selected').val();
+                else if($(eachTD).find('input').length > 0)
+                	eachRowJSON[keys[index]] = $(eachTD).find('input').val();
+                else
+					eachRowJSON[keys[index]] = $(eachTD).text();
+			}
+
 			
 	  });
 		 gridJSONObject.push(eachRowJSON);
@@ -430,3 +439,34 @@ function setCheckboxValueIntoJSONArray(jsonArray, key, value) {
 
 }
 */
+
+
+/**Updates Branches for Zones**/
+function update_location_ports(nodeObject, jsonValues)
+{
+
+	var formValues = jsonValues[1][NODES_CONSTANTS.TERRITORIES];
+  	var formValuesJson  = {};
+
+  	// Converts array to json
+  	for(var i=0;i<formValues.length;i++)
+  		formValuesJson[formValues[i]["dynamicgrid"]] = true;
+
+	// array of ports
+	var ports = getPorts(nodeObject);
+
+	$.each(formValuesJson, function(key, value){
+
+		// If key doesn't exists in ports, add new port
+		if(ports.indexOf(key) == -1)
+			addPort(key, nodeObject);
+		else
+			editPort(nodeObject, ports.indexOf(key), key);
+
+		alignDynamicNodePorts(nodeObject);
+
+		// Draw2D (based on the ports)
+		nodeObject.allignDynamicNode();
+		
+	});
+}

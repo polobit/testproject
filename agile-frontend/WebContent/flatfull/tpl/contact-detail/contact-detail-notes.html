@@ -100,10 +100,10 @@
 					{{else}}	
 <div class="inline-block word-break-all">
 					{{#if_contact_type "PERSON"}}
-						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+						<a class="text-info text-capitalize" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
-        		<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        		<a class="text-info text-capitalize" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         			{{/if_contact_type}}
 </div>
 				{{/isDuplicateContactProperty}}
