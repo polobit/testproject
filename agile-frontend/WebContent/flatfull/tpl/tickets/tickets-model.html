@@ -117,7 +117,11 @@
               <span class="v-middle txt-small">
                 <strong>
                   {{#if_equals last_updated_by 'AGENT'}}
-                    {{last_ticket_notes.ticket_notes_assinee.name}}
+                    {{#if last_ticket_notes}}
+                      {{last_ticket_notes.ticket_notes_assinee.name}}
+                    {{else}}
+                      {{assignee.name}}
+                    {{/if}}
                   {{else}}
                     {{requester_name}}
                   {{/if_equals}}
@@ -130,7 +134,11 @@
               </span>
             </div>
             <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-              {{replace_br_with_space last_ticket_notes.plain_text}}
+              {{#if last_ticket_notes}}
+                {{replace_br_with_space last_ticket_notes.plain_text}}
+              {{else}}
+                {{replace_br_with_space last_reply_text}}
+              {{/if}}
             </div>
             {{/if_equals}}
           {{/if_equals}}
@@ -341,7 +349,11 @@
               <span class="v-middle txt-small">
                 <strong>
                   {{#if_equals last_updated_by 'AGENT'}}
-                    {{last_ticket_notes.ticket_notes_assinee.name}}
+                    {{#if last_ticket_notes}}
+                      {{last_ticket_notes.ticket_notes_assinee.name}}
+                    {{else}}
+                      {{assignee.name}}
+                    {{/if}}
                   {{else}}
                     {{requester_name}}
                   {{/if_equals}}
@@ -354,7 +366,11 @@
               </span>
             </div>
             <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-              {{replace_br_with_space last_ticket_notes.plain_text}}
+              {{#if last_ticket_notes}}
+                {{replace_br_with_space last_ticket_notes.plain_text}}
+              {{else}}
+                {{replace_br_with_space last_reply_text}}
+              {{/if}}
             </div>
            {{/if_equals}}
           {{/if_equals}}
