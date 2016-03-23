@@ -10,8 +10,8 @@ var VisitorsSegmentationRouter = Backbone.Router
 
         },
 
-        visitorssegmentation: function(time_range, is_lhs_filter,
-            view_data) {
+        visitorssegmentation: function(time_range, is_lhs_filter,view_data)
+             {
 
             var postData;
             var start_time;
@@ -133,21 +133,10 @@ var VisitorsSegmentationRouter = Backbone.Router
                                 el, collection) {
 
                                 abortCountQueryCall();
+                                if(collection.models.length > 0)
+                                    getAndUpdateCollectionCountVisitors(postData,start_time,end_time);
 
-                                var count = 0;
-                                var count_message;
-
-                                if (collection.models.length > 0) {
-                                    count = collection.models.length;
-                                }
-
-                                if (count > 9999 && (_agile_get_prefs('dynamic_visitors_filter')))
-                                    count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-                                else
-                                    count_message = "<small> (" + count + " Total) </small>";
-                                $('#visitors-count').html(
-                                    count_message);
-
+                                
                                 if (!is_lhs_filter) {
                                     setupAnalyticsLhsFilters(el);
                                     contactFiltersListeners("lhs_filters_segmentation");
@@ -188,3 +177,25 @@ var VisitorsSegmentationRouter = Backbone.Router
         }
 
     });
+
+
+function getAndUpdateCollectionCountVisitors(filterJson,start_time,end_time) {
+    var count_message = "";
+    $("#contacts-count").html(count_message);
+    countURL = App_VisitorsSegmentation.webstatsListView.options.url + "/count";
+    abortCountQueryCall();
+    Count_XHR_Call = $.ajax({
+        type: "POST",
+        url: countURL,
+        data: {
+            filterJson: filterJson,
+            start_time: start_time,
+            end_time: end_time
+        },
+        success: function(result) {
+            data = parseInt(result);
+            count_message = "<small> (" + data + " Total) </small>";
+            $("#visitors-count").html(count_message)
+        }
+    })
+}
