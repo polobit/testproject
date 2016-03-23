@@ -23,6 +23,7 @@ import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -58,6 +59,18 @@ public class TicketNotesUtil
 	{
 		return TicketNotes.ticketNotesDao.get(notesID);
 	}
+	
+	/**
+	 * 
+	 * @param ticketID
+	 * @param sortOrder
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public static TicketNotesPartial getTicketNotesPartialByID(Long notesID) throws EntityNotFoundException
+	{
+		return TicketNotes.partialDAO.get(notesID);
+	}
 
 	/**
 	 * 
@@ -79,7 +92,8 @@ public class TicketNotesUtil
 			note.plain_text = TicketNotesUtil.convertNewLinesToBreakTags(note.plain_text);
 		}
 
-		return inclDomainUsers(notes);
+		//return inclDomainUsers(notes);
+		return notes;
 	}
 
 	// /**
