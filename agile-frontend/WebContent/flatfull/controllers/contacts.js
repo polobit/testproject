@@ -61,7 +61,10 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with only mobile number */
 			"contacts/call-lead/:mob" : "addMobLead",
 			
-			"call-contacts" : "callcontacts"
+			"call-contacts" : "callcontacts",
+
+		/* Referrals */
+		"refer-friends" : "referFriends"
 	},
 	
 	initialize : function()
@@ -1217,6 +1220,13 @@ var ContactsRouter = Backbone.Router.extend({
 
 
 
+	},
+
+	referFriends : function()
+	{
+		var subject = "Referral request";
+		var body = "http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign="+CURRENT_DOMAIN_USER.domain;
+		sendMail(undefined,subject,body,undefined,undefined,this);
 	}
 		
 	});

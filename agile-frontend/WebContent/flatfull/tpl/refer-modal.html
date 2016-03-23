@@ -1,0 +1,132 @@
+<script id="refer-modal-template" type="text/html">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+	        <button class="close" data-dismiss="modal">&times;</button>
+	        <h3 class="modal-title">Referrals</h3>
+	    </div>
+		<div class="modal-body">
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="refer-modal-body-template" type="text/html">
+	<ul class="list-group list-group-lg m-b-none">
+	    <li id="write_blog" class="list-group-item clearfix p-n c-p">
+	      <a class="pull-left" href="#">
+	        <img src="img/referrals/blogger.png" class="w-xxs">
+	      </a>
+	      <div class="pull-right" style="padding:15px 50px;">
+	        <div class="text-lg m-t-xs" style="opacity: .785;">3000</div>
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+	      </div>
+	      <div class="clear">
+	        <div class="text-lg text-info">Write a blog about us</div>
+	        <div class="text-ellipsis">Blog about Agile CRM and spread the word</div>
+	      </div>      
+	    </li>
+
+	    <li id="refer_friends" class="list-group-item clearfix p-n c-p">
+	      <a class="pull-left" href="#">
+	        <img src="img/referrals/refer_friends.png" class="w-xxs">
+	      </a>
+	      <div class="pull-right" style="padding:15px 50px;">
+	        <div class="text-lg m-t-xs" style="opacity: .785;">2000</div>
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+	      </div>
+	      <div class="clear">
+	        <div class="text-lg text-info">Refer friends</div>
+	        <div class="text-ellipsis">Invite friends to try Agile CRM (5 at least)</div>
+	      </div>      
+	    </li>
+
+	    <li id="share_on_fb" class="list-group-item clearfix p-n c-p">
+	      <a class="pull-left" href="#">
+	        <img src="img/referrals/facebook.png" class="w-xxs">
+	      </a>
+	      <div class="pull-right" style="padding:15px 50px;">
+	        <div class="text-lg m-t-xs" style="opacity: .785;">750</div>
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+	      </div>
+	      <div class="clear">
+	        <div class="text-lg text-info">Share on Facebook</div>
+	        <div class="text-ellipsis">Share Agile updates with your facebook contacts</div>
+	      </div>      
+	    </li>
+
+	    <li id="follow_on_twitter" class="list-group-item clearfix p-n c-p">
+	      <a class="pull-left" href="#">
+	        <img src="img/referrals/twitter.png" class="w-xxs">
+	      </a>
+	      <div class="pull-right" style="padding:15px 50px;">
+	        <div class="text-lg m-t-xs" style="opacity: .785;">750</div>
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+	      </div>
+	      <div class="clear">
+	        <div class="text-lg text-info">Follow on Twitter</div>
+	        <div class="text-ellipsis">Follow & share bout Agile CRM on Twitter</div>
+	      </div>      
+	    </li>
+
+	    <li id="tweet_about_us" class="list-group-item clearfix p-n c-p">
+	      <a class="pull-left" href="#">
+	        <img src="img/referrals/tweet.png" class="w-xxs" style="height:50px;">
+	      </a>
+	      <div class="pull-right" style="padding:15px 50px;">
+	        <div class="text-lg m-t-xs" style="opacity: .785;">2000</div>
+			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
+	      </div>
+	      <div class="clear">
+	        <div class="text-lg text-info">Tweet about us</div>
+	        <div class="text-ellipsis">Mention Agile CRM on your Twitter timeline</div>
+	      </div>      
+	    </li>
+	 </ul>
+</script>
+
+<script id="refer-blog-template" type="text/html">
+	<div class="referrals-body">
+		<p>please Enter your blog post url here</p>
+  		<form id="blogmailForm" class="form-horizontal">
+  		<input type="hidden" name="to" value="mogulla@agilecrm.com">
+  		<input type="hidden" name="subject" value="Blog post Request for adding emails">
+			<div class="form-group">
+				<label class="col-sm-1 control-label">URL<span class="field_req">*</span></label>
+				<div class="col-sm-8">
+			        <input type="text" name="body" class="form-control required">
+			  	</div>
+  			</div>
+			<div class="form-group">
+				<div class="col-md-offset-1 col-sm-8">
+					<a href="#" id="go_to_referrals" class="btn btn-sm btn-default m-r-xs">Back</a>
+					<a href="#" id="blogMail" type="submit" class="btn btn-sm btn-primary">Send</a>
+            	</div>
+			</div>
+		</form>
+	</div>
+</script>
+
+<script id="refer-tweet-template" type="text/html">
+	<div class="referrals-body">
+  		<form id="blogmailForm" class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-12">
+					<textarea class="input-xlarge required form-control" disabled="disabled" rows="10">adsadsadasdasdasdsadasd sad as d  as d asd asd asd as d asdasd
+sad
+ssssssssssssssssssssssss
+asdasdsadsa
+dasdasdasdasd</textarea>
+			  	</div>
+  			</div>
+			<div class="form-group">
+				<div class="col-sm-12">
+					<div class="pull-right">
+					  <a href="#" id="go_to_referrals" class="btn btn-sm btn-default">Back</a>
+					  <a href="#" id="refer_by_tweet" type="submit" class="btn btn-sm btn-primary m-r-xs">Tweet</a>
+					</div>
+            	</div>
+			</div>
+		</form>
+	</div>
+</script>

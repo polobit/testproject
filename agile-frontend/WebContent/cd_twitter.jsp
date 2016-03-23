@@ -1,4 +1,5 @@
 
+<%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="org.scribe.model.Token"%>
 <%@page import="com.agilecrm.Globals"%>
 <%@page import="org.scribe.builder.api.TwitterApi"%>
@@ -17,7 +18,9 @@ OAuthService service = new ServiceBuilder().provider(TwitterApi.SSL.class).callb
 // Save Token and Service as we need them after it returns back
 Token token = service.getRequestToken();
 session.setAttribute("requestToken", token);
-
+String referral_type = request.getParameter("referral_type");
+if(referral_type != null && !StringUtils.isEmpty(referral_type))
+	session.setAttribute("referral_type", referral_type);
 // Redirect to Authorization URL
 String url = service.getAuthorizationUrl(token);
 System.out.println(url + " " + token.getToken() + " " + token.getSecret());

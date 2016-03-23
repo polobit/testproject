@@ -1,3 +1,5 @@
+<%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
+<%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="twitter4j.auth.AccessToken"%>
 <%@page import="twitter4j.TwitterFactory"%>
@@ -17,7 +19,7 @@ if(StringUtils.isNotBlank(deniedParam)){
 }
 	
 //Get Access Token
-Token accessToken = null; Twitter twitter = null; User user = null;
+Token accessToken = null; Twitter twitter = null; User user = null; Object referralObj = null;
 
 try{
 
@@ -52,6 +54,22 @@ twitter.setOAuthAccessToken(accessToken2);
 	    
 //Fetches User from Twitter
 user = twitter.showUser(twitter.getId());
+
+referralObj = request.getSession().getAttribute("referral_type");
+if(referralObj != null){
+	String referral_type = (String) referralObj;
+	System.out.println("referral_type is:: "+referral_type);
+	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+	if(referral_type.equals("tweet")){
+		twitter.updateStatus("Hello");
+		restriction.incrementEmailCreditsCount(2000);
+	}else if(referral_type.equals("follow")){
+		User user1 = twitter.createFriendship("msreddy1993");
+		twitter.createFriendship(user1.getId());
+		restriction.incrementEmailCreditsCount(750);
+	}
+	restriction.save();
+}
 }catch(Exception e){
 	   System.out.println(accessToken);
 	   System.out.println("Some error occured : " + e.getMessage());
@@ -73,14 +91,21 @@ user = twitter.showUser(twitter.getId());
 
 $(function()
 {	
- 	var token = "<%=accessToken.getToken()%>";
-	var tokenSecret = "<%=accessToken.getSecret()%>";
-	var account = "<%=twitter.getScreenName()%>";
-	
-	// Fetches profile image url
-	var profileImgUrl = "<%=user.getOriginalProfileImageURLHttps()%>";
+	<%if(referralObj != null){
+		String referralType = (String) referralObj;
+		%>
+		var referral_type = <%=referralType%>;
+		window.opener.trackReferrals(referral_type);
+	<%}else{%>
+	 	var token = "<%=accessToken.getToken()%>";
+		var tokenSecret = "<%=accessToken.getSecret()%>";
+		var account = "<%=twitter.getScreenName()%>";
 		
-	window.opener.popupTwitterCallback(token, tokenSecret, account, profileImgUrl);
+		// Fetches profile image url
+		var profileImgUrl = "<%=user.getOriginalProfileImageURLHttps()%>";
+		
+		window.opener.popupTwitterCallback(token, tokenSecret, account, profileImgUrl);
+	<%}%>
 	window.close();
 });
 

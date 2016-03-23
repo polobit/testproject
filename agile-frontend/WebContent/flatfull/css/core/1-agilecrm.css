@@ -3511,3 +3511,29 @@ text-align:left;
 	margin-top: 6px;
 	margin-bottom: 6px;
 }
+
+@media (min-width: 767px) {
+#referModal .modal-dialog{
+	width:62%;
+}
+}
+#referModal ul{
+	padding: 20px 30px 20px 30px;
+}
+#referModal .referrals-body{
+	padding: 20px 30px 0px 30px;
+}
+#referModal ul li:nth-child(odd) {
+	background-color: #f6f6f6;
+}
+#referModal ul li:nth-child(even) {
+	background-color: #fcfcfc;
+}
+#referModal ul li a{
+	padding: 15px 10px 10px 15px;
+}
+#referModal ul li .clear{
+	border-right: 1px solid #e7ecee;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
