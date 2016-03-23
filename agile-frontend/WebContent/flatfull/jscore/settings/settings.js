@@ -477,6 +477,9 @@ function loadip_access_events()
 		//$("#ipaccess-modal").modal('show');
 		$("#ipaccess-modal").html(getTemplate('add-new-ip', {})).modal('show');
 			$("#ip-add").on('click',function(e){
+				if(!$("#iplist").val().length>0)
+					return;
+				
 				var form = $(this).closest("form");
 				if (!isValidForm(form)) {
 					return;
