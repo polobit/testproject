@@ -488,6 +488,32 @@ public class DomainUserUtil
      *            name of the domain
      * @return domain user, who is owner
      */
+    public static Key<DomainUser> getDomainOwnerKey(String domain)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	Key<DomainUser> userKey = null;
+	try
+	{
+		userKey = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).getKey();
+	    if (userKey == null)
+	    	userKey = new Key<DomainUser>(DomainUser.class, getDomainOwnerHack(domain).id);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
+	return userKey;
+    }
+    
+    /**
+     * Gets account owners of the given domain
+     * 
+     * @param domain
+     *            name of the domain
+     * @return domain user, who is owner
+     */
     public static DomainUser getDomainOwner(String domain)
     {
 	String oldNamespace = NamespaceManager.get();
@@ -495,9 +521,9 @@ public class DomainUserUtil
 	DomainUser user = null;
 	try
 	{
-	    user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
+		user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
 	    if (user == null)
-		user = getDomainOwnerHack(domain);
+	    	user = getDomainOwnerHack(domain);
 	}
 	finally
 	{

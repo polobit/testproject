@@ -57,7 +57,7 @@ public class StripeChargeWebhook extends HttpServlet
 	String apiKey = request.getParameter("api-key");
 	System.out.println("api key is " + apiKey);
 
-	Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 	if (owner == null)
 	{
 	    // response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
@@ -180,7 +180,7 @@ public class StripeChargeWebhook extends HttpServlet
 			contactProperties.add(new ContactField(key, value, null));
 		    }
 
-		    DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
+		    DomainUser user = APIKeyUtil.getDomainUserRelatedToAPIKey(apiKey);
 		    if (user != null)
 		    {
 			System.out.println("user is " + user);

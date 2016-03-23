@@ -45,7 +45,7 @@ public class MailHandlerServlet extends HttpServlet
 	    System.out.println("Setting namespace " + subDomain);
 
 	    String apiKey = getAgileDetails(recepientAddresses, AgileDetail.API_KEY);
-	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	    Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 	    System.out.println("API Key is " + apiKey);
 
 	    if (owner == null)

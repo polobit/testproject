@@ -45,7 +45,7 @@ public class GravityForm extends HttpServlet
 	    String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 
 	    // Get owner from API key
-	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+	    Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 
 	    // Define properties list (ContactField)
 	    List<ContactField> properties = new ArrayList<ContactField>();

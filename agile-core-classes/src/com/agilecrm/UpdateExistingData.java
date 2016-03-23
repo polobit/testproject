@@ -82,7 +82,7 @@ public class UpdateExistingData extends HttpServlet
 	try
 	{
 	    NamespaceManager.set(namespace);
-	    Key<DomainUser> user = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	    Key<DomainUser> user = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 	    Integer page_size = 0;
 	    if (count != null)
 	    {

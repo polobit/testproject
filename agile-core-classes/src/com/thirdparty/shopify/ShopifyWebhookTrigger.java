@@ -39,7 +39,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	String apiKey = req.getParameter("api-key");
 	System.out.println("API KEY is " + apiKey);
 
-	Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 	System.out.println("Owner is " + owner);
 	if (owner == null)
 	{

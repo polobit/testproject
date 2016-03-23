@@ -58,6 +58,63 @@ public class APIKeyUtil
     }
     
     /**
+     * Returns Domain User key with respect to api key.
+     * 
+     * @param apiKey
+     *            - api key of domain user
+     * @return Domain user key
+     */
+    public static Key<DomainUser> getDomainUserKeyRelatedToAPIKey(String apiKey)
+    {
+	// Get API Object
+	APIKey apiKeyObject = dao.ofy().query(APIKey.class).filter("api_key", apiKey).get();
+	if (apiKeyObject == null)
+	    return null;
+
+	return apiKeyObject.apiKeyOwner();
+    }
+    /**
+     * Returns domain user related ot API key. Domain user key is stored in
+     * APIKey entity. Queries with APIKey and fetches domain user based on key
+     * saved in owner field
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static DomainUser getDomainUserRelatedToAPIKey(String apiKey)
+    {
+	// Fetches APIKey object and returns domain user key.
+	Key<DomainUser> userKey = getDomainUserKeyRelatedToAPIKey(apiKey);
+
+	if (userKey == null)
+	    return null;
+
+	// Fetches domain user based on domainUser id
+	return DomainUserUtil.getDomainUser(userKey.getId());
+
+    }
+
+    /**
+     * Returns Agile User key with respect to apikey. Gets domain user from api
+     * key and then gets agile user from domain user id.
+     * 
+     * @param apiKey
+     *            - api key.
+     * @return AgileUser
+     */
+    public static Key<AgileUser> getAgileUserRelatedToAPIKey(String apiKey)
+    {
+    // Fetches APIKey object and returns domain user key.
+    Key<DomainUser> userKey = getDomainUserKeyRelatedToAPIKey(apiKey);
+
+	if (userKey == null)
+	    return null;
+
+	return AgileUser.getCurrentAgileUserKeyFromDomainUser(userKey.getId());
+    }
+    
+    
+    /**
      * Checks whether api is related to this domain, used while verifying JSAPI
      * request in JSAPI filter
      * 

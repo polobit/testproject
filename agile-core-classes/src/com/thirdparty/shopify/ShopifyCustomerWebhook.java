@@ -38,7 +38,7 @@ public class ShopifyCustomerWebhook extends HttpServlet
 			String apiKey = requestParams.get("apikey")[0];
 
 			// Get owner
-			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+			Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 			if (owner == null)
 				return;
 

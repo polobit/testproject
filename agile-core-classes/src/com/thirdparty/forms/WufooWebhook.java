@@ -44,7 +44,7 @@ public class WufooWebhook extends HttpServlet
 	    String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 
 	    // Get domain user from API key
-	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+	    Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 
 	    // Create note(Note) and properties(ContactField) list
 	    List<Note> notes = new ArrayList<Note>();

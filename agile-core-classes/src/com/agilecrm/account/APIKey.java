@@ -8,7 +8,6 @@ import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
@@ -220,61 +219,6 @@ public class APIKey
 	return dao.ofy().query(APIKey.class).filter("owner", currentUserKey).get();
 
     }
-    /**
-     * Returns Domain User key with respect to api key.
-     * 
-     * @param apiKey
-     *            - api key of domain user
-     * @return Domain user key
-     */
-    public static Key<DomainUser> getDomainUserKeyRelatedToAPIKey(String apiKey)
-    {
-	// Get API Object
-	APIKey apiKeyObject = dao.ofy().query(APIKey.class).filter("api_key", apiKey).get();
-	if (apiKeyObject == null)
-	    return null;
-
-	return apiKeyObject.owner;
-    }
-    /**
-     * Returns domain user related ot API key. Domain user key is stored in
-     * APIKey entity. Queries with APIKey and fetches domain user based on key
-     * saved in owner field
-     * 
-     * @param apiKey
-     * @return
-     */
-    public static DomainUser getDomainUserRelatedToAPIKey(String apiKey)
-    {
-	// Fetches APIKey object and returns domain user key.
-	Key<DomainUser> userKey = getDomainUserKeyRelatedToAPIKey(apiKey);
-
-	if (userKey == null)
-	    return null;
-
-	// Fetches domain user based on domainUser id
-	return DomainUserUtil.getDomainUser(userKey.getId());
-
-    }
-
-    /**
-     * Returns Agile User key with respect to apikey. Gets domain user from api
-     * key and then gets agile user from domain user id.
-     * 
-     * @param apiKey
-     *            - api key.
-     * @return AgileUser
-     */
-    public static AgileUser getAgileUserRelatedToAPIKey(String apiKey)
-    {
-    // Fetches APIKey object and returns domain user key.
-    Key<DomainUser> userKey = getDomainUserKeyRelatedToAPIKey(apiKey);
-
-	if (userKey == null)
-	    return null;
-
-	return AgileUser.getCurrentAgileUserFromDomainUser(userKey.getId());
-    }
 
     /**
      * Returns Api key of Domain Owner. Domain Owner is the domain user having
@@ -286,12 +230,12 @@ public class APIKey
      */
     public static APIKey getAPIKeyRelatedToDomain(String domain)
     {
-	DomainUser domainUser = DomainUserUtil.getDomainOwner(domain);
+	Key<DomainUser> domainUserKey = DomainUserUtil.getDomainOwnerKey(domain);
 
-	if (domainUser == null)
+	if (domainUserKey == null)
 	    return null;
 
-	return getAPIKeyRelatedToUser(domainUser.id);
+	return getAPIKeyRelatedToUser(domainUserKey.getId());
     }
     
 }

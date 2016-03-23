@@ -102,7 +102,7 @@ public class PHPAPI
 	    }
 
 	    // Set contact owner from API key and save contact
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.setContactOwner(APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey));
 
 	    // Add properties list to contact properties
 	    contact.properties = properties;
@@ -254,7 +254,7 @@ public class PHPAPI
 	    task = mapper.readValue(obj.toString(), Task.class);
 
 	    // Set task owner
-	    task.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apikey));
+	    task.setOwner(APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apikey));
 	    task.contacts = new ArrayList<String>();
 
 	    // Save task to related contact
@@ -314,7 +314,7 @@ public class PHPAPI
 	    opportunity.addContactIds(contact.id.toString());
 
 	    // Set deal owner based on API key, save and return deal as String
-	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToAPIKey(apikey).getId());
+	    opportunity.owner_id = String.valueOf(APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apikey).getId());
 	    opportunity.save();
 	    return mapper.writeValueAsString(opportunity);
 	}

@@ -772,6 +772,24 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	}
 	return results;
     }
+    
+    /**
+     * Convenience method to get key matching to multiple properties
+     * 
+     * @param map
+     * @return list of keys of type T
+     */
+    public Key<T> getKeyByProperty(Map<String, Object> map)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+
+	return q.getKey();
+    }
+    
 
     /**
      * Convenience method to get list of keys matching a single property

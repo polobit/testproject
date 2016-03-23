@@ -90,7 +90,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 						continue;
 					}
 					NamespaceManager.set(agileDomain);
-					Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+					Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 					System.out.println("owner is " + owner);
 					if (owner == null)
 					{
@@ -313,7 +313,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			String messageSubject = message.getString("subject");
 			System.out.println("forwarding confirmation email with subject " + messageSubject);
 
-			DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
+			DomainUser user = APIKeyUtil.getDomainUserRelatedToAPIKey(apiKey);
 			EmailUtil.sendEmailUsingAPI("noreply@agilecrm.com", "Agile CRM", user.email, null, null, messageSubject,
 					null, getMessageContent("html", message), getMessageContent("text", message), null, null);
 		}
