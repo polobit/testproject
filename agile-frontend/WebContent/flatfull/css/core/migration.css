@@ -2260,8 +2260,7 @@ color:#484848!important;
 
 @media all and (min-width: 768px) and (max-width: 1024px) { 
 
-  .navbar-nav li a{ padding-left: 14px; padding-right: 14px;}
-  /*#document-list.table thead tr th:first-child, .webrulesListView.table thead tr th:first-child{ width: 8% !important;}*/
+  .navbar-nav li a{ padding-left: 10px; padding-right: 10px;}
   #contacts-custom-view-model-list tr td:first-child, #opportunities-model-list tr td:first-child,
   #companies-custom-view-model-list tr td:first-child{
 
