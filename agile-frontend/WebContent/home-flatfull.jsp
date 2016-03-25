@@ -687,27 +687,31 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
-head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
+head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min-2.js?_=' + _AGILE_VERSION, function(){
+        load_globalize();
+        showVideoForRegisteredUser();
+});
+
+// head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
+head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
 
 var en;
-
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
 
 
-head.ready('library', function() {
+// head.ready('library', function() {
 
-load_globalize();
-showVideoForRegisteredUser();
+head.ready(function() {
 
 if(!HANDLEBARS_PRECOMPILATION){
     head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
     {
         downloadTemplate("tpl.js");
+        downloadTemplate("contact-view.js");
     });
 }
  
@@ -719,32 +723,36 @@ head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-mi
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
-	 $('[data-toggle="tooltip"]').tooltip();  
-	//Code to display alerts of widgets.
-  try{
-	   showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
-    }catch(e){}
-   
+
    try{
-    //Code to display alerts of widgets.
-    showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+      $('[data-toggle="tooltip"]').tooltip();  
+      //Code to display alerts of widgets.
+      showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
    }catch(e){}
 	 
 	//Resting the variables.
-	<%  session.removeAttribute("widgetMsgType");
-	session.removeAttribute("widgetMsg"); %>
+	<% session.removeAttribute("widgetMsgType");
+	   session.removeAttribute("widgetMsg"); 
+  %>
 	
 	try{
       var sig = CURRENT_USER_PREFS.signature;
       sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-
       CURRENT_USER_PREFS.signature = sig;
 	}catch(e){}
+
 });
 
 });    
 function load_globalize()
 {
+
+  if (!typeof Globalize) {
+    setTimeout(function() {
+      load_globalize();
+    }, 500);
+    return;
+  }
 
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");
