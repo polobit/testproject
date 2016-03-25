@@ -19,7 +19,7 @@ if(StringUtils.isNotBlank(deniedParam)){
 }
 	
 //Get Access Token
-Token accessToken = null; Twitter twitter = null; User user = null; Object referralObj = null;
+Token accessToken = null; Twitter twitter = null; User user = null; String referralType = null;
 
 try{
 
@@ -55,15 +55,15 @@ twitter.setOAuthAccessToken(accessToken2);
 //Fetches User from Twitter
 user = twitter.showUser(twitter.getId());
 
-referralObj = request.getSession().getAttribute("referral_type");
+Object referralObj = request.getSession().getAttribute("referral_type");
 if(referralObj != null){
-	String referral_type = (String) referralObj;
-	System.out.println("referral_type is:: "+referral_type);
+	referralType = (String) referralObj;
+	System.out.println("referral_type is:: "+referralType);
 	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
-	if(referral_type.equals("tweet")){
+	if(referralType.equals("tweet")){
 		twitter.updateStatus("Hello");
 		restriction.incrementEmailCreditsCount(2000);
-	}else if(referral_type.equals("follow")){
+	}else if(referralType.equals("follow")){
 		User user1 = twitter.createFriendship("msreddy1993");
 		twitter.createFriendship(user1.getId());
 		restriction.incrementEmailCreditsCount(750);
@@ -91,21 +91,17 @@ if(referralObj != null){
 
 $(function()
 {	
-	<%if(referralObj != null){
-		String referralType = (String) referralObj;
-		%>
-		var referral_type = <%=referralType%>;
-		window.opener.trackReferrals(referral_type);
-	<%}else{%>
-	 	var token = "<%=accessToken.getToken()%>";
-		var tokenSecret = "<%=accessToken.getSecret()%>";
-		var account = "<%=twitter.getScreenName()%>";
-		
-		// Fetches profile image url
-		var profileImgUrl = "<%=user.getOriginalProfileImageURLHttps()%>";
-		
+	var referral_type = "<%=referralType%>";
+ 	var token = "<%=accessToken.getToken()%>";
+	var tokenSecret = "<%=accessToken.getSecret()%>";
+	var account = "<%=twitter.getScreenName()%>";
+	
+	// Fetches profile image url
+	var profileImgUrl = "<%=user.getOriginalProfileImageURLHttps()%>";
+	if(referral_type != null && referral_type != "null")
+		window.opener.trackReferrals(referral_type); 
+	else
 		window.opener.popupTwitterCallback(token, tokenSecret, account, profileImgUrl);
-	<%}%>
 	window.close();
 });
 

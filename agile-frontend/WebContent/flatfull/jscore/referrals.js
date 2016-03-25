@@ -145,6 +145,7 @@ function openFacebookModal() {
 		// Send success info to server to send email
 		trackReferrals("facebook");
 		alert("Success");
+		addEmails(750);
 	});
 
 }
@@ -152,7 +153,14 @@ function openFacebookModal() {
 function addEmails(quantity) {
 
 	console.log('Adding '+quantity+' emails');
-
+	$.ajax({url:'core/api/subscription/em?q='+quantity,
+			type:'POST',
+			success:function(data){
+				console.log("Emails added");
+			},error: function(){
+				console.log("Error occured");
+			}
+		});
 }
 
 function load_facebook_lib_for_referrals() {
@@ -180,18 +188,8 @@ function load_facebook_lib_for_referrals() {
 }
 
 function trackReferrals(type){
-	$("#referModal").modal("hide");
+	$("#referModal").find(".modal-body").html(getTemplate('refer-modal-body', {}));
 	if(type == undefined)
 		return;
-	switch(type){
-		case "facebook":
-			return;
-		case "follow":
-			return;
-		case "tweet":
-			return;
-		default:
-			return;
-	}
-//Agile_GA_Event_Tracker.track_event("refer_"+type,CURRENT_DOMAIN_USER.domain)
+	//Agile_GA_Event_Tracker.track_event("refer_"+type,CURRENT_DOMAIN_USER.domain)
 }

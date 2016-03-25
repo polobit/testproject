@@ -19,6 +19,7 @@ OAuthService service = new ServiceBuilder().provider(TwitterApi.SSL.class).callb
 Token token = service.getRequestToken();
 session.setAttribute("requestToken", token);
 String referral_type = request.getParameter("referral_type");
+session.removeAttribute("referral_type");
 if(referral_type != null && !StringUtils.isEmpty(referral_type))
 	session.setAttribute("referral_type", referral_type);
 // Redirect to Authorization URL

@@ -518,5 +518,20 @@ public class SubscriptionApi {
 		}
 	}
 	
+	@Path("/em")
+	@POST
+	public void addEmailCredits(@QueryParam("q") Integer quantity)
+	{
+		try {
+			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+			restriction.incrementEmailCreditsCount(quantity);
+			restriction.save();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
 
 }
