@@ -149,10 +149,10 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		return;
 	}
 
-	public JSONObject getSenderNames(String fromName, String fromEmail) throws JSONException
+	public JSONObject getSenderNames(String fromName, String fromEmail, boolean isNewContact) throws JSONException
 	{
 		JSONObject from = new JSONObject();
-		if (!(StringUtils.isBlank(fromName) || StringUtils.equals(fromName, "null")))
+		if (!(StringUtils.isBlank(fromName) || StringUtils.equals(fromName, "null")) && isNewContact)
 		{
 			if (StringUtils.contains(fromName, " "))
 			{
@@ -187,7 +187,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, fromEmail, null));
 		try
 		{
-			JSONObject from = getSenderNames(fromName, fromEmail);
+			JSONObject from = getSenderNames(fromName, fromEmail, isNewContact);
 			if (from.has(Contact.FIRST_NAME))
 				contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, from
 						.getString(Contact.FIRST_NAME), null));
