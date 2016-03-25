@@ -747,11 +747,10 @@ head.ready(["core"], function(){
 function load_globalize()
 {
 
-  if (!(typeof Globalize)) {
+  if (typeof Globalize != "function") {
     setTimeout(function() {
       load_globalize();
     }, 500);
-
     return;
   }
 
