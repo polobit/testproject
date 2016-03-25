@@ -2255,8 +2255,8 @@ color:#484848!important;
 
 .social-video{ width: 50%; margin: 0px auto;}
 .social-video .embed-responsive-item{ max-height: 368px;}
-.emailTemplates tr th:first-child{ width: 1.6% !important;}
-
+.emailTemplates tr th:first-child{ width: 4% !important;}
+.min-h-auto{ min-height: auto !important;}
 
 @media all and (min-width: 768px) and (max-width: 1024px) { 
 
