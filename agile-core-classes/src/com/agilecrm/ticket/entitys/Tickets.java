@@ -23,9 +23,11 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketGroupsPartial;
+import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -338,6 +340,18 @@ public class Tickets extends Cursor implements Serializable
 	public List<Long> contact_ids = new ArrayList<Long>();
 
 	/**
+	 * Stores ticket last public notes id
+	 */
+	@JsonIgnore
+	public Key<TicketNotes> last_notes_key = null;
+
+	/**
+	 * Stores last ticket notes object to send it to client
+	 */
+	@NotSaved
+	public TicketNotesPartial last_ticket_notes = null;
+
+	/**
 	 * Default constructor
 	 */
 	public Tickets()
@@ -395,7 +409,8 @@ public class Tickets extends Cursor implements Serializable
 			this.created_by = createdBy;
 
 			// Adding 1 min extra time make its creation time greater than
-			// contact creation time otherwise ticket creation will show first rather than contact creation in ticket timeline
+			// contact creation time otherwise ticket creation will show first
+			// rather than contact creation in ticket timeline
 			Long epochTime = Calendar.getInstance().getTimeInMillis() + 60000;
 
 			if (assignee_id != null)
@@ -561,10 +576,29 @@ public class Tickets extends Cursor implements Serializable
 		return this;
 	}
 
-	public Tickets save()
+	/**
+	 * Updates datastore entity alone
+	 * 
+	 * @return current ticket entity
+	 */
+	public Tickets putEntity()
 	{
 		// Updating ticket entity
 		Tickets.ticketsDao.put(this);
+
+		return this;
+	}
+
+	/**
+	 * Updates datastore entity and text search as well
+	 * 
+	 * @return current ticket entity
+	 */
+	public Tickets save()
+	{
+		// Updating ticket entity
+		// Tickets.ticketsDao.put(this);
+		putEntity();
 
 		// Updating text search data
 		new TicketsDocument().edit(this);
@@ -751,6 +785,27 @@ public class Tickets extends Cursor implements Serializable
 			contact = ContactUtil.createContact(requester_name, requester_email);
 
 		return contact;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public TicketNotesPartial getLast_ticket_notes()
+	{
+		if(last_notes_key != null){
+			
+			try
+			{
+				return TicketNotesUtil.getTicketNotesPartialByID(last_notes_key.getId());
+			}
+			catch (Exception e)
+			{
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		}
+		
+		return null;
 	}
 
 	@Override

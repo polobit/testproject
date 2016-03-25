@@ -1,3 +1,4 @@
+console.log('Loading tickets lib...');
 var Ticket_Attachments = {
 	
 	renderExistingDocs: function(selectId, el){

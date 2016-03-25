@@ -102,7 +102,7 @@
           </div>
           <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
             <div id="recent-reply-notes" class="recent-reply-notes">
-              {{{first_notes_text}}}
+              {{first_notes_text}}
             </div>
           </div>
           {{#if_equals status 'NEW'}}
@@ -110,12 +110,22 @@
            {{#if_equals user_replies_count '1'}}
             {{else}}
             <div class="col-md-12 pad-all-sm">
-              <span class="text-muted">Last comment</span>
+              <span class="text-muted">Last Comment</span>
               <hr class="m-t-xs m-b-xs">
             </div>
             <div class="col-md-12 pad-all-sm">
               <span class="v-middle txt-small">
-                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+                <strong>
+                  {{#if_equals last_updated_by 'AGENT'}}
+                    {{#if last_ticket_notes}}
+                      {{last_ticket_notes.ticket_notes_assinee.name}}
+                    {{else}}
+                      {{assignee.name}}
+                    {{/if}}
+                  {{else}}
+                    {{requester_name}}
+                  {{/if_equals}}
+                </strong>
               </span>
               <span class="text-light pull-right txt-small">
                 <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
@@ -124,7 +134,11 @@
               </span>
             </div>
             <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-              {{replace_br_with_space last_reply_text}}
+              {{#if last_ticket_notes}}
+                {{replace_br_with_space last_ticket_notes.plain_text}}
+              {{else}}
+                {{replace_br_with_space last_reply_text}}
+              {{/if}}
             </div>
             {{/if_equals}}
           {{/if_equals}}
@@ -320,7 +334,7 @@
           </div>
           <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
             <div id="recent-reply-notes" class="recent-reply-notes">
-              {{{first_notes_text}}}
+              {{first_notes_text}}
             </div>
           </div>
           {{#if_equals status 'NEW'}}
@@ -328,12 +342,22 @@
            {{#if_equals user_replies_count '1'}}
             {{else}}
             <div class="col-md-12 pad-all-sm">
-              <span class="text-muted">Last comment</span>
+              <span class="text-muted">Last Comment</span>
               <hr class="m-t-xs m-b-xs">
             </div>
             <div class="col-md-12 pad-all-sm">
               <span class="v-middle txt-small">
-                <strong>{{#if assigneeID}}{{assignee.name}}{{else}}{{requester_name}}{{/if}}</strong>
+                <strong>
+                  {{#if_equals last_updated_by 'AGENT'}}
+                    {{#if last_ticket_notes}}
+                      {{last_ticket_notes.ticket_notes_assinee.name}}
+                    {{else}}
+                      {{assignee.name}}
+                    {{/if}}
+                  {{else}}
+                    {{requester_name}}
+                  {{/if_equals}}
+                </strong>
               </span>
               <span class="text-light pull-right txt-small">
                 <time class="time-ago txt-small" datetime="{{epochToHumanDate "" last_updated_time}}">
@@ -342,7 +366,11 @@
               </span>
             </div>
             <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-              {{replace_br_with_space last_reply_text}}  
+              {{#if last_ticket_notes}}
+                {{replace_br_with_space last_ticket_notes.plain_text}}
+              {{else}}
+                {{replace_br_with_space last_reply_text}}
+              {{/if}}
             </div>
            {{/if_equals}}
           {{/if_equals}}

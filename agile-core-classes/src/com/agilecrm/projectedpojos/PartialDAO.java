@@ -38,8 +38,11 @@ public class PartialDAO<T extends ProjectionEntityParse> {
 		{
 			add("id");
 			add("properties");
-			add("group_email");
 			add("domain");
+			
+			/**Ticket related fields to ignore**/
+			add("ticket_notes_assinee");
+			add("group_email");
 		}
 	};
     		
@@ -85,6 +88,8 @@ public class PartialDAO<T extends ProjectionEntityParse> {
     	
     	// Add projection props
     	query = addProjectionFields(query);
+    	
+    	System.out.println("query: " + query);
     	
     	try {
     		// Process Query
