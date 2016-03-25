@@ -432,6 +432,10 @@ public class Tickets extends Cursor implements Serializable
 			this.created_time = epochTime;
 			this.last_updated_time = epochTime;
 			this.last_customer_replied_time = epochTime;
+			
+			if(status == Status.CLOSED)
+				this.closed_time = epochTime;
+			
 			this.last_updated_by = LAST_UPDATED_BY.REQUESTER;
 			this.requester_ip_address = ipAddress;
 			this.user_replies_count = 1;

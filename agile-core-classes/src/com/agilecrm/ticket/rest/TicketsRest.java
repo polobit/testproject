@@ -326,8 +326,6 @@ public class TicketsRest
 			String html_text = ticket.html_text, plain_text = html_text;
 			html_text = html_text.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 
-			CreatedBy createdBy = ticket.created_by;
-
 			if (StringUtils.isBlank(html_text))
 				throw new Exception("Please provide message body.");
 
