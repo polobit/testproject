@@ -94,7 +94,7 @@ public class AnalyticsAPI
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Contact> filterCustomers(@FormParam("filterJson") String filterJson,
-        @FormParam("page_size") String count, @FormParam("cursor") String cursor , @FormParam("start_time") Long startTime , @FormParam("end_time") Long endTime) 
+        @FormParam("page_size") String count, @FormParam("cursor") String cursor , @FormParam("start_time") Long startTime , @FormParam("end_time") Long endTime ,@FormParam("timeZone") String timeZone) 
     {
         return null;
     }

@@ -16,6 +16,7 @@ var VisitorsSegmentationRouter = Backbone.Router
             var postData;
             var start_time;
             var end_time;
+            var timeZone;
 
             if (VISITORS_HARD_RELOAD == true) {
                 this.webstatsListView = undefined;
@@ -111,6 +112,8 @@ var VisitorsSegmentationRouter = Backbone.Router
                             end_time = time_range[1];
                         }
 
+                        timeZone=new Date().getTimezoneOffset();
+
                         web_scope.webstatsListView = new Base_Collection_View({
                             url: url,
                             restKey: "contact",
@@ -124,7 +127,8 @@ var VisitorsSegmentationRouter = Backbone.Router
                             post_data: {
                                 'filterJson': postData,
                                 'start_time': start_time,
-                                'end_time': end_time
+                                'end_time': end_time,
+                                'timeZone' : timeZone
 
                             },
                             page_size: 20,
@@ -178,7 +182,6 @@ var VisitorsSegmentationRouter = Backbone.Router
 
     });
 
-
 function getAndUpdateCollectionCountVisitors(filterJson,start_time,end_time) {
     var count_message = "";
     $("#contacts-count").html(count_message);
@@ -197,5 +200,8 @@ function getAndUpdateCollectionCountVisitors(filterJson,start_time,end_time) {
             count_message = "<small> (" + data + " Total) </small>";
             $("#visitors-count").html(count_message)
         }
-    })
+    });
+
+
+
 }
