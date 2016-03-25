@@ -709,3 +709,11 @@ function  startFunctionTimer(name){
 function endFunctionTimer(name){
       console.timeEnd(name);
 }
+
+function loadServiceLibrary(callback){
+	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets-min.js' + "?_=" + _AGILE_VERSION, function(){
+
+		if(callback)
+			callback();
+	});
+}
