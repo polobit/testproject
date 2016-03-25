@@ -94,8 +94,10 @@ function subscribeToPubNub(domain)
 			// Ticket operations
 			if (message.type.indexOf('TICKET') != -1)
 			{
-				Ticket_Utils.showNoty('information', message.message, 'bottomRight', 5000);
-				return;
+				loadServiceLibrary(function(){
+					Ticket_Utils.showNoty('information', message.message, 'bottomRight', 5000);
+					return;
+				});
 			}
 			
 			if (message.type == "EVENT_REMINDER")

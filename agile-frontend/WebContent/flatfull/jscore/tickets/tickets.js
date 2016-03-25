@@ -131,8 +131,9 @@ var Tickets = {
 
 					Tickets.setCountText();
 
-					if(Tickets.isSingleRowView())
+					if(Tickets.isSingleRowView()){
 						Tickets.setMinHeight();
+					}
 				}
 			});
 	
@@ -416,6 +417,7 @@ var Tickets = {
 
 					clearTimeout(popoverFunction);
 					
+					    
 					if (event.type == 'mouseover'){
 
 						var $that = $(this);
@@ -427,11 +429,14 @@ var Tickets = {
 
 							getTemplate("ticket-single-row-popup", ticketJSON, undefined, function(template_ui){
 
-								if(!template_ui)
+                               
+                               
+                            	  if(!template_ui)
 							  		return;
 
 								$('body').append($(template_ui));
 								
+								         
 								if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
 									return;
 
@@ -443,7 +448,12 @@ var Tickets = {
 									top = $that.offset().top + 35 + 'px';
 								else
 									top = $that.offset().top - $('#ticket-last-notes').height() + 'px';
-
+                                
+                                Ticket_Utils.loadTimeAgoPlugin(function(){
+					        	     var x = $("time","#ticket-last-notes").timeago();
+					        	 });
+								 
+                                
 								$('#ticket-last-notes').css('top', top).css('left', left).css('display', 'block');
 							});
 						},600);
@@ -1515,13 +1525,13 @@ var Tickets = {
 
 		if(type && type == "hide"){
 			targetEle.attr("rel", "activities");
-			targetEle.attr("data-original-title", "Hide activities");
+			targetEle.attr("data-original-title", "Hide Activities");
 			targetEle.html("<i class='fa fa-ellipsis-v'></i>");
 		}
 		else{
 			//Rendering ticket notes
 			targetEle.attr("rel", "notes");
-			targetEle.attr("data-original-title", "Show activities");
+			targetEle.attr("data-original-title", "Show Activities");
 			targetEle.html("<i class='fa fa-ellipsis-h'></i>");
 		}
 

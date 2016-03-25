@@ -8,23 +8,19 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -200,8 +196,9 @@ public class TicketNotes
 		this.original_html_text = original_html_text;
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
-		
-		//Removing 1 sec time from current time to show created notes first and status changed activity next
+
+		// Removing 1 sec time from current time to show created notes first and
+		// status changed activity next
 		this.created_time = (Calendar.getInstance().getTimeInMillis() - 60000);
 
 		this.plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text);
@@ -212,12 +209,18 @@ public class TicketNotes
 
 	public TicketNotes save()
 	{
-		TicketNotes.ticketNotesDao.put(this);
+		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(this);
 
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticket_key.getId());
 
+			// Updating last notes key to ticket entity
+			ticket.last_notes_key = key;
+			ticket = ticket.putEntity();
+
+			// If ticket created from agile dashboard then no need to send this
+			// ticket to end user
 			if (ticket.user_replies_count == 1)
 				return this;
 
@@ -254,6 +257,16 @@ public class TicketNotes
 		return this;
 	}
 
+	public DomainUserPartial getDomain_user()
+	{
+		if (assignee_key != null)
+		{
+			return DomainUserUtil.getPartialDomainUser(assignee_key.getId());
+		}
+
+		return null;
+	}
+
 	@javax.persistence.PostLoad
 	private void PostLoad()
 	{
@@ -272,4 +285,8 @@ public class TicketNotes
 	 */
 	public static ObjectifyGenericDao<TicketNotes> ticketNotesDao = new ObjectifyGenericDao<TicketNotes>(
 			TicketNotes.class);
+	/**
+	 * Initialize partial DataAccessObject
+	 */
+	public static PartialDAO<TicketNotesPartial> partialDAO = new PartialDAO<TicketNotesPartial>(TicketNotesPartial.class);
 }
