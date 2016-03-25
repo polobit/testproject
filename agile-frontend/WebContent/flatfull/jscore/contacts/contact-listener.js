@@ -133,8 +133,8 @@ $('.popover').on('click', '#minus-score', function(e){
 	    // Convert string type to int
 	    var sub_score = parseInt($('#lead-score').text());
 		
-		if(sub_score <= 0)
-			return;
+		//if(sub_score <= 0)
+		//	return;
 		
 		sub_score = sub_score - 1;
 		

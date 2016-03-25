@@ -858,9 +858,8 @@ getScore:  function(e){
 		// Converts string type to Int
 		var sub_score = parseInt($('#lead-score').text());
 		
-		if(sub_score <= 0)
-			return;
-		
+		//if(sub_score <= 0)
+		//	return;		
 		sub_score = sub_score - 1;
 		
 		// Changes score in UI
@@ -884,8 +883,8 @@ getScore:  function(e){
 		 	// Converts string type to Int
 		 	var sub_score = parseInt($('#lead-cscore').text());
 			
-		 	if(sub_score <= 0)
-		 		return;
+		 	//if(sub_score <= 0)
+		 	//	return;
 			
 		 	sub_score = sub_score - 1;
 			
@@ -1188,7 +1187,7 @@ updateScoreValue :function(){
 		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
-		if ((scoreboxval != prvs && (!isNaN(scoreboxval)) && (scoreboxval>=0))|| $("#scorebox").val()==""){ 
+		if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val()==""){ 
 			if($("#scorebox").val()==""){scoreboxval=0;
 			}					
 			App_Contacts.contactDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
@@ -1200,7 +1199,7 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
+		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
 			alert("Please enter a valid number.");
 			scoreboxval=prvs;
 		}
