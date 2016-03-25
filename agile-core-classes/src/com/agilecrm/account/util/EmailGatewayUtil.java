@@ -370,7 +370,6 @@ public class EmailGatewayUtil
 		SendGrid.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
 		return;
 	    }
-
 	    // If no gateway setup, sends email through Agile Mandrill
 	    if (emailGateway == null || ((EMAIL_API.SEND_GRID.equals(emailGateway.email_api) || EMAIL_API.SES.equals(emailGateway.email_api)) && ((documentIds != null && documentIds.size() != 0) || (blobKeys != null && blobKeys.size() != 0))) || (EMAIL_API.SES.equals(emailGateway.email_api) && attachments!=null && attachments.length !=0))
 	    {
