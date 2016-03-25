@@ -1,4 +1,69 @@
 var timer = undefined;
+
+$(function(){
+	$('body').off('mouseover','.popover_contact');
+		$('body').on('mouseover','.popover_contact',function(e){
+			//e.stopPropagation();
+			var left=e.pageX;
+            var that=$(this);
+
+			timer=setTimeout(function() {
+
+						 		
+		
+					var contact_id=$(that).attr('data')
+		 //App_Contacts.contact_popover=$(that).attr('data');
+		  $.ajax({
+				type : 'GET',
+				url :  '/core/api/contacts/' + contact_id,
+				dataType : 'json',
+				success : function(data) {
+					App_Contacts.contact_popover=new Backbone.Model(data);
+		 		getTemplate("contacts-custom-view-popover", data, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "auto right",
+            "html": "true",
+            "content": template_ui,
+            "container" : 'body'
+            });
+								$(that).popover('show');
+								
+						$('.popover').addClass("contact_popover fadeInLeft animated");
+							/*var top;
+							if (window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 400)
+       	  top = $(that).offset().top + 20 + 'px';
+       	else if(window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 200 &&  window.innerHeight - $(that).offset().top + $(window).scrollTop()<400)
+       	top = $(that).offset().top + 30 - $('.popover').height()/2+ 'px';
+        else
+         top = $(that).offset().top-$('.popover').height() + 'px';
+     $('.popover').css('top',top);
+       $('.popover').css('left',left+10+'px');*/
+
+						contact_list_starify('.popover',undefined);
+						
+					});
+		 		//that.find('.data').attr('data');
+		 	}
+		 	});
+		 	
+		 }, 1000);
+});
+
+	$('body').off('mouseout','.popover_contact');
+		$('body').on('mouseout','.popover_contact',function(e){
+				var that=$(this);
+			if($('.popover').length!=0){
+			$(that).popover('hide');
+			$('.popover').remove();
+		}
+		clearTimeout(timer);
+			});
+	});
 function contactListener(el)
 {
 	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseenter','tr > td:not(":first-child")');
@@ -100,65 +165,7 @@ function contactListener(el)
 		
 	});
 
-	$('body').off('mouseover','.popover_contact');
-		$('body').on('mouseover','.popover_contact',function(e){
-			//e.stopPropagation();
-			var left=e.pageX;
-            var that=$(this);
-
-			timer=setTimeout(function() {
-
-						 		
-		
-					var contact_id=$(that).attr('data')
-		 //App_Contacts.contact_popover=$(that).attr('data');
-		  $.ajax({
-				type : 'GET',
-				url :  '/core/api/contacts/' + contact_id,
-				dataType : 'json',
-				success : function(data) {
-					App_Contacts.contact_popover=new Backbone.Model(data);
-		 		getTemplate("contacts-custom-view-popover", data, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-								$(that).popover(
-        {
-            "rel": "popover",
-            "trigger": "manual",
-            "placement": "auto top",
-            "html": "true",
-            "content": template_ui,
-            "container" : 'body'
-            });
-								$(that).popover('show');
-								
-						$('.popover').addClass("contact_popover fadeInLeft animated");
-							var top;
-							if (window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 250)
-       	  top = $(that).offset().top + 30 + 'px';
-        else
-         top = $(that).offset().top-$('.popover').height() + 'px';
-     $('.popover').css('top',top);
-
-						contact_list_starify('.popover',undefined);
-						
-					});
-		 		//that.find('.data').attr('data');
-		 	}
-		 	});
-		 	
-		 }, 1000);
-});
-
-	$('body').off('mouseout','.popover_contact');
-		$('body').on('mouseout','.popover_contact',function(e){
-				var that=$(this);
-			if($('.popover').length!=0){
-			$(that).popover('hide');
-			$('.popover').remove();
-		}
-		clearTimeout(timer);
-			});
+	
 }
 
 var insidePopover=false;

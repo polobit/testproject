@@ -276,7 +276,7 @@ function minicalendar(el)
 		            			   if (event.contacts.length > 0)
 		            				   reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
 		            		   }
-		            		   if (event.contacts)
+		            		/*   if (event.contacts)
 		            		   {
 		            			   for (var i = 0; i < event.contacts.length; i++)
 		            			   {
@@ -303,7 +303,90 @@ function minicalendar(el)
 		            				   if (i != event.contacts.length - 1)
 		            					   reletedContacts += ', ';
 		            			   }
-		            		   }
+		            		   }*/
+
+		            		   if(event.contacts.length != 0){
+                  
+                    reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
+                  if(event.contacts.length>1){
+                  for (var i = 0; i < event.contacts.length; i++)
+                  {
+                    if (event.contacts[i].entity_type == "contact_entity")
+                    {
+                      var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
+                      if (last_name == undefined)
+                        last_name = "";
+                      if(event.contacts[i].type == 'COMPANY')
+                        {
+                          reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
+                          event.contacts[i].properties, "name") + '</a>';
+                      }
+
+                      else
+                        {
+                      reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+                            event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
+                    
+                      }
+                    }else{
+                      reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+                          event.contacts[i].properties, "name") + '</a>';
+                    }
+                    if (i != event.contacts.length - 1){
+                      reletedContacts += ', ';
+                    }
+                  }
+                  }
+                  else{
+
+                    if (event.contacts[0].entity_type == "contact_entity")
+                    {
+                      var last_name = getPropertyValue(event.contacts[0].properties, "last_name");
+                      if (last_name == undefined)
+                        last_name = "";
+                      if(event.contacts[0].type == 'COMPANY')
+                        {
+                          reletedContacts += '<a class="text-info" href="#company/' + event.contacts[0].id + '">' + getPropertyValue(
+                          event.contacts[0].properties, "name") + '</a>';
+                          var email= getPropertyValue(
+                          event.contacts[0].properties, "url");
+                      if(email)
+                        reletedContacts +='<div><i class="icon-envelope text-muted m-r-xs"></i><a>'+ email +'</a></div>';
+                      var phone= getPropertyValue(
+                          event.contacts[0].properties, "phone");
+                      if(phone)
+                        reletedContacts +='<div><i class="icon-call-end text-muted m-r-xs"></i><a>'+ phone+'</a></div>';
+                      
+                        var star=event.contacts[0].star_value; 
+                        reletedContacts+='<div class="m-l-md">'+ setUpStarRating(star)+'</div>';
+                        
+                      }
+
+                      else
+                        {
+                      reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[0].id + '">' + getPropertyValue(
+                            event.contacts[0].properties, "first_name") + ' ' + last_name + '</a>';
+                      var email= getPropertyValue(
+                          event.contacts[0].properties, "email");
+                      if(email)
+                        reletedContacts +='<div><i class="icon-envelope text-muted m-r-xs"></i><a>'+ email +'</a></div>';
+                      var phone= getPropertyValue(
+                          event.contacts[0].properties, "phone");
+                      if(phone)
+                        reletedContacts +='<div><i class="icon-call-end text-muted m-r-xs"></i><a>'+ phone+'</a></div>';
+                      var score=event.contacts[0].lead_score;
+                        reletedContacts +='<div class="m-l-md"><a>Score:'+ score+'</a></div>';
+                        var star=event.contacts[0].star_value; 
+                        reletedContacts+='<div class="m-l-md">'+ setUpStarRating(star)+'</div>';
+
+                    }
+                    }else{
+                      reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+                          event.contacts[0].properties, "name") + '</a>';
+                    }
+                    
+                  }
+                }
 		            		   if (event.meeting_type && event.description)
 		            		   {
 		            			   meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + event.description + '</span>';

@@ -3187,7 +3187,7 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover{ 
 
 	border-radius: 0px;
-	z-index:10;
+	z-index:1026;
 	//width : 260px;
 }
 
