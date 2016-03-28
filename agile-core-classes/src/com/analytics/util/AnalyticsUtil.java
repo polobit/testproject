@@ -2,13 +2,36 @@ package com.analytics.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.db.util.GoogleSQLUtil;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.util.HTTPUtil;
+import com.analytics.Analytics;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>AnalyticsUtil</code> is the utility class for Analytics. It merges page
@@ -174,7 +197,7 @@ public class AnalyticsUtil
      */
     public static String getStatsServerUrl(String domain)
     {
-	String statsServerUrl = "https://agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
+	String statsServerUrl = "http://localhost:8080/stats?domain=" + domain + "&psd="
 		+ STATS_SEREVR_HTTP_REQUEST_PWD;
 	return statsServerUrl;
     }
@@ -208,6 +231,59 @@ public class AnalyticsUtil
 	    return array1;
 	else
 	    return null;
+    }
+    
+    public static Set<String> getEmails(String filterJSON, String startTime, String endTime, String pageSize,
+	    String cursor)
+    {
+	try
+	{
+	    String statsServerUrl = "https://1-2-dot-agilecrm-web-stats.appspot.com/visitors";
+	    Map<String, String> params = new LinkedHashMap<String, String>();
+	    params.put("filter_json", filterJSON);
+	    params.put("cursor", cursor);
+	    params.put("page_size", pageSize);
+	    params.put("start_time", startTime);
+	    params.put("end_time", endTime);
+	    params.put("domain", NamespaceManager.get());
+	    params.put("psd", STATS_SEREVR_HTTP_REQUEST_PWD);
+	    
+	    StringBuilder postData = new StringBuilder();
+	    for (Map.Entry<String, String> param : params.entrySet())
+	    {
+		if (postData.length() != 0)
+		    postData.append('&');
+		postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+		postData.append('=');
+		postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+	    }
+	    String postDataBytes = postData.toString();
+	    
+	    String mergedStats = HTTPUtil.accessURLUsingPost(statsServerUrl, postDataBytes);
+	    JSONArray contactEmailsJsonArray = new JSONArray(mergedStats);
+	    Set<String> emails = new HashSet<String>();
+	    for(int i=0;i<contactEmailsJsonArray.length();i++)
+	    {
+		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
+		emails.add(contactEmail.get("email").toString());
+	    }
+	    return emails;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    return null;
+	}
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static List<Contact> getContacts(Set<String> contactEmails)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	List<Contact> contacts = null;
+        contacts = ofy.query(Contact.class).filter("properties.name","email").filter("properties.value IN",contactEmails).list();
+	return contacts;
     }
     
 }
