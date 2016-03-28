@@ -455,7 +455,11 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 });
 
 Handlebars.registerHelper('get_current_filter_id', function(str, options) {
-	return Ticket_Filter_ID
+	
+	if(Ticket_Filter_ID == "")
+    	return "#tickets";
+
+	return "#tickets/filter/"+Ticket_Filter_ID;
 });
 
 /**
