@@ -117,7 +117,7 @@ public class TicketGroups
 
 		return this;
 	}
-	
+
 	/**
 	 * 
 	 * @param groupIDsArray
@@ -138,7 +138,8 @@ public class TicketGroups
 			}
 		}
 
-		group_email = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(id) + Globals.INBOUND_EMAIL_SUFFIX;
+		String temp = String.format(Globals.INBOUND_EMAIL_SUFFIX_NEW, NamespaceManager.get());
+		group_email = group_name + "+" + temp;
 	}
 
 	@JsonIgnore
