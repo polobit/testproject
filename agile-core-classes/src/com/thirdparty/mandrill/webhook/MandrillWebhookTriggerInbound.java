@@ -152,18 +152,22 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	public JSONObject getSenderNames(String fromName, String fromEmail, boolean isNewContact) throws JSONException
 	{
 		JSONObject from = new JSONObject();
-		if (!(StringUtils.isBlank(fromName) || StringUtils.equals(fromName, "null")) && isNewContact)
+		
+		if(isNewContact)	
 		{
-			if (StringUtils.contains(fromName, " "))
+			if (!(StringUtils.isBlank(fromName) || StringUtils.equals(fromName, "null")))
 			{
-				from.put(Contact.FIRST_NAME, fromName.split(" ")[0]);
-				from.put(Contact.LAST_NAME, fromName.split(" ")[1]);
+				if (StringUtils.contains(fromName, " "))
+				{
+					from.put(Contact.FIRST_NAME, fromName.split(" ")[0]);
+					from.put(Contact.LAST_NAME, fromName.split(" ")[1]);
+				}
+				else
+					from.put(Contact.FIRST_NAME, fromName);
 			}
 			else
-				from.put(Contact.FIRST_NAME, fromName);
+				from.put(Contact.FIRST_NAME, fromEmail.split("@")[0]);
 		}
-		else
-			from.put(Contact.FIRST_NAME, fromEmail.split("@")[0]);
 		return from;
 	}
 
