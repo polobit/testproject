@@ -1189,7 +1189,7 @@ var Tickets = {
 
 					clearContactWidetQueues(ticketModel.contactID);
 
-					loadWidgets(App_Contacts.contactDetailView.el, contact.toJSON(), "widgets");
+					loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
 				}
 			});
 
