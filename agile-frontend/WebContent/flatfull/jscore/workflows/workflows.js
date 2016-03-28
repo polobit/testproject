@@ -490,6 +490,10 @@ function fill_logs_slate(id, type)
 		    	"title": "No emails sent yet",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    },
+            "EMAIL_SENDING_SKIPPED": {
+                "title": "No emails skipped yet",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
 		    "EMAIL_OPENED": {
 		    	"title": "No emails opened in this campaign",
 				"image": updateImageS3Path("/img/clipboard.png")
