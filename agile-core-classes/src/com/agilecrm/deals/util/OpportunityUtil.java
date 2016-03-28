@@ -1115,7 +1115,7 @@ public class OpportunityUtil
 
     
     // Total value count using projection query
-    public static JSONObject getTotalValueOfDeals(org.json.JSONObject filterJson)
+    public static Double getTotalValueOfDeals(org.json.JSONObject filterJson)
     {
     com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query("Opportunity");
     DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
@@ -1124,8 +1124,6 @@ public class OpportunityUtil
 	double start_value = 0d;
 	double end_value = 0d;
 	String sortField = "close_date";
-	int deals_count = 0;
-	JSONObject json = new JSONObject();
 	try
 	{
 		
@@ -1242,15 +1240,10 @@ public class OpportunityUtil
 		  		    double value = Double.parseDouble(filterJson.getString("value"));
 		  		    for (Entity eachdeal : deals) {
 		  		    	if(((Double)eachdeal.getProperty("expected_value")) == value)
-		  		    	{
 		  		    		dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
-		  		    		deals_count++;
-		  		    	}
 		  		  	}
 		  		    System.out.println("out side try "+dealTotal);
-		  		    json.put("deals_total", dealTotal);
-		    		json.put("deals_count", deals_count);
-			        return  json;
+			        return  dealTotal;
 		  		}
 
 		  	    }
@@ -1270,55 +1263,38 @@ public class OpportunityUtil
 		      {
 		    	  for (Entity eachdeal : deals) {
 		    		  if (((Double)eachdeal.getProperty("expected_value")) >=start_value && ((Double)eachdeal.getProperty("expected_value"))  <=end_value )
-		    		  {
-		    			  dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
-		    			  deals_count++;
-		    		  }
+			    	        dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
 			      }
 			      
 			  System.out.println("out side try "+dealTotal);
-			  json.put("deals_total", dealTotal);
-			  json.put("deals_count", deals_count);
-			  return  json;
+			  return  dealTotal;
 		      }
 		      else if (start_value > 0 && end_value ==0)
 		      {
 		    	  for (Entity eachdeal : deals) {
 		    		  if (((Double)eachdeal.getProperty("expected_value")) >=start_value )
-		    		  {
-		    			  dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
-		    			  deals_count++;
-		    		  }
+			    	        dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
 			      }
 			      
 			  System.out.println("out side try "+dealTotal);
-			  json.put("deals_total", dealTotal);
-			  json.put("deals_count", deals_count);
-			  return  json;
+			  return  dealTotal;
 		      }
 		      else if (start_value == 0 && end_value >0)
 		      {
 		    	  for (Entity eachdeal : deals) {
 		    		  if (((Double)eachdeal.getProperty("expected_value")) <=end_value )
-		    		  {
-		    			  dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
-		    			  deals_count++;
-		    		  }
+			    	        dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
 			      }
 			      
 			  System.out.println("out side try "+dealTotal);
-			  json.put("deals_total", dealTotal);
-			  json.put("deals_count", deals_count);
-			  return  json;
+			  return  dealTotal;
 		      }
 		      for (Entity eachdeal : deals) {
 		    	  dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
-		    	  deals_count++;
-		      }    
+		      }
+		      
 		  System.out.println("out side try "+dealTotal);
-		  json.put("deals_total", dealTotal);
-		  json.put("deals_count", deals_count);
-		  return  json;
+		  return  dealTotal;
 	  }
 	catch (JSONException e)
 	{
@@ -3116,7 +3092,7 @@ public class OpportunityUtil
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
 
-	    return dao.getCountByPropertyWithLimit(searchMap, 10001);
+	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
 	}
 	catch (JSONException e)
 	{
@@ -3184,7 +3160,7 @@ public class OpportunityUtil
     	    if (!StringUtils.isNotBlank(fieldName))
     		fieldName = "-created_time";
 
-    	    return dao.getCountByPropertyWithLimit(searchMap, 10001);
+    	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
 
     	}
     	catch (Exception e)

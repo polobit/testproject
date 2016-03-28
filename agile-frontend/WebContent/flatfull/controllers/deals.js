@@ -99,12 +99,12 @@ var DealsRouter = Backbone.Router.extend({
 						dealCount.model.fetch({ success : function(data)
 						{
 							var count = data.get("count") ? data.get("count") : 0;
-							if(count != undefined && count <= 10000)
+							if(count != undefined && count <= 1000)
 							{
 								// Shows deals chart
 								dealsLineChartByPipeline(pipeline_id);
 							}
-							else if(count != undefined && count > 10000){
+							else if(count != undefined && count > 1000){
 								$("#total-pipeline-chart").hide();
 							}
 						} });

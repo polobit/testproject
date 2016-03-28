@@ -196,8 +196,11 @@ function dealsFetch(base_model)
         	// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
-		dealsCountFetch(base_model, function(){
-			dealTotalCountForPopover(heading);
+		dealsCountFetch(base_model, function(deals_count){
+			if(deals_count <= 1000)
+			{
+				dealTotalCountForPopover(heading);
+			}
 		});
 	} });
 }
@@ -319,7 +322,7 @@ console.log('------popover pipeline id-----', pipeline_id);
                 if(data){
 					var json = JSON.parse(data); 
 					var dealcount = json.total;
-					var count = json.count;
+					var count = $('#'+json.milestone.replace(/ +/g, '')+'_count').text();
 					var countoto = 3;
 			        var heading = json.milestone.replace(/ +/g, '');
 			        var i;
@@ -360,7 +363,7 @@ function dealsCountFetch(base_model, callback)
 	dealCount.model.fetch({ success : function(data)
 	{
 		var count = data.get("count") ? data.get("count") : 0;
-		if(count > 10000)
+		if(count > 1000)
 		{
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text((count-1)+"+");
 		}
@@ -370,7 +373,7 @@ function dealsCountFetch(base_model, callback)
 		}
 		if(callback)
 		{
-			return callback();
+			return callback(count);
 		}
 	} });
 	
