@@ -3578,6 +3578,7 @@ text-align:left;
 	margin-left: 10px!important;
 }
 
+
 .txt-small{
 	font-size: 12px;
 }
@@ -3594,6 +3595,12 @@ text-align:left;
 	margin-right: 4px !important;
 	background:#eee;
 }
+/*
+#admin-previlages .nav-tabs{
+	border-radius:0px solid !important;
+	border-bottom:0px;
+
+}*/
 .dashboard-search-scroll-bar::-webkit-scrollbar-thumb {
 	 background: #bebebe;
 }
@@ -3615,5 +3622,7 @@ opacity: .3;
 
 #admin-previlages>div.m-xs>span{
 	margin-left:60px;
+
 } 
+
 
