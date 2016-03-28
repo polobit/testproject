@@ -224,6 +224,20 @@ function isValidForm(form) {
 		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
 	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
 
+	//Image keyword validation for custom fields
+	jQuery.validator.addMethod("custom_field_keyword", function(value, element){
+		
+		if(value=="image")
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+
+	},"<i><b>image</b> is a keyword in the system and it can't be added as a custom field.</i>");
+
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,
