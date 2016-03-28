@@ -454,13 +454,13 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 	return str;
 });
 
-Handlebars.registerHelper('get_current_filter_id', function(str, options) {
+Handlebars.registerHelper('get_ticket_uri', function(str, options) {
 	
-	if(Ticket_Filter_ID == "")
-    	return "#tickets";
+    	if(Ticket_Filter_ID)
+	       return "#tickets/filter/"+Ticket_Filter_ID;
 
-	return "#tickets/filter/"+Ticket_Filter_ID;
-});
+    	return "#tickets";
+    });
 
 /**
   * CSS text avatars
