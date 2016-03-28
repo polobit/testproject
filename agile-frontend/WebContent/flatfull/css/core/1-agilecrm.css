@@ -3586,6 +3586,7 @@ text-align:left;
  font-size: 13px !important;
 }
 
+
 /* Dashboard Search Custom Scrollbar Start */
 
 .dashboard-search-scroll-bar::-webkit-scrollbar {
@@ -3611,3 +3612,8 @@ opacity: .3;
 #schedule_demo{
   margin-right: 214px;
 }
+
+#admin-previlages>div.m-xs>span{
+	margin-left:60px;
+} 
+
