@@ -275,6 +275,11 @@
 			e.preventDefault();
 			bulkDeleteDeals();
 		});
+
+		deleteACLDeals.on('click',function(e){
+			e.preventDefault();
+			bulkDeleteDeals();
+		});
 		
 		dealConAddTag.on('click',function(e){
 			e.preventDefault();
