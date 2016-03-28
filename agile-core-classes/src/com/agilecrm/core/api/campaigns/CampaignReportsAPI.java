@@ -196,9 +196,6 @@ public class CampaignReportsAPI
 		
 		if (json.getString("log_type").equals("EMAIL_OPENED"))
 		    statsJSON.put("unique_opened", json.getString("count"));
-		
-		if (json.getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
-		    statsJSON.put("skipped", json.getString("count"));
 
 		statsJSON.put(stats.getJSONObject(i).getString("log_type"), stats.getJSONObject(i).getInt("total"));
 	    }
