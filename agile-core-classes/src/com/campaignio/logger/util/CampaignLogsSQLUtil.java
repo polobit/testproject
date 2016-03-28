@@ -300,23 +300,16 @@ public class CampaignLogsSQLUtil
 	String domain = NamespaceManager.get();
 	JSONArray contactActivities = null;
 	if (log_type == null || ("All_Activities").equals(log_type))
-	{
 	    contactActivities = getAllContactActivitiesByPage(domain, cursor, page_size);
-	}
+	else if(("PAGE_VIEWS").equals(log_type.toUpperCase()))
+	    contactActivities = getAllPageViews(domain, cursor, page_size);
 	else
 	{
-	    if (("PAGE_VIEWS").equals(log_type.toUpperCase()))
-	    {
-		contactActivities = getAllPageViews(domain, cursor, page_size);
-	    }
-	    else
-	    {
-		logs = "SELECT campaign_id, subscriber_id, campaign_name, log_time, log_type,message, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs "
+	    logs = "SELECT campaign_id, subscriber_id, campaign_name, log_time, log_type,message, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs "
 			+ " USE INDEX(domain_logtype_logtime_index) WHERE domain = '"
 			+ domain
 			+ "' AND log_type = '"
 			+ log_type.toUpperCase() + "' ORDER BY time DESC LIMIT " + page_size + " OFFSET " + cursor;
-	    }
 	    try
 	    {
 		contactActivities = GoogleSQL.getJSONQuery(logs);
@@ -324,6 +317,7 @@ public class CampaignLogsSQLUtil
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
+		System.out.println("Exception occured while fetching campiagn activities " + e.getMessage());
 		return null;
 	    }
 	}
