@@ -102,10 +102,15 @@ var DealsRouter = Backbone.Router.extend({
 							if(count != undefined && count <= 1000)
 							{
 								// Shows deals chart
+								$("#total-pipeline-chart").show();
 								dealsLineChartByPipeline(pipeline_id);
 							}
 							else if(count != undefined && count > 1000){
 								$("#total-pipeline-chart").hide();
+							}
+							if(App_Deals.opportunityCollectionView.collection && App_Deals.opportunityCollectionView.collection.models[0])
+							{
+								App_Deals.opportunityCollectionView.collection.models[0].set({ "count" : count }, { silent : true })
 							}
 						} });
 						deal_bulk_actions.init_dom(el);
