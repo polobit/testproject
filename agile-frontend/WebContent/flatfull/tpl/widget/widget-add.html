@@ -63,6 +63,9 @@
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
 					<div class="btn-group inline-block">
+						<a class="btn btn-sm btn-default m-r-sm acl_widget" widget-data='{"id":"{{id}}", "name":"{{name}}"}'>
+  							<i class="fa fa-users"></i>
+  						</a>
         				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
         				<a class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 						<ul class="dropdown-menu text-base">
@@ -71,18 +74,27 @@
 					</div>
 					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
+    			<a class="btn btn-sm btn-default acl_widget" widget-data='{"id":"{{id}}", "name":"{{name}}"}'>
+  					<i class="fa fa-users"></i>
+  				</a>
     			<a class="btn btn-sm btn-default install-custom-widget" href="#Custom-widget" widget-name="{{name}}">Add</a>
 				<a class="btn btn-sm btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>    		
 			{{/if}}
 		{{else}}
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
-				{{#if_equals name "CallScript"}}  
-                   <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+				{{#if_equals name "CallScript"}}
+					<a class="btn btn-sm btn-default acl_widget" widget-data='{"id":"{{id}}", "name":"{{name}}"}'>
+  						<i class="fa fa-users"></i>
+  				   </a>  
+                   <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>                   
                 {{else}}{{#if_equals name "Twilio"}}
                            <a></a>
                         {{else}}
-				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                           <a class="btn btn-sm btn-default acl_widget" widget-data='{"id":"{{id}}", "name":"{{name}}"}'>
+  								<i class="fa fa-users"></i>
+  				   		   </a>
+				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>				          
                         {{/if_equals}}
                 {{/if_equals}}
     			<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>
@@ -148,7 +160,7 @@
 												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
 											{{else}}																			
 											<div class="btn-group">
-  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>										
+  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>											
 											</div>
 												{{/if_equals}}
 											{{/if_equals}}
@@ -175,8 +187,8 @@
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
 											{{else}}											
 												<div class="btn-group">
-  													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>								
-												</div>
+  													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+  												</div>
 												{{/if_equals}}
 												{{/if_equals}}
 											{{/if_equals}}
@@ -317,7 +329,7 @@
     					 <div class="text-center">
 							{{#isAdmin}}											
 								<div class="btn-group" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>  									
+  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
 								</div>
 							{{else}}
 								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
@@ -562,4 +574,47 @@
 	    </form>
 	</div>
 	</div>
+</script>
+
+<script  id="widget-acls-modal-content-template" type="text/html">
+ <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{this.widget.name}}</h4>
+      </div>
+      <div class="modal-body overflow-auto p-xs" style="max-height: 500px;">
+        	{{#if this.data.length}}
+        	<div class="row p-none m-none">
+        		{{#each this.data}}
+    				<div class="col-md-6 p-none">	    	
+    					<div class="b p-sm m-sm">			
+	    					<div class="checkbox pull-left">
+				              <label class="i-checks">
+				                <input type="checkbox" value="{{id}}">
+				                <i></i>				           
+				              </label>
+		            		</div>
+		    				<div class="m-r-xs agile-img">					
+								<img class="img-inital r r-2x" height="42" width="42" src="{{ownerPic}}" title="{{name}}">					   
+							</div>
+							<div class="text-ellipsis">
+								<a class="m-r-sm custom-link text-ellipsis">{{name}}</a><br>
+								<div class="text-xs">{{email}}</div>
+								 <div class="text-xs">{{epochToHumanDateInFormat createdTime}}</div>		
+							</div>
+							<div class="clear-fix"></div>
+						</div>
+					</div>            		
+        		{{/each}}
+        	</div>
+        	{{/if}}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" widget-id="{{this.widget.id}}">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 </script>

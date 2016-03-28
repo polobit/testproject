@@ -112,6 +112,21 @@ function initializeWidgetSettingsListeners(){
 
 	});
 
+	$('#prefs-tabs-content .acl_widget').off();
+	$('#prefs-tabs-content').on('click', '.acl_widget', function(e){
+		// Fetching widget ID.
+		var widgetData = $(this).attr('widget-data');		
+
+		$.getJSON( "core/api/admin_panel/getAllDomainUsers", function( data ){	
+			var result ={}; 
+			result.widget = JSON.parse(widgetData);
+			result.data = data;		
+			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
+  				$("#widget-acls-modal").html(template_ui).modal('show');  								
+  			});					
+		});
+	});	
+
 	// Deleting widget
 	/**
 	 * When user chooses to delete a widget, on confirmation sends delete
