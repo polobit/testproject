@@ -237,11 +237,13 @@
 		archiveACLDeals = $('#deal-bulk-archive-acl');
 		restoreACLDeals = $('#deal-bulk-restore-acl');
 		deleteDeals = $('#deal-bulk-delete');
+		deleteACLDeals = $('#deal-bulk-delete-acl');
 		dealConAddTag = $('#deal-contact-add-tag');
 		dealConAddCamp = $('#deal-contact-add-camp');
 		bulkChangeToMilestones = $('#bulk_deals_milestone_change');
 		bulkArchive = $('#bulk_deals_archive');
 		bulkRestore = $('#bulk_deals_restore');
+		bulkDelete = $('#bulk_deals_delete');
 		filterJSON = $.parseJSON(_agile_get_prefs('deal-filters'));
 		
 		changeOwner.on('click',function(e){
@@ -318,6 +320,17 @@
 			}else
 			{
 				$('#deal_bulk_restore_modal').modal('show');
+			}
+		});
+
+		bulkDelete.on('click',function(e){
+			e.preventDefault();
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				$('#deal_bulk_delete_acl_modal').modal('show');
+			}else
+			{
+				$('#deal_bulk_delete_modal').modal('show');
 			}
 		});
 		
