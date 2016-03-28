@@ -190,7 +190,7 @@ public class AnalyticsUtil
      */
     public static String getStatsServerUrl(String domain)
     {
-	String statsServerUrl = "https://agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
+	String statsServerUrl = "https://1-2-dot-agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
 		+ STATS_SEREVR_HTTP_REQUEST_PWD;
 	return statsServerUrl;
     }
