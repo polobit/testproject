@@ -46,13 +46,13 @@ function set_p_portlets(base_model) {
 		"Events" : "calendar",
 		"DashBoard" : "dashboard"
 	};
-	if(Current_Route!=undefined && routeJSON[base_model.toJSON().portlet_route].toUpperCase()!=Current_Route.toUpperCase())
+/*	if(Current_Route!=undefined && routeJSON[base_model.toJSON().portlet_route].toUpperCase()!=Current_Route.toUpperCase())
 {	
 	Portlets_View.collection.remove(base_model);
 	console.log("Removed");
 	return;
-}	
-	if((base_model.toJSON().column_position == -1 && base_model.toJSON().row_position == -1) && (Current_Route==undefined || Current_Route.toUpperCase()==routeJSON[base_model.toJSON().portlet_route].toUpperCase())){
+}	*/
+	if((base_model.toJSON().column_position == -1 && base_model.toJSON().row_position == -1) /*&& (Current_Route==undefined || Current_Route.toUpperCase()==routeJSON[base_model.toJSON().portlet_route].toUpperCase())*/){
 		App_Portlets.RoutePortlets.push(base_model);
 		return;
 	}
