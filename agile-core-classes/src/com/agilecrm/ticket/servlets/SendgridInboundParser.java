@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 public class SendgridInboundParser extends HttpServlet
 {
@@ -23,17 +24,14 @@ public class SendgridInboundParser extends HttpServlet
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		PrintWriter pw = response.getWriter();
 		pw.write("Get");
 		System.out.println("Get method called..");
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-			IOException
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		try
 		{
@@ -53,16 +51,16 @@ public class SendgridInboundParser extends HttpServlet
 					System.out.println(paramValue);
 				}
 			}
-			
+
 			System.out.println("Form fields...");
-			
+
 			List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 
 			for (FileItem item : multiparts)
 			{
 				String name = item.getFieldName();
 				String value = item.getString();
-				
+
 				if (!item.isFormField())
 				{
 					System.out.println("!item.isFormField()");
@@ -79,8 +77,7 @@ public class SendgridInboundParser extends HttpServlet
 		}
 		catch (FileUploadException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 }
