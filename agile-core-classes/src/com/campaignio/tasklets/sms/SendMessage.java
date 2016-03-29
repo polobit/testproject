@@ -199,7 +199,7 @@ public class SendMessage extends TaskletAdapter
 	
 	public static String shortenLongURLs(String message, String subscriberId, String campaignId, String trackingId, String keyword, ShortenURLType type, String trackClicks)
 	{
-		String regex = "\\(?\\b(http://|www[.]|https://|HTTP://|HTTPS://)[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
+		String regex = "\\(?\\b(http://|https://|HTTP://|HTTPS://)[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
 		Pattern p = Pattern.compile(regex);
 		Matcher m  = p.matcher(message);
 		
