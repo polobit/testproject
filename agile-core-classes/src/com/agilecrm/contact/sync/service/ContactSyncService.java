@@ -365,14 +365,16 @@ public abstract class ContactSyncService implements IContactSyncService
     private Contact saveContact(Contact contact)
     {
 	addTagToContact(contact);
-	Map<String, Object> queryMap = new HashMap<String , Object>();
+	Map<String, Object> queryMap = null;
 	if (prefs.type == Type.SHOPIFY)
 	{
+		queryMap = new HashMap<String , Object>();
     queryMap.put("properties.name", Contact.SHOPIFY_SYNC);
     queryMap.put("properties.value", contact.getContactFieldValue(Contact.SHOPIFY_SYNC));
 	}
 	if (prefs.type == Type.QUICKBOOK)
 	{
+		queryMap = new HashMap<String , Object>();
     queryMap.put("properties.name", Contact.QUICKBOOK_SYNC);
     queryMap.put("properties.value", contact.getContactFieldValue(Contact.QUICKBOOK_SYNC));
 	}
