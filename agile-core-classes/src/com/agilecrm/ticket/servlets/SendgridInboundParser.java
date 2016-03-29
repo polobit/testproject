@@ -4,8 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Properties;
 
+import javax.mail.Header;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,39 +42,20 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		try
 		{
-			String input = null;
-			BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"), 8);
-			StringBuilder sb = new StringBuilder();
+			// System properties
+			Properties props = new Properties();
+			Session session = Session.getDefaultInstance(props, null);
 
-			String line = null;
-			while ((line = reader.readLine()) != null)
+			// Reading the input Mail
+			MimeMessage message = new MimeMessage(session, request.getInputStream());
+
+			Enumeration headers = message.getAllHeaders();
+			System.out.println("Message Headers: \r\n");
+			
+			while (headers.hasMoreElements())
 			{
-				sb.append(line + "\n");
-			}
-			input = sb.toString();
-
-			System.out.println("Result: " + sb);
-
-			ServletFileUpload upload = new ServletFileUpload();
-			FileItemIterator fileIterator = upload.getItemIterator(request);
-			while (fileIterator.hasNext())
-			{
-				FileItemStream item = fileIterator.next();
-
-				if ("file".equals(item.getFieldName()))
-				{
-					byte[] content = IOUtils.toByteArray(item.openStream());
-					// Save content into datastore
-					// ...
-				}
-				else if ("name".equals(item.getFieldName()))
-				{
-					String name = IOUtils.toString(item.openStream());
-					System.out.println("name.." + name);
-
-					// Do something with the name string
-					// ...
-				}
+				Header h = (Header) headers.nextElement();
+				System.out.println(h.getName() + ": " + h.getValue());
 			}
 		}
 		catch (Exception e)
