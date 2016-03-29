@@ -75,7 +75,10 @@
         </exec>
         <!--Copy static content to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war">
-            <fileset dir="WebContent" />
+              <fileset dir="WebContent">
+                <exclude name="tpl/**/*"/>
+                <exclude name="flatfull/tpl/**/*"/>
+            </fileset>
         </copy>
         <!--Copy application libraries to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib">
