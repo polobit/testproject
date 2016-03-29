@@ -188,18 +188,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 
 			that.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
-			individual_tag_name : "div", sortKey : "name", postRenderCallback : function(el)
+			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
 
-				getTemplate('adminsettings-newuser', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-
-					// Get template and fill it with chats data and append it to chats panel
-					$('#admin-settings-users-model-list').append($(template_ui));
-
-				}, null);
+				
 
 
 
