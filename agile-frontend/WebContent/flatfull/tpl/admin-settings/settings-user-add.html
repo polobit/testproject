@@ -114,7 +114,7 @@
 {{/is_domain_owner}}
 <div class="col-sm-offset-3 col-md-9 p-l-xs" id="admin-previlages">
 <div class="tab-container m-b-none">
-<label> Permissions</label>
+<label class="p-b-xs"> Permissions</label>
   <ul class="nav nav-tabs b-b-none">
         <li class="active  p-none"><a class="text-center m-r-none"href="#sales-previlages" data-toggle="tab"style="border-left:0px">Sales</a></li>
         <li class=" p-none"><a class="text-center m-r-none"href="#marketing-previlages" data-toggle="tab">Marketing</a></li>
@@ -126,7 +126,7 @@
     {{#is_acl_allowed}}
         {{#isAllowedInCurrentPlan "is_ACL_allowed"}}
          {{else}}
-        <div class="m-xs " style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;margin-left:60px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
+        <div class="m-xs " style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
         </div>
         {{/isAllowedInCurrentPlan}}
     {{/is_acl_allowed}}
