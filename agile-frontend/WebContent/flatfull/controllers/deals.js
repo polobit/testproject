@@ -98,8 +98,26 @@ var DealsRouter = Backbone.Router.extend({
 						includeTimeAgo(el);
 						// Shows Milestones Pie
 						pieMilestonesByPipeline(pipeline_id);
-						// Shows deals chart
-						dealsLineChartByPipeline(pipeline_id);
+
+						var dealCount = new Base_Model_View({ url : 'core/api/opportunity/based/count?pipeline_id=' + pipeline_id + query, template : "" });
+
+						dealCount.model.fetch({ success : function(data)
+						{
+							var count = data.get("count") ? data.get("count") : 0;
+							if(count != undefined && count <= 1000)
+							{
+								// Shows deals chart
+								$("#total-pipeline-chart").show();
+								dealsLineChartByPipeline(pipeline_id);
+							}
+							else if(count != undefined && count > 1000){
+								$("#total-pipeline-chart").hide();
+							}
+							if(App_Deals.opportunityCollectionView.collection && App_Deals.opportunityCollectionView.collection.models[0])
+							{
+								App_Deals.opportunityCollectionView.collection.models[0].set({ "count" : count }, { silent : true })
+							}
+						} });
 						deal_bulk_actions.init_dom(el);
 						setupDealsTracksList(cel);
 						setupDealFilters(cel);

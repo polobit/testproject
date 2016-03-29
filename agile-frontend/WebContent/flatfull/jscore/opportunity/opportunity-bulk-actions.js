@@ -362,18 +362,36 @@
 		$('body').on('click', '#select-all-available-deals', function(e) {
 			e.preventDefault();
 			deal_bulk_actions.SELECT_ALL_DEALS = true;
-			$('body').find('#bulk-select').html("Selected " + numberWithCommas(getAvailableDeals()) + " deals. <a id='select-choosen-deals' href='#'>Select choosen deals only.</a>");
+			var total_available_deals = getAvailableDeals();
+			var deals_count_with_commas = numberWithCommas(total_available_deals);
+			if(total_available_deals > 1000)
+			{
+				deals_count_with_commas = numberWithCommas(total_available_deals - 1)+"+";
+			}
+			$('body').find('#bulk-select').html("Selected " + deals_count_with_commas + " deals. <a id='select-choosen-deals' href='#'>Select choosen deals only.</a>");
 		});
 		
 		$('body').on('click', '#select-choosen-deals', function(e) {
 			e.preventDefault();
 			deal_bulk_actions.SELECT_ALL_DEALS = false;
-			$('body').find('#bulk-select').html("Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + numberWithCommas(getAvailableDeals()) + " deals</a>");
+			var total_available_deals = getAvailableDeals();
+			var deals_count_with_commas = numberWithCommas(total_available_deals);
+			if(total_available_deals > 1000)
+			{
+				deals_count_with_commas = numberWithCommas(total_available_deals - 1)+"+";
+			}
+			$('body').find('#bulk-select').html("Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + deals_count_with_commas + " deals</a>");
 		});
 		
 		$(".deal_bulk_modal").on('show.bs.modal',function(){
+			var total_available_deals = getAvailableDeals();
+			var deals_count_with_commas = numberWithCommas(total_available_deals);
+			if(total_available_deals > 1000)
+			{
+				deals_count_with_commas = numberWithCommas(total_available_deals - 1)+"+";
+			}
 			if(deal_bulk_actions.SELECT_ALL_DEALS)
-				$(this).find('span.count').text(numberWithCommas(getAvailableDeals()));
+				$(this).find('span.count').text(deals_count_with_commas);
 			else
 				$(this).find('span.count').text(numberWithCommas(getDealsBulkIds().length));
 			
@@ -440,13 +458,18 @@
 		if ($(clicked_ele).is(':checked'))
 		{
 			$('body').find('#bulk-actions').css('display', 'inline-block');
+			var deals_count_with_commas = numberWithCommas(total_available_deals);
+			if(total_available_deals > 1000)
+			{
+				deals_count_with_commas = numberWithCommas(total_available_deals - 1)+"+";
+			}
 
 			if (isBulk && total_available_deals != App_Deals.opportunityCollectionView.collection.length)
 				$('body')
 						.find('#bulk-select')
 						.show()
 						.html(
-								"Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + numberWithCommas(total_available_deals) + " deals</a>");
+								"Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + deals_count_with_commas + " deals</a>");
 		}
 		else
 		{

@@ -3006,4 +3006,169 @@ public class OpportunityUtil
 		    return list;
 		}
     }
+    
+    /**
+     * Get opportunities count based on the filter in the given filter JSON object.
+     * 
+     * @param filterJson
+     *            JSON object containing the fields.
+     * @param count
+     *            number of deals per page.
+     * @param cursor
+     *            cursor for the deals.
+     * @return deals list.
+     */
+    public static int getOpportunitiesCountByFilter(org.json.JSONObject filterJson, int count, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	try
+	{
+	    if (checkJsonString(filterJson, "pipeline_id"))
+	    {
+		searchMap.put("pipeline",
+			new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("pipeline_id"))));
+		if (checkJsonString(filterJson, "milestone"))
+		    searchMap.put("milestone", filterJson.getString("milestone"));
+	    }
+
+	    if (checkJsonString(filterJson, "owner_id"))
+		searchMap.put("ownerKey",
+			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
+
+	    if (checkJsonString(filterJson, "archived"))
+	    {
+		if (!filterJson.getString("archived").equals("all"))
+		    searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
+	    }
+
+	    if (checkJsonString(filterJson, "value_filter")
+		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
+	    {
+		if (checkJsonString(filterJson, "value"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value"));
+		    searchMap.put("expected_value", value);
+		}
+
+	    }
+	    else
+	    {
+		if (checkJsonString(filterJson, "value_start"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
+		    searchMap.put("expected_value >=", value);
+		}
+		if (checkJsonString(filterJson, "value_end"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
+		    searchMap.put("expected_value <=", value);
+		}
+	    }
+
+	    if (checkJsonString(filterJson, "probability_filter")
+		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
+	    {
+		if (checkJsonString(filterJson, "probability"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability").replace("%", ""));
+		    searchMap.put("probability", probability);
+		}
+
+	    }
+	    else
+	    {
+		if (checkJsonString(filterJson, "probability_start"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability_start").replace("%", ""));
+		    searchMap.put("probability >=", probability);
+		}
+		if (checkJsonString(filterJson, "probability_end"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
+		    searchMap.put("probability <=", probability);
+		}
+	    }
+
+	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
+	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
+
+	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
+	return 0;
+    }
+    
+    /**
+     * Returns count of opportunities. This method is called if TEXT_PLAIN is
+     * request.
+     * 
+     * @param ownerId
+     *            Owner of the deal.
+     * @param milestone
+     *            Deals Milestone.
+     * @param contactId
+     *            Id of the contact related to deal.
+     * @param fieldName
+     *            the name field to sort on.
+     * @param cursor
+     * @param pipelineId
+     *            the id of the pipeline the deal belongs to.
+     * @param count
+     *            page size.
+     * @return List of deals.
+     */
+    public static int getOpportunitiesCountByFilter(String ownerId, String milestone, String contactId,
+	    String fieldName, int max, String cursor, Long pipelineId)
+    {
+	if (pipelineId == null || pipelineId == 0L)
+	    pipelineId = MilestoneUtil.getMilestones().id;
+
+	return getOpportunitiesCountByFilterWithoutDefaultPipeLine(ownerId, milestone, contactId, fieldName, max, cursor,
+		pipelineId);
+
+    }
+    
+    public static int getOpportunitiesCountByFilterWithoutDefaultPipeLine(String ownerId, String milestone,
+    	    String contactId, String fieldName, int max, String cursor, Long pipelineId)
+        {
+    	try
+    	{
+    	    Map<String, Object> searchMap = new HashMap<String, Object>();
+
+    	    if (pipelineId != null && pipelineId != 1L)
+    	    {
+    		// If the track is deleted by the user, get the deals from the
+    		// default track.
+    		if (MilestoneUtil.getMilestone(pipelineId) == null)
+    		    pipelineId = MilestoneUtil.getMilestones().id;
+
+    		searchMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
+    	    }
+
+    	    if (StringUtils.isNotBlank(ownerId))
+    		searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId)));
+
+    	    if (StringUtils.isNotBlank(milestone))
+    		searchMap.put("milestone", milestone);
+
+    	    if (StringUtils.isNotBlank(contactId))
+    		searchMap.put("related_contacts", new Key<Contact>(Contact.class, Long.parseLong(contactId)));
+
+    	    if (!StringUtils.isNotBlank(fieldName))
+    		fieldName = "-created_time";
+
+    	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
+
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    System.out.println(e.getMessage());
+    	    return 0;
+    	}
+
+        }
 }
