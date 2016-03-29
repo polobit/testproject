@@ -1,0 +1,9 @@
+<script id="ticket-show-workflows-list-template" type="text/html">
+	{{#each this}}
+		<li><a {{#is_disabled}}{{else}}id="{{id}}"{{/is_disabled}} href="javascript:void(0);" 
+				{{#is_disabled}}style="color: #A0A0A0;"{{/is_disabled}}>
+			{{name}}
+			</a>
+		</li>
+	{{/each}}
+</script>

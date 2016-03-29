@@ -189,6 +189,20 @@
                 <div class="text-xs">{{body}}</div>
             </div>
         {{/if_entity}}
+        {{#if_entity "tickets"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="text-md text-cap">  
+                <div class="contact-job-title text-base custom-color">
+                    <i class="fa fa-ticket text-muted text-muted p-r-xs" title="Ticket created">
+                    </i> Ticket#{{id}} created
+                </div>
+            </div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text-xs ">{{subject}}</div>
+                <div class="text-xs ">{{first_notes_text}}</div>
+            </div>
+        {{/if_entity}}
 	<a href="#" class="open-close"></a>
   </div>
 </div>
@@ -451,7 +465,11 @@
         	    			<i class="icon-folder-open-alt text-muted p-r-xs" title="Email Opened"></i>
         				{{/if_equals}}
 					{{/if}}
+				{{#if subject}}
 					{{subject}}
+				{{else}}
+					no subject
+				{{/if}}
 				</div>
 			</div>
              <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" date_secs}}</div><div class="clearfix"></div>
@@ -558,6 +576,24 @@
             <div class="body">
                  <div class="text-xs ">{{name}}</div>
                 <div class="text-xs ">{{body}}</div>
+            </div>
+        {{/if_entity}}
+        {{#if_entity "tickets"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="text-md text-cap">  
+                <div class="contact-job-title text-base custom-color" style="max-width: initial;">
+                    <i class="fa fa-ticket text-muted text-muted p-r-xs" title="Ticket created">
+                    </i> Ticket#{{id}} created
+                    <div class="pull-right" style="font-size:11px;margin-top: 3px; text-transform: initial;">
+                        <i class="fa fa-clock-o m-r-xs"></i> {{epochToHumanDate "hh:MM tt" created_time}}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text-xs ">{{subject}}</div>
+                <div class="text-xs ">{{{convert_to_html plain_text}}}</div>
             </div>
         {{/if_entity}}
 	<!-- <a href="#" class="open-close"></a> -->

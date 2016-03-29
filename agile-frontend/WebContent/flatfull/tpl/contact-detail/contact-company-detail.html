@@ -46,9 +46,13 @@
 					
 							<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-right:5px; text-transform: capitalize;">
 
-								{{getPropertyValue properties "name"}}
+								<div id="company-Input"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
+								<div class="text-ellipsis"id="company-name-text">{{getPropertyValue properties "name"}}</div></div>
+								<div class="clearfix"></div>
 								{{#if_propertyName "url"}}</br>
+
 									<a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
+
 								{{/if_propertyName}}
 								
 								<div class=" text-center m-b-xs text-muted  text-ellipsis" style="font-size:13px;">
@@ -299,11 +303,35 @@
 											<span class="text-muted"  title="{{name}}">{{name}}<span>
 										</div>
 										{{#if_equals index ../this.length}}
-											<div class="inline-block custom-color text-xs" >
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if custom_field_type}}
+												<div class="custom-color custom-value text-xs p-t-xs" name="{{name}}">
+											{{else}}
+												<div class="inline-block custom-color custom-value text-xs" name="{{name}}">
+											{{/if}}
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</div>
 										{{else}}
-											<div class="inline-block custom-color text-xs">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if custom_field_type}}
+												<div class="custom-color custom-value text-xs" name="{{name}}">
+											{{else}}
+												<div class="inline-block custom-color custom-value text-xs" name="{{name}}">
+											{{/if}}
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o" style="margin-left:1px;"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</div>
 
 										{{/if_equals}}
 										</div>

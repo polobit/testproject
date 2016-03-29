@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -25,17 +26,23 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.deferred.CompanyDeleteDeferredTask;
+import com.agilecrm.contact.deferred.ContactPostDeleteTask;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -49,14 +56,22 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>ContactUtil</code> is a utility class to process the data of contact
@@ -75,6 +90,9 @@ public class ContactUtil
 {
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+    
+    // Partial Dao
+    private static PartialDAO<ContactPartial> partialDAO = new PartialDAO<ContactPartial>(ContactPartial.class);
 
     /**
      * Gets the number of contacts (count) present in the database with given
@@ -226,10 +244,11 @@ public class ContactUtil
      *            Activates infiniScroll at client side
      * @return list of contacts (company)
      */
-    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey){
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("type", Type.COMPANY);
-		return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
+    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", Type.COMPANY);
+	return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
     }
 
     /**
@@ -903,34 +922,45 @@ public class ContactUtil
 	}
     }
 
+    public static void deleteTextSearchDataWithRetries(String[] ids, int maxRetries)
+    {
+	Index index = new AppengineSearch<Contact>(Contact.class).index;
+
+	try
+	{
+	    index.delete(ids);
+	    return;
+	}
+	catch (SearchException e)
+	{
+	    System.out.println("Exception occured while deleting text search data in domain : "
+		    + NamespaceManager.get() + " " + maxRetries);
+
+	    if (maxRetries > 0)
+	    {
+		System.out.println("retrying");
+		deleteTextSearchDataWithRetries(ids, --maxRetries);
+	    }
+	}
+    }
+
     public static void postDeleteOperation(List<Long> ids, Set<String> tags)
     {
 	String[] docIds = new String[ids.size()];
-	for (int i = 0; i < ids.size(); i++)
+	Iterator<Long> iterator = ids.iterator();
+	for (int i = 0; iterator.hasNext(); i++)
 	{
-	    Long id = ids.get(i);
-	    // Delete Notes
-	    NoteUtil.deleteAllNotes(id);
-
-	    // Delete Crons.
-	    CronUtil.removeTask(null, id.toString());
-
-	    // Deletes logs of contact.
-	    LogUtil.deleteSQLLogs(null, id.toString());
-
-	    // Deletes TwitterCron
-	    TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
-
-	    docIds[i] = String.valueOf(id);
+	    docIds[i] = String.valueOf(iterator.next());
 	}
 
-	Index index = new AppengineSearch<Contact>(Contact.class).index;
+	/**
+	 * Delete text search indexed data with maximum of 3 retires
+	 */
+	deleteTextSearchDataWithRetries(docIds, 4);
 
-	if (index != null)
-	    index.delete(docIds);
-
-	// Delete Tags
-	TagUtil.deleteTags(tags);
+	ContactPostDeleteTask task = new ContactPostDeleteTask(ids, tags, NamespaceManager.get());
+	Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_POST_DELETE_QUEUE);
+	queue.addAsync(TaskOptions.Builder.withPayload(task));
     }
 
     public static void postDeleteOperation(Long id, Set<String> tags)
@@ -1347,7 +1377,7 @@ public class ContactUtil
 	if (contact == null)
 	    return null;
 
-	DomainUser contactOwner = contact.getOwner();
+	DomainUser contactOwner = contact.getContactOwner();
 
 	// if contactOwner is null, return
 	if (contactOwner == null)
@@ -1822,23 +1852,114 @@ public class ContactUtil
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
     }
 
-    public static String getMD5EncodedImage(Contact contact){
+    public static String getMD5EncodedImage(Contact contact)
+    {
 
-         String email = contact.getContactFieldValue(contact.EMAIL);
-         String image_email = "";
-            if(email != null)
-            {
-                try
-                {
-                     image_email = MD5Util.getMD5Code(email);   
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                
-            }
-            return image_email;
+	String email = contact.getContactFieldValue(contact.EMAIL);
+	String image_email = "";
+	if (email != null)
+	{
+	    try
+	    {
+		image_email = MD5Util.getMD5Code(email);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+	return image_email;
     }
-    
+    /**
+     * Creates contact in DB for the given name and email
+     * 
+     * @param firstName
+     * @param email
+     * @return new created contact
+     */
+	public static Contact createContact(String name, String email)
+	{
+		if(StringUtils.isBlank(name) || StringUtils.isBlank(email))
+			return null;
+		
+		Contact contact = new Contact();
+		contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, email, null));
+		
+		String[] names = name.split(" ");
+		
+		if (names.length > 1)
+		{
+			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, names[0], null));
+			
+			contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, names[1],
+					null));
+		}else{
+			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, name, null));
+		}
+		
+		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+		contact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
+		
+		try
+		{
+			contact.save();
+		}
+		catch (PlanRestrictedException e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return contact;
+	}
+
+    /**
+     * Gets a partial opportunity based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<ContactPartial> getPartialContacts(List<Key<Contact>> ids_list)
+    {
+    	List<ContactPartial> list = new ArrayList<ContactPartial>();
+    	if(ids_list == null || ids_list.size() == 0)
+    		 return list;
+		try
+		{
+			List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
+			if(keys.size() == 0)
+				return list;
+			
+			Map map = new HashMap();
+			map.put("__key__ IN", keys);
+			
+			return partialDAO.listByProperty(map);
+	    	
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return list;
+		}
+    }
+	 /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static ContactPartial getPartialContact(Long id)
+    {
+		try
+		{
+			return partialDAO.get(id);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return null;
+		}
+    }
 }

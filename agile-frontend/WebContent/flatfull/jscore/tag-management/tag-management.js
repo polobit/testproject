@@ -407,7 +407,7 @@ function isValidTag(tag, showAlert) {
 	var regexString = '^['+r+']['+r+' 0-9_-]*$';
 	var is_valid = new RegExp(regexString).test(tag);
 	if (showAlert && !is_valid)
-		alert("Tag name should start with an alphabet and can not contain special characters other than underscore, space and hypen");
+		alert("Tag name should start with an alphabet and cannot contain special characters other than underscore and space.");
 	return is_valid;
 }
 

@@ -28,8 +28,8 @@
 <div  class="activity block pos-rlt">
 <div class="activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
 		{{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img r r-2x"  alt="" src="{{ownerPic}}" >
+			{{#if domainOwner.pic}}
+				<img class="user-img r r-2x"  alt="" src="{{domainOwner.pic}}" >
 			{{else}}
 				<img class="user-img r r-2x"  alt="" src="{{defaultGravatarurl 40}}" >
 			{{/if}}
@@ -68,7 +68,7 @@
            	{{/if}}
        	{{/each}}
 		</div>
-		<div class="pos-abs pos-r-0 pos-b-n-sm" id="deal-hover-actions">
+		<div class="pos-abs pos-r-0 pos-b-n-sm" id="deal-hover-actions" style="right:19px;">
 		<span class="actions">
 <a title="Edit"  data="{{id}}" data-toggle="modal" class="deal-edit-note c-p text-l-none-hover p-r-sm"> <i class="icon-pencil"></i> </a>
             <a title="Delete" class="c-p text-l-none-hover"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>

@@ -53,6 +53,14 @@
   <target>agile-normal-bulk</target>
   </queue>
   <queue>
+    <name>mandrill-queue</name>
+    <rate>10/s</rate>
+    <max-concurrent-requests>20</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  <queue>
     <name>periodic-triggers-queue</name>
     <rate>2/s</rate>
     <max-concurrent-requests>5</max-concurrent-requests>
@@ -142,6 +150,15 @@
     <name>contacts-delete-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-normal-bulk</target>
+  </queue>
+   <queue>
+    <name>contacts-post-delete-queue</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>5</max-concurrent-requests>
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
@@ -274,7 +291,7 @@
     <name>ticket-bulk-actions</name>
     <rate>10/s</rate>
     <max-concurrent-requests>30</max-concurrent-requests>
-  <target>agile-normal-bulk</target>
+  	<target>agile-ticket-module</target>
   </queue>
 
   <queue>

@@ -344,6 +344,16 @@ function getGMTEpochFromDate(date)
 	return date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
 }
 
+//get the GMT time for contact and compant static filters
+function getGMTEpochFromDateForCustomFilters(date)
+{
+	var current_sys_date = new Date();
+	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+	var offset = (date.getTimezoneOffset() * 60 * 1000) ;
+	// Adding offset to date returns GMT time 
+	return date.getTime() - (date.getTimezoneOffset() * 60 * 1000);
+	}
+
 /**
  * Returns local epoch time based form GMT time
  * 
@@ -518,6 +528,23 @@ function getDateInFormatFromEpoc(date)
 
 }
 
+// function to get the gmt format of date to show to edit the custom filters for contacts
+function getDateInFormatFromEpocForContactFilters(date)
+{
+	if(!date)
+		return;
+	var now = new Date(parseInt(date)); 
+	var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+	if ((date / 100000000000) > 1)
+	{1  
+		
+		
+		return en.dateFormatter({raw: getGlobalizeFormat()})(now_utc);
+	}
+	return en.dateFormatter({raw: getGlobalizeFormat()})(now_utc * 1000);
+
+}
+
 /*
  function to get the date in user selected format in useprefs page. Will takes date object as input
 */
@@ -642,7 +669,15 @@ function showPageBlockModal() {
 	// Removing existing modal
 	$("#user-blocked-modal").modal('hide');
 	$("#alert-message").html("").hide();
-	if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456803000)
+	if(USER_BILLING_PREFS.status == "BILLING_PAUSED"){
+		getTemplate("pause-user", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("body").append(template_ui);
+			$("#user-blocked-modal").modal('show');
+		}, null);
+	}
+	else if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456803000)
 		return;
 	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
 		var expiry_date = (USER_BILLING_PREFS.updated_time+691200)*1000;
@@ -662,5 +697,23 @@ function showPageBlockModal() {
 			$("#user-blocked-modal").modal('show');
 		}, null);
 	}
+}
 
+function  printCurrentDateMillis(type){
+      console.info(type + " " + new Date().getTime());
+}
+function  startFunctionTimer(name){
+      console.time(name);
+}
+
+function endFunctionTimer(name){
+      console.timeEnd(name);
+}
+
+function loadServiceLibrary(callback){
+	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets-min.js' + "?_=" + _AGILE_VERSION, function(){
+
+		if(callback)
+			callback();
+	});
 }

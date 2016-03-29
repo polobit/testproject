@@ -14,6 +14,7 @@ import org.json.JSONArray;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Query;
 
 public class LandingPageUtil
@@ -160,8 +161,21 @@ public class LandingPageUtil
 			Query<LandingPageCNames> q = null;
 			ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
 			q = dao.ofy().query(LandingPageCNames.class);
+			
 			q.filter("landing_page_id", pageId);
-			return q.get();
+			List<LandingPageCNames> lpCnames = q.list();
+			
+			int noOfLandingPages = lpCnames.size();
+			if(noOfLandingPages != 0) {
+				for(int j = 0; j < noOfLandingPages; j++) {
+					LandingPageCNames lpCname = lpCnames.get(j);
+					if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development || (lpCname != null && lpCname.domain.equals(oldNameSpace))) {
+						return lpCname;
+					}
+				}
+			}
+			
+			return null;
 		}
 		catch (Exception e)
 		{

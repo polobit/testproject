@@ -101,6 +101,10 @@ var DealsRouter = Backbone.Router.extend({
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
 						contactListener();
+						loadPortlets('Deals',el);
+						setTimeout(function(){
+							$('#delete-checked',el).attr("id","deal-delete-checked");
+						},500);
 					}, appendItemCallback : function(el)
 					{
 						appendCustomfields(el);
@@ -117,10 +121,12 @@ var DealsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
+		loadPortlets('Deals');
 		setTimeout(function()
 		{
 			$('a.deal-notes').tooltip();
 			$('.deal_won_date').tooltip();
+			
 		}, 2000);
 	},
 
@@ -151,6 +157,12 @@ var DealsRouter = Backbone.Router.extend({
 	 */
 	importDeals : function()
 	{
+		if (!hasScope("MANAGE_DEALS"))
+		{
+			$('#content').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; Sorry, you do not have privileges to import deals.</strong></h2>');
+			hideTransitionBar();
+			return;
+		}
 		$('#content').html("<div id='import-deals-listener'></div>");
 		getTemplate("import-deals", {}, undefined, function(template_ui){
 			if(!template_ui)

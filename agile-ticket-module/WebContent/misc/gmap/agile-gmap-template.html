@@ -1,0 +1,78 @@
+
+
+<script id="gmap-sidebar-template" type="text/html">
+
+  <div class="well sidebar-nav">
+    <ul class="nav nav-list">
+      <li class="nav-header">Filter</li>
+      <li class="active"><a href="#">Date Range</a></li>
+      <li><a href="#">Location</a></li>
+      <li><a href="#">Frequent</a></li>
+      <li><a href="#">Top 10</a></li>
+	  <li><a href="#">Specific Customer</a></li>
+	  <li><a href="#">Specific Visitor</a></li>
+	  <hr>
+      <li class="nav-header">Sort By</li>
+      <li><a href="#">Date</a></li>
+      <li><a href="#">Location</a></li>
+      <li><a href="#">Frequency</a></li>
+      <li><a href="#">Top 10</a></li>
+      <li><a href="#">Specific Customer</a></li>
+      <li><a href="#">Specific Visitor</a></li>
+    </ul>
+  </div><!--/.well -->
+
+</script>
+
+<script id="gmap-main-template" type="text/html">
+
+  <div class="leaderboard">
+  	<div class="well well-small">
+  	  <div class="row-fluid">
+<!-- Map Tab Area -->    	    
+  	    <div class="map-tab option-tabs">
+  	      <ul class="nav nav-tabs" data-tabs="tabs">
+  	        <li class="active"><a href="#map-view" data-toggle="tab">Map View</a></li>
+  	        <li><a href="#table-view" data-toggle="tab">Table View</a></li>
+  	      </ul>
+  	      
+  	      <div class="tab-content">
+  	      	<img class="map-tab-waiting" style="width: 16px; float: left; margin: 5px 5px 0px 8px; display: none;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif">
+  	      	<div class="tab-pane active" id="map-view">
+<!-- Google Map -->    	      	  
+  	      	  <div id="google_map" class="map" style="width:auto; height:350px;"></div>
+<!-- Google Map -->    	      	  
+  	      	</div>
+  	      	<div class="tab-pane" id="table-view">
+  	      	  <p>Here Comes Table Details View !!!</p>
+  	      	</div>
+  	      </div>
+  	    </div>
+<!-- Map Tab Area -->     	  
+      </div>
+    </div>
+  </div>
+
+</script>
+
+<script id="gmap-bottom-tables-template" type="text/html">
+
+  <div class="span4">
+    <div class="well well-small">
+  	<p>Here Comes Contact By Location !!!</p>
+    </div>
+  </div><!--/span-->
+
+  <div class="span4">
+    <div class="well well-small">
+  	<p>Here Comes Contact By Frequency !!!</p>
+    </div>
+  </div><!--/span-->
+
+  <div class="span4">
+    <div class="well well-small">
+  	<p>Here Comes Contact By Names !!!</p>
+    </div>
+  </div><!--/span-->
+  
+</script>

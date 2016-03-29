@@ -103,7 +103,10 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 	
 	 if(!DealJSON.close_date || DealJSON.close_date==0)
 		 DealJSON.close_date = null;
-	 DealJSON.owner_id = DealJSON.owner.id;
+	if(DealJSON && DealJSON.owner)
+	{
+		DealJSON.owner_id = DealJSON.owner.id;
+	}
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
@@ -118,14 +121,12 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 		},
 		error : function(model, response) {
 			$('ul.milestones').sortable("enable");
-			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly.")) {
+			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly." || response && response.status == 403)) {
 				showModalConfirmation("Deals", response.responseText, function(element){
 					App_Deals.deals();	
 				},
 				"",
-				function(element){
-					App_Deals.deals();
-				}, "Ok", "");
+				"", "Cancel", "");
 			}
 		}
 	});

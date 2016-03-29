@@ -3,15 +3,9 @@ var Portlets_View, gridster;
 /** If CURRENT_AGILE_USER is not set, set it from user.domain **/
 $(function()
 {
-	$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/current-agile-user', function(user)
 	{
-		$.each(users, function(i, user)
-		{
-			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-			{
-				CURRENT_AGILE_USER = user;
-			}
-		});
+		CURRENT_AGILE_USER = user;
 	});
 });
 
@@ -20,7 +14,7 @@ $(function()
  * 
  * @param el
  */
-function loadPortlets(el){
+function loadPortlets(route,el){
 
 	App_Portlets.todayEventsCollection = new Array();
 	App_Portlets.tasksCollection = new Array();
@@ -37,18 +31,62 @@ function loadPortlets(el){
 	App_Portlets.campaignstats = new Array();
 	App_Portlets.dealGoals=new Array();
 	App_Portlets.adminPortlets = new Array();
+	App_Portlets.RoutePortlets=new Array();
 	App_Portlets.taskAverage = new Array();
-
+	if(Portlets_View!=undefined)
+	console.log("before initialized" +route+ Portlets_View.collection.length);
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
 	 */
+	$('#portlets', el).html(getRandomLoadingImg());
 	
 	// This flag is used to ensure portlet script are loaded only once in
 	// postrender. It is set to false after portlet setup is initialized
-	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
+	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
+			if(route!='DashBoard' && Portlets_View.collection.length!=0 && !$('.route_Portlet').is(':visible'))
+			{
+				/*if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
+				$('#no-portlets').parents('.wrapper-md').hide();*/
+				$('#portlets').parents('.route_Portlet').show();
+			}
 			set_up_portlets(el, portlets_el);
+				//if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0){
+					var models = [];
+					$.each( App_Portlets.RoutePortlets, function(index,model) {
+
+					var obj={};
+					var next_position = gridster.next_position(1, 1);
+				obj.column_position = next_position.col;
+				obj.row_position = next_position.row;
+
+				
+				model.set({ 'column_position' : obj.column_position}, { silent : true });
+					model.set({ 'row_position' : obj.row_position  }, { silent : true });
+					model.set({'isForAll' : false});
+					//set_p_portlets(model,portlets_el);
+					portlet_utility.getOuterViewOfPortlet(model,portlets_el, function() {
+							portlet_utility.getInnerViewOfPortlet(model, portlets_el);
+						});
+					//set_up_portlets(el,$('#portlets > div'));
+					
+					portlet_utility.addWidgetToGridster(model);
+					var that=$('#'+model.id).parent();
+					if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
+					{
+						model.set({ 'column_position' : parseInt(that.attr("data-col")) }, { silent : true });
+						model.set({ 'row_position' : parseInt(that.attr("data-row")) }, { silent : true });
+						that.attr('id','ui-id-'+that.attr("data-col")+'-'+that.attr("data-row"));
+					that.find('div.portlet_body').attr('id','p-body-'+that.attr("data-col")+'-'+that.attr("data-row"));
+					}
+					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
+			
+				});
+				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
+					
+				//}
 				if(App_Portlets.adminPortlets.length!=0)
 				{
 					var models = [];
@@ -59,14 +97,6 @@ function loadPortlets(el){
 				obj.column_position = next_position.col;
 				obj.row_position = next_position.row;
 
-				/*if (model.toJSON().portlet_type == "USERACTIVITY"
-										&& model.toJSON().name == "Leaderboard") {
-									if(obj.column_position==3)
-									{
-										obj.column_position=1;
-										obj.row_position=obj.row_position+1;
-					}
-				}*/
 				
 				model.set({ 'column_position' : obj.column_position}, { silent : true });
 					model.set({ 'row_position' : obj.row_position  }, { silent : true });
@@ -143,6 +173,7 @@ function loadPortlets(el){
  */
 function set_up_portlets(el, portlets_el){
 
+	$('.gridster > div:visible',portlets_el);
 	var dimensions;
 	var dim_width = Math.round($('.gridster-portlets').width()/3)-20;
 	var dim_height = 200;
@@ -264,7 +295,7 @@ function set_up_portlets(el, portlets_el){
 						var css = {"height" : height+"px", "max-height" : height+"px"};
 
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css(css);
-						$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(el));	
+						$('#calendar_container',$(el)).fullCalendar('option','aspectRatio',getaspectratio(el));	
 						
 						var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
 						$(el).find('.fc-day-number').css('top',top);
@@ -335,8 +366,8 @@ function set_up_portlets(el, portlets_el){
     			$('.portlet_body_calendar').each(function(){
 					var that=$(this);
 
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
 				});
     		}
     	}
@@ -352,8 +383,8 @@ function set_up_portlets(el, portlets_el){
 				$('.portlet_body_calendar').each(function(){
 					var that=$(this);
 
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
 				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){
 				$(this).text($(this).text().substring(0, 1));
 				});
@@ -364,13 +395,21 @@ function set_up_portlets(el, portlets_el){
 				$('.portlet_body_calendar').each(function()
 				{
 					var that=$(this);
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($(el).find('#calendar_container').width()<185)
+		            		   {
+		            		   		$(el).find("#calendar_container").find(".fc-widget-header").each(function() {
+                 					   $(this).text($(this).text().substring(0, 1))
+              					  });
+		            		   }
+		            		   else{
 					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{
 						$(this).text(weeksArray[index]);
 					});
+				}
 				});
 		}
     });
@@ -384,7 +423,7 @@ function set_up_portlets(el, portlets_el){
 		gridster.enable_resize();
 	}
 
-    $(window).trigger('resize');
+   // $(window).trigger('resize');
 
     //return callback();
 }
@@ -462,19 +501,39 @@ function gravatarImgForPortlets(width){
 
 /** Loading google events for Events Portet**/
 function loadGoogleEventsForPortlets(p_el,startTime,endTime){
-	$.getJSON('core/api/calendar-prefs/get', function(response)
+	$.getJSON('core/api/calendar-prefs/type/GOOGLE', function(response)
 	{
-		var events = new Array();
+
 		console.log(response);
 		if (response)
 		{
 
-		head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
-		{
-			setupGC(function()
+			if(typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar)) 
 			{
+				googledataforEvents(p_el,response,startTime,endTime);
+				return;
+			}	
+		_load_gapi(function(){
 
-				gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+				googledataforEvents(p_el,response,startTime,endTime);
+
+			});
+		}
+		else{
+			setTimeout(function(){
+				if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
+				{
+					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
+				}
+			},1000);
+		}
+	});
+}
+
+function googledataforEvents(p_el,response,startTime,endTime)
+{
+			var events = new Array();
+	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 				var current_date = new Date();
 				var timezone_offset = current_date.getTimezoneOffset();
@@ -523,17 +582,4 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 						}
 						hideTransitionBar();
 					});
-
-				});
-			});
-		}
-		else{
-			setTimeout(function(){
-				if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
-				{
-					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
-				}
-			},1000);
-		}
-	});
 }

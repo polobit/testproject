@@ -357,7 +357,7 @@ public class StripeImpl implements AgileBilling {
 
 		// Updates customer with changed card details
 		customer = customer.update(updateParams);
-
+		payPendingInvoices(stripeCustomer);
 		return StripeUtil.getJSONFromCustomer(customer);
 	}
 
@@ -688,5 +688,32 @@ public class StripeImpl implements AgileBilling {
 		}
 		
 		
+	}
+	
+	public void addTrial(Long trialEnd) throws Exception{
+		// Fetches subscription from customer object in stripe
+		Subscription subscription = SubscriptionUtil.getSubscription();
+		Customer customer = StripeUtil.getCustomerFromJson(new JSONObject(subscription.billing_data_json_string));
+		List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
+		for(com.stripe.model.Subscription sub : subscriptions){
+			Map<String, Object> updateParams = new HashMap<String, Object>();
+			if(trialEnd == 0)
+				updateParams.put("trial_end", "now");
+			else
+				updateParams.put("trial_end", trialEnd);
+			sub.update(updateParams);
+		}
+		if(trialEnd == 0)
+		{
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("customer", customer.getId());
+			try{
+				Invoice invoice = Invoice.create(params).pay();
+				System.out.println("invoice for email credits "+invoice);
+			}catch(Exception e){
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -34,7 +34,15 @@
  
 	<div class="">
 		<div id="right-pane">
-	
+	 <div class="route_Portlet b-b" style="display:none">
+	<div class="row">
+		<div class="col-md-12">
+			<div>
+				<div id="portlets">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	</div>
 	<div class="contacts-div">
 
 <div class="dta-contatiner table-responsive m-r-sm b-n contacts-inner-div">
@@ -44,7 +52,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table b-n no-radius showCheckboxes no-sorting panel agile-table noDelete"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table b-n no-radius showCheckboxes no-sorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -147,27 +155,37 @@
 		<ul class="dropdown-menu pull-right">
 			<li><a href="#import">Import from CSV</a></li>
 			<li><a href="#import">Import from Salesforce</a></li>
+			
 		</ul>
 	</div></div>
             </div>
 	    </div>
 	    
 	</div>
+	  <div class="route_Portlet b-b" style="display:none">
+	<div class="row">
+		<div class="col-md-12">
+			<div>
+				<div id="portlets">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	</div>
 	<div class="contacts-div">
 <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
 				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Remove Tags</button>
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add Tags</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Remove Tags</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add to Campaign</button>
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add to Campaign</button>
 					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Change Owner</button>
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">Start Call Campaign</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Send Email</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Change Owner</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Export as CSV</button>
 					    {{/hasScope}}
-					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled" style="font-size:10px">Delete</button>
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
 					    
 				    </div>
 
@@ -179,7 +197,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -233,7 +251,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>

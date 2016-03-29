@@ -16,6 +16,7 @@ import java.util.TreeSet;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,19 +29,39 @@ import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Document.Builder;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -48,6 +69,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>OpportunityUtil</code> is the utility class to fetch opportunities with
@@ -70,6 +92,11 @@ public class OpportunityUtil
      * ObjectifyDao of Opportunity.
      */
     private static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
+    
+    /**
+     * ObjectifyDao of OpportunityPartial.
+     */
+    private static PartialDAO<OpportunityPartial> partialDAO = new PartialDAO<OpportunityPartial>(OpportunityPartial.class);
 
     /**
      * Gets opportunity based on id.
@@ -1086,6 +1113,197 @@ public class OpportunityUtil
 	return null;
     }
 
+    
+    // Total value count using projection query
+    public static Double getTotalValueOfDeals(org.json.JSONObject filterJson)
+    {
+    com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query("Opportunity");
+    DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+ 	query.addProjection(new PropertyProjection("expected_value", Double.class));
+	double dealTotal = 0d;
+	double start_value = 0d;
+	double end_value = 0d;
+	String sortField = "close_date";
+	try
+	{
+		
+	    if (checkJsonString(filterJson, "pipeline_id"))
+	    {
+	    	 Key<Milestone> pipelinekey = new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("pipeline_id")));
+    		 query.addFilter("pipeline", FilterOperator.EQUAL, KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId()));
+    		 
+
+		if (checkJsonString(filterJson, "milestone")){
+			query.addFilter("milestone" , FilterOperator.EQUAL , filterJson.getString("milestone"));		    
+	    }
+	    }
+	    if (checkJsonString(filterJson, "owner_id")){
+	    	 Key<DomainUser> ownerkey = new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id")));
+    		 query.addFilter("ownerKey", FilterOperator.EQUAL, KeyFactory.createKey(ownerkey.getKind(), ownerkey.getId()));
+    		 
+	    	
+	 //   	query.setFilter(com.google.appengine.api.datastore.Query.FilterOperator.EQUAL.of("ownerKey",searchMap.get("ownerKey")));
+	    }
+	    if (checkJsonString(filterJson, "archived"))
+	    {
+		if (!filterJson.getString("archived").equals("all")){
+	    query.addFilter("archived",FilterOperator.EQUAL, Boolean.parseBoolean(filterJson.getString("archived")));		 
+	    }
+	    }
+	    if (checkJsonString(filterJson, "probability_filter")
+		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
+	    {
+		if (checkJsonString(filterJson, "probability"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability").replace("%", ""));
+		    query.addFilter("probability" , FilterOperator.EQUAL, probability);
+		}
+
+	    }
+	    else
+	    {
+		if (checkJsonString(filterJson, "probability_start"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability_start").replace("%", ""));
+	        query.addFilter("probability",FilterOperator.GREATER_THAN, probability);
+		}
+		if (checkJsonString(filterJson, "probability_end"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
+		    query.addFilter("probability",FilterOperator.LESS_THAN, probability);
+		}
+	    }
+	    if (checkJsonString(filterJson, "close_date")) {
+	    	    	 String fieldName = filterJson.getString("close_date");
+		    if (checkJsonString(filterJson, fieldName + "_filter"))
+		    {
+			if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("equals")
+				&& checkJsonString(filterJson, fieldName))
+			{
+			    long closeDate = Long.parseLong(filterJson.getString(fieldName));
+			    query.addFilter(fieldName,FilterOperator.EQUAL,closeDate );
+			}
+			else
+			{
+			    if (checkJsonString(filterJson, fieldName + "_start"))
+			    {
+				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_start"));
+				 query.addFilter(fieldName,FilterOperator.GREATER_THAN,closeDate );
+			    }
+			    if (checkJsonString(filterJson, fieldName + "_end"))
+			    {
+				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_end"));
+				 query.addFilter(fieldName,FilterOperator.LESS_THAN,closeDate );
+			    }
+			}
+		    }
+		
+	    }
+	    if (checkJsonString(filterJson, "created_time")) {
+	    
+	    	 String fieldName = filterJson.getString("created_time");
+		    if (checkJsonString(filterJson, fieldName + "_filter"))
+		    {
+			if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("equals")
+				&& checkJsonString(filterJson, fieldName))
+			{
+			    long closeDate = Long.parseLong(filterJson.getString(fieldName));
+			     query.addFilter(fieldName,FilterOperator.EQUAL,closeDate );
+			}
+			else
+			{
+			    if (checkJsonString(filterJson, fieldName + "_start"))
+			    {
+				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_start"));
+				 query.addFilter(fieldName,FilterOperator.GREATER_THAN,closeDate );
+			    }
+			    if (checkJsonString(filterJson, fieldName + "_end"))
+			    {
+				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_end"));
+				 query.addFilter(fieldName,FilterOperator.LESS_THAN,closeDate );
+			    }
+			}
+		    }
+		 }   
+    		 Key<Milestone> pipelinekey = new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("pipeline_id")));
+    		 KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId());
+    		 query.addFilter("pipeline", FilterOperator.EQUAL, KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId()));
+    		 
+		      System.out.println("hello n try block "+filterJson.getLong("pipeline_id"));
+		      List<Entity> deals = dataStore.prepare(query).asList(FetchOptions.Builder.withDefaults());
+		      System.out.println("deals size in projection query = "+deals.size());
+		      if (checkJsonString(filterJson, "value_filter")
+		  		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
+		  	    {
+		  		if (checkJsonString(filterJson, "value"))
+		  		{
+		  		    double value = Double.parseDouble(filterJson.getString("value"));
+		  		    for (Entity eachdeal : deals) {
+		  		    	if(((Double)eachdeal.getProperty("expected_value")) == value)
+		  		    		dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
+		  		  	}
+		  		    System.out.println("out side try "+dealTotal);
+			        return  dealTotal;
+		  		}
+
+		  	    }
+		  	    else
+		  	    {
+		  		if (checkJsonString(filterJson, "value_start"))
+		  		{
+		  		    start_value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
+		  		}
+		  		if (checkJsonString(filterJson, "value_end"))
+		  		{
+		  		   end_value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
+		  		 
+		  		}
+		  	    }
+		      if (start_value > 0 && end_value >0)
+		      {
+		    	  for (Entity eachdeal : deals) {
+		    		  if (((Double)eachdeal.getProperty("expected_value")) >=start_value && ((Double)eachdeal.getProperty("expected_value"))  <=end_value )
+			    	        dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
+			      }
+			      
+			  System.out.println("out side try "+dealTotal);
+			  return  dealTotal;
+		      }
+		      else if (start_value > 0 && end_value ==0)
+		      {
+		    	  for (Entity eachdeal : deals) {
+		    		  if (((Double)eachdeal.getProperty("expected_value")) >=start_value )
+			    	        dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
+			      }
+			      
+			  System.out.println("out side try "+dealTotal);
+			  return  dealTotal;
+		      }
+		      else if (start_value == 0 && end_value >0)
+		      {
+		    	  for (Entity eachdeal : deals) {
+		    		  if (((Double)eachdeal.getProperty("expected_value")) <=end_value )
+			    	        dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
+			      }
+			      
+			  System.out.println("out side try "+dealTotal);
+			  return  dealTotal;
+		      }
+		      for (Entity eachdeal : deals) {
+		    	  dealTotal = dealTotal+((Double)eachdeal.getProperty("expected_value")) ;
+		      }
+		      
+		  System.out.println("out side try "+dealTotal);
+		  return  dealTotal;
+	  }
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
+	return null;
+    }
+
+
     /**
      * Generate the Map object with field name and values of the date(epoch
      * time).
@@ -1744,7 +1962,6 @@ public class OpportunityUtil
 			    .filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
 			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    ;
 		    count += dao.getCount(q);
 		}
 		else
@@ -1753,7 +1970,6 @@ public class OpportunityUtil
 			    .filter("won_date >= ", minTime).filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
 			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    ;
 		    count += dao.getCount(q);
 		}
 	    }
@@ -2009,7 +2225,6 @@ public class OpportunityUtil
      * 
      * @return List
      */
-
     public static List<Opportunity> getDealsWithOwnerandPipeline(Long ownerId, Long pipelineId, long minTime,
 	    long maxTime)
     {
@@ -2752,10 +2967,43 @@ public class OpportunityUtil
 	   	
 	   	if(expectedValue.length()!=0 && expectedValue!=null)   
     		opportunityObj.expected_value=expectedValueD;
-    	
+	   	
+	   	System.out.println("updateDeal------------Checking ACLs for creating deal");
+	   	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunityObj, CRUDOperation.CREATE, true);
+	   	
     	opportunityObj.save();
 
     	return opportunityObj.name;
     }
 	
+    /**
+     * Gets a partial opportunity based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<OpportunityPartial> getPartialOpportunities(List<Key<Opportunity>> ids_list)
+    {
+    	List<OpportunityPartial> list = new ArrayList<OpportunityPartial>();
+    	if(ids_list == null || ids_list.size() == 0)
+   		 return list;
+		
+		try
+		{
+			List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
+			if(keys.size() == 0)
+				return list;
+			
+			Map map = new HashMap();
+			map.put("__key__ IN", keys);
+			
+			return partialDAO.listByProperty(map);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return list;
+		}
+    }
 }

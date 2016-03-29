@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.agilecrm.user.AgileUser;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs.CALENDAR_TYPE;
 import com.thirdparty.google.calendar.util.GooglecalendarPrefsUtil;
@@ -79,9 +80,9 @@ public class GoogleCalendarPrefsAPI {
 
 			String Url = Office365CalendarUtil.getOfficeAuthUrl(calendarPrefs,
 					startDate, endDate);
-
+			Long agileUserId = AgileUser.getCurrentAgileUser().id;
 			List<OfficeCalendarTemplate> appointments = Office365CalendarUtil
-					.getAppointmentsFromServer(Url);
+					.getAppointmentsFromServer(Url, agileUserId, "agile_calendar");
 			System.out.println(appointments.size());
 
 		}
@@ -101,8 +102,7 @@ public class GoogleCalendarPrefsAPI {
 			@PathParam("type") CALENDAR_TYPE calendar_type,
 			GoogleCalenderPrefs prefs) throws Exception {
 		prefs.calendar_type = calendar_type;
-		
-		
+
 		if (calendar_type.equals(CALENDAR_TYPE.OFFICE365)) {
 			System.out.println("Office 365");
 
@@ -119,14 +119,13 @@ public class GoogleCalendarPrefsAPI {
 
 			String Url = Office365CalendarUtil.getOfficeAuthUrl(calendarPrefs,
 					startDate, endDate);
-
+			Long agileUserId = AgileUser.getCurrentAgileUser().id;
 			List<OfficeCalendarTemplate> appointments = Office365CalendarUtil
-					.getAppointmentsFromServer(Url);
+					.getAppointmentsFromServer(Url, agileUserId, "agile_calendar");
 			System.out.println(appointments.size());
 
 		}
-		
-		
+
 		GooglecalendarPrefsUtil.updatePrefs(prefs);
 	}
 

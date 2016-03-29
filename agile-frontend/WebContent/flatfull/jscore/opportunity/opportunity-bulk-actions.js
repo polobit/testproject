@@ -3,6 +3,8 @@
 	var changOwner = null;
 	var archiveDeals = null;
 	var restoreDeals = null;
+	var archiveACLDeals = null;
+	var restoreACLDeals = null;
 	var deleteDeals = null;
 	var dealConAddTag = null;
 	var dealConAddCamp = null;
@@ -64,20 +66,29 @@
 		} });
 	}
 	
-	var bulkRestoreDeals = function(){
+	var bulkRestoreDeals = function(isACLCondition){
 		console.log('restore',getDealsBulkIds());
 		console.log('archive',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk/restore';
 		postBulkActionDealsData(url,undefined,function(){
-			$("#deal_bulk_restore_modal").modal('hide');
+			if(isACLCondition){
+				$("#deal_bulk_restore_acl_modal").modal('hide');
+			}else{
+				$("#deal_bulk_restore_modal").modal('hide');
+			}
 		},message);
 	};
 	
-	var bulkArchiveDeals = function(){
+	var bulkArchiveDeals = function(isACLCondition){
 		console.log('archive',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk/archive';
 		postBulkActionDealsData(url,undefined,function(){
-			$("#deal_bulk_archive_modal").modal('hide');
+			if(isACLCondition){
+				$("#deal_bulk_archive_acl_modal").modal('hide');
+			}else{
+				$("#deal_bulk_archive_modal").modal('hide');
+			}
+			
 		},message);
 	};
 	
@@ -223,9 +234,14 @@
 		changeOwner = $('#deal-bulk-owner');
 		archiveDeals = $('#deal-bulk-archive');
 		restoreDeals = $('#deal-bulk-restore');
+		archiveACLDeals = $('#deal-bulk-archive-acl');
+		restoreACLDeals = $('#deal-bulk-restore-acl');
 		deleteDeals = $('#deal-bulk-delete');
 		dealConAddTag = $('#deal-contact-add-tag');
 		dealConAddCamp = $('#deal-contact-add-camp');
+		bulkChangeToMilestones = $('#bulk_deals_milestone_change');
+		bulkArchive = $('#bulk_deals_archive');
+		bulkRestore = $('#bulk_deals_restore');
 		filterJSON = $.parseJSON(_agile_get_prefs('deal-filters'));
 		
 		changeOwner.on('click',function(e){
@@ -242,6 +258,16 @@
 			e.preventDefault();
 			bulkRestoreDeals();
 		});
+
+		archiveACLDeals.on('click',function(e){
+			e.preventDefault();
+			bulkArchiveDeals(true);
+		});
+		
+		restoreACLDeals.on('click',function(e){
+			e.preventDefault();
+			bulkRestoreDeals(true);
+		});
 		
 		deleteDeals.on('click',function(e){
 			e.preventDefault();
@@ -256,6 +282,43 @@
 		dealConAddCamp.on('click',function(e){
 			e.preventDefault();
 			bulkAddDealContactsToCamp($(this));
+		});
+
+		bulkChangeToMilestones.on('click',function(e){
+			e.preventDefault();
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				showModalConfirmation("Bulk Update", 
+						"You may not have permission to update some of the deals selected. Proceeding with this operation will update only the deals that you are permitted to update.<br/><br/> Do you want to proceed?", 
+						function (){
+							$('#deal_mile_change_modal').modal('show');
+						});
+			}else
+			{
+				$('#deal_mile_change_modal').modal('show');
+			}
+		});
+
+		bulkArchive.on('click',function(e){
+			e.preventDefault();
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				$('#deal_bulk_archive_acl_modal').modal('show');
+			}else
+			{
+				$('#deal_bulk_archive_modal').modal('show');
+			}
+		});
+
+		bulkRestore.on('click',function(e){
+			e.preventDefault();
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				$('#deal_bulk_restore_acl_modal').modal('show');
+			}else
+			{
+				$('#deal_bulk_restore_modal').modal('show');
+			}
 		});
 		
 		$('body').on('change', '#pipeline-list-bulk', function(e) {

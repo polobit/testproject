@@ -161,12 +161,9 @@ public class VersioningUtil
 	if (StringUtils.equals(applicationId, "agilecrmbeta"))
 	    return "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/";
 
-	if (StringUtils.equals(applicationId, "agilecrmbeta"))
-	    return "https://" + domain + "-dot-sandbox-dot-agilesanbox.appspot.com/";
-
 	return VersioningUtil.getDefaultLoginUrl(domain);
     }
-    
+
     public static String getBaseServerURL()
     {
 	return CLOUDFRONT_SERVER_URL;
@@ -196,7 +193,18 @@ public class VersioningUtil
 
 	return false;
     }
-
+    
+    public static String getCurrentModuleName()
+    {
+    	ModulesService service = ModulesServiceFactory.getModulesService();
+    	if (service == null)
+    	    return "";
+    	
+    	String moduleName = service.getCurrentModule();
+    	System.out.println("current module : " + moduleName);
+    	
+    	return moduleName;
+    }
     /**
      * Returns app release version
      * 

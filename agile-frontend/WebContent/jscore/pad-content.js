@@ -95,6 +95,11 @@ var CONTENT_JSON = {
 		"route" : "#contact-view-add",
 		"image" : "/img/clipboard.png"
 	},
+	"no-tickets" : {
+		"title" : "You do not have any Tickets currently.",
+		"description" : "Tickets can be problem, incident, question or task escalated by your customer.",
+		"image" : "/img/clipboard.png"
+	},
 	"dashboard" : {
 		"contacts" : {
 			"title" : "There is no recent activity",

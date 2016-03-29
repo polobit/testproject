@@ -279,16 +279,22 @@ function addNodeInternal(node)
     		// If the node is dynamic node, we need to iterate the array and create the ports
 			console.log(node.formValues);
 										
+            var cache_arr = [];
 			$.each(node.formValues, function(index, json){				
 				
 				$.each(json, function(key,  value){
 					
 					// Check which grid is dynamic - look for dynamicportkey
 					if( key == node.nodeDefinition.dynamicportkey ) 
-					{						
+					{	
+                        
 						// Iterate through dynamic grid
 						$.each(value, function(index, portJSONObject){
 							
+                            // Make branch names unique - Naresh (03/08/2016)
+                            if(node.nodeDefinition.unique_branches && is_duplicate(cache_arr, portJSONObject["dynamicgrid"]))
+                                 return;
+
 							// Store the name 
 							console.log(portJSONObject);									
 							object.addAttribute(portJSONObject["dynamicgrid"], "String");								
@@ -298,9 +304,10 @@ function addNodeInternal(node)
 				});
 
 			});
-		
+
+            // Empty cache arr
+            cache_arr = [];
     		
-    
     }
 
 	/*
@@ -607,7 +614,7 @@ function send_test_email(button){
     });
 }
 function check_spam_score(button){
-      window.parent.workflow_alerts("Please Wait Spam Score Checking is Progress...", "<img src='img/21-0.gif' alt='Waiting' style='padding-left:240px; height=50px; '>" , "workflow-alert-modal",undefined);        
+      window.parent.workflow_alerts("Please wait spam score checking is progress...", "<img src='img/21-0.gif' alt='Waiting' style='padding-left:240px; height=50px; '>" , "workflow-alert-modal",undefined);        
     
     var margin;
     var jsonValues = serializeNodeForm();

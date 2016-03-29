@@ -1,5 +1,11 @@
 <!DOCTYPE html>
+<%@page import="com.google.appengine.api.taskqueue.Queue"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
+<%@page import="com.google.appengine.api.NamespaceManager"%>
+<%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
+<%@page import="com.google.appengine.api.taskqueue.TaskOptions"%>
+<%@page import="com.google.appengine.api.taskqueue.QueueFactory"%>
+<%@page import="com.agilecrm.activities.util.TaskUtil"%>
 <%@page import="com.agilecrm.SafeHtmlUtil"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
@@ -47,7 +53,14 @@ return;
 }
 
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+
 System.out.println("Domain user " + domainUser);
+
+DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
+// Add to queue
+Queue queue = QueueFactory.getDefaultQueue();
+queue.add(TaskOptions.Builder.withPayload(task));
+
 
 ObjectMapper mapper = new ObjectMapper();
 
@@ -110,6 +123,7 @@ if(is_free_plan && is_first_time_user)
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
+
 %>
 
 
@@ -142,10 +156,14 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
+
+<!--<link rel="stylesheet" type="text/css" href="flatfull/css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>-->
+
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -270,7 +288,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
-  <li class="line dk"></li>
+  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span>Marketing</span>
               </li>
@@ -313,6 +331,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
+  <li class="line dk m-t-none m-b-none" style="height: 1px; display: none;"></li>
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs" style="display: none;">
+    <span>Support</span>
+  </li>
+  <li id="tickets" style="display: none;">
+    <a  href="#tickets">
+      <i class="icon icon-ticket"></i>
+      <span>Help Desk</span>
+    </a>
+  </li>            
   </ul>
 
 
@@ -597,6 +625,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
+console.time("startbackbone");
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
@@ -657,39 +686,32 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 // Billing Restriction
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
-var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-//var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
-// head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'final-lib/min/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
-
-<!-- JQUery Core and UI CDN --> 
-<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-console.log("before dashboard load");
-head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
+head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
         showVideoForRegisteredUser();
+});
 
-})
-// , LIB_PATH + 'lib/backbone-route-filter.js'
+// head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
-else
-	head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION);
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
 
 var en;
-
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
 
 
+// head.ready('library', function() {
+
 head.ready(function() {
-	
+
 if(!HANDLEBARS_PRECOMPILATION){
-    downloadTemplate("tpl.js", function(){             
-    });
-    downloadTemplate("contact-view.js", function(){             
+    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
+    {
+        downloadTemplate("tpl.js");
+        downloadTemplate("contact-view.js");
     });
 }
  
@@ -697,31 +719,40 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
+
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
-	 $('[data-toggle="tooltip"]').tooltip();  
-   
+
    try{
-    //Code to display alerts of widgets.
-    showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+      $('[data-toggle="tooltip"]').tooltip();  
+      //Code to display alerts of widgets.
+      showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
    }catch(e){}
 	 
 	//Resting the variables.
-	<%  session.removeAttribute("widgetMsgType");
-	session.removeAttribute("widgetMsg"); %>
+	<% session.removeAttribute("widgetMsgType");
+	   session.removeAttribute("widgetMsg"); 
+  %>
 	
 	try{
       var sig = CURRENT_USER_PREFS.signature;
       sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-
       CURRENT_USER_PREFS.signature = sig;
 	}catch(e){}
+
 });
 
 });    
 function load_globalize()
 {
+
+  if (typeof Globalize != "function") {
+    setTimeout(function() {
+      load_globalize();
+    }, 500);
+    return;
+  }
 
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");

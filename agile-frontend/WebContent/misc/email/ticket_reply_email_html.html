@@ -1,0 +1,69 @@
+<body style="">
+	<div style="width:100%!important;">
+            <div style="line-height:18px;font-family:Arial,sans-serif;font-size:12px;color:#555;">
+                <p style="font-weight:bold;color:#919191">
+                	Your request (#{{ticket_id}}) has been reviewed by support team.
+                </p>
+                
+               {{#note_json_array}}
+                <div style="margin-top:25px">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tbody>
+                            <tr>
+                                <td width="100%" style="padding:15px 0;border-top:2px solid #5187bd">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed">
+                                        <tbody>
+                                            <tr>
+                                                <td valign="top" style="padding:0 10px 0 0;width:45px">              
+												<img alt="clickdesk-profile-pic" height="40" class="clickdesk-profile-pic" src="{{img_url}}" style="min-height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:3px" width="40"/></td>
+                                                <td width="100%" valign="top">
+                                                    <p style="font-family:Arial,sans-serif;font-size:14px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">
+                                                    	<strong>{{user_name}}</strong>
+                                                    </p>
+                                                     
+                                                    <p style="font-family:Arial,sans-serif;font-size:12px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#A8A8A8">{{created_time}}</p>
+													<div style="border-top:1px dotted #5187bd;" width="100px"></div>
+													
+													<div style=" margin-top: 10px; "> {{{html_text}}} </div>
+                                                    
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {{#attachments_exists}}
+                    	<table width="100%" cellpadding="0" cellspacing="0" border="0">
+	                        <tbody>
+	                            <tr>
+	                                <td width="100%">
+	                                	<span style="line-height: 25px;font-size: 14px;">Attachments:</span><br>
+	                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed">
+	                                        <tbody>
+	                                        	{{#attachments_list}}
+	                                            	<tr>
+	                                            		<td valign="top" style="padding:0 10px 5px 0;">              
+															<a href="{{url}}" target="_blank">{{name}}</a>
+														</td>
+	                                            	</tr>
+	                                            {{/attachments_list}}
+	                                        </tbody>
+	                                    </table>
+	                                </td>
+	                            </tr>
+	                        </tbody>
+	                    </table>
+	               {{/attachments_exists}}
+                </div>
+               {{/note_json_array}}
+				
+                <div style="color:#A8A8A8;margin:10px 0 14px 0;padding-top:8px;border-top:1px dotted #5187bd">
+                	This email is a service from {{company_name}}. Delivered by <a href="https://www.agilecrm.com?utm_source=www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=null" style="text-decoration:none" target="_blank">Agile CRM</a>
+               </div>
+               {{{tracking_img}}}
+           </div>
+            
+        </div>
+    </body>

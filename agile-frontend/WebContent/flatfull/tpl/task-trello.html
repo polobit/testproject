@@ -24,7 +24,7 @@
 	        </div> 	
           {{#is_mobile}}
           {{else}}
-			<div class="btn-group type-task-button c-p pull-right">
+			<div class="btn-group type-task-button c-p m-r">
 		        <button class="btn btn-default btn-sm selected_name">Due</button>
 		        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 		        <span class="caret"></span>
@@ -46,7 +46,11 @@
                <li><a href="CALENDAR" class="calendar-view new-type-task">Calendar View</a></li>                     
 		        </ul>
 		    </div>
-
+        <div class="btn-group type-task-button c-p pull-right">
+        <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+          <i class="icon icon-plus-sign"></i> Add Dashlet
+        </a>
+        </div>
 	        {{/is_mobile}}		
 
 		</div>
@@ -55,6 +59,16 @@
 	</div>  	  
 </div>
 </div>
+<div class="route_Portlet b-b" style="display:none">
+	<div class="row">
+		<div class="col-md-12">
+			<div>
+				<div id="portlets">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
 <div class="wrapper-md">
 	<div id="new-task-list-based-condition"> 
   		<img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
@@ -115,8 +129,8 @@
   <div class="task-body">    
     <div class="task-left">  
 <div class="new-task-owner  thumb-xxs avatar">     
-         {{#if ownerPic}}
-        	<img src="{{ownerPic}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
+         {{#if taskOwner.pic}}
+        	<img src="{{taskOwner.pic}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
 	     {{else}}
 			<img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
 	     {{/if}}
@@ -200,8 +214,8 @@
 <li class="task-note" data="{{id}}"> 
 <div class="thumb avatar">
 {{#if domainOwner}}
-	{{#if ownerPic}}
-		<img class="thumbnail" width="20" height="20" alt="" src="{{ownerPic}}" title="{{domainOwner.name}}">
+	{{#if domainOwner.pic}}
+		<img class="thumbnail" width="20" height="20" alt="" src="{{domainOwner.pic}}" title="{{domainOwner.name}}">
 	{{else}}
 		<img class="thumbnail" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{domainOwner.name}}">
 	{{/if}}

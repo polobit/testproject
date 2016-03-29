@@ -39,6 +39,7 @@ $(function()
 	App_FacebookPageTabRouter = new FacebookPageTabRouter();
 	App_Companies = new CompaniesRouter();
 	App_Datasync = new DataSyncRouter();
+	App_Ticket_Module = new TicketsUtilRouter();
 	App_LandingPageRouter = new LandingPageRouter();
 	App_EmailBuilderRouter = new EmailBuilderRouter();
 
@@ -66,6 +67,8 @@ var Current_Route;
  */
 function currentRoute(route)
 {
+	endFunctionTimer("startbackbone");
+	
 	Current_Route = window.location.hash.split("#")[1];
 	
 	if(SCROLL_POSITION)
@@ -91,7 +94,11 @@ function currentRoute(route)
 	// disposeEvents();
 
 	// load_clickdesk_code();
-	showPageBlockModal();
+	try{
+		showPageBlockModal();
+	}catch(e){
+	}
+	
 	 showUpgradeNoty();
 
 	 // Check the user permission to view the current route.

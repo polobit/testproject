@@ -129,7 +129,10 @@ $(function()
 						if (!currentDeal.close_date || currentDeal.close_date == 0)
 							currentDeal.close_date = null;
 
-						currentDeal.owner_id = currentDeal.owner.id;
+						if(currentDeal && currentDeal.owner)
+						{
+							currentDeal.owner_id = currentDeal.owner.id;
+						}
 
 						var arch_deal = new Backbone.Model();
 						arch_deal.url = '/core/api/opportunity';
@@ -210,6 +213,15 @@ $(function()
 											dealsLineChart();
 											update_deal_collection(model.toJSON(), id, milestone, milestone);
 
+										},error : function(model, err)
+										{
+											enable_save_button(that);
+											$("#deal_archive_confirm_modal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+											setTimeout(function()
+											{
+												$("#deal_archive_confirm_modal").find('span.error-status').html('');
+											}, 2000);
+											console.log('-----------------', err.responseText);
 										} });
 					});
 
@@ -257,7 +269,10 @@ $(function()
 
 						if (!currentDeal.close_date || currentDeal.close_date == 0)
 							currentDeal.close_date = null;
-						currentDeal.owner_id = currentDeal.owner.id;
+						if(currentDeal && currentDeal.owner)
+						{
+							currentDeal.owner_id = currentDeal.owner.id;
+						}
 						var arch_deal = new Backbone.Model();
 						arch_deal.url = '/core/api/opportunity';
 						arch_deal
@@ -303,6 +318,15 @@ $(function()
 											dealsLineChart();
 											update_deal_collection(model.toJSON(), id, milestone, milestone);
 
+										},error : function(model, err)
+										{
+											enable_save_button(that);
+											$("#deal_restore_confirm_modal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+											setTimeout(function()
+											{
+												$("#deal_restore_confirm_modal").find('span.error-status').html('');
+											}, 2000);
+											console.log('-----------------', err.responseText);
 										} });
 
 					});
@@ -460,6 +484,54 @@ function updateDeal(ele, editFromMilestoneView)
 		// if(!value["custom_data"]) value["custom_data"] = [];
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
 
+		$('.contact_input', dealForm).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), dealForm), contacts_typeahead, undefined, 'type=PERSON');
+		});
+
+		$('.contact_input', dealForm).each(function(){
+			var name = $(this).attr("name");
+			for (var i = 0; i < value.custom_data.length; ++i)
+			{
+				if (value.custom_data[i].name == name)
+				{
+					var valJSON = $.parseJSON(value.custom_data[i].value);
+					var referenceContactIds = "";
+					$.each(valJSON, function(index, value){
+						if(index != valJSON.length-1){
+							referenceContactIds += value + ",";
+						}else{
+							referenceContactIds += value;
+						}
+					});
+					setReferenceContacts(name, dealForm, valJSON, referenceContactIds);
+				}
+			}
+		});
+
+		$('.company_input', dealForm).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), dealForm), contacts_typeahead, undefined, 'type=COMPANY');
+		});
+
+		$('.company_input', dealForm).each(function(){
+			var name = $(this).attr("name");
+			for (var i = 0; i < value.custom_data.length; ++i)
+			{
+				if (value.custom_data[i].name == name)
+				{
+					var valJSON = $.parseJSON(value.custom_data[i].value);
+					var referenceContactIds = "";
+					$.each(valJSON, function(index, value){
+						if(index != valJSON.length-1){
+							referenceContactIds += value + ",";
+						}else{
+							referenceContactIds += value;
+						}
+					});
+					setReferenceContacts(name, dealForm, valJSON, referenceContactIds);
+				}
+			}
+		});
+
 	}, "DEAL")
 
 	populateLostReasons(dealForm, value);
@@ -494,6 +566,14 @@ function show_deal()
 			"modal"
 		]);
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+
+		$('.contact_input', el).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=PERSON');
+		});
+
+		$('.company_input', el).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=COMPANY');
+		});
 
 	}, "DEAL");
 
@@ -634,23 +714,34 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 					if (dealsView && dealsView.collection)
 					{
-						if (deal.archived == true)
-						{
-							dealsView.collection.remove(deal.id);
+						var owner = deal.owner_id;
+
+					  	if(!owner){
+					  		owner = deal.owner.id;
+					  	}
+					  	if(hasScope("VIEW_DEALS") || CURRENT_DOMAIN_USER.id == owner){
+					  		if (deal.archived == true)
+							{
+								dealsView.collection.remove(deal.id);
+								dealsView.collection.sort();
+							}
+							else if (dealsView.collection.get(deal.id))
+							{
+								dealsView.collection.get(deal.id).set(new BaseModel(deal));
+								$("#"+deal.id).closest("li").removeAttr("class");
+								$("#"+deal.id).closest("li").addClass("deal-color");
+								$("#"+deal.id).closest("li").addClass(deal.colorName);
+							}
+							else
+							{
+								dealsView.collection.add(new BaseModel(deal), { sort : false });
+								dealsView.collection.sort();
+							}
+					  	}
+					  	if(!hasScope("VIEW_DEALS") && CURRENT_DOMAIN_USER.id != owner && isUpdate){
+					  		dealsView.collection.remove(deal.id);
 							dealsView.collection.sort();
-						}
-						else if (dealsView.collection.get(deal.id))
-						{
-							dealsView.collection.get(deal.id).set(new BaseModel(deal));
-							$("#"+deal.id).closest("li").removeAttr("class");
-							$("#"+deal.id).closest("li").addClass("deal-color");
-							$("#"+deal.id).closest("li").addClass(deal.colorName);
-						}
-						else
-						{
-							dealsView.collection.add(new BaseModel(deal), { sort : false });
-							dealsView.collection.sort();
-						}
+					  	}
 					}
 
 					// Activates "Timeline" tab and its tab content in
@@ -667,7 +758,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		} else if(App_Companies.companyDetailView
 				&& Current_Route == "company/"
 					+ App_Companies.companyDetailView.model.get('id')){
-			company_util.updateDealsList(deal,true);
+			company_util.updateDealsList(deal,true, isUpdate);
 		}
 		// When deal is added or updated from Deals route
 		else if (Current_Route == 'deals')
@@ -837,8 +928,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 					     	var newheading = newMilestone.replace(/ +/g, '');
 					        var symbol = getCurrencySymbolForCharts();
 				            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
-				            avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
-							var dealdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+				            var dealdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
 							var dealDataString = JSON.stringify(dealdata) ; 
 							$("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
 							$("#"+newheading+" .dealtitle-angular").attr("data" , dealDataString ); 
@@ -858,7 +948,32 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						try
 						{
 							$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+
+	                        var dealchangevalue = deal.expected_value;
+	                        var newdealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealchangevalue); 
+	                        $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+		                  
+						    /* average of new deal total */
+					      	var avg_new_deal_size = 0;
+					     	var new_deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()); 
+					     	if(new_deal_count == 0)
+					     		avg_new_deal_size = 0;
+					     	else
+					     		avg_new_deal_size = newdealvalue / new_deal_count;
+
+					     	newdealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue) ;
+					        avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+
+					     	var newheading = oldMilestone.replace(/ +/g, '');
+					        var symbol = getCurrencySymbolForCharts();
+				            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+				            var dealdata = {"dealTrack":dealTrack ,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+							var dealDataString = JSON.stringify(dealdata) ; 
+							$("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
+							$("#"+newheading+" .dealtitle-angular").attr("data" , dealDataString ); 
+						
 						}
+						
 						catch (err)
 						{
 							console.log(err);

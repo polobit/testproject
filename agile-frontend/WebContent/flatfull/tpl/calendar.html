@@ -39,6 +39,7 @@
 	               <ul class="dropdown-menu pull-right c-p">
 	                   <li><a data-toggle="modal" class="add-event">Add Event</a></li>
 	                   <li><a data-toggle="modal" class="add-task">Add Task</a></li>
+	                   <li><a href="#add-dashlet">Add Dashlet</a></li>
 	               </ul>
 	           </div>
 		</div>
@@ -47,6 +48,16 @@
 </div>
 </div>
 </div>
+
+<div class="route_Portlet b-b" style="display:none">
+	<div class="row">
+		<div class="col-md-12">
+			<div>
+				<div id="portlets">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	</div>
 <div class="wrapper-md">
 <div class="row">
     <div class="col-md-2">
@@ -324,7 +335,7 @@
 	       	<div class="line b-b b-light"></div>
 	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.eventOwner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">
@@ -365,7 +376,7 @@
 			<div class="line b-b b-light"></div>
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.eventOwner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">
@@ -406,7 +417,7 @@
 			<div class="line b-b b-light"></div>
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.eventOwner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">

@@ -830,7 +830,7 @@ function show_bulk_owner_change_page()
 		$("body").off('fill_owners').on("fill_owners", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-			fillSelect('ownerBulkSelect', '/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate);
+			fillSelect('ownerBulkSelect', '/core/api/users/partial', 'domainUsers', 'no-callback ', optionsTemplate);
 		});
 
 		// Navigate to show form
@@ -1366,9 +1366,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 		if (check_count == 0)
 		{
-			if(company_util.isCompany())
-				$('#bulk-actions').css('display', 'none');
-			else
+			
 				$("#bulk-action-btns button").addClass("disabled");
 		}
 	}

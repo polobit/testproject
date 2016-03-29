@@ -42,8 +42,6 @@
 	</div>
 	{{/if_equals}}
 
-</div>
-
 <!-- Document Result -->
 {{#if_equals entity_type "document"}}
 <div class="thumb-sm agile-img m-r-xs">
@@ -55,8 +53,6 @@
          
 	</div>
 	{{/if_equals}}
-
-</div>
 
 <!-- Case Result -->
 {{#if_equals entity_type "case"}}
@@ -70,6 +66,21 @@
 	</div>
 	{{/if_equals}}
 
+<!-- Ticket Result -->
+{{#if_equals entity_type "tickets"}}
+	<div class="thumb-sm agile-img m-r-xs m-t-xs">
+		{{#if contact.properties}}
+	    	<img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}" class="r-5x">
+      	{{else}}
+        	<img src="{{emailGravatarurl 42 requester_email}}">
+      	{{/if}}
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		#{{id}} {{subject}}
+        <br/>{{first_notes_text}} </br> {{epochToHumanDate "mmm dd, yyyy" created_time}}
+	</div>
+{{/if_equals}}	
+
 </div>
 
 </script>
@@ -77,6 +88,9 @@
 <script id="typeahead-contacts-collection-template" type="text/html">
 <div id="contact-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Contacts</div>
 	<div id="contact-results">
+	</div>
+<div id="company-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Companies</div>
+	<div id="company-results">
 	</div>
 <div id="deal-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Deals</div>
 	<div id="deals-results">
@@ -87,6 +101,9 @@
 <div id="case-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Cases</div>	
 	<div id="case-results">
 	</div>
+<div id="tickets-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Tickets</div>	
+	<div id="ticket-results">
+	</div>	
 	<div id="typeahead-contacts-model-list"></div>
 </script>
 

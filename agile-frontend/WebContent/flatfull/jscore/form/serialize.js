@@ -52,6 +52,40 @@ function serializeForm(form_id) {
 	}).get());
 	console.log(arr);
 	
+	//Included to set content editable data
+	arr = arr.concat($('#' + form_id + ' div[contenteditable="true"]').map(function() {
+
+		var $editable_div = $('div[contenteditable="true"]');
+
+		return {
+			"name" : $editable_div.attr('data-name'),
+			"value" : $editable_div.html()
+		};
+	}).get());
+
+	// Serialize cc_emails
+	arr = arr.concat($('#' + form_id + ' [name="cc_emails"]').map(function() {
+
+        var array = [];
+        $.each($(this).children(), function(g, h) {
+
+    		if($(h).attr("data"))
+        		array.push(($(h).attr("data")).toString());
+	    });
+
+	    return { name: 'cc_emails', value: array };
+
+	}).get());
+
+	// Serialize sortable widget data
+	arr = arr.concat($('#' + form_id + ' .selected_columns').map(function() {
+
+	    return { name: $(this).attr('name'), value: $(this).sortable("toArray") };
+
+	}).get());
+
+	//Serialize attachments list
+	//arr = arr.concat(Ticket_Attachments.serializeList(form_id));
 
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
@@ -83,6 +117,18 @@ function serializeForm(form_id) {
 		return {
 			"name" : $(this).attr('name'),
 			"value" : fields_set
+		};
+	}).get());
+
+
+	arr = arr.concat($('#' + form_id + ' .chosen-select').map(function() {
+		var fields_set = [];
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : $(this).val()
 		};
 	}).get());
 	
@@ -154,7 +200,10 @@ function serializeChainedElement(element)
 		if ($(data).hasClass("date")) {
 			var date = getFormattedDateObjectWithString($(data).val());
 
-			value = getGMTEpochFromDate(date);
+			value = getGMTEpochFromDateForCustomFilters(date);
+		}
+		else if ($(data).hasClass("contact_custom_field") || $(data).hasClass("company_custom_field")) {
+			value = $(data).attr("data");
 		}
 
 		// Value of input/select
@@ -169,6 +218,14 @@ function serializeChainedElement(element)
 			json_object[name] = value;
 		// Pushes each rule built from chained select in to an JSON array
 	});
+	if(json_object.CONDITION == "BETWEEN") {
+	    var newdate = (json_object.RHS_NEW + (24 * 60 * 60 * 1000) - 1);
+       json_object.RHS_NEW = newdate;
+	}
+	if(json_object.nested_condition == "BETWEEN") {
+	    var newdate = (json_object.nested_rhs + (24 * 60 * 60 * 1000) - 1);
+       json_object.nested_rhs = newdate;
+	}
 	return json_object;
 }
 
@@ -205,6 +262,7 @@ $(function(){
 function serializeLhsFilters(element)
 {
 	var json_array = [];
+	var json_array_1 = [];
 	var filters = {};
 	$(element).find('a#lhs-filters-header').removeClass('bold-text');
 	$.each($(element).find('.lhs-contact-filter-row'), function(index, data) {
@@ -223,7 +281,30 @@ function serializeLhsFilters(element)
 
 			RHS_VALUE = getGMTEpochFromDate(date);
 		}
-
+		if ($(RHS_ELEMENT).hasClass("custom_contact") || $(RHS_ELEMENT).hasClass("custom_company")) {
+			RHS_VALUE = $(RHS_ELEMENT).parent().find("input").attr("data");
+		}
+		if ($(RHS_ELEMENT).hasClass("custom_contacts") || $(RHS_ELEMENT).hasClass("custom_companies")) {
+			$(RHS_ELEMENT).find("li").each(function(){
+				var json_object_1 = {};
+				var RHS_VALUE_1 = $(this).attr("data");
+				var LHS_1 = $(currentElement).find('[name="LHS"]').val();
+				if(RHS_VALUE_1)
+				{
+					json_object_1["LHS"] = LHS_1;
+					json_object_1["CONDITION"] = "EQUALS";
+					json_object_1["RHS"] = RHS_VALUE_1;
+					json_object_1["RHS_NEW"] = "";
+					json_array_1.push(json_object_1);
+					var fieldName = LHS_1.replace(/ +/g, '_');
+					fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@').replace(/[\/]/g,'\\/');
+					var currentElemnt = $(element).find('#'+fieldName+'_div');
+					$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+					$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
+				}
+			});
+			
+		}
 		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
 			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
@@ -266,6 +347,10 @@ function serializeLhsFilters(element)
 		// Pushes each rule built from chained select in to an JSON array
 	});
 	filters["rules"] = json_array;
+	if(json_array_1)
+	{
+		filters["or_rules"] = json_array_1;
+	}
 	filters["contact_type"] = $(element).find('#contact_type').val();
 	return filters;
 }

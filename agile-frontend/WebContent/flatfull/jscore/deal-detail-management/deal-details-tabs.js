@@ -134,8 +134,14 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		fill_deal_owners(undefined, undefined, function()
 		{
-
-			$('#deal-owner').css('display', 'none');
+			if(hasScope("MANAGE_DEALS") || $(this).attr("data") == CURRENT_DOMAIN_USER.id)
+			{
+				$('#deal-owner').css('display', 'none');
+			}
+			else
+			{
+				$("#deal_update_privileges_error_modal").modal("show");
+			}
 			$('#change-deal-owner-ul').css('display', 'inline-block');
 
 			if ($('#change-deal-owner-ul').css('display') == 'inline-block')
@@ -161,7 +167,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			Backbone.history.navigate("#deals", { trigger : true });
 		}, error : function(response)
 		{
-			alert("some exception occured please try again");
+			//alert("some exception occured please try again");
+			alert(response.responseText);
 		} });
 	},
 

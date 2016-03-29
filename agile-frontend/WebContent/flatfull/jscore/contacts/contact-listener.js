@@ -378,7 +378,7 @@ $('.popover').on('click', '#contact-owner-popover', function(e){
 	var that=$(this);
 	  e.preventDefault();
 	  var optionsTemplate = "<li><a class='contact-owner-list-popover' data='{{id}}'>{{name}}</a></li>";
-         fillSelect('contact-detail-owner-popover','/core/api/users', 'domainUsers', function()
+         fillSelect('contact-detail-owner-popover','/core/api/users/partial', 'domainUsers', function()
 			{
 									$(that).css('display', 'none');
 	    	$(that).parent().find('#change-owner-ul-popover').css('display', 'inline-block');

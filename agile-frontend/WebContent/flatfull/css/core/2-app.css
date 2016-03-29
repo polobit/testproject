@@ -13,7 +13,7 @@ body {
 
 *
 {
-	font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 *:focus {
   outline: 0 !important;
@@ -42,7 +42,7 @@ a:focus {
 }
 
 .show {
-	visibility:visible;
+  visibility:visible;
 }
 
 label {
@@ -225,7 +225,7 @@ a:hover .caret-white {
 }
 #contact-tab-content > ul > li,#deal-tab-content > ul > li,#task_tab_detail > ul > li
 {
-	 background-color: #fff;
+   background-color: #fff;
     border: 1px solid #ddd;
     display: block;
     margin-bottom: -1px;
@@ -253,7 +253,7 @@ a:hover .caret-white {
 }
 .ativity-block-ul li:first-child
 {
-	border-top-width:0;
+  border-top-width:0;
 }
 .list-group.no-border .list-group-item,#contact-tab-content ul li,#deal-tab-content ul li,#task_tab_detail ul li {
   border-width: 1px 0;
@@ -269,7 +269,7 @@ a:hover .caret-white {
 }
 .ativity-block-ul li
 {
-	padding-left:15px;
+  padding-left:15px;
 }
 
 
@@ -922,17 +922,17 @@ body {
   .app-aside,
   .navbar-header,.app-aside .fixedicons {
     width: 200px;
-/*	-webkit-animation:togglingAnimationV4 .5s ease-in-out 0s forwards;
+/*  -webkit-animation:togglingAnimationV4 .5s ease-in-out 0s forwards;
   }
   @-webkit-keyframes togglingAnimationV4{
      0%
-	 {
-		 width:60px;
-	 }
-	 100%
-	 {
-		 width:200px;
-	 }
+   {
+     width:60px;
+   }
+   100%
+   {
+     width:200px;
+   }
 }
   */
 }
@@ -940,17 +940,17 @@ body {
   .app-content,
   .app-footer {
     margin-left: 200px;
-/*	-webkit-animation:togglingAnimationV3 .5s ease-in-out 0s forwards;
+/*  -webkit-animation:togglingAnimationV3 .5s ease-in-out 0s forwards;
   }
   @-webkit-keyframes togglingAnimationV3{
      0%
-	 {
-		 margin-left:60px;
-	 }
-	 100%
-	 {
-		 margin-left:200px;
-	 }
+   {
+     margin-left:60px;
+   }
+   100%
+   {
+     margin-left:200px;
+   }
 }*/
   }
   .app-aside-right {
@@ -983,22 +983,22 @@ body {
   }
   .app-aside-folded .app-aside,
   .app-aside-folded .navbar-header,.app-aside-folded .app-aside .fixedicons {
-	  
+    
     width:60px;
   }
  /*   -webkit-animation:togglingAnimationV1 1s linear 0s forwards;
   }
 @-webkit-keyframes togglingAnimationV1{
      0%
-	 {
-		 width:200px;
-	 }
-	 100%
-	 {
-		 width:60px;
-	 }
+   {
+     width:200px;
+   }
+   100%
+   {
+     width:60px;
+   }
 }
-	*/
+  */
   .app-aside-folded .navbar-collapse,
   .app-aside-folded .app-content,
   .app-aside-folded .app-footer {
@@ -1008,13 +1008,13 @@ body {
   }
   @-webkit-keyframes togglingAnimationV2{
      0%
-	 {
-		 margin-left:200px;
-	 }
-	 100%
-	 {
-		 margin-left:60px;
-	 }
+   {
+     margin-left:200px;
+   }
+   100%
+   {
+     margin-left:60px;
+   }
 }*/
   .app-aside-folded .app-header .navbar-brand {
     display: block;
@@ -1347,23 +1347,23 @@ body {
   /*custom css for MUSIK transition*/
   .app-aside-folded:not(.app-aside-dock .navi > ul > li > a) .navi > ul > li > a
 {
-	width:60px;
-	height:50px;
-	overflow:hidden;
+  width:60px;
+  height:50px;
+  overflow:hidden;
 }
 .app-aside-folded:not(.app-aside-dock .navi > ul > li > a  i) .navi > ul > li > a  i
 {
-	margin:0px;
-	-webkit-transition:margin-top .2s;
+  margin:0px;
+  -webkit-transition:margin-top .2s;
 }
 
 .app-aside-folded:not(.app-aside-dock .navi > ul > li > a:hover  i) .navi > ul > li > a:hover  i
 {
-	margin-top:-50px;
+  margin-top:-50px;
 }
 .app-aside-folded:not(.app-aside-dock .navi > ul > li > a:hover span) .navi > ul > li > a:hover span
 {
-	display:block;
+  display:block;
 }
 .app-aside-folded:not(.app-aside-dock .navi > ul > li > a span) .navi > ul > li > a span {
   display: none;

@@ -43,8 +43,8 @@
 <div  class="activity block pos-rlt">
 <div class="thumb-xs pull-left m-r-sm b-light b avatar">
 {{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img r r-2x"  alt="" src="{{ownerPic}}" >
+			{{#if domainOwner.pic}}
+				<img class="user-img r r-2x"  alt="" src="{{domainOwner.pic}}" >
 			{{else}}
 				<img class="user-img r r-2x"  alt="" src="{{defaultGravatarurl 40}}" >
 			{{/if}}
@@ -100,10 +100,10 @@
 					{{else}}	
 <div class="inline-block word-break-all">
 					{{#if_contact_type "PERSON"}}
-						<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+						<a class="text-info popover_contact text-capitalize" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
-        		<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        		<a class="text-info text-capitalize" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         			{{/if_contact_type}}
 </div>
 				{{/isDuplicateContactProperty}}
@@ -112,7 +112,7 @@
        	{{/each}}
 	
 </div>
-<div align="right" class="pos-abs pos-r-0 pos-b-0">
+<div align="right" class="pos-abs pos-r-0 pos-b-0" style="right:19px;">
 {{#if callType}}
 
 	{{#if_equals callType ""}}

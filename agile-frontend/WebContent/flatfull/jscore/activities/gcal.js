@@ -33,12 +33,17 @@ function isDefined(x)
 	return typeof x !== undefined;
 }
 
+var isSet1  =false;
 function _init_gcal_options(users)
 {
+	if(isSet1)
+		return ;
+
 	var fc = $.fullCalendar;
-	fc.sourceFetchers = [];
+	//fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
 	fc.sourceFetchers.push(_googleEventFetcher);
+	isSet1 =  true;
 }
 
 function _googleEventFetcher(sourceOptions, start, end, callback)
