@@ -23,7 +23,10 @@ define([
      , giveUniqueId: function(snippet){
        
        if(snippet.attributes.fields.id){
+       
        var snippetType = snippet.attributes.fields.id.value;
+
+       if(!(isFinite(Math.max.apply(null, snippetType.match(/(\d+)/g))))){
        var idArray = "";
         for(var i=1; i<=saveform.length-1; i++){
         if(saveform[i].fields.id)
@@ -43,8 +46,8 @@ define([
  
        snippet.setField("id", snippetType + "-" + this.counter[snippetType]);
       }
- 
-     }
+    }
+  }
     , renderAll: function(){
       return this.map(function(snippet){
         return new MyFormSnippetView({model: snippet}).render(true);
