@@ -98,23 +98,14 @@ public class WidgetsAPI {
 	public Widget createWidget(Widget widget) throws JSONException {
 		System.out.println("In widgets api create");
 		if (widget != null) {
-			if (widget.name.equals("Braintree")) {
-				JSONObject prefsObj = new JSONObject(widget.prefs);
-				String merchantId = prefsObj.getString("merchant_id");
-				String publicKey = prefsObj.getString("public_key");
-				String privateKey = prefsObj.getString("private_key");
-				BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
-						privateKey);
-				try{
-					JSONArray resultObj = bUtil
-						.getTransactions("test@agilecrm.com");
-				}catch(Exception e){
-					return null;
-				}
+			try {
+				WidgetsAPI.checkValidDetails(widget);
+				widget.save();
+				return widget;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-
-			widget.save();
-			return widget;
 		}
 
 		return null;
@@ -171,8 +162,14 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget) {
 		if (widget != null) {
-			widget.save();
-			return widget;
+			try {
+				WidgetsAPI.checkValidDetails(widget);
+				widget.save();
+				return widget;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -357,4 +354,15 @@ public class WidgetsAPI {
 		return widgets;
 	}
 
+	public static void checkValidDetails(Widget widget) throws Exception {
+		if (widget.name.equals("Braintree")) {
+			JSONObject prefsObj = new JSONObject(widget.prefs);
+			String merchantId = prefsObj.getString("merchant_id");
+			String publicKey = prefsObj.getString("public_key");
+			String privateKey = prefsObj.getString("private_key");
+			BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
+					privateKey);
+			JSONArray resultObj = bUtil.getTransactions("test@agilecrm.com");
+		}
+	}
 }
