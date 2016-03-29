@@ -1528,6 +1528,10 @@ public class PortletUtil {
 		int emailsOpened =0;
 		int emailsent = 0;
 		int unsubscribe =0;
+		int hardBounce=0;
+		int softBounce=0;
+		int emailsSkipped=0;
+		int emailsSpam=0;
 		String a="";
 		JSONArray campaignEmailsJSONArray;
 		long minTime=0L;
@@ -1562,12 +1566,28 @@ public class PortletUtil {
 
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_OPENED"))
 			{emailsOpened = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
 			{emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
 			{emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
 			{unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SPAM"))
+			{emailsSpam= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
+			{emailsSkipped= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_HARD_BOUNCED"))
+			{hardBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SOFT_BOUNCED"))
+			{softBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+		
 			}
 			
 			}
@@ -1578,10 +1598,14 @@ public class PortletUtil {
 		}
 		
 	}
-		datajson.put("emailopened",emailsOpened);
+		    datajson.put("emailopened",emailsOpened);
 			datajson.put("emailclicked",emailsClicked);
 			datajson.put("emailsent",emailsent);
 			datajson.put("emailunsubscribed",unsubscribe);
+			datajson.put("emailSpam",emailsSpam);
+			datajson.put("emailSkipped", emailsSkipped);
+			datajson.put("hardBounce", hardBounce);
+			datajson.put("softBounce", softBounce);
 		return datajson;
 		}
 		
@@ -1623,13 +1647,13 @@ public class PortletUtil {
 			if(campaignType.equalsIgnoreCase("All"))	 
 				 query  =  "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+ 
 									" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
-									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED', 'EMAIL_SPAM', 'EMAIL_SENDING_SKIPPED', 'EMAIL_HARD_BOUNCED', 'EMAIL_SOFT_BOUNCED')"+
 									" AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " +
 										 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
 			else
 				 query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
 									"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
-									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED', 'EMAIL_SPAM', 'EMAIL_SENDING_SKIPPED', 'EMAIL_HARD_BOUNCED', 'EMAIL_SOFT_BOUNCED')"+
 									"AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
 									"AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type " ;
                 

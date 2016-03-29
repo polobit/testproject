@@ -2309,16 +2309,31 @@ Deleted  {{custom1}} Campaigns<br/>
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
-        <div class="portlet_body">
-			<div id="emails-sent" style="height:50%">
+        <div class="portlet_body text-center">
+			<div id="emails-sent" style="height:50%; width:25%;">
 			<div id="emails-sent-label" class="text-sm text-light text-ellipsis"></div> 
-			<div id="emails-sent-count" class="text-count text-center" style="color:#23b7e5;"></div>
-			
+			<div id="emails-sent-count" class="text-count text-center" style="color:#23B7E5;"></div>
 			</div>
-			<div id="emails-opened" style="height:50%; display:none;"></div>
-			<div id="emails-clicked" style="height:50%; display:none;"></div>
 
-			<div id="emails-unsubscribed" style="height:50%; display:none;"></div>
+			<div id="emails-skipped" style="height:50%;width:25%;">
+			<div id="emails-skipped-label" class="text-sm text-light text-ellipsis"></div> 
+			<div id="emails-skipped-count" class="text-count text-center" style="color:#FAD733;"></div>
+			</div>
+          
+           <div id="emails-opened" style="height:50%;width:25%; display:none;"></div>
+
+           <div id="emails-clicked" style="height:50%; width:25%; display:none;"></div>
+
+			<div id="emails-spam" style="height:50%;width:25%;">
+			<div id="emails-spam-label" class="text-sm text-light text-ellipsis"></div> 
+			<div id="emails-spam-count" class="text-count text-center" style="color:#FF4343;"></div>
+			</div>
+
+			<div id="emails-hard-bounce" style="height:50%; width:25%; display:none;"></div>
+
+			<div id="emails-soft-bounce" style="height:50%; width:25%; display:none;"></div>
+
+			<div id="emails-unsubscribed" style="height:50%; width:25%; display:none;"></div>
 
 		</div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
