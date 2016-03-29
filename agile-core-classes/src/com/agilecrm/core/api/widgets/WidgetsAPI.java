@@ -95,7 +95,7 @@ public class WidgetsAPI {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget createWidget(Widget widget) throws JSONException {
+	public Widget createWidget(Widget widget) throws Exception {
 		System.out.println("In widgets api create");
 		if (widget != null) {
 			try {
@@ -160,16 +160,11 @@ public class WidgetsAPI {
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget updateWidget(Widget widget) {
+	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
-			try {
-				WidgetsAPI.checkValidDetails(widget);
-				widget.save();
-				return widget;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			WidgetsAPI.checkValidDetails(widget);
+			widget.save();
+			return widget;
 		}
 		return null;
 	}
