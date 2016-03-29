@@ -625,7 +625,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
-console.time("startbackbone");
+
+try{console.time("startbackbone");}catch(e){}
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
@@ -769,13 +770,19 @@ function showVideoForRegisteredUser(){
     {     
        $("#dashboard_video").modal("show");
        var $frame = $("#dashboard_video iframe");
-      $frame.attr("src", $frame.attr("data-source"));
-    }       
+       $frame.attr("src", $frame.attr("data-source"));
+       
+    } 
     
     localStorage.setItem(domainuser_video_cookie,true);
     
 }
-
+function closeVideo(){
+   $('#dashboard_video').on("click", ".close", function () {
+       $('#dashboard_video').modal("hide");
+        $('#dashboard_video iframe').removeAttr("src");
+    });
+}
 </script>
 
 
@@ -790,23 +797,30 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 
  <!--video on dashboard -->
  <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" id="dashboard-video" >
+       <div class="modal-dialog" id="dashboard-video" >
         <div class="modal-content">
         <div class="modal-header">
-          <button class="close" data-dismiss="modal">&times;</button>
+          <button class="close" onClick="closeVideo()">&times;</button>
           <h3 id="myModalLabel">Welcome to Agile CRM</h3>
           <small>Here is a short video which explains the steps to get started with Agile. We recommend you watch it.</small>
         </div>      
         <div class="modal-body">
               <div class="embed-responsive embed-responsive-16by9">
                       <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
-              </div>                     
+              </div> 
+
+              
         </div>
                
+        <div class="modal-footer">
+                 <a href="http://salescal.agilecrm.com/" class="btn btn-primary" id="schedule_demo">Schedule a Demo</a>
+        </div>                     
+                                 
+        </div>
+          
         
         </div>
-        </div>
-  </div>
+</div>
 
 </body>
 </html>
