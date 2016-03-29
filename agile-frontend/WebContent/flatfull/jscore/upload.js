@@ -10,6 +10,12 @@ $(function(){
 		e.preventDefault();
 		uploadImage("contact-container");
 	});
+
+	//Upload company image
+	$("body").on('click', ".upload_pic", function(e){
+		e.preventDefault();
+		uploadImage("contact-container");
+	});
 	
 	//Upload personal prefs
 	$("body").on('click', ".upload_prefs_s3", function(e){
