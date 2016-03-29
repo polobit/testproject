@@ -56,16 +56,6 @@ public class HomeServlet extends HttpServlet
 	 * datastore.
 	 */
 	String isFirstTimerUser = req.getParameter("w");
-	//IP access
-	try{
-		if(!IpAccessUtil.isValidIpOpenPanel(req))
-			req.getSession().removeAttribute(
-					SessionManager.AUTH_SESSION_COOKIE_NAME);
-			resp.sendRedirect(Globals.CHOOSE_DOMAIN);
-	}
-	catch(Exception e){
-		e.printStackTrace();
-	}
 
 	// If parameter 'w' is not empty, the user is created and it reached
 	// here due to eventual consistency. Request is forwared back to

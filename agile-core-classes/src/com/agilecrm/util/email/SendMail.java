@@ -128,6 +128,11 @@ public class SendMail
 	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
 	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
 
+	//For AllowAccessIP
+	public static final String ALLOW_IP_ACCESS = "allow_ip_access";
+	public static final String ALLOW_IP_ACCESS_SUBJECT = "Add IP to allow access";
+	
+	
     /**
      * From Name of email.
      */
