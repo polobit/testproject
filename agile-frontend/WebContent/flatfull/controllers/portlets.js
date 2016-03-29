@@ -12,12 +12,12 @@ var PortletsRouter = Backbone.Router
 			adddashlet : function() {
 
 				// Back to dashboard if gridster not initalized
-				if (!gridster) {
+				/*if (!gridster) {
 					App_Portlets.navigate("dashboard", {
 						trigger : true
 					});
 					return;
-				} 
+				} */
 
 					
 				$('#content').html("<div id='portlets-add-listener'></div>");
