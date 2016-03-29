@@ -37,7 +37,7 @@ define([
 							var field = saveform[j].fields.agilefield.value;
 							
 							var agileFields = field.slice(0,15);
-							
+														
 							if(field.length>15){
 								for(var k=field.length-1; k>=15; k--){
 									if(field[k].selected)
