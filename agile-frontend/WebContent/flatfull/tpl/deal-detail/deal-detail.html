@@ -202,7 +202,7 @@
 <div class="m-b-xs">
         	<small class="text-base text-muted">Related to</small>
 </div>
-{{/if}}
+
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -210,14 +210,13 @@
 			{{#if_contact_type "COMPANY"}}
         		<a href="#company/{{id}}" class="activate-link thumb m-b-xs"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
-        {{/each}}
-      </div> 
-				
-
+      {{/each}}
+      
+      </div>
     </div>
   </div>
-</div>
-
+  {{/if}}
+  </div>
 
 {{#if description}}
 <div class="wrapper hidden-sm hidden-xs p-t-sm" >
