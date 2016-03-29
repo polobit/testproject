@@ -782,11 +782,11 @@ var portlet_utility = {
 
 									that.find('#emails-unsubscribed').css(
 											'display', 'block').addClass(
-											'pull-left p-xs w-half');
+											'pull-left p-xs b-r b-light w-half');
 									that
 											.find('#emails-sent')
 											.addClass(
-													'pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+													'pull-left p-xs b-r b-b b-light w-half overflow-hidden');
 
 									that
 											.find('#emails-sent-count')
