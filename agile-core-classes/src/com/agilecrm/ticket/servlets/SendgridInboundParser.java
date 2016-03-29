@@ -37,6 +37,25 @@ public class SendgridInboundParser extends HttpServlet
 		{
 			response.setContentType("multipart/alternative");
 			
+			
+			Enumeration<String> headerNames = request.getHeaderNames();
+
+			while (headerNames.hasMoreElements())
+			{
+				String headerName = headerNames.nextElement();
+				System.out.println(headerName);
+
+				Enumeration<String> headers = request.getHeaders(headerName);
+				while (headers.hasMoreElements())
+				{
+					String headerValue = headers.nextElement();
+					System.out.println("headerValue" + headerValue);
+				}
+			}
+
+			System.out.println("request.getParameterMap();");
+			System.out.println(request.getParameterMap());
+			
 			// System properties
 			Properties props = new Properties();
 			Session session = Session.getDefaultInstance(props, null);
