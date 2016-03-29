@@ -37,6 +37,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.sendgrid.lib.SendGridLib;
 import com.thirdparty.ses.util.AmazonSESUtil;
 import com.thirdparty.mandrill.Mandrill;
 
@@ -372,20 +373,13 @@ public class EmailGatewayUtil
 	    }
 
 	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null || ((EMAIL_API.SEND_GRID.equals(emailGateway.email_api) || EMAIL_API.SES.equals(emailGateway.email_api)) && ((documentIds != null && documentIds.size() != 0) || (blobKeys != null && blobKeys.size() != 0))))
+	    if (emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api) && ((documentIds != null && documentIds.size() != 0) || (blobKeys != null && blobKeys.size() != 0))))
 	    {
-	    	if(attachments!=null)
-	    	{
-	    		for(String str :attachments)
-	    		{
-	    			System.out.println("support debug:EmailGatewayUtil:0:" + str);
-	    		}
-	    		
-	    	}
-		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-			mandrillMetadata, documentIds, blobKeys, attachments);
-
-		return;
+			//Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
+			//		mandrillMetadata, documentIds, blobKeys, attachments);
+	    	
+	    	SendGrid.sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, documentIds, blobKeys, attachments);
+	    	return;
 	    }
 
 	    // If Mandrill
@@ -396,7 +390,7 @@ public class EmailGatewayUtil
 	    // If SendGrid
 	    else if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
 		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
-		        subject, replyTo, html, text, null, attachments);
+		        subject, replyTo, html, text, null, documentIds, blobKeys, attachments);
 	    
 	    else if (EMAIL_API.SES.equals(emailGateway.email_api))
 	    {
@@ -414,12 +408,6 @@ public class EmailGatewayUtil
 		    + e.getMessage());
 
 	    e.printStackTrace();
-
-	    System.out.println("Sending email again from exception in EmailGatewayUtil... " + e.getMessage());
-
-	    Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		    mandrillMetadata, documentIds, blobKeys, attachments);
-
 	}
     }
 
@@ -558,21 +546,21 @@ public class EmailGatewayUtil
 
 	    if (emailSender.canSend())
 	    {
-		// If null or Mandrill
-		if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
-		    MandrillUtil.splitMandrillTasks(tasks, emailSender);
-
-		// If SendGrid
-		else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
-		    SendGridUtil.sendSendGridMails(tasks, emailSender);
+	    	// If No Gateway or SendGrid
+	    	if (emailGateway == null || emailGateway.email_api == EMAIL_API.SEND_GRID)
+			    SendGridUtil.sendSendGridMails(tasks, emailSender);
 		
-		else if (emailGateway.email_api == EMAIL_API.SES)
-			AmazonSESUtil.sendSESMails(tasks, emailSender);
-
-		addEmailLogs(tasks);
-
-		emailSender.setCount(tasks.size());
-		emailSender.updateStats();
+	    	// If Mandrill
+	    	if (emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
+	    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
+		
+			if (emailGateway.email_api == EMAIL_API.SES)
+				AmazonSESUtil.sendSESMails(tasks, emailSender);
+	
+			addEmailLogs(tasks);
+	
+			emailSender.setCount(tasks.size());
+			emailSender.updateStats();
 
 	    }
 	    else

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
@@ -60,8 +61,8 @@ public class SendGridUtil
 	try
 	{
 	    EmailGateway emailGateway = emailSender.emailGateway;
-	    String apiUser = emailGateway == null ? null : emailGateway.api_user;
-	    String apiKey = emailGateway == null ? null : emailGateway.api_key;
+	    String apiUser = (emailGateway == null) ? Globals.SENDGRID_API_USER_NAME : emailGateway.api_user;
+	    String apiKey = (emailGateway == null) ? Globals.SENDGRID_API_KEY : emailGateway.api_key;
 
 	    MailDeferredTask firstSendGridDefferedTask = tasks.get(0);
 

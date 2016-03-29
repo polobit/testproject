@@ -1,15 +1,31 @@
 package com.thirdparty.sendgrid;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 
 import com.agilecrm.Globals;
+import com.agilecrm.document.Document;
+import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.file.readers.BlobFileInputStream;
+import com.agilecrm.file.readers.DocumentFileInputStream;
+import com.agilecrm.file.readers.IFileInputStream;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.thirdparty.mandrill.MandrillSendDeferredTask;
+import com.thirdparty.sendgrid.deferred.SendGridAttachmentDeferredTask;
+import com.thirdparty.sendgrid.lib.SendGridLib;
+import com.thirdparty.sendgrid.lib.SendGridLib.Email;
 
 /**
  * <code>SendGrid</code> is the core class that sends email using Send Grid API.
@@ -333,5 +349,132 @@ public class SendGrid
 	}
 
 	return attachmentData[0];
+    }
+    
+    public static String sendMail(String apiUser, String apiKey, String fromEmail, String fromName, String to,
+    	    String cc, String bcc, String subject, String replyTo, String html, String text, String SMTPHeaderJSON, List<Long> documentIds, List<BlobKey> blobKeys,
+    	    String... attachmentData)
+    {
+    	if(apiUser == null && apiKey == null)
+    	{
+    		apiUser = Globals.SENDGRID_API_USER_NAME;
+    		apiKey = Globals.SENDGRID_API_KEY;
+    	}
+    	
+    	SendGridLib sendGrid = new SendGridLib(apiUser, apiKey);
+    	SendGridLib.Email email = new SendGridLib.Email();
+
+    	email.setFrom(fromEmail).setFromName(fromName);
+    	
+    	for(String emailString: EmailUtil.getStringTokenArray(to, ","))
+    		email.addTo(EmailUtil.getEmail(emailString), EmailUtil.getEmailName(emailString));
+    	
+    	if (!StringUtils.isEmpty(cc))
+    		email.addCc(EmailUtil.getStringTokenArray(cc, ","));
+    	
+    	if (!StringUtils.isEmpty(bcc))
+    		email.addBcc(EmailUtil.getStringTokenArray(bcc, ","));
+    	
+    	email.setSubject(subject);
+    	
+    	// If replyTo empty, set From
+    	if(StringUtils.isEmpty(replyTo))
+    		replyTo = fromEmail;
+    	
+    	email.setReplyTo(replyTo);
+    	
+    	email.setHtml(html);
+    	email.setText(text);
+    	
+    	// SMTP Header json
+    	if(StringUtils.isNotBlank(SMTPHeaderJSON))
+    		email.setSmtpJsonString(SMTPHeaderJSON);
+    	
+    	if (documentIds != null && documentIds.size() > 0)
+    		sendDocumentAsMailAttachment(apiUser, apiKey, email, documentIds.get(0));
+	    else if (blobKeys != null && blobKeys.size() > 0)
+	    	sendBlobAsMailAttachment(apiUser, apiKey, email, blobKeys.get(0));
+	    else if (attachmentData != null && attachmentData.length > 0)
+	    {
+	    	String fileName = getFileName(attachmentData);
+
+		    // Get extension
+		    String fileExt = attachmentData[1].contains(".") ? attachmentData[1].split("\\.")[1] : attachmentData[1];
+
+		    String fileContent = attachmentData[2];
+		    
+			try
+			{
+				System.out.println("FileName: " + fileName + " FileExtension: " + fileExt);
+				
+				email.addAttachment(fileName + "." + fileExt, fileContent);
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
+    	
+    	return sendGrid.send(email);
+    }
+    
+    /**
+     * Creates a task for sending email and agile document as a email attachment
+     * 
+     * @param documentId
+     * @param mailJSONString
+     * @param messageJSONString
+     */
+    private static void sendDocumentAsMailAttachment(String username, String password, Email email, Long documentId)
+    {
+		// Task for sending mail and document as mail attachment
+		Document document = DocumentUtil.getDocument(documentId);
+		String fileName = document.extension;
+		String Url = document.url;
+		IFileInputStream documentStream = new DocumentFileInputStream(fileName, Url);
+		
+		try
+		{
+//			email.addAttachment(fileName, documentStream.getInputStream());
+			
+			SendGridAttachmentDeferredTask task = new SendGridAttachmentDeferredTask(username, password, email, documentStream);
+
+			Queue queue = QueueFactory.getQueue("email-attachment-queue");
+			queue.add(TaskOptions.Builder.withPayload(task));
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    /**
+     * Creates a task for sending email and uploaded blob as a email attachment
+     * 
+     * @param blobKey
+     * @param mailJSONString
+     * @param messageJSONString
+     */
+    private static void sendBlobAsMailAttachment(String username, String password, Email email, BlobKey blobKey)
+    {
+		// Task for sending mail and blob as mail attachment
+		IFileInputStream blobStream = new BlobFileInputStream(blobKey);
+		try
+		{
+//			email.addAttachment(blobStream.getFileName(), blobStream.getInputStream());
+			
+			SendGridAttachmentDeferredTask task = new SendGridAttachmentDeferredTask(username, password, email, blobStream);
+			
+			Queue queue = QueueFactory.getQueue("email-attachment-queue");
+			queue.add(TaskOptions.Builder.withPayload(task));
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
     }
 }

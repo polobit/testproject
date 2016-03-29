@@ -26,7 +26,7 @@ public class Globals
     // API user name
     // public static final String SENDGRID_API_USER_NAME = "shelley";
     // public static final String SENDGRID_API_USER_NAME = "naveen123";
-    public static final String SENDGRID_API_USER_NAME = "agilecrm";
+    public static final String SENDGRID_API_USER_NAME = "agilecrm1";
 
     // API key
     // public static final String SENDGRID_API_KEY = "mantra800pbx";

@@ -104,6 +104,13 @@ public class EmailUtil
 
 	return tokenSet;
     }
+    
+    public static String[] getStringTokenArray(String str, String delimiter)
+    {
+    	Set<String> tokenSet = getStringTokenSet(str, delimiter);
+    	
+    	return tokenSet.toArray(new String[tokenSet.size()]);
+    }
 
     /**
      * Sends an email using to remote object <code>SendGridEmail</code>
