@@ -60,7 +60,7 @@ $(function() {
 			{
 				enable_send_button($that);
 				trackReferrals("blogpost");
-				showNotyPopUp("information", "Thanks for writing blog. Our support team will get back to you soon", "top");
+				showNotyPopUp("information", "Your submission is successful, thank you.", "top");
 				
 			},
 			error : function(response)
@@ -191,5 +191,18 @@ function trackReferrals(type){
 	$("#referModal").find(".modal-body").html(getTemplate('refer-modal-body', {}));
 	if(type == undefined)
 		return;
+	switch(type){
+			case "facebook":
+				showNotyPopUp("information", "Your submission is successful, thank you.", "top");
+				return;
+			case "follow":
+				showNotyPopUp("information", "You are following Agile CRM on Twitter. Congratulations!", "top");
+				return;
+			case "tweet":
+				showNotyPopUp("information", "Your tweet has been posted successfully.", "top");
+				return;
+			default:
+				return;
+		}
 	//Agile_GA_Event_Tracker.track_event("refer_"+type,CURRENT_DOMAIN_USER.domain)
 }

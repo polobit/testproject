@@ -61,7 +61,7 @@ if(referralObj != null){
 	System.out.println("referral_type is:: "+referralType);
 	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 	if(referralType.equals("tweet")){
-		twitter.updateStatus("Hello");
+		twitter.updateStatus("Try @agilecrm for an out-of-the-box #marketingautomation and #salesautomation solutions experience. http://bit.ly/1Sqkb4F   #CRM");
 		restriction.incrementEmailCreditsCount(2000);
 	}else if(referralType.equals("follow")){
 		User user1 = twitter.createFriendship("msreddy1993");
