@@ -33,9 +33,7 @@ import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.deals.Opportunity;
 import com.agilecrm.projectedpojos.ContactPartial;
-import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
@@ -56,13 +54,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PropertyProjection;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.SearchException;
@@ -71,7 +63,6 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>ContactUtil</code> is a utility class to process the data of contact
@@ -90,7 +81,7 @@ public class ContactUtil
 {
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
-    
+
     // Partial Dao
     private static PartialDAO<ContactPartial> partialDAO = new PartialDAO<ContactPartial>(ContactPartial.class);
 
@@ -115,6 +106,23 @@ public class ContactUtil
      * @return list of contacts
      */
     public static List<Contact> getContactsForTag(String tag, Integer count, String cursor, String orderBy)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("tagsWithTime.tag", tag);
+	if (count != null)
+	    return dao.fetchAllByOrder(count, cursor, searchMap, true, false, orderBy);
+
+	return dao.listByPropertyAndOrder(searchMap, orderBy);
+    }
+
+    /**
+     * Gets all the contact objects, associated with the given tag
+     * 
+     * @param tag
+     *            name of the tag
+     * @return list of contacts
+     */
+    public static List<Contact> getContactsForTagByCreatedTime(String tag, Integer count, String cursor, String orderBy)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("tagsWithTime.tag", tag);
@@ -1871,6 +1879,7 @@ public class ContactUtil
 	}
 	return image_email;
     }
+
     /**
      * Creates contact in DB for the given name and email
      * 
@@ -1878,40 +1887,41 @@ public class ContactUtil
      * @param email
      * @return new created contact
      */
-	public static Contact createContact(String name, String email)
+    public static Contact createContact(String name, String email)
+    {
+	if (StringUtils.isBlank(name) || StringUtils.isBlank(email))
+	    return null;
+
+	Contact contact = new Contact();
+	contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, email, null));
+
+	String[] names = name.split(" ");
+
+	if (names.length > 1)
 	{
-		if(StringUtils.isBlank(name) || StringUtils.isBlank(email))
-			return null;
-		
-		Contact contact = new Contact();
-		contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, email, null));
-		
-		String[] names = name.split(" ");
-		
-		if (names.length > 1)
-		{
-			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, names[0], null));
-			
-			contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, names[1],
-					null));
-		}else{
-			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, name, null));
-		}
-		
-		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
-		contact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
-		
-		try
-		{
-			contact.save();
-		}
-		catch (PlanRestrictedException e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-		}
-		
-		return contact;
+	    contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, names[0], null));
+
+	    contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, names[1], null));
 	}
+	else
+	{
+	    contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, name, null));
+	}
+
+	DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+	contact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
+
+	try
+	{
+	    contact.save();
+	}
+	catch (PlanRestrictedException e)
+	{
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
+	}
+
+	return contact;
+    }
 
     /**
      * Gets a partial opportunity based on its id
@@ -1921,29 +1931,30 @@ public class ContactUtil
      */
     public static List<ContactPartial> getPartialContacts(List<Key<Contact>> ids_list)
     {
-    	List<ContactPartial> list = new ArrayList<ContactPartial>();
-    	if(ids_list == null || ids_list.size() == 0)
-    		 return list;
-		try
-		{
-			List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
-			if(keys.size() == 0)
-				return list;
-			
-			Map map = new HashMap();
-			map.put("__key__ IN", keys);
-			
-			return partialDAO.listByProperty(map);
-	    	
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-		    e.printStackTrace();
-		    return list;
-		}
+	List<ContactPartial> list = new ArrayList<ContactPartial>();
+	if (ids_list == null || ids_list.size() == 0)
+	    return list;
+	try
+	{
+	    List<com.google.appengine.api.datastore.Key> keys = dao.convertKeysToNativeKeys(ids_list);
+	    if (keys.size() == 0)
+		return list;
+
+	    Map map = new HashMap();
+	    map.put("__key__ IN", keys);
+
+	    return partialDAO.listByProperty(map);
+
+	}
+	catch (Exception e)
+	{
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return list;
+	}
     }
-	 /**
+
+    /**
      * Gets a user based on its id
      * 
      * @param id
@@ -1951,15 +1962,15 @@ public class ContactUtil
      */
     public static ContactPartial getPartialContact(Long id)
     {
-		try
-		{
-			return partialDAO.get(id);
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-		    e.printStackTrace();
-		    return null;
-		}
+	try
+	{
+	    return partialDAO.get(id);
+	}
+	catch (Exception e)
+	{
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return null;
+	}
     }
 }

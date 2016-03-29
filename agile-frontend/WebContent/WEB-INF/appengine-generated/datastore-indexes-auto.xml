@@ -504,4 +504,9 @@
         <property name="ticket_key" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
+    
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="tagsWithTime.createdTime" direction="desc"/>
+</datastore-index>
 </datastore-indexes>
