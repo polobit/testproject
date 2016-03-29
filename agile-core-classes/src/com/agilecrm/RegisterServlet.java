@@ -25,6 +25,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.ipaccess.AllowAccessMailServlet;
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -91,6 +92,7 @@ public class RegisterServlet extends HttpServlet
 	{
 		// Check ip with allowed ones
 		if(!IpAccessUtil.isValidIpOpenPanel(request)){
+			AllowAccessMailServlet.accessMail(request);
 			throw new Exception("The IP address you have provided is not authorized to access this account.");
 			}
 		

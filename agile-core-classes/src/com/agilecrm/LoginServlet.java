@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.ipaccess.AllowAccessMailServlet;
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -85,8 +86,13 @@ public class LoginServlet extends HttpServlet {
 
 			// Check ip with allowed ones
 			if(!IpAccessUtil.isValidIpOpenPanel(request))
+			{
+				AllowAccessMailServlet.accessMail(request);
 				throw new Exception(
+						
 						"The IP address you have provided is not authorized to access this account.");
+				
+			}
 			
 			if (!StringUtils.isEmpty(multipleLogin)) {
 				handleMulipleLogin(response);
