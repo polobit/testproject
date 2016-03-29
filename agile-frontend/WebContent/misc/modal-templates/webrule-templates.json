@@ -1,0 +1,143 @@
+{
+    "templates": [
+        {
+            "category": "Information",            
+            "list": [
+                {
+                    "id": "sleak",
+                    "title": "sleak-information",
+                    "link": "information/sleak/sleak.html",
+                    "thumbnail": "misc/modal-templates/information/sleak/images/sleak.png"
+                },
+                {
+                    "id": "radiant",
+                    "title": "radiant-information",
+                    "link": "information/radiant/radiant.html",
+                    "thumbnail": "misc/modal-templates/information/radiant/images/radiant.png"
+                }
+            ]
+        },
+        {
+            "category": "Confirmation",            
+            "list": [
+                {
+                    "id": "fullscreen",
+                    "title": "fullscreen-confirmation",
+                    "link": "confirmation/fullscreen/fullscreen.html",
+                    "thumbnail": "misc/modal-templates/confirmation/fullscreen/images/fullscreen.png"
+                },
+                {
+                    "id": "elegant",
+                    "title": "elegant-confirmation",
+                    "link": "confirmation/elegant/elegant.html",
+                    "thumbnail": "misc/modal-templates/confirmation/elegant/images/elegant.png"
+                }   
+            ]
+        },
+        {
+            "category": "Email Form",            
+            "list": [
+                {
+                    "id": "bold",
+                    "title": "bold-form",
+                    "link": "form/bold/bold.html",
+                    "thumbnail": "misc/modal-templates/form/bold/images/bold.png"
+                },
+                {
+                    "id": "splitmessage",
+                    "title": "splitmessage-form",
+                    "link": "form/split-message/split-message.html",
+                    "thumbnail": "misc/modal-templates/form/split-message/images/split-message.png"
+                },
+                {
+                    "id": "standout",
+                    "title": "standout-form",
+                    "link": "form/standout/standout.html",
+                    "thumbnail": "misc/modal-templates/form/standout/images/standout.png"
+                },
+                {
+                    "id": "imagesplit",
+                    "title": "imagesplit-form",
+                    "link": "form/image-split/image-split.html",
+                    "thumbnail": "misc/modal-templates/form/image-split/images/image-split.png"
+                },
+                {
+                    "id": "mouseflow",
+                    "title": "mouseflow-form",
+                    "link": "form/mouseflow/mouseflow.html",
+                    "thumbnail": "misc/modal-templates/form/mouseflow/images/mouseflow.png"
+                },
+                {
+                    "id": "peepout",
+                    "title": "peepout-form",
+                    "link": "form/peep-out/peep-out.html",
+                    "thumbnail": "misc/modal-templates/form/peep-out/images/peep-out.png"
+                },
+                {
+                    "id": "minimal",
+                    "title": "minimal-form",
+                    "link": "form/minimal/minimal.html",
+                    "thumbnail": "misc/modal-templates/form/minimal/images/minimal.png"
+                },
+                {
+                    "id": "elegant",
+                    "title": "elegant-form",
+                    "link": "form/elegant/elegant.html",
+                    "thumbnail": "misc/modal-templates/form/elegant/images/elegant.png"
+                },
+                {
+                    "id": "newsletter",
+                    "title": "newsletter-form",
+                    "link": "form/newsletter/newsletter.html",
+                    "thumbnail": "misc/modal-templates/form/newsletter/images/newsletter.png"
+                },
+                {
+                    "id": "popout",
+                    "title": "popout-form",
+                    "link": "form/pop-out/pop-out.html",
+                    "thumbnail": "misc/modal-templates/form/pop-out/images/pop-out.png"
+                },
+                {
+                    "id": "valentine",
+                    "title": "valentine-form",
+                    "link": "form/valentine/valentine.html",
+                    "thumbnail": "misc/modal-templates/form/valentine/images/valentine.png"
+                }
+            ]
+        },
+        {
+            "category": "Schedule Meeting",            
+            "list": [
+                {
+                    "id": "popout",
+                    "title": "popout-schedule",
+                    "link": "schedule/popout/pop-out.html",
+                    "thumbnail": "misc/modal-templates/schedule/popout/images/pop-out.jpg"
+                }
+            ]
+        },
+        {
+            "category": "Survey",            
+            "list": [
+                {
+                    "id": "choicefour",
+                    "title": "choicefour-survey",
+                    "link": "survey/choice-four/choice-four.html",
+                    "thumbnail": "misc/modal-templates/survey/choice-four/images/choice-four.png"
+                },
+                {
+                    "id": "choicemulti",
+                    "title": "choicemulti-survey",
+                    "link": "survey/choice-multi/choice-multi.html",
+                    "thumbnail": "misc/modal-templates/survey/choice-multi/images/choice-multi.png"
+                },
+                {
+                    "id": "choicetwo",
+                    "title": "choicetwo-survey",
+                    "link": "survey/choice-two/choice-two.html",
+                    "thumbnail": "misc/modal-templates/survey/choice-two/images/choice-two.png"
+                }                
+            ]
+        }
+    ]
+}
