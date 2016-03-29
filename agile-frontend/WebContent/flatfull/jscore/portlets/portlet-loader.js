@@ -416,6 +416,7 @@ function set_up_portlets(el, portlets_el){
     if($(window).width()<768 && gridster!=undefined){
 		gridster.disable();
 		gridster.disable_resize();
+		 $(".gridster-portlets").css("height", "auto");
 	}
 	else if(gridster!=undefined){
 		gridster.enable();

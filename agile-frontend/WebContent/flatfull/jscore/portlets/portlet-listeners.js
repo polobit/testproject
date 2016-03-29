@@ -1142,11 +1142,11 @@ function clickfunction(that,url,forAll,route){
 				var curDate = new Date();
 				obj.portlet_type = portlet_type;
 				var max_row_position = 0;
-				var next_position = gridster.next_position(1, 1);
+				//var next_position = gridster.next_position(1, 1);
 				obj.column_position = -1;
 				obj.row_position = -1;
-				obj.size_x = next_position.size_x;
-				obj.size_y = next_position.size_y;
+				obj.size_x = 1;
+				obj.size_y = 1;
 
 				if (portlet_type == "RSS" && p_name == "Agile CRM Blog")
 					obj.size_y = 2;
