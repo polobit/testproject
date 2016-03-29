@@ -126,6 +126,13 @@ function deleteContactImage(){
    			 if(properties[i].name == "image"){
    			 	properties.splice(i,1);
    			 }
+		}
+		var contact_model = App_Contacts.contactDetailView.model;
+	    var conProperties = contact_model.toJSON()['properties'];
+	    for (i = 0; i < conProperties.length; i++) {
+   			 if(conProperties[i].name == "image"){
+   			 	conProperties.splice(i,1);
+   			 }
 		}  
  
 	},error: function() {
