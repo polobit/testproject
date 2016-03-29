@@ -35,6 +35,8 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		try
 		{
+			response.setContentType("multipart/alternative");
+			
 			// System properties
 			Properties props = new Properties();
 			Session session = Session.getDefaultInstance(props, null);
