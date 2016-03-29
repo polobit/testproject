@@ -568,9 +568,11 @@
 	type="text/html">
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
-<div class="panel wrapper" >
-<span class="label label-danger pull-right m-b">Beta</span>
+<div class="panel panel-default">
+<div class="panel-heading">
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}"  /></center>
+</div>
+<div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
 		Setup contacts sync with your Freshbooks account.
@@ -580,7 +582,7 @@
     {{#if id}}
 <form id="freshbooks-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div><span>Account Linked </span>  <span>{{othersParams}}.freshbooks.com </span></div>
+          <div>Account Linked:  <div>{{othersParams}}.freshbooks.com </div></div>
 			<br>
           
              	<div class="control-group form-group">
@@ -601,7 +603,7 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
+			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
 <button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs">Sync</button>
        	  	</div>
@@ -640,6 +642,7 @@
 	    </form>
 </div>
 {{/if}}
+</div>
 
 </div>
 </div>
@@ -683,10 +686,9 @@
 <script id="admin-settings-import-freshbooks-contacts-form-template"
 	type="text/html">
 <div class="row">
-<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="col-md-6 col-sm-6 col-xs-12">
 <div class="panel panel-default" >
 <div class="panel-heading">
-<span class="label label-danger pull-right m-b">Beta</span>
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
 </div>
 <div class="panel-body">
