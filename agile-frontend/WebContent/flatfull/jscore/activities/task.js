@@ -288,8 +288,10 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 			json.notes = notes;
 		}
 	}
+	var date = new Date(json.due*1000);
+	json.due = getGMTEpochFromDateForCustomFilters(date);
 	var startarray = (json.task_ending_time).split(":");
-	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+	json.due = new Date(json.due).setHours(startarray[0], startarray[1]) / 1000.0;
 
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
