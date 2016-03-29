@@ -214,17 +214,12 @@ public class TicketNotes
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticket_key.getId());
-
-			// Updating last notes key to ticket entity
-			ticket.last_notes_key = key;
-			ticket = ticket.putEntity();
-
+			boolean isPublicNotes = (note_type == NOTE_TYPE.PUBLIC);
+			
 			// If ticket created from agile dashboard then no need to send this
 			// ticket to end user
-			if (ticket.user_replies_count == 1)
+			if (ticket.user_replies_count == 1 && !isPublicNotes)
 				return this;
-
-			boolean isPublicNotes = (note_type == NOTE_TYPE.PUBLIC);
 
 			ActivityType activityType = (isPublicNotes) ? ((created_by == CREATED_BY.AGENT) ? ActivityType.TICKET_ASSIGNEE_REPLIED
 					: ActivityType.TICKET_REQUESTER_REPLIED)
@@ -233,6 +228,10 @@ public class TicketNotes
 			// Sending reply to requester if and only if notes type is public
 			if (isPublicNotes)
 			{
+				// Updating last notes key to ticket entity
+				ticket.last_notes_key = key;
+				ticket = ticket.putEntity();
+				
 				if (created_by == CREATED_BY.AGENT)
 					// Send email thread to user
 					TicketNotesUtil.sendReplyToRequester(ticket);
