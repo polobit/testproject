@@ -114,12 +114,13 @@
 {{/is_domain_owner}}
 <div class="col-sm-offset-3 col-md-9 p-l-xs" id="admin-previlages">
 <div class="tab-container m-b-none">
+<label> Permissions</label>
   <ul class="nav nav-tabs b-b-none">
-        <li class="active col-md-6 p-none"><a class="text-center m-r-none"href="#sales-previlages" data-toggle="tab">Sales Privileges</a></li>
-        <li class="col-md-6 p-none"><a class="text-center m-r-none"href="#marketing-previlages" data-toggle="tab">Marketing Privileges</a></li>
+        <li class="active  p-none"><a class="text-center m-r-none"href="#sales-previlages" data-toggle="tab"style="border-left:0px">Sales</a></li>
+        <li class=" p-none"><a class="text-center m-r-none"href="#marketing-previlages" data-toggle="tab">Marketing</a></li>
     </ul>
     </div>
-    <div class="tab-pane" style="border:1px solid #ddd;border-top:0px;">
+    <div class="tab-pane">
     <div>
     <div class="col panel wrapper b-t" style="box-shadow: inherit;">
     {{#is_acl_allowed}}
