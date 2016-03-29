@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
@@ -46,15 +50,26 @@ public class SendgridInboundParser extends HttpServlet
 
 			System.out.println("Result: " + sb);
 
-			JSONObject jsonObject = new JSONObject(input);
-
-			Iterator<?> keys = jsonObject.keys();
-
-			while (keys.hasNext())
+			ServletFileUpload upload = new ServletFileUpload();
+			FileItemIterator fileIterator = upload.getItemIterator(request);
+			while (fileIterator.hasNext())
 			{
-				String key = (String) keys.next();
+				FileItemStream item = fileIterator.next();
 
-				System.out.println(jsonObject.get(key));
+				if ("file".equals(item.getFieldName()))
+				{
+					byte[] content = IOUtils.toByteArray(item.openStream());
+					// Save content into datastore
+					// ...
+				}
+				else if ("name".equals(item.getFieldName()))
+				{
+					String name = IOUtils.toString(item.openStream());
+					System.out.println("name.." + name);
+
+					// Do something with the name string
+					// ...
+				}
 			}
 		}
 		catch (Exception e)
