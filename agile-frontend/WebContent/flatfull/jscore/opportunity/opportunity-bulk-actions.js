@@ -174,11 +174,18 @@
 		}
 	};
 	
-	var bulkDeleteDeals = function(){
+	var bulkDeleteDeals = function(isACLCondition){
 		console.log('Delete',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk';
 		postBulkActionDealsData(url,undefined,function(){
-			$("#deal_bulk_delete_modal").modal('hide');
+			if(isACLCondition)
+			{
+				$("#deal_bulk_delete_acl_modal").modal('hide');
+			}
+			else
+			{
+				$("#deal_bulk_delete_modal").modal('hide');
+			}
 		},message);
 	};
 	
@@ -237,11 +244,13 @@
 		archiveACLDeals = $('#deal-bulk-archive-acl');
 		restoreACLDeals = $('#deal-bulk-restore-acl');
 		deleteDeals = $('#deal-bulk-delete');
+		deleteACLDeals = $('#deal-bulk-delete-acl');
 		dealConAddTag = $('#deal-contact-add-tag');
 		dealConAddCamp = $('#deal-contact-add-camp');
 		bulkChangeToMilestones = $('#bulk_deals_milestone_change');
 		bulkArchive = $('#bulk_deals_archive');
 		bulkRestore = $('#bulk_deals_restore');
+		bulkDelete = $('#bulk_deals_delete');
 		filterJSON = $.parseJSON(_agile_get_prefs('deal-filters'));
 		
 		changeOwner.on('click',function(e){
@@ -272,6 +281,11 @@
 		deleteDeals.on('click',function(e){
 			e.preventDefault();
 			bulkDeleteDeals();
+		});
+
+		deleteACLDeals.on('click',function(e){
+			e.preventDefault();
+			bulkDeleteDeals(true);
 		});
 		
 		dealConAddTag.on('click',function(e){
@@ -318,6 +332,17 @@
 			}else
 			{
 				$('#deal_bulk_restore_modal').modal('show');
+			}
+		});
+
+		bulkDelete.on('click',function(e){
+			e.preventDefault();
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				$('#deal_bulk_delete_acl_modal').modal('show');
+			}else
+			{
+				$('#deal_bulk_delete_modal').modal('show');
 			}
 		});
 		

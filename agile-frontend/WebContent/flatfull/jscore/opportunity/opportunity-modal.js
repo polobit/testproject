@@ -983,6 +983,14 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 				}
 				else if (checkPipeline(deal.pipeline_id))
 				{
+					var owner = deal.owner_id;
+
+				  	if(!owner){
+				  		owner = deal.owner.id;
+				  	}
+				  	if(!hasScope("VIEW_DEALS") && CURRENT_DOMAIN_USER.id != owner){
+				  		return;
+				  	}
 					var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 					if (!dealPipelineModel)
 						return;
@@ -1043,6 +1051,15 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 			}
 			else
 			{
+				var owner = deal.owner_id;
+
+			  	if(!owner){
+			  		owner = deal.owner.id;
+			  	}
+			  	if(!hasScope("VIEW_DEALS") && CURRENT_DOMAIN_USER.id != owner){
+			  		return;
+			  	}
+			  	
 				if (isUpdate)
 					App_Deals.opportunityCollectionView.collection.remove(json);
 				if (App_Deals.opportunityCollectionView.collection.length > 0)
