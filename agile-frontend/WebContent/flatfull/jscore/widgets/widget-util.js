@@ -44,6 +44,7 @@ function update_collection_with_prefs(data) {
 		}
 
 	}
+
 }
 
 function save_widget_prefs(pluginName, prefs, callback) {
@@ -151,7 +152,18 @@ function save_widget_prefs(pluginName, prefs, callback) {
 
 		}, error : function(data){
 			console.log(data);
-			alert("error occurred"+data);
+
+			var msgType = "error";
+			var msg = ("Error occurred while saving "+pluginName);
+
+			if(pluginName == "Braintree"){				
+				msg = "Invalid  "+pluginName+" credentials";
+				$('.save-agile-widget').removeAttr('disabled');		
+			}				
+			$('#stripe_url').removeAttr('disabled');			
+
+			showNotyPopUp(msgType , msg, "bottomRight");
+
 		}
 	});
 }
