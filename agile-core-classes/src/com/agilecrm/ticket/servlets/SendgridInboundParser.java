@@ -1,20 +1,18 @@
 package com.agilecrm.ticket.servlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONObject;
 
 public class SendgridInboundParser extends HttpServlet
 {
@@ -35,47 +33,31 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		try
 		{
+			String input = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"), 8);
+			StringBuilder sb = new StringBuilder();
 
-			Enumeration<String> parameterNames = request.getParameterNames();
-
-			while (parameterNames.hasMoreElements())
+			String line = null;
+			while ((line = reader.readLine()) != null)
 			{
-
-				String paramName = parameterNames.nextElement();
-				System.out.println(paramName);
-
-				String[] paramValues = request.getParameterValues(paramName);
-				for (int i = 0; i < paramValues.length; i++)
-				{
-					String paramValue = paramValues[i];
-					System.out.println(paramValue);
-				}
+				sb.append(line + "\n");
 			}
+			input = sb.toString();
 
-			System.out.println("Form fields...");
+			System.out.println("Result: " + sb);
 
-			List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+			JSONObject jsonObject = new JSONObject(input);
 
-			for (FileItem item : multiparts)
+			Iterator<?> keys = jsonObject.keys();
+
+			while (keys.hasNext())
 			{
-				String name = item.getFieldName();
-				String value = item.getString();
+				String key = (String) keys.next();
 
-				if (!item.isFormField())
-				{
-					System.out.println("!item.isFormField()");
-					System.out.println(name);
-					System.out.println(value);
-					// your operations on file
-				}
-				else
-				{
-					System.out.println(name);
-					System.out.println(value);
-				}
+				System.out.println(jsonObject.get(key));
 			}
 		}
-		catch (FileUploadException e)
+		catch (Exception e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
