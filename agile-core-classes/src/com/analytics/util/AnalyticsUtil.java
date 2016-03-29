@@ -116,7 +116,7 @@ public class AnalyticsUtil
      * 
      * @return
      */
-    public static String getStatsUrlForAllPageViews(String searchEmail, String domain)
+    public static String getStatsUrlForPageViewsOfEmail(String searchEmail, String domain)
     {
 	String url = null;
 	String hostUrl = getStatsServerUrl(domain);
@@ -137,6 +137,22 @@ public class AnalyticsUtil
 	String hostUrl = getStatsServerUrl(domain);
 	String url = null;
 	url = hostUrl + "&action=FETCH_XACTIVITIES&offset=" + offset + "&limit=" + limit;
+	return url;
+    }
+    
+    /**
+     * This method responsible for fetching all activities related to
+     * page views.
+     * 
+     * @param offset
+     * @param limit
+     * @return
+     */
+    public static String getStatsUrlForAllPageViews(String offset, String limit, String domain)
+    {
+	String hostUrl = getStatsServerUrl(domain);
+	String url = null;
+	url = hostUrl + "&action=FETCH_NEW_PAGEVIEWS&offset=" + offset + "&limit=" + limit;
 	return url;
     }
     
@@ -174,7 +190,7 @@ public class AnalyticsUtil
      */
     public static String getStatsServerUrl(String domain)
     {
-	String statsServerUrl = "https://agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
+	String statsServerUrl = "https://1-2-dot-agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
 		+ STATS_SEREVR_HTTP_REQUEST_PWD;
 	return statsServerUrl;
     }
