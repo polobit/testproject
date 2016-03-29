@@ -257,7 +257,7 @@ function initializeDealsListeners()
 	$("#opportunity-listners").off('mouseenter','.milestone-column > .dealtitle-angular');
 	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
     	var data = $(this).attr('data');
-		if(data){
+		if(data && $("#"+$(this).parent().attr("id")+"_count").text() != "1000+"){
 
 		var originalHeading = $(this).siblings().find('.milestones').attr('milestone');
 		var jsonDealData = JSON.parse(data);
