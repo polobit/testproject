@@ -174,11 +174,18 @@
 		}
 	};
 	
-	var bulkDeleteDeals = function(){
+	var bulkDeleteDeals = function(isACLCondition){
 		console.log('Delete',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk';
 		postBulkActionDealsData(url,undefined,function(){
-			$("#deal_bulk_delete_modal").modal('hide');
+			if(isACLCondition)
+			{
+				$("#deal_bulk_delete_acl_modal").modal('hide');
+			}
+			else
+			{
+				$("#deal_bulk_delete_modal").modal('hide');
+			}
 		},message);
 	};
 	
@@ -278,7 +285,7 @@
 
 		deleteACLDeals.on('click',function(e){
 			e.preventDefault();
-			bulkDeleteDeals();
+			bulkDeleteDeals(true);
 		});
 		
 		dealConAddTag.on('click',function(e){
