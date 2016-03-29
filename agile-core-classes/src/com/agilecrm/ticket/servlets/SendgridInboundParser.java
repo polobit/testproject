@@ -52,6 +52,10 @@ public class SendgridInboundParser extends HttpServlet
 			Enumeration headers = message.getAllHeaders();
 			System.out.println("Message Headers: \r\n");
 			
+			System.out.println("getFrom..." + message.getFrom());
+			System.out.println("getContentType..." + message.getContentType());
+			System.out.println("getContent..." + message.getContent());
+			
 			while (headers.hasMoreElements())
 			{
 				Header h = (Header) headers.nextElement();
