@@ -642,9 +642,9 @@ var ContactsRouter = Backbone.Router.extend({
 		$(el).find('.content-tabs').tabCollapse(); 
 
 		$('#content').html(el);
-		if($(".toggle-contact-image .contact-delete-option").length == 0) {
+	/*	if($(".toggle-contact-image .contact-delete-option").length == 0) {
 			$(".toggle-contact-image .contact-edit-option").css("margin-left","10px");
-			}
+			}*/
 		// Check updates in the contact.
 		checkContactUpdated();
 
