@@ -3625,4 +3625,8 @@ opacity: .3;
 
 } 
 
+.tab-content .tab-pane #sales-previlages .active{
+    display: block !important;
+    visibility: visible !important;
+}
 

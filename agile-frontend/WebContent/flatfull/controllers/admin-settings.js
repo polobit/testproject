@@ -244,6 +244,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 				// Binds action
 				bindAdminChangeAction(el, view.model.toJSON());
+				setTimeout(function(){
+				$('a[href="#sales-previlages"]').tab("show");
+				},100)
+				
+					
+				
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
