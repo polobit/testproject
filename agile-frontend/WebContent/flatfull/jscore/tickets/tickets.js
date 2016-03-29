@@ -1342,10 +1342,6 @@ var Tickets = {
 		
 		var ticket = App_Ticket_Module.ticketView.model.toJSON();
 
-         		
-  		if(ticket.status == "CLOSED")
-  			return;
-
 		head.load(LIB_PATH + 'lib/date-charts.js', function()
 		{
 			$('#ticket_change_sla', el).datepicker({ 
