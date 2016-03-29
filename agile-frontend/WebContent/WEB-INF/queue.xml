@@ -31,6 +31,15 @@
   <target>agile-campaigns-normal</target>
   </queue>
   <queue>
+    <name>normal-campaign-push-queue</name>
+    <rate>20/s</rate>
+    <bucket-size>20</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>0</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  <queue>
     <name>notification-queue</name>
     <rate>10/s</rate>
     <bucket-size>10</bucket-size>
