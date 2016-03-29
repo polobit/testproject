@@ -122,7 +122,17 @@ function initializeWidgetSettingsListeners(){
 			result.widget = JSON.parse(widgetData);
 			result.data = data;		
 			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
-  				$("#widget-acls-modal").html(template_ui).modal('show');  								
+  				$("#widget-acls-modal").html(template_ui).modal('show');  	
+
+  				$('#widget-acls-modal .widget_acl_save').off();
+				$('#widget-acls-modal').on('click', '.widget_acl_save', function(e){
+					var widgetID = $(this).attr('widget-id');
+
+					$('input:checkbox[name=agileUserChk]:checked').each(function(e){
+       					alert($(this).val());
+    				});															
+				});
+  											
   			});					
 		});
 	});	
