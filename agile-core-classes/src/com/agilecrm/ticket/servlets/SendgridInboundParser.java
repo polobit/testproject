@@ -41,12 +41,16 @@ public class SendgridInboundParser extends HttpServlet
 
 			// Reading the input Mail
 			MimeMessage message = new MimeMessage(session, request.getInputStream());
-			MimeMessageParser mmp = new MimeMessageParser(message).parse();
 			
-			System.out.println("mmp.getFrom()..." + mmp.getFrom());
-			System.out.println("mmp.getSubject()..." + mmp.getSubject());
-			System.out.println("mmp.getTo()..." + mmp.getTo());
-			System.out.println("mmp.getPlainContent()..." + mmp.getPlainContent());
+			System.out.println("message..." + message.getFrom());
+			System.out.println("message.getSubject()..." + message.getSubject());
+			
+//			//MimeMessageParser mmp = new MimeMessageParser(message).parse();
+//			
+//			System.out.println("mmp.getFrom()..." + mmp.getFrom());
+//			System.out.println("mmp.getSubject()..." + mmp.getSubject());
+//			System.out.println("mmp.getTo()..." + mmp.getTo());
+//			System.out.println("mmp.getPlainContent()..." + mmp.getPlainContent());
 
 			Enumeration headers = message.getAllHeaders();
 			System.out.println("Message Headers: \r\n");
