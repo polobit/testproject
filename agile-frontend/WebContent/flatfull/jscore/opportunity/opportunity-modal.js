@@ -794,7 +794,11 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						{
 							var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(deal_pre_modified_value);
 						    $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
-						    $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+						    if($('#' + oldMilestone.replace(/ +/g, '') + '_count').text() != "1000+")
+						    {
+						    	$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+						    }
+						    
 						
 							/* average of new deal total */
 					     	var avg_deal_size = 0;
@@ -842,9 +846,23 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		                    $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
 		                    $('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
 
-
-						    $('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
-						    $('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+		                    if($('#' + newMilestone.replace(/ +/g, '') + '_count').text() != "1000+")
+		                    {
+		                    	if(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1 > 1000)
+		                    	{
+		                    		$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text())+"+");
+		                    	}
+		                    	else
+		                    	{
+		                    		$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
+		                    	}
+		                    }
+						    
+						    if($('#' + oldMilestone.replace(/ +/g, '') + '_count').text() != "1000+")
+						    {
+						    	$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+						    }
+						    
 							/* average of new deal total */
 					     	var avg_old_deal_size = 0;
 					     	var old_deal_count = parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) ; 
@@ -947,7 +965,10 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 						$("#" + oldMilestone.replace(/ +/g, '')).find("#" + id).parent().remove();
 						try
 						{
-							$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+							if($('#' + oldMilestone.replace(/ +/g, '') + '_count').text() != "1000+")
+							{
+								$('#' + oldMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + oldMilestone.replace(/ +/g, '') + '_count').text()) - 1);
+							}
 
 	                        var dealchangevalue = deal.expected_value;
 	                        var newdealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealchangevalue); 
@@ -1015,7 +1036,17 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
                         
                         $('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealeditvalue));
 
-						$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
+                        if($('#' + newMilestone.replace(/ +/g, '') + '_count').text() != "1000+")
+                        {
+                        	if(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1 > 1000)
+                        	{
+                        		$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text())+"+");
+                        	}
+                        	else
+                        	{
+                        		$('#' + newMilestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) + 1);
+                        	}
+                        }
 					    /* average of new deal total */
 				      	var avg_new_deal_size = 0;
 				     	var new_deal_count = parseInt($('#' + newMilestone.replace(/ +/g, '') + '_count').text()) ;  
