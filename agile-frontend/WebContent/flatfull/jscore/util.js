@@ -702,12 +702,13 @@ function showPageBlockModal() {
 function  printCurrentDateMillis(type){
       console.info(type + " " + new Date().getTime());
 }
+
 function  startFunctionTimer(name){
-      console.time(name);
+	try{console.time(name);	}catch(e){}
 }
 
 function endFunctionTimer(name){
-      console.timeEnd(name);
+	try{console.timeEnd(name);	}catch(e){}
 }
 
 function loadServiceLibrary(callback){

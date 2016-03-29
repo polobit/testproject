@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -3171,4 +3173,23 @@ public class OpportunityUtil
     	}
 
         }
+    
+    public static Milestone getOpportunityPipeline(Opportunity opportunity) throws Exception
+    {
+    
+    Long id = opportunity.getPipeline_id();
+	if (id!= null && id != 0L)
+	{
+	    try
+	    {
+		// Gets Domain User Object
+		return MilestoneUtil.getMilestone(id);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
 }
