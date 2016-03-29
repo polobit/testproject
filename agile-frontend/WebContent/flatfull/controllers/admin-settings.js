@@ -1168,14 +1168,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
-			var view = new Base_Model_View({ url : '/core/api/alias', template : "admin-settings-domain-alias", postRenderCallback : function(el)
-			{
-				if($("#alias_domain #alias").html() == "")
-					$("#alias_domain #alias").val(CURRENT_DOMAIN_USER.domain);
-			},prePersist : function(model){
+			var view = new Base_Model_View({ url : '/core/api/alias', template : "admin-settings-domain-alias", postRenderCallback : function(el){},
+			prePersist : function(model){
 				var aliasJSON = [];
 				$.each($("#alias_domain").find('input[name="alias"]'), function(index, data) {
-					aliasJSON.push(($(data).val()));
+					aliasJSON.push(($(data).val().toLowerCase()));
 				});
 			    model.set({ 
 			       'alias' : aliasJSON
