@@ -79,7 +79,7 @@ public class EmailsAPI
     @Path("send-email")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
+    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("cc") String cc, @QueryParam("bcc") String bcc,
 	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
     {
 	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null,null);
@@ -141,7 +141,7 @@ public class EmailsAPI
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to,
+    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to, @FormParam("cc") String cc, @FormParam("bcc") String bcc,
 	    @FormParam("subject") String subject, @FormParam("body") String body) throws Exception
     {
 	String oldNamespace = NamespaceManager.get();
@@ -150,7 +150,7 @@ public class EmailsAPI
 	{
 	    // To avoid sending through subaccount
 	    NamespaceManager.set("");
-	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null,null);
+	    Mandrill.sendMail(false, fromEmail, fromEmail, to, cc, bcc, subject, fromEmail, body, null, null, null,null);
 	}
 	catch (Exception e)
 	{

@@ -717,3 +717,21 @@ function loadServiceLibrary(callback){
 			callback();
 	});
 }
+
+function sendEmail(json, callback){
+	$.ajax({
+
+			type : 'POST',
+			data : json,
+			url : 'core/api/emails/contact-us',
+			success : function()
+			{
+				if(callback && typeof(callback == "function"))
+					callback();
+			},
+			error : function(response)
+			{
+				showNotyPopUp("warning", data.responseText, "top");
+			}
+			});
+}
