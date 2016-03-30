@@ -67,7 +67,7 @@ public class QuickBooksWidgetAPI
 		else
 		{
 			//result="Please reconfigure the Quickbooks widget.";//throw new Exception("");
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("We have updated our Quickbooks widget API. Please reconfigure the Quickbooks widget.").build());
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("We have updated our QuickBooks widget API. Please reconfigure the QuickBooks widget.").build());
 		}
 		return result;
     }
@@ -115,7 +115,7 @@ public class QuickBooksWidgetAPI
 		}
 	}
 	else{
-		 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("We have updated our Quickbooks widget API. Please reconfigure the Quickbooks widget.").build());
+		 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("We have updated our QuickBooks widget API. Please reconfigure the QuickBooks widget.").build());
 	}
 	return result;
     }
