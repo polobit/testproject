@@ -748,12 +748,12 @@ head.ready(["core"], function(){
 function load_globalize()
 {
 
-  if (typeof Globalize != "function") {
+  /*if (typeof Globalize != "function") {
     setTimeout(function() {
       load_globalize();
     }, 100);
     return;
-  }
+  } */
 
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");
