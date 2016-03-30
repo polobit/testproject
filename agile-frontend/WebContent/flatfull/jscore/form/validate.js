@@ -236,7 +236,7 @@ function isValidForm(form) {
 			return true;
 		}
 
-	},"<i><b>image</b> is a keyword in the system and it can't be added as a custom field.</i>");
+	},"<b>image</b> is a keyword in the system and it can't be added as a custom field.");
 
 	$(form).validate({
 		rules : {
