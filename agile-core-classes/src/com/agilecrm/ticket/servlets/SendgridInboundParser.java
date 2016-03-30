@@ -60,57 +60,18 @@ public class SendgridInboundParser extends HttpServlet
 			}
 
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-			
+
 			System.out.println("isMultipart: " + isMultipart);
-			
-			if (isMultipart)
-			{
-				ServletFileUpload upload = new ServletFileUpload();
-				try
-				{
-					FileItemIterator iter = upload.getItemIterator(request);
-					FileItemStream item = null;
-					String name = "";
 
-					while (iter.hasNext())
-					{
-						item = iter.next();
-						name = item.getFieldName();
-						if (item.isFormField())
-						{
-							System.out.println("Form field " + name);
-							InputStream stream = item.openStream();
-							
-							BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-							
-							StringBuffer chaine = new StringBuffer();
-							String ligne = "";
+			// System properties
+			Properties props = new Properties();
+			Session session = Session.getDefaultInstance(props, null);
 
-							while ((ligne = br.readLine()) != null)
-								chaine.append(ligne);
+			// Reading the input Mail
+			MimeMessage message = new MimeMessage(session, request.getInputStream());
 
-							stream.close();
-
-							System.out.println("chaine");
-							System.out.println(chaine);
-						}
-						else
-						{
-							name = item.getName();
-							System.out.println("name==" + name);
-							if (name != null && !"".equals(name))
-							{
-								String fileName = new File(item.getName()).getName();
-								System.out.println("fileName: " + fileName);
-							}
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					System.out.println(ExceptionUtils.getFullStackTrace(e));
-				}
-			}
+			System.out.println("message getFrom..." + message.getFrom());
+			System.out.println("message getSubject()..." + message.getSubject());
 		}
 		catch (Exception e)
 		{
