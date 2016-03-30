@@ -11,7 +11,7 @@ define([
 				o[k] = _.find(v["value"], function(o)
 				{
 					return o.selected
-				})["value"];
+				});
 			}
 			else
 			{
