@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.Enumeration;
 
 import javax.servlet.ServletException;
@@ -40,110 +41,73 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		try
 		{
-			// Enumeration<String> headerNames = request.getHeaderNames();
-			//
-			// while (headerNames.hasMoreElements())
-			// {
-			// String headerName = headerNames.nextElement();
-			// System.out.println("headerName: " + headerName);
-			//
-			// Enumeration<String> headers = request.getHeaders(headerName);
-			// while (headers.hasMoreElements())
-			// {
-			// String headerValue = headers.nextElement();
-			// System.out.println("headerValue: " + headerValue);
-			// }
-			// }
-
+			System.out.println("html: " + request.getParameter("html"));
+			
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
 			System.out.println("isMultipart: " + isMultipart);
 
-			if (isMultipart)
+			try
 			{
-				ServletFileUpload upload = new ServletFileUpload();
-
-				try
+				Long currentTime = Calendar.getInstance().getTimeInMillis();
+				
+				if (isMultipart)
 				{
-					FileItemIterator iter = upload.getItemIterator(request);
-					FileItemStream item = null;
-					String name = "";
+					ServletFileUpload upload = new ServletFileUpload();
 
-					while (iter.hasNext())
+					try
 					{
-						item = iter.next();
-						name = item.getFieldName();
+						FileItemIterator iter = upload.getItemIterator(request);
+						FileItemStream item = null;
+						String name = "";
 
-						if (item.isFormField())
+						while (iter.hasNext())
 						{
-							System.out.println("Form field:  " + name);
+							item = iter.next();
+							name = item.getFieldName();
 
-							String theString = IOUtils.toString(item.openStream(), "UTF-8");
-
-							System.out.println(theString);
-						}
-						else
-						{
-							name = item.getName();
-							System.out.println("name==" + name);
-							if (name != null && !"".equals(name))
+							if (item.isFormField())
 							{
-								String fileName = new File(item.getName()).getName();
-								System.out.println("fileName: " + fileName);
-								System.out.println("file content: ");
+								System.out.println("Form field:  " + name);
 
 								String theString = IOUtils.toString(item.openStream(), "UTF-8");
 
 								System.out.println(theString);
 							}
+							else
+							{
+								name = item.getName();
+								System.out.println("name==" + name);
+								
+								if (name != null && !"".equals(name))
+								{
+									String fileName = new File(item.getName()).getName();
+									System.out.println("fileName: " + fileName);
+									System.out.println("file content: ");
+
+									String theString = IOUtils.toString(item.openStream(), "UTF-8");
+
+									System.out.println(theString);
+								}
+							}
 						}
 					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
 				}
-				catch (Exception e)
-				{
-					System.out.println(ExceptionUtils.getFullStackTrace(e));
-				}
+
+			}
+			catch (Exception e)
+			{
+				System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
+				e.printStackTrace();
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
-	}
-
-	public static void main(String[] args) throws FileNotFoundException, Exception
-	{
-		File f = new File("D:\\email.txt");
-
-		FileInputStream fin = new FileInputStream(f);
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(fin));
-
-		StringBuffer chaine = new StringBuffer();
-		String ligne = "";
-
-		while ((ligne = br.readLine()) != null)
-			chaine.append(ligne);
-
-		fin.close();
-
-		System.out.println("chaine");
-
-		String[] array = chaine.toString().split("--xYzZY");
-
-		for (String string : array)
-		{
-			System.out.println(string);
-		}
-
-		// // System properties
-		// Properties props = new Properties();
-		// Session session = Session.getDefaultInstance(props, null);
-		//
-		// // Reading the input Mail
-		// MimeMessage message = new MimeMessage(session, fin);
-		//
-		// System.out.println("message..." + message.getFrom());
-		// System.out.println("message.getSubject()..." + message.getSubject());
 	}
 }
