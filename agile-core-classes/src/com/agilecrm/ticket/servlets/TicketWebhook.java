@@ -28,8 +28,6 @@ import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketLabels;
