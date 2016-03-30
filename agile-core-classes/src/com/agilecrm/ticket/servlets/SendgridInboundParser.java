@@ -107,6 +107,21 @@ public class SendgridInboundParser extends HttpServlet
 							{
 								String fileName = new File(item.getName()).getName();
 								System.out.println("fileName: " + fileName);
+								System.out.println("file content: ");
+								
+								InputStream stream = item.openStream();
+								
+								BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+								
+								StringBuffer chaine = new StringBuffer();
+								String ligne = "";
+
+								while ((ligne = br.readLine()) != null)
+									chaine.append(ligne);
+
+								stream.close();
+
+								System.out.println(chaine);
 							}
 						}
 					}
