@@ -230,6 +230,16 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	public boolean is_forms_updated = false;
 
+
+	/** Helpdesk settings */
+
+	@Embedded
+	//public HelpdeskSettings helpdeskSettings = null;
+	
+	/** For FingerprintId */
+	
+	public String fingerprintId;
+
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
@@ -258,14 +268,16 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 *            specifies ownership
 	 */
 
-	public DomainUser(String domain, String email, String name, String password, boolean isAdmin, boolean isAccountOwner)
+	public DomainUser(String domain, String email, String name, String password,  String fingerprintId, boolean isAdmin, boolean isAccountOwner)
 	{
 		this.domain = domain;
 		this.email = email;
 		this.name = name;
 		this.password = password;
+		this.fingerprintId =fingerprintId;
 		this.is_admin = isAdmin;
 		this.is_account_owner = isAccountOwner;
+		
 	}
 
 	/**
