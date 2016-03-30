@@ -63,7 +63,7 @@
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
 					<div class="btn-group inline-block">
-						<a class="btn btn-sm btn-default m-r-sm acl_widget" widget-data='{"id":"{{id}}", "name":"{{name}}"}'>
+						<a class="btn btn-sm btn-default m-r-sm acl_widget" widget-data="{{stringifyObject this}}">
   							<i class="fa fa-users"></i>
   						</a>
         				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
@@ -74,7 +74,7 @@
 					</div>
 					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
-    			<a class="btn btn-sm btn-default acl_widget" widget-data='{"id":"{{id}}", "name":"{{name}}"}'>
+    			<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
   					<i class="fa fa-users"></i>
   				</a>
     			<a class="btn btn-sm btn-default install-custom-widget" href="#Custom-widget" widget-name="{{name}}">Add</a>
@@ -84,14 +84,14 @@
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
 				{{#if_equals name "CallScript"}}
-					<a class="btn btn-sm btn-default acl_widget" widget-data='{"id":"{{id}}", "name":"{{name}}"}'>
+					<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
   						<i class="fa fa-users"></i>
   				   </a>  
                    <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>                   
                 {{else}}{{#if_equals name "Twilio"}}
                            <a></a>
                         {{else}}
-                           <a class="btn btn-sm btn-default acl_widget" widget-data='{"id":"{{id}}", "name":"{{name}}"}'>
+                           <a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
   								<i class="fa fa-users"></i>
   				   		   </a>
 				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>				          
@@ -591,7 +591,11 @@
     					<div class="b p-sm m-sm">			
 	    					<div class="checkbox pull-left">
 				              <label class="i-checks">
-				                <input type="checkbox" name="agileUserChk" value="{{id}}">
+				               {{#if isChecked}}
+				                <input type="checkbox" name="agileUserChk" value="{{id}}" checked>
+				               {{else}}
+				               	<input type="checkbox" name="agileUserChk" value="{{id}}">
+				               {{/if}}
 				                <i></i>				           
 				              </label>
 		            		</div>

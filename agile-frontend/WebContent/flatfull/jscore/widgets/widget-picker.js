@@ -116,21 +116,49 @@ function initializeWidgetSettingsListeners(){
 	$('#prefs-tabs-content').on('click', '.acl_widget', function(e){
 		// Fetching widget ID.
 		var widgetData = $(this).attr('widget-data');		
-
-		$.getJSON( "core/api/admin_panel/getAllDomainUsers", function( data ){	
+		var that = $(this);
+		$.getJSON( "core/api/admin_panel/getAllDomainUsers", function(data){	
 			var result ={}; 
-			result.widget = JSON.parse(widgetData);
-			result.data = data;		
+			result.widget = JSON.parse(widgetData);							
+			var userList = JSON.stringify(result.widget.listOfUsers);
+			for(var i=0; i < data.length ; i++){	
+				var obj = data[i];						
+				if(userList.indexOf(obj.id) > 0){
+					obj.isChecked = true;
+					data[i] = obj;
+				}				
+			}
+			result.data = data;
+
 			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
   				$("#widget-acls-modal").html(template_ui).modal('show');  	
 
   				$('#widget-acls-modal .widget_acl_save').off();
-				$('#widget-acls-modal').on('click', '.widget_acl_save', function(e){
+				$('#widget-acls-modal').one('click', '.widget_acl_save', function(e){
 					var widgetID = $(this).attr('widget-id');
+					var widget = result.widget;
 
+					var newUserList = [];
 					$('input:checkbox[name=agileUserChk]:checked').each(function(e){
-       					alert($(this).val());
-    				});															
+       					newUserList.push($(this).val());
+    				});
+
+					widget.listOfUsers = newUserList;
+
+					$.ajax({
+						type : 'POST',
+						url : '/core/api/widgets/saveWidgetPrivilages',
+						data : JSON.stringify(widget),						
+						success: function(resultData){
+							var widgetData = result.widget;
+							widgetData.listOfUsers = widget.listOfUsers;
+
+							that.attr('widget-data',JSON.stringify(widgetData));
+							console.log('Widget ACL updated');
+							$("#widget-acls-modal").html(template_ui).modal('hide');
+						}
+					});
+																							
 				});
   											
   			});					

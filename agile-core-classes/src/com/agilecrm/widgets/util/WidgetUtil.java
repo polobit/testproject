@@ -64,6 +64,7 @@ public class WidgetUtil {
 					widget.is_added = true;
 					widget.id = currentWidget.id;
 					widget.prefs = currentWidget.prefs;
+					widget.listOfUsers = currentWidget.listOfUsers;
 				}
 
 		return widgets;
