@@ -79,6 +79,20 @@ public class SendgridInboundParser extends HttpServlet
 						if (item.isFormField())
 						{
 							System.out.println("Form field " + name);
+							InputStream stream = item.openStream();
+							
+							BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+							
+							StringBuffer chaine = new StringBuffer();
+							String ligne = "";
+
+							while ((ligne = br.readLine()) != null)
+								chaine.append(ligne);
+
+							stream.close();
+
+							System.out.println("chaine");
+							System.out.println(chaine);
 						}
 						else
 						{
