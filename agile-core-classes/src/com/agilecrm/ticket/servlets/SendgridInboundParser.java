@@ -61,6 +61,8 @@ public class SendgridInboundParser extends HttpServlet
 
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 			
+			System.out.println("isMultipart: " + isMultipart);
+			
 			if (isMultipart)
 			{
 				ServletFileUpload upload = new ServletFileUpload();
