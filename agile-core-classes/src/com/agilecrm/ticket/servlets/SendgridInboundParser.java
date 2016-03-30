@@ -20,6 +20,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 public class SendgridInboundParser extends HttpServlet
@@ -56,57 +59,41 @@ public class SendgridInboundParser extends HttpServlet
 				}
 			}
 
-			InputStream client = request.getInputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(client));
-
-			StringBuffer chaine = new StringBuffer();
-			String ligne = "";
-
-			while ((ligne = br.readLine()) != null)
-				chaine.append(ligne);
-
-			client.close();
-
-			System.out.println("chaine");
-			System.out.println(chaine);
+			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 			
-			System.out.println("request.getParameterMap();");
-			System.out.println(request.getParameterMap());
-
-			// System properties
-			Properties props = new Properties();
-			Session session = Session.getDefaultInstance(props, null);
-
-			// Reading the input Mail
-			MimeMessage message = new MimeMessage(session, client);
-
-			System.out.println("message..." + message.getFrom());
-			System.out.println("message.getSubject()..." + message.getSubject());
-
-			// //MimeMessageParser mmp = new MimeMessageParser(message).parse();
-			//
-			// System.out.println("mmp.getFrom()..." + mmp.getFrom());
-			// System.out.println("mmp.getSubject()..." + mmp.getSubject());
-			// System.out.println("mmp.getTo()..." + mmp.getTo());
-			// System.out.println("mmp.getPlainContent()..." +
-			// mmp.getPlainContent());
-
-			Enumeration headers = message.getAllHeaders();
-			System.out.println("Message Headers: \r\n");
-
-			while (headers.hasMoreElements())
+			if (isMultipart)
 			{
-				Header h = (Header) headers.nextElement();
-				System.out.println(h.getName() + ": " + h.getValue());
-			}
-			
-			headers = message.getAllHeaderLines();
-			System.out.println("Message Headers lines : \r\n");
+				ServletFileUpload upload = new ServletFileUpload();
+				try
+				{
+					FileItemIterator iter = upload.getItemIterator(request);
+					FileItemStream item = null;
+					String name = "";
 
-			while (headers.hasMoreElements())
-			{
-				Header h = (Header) headers.nextElement();
-				System.out.println(h.getName() + ": " + h.getValue());
+					while (iter.hasNext())
+					{
+						item = iter.next();
+						name = item.getFieldName();
+						if (item.isFormField())
+						{
+							System.out.println("Form field " + name);
+						}
+						else
+						{
+							name = item.getName();
+							System.out.println("name==" + name);
+							if (name != null && !"".equals(name))
+							{
+								String fileName = new File(item.getName()).getName();
+								System.out.println("fileName: " + fileName);
+							}
+						}
+					}
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
 			}
 		}
 		catch (Exception e)
@@ -121,14 +108,33 @@ public class SendgridInboundParser extends HttpServlet
 
 		FileInputStream fin = new FileInputStream(f);
 
-		// System properties
-		Properties props = new Properties();
-		Session session = Session.getDefaultInstance(props, null);
+		BufferedReader br = new BufferedReader(new InputStreamReader(fin));
 
-		// Reading the input Mail
-		MimeMessage message = new MimeMessage(session, fin);
+		StringBuffer chaine = new StringBuffer();
+		String ligne = "";
 
-		System.out.println("message..." + message.getFrom());
-		System.out.println("message.getSubject()..." + message.getSubject());
+		while ((ligne = br.readLine()) != null)
+			chaine.append(ligne);
+
+		fin.close();
+
+		System.out.println("chaine");
+
+		String[] array = chaine.toString().split("--xYzZY");
+
+		for (String string : array)
+		{
+			System.out.println(string);
+		}
+
+		// // System properties
+		// Properties props = new Properties();
+		// Session session = Session.getDefaultInstance(props, null);
+		//
+		// // Reading the input Mail
+		// MimeMessage message = new MimeMessage(session, fin);
+		//
+		// System.out.println("message..." + message.getFrom());
+		// System.out.println("message.getSubject()..." + message.getSubject());
 	}
 }

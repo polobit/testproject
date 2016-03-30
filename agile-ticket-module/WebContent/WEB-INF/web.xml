@@ -227,11 +227,6 @@
 		<servlet-name>TicketSendgridWebhook</servlet-name>
 		<url-pattern>/ticket-module/backend/sendgrid_hook</url-pattern>
 	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>TicketSendgridWebhook</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
 	<servlet>
 		<servlet-name>TicketOpenServlet</servlet-name>
 		<servlet-class>com.agilecrm.ticket.servlets.TicketOpenServlet</servlet-class>
