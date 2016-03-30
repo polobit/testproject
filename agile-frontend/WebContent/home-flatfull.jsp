@@ -751,7 +751,7 @@ function load_globalize()
   if (typeof Globalize != "function") {
     setTimeout(function() {
       load_globalize();
-    }, 500);
+    }, 100);
     return;
   }
 
