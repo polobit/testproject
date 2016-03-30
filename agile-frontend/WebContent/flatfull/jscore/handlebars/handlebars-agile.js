@@ -1119,15 +1119,16 @@ function getDealCustomProperties(items)
 					{
 						if(allCustomFields[i].name==fields[j].name)
 						{
+							fields[j].is_date = true;
 							if(!fields[j].value)
 								return '';
-							if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
+							/*if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
 								fields[j].value = convertDateFromUKtoUS(fields[j].value);
 							var dateString = new Date(fields[j].value);
 							if(dateString == "Invalid Date")
 								fields[j].value = getDateInFormatFromEpoc(fields[j].value);
 							else
-								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);*/
 
 							finalFields.push(fields[j]);
 							break;
