@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Header;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -63,15 +66,60 @@ public class SendgridInboundParser extends HttpServlet
 
 			System.out.println("isMultipart: " + isMultipart);
 
-			// System properties
-			Properties props = new Properties();
-			Session session = Session.getDefaultInstance(props, null);
+			if (isMultipart)
+			{
+				ServletFileUpload upload = new ServletFileUpload();
 
-			// Reading the input Mail
-			MimeMessage message = new MimeMessage(session, request.getInputStream());
+				List<FileItem> list = upload.parseRequest(request);
 
-			System.out.println("message getFrom..." + message.getFrom());
-			System.out.println("message getSubject()..." + message.getSubject());
+				for (FileItem item : list)
+				{
+					System.out.println("item.isFormField() : " + item.isFormField());
+
+					System.out.println("item.getFieldName()");
+					System.out.println(item.getFieldName());
+
+					System.out.println("item.getName()");
+					System.out.println(item.getName());
+
+					System.out.println("item.getString()");
+					System.out.println(item.getString());
+				}
+
+				try
+				{
+					FileItemIterator iter = upload.getItemIterator(request);
+					FileItemStream item = null;
+					String name = "";
+
+					while (iter.hasNext())
+					{
+						item = iter.next();
+						name = item.getFieldName();
+
+						if (item.isFormField())
+						{
+							System.out.println("Form field " + name);
+
+							System.out.println(item.toString());
+						}
+						else
+						{
+							name = item.getName();
+							System.out.println("name==" + name);
+							if (name != null && !"".equals(name))
+							{
+								String fileName = new File(item.getName()).getName();
+								System.out.println("fileName: " + fileName);
+							}
+						}
+					}
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
+			}
 		}
 		catch (Exception e)
 		{
