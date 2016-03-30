@@ -280,13 +280,13 @@ function minicalendar(el)
 		            		   el.parent().css('z-index',3);
 		            		   var reletedContacts = '';
 		            		   var meeting_type = '';
+		            		   var that = $(this);
 		            		   if(CURRENT_AGILE_USER.domainUser.ownerPic=="" || CURRENT_AGILE_USER.domainUser.ownerPic=="no image")
-		            			   event.eventOwner.pic=gravatarImgForPortlets(25);
-		            		   if (event.contacts)
-		            		   {
-		            			   if (event.contacts.length > 0)
-		            				   reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
-		            		   }
+		            			   event.owner.pic=gravatarImgForPortlets(25);
+		            			accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
+											console.log(data);
+											event.contacts=data;
+		            		  
 		            		/*   if (event.contacts)
 		            		   {
 		            			   for (var i = 0; i < event.contacts.length; i++)
@@ -392,7 +392,7 @@ function minicalendar(el)
 
                     }
                     }else{
-                      reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+                      reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[0].id + '">' + getPropertyValue(
                           event.contacts[0].properties, "name") + '</a>';
                     }
                     
@@ -413,14 +413,14 @@ function minicalendar(el)
 		            		   var popoverElement = '';
 		            		   if(event.type=="AGILE"){
 		            			   popoverElement = '<div class="fc-overlay ' + leftorright + '" style="width:100%;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-		            			   .format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.eventOwner.pic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-		            			   $(this).append(popoverElement);
-		            			   $(this).find('.fc-overlay').find('.arrow').css('top','70px');
+		            			   .format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.owner.pic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+		            			   that.append(popoverElement);
+		            			   that.find('.fc-overlay').find('.arrow').css('top','70px');
 		            		   }
 		            		   else{
 		            			   popoverElement = '<div class="fc-overlay ' + leftorright + '" style="width:100%;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
 		            			   .format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-		            			   $(this).append(popoverElement);
+		            			   that.append(popoverElement);
 		            		   }
 		            		   var overlay=$(this).find('.fc-overlay');
 		            		   if(event.start.getDay()==4 || event.start.getDay()==5 || event.start.getDay()==6){
@@ -436,6 +436,7 @@ function minicalendar(el)
 		            			   overlay.find('.arrow').css('top','98px');
 		            		   }
 		            		   overlay.show();
+		            		});
 		            	   },
 		            	   eventMouseout : function(event, jsEvent, view)
 		            	   {

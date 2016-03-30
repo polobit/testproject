@@ -349,4 +349,12 @@ public class EventsAPI
 	return EventUtil.getEvents(Integer.parseInt(count));
     }
 
+     @Path("/contacts-related")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getRelatedContactsToEvents(@QueryParam("id") Long id)
+    {
+	return EventUtil.getEventsRelatedContacts(id);
+    }
+
 }

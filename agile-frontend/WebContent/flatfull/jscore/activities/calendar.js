@@ -382,36 +382,42 @@ function showCalendar(users)
 										}
 
 										var eventJSON = {};
+										var that = $(this);
 										eventJSON.leftorright = leftorright;eventJSON.popover_min_width = popover_min_width;
 										eventJSON.popover_min_width = popover_min_width;eventJSON.left = left;eventJSON.top = top;
 										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
+										accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
+											console.log(data);
+											event.contacts=data;
+							  
 
 										if(event.type == "officeCalendar"){
-											$(this).after($(getTemplate("office-calendar-mouseover-popover", eventJSON)));
+											that.after($(getTemplate("office-calendar-mouseover-popover", eventJSON)));
 										}else{
-											$(this).after($(getTemplate("calendar-mouseover-popover", eventJSON)));
+											that.after($(getTemplate("calendar-mouseover-popover", eventJSON)));
 										}
 										
-										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < that.parent().find('.fc-overlayw')
 												.height())
 										{
-											$(this).parent().find('.fc-overlayw').css("top",
-													top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
+											that.parent().find('.fc-overlayw').css("top",
+													top - that.parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
+											that.parent().find('.fc-overlayw').find('.arrow').css("top", that.parent().find('.fc-overlayw').height() - 31 + "px");
 										}
-										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
 										{
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
+											that.parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
 										}
-										if (($(this).parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
-												this).parent().find('.fc-overlayw').height() + 10) && ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
+										if ((that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < that
+										.parent().find('.fc-overlayw').height() + 10) && (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
 										{
-											$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+											that.parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
 											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
-											top = jsEvent.currentTarget.offsetTop - $(this).parent().find('.fc-overlayw').height() + 10;
-											$(this).parent().find('.fc-overlayw').css({ "top" : top + "px", "lef" : left + "px" });
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
+											top = jsEvent.currentTarget.offsetTop - that.parent().find('.fc-overlayw').height() + 10;
+											that.parent().find('.fc-overlayw').css({ "top" : top + "px", "lef" : left + "px" });
+											that.parent().find('.fc-overlayw').find('.arrow').css("top",that.parent().find('.fc-overlayw').height() - 22 + "px");
 										}
+										});
 									}
 									else if (calendarView == "agendaWeek")
 									{
