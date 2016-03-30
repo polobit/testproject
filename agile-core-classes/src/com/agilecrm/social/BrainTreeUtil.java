@@ -17,7 +17,7 @@ public class BrainTreeUtil {
 	Environment SANDBOX = Environment.SANDBOX;
 
 	public BrainTreeUtil(String merchantId, String publicKey, String privateKey) {
-		gateway = new BraintreeGateway(SANDBOX, merchantId, publicKey,
+		gateway = new BraintreeGateway(PRODUCTION, merchantId, publicKey,
 				privateKey);
 	}
 
