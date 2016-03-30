@@ -383,7 +383,7 @@ public class EmailGatewayUtil
 	    }
 
 	    // If Mandrill
-	    if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
+	    else if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
 		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
 			text, mandrillMetadata, documentIds, blobKeys, attachments);
 
@@ -551,10 +551,10 @@ public class EmailGatewayUtil
 			    SendGridUtil.sendSendGridMails(tasks, emailSender);
 		
 	    	// If Mandrill
-	    	if (emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
+	    	else if (emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
 	    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
 		
-			if (emailGateway.email_api == EMAIL_API.SES)
+	    	else if (emailGateway.email_api == EMAIL_API.SES)
 				AmazonSESUtil.sendSESMails(tasks, emailSender);
 	
 			addEmailLogs(tasks);
