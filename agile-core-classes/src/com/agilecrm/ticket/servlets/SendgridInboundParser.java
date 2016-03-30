@@ -9,23 +9,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
 
-import javax.mail.Header;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 public class SendgridInboundParser extends HttpServlet
@@ -47,20 +40,20 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		try
 		{
-			Enumeration<String> headerNames = request.getHeaderNames();
-
-			while (headerNames.hasMoreElements())
-			{
-				String headerName = headerNames.nextElement();
-				System.out.println("headerName: " + headerName);
-
-				Enumeration<String> headers = request.getHeaders(headerName);
-				while (headers.hasMoreElements())
-				{
-					String headerValue = headers.nextElement();
-					System.out.println("headerValue: " + headerValue);
-				}
-			}
+			// Enumeration<String> headerNames = request.getHeaderNames();
+			//
+			// while (headerNames.hasMoreElements())
+			// {
+			// String headerName = headerNames.nextElement();
+			// System.out.println("headerName: " + headerName);
+			//
+			// Enumeration<String> headers = request.getHeaders(headerName);
+			// while (headers.hasMoreElements())
+			// {
+			// String headerValue = headers.nextElement();
+			// System.out.println("headerValue: " + headerValue);
+			// }
+			// }
 
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
@@ -69,7 +62,7 @@ public class SendgridInboundParser extends HttpServlet
 			if (isMultipart)
 			{
 				ServletFileUpload upload = new ServletFileUpload();
-				
+
 				try
 				{
 					FileItemIterator iter = upload.getItemIterator(request);
@@ -85,19 +78,9 @@ public class SendgridInboundParser extends HttpServlet
 						{
 							System.out.println("Form field:  " + name);
 
-							InputStream stream = item.openStream();
-							
-							BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-							
-							StringBuffer chaine = new StringBuffer();
-							String ligne = "";
+							String theString = IOUtils.toString(item.openStream(), "UTF-8");
 
-							while ((ligne = br.readLine()) != null)
-								chaine.append(ligne);
-
-							stream.close();
-
-							System.out.println(chaine);
+							System.out.println(theString);
 						}
 						else
 						{
@@ -108,20 +91,10 @@ public class SendgridInboundParser extends HttpServlet
 								String fileName = new File(item.getName()).getName();
 								System.out.println("fileName: " + fileName);
 								System.out.println("file content: ");
-								
-								InputStream stream = item.openStream();
-								
-								BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-								
-								StringBuffer chaine = new StringBuffer();
-								String ligne = "";
 
-								while ((ligne = br.readLine()) != null)
-									chaine.append(ligne);
+								String theString = IOUtils.toString(item.openStream(), "UTF-8");
 
-								stream.close();
-
-								System.out.println(chaine);
+								System.out.println(theString);
 							}
 						}
 					}
