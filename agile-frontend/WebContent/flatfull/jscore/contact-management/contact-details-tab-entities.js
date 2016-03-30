@@ -6,6 +6,7 @@ var casesView;
 var documentsView;
 var campaignsView;
 var mailsView;
+var mailAccountsView_company;
 var mailAccountsView;
 var email_errors_divs = [];
 var email_requests = [];

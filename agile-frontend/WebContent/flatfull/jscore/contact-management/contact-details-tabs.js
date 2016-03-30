@@ -10,6 +10,8 @@
 
 var contact_tab_position_cookie_name = "contact_tab_position_" + CURRENT_DOMAIN_USER.id;
 
+var company_tab_position_cookie_name = "company_tab_position_" + CURRENT_DOMAIN_USER.id;
+
 var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
 var NO_WEB_STATS_SETUP = true;
@@ -360,6 +362,22 @@ function activate_timeline_tab()
 	}
 }
 
+function activate_company_contact_tab()
+{
+	$('#contactDetailsTab').find('li.active').removeClass('active');
+	$('#contactDetailsTab li:first-child').addClass('active');
+
+	$('div.tab-content').find('div.active').removeClass('active');
+	$('div.tab-content > div:first-child').addClass('active');
+
+	// $('#time-line').addClass('active'); //old original code for flicking
+	// timeline
+
+	if (App_Companies.companyDetailView.model.get('type') == 'COMPANY')
+	{
+		fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
+	}
+}
 /**
  * Disables Send button of SendEmail and change text from Send to Sending...
  * 
@@ -408,6 +426,17 @@ function save_contact_tab_position_in_cookie(tab_href)
 	_agile_set_prefs(contact_tab_position_cookie_name, tab_href);
 }
 
+function save_company_tab_position_in_cookie(tab_href)
+{
+
+	var position = _agile_get_prefs(company_tab_position_cookie_name);
+
+	if (position == tab_href)
+		return;
+
+	_agile_set_prefs(company_tab_position_cookie_name, tab_href);
+}
+
 function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
@@ -434,6 +463,36 @@ function load_contact_tab(el, contactJSON)
 		// shown in view.
 		$(".tab-content", el).find("#" + position).addClass("active");
 		contact_details_tab["load_" + position]();
+	}
+
+}
+
+function load_company_tab(el, contactJSON)
+{
+	//timeline_collection_view = null;
+	var position = _agile_get_prefs(company_tab_position_cookie_name);
+	if (position == null || position == undefined || position == "")
+		position = "contacts";
+
+	if(position == "contacts" && agile_is_mobile_browser())
+			return;
+
+	$('#contactDetailsTab a[href="#company-' + position + '"]', el).tab('show');
+
+	if (!position || position == "contacts")
+	{
+		activate_company_contact_tab()
+		company_detail_tab.load_fill_company_related_contacts
+		return;
+	}
+
+	if (company_detail_tab["load_company_" + position])
+	{
+
+		// Should add active class, tab is not enough as content might not be
+		// shown in view.
+		$(".tab-content", el).find("#company-" + position).addClass("active");
+		company_detail_tab["load_company_" + position]();
 	}
 
 }

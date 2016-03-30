@@ -291,6 +291,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contactDetailsTab a[href="#company-documents"]' : 'listCompanyDocuments',
     	'click #contactDetailsTab a[href="#company-events"]' : 'listCompanyEvents',
     	'click #contactDetailsTab a[href="#company-tasks"]' : 'listCompanyTasks',
+    	'click #contactDetailsTab a[href="#company-mail"]' : 'listCompanyMails',
     	'click #company-add-tags' : 'addCompanytags',
     	'keydown #companyAddTags' : 'companyAddTags',
     	'click #company-actions-delete' : 'companyDelete',
@@ -1063,7 +1064,7 @@ getScore:  function(e){
 	listCompanyDeals : function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("deals");
+		save_company_tab_position_in_cookie("deals");
 		company_detail_tab.load_company_deals();
 	},
 
@@ -1073,7 +1074,7 @@ getScore:  function(e){
 	listCompanyCases :  function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("cases");
+		save_company_tab_position_in_cookie("cases");
 
 		company_detail_tab.load_company_cases();
 	},
@@ -1085,7 +1086,7 @@ getScore:  function(e){
 	listCompanyNotes :  function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("notes");
+		save_company_tab_position_in_cookie("notes");
 		company_detail_tab.load_company_notes();
 	},
 	
@@ -1097,7 +1098,7 @@ getScore:  function(e){
 	listCompanyDocuments : function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("documents");
+		save_company_tab_position_in_cookie("documents");
 		company_detail_tab.load_company_documents();
 	},
 
@@ -1109,7 +1110,7 @@ getScore:  function(e){
 	listCompanyEvents : function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("events");
+		save_company_tab_position_in_cookie("events");
 		company_detail_tab.load_company_events();
 	},
 
@@ -1122,8 +1123,21 @@ getScore:  function(e){
 	listCompanyTasks : function(e)
 	{
 		e.preventDefault();
-		save_contact_tab_position_in_cookie("tasks");
+		save_company_tab_position_in_cookie("tasks");
 		company_detail_tab.load_company_tasks();
+	},
+
+     /**
+	 * Gets every conversation of the contact (if it has email) with the
+	 * associated email (gmail or imap) in Email-preferences of this CRM, when
+	 * "Mail" tab is clicked.
+	 */
+	listCompanyMails : function(e)
+	{
+		e.preventDefault();
+		email_server_type = "agilecrm"
+		save_company_tab_position_in_cookie("mail");
+		company_detail_tab.load_company_mail();
 	},
 	/**
 	 * "click" event of add button of tags form in contact detail view

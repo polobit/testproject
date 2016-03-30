@@ -188,6 +188,7 @@ public class ContactEmailUtil
 
 				// Get contact based on email.
 				contact = ContactUtil.searchContactByEmail(email);
+				contact = ContactUtil.searchCompanyByEmail(email);
 
 				// Saves email with contact-id
 				if (contact != null)

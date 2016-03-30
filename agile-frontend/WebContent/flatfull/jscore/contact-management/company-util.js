@@ -585,8 +585,8 @@
             }
         });
         dealsView.collection.fetch();
-        $('#deals', App_Companies.companyDetailView.el).html(dealsView.el);
-        company_detail_tab.activateCurrentTab($('#deals'));
+        $('#company-deals', App_Companies.companyDetailView.el).html(dealsView.el);
+        company_detail_tab.activateCurrentTab($('#company-deals'));
         
 	};
 	company_detail_tab.load_company_cases = function()
@@ -606,8 +606,8 @@
             }
         });
 		casesView.collection.fetch();
-        $('#cases', App_Companies.companyDetailView.el).html(casesView.el);
-        company_detail_tab.activateCurrentTab($('#cases'));
+        $('#company-cases', App_Companies.companyDetailView.el).html(casesView.el);
+        company_detail_tab.activateCurrentTab($('#company-cases'));
 	};
 	
 	company_detail_tab.load_company_notes = function()
@@ -627,8 +627,8 @@
             }
         });
         notesView.collection.fetch();
-        $('#notes', App_Companies.companyDetailView.el).html(notesView.render().el);
-        company_detail_tab.activateCurrentTab($('#notes'));
+        $('#company-notes', App_Companies.companyDetailView.el).html(notesView.render().el);
+        company_detail_tab.activateCurrentTab($('#company-notes'));
 	};
 	
 	company_detail_tab.load_company_documents = function()
@@ -649,8 +649,8 @@
 	            }
 	        });
 		    documentsView.collection.fetch();
-	        $('#documents', App_Companies.companyDetailView.el).html(documentsView.render().el);
-	        company_detail_tab.activateCurrentTab($('#documents'));
+	        $('#company-documents', App_Companies.companyDetailView.el).html(documentsView.render().el);
+	        company_detail_tab.activateCurrentTab($('#company-documents'));
 	};
 
 	company_detail_tab.load_company_events = function()
@@ -713,7 +713,499 @@
 		        $('#company-tasks', App_Companies.companyDetailView.el).html(tasksView.render().el);
 	        company_detail_tab.activateCurrentTab($('#company-tasks'));
 		};
+        
+        company_detail_tab.load_company_mail = function(mail_server_url,email_server)
+		{	
+			killAllPreviousRequests();
+			$('#company-mail #company-mails-span', App_Companies.companyDetailView.el).remove();
+			$('#company-mails', App_Companies.companyDetailView.el).html("");
+			if(typeof mailsView !== 'undefined')
+			{
+				mailsView.render = null;
+				mailsView.collection = null;
+			}
+			var contact = App_Companies.companyDetailView.model;
+			var json = contact.toJSON();
+			// Get email of the contact in contact detail
+			var email = getAllPropertyValuesByName(json.properties, "email", ",");			
+			// Shows an error alert, when there is no email to the contact
+			if (!email)
+			{
+				show_no_email_alert();
+				return;
+			}
+			var company_detail_tab_scope = this;
+			var has_email_configured = true;
+			var has_shared_email_configured = true;			
+			if(email_server && mail_server_url)
+			{
+				if($('#has_email_configured', App_Companies.companyDetailView.el).html() === 'true')
+					has_email_configured = true;
+				else
+					has_email_configured = false;
+				if(email_server !== 'all')
+					company_fetchMails(company_detail_tab_scope,has_email_configured,mail_server_url,email_server,email);
+				else
+				{
+					var email_accounts_model = mailAccountsView_company.model.toJSON();
+					fetchAllMails(company_detail_tab_scope,has_email_configured,email_accounts_model,email);
+				}
+			}
+			else
+			{
+				loadMailTabView_company(company_detail_tab_scope,email_server,mail_server_url,email);
+			}		
+		};
+        
+	/**
+ * This method responsible for building mail tab UI in contact-details page.
+ * First it loads configured email accounts and then loads emails from selected
+ * email account. It has an option of showing all emails in one shot also.
+ */
+function loadMailTabView_company(company_detail_tab_scope,email_server,mail_server_url,email)
+{
+	var has_email_configured = true;
+	var has_shared_email_configured = true;
+	var model = "";
+	var email_dropdown_html = "";
+	var from_email = "";
+    mailAccountsView_company = new Base_Model_View({ url : 'core/api/emails/synced-accounts', template : "email-account-types",change:false,
+		postRenderCallback : function(el)
+		{	
+			model = mailAccountsView_company.model.toJSON();
+			if(model.hasEmailAccountsConfigured)
+				has_email_configured = true;
+			else
+				has_email_configured = false;
+			if(model.hasSharedEmailAccounts)
+				has_shared_email_configured = true;
+			else
+				has_shared_email_configured = false;
+			//Reading cookie info, fetches mail server type and email from cookie 
+			var cookie_info = fetch_mailserverurl_from_cookie(model);
+			if(cookie_info && cookie_info.length == 4)
+			{
+				mail_server_url = cookie_info[0];
+				email_dropdown_html = cookie_info[1];
+				email_server = cookie_info[2];
+				from_email = cookie_info[3];
+				if(from_email)
+					email_server_type = from_email;
+			}
+			//By default loads mails from Agile server
+			if(!email_server || !mail_server_url || !from_email || (!has_email_configured && !has_shared_email_configured))
+			{
+				email_server = "agile";
+				email_dropdown_html = '<i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>'+'Agile';
+				email_server_type = "agilecrm";
+			}
+			//Fetching emails from All registered email accounts
+			if(email_server ==='all' || mail_server_url === 'all')
+				fetchAllMails(company_detail_tab_scope,has_email_configured,model,email)
+			else
+				company_fetchMails(company_detail_tab_scope,has_email_configured,mail_server_url,email_server,email);
+			if(has_email_configured || has_shared_email_configured)
+			{
+				if(email_dropdown_html)
+					$('#email-type-select',App_Companies.companyDetailView.el).html(email_dropdown_html);	 
+				$('#company-mail-account-types', App_Companies.companyDetailView.el).css('display','block');
+			} 						
+		}
+	});
+	$('#company-mail-account-types', App_Companies.companyDetailView.el).html(mailAccountsView_company.render().el);	 
+}
+
+/**
+ * This function is used to get mails from specified server and email, 
+ * if server or email is not specified then it fetches 
+ * mails sent through Agile.
+ */
+function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_server_url,email_server,email)
+{	
+	$('#company-mail', App_Companies.companyDetailView.el).append('<span id="company-mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm pull-left"  src= "'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'"></img></span>');
+	this.configured_sync_email = "";
+	var cursor = true;
+
+	// By default showing Agile emails
+	if(email_server === 'agile')
+	{
+		mail_server_url = 'core/api/emails/agile-cemails?search_email='+encodeURIComponent(email);
+		email_server_type = "agilecrm";
+		cursor = false;
+	}
+	else
+		mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
+
+	// Fetches mails collection
+	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
+	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	postRenderCallback : function(el)
+	{
+		$('#company-mail', App_Companies.companyDetailView.el).find("#no-email").css('display','block');
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".email-sent-time", el).each(function(index, element)
+			{
+				$(element).timeago();
+			});
+		});
+		
+		if(email_server_type!="agilecrm")
+			company_detail_tab_scope.configured_sync_email = email_server_type;
 	
+		if(!has_email_configured)
+			$('#email-prefs-verification',App_Companies.companyDetailView.el).css('display', 'block');
+		contact_detail_page_infi_scroll($('#contact-dtl', App_Companies.companyDetailView.el), mailsView);
+		$('#company-mail #company-mails-span', App_Companies.companyDetailView.el).remove();
+	}});
+	mailsView.collection.fetch();
+	$('#company-mails', App_Companies.companyDetailView.el).html(mailsView.render().el);
+}
+
+function fetchAllMails(company_detail_tab_scope,has_email_configured,email_accounts_model,email)
+{	
+	var all_emails = [];
+	var fetch_urls = email_accounts_model['fetchUrls'];
+	$('#contact-dtl', App_Companies.companyDetailView.el).unbind("scroll");
+	loadAllMailsView(company_detail_tab_scope,has_email_configured,all_emails);
+    fetchMailsFromAllAccounts(company_detail_tab_scope,has_email_configured,fetch_urls,email);
+}
+
+/**
+ * 
+ * This function is used to fetch mails from all configured email
+ * accounts. It calls emails servers in asynchronous fashion.
+ * After getting response from each server call, view automatically
+ * gets sorted and rendered with new items
+ 
+ * @param contact_details_tab_scope
+ * @param has_email_configured
+ * @param fetch_urls
+ * @param email
+ */
+function fetchMailsFromAllAccounts(company_detail_tab_scope,has_email_configured,fetch_urls,email)
+{
+	var response_count = 0;
+	if(fetch_urls)
+	{
+		if(fetch_urls.length > 0)
+		{
+			$('#company-mail-account-types', App_Companies.companyDetailView.el).prepend('<span id="company-mails-span"> <img class="all-mails-loading p-r-xs m-b m-l-sm pull-left"  src= "'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'"></img></span>');
+			$('#company-mail-account-types', App_Companies.companyDetailView.el).find('.all-mails-loading').css("display","block");
+		}
+		for(var i=0;i<fetch_urls.length;i++)
+		{
+			var xhr = $.ajax({ url : fetch_urls[i]+'&search_email='+encodeURIComponent(email),
+				success : function(emails)
+				{	
+					response_count++;
+					if(emails)
+					{	if(ifNoError(emails[0]))
+						{
+							if(!mailsView)
+							{				
+								setTimeout(function(){
+									mailsView.collection.add(emails);
+									mailsView.render(true);
+									showTransitionBar();
+								},5000);
+							}
+							else
+							{
+								mailsView.collection.add(emails);
+								mailsView.render(true);				
+							}
+						}
+						if(response_count === fetch_urls.length)
+						{
+							showMailsInfoMessages();
+						}
+				    }
+				},
+			    error : function(response)
+			    {
+			    	response_count++;
+			    	if(response_count === fetch_urls.length)
+			    	{
+			    		showMailsInfoMessages(response);
+			    	}
+			    }
+			});
+			email_requests.push(xhr);
+		}
+	}
+}
+/**
+ * /**
+ * This function is responsible for building mailsView.
+ * Mails view consists mails fetched from emails servers.
+ 
+ * @param contact_details_tab_scope
+ * @param has_email_configured
+ * @param fetched_emails
+ * 
+ */
+function loadAllMailsView(company_detail_tab_scope,has_email_configured,fetched_emails)
+{
+	if(typeof mailsView !== 'undefined')
+	{
+		mailsView.render = null;
+		mailsView = null;
+	}
+	this.configured_sync_email = "";
+	mailsView = new Base_Collection_View({data : fetched_emails,
+	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	postRenderCallback : function(el)
+	{
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".email-sent-time", el).each(function(index, element)
+			{
+				$(element).timeago();
+			});
+		});
+		
+		if(email_server_type!="agilecrm")
+			company_detail_tab_scope.configured_sync_email = email_server_type;
+	
+		if(!has_email_configured)
+			$('#email-prefs-verification',App_Companies.companyDetailView.el).css('display', 'block');
+		//$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
+	}});
+	$('#company-mails', App_Companies.companyDetailView.el).html(mailsView.render(true).el);
+}
+
+/**
+ * This method is used read email_type_select cookie , parses cookie value
+ * and evalutes if cookie informations has vaild now or not.
+ * This cookie stores information about selected mail type and mail under mail tab.
+ * @param model
+ * @returns {Array}
+ */
+function fetch_mailserverurl_from_cookie(model)
+{
+	var cookie_value = _agile_get_prefs(email_server_type_cookie_name);
+	var final_url = "";
+	var cookie_info = [];
+	if(cookie_value)
+	{
+		var values = cookie_value.split("|");
+		if(values)
+		{
+			if(values.length === 2)
+			{
+				var email = values[0];
+				var email_server = values[1];
+				var html = "";
+				var shared = false;
+				if(email && email_server)
+				{
+					if(email_server.toLowerCase()==='all')
+					{
+						cookie_info[0] = 'all'
+						cookie_info[1] = 'All Mail';
+						cookie_info[2] = 'all';
+						cookie_info[3] = 'all';
+					}
+					else if(email_server.toLowerCase()==='google')
+					{
+						var hasGmail = false;
+						if(typeof model.gmailUserNames !== 'undefined' && model.hasOwnProperty('gmailUserNames'))
+						{
+							for(var i=0;i<model.gmailUserNames.length;i++)
+							{
+								if(model.gmailUserNames[i] === email)
+								{
+									hasGmail = true;
+									break;
+								}
+							}
+						}
+						if(typeof model.sharedGmailUserNames !== 'undefined' && model.hasOwnProperty('sharedGmailUserNames'))
+						{
+							for(var i=0;i<model.sharedGmailUserNames.length;i++)
+							{
+								if(model.sharedGmailUserNames[i] === email)
+								{
+									hasGmail = true;
+									shared = true;
+									break;
+								}
+							}
+						}
+						if(hasGmail)
+						{
+							final_url = 'core/api/social-prefs/google-emails?from_email='+email;
+							html = '<i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>'+email;
+							if(shared)
+								html = html+ ' (Shared)';
+						}
+					}
+					else if(email_server.toLowerCase()==='imap')
+					{
+						var hasImap = false;
+						if(typeof model.imapUserNames !== 'undefined' && model.hasOwnProperty('imapUserNames'))
+						{
+							for(var i=0;i<model.imapUserNames.length;i++)
+							{
+								if(model.imapUserNames[i] === email)
+								{
+									hasImap = true;
+									break;
+								}
+							}
+						}
+						if(typeof model.sharedImapUserNames !== 'undefined' && model.hasOwnProperty('sharedImapUserNames'))
+						{
+							for(var i=0;i<model.sharedImapUserNames.length;i++)
+							{
+								if(model.sharedImapUserNames[i] === email)
+								{
+									hasImap = true;
+									shared = true;
+									break;
+								}
+							}
+						}
+						if(hasImap)
+						{
+							final_url = 'core/api/imap/imap-emails?from_email='+email;
+							html = '<i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>'+email;
+							if(shared)
+								html = html+ ' (Shared)';
+						}
+					}
+					else if(email_server.toLowerCase()==='exchange')
+					{
+						var hasExchange = false;
+						if(typeof model.exchangeUserNames !== 'undefined' && model.hasOwnProperty('exchangeUserNames'))
+						{
+							for(var i=0;i<model.exchangeUserNames.length;i++)
+							{
+								if(model.exchangeUserNames[i] === email)
+								{
+									hasExchange = true;
+									break;
+								}
+							}
+						}
+						if(typeof model.sharedExchangeUserNames !== 'undefined' && model.hasOwnProperty('sharedExchangeUserNames'))
+						{
+							for(var i=0;i<model.sharedExchangeUserNames.length;i++)
+							{
+								if(model.sharedExchangeUserNames[i] === email)
+								{
+									hasExchange = true;
+									shared = true;
+									break;
+								}
+							}
+						}
+						if(hasExchange)
+						{
+							final_url = 'core/api/office/office365-emails?from_email='+email;
+							html = '<i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>'+email;
+							if(shared)
+								html = html+ ' (Shared)';
+						}
+					}
+					if(final_url)
+					{
+						cookie_info[0] = final_url
+						cookie_info[1] = html;
+						cookie_info[2] = email_server;
+						cookie_info[3] = email;
+					}
+				}
+			}// end of if cookie values == 2
+		}
+	}
+	return cookie_info;
+}
+
+function contact_detail_page_infi_scroll(element_id, targetCollection)
+{
+	console.log("initialize_infinite_scrollbar",element_id);
+	
+	element_id.unbind("scroll");
+
+	if (element_id == undefined || element_id == null)
+	{
+		console.log("no elmnt");
+		return;
+	}
+	console.log(targetCollection);
+	targetCollection.infiniScroll = new Backbone.InfiniScroll(targetCollection.collection, {
+		target : element_id,
+		untilAttr : 'cursor',
+		param : 'cursor',
+		strict : false,
+		pageSize : targetCollection.page_size,
+		success : function(colleciton, response)
+		{
+			console.log('in success');
+			if (!colleciton.last().get("cursor"))
+			{
+				this.strict = true;
+				targetCollection.infiniScroll.disableFetch();
+			}
+			// Remove loading icon
+			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
+		},
+		onFetch : function()
+		{
+			console.log('in fetch');
+			// Add loading icon
+			$(targetCollection.infiniScroll.options.target).append(
+					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
+		}
+		});
+}
+function showMailsInfoMessages()
+{
+	showMailsErrorMessages();
+	if(mailsView.collection.length > 20)
+	{
+		if(($('#all-emails-info',App_Companies.companyDetailView.el).length === 0))
+		{
+			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">Showing relevant messages from all accounts. Maximum of 20 messages from each account </div>');
+		}
+	}
+	$('#company-mail-account-types', App_Companies.companyDetailView.el).find('.all-mails-loading').remove();
+	$('#company-mail', App_Companies.companyDetailView.el).find("#no-email").css('display','block');
+}
+function showMailsErrorMessages()
+{
+	for(var i=0;i<email_errors_divs.length;i++)
+		$('#company-mails',App_Companies.companyDetailView.el).prepend(email_errors_divs[i]);
+	email_errors_divs = [];
+}
+function ifNoError(email)
+{
+	if(email && 'errormssg' in email && 'owner_email' in email)
+	{
+		var email_error_div = '<div class="alert alert-danger" > <a href="#" class="close" data-dismiss="alert">&times;</a><span class="text-dark">Unable to fetch emails from account "'+email.owner_email+'" Error:'+ email.errormssg+'</span>';
+		email_errors_divs.push(email_error_div);
+		return false;
+	}
+	return true;
+}
+function killAllPreviousRequests()
+{
+	for(var i=0;i<email_requests.length;i++)
+	{
+		var xhr = email_requests[i];
+		xhr.abort();
+	}
+	email_requests = [];
+}
+function show_no_email_alert()
+{
+	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this company has no email to get the mails.</div>');
+}
+
+
+
 
 }(window.company_detail_tab = window.company_detail_tab || {}, $));
 

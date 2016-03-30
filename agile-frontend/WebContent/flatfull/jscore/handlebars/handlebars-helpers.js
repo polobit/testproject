@@ -1663,6 +1663,16 @@ $(function()
 		}
 	});
 
+	Handlebars.registerHelper('getCurrentCompanyProperty', function(value)
+	{
+		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties')
+			console.log(App_Companies.companyDetailView.model.toJSON());
+			return getPropertyValue(contact_properties, value);
+		}
+	});
+
 	Handlebars.registerHelper('safe_string', function(data)
 	{
 		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
