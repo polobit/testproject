@@ -361,34 +361,36 @@ function showCalendar(users)
 								var pullupornot = '';
 								var popoverElement = '';
 								var popover_min_width = 300;
-									
+								var that = $(this);	
+								var that_event = jsEvent.currentTarget;
+								accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
+											console.log(data);
+											event.contacts=data;
 									if (calendarView == "month")
 									{
 										console.log("month");
 
-										popover_min_width = $(this).parents('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
-										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
-										var top = jsEvent.currentTarget.offsetTop;
-										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - left < popover_min_width)
+										popover_min_width = that.parents('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
+										var left =that_event.offsetLeft + that_event.offsetWidth + 10;
+										var top = that_event.offsetTop;
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - left < popover_min_width)
 										{
-											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
+											left = that_event.offsetLeft - popover_min_width - 10;
 											leftorright = 'right';
 										}
-										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < that_event.offsetWidth)
 										{
-											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
-											top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
+											left = ((that_event.offsetLeft + that_event.offsetWidth + 10) / 2) - (popover_min_width / 2);
+											top = that_event.offsetTop + that_event.offsetHeight + 10;
 											leftorright = 'top';
 										}
 
 										var eventJSON = {};
-										var that = $(this);
+										
 										eventJSON.leftorright = leftorright;eventJSON.popover_min_width = popover_min_width;
 										eventJSON.popover_min_width = popover_min_width;eventJSON.left = left;eventJSON.top = top;
 										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
-										accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
-											console.log(data);
-											event.contacts=data;
+										
 							  
 
 										if(event.type == "officeCalendar"){
@@ -397,37 +399,37 @@ function showCalendar(users)
 											that.after($(getTemplate("calendar-mouseover-popover", eventJSON)));
 										}
 										
-										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < that.parent().find('.fc-overlayw')
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw')
 												.height())
 										{
 											that.parent().find('.fc-overlayw').css("top",
-													top - that.parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
+													top - that.parent().find('.fc-overlayw').height() + that_event.offsetHeight + 20 + "px");
 											that.parent().find('.fc-overlayw').find('.arrow').css("top", that.parent().find('.fc-overlayw').height() - 31 + "px");
 										}
-										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < that_event.offsetWidth)
 										{
 											that.parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
 										}
-										if ((that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < that
-										.parent().find('.fc-overlayw').height() + 10) && (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
+										if ((that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - that_event.offsetTop - that_event.offsetHeight - 10 < that
+										.parent().find('.fc-overlayw').height() + 10) && (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < that_event.offsetWidth))
 										{
 											that.parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
-											top = jsEvent.currentTarget.offsetTop - that.parent().find('.fc-overlayw').height() + 10;
+											left = ((that_event.offsetLeft + that_event.offsetWidth + 10) / 2) - (popover_min_width / 2);
+											top = that_event.offsetTop - that.parent().find('.fc-overlayw').height() + 10;
 											that.parent().find('.fc-overlayw').css({ "top" : top + "px", "lef" : left + "px" });
 											that.parent().find('.fc-overlayw').find('.arrow').css("top",that.parent().find('.fc-overlayw').height() - 22 + "px");
 										}
-										});
+										
 									}
 									else if (calendarView == "agendaWeek")
 									{
 										console.log("agendaWeek");
 										popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
-										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
-										var top = jsEvent.currentTarget.offsetTop;
+										var left = that_event.offsetLeft + that_event.offsetWidth + 10;
+										var top = that_event.offsetTop;
 										if ($('.fc-agenda-slots:visible').width() - left < popover_min_width)
 										{
-											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
+											left = that_event.offsetLeft - popover_min_width - 10;
 											leftorright = 'right';
 										}
 
@@ -437,27 +439,27 @@ function showCalendar(users)
 										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
 										
 										if(event.type == "officeCalendar"){
-											$(this).after(getTemplate("week-office-calendar-mouseover-popover", eventJSON));
+											that.after(getTemplate("week-office-calendar-mouseover-popover", eventJSON));
 										}else{
-											$(this).after(getTemplate("week-calendar-mouseover-popover", eventJSON));
+											that.after(getTemplate("week-calendar-mouseover-popover", eventJSON));
 										}
 										
-										if ($('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
+										if ($('.fc-agenda-slots:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw').height())
 										{
-											$(this).parent().find('.fc-overlayw').css("top",
-													top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
+											that.parent().find('.fc-overlayw').css("top",
+													top - that.parent().find('.fc-overlayw').height() + that_event.offsetHeight + 20 + "px");
+											that.parent().find('.fc-overlayw').find('.arrow').css("top", that.parent().find('.fc-overlayw').height() - 31 + "px");
 										}
 									}
 									else if (calendarView == "agendaDay")
 									{
 										console.log("agendaDay");
-										var left = jsEvent.currentTarget.offsetLeft;
-										var top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
+										var left = that_event.offsetLeft;
+										var top = that_event.offsetTop + that_event.offsetHeight + 10;
 										leftorright = 'top';
-										if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
+										if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
 										{
-											left = jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth);
+											left = that_event.offsetLeft - that_event.offsetWidth - ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft - that_event.offsetWidth);
 										}
 										
 										var eventJSON = {};
@@ -465,49 +467,50 @@ function showCalendar(users)
 										eventJSON.left = left;eventJSON.top = top;
 										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
 										if(event.type == "officeCalendar"){
-											$(this).after(getTemplate("day-office-calendar-mouseover-popover", eventJSON));
+											that.after(getTemplate("day-office-calendar-mouseover-popover", eventJSON));
 										}else{
 											try{
-												$(this).after(getTemplate("day-calendar-mouseover-popover", eventJSON));
+												that.after(getTemplate("day-calendar-mouseover-popover", eventJSON));
 											}catch(e){}
 										}
 										
-										$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
-										if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
+										that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
+										if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
 										{
-											$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
+											that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
 										}
-										if ((jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
-												.height() - jsEvent.currentTarget.offsetHeight < $(this).parent().find('.fc-overlayw').height() + 10))
+										if ((that_event.offsetTop < that.parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
+												.height() - that_event.offsetHeight < that.parent().find('.fc-overlayw').height() + 10))
 										{
-											$(this).parent().find('.fc-overlayw').css("top", jsEvent.currentTarget.offsetTop + 40 + "px");
+											that.parent().find('.fc-overlayw').css("top", that_event.offsetTop + 40 + "px");
 										}
-										if ((jsEvent.currentTarget.offsetTop > $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
-												.height() - (jsEvent.currentTarget.offsetHeight + jsEvent.currentTarget.offsetTop) < $(this).parent().find(
+										if ((that_event.offsetTop > that.parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
+												.height() - (that_event.offsetHeight + that_event.offsetTop) < that.parent().find(
 												'.fc-overlayw').height() + 10))
 										{
-											$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
-											$(this).parent().find('.fc-overlayw').css(
+											that.parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+											that.parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
+											that.parent().find('.fc-overlayw').css(
 													"top",
-													$('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetHeight - $(this).parent().find('.fc-overlayw')
+													$('.fc-agenda-slots:visible').height() - that_event.offsetHeight -that.parent().find('.fc-overlayw')
 															.height() + 7 + "px");
-											if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
+											if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
 											{
-												$(this).parent().find('.fc-overlayw')
+												that.parent().find('.fc-overlayw')
 														.css(
 																"left",
-																jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible')
-																		.width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth) + "px");
+																that_event.offsetLeft - that_event.offsetWidth - ($('.fc-agenda-slots:visible')
+																		.width() - that_event.offsetLeft - that_event.offsetWidth) + "px");
 											}
 										}
 									}
-							$(jsEvent.currentTarget).css('z-index', 9);
+							$(that_event).css('z-index', 9);
 							if (event.allDay){
-								$(jsEvent.currentTarget.parentElement).css('z-index', 9);
+								$(that_event.parentElement).css('z-index', 9);
 							}
-							$(this).parent().find('.fc-overlayw').show();
-							$(this).find(".ui-resizable-handle").show();
+							that.parent().find('.fc-overlayw').show();
+							that.find(".ui-resizable-handle").show();
+							});
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{

@@ -422,7 +422,7 @@ function minicalendar(el)
 		            			   .format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
 		            			   that.append(popoverElement);
 		            		   }
-		            		   var overlay=$(this).find('.fc-overlay');
+		            		   var overlay=that.find('.fc-overlay');
 		            		   if(event.start.getDay()==4 || event.start.getDay()==5 || event.start.getDay()==6){
 		            			   overlay.css('left','-180px');
 		            			   overlay.find('.arrow').css('left','91%');
