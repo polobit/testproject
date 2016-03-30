@@ -69,23 +69,7 @@ public class SendgridInboundParser extends HttpServlet
 			if (isMultipart)
 			{
 				ServletFileUpload upload = new ServletFileUpload();
-
-				List<FileItem> list = upload.parseRequest(request);
-
-				for (FileItem item : list)
-				{
-					System.out.println("item.isFormField() : " + item.isFormField());
-
-					System.out.println("item.getFieldName()");
-					System.out.println(item.getFieldName());
-
-					System.out.println("item.getName()");
-					System.out.println(item.getName());
-
-					System.out.println("item.getString()");
-					System.out.println(item.getString());
-				}
-
+				
 				try
 				{
 					FileItemIterator iter = upload.getItemIterator(request);
