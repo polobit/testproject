@@ -63,7 +63,19 @@ public class SendgridInboundParser extends HttpServlet
 			}
 
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+			
+			StringBuffer chaine = new StringBuffer();
+			String ligne = "";
 
+			while ((ligne = br.readLine()) != null)
+				chaine.append(ligne);
+			
+			System.out.println("Input stream....");
+			System.out.println(chaine);
+
+			
 			System.out.println("isMultipart: " + isMultipart);
 
 			if (isMultipart)
@@ -87,10 +99,10 @@ public class SendgridInboundParser extends HttpServlet
 
 							InputStream stream = item.openStream();
 							
-							BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+							br = new BufferedReader(new InputStreamReader(stream));
 							
-							StringBuffer chaine = new StringBuffer();
-							String ligne = "";
+							chaine = new StringBuffer();
+							ligne = "";
 
 							while ((ligne = br.readLine()) != null)
 								chaine.append(ligne);
