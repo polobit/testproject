@@ -41,7 +41,7 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		try
 		{
-			System.out.println("html: " + request.getParameter("html"));
+			System.out.println("html: " + request.getParameter("body-html"));
 			
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
