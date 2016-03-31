@@ -64,6 +64,7 @@ var ContactsRouter = Backbone.Router.extend({
 			"call-contacts" : "callcontacts",
 
 		/* Referrals */
+		"refer" : "refer",
 		"refer-friends" : "referFriends"
 	},
 	
@@ -1220,6 +1221,22 @@ var ContactsRouter = Backbone.Router.extend({
 
 
 
+	},
+
+	refer : function()
+	{
+		load_facebook_lib_for_referrals();
+		getTemplate("refer-modal", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#referModal').html($(template_ui));
+			getTemplate("refer-modal-body", {}, undefined, function(template_ui1){
+				if(!template_ui1)
+					  return;
+				$('#referModal').find(".modal-body").html($(template_ui1));
+				$('#referModal').modal("show");
+			}, null);
+		}, null);
 	},
 
 	referFriends : function()

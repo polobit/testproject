@@ -256,22 +256,6 @@ $(document).ready(function(){
 
    });
 
-	$("#referrals_link").on("click", function(e){
-		e.preventDefault();
-		load_facebook_lib_for_referrals();
-		getTemplate("refer-modal", {}, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('#referModal').html($(template_ui));
-			getTemplate("refer-modal-body", {}, undefined, function(template_ui1){
-				if(!template_ui1)
-					  return;
-				$('#referModal').find(".modal-body").html($(template_ui1));
-				$('#referModal').modal("show");
-			}, null);
-		}, null);
-		
-	});
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){
