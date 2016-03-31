@@ -237,10 +237,10 @@ public class SendgridInboundParser extends HttpServlet
 
 	private String[] getNameAndEmail(JSONObject json)
 	{
-		String name = "x", email = "customer@domain.com";
+		String name = "x", from = "customer@domain.com";
 		try
 		{
-			String from = json.getString("from");
+			 from = json.getString("from");
 
 			int delimeterIndex = from.indexOf("<");
 
@@ -250,15 +250,15 @@ public class SendgridInboundParser extends HttpServlet
 			if (StringUtils.isBlank(name))
 				name = from.substring(0, from.lastIndexOf("@"));
 
+			System.out.println("name: " + name);
 			System.out.println("from: " + from);
-			System.out.println("email: " + email);
 		}
 		catch (JSONException e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
-		return new String[] { name, email };
+		return new String[] { name, from };
 	}
 
 	private List<String> getCCEmails(JSONObject json)
