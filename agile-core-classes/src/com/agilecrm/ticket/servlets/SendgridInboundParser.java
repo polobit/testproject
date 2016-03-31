@@ -323,6 +323,7 @@ public class SendgridInboundParser extends HttpServlet
 		try
 		{
 			FileItemIterator iter = upload.getItemIterator(request);
+			
 			FileItemStream item = null;
 
 			while (iter.hasNext())
@@ -333,7 +334,7 @@ public class SendgridInboundParser extends HttpServlet
 				// System.out.println("Field value: ");
 				// System.out.println(IOUtils.toString(item.openStream()));
 
-				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream(), StandardCharsets.UTF_8.name()));
+				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream()));
 
 				// if (item.isFormField())
 				// {
@@ -358,13 +359,6 @@ public class SendgridInboundParser extends HttpServlet
 				// System.out.println(theString);
 				// }
 				// }
-			}
-
-			InputStream stream = request.getInputStream();
-
-			if (stream != null)
-			{
-				System.out.println(IOUtils.toString(stream, StandardCharsets.UTF_8.name()));
 			}
 		}
 		catch (Exception e)
