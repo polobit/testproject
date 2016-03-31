@@ -5,10 +5,10 @@
 <div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
 
 <div class="row-row">
-<div  id="deal-detail-actions-dropdown">
+<div  id="deal-detail-actions-dropdown" class="wrapper">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
-<div class="wrapper p-t">
-  <div class="panel panel-default m-b-none">
+<div class="p-t-none">
+  <div class="panel panel-default m-b">
     <div class="panel-body">
 <div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
 {{#if expected_value}}
@@ -110,8 +110,8 @@
 <div>
 {{#if_equals pipeline.won_milestone milestone}}
   {{#if won_date}}
-    <div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:10px;">
-    <div class="panel panel-default m-b-none">
+    <div class="hidden-sm hidden-xs">
+    <div class="panel panel-default m-b">
     <div class="panel-body">
    
 
@@ -143,14 +143,14 @@
 
                            
 
-<div class="deal-custom-data p-t-sm"> 
+<div class="deal-custom-data"> 
 								
 					
 								<div class="l-h">
 									
 									{{#if custom_data}}
-                  <div class="wrapper hidden-sm hidden-xs p-b-md p-t-none" >
-                  <div class="panel panel-default m-b-none">
+                  <div class="hidden-sm hidden-xs " >
+                  <div class="panel panel-default ">
                     <div class="panel-body">
                                      
                                       <small class="text-base text-muted">Custom Data</small>
@@ -190,11 +190,13 @@
 
 					</div>
 
-<div class="wrapper hidden-sm hidden-xs p-b-xs p-t-xxs" >
-  <div class="panel panel-default m-b-none">
-    <div class="panel-body">
+
+
 
 {{#if contacts}}
+<div class=" hidden-sm hidden-xs">
+  <div class="panel panel-default m-b">
+    <div class="panel-body">
 <div class="m-b-xs">
         	<small class="text-base text-muted">Related to</small>
 </div>
@@ -215,8 +217,8 @@
   </div>
 
 {{#if description}}
-<div class="wrapper hidden-sm hidden-xs p-t-sm" >
-  <div class="panel panel-default m-b-none">
+<div class="hidden-sm hidden-xs " >
+  <div class="panel panel-default m-b ">
     <div class="panel-body">
 <div>
         	<small class="text-base text-muted">Description</small>
