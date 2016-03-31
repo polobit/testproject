@@ -165,3 +165,8 @@ function executeWebRulesOnRoute(){
 	        return;
 	  }
 }
+
+$(document).ready(function(){
+
+  setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
+});
