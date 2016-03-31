@@ -112,7 +112,7 @@ public class SendgridInboundParser extends HttpServlet
 
 					System.out.println("groupName: " + groupName);
 
-					String[] groupArray = groupName.split("+");
+					String[] groupArray = groupName.split("\\+");
 					boolean isNewTicket = false;
 
 					if (groupArray.length >= 2)
@@ -353,13 +353,7 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		String from = "Sasi Jolla <sasi@agilecrm.com>";
 
-		int delimeterIndex = from.indexOf("<");
-
-		String name = from.substring(0, delimeterIndex).trim();
-		from = from.substring((delimeterIndex + 1), from.indexOf(">")).trim();
-
-		System.out.println(from);
-		System.out.println(name);
+		System.out.println(from.split("\\+")[0]);
 
 		// System.out.println("<sasi@clickesk.com>".replaceAll("<|>", ""));
 		// System.out.println(getSubDomain("support@happy.agilecrm.com"));
