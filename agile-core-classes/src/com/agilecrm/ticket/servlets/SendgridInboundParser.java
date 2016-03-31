@@ -240,7 +240,7 @@ public class SendgridInboundParser extends HttpServlet
 		String name = "x", email = "customer@domain.com";
 		try
 		{
-			String from = json.getString("json");
+			String from = json.getString("from");
 
 			int delimeterIndex = from.indexOf("<");
 
