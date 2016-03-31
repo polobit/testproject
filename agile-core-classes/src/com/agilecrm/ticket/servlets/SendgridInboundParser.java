@@ -113,12 +113,12 @@ public class SendgridInboundParser extends HttpServlet
 					System.out.println("groupName: " + groupName);
 
 					String[] groupArray = groupName.split("\\+");
-					boolean isNewTicket = false;
+					boolean isNewTicket = true;
 
 					if (groupArray.length >= 2)
 					{
 						groupName = groupArray[0];
-						isNewTicket = true;
+						isNewTicket = false;
 					}
 
 					TicketGroups ticketGroup = null;
