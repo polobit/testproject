@@ -188,8 +188,8 @@ var DealsRouter = Backbone.Router.extend({
 		var deals_filter = new Base_Model_View({ url : '/core/api/deal/filters', template : "filter-deals", isNew : "true", window : "deal-filters",
 			prePersist : function(model){
 				model.set({ 
-							'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
-							'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
+						//	'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
+						//	'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
 						}, 
 						{ 
 							silent : true 
@@ -281,9 +281,9 @@ var DealsRouter = Backbone.Router.extend({
 				model.set({ 
 							'pipeline_id' : $('#filter_pipeline', $("#dealsFilterForm")).val(), 
 							'milestone' : $('#milestone', $("#dealsFilterForm")).val(),
-							'owner_id' : $('#owners-list-filters', $("#dealsFilterForm")).val() ,
-							'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
-							'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
+							'owner_id' : $('#owners-list-filters', $("#dealsFilterForm")).val() 
+						//	'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
+						//	'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
 						}, 
 						{ 
 							silent : true 
@@ -314,9 +314,9 @@ var DealsRouter = Backbone.Router.extend({
 						hideTransitionBar();
 						$('#value_filter').find('option').each(function(){
 				    		if($(this).val()==$('#value_filter').val()){
-				    			$('.'+$(this).val(),$('#value_filter')).removeClass('hide');
+				    			$('.'+$(this).val(),$('#deal-value-filter')).removeClass('hide');
 				    		}else{
-				    			$('.'+$(this).val(),$('#value_filter')).addClass('hide');
+				    			$('.'+$(this).val(),$('#deal-value-filter')).addClass('hide');
 				    		} 
 				    	});
 					}

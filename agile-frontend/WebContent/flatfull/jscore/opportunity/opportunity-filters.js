@@ -857,10 +857,10 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		var that = $(this);
     	that.find('option').each(function(){
     		if($(this).val()==that.val()){
-    			$('.'+$(this).val()).removeClass('hide');
+    			$('.'+$(this).val(),$('#deal-value-filter')).removeClass('hide');
     		}else{
-    			$('.'+$(this).val()).addClass('hide');
-    			$('.'+$(this).val()).each(function(){
+    			$('.'+$(this).val(),$('#deal-value-filter')).addClass('hide');
+    			$('.'+$(this).val(),$('#deal-value-filter')).each(function(){
     				$(this).find('input').val("");
     			});
     		} 
