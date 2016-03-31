@@ -138,7 +138,8 @@ public class SendgridInboundParser extends HttpServlet
 
 					List<String> ccEmails = getCCEmails(json);
 
-					String plainText = json.getString("text"), htmlText = json.getString("html");
+					String plainText = json.has("text") ? json.getString("text") : "", htmlText = json.has("html") ? json
+							.getString("html") : "";
 
 					// Check if any attachments exists
 					Boolean attachmentExists = false;
@@ -240,7 +241,7 @@ public class SendgridInboundParser extends HttpServlet
 		String name = "x", from = "customer@domain.com";
 		try
 		{
-			 from = json.getString("from");
+			from = json.getString("from");
 
 			int delimeterIndex = from.indexOf("<");
 
