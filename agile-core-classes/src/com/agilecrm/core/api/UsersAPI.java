@@ -426,15 +426,24 @@ public class UsersAPI
 	@POST
 	@Path("/fingerprintscanner")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void getFingerPrints(@QueryParam("result") String result,@FormParam("obj") String obj){
-		try{
-		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-		domainUser.fingerprintId=result;		
-		domainUser.save();
+	public String getFingerPrints(@QueryParam("result") String result,@FormParam("obj") String obj){
+		/*try{
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			String existingFingerprint = domainUser.finger_print;
+			
+			// Check with equality with present
+			if(StringUtils.isNotBlank(existingFingerprint) && !existingFingerprint.equals(result))
+			{
+				domainUser.finger_print=result;		
+				
+			}
+			String mail = domainUser.email;
+			domainUser.save();
 		}
 		catch(Exception e){
 			
-		}
+		}*/
+		return result;
 	}
 
 }

@@ -236,9 +236,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	@Embedded
 	//public HelpdeskSettings helpdeskSettings = null;
 	
-	/** For FingerprintId */
+
+	/** Browser Fingerprint */
+	public String finger_print;
 	
-	public String fingerprintId;
 
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
@@ -274,7 +275,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		this.email = email;
 		this.name = name;
 		this.password = password;
-		this.fingerprintId =fingerprintId;
+		this.finger_print =finger_print;
 		this.is_admin = isAdmin;
 		this.is_account_owner = isAccountOwner;
 		

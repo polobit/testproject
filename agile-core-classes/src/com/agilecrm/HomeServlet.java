@@ -219,7 +219,25 @@ public class HomeServlet extends HttpServlet
 	// first user in the domain.
 	setUpAgileUser(req, resp);
     }
-
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+    {
+    	try {
+		    	String otp= request.getParameter("otp");
+		    	long newotp = Long.parseLong(otp);
+		    
+		    	long generateotp = (long) request.getSession().getAttribute("return_otp");
+		    	if(newotp == generateotp){
+		    		doGet(request, response);
+		    	}
+		    	else{
+						throw new Exception(
+								"Invalid OTP");
+					} 
+    	}
+    	catch(Exception e){}
+    	
+    }
+  
     public static boolean isFirstTimeUser(HttpServletRequest req)
     {
 	Object object = req.getAttribute(FIRST_TIME_USER_ATTRIBUTE);

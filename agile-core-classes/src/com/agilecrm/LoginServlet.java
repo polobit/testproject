@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -20,6 +21,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -45,7 +47,11 @@ import com.google.appengine.api.utils.SystemProperty;
 public class LoginServlet extends HttpServlet {
 	public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
 	public static String RETURN_PATH_SESSION_HASH = "return_hash";
-
+	//Create session for fingerprint
+	public static String RETURN_SESSION_FINGERPRINT = "return_fingerprint";
+	//For generated otp
+	public static String RETURN_SESSION_FINGERPRINT_OTP = "return_otp";
+	
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -186,7 +192,11 @@ public class LoginServlet extends HttpServlet {
 
 		// Hash to redirect after login
 		String hash = request.getParameter("location_hash");
-
+		
+		//Browser finger_print
+		String finger_print = (String) request.getAttribute("finger_print");
+		System.out.println(finger_print);
+		
 		if (!StringUtils.isEmpty(hash))
 			request.getSession().setAttribute(RETURN_PATH_SESSION_HASH, hash);
 
@@ -240,6 +250,8 @@ public class LoginServlet extends HttpServlet {
 		UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
 		request.getSession().setAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
+		//create session for finger_print
+		request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT, finger_print);
 
 		// Set session active for 30 days if remember me is set
 		if (request.getParameter("signin") != null
@@ -271,10 +283,32 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect(redirect);
 			return;
 		}
-
-		response.sendRedirect("/");
+		String existingFingerprint = domainUser.finger_print;
+		if(StringUtils.isNotBlank(existingFingerprint) && !existingFingerprint.equals(finger_print))
+		{
+			domainUser.finger_print=finger_print;
+			request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT,true);
+			
+			response.sendRedirect("/");
+		}
+		else{
+			String mail = domainUser.email;
+			request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT,false);
+			long generatedotp = fingerPrintSession(domainUser.finger_print);	
+			request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT_OTP,generatedotp );		
+			//SendMail.sendMail(mail, subject, template, otp);
+		}
+		
+	
 
 	}
+	
+	public long fingerPrintSession(String fingerprint){
+		long otp = System.currentTimeMillis()/1000;
+		return otp;
+		
+	}
+	
 
 	private void handleMulipleLogin(HttpServletResponse response)
 			throws Exception {
