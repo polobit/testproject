@@ -796,6 +796,7 @@ public class DealsAPI
 		opp.note_description = note.description;
 		opp.note_subject = note.subject;
 		opp.note_created_time = note.created_time;
+		opp.updated_time = System.currentTimeMillis() / 1000 ;
 		opp.save();
 	    }
 	}
@@ -823,10 +824,15 @@ public class DealsAPI
 	    updatedOpportunityid = deal_ids.get(0);
 	}
 	note.save();
-	if (updatedOpportunityid != null)
-	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+	if (updatedOpportunityid != null){
+		Opportunity opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+		opportunity.updated_time = System.currentTimeMillis() / 1000 ; 
+		opportunity.save();
+	    return opportunity ; 
+	}
 	return null;
     }
+    
 
     /**
      * Call backends archive deals.

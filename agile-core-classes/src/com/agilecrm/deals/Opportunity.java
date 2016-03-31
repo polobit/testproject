@@ -256,6 +256,8 @@ public class Opportunity extends Cursor implements Serializable
      */
     @NotSaved
     public Double total_deal_value = 0d;
+    
+    public Long updated_time = 0L;
 
     /**
      * ObjectifyDao of Opportunity.
@@ -601,6 +603,8 @@ public class Opportunity extends Cursor implements Serializable
 	// Initializes created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
+	
+	updated_time = System.currentTimeMillis() / 1000;
 
 	// Set Deal Pipeline.
 	if (pipeline_id != null && pipeline_id > 0)
