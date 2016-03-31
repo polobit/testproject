@@ -17,6 +17,8 @@ public class DomainUserPartial extends ProjectionEntityParse{
 	public String name;
 	public String pic;
 	
+	public String domain;
+	
 	public DomainUserPartial(){
 		super();
 		System.out.println("Default one");
@@ -28,6 +30,8 @@ public class DomainUserPartial extends ProjectionEntityParse{
 		name = (String) getPropertyValue(entity, "name");
 		email = (String) getPropertyValue(entity, "email");
 		pic = (String) getPropertyValue(entity, "pic");
+		
+		domain = (String) getPropertyValue(entity, "domain");
 		
 		return this;
 
