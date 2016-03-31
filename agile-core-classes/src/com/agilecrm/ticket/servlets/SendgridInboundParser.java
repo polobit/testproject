@@ -325,24 +325,6 @@ public class SendgridInboundParser extends HttpServlet
 			FileItemIterator iter = upload.getItemIterator(request);
 			FileItemStream item = null;
 
-			InputStream stream = request.getInputStream();
-
-			if (stream != null)
-			{
-				StringBuilder inputStringBuilder = new StringBuilder();
-
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-				String line = bufferedReader.readLine();
-				while (line != null)
-				{
-					inputStringBuilder.append(line);
-					inputStringBuilder.append('\n');
-					line = bufferedReader.readLine();
-				}
-				System.out.println("Input stream.....");
-				System.out.println(inputStringBuilder.toString());
-			}
-
 			while (iter.hasNext())
 			{
 				item = iter.next();
@@ -376,6 +358,13 @@ public class SendgridInboundParser extends HttpServlet
 				// System.out.println(theString);
 				// }
 				// }
+			}
+
+			InputStream stream = request.getInputStream();
+
+			if (stream != null)
+			{
+				System.out.println(IOUtils.toString(stream, StandardCharsets.UTF_8.name()));
 			}
 		}
 		catch (Exception e)
