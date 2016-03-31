@@ -1,9 +1,16 @@
 package com.agilecrm.ticket.servlets;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -26,9 +33,9 @@ import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
-import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.CreatedBy;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
@@ -75,15 +82,26 @@ public class SendgridInboundParser extends HttpServlet
 				{
 					JSONObject json = getJSONFromMIME(request);
 
-					System.out.println("JSON:");
-					System.out.println(json);
+					System.out.println("JSON keys list:");
+
+					for (Iterator iter = json.keys(); iter.hasNext();)
+					{
+						String keyName = (String) iter.next();
+
+						System.out.println("keyName: " + keyName);
+
+						if (keyName.contains("attachment"))
+							System.out.println(json.getString(keyName));
+					}
 
 					String envelope = json.getString("envelope");
+
+					System.out.println("Envelope:" + envelope);
 
 					JSONObject enveloperJSON = new JSONObject(envelope);
 					String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
 
-					System.out.println("toAddress: " + toAddress);
+					System.out.println("To address: " + toAddress);
 
 					/**
 					 * Replacing helptor.com text with space so that we'll get a
@@ -307,6 +325,24 @@ public class SendgridInboundParser extends HttpServlet
 			FileItemIterator iter = upload.getItemIterator(request);
 			FileItemStream item = null;
 
+			InputStream stream = request.getInputStream();
+
+			if (stream != null)
+			{
+				StringBuilder inputStringBuilder = new StringBuilder();
+
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+				String line = bufferedReader.readLine();
+				while (line != null)
+				{
+					inputStringBuilder.append(line);
+					inputStringBuilder.append('\n');
+					line = bufferedReader.readLine();
+				}
+				System.out.println("Input stream.....");
+				System.out.println(inputStringBuilder.toString());
+			}
+
 			while (iter.hasNext())
 			{
 				item = iter.next();
@@ -315,7 +351,7 @@ public class SendgridInboundParser extends HttpServlet
 				// System.out.println("Field value: ");
 				// System.out.println(IOUtils.toString(item.openStream()));
 
-				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream()));
+				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream(), StandardCharsets.UTF_8.name()));
 
 				// if (item.isFormField())
 				// {
@@ -350,13 +386,11 @@ public class SendgridInboundParser extends HttpServlet
 		return dataJSON;
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws JSONException, IOException
 	{
-		String from = "Sasi Jolla <sasi@agilecrm.com>";
+		File file = new File("D:\\email.txt");
+		FileInputStream inputStream = new FileInputStream(file);
 
-		System.out.println(from.split("\\+")[0]);
-
-		// System.out.println("<sasi@clickesk.com>".replaceAll("<|>", ""));
-		// System.out.println(getSubDomain("support@happy.agilecrm.com"));
+		System.out.println(IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()));
 	}
 }

@@ -218,7 +218,7 @@ public class TicketNotes
 			
 			// If ticket created from agile dashboard then no need to send this
 			// ticket to end user
-			if (ticket.user_replies_count == 1 && !isPublicNotes)
+			if (ticket.user_replies_count == 1 && isPublicNotes)
 				return this;
 
 			ActivityType activityType = (isPublicNotes) ? ((created_by == CREATED_BY.AGENT) ? ActivityType.TICKET_ASSIGNEE_REPLIED
