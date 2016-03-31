@@ -27,8 +27,13 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -48,6 +53,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
+import com.google.api.client.util.Base64;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -161,11 +167,71 @@ public class SendgridInboundParser extends HttpServlet
 
 					// Check if any attachments exists
 					Boolean attachmentExists = false;
+					List<TicketDocuments> documentsList = new ArrayList<TicketDocuments>();
 
 					if (json.has("attachments"))
 					{
-						if (json.getInt("attachments") > 0)
-							attachmentExists = true;
+						try
+						{
+							int attachmentsCount = json.getInt("attachments");
+
+							if (attachmentsCount > 0)
+							{
+								attachmentExists = true;
+
+								Document doc = Jsoup.parseBodyFragment(htmlText.toString(), "UTF-8");
+
+								JSONObject attachmentInfo = new JSONObject(json.getString("attachment-info"));
+
+								for (Iterator<String> iter = attachmentInfo.keys(); iter.hasNext();)
+								{
+									String attachmentKeyName = iter.next();
+
+									JSONObject fileInfo = new JSONObject(attachmentInfo.getString(attachmentKeyName));
+
+									String fileName = "", fileType = fileInfo.getString("type");
+
+									if (fileInfo.has("filename"))
+										fileName = fileInfo.getString("filename");
+									else if (fileInfo.has("content-id"))
+										fileName = fileInfo.getString("content-id");
+
+									if (fileType.startsWith("image"))
+									{
+										Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
+
+										if (elements == null || elements.size() == 0)
+											continue;
+
+										Element element = elements.first();
+
+										plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
+
+										try
+										{
+											element.remove();
+										}
+										catch (Exception e)
+										{
+											System.out.println(ExceptionUtils.getFullStackTrace(e));
+										}
+									}
+
+									byte[] bytes = json.getString(attachmentKeyName).getBytes(StandardCharsets.UTF_8);
+
+									// Saving file to GCS
+									GCSServiceAgile service = TicketWebhook.saveFileToGCS(fileName, fileType, bytes);
+
+									// Saving file URL to document object
+									documentsList.add(new TicketDocuments(fileName, fileType, (long) bytes.length,
+											service.getFilePathToDownload()));
+								}
+							}
+						}
+						catch (Exception e)
+						{
+							System.out.println(ExceptionUtils.getFullStackTrace(e));
+						}
 					}
 
 					Tickets ticket = null;
@@ -226,8 +292,6 @@ public class SendgridInboundParser extends HttpServlet
 						// Execute note created by customer trigger
 						TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 					}
-
-					List<TicketDocuments> documentsList = new ArrayList<TicketDocuments>();
 
 					// Creating new Notes in TicketNotes table
 					TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID,
@@ -334,27 +398,7 @@ public class SendgridInboundParser extends HttpServlet
 				// System.out.println("Field value: ");
 				// System.out.println(IOUtils.toString(item.openStream()));
 
-				BufferedReader br = new BufferedReader(new InputStreamReader(item.openStream()));
-
-				// you should estimate buffer size
-				StringBuffer sb = new StringBuffer(5000);
-
-				try
-				{
-					int linesPerRead = 100;
-					for (int i = 0; i < linesPerRead; ++i)
-					{
-						sb.append(br.readLine());
-						// placing newlines back because readLine() removes them
-						sb.append('\n');
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-
-				dataJSON.put(item.getFieldName(), sb.toString());
+				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream()));
 
 				// if (item.isFormField())
 				// {
