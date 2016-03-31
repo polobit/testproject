@@ -333,7 +333,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			 * Creates a Model for users edit, navigates back to 'user' window on
 			 * save success
 			 */
-			var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", saveCallback : function(response)
+			var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", change : false, saveCallback : function(response)
 			{
 
 				update_contact_in_our_domain(userEmail, response, function(){
@@ -367,6 +367,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				setTimeout(function(){
 					$('#deals-privilege', el).trigger('change');
 					$('#calendar-privilege', el).trigger('change');
+					$('a[href="#sales-previlages"]',el).tab('show');
+					$('a[href="#sales-previlages"]',el).trigger('click');
 				},500);
 			}, saveAuth : function(el){
 				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
