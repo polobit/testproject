@@ -757,14 +757,7 @@ var portlet_utility = {
 								emailsSkippedCount = data["emailSkipped"];
 								emailsHardBounceCount = data["hardBounce"];
 								emailsSoftBounceCount = data["softBounce"];
-								if (emailsSentCount == 0) {
-									that.find('#emails-sent').css('width',
-											'100%').css('height', '100%');
-									that
-											.find('#emails-sent')
-											.html(
-													'<div class="portlet-error-message">No Email activity</div>');
-								} else {
+				
 									that
 											.find('#emails-opened')
 											.css('display', 'block')
@@ -845,7 +838,6 @@ var portlet_utility = {
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsUnsubscribed)
 															+ '</div></div>');
-								}
 
 								portlet_utility.addWidgetToGridster(base_model);
 							});
