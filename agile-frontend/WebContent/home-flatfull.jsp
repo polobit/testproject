@@ -813,7 +813,7 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
         </div>
                
         <div class="modal-footer">
-                 <a href="http://salescal.agilecrm.com/" class="btn btn-primary" id="schedule_demo">Schedule a Demo</a>
+                 <a href="http://salescal.agilecrm.com/" target="_blank" class="btn btn-primary" id="schedule_demo">Schedule a Demo</a>
         </div>                     
                                  
         </div>
