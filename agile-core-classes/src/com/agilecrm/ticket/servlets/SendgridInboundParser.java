@@ -323,7 +323,7 @@ public class SendgridInboundParser extends HttpServlet
 		try
 		{
 			FileItemIterator iter = upload.getItemIterator(request);
-			
+
 			FileItemStream item = null;
 
 			while (iter.hasNext())
@@ -334,7 +334,27 @@ public class SendgridInboundParser extends HttpServlet
 				// System.out.println("Field value: ");
 				// System.out.println(IOUtils.toString(item.openStream()));
 
-				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream()));
+				BufferedReader br = new BufferedReader(new InputStreamReader(item.openStream()));
+
+				// you should estimate buffer size
+				StringBuffer sb = new StringBuffer(5000);
+
+				try
+				{
+					int linesPerRead = 100;
+					for (int i = 0; i < linesPerRead; ++i)
+					{
+						sb.append(br.readLine());
+						// placing newlines back because readLine() removes them
+						sb.append('\n');
+					}
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+
+				dataJSON.put(item.getFieldName(), sb.toString());
 
 				// if (item.isFormField())
 				// {
