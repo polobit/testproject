@@ -44,9 +44,21 @@ $(document).ready(function(){
 
 
 
-
+//addDescriptionInfo();
 	
+ $("#addDescriptionLink").click(function(e){
+ e.preventDefault();
+ $(this).hide();
+   $("#addDescriptionInfo").toggle();
+   });
 
+ $("#activityTaskModal").on("click", "#taskDescriptionLink", function(e){
+ e.preventDefault();
+ $(this).hide();
+   $("#taskDescriptionInfo").toggle();
+   });
+
+//addDescriptionInfo();
 	
 	
 

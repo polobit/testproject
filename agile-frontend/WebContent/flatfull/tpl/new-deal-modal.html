@@ -3,9 +3,9 @@
   <div class="modal-dialog">
     <div class="modal-content" style="border-radius:0px;">
   <div class="modal-header">
-    <button class="close" data-dismiss="modal">x</button>
+    <button class="close" data-dismiss="modal">×</button>
     <h3 class="modal-title" style="font-size:18px;">
-      &nbsp;Add Deal
+      &nbsp;New Deal
     </h3>
   </div>
   <div class="modal-body">
@@ -27,7 +27,7 @@
               <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
             </div>
           </div>
-          <div class="control-group form-group">
+          <!-- <div class="control-group form-group">
             <label class="control-label col-sm-3">Value<span
               class="field_req">*</span></label>
             <div class="controls col-sm-7">
@@ -44,7 +44,32 @@
                 name="probability" value="20" class=" required digits form-control" max="100"
                 placeholder="Probability %" /></span>
             </div>
-          </div>
+          </div> -->
+
+
+          <div class="row">
+                        <div class="col-sm-6">
+                        <div class="control-group form-group" style="margin-bottom:15px;">
+                            <label class="control-label col-sm-6">Value <span class="field_req">*</span></label>
+                            <div class="controls col-sm-5">
+                              <input type="text" name="expected_value"
+                class="required  number form-control" min="0" max="1000000000000"
+                placeholder="Value of Deal"  style="font-size:13px"/>            
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-sm-6">
+                        <div class="control-group form-group" style="margin-bottom:15px;">
+                            <label class="control-label col-sm-5"  {{#is_mobile}} {{else}} style="padding-left:0px;"{{/is_mobile}}>Probability (%) <span class="field_req">*</span></label>
+                            <div class="controls col-sm-3 {{#is_mobile}} {{else}} p-l-none {{/is_mobile}}">
+                                <input type="text" id="probability"
+                name="probability" value="20" class=" required digits form-control" max="100"
+                placeholder="Probability %" />      
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
         
           <div class="control-group form-group">
             <label class="control-label col-sm-3">Milestone<span
@@ -111,7 +136,15 @@
           <input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i> Archive </label>
         </div>
         <div id="custom-field-deals"></div>
-          <div class="control-group form-group">
+
+        <div class="form-group m-b-none">
+                    <div class="col-sm-offset-3 col-sm-7 text-left">
+        <a href="javascript:;" id="addDescriptionLink" class="text-info"><i class="icon-plus"></i> Add Description</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+          <div class="control-group form-group" id="addDescriptionInfo">
             <label class="control-label col-sm-3">Description</label>
             <div class="controls col-sm-7">
               <textarea id="description" name="description" rows="3"
