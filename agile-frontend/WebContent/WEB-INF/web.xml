@@ -1112,5 +1112,14 @@
         <servlet-name>AllDomainStatsServlet</servlet-name>
         <url-pattern>/backend/stats-report</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+		<servlet-name>OpportunitySchemaChange</servlet-name>
+		<servlet-class>com.agilecrm.OpportunitySchemaChangeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OpportunitySchemaChange</servlet-name>
+		<url-pattern>/backend/cron/opportunity-schema-change</url-pattern>
+	</servlet-mapping>
   
 </web-app>

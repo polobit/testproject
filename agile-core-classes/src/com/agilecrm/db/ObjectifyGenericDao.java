@@ -16,6 +16,7 @@ import org.json.JSONArray;
 
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
+import com.agilecrm.OpportunitySchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
@@ -89,12 +90,8 @@ import com.campaignio.twitter.TwitterJobQueue;
 import com.campaignio.urlshortener.URLShortener;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -258,6 +255,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// CSV Import status
 	ObjectifyService.register(ImportStatus.class);
+	
+	//For deals update in textsearch
+	ObjectifyService.register(OpportunitySchemaUpdateStats.class);
 
     }
 
