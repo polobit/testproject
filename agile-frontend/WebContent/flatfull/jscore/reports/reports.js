@@ -34,6 +34,23 @@ function initializeReportsListeners(){
 						
 					});
 
+	$('#reports-listerners-container')
+			.on(
+					'click',
+					'#reports-campaign-email-now',
+					function(e)
+					{
+						// e.preventDefault();
+						e.stopPropagation();
+
+						var id = $(this).attr('data');
+						var url='core/api/campaignReports/send/' + id;
+						$("#report-send-confirmation").find('input').attr("data",url);
+						$('#report-send-confirmation').modal('show');
+						initializeReportSendConfirm();
+						
+					});
+
 	$('#reports-listerners-container').on(
 			'click',
 			'#campaign_id',

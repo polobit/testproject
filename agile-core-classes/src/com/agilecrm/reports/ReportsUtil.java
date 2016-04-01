@@ -1,11 +1,13 @@
 package com.agilecrm.reports;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -18,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +42,7 @@ import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.reports.deferred.CampaignReportsDeferredTask;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
@@ -55,6 +59,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
@@ -143,6 +148,151 @@ public class ReportsUtil
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
 		    new Object[] { results, fieldsList });
 	}
+    }
+    
+    /**
+     * Processes the reports and sends results to respective domain users. It
+     * iterates through search report in reports list, fetches the results based
+     * on the criteria specified in the report object.
+     * 
+     * @param reportsList
+     * @throws JSONException
+     */
+    public static void sendCampaignReportsToUsers(List<Reports> reportsList) throws JSONException
+    {
+	for (Reports report : reportsList)
+	{
+	    // Each report is sent to email address which is saved in report. If
+	    // email in sendTo in empty, report is not processed further
+	    if (StringUtils.isEmpty(report.sendTo))
+		return;
+
+	    try{
+	    // Call process filters to get reports for one domain, and add
+	    // domain details
+	    Map<String, Object> results = processCampaignReports(report);
+
+	    if (results == null)
+		results = new HashMap<String, Object>();
+	    
+	    // Report heading. It holds the field values chosen in the report
+	    LinkedHashSet<String> reportHeadings = new LinkedHashSet<String>();
+
+	    // Iterates through each filter and customizes (Replace underscore
+	    // with space, and capitalize the first letter in the heading ) the
+	    // field heading.
+	    for (String field : report.fields_set)
+	    {
+		// Splits fields at properties.
+		String fields[] = field.split("properties_");
+		if (fields.length > 1)
+		{
+		    // Replaces underscore with space
+		    field = fields[1].replace("_", " ");
+		}
+
+		// Split fields at "custom_", and replaces underscore with
+		// space.
+		String customFields[] = field.split("custom_");
+		if (customFields.length > 1)
+		{
+		    field = customFields[1].replace("_", " ");
+		}
+
+		String heading = field.substring(0, 1).toUpperCase() + field.substring(1);
+		reportHeadings.add(heading);
+	    }
+
+	    Map<String, LinkedHashSet<String>> fieldsList = new LinkedHashMap<String, LinkedHashSet<String>>();
+	    fieldsList.put("fields", reportHeadings);
+
+//	    // Set number of results in count variable
+//	    if (results.get("report_results") != null)
+//	    {
+//	    	JSONArray resultsCollection = new JSONArray(results.get("report_results"));
+//		System.out.println("available = " + resultsCollection.length());
+//		if (resultsCollection.length() == 0)
+//		    continue;
+//	    }
+
+	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
+
+	    // Send reports email
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
+		    new Object[] { results, fieldsList });
+	    }catch(Exception e){
+	    	System.out.println("Exception occured in sending email report:"+e.getMessage() );
+	    }
+	}
+    }
+    
+    public static Map<String, Object> processCampaignReports(Reports report)
+    {
+	Map<String, Object> domain_details = new HashMap<String, Object>();
+	
+	JSONArray jsonArray = new JSONArray();
+	
+	// Fetches report based on report id
+    Date dt = new Date();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String endDate = sdf.format(dt);
+    TimeZone timeZone = TimeZone.getTimeZone(report.report_timezone);
+    
+    if(report.duration == Reports.Duration.DAILY){
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(dt);
+    	cal.add(Calendar.DATE, -1);
+    	Date startDateTime = cal.getTime();
+    	String startDate = sdf.format(startDateTime);
+    	//jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate, timeZone.getRawOffset()+"", null);
+    }else if(report.duration == Reports.Duration.WEEKLY){
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(dt);
+    	cal.add(Calendar.DATE, -7);
+    	Date startDateTime = cal.getTime();
+    	String startDate = sdf.format(startDateTime);
+	    //jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate,timeZone.getRawOffset()+"", null);
+	}else if(report.duration == Reports.Duration.MONTHLY){
+		Calendar cal = Calendar.getInstance();
+    	cal.setTime(dt);
+    	cal.add(Calendar.DATE, -30);
+    	Date startDateTime = cal.getTime();
+    	String startDate = sdf.format(startDateTime);
+	    //jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate,timeZone.getRawOffset()+"", null);
+	}
+	
+	try{
+	JSONObject emails_opened = new JSONObject();
+    emails_opened.put("log_type", "EMAIL_OPENED");
+    emails_opened.put("count", 5);
+    emails_opened.put("total", 10);
+    jsonArray.put(emails_opened);
+    
+    JSONObject emails_sent = new JSONObject();
+    emails_sent.put("log_type", "EMAIL_SENT");
+    emails_sent.put("count", 3);
+    emails_sent.put("total", 8);
+    jsonArray.put(emails_sent);
+    
+    JSONObject emails_clicked = new JSONObject();
+    emails_clicked.put("log_type", "EMAIL_CLICKED");
+    emails_clicked.put("count", 4);
+    emails_clicked.put("total", 6);
+    jsonArray.put(emails_clicked);
+    
+    JSONObject emails_unsubscribed = new JSONObject();
+    emails_unsubscribed.put("log_type", "UNSUBSCRIBED");
+    emails_unsubscribed.put("count", 2);
+    emails_unsubscribed.put("total", 5);
+    jsonArray.put(emails_unsubscribed);
+	}catch(Exception e){
+		System.out.println("Exception occured:"+e.getMessage());
+	}
+	
+	domain_details.put("report_results", jsonArray.toString());
+
+	// Return results
+	return domain_details;
     }
 
     /**
@@ -367,6 +517,21 @@ public class ReportsUtil
 
 	// Add to queue
 	queue.addAsync(TaskOptions.Builder.withPayload(reportsDeferredTask));
+    }
+    
+    /**
+     * Creates a deferred task to send report based on the report sent
+     * 
+     * @param report_id
+     */
+    public static void sendCampaignReport(Long report_id)
+    {
+    	CampaignReportsDeferredTask campaignReportsDeferredTask = new CampaignReportsDeferredTask(report_id);
+
+	Queue queue = QueueFactory.getDefaultQueue();
+
+	// Add to queue
+	queue.addAsync(TaskOptions.Builder.withPayload(campaignReportsDeferredTask));
     }
 
     /**

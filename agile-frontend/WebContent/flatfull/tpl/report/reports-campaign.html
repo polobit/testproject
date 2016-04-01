@@ -1,11 +1,11 @@
-<script id="report-collection-template" type="text/html">
+<script id="report-campaign-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
        
             <h3 class="pull-left font-thin h3">Email Reports</h3>
-            <a href="#report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  Add Report</a>
+            <a href="#campaign-report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  Add Report</a>
             <div class="clearfix">
         </div>
    
@@ -29,7 +29,7 @@
                     <th>Fields</th>
                 </tr>
             </thead>
-            <tbody id="report-model-list" route="report-edit/">
+            <tbody id="report-campaign-model-list" route="campaign-report-edit/">
             </tbody>
         </table>
        </div>
@@ -53,7 +53,7 @@
 </div>
 </script>
 
-<script id="report-model-template" type="text/html">
+<script id="report-campaign-model-template" type="text/html">
     <td data="{{id}}" class="data c-p"><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
     <td>
         <div class="table-resp">
@@ -63,18 +63,18 @@
     <td><div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
     <td>
         <div class="table-resp">
-            <a href="#report-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">Show Results</a>             
+            <a href="#report-campaign-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">Show Results</a>             
         </div>
     </td>
     <td>
         <div class="table-resp">
-            <a  data={{id}} class="text-info" id="reports-email-now" >Send Now</a>
+            <a  data={{id}} class="text-info" id="reports-campaign-email-now" >Send Now</a>
         </div>
     </td>
 <br />
 </script>
 
-<script type="text/html" id="report-categories-template">
+<script type="text/html" id="report-campaign-categories-template">
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
