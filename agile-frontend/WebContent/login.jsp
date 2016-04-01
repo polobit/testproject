@@ -338,17 +338,17 @@ if(isSafari && isWin)
 			// Sets location hash in hidden fields
 			if(login_hash)
 				$("#location_hash").val(login_hash);
-        var newImg = new Image;
+        /*var newImg = new Image;
         newImg.onload = function() {
         
         $("body").css("background-image","url('"+this.src+"')");
        
-        }
+        }*/
 
       //  newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
 
         // agile-login-page-high.png
-        	//preload_login_pages();
+        	preload_login_pages();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 
