@@ -284,8 +284,7 @@ if (scheduleid != null && multiple_users){  %>
 					<div class="numberlt" id="two">2</div>
 					<div class="event-title" style="margin-bottom:7px;">
 						<span class="pull-left">Select Date and Time</span>
-						<span class="timezone">							
-							<span id="hidetimezone">
+						<span class="timezone">														
 								<select name="user_timezone" class="form-control" id="user_timezone">
                                 	<optgroup label="US/Canada">
 										<option value="US/Arizona">US/Arizona</option>
@@ -1087,7 +1086,7 @@ if (scheduleid != null && multiple_users){  %>
 										<option value="GMT"> GMT</option>
 										<option value="UTC"> UTC</option>
 
-							</select></span>
+							</select>
 						</span>
 						<div class="clearfix"></div>
 					</div>
