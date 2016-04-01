@@ -128,7 +128,10 @@ $(function()
 	$('#user_timezone').die().change(function()
 	{
 
-		SELECTED_TIMEZONE = $('#user_timezone').val();		
+		SELECTED_TIMEZONE = $('#user_timezone').val();
+		$(".timezone1").text(SELECTED_TIMEZONE);
+		$('.timezone1').show();
+		$("#hidetimezone").addClass("hide");
 		$('.user_in_visitor_timezone').html(SELECTED_TIMEZONE);
 		updateUserBusinessHoursInVisitorTimezone();
 
@@ -139,6 +142,21 @@ $(function()
 		get_slots(selecteddate, Selected_Time);
 	});
 
+	$('.timezone1').die().click(function()
+	{
+		$("#hidetimezone").removeClass("hide");
+		$('.timezone1').hide();
+	});
+
+	$('#user_timezone').die().blur(function()
+	{
+		if (SELECTED_TIMEZONE == $('#user_timezone').val())
+		{
+			$(".timezone1").text(SELECTED_TIMEZONE);
+			$('.timezone1').show();
+			$("#hidetimezone").addClass("hide");
+		}
+	});
 
 	function autoscrol(divclass)
 	{
