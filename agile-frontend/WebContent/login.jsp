@@ -380,12 +380,6 @@ if(isSafari && isWin)
 		function preload_dashlet_libs(){ 
 			setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
 		}
-		$(function(){
-			new Fingerprint2().get(function(result, components){
-		  		console.log(result); //a hash, representing your device fingerprint
-		  		console.log(components);
-		  		<%request.setAttribute("finger_print",result);%>
-		}
 	</script>
 	<!-- Clicky code -->
  	<script src="//static.getclicky.com/js" type="text/javascript"></script>

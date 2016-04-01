@@ -199,20 +199,41 @@ public class HomeServlet extends HttpServlet
 
 	// If user is not new, it calls method to set logged in time in current
 	// domain user and forwards request to home.jsp
+   
 	if (!isNewUser())
 	{
-	    // Saves logged in time in domain user.
-	    setLoggedInTime(req);
-	    setAccountTimezone(req);
+		 
+		Object otpOption = req.getSession().getAttribute("return_otp");
+		
+		try {
+			if(otpOption == null || (Boolean) otpOption == true){
+				
+				// Saves logged in time in domain user.
+			    setLoggedInTime(req);
+			    setAccountTimezone(req);
 
-	    String old_ui = req.getParameter("old");
-	    if (old_ui != null)
-		req.getRequestDispatcher("home.jsp").forward(req, resp);
-	    else
-		req.getRequestDispatcher("home-flatfull.jsp").forward(req, resp);
+			    String old_ui = req.getParameter("old");
+			    if (old_ui != null)
+				req.getRequestDispatcher("home.jsp").forward(req, resp);
+			    else
+				req.getRequestDispatcher("home-flatfull.jsp").forward(req, resp);
 
-	    return;
-	}
+			    return;
+			}
+			
+			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
+			return;
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
+			return;
+			
+		}
+		
+		}
 
 	// If user is new user it will create new AgileUser and set cookie for
 	// initial page tour. It also calls to initialize defaults, if user is
@@ -223,13 +244,21 @@ public class HomeServlet extends HttpServlet
     {
     	try {
 		    	String otp= request.getParameter("otp");
-		    	long newotp = Long.parseLong(otp);
+		    	Long newotp = Long.parseLong(otp);
 		    
-		    	long generateotp = (long) request.getSession().getAttribute("return_otp");
+		    	Long generateotp = (Long) request.getSession().getAttribute("return_otp");
 		    	if(newotp == generateotp){
+		    		request.getSession().setAttribute("return_otp",true);
+		    		
 		    		doGet(request, response);
+		    		request.getSession().removeAttribute("return_otp");
+		    		return;
+		    		
+		    		
 		    	}
 		    	else{
+		    		request.getSession().setAttribute("return_otp",false);
+		    		request.getRequestDispatcher("fingerprintAuthentication.jsp").forward(request, response);
 						throw new Exception(
 								"Invalid OTP");
 					} 

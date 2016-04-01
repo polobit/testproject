@@ -286,17 +286,23 @@ public class LoginServlet extends HttpServlet {
 		String existingFingerprint = domainUser.finger_print;
 		if(StringUtils.isNotBlank(existingFingerprint) && !existingFingerprint.equals(finger_print))
 		{
+			//SendMail.sendMail(mail, subject, template, otp);
 			domainUser.finger_print=finger_print;
 			request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT,true);
-			
+			domainUser.save();
+			request.getSession().removeAttribute(RETURN_SESSION_FINGERPRINT);
 			response.sendRedirect("/");
+			System.out.println(domainUser.finger_print);
 		}
 		else{
+			
+			
 			String mail = domainUser.email;
-			request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT,false);
 			long generatedotp = fingerPrintSession(domainUser.finger_print);	
-			request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT_OTP,generatedotp );		
-			//SendMail.sendMail(mail, subject, template, otp);
+			request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT_OTP,generatedotp );
+			SendMail.sendMail(mail, SendMail.NEW_REPLY, SendMail.OTP_EMAIL_TO_USER, generatedotp);
+			request.getRequestDispatcher("fingerprintAuthentication.jsp").forward(request, response);
+			request.getSession().setAttribute(RETURN_SESSION_FINGERPRINT,false);
 		}
 		
 	

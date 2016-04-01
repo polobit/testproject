@@ -131,8 +131,17 @@ public class SendMail
 	//For AllowAccessIP
 	public static final String ALLOW_IP_ACCESS = "allow_ip_access";
 	public static final String ALLOW_IP_ACCESS_SUBJECT = "Add IP to allow access";
-	
-	
+
+	// Ticket template names
+   	public static final String TICKET_REPLY = "ticket_reply_email";
+   	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
+   	public static final String TICKET_FORWARD = "ticket_forward_email";
+   	
+   	//For browser Fingerprint
+   	public static final String NEW_REPLY = "wrong user";
+   	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
+   	
+
     /**
      * From Name of email.
      */

@@ -269,13 +269,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 *            specifies ownership
 	 */
 
-	public DomainUser(String domain, String email, String name, String password,  String fingerprintId, boolean isAdmin, boolean isAccountOwner)
+	public DomainUser(String domain, String email, String name, String password, boolean isAdmin, boolean isAccountOwner)
 	{
 		this.domain = domain;
 		this.email = email;
 		this.name = name;
 		this.password = password;
-		this.finger_print =finger_print;
 		this.is_admin = isAdmin;
 		this.is_account_owner = isAccountOwner;
 		
