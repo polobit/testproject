@@ -3620,13 +3620,19 @@ opacity: .3;
   margin-right: 214px;
 }
 
-#admin-previlages>div.m-xs>span{
+/*#admin-previlages>div.m-xs>span{
 	margin-left:60px;
 
-} 
+} */
 
 .tab-content .tab-pane #sales-previlages .active{
     display: block !important;
     visibility: visible !important;
+}
+
+
+.nav-tabs li a#Sales_previlages, .nav-tabs li a#marketing_previlages
+{
+ color:#555!important;
 }
 
