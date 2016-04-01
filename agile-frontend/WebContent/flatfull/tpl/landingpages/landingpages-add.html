@@ -2,37 +2,99 @@
 <div class="custom-animated custom-fadeInUp hide-rainbow">
 <div class="wrapper-md">
 <div class="row">
-    <div class="col-md-12">
-        <div class="panel wrapper">
+
+<!-- IE conditional check-->
+{{#is_IE_browser}}
+<div class="col-md-6 col-md-offset-3">
+<div class="alert alert-warning" role="alert"> <strong>Warning!</strong> 
+<div class="error-details">
+                    We&#39;re sorry. This browser may not support this feature.<br>
+To get the best experience, we recommend you to use <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a> (Mac only).
+                </div>
+</div>
+</div> {{else}} 
+{{/is_IE_browser}}
+<!-- End of IE conditional check-->
+
+ <div class="col-md-12">
+        <div class="panel wrapper landingpagessmart" >
             <form id="landingPageBuilderForm">
                 <fieldset>
-                    <div class="control-group form-group">
+                     <div class="control-group form-group">
                         <label class="control-label"><b>Name of page:</b> <span class="field_req">*</span></label>
                         <div class="controls">
-							<div class="row">
-								<div class="col-md-5 col-sm-4 col-xs-4">
-									<input name="landingpagename" type="text" id="landingpagename" class="col-md-3 form-control required w-md m-r-xs" placeholder="Name of page"/>
+                        <div class="row">
+                        <div class="col-md-5 col-sm-4">
+                                    <input name="landingpagename" type="text" id="landingpagename" class="col-md-3 form-control required w-md m-r-xs" placeholder="Name of page"/>
                                     <span for="landingpagename" generated="true" class="help-inline" style="display: block;padding: 6px;padding-left: 10px;"></span>
-								</div>
-								<div class="col-md-3 col-sm-3 col-xs-4">
-									<span id="landingpagename-msg" class="text-center"></span>
-								</div>
-								<div class="col-md-4 col-sm-5 col-xs-4">
-									<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" >Save Page</button>
-								</div>
-                           		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
-							</div>
-						</div>
+                        </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <span id="landingpagename-msg" class="text-center"></span>
+                                </div>
+                                <div class="col-md-4 col-sm-5">
+                                    {{#if_equals action "edit"}}
+                                        <div class="btn-group right m-r-xs m-r-n-sm">                                   
+                                            <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">Save Page</span>
+                                            </button>
+                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu landingpage-copy">
+                                                <li>
+                                                    <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
+                                                        <i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div> 
+                                         <!--
+                                        {{#is_mobile}}
+
+                                                {{else}}
+                                            <div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+                                            <button class="btn btn-default btn-sm m-l-xs fullscreenelement pull-right" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+                                    <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+                                        {{/is_mobile}}
+                                        -->
+                                         {{else}}
+                                        <button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" ><span class="saveLandingPageButtonText">Save Page</span>
+                                        </button> 
+                                    {{/if_equals}}                                       
+                  <div class="lpPreviewView" data-trigger="#landingpageFullPreview">
+                            <label class="m-t-xs m-r pull-right">
+                                <a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a>
+                            </label> 
                     </div>
-					<div id="landingPageBuilderHolder">
+                    </div>
+                                </div>
+                                </div>
+                        </div>
+                    <div id="landingPageBuilderHolder">
 
                     <div class="row">
                         <div class="col-md-12" id="landingPageBuilderMenuNav" style="display:none;">
             <ul class="nav nav-tabs lp-menu-nav">
-                <li class="lpBuilderMenuItem" id="elementsBuilderMenuItem" data-id="elements"><a href="#"><i class="fa fa-puzzle-piece"></i> Elements</a></li>
-                <li class="lpBuilderMenuItem" id="inspectorBuilderMenuItem" data-id="inspector"><a href="#"><i class="fa fa-paint-brush"></i> Inspector</a></li>
+                <li class="lpBuilderMenuItem" id="elementsBuilderMenuItem" data-id="elements"><a href="#"><i class="fa fa-plus"></i> Elements</a></li>
+                <li class="lpBuilderMenuItem" id="inspectorBuilderMenuItem" data-id="inspector"><a href="#"><i class="fa fa-cog"></i> Advanced</a></li>
                 <li class="lpCodeEditorMenuItem"><a href="#" ><i class="fa fa-code"></i> Code Editor</a></li>
+
+
+            
+            
+            <li class="lpDeviceView p-l-xxl m-l-xxl" data-trigger="#deviceSwitcherDesktop" data-deviceclass="full-width"><a href="#" ><i class="fa fa-desktop fa-lg"></i></a></li>
+            <li class="lpDeviceView" data-trigger="#deviceSwitcherLaptop" data-deviceclass="md-width"><a href="#" ><i class="fa fa-laptop fa-lg"></i> </a></li>
+            <li class="lpDeviceView" data-trigger="#deviceSwitcherTablet" data-deviceclass="sm-width"><a href="#" ><i class="fa fa-tablet fa-lg"></i> </a></li>
+            <li class="lpDeviceView" data-trigger="#deviceSwitcherMobile" data-deviceclass="xs-width"><a href="#" ><i class="fa fa-mobile fa-lg"></i> </a></li>
+            
+            <!--
+            <li class="lpPreviewView" data-trigger="#landingpageFullPreview"><a href="#" ><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a></li>
+            -->
             </ul>
+
+            
+
+
+                            </div>
                         </div>
                     </div>
 
@@ -93,9 +155,26 @@
 
                     </div>
                     <br />
-					<br />
-					<button class="btn btn-sm btn-primary saveLandingPageButton" >Save Page</button>
-                    <div class="save-workflow-img inline-block"></div>
+                    <br />
+                    <div class="btn-group left m-r-xs m-r-n-xs">
+                    {{#if_equals action "edit"}}
+                    <button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">Save Page</span>
+                    </button>
+                     <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
+                                                <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" style="min-width:0px;">
+                                            <li>
+                                                <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
+                                                    <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
+                                            </li>
+                                </ul>
+                    </button>
+                    {{else}}
+                    <button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><span class="saveLandingPageButtonText">Save Page</span>
+                    </button>
+                    {{/if_equals}}
+                    </div>                    
                     <br />
                 </fieldset>
             </form>

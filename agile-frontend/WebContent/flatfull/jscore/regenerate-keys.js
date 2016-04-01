@@ -1,14 +1,14 @@
 function initializeRegenerateKeysListeners() {
     $(".prettyprint").css({
-            "padding": "0px",
+            "padding": "9px 15px; ",
             "border": "none"
     });
 
-    $("#api_key_code").off('click').on("click", "#api_key_generate_icon", function(e) {
+    $("#api_key_generate_icon").on("click",function(e) {
         e.preventDefault();
         regenerate_api_key('core/api/api-key/key');
     });
-    $("#jsapi_key_code").off('click').on("click", "#jsapi_key_generate_icon", function(e) {
+    $("#jsapi_key_generate_icon").off('click').on("click", function(e) {
         e.preventDefault();
         regenerate_api_key('core/api/api-key/jskey');
     });
@@ -60,6 +60,15 @@ function prettify_api_add_events() {
         }
         allowed_domains = allowed_domains ? allowed_domains + ", " + new_allowed_domain : new_allowed_domain;
         put_allowed_domains(allowed_domains);
+    });
+$("#webhook_accordian").on('click', function(e) {
+        e.preventDefault();
+        if($("#webhook-accordian-template").html() != "")
+            return;
+        setTimeout(function(){
+             App_Admin_Settings.webhookSettings();
+        },500)
+       
     });
 
     $(".allowed-domain-delete").off('click');

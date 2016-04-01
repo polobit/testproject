@@ -20,6 +20,7 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
+		      	  $('ul.milestones').sortable("disable");
 		      	  console.log(">>>>>>>>>>>>>>>>>> deals id");
 		    	  console.log(ui);
 		    	  console.log(ui.item[0]);
@@ -102,7 +103,10 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 	
 	 if(!DealJSON.close_date || DealJSON.close_date==0)
 		 DealJSON.close_date = null;
-	 DealJSON.owner_id = DealJSON.owner.id;
+	if(DealJSON && DealJSON.owner)
+	{
+		DealJSON.owner_id = DealJSON.owner.id;
+	}
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
@@ -112,6 +116,17 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 			console.log('moved deal----',model);
 			if (updateCollectionFlag) {
 				update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
+			}
+			$('ul.milestones').sortable("enable");
+		},
+		error : function(model, response) {
+			$('ul.milestones').sortable("enable");
+			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly." || response && response.status == 403)) {
+				showModalConfirmation("Deals", response.responseText, function(element){
+					App_Deals.deals();	
+				},
+				"",
+				"", "Cancel", "");
 			}
 		}
 	});
@@ -136,8 +151,68 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 	if(!dealPipelineModel)
 		return;
 	try{
-		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
-		$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+
+
+        if(oldMilestone != newMilestone){
+	    var dealchangevalue = dealModel.expected_value;
+        var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealchangevalue); 
+        var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(dealchangevalue);
+
+        if($('#'+newMilestone.replace(/ +/g, '')+'_count').text() != "1000+")
+        {
+        	if(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1 > 1000)
+        	{
+        		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+"+");
+        	}
+        	else
+        	{
+        		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
+        	}
+        }
+   		if($('#'+oldMilestone.replace(/ +/g, '')+'_count').text() != "1000+")
+   		{
+   			$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+   		}
+
+   		$('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+		$('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
+		/* average of new deal total */
+     	var avg_old_deal_size = 0;
+     	var old_deal_count = parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text()) ; 
+     	if(old_deal_count == 0)
+     		avg_old_deal_size = 0;
+     	else
+     		avg_old_deal_size = olddealvalue / old_deal_count;
+		 /* average of new deal total */
+      	var avg_new_deal_size = 0;
+     	var new_deal_count = parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text()) ; 
+     	if(new_deal_count == 0)
+     		avg_new_deal_size = 0;
+     	else
+     		avg_new_deal_size = newdealvalue / new_deal_count;
+
+     	olddealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue) ;
+        avg_old_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_old_deal_size);
+        newdealvalue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue) ;
+        avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+
+     	var oldheading = oldMilestone.replace(/ +/g, '');
+     	var newheading = newMilestone.replace(/ +/g, '');
+     	var symbol = getCurrencySymbolForCharts();
+
+        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+        $("#"+oldheading+" .dealtitle-angular").removeAttr("data");  
+        $("#"+newheading+" .dealtitle-angular").removeAttr("data"); 
+       
+        var dealolddata = {"dealTrack": dealTrack,"heading": oldheading ,"dealcount":olddealvalue ,"avgDeal" : avg_old_deal_size,"symbol":symbol,"dealNumber":old_deal_count};
+		var dealOldDataString = JSON.stringify(dealolddata); 
+		$("#"+oldheading+" .dealtitle-angular").attr("data" , dealOldDataString); 
+
+        var dealnewdata = {"dealTrack": dealTrack,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
+		var dealNewDataString = JSON.stringify(dealnewdata); 
+		$("#"+newheading+" .dealtitle-angular").attr("data" , dealNewDataString);
+        
+        }
 	} catch(err){
 		console.log(err);
 	}

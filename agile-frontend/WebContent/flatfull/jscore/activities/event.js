@@ -39,7 +39,8 @@ $(function(){
 	{
 		e.preventDefault();
 		var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-		save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
+		var currentDiv = $('#updateActivityModal').find("#current_div").val();
+		save_event('updateActivityForm', 'updateActivityModal', true, this,currentDiv, function(data)
 		{
 			console.log(data);
 			var eventModel = eventCollectionView.collection.get(eventId);
@@ -55,11 +56,22 @@ $("#updateActivityModal").on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 
-		var event_id = $('#updateActivityForm input[name=id]').val();
-		$("#updateActivityModal").modal('hide');
-		$("#webEventCancelModel").modal('show');
-		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
-		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+		if(hasScope("MANAGE_CALENDAR") || (CURRENT_DOMAIN_USER.id == App_Calendar.current_event.owner.id))
+		{
+			var event_id = $('#updateActivityForm input[name=id]').val();
+			$("#updateActivityModal").modal('hide');
+			$("#webEventCancelModel").modal('show');
+			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
+			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+		}
+		else
+		{
+			$("#updateActivityModal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>You do not have permission to delete this Event.</i></p></div>');
+			setTimeout(function()
+			{
+				$("#updateActivityModal").find('span.error-status').html('');
+			}, 2000);
+		}
 
 	});
 
@@ -97,7 +109,7 @@ $("#updateActivityModal").on(
 										// if event deleted from today events
 										// portlet, we removed that event from
 										// portlet events collection
-										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)])
 										{
 											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
 													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
@@ -110,8 +122,16 @@ $("#updateActivityModal").on(
 												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
 												a.setHours(0,0,0,0);
 												_agile_set_prefs("current_date_calendar",a);
-										       $('#calendar_container').fullCalendar( 'refetchEvents' );
+										       $('.portlet_body_calendar').each(function(){
+										       	var that=$(this);
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+										       	 App_Portlets.eventCalendar=that;
+										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+
 										       App_Portlets.refetchEvents = true;
+										   }
+										       });
+										       
 										       //_agile_delete_prefs('current_date_calendar');
 									      }
 										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
@@ -126,6 +146,17 @@ $("#updateActivityModal").on(
 												}
 											}
 										}
+										else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+										{
+											if (eventsView && eventsView.collection)
+											{
+												if (eventsView.collection.get(event_id))
+												{
+													eventsView.collection.remove(event_id);
+													eventsView.render(true);
+												}
+											}
+										}
 
 										// $('#updateActivityModal').find('span.save-status
 										// img').remove();
@@ -134,6 +165,15 @@ $("#updateActivityModal").on(
 
 										var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
 										$('#calendar_event').fullCalendar('removeEvents', eventId);
+									}, error : function(err)
+									{
+										enable_save_button(save_button);
+										$('#updateActivityModal').find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+										setTimeout(function()
+										{
+											$('#updateActivityModal').find('span.error-status').html('');
+										}, 2000);
+										console.log('-----------------', err.responseText);
 									} });
 						if (_agile_get_prefs("agile_calendar_view"))
 						{
@@ -185,7 +225,7 @@ $("#updateActivityModal").on(
 										// if event deleted from today events
 										// portlet, we removed that event from
 										// portlet events collection
-										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)])
 										{
 											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
 													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
@@ -774,7 +814,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
 
 		return false;
 	}
@@ -783,7 +823,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
 		return false;
 	}
@@ -792,7 +832,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
 
 		return false;
 	}
@@ -816,7 +856,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
  *            or updating the existing one
  * 
  */
-function save_event(formId, modalName, isUpdate, saveBtn, callback)
+function save_event(formId, modalName, isUpdate, saveBtn, el,callback)
 {
 
 	// Returns, if the save button has disabled attribute
@@ -865,12 +905,6 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 	var endarray = (json.end_time).split(":");
 	json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
 
-	$('#' + modalName).modal('hide');
-
-	$('#' + formId).each(function()
-	{
-		this.reset();
-	});
 
 	// Deleting start_time and end_time from json
 	delete json.start_time;
@@ -899,7 +933,41 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						// $('#calendar').fullCalendar( 'refetchEvents' );
 						var event = data.toJSON();
 						event = renderEventBasedOnOwner(event);
-						if (Current_Route == 'calendar' && !_agile_get_prefs("agile_calendar_view"))
+						if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar' && el == "Mini Calendar")
+					      {
+							
+						$('.portlet_body_calendar').each(function(){
+										       	var that=$(this);
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+										       	if($('.minical-portlet-event',that).attr('data-date')!=undefined){
+								var a=new Date(parseInt($('.minical-portlet-event',that).attr('data-date')));	
+								a.setHours(0,0,0,0);
+								_agile_set_prefs("current_date_calendar",a);
+							}
+							else{
+								var a=new Date(parseInt($('.minical-portlet-event-add',that).attr('data-date')));	
+								a.setHours(0,0,0,0);
+								_agile_set_prefs("current_date_calendar",a);
+							}
+										       	 App_Portlets.eventCalendar=that;
+										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+										       App_Portlets.refetchEvents = true;
+										   }
+										       });
+					      }
+
+					      else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && el == "Events Dashlet")
+						{
+							if (isUpdate)
+								App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+							// Updates events list view
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+						}
+						else if (Current_Route == 'calendar' && !_agile_get_prefs("agile_calendar_view"))
 						{
 
 							// When updating an event remove the old event from
@@ -934,14 +1002,25 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									// function
 									if (eventsView && eventsView.collection)
 									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
 										if (eventsView.collection.get(data.id))
 										{
-											eventsView.collection.get(data.id).set(new BaseModel(data));
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.get(data.id).set(new BaseModel(data));
+											}
+											
 										}
 										else
 										{
-											eventsView.collection.add(new BaseModel(data), { sort : false });
-											eventsView.collection.sort();
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												eventsView.collection.add(new BaseModel(data), { sort : false });
+												eventsView.collection.sort();
+											}
 										}
 									}
 
@@ -956,33 +1035,8 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 							});
 						}
-						else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
-						{
-							if (isUpdate)
-								App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
-
-							// Updates events list view
-							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
-
-							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
-
-						}
-						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
-					      {
-							if($('.minical-portlet-event').attr('data-date')!=undefined){
-								var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
-								a.setHours(0,0,0,0);
-								_agile_set_prefs("current_date_calendar",a);
-							}
-							else{
-								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
-								a.setHours(0,0,0,0);
-								_agile_set_prefs("current_date_calendar",a);
-							}
-							$('#calendar_container').fullCalendar( 'refetchEvents' );
-						       App_Portlets.refetchEvents = true;
-						       //_agile_delete_prefs('current_date_calendar');
-					      }
+						
+						
 						else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 						{
 
@@ -1004,14 +1058,24 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									// function
 									if (dealEventsView && dealEventsView.collection)
 									{
+										var owner = data.get("owner_id");
+
+									  	if(!owner){
+									  		owner = data.get("owner").id;
+									  	}
+
 										if (dealEventsView.collection.get(data.id))
 										{
-											dealEventsView.collection.get(data.id).set(new BaseModel(data));
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												dealEventsView.collection.get(data.id).set(new BaseModel(data));
+											}
 										}
 										else
 										{
-											dealEventsView.collection.add(new BaseModel(data), { sort : false });
-											dealEventsView.collection.sort();
+											if(hasScope("VIEW_CALENDAR") || CURRENT_DOMAIN_USER.id == owner){
+												dealEventsView.collection.add(new BaseModel(data), { sort : false });
+												dealEventsView.collection.sort();
+											}
 										}
 									}
 									dealEventsView.render(true);
@@ -1026,6 +1090,15 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 						if (callback && typeof callback === 'function')
 							callback(data);
+					}, error : function(model, err)
+					{
+						enable_save_button($(saveBtn));
+						$('#' + modalName).find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+						setTimeout(function()
+						{
+							$('#' + modalName).find('span.error-status').html('');
+						}, 2000);
+						console.log('-----------------', err.responseText);
 					} });
 }
 
@@ -1117,6 +1190,28 @@ function changeEndTime(startTime, endTime)
 	console.log("In changeEndTime");
 	console.log(startTime);
 	console.log(endTime);
+	// var s0 = startTime[0];
+ //    var s1=startTime[1];
+    var reg = /[a-zA-Z]/;
+   
+  for(var i=0;i<startTime.length;i++)
+  {
+     if (reg.test(startTime[i])) {
+   startTime[i]=00;
+	}
+	else if(!reg.test(startTime[i])){
+		startTime[i] = startTime[i].substring(0,2);
+	}
+
+
+  }
+
+   /*if (reg.test(s1)) {
+   startTime[1]=00;
+	}
+	else if(!reg.test(s1)){
+		startTime[1] = s1.substring(0,2);
+	}*/
 
 	if (startTime[0] > endTime[0] || (startTime[0] == endTime[0] && startTime[1] >= endTime[1]))
 	{

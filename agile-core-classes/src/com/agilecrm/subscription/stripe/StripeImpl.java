@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -29,6 +30,7 @@ import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerSubscriptionCollection;
 import com.stripe.model.Invoice;
+import com.stripe.model.InvoiceItem;
 import com.stripe.net.RequestOptions;
 import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 
@@ -355,7 +357,7 @@ public class StripeImpl implements AgileBilling {
 
 		// Updates customer with changed card details
 		customer = customer.update(updateParams);
-
+		payPendingInvoices(stripeCustomer);
 		return StripeUtil.getJSONFromCustomer(customer);
 	}
 
@@ -523,7 +525,7 @@ public class StripeImpl implements AgileBilling {
 
 		// If there exists email plan, then it is updated instead of creating
 		// new subscription
-		try {
+		
 
 			/**
 			 * Retrieves all subscriptions from customer object. It is used to
@@ -604,11 +606,7 @@ public class StripeImpl implements AgileBilling {
 			// subscription.plan);
 			return StripeUtil.getJSONFromCustomer(customer_new);
 
-		} catch (StripeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		
 
 	}
 
@@ -664,5 +662,58 @@ public class StripeImpl implements AgileBilling {
 		System.out.println("Invoice===  "+invoice);
 		return invoice;
 	}
-
+	
+	// Create InvoiceIterm and pay to purchase life time emails
+	public void purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
+		Customer customer = StripeUtil.getCustomerFromJson(customerJSON);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("customer", customer.getId());
+		params.put("amount", quantity*4*100);
+		params.put("currency", "usd");
+		params.put("description", quantity*1000+" Email Credits");
+		InvoiceItem invoiceItem = InvoiceItem.create(params);
+		System.out.println("invoiceItem for email credits "+invoiceItem);
+		params.remove("amount");
+		params.remove("currency");
+		try{
+			Invoice invoice = Invoice.create(params).pay();
+			System.out.println("invoice for email credits "+invoice);
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			params.remove("description");
+			params.put("limit", 1);
+			List<InvoiceItem> invoiceItems = InvoiceItem.all(params).getData();
+			invoiceItems.get(0).delete();
+			throw new Exception(e.getMessage());
+		}
+		
+		
+	}
+	
+	public void addTrial(Long trialEnd) throws Exception{
+		// Fetches subscription from customer object in stripe
+		Subscription subscription = SubscriptionUtil.getSubscription();
+		Customer customer = StripeUtil.getCustomerFromJson(new JSONObject(subscription.billing_data_json_string));
+		List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
+		for(com.stripe.model.Subscription sub : subscriptions){
+			Map<String, Object> updateParams = new HashMap<String, Object>();
+			if(trialEnd == 0)
+				updateParams.put("trial_end", "now");
+			else
+				updateParams.put("trial_end", trialEnd);
+			sub.update(updateParams);
+		}
+		if(trialEnd == 0)
+		{
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("customer", customer.getId());
+			try{
+				Invoice invoice = Invoice.create(params).pay();
+				System.out.println("invoice for email credits "+invoice);
+			}catch(Exception e){
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				e.printStackTrace();
+			}
+		}
+	}
 }

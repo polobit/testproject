@@ -2,7 +2,7 @@
  * user name can be redundant so we need user's id too.*/
 function getUserDetails(callback)
 {
-	$.getJSON('/core/api/users', function(users)
+	$.getJSON('/core/api/users/partial', function(users)
 	{
 		for ( var i in users)
 		{

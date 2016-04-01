@@ -44,6 +44,7 @@ import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.GeoLocationUtil;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
@@ -138,7 +139,7 @@ public class JSAPI
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
     public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds,
-	    @QueryParam("id") String apiKey)
+	    @QueryParam("id") String apiKey, @Context HttpServletRequest request)
     {
 	try
 	{
@@ -148,11 +149,27 @@ public class JSAPI
 
 	    // Get Contact count by email
 	    String email = contact.getContactFieldValue(Contact.EMAIL);
-	    int count = ContactUtil.searchContactCountByEmail(email);
+	    if (email != null)
+	    {
+		System.out.println(email.toLowerCase());
+	    }
+	    int count = ContactUtil.searchContactCountByEmail(email.toLowerCase());
+	    System.out.println("count = " + count);
 	    if (count != 0)
 	    {
 		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
 	    }
+
+	    String address = contact.getContactFieldValue(Contact.ADDRESS);
+	    System.out.println("Address = " + address);
+	    if (StringUtils.isBlank(address))
+	    {
+		System.out.println("Adding location");
+
+		org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+		contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+	    }
+
 	    // Sets owner key to contact before saving
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 
@@ -693,6 +710,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -763,6 +783,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -799,6 +822,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -971,6 +997,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Milestone milestone = MilestoneUtil.getMilestones();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(milestone);
@@ -1017,6 +1046,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Milestone milestone = null;
 	    if (pipelineId != null && pipelineId > 0)
 		milestone = MilestoneUtil.getMilestone(pipelineId);
@@ -1371,14 +1403,14 @@ public class JSAPI
 	    for (Trigger trigger : triggers)
 	    {
 		if (StringUtils.equals(trigger.type.toString(), "FORM_SUBMIT")
-		        && (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
+			&& (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
 		{
 		    System.out.println("trigger condition, event match ...");
 		    if (StringUtils.equals(trigger.trigger_form_event, form.id.toString()))
 		    {
 			System.out.println("Assigning campaign to contact ...");
 			WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-			        new JSONObject().put("form", formFields));
+				new JSONObject().put("form", formFields));
 		    }
 		}
 	    }
@@ -1400,6 +1432,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(DomainUserUtil.getUsers());
 	}

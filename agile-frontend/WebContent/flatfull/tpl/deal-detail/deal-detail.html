@@ -1,8 +1,8 @@
 
 <script id="deal-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
-<div class="hbox hbox-auto-xs  bg-light">
-<div class="col w-xl bg-light lter b-r text-center-mobile-view">
+<div class="hbox hbox-auto-xs {{#is_mobile}} wrapper-md {{else}} bg-light {{/is_mobile}}">
+<div class="col w-xl text-center-mobile-view {{#is_mobile}} bg-white  {{else}} bg-light lter b-r {{/is_mobile}}">
 <div class="vbox">
 <div class="row-row">
 <div class="wrapper pos-rlt" id="deal-detail-actions-dropdown">
@@ -81,11 +81,12 @@
         	<div><small class="text-xs text-muted">Owner:&nbsp;&nbsp;</small></div>
 		
         	<div id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name c-p">{{owner.name}}</div>
-        
+          {{#hasScope "MANAGE_DEALS"}}
         	<div class="btn-group v-middle" id="change-deal-owner-ul" style="display: none">
         		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
         		 <ul id='deal-detail-owner' class="dropdown-menu"></ul>
-        	</div> 
+        	</div>
+          {{/hasScope}} 
        </div>
     </div>
 	</div>
@@ -125,18 +126,27 @@
                                       <small class="text-xs text-muted">Custom Data</small>
                                        </div>
 									{{#getDealCustomProperties custom_data}}
-									{{#each_with_index this}}
-                                       
-                                   	
-
-                                            <span class="contact-custom-name">
-												<span class="text-light" title="{{name}}">{{name}}</span>
-											</span>
-
-										
-											<span class="contact-custom-value">
-											<span class="note-created-time" title="{{value}}">{{value}}</span>
-                                             </span><br/> 
+									{{#each_with_index this}}             	
+                      {{#if custom_field_type}}
+                        <div class="m-b-xs">
+                          <span class="contact-custom-name">
+                            <span class="text-light" title="{{name}}">{{name}}</span>
+                          </span>
+                        </div>
+                        <div class="note-created-time custom-value" title="" name="{{name}}">
+                          {{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+                        </div>
+                      {{else}}
+                        <span class="contact-custom-name">
+                          <span class="text-light" title="{{name}}">{{name}}</span>
+                        </span>
+                        <span class="contact-custom-value">
+                          <span class="note-created-time custom-value" title="{{value}}" name="{{name}}">
+                            {{value}}
+                          </span>
+                        </span>
+                        <br/>
+                      {{/if}}
 										{{/each_with_index}}
 									{{/getDealCustomProperties}}
                                     {{/if}}
@@ -173,7 +183,7 @@
 <div>
         	<small class="text-xs text-muted">Description</small>
 </div>
-<div>{{{description}}}</div>
+<div>{{{show_link_in_statement description}}}</div>
 {{/if}}
 </div>
 
@@ -184,12 +194,12 @@
 				</div>
 			</div>
 			
-<div class="col bg-white">
+<div class="col  {{#is_mobile}}  {{else}} bg-white {{/is_mobile}}">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">			
 <div id="deal-details">
 	<div class="tab-container">
-           <ul class="nav nav-tabs bg-light" id="deal-details-tab">
+           <ul class="nav nav-tabs bg-light content-tabs" id="deal-details-tab">
              <li><a href="#dealactivities" data-toggle="tab" >Activity</a></li>
              <li><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
 			 <li><a href="#dealdocs" data-toggle="tab">Documents</a></li>
@@ -198,7 +208,7 @@
 			 <li><a href="#dealevents" data-toggle="tab">Events</a></li> 
            </ul>
 	</div>
- 	<div class="tab-content panel" id="deal-tab-content">
+ 	<div class="tab-content {{#is_mobile}}  {{else}} panel {{/is_mobile}}" id="deal-tab-content">
  		<div class="tab-pane" id="dealactivities"></div>
  		<div class="tab-pane" id="dealnotes"></div>
  		<div class="tab-pane" id="dealdocs"></div>
@@ -231,6 +241,7 @@
 	</div>
   </div>
   <div class="modal-footer">
+  <span class="error-status text-danger"></span>
 	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
     <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">Yes</a>
   </div>

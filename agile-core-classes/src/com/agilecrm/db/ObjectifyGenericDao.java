@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
@@ -36,6 +37,7 @@ import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.dashboards.Dashboard;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -53,7 +55,15 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
+import com.agilecrm.ticket.entitys.TicketCannedMessages;
+import com.agilecrm.ticket.entitys.TicketDocuments;
+import com.agilecrm.ticket.entitys.TicketFilters;
+import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -66,6 +76,8 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.voicemail.VoiceMail;
+import com.agilecrm.webhooks.triggers.util.Webhook;
+import com.agilecrm.webhooks.triggers.util.WebhookTriggerUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -78,7 +90,12 @@ import com.campaignio.twitter.TwitterJobQueue;
 import com.campaignio.urlshortener.URLShortener;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -112,8 +129,8 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 public class ObjectifyGenericDao<T> extends DAOBase
 {
 
-	static final String[] countRestrictedClassNames = new String[]{"contact", "activity"};
-	
+    static final String[] countRestrictedClassNames = new String[] { "contact", "activity", "opportunity" };
+
     static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
 
     // Registers the classes with ObjectifyService
@@ -130,6 +147,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(ContactViewPrefs.class);
 	ObjectifyService.register(AgileUser.class);
 	ObjectifyService.register(DomainUser.class);
+	ObjectifyService.register(AliasDomain.class);
 	ObjectifyService.register(Tag.class);
 	ObjectifyService.register(SocialPrefs.class);
 	ObjectifyService.register(AccountPrefs.class);
@@ -214,15 +232,34 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(FacebookPage.class);
 
 	ObjectifyService.register(VerifiedEmails.class);
-	
+
 	ObjectifyService.register(Office365CalendarPrefs.class);
+
+	// Ticket related entitys
+	ObjectifyService.register(Tickets.class);
+	ObjectifyService.register(TicketNotes.class);
+	ObjectifyService.register(TicketGroups.class);
+	ObjectifyService.register(TicketCannedMessages.class);
+	ObjectifyService.register(TicketFilters.class);
+	ObjectifyService.register(TicketDocuments.class);
+	//ObjectifyService.register(TicketActivity.class);
+	ObjectifyService.register(TicketLabels.class);
+	
 	
 	ObjectifyService.register(DealFilter.class);
 
-    ObjectifyService.register(LandingPage.class);
-    ObjectifyService.register(LandingPageCNames.class);
+	ObjectifyService.register(LandingPage.class);
+	ObjectifyService.register(LandingPageCNames.class);
 	ObjectifyService.register(Goals.class);
 	ObjectifyService.register(Dashboard.class);
+
+	ObjectifyService.register(Webhook.class);
+	
+	//All Domain Stats report for Agile Management
+	ObjectifyService.register(AllDomainStats.class);
+
+	// CSV Import status
+	ObjectifyService.register(ImportStatus.class);
 
     }
 
@@ -262,7 +299,34 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// Checks User access control over current entity to be saved.
 	UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.CREATE, true);
 
-	return ofy().put(entity);
+	Long id = getEntityIdByEnity(entity);
+	Key<T> key = ofy().put(entity);
+
+	String className = clazz.getSimpleName();
+	if (className.equals("Contact") || className.equals("Opportunity"))
+	{
+	    try
+	    {
+		if (id != null && className.equals("Contact"))
+		{
+		    System.out.println("Class Name" + className);
+		    return key;
+		}
+		else
+		{
+		    WebhookTriggerUtil.triggerWebhook(entity, className, (id != null));
+		}
+
+	    }
+	    catch (EntityNotFoundException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+
+	}
+
+	return key;
     }
 
     /**
@@ -660,24 +724,24 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (result instanceof com.agilecrm.cursor.Cursor)
 		{
 
-			String className = this.clazz.getSimpleName().toLowerCase();
-			
+		    String className = this.clazz.getSimpleName().toLowerCase();
+
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
 		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
 			    + NamespaceManager.get() + "_count");
 
-		    
-		    if (object != null){
-		    	if(!Arrays.asList(countRestrictedClassNames).contains(className))
-		    		agileCursor.count = (Integer) object;	
+		    if (object != null)
+		    {
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = (Integer) object;
 		    }
-			
+
 		    else
 		    {
 			long startTime = System.currentTimeMillis();
-			if(!Arrays.asList(countRestrictedClassNames).contains(className))
-					agileCursor.count = query.count();
-			
+			if (!Arrays.asList(countRestrictedClassNames).contains(className))
+			    agileCursor.count = query.count();
+
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 15 * 1000 && cache)
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
@@ -981,5 +1045,61 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	}
 	return results;
     }
+
+    private Long getEntityIdByEnity(T entity)
+    {
+	Long id = null;
+	Object obj = (Object) entity;
+	String entitytype = clazz.getSimpleName();
+	switch (entitytype.toLowerCase())
+	{
+	case "contact":
+	    Contact con = (Contact) obj;
+	    System.out.println(con);
+	    id = con.id;
+	    break;
+
+	case "opportunity":
+	    Opportunity opp = (Opportunity) obj;
+	    id = opp.id;
+	    break;
+
+	default:
+	    break;
+	}
+	return id;
+    }
+    
+    public List<com.google.appengine.api.datastore.Key> convertKeysToNativeKeys(List<Key<T>> ids_list)
+    {
+    	List<com.google.appengine.api.datastore.Key> keys = new ArrayList<com.google.appengine.api.datastore.Key>();
+		Iterator<Key<T>> iteartor = ids_list.iterator();
+		while (iteartor.hasNext()) {
+			Key<T> key = (Key<T>) iteartor.next();
+			keys.add(KeyFactory.createKey(key.getKind(), key.getId()));
+		}
+		
+		return keys;
+    }
+    
+    /**
+     * Convenience method to get number of entities with max limit based on properties map
+     * 
+     * @param map
+     * @return T matching object
+     */
+    public int getCountByPropertyWithLimit(Map<String, Object> map, int limit)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+	
+	q.limit(limit);
+
+	return getCount(q);
+    }
+    
 
 }

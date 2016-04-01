@@ -7,7 +7,8 @@ var DealsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Deals/Opportunity */
-	"deals" : "deals", "import-deals" : "importDeals", 
+	"deals" : "deals", "import-deals" : "importDeals",
+	"deal-rc-0" : "dealsRightClick","deal-rc-1" : "dealsRightClick","deal-rc-2" : "dealsRightClick","deal-rc-3" : "dealsRightClick",
 	"deal-filters" : "dealFilters", 
 	"deal-filter-add" : "dealFilterAdd",
 	"deal-filter-edit/:id" : "dealFilterEdit",
@@ -64,7 +65,7 @@ var DealsRouter = Backbone.Router.extend({
 				setupDealFilters();
 				//setupNewDealFilters();
 				initializeDealListners();
-				
+				loadPortlets('Deals');
 
 			}, "#opportunity-listners");
 		}
@@ -73,6 +74,11 @@ var DealsRouter = Backbone.Router.extend({
 			var that = this;
 			setupNewDealFilters(function(){
 				DEALS_LIST_COLLECTION = null;
+				getTemplate("opportunities-header-list", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#opportunity-listners').html($(template_ui));
+				
 				var query = ''
 				if (_agile_get_prefs('deal-filters'))
 				{
@@ -92,14 +98,35 @@ var DealsRouter = Backbone.Router.extend({
 						includeTimeAgo(el);
 						// Shows Milestones Pie
 						pieMilestonesByPipeline(pipeline_id);
-						// Shows deals chart
-						dealsLineChartByPipeline(pipeline_id);
+
+						var dealCount = new Base_Model_View({ url : 'core/api/opportunity/based/count?pipeline_id=' + pipeline_id + query, template : "" });
+
+						dealCount.model.fetch({ success : function(data)
+						{
+							var count = data.get("count") ? data.get("count") : 0;
+							if(count != undefined && count <= 1000)
+							{
+								// Shows deals chart
+								$("#total-pipeline-chart").show();
+								dealsLineChartByPipeline(pipeline_id);
+							}
+							else if(count != undefined && count > 1000){
+								$("#total-pipeline-chart").hide();
+							}
+							if(App_Deals.opportunityCollectionView.collection && App_Deals.opportunityCollectionView.collection.models[0])
+							{
+								App_Deals.opportunityCollectionView.collection.models[0].set({ "count" : count }, { silent : true })
+							}
+						} });
 						deal_bulk_actions.init_dom(el);
 						setupDealsTracksList(cel);
 						setupDealFilters(cel);
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
-						loadPortlets('Deals',el);
+						
+						setTimeout(function(){
+							$('#delete-checked',el).attr("id","deal-delete-checked");
+						},500);
 					}, appendItemCallback : function(el)
 					{
 						appendCustomfields(el);
@@ -110,25 +137,56 @@ var DealsRouter = Backbone.Router.extend({
 					} });
 				that.opportunityCollectionView.collection.fetch();
 
-				$('#opportunity-listners').html(that.opportunityCollectionView.render().el);
+				$('.new-collection-deal-list').html(that.opportunityCollectionView.render().el);
+				loadPortlets('Deals');
 			});
+});
 		}
 
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
+		
 		setTimeout(function()
 		{
 			$('a.deal-notes').tooltip();
 			$('.deal_won_date').tooltip();
-			loadPortlets('Deals');
+			
 		}, 2000);
 	},
 
+	/**
+	 * Open deal view in new page when right clicked
+	 */
+	dealsRightClick : function()
+	{
+		var link = window.location.hash;
+		var param = link.split("-")[2];
+		
+		if(param == "0"){
+			_agile_set_prefs("agile_deal_view", "list_view");
+		}else if(param == "1"){
+			_agile_delete_prefs("agile_deal_view");
+			_agile_delete_prefs('deal-milestone-view');
+		}else if(param == "2"){
+			_agile_set_prefs('deal-milestone-view','compact');			
+		}else if(param == "3"){
+			_agile_set_prefs('deal-milestone-view','fit');
+		}
+		App_Deals.deals();
+		window.location.hash = "deals";
+	},
+	
 	/**
 	 * import deals from a csv file and then upload all deals to databse
 	 */
 	importDeals : function()
 	{
+		if (!hasScope("MANAGE_DEALS"))
+		{
+			$('#content').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; Sorry, you do not have privileges to import deals.</strong></h2>');
+			hideTransitionBar();
+			return;
+		}
 		$('#content').html("<div id='import-deals-listener'></div>");
 		getTemplate("import-deals", {}, undefined, function(template_ui){
 			if(!template_ui)
@@ -177,8 +235,9 @@ var DealsRouter = Backbone.Router.extend({
 						if(json && json.length > 1){
 							$('#owners-list-filters').html('<option value="">Any</option>');
 						}
+						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>'); 
 						$.each(json, function(index, user){
-							$('#owners-list-filters').append('<option value="'+user.id+'">'+user.name+'</option>');
+							$('#owners-list-filters').append(template({name : user.name, id : user.id}));
 						});
 						$('#owners-list-filters').parent().find('img').hide();
 						hideTransitionBar();
@@ -192,8 +251,9 @@ var DealsRouter = Backbone.Router.extend({
 						if(json && json.length > 1){
 							$('#filter_pipeline').html('<option value="">Any</option>');
 						}
+						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>'); 
 						$.each(json, function(index, track){
-							$('#filter_pipeline').append('<option value="'+track.id+'">'+track.name+'</option>');
+							$('#filter_pipeline').append(template({name : track.name, id : track.id}));
 						});
 						$('#filter_pipeline', $('#opportunity-listners')).trigger('change');
 						$('#filter_pipeline').parent().find('img').hide();
@@ -244,8 +304,9 @@ var DealsRouter = Backbone.Router.extend({
 						if(json && json.length > 1){
 							$('#owners-list-filters').html('<option value="">Any</option>');
 						}
+						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>');
 						$.each(json, function(index, user){
-							$('#owners-list-filters').append('<option value="'+user.id+'">'+user.name+'</option>');
+							$('#owners-list-filters').append(template({id : user.id, name : user.name}));
 						});
 						if(deal_filter_json && deal_filter_json.owner_id)
 						{
@@ -270,8 +331,9 @@ var DealsRouter = Backbone.Router.extend({
 						if(json && json.length > 1){
 							$('#filter_pipeline').html('<option value="">Any</option>');
 						}
+						var template = Handlebars.compile('<option value="{{id}}">{{name}}</option>');
 						$.each(json, function(index, track){
-							$('#filter_pipeline').append('<option value="'+track.id+'">'+track.name+'</option>');
+							$('#filter_pipeline').append(template({id : track.id, name : track.name}));
 						});
 						if(deal_filter_json && deal_filter_json.pipeline_id)
 						{
@@ -295,8 +357,9 @@ var DealsRouter = Backbone.Router.extend({
 									{
 										$('#milestone', el).html('<option value="">Any</option>');
 									}
+									var template = Handlebars.compile('<option value="{{milestone}}">{{milestone}}</option>');
 									$.each(milestonesList, function(index, milestone){
-										$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+										$('#milestone', el).append(template({milestone : milestone}));
 									});
 									if(deal_filter_json && deal_filter_json.milestone && track == deal_filter_json.pipeline_id)
 									{

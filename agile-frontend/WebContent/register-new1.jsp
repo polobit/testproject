@@ -3,10 +3,11 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@page import="com.agilecrm.util.MathUtil"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
 
-	 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	} 
@@ -15,10 +16,9 @@
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	} 
+	}
 
   String _source = request.getParameter("_source");
-  
   String registered_email = request.getParameter("email");
 
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
@@ -32,18 +32,39 @@ String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 //Static images s3 path
 String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+
+// Bg Image
+int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
+
+// Error Message
+String errorMessage = "";
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
-	  S3_STATIC_IMAGE_PATH = VersioningUtil.getBaseServerURL() + "/beta/static/";
+	  S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL();
 }
 
   if(registered_email != null)
   {
-    request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
-    return;
+	  try{
+		  
+		  String name = request.getParameter("name");
+		  String password = request.getParameter("password");
+		  if(StringUtils.isNotBlank(name) && StringUtils.isNotBlank(password)) {
+			  // Validate Email
+			  new RegisterVerificationServlet().validateEmailIdWhileRegister(request, response);
+			  request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
+			  return; 
+		  }
+	  }
+	  catch(Exception e)
+	  {
+		  errorMessage = e.getMessage();
+		    	
+	  }
+	
   }
 
 %>
@@ -66,6 +87,22 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+<STYLE>
+
+.overlay:before{
+	content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: black;
+    opacity: 0.25;
+}
+</STYLE>
+
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
@@ -86,11 +123,14 @@ if(isSafari && isWin)
 			if(cookie.getName().equals("registration_email"))
 				email = cookie.getValue();
 	}
+	
+	if(StringUtils.isNotBlank(registered_email))
+		  email = registered_email;
 %>
 
 <%
     if (isMSIE) {
-				response.sendRedirect("/error/not-supported.jsp");
+				// response.sendRedirect("/error/not-supported.jsp");
 			}
 %>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -99,9 +139,13 @@ if(isSafari && isWin)
     <![endif]-->
 
 </head>
-<body>
-  <div id="error-area" class="error-top-view"></div>
-<div class="app app-header-fixed app-aside-fixed">
+<body class="overlay">
+  <div id="error-area" class="error-top-view">
+    <%if(StringUtils.isNotEmpty(errorMessage)){
+        out.println(errorMessage);
+    }%>
+  </div>
+<div class="app app-header-fixed app-aside-fixed transparant">
 <div class="container w-xxl w-auto-xs">
 <a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
@@ -116,7 +160,6 @@ if(isSafari && isWin)
 <div id="openid_btns">
 <input type='hidden' name='type' value='agile'></input>
 <input type='hidden' name='step' id="step" value="1"></input>
-<input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
@@ -132,14 +175,14 @@ if(isSafari && isWin)
 <input class="input-xlarge field required email form-control no-border"
 			id="login_email" name='email' type="email" required maxlength="50"
 			minlength="6" value="<%=email%>"  placeholder="Email Address (User ID)"
-			autocapitalize="off">
+			autocapitalize="off" autocomplete="off">
 </div>
 
 
 <div class="list-group-item">
 <input class="input-xlarge field required form-control no-border"
 											maxlength="20" minlength="4" required name='password' type="password"
-											placeholder="Password" autocapitalize="off">
+											placeholder="Password" autocapitalize="off" autocomplete="off">
 </div>
 
 </div>
@@ -152,6 +195,10 @@ if(isSafari && isWin)
 									</div> 		
 
 <input type='submit' id="register_account" value="Sign Up" class='btn btn-lg btn-primary btn-block'>
+<div class="text-center text-white m-t m-b">
+	<small>Forgot</small> 
+	<a href="/forgot-domain" class="text-white">Domain?</a>
+</div>
 </form>
 					
 </div>
@@ -197,8 +244,11 @@ if(isSafari && isWin)
 </div>
 <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 <script src="/flatfull/registration/register.js" type="text/javascript"></script>
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
+
   <script type="text/javascript">
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
@@ -207,11 +257,31 @@ $(document).ready(function() {
     newImg.onload = function() {
     $("body").css("background-image","url('"+this.src+"')");
      }
-    newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-registration-page-high.png';
-
-
-    $('#account_timezone').val(jstz.determine().name());
+   newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/agile-registration-page-high.png';
+   
+  console.log(newImg.src);
+    if($("#error-area").text().trim())
+    	$("#error-area").slideDown("slow");
+//preload_login_pages();
 });
+/*
+ function preload_login_pages()
+			{
+
+			for(var i=1; i < 10; i++){
+
+			$('<img/>', {
+				class: 'hide',
+				src: '<%=S3_STATIC_IMAGE_PATH%>/images/signup-' + i + '-high.jpg',
+			}).appendTo('body');
+
+			$('<img/>', {
+				class: 'hide',
+				src: '<%=S3_STATIC_IMAGE_PATH%>/images/signup-' + i + '-low.jpg',
+				}).appendTo('body');
+
+			}
+		}*/
   </script>
 
   <!-- Clicky code -->
@@ -219,9 +289,11 @@ $(document).ready(function() {
   <script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script>
 <script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
 <script type="text/javascript">twttr.conversion.trackPid('nu0pq', { tw_sale_amount: 0, tw_order_quantity: 0 });</script>
+
 <noscript>
 <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=nu0pq&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
 <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=nu0pq&p_id=Twitter&tw_sale_amount=0&tw_order_quantity=0" />
+
 </noscript>
 	</body>
 	</html>

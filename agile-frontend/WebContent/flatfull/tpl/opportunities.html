@@ -1,164 +1,88 @@
-<script id="opportunities-collection-template" type="text/html">
+<script id="opportunities-header-list-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md b-b">
-	<div class="row">
-		<div class="col-md-12">
-			<div>
-				<div id="portlets" style="height:240px;overflow-y:auto">&nbsp;</div>
-			</div>
-		</div>
-	</div>
-	</div>
+{{#is_mobile}}
+{{else}}
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
             <h3 class="pull-left h3 font-thin">Deals <small>Opportunities</small>
-			<div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="margin-left:100px;display:none;">
-  				For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">Deal settings</a> page.
-			</div>
-			</h3>
-			<!--a href="#deals-add" class="deals-add btn-sm btn-default btn right"><i class="icon-plus-sign" /> Add Deal</a-->
-			<div class="pull-right">
-			<div class="btn-group  hidden m-r-xs inline-block" id="deals-tracks">
-			</div>
+      <div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="margin-left:100px;display:none;">
+          For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">Deal settings</a> page.
+      </div>
+      </h3>
+      <!--a href="#deals-add" class="deals-add btn-sm btn-default btn right"><i class="icon-plus-sign" /> Add Deal</a-->
+      <div class="pull-right">
+      <div class="btn-group  hidden m-r-xs inline-block" id="deals-tracks">
+      </div>
       {{#is_mobile}}
       {{else}}
-			<div id="deal-list-filters" class="btn-group m-r-xs inline-block">
-				 <img class="loading_img p-r-xs"  height="32px" width="32px" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
-			</div>
+      <div id="deal-list-filters" class="btn-group m-r-xs inline-block">
+         <img class="loading_img p-r-xs"  height="32px" width="32px" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
+      </div>
       {{/is_mobile}}
       {{#is_mobile}}
               {{else}}
-			<div class="btn-group m-r-xs inline-block" id="deals-view">
-					<div class="btn btn-sm btn-default"><i class="icon-list m-r-xs"></i></div>
-					<a class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" href="#">
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu pull-right">
-							<li><a href="#" class="deals-list-view" onclick="return false;">List View</a></li>
+      <div class="btn-group m-r-xs inline-block" id="deals-view">
+          <div class="btn btn-sm btn-default"><i class="icon-list m-r-xs"></i></div>
+          <a class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" href="#">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu pull-right">
+              <li><a href="#deal-rc-0" class="deals-list-view" onclick="return false;">List View</a></li>
               
-						<li><a href="#" class="deals-pipelined-view">Milestone View</a></li>
+            <li><a href="#deal-rc-1" class="deals-pipelined-view">Milestone View</a></li>
             
-					</ul>
-			</div>
+          </ul>
+      </div>
       {{/is_mobile}}
-			<div class="btn-group m-r-xs inline-block" id="deals-action">
-					<a href="#deals-add" class="deals-add btn btn-default btn-sm"><i class="icon-plus-sign" /> Add Deal
-					</a>
-					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu pull-right">
-						<li><a href="#import-deals" >Import from CSV</a></li>
-						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
-					
-					</ul>
-			</div>
-			</div>
-			<div class="clearfix"></div>
+      <div class="btn-group m-r-xs inline-block" id="deals-action">
+          <a href="#deals-add" class="deals-add btn btn-default btn-sm"><i class="icon-plus-sign" /> Add Deal
+          </a>
+          <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="caret"></span>
+          </a>
+          {{#hasScope "MANAGE_DEALS"}}
+          <ul class="dropdown-menu pull-right">
+            <li><a href="#import-deals" >Import from CSV</a></li>
+            <li><a href="#" class="deals-export-csv">Export as CSV</a></li>
+            <li><a href="#add-dashlet">Add Dashlet</a></li>
+          
+          </ul>
+
+          {{else}}
+          <ul class="dropdown-menu pull-right">
+          <li><a href="#add-dashlet">Add Dashlet</a></li>
+          </ul>
+          
+          {{/hasScope}}
+          <!--
+          {{#is_mobile}}
+
+          {{else}}
+          <div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+            <button class="btn btn-default btn-sm m-l-sm fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+              <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+
+              {{/is_mobile}}
+              -->
+      </div>
+      </div>
+      <div class="clearfix"></div>
 </div>
 </div>
 </div>
-<div class="wrapper-md">
-<div class="row">
-    <div class="col-md-9">
-        <div id="slate">
-        </div>
-        {{#if this.length}}
-        {{#is_mobile}}
-        {{else}}
-        <div id="total-pipeline-chart" class="w-full bg-white" style="height:300px"></div>
-        
-        <br />
-			<div>
-				<div class="btn-group pull-left" id="bulk-actions" style="display:none;">
-					<div class="btn btn-sm btn-default">Bulk Actions</div>
-					<a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
-						<li><a href="#deal_mile_change_modal" data-toggle="modal">Change Milestone/Track</a></li>
-						<li class="divider"></li>
-						<li><a href="#deal_contact_add_tag_modal" data-toggle="modal">Add Tag to related Contacts</a></li>
-						{{#hasMenuScope 'CAMPAIGN'}}
-							<li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
-						{{/hasMenuScope}}
-						<li class="divider"></li>
-						<li><a href="#deal_bulk_archive_modal" data-toggle="modal">Archive</a></li>
-						<li><a href="#deal_bulk_restore_modal" data-toggle="modal">Restore</a></li>
-						<li class="divider"></li>
-						<li><a href="#deal_bulk_delete_modal" data-toggle="modal">Delete</a></li>
-						
-					</ul>
-				</div>
-				<div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
-        <div class="clearfix"></div>
-				<br>
-			</div>
-      {{/is_mobile}}
-			<div class="panel panel-default">
-			<div class="panel-heading">Deals</div>
-			<div class="table-responsive">
-
-                <table class="table table-striped showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/delete" id="deal-list" style="table-layout:auto;">
-
-					<thead>
-                        <tr>
-                            <th>Opportunity</th>
-                            <th>Related To</th>
-                            <th>Value</th>
-                            <th>Milestone</th>
-                            <th>Close Date</th>
-                            <th>Owner</th>
-                        </tr>
-                    </thead>
-                    <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
-                    </tbody>
-                </table>
-            </div>
-            </div>
-        
-        {{/if}}
-        </div>
-        
-    <div class="col-md-3">
-        <div class="data-block">
-        {{#is_mobile}}
-        {{else}}
-        
-            <div class="panel wrapper m-b-none">
-                <header>
-                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> Milestones</h4>
-                </header>
-                <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
-			</div>
-      {{/is_mobile}}
-
-			<div class="m-t-md">
-                <h4 class="m-t-none m-b-sm h4 text-center-xs">
-                    What are Milestones?
-                </h4>
-                
-                <p>
-                    Milestones are used to define the status of the deal.
-                </p>
-                <p>
-                    e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
-                </p>
-                
-                <h4 class="m-t-none m-b-sm h4 text-center-xs">
-                    What are Deals?
-                </h4>
-                
-                <p>
-                    Deals are opportunities you can continuously track throughout their life-cycle.
-                </p>
-            </div>
-        </div> 
+{{/is_mobile}}
+<div class="route_Portlet b-b" style="display:none">
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+        <div id="portlets">&nbsp;</div>
+      </div>
     </div>
-</div>
-</div>
+  </div>
+  </div>
+
+  <div class="new-collection-deal-list"></div>
 
 </div>
 
@@ -173,14 +97,14 @@
   <div class="modal-body">
 <div class="row">
     <div class="control-group form-group col-md-5">
-		<p class="m-t-xs">Changing owner for <span class="count"> </span> Deal(s).</p>
-		<label class="control-label"><b>Select Owner </b><span
-			class="field_req">*</span></label>
-			<div class="controls" id="owners">
-				<select id="owners-list-bulk" class="required form-control" name="owner_id"></select>
-			</div>
+    <p class="m-t-xs">Changing owner for <span class="count"> </span> Deal(s).</p>
+    <label class="control-label"><b>Select Owner </b><span
+      class="field_req">*</span></label>
+      <div class="controls" id="owners">
+        <select id="owners-list-bulk" class="required form-control" name="owner_id"></select>
+      </div>
 </div>
-	</div>
+  </div>
   </div>
   <div class="modal-footer">
     <a href="#" id="deal-bulk-owner" class="btn btn-sm btn-primary">Done</a>
@@ -198,28 +122,28 @@
     <h3 class="modal-title">Change Milestone/Track</h3>
   </div>
   <div class="modal-body">
-	<form id="bulk_mile_Form" name="opportunityForm" method="post">
-	<p>Changing track/milestone for <span class="count"> </span> Deal(s).</p>
+  <form id="bulk_mile_Form" name="opportunityForm" method="post">
+  <p>Changing track/milestone for <span class="count"> </span> Deal(s).</p>
 <div class="row">
     <div class="control-group form-group col-md-5">
-		<label class="control-label"><b>Select Track </b><span
-			class="field_req">*</span></label>
-			<div class="controls" id="bulk-pipeline">
-				<select id="pipeline-list-bulk" class="required form-control" name="pipeline"></select>
-			</div>
+    <label class="control-label"><b>Select Track </b><span
+      class="field_req">*</span></label>
+      <div class="controls" id="bulk-pipeline">
+        <select id="pipeline-list-bulk" class="required form-control" name="pipeline"></select>
+      </div>
 </div>
-	</div>
+  </div>
 <div class="row">
-	<div class="control-group form-group col-md-5">
-		<label class="control-label"><b>Select Milestone </b><span
-			class="field_req">*</span></label>
-			<div class="controls" id="bulk-pipeline">
-				<select id="milestone-list-bulk" class="required form-control" name="milestone"></select>
-			</div>
-	</div>
-	</div>
+  <div class="control-group form-group col-md-5">
+    <label class="control-label"><b>Select Milestone </b><span
+      class="field_req">*</span></label>
+      <div class="controls" id="bulk-pipeline">
+        <select id="milestone-list-bulk" class="required form-control" name="milestone"></select>
+      </div>
+  </div>
+  </div>
 <input type="hidden" id="pipeline-name"  name="pipeline-name"></input>
-	</form>
+  </form>
   </div>
   <div class="modal-footer">
     <a href="#" id="deal-bulk-mile" class="btn btn-sm btn-primary">Done</a>
@@ -238,11 +162,11 @@
   </div>
   <div class="modal-body">
     <div id="deal-bulk-confirm">
-		Archive <span class="count"> </span> Deal(s)?
-	</div>
+    Archive <span class="count"> </span> Deal(s)?
+  </div>
   </div>
   <div class="modal-footer">
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
     <a href="#" id="deal-bulk-archive" class="btn btn-sm btn-primary">Yes</a>
   </div>
 </div>
@@ -259,11 +183,11 @@
   </div>
   <div class="modal-body">
     <div id="deal-bulk-confirm">
-		Restore <span class="count"> </span> Deal(s)?
-	</div>
+    Restore <span class="count"> </span> Deal(s)?
+  </div>
   </div>
   <div class="modal-footer">
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
     <a href="#" id="deal-bulk-restore" class="btn btn-sm btn-primary">Yes</a>
   </div>
 </div>
@@ -280,11 +204,11 @@
   </div>
   <div class="modal-body">
     <div id="deal-bulk-confirm">
-		Delete <span class="count"> </span> Deal(s)?
-	</div>
+    Delete <span class="count"> </span> Deal(s)?
+  </div>
   </div>
   <div class="modal-footer">
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
     <a href="#" id="deal-bulk-delete" class="btn btn-sm btn-primary">Yes</a>
   </div>
 </div>
@@ -301,27 +225,27 @@
   </div>
   <div class="modal-body">
 <div class="row">
-		<form id="dealContactTagsBulkForm">
+    <form id="dealContactTagsBulkForm">
                 <div class="control-group form-group col-md-7">         
-					<p class="m-t-xs">Add Tag to related Contacts of selected <span class="count"> </span> Deal(s)</p>
+          <p class="m-t-xs">Add Tag to related Contacts of selected <span class="count"> </span> Deal(s)</p>
                     <label class="control-label"><b>Add tags</b> <span class="field_req">*</span></label>
                     <div class="controls">
                         <div class="pull-left">
                         <ul name="tags" class="tagsinput tags p-n"></ul>
                         </div>              
                         <input name="tags" type="text" id="addBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma" autocomplete="off"><ul class="typeahead dropdown-menu" style="top: 34px; left: 15px; display: none;"><li class="active"><a href="#"><strong>Te</strong>st</a></li><li><a href="#"><strong>Te</strong>st Company</a></li><li><a href="#"><strong>Te</strong>st2</a></li><li><a href="#"><strong>Te</strong>st3</a></li><li><a href="#"><strong>Te</strong>xt</a></li><li><a href="#"><strong>te</strong>st</a></li></ul>
-						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
-						<span class="invalid-tags" style="display:none;color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</span>
-						<input class="hide">      
-              		</div>
+            <span class="error-tags" style="display:none;color:red;">This field is required.</span>
+            <span class="invalid-tags" style="display:none;color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</span>
+            <input class="hide">      
+                  </div>
                 </div>
         </form>
-	</div>
+  </div>
   </div>
   <div class="modal-footer">
-    	<!-- <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button> -->
-    	<a href="#" id="deal-contact-add-tag" class="btn btn-primary btn-sm">Done</a> 
-  		<span class="save-status"></span>
+      <!-- <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button> -->
+      <a href="#" id="deal-contact-add-tag" class="btn btn-primary btn-sm">Done</a> 
+      <span class="save-status"></span>
   </div>
 </div>
 </div>
@@ -338,14 +262,14 @@
   <div class="modal-body">
 <div class="row">
     <div class="control-group form-group col-md-8">
-		<p class="m-t-xs">Add related Contacts of selected <span class="count"> </span> Deal(s) to Campaign</p>
-		<label class="control-label"><b>Select Campaign </b><span
-			class="field_req">*</span></label>
-			<div class="controls" id="workflows">
-				<select id="workflows-list-bulk" class="required form-control" name="workflow_id"></select>
-			</div>
+    <p class="m-t-xs">Add related Contacts of selected <span class="count"> </span> Deal(s) to Campaign</p>
+    <label class="control-label"><b>Select Campaign </b><span
+      class="field_req">*</span></label>
+      <div class="controls" id="workflows">
+        <select id="workflows-list-bulk" class="required form-control" name="workflow_id"></select>
+      </div>
 </div>
-	</div>
+  </div>
   </div>
   <div class="modal-footer">
     <a href="#" id="deal-contact-add-camp" class="btn btn-sm btn-primary">Done</a>
@@ -356,20 +280,47 @@
 
 </script>
 <script id="opportunities-model-template" type="text/html">
+
+{{#is_mobile}}
+
+<td data="{{id}}" class="data" style="padding-bottom:12px;">
+
+  <div class="text-ellipsis deals-name"> 
+    <a class="text-cap">{{name}}</a>
+    
+  </div>
+
+  <div class="text-ellipsis deals-name" style="font-size:13px; margin-top:-2px;">
+  {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+<span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
+  </div>
+
+  <div class="text-ellipsis text-light deals-name" style="font-size:12px; margin-top:-3px;">
+       {{owner.name}}
+    </div>
+</div>
+
+
+</td>
+<td>
+
+
+{{else}}
+
 <td data="{{id}}" class="data">
-	<div class="text-ellipsis" style="width:10em"> 
-		<a class="text-cap">{{name}}</a>
-	</div>
+  <div class="text-ellipsis" style="width:10em"> 
+    <a class="text-cap">{{name}}</a>
+  </div>
 </td>
 <td>
 <div  style="width:10em">
-	<div class="inline-block no-wrap overflow-hidden" style="width:9em;">
-	{{#each contacts}}
+  <div class="inline-block no-wrap overflow-hidden" style="width:9em;">
+  {{#each contacts}}
        {{#if_contact_type "PERSON"}}
-        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+          <a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
        {{/if_contact_type}}
-	   {{#if_contact_type "COMPANY"}}
-        	<a href="#company/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+     {{#if_contact_type "COMPANY"}}
+          <a href="#company/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
        {{/if_contact_type}}
    {{/each}}
    </div>
@@ -384,24 +335,25 @@
     <div class="thumb-sm avatar">
        {{#if pic}}
         <img class="r r-2x" src="{{pic}}"  title="{{owner.name}}" />
-	   {{else}}
-		<img class="r r-2x" src="{{defaultGravatarurl 50}}"  title="{{owner.name}}" />
+     {{else}}
+    <img class="r r-2x" src="{{defaultGravatarurl 50}}"  title="{{owner.name}}" />
        {{/if}}
     </div>
 </div>
 </td>
+{{/is_mobile}}
 </script>
 
-<script id="opportunity-track-list-collection-template" type="text/html">
+<!--<script id="opportunity-track-list-collection-template" type="text/html">
 <div class="btn-group right pos-rlt"  id="filters-tour-step">
-	<button class="btn filter-dropdown btn-default btn-sm"><i class="icon-road m-r-xs"/></button>
-	<button class="btn dropdown-toggle btn-default btn-sm" data-toggle="dropdown">
-    	<span class="caret"></span>
-  	</button>
-	<ul id ="opportunity-track-list-model-list" class="pull-right dropdown-menu">
-	</ul>
+  <button class="btn filter-dropdown btn-default btn-sm"><i class="icon-road m-r-xs"/></button>
+  <button class="btn dropdown-toggle btn-default btn-sm" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+  <ul id ="opportunity-track-list-model-list" class="pull-right dropdown-menu">
+  </ul>
 </div>
-</script>
+</script>  -->
 
 <script id="opportunity-track-list-model-template" type="text/html">
 {{#if name}}
@@ -410,3 +362,211 @@
 <a id='{{id}}' class="pipeline c-p" data="Default">Default</a>
 {{/if}}
 </script>
+
+<!-- Delete privileges error modal -->
+<div id="deal_delete_privileges_error_modal" class="modal  fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" data-dismiss="modal" class="close">×</a>
+        <h3>Delete</h3>
+      </div>
+      <div class="modal-body">You do not have permission to delete this deal.</div>
+      <div class="modal-footer">
+        <div>
+          <a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk archive ACLs confirmation-->
+<div id="deal_bulk_archive_acl_modal" class="deal_bulk_modal modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">Archive</h3>
+  </div>
+  <div class="modal-body">
+    You may not have permission to archive some of the deals selected. Proceeding with this operation will archive only the deals that you are permitted to update.<br/><br/> Do you want to proceed?
+  </div>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+    <a href="#" id="deal-bulk-archive-acl" class="btn btn-sm btn-primary">Yes</a>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Bulk restore ACLs confirmation-->
+<div id="deal_bulk_restore_acl_modal" class="deal_bulk_modal modal fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">Restore</h3>
+  </div>
+  <div class="modal-body">
+    You may not have permission to restore some of the deals selected. Proceeding with this operation will restore only the deals that you are permitted to update.<br/><br/> Do you want to proceed?
+  </div>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+    <a href="#" id="deal-bulk-restore-acl" class="btn btn-sm btn-primary">Yes</a>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Update privileges error modal -->
+<div id="deal_update_privileges_error_modal" class="modal  fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" data-dismiss="modal" class="close">×</a>
+        <h3>Update</h3>
+      </div>
+      <div class="modal-body">You do not have permission to update this deal.</div>
+      <div class="modal-footer">
+        <div>
+          <a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script id="opportunities-collection-template" type="text/html">
+
+<div class="{{#is_mobile}} {{else}} wrapper-md {{/is_mobile}}">
+<div class="row">
+    <div class="col-md-9">
+        <div id="slate">
+        </div>
+        {{#if this.length}}
+        {{#is_mobile}}
+        {{else}}
+        <div id="total-pipeline-chart" class="w-full bg-white" style="height:300px;display:none;"></div>
+        
+        <br />
+      <div>
+        <div class="btn-group pull-left" id="bulk-actions" style="display:none;">
+          <div class="btn btn-sm btn-default">Bulk Actions</div>
+          <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" id="view-actions">
+          {{#hasScope 'MANAGE_DEALS'}}
+            <li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
+          {{/hasScope}}
+            <li><a href="#" id="bulk_deals_milestone_change" data-toggle="modal">Change Milestone/Track</a></li>
+            <li class="divider"></li>
+            <li><a href="#deal_contact_add_tag_modal" data-toggle="modal">Add Tag to related Contacts</a></li>
+            {{#hasMenuScope 'CAMPAIGN'}}
+              <li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
+            {{/hasMenuScope}}
+            <li class="divider"></li>
+            <li><a href="#" id="bulk_deals_archive" data-toggle="modal">Archive</a></li>
+            <li><a href="#" id="bulk_deals_restore" data-toggle="modal">Restore</a></li>
+            <li class="divider"></li>
+            <li><a href="#" id="bulk_deals_delete" data-toggle="modal">Delete</a></li>
+            
+          </ul>
+        </div>
+        <div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
+        <div class="clearfix"></div>
+        <br>
+      </div>
+      {{/is_mobile}}
+      <div class="panel panel-default" {{#is_mobile}} style="border:0px; border-radius:0px;" {{/is_mobile}}>
+      {{#is_mobile}} {{else}} <div class="panel-heading"> Deals</div>{{/is_mobile}}
+      <div class="table-responsive">
+
+                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
+
+          {{#is_mobile}}
+           {{else}}
+          <thead>
+                        <tr>
+                            <th>Opportunity</th>
+                            <th>Related To</th>
+                            <th>Value</th>
+                            <th>Milestone</th>
+                            <th>Close Date</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    {{/is_mobile}}
+                    <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        
+        {{/if}}
+        </div>
+
+        {{#is_mobile}}
+
+        {{else}}
+        
+    <div class="col-md-3">
+        <div class="data-block">
+        {{#is_mobile}}
+        {{else}}
+        
+            <div class="panel wrapper m-b-none">
+                <header>
+                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> Milestones</h4>
+                </header>
+                <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
+      </div>
+       {{/is_mobile}}
+
+      <div class="m-t-md">
+                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
+                    What are Milestones?
+                </h4>
+                
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
+                    Milestones are used to define the status of the deal.
+                </p>
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
+                    e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
+                </p>
+                
+                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
+                    What are Deals?
+                </h4>
+                
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs{{/is_mobile}}">
+                    Deals are opportunities you can continuously track throughout their life-cycle.
+                </p>
+            </div>
+        </div> 
+    </div>
+     {{/is_mobile}}
+
+</div>
+</div>
+</script>
+
+<!-- Bulk delete ACLs confirmation-->
+<div id="deal_bulk_delete_acl_modal" class="deal_bulk_modal modal fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">Delete</h3>
+  </div>
+  <div class="modal-body">
+    You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?
+  </div>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+    <a href="#" id="deal-bulk-delete-acl" class="btn btn-sm btn-primary">Yes</a>
+  </div>
+</div>
+</div>
+</div>

@@ -90,6 +90,15 @@ function subscribeToPubNub(domain)
 				bulkActivitiesNoty('information', message);
 				return;
 			}
+
+			// Ticket operations
+			if (message.type.indexOf('TICKET') != -1)
+			{
+				loadServiceLibrary(function(){
+					Ticket_Utils.showNoty('information', message.message, 'bottomRight', 5000);
+					return;
+				});
+			}
 			
 			if (message.type == "EVENT_REMINDER")
 			{

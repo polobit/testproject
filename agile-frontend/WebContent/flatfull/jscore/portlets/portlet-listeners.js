@@ -198,6 +198,50 @@ function initializePortletsListeners() {
 							taskreportStatus.show();
 					});
 
+			$('#portletsPendingDealsSettingsModal').off('change', '#track');
+	$('#portletsPendingDealsSettingsModal').on('change', '#track', function(e)
+	{
+		var el = $(this).closest('form');
+		var track = $('#track', el).val();
+		if (track!='anyTrack')
+		{
+			
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/'+track,
+				dataType : 'json',
+				success : function(data) {
+					var milestonesList=data.milestones.split(",");
+					$('#milestone').html('');
+					var lost=data.lost_milestone;
+					var won= data.won_milestone;
+					if(milestonesList.length > 1)
+					{
+						$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+					}
+					$.each(milestonesList, function(index, milestone){
+						if(lost!=null && won!=null){
+							if(!(milestone==lost) && !(milestone==won) )
+							
+						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+					}
+						else
+						{
+							if(!(milestone=='Won') && !(milestone=='Lost') )
+							
+						$('#milestone', el).append('<option value="'+milestone+'">'+milestone+'</option>');
+						}
+					});
+				}
+			});
+		}
+		else
+		{
+			$('#milestone', el).html('<option value="anyMilestone">Any</option>');
+		}
+		
+	});
+
 	$('.gridster-portlets').off("mouseover").on(
 			'mouseover',
 			'.stats_report_portlet_body',
@@ -229,7 +273,7 @@ function initializePortletsListeners() {
 						json2["done"] = false;
 						json2["skip"] = false;
 					}
-					json1["" + $(this).prop('value')] = json2;
+					json1["" + $(this).attr('value')] = json2;
 				});
 				model.set({
 					'prefs' : JSON.stringify(json1)
@@ -311,6 +355,15 @@ function initializePortletsListeners() {
 				$(this).find('.fc-button').css('visibility', 'hidden');
 			});
 
+	$('.portlet_body_calendar').on('click', '.fc-button-content',
+			function(e) {
+				App_Portlets.eventCalendar=$(this).parents('.portlet_body_calendar');
+			});
+
+	$('.events_show')
+			.off(
+					'click',
+					'.minical-portlet-event')
 	$('.events_show')
 			.on(
 					'click',
@@ -328,11 +381,7 @@ function initializePortletsListeners() {
 						if (id && !isNaN(id)) {
 							var events_array = $(
 									'#calendar_container',
-									$(this)
-											.parentsUntil('.mini-cal')
-											.eq(
-													$(this).parentsUntil(
-															'.mini-cal').length - 1))
+									$(this).parents('.portlet_body_calendar'))
 									.fullCalendar(
 											'clientEvents',
 											id,
@@ -369,7 +418,7 @@ function initializePortletsListeners() {
 												deserializeForm(
 														model,
 														$("#updateActivityForm"));
-
+												$('#current_div','#updateActivityModal').val("Mini Calendar");
 												$("#update-event-date-1").val(
 														getDateInFormat(start));
 												$("#update-event-date-2").val(
@@ -472,6 +521,8 @@ function initializePortletsListeners() {
 												// Show edit modal for the event
 												$("#updateActivityModal")
 														.modal('show');
+
+
 												$(
 														'#' + id,
 														$('#calendar_container'))
@@ -482,6 +533,9 @@ function initializePortletsListeners() {
 						}
 					});
 
+	$('.events_show').off(
+			'click',
+			'.minical-portlet-event-add');
 	$('.events_show').on(
 			'click',
 			'.minical-portlet-event-add',
@@ -503,6 +557,8 @@ function initializePortletsListeners() {
 				$('#task-date-1').val(getDateInFormat(start));
 				$("#event-date-1").val(getDateInFormat(start));
 				$("#event-date-2").val(getDateInFormat(start));
+				$('#current_div','#activityModal').val("Mini Calendar");
+
 
 				// Set Time for Event
 				// if ((start.getHours() == 00) && (start.getHours() == 00) &&
@@ -546,12 +602,14 @@ function initializePortletsListeners() {
 								var model_id = $(this).find('.portlets').attr('id');
 					
 					var model = Portlets_View.collection.get(model_id);
+					if(model!=undefined){
 					model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
 					model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
 
 					models.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
-				
+							}
 							});
+
 							// Saves new positions in server
 				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
@@ -561,7 +619,7 @@ function initializePortletsListeners() {
 						if(portlet.get('portlet_route')!='DashBoard' && isNaN(portlet.get('portlet_route')))
 						{
 							if ($('.gridster-portlets > div').length == 0)
-							$('#no-portlets').parents('.wrapper-md').hide();
+							$('#no-portlets').parents('.route_Portlet').hide();
 						}
 						if ($('.gridster-portlets > div').length == 0)
 							$('#no-portlets').show();
@@ -574,7 +632,7 @@ function initializePortletsListeners() {
 
 			});
 
-	$('#dashlet_heading #tutotial_modal').off('click');
+	$('#dashlet_heading').off('click', '#tutotial_modal');
 	$('#dashlet_heading').on('click', '#tutotial_modal', function(e) {
 		e.preventDefault();
 
@@ -624,7 +682,7 @@ function initializePortletsListeners() {
 		});
 
 	});
-
+	$('.portlet_body #portlets-opportunities-model-list > tr').off();
 	$('.portlet_body').on(
 			"click",
 			'#portlets-opportunities-model-list > tr',
@@ -656,6 +714,11 @@ function initializePortletsListeners() {
 				}
 			});
 
+//$('.portlet_body #portlets-events-model-list > tr').off('click');
+$('.portlet_body')
+			.off(
+					"click",
+					'#portlets-events-model-list > tr')
 	$('.portlet_body')
 			.on(
 					"click",
@@ -693,6 +756,7 @@ function initializePortletsListeners() {
 							var startDate = new Date(model.get('start') * 1000);
 							var endDate = new Date(model.get('end') * 1000)
 							// Set time for update Event
+							$('#current_div',"#updateActivityModal").val("Events Dashlet");
 							$('#update-event-time-1')
 									.val(
 											(startDate.getHours() < 10 ? "0"
@@ -841,7 +905,7 @@ function initializePortletsListeners() {
 						}
 					});
 
-	$('.gridster-portlets').on("click", '.portlet-settings', function(e) {
+	$('.gridster-portlets').off("click").on("click", '.portlet-settings', function(e) {
 		e.preventDefault();
 
 		portlet_utility.showPortletSettings(this.id);
@@ -938,6 +1002,9 @@ function initializeAddPortletsListeners() {
 							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
 							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg"),
 							"DealGoals" : updateImageS3Path("flatfull/img/dashboard_images/Quota.png"),
+							"IncomingDeals" : updateImageS3Path("flatfull/img/dashboard_images/incoming-deals-new.png"),
+							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis-new.png"),
+							"AverageDeviation" :  updateImageS3Path("flatfull/img/dashboard_images/Average_deviation.png"),
 
 						};
 						var placements_json = {
@@ -948,7 +1015,8 @@ function initializeAddPortletsListeners() {
 							"RevenueGraph" : "left",
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
-							"Campaignstats" : ""
+							"Campaignstats" : "",
+							"LostDealAnalysis" : "left"
 						};
 						if (placements_json[p_name]) {
 							placement = "left";
@@ -969,39 +1037,48 @@ function initializeAddPortletsListeners() {
 						$(this).popover('show');
 					});
 
+$('.show_screeshot').off('click touchstart').on(
+			"click touchstart",
+			'.add-portlet-direct',
+			function() {
+				var route=[];
+				var url='core/api/portlets/add';
 
+													route.push('DashBoard');
+												
+				var forAll=false;
+				clickfunction($(this),url,forAll,route);
+			});
+	$('.col-md-3').off('click touchstart').on('click touchstart',
+			'.add_to_all',
+			function() {
+				var route=[];
+			route.push('DashBoard');
+				var forAll=true;
+				var url='core/api/portlets/addforAll';
+				clickfunction($(this),url,forAll,route);
+				
+			});
 	
 	$('#portlets-add-listener').on('click','.configure-portlets',function(e){
 		e.preventDefault();
-					var route=$(this).attr("route");
-					route=route.substr(1,route.length-2);
-					var routes=route.split(',');
+		  
+					//var route=$(this).attr("route");
+					//route=route.substr(1,route.length-2);
+					//var routes=route.split(',');
 		var portlet_type = $(this).attr("portlet_type");
 				var p_name = $(this).attr("portlet_name");
 				
-				$("#portletStreamModal").html(getTemplate('portletStreamModalInfo'));
-				$("#portletStreamModal").modal('show');
+				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo'));
+				
 
-				if(p_name=='Mini Calendar')
-				{
-					$.each(routes,function(index,data)
-					{
-						$('#route-list>option', $('#portletStreamModal')).each(function(i,d)
-						{
-							if(d.value==data.trim())
-								this.remove();
-						})
-					});
-				}
-				if($('#route-list' , $('#portletStreamModal')).children().length==0){
-					$('.modal-body',$('#portletStreamModal')).text('Already Added');
-				$(".add-portlet").addClass('disabled');
-				$(".add_to_all").addClass('disabled');
-			}
+					  
+					
+			
 
 				head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
 						$('#ms-route-list' ).remove();
-				$('#route-list' , $('#portletStreamModal')).multiSelect();
+				$('#route-list' , $('#portletStreamModalNew')).multiSelect();
 				$('#ms-route-list .ms-selection').children('ul')
 						.addClass('multiSelect').attr("name", "route-list")
 						.attr("id", "route");
@@ -1026,10 +1103,11 @@ function initializeAddPortletsListeners() {
 		$(".add_to_all").attr('portlet_type',
 				portlet_type);
 		$(".add_to_all").attr('portlet_name',p_name);
+		$("#portletStreamModalNew").modal('show');
 		
 	});
 
-	$('#portletStreamModal').on('shown.bs.modal', function(event){
+	$('#portletStreamModalNew').on('shown.bs.modal', function(event){
 		insideAddListener();
 	});
 
@@ -1039,22 +1117,28 @@ function initializeAddPortletsListeners() {
 function insideAddListener()
 {
 
-	$('.modal-content').off('click').on('click', '#route-select-all',
-			function(e) {
-				e.preventDefault();
-				$('#route-list').multiSelect('select_all');
-			});
-
-	$('.modal-content').on('click', '#route-select-none',
-			function(e) {
-				e.preventDefault();
-				$('#route-list').multiSelect('deselect_all');
-			});
-
+	 $('.modal-content').off('click', '#route-select-all');
+  $('.modal-content').on('click', '#route-select-all',
+      function(e) {
+        e.preventDefault();
+        $('#route-list').multiSelect('select_all');
+      });
+  $('.modal-content').off('click', '#route-select-none');
+  $('.modal-content').on('click', '#route-select-none',
+      function(e) {
+        e.preventDefault();
+        $('#route-list').multiSelect('deselect_all');
+      });
+  
+    $('.modal-content').off('click', '.add-portlet');
 		$('.modal-content').on(
 			"click",
 			'.add-portlet',
 			function() {
+				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
+				 if (!isValidForm("#" + id)) {
+           			 return false
+       			 }
 				var route=[];
 				var url='core/api/portlets/add';
 				$('#route-list', $(this).parents('.modal'))
@@ -1069,10 +1153,13 @@ function insideAddListener()
 				clickfunction($(this),url,forAll,route);
 			});
 		
-	$('#portletStreamModal').																																																																												off('click').on(
-			"click touchstart",
+	$('.modal-footer').off('click touchstart').on('click touchstart',
 			'.add_to_all',
 			function() {
+				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
+				 if (!isValidForm("#" + id)) {
+           			 return false
+       			 }
 				var route=[];
 				$('#route-list', $(this).parents('.modal'))
 									.find('option')
@@ -1114,7 +1201,7 @@ function insideAddListener()
 }
 function clickfunction(that,url,forAll,route){
 
-	$("#portletStreamModal").modal('hide');
+	$("#portletStreamModalNew").modal('hide');
 	$('.modal-backdrop').hide();
 	var portlet_type = that.attr("portlet_type");
 				var p_name = that.attr("portlet_name");
@@ -1127,11 +1214,11 @@ function clickfunction(that,url,forAll,route){
 				var curDate = new Date();
 				obj.portlet_type = portlet_type;
 				var max_row_position = 0;
-				var next_position = gridster.next_position(1, 1);
-				obj.column_position = next_position.col;
-				obj.row_position = next_position.row;
-				obj.size_x = next_position.size_x;
-				obj.size_y = next_position.size_y;
+				//var next_position = gridster.next_position(1, 1);
+				obj.column_position = -1;
+				obj.row_position = -1;
+				obj.size_x = 1;
+				obj.size_y = 1;
 
 				if(!isNaN(route)){
 					obj.column_position = -1;
@@ -1174,9 +1261,11 @@ function clickfunction(that,url,forAll,route){
 							$('#zero-portlets').hide();
 						if ($('#no-portlets').is(':visible'))
 							$('#no-portlets').hide();
+						if(data.toJSON().name=='Mini Calendar' || data.toJSON().name=='Agenda'){
 						App_Portlets.navigate("dashboard", {
 							trigger : true
 						});
+					}
 					},
 					error : function(model, response) {
 						alert("Failed to add.");

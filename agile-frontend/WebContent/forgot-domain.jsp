@@ -1,3 +1,5 @@
+<%@page import="com.agilecrm.user.AliasDomain"%>
+<%@page import="com.agilecrm.user.util.AliasDomainUtil"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
@@ -25,8 +27,13 @@ if(!StringUtils.isEmpty(email))
 	}
 	else
 	{
-	   success = "Redirecting to " + domainUser.domain;
-	   response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com");
+	   String domain = domainUser.domain;
+	   AliasDomain aliasDomain = AliasDomainUtil.getAliasDomain(domain);
+	   if(aliasDomain != null)
+		   domain = aliasDomain.alias.get(0);
+	   success = "Redirecting to " + domain;
+	   String url = VersioningUtil.getURL(domain, request);
+	   response.sendRedirect(url);
 	}
 	
 	System.out.println(error + " " + success);
@@ -56,6 +63,9 @@ String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("fl
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/font.css" />
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
 
 <style>
 
@@ -134,7 +144,9 @@ body {
 
 <script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
-
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
 <!-- <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,

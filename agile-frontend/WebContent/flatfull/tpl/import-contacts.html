@@ -24,79 +24,234 @@
     </div>
 </div>
 </div>
-<div class="wrapper-md">
-<div class="row">
-<div class="col-sm-6 col-xs-12 col-md-4">
-<div class="panel panel-default">
-	<div class="panel-heading">CSV Contacts Import<!--<span class="label label-important">Beta</span>--></div>
-	<div class="panel-body">
-    <form id="imap-prefs-form">
-        
-		<div class="p-b-sm">
-			Import upto 10,000 contacts from a CSV file
-		</div>
-		<input type="hidden" id="type" value="contacts" class="form-control">
-        <fieldset>
-			{{#canSyncContacts}}
-           		<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+<div class="tab-content wrapper-md">
+			<div class="tabs" id="import-tabs-content">
+				<div class="tab-container m-b-none">
+			       <ul class="nav nav-tabs">
+			       		<li><a href="#csv-tab" data-toggle="tab" >Import from CSV</a></li>
+         				<li><a href="#salesforce-tab" data-toggle="tab">Import from Salesforce</a></li>
+         				<li><a href="#other-tab" data-toggle="tab">Import from Other</a></li>
+			       </ul>
+			    </div>
+			<div>
+</div>
+<div class="tab-content wrapper-md panel">
+		<div class="tab-pane active" id="csv-tab">
+			<div class="row">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							CSV Contacts Import<!--<span class="label label-important">Beta</span>-->
+						</div>
+						<div class="panel-body">
+							<form id="imap-prefs-form">
+	        					<div class="p-b-sm">
+									Import upto 10,000 contacts from a CSV file
+								</div>
+								<input type="hidden" id="type" value="contacts" class="form-control">
+	        					<fieldset>
+								{{#canSyncContacts}}
+				{{#if ../type}}
+						<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
+						<span class="m-l-xs"><i>
+							{{#if total_count}}
+										Import in process
+									{{else}}
+										Import is scheduled
+										
+							{{/if}}
+						</i></span>
+						
+					{{else}}
+           				<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">Upload CSV file</div>
+           		{{/if}}
 					{{else}}
            				<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
 						<span class="m-l-xs"><i>Needs import privilege.</i></span>
 			{{/canSyncContacts}}
-           
-        </fieldset>
-    </form>
-    </div>
-</div>
-</div>
+	        					</fieldset>
+						    </form>
+						</div>
+					</div>
+				</div>
 
-<div class="col-sm-6 col-xs-12 col-md-4" style="height: 200px;">
-<div class="panel panel-default">
-	<div class="panel-heading">CSV Companies Import <span class="label label-sm bg-danger">Beta</span></div>
-	<div class="panel-body">
-    <form id="company-import-form">
-        
-		<div class="p-b-sm">
-			Import upto 10,000 companies from a CSV file
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+				    <div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							CSV Companies Import 
+						</div>
+						<div class="panel-body">
+						<form id="company-import-form">
+        					<div class="p-b-sm">
+								Import upto 10,000 companies from a CSV file
+							</div>
+							<input type="hidden" id="type" value="company" class="form-control">
+        					<fieldset>
+							{{#canSyncContacts}}
+           					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">Upload CSV file</div>
+							{{else}}
+           					<span class="btn btn-sm btn-default inline-block"  disabled="">Upload CSV file</span>
+							<span style="margin-left:5px"><i>Needs import privilege.</i></span>
+							{{/canSyncContacts}}
+           					</fieldset>
+    					</form>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
 		</div>
-			<input type="hidden" id="type" value="company" class="form-control">
-        <fieldset>
-			{{#canSyncContacts}}
-           		<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
-					{{else}}
-           				<span class="btn btn-sm btn-default inline-block"  disabled="">Upload CSV file</span>
-						<span style="margin-left:5px"><i>Needs import privilege.</i></span>
-			{{/canSyncContacts}}
-           
-        </fieldset>
-    </form>
-    </div>
-</div>
-</div>
 
-<div class="col-sm-6 col-xs-12 col-md-4">
-<div class="panel panel-default">
-	<div class="panel-heading">Import from Salesforce <span class="label label-sm bg-danger">Beta</span></div>
-	<div class="panel-body">
-    <form id="imap-prefs-form">
-        
-		<div class="p-b-sm">
-			Import Contacts, Accounts, and Tasks
+<!-- For salesforce -->
+	<div class="tab-pane" id="salesforce-tab">
+	<div class="row">
+		<div class="col-sm-6 col-xs-12 col-md-4">
+		<div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Import from Salesforce <span class="label label-sm bg-danger">Beta</span>
+				</div>
+				<div class="panel-body">
+					 <form id="imap-prefs-form">
+        			<div class="p-b-sm">
+						Import Contacts, Accounts, and Tasks
+					</div>
+					<input type="hidden" id="type" value="contacts" class="form-control">
+        			<fieldset>
+					{{#canSyncContacts}}
+           			<a href="#import/salesforce" class="btn btn-sm btn-default inline-block">Import</a>
+					{{/canSyncContacts}}
+           			</fieldset>
+    				</form>
+
+				</div>
+			</div>
 		</div>
-		<input type="hidden" id="type" value="contacts" class="form-control">
-        <fieldset>
-			{{#canSyncContacts}}
-           		<a href="#import/salesforce" class="btn btn-sm btn-default inline-block">Import</a>
-			{{/canSyncContacts}}
-           
-        </fieldset>
-    </form>
-    </div>
-</div>
+		</div>
+	</div>
+	</div>
+<!-- For others -->
+	<div class="tab-pane" id="other-tab">
+
+		<div class="row">
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+					<div>
+					<div class="panel panel-default">
+						
+						<div class="panel-heading">
+							Import from Google
+						</div>
+						<div class="panel-body">
+							<div class="p-b-sm">
+							Import contacts from Google.
+							</div>
+							<a href="#sync" onclick='_agile_set_prefs("datasync_tab","google-tab");'>
+							<div class="btn btn-sm btn-default inline-block" sync_type="GOOGLE" id="data-sync-type">Import
+							</div></a>
+						</div>
+					</div>
+					</div>
+				</div>
+
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+				    <div>
+					<div class="panel panel-default">
+					
+						<div class="panel-heading">
+							Import from Quickbooks
+						</div>
+						<div class="panel-body">
+						<div class="p-b-sm">
+						 Import contacts from Quickbooks.
+						 </div>
+						<fieldset>
+						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
+
+						 <div class="btn btn-sm btn-default inline-block" sync_type="QUICKBOOK" id="data-sync-type">Import</a>
+						 </fieldset>
+						 </div>
+						</div>
+					</div>
+					</div>
+
+					<div  class="col-sm-6 col-xs-12 col-md-4">
+
+
+				    <div>
+					<div class="panel panel-default">
+					
+						<div class="panel-heading">
+							Import from Shopify
+						</div>
+						
+						<div class="panel-body">
+						<div class="p-b-sm">
+						Import contacts from Shopify.
+						</div>
+						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","ecommerce-tab");'>
+						<div class="btn btn-sm btn-default inline-block" sync_type="SHOPIFY" id="data-sync-type">Import
+						</div></a>
+						
+						</div>
+						
+					</div>
+					</div>
+				</div>
+
+
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+				    <div>
+					<div class="panel panel-default">
+					
+						<div class="panel-heading">
+							Import from Stripe
+						</div>
+						<div class="panel-body">
+						<div class="p-b-sm">
+						 Import contacts from Stripe.
+						</div>
+						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","payment-tab");'>
+						 <div class="btn btn-sm btn-default inline-block" sync_type="STRIPE" id="data-sync-type">Import</div> </a>
+						</div>
+					</div>
+					</div>
+				</div>
+
+				<div  class="col-sm-6 col-xs-12 col-md-4">
+				    <div>
+					<div class="panel panel-default" >
+					
+						<div class="panel-heading">
+							Import from Freshbooks
+						</div>
+						<div class="panel-body">
+						 <div class="p-b-sm">
+							Import contacts from Freshbooks.
+						 </div>
+						 <a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
+						 <div class="btn btn-sm btn-default inline-block" sync_type="FRESHBOOKS" id="data-sync-type">Import</div></a>
+						</div>
+					
+					</div>
+					</div>
+				</div>
+				</div>
+
+					</div>
+					
+
+				
+
+				
+
+
+			</div>
+		</div>
 </div>
 
-</div>
-</div>
+
+
 </script>
 
 <script id="import-deals-template" type="text/html">
@@ -134,9 +289,7 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        
             <h3 class="font-thin h3">CSV Contacts Import <br><small> Field mapping </small></h3>
-       
     </div>
 </div>
 </div>
@@ -349,7 +502,7 @@
 		 	<div class="col-md-12 col-sm-12 col-xs-12">
 			<a class="btn btn-sm btn-primary pull-right" id="import-deals" style="margin-left:2px">Import</a>
 			<a class="btn btn-default btn-sm pull-right" id="deal-cancel">Cancel</a>
-			<div id="import-validation-error pull-right"></div>
+			<div id="import-validation-error"></div>
 			</div>
 			</div>
 			</footer>
@@ -415,7 +568,7 @@
 </script>
 
 <script id="csv_upload_options-template" type="text/html">
-<select class="import-select form-control">
+<select class="import-select form-control contacts-import-select">
 <option value="properties__ignore_">-Ignore-</option>
 <option value="properties_first_name">First Name</option>
 <option value="properties_last_name">Last Name</option>
@@ -545,4 +698,3 @@
 
 
 </script>
-

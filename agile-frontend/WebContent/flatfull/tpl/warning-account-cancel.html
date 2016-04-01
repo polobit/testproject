@@ -89,27 +89,26 @@
 </script>
 
 <script id="send-cancellation-request-template" type="text/html">
- <div class="modal-dialog">
     <div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 class="modal-title">Request for cancellation</h3>
-    </div>
     <div class="modal-body">
-            <p>
-			   <b>Please tell us why you want to leave. Our support team get in touch with you soon.</b>
+     <button type="button" class="close pull-right m-r-xs" data-dismiss="modal" aria-hidden="true">&times;</button>
+     <div class="display-center">
+        <h4>Request for Cancellation</h4>
+            <p class="p-t-xs">
+			   Please let us know why you want to leave. In case of any issues, our support team will be in touch with you soon.
             </p>
 		<form id="cancelation-request-form">
 			<div class="controls">
-				<textarea name="account_cancel_reason" class="required form-control w-full" id="account_cancel_reason" rows="3" ></textarea>
+				<textarea name="account_cancel_reason" class="required form-control w-full" id="account_cancel_reason" rows="10" ></textarea>
+				<p class="p-t-xs"><span class="font-bold">Important: </span>Upon cancellation of your account, unused period will automatically lapse.</p>
     		</div>
 		</form>
-	</div>
+	 </div>
+   </div>
     <div class="modal-footer">
         <!-- <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a> -->
         <a href="#" id="send-delete-request" class="btn btn-sm btn-primary ">Send Request</a>
     </div>
-</div>
 </div>
 </script>
 
@@ -130,4 +129,68 @@
     </div>
 </div>
 </div>
+</script>
+
+<script id="cancel-subscription-request-template" type="text/html">
+     <div id="cancel_subscription_modal" class="modal-dialog p-t-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="account_cancel_options" class="text-center"> <div style="font-size: 20px;line-height: 35px;">Please do not break up. Friends? <button type="button" class="close pull-right pos-abs" data-dismiss="modal" aria-hidden="true" style="right: 20px;">×</button></div>
+                    <div class="m-b" style="font-size: 16px;">Let us help you</div>
+
+                    <div class="text-center row">
+                     <div class="display-center p-b">
+                            <div class="col-md-4">
+                      <div id="account_cancel_chat" class="wrapper">
+                              <div class="bg-box m-r m-l" style="background-color: #50c7a7;">
+                                <i class="fa fa-comment-o pos-rlt pos-t-xs"></i>
+                              </div>
+                              <h4>Instant Help</h4>
+                              <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">We can help you to get more out of chat. Just ask us!</div>
+                              <a id="account_cancel_chat_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Chat</a>
+                            </div></div>
+                    <div class="col-md-4">
+                      <div id="account_cancel_support" class="wrapper">
+                              <div class="bg-box m-r m-l" style="background-color: #5fa2dd;">
+                                <i class="icon-support pos-rlt pos-t"></i>
+                              </div>
+                              <h4>Schedule a Call</h4>
+                              <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">Schedule a slot & one of our product experts will call you for assistance.</div>
+                              <a href="http://supportcal.agilecrm.com" target="_blank" id="account_cancel_support_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Schedule</a>
+                            </div></div>
+                    <div class="col-md-4">
+                      <div id="account_pause" class="wrapper">
+                              <div class="bg-box m-r m-l" style="background-color: #f76c51;">
+                                <i class="icon-rocket pos-rlt pos-t"></i>
+                              </div>
+                              <h4>Need a Break?</h4>
+                              <div id="pause_settings" class="text-xs pos-rlt p-b-xs p-l-sm p-r-sm text-muted">
+                                  Postpone your billing for 
+                                  <span class="pos-rlt">
+                                  <span id="pause_count">1</span>
+                                  <span class="pause-count-control m-l-sm">
+                                        <ul class="inline-block list-none m-n p-n">
+                                            <li style="height: 4px"><i class="icon-sort-up c-p" id="add" style="height: 10px;"></i></li>
+                                            <li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+                                        </ul>
+                                  </span>
+                                  </span>
+                                  <span id="month_id" class="m-l-xs">month</span>, so that you don't lose your data.
+                             </div>
+                              <a id="account_pause_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Pause</a>
+                            </div></div>
+                            
+                            </div>
+                            <div class="display-center" style="width: 87%;"><hr></div>
+                          </div>
+                    <div class="text-center text-lg">Still want to cancel?</div>
+                    <div class="text-base text-muted m-b m-t-xs">By cancelling your subscription all your data and settings will be lost and never restore them back.</div>
+                    <div class="m-b">
+                    	<a href="#" id="cancel-account-request-proceed" class="btn btn-sm btn-default">Cancel My Subscription</a>
+                        <a href="#" onClick="$('#send-cancellation').modal('hide');" class="btn btn-sm m-l-sm" style="background-color: #50c7a7;color:white;">Back to Dashboard</a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
 </script>

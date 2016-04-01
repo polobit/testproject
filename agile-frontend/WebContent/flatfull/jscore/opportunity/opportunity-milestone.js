@@ -68,8 +68,12 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 		DEALS_LIST_COLLECTION.collection.add(newDealList);// main-collection
 	}
 
+	// Over write append function
+	DEALS_LIST_COLLECTION.appendItem = dealAppend;
+
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
+	initializeDealsListeners();
 
 }
 
@@ -103,10 +107,9 @@ function initDealListCollection(milestones)
 
 			$('#opportunities-by-paging-model-list', el).find('.milestone-column').width(width + "%");
 			$('.mark-won, .mark-lost',el).tooltip();
+			
 		} });
 
-	// Over write append function
-	DEALS_LIST_COLLECTION.appendItem = dealAppend;
 }
 
 // Append sub collection and model
@@ -150,15 +153,23 @@ function dealsFetch(base_model)
 	}
 
 	// Define sub collection
-	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li',
+	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li', 
 		sort_collection : false, cursor : true, page_size : 20, postRenderCallback : function(el)
-		{
+		{   
+			$(el).find('ul li').each(function(){
+				$(this).addClass("deal-color");
+				$(this).addClass($(this).find("input").attr("class"));
+			});
+			
+
 			$('ul.milestones', el).attr('milestone', base_model.get("heading"));
 
 			if (!_agile_get_prefs("agile_deal_view"))
 				deal_infi_scroll($('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container')[0], dealCollection);
 
+
 			includeTimeAgo(el);
+
 		} });
 
 	// Fetch task from DB for sub collection
@@ -169,21 +180,28 @@ function dealsFetch(base_model)
 		$('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container').html(dealCollection.render(true).el)
 		console.log($('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
-		try
+		var heading =  base_model.get("heading");
+		/*try
 		{
 			var count = data.at(0) ? data.at(0).toJSON().count : 0;
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
-		}
-		catch (err)
+	     
+        }
+        catch (err)
 		{
 			console.log(err);
-		}
-
-		$('a.deal-notes').tooltip();
-		// Counter to fetch next sub collection
+		}*/  
+        
+        $('a.deal-notes').tooltip();
+        	// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
-		
+		dealsCountFetch(base_model, function(deals_count){
+			if(deals_count <= 1000)
+			{
+				dealTotalCountForPopover(heading);
+			}
+		});
 	} });
 }
 
@@ -217,6 +235,11 @@ function deal_infi_scroll(element_id, targetCollection)
 			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
 			includeTimeAgo($(targetCollection.infiniScroll.options.target));
 			$('a.deal-notes').tooltip();
+			$(response).each(function(){
+				$('#'+this.id).parent('li').addClass("deal-color");
+				$('#'+this.id).parent('li').addClass(this.colorName);
+
+			});
 		},
 		onFetch : function()
 		{
@@ -226,4 +249,132 @@ function deal_infi_scroll(element_id, targetCollection)
 			$(targetCollection.infiniScroll.options.target).append(
 					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'" style="margin-left: 44%;"> </div>');
 		} });
+}
+// show deal pop-over modal
+
+function initializeDealsListeners()
+{
+	$("#opportunity-listners").off('mouseenter','.milestone-column > .dealtitle-angular');
+	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
+    	var data = $(this).attr('data');
+		if(data && $("#"+$(this).parent().attr("id")+"_count").text() != "1000+"){
+
+		var originalHeading = $(this).siblings().find('.milestones').attr('milestone');
+		var jsonDealData = JSON.parse(data);
+		jsonDealData.heading = originalHeading;
+		var that = this;
+		getTemplate('deal-detail-popover', jsonDealData , undefined, function(template_ui){
+ 		if(!template_ui)
+	    		return;
+    	var ele = $(template_ui);
+		$(that).popover(
+					{ "rel" : "popover", "trigger" : "manual", "placement" : 'bottom', "content" : ele,
+						"html" : "true"}); 
+			$(that).popover('show');
+			$(".popover-content").html(ele);
+			$(".dealtitle-angular + .popover > .arrow").remove();
+			$(".dealtitle-angular + .popover").css("top","35px");
+			$(".dealtitle-angular + .popover > .popover-content" ).css("padding","0px");
+			$(".dealtitle-angular + .popover ").css("border-radius","0px");
+		});
+		}
+	});
+
+	/**
+	 * On mouse out on the row hides the popover.
+	 */
+	 $("#opportunity-listners").off('mouseleave','.milestone-column > .dealtitle-angular');
+	 $('#opportunity-listners').on('mouseleave', '.milestone-column > .dealtitle-angular', function()
+	{
+		$(this).popover('hide');
+		$(this).popover('destroy');
+	});
+}
+function dealTotalCountForPopover(milestone){
+
+console.log('------popover pipeline id-----', pipeline_id);
+	if (_agile_get_prefs('agile_deal_track'))
+	{
+		if (_agile_get_prefs('agile_deal_track') != pipeline_id)
+			_agile_set_prefs('agile_deal_track', pipeline_id);
+	}
+	var currentTrack = trackListView.collection.get(pipeline_id).toJSON();
+	var milestones = currentTrack.milestones.split(',');
+	console.log(milestones);
+
+	// Url to call DB
+	var initialURL = '/core/api/opportunity/totalDealValue?pipeline_id=' + pipeline_id + '&order_by=close_date';
+
+	if (_agile_get_prefs('deal-filters'))
+	{
+		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
+	}
+
+	// Creates main collection with deals lists
+		var newDealList;
+			var url = initialURL + "&milestone=" + milestone;
+			newDealList = { "heading" : milestone, "url" : url};
+			if(currentTrack.won_milestone == milestone)
+				newDealList.won_milestone = currentTrack.won_milestone;
+			else if(currentTrack.lost_milestone == milestone)
+				newDealList.lost_milestone = currentTrack.lost_milestone;
+			$.ajax({ type : 'GET', url : url, success : function(data){
+                if(data){
+					var json = JSON.parse(data); 
+					var dealcount = json.total;
+					var count = $('#'+json.milestone.replace(/ +/g, '')+'_count').text();
+					var countoto = 3;
+			        var heading = json.milestone.replace(/ +/g, '');
+			        var i;
+			        $('#'+json.milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount));
+
+		            var avg_deal_size = 0;
+		            if(count == 0)
+		            	avg_deal_size = 0;
+		            else
+		            	avg_deal_size = dealcount / count ; 
+		            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();
+		            dealcount = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(dealcount) ;
+		            var symbol = getCurrencySymbolForCharts();
+		            avg_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_deal_size);
+					var dealdata = {"dealTrack": dealTrack ,"heading": heading ,"dealcount":dealcount ,"avgDeal" : avg_deal_size,"symbol":symbol,"dealNumber":count};
+					var dealDataString = JSON.stringify(dealdata) ; 
+					$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString ); 	
+		        }
+		        else{
+		        	dealTotalCountForPopover(milestone);
+		        }
+			},error: function() {
+                 console.log('An error occurred');
+      		}
+			});
+	
+
+}
+
+function dealsCountFetch(base_model, callback)
+{
+	if (!base_model)
+		return;
+
+	// Define sub collection
+	var dealCount = new Base_Model_View({ url : base_model.get("url").replace("/based", "/based/count"), template : "", isNew : true });
+
+	dealCount.model.fetch({ success : function(data)
+	{
+		var count = data.get("count") ? data.get("count") : 0;
+		if(count > 1000)
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text((count-1)+"+");
+		}
+		else
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(count);
+		}
+		if(callback)
+		{
+			return callback(count);
+		}
+	} });
+	
 }

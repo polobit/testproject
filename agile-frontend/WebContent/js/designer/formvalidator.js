@@ -97,6 +97,11 @@ function initValidator(selector, callback) {
               
                //get the name of the field
                var name = error.input.attr("name");
+               var err_name = error.input.attr("name_on_error");
+               
+               // Changes name attribute e.g., dynamic-grid
+               if(err_name)
+                   name = err_name;
 
                if(name == "html_email" || name == "text_email")
                    name = name.replace('_email', '').toUpperCase();
@@ -153,14 +158,40 @@ function initValidator(selector, callback) {
             		   		  saveflag = false;
 				
 					}
-  			});   
+  			});
+
+  			
+	        //special condition to skip the error message for and_key_grid-table
+	        if(keys[1] == "and_key_grid-table" || keys[1] == "or_key_grid-table" )
+	        {
+	        	if($('#and_key_grid-table tr').length > 1  || $('#or_key_grid-table tr').length > 1)
+	        	{
+	        	saveflag = true;
+	        	}
+	        }
+
+	    	var selector_ele = selector;
+	    	var isValid =  isCheckFlagUpdateDeal();
+	    
+	    	if(!isValid){
+        	    errorMessageUpdateDeal(selector_ele);
+				return;
+	    	}   
+
   	        //if errors show single message
 	   		if(!saveflag){
 				  
 				   // Show Grid error  (Ramesh(27 Sep 2010))
-				   
+	   			if(keys[1] == "and_key_grid-table" || keys[1] == "or_key_grid-table" )
+		        {
+	   				selector.find("#errorsdiv").html("<p> Please add atleast one condition </p>").addClass('ui-state-highlight');
+	   			  
+		        }
+		             
+	   			else
+	   			{  
 	   		     selector.find("#errorsdiv").html("<p> <strong>" + keys[1]  + "</strong> -Please add data inside <strong>"+ keys[0] +"</strong></p>").addClass('ui-state-highlight');
-	   		    
+	   			}
 	   		}
 	   		//if no errors (i.e all table elements are filled)
 	   		else{
@@ -178,4 +209,35 @@ function initValidator(selector, callback) {
     	});    
 
 
+}
+
+function isCheckFlagUpdateDeal()
+{
+	var errorflag = true;
+
+		if($('#expected_value') && $('#milestone') ){
+	        
+	        	if($('#expected_value').val()=="" && $('#milestone').val()=="")
+		        	errorflag = false;
+
+		    	else if(!isNaN($('#expected_value').val()) && $('#expected_value').val()<0)
+					errorflag = false;				
+		}	
+		return errorflag;
+}
+
+function errorMessageUpdateDeal(selector)
+{
+	       
+	        	if($('#expected_value').val() == "" && $('#milestone').val() == "")
+	   				selector.find("#errorsdiv").html("<p> Please complete any one of the fields. </p>").addClass('ui-state-highlight');
+		       
+		        else if(!isNaN($('#expected_value').val()) && $('#expected_value').val()<0){
+
+		        	$('#expected_value').css("border", "1px solid red");
+		        	selector.find("#errorsdiv").html("<p> <strong> Value </strong> - Please enter a value greater than or equal to 0.</p>").addClass('ui-state-highlight');
+				
+				}			
+			
+		
 }

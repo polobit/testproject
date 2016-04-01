@@ -19,15 +19,25 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
+var DEFAULT_GRAVATAR_url = agileWindowOrigin() + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma,stephen";
+var ONBOARDING_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey";
+
+var SALES_SCHEDULE_URL = "http://salescal.agilecrm.com";
+
+
+var SUPPORT_SCHEDULE_URL = "http://supportcal.agilecrm.com";
+
 
 var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
+
+var AVOID_PAGEBLOCK_URL = [ "subscribe", "purchase-plan", "updateCreditCard" ];
+
+var PAGEBLOCK_REASON = [ "BILLING_FAILED_2", "BILLING_FAILED_3", "SUBSCRIPTION_DELETED" ];
+
+var PAYMENT_FAILED_REASON = ["BILLING_FAILED_0", "BILLING_FAILED_1"];
 /**
  * Returns random loading images
  * 
@@ -126,6 +136,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		});
 		// Convert template into HTML
 		var modelTemplate = Handlebars.compile(template);
+		var optionsHTML = "";
 		// Iterates though each model in the collection and
 		// populates the template using handlebars
 		$.each(data, function(index, model)
@@ -136,8 +147,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			}
 			else
 			{
-				var optionsHTML = modelTemplate(model);
-				$("#" + selectId, el).append(optionsHTML);
+				optionsHTML += modelTemplate(model);
+				$("#" + selectId, el).append(modelTemplate(model));
 			}
 		});
 
@@ -147,7 +158,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		{
 			// execute the callback, passing parameters as
 			// necessary
-			callback(collection);
+			callback(collection, optionsHTML);
 		}
 	}
 
@@ -333,6 +344,16 @@ function getGMTEpochFromDate(date)
 	return date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
 }
 
+//get the GMT time for contact and compant static filters
+function getGMTEpochFromDateForCustomFilters(date)
+{
+	var current_sys_date = new Date();
+	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+	var offset = (date.getTimezoneOffset() * 60 * 1000) ;
+	// Adding offset to date returns GMT time 
+	return date.getTime() - (date.getTimezoneOffset() * 60 * 1000);
+	}
+
 /**
  * Returns local epoch time based form GMT time
  * 
@@ -358,7 +379,9 @@ function showTextGravatar(selector, element)
 			return;
 
 		$(this).attr("data-name", name);
-		$(this).initial({ charCount : 2 });
+
+		// $(element).initial({charCount: 2,fontWeight: 'normal',fontSize:20, width:$(element).width(), height:$(element).height()});
+		$(element).initial({charCount: 2,fontWeight: 'normal'});
 	});
 }
 
@@ -505,6 +528,23 @@ function getDateInFormatFromEpoc(date)
 
 }
 
+// function to get the gmt format of date to show to edit the custom filters for contacts
+function getDateInFormatFromEpocForContactFilters(date)
+{
+	if(!date)
+		return;
+	var now = new Date(parseInt(date)); 
+	var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+	if ((date / 100000000000) > 1)
+	{1  
+		
+		
+		return en.dateFormatter({raw: getGlobalizeFormat()})(now_utc);
+	}
+	return en.dateFormatter({raw: getGlobalizeFormat()})(now_utc * 1000);
+
+}
+
 /*
  function to get the date in user selected format in useprefs page. Will takes date object as input
 */
@@ -581,3 +621,118 @@ function getFormattedDateObjectWithString(value){
 	
 }
 
+function isIE() {
+
+	var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+	var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+	if(isIE || isIENew)
+	 return true;
+
+	return false;
+}
+
+function agileWindowOrigin(){
+	if (!window.location.origin) {
+	   return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+	}
+
+	return window.location.origin;
+}
+
+$(function(){
+    $( document ).ajaxError(function(event, jqXHR) {
+	   // Get response code and redirect to login page
+	   if(jqXHR.status && jqXHR.status == 401)
+	   	      handleAjaxError();
+	});
+});
+
+function handleAjaxError(){
+
+		var hash = window.location.hash;
+
+        try{
+            // Unregister all streams on server.
+			unregisterAll();
+        }catch(err){}
+		
+		// Unregister on SIP server.
+		sipUnRegister();
+		
+		// Firefox do not support window.location.origin, so protocol is explicitly added to host
+		window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
+
+}
+
+function showPageBlockModal() {
+
+	// Removing existing modal
+	$("#user-blocked-modal").modal('hide');
+	$("#alert-message").html("").hide();
+	if(USER_BILLING_PREFS.status == "BILLING_PAUSED"){
+		getTemplate("pause-user", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("body").append(template_ui);
+			$("#user-blocked-modal").modal('show');
+		}, null);
+	}
+	else if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456803000)
+		return;
+	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
+		var expiry_date = (USER_BILLING_PREFS.updated_time+691200)*1000;
+		if(USER_BILLING_PREFS.status == "BILLING_FAILED_1")
+			expiry_date = (USER_BILLING_PREFS.updated_time+432000)*1000;
+		getTemplate("user-alert", {"message":"Action Required! Your account has dues. Please update your credit card information to pay your outstanding amount. Non-payment of the dues will lead to locking of your account on "+new Date(expiry_date).format('mmm dd, yyyy')+"."}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#alert-message").html(template_ui).show();
+		}, null);
+
+	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time != null && USER_BILLING_PREFS.updated_time != undefined && USER_BILLING_PREFS.updated_time > 1457494200){
+		getTemplate("block-user", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("body").append(template_ui);
+			$("#user-blocked-modal").modal('show');
+		}, null);
+	}
+}
+
+function  printCurrentDateMillis(type){
+      console.info(type + " " + new Date().getTime());
+}
+
+function  startFunctionTimer(name){
+	try{console.time(name);	}catch(e){}
+}
+
+function endFunctionTimer(name){
+	try{console.timeEnd(name);	}catch(e){}
+}
+
+function loadServiceLibrary(callback){
+	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets-min.js' + "?_=" + _AGILE_VERSION, function(){
+
+		if(callback)
+			callback();
+	});
+}
+
+function sendEmail(json, callback){
+	$.ajax({
+
+			type : 'POST',
+			data : json,
+			url : 'core/api/emails/contact-us',
+			success : function()
+			{
+				if(callback && typeof(callback == "function"))
+					callback();
+			},
+			error : function(response)
+			{
+				showNotyPopUp("warning", data.responseText, "top");
+			}
+			});
+}

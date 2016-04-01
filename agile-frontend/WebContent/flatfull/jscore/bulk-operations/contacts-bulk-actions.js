@@ -385,17 +385,16 @@ var contacts_bulk_actions = {
 		if (!canSendEmails(count))
 		{
 			continueAction = false;
-			var pendingEmails = getPendingEmails();
-
+			var pendingEmails = getPendingEmails() + getEmailCreditsCount();
 			var yes = "Yes";
 			var no = "No"
 
 			var message = "";
-			var upgrade_link = ' You may <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">purchase more emails </a> if this does not suffice your bulk action.';
-			var title = "Low on emails"
+			var upgrade_link = ' You may <a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">purchase </a>more emails if this does not suffice your bulk action.';
+			var title = "Low on Emails"
 			if (pendingEmails <= 0)
 			{
-				title = "Low on emails";
+				title = "Low on Emails";
 				yes = "";
 				no = "Ok"
 				message = "You have used up all emails in your quota. " + upgrade_link;
@@ -576,20 +575,21 @@ var contacts_bulk_actions = {
 
 							if (!canSendEmails(count))
 							{
-								var pendingEmails = getPendingEmails();
+								var pendingEmails = getPendingEmails() + getEmailCreditsCount();
 
 								var yes = "Yes";
 								var no = "No"
 
 								var message = "";
-								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgrade your email subscription.</a>';
-								var title = "Not enough emails left"
+								var upgrade_link = 'Please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade</a> your email subscription.';
+								var emialErrormsg = '<div>To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase</a>  more.</div>';
+								var title = "Not Enough Emails Left"
 								if (pendingEmails <= 0)
 								{
-									title = "Emails limit";
+									title = "Emails Limit";
 									yes = "";
 									no = "Ok"
-									message = "You have used up all emails in your quota. " + upgrade_link;
+									message = "<div>Sorry, your emails quota has been utilized.</div> " + emialErrormsg;
 								}
 								else
 									message = "You have only " + pendingEmails + " emails remaining as per your quota. " + upgrade_link + " Continuing with this operation may not send the email to some contacts. <br/><br/>" + "Do you want to proceed?";
@@ -682,6 +682,7 @@ var contacts_bulk_actions = {
 											// hide bulk actions button.
 											$('body').find('#bulk-actions').css('display', 'none');
 											$('body').find('#bulk-select').css('display', 'none');
+											$('body').find('#bulk-action-btns button').addClass("disabled");
 											$('table#contacts-table').find('.thead_check').removeAttr('checked');
 											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
 											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
@@ -829,7 +830,7 @@ function show_bulk_owner_change_page()
 		$("body").off('fill_owners').on("fill_owners", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-			fillSelect('ownerBulkSelect', '/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate);
+			fillSelect('ownerBulkSelect', '/core/api/users/partial', 'domainUsers', 'no-callback ', optionsTemplate);
 		});
 
 		// Navigate to show form
@@ -943,7 +944,7 @@ function show_bulk_owner_change_page()
 
 		setup_tags_typeahead();
 
-		$('#addBulkTags')
+	/*	$('#addBulkTags')
 				.on(
 						"focusout",
 						function(e)
@@ -960,7 +961,7 @@ function show_bulk_owner_change_page()
 												'<li class="tag" style="display: inline-block;" data="' + tag_input + '">' + tag_input + '<a class="close" id="remove_tag" tag="' + tag_input + '">&times</a></li>');
 							}
 
-						});
+						});  */
 		/**
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
@@ -977,12 +978,10 @@ function show_bulk_owner_change_page()
 			
 			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 			{
-				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
-			}
-			
-		//	$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
-			
-			
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+			 	// Adds contact name to tags ul as li element
+			 	$('#addBulkTags').closest(".control-group").find('ul.tags').append(template({name : tag_input}));
+			}	
 			
 			if(tag_input != "")
 				tags[0].value.push(tag_input);
@@ -1046,7 +1045,7 @@ function show_bulk_owner_change_page()
 
 		setup_tags_typeahead();
 
-		$('#removeBulkTags')
+	/**	$('#removeBulkTags')
 				.on(
 						"focusout",
 						function(e)
@@ -1064,7 +1063,7 @@ function show_bulk_owner_change_page()
 							}
 
 						});
-		/**
+		
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
@@ -1080,11 +1079,10 @@ function show_bulk_owner_change_page()
 
 							if (tag_input && tag_input.length >= 0 && !(/^\s*$/).test(tag_input))
 							{
-								$('#removeBulkTags')
-										.closest(".control-group")
-										.find('ul.tags')
-										.append(
-												'<li class="tag" style="display: inline-block;" data="' + tag_input + '">' + tag_input + '<a class="close" id="remove_tag" tag="' + tag_input + '">&times</a></li>');
+								var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+							 	// Adds contact name to tags ul as li element
+							 	$('#removeBulkTags').closest(".control-group").find('ul.tags').append(template({name : tag_input}));
+								
 							}
 
 							// $('#addBulkTags').closest(".control-group").find('ul.tags').append('<li
@@ -1294,7 +1292,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	$('body').find('#bulk-select').css('display', 'none')
 	if ($(clicked_ele).is(':checked'))
 	{
-		$('body').find('#bulk-actions').css('display', 'inline-block');
+		<!--$('body').find('#bulk-actions').css('display', 'inline-block');-->
 
 
 		var resultCount = 0;
@@ -1302,7 +1300,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		var limitValue = 10000;		
 
 		if(company_util.isCompany()){
-
+			$("#bulk-action-btns button").removeClass("disabled");
 			resultCount = App_Companies.companiesListView.collection.length;
 			appCount = total_available_contacts;
 
@@ -1322,7 +1320,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 				$('#bulk-select').css("display","block");
 			}
 		}else{
-
+			$("#bulk-action-btns button").removeClass("disabled");
 			resultCount = App_Contacts.contactsListView.collection.length;
 			appCount = total_available_contacts;
 
@@ -1348,7 +1346,10 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	{
 		if (isBulk)
 		{
-			$('#bulk-actions').css('display', 'none');
+			if(company_util.isCompany())
+				$("#bulk-action-btns button").addClass("disabled");
+			else
+				$("#bulk-action-btns button").addClass("disabled");
 			return;
 		}
 
@@ -1365,7 +1366,8 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 		if (check_count == 0)
 		{
-			$('#bulk-actions').css('display', 'none');
+			
+				$("#bulk-action-btns button").addClass("disabled");
 		}
 	}
 }

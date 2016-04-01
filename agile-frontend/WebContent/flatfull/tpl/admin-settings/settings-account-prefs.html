@@ -37,6 +37,21 @@
                             <input name="company_name" class="input-medium required form-control" type="text" value="{{company_name}}" />
                         </div>
                     </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">Domain</label>
+                        <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
+                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs">Add Alias</a>{{/unless}}                           
+                        </div>
+                    </div>
+                    {{#if aliasNames}}
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">Domain Alias</label>
+                        <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
+                            {{getAliasFromArry aliasNames}} <a href="#change-domain" class="text-info p-l-xs">Change</a>                           
+                        </div>
+                    </div>
+                    {{/if}}
+                    
 					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
 				</div>
                 <div class="col-md-offset-2 col-md-3 col-xs-offset-4 col-xs-8 hide">
@@ -76,4 +91,69 @@
 </div>
 </div>
 
+</script>
+
+<script id="admin-settings-domain-alias-template" type="text/html">
+<div id="alias_domain" class="panel panel-default">
+    <div class="panel-heading">Domain Alias</div>
+    <div class="panel-body">
+    <form id="aliasDomain" class="form-horizontal">
+        <fieldset>
+            {{#if id}}
+                <input name="id" class="form-control" type="hidden" value="{{id}}" />
+            {{/if}}
+            <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
+            
+            <div class="row">
+                <div class="col-md-7 col-xs-12">
+                    
+                    
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-4 col-xs-4">Alias<span class="field_req">*</span></label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="Domain Alias" value="{{alias}}" />
+                            <span for="alias" generated="true" class="help-inline text-xs"> </span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="clearfix"></div>
+<div class="line ling-lg b-b"></div>
+<div class="row">
+<div class="col-md-7 col-xs-8">
+<div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
+            
+                <a href="#" type="submit" class="save saveAuth btn btn-sm btn-primary">Save</a>
+           
+
+</div>
+</div>
+</div>
+        </fieldset>
+    </form>
+</div>
+<div class="modal" data-backdrop="static" id="saveAliasAuthentication"></div>
+</div>
+
+</script>
+
+<script id="conform-domain-change-model-template" type="text/html">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Domain Alias</h3>
+            </div>
+            <div class="modal-body help-text">
+                <p>Are you sure you want to add an alias name for your current domain?</p>
+                <p>Please note that once the alias name has been updated, you will be redirected to the login page with the domain alias name.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-sm btn-default">No</a>
+                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">Yes</a>
+            </div>
+        </div>
+    </div>
 </script>

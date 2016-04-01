@@ -7,12 +7,20 @@
 
 		<div class="tab-container m-b-none">
 			<ul class="nav nav-tabs" id="online-calendar">
+			{{#is_mobile}}
+				<li><a href="#calendar-tab" class="b-l-none"  data-toggle="tab"><i class="icon icon-calendar"></i></a></li>
+				<li><a href="#businesshours-tab" data-toggle="tab"><i class="icon icon-briefcase"></i></a></li>
+				<li><a href="#meeting-types-tab" data-toggle="tab"><i class="icon icon-users"></i></a></li>
+				<li><a href="#advanced-tab" data-toggle="tab"><i class="icon icon-magnifier"></i></a></li>
+				{{else}}
 				<li><a href="#calendar-tab" class="b-l-none"  data-toggle="tab">Calendar</a></li>
 				<li><a href="#businesshours-tab" data-toggle="tab">Business
 						Hours</a></li>
 				<li><a href="#meeting-types-tab" data-toggle="tab">Meeting
 						Types</a></li>
 				<li><a href="#advanced-tab" data-toggle="tab">Advanced</a></li>
+				{{/is_mobile}}
+
 			</ul>
 		</div>
 		<div class="tab-content panel wrapper" id="online-calendar-content">
@@ -305,12 +313,12 @@
 														<div class="controls col-sm-9">
 															<div class="row m-b-sm">
 
-																<div class="col-sm-6">
+																<div class="col-sm-6 m-t-xs">
 																	<input type="text" class="form-control inline-block"
 																		name="bufferTime" id="bufferTime"
 																		placeholder="Buffer time">
 																</div>
-																<div class="col-sm-3">
+																<div class="col-sm-3 m-t-xs">
 																	<select class="form-control" id="bufferTimeUnit"
 																		name="bufferTimeUnit">
 																		<option value="minutes">Minutes</option>

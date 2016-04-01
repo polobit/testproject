@@ -22,6 +22,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
 
@@ -41,7 +42,7 @@ public class ActivitySave
     public static void createDealAddActivity(Opportunity opportunity) throws JSONException
     {
 
-	List<Contact> contacts = opportunity.getContacts();
+	List<ContactPartial> contacts = opportunity.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -128,7 +129,7 @@ public class ActivitySave
      */
     public static void createDealDeleteActivity(Opportunity opr) throws JSONException
     {
-	List<Contact> contacts = opr.getContacts();
+	List<ContactPartial> contacts = opr.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -148,7 +149,7 @@ public class ActivitySave
     public static void createEventAddActivity(Event event) throws JSONException
     {
 
-	List<Contact> contacts = event.getContacts();
+	List<ContactPartial> contacts = event.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -203,7 +204,7 @@ public class ActivitySave
      */
     public static void createEventDeleteActivity(Event event) throws JSONException
     {
-	List<Contact> contacts = event.getContacts();
+	List<ContactPartial> contacts = event.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -222,7 +223,7 @@ public class ActivitySave
 
     public static void createTaskAddActivity(Task task) throws JSONException
     {
-	List<Contact> contacts = task.getContacts();
+	List<ContactPartial> contacts = task.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -316,7 +317,7 @@ public class ActivitySave
     public static void createTaskDeleteActivity(Task task) throws JSONException
     {
 
-	List<Contact> contacts = task.getContacts();
+	List<ContactPartial> contacts = task.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -469,7 +470,16 @@ public class ActivitySave
 	System.out.println(js);
 
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
-
+	
+	String custom4 = "";
+	if(null != note.callType && null != note.phone && null != note.status){
+		if(note.callType .equals("outbound-dial")){
+			custom4 +=  "Outgoing call to " + note.phone + ", Status is "+ note.status;
+		}else{
+			custom4 +=  "Incoming call from " + note.phone + ", Status is "+ note.status;
+		}
+		System.out.println(custom4);
+	}
 	if (jsn != null && jsn.length() > 0)
 	{
 
@@ -477,8 +487,13 @@ public class ActivitySave
 	    {
 
 		Contact contact = ContactUtil.getContact(jsn.getLong(i));
-		ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
-		        note.id.toString());
+		if(null != note.callType){
+			ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
+			        note.id.toString(),custom4);
+		}else{
+			ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
+			        note.id.toString());
+		}
 	    }
 
 	}

@@ -46,6 +46,7 @@ import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.googlecode.objectify.Key;
+import com.thirdparty.office365.calendar.util.Office365CalendarUtil;
 
 public class WebCalendarEventUtil
 {
@@ -94,7 +95,7 @@ public class WebCalendarEventUtil
 		// Get all permutations possible based on selected slottime(duration) in
 		// 24 Hr.
 		List<List<Long>> possibleSlots = getAllPossibleSlots(slotTime, date, startTime, timezone, timezoneName);
-
+		
 		// Get all filled slots from Agile calendar.
 		List<List<Long>> filledAgileSlots = getFilledAgileSlots(agileuserid, slotTime, startTime, endTime);
 
@@ -112,13 +113,25 @@ public class WebCalendarEventUtil
 		List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(userid, slotTime, timezone,
 				timezoneName, startTime, endTime);
 
-		if (filledGoogleSlots != null)
-		{
+		if (filledGoogleSlots != null){
 			// Remove all filled slots from available/possible slots.
 			possibleSlots.removeAll(filledGoogleSlots);
 
 			// Remove all filled odd timing slots from available/possible slots.
 			possibleSlots = removeAllOddSlots(possibleSlots, filledGoogleSlots);
+		}
+		
+		// Get all filled slots from office calendar.
+		List<List<Long>> filledOfficeSlots = Office365CalendarUtil.getFilledOfficeSlots(userid, slotTime, timezone,
+				timezoneName, startTime, endTime, "online");
+		
+		if(filledOfficeSlots != null){
+			System.out.println(filledOfficeSlots.toString());
+			// Remove all filled slots from available/possible slots.
+			possibleSlots.removeAll(filledOfficeSlots);
+
+			// Remove all filled odd timing slots from available/possible slots.
+			possibleSlots = removeAllOddSlots(possibleSlots, filledOfficeSlots);
 		}
 
 		if (possibleSlots != null && possibleSlots.size() > 0)
@@ -134,7 +147,7 @@ public class WebCalendarEventUtil
 
 			}
 		}
-
+		System.out.println(listOfLists.toString());
 		// Return available slots
 		return listOfLists;
 	}
@@ -446,7 +459,9 @@ public class WebCalendarEventUtil
 		// Number of slots possible within 24Hrs with selected slot
 		// time(duration)
 		int itr = (60 / slotTime) * 24;
-
+		
+		// 3400 sec per hour. 86400 per day.
+		
 		// Make slots
 		for (int i = 1; i <= itr; i++)
 		{
@@ -477,7 +492,7 @@ public class WebCalendarEventUtil
 
 		return listOfLists;
 	}
-
+	
 	/**
 	 * Returns filled time slots on selected date from Agile calendar. Make
 	 * slots size of filled slots as per selected slot time(duration).
@@ -500,16 +515,20 @@ public class WebCalendarEventUtil
 		List<List<Long>> filledSlots = new ArrayList<List<Long>>();
 
 		// Get agile events on selected timings
-		List<Event> agileEvents = EventUtil.getEvents(startTime, endTime, userid);
+		//List<Event> agileEvents = EventUtil.getEvents(startTime, endTime, userid);
+		
+		List<Event> loadEvents = EventUtil.getBlockedEvents(startTime, endTime, userid);
 
 		// Add filled slot in nested list
-		for (Event e : agileEvents)
+		for (Event e : loadEvents)
 		{
 			/*
 			 * Make sub slot of filled slot as per selected duration(slot time)
 			 * and add in list
 			 */
-			filledSlots.addAll(makeSlots(slotTime, e.start, e.end));
+			if(e.start != null && e.end !=null){
+				filledSlots.addAll(makeSlots(slotTime, e.start, e.end));
+			}
 		}
 
 		return filledSlots;
@@ -853,7 +872,13 @@ public class WebCalendarEventUtil
 							+ "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
 							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
-
+				if(attachments_to_agile_user!=null)
+				{
+					for(String str :attachments_to_agile_user )
+					{
+					System.out.print("support debug:WebCalendarEventUtil:" +str);
+					}
+				}
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
 						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
 			}
@@ -906,7 +931,13 @@ public class WebCalendarEventUtil
 							+ "mins</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
 							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
-
+				if(attachments_to_agile_user!=null)
+				{
+					for(String str :attachments_to_agile_user )
+					{
+					System.out.print(	"support debug:WebCalendarEventUtil:" +str);
+					}
+				}
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
 						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
 
@@ -1357,5 +1388,31 @@ public class WebCalendarEventUtil
 		}
 		return slots_array;
 	}
-
+	
+	public static void getBaseDetails() {
+		
+		Long user_id = 5629499534213120L;
+		String date = "Fri Mar 18 2016 17:12:21 GMT 0530 (India Standard Time)";
+		int slot_time = 60;
+		String timezone_name = "Asia/Kolkata";
+		long epoch_time = 1458239400L;
+		long startTime = 1458239400L;
+		long endTime = 1458325800L;		
+		// long agile_user_id = 5716606839685120L;
+		Long agile_user_id = null;
+		int timezone = -330;
+		try {
+			List<List<Long>> list = WebCalendarEventUtil.getSlots(user_id,
+					slot_time, date, timezone_name, epoch_time, startTime,
+					endTime, agile_user_id, timezone);
+			System.out.println(list);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

@@ -38,8 +38,21 @@ function organize_portlets(base_model) {
  * Appends the outer view and inner view of each portlet.
  */
 function set_p_portlets(base_model) {
-	
-	if(base_model.toJSON().portlet_route!='DashBoard' && isNaN(base_model.toJSON().portlet_route)){
+	console.log("collection----" + Portlets_View.collection.length);
+	var routeJSON = {
+		"Contacts" : "contacts",
+		"Deals" : "deals",
+		"Tasks" : "tasks",
+		"Events" : "calendar",
+		"DashBoard" : "dashboard"
+	};
+/*	if(Current_Route!=undefined && routeJSON[base_model.toJSON().portlet_route].toUpperCase()!=Current_Route.toUpperCase())
+{	
+	Portlets_View.collection.remove(base_model);
+	console.log("Removed");
+	return;
+}	*/
+	if((base_model.toJSON().column_position == -1 && base_model.toJSON().row_position == -1) && isNaN(base_model.toJSON().portlet_route)){
 		App_Portlets.RoutePortlets.push(base_model);
 		return;
 	}
@@ -56,11 +69,16 @@ function set_p_portlets(base_model) {
 		App_Portlets.DashboardPortlets.push(base_model);
 		return;
 	}
-	
+
+	if(Current_Route!=undefined && Current_Route.toUpperCase()!=('DashBoard').toUpperCase() && Portlets_View.collection.length!=0 && ! $('.route_Portlet').is(':visible'))
+	{
+		$('#portlets').parents('.route_Portlet').show();
+	}
 	var that = this;
 	portlet_utility.getOuterViewOfPortlet(base_model, this.el, function() {
 		portlet_utility.getInnerViewOfPortlet(base_model, that.el);
 	});
+
 
 }
 

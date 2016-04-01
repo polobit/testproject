@@ -13,11 +13,11 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "contact-reports" : "emailReports", "report-add" : "reportAdd",
 				"report-edit/:id" : "reportEdit", "report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts",
 				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-sales":"showrevenuegraph","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport","user-reports": "showUserReports",
-				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart" },
+				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart","rep-reports":"showRepPerformance","report-comparison":"showComparisonReport" },
 
 
 			/**
-			 * Shows reports categories
+			 * Shows reports categories 
 			 */
 			reports : function()
 			{
@@ -49,6 +49,11 @@ var ReportsRouter = Backbone.Router
 							'flatfull/img/reports_images/user-activities.png',
 							'flatfull/img/reports_images/Daily-reports.png',
 							'flatfull/img/reports_images/Call_Report_Time.png',
+							'flatfull/img/reports_images/Rep_Performance.png',
+							'flatfull/img/reports_images/new-tickets.png',
+							'flatfull/img/reports_images/sla-report.png',
+							'flatfull/img/reports_images/status-report.png',
+							'flatfull/img/reports_images/first-response-time.png'
 							]);
 				initializeReportsListeners();
 				hideTransitionBar();
@@ -761,6 +766,47 @@ var ReportsRouter = Backbone.Router
 							initSalesCharts(function()
 							{
 								showsalesReportGraphs();
+					});
+						}, "#content");
+					});
+			},
+
+			showComparisonReport : function()
+			{
+					hideTransitionBar();
+				initReportLibs(function()
+				{
+							// Load Reports Template
+						getTemplate("report-comparison", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+							// Set the name
+
+							initComparisonReports(function()
+							{
+								showComparisonReportGraph();
+					});
+						}, "#content");
+					});
+			},
+			
+			showRepPerformance : function()
+			{
+				hideTransitionBar();
+				initReportLibs(function()
+				{
+							// Load Reports Template
+						getTemplate("report-user-performance", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+							// Set the name
+
+						initRepReports(function()
+							{
+								showRepPerformanceReport();
+								
 					});
 						}, "#content");
 					});

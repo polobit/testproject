@@ -40,10 +40,14 @@ var WidgetsRouter = Backbone.Router
                 "FreshBooks/:id" : "FreshBooks",
                 "Stripe" : "Stripe",
                 "Stripe/:id" : "Stripe",
+                "Braintree" : "Braintree",
+                "Braintree/:id" : "Braintree",
                 "Xero" : "Xero",
                 "Xero/:id" : "Xero",
                 "QuickBooks" : "QuickBooks",
                 "QuickBooks/:id" : "QuickBooks",
+                "PayPal" : "PayPal",
+                "PayPal/:id" : "PayPal",
                 // Ecommerce widgets
                 "Shopify" : "Shopify",
                 "Shopify/:id" : "Shopify",
@@ -51,7 +55,7 @@ var WidgetsRouter = Backbone.Router
                 "Custom-widget" : "Custom",
                 "Custom-widget/:id" : "Custom",
 				"Bria" : "Bria", "Bria/:id" : "Bria",
-				//"Skype" : "Skype", "Skype/:id" : "Skype"
+				"Skype" : "Skype", "Skype/:id" : "Skype"
 
                 	
             },
@@ -145,9 +149,9 @@ var WidgetsRouter = Backbone.Router
 			 /**
 			 * Manages Skype widget
 			 */
-	/*		 Skype : function(id) {
+			 Skype : function(id) {
 			 	addConfigurableWidget(id, "Skype", 'skype-login');
-			 },*/
+			 },
 			 
             /**
              * Manages Rapleaf widget
@@ -260,6 +264,24 @@ var WidgetsRouter = Backbone.Router
 
             },
 
+           /**
+            *
+            */
+            PayPal : function(id){
+
+               if (!id) {
+                    addOAuthWidget(
+                            "PayPal",
+                            "paypal-login",
+                            ('/paypalScribe?isForAll=' + isForAll + '&return_url='
+                                    + encodeURIComponent(window.location.href)));
+                } else {
+                    addWidgetProfile(id, "PayPal", "paypal-revoke-access",
+                            "core/api/widgets/paypal");
+                }
+
+            },
+
             /**
              * Manages Shopify widget
              */
@@ -306,6 +328,13 @@ var WidgetsRouter = Backbone.Router
                             "core/api/widgets/Stripe");
                 }
 
+            },
+
+            /**
+             * Manages Stripe widget
+             */
+            Braintree : function(id) {
+               addConfigurableWidget(id, "Braintree", "braintree-login");
             },
 
             /**

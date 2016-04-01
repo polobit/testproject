@@ -117,6 +117,9 @@
                                              <li role="presentation" data-tab="3">
                                                 <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
                                             </li>
+                                             <li role="presentation" data-tab="3" style="display: none;">
+                                                <a href="#helpdesk-tab" role="tab" data-toggle="tab">Help Desk</a>
+                                            </li>
 
 </ul>
 
@@ -491,6 +494,9 @@
         </div>
     </div>
 </div>
+
+
+
 </div>
 </div>
 
@@ -601,9 +607,167 @@
     </div>
 </div>
 
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Rep_Performance.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>Rep Performance</b><span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+        </div>
+        <br />
+        <!-- Description -->
+        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+         Know the performance by each user.
+         <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+        </div>
+        <!-- Add button -->
+        <div  style="display:inline;">
+            <a class="btn btn-sm btn-default" href="#rep-reports">Go</a>
+        </div>
+
+            {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+             Know the performance by each user.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+             </div>
+        <!-- Add button -->
+            <div >
+                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
+                </div>
+                 
+            {{/isAllowedInCurrentPlan}}
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Comparison_Report.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>Comparison Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+        Compare the pipeline stages for each user.
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#report-comparison">Go</a>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 
+
+<div class="tab-pane" id="helpdesk-tab">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/new-tickets.png' width='400px' height='212px'></img>" data-trigger="hover">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="icon-tasks icon-3x"></i>
+                    </div>
+                    <b>Tickets</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View new and closed tickets report for each day, week & month.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/tickets">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/sla-report.png' width='400px' height='212px'></img>" data-trigger="hover">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="fa fa-check-square-o fa-3x"></i>
+                    </div>
+                    <b>SLA Report</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets closed in < 2 hrs, between 2-6 hrs, between 6-12 hrs etc.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/sla-report">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" data-placement="left" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/status-report.png' width='400px' height='212px'></img>" data-trigger="hover">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="fa fa-star fa-3x"></i>
+                    </div>
+                    <b>Ticket Priority & Status Reports</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets priority and status reports over the date ranges.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/priority-report">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" data-placement="left" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/first-response-time.png' width='400px' height='212px'></img>" data-trigger="hover">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="icon-clock icon-3x"></i>
+                    </div>
+                    <b>First Response Time</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View first response time over the date ranges.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/avg-first-resp-time">Go</a>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a">
+                <div>
+                    <div>
+                        <i class="fa fa-th-large fa-3x"></i>
+                    </div>
+                    <b>Ticket status</b>
+                </div>
+                <br />
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets status chart
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/status-report">Go</a>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
 
 </div>
 

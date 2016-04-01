@@ -67,11 +67,17 @@
 		}*/
 	};
 	
-	company_util.updateDealsList = function(deal,isCompany){
+	company_util.updateDealsList = function(deal,isCompany, isUpdate){
 		// Add model to collection. Disabled sort while adding and called
 		// sort explicitly, as sort is not working when it is called by add
 		// function
 		var current = App_Companies.companyDetailView.model.toJSON();
+
+		var owner = deal.owner_id;
+
+	  	if(!owner){
+	  		owner = deal.owner.id;
+	  	}
 
 		/*
 		 * Verifies whether the added deal is related to the contact in
@@ -82,24 +88,34 @@
 			if (contact.id == current.id) {
 				
 				
+				if(hasScope("VIEW_DEALS") || CURRENT_DOMAIN_USER.id == owner){
+					if (dealsView && dealsView.collection)
+					{
+						if(deal.archived == true)
+						{
+							dealsView.collection.remove(deal.id);
+							dealsView.collection.sort();
+						}
+						else if(dealsView.collection.get(deal.id))
+						{
+							dealsView.collection.get(deal.id).set(new BaseModel(deal));
+							$("#"+deal.id).closest("li").removeAttr("class");
+							$("#"+deal.id).closest("li").addClass("deal-color");
+							$("#"+deal.id).closest("li").addClass(deal.colorName);
 
-				if (dealsView && dealsView.collection)
-				{
-					if(deal.archived == true)
-					{
-						dealsView.collection.remove(deal.id);
-						dealsView.collection.sort();
-					}
-					else if(dealsView.collection.get(deal.id))
-					{
-						dealsView.collection.get(deal.id).set(new BaseModel(deal));
-					}
-					else
-					{
-						dealsView.collection.add(new BaseModel(deal), { sort : false });
-						dealsView.collection.sort();
+						}
+						else
+						{
+							dealsView.collection.add(new BaseModel(deal), { sort : false });
+							dealsView.collection.sort();
+						}
 					}
 				}
+				if(!hasScope("VIEW_DEALS") && CURRENT_DOMAIN_USER.id != owner && isUpdate){
+					dealsView.collection.remove(deal.id);
+					dealsView.collection.sort();
+				}
+				
 				
 				return false;
 			}
@@ -385,15 +401,16 @@
 										filter_name = companyFiltersListView.collection.get(filter_name).toJSON().name;
 								
 
-							el.find('.filter-dropdown').append(filter_name);
+							el.find('.filter-dropdown').append(Handlebars.compile('{{name}}')({name : filter_name}));
 						}
 
 						if (!filter_name)
 							return;
 
-						$('.filter-criteria', cel)
-						.html(
-								'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">' + filter_name + '</span><a class="close default_company_filter">&times</a></li></ul>');
+						var template = Handlebars.compile('<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">{{name}}</span><a class="close default_company_filter">&times</a></li></ul>');
+
+					 	// Adds contact name to tags ul as li element
+						$('.filter-criteria', cel).html(template({name : filter_name}));
 						
 						if(filter_id)
 							$('.filter-criteria', cel).attr("_filter", filter_id);
@@ -541,8 +558,14 @@
 		       			App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
 		       			
 		       			// Append to the list, when no match is found 
-		       			if ($.inArray(new_tags, old_tags) == -1) 
-		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-company-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+		       			if ($.inArray(new_tags, old_tags) == -1) {
+
+		       				var template = Handlebars.compile('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="{{name}}"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{name}}" >{{name}}</a><a class="close remove-company-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+						 	// Adds contact name to tags ul as li element
+							$('#added-tags-ul').append(template({name : new_tags}));
+
+		       			}
 		       			
 		       			console.log(new_tags);
 		       			// Adds the added tags (if new) to tags collection
@@ -565,7 +588,11 @@
             descending: true,
             postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".deal-created-time", el).timeago();
+            		$(".deal-created-time", el).timeago();
+            		$(el).find('ul li').each(function(){
+				    $(this).addClass("deal-color");
+				    $(this).addClass($(this).find("input").attr("class"));
+			        });
             	})
             }
         });
@@ -612,7 +639,7 @@
             }
         });
         notesView.collection.fetch();
-        $('#notes', App_Companies.companyDetailView.el).html(notesView.el);
+        $('#notes', App_Companies.companyDetailView.el).html(notesView.render().el);
         company_detail_tab.activateCurrentTab($('#notes'));
 	};
 	
@@ -634,7 +661,7 @@
 	            }
 	        });
 		    documentsView.collection.fetch();
-	        $('#documents', App_Companies.companyDetailView.el).html(documentsView.el);
+	        $('#documents', App_Companies.companyDetailView.el).html(documentsView.render().el);
 	        company_detail_tab.activateCurrentTab($('#documents'));
 	};
 	

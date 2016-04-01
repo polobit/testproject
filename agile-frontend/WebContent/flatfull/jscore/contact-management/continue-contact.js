@@ -19,14 +19,15 @@ function show_error(modalId, formId, errorClass, htmlText)
 	if (modal_elem.css('display') !== 'none')
 	{
 		modal_elem.find('.' + errorClass).html(
-				'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+				'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 	}
 	else if (form_elem.css('display') !== 'none')
 	{
 		form_elem.find('.' + errorClass).html(
-				'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+				'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 	}
 }
+
 
 function show_error_in_formactions(modalId, formId, errorClass, htmlText)
 {
@@ -153,14 +154,38 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	// Reads custom fields and pushes into properties
 	var custom_field_elements = $('#' + form_id).find('.custom_field');
 	var custom_fields_in_template = [];
+	var contact_custom_fields_flag = true;
 
 	$.each(custom_field_elements, function(index, element)
 	{
 		var id = $(element).attr('id'), name = $(element).attr('name');
 		custom_fields_in_template.push(name);
-		if (isValidField(id))
-			properties.push(custom_Property_JSON(name, 'CUSTOM', form_id));
+		if($(element).hasClass("contact_input") || $(element).hasClass("company_input")){
+			if ($(element).hasClass("required_field"))
+			{
+				if ($(this).parent().find("ul").find("li").length == 0)
+				{
+					$(this).parent().append('<span for="fname" generated="true" class="help-inline">This field is required.</span>');
+					var that = this;
+					setTimeout(function(){
+						$(that).parent().find('span').remove();
+					},1500);
+					contact_custom_fields_flag = false;
+				}
+			}
+			if (isValidContactCustomField(id))
+				properties.push(custom_Property_JSON(name, 'CUSTOM', form_id));
+		}else{
+			if (isValidField(id))
+				properties.push(custom_Property_JSON(name, 'CUSTOM', form_id));
+		}
+		
 	});
+	if (!contact_custom_fields_flag)
+	{
+		enable_save_button($(saveBtn));
+		return;
+	}
 
 	if (is_person)
 	{
@@ -310,7 +335,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 					if (status)
 					{
-						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exists.');
 
 						enable_save_button($(saveBtn));// Remove loading image
 						return;
@@ -453,10 +478,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 	/*
 	 * Check whether there are any properties in existing contact, which can get
 	 * lost in contact update form. There are chances user adds a property(may
-	 * be stripe id..) using developers API, in order not to loose them
-	 * following verification is done
+	 * be stripe id..) using developers API and contact image saved as CUSTOM type,
+	 * in order not to loose them following verification is done
 	 */
-
 	if (obj.properties)
 	{
 		var properties_temp = properties;
@@ -483,7 +507,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 												// in new properties then
 												// preserving them.
 												else if (new_property_index == (properties_temp.length - 1) && custom_fields_in_template
-														.indexOf(contact_property.name) == -1 && contact_property.type == "CUSTOM")
+														.indexOf(contact_property.name) == -1 && contact_property.type == "CUSTOM" && contact_property.name == "image")
 												{
 													properties.push(contact_property);
 												}
@@ -727,6 +751,55 @@ function deserialize_contact(contact, template)
 		// If contact is added from social suite, need to add website.
 		// socialsuite_add_website();
 
+		$('.contact_input', $('#content')).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
+		});
+
+		$('.contact_input', $('#content')).each(function(){
+			var name = $(this).attr("name");
+			for (var i = 0; i < contact.properties.length; ++i)
+			{
+				if (contact.properties[i].name == name)
+				{
+					var valJSON = $.parseJSON(contact.properties[i].value);
+					var referenceContactIds = "";
+					$.each(valJSON, function(index, value){
+						if(index != valJSON.length-1){
+							referenceContactIds += value + ",";
+						}else{
+							referenceContactIds += value;
+						}
+					});
+					setReferenceContacts(name, $('#content'), valJSON, referenceContactIds);
+				}
+			}
+		});
+
+		$('.company_input', $('#content')).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=COMPANY');
+		});
+
+		$('.company_input', $('#content')).each(function(){
+			var name = $(this).attr("name");
+			for (var i = 0; i < contact.properties.length; ++i)
+			{
+				if (contact.properties[i].name == name)
+				{
+					var valJSON = $.parseJSON(contact.properties[i].value);
+					var referenceContactIds = "";
+					$.each(valJSON, function(index, value){
+						if(index != valJSON.length-1){
+							referenceContactIds += value + ",";
+						}else{
+							referenceContactIds += value;
+						}
+					});
+					setReferenceContacts(name, $('#content'), valJSON, referenceContactIds);
+				}
+			}
+		});
+		
+
 	}, "#content");
 
 	
@@ -793,6 +866,7 @@ function fill_multi_options(field_element, element)
 	}
 }
 
+
 /**
  * Creates json object for each custom field in contact form with name, type and
  * value as attributes.
@@ -830,6 +904,14 @@ function custom_Property_JSON(name, type, form_id)
 			else
 				elem_value = new Date(elem.val()).getTime() / 1000;
 		}
+	else if (elem.hasClass("contact_input") || elem.hasClass("company_input"))
+	{
+		var contact_values = [];
+		$('ul[name="'+name+'"]', $('#'+form_id)).find('li').each(function(){
+			contact_values.push($(this).attr("data"));
+		});
+		elem_value = JSON.stringify(contact_values);
+	}
 		else
 			elem_value = elem.val();
 
@@ -985,7 +1067,7 @@ function add_model_cursor(app_collection, mdl)
  */
 function isCompanyExist(company, callback)
 {
-	$.get('core/api/contacts/company/validate/' + company, function(data){
+	$.get('core/api/contacts/company/validate?companyName=' + company, function(data){
 		   if(data == "true"){
 		   	    callback(true);
 		   		return;
@@ -994,4 +1076,51 @@ function isCompanyExist(company, callback)
 		   callback(false);
 	});
 
+}
+
+/**
+ * Sets refernce contacts to contacts, companies, deals and cases update forms
+ * 
+ * @param name -
+ *            custom field name
+ * @param ele -
+ *            update from element
+ * @param valJSON -
+ *            list of custom fields
+ * @param referenceContactIds -
+ *            list of reference contact ids
+ */
+function setReferenceContacts(name, ele, valJSON, referenceContactIds)
+{
+	App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+
+	App_Contacts.referenceContactsCollection.collection.fetch({
+		success : function(data){
+			if (data && data.length > 0)
+			{
+				$.each(valJSON, function(index, value){
+					var contact_name = getPropertyValue(data.get(value).get("properties"), "first_name");
+					var last_name = getPropertyValue(data.get(value).get("properties"), "last_name");
+					if(last_name)
+					{
+						contact_name += " "+last_name;
+					}
+					if(contact_name)
+					{
+						$("ul[name='"+name+"']", ele)
+						.append(
+								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#contact/' + value + '">' + contact_name + '</a><a class="close" id="remove_tag">&times</a></li>');
+					}
+					else
+					{
+						$("ul[name='"+name+"']", ele)
+						.append(
+								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#company/' + value + '">' + getPropertyValue(data.get(value).get("properties"), "name") + '</a><a class="close" id="remove_tag">&times</a></li>');
+					}
+					
+				});
+			}
+			hideTransitionBar();
+		}
+	});
 }

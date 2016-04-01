@@ -6,6 +6,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
@@ -18,6 +20,8 @@ import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.utils.TicketsUtil;
 
 /**
  * <ContactFullDetails> loads deals, tasks, notes and cases of a particular
@@ -148,6 +152,31 @@ public class ContactFullDetails
 			e.printStackTrace();
 			return new ArrayList<Event>();
 		}
+	}
+
+	/**
+	 * Fetches events
+	 * 
+	 * @return
+	 */
+	@XmlElement
+	public List<Tickets> getTickets()
+	{
+		try
+		{
+			List<Tickets> tickets =  TicketsUtil.getTicketsByContactID(contact_id);
+			
+			for(Tickets ticket : tickets)
+				ticket.created_time = ticket.created_time/1000;
+			
+			return tickets;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception in GetTicketActivity: " + ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return new ArrayList<Tickets>();
 	}
 
 }

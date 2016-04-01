@@ -34,7 +34,6 @@ public class FacebookPageServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
 	String action = request.getParameter("action");
-	PrintWriter out = response.getWriter();
 	if (action != null && action.trim() != "")
 	{
 	    ACTIONS routeAction = ACTIONS.valueOf(action);
@@ -43,8 +42,9 @@ public class FacebookPageServlet extends HttpServlet
 	    case GET_DETAILS:
 		try
 		{
-		    response.setContentType("application/json");
-		    out.print(getAuthAndPages(request));
+		    response.setContentType("application/json; charset=UTF-8");
+		    PrintWriter out = response.getWriter();
+		    out.write(getAuthAndPages(request));
 		}
 		catch (JSONException e)
 		{
@@ -67,6 +67,7 @@ public class FacebookPageServlet extends HttpServlet
 		}
 		try
 		{
+			PrintWriter out = response.getWriter();
 		    out.print("" + FacebookPageUtil.deleteOurFacebookTab(fbPageID, fbPageToken));
 		}
 		catch (JSONException e)
@@ -84,6 +85,7 @@ public class FacebookPageServlet extends HttpServlet
 		try
 		{
 		    response.setContentType("text/plain");
+		    PrintWriter out = response.getWriter();
 		    if (FacebookPageUtil.linkOurFacebookTab(facebookPageID, facebookPageToken, formName))
 		    {
 			FacebookPage facebookPage = FacebookPageUtil.getFacebookPageDetails(facebookPageID);

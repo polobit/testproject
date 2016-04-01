@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -111,7 +112,7 @@ public class UserAccessControlUtil
 	System.out.println(userAccess.getCurrentUserScopes());
 	if (!userAccess.canRead())
 	{
-	    if (className.equals("Contact"))
+	    if (className.equals("Contact") || className.equals("Event") || className.equals("Opportunity"))
 		userAccess.modifyQuery(q);
 	    else
 		CRUDOperation.READ.throwException(className);

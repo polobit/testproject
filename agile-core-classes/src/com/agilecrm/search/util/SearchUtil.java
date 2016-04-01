@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +46,8 @@ public class SearchUtil
      *            {@link Contact}
      * @return {@link Map}
      */
+	
+
     public static Map<String, String> getFieldsMap(Contact contact, Document.Builder doc)
     {
 	// Map to store all the fields
@@ -54,7 +58,22 @@ public class SearchUtil
 	{
 	    // if (StringUtils.isEmpty(contactField.value))
 	    // continue;
-
+		
+		 // Trims the spaces in field value
+	    String normalized_value = normalizeString(contactField.value);
+	    String field_name = normalizeTextSearchString(contactField.name);
+		
+		/*
+		 * Add UTM parameter in a Search Document of contact. If UTM parameter is Avialable 
+		 */
+		if (!(StringUtils.isEmpty(contactField.value)) && (contactField.name.equals(Contact.UTM_SOURCE) || contactField.name.equals(Contact.UTM_MEDIUM) || contactField.name.equals(Contact.UTM_CAMPAIGN) || contactField.name.equals(Contact.UTM_TERM) || contactField.name.equals(Contact.UTM_CONTENT)))
+		{
+			 doc.addField(Field.newBuilder().setName(field_name).setText(StringUtils.lowerCase(normalized_value)));
+		     fields.put(field_name, normalized_value);
+			 continue;
+		}
+		
+		
 	    CustomFieldDef customField = null;
 
 	    if (contactField.value == null || contactField.name == null)
@@ -77,12 +96,9 @@ public class SearchUtil
 		    continue;
 	    }
 
-	    // Trims the spaces in field value
-	    String normalized_value = normalizeString(contactField.value);
+	   
 
-	    String field_name = normalizeTextSearchString(contactField.name);
-
-	    System.out.println(field_name);
+	    //System.out.println(field_name);
 	    /*
 	     * Replaces special characters with "_" in field name
 	     */
@@ -120,6 +136,31 @@ public class SearchUtil
 		}
 		continue;
 	    }
+	    else if (customField != null && (customField.field_type == CustomFieldDef.Type.CONTACT || customField.field_type == CustomFieldDef.Type.COMPANY))
+	    {
+		try
+		{
+			String contact_value = "";
+			if (contactField.value != null)
+		    {
+		    JSONArray jsonArray = new JSONArray(contactField.value);
+		    for (int i=0; i<jsonArray.length(); i++)
+		    {
+		    	contact_value += jsonArray.getString(i) + " ";
+		    }
+		    }
+		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name))
+			    .setText(contact_value));
+		    
+		    
+		    fields.put(normalizeTextSearchString(field_name), contact_value);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		continue;
+	    }
 
 	    if (customField == null && field_name.equals(Contact.PHONE))
 	    {
@@ -144,6 +185,9 @@ public class SearchUtil
 		    fields.put(field_name, normalized_value);
 			continue;
 		}
+		
+			
+		
 
 	    /*
 	     * If key already exist appends contact field value to respective

@@ -9,13 +9,38 @@
  /**
 *  Workflow event listeners
 */
+var unsubscribe_fill_select = {};
 var Workflow_Model_Events = Base_Model_View.extend({
    
     events: {
-        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom,.is-disabled-top': 'saveCampaignClick',
+        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom': 'saveCampaignClick',
         'click #workflow-unsubscribe-option': 'unsubscribeCampaign',
         'click #workflow-designer-help': 'helpCampaign',
         'change #unsubscribe-action': 'unsubscribeCampaignOptionSelect',
+        'change #disable-workflow':'saveCampaignClick',
+        'change .emailSelect,click .emailSelect' : 'fillDetails',
+    },
+
+    fillDetails : function(e)
+    {
+        console.log('fillDetails');
+        var unsubscribe_subject = "";
+        unsubscribe_fill_select.id = "";
+        var model_id = $('.emailSelect option:selected').prop('value');
+        if (!model_id)
+        	return;
+		var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
+		var templateModel = new emailTemplatesModel();
+		
+		templateModel.fetch({ success : (function(data)
+		{
+            var model = data.toJSON();
+			unsubscribe_fill_select.id = model_id;
+            unsubscribe_fill_select.text = model.text;
+		})
+    });
+            
+
     },
 
     unsubscribeCampaignOptionSelect : function(e){
@@ -63,18 +88,11 @@ var Workflow_Model_Events = Base_Model_View.extend({
 
     unsubscribeCampaign : function(e){
         e.preventDefault();
-        var targetEl = $(e.currentTarget);
-
-        if($(targetEl).hasClass('collapsed'))
-        {
-            $('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
-            return;
-        }
-        
-        $('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription')
-        
+        $(e.currentTarget).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
+        $("#workflow-unsubscribe-block").slideToggle('fast');        
     },
 
+        
    /**
      * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
      * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
@@ -84,6 +102,21 @@ var Workflow_Model_Events = Base_Model_View.extend({
     saveCampaignClick: function(e, trigger_data){
         e.preventDefault();
         var targetEl = $(e.currentTarget);
+
+        try{
+            var nodeLength = $('iframe[id=designer]').contents().find('#paintarea .contextMenuForNode').length;
+            var currentLimits=_billing_restriction.currentLimits;
+            var campaignNodeLimit=currentLimits.campaignNodesLimit;
+            if(nodeLength-1 > campaignNodeLimit)
+            {
+                $("#workflow-edit-msg").hide();
+                $("#nodes-limit-reached").show();
+                campaignAlert("nodeLimit");
+                return;
+            }
+
+        }
+        catch(err){}
 
         // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
        // it is holding jQuery object
@@ -118,16 +151,21 @@ var Workflow_Model_Events = Base_Model_View.extend({
         var unsubscribe_action = $('#unsubscribe-action').val();
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
         var unsubscribe_name = $('#unsubscribe-name').val().trim();
+        var unsubscribe_subject = "";
+        if(unsubscribe_fill_select.id)
+            unsubscribe_subject = unsubscribe_fill_select.id;
         var is_disabled = $('.is-disabled-top').attr("data");
-        if($clicked_button.hasClass("is-disabled-top") && is_disabled)
+        if(e.type == "change" && is_disabled)
             is_disabled = !JSON.parse(is_disabled);
 
         var unsubscribe_json ={
                                     "tag":unsubscribe_tag,
                                     "action":unsubscribe_action,
                                     "unsubscribe_email": unsubscribe_email,
-                                    "unsubscribe_name": unsubscribe_name
+                                    "unsubscribe_name": unsubscribe_name,
+                                    "unsubscribe_subject": unsubscribe_subject
                                }
+
         
         // Check for valid name
         if (isNotValid(name)) {
@@ -137,18 +175,24 @@ var Workflow_Model_Events = Base_Model_View.extend({
 
         // Disables save button to prevent multiple save on click event issues
         disable_save_button($(targetEl));
-        
+
+                
         var workflowJSON = {};
 
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(targetEl).attr('id') === 'duplicate-workflow-top' || $(targetEl).attr('id') === 'duplicate-workflow-bottom') 
         {
-            create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);
+            create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);   
+
         }
         // Update workflow
         else
         {
             workflowJSON = App_Workflows.workflow_model;
+
+            // To reset model on error
+            var previousAttributes = App_Workflows.workflow_model.previousAttributes();
+
             App_Workflows.workflow_model.set("name", name);
             App_Workflows.workflow_model.set("rules", designerJSON);
             App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
@@ -157,7 +201,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 
                 enable_save_button($clicked_button);
                 
-                show_campaign_save();
+                show_campaign_save(e);
                 
                 try{
                 // Adds tag in our domain
@@ -167,33 +211,26 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 // Hide message
                 $('#workflow-edit-msg').hide();
 
-                //toggle disable dropdown
-                 if($clicked_button.hasClass("is-disabled-top")){
+                if(e.type == "change"){
                      var disabled = $(".is-disabled-top");
-                 
-                    if (is_disabled) {
+                 var status = $('#disable-switch').bootstrapSwitch('status');
+                if (is_disabled && status) {
                         disabled.attr("data", true);
-                        disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
-                        disabled.find('div').text("Enable Campaign");
-                        $('#designer-tour').addClass("blur").removeClass("anti-blur");;
-                        window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
-                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
-                        show_campaign_save("Campaign has been disabled successfully.","red");
+                        $('#designer-tour').addClass("blur").removeClass("anti-blur");
+                        window.frames[1].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                        show_campaign_save(e,"Campaign has been disabled successfully.","red");
                     } else {
                         disabled.attr("data", false);
-                        disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
-                        disabled.find('div').text("Disable Campaign"); 
-                        $('#designer-tour').addClass("anti-blur").removeClass("blur");;
-                        window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
-                        window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
+                        $('#designer-tour').addClass("anti-blur").removeClass("blur");
+                        window.frames[1].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
+                        window.frames[1].$('#toolbartabs').removeClass("disable-iframe");
                        // $('#designer-tour').css("pointer-events","none");
-                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
-                        show_campaign_save("Campaign has been enabled successfully.");
-
+                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
+                        show_campaign_save(e,"Campaign has been enabled successfully.");
                     }
                 }
 
-                
                 // Boolean data used on clicking on Done
                 if(trigger_data && trigger_data["navigate"])
                 {
@@ -210,6 +247,9 @@ var Workflow_Model_Events = Base_Model_View.extend({
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button);
 
+              // Reset model with previous on error
+              App_Workflows.workflow_model.set(previousAttributes);
+              
               console.log(status);
                     // Show cause of error in saving
                     $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
@@ -228,6 +268,27 @@ var Workflow_Model_Events = Base_Model_View.extend({
             });        
             
         } 
+        var unsubscribe_subject = "";
+        unsubscribe_fill_select.id = "";
+        var model_id = $('.emailSelect option:selected').prop('value');
+        if (!model_id)
+            return;
+        
+        var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
+        var templateModel = new emailTemplatesModel();
+        
+        templateModel.fetch({ success : (function(data)
+            {
+                var model = data.toJSON();
+                unsubscribe_fill_select.id = model_id;
+                unsubscribe_fill_select.text = model.text;
+            }),
+        error: (function () {
+                unsubscribe_fill_select.id = model_id;
+                unsubscribe_subject = unsubscribe_fill_select.id;
+            })
+        });
+ 
     },
 
 });
@@ -327,7 +388,7 @@ $(function(){
  * @param unsubscribe_json - unsubscribe data of workflow
  * @param $clicked_button - jquery object to know clicked button
  **/
-function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, was_disabled)
+function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, was_disabled)
 {
 	var workflowJSON = {};
 	
@@ -345,8 +406,8 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
     	    	enable_save_button($clicked_button);
     	    	
     	    	// Shows Campaign save message
-    	    	show_campaign_save();
-    	    	
+    	    	show_campaign_save(e);
+
     	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
     	    	
     	    	// Hide edit message
@@ -364,11 +425,13 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
     	    	
     	    	// Updates workflow model
     	    	App_Workflows.workflow_model = workflow;
+                if(Current_Route.indexOf("share-campaign")!=-1)
+                    App_Workflows.workflow_list_view = undefined;
     	    },
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button); 
-              
+              App_Workflows.workflow_list_view.collection.remove(workflow);
               // shows Exception message
               if(status.status != 406)
               {
@@ -459,19 +522,24 @@ function fill_logs_slate(id, type)
 
 }
 
-function show_campaign_save(message,color)
+function show_campaign_save(e,message,color)
 {
 	// Campaign save message
     var save_info;
     if(message)
         save_info = '<span style="color: green;">'+message+'</span>';
     else
+    {
 	   save_info = '<span style="color: green;">Campaign saved.</span>';
+       //Show popup modal for adding campaign in trigger or contac
+        showCampaignPopup(e);
+       
+    }
 
     if(color)
         save_info = $(save_info).css("color", color);
 
-	$("#workflow-msg").html(save_info).show().fadeOut(3000);
+   	$("#workflow-msg").html(save_info).show().fadeOut(3000);
 }
 
 function is_start_active(designerJSON){
@@ -506,5 +574,113 @@ function populate_workflows_list(id, el, callback)
      fillSelect(id, '/core/api/workflows', 'workflow', callback , optionsTemplate, undefined, el);
 }
 
+function shareCampaign()
+{
+    $("#shareCampaign").remove();
+    getTemplate('share-campaign-modal', {}, undefined, function(template_ui){
+                if(!template_ui)
+                    return;
+                var share_campaign_modal = $(template_ui);
+                share_campaign_modal.modal('show');
+               /* share_campaign_modal.on('shown.bs.modal', function(){
+                    window.history.back();
+                });*/
+    }, null);
+
+        
+}
+function createJSON() {
+        var shareCampaign_json = {};
+        // Getting the emailId entered by the user to share with
+        var value = $("#emailId").val();
+        if(!isValidForm('#verify-email'))
+            return;
+        var json = serializeForm("verify-email");
+        if(!json)
+            return;
+        shareCampaign_json.receiverEmail = value;
+        shareCampaign_json.campaignId = App_Workflows.workflow_model.id;
+
+        $.ajax({ url : "/core/api/workflows/share?type=Workflow&id="+App_Workflows.workflow_model.id+"&recEmail="+shareCampaign_json.receiverEmail,
+         type : "GET",
+         data: shareCampaign_json,
+         dataType: "json",
+         contentType : "application/json",
+         success : function()
+            {
+                $("#shareCampaign").modal('hide');
+                showNotyPopUp("information", "Campaign has been shared successfully.", "top");
+                //Backbone.history.navigate("workflows", { trigger : true });
+            },error : function(){
+                $("#shareCampaign").modal('hide');
+            }
+        });
+}
+$('body').on('mouseenter','#workflows-model-list tr', function(e){
+         $(this).find('#camp_history').removeClass('hide');
+         $(this).find('#camp_reports').removeClass('hide');
+    });
+
+$('body').on('mouseleave','#workflows-model-list tr', function(e){
+         $(this).find('#camp_history').addClass('hide');
+         $(this).find('#camp_reports').addClass('hide');
+    });
+
+   /**
+     *Script to show Popup window. when user click on save campaign 
+     *
+     **/
+   
+     function showCampaignPopup(e)
+     {
+         e.preventDefault();
+
+        var targetEl=$(e.currentTarget);
+        var click_button= $(targetEl).attr('id');
+        var popup_status=readData("campaign-save-popup");
+
+        if(popup_status !=='true' && (click_button==='save-workflow-top' || click_button==='save-workflow-bottom' || click_button==='duplicate-workflow-top' || click_button==='duplicate-workflow-bottom'))
+        {
+            while($("#workflow-save-popup").length)
+                  $("#workflow-save-popup").remove();
+
+            workflow_alerts("Next Action ", "null" , "workflow-save-popup-modal", function(el){
+               
+                window.setTimeout(function () {   $(el).find("#popup-msg").fadeOut(8000); }, 500); 
+            });
+        }
+     }
+
+    function popupCampaignContact ()
+    {
+            $("#workflow-save-popup").modal("hide");
+           
+          // window.location.hash="#contacts";
+           Backbone.history.navigate("#contacts" , {
+                trigger: true
+            });
+           
+       }
+         
+     function popupCampaignTrigger ()
+     {  
+            $("#workflow-save-popup").modal("hide");
+             
+             Backbone.history.navigate("#trigger-add" , {
+                trigger: true
+            });
+            
+     }
+
+
+     function hideCampaignPopup()
+     {
+        if($("#campaign-save-popup").prop("checked"))
+            storeData("campaign-save-popup", true,10);
+        else
+            storeData("campaign-save-popup", false,10);
+      }
+
 
 function initializeWorkflowsListeners() {}
+

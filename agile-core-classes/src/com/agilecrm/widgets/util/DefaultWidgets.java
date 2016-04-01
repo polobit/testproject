@@ -60,6 +60,15 @@ public class DefaultWidgets {
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
+				"Braintree",
+				"Braintree enables individuals and businesses to accept payments over the internet.",
+				"/widgets/braintree.js", "/img/plugins/braintree-lg-logo.png",
+				"/widgets/braintree-sm-logo.png", null, WidgetType.BILLING));
+		widgets.add(new Widget(
+				"PayPal","PayPal is the faster, safer way for online invoicing  web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.",
+				"/widgets/paypal.js", "/img/plugins/paypal_logo_png.png",
+				"/widgets/paypal_icon.png", null, WidgetType.BILLING));
+		widgets.add(new Widget(
 				"HelpScout",
 				"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
 				"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png",
@@ -109,11 +118,12 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
+		
 		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
 		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
 		WidgetType.CALL));
-/*		widgets.add(new Widget("Skype", "Make and receive calls from your contacts using your Skype Account.",
-		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));*/
+		widgets.add(new Widget("Skype", "Make and receive calls from your contacts using your Skype Account.",
+		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

@@ -1,6 +1,8 @@
 package com.agilecrm.core.api;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -37,10 +39,15 @@ import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.EmailPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -72,7 +79,7 @@ public class EmailsAPI
     @Path("send-email")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
+    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("cc") String cc, @QueryParam("bcc") String bcc,
 	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
     {
 	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null,null);
@@ -134,7 +141,7 @@ public class EmailsAPI
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to,
+    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to, @FormParam("cc") String cc, @FormParam("bcc") String bcc,
 	    @FormParam("subject") String subject, @FormParam("body") String body) throws Exception
     {
 	String oldNamespace = NamespaceManager.get();
@@ -143,7 +150,7 @@ public class EmailsAPI
 	{
 	    // To avoid sending through subaccount
 	    NamespaceManager.set("");
-	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null,null);
+	    Mandrill.sendMail(false, fromEmail, fromEmail, to, cc, bcc, subject, fromEmail, body, null, null, null,null);
 	}
 	catch (Exception e)
 	{
@@ -179,39 +186,64 @@ public class EmailsAPI
 	{
 
 	    // Removes unwanted spaces in between commas
-	    String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+	   // String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
 
 	    // Gets gmailPrefs url if not null, otherwise imap url.
-	    String url = ContactEmailUtil.getEmailsFetchURL(AgileUser.getCurrentAgileUser(), normalisedEmail, offset,
-		    count);
+	   // String url = ContactEmailUtil.getEmailsFetchURL(AgileUser.getCurrentAgileUser(), normalisedEmail, offset,
+		//    count);
 
 	    // If both are not set, return Contact emails.
-	    if (url == null)
-	    {
+	  //  if (url == null)
+	  //  {
+		//passing the agile mail and sending the URL of rest of the pararm
+
 		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0],
 			null);
+		JSONObject res = new JSONObject();
 
 		// return in the same format {emails:[]}
-		return new JSONObject().put("emails", contactEmails).toString();
-	    }
+		EmailPrefs emailPrefs = null;
+		List<String> mailUrls = new ArrayList<>();
+		
+		try
+		{
+		    emailPrefs = ContactEmailUtil.getEmailPrefs();
+		    mailUrls = emailPrefs.getFetchUrls();
+		    String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
+		    for(int i=0; i< mailUrls.size();i++){
+		    	if(mailUrls.get(i).equals(agileEmailsUrl)){
+		    		mailUrls.remove(i);
+		    	}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		res.put("emails", contactEmails);
+		res.put("emailPrefs", mailUrls);
+		return res.toString();
+		
+	  //  }
+
 
 	    // Returns imap emails, usually in form of {emails:[]}, if not build
 	    // result like that.
-	    String jsonResult = HTTPUtil.accessURL(url);
+	   // String jsonResult = HTTPUtil.accessURL(url);
 
 	    // Convert emails to json.
-	    JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+	  //  JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
 
 	    // Fetches JSONArray from {emails:[]}
-	    JSONArray emailsArray = emails.getJSONArray("emails");
+	  //  JSONArray emailsArray = emails.getJSONArray("emails");
 
 	    // Add owner email to each email and parse each email body.
-	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, "");
+	 //   emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, "");
 
 	    // Merges imap emails and contact emails.
-	    emailsArray = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0], emailsArray);
+	  ///  emailsArray = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0], emailsArray);
 
-	    return emails.toString();
+	  //  return emails.toString();
 	}
 	catch (Exception e)
 	{
@@ -479,4 +511,78 @@ public class EmailsAPI
     	
     }
 
+
+    /**
+     * Check Spam Score and show the output.
+     * 
+     * @param fromEmail
+     *            - from email
+     * @param to
+     *            - to email
+     * @param subject
+     *            - subject
+     * @param body
+     *            - body
+     */
+    @Path("check-spam-score")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String checkSpamScore(@FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail,
+	    @FormParam("to_email") String toEmail, @FormParam("subject") String subject,
+	    @FormParam("text_email") String textEmail, @FormParam("html_email") String htmlEmail,
+	    @FormParam("replyto_email") String replyToEmail)
+    {
+    	//Getting  Domain name and user name for unique file name
+    	 String domainName=NamespaceManager.get()+ "_"+SessionManager.get().getName();
+    	 
+    	 String scoreJson=null;
+		 String date=DateUtil.getCalendarString(System.currentTimeMillis(), "E, dd MMM yyyy HH:mm:ss Z", "");
+    	
+		 EmailSender emailSender = EmailSender.getEmailSender();
+
+		    // Appends Agile label
+		    textEmail = StringUtils.replace(textEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"),
+			    "Sent using Agile");
+		    textEmail = EmailUtil.appendAgileToText(textEmail, "Sent using", emailSender.isEmailWhiteLabelEnabled());
+
+		    // If no powered by merge field, append Agile label to html
+		    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+		    		htmlEmail = EmailUtil.appendAgileToHTML(htmlEmail, "campaign", "Powered by",
+				emailSender.isEmailWhiteLabelEnabled());
+		 
+    	String  data =domainName;												data +="\n";
+    			data +="Mime-Version: 1.0";										data +="\n";
+		    	data +="Content-Type: multipart/alternative; boundary=\"_av-0sAAoRRXZN7YLBFWvl0DvA\"";		data +="\n";
+    		    data +="Message-Id: <v0421010eb70653b14e06@[208.192.102.193]>";	data +="\n";
+    		    data +="Date: "+date;											data +="\n";
+		    	data +="To: " + toEmail;										data +="\n";
+		    	data +="From: " + fromEmail;									data +="\n";
+		    	data +="Subject: " + subject;									data +="\n";
+		    	data +="Sender: " + "contact@agilecrm.com";						data +="\n";
+		    	data +="Reply-To: " + replyToEmail;								data +="\n";
+		    	data +="--_av-0sAAoRRXZN7YLBFWvl0DvA\nContent-Type: text/plain; charset=utf-8 \n Content-Transfer-Encoding: 7bit\n";
+		    	data +=textEmail;												data +="\n";
+		    	data +="--_av-0sAAoRRXZN7YLBFWvl0DvA";							data +="\n";
+		    	data +="--_av-0sAAoRRXZN7YLBFWvl0DvA\nContent-Type: text/html; charset=utf-8 \n Content-Transfer-Encoding: 7bit\n";
+		    	data +=htmlEmail;												data +="\n";
+		    	data +="--_av-0sAAoRRXZN7YLBFWvl0DvA--";						data +="\n";
+    	
+	try
+	{
+		scoreJson=HTTPUtil.accessURLUsingPost("http://54.84.112.13/spamassassin/spam",data);
+	  /* 
+
+	   // emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
+		//    textEmail, null, new ArrayList<Long>(),new ArrayList<BlobKey>());
+*/
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while sending test email..." + e.getMessage());
+	    e.printStackTrace();
+	}
+	
+	return scoreJson;
+    }
 }

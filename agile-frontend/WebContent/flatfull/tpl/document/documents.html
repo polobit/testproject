@@ -13,8 +13,8 @@
 <div class="row">
 		{{#unless this.length}}
 		<div class="col-md-9">
-		<div class="alert-info alert">
-            <div class="slate-content">
+		<div class="alert bg-white">
+            <div class="slate-content  p-md">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
@@ -101,9 +101,10 @@
 	</div>
 </td><td>
     <div class="thumb-sm avatar">
-       {{#if ownerPic}}
-        <img class="r r-2x" src="{{ownerPic}}"  title="{{owner.name}}" />
+       {{#if owner.pic}}
+        <img class="r r-2x" src="{{owner.pic}}"  title="{{owner.name}}" />
 	   {{else}}
+             <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;">{{owner.name}}</div>
        {{/if}}
     </div>
 </td>

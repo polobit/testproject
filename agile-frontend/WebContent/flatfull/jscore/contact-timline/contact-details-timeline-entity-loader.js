@@ -14,7 +14,7 @@ var timeline_entity_loader = {
 			console.log(_this);
 			_this.load_other_timline_entities(contact);
 
-			timeline_collection_view.render();
+			timeline_collection_view.render(true);
 			// timeline_collection_view.render();
 
 		});
@@ -32,7 +32,7 @@ var timeline_entity_loader = {
 	load_related_entites : function(contactId)
 	{
 		var entity_types = [
-				"deals", "notes", "cases", "tasks","calls","events"
+				"deals", "notes", "cases", "tasks","calls","events", "tickets"
 		];
 
 		var url = 'core/api/contacts/related-entities/' + contactId;
@@ -97,6 +97,42 @@ var timeline_entity_loader = {
 					if(contact_emails)
 						timeline_collection_view.addItems(contact_emails);
 				}
+				if(stats && stats["emailPrefs"]){
+					killAllPreviousRequests();
+					var fetch_urls = stats["emailPrefs"];
+					var contact_social_emails = [];
+					
+					for(var i=0;i<fetch_urls.length;i++)
+					{
+						var xhr = $.ajax({ url : fetch_urls[i]+'&search_email='+encodeURIComponent(email),
+							success : function(emails)
+							{	
+								if(emails)
+								{	
+									var mail_array = [];
+									$.each(emails, function(index,data){
+										// if error occurs in imap (model is obtained with the
+										// error msg along with contact-email models),
+										// ignore that model
+										if(('errormssg' in data) || data.status === "error")
+										return;
+										mail_array.push(data);
+										});
+									
+									if(mail_array.length > 0){
+										timeline_collection_view.addItems(mail_array);
+									}
+							    }
+							},
+						    error : function(response)
+						    {
+						    }
+						});
+						email_requests.push(xhr);
+					}
+				}
+				
+				
 			})
 		}
 	},
@@ -143,7 +179,7 @@ var timeline_entity_loader = {
 		$.getJSON(url, function(data)
 		{
 			
-			console.log("success : " + _this.active_connections)
+			console.log("success : " + _this.active_connections);
 			--_this.active_connections;
 			console.log("success : " + _this.active_connections)
 			if (callback && typeof callback === "function")
@@ -192,6 +228,7 @@ var timeline_entity_loader = {
 
 	get_stats : function(email, contact, el)
 	{
+		var that = this;
 		get_web_stats_count_for_domain(function(count){
 
 			// If there are no web-stats - return
@@ -209,11 +246,11 @@ var timeline_entity_loader = {
 
 			var StatsCollection = Backbone.Collection.extend({});
 
-			this.timline_fetch_data('core/api/web-stats?e=' + encodeURIComponent(email), function(data)
+			that.timline_fetch_data('core/api/web-stats?e=' + encodeURIComponent(email), function(data)
 			{
 
-				this.statsCollection = new StatsCollection(data);
-				data = statsCollection;
+				that.statsCollection = new StatsCollection(data);
+				data = that.statsCollection;
 
 				is_mails_fetched = true;
 				is_logs_fetched = false;

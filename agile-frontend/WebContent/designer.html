@@ -43,21 +43,22 @@
 	<script src="js/designer/invox.js" type="text/javascript"></script>
 
 	<!-- Invox Form Validator -->
-	<script src="js/designer/formvalidator.js" type="text/javascript"></script>
+	<script src="js/designer/formvalidator.js?_t=1458303417" type="text/javascript"></script>
  
 	<!-- Grid JS -->
-	<script src="js/designer/grid.js" type="text/javascript"></script>
+	<script src="js/designer/grid.js?_t=1458628444" type="text/javascript"></script>
 <script src="js/designer/audiogrid.js" type="text/javascript"></script>
 
 	
 	<!-- include the Global Path -->
-	<script src="js/designer/globals.js" type="text/javascript"></script>
+	<script src="js/designer/globals.js?_t=1458109875" type="text/javascript"></script>
 
 	<!-- Core -->
 	<script src="js/designer/core.js" type="text/javascript"></script>
 
 	<!-- UI -->
-	<script src="js/designer/ui.js?_t=18_8" type="text/javascript"></script>
+	<script src="js/designer/ui.js?_t=1458109875" type="text/javascript"></script>
+	
 	
 	<!--  Addon (+) -->
 	<script src="js/designer/addon.js" type="text/javascript"></script>
@@ -66,15 +67,18 @@
 	<script src="js/designer/toolbar.js?_t=18_8" type="text/javascript"></script>
 
 	<!-- Designer -->
-	<script src="js/designer/designer.js" type="text/javascript"></script>
+	<script src="js/designer/designer.js?_t=1458109875" type="text/javascript"></script>
+
 	<script src="js/designer/dynamicnodes.js" type="text/javascript"></script>
 	
 
 	<!-- Node UI -->
-	<script src="js/designer/nodeui.js" type="text/javascript"></script>
+	<script src="js/designer/nodeui.js?_t=1458126095" type="text/javascript"></script>
 	
 	<!-- Desinger Util functions Naresh 30/10/2013 -->
-    <script src="js/designer/designerutil.js?_t=18_8" type="text/javascript"></script>
+    <script src="js/designer/designerutil.js?_t=1458109875" type="text/javascript"></script>
+
+    <script src="js/designer/nodes_constants.js?_t=1458299929" type="text/javascript"></script>
 	
 	<!-- YQL Cross Domain -->
 	<script src="js/designer/yql.js" type="text/javascript"></script>
@@ -84,7 +88,9 @@
 
 	<!-- Deserialize -->
 	<script src="js/lib/deserialize/deserializeform.js" type="text/javascript"></script>
-
+	
+	<!-- Ticket -->
+	<script src="js/designer/ticket.js" type="text/javascript"></script>
 	
 	<!-- Block UI -->
 	<script src="js/lib/blockui/jquery.blockUI.js"></script>
@@ -96,7 +102,7 @@
 	<script src="js/designer/tinymce/tinymce.min.js" type="text/javascript"></script>
 
 	<!-- tooltip, tabs, validator styling -->
-	<link rel="stylesheet" type="text/css" href="css/designer/core.css" />
+	<link rel="stylesheet" type="text/css" href="css/designer/core.css?_t=1455774684" />
 	<link rel="stylesheet" type="text/css" href="css/designer/menubar.css" />
 	<link rel="stylesheet" type="text/css" href="css/designer/tooltip.css" />
 	<link rel="stylesheet" type="text/css" href="css/designer/validator.css" />
@@ -109,8 +115,7 @@
 
 	<!-- Uploadify -->
 	<link rel="stylesheet" href="css/designer/uploadify/uploadify.css" type="text/css"/>
-
-
+	
 	<!-- Draw 2d -->
 	<link rel="stylesheet" type="text/css" href="css/designer/draw2d.css" />
 
@@ -140,6 +145,7 @@
 <!-- Place holder for the toolkit - designer and toolbars -->
 
 <div id = "maincontainer">
+
 	<div id = "designercontainer">
 
 		<div id="designer" class="ui-widget-content">
@@ -148,7 +154,7 @@
 			<div id = "paintarea" style="padding-top:15px">
 				
 				<!-- Toolbar fixed to LHS-->
-				<div class="toolbar_content" style="position: fixed;top: 12px;">
+				<div class="toolbar_content">
 				
 				<!-- Tool bar Padding, name & Horizontal line (Yasin/3-09-10) -->
 				 <div id="toolbartabs" style="width:70px;margin:0 6px 6px;font-size:9px;">
@@ -185,7 +191,7 @@
 				  
 				  
 <!-- Catalog Add more image(below toolbar)  (yasin/3-09-10)  --> 
-<div class="addmorebutton ui-widget ui-widget-content ui-corner-all" style="position: fixed; top: 700px;"> 
+<div class="addmorebutton ui-widget ui-widget-content ui-corner-all"> 
 	     <div align="center"> 
 		 <img  style="cursor:pointer;" id="showcatalog" src="css/designer/images/draw2d/add-more.png" /></div> 
 </div> 
@@ -343,7 +349,8 @@
 		 <!--    <li><a href="#socialAddons">Social</a><br /></li> 
 		 <li><a href="#urlAddons">URL</a><br /></li> -->
 		<li><a href="#utilitiesAddons">Utilities</a><br /></li> 
-		<li><a href="#developersAddons">Developers</a><br /></li> 
+		<li><a href="#developersAddons">Developers</a><br /></li>
+		<li><a href="#serviceAddons">Service</a><br /></li> 
 	</ul> 
 	
 	<div id="crmAddons"></div> 
@@ -354,7 +361,8 @@
 	 <!--   <div id="socialAddons"></div> 
 	<div id="urlAddons"></div>  -->
 	<div id="utilitiesAddons"></div> 
- 	<div id="developersAddons"></div> 
+ 	<div id="developersAddons"></div>
+ 	<div id="serviceAddons"></div> 
  
  
 </div> 

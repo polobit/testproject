@@ -15,7 +15,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 
     console.log("constructNodeFromDefinition "+nodeId);
 	console.log(nodeJSONDefinition);
-	
+
     // Remove old data
     $("#nodeui").removeData();
     $("#nodeui").empty();
@@ -42,9 +42,10 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     // Change Grid default values in nodeJSONDefinition
     // Clone
     var newJSONDefinition = JSON.parse(JSON.stringify(nodeJSONDefinition));
-    
     if(jsonData != undefined)
 	    newJSONDefinition = changeDefaultValues(newJSONDefinition, jsonData);
+
+	
         
     // Change Grid default values       
     constructUI($("#nodeui"), newJSONDefinition);
@@ -85,14 +86,23 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     // Init tags typeahead for Tags or Check Tags node. Naresh 30/10/2013
     if(nodeJSONDefinition.name === "Tags" || nodeJSONDefinition.name === "Check Tags")
     {
-    	init_tags_typeahead();
+    	init_tags_typeahead("#tag_names, #tag_value", "tags");
     }
     
-    nodeJSONDefinition.parentY = window.parent.scrollY;
+    // Init labels typeahead for labels or Check labels node. Vaishnavi 24/11/15
+    if(nodeJSONDefinition.name === "Labels" || nodeJSONDefinition.name === "Check Labels")
+    {
+    	init_tags_typeahead("#label_names, #label_value", "labels");
+    }
     
     if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
         $("#nodeui").find("[name=to]").val("{{phone}}");
     
+    //for set property node
+    if(nodeJSONDefinition["name"] == "Set Property"){
+    		setPropertyNode(jsonData);
+    }
+
     // Clear Global Operations Queues (for dynamic edit)
     clearGridOperations();
 
@@ -118,6 +128,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
             	
             	// Disables 'text' required property if html is given and text is empty 
             	disable_text_required_property($(this));
+            	
                 
             	var $form = $(this).find('form');
             	
@@ -128,8 +139,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         }
     });
     
-     window.parent.scrollTo(0,0);
-     
+
     if (nodeJSONDefinition.language != undefined) 
     	$("#nodeui .translate").val(nodeJSONDefinition.language);
 
@@ -145,6 +155,17 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 	
 	//.removeClass('ui-button-text-only').addClass('ui-button-text-icon').append("<span class='ui-icon ui-icon-disk'></span>");        
 	
+	// Treat as opened second time, So trigger the events attached to ui
+	// elements
+	$.each(nodeJSONDefinition.ui, function(index, data) {
+		try {
+			if (data.triggerEventOnLoad)
+				window[data.eventHandlerOnLoad]($("*[name='" + data.name + "']"),
+						jsonData);
+		} catch (e) {
+			console.log(e);
+		}
+	});
 }
 
 function loadForwardingEmail(element)
@@ -194,7 +215,7 @@ function saveNode(e) {
         	jsonDefinition = jsonDefinition.org;
         
         // Get Display name
-        var displayName = $("#nodeui").find("[name=nodename]").val();  
+        var displayName = $("#nodeui").find("[name=nodename]").val();
                        
         
         // Get the node id and update the old node id
@@ -203,40 +224,7 @@ function saveNode(e) {
 		// Check if node id is undefined or not 
 		if( nodeId == undefined || nodeId == null ) {
 			// Add designer at given location
-			if(jsonDefinition.x && jsonDefinition.y){
-				jsonDefinition.x += $('#designercontainer').scrollLeft();
-				jsonDefinition.y += $('#designercontainer').scrollTop();
-				window.parent.scrollTo(0,jsonDefinition.parentY);
-				addNode(jsonDefinition, displayName, jsonValues, jsonDefinition.x, jsonDefinition.y);
-			}
-			else{
-					var designer = window.parent.document.getElementById("designer").contentWindow.document.body;
-					var x_coordinate = $('#designercontainer').scrollLeft();
-					var y_coordinate = $('#designercontainer').scrollTop();
-					//var cordinates = (x_coordinate + y_coordinate)/2;
-					//window.parent.scrollTo(0,y_coordinate);
-					//$('#designercontainer').scrollTop(cordinates);  
-					//$(designer).find('#designercontainer').scrollLeft(cordinates);
-					var a = window.parent.document.getElementById("designer").contentWindow.document.body;
-					if($(a).find("#addontabs").attr("data")){
-						window.parent.scrollTo(0,$(a).find("#addontabs").attr("data")); 
-						y_coordinate += 300; 
-						//jsonDefinition.parentY = $(a).find("#addontabs").attr("data");
-					}
-					else
-					window.parent.scrollTo(0,jsonDefinition.parentY);
-					
-					
-					if(jsonDefinition.parentY==0)
-						jsonDefinition.parentY=250;
-					
-					if(jsonDefinition.parentX==0)
-						jsonDefinition.parentX=250;
-					if(x_coordinate !=undefined && y_coordinate  !=undefined )
-						addNode(jsonDefinition, displayName, jsonValues, x_coordinate+250,y_coordinate+jsonDefinition.parentY);
-					else
-						addNode(jsonDefinition, displayName, jsonValues, 200, 200);
-				}
+			addNode(jsonDefinition, displayName, jsonValues, 200, 200);
 		}
 		else {					
 	
@@ -254,15 +242,16 @@ function saveNode(e) {
 			  	// Connects to older ports automatically
 			  	if( nodeObject.isDynamicPorts == "yes" )
 			  	{
-					editDynamicNode(nodeObject);
-					
+			  		if(nodeObject.name == NODES_CONSTANTS.TERRITORY)
+			  			update_location_ports(nodeObject, jsonValues);
+			  		else
+						editDynamicNode(nodeObject);
 				}	  
 			  				  	
 		}
 		
 		
-		
-		 templateContinue(nodeId);
+		 //templateContinue(nodeId);
 		 
 		 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
 		 
@@ -322,8 +311,16 @@ function serializeTable(selector, jsonValues)
 		$(eachTR).find("td").each(function (index, eachTD) {
 		
 		 	// Index 0 is edit, delete
-			if(index != 0)
-				eachRowJSON[keys[index]] = $(eachTD).text();
+			if(index != 0){
+
+				if($(eachTD).find('select').length > 0)
+                    eachRowJSON[keys[index]] = $(eachTD).find('select option:selected').val();
+                else if($(eachTD).find('input').length > 0)
+                	eachRowJSON[keys[index]] = $(eachTD).find('input').val();
+                else
+					eachRowJSON[keys[index]] = $(eachTD).text();
+			}
+
 			
 	  });
 		 gridJSONObject.push(eachRowJSON);
@@ -442,3 +439,34 @@ function setCheckboxValueIntoJSONArray(jsonArray, key, value) {
 
 }
 */
+
+
+/**Updates Branches for Zones**/
+function update_location_ports(nodeObject, jsonValues)
+{
+
+	var formValues = jsonValues[1][NODES_CONSTANTS.TERRITORIES];
+  	var formValuesJson  = {};
+
+  	// Converts array to json
+  	for(var i=0;i<formValues.length;i++)
+  		formValuesJson[formValues[i]["dynamicgrid"]] = true;
+
+	// array of ports
+	var ports = getPorts(nodeObject);
+
+	$.each(formValuesJson, function(key, value){
+
+		// If key doesn't exists in ports, add new port
+		if(ports.indexOf(key) == -1)
+			addPort(key, nodeObject);
+		else
+			editPort(nodeObject, ports.indexOf(key), key);
+
+		alignDynamicNodePorts(nodeObject);
+
+		// Draw2D (based on the ports)
+		nodeObject.allignDynamicNode();
+		
+	});
+}

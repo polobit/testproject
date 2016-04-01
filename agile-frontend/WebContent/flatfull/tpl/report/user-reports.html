@@ -79,3 +79,54 @@
    </div>
 </div>
 </script>
+
+<script id="report-comparison-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+                     
+             <div style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
+			border:1px solid #cfdadd;height:34px;padding:5px;" class="pull-right test-class" id="reportrange">
+                <i class="icon-calendar icon-large"></i>
+                <span id="range">{{date-range "today" "-6"}}</span>
+              </div>
+
+			<div class="pull-right" style="padding:0px 8px 10px">
+				<select name="pipeline_track" id="pipeline_track" class="required form-control">
+					<option value="">Select</option>
+                </select>
+			</div>
+			<div class="col-md-4 col-sm-6" style="padding-left:0px;">
+            <h3 class="font-thin h3">Comparison Reports
+            </h3>
+			
+			</div>
+   				<div id="plan-limit-error" class="pull-left" style="padding: 5px 15px 0px;display:none"></div> 
+        </div>
+
+</div>
+</div>
+<div>	
+	<!-- Growth Reports -->
+	<div id="email-reports" class="wrapper-md">	
+		<div class="row">
+			<div class="col-md-12">
+{{#hasMenuScope 'DEALS'}}
+
+				<div id="comparison-chart" class="panel">
+</div>
+{{else}}
+<div style="height:400px;">
+<div class='portlet-error-message' style="padding-top: 50%;font-size: 14px;font-style: normal"><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>
+</div>
+
+{{/hasMenuScope}}
+
+</div>
+			</div>
+
+			</div>
+	</div>
+	</div>
+	</script>

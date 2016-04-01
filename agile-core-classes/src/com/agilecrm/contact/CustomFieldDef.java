@@ -1,9 +1,16 @@
 package com.agilecrm.contact;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import net.sf.json.JSONObject;
+
+import com.agilecrm.contact.exception.DuplicateCustomFieldException;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.util.ContactViewPrefsUtil;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -39,7 +46,7 @@ public class CustomFieldDef
      */
     public enum Type
     {
-	TEXT, DATE, LIST, CHECKBOX, TEXTAREA, NUMBER, FORMULA
+	TEXT, DATE, LIST, CHECKBOX, TEXTAREA, NUMBER, FORMULA, CONTACT, COMPANY
     };
 
     /**
@@ -72,6 +79,12 @@ public class CustomFieldDef
      * Searches the respective entity, if the field is searchable
      */
     public boolean searchable = false;
+
+    /**
+     * Search key. To keep track of what is saved in text search
+     */
+    @NotSaved
+    public String search_key;
 
     /**
      * Specifies the scope of the custom field should be added
@@ -142,15 +155,47 @@ public class CustomFieldDef
 	    // Fetches all custom fields to check label duplicates
 	    for (CustomFieldDef customField : dao.fetchAll())
 	    {
+	    
+    	if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id
+    			&& customField.scope != this.scope && customField.field_type != this.field_type)
+		{
+    		throw new DuplicateCustomFieldException(customField.field_type.toString());
+		}
 
 		if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id
 			&& customField.scope == this.scope)
 		{
-		    throw new Exception();
+			throw new DuplicateCustomFieldException("Sorry, a custom field with that name is already present.");
 		}
 	    }
+	else 
+	{
+		for (CustomFieldDef customField : dao.fetchAll())
+	    {
+	    
+    	if (customField.field_label.equalsIgnoreCase(this.field_label) 
+    			&& customField.scope != this.scope && customField.field_type != this.field_type)
+		{
+    		throw new DuplicateCustomFieldException(customField.field_type.toString());
+		}
+    	
+	    }
+	}
 
 	dao.put(this);
+    }
+
+    @PostLoad
+    public void postLoad()
+    {
+	if (searchable)
+	{
+	    search_key = SearchUtil.normalizeTextSearchString(field_label);
+	    if (field_type == Type.DATE)
+		search_key += "_time_epoch";
+	    else if (field_type == Type.NUMBER)
+		search_key += "_number";
+	}
     }
 
     /**

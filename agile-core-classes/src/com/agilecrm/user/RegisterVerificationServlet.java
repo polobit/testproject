@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.analytics.servlets.AnalyticsServlet;
@@ -43,7 +44,8 @@ public class RegisterVerificationServlet extends HttpServlet
     {
 	IPlIST.add("49.206.56.84");
 	IPlIST.add("117.247.178.90");
-
+	IPlIST.add("183.83.0.113");
+	IPlIST.add("117.247.109.22");
     }
 
     /**
@@ -101,7 +103,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	}
 	System.out.println("domain : " + domain + ", email" + email);
 
-	if (!StringUtils.isEmpty(domain) && DomainUserUtil.count(domain) > 0)
+	if (!StringUtils.isEmpty(domain) && (DomainUserUtil.count(domain) > 0 || AliasDomainUtil.checkForAlias(domain)))
 	{
 	    System.out.println("duplicate domain");
 
@@ -112,44 +114,17 @@ public class RegisterVerificationServlet extends HttpServlet
 		    + ".agilecrm.com/login" + "'>here</a>.");
 	    return;
 	}
-
-	else if (!StringUtils.isEmpty(email))
+	try 
 	{
-		String emailDomainSubstring = "";
-		try {
-			emailDomainSubstring = email.split("@")[1];
-		} catch (Exception e) {
-		}
-		
-	    // String emailDomainSubstring = email.split("@")[1];
-	    System.out.println(emailDomainSubstring);
-	    if (StringUtils.isEmpty(emailDomainSubstring))
-	    {
-		writeErrorMessage(response, "Agile CRM needs your business email to signup");
+		validateEmailIdWhileRegister(request,response);
+	} 
+	catch (Exception e)
+	{
+		e.printStackTrace();
+		writeErrorMessage(response, e.getMessage());
 		return;
-	    }
-
-	    String emailDomain = emailDomainSubstring.split("\\.")[0];
-
-	    if (!StringUtils.isEmpty(emailDomain))
-	    {
-		if (invalid_domains.contains(emailDomain.toLowerCase())
-			|| invalid_domains.contains(emailDomainSubstring))
-		{
-		    writeErrorMessage(response, "Agile CRM needs your business email to signup");
-		    return;
-		}
-	    }
-	    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-	    if (domainUser != null)
-	    {
-
-		writeErrorMessage(response, "User with same email address already exists in our system for "
-			+ domainUser.domain + " domain");
-		return;
-	    }
 	}
-
+	
 	if (!StringUtils.isEmpty(oauth))
 	    return;
 
@@ -202,8 +177,51 @@ public class RegisterVerificationServlet extends HttpServlet
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	
 
     }
+    
+    public void  validateEmailIdWhileRegister(HttpServletRequest request, HttpServletResponse response)throws Exception 
+    {
+    	String email = request.getParameter("email");
+
+    	System.out.println("Email = " + email);
+    	
+    	if (StringUtils.isEmpty(email))
+    		throw new Exception("Email should not be empty");
+    	
+    	String emailDomainSubstring = "";
+		try {
+			emailDomainSubstring = email.split("@")[1];
+		} 
+		catch (Exception e) 
+		{
+		}
+		
+		System.out.println(emailDomainSubstring);
+		
+		if (StringUtils.isEmpty(emailDomainSubstring)) 		
+			throw new Exception("Agile CRM needs your business email to signup");
+		
+		String emailDomain = emailDomainSubstring.split("\\.")[0];
+	    if (StringUtils.isEmpty(emailDomain))
+				throw new Exception("Agile CRM needs your business email to signup");
+	    
+		if (invalid_domains.contains(emailDomain.toLowerCase())
+			|| invalid_domains.contains(emailDomainSubstring))
+			throw new Exception("Agile CRM needs your business email to signup");
+		
+		
+		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+	    if (domainUser == null)
+	    	 return;
+	    
+		throw new Exception("User with same email address already exists in our system for "
+			+ domainUser.domain + " domain");
+		
+    	
+     }
+    
 
     public static void storeIpInMemcache(HttpServletRequest request, String domain)
     {

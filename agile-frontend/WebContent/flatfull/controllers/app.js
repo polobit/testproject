@@ -39,8 +39,10 @@ $(function()
 	App_FacebookPageTabRouter = new FacebookPageTabRouter();
 	App_Companies = new CompaniesRouter();
 	App_Datasync = new DataSyncRouter();
+	App_Ticket_Module = new TicketsUtilRouter();
 	App_LandingPageRouter = new LandingPageRouter();
 	App_Dashboards = new DashboardsRouter();
+	App_EmailBuilderRouter = new EmailBuilderRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
@@ -66,6 +68,8 @@ var Current_Route;
  */
 function currentRoute(route)
 {
+	endFunctionTimer("startbackbone");
+	
 	Current_Route = window.location.hash.split("#")[1];
 	
 	if(SCROLL_POSITION)
@@ -91,13 +95,49 @@ function currentRoute(route)
 	// disposeEvents();
 
 	// load_clickdesk_code();
+	try{
+		showPageBlockModal();
+	}catch(e){
+	}
+	
 	 showUpgradeNoty();
 
 	 // Check the user permission to view the current route.
 	 if(CURRENT_DOMAIN_USER)
 		 tight_acl.init_permissions();
+
+		//removing_fullscreen();
+
 }
 
+
+
+/*
+checking the current path for the contacts
+*/
+/*
+function removing_fullscreen()
+{
+
+    var fullscreenhideRoutes = ["contacts", "deals", "workflows"];
+    var hideFullScreen = false;
+    for(var i=0;i <fullscreenhideRoutes.length; i++){
+    	if(Current_Route == undefined) {
+    		$("#content").removeClass("fullscreenwidjet");
+			$("#aside").removeClass("hide");
+		}
+         else if (Current_Route.indexOf(fullscreenhideRoutes[i]) == 0){
+           		return;
+    }
+    else  {
+    $("#content").removeClass("fullscreenwidjet");
+	$("#aside").removeClass("hide");
+	}
+	}
+
+    
+ }
+ */
 /**
  * Clickdesk Widget
  */

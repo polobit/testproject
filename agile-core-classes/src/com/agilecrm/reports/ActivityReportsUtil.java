@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -25,7 +26,9 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.reports.ActivityReports.ActivityType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -36,7 +39,6 @@ import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import javax.ws.rs.core.Response;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -160,7 +162,7 @@ public class ActivityReportsUtil
 		// Check for the entities/activities selected by the user for
 		// activity report.
 		if (activities.contains(ActivityReports.ActivityType.DEAL)
-		        && user.menu_scopes.contains(NavbarConstants.DEALS))
+			&& user.menu_scopes.contains(NavbarConstants.DEALS))
 		{
 		    activityReport.put("deals",
 			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
@@ -252,7 +254,7 @@ public class ActivityReportsUtil
 	// Get all the activities of the user on deals. Instead of getting by
 	// activity type. This will reduce the DB calls.
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.DEAL.toString(),
-	        null, null, startTime, endTime, 0, null);
+		null, null, startTime, endTime, 0, null);
 
 	UserPrefs pref = null;
 	try
@@ -301,8 +303,8 @@ public class ActivityReportsUtil
 	activityTypeList.add(Activity.ActivityType.DEAL_OWNER_CHANGE.toString());
 
 	activities = dao.ofy().query(Activity.class).filter("entity_type = ", Activity.EntityType.DEAL.toString())
-	        .filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
-	        .filter("time <= ", endTime).list();
+		.filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
+		.filter("time <= ", endTime).order("-time").list();
 
 	for (Activity act : activities)
 	{
@@ -343,10 +345,13 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsWon)
 	    {
 		wonValue += deal.expected_value;
+		
+		Milestone pipeline = OpportunityUtil.getOpportunityPipeline(deal);
+		String pipeLineName = (pipeline != null) ? pipeline.name : "";
 
 		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
-		if (!deal.getPipeline().name.equals("Default"))
-		    summary += ", " + deal.getPipeline().name;
+		if (!pipeLineName.equals("Default"))
+		    summary += ", " + pipeLineName;
 		summary += ")";
 		wonActivities.get(deal.id).custom4 = summary;
 		wonCount++;
@@ -354,9 +359,13 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsLost)
 	    {
 		lostValue += deal.expected_value;
+		
+		Milestone pipeline = OpportunityUtil.getOpportunityPipeline(deal);
+		String pipeLineName = (pipeline != null) ? pipeline.name : "";
+		
 		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
-		if (!deal.getPipeline().name.equals("Default"))
-		    summary += ", " + deal.getPipeline().name;
+		if (!pipeLineName.equals("Default"))
+		    summary += ", " + pipeLineName;
 		summary += ")";
 		lostActivities.get(deal.id).custom4 = summary;
 		lostCount++;
@@ -365,9 +374,13 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsCreated)
 	    {
 		newValue += deal.expected_value;
+		
+		Milestone pipeline = OpportunityUtil.getOpportunityPipeline(deal);
+		String pipeLineName = (pipeline != null) ? pipeline.name : "";
+		
 		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
-		if (!deal.getPipeline().name.equals("Default"))
-		    summary += ", " + deal.getPipeline().name;
+		if (!pipeLineName.equals("Default"))
+		    summary += ", " + pipeLineName;
 		summary += ")";
 		newDealActivities.get(deal.id).custom4 = summary;
 		newCount++;
@@ -376,10 +389,14 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsMileChange)
 	    {
 		mileValue += deal.expected_value;
+		
+		Milestone pipeline = OpportunityUtil.getOpportunityPipeline(deal);
+		String pipeLineName = (pipeline != null) ? pipeline.name : "";
+		
 		String summary = "(" + currency + " " + formatter.format(deal.expected_value) + ", " + deal.probability
-		        + "%";
-		if (!deal.getPipeline().name.equals("Default"))
-		    summary += ", " + deal.getPipeline().name;
+			+ "%";
+		if (!pipeLineName.equals("Default"))
+		    summary += ", " + pipeLineName;
 		summary += ")";
 		mileChangeActivities.get(deal.id).custom4 = summary;
 		mileCount++;
@@ -454,7 +471,7 @@ public class ActivityReportsUtil
 
 	// Get all the activities on the user performed on the events.
 	List<Activity> eventActivity = ActivityUtil.getActivitiesByFilter(user.id,
-	        Activity.EntityType.EVENT.toString(), null, null, startTime, endTime, 0, null);
+		Activity.EntityType.EVENT.toString(), null, null, startTime, endTime, 0, null);
 
 	List<Key<Event>> addEvent = new ArrayList<Key<Event>>();
 
@@ -470,15 +487,15 @@ public class ActivityReportsUtil
 		    && activity.custom3.indexOf("start_date") > 0)
 	    {
 		List<String> fields = Arrays.asList(activity.custom3.substring(1, activity.custom3.length() - 1).split(
-		        ","));
+			","));
 		List<String> newFieldValues = Arrays.asList(activity.custom2
-		        .substring(1, activity.custom2.length() - 1).split(","));
+			.substring(1, activity.custom2.length() - 1).split(","));
 		List<String> oldFieldValues = Arrays.asList(activity.custom1
-		        .substring(1, activity.custom1.length() - 1).split(","));
+			.substring(1, activity.custom1.length() - 1).split(","));
 		int index = fields.indexOf("start_date");
 		activity.custom4 = "'" + activity.label + "'  rescheduled from " + oldFieldValues.get(index)
-		        + oldFieldValues.get(index + 1) + " to " + newFieldValues.get(index)
-		        + newFieldValues.get(index + 1);
+			+ oldFieldValues.get(index + 1) + " to " + newFieldValues.get(index)
+			+ newFieldValues.get(index + 1);
 		eventMovedActivity.add(activity);
 
 	    }
@@ -557,7 +574,7 @@ public class ActivityReportsUtil
 	// Get all the activities of the user on tasks. Instead of getting by
 	// activity type. This will reduce the DB calls.
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.TASK.toString(),
-	        null, null, startTime, endTime, 0, null);
+		null, null, startTime, endTime, 0, null);
 	// Separate activities based on the activity types.
 	for (Activity act : activities)
 	{
@@ -580,8 +597,8 @@ public class ActivityReportsUtil
 	activityTypeList.add(Activity.ActivityType.TASK_OWNER_CHANGE.toString());
 
 	activities = dao.ofy().query(Activity.class).filter("entity_type = ", Activity.EntityType.TASK.toString())
-	        .filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
-	        .filter("time <= ", endTime).list();
+		.filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
+		.filter("time <= ", endTime).order("-time").list();
 
 	for (Activity act : activities)
 	{
@@ -651,9 +668,9 @@ public class ActivityReportsUtil
 	activityTypeList.add(Activity.ActivityType.BULK_ACTION.toString());
 
 	List<Activity> activities = dao.ofy().query(Activity.class)
-	        .filter("user", new Key<DomainUser>(DomainUser.class, user.id))
-	        .filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
-	        .filter("time <= ", endTime).list();
+		.filter("user", new Key<DomainUser>(DomainUser.class, user.id))
+		.filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
+		.filter("time <= ", endTime).order("-time").list();
 
 	int emailsCount = 0;
 	List<Activity> emailActivity = new ArrayList<Activity>();
@@ -666,7 +683,7 @@ public class ActivityReportsUtil
 		// Prepare the summary to show in the email, as it is not
 		// possible to format in the template.
 		activity.label = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
-		        + "\">" + activity.label + "</a>";
+			+ "\">" + activity.label + "</a>";
 		emailActivity.add(activity);
 	    }
 	    else if (activity.activity_type == Activity.ActivityType.BULK_ACTION
@@ -723,7 +740,7 @@ public class ActivityReportsUtil
     {
 
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.CONTACT.toString(),
-	        Activity.ActivityType.NOTE_ADD.toString(), null, startTime, endTime, 0, null);
+		Activity.ActivityType.NOTE_ADD.toString(), null, startTime, endTime, 0, null);
 	List<Activity> noteActivities = new ArrayList<Activity>();
 	for (Activity activity : activities)
 	{
@@ -737,7 +754,7 @@ public class ActivityReportsUtil
 
 	    if (!StringUtils.isEmpty(name))
 		result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + contact.id
-		        + "\" target=\"_blank\">" + name + "</a>";
+			+ "\" target=\"_blank\">" + name + "</a>";
 
 	    activity.custom4 = result;
 	    noteActivities.add(activity);
@@ -777,8 +794,8 @@ public class ActivityReportsUtil
     public static Map<String, Object> getDocumentsActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id,
-	        Activity.EntityType.DOCUMENT.toString(), Activity.ActivityType.DOCUMENT_ADD.toString(), null,
-	        startTime, endTime, 0, null);
+		Activity.EntityType.DOCUMENT.toString(), Activity.ActivityType.DOCUMENT_ADD.toString(), null,
+		startTime, endTime, 0, null);
 	for (Activity act : activities)
 	{
 	    act.custom4 = getActivityRelateContacts(act, user.domain, " related to ");
@@ -819,7 +836,7 @@ public class ActivityReportsUtil
     public static Map<String, Object> getCallActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, null,
-	        Activity.ActivityType.CALL.toString(), null, startTime, endTime, 0, null);
+		Activity.ActivityType.CALL.toString(), null, startTime, endTime, 0, null);
 
 	List<Activity> doneCallActivities = new ArrayList<Activity>();
 	List<Activity> noAnsCallActivities = new ArrayList<Activity>();
@@ -837,7 +854,7 @@ public class ActivityReportsUtil
 
 	    if (activity.entity_id != null)
 		link = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
-		        + "\" target=\"_blank\">" + activity.label + "</a>";
+			+ "\" target=\"_blank\">" + activity.label + "</a>";
 	    else
 		link = activity.label;
 
@@ -1034,9 +1051,10 @@ public class ActivityReportsUtil
 	Long recordsCount = (Long) reports.get("all_reports_count");
 	System.out.println("Total records count = " + recordsCount);
 	// Send reports email only if it has records.
-	if (recordsCount != null && recordsCount > 0){
+	if (recordsCount != null && recordsCount > 0)
+	{
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
-	    		reports);
+		    reports);
 	    return;
 	}
 	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -1239,7 +1257,7 @@ public class ActivityReportsUtil
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, min);
 		System.out.println("time for monthly current time greater than first one " + cal.getTimeInMillis()
-		        / 1000);
+			/ 1000);
 		return cal.getTimeInMillis() / 1000;
 	    }
 	    System.out.println(time_based_on_setting + " -------------------Time for monthly  "

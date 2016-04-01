@@ -10,9 +10,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -177,22 +182,15 @@ public class Event extends Cursor
      * @return List of contact objects
      */
     @XmlElement
-    public List<Contact> getContacts()
+    public List<ContactPartial> getContacts()
     {
-	return Contact.dao.fetchAllByKeys(this.related_contacts);
+	// return Contact.dao.fetchAllByKeys(this.related_contacts);
+    return ContactUtil.getPartialContacts(this.related_contacts);
     }
-
-    /**
-     * Returns list of contacts related to task.
-     * 
-     * @param id
-     *            - Event Id.
-     * @return list of Contacts
-     */
-    public List<Contact> getContacts(Long id)
+    
+    public List<Contact> relatedContacts()
     {
-	Event event = EventUtil.getEvent(id);
-	return event.getContacts();
+    	return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
     /**
@@ -211,7 +209,7 @@ public class Event extends Cursor
     /**
      * Range object for doing two inequality queries
      */
-    List<Long> search_range = null;
+    public List<Long> search_range = null;
 
     /******************************** New Field ********************/
     /**
@@ -262,13 +260,33 @@ public class Event extends Cursor
     }
 
     @XmlElement(name = "eventOwner")
-    public DomainUser getOwner() throws Exception
+    public DomainUserPartial getOwner() throws Exception
     {
 	if (owner != null)
 	{
 	    try
 	    {
 		AgileUser agileuser = AgileUser.getCurrentAgileUser(owner.getId());
+		
+		// Gets Domain User Object
+		return DomainUserUtil.getPartialDomainUser(agileuser.domain_user_id);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
+    
+    public DomainUser eventOwner() throws Exception
+    {
+	if (owner != null)
+	{
+	    try
+	    {
+		AgileUser agileuser = AgileUser.getCurrentAgileUser(owner.getId());
+		
 		// Gets Domain User Object
 		return DomainUserUtil.getDomainUser(agileuser.domain_user_id);
 	    }
@@ -373,42 +391,6 @@ public class Event extends Cursor
     }
 
     /**
-     * Gets picture of owner who created event. Owner picture is retrieved from
-     * user prefs of domain user who created event and is used to display owner
-     * picture in deals list.
-     * 
-     * @return picture of owner.
-     * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key.
-     */
-    @XmlElement(name = "ownerPic")
-    public String getOwnerPic() throws Exception
-    {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    if (owner != null)
-		agileuser = AgileUser.getUser(owner);
-
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-
-	    if (userprefs != null)
-		return userprefs.pic;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-
-	}
-
-	return "";
-    }
-
-    /**
      * gets the owner based along with event entity
      * 
      * @param event1
@@ -478,9 +460,10 @@ public class Event extends Cursor
      * @return List of deal objects
      */
     @XmlElement
-    public List<Opportunity> getDeals()
+    public List<OpportunityPartial> getDeals()
     {
-	return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    	return OpportunityUtil.getPartialOpportunities(this.related_deals);
+    	// return Opportunity.dao.fetchAllByKeys(this.related_deals);
     }
 
     /**

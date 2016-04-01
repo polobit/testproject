@@ -14,7 +14,7 @@
                     {{/hasMenuScope}}
 					<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="btn btn-default btn-sm add-document-select m-t-xs"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
 						<span class="contact-document-select upload-doc-field" style="display:none;">
-							<select id="document-select" class="form-control inline-block">
+							<select id="document-select" class="form-control inline-block w">
 								<option value="">Select...</option>
 							</select>
  					<div class="m-t-sm">
@@ -48,7 +48,7 @@
 		</div>-->
 		<div>{{#hasMenuScope 'DOCUMENT'}}<a href="#" class="add-document-select btn btn-default btn-sm btn-addon"><i class='icon-plus-sign'/></i> Add Document</a>{{/hasMenuScope}}
 			<span class="contact-document-select upload-doc-field" style="display:none;">
-				<select id="document-select" class="form-control inline-block m-r-sm p-t-xs w-xl"> 
+				<select id="document-select" class="form-control inline-block m-r-sm p-t-xs w"> 
 					<option value="">Select...</option>
 				</select>
 				<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -67,15 +67,15 @@
 <div class="activity block pos-rlt">
 	
 	<div class="activity-block-owner  thumb-xs pull-left m-r-sm avatar">
-		{{#if ownerPic}}
-			<img class="user-img r r-2x"  alt="" src="{{ownerPic}}" >
+		{{#if owner.pic}}
+			<img class="user-img r r-2x"  alt="" src="{{owner.pic}}" >
 		{{else}}
 			<img class="user-img r r-2x"  src="{{defaultGravatarurl 40}}">
 		{{/if}}
 		<span class="owner-name hide">{{owner.name}}</span>
 	</div>
 	<div class="pull-left rightThumbView">
-	<div class="document-title text-md text-cap pull-left contact-title-dynamic custom-color">{{name}}</div>
+	<div class="document-title text-md text-cap pull-left contact-title-dynamic custom-color text-ellipsis">{{name}}</div>
 	<div class="pull-right">	
 		 <small class="edit-hover text-muted"> 
 		 <i class="fa fa-clock-o m-r-xs"></i>
@@ -95,16 +95,21 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+							<a href="#contact/{{id}}" class="text-capitalize">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        					<a href="#company/{{id}}" class="text-capitalize">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
            	{{/if}}
        	{{/each}}
-		{{{getDealNames deals}}}
+
+       	{{#each deals}}
+       	    {{#isCurrentDeal this.id}} {{else}}
+                <a href="#deal/{{this.id}}">{{this.name}}</a>{{#if @last}}{{else}},{{/if}}
+       	    {{/isCurrentDeal}}
+       	{{/each}}
 		</div>
 	
 		

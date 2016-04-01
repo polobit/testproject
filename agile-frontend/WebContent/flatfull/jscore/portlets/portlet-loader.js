@@ -3,15 +3,9 @@ var Portlets_View, gridster;
 /** If CURRENT_AGILE_USER is not set, set it from user.domain **/
 $(function()
 {
-	$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/current-agile-user', function(user)
 	{
-		$.each(users, function(i, user)
-		{
-			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-			{
-				CURRENT_AGILE_USER = user;
-			}
-		});
+		CURRENT_AGILE_USER = user;
 	});
 });
 
@@ -38,24 +32,27 @@ function loadPortlets(route,el){
 	App_Portlets.dealGoals=new Array();
 	App_Portlets.adminPortlets = new Array();
 	App_Portlets.RoutePortlets=new Array();
-	App_Portlets.DashboardPortlets=new Array();
-
+	App_Portlets.taskAverage = new Array();
+	if(Portlets_View!=undefined)
+	console.log("before initialized" +route+ Portlets_View.collection.length);
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
 	 */
+	$('#portlets', el).html(getRandomLoadingImg());
 	
 	// This flag is used to ensure portlet script are loaded only once in
 	// postrender. It is set to false after portlet setup is initialized
 	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
-			if(route!='DashBoard' && isNaN(route))
+			if(route!='DashBoard' && Portlets_View.collection.length!=0 && !$('.route_Portlet').is(':visible') && isNaN(route))
 			{
-				if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
-				$('#no-portlets').parents('.wrapper-md').hide();
+				/*if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
+				$('#no-portlets').parents('.wrapper-md').hide();*/
+				$('#portlets').parents('.route_Portlet').show();
 			}
 			set_up_portlets(el, portlets_el);
-				if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0){
+				//if(route!='DashBoard' && App_Portlets.RoutePortlets.length!=0){
 					var models = [];
 					$.each( App_Portlets.RoutePortlets, function(index,model) {
 
@@ -89,7 +86,7 @@ function loadPortlets(route,el){
 				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 					
-				}
+				//}
 
 				if(route!='DashBoard' && App_Portlets.DashboardPortlets.length!=0){
 					var models = [];
@@ -208,6 +205,7 @@ function loadPortlets(route,el){
  */
 function set_up_portlets(el, portlets_el){
 
+	$('.gridster > div:visible',portlets_el);
 	var dimensions;
 	var dim_width = Math.round($('.gridster-portlets').width()/3)-20;
 	var dim_height = 200;
@@ -329,7 +327,7 @@ function set_up_portlets(el, portlets_el){
 						var css = {"height" : height+"px", "max-height" : height+"px"};
 
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css(css);
-						$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(el));	
+						$('#calendar_container',$(el)).fullCalendar('option','aspectRatio',getaspectratio(el));	
 						
 						var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
 						$(el).find('.fc-day-number').css('top',top);
@@ -399,8 +397,9 @@ function set_up_portlets(el, portlets_el){
     		{
     			$('.portlet_body_calendar').each(function(){
 					var that=$(this);
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
 				});
     		}
     	}
@@ -415,8 +414,9 @@ function set_up_portlets(el, portlets_el){
 		{
 				$('.portlet_body_calendar').each(function(){
 					var that=$(this);
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
 				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){
 				$(this).text($(this).text().substring(0, 1));
 				});
@@ -427,13 +427,21 @@ function set_up_portlets(el, portlets_el){
 				$('.portlet_body_calendar').each(function()
 				{
 					var that=$(this);
-					if($("#calendar_container").find('.fc-widget-header').length!=0)
-					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($("#calendar_container",that).find('.fc-widget-header').length!=0)
+					$('#calendar_container',that).fullCalendar('option','aspectRatio',getaspectratio(that));
+					if($(el).find('#calendar_container').width()<185)
+		            		   {
+		            		   		$(el).find("#calendar_container").find(".fc-widget-header").each(function() {
+                 					   $(this).text($(this).text().substring(0, 1))
+              					  });
+		            		   }
+		            		   else{
 					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{
 						$(this).text(weeksArray[index]);
 					});
+				}
 				});
 		}
     });
@@ -441,13 +449,14 @@ function set_up_portlets(el, portlets_el){
     if($(window).width()<768 && gridster!=undefined){
 		gridster.disable();
 		gridster.disable_resize();
+		 $(".gridster-portlets").css("height", "auto");
 	}
 	else if(gridster!=undefined){
 		gridster.enable();
 		gridster.enable_resize();
 	}
 
-    $(window).trigger('resize');
+   // $(window).trigger('resize');
 
     //return callback();
 }
@@ -525,19 +534,39 @@ function gravatarImgForPortlets(width){
 
 /** Loading google events for Events Portet**/
 function loadGoogleEventsForPortlets(p_el,startTime,endTime){
-	$.getJSON('core/api/calendar-prefs/get', function(response)
+	$.getJSON('core/api/calendar-prefs/type/GOOGLE', function(response)
 	{
-		var events = new Array();
+
 		console.log(response);
 		if (response)
 		{
 
-		head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
-		{
-			setupGC(function()
+			if(typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar)) 
 			{
+				googledataforEvents(p_el,response,startTime,endTime);
+				return;
+			}	
+		_load_gapi(function(){
 
-				gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+				googledataforEvents(p_el,response,startTime,endTime);
+
+			});
+		}
+		else{
+			setTimeout(function(){
+				if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
+				{
+					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
+				}
+			},1000);
+		}
+	});
+}
+
+function googledataforEvents(p_el,response,startTime,endTime)
+{
+			var events = new Array();
+	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 				var current_date = new Date();
 				var timezone_offset = current_date.getTimezoneOffset();
@@ -586,17 +615,4 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 						}
 						hideTransitionBar();
 					});
-
-				});
-			});
-		}
-		else{
-			setTimeout(function(){
-				if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
-				{
-					$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
-				}
-			},1000);
-		}
-	});
 }

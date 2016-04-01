@@ -1,7 +1,9 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,8 +46,16 @@ public class GoogleCalendarUtil
 		List<List<Long>> filledSlots = new ArrayList<List<Long>>();
 
 		// Current user calendar prefs
-		GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(
+//		GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(
+//				DomainUser.class, userid));
+		
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		queryMap.put("domainUserKey", new Key<DomainUser>(
 				DomainUser.class, userid));
+		queryMap.put("calendar_type", GoogleCalenderPrefs.CALENDAR_TYPE.GOOGLE);
+		
+		GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty(queryMap);
+		
 		System.out.println(prefs);
 
 		// If google calendar sync with Agile Calendar then Get calendar
@@ -57,14 +67,30 @@ public class GoogleCalendarUtil
 			{
 				// Refresh google token
 				prefs.refreshToken();
-
-				// Get primary calendar's email id
-				String pCalId = getPrimaryCaledarId(prefs);
+				
+				JSONArray calenderIds = null;	
+				boolean hasCalenders = false;
+				
+				if( prefs.prefs != null){
+					JSONObject calenderObj = new JSONObject( prefs.prefs);
+					if(calenderObj.get("fields") != null){
+						hasCalenders = true;
+						calenderIds = new JSONArray(calenderObj.get("fields").toString());
+					}
+				}
+				
+				if(!hasCalenders){
+					// Get primary calendar's email id
+					String pCalId = getPrimaryCaledarId(prefs);
+					calenderIds = new JSONArray();
+					calenderIds.put(pCalId);
+				}
+				
 
 				System.out.println("check for " + startTime + " " + endTime);
 
 				// Get events from primary calendar of google on selected date
-				String googleEvents = getPrimaryCalendar(startTime, endTime, prefs, timezone, timezoneName, pCalId);
+				String googleEvents = getAllCalendarEvents(startTime, endTime, prefs, timezone, timezoneName, calenderIds);
 
 				System.out.println(googleEvents);
 
@@ -73,37 +99,41 @@ public class GoogleCalendarUtil
 
 				// google calendars
 				JSONObject calendars = (JSONObject) joGoogleEvents.get("calendars");
+				
+				
+				for (int j = 0; j < calenderIds.length(); j++) {
+					String gCalenderId = calenderIds.getString(j);
+					// If calendars has primary calendar which is sync
+					if (calendars.has(gCalenderId)){
+						
+						// Get primary calendar
+						JSONObject accCalendar = (JSONObject) calendars.get(gCalenderId);
 
-				// If calendars has primary calendar which is sync
-				if (calendars.has(pCalId))
-				{
-					// Get primary calendar
-					JSONObject accCalendar = (JSONObject) calendars.get(pCalId);
+						// Get busy slots
+						JSONArray busyArray = new JSONArray(accCalendar.get("busy").toString());
+						for (int i = 0; i < busyArray.length(); i++){
+							// Get start and end of busy slot
+							String start1 = busyArray.getJSONObject(i).getString("start");
+							String end1 = busyArray.getJSONObject(i).getString("end");
 
-					// Get busy slots
-					JSONArray busyArray = new JSONArray(accCalendar.get("busy").toString());
-					for (int i = 0; i < busyArray.length(); i++)
-					{
-						// Get start and end of busy slot
-						String start1 = busyArray.getJSONObject(i).getString("start");
-						String end1 = busyArray.getJSONObject(i).getString("end");
+							System.out.println(start1 + " " + end1);
 
-						System.out.println(start1 + " " + end1);
+							// Get time from busy slot's datetime
+							new DateTime();
+							DateTime s1 = DateTime.parseDateTime(start1);
+							DateTime e1 = DateTime.parseDateTime(end1);
+							System.out.println(s1.getValue() / 1000 + " " + e1.getValue() / 1000);
 
-						// Get time from busy slot's datetime
-						new DateTime();
-						DateTime s1 = DateTime.parseDateTime(start1);
-						DateTime e1 = DateTime.parseDateTime(end1);
-						System.out.println(s1.getValue() / 1000 + " " + e1.getValue() / 1000);
-
-						/*
-						 * Make sub slot of filled slot as per selected
-						 * duration(slot time) and add in list
-						 */
-						filledSlots.addAll(WebCalendarEventUtil.makeSlots(slotTime, s1.getValue() / 1000,
-								e1.getValue() / 1000));
+							/*
+							 * Make sub slot of filled slot as per selected
+							 * duration(slot time) and add in list
+							 */
+							filledSlots.addAll(WebCalendarEventUtil.makeSlots(slotTime, s1.getValue() / 1000,
+									e1.getValue() / 1000));
+						}
 					}
 				}
+
 			}
 			catch (JSONException e)
 			{
@@ -188,6 +218,56 @@ public class GoogleCalendarUtil
 		JSONObject newObject = new JSONObject();
 		newObject.put("id", pCalId);
 		array.put(newObject);
+		object.put("items", array);
+
+		// Send request and return result
+		return HTTPUtil.accessURLUsingPostForWebCalendar(url, object.toString());
+	}
+	
+	/**
+	 *  Gets all the calender and sub calender events.
+	 *  
+	 * @param startTime
+	 * @param endTime
+	 * @param prefs
+	 * @param timezone
+	 * @param timezoneName
+	 * @param pCalId
+	 * @return
+	 * @throws Exception
+	 */
+	private static String getAllCalendarEvents(Long startTime, Long endTime, GoogleCalenderPrefs prefs, int timezone,
+			String timezoneName, JSONArray  calendarIds) throws Exception
+	{
+		System.out.println("In getPrimaryCalendar");
+
+		// Url to get calendar
+		String url = "https://www.googleapis.com/calendar/v3/freeBusy?access_token=" + prefs.access_token;
+
+		JSONObject object = new JSONObject();
+
+		// Date time conversion
+		DateTime sd = new DateTime(startTime * 1000, timezone);
+		DateTime ed = new DateTime(endTime * 1000, timezone);
+
+		System.out.println(sd);
+		System.out.println(ed);
+		System.out.println(timezoneName);
+
+		// Set request parameter
+		object.put("timeMin", sd);
+		object.put("timeMax", ed);
+		object.put("timeZone", timezoneName);
+
+		JSONArray array = new JSONArray();
+		
+		for (int i = 0; i < calendarIds.length(); i++) {			
+			if(calendarIds.get(i) != null){
+				JSONObject newObject = new JSONObject();
+				newObject.put("id", calendarIds.get(i));
+				array.put(newObject);
+			}
+		}
 		object.put("items", array);
 
 		// Send request and return result

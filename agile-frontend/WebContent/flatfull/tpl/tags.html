@@ -19,3 +19,12 @@ margin:10px -20px -20px 0px">
 <script id="tags-model-template" type="text/html">
 {{this}}
 </script>
+
+<script id="tag-item-li-template" type="text/html">
+  <li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="{{email_item}}"><a class="text-white" href="{{type_item}}{{tag_item}}">{{item}}</a><a class="close text-white m-l-xs v-middle" id="remove_tag">&times</a></li>
+</script>
+
+<script id="tag-deal-item-li-template" type="text/html">
+  <li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="{{tag_item}}"><a class="text-white v-middle" href="#deal/{{tag_item}}">{{item}}</a><a class="close m-l-xs" id="remove_tag">&times</a></li>
+</script>
+

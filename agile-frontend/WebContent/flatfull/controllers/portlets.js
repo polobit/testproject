@@ -12,12 +12,12 @@ var PortletsRouter = Backbone.Router
 			adddashlet : function() {
 
 				// Back to dashboard if gridster not initalized
-				if (!gridster) {
+				/*if (!gridster) {
 					App_Portlets.navigate("dashboard", {
 						trigger : true
 					});
 					return;
-				} 
+				} */
 
 					
 				$('#content').html("<div id='portlets-add-listener'></div>");
@@ -66,6 +66,10 @@ var PortletsRouter = Backbone.Router
 										updateImageS3Path('flatfull/img/dashboard_images/User-Activities.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/Campaign-stats.jpg'),
 										updateImageS3Path('flatfull/img/dashboard_images/Quota.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/incoming-deals-new.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/lost-deal-analysis-new.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Average_deviation.png'),
+
 
 								]);
 								// Event initializers
@@ -114,11 +118,11 @@ function deletePortlet(el) {
 
 	var deleteWarnHTML = "";
 
-	if (header_text && header_text.trim() != "Getting started")
+	if (header_text && header_text.trim() != "Getting Started")
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - "
 				+ header_text.trim() + " " + header_sub_text.trim() + "?";
 
-	else if (header_text && header_text.trim() == "Getting started")
+	else if (header_text && header_text.trim() == "Getting Started")
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - "
 				+ header_text.trim()
 				+ "?<br/>This dashlet can't be added back again.";

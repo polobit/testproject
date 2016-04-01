@@ -21,13 +21,13 @@
 <div class="row">
 <div class="col-md-9 col-sm-9">
 {{#unless this.length}}
-        <div class="alert-info alert">
-            <div class="slate-content">
+        <div class="alert bg-white">
+            <div class="slate-content  p-md">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">There are no Landing Pages.</h4>
+                    <h4 class="m-t-none">There are no landing pages.</h4>
                     <div class="text">
                         You can add Landing Pages by clicking the button below or the one on the right side of the page.
                     </div>
@@ -37,6 +37,16 @@
                 </div>
             </div>
         </div>
+        <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/vrxV_52QQTc?rel=0&amp;" frameborder="0" style="
+                width: 58%;
+                position: absolute;
+                left: 37%;
+                top: 15%;
+                margin: -75px 0 0 -135px;
+                height: 304px;
+                " allowfullscreen=""></iframe>
+            </div>
 {{/unless}}
 {{#if this.length}}
         <div class="panel panel-default">
@@ -70,6 +80,16 @@
             Landing page is your lead magnet - a web page created to gather leads online. Create a landing page in Agile and link it from your website, email messages or online ads. Add a Form to your landing page to gather visitor details, create Contacts in Agile automatically and nature them using Campaigns.
             </p>
             <br>
+            {{#if this.length}}
+            <p>
+
+<a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+<img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+</a>
+</p>
+
+        <br>
+        {{/if}}
         
     </div>
 </div>

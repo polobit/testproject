@@ -68,7 +68,8 @@ parse : function(response)
  * view.
  */
 var Base_List_View = Backbone.View.extend({ events : { "click .delete" : "deleteItem", "click .edit" : "edit", "delete-checked .agile_delete" : "deleteItem",
-	"click .delete-model" : "deleteModel"
+	"click .delete-model" : "deleteModel",
+	"click .delete-confirm" : "deleteConfirm"
 
 },
 /*
@@ -91,7 +92,6 @@ initialize : function()
  */
 deleteItem : function(e)
 {
-	
 	e.preventDefault();
 	this.model.destroy();
 	this.remove();
@@ -101,11 +101,61 @@ deleteModel : function(e)
 	e.preventDefault();
 	if(!confirm("Are you sure you want to delete?"))
 		return false;
+
 	$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
 		location.reload(true);
 	}
         });
+	
 },
+
+deleteConfirm : function(e)
+{
+	var that = this;
+	var confirmModal = $('#deleteConfirmationModal');
+
+	confirmModal.html(getTemplate('modal-delete-confirm', {})).modal('show');
+
+	$("#delete-confirm", confirmModal).click(function(e){
+			e.preventDefault();
+			var id=that.model.get("id");
+			console.log(id);
+		   // Show loading
+		   $(this).addClass("disabled")
+		   $.ajax({
+    					url: 'core/api/users/'+id,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						console.log("success");
+       						$('#deleteConfirmationModal').modal('hide');
+       						that.remove();
+						    if(!_billing_restriction.currentLimits.freePlan)
+							   {
+							    var message;
+							    if(count > 1)
+							     message = "Users have been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted users.";
+							    else
+							     message = "User has been deleted successfully. Please adjust your billing plan to avoid being billed for the deleted user.";
+							    showNotyPopUp('information', message, "top", 10000);
+							   }
+
+
+       					},
+       					error : function(response)
+						{
+							console.log("error");
+							confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">Sorry, can not delete user having admin privilege.</small>');
+							console.log(response);
+
+						}
+
+       			});
+          
+	});
+
+},
+
 edit : function(e)
 {
 	/*
@@ -125,8 +175,10 @@ edit : function(e)
 	{
 		var that = this
 		// console.log(this.model.toJSON());
+		// startFunctionTimer("model getTemplate");
 		getTemplate(that.options.template, that.model.toJSON(), undefined, function(el)
 		{
+			// endFunctionTimer("model getTemplate");
 			$(that.el).html(el);
 			$(that.el).data(that.model);
 			console.log($(that.el));
@@ -190,6 +242,8 @@ var Base_Collection_View = Backbone.View
 			 */
 			initialize : function()
 			{
+				// startFunctionTimer("initialize");
+
 				// Do not show transition bar 
 				if(!this.options.no_transition_bar)
 				    showTransitionBar();
@@ -245,17 +299,7 @@ var Base_Collection_View = Backbone.View
 				{
 					if (response.status == 401)
 					{
-						var hash = window.location.hash;
-
-						// Unregister all streams on server.
-						unregisterAll();
-
-						// Unregister on SIP server.
-						sipUnRegister();
-
-						// Firefox do not support window.location.origin, so
-						// protocol is explicitly added to host
-						window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;
+						handleAjaxError();
 						return;
 					}
 					that.render(true, response.responseText);
@@ -264,6 +308,7 @@ var Base_Collection_View = Backbone.View
 				// Commented as it was creating a ripple effect
 				// this.collection.bind('add', function(){that.render(true)});
 
+				// endFunctionTimer("initialize");
 				/*
 				 * Calls render before fetching the collection to show loading
 				 * image while collection is being fetched.
@@ -295,7 +340,7 @@ var Base_Collection_View = Backbone.View
 					var that = this;
 
 					/**
-					 * Initiazlizes the infiniscroll on the collection created
+					 * Initiazlizes the infi$target : this.options.scroll_target ? tarniscroll on the collection created
 					 * in the view,
 					 */
 					this.infiniScroll = new Backbone.InfiniScroll(this.collection, { success : function()
@@ -306,7 +351,14 @@ var Base_Collection_View = Backbone.View
 						 * view
 						 */
 						$(".scroll-loading", that.el).remove();
-					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size,
+
+						/**
+						 *callback to be fired when next set is fetched. Added by Sasi on Jan/18/2016.
+						 */
+						if (that.options.infini_scroll_cbk)
+							that.options.infini_scroll_cbk();
+
+					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size, target : this.options.scroll_target ? this.options.scroll_target: $(window),
 
 					/*
 					 * Shows loading on fetch, at the bottom of the table
@@ -343,6 +395,7 @@ var Base_Collection_View = Backbone.View
 					// Set the URL
 					this.collection.fetch = function(options)
 					{
+						// startFunctionTimer("fetch time");
 						options || (options = {})
 						options.data || (options.data = {});
 						options.data['page_size'] = page_size;
@@ -393,6 +446,7 @@ var Base_Collection_View = Backbone.View
 					return;
 				}
 
+				console.log("appendItem");
 				this.model_list_element_fragment.appendChild(this.createListView(base_model).render().el);
 			},
 			createListView : function(base_model)
@@ -455,13 +509,15 @@ var Base_Collection_View = Backbone.View
 			 */
 			render : function(force_render, error_message)
 			{
-
 				// If collection in not reset then show loading in the content,
 				// once collection is fetched, loading is removed by render and
 				// view gets populated with fetched collection.
 				if (force_render == undefined)
-				{
-					$(this.el).html("");
+				{	
+					//Included by Sasi for tickets
+					var html = (this.options.customLoader) ? getTemplate(this.options.customLoaderTemplate) : '';
+
+					$(this.el).html(html);
 					return this;
 				}
 
@@ -476,11 +532,15 @@ var Base_Collection_View = Backbone.View
 					$(this.el).html('<div style="padding:10px;font-size:14px"><b>' + error_message + '<b></div>');
 					return;
 				}
+				// endFunctionTimer("fetch time");
+				// printCurrentDateMillis("render start");
 
 				var _this = this;
 				var ui_function = this.buildCollectionUI;
 				// Populate template with collection and view element is created
 				// with content, is used to fill heading of the table
+
+				// startFunctionTimer("getTemplate");
 				getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON(), "yes", ui_function);
 
 				if (this.page_size && (this.collection.length < this.page_size))
@@ -493,6 +553,8 @@ var Base_Collection_View = Backbone.View
 				return this;
 			}, buildCollectionUI : function(result)
 			{
+				// endFunctionTimer("getTemplate")
+				// startFunctionTimer("buildCollectionUI");
 				$(this.el).html(result);
 				// If collection is Empty show some help slate
 				if (this.collection.models.length == 0)
@@ -527,6 +589,8 @@ var Base_Collection_View = Backbone.View
 
 				$(this.model_list_element).append(this.model_list_element_fragment);
 
+				// endFunctionTimer("buildCollectionUI");
+
 				/*
 				 * Few operations on the view after rendering the view,
 				 * operations like adding some alerts, graphs etc after the view
@@ -541,7 +605,7 @@ var Base_Collection_View = Backbone.View
 				 */
 				if (callback && typeof (callback) === "function")
 				{
-					
+					// startFunctionTimer("postRenderCallback");
 					// execute the callback, passing parameters as necessary
 					callback($(this.el), this.collection);
 				}
@@ -557,6 +621,10 @@ var Base_Collection_View = Backbone.View
 
 				// For the first time fetch, disable Scroll bar if results are
 				// lesser
+				if (callback && typeof (callback) === "function"){}
+					// endFunctionTimer("postRenderCallback");
+
+				// printCurrentDateMillis("render end");
 
 				return this;
 			}, });
@@ -564,6 +632,16 @@ var Base_Collection_View = Backbone.View
 *  Extended View of Base_Collection. It combines parent events to extended view events.
 */
 Base_Collection_View.extend = function(child) {
+	var view = Backbone.View.extend.apply(this, arguments);
+	view.prototype.events = _.extend({}, this.prototype.events, child.events);
+	return view;
+};
+
+
+/**
+*  Extended View of list view. It combines parent events to extended view events.
+*/
+Base_List_View.extend = function(child) {
 	var view = Backbone.View.extend.apply(this, arguments);
 	view.prototype.events = _.extend({}, this.prototype.events, child.events);
 	return view;

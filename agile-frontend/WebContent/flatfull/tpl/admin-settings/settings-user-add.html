@@ -73,7 +73,7 @@
     						<div class="checkbox">
 <label class="i-checks i-checks-sm">
     							<input type="checkbox" id="Disabled" name='is_disabled' value='true'/><i></i>
-                           		Disable this user
+                           		Disable this user<br/><div style="margin-left:6px;"><small>Prevents the user access but billing cycle is still enabled for this user</small></div>
 </label>
     						</div>
     					</div>
@@ -122,37 +122,76 @@
       					</div>
     				</div>
 					<div id="collapseOne" class="panel-collapse collapse" >
-      					<div class="m-l-md">
+      					
+                    {{#is_acl_allowed}}
+                    {{#isAllowedInCurrentPlan "is_ACL_allowed"}}
+                    {{else}}
+                            <div class="m-xs" style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span></div>
+                    {{/isAllowedInCurrentPlan}}
+                    {{/is_acl_allowed}}
+                    <div class="m-l-md">
 					{{#unless id}}
  					<div class="control-group form-group">
 						
 					<div class="controls">
 						<div class="multiple-checkbox" name="newscopes">
 								<label class="i-checks i-checks-sm checkbox">
-                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked><i></i> 
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Create Contacts <br/>
 									<div style="margin-left:6px;"><small> Add contacts</small></div>
 								</label>
 								<label class="i-checks i-checks-sm checkbox">
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked><i></i> 
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
         	                    	Import Contacts  <br/>
 									<div style="margin-left:6px;"><small> Import from CSV file, sync from Google Apps and other integrations </small></div>
     	                       </label>
                                <label class="i-checks i-checks-sm checkbox">
-            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked><i></i> 
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
         	                    	Export Contacts  <br/>
 									<div style="margin-left:6px;"><small> Export contacts as a CSV file </small></div>
     	                       </label>
 								<label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked><i></i> 
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		View All Contacts  <br/>
 									<div style="margin-left:6px;"><small> View contacts owned by other users</small></div>
                            		</label>
 								<label class="i-checks i-checks-sm checkbox">
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked><i></i> 
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
+                             <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Deals
+                                    
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Deals
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small></div>
+                              </div>
+                              <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Events
+                                    
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Events
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add events to others. View, edit and delete events owned by others</small></div>
+                              </div>
 							</div>
 						</div>
                     </div>
@@ -162,30 +201,60 @@
 						<div class="controls">
 						<div class="multiple-checkbox"  name="newscopes">
 								<label class="i-checks i-checks-sm checkbox">
-                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT"><i></i> 
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Create Contacts <br/>
 									<div style="margin-left:6px;"><small> Add contacts</small></div>
 								</label>
 								<label class="i-checks i-checks-sm checkbox">
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS"><i></i>
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i>
         	                    	Import Contacts  <br/>
 									<div style="margin-left:6px;"><small> Import from CSV file, sync from Google Apps and other integrations</small></div>
     	                       </label>
                                <label class="i-checks i-checks-sm checkbox">
-            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS"><i></i>
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i>
         	                    	Export Contacts  <br/>
 									<div style="margin-left:6px;"><small> Export contacts as a CSV file</small></div>
     	                       </label>
 								<label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS"><i></i> 
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		View All Contacts  <br/>
 									<div style="margin-left:6px;"><small> View contacts owned by other users </small></div>
                            		</label>
 								<label class="i-checks i-checks-sm checkbox">
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS"><i></i> 
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
+                             <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Deals
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Deals
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small></div>
+                              </div>
+                              <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Events
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Events
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add events to others. View, edit and delete events owned by others</small></div>
+                              </div>
 							</div>
 						</div>
                     </div>
@@ -194,30 +263,60 @@
 						<div class="controls">
 						<div class="multiple-checkbox"  name="newscopes">
 									<label class="i-checks i-checks-sm checkbox" >
-                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" disabled><i></i> 
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Create Contacts <br/>
 									<div style="margin-left:6px;"><small> Add contacts</small></div>
 								</label>
 								<label class="i-checks i-checks-sm checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled><i></i> 
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
         	                    	Import Contacts  <br/>
 									<div style="margin-left:6px;"><small> Import from CSV file, sync from Google Apps and other integrations </small></div>
     	                       </label>
                                <label class="i-checks i-checks-sm checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled><i></i> 
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
         	                    	Export Contacts  <br/>
 									<div style="margin-left:6px;"><small> Export contacts as a CSV file </small></div>
     	                       </label>
 								<label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled><i></i> 
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		View All Contacts  <br/>
 									<div style="margin-left:6px;"><small> View contacts owned by other users </small></div>
                            		</label>
 								<label class="i-checks i-checks-sm checkbox">
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled><i></i> 
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Update All Contacts  <br/>
 									<div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
                     	       </label>
+                             <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Deals
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Deals
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add deals to others. View, edit and delete deals owned by others</small></div>
+                              </div>
+                              <div>
+                              <div class="pull-left" style="width:40%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="VIEW_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    View All Events
+                               </label>
+                               </div>
+                               <div class="pull-left" style="width:60%;">
+                               <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="MANAGE_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Manage Events
+                               </label>
+                               </div>
+                               <div style="margin-left:26px;"><small>  Add events to others. View, edit and delete events owned by others</small></div>
+                              </div>
 							</div>
 						</div>
                     </div>
@@ -229,96 +328,96 @@
 						<div class="multiple-checkbox"  name="newMenuScopes" style="padding-top:5px">
 					{{#if id}}
 						<label class="i-checks i-checks-sm checkbox hide">
-                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked><i></i> 
+                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Contacts<br/><div style="margin-left:6px;"><small>Manage contacts</small></div></label> 
 								<label class="i-checks i-checks-sm checkbox">
-                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" ><i></i> 
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Calendar<br/><div style="margin-left:6px;"><small>Manage your tasks and events</small></div></label> 
 								<label class="i-checks i-checks-sm checkbox">
-            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS"><i></i> 
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
         	                    	Deals<br/>
 									<div style="margin-left:6px;"><small> Track sales opportunities</small></div>
     	                       </label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN"><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Campaigns<br/>
 										<div style="margin-left:6px;"><small> Automate marketing</small></div>
                            		</label>
 						
 								 </label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES"><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Cases<br/>
 									<div style="margin-left:6px;"><small>Log and address customer issues</small></div>
                            		</label>
  								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" ><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Social Suite<br/>
 									<div style="margin-left:6px;"><small> Monitor your brand on social media</small></div>
                            		</label>
 								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" ><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Web Rule<br/>
 									<div style="margin-left:6px;"><small> Engage your website visitors with smart popups, or perform automatic actions </small></div>
                            		</label>
 								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" ><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Documents<br/>
 								<div style="margin-left:6px;"><small> Upload and attach documents to contacts, deals or cases</small></div>
                            		</label>
 								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" ><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Activities<br/>
 									<div style="margin-left:6px;"><small> Know what other users are doing</small></div>
                            		</label>
 								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" ><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Reports<br/>
 									<div style="margin-left:6px;"><small> Stay on top of your data</small></div>
                            		</label>
 
 						{{else}}
 								<label class="i-checks i-checks-sm checkbox hide"  >
-                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked><i></i> 
+                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Contacts<br/><div style="margin-left:6px;"><small>Manage contacts</small></div></label>
 								<label class="i-checks i-checks-sm checkbox">
-                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" checked><i></i> 
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                         	    	Calendar<br/><div style="margin-left:6px;"><small>Manage your tasks and events</small></div></label> 
 								<label class="i-checks i-checks-sm checkbox">
-            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" checked><i></i> 
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
         	                    	Deals<br/>
 									<div style="margin-left:6px;"><small> Track sales opportunities</small></div>
     	                       </label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN" checked><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Campaigns<br/>
 										<div style="margin-left:6px;"><small> Automate marketing</small></div>
                            		</label>
 						
 								 </label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES" checked><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Cases<br/>
 									<div style="margin-left:6px;"><small>Log and address customer issues</small></div>
                            		</label>
  								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" checked><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Social Suite<br/>
 									<div style="margin-left:6px;"><small> Monitor your brand on social media</small></div>
                            		</label>
 								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" checked><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Web Rule<br/>
 									<div style="margin-left:6px;"><small> Engage your website visitors with smart popups, or perform automatic actions </small></div>
                            		</label>
 								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" checked><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Documents<br/>
 								<div style="margin-left:6px;"><small> Upload and attach documents to contacts, deals or cases</small></div>
                            		</label>
 								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" checked><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Activities<br/>
 									<div style="margin-left:6px;"><small> Know what other users are doing</small></div>
                            		</label>
 								</label><label class="i-checks i-checks-sm checkbox">
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" checked><i></i> 
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                             		Reports<br/>
 									<div style="margin-left:6px;"><small> Stay on top of your data</small></div>
                            		</label>

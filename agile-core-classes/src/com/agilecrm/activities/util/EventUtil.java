@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +22,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -163,10 +166,14 @@ public class EventUtil
     {
 	try
 	{
-	    if (ownerId != null)
-		return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
-			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
-	    return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end).list();
+	    if (ownerId != null){
+	    	Query<Event> q =  dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
+	    			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
+	    	return dao.fetchAll(q);
+	    }
+		
+	    Query<Event> q =  dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end);
+	    return dao.fetchAll(q);
 	}
 	catch (Exception e)
 	{
@@ -175,6 +182,33 @@ public class EventUtil
 	}
     }
 
+    public static List<Event> getBlockedEvents(Long start, Long end, Long ownerId)
+    {
+
+   	     List<Event> startList = null;
+		 List<Event> endList = null;
+	try{
+		    if (ownerId != null){
+		    	startList = dao.ofy().query(Event.class).filter("search_range >=", start).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+				endList = dao.ofy().query(Event.class).filter("search_range <=", end).filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+				 System.out.println(startList.size()+ "  :  "+ endList.size());
+				 startList.addAll(endList); 
+				 return EventUtil.getDuplicateList(startList); 
+		    }else{
+		    	  startList = dao.ofy().query(Event.class).filter("search_range <=", start).list();
+				  endList = dao.ofy().query(Event.class).filter("search_range >=", end).list();				    
+				  System.out.println(startList.size()+ "  :  "+ endList.size());
+				  startList.addAll(endList);				
+				  return EventUtil.getDuplicateList(startList);
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    return null;
+		}
+    }
+    
     /**
      * Gets Events with respect to AgileUser.
      * 
@@ -225,7 +259,7 @@ public class EventUtil
 	Query<Event> query = dao.ofy().query(Event.class)
 		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
 
-	return query.list();
+	return dao.fetchAll(query);
     }
 
     /**
@@ -237,7 +271,7 @@ public class EventUtil
     @Deprecated
     public static void sendIcal(Event event)
     {
-	List<Contact> contacts = event.getContacts();
+	List<Contact> contacts = event.relatedContacts();
 
 	String subject = "Invitation:" + event.title;
 
@@ -547,7 +581,7 @@ public class EventUtil
     public static void sendMailToWebEventAttendee(Event event, String cancel_reason)
     {
 
-	Contact contact = event.getContacts().get(0);
+	Contact contact = event.relatedContacts().get(0);
 	String contactEmail = contact.getContactFieldValue("EMAIL");
 	String first_name = contact.getContactFieldValue("FIRST_NAME");
 	String last_name = contact.getContactFieldValue("LAST_NAME");
@@ -576,7 +610,7 @@ public class EventUtil
 
 	try
 	{
-	    DomainUser domain_user = event.getOwner();
+	    DomainUser domain_user = event.eventOwner();
 
 	    String domain_user_name = domain_user.name;
 	    String calendar_url = domain_user.getCalendarURL();
@@ -590,7 +624,7 @@ public class EventUtil
 		    event.start * 1000, new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a (z)"));
 	    String event_title = event.title;
 	    Long duration = (event.end - event.start) / 60;
-	    List<Contact> contacts = event.getContacts();
+	    List<Contact> contacts = event.relatedContacts();
 	    String client_name = contacts.get(0).getContactFieldValue("FIRST_NAME");
 	    if (StringUtils.isNotEmpty(contacts.get(0).getContactFieldValue("LAST_NAME")))
 	    {
@@ -627,5 +661,16 @@ public class EventUtil
     {
 	Key<Opportunity> dealKey = new Key<Opportunity>(Opportunity.class, dealId);
 	return dao.listByProperty("related_deals = ", dealKey);
+    }
+    
+    public static List<Event> getDuplicateList(List<Event> eventsList){
+    	List<Event> filteredEvents = new ArrayList<Event>();
+    	Set<List<Long>> uniqueStart = new HashSet<>();
+    	for( Event e : eventsList ) {
+    	    if( !uniqueStart.add( e.search_range) ) {
+    	    	filteredEvents.add( e );
+    	    }
+    	}
+		return filteredEvents;
     }
 }

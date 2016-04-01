@@ -7,7 +7,7 @@
                 <fieldset>
                 <div class="panel-heading">
 					<span class="pull-left m-r-sm m-t-xs text-head-black">Notifications</span>
-					<div class="pull-left">                                          
+					<div class="pull-left safari_only">                                          
                         <div id="notification-switch">
 							<label class="i-switch m-t-xs m-r">
                           		{{#if control_notifications}}
@@ -22,7 +22,11 @@
                     </div>
                     <div class="pull-right">
                     <span id="desktop-notification-content" class="right text-base"></span>
+                    {{#is_mobile}}
+
+                    {{else}}
                     <a href="#notification-prefs" class="btn pull-right btn-sm btn-default btn-addon" id="set-desktop-notification"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
+                    {{/is_mobile}}
                     {{/if}}
                     <input name="id" type="hidden" value="{{id}}" /> 
                     </div>

@@ -33,6 +33,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
@@ -220,7 +221,7 @@ public class TasksAPI
 	{
 	    e.printStackTrace();
 	}
-	return task;
+	return TaskUtil.getTask(task.id);
     }
 
     /**
@@ -245,7 +246,7 @@ public class TasksAPI
 	    e.printStackTrace();
 	}
 	task.save();
-	return task;
+	return TaskUtil.getTask(task.id);
     }
 
     /**
@@ -481,7 +482,7 @@ public class TasksAPI
 	try
 	{
 	    Task task = TaskUtil.getTask(id);
-	    return task.getContacts();
+	    return task.relatedContacts();
 	}
 	catch (Exception e)
 	{
@@ -507,7 +508,7 @@ public class TasksAPI
 	{
 	    String prevOwner = task.getTaskOwner().name;
 	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
-	    List<Contact> contacts = task.getContacts();
+	    List<ContactPartial> contacts = task.getContacts();
 	    JSONArray jsn = null;
 	    if (contacts != null && contacts.size() > 0)
 	    {
@@ -537,7 +538,7 @@ public class TasksAPI
 	try
 	{
 	    Task task = TaskUtil.getTask(id);
-	    return task.getDeals();
+	    return task.relatedDeals();
 	}
 	catch (Exception e)
 	{
@@ -642,6 +643,28 @@ public class TasksAPI
 	    task.save();
 
 	return task;
+    }
+    
+    /**
+     * Gets all task based on due and type
+     * 
+     * @param type
+     * @return {@link Task}
+     */
+    @Path("/calendar")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> getTasksBasedOnOwnerOfType(@QueryParam("criteria") String criteria,
+	    @QueryParam("type") String type, @QueryParam("owner") String owner, @QueryParam("pending") boolean pending,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime) throws Exception
+    {
+	if (count != null)
+	{
+	    return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, Integer.parseInt(count), cursor, startTime, endTime);
+	}
+
+	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime, endTime);
     }
     /***************************************************************************/
 }

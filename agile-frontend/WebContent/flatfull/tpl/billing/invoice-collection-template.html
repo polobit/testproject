@@ -43,7 +43,10 @@ Emails
 {{else}}
 {{this.plan.name}}
 {{/containString}}
-        
+ {{else}}       
+   {{#if this.description}}
+     Credits
+   {{/if}}
         {{/if}}
 	</td>
 	<td>
@@ -57,6 +60,10 @@ Emails
 <br>
 			<small>(for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} to {{epochToHumanDate "mm/dd/yyyy" period.end}})</small>
 		{{/containString}}
+        {{else}}
+           {{epochToHumanDate "mm/dd/yyyy" period.start}} 
+           <br>
+            <small>(charged @ $4/1000)</small>
 		{{/if}}
     </td>
 	<td>

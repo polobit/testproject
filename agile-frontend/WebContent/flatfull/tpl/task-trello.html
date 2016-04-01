@@ -6,6 +6,14 @@
 		     
 			<h3 id="new-task-heading" class="task-heading pull-left font-thin h3">My Pending Tasks<small class="tasks-count"></small></h3>
 		<div class="pull-right">
+    <div class="inline-block m-r hide" id="calendarTasksButtons">
+      <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">Today</button>
+      <div class="btn-group m-l-xs">
+        <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >Day</button>
+        <!-- <button id="agendaWeek" class="btn btn-sm btn-default taskDayWeekMonth" >Week</button> -->
+        <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >Month</button>
+      </div>
+    </div>
 		<div class="btn-group owner-task-button m-r">
 	            <button class="btn btn-default btn-sm selected_name">My Pending Tasks</button>
 	            <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
@@ -16,7 +24,7 @@
 	        </div> 	
           {{#is_mobile}}
           {{else}}
-			<div class="btn-group type-task-button c-p pull-right">
+			<div class="btn-group type-task-button c-p m-r">
 		        <button class="btn btn-default btn-sm selected_name">Due</button>
 		        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 		        <span class="caret"></span>
@@ -34,10 +42,15 @@
 		           </li>
 
 		           <li><a href="LIST" class="list-view new-type-task">List View</a></li>
-		           <li><a href="GroupView" class="group-view" style="display:none;">Group View</a></li>                     
+		           <li><a href="GroupView" class="group-view" style="display:none;">Group View</a></li>
+               <li><a href="CALENDAR" class="calendar-view new-type-task">Calendar View</a></li>                     
 		        </ul>
 		    </div>
-
+        <div class="btn-group type-task-button c-p pull-right">
+        <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+          <i class="icon icon-plus-sign"></i> Add Dashlet
+        </a>
+        </div>
 	        {{/is_mobile}}		
 
 		</div>
@@ -46,11 +59,11 @@
 	</div>  	  
 </div>
 </div>
-<div class="wrapper-md b-b">
+<div class="route_Portlet b-b" style="display:none">
 	<div class="row">
 		<div class="col-md-12">
 			<div>
-				<div id="portlets" style="height:240px;overflow-y:auto">&nbsp;</div>
+				<div id="portlets">&nbsp;</div>
 			</div>
 		</div>
 	</div>
@@ -61,6 +74,7 @@
   		<img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
 	</div>
 	<div id="task-list-based-condition"></div>
+  <div id="task-calendar-based-condition" class="hide"></div>
 </div>
 </div>
 </script>
@@ -115,8 +129,8 @@
   <div class="task-body">    
     <div class="task-left">  
 <div class="new-task-owner  thumb-xxs avatar">     
-         {{#if ownerPic}}
-        	<img src="{{ownerPic}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
+         {{#if taskOwner.pic}}
+        	<img src="{{taskOwner.pic}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
 	     {{else}}
 			<img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
 	     {{/if}}
@@ -200,8 +214,8 @@
 <li class="task-note" data="{{id}}"> 
 <div class="thumb avatar">
 {{#if domainOwner}}
-	{{#if ownerPic}}
-		<img class="thumbnail" width="20" height="20" alt="" src="{{ownerPic}}" title="{{domainOwner.name}}">
+	{{#if domainOwner.pic}}
+		<img class="thumbnail" width="20" height="20" alt="" src="{{domainOwner.pic}}" title="{{domainOwner.name}}">
 	{{else}}
 		<img class="thumbnail" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{domainOwner.name}}">
 	{{/if}}

@@ -8,6 +8,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.agilecrm.user.AgileUser;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.google.calendar.util.GooglecalendarPrefsUtil;
 import com.thirdparty.office365.calendar.OfficeCalendarTemplate;
 import com.thirdparty.office365.calendar.util.Office365CalendarUtil;
 
@@ -31,10 +34,22 @@ public class OfficeCalendar365API {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<OfficeCalendarTemplate> getOffice365Appointments(
 			@QueryParam("startDate") String startDate,
-			@QueryParam("endDate") String endDate) throws Exception {
+			@QueryParam("endDate") String endDate) {
 		List<OfficeCalendarTemplate> appointments = null;
-		String Url = Office365CalendarUtil.getOfficeURL(startDate, endDate);
-		appointments = Office365CalendarUtil.getAppointmentsFromServer(Url);
+		try {
+			GoogleCalenderPrefs calendarPrefs = GooglecalendarPrefsUtil
+					.getCalendarPrefsByType(GoogleCalenderPrefs.CALENDAR_TYPE.OFFICE365);
+
+			String Url = Office365CalendarUtil.getOfficeURL(startDate, endDate,
+					calendarPrefs);
+			if (Url != null) {
+				Long agileUserId = AgileUser.getCurrentAgileUser().id;
+				appointments = Office365CalendarUtil.getAppointmentsFromServer(
+						Url, agileUserId, "agile_calendar");
+			}
+		} catch (Exception e) {
+			System.out.println("Error " + e);
+		}
 
 		return appointments;
 	}

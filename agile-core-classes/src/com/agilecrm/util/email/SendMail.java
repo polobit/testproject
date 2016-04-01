@@ -77,6 +77,9 @@ public class SendMail
 
     public static final String EMAIL_PLAN_CHANGED = "subscription/add-on/email/plan_changed";
     public static final String EMAIL_PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
+    
+    public static final String FREE_EMAILS_UPDATED = "subscription/emails_updated";
+    public static final String FREE_EMAILS_UPDATED_SUBJECT = "Your Free 5000 Branded Emails Are Updated";
 
     public static final String FAILED_BILLINGS_FIRST_TIME = "subscription/payments/failed/failed_billings_first_time";
     public static final String FAILED_BILLINGS_FIRST_TIME_SUBJECT = "[Notice #1] Your Payment to Agile CRM has Declined";
@@ -107,6 +110,9 @@ public class SendMail
     public static final String CSV_IMPORT_NOTIFICATION = "csv_reports";
     public static final String CSV_IMPORT_NOTIFICATION_SUBJECT = "CSV Import report";
 
+    public static final String CSV_IMPORT_DELAY_NOTIFICATION = "csv_delay_notifier";
+    public static final String CSV_IMPORT_DELAY_NOTIFICATION_SUBJECT = "CSV Import Delay";
+
     public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
     public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
     public static final String EXPORT_DEALS_CSV = "export_csv";
@@ -117,10 +123,19 @@ public class SendMail
 
     public static final String STRIPE_IMPORT_NOTIFICATION = "contact_sync_notification_template";
     public static final String STRIPE_IMPORT_NOTIFICATION_SUBJECT = "Stripe Import Report";
-    
+
     public static final String FROM_VERIFICATION_EMAIL = "from_verification_email";
     public static final String FROM_VERIFICATION_EMAIL_SUBJECT = "Verify your Email";
 
+	// For campaign sharing
+	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
+	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
+	
+	// Ticket template names
+   	public static final String TICKET_REPLY = "ticket_reply_email";
+   	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
+   	public static final String TICKET_FORWARD = "ticket_forward_email";
+   	
     /**
      * From Name of email.
      */
@@ -129,7 +144,7 @@ public class SendMail
     /**
      * From Email-id of email.
      */
-    public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
+    public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com  ";
 
     /**
      * Templates path where template files exist.

@@ -19,10 +19,12 @@ import com.agilecrm.activities.EventReminder;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
@@ -82,7 +84,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    AgileUser agileUser = null;
 		    try
 		    {
-			domainuser = eventList.get(i).getOwner();
+			domainuser = eventList.get(i).eventOwner();
 		    }
 
 		    catch (TransientFailureException tfe)
@@ -239,7 +241,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			}
 		    }
 		    Map<String, Object> currentEvent = eventListMap.get(0);
-		    List<Contact> contactList = eventList.get(i).getContacts();
+		    List<Contact> contactList = eventList.get(i).relatedContacts();
 		    List<Map<String, Object>> contactListMap = new ArrayList<Map<String, Object>>();
 		    for (Contact contact : contactList)
 		    {
@@ -249,6 +251,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			    mapContact.put(contactField.name, contactField);
 
 			mapContact.put("id", String.valueOf(contact.id));
+
+		   	mapContact.put("email_image", ContactUtil.getMD5EncodedImage(contact));	
 			// save id of this contact for href
 
 			contactListMap.add(mapContact);

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
@@ -45,18 +47,27 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.bulkaction.ContactExportBulkPullTask;
 import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
+import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.bulk.ContactsDeleteTask;
+import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
+import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -67,14 +78,18 @@ import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -117,11 +132,16 @@ public class ContactsAPI
 	}
 
 	System.out.println("Fetching page by page");
+
+	if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	{
+	    return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor, Type.PERSON);
+	}
 	List<Contact> contacts = ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
 	return contacts;
 
     }
-    
+
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -143,9 +163,9 @@ public class ContactsAPI
 	System.out.println("Fetching count int");
 	Map searchMap = new HashMap();
 	searchMap.put("type", Contact.Type.PERSON);
-	
+
 	return Contact.dao.getCountByProperty(searchMap);
-	
+
     }
 
     /**
@@ -229,8 +249,15 @@ public class ContactsAPI
     public List<Contact> getCompaniesList(@FormParam("cursor") String cursor, @FormParam("page_size") String count,
 	    @FormParam("global_sort_key") String sortKey)
     {
+
 	if (count != null)
 	{
+
+	    if (sortKey != null && ContactFilterUtil.isCustomField(sortKey))
+	    {
+		return ContactFilterUtil.getFilterContactsBySortKey(sortKey, Integer.parseInt(count), cursor,
+			Type.COMPANY);
+	    }
 
 	    System.out.println("Fetching companies page by page");
 	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
@@ -238,7 +265,7 @@ public class ContactsAPI
 
 	return ContactUtil.getAllCompaniesByOrder(sortKey);
     }
-    
+
     /**
      * Fetches all the contacts (of type person). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -260,9 +287,9 @@ public class ContactsAPI
 	System.out.println("Fetching count of companies");
 	Map searchMap = new HashMap();
 	searchMap.put("type", Contact.Type.COMPANY);
-	
+
 	return Contact.dao.getCountByProperty(searchMap);
-	
+
     }
 
     /**
@@ -309,11 +336,12 @@ public class ContactsAPI
     public Contact createContact(Contact contact)
     {
 	// Check if the email exists with the current email address
-	boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
+	boolean isDuplicate = ContactUtil.isExists(StringUtils.lowerCase(contact.getContactFieldValue("EMAIL")));
 
 	// Throw non-200 if it exists
 	if (isDuplicate)
 	{
+	    System.out.println("Duplicate contact found");
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, duplicate contact found with the same email address.").build());
 	}
@@ -1142,10 +1170,10 @@ public class ContactsAPI
      * @param companyName
      * @return
      */
-    @Path("/company/validate/{company-name}")
+    @Path("/company/validate")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean isCompanyExist(@PathParam("company-name") String companyName)
+    public boolean isCompanyExist(@QueryParam("companyName") String companyName)
     {
 	return ContactUtil.isCompanyExist(companyName);
     }
@@ -1233,6 +1261,8 @@ public class ContactsAPI
 	    }
 
 	}
+	if (contact.type.toString().equals(("PERSON")))
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
 	// merge notes
 	return contact;
     }
@@ -1323,7 +1353,8 @@ public class ContactsAPI
     @Path("/import/{key}/{type}")
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void contactsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ImportStatus contactsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
     {
 	// it gives is 1000)
 	int currentEntityCount = ContactUtil.getCount();
@@ -1339,10 +1370,15 @@ public class ContactsAPI
 	CSVImporter<Contact> importer;
 	try
 	{
+	    ImportStatusDAO statusDAO = new ImportStatusDAO(NamespaceManager.get(), ImportType.CONTACTS);
+	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, info.getDomainId());
+
+	    statusDAO.createNewImportStatus(userKey, 0, blobKey.getKeyString());
 	    importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey, info.getDomainId(),
-		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount);
+		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount, statusDAO);
 
 	    PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
+	    return statusDAO.getImportStatus(NamespaceManager.get());
 	}
 
 	catch (IOException e)
@@ -1350,6 +1386,8 @@ public class ContactsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+
+	return null;
 
     }
 
@@ -1622,6 +1660,24 @@ public class ContactsAPI
 	return contact;
     }
 
+    /* Fetch all reference contacts to a contact or company or deal or case */
+    @Path("/references")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getReferenceContacts(@QueryParam("references") String references)
+    {
+	List<Long> refContactIdsList = new ArrayList<Long>();
+	String[] refContactsArray = references.split(",");
+	for (String contactId : refContactsArray)
+	{
+	    if (!contactId.equals(""))
+	    {
+		refContactIdsList.add(Long.valueOf(contactId));
+	    }
+	}
+	return ContactUtil.getContactsBulk(refContactIdsList);
+    }
+
     /**
      * Delete the existing tags to a contact (Partial update)
      * 
@@ -1703,5 +1759,51 @@ public class ContactsAPI
 
 	return contact.getTagsList();
     }
+    
+    @Path("delete")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteContacts(@FormParam("ids") String model_ids, @QueryParam("filter") String filter,
+	    @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
+    {
+	Long current_user_id = SessionManager.get().getDomainId();
+	System.out.println(model_ids + " model ids " + filter + " filter " + current_user_id + " current user");
 
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter, model_ids,
+		null, 100, current_user_id);
+
+	Set<Key<Contact>> keys = idsFetcher.next();
+
+	if (keys.size() < 100)
+	{
+	    BulkActionAdaptor taskRunner = new ContactsBulkDeleteDeferredTask(current_user_id, NamespaceManager.get(),
+		    keys);
+	    taskRunner.run();
+	    ContactsDeleteTask task = new ContactsDeleteTask(idsFetcher, current_user_id);
+	    task.logActivity();
+	    return;
+	}
+
+	ContactsDeleteTask task = new ContactsDeleteTask(model_ids, filter, current_user_id, dynamicFilter);
+	// Add to queue
+	Queue queue = QueueFactory.getQueue(AgileQueues.BULK_ACTION_QUEUE);
+	queue.addAsync(TaskOptions.Builder.withPayload(task));
+    }
+
+    @Path("/deleteContactImage")
+    @PUT
+	public void deleteContactImage(@QueryParam("id") Long id) 
+    {  
+    	Contact contact = ContactUtil.getContact(id);
+    	if(contact != null){
+    	List<ContactField> properties = contact.properties;
+    	System.out.println(properties.size());
+    	for(int i=0 ; i <properties.size(); i++){
+    		System.out.println(properties.get(i).name);
+    		if(properties.get(i).name.equalsIgnoreCase("image"))
+    			properties.remove(i);
+    	}
+    	contact.save();
+    }
+    }
 }
