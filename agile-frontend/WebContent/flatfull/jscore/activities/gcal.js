@@ -191,48 +191,61 @@ function _fetchGoogleCalendarList(callback, retryCount)
 
 function _fetchGCAndAddEvents(sourceOptions, start, end)
 {
-	console.log(sourceOptions);
-	// Set the access token
-	gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
+	head.js('flatfull/lib/web-calendar-event/moment.min.js', function(){
+		head.js('flatfull/lib/web-calendar-event/moment-timezone-with-data.js',function() {
+			console.log(sourceOptions);
+			// Set the access token
+			gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
 
-	if(!sourceOptions.calendarIds)
-	{
-		sourceOptions.calendarIds = ["primary"];
-	}
-
-	showLoadingOnCalendar(false);
-	$.each(sourceOptions.calendarIds, function(index, calendarId)
-	{
-		showLoadingOnCalendar(true);
-		// Retrieve the events from primary
-		var request = gapi.client.calendar.events.list({ 'calendarId' : calendarId, timeMin : ts2googleDate(start), timeMax : ts2googleDate(end),
-			maxResults : 10000, // max results causes problems: http://goo.gl/FqwIFh
-			singleEvents : true });
-
-		request.execute(function(resp)
-		{
-			var google_events = [];
-			for (var i = 0; i < resp.items.length; i++)
+			if(!sourceOptions.calendarIds)
 			{
-				var fc_event = google2fcEvent(resp.items[i]);
-
-				if (fc_event)
-					google_events.push(fc_event);
-				renderEventBasedOnOwner(fc_event);
-				//$('#calendar_event').fullCalendar('renderEvent', fc_event);		
+				sourceOptions.calendarIds = ["primary"];
 			}
 
-
-			//$('#calendar_event').fullCalendar('renderEvents', google_events);
-			addEventSourceToCalendar("google_" + calendarId, google_events);
 			showLoadingOnCalendar(false);
+			$.each(sourceOptions.calendarIds, function(index, calendarId)
+			{
+				showLoadingOnCalendar(true);
+				// Retrieve the events from primary
+				var request = gapi.client.calendar.events.list({ 'calendarId' : calendarId, timeMin : ts2googleDate(start), timeMax : ts2googleDate(end),
+					maxResults : 10000, // max results causes problems: http://goo.gl/FqwIFh
+					singleEvents : true });
 
-			
-			//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
-			// Add event
-			//$('#calendar_event').fullCalendar('renderEvents', google_events);
+				request.execute(function(resp)
+				{
+
+					var google_events = [];
+					for (var i = 0; i < resp.items.length; i++)
+					{
+						var fc_event = google2fcEvent(resp.items[i]);
+
+						if (fc_event)
+							var utcTime = new Date(fc_event.start).toUTCString();
+	    					var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+	      					fc_event.start = tz.format();
+	      					
+	      					utcTime = new Date(fc_event.end).toUTCString();
+	    					tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+	      					fc_event.end = tz.format();
+	      					
+							google_events.push(fc_event);
+						renderEventBasedOnOwner(fc_event);
+						//$('#calendar_event').fullCalendar('renderEvent', fc_event);		
+					}
+
+
+					//$('#calendar_event').fullCalendar('renderEvents', google_events);
+					addEventSourceToCalendar("google_" + calendarId, google_events);
+					showLoadingOnCalendar(false);
+
+					
+					//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
+					// Add event
+					//$('#calendar_event').fullCalendar('renderEvents', google_events);
+				});
+			});
 		});
-	})
+	});
 }
 
 // Convert a timestamp into google date format
