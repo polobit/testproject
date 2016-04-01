@@ -150,12 +150,12 @@ function subscribeToPubNub(domain)
 				   
 			   return;
 			}
-			if(message.notification == 'IS_BROWSING')
+			if(message.type == 'IS_BROWSING')
 			{
 			    get_contact_by_email(message.email,function(contact){
 			    	if(contact)
 			    	{
-			    		contact['notification'] = message.notification;
+			    		contact['notification'] = message.type;
 			    		contact['custom_value'] = message.custom_value;
 			    		message = contact;
 			    		_setupNotification(message);
