@@ -1879,7 +1879,7 @@ public class PortletUtil {
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			System.err.println("Exception occured while getting contact campaign status count...");
+			System.err.println("Exception occured while getting contact campaign status count..." + e.getMessage());
 		}
 			
 			return dataJson;

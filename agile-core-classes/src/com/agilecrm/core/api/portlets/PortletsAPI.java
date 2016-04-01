@@ -634,7 +634,6 @@ public class PortletsAPI {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public JSONObject getCampaignGraphForPortlets(@QueryParam("start-date") String startDate,@QueryParam("campaign_type") String campaignType) throws Exception {
 		
-		System.out.println(startDate+"pppppp"+PortletUtil.getCampaignStatsForPieChart(campaignType, Long.parseLong(startDate)));
 		return PortletUtil.getCampaignStatsForPieChart(campaignType, Long.parseLong(startDate));
 	}
 

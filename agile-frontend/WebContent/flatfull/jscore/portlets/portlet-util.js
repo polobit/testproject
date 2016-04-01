@@ -193,7 +193,7 @@ var portlet_utility = {
 			json['duration'] = "yesterday";
 			json['campaign_type'] = "All";
 		}else if (portlet_type == "USERACTIVITY" && p_name == "Campaign graph") {
-			json['duration'] = "Last 30 Days";
+			json['duration'] = "1-month";
 			json['campaign_type'] = "All";
 		}
 		else if (portlet_type == "DEALS" && p_name == "Deal Goals") {
