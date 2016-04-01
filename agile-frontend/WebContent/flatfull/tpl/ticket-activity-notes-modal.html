@@ -1,0 +1,20 @@
+<!-- Ticket (Note) Modal -->
+<script id="ticket_activity_notes_modal-template" type="text/html">
+<div class="modal fade infoModal" id="ticket_activity_notes_modal">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3>Note</h3>
+    </div>
+    <div class="modal-body">
+
+<div style="margin-bottom:5px;">
+<div>{{#if_equals activity_type "TICKET_CREATED"}}{{custom2}}{{else}} {{{custom1}}} {{/if_equals}}</div>
+       
+       
+    </div>
+    </div>
+</div>
+</div>
+</script>

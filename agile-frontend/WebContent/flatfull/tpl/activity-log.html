@@ -907,7 +907,9 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{#if_equals "TICKET_CREATED" activity_type}}
 			New <a href="#ticket/{{entity_id}}" >ticket#{{entity_id}}</a> created<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted {{user_name}}{{/if}}
+				{{#if this.entityObject}}  
+			   <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a>	  			
+{{else}}Ticket deleted {{user_name}}{{/if}}
 			</small>
 		{{/if_equals}}
 		{{#if_equals "TICKET_DELETED" activity_type}}
@@ -1001,9 +1003,8 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNEE_REPLIED" activity_type}}
 			{{user_name}} replied to <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a><br/>
-			<small class="activities_second_line m-t-none text-sm">
-				{{replace_br_with_space custom1}}
-			</small>  
+			<small class="activities_second_line m-t-none text-sm"> 
+			   <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a></small>	  			
 		{{/if_equals}}
 		{{#if_equals "TICKET_REQUESTER_REPLIED" activity_type}}
 			{{#if related_contact_ids}}
@@ -1015,15 +1016,14 @@ Deleted  {{custom1}} Campaigns<br/>
 					{{/toLinkTrigger}}
 				{{/stringToJSON}}
 			{{/if}} replied to <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a><br/>
-			<small class="activities_second_line m-t-none text-sm">
-				{{replace_br_with_space custom1}}
-			</small>  
+			<small class="activities_second_line m-t-none text-sm">  
+			    <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a></small>	  			
+  
 		{{/if_equals}}
 		{{#if_equals "TICKET_PRIVATE_NOTES_ADD" activity_type}}
 			{{user_name}} added private notes to <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a>
-			<br/><small class="activities_second_line m-t-none text-sm">
-				{{replace_br_with_space custom2}}
-			</small>  
+			<br/><small class="activities_second_line m-t-none text-sm"> 
+			    <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a></small>	  			
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_FAVORITE" activity_type}}
 			{{#if user_name}}
