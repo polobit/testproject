@@ -623,4 +623,20 @@ public class PortletsAPI {
 		return PortletUtil.getAverageDeviationForTasks(start_time, end_time);
 	}
 	
+
+	/**
+	 * Gets contacts count based on campaign status
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/campaign-graph")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getCampaignGraphForPortlets(@QueryParam("start-date") String startDate,@QueryParam("campaign_type") String campaignType) throws Exception {
+		
+		System.out.println(startDate+"pppppp"+PortletUtil.getCampaignStatsForPieChart(campaignType, Long.parseLong(startDate)));
+		return PortletUtil.getCampaignStatsForPieChart(campaignType, Long.parseLong(startDate));
+	}
+
+	
 }

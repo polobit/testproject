@@ -125,6 +125,122 @@ var portlet_graph_utility = {
 	},
 
 	/**
+	 * To display contacts count by campaigns stats portlet as pie graph
+	 */
+	campaignStatsPieGraph : function(selector, campaignStatusList,
+			campaignValuesList, campaignNumbersList) {
+		setupCharts(function(){
+							var emptyFlag = true;
+							$.each(campaignValuesList, function(index, value) {
+								if (value > 0)
+									emptyFlag = false;
+							});
+							if (campaignStatusList.length == 0 || emptyFlag) {
+								$('#' + selector)
+										.html(
+												'<div class="portlet-error-message">No Contact Found</div>');
+							} else {
+								var data = [];
+								$.each(campaignStatusList, function(index, value) {
+									data.push([ value,
+											campaignValuesList[index] ]);
+								});
+								$('#' + selector)
+										.highcharts(
+												{
+													chart : {
+														type : 'pie',
+														marginRight : 20
+													},
+													colors : [ '#55BF3B',
+															'#23b7e5',
+															'#ff0000',
+															'#27c24c',
+															'#f05050',
+															"#aaeeee",
+															"#ff0066",
+															"#eeaaee",
+															"#7266ba",
+															"#DF5353",
+															"#7798BF",
+															"#aaeeee" ],
+													title : {
+														text : ''
+													},
+													tooltip : {
+														formatter : function() {
+															return '<table>'
+																	+ '<tr> <td class="p-n"><b>'
+																	+ campaignStatusList[this.point.x]
+																	+ '</b> Subscribers</td></tr>'
+																	+ '<tr><td class="p-n">Total Count : '
+																	+ '<b> '
+																	+ campaignValuesList[this.point.x].toLocaleString()
+																	+ '</b></td></tr>'
+																	+ '</table>';
+														},
+														shared : true,
+														useHTML : true,
+														borderWidth : 1,
+														backgroundColor : '#313030',
+														shadow : false,
+														borderColor : '#000',
+														borderRadius : 3,
+														style : {
+															color : '#EFEFEF'
+														}
+													},
+													plotOptions : {
+														series : {
+															borderWidth : 0
+														},
+														pie : {
+															borderWidth : 0,
+															innerSize : '35%',
+															size:'45%',
+															dataLabels : {
+																enabled : true,
+																useHTML : true,
+																/*
+																 * connectorWidth:
+																 * 0,
+																 */
+																softConnector : true,
+																formatter : function() {
+																	return '<div class="text-center"><span style="color:'
+																			+ this.point.color
+																			+ '"><b>'
+																			+ this.point.name
+																			+ '</b></span><br/>'
+																			+ '<span style="color:'
+																			+ this.point.color
+																			+ '"><b>'
+																			+ Math
+																					.round(this.point.percentage)
+																			+ '%</b></span></div>';
+																},
+																/*
+																 * format: '<b>{point.name}</b>:
+																 * {point.percentage:.1f}',
+																 */
+																distance : 30,
+																x : 2,
+																y : -10
+															},
+															showInLegend : false
+														}
+													},
+													series : [ {
+														name : 'Contact',
+														data : data
+													} ],
+																									});
+							}
+						});
+	},
+
+
+	/**
 	 * To display closers per person portlet as bar graph
 	 */
 	closuresPerPersonBarGraph : function(selector, catges, data, text, name, base_model) {
