@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.visitor.segmentation.SegmentationQueryGenerator;
+
 /**
  * <code>AnalyticsUtil</code> is the base class for handling SQL queries to
  * insert and get page-views analytics data. It also handles campaigns
@@ -21,7 +23,7 @@ import org.json.JSONArray;
 public class StatsSQLUtil
 {
     /**
-     * Inserts values into page_views table.
+     * Inserts values into page_visits table.
      * 
      * @param domain
      *            - current namespace.
@@ -122,7 +124,7 @@ public class StatsSQLUtil
 	}
 	catch (Exception e)
 	{
-	    System.out.println("Exception occured while fetching page_views " + e.getMessage());
+	    System.out.println("Exception occured while fetching page_visits " + e.getMessage());
 	}
     }
     
@@ -155,10 +157,10 @@ public class StatsSQLUtil
     public static JSONArray getPageViews(String domain, String email)
     {
 	
-	String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views p1";
+	String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_visits p1";
 	
 	// Gets UNIQUE session ids based on Email from database
-	String sessions = "(SELECT DISTINCT sid FROM page_views WHERE email ="
+	String sessions = "(SELECT DISTINCT sid FROM page_visits WHERE email ="
 		+ StatsGoogleSQLUtil.encodeSQLColumnValue(email) + " AND domain = "
 		+ StatsGoogleSQLUtil.encodeSQLColumnValue(domain) + ") p2";
 	
@@ -215,6 +217,7 @@ public class StatsSQLUtil
 	    e1.printStackTrace();
 	    return null;
 	}
+	
     }
     
     /**
@@ -229,7 +232,7 @@ public class StatsSQLUtil
     {
 	String offsetString = req.getParameter("offset");
 	String limitString = req.getParameter("limit");
-	int limit = StatsUtil.getIntegerValue(limitString, 0);
+	int limit = StatsUtil.getIntegerValue(limitString, 20);
 	int offset = StatsUtil.getIntegerValue(offsetString, 0);
 	JSONArray result = null;
 	String pageViewsQuery = "SELECT url,inet6_ntoa(ip) as ip,stats_time,email,"
@@ -250,6 +253,39 @@ public class StatsSQLUtil
     }
     
     /**
+     * Get contact activities from page views table
+     * 
+     * @param log_type
+     * @param cursor
+     * @param page_size
+     * @return
+     */
+    public static void getLatestPageViewsOfDomain(HttpServletRequest req, HttpServletResponse res, String domain)
+    {
+	String offsetString = req.getParameter("offset");
+	String limitString = req.getParameter("limit");
+	int limit = StatsUtil.getIntegerValue(limitString, 20);
+	int offset = StatsUtil.getIntegerValue(offsetString, 0);
+	JSONArray result = null;
+	String pageViewsQuery = "SELECT url, inet6_ntoa(ip) as ip, stats_time, email, UNIX_TIMESTAMP(stats_time) AS time FROM page_visits "
+		+ "WHERE email != '' AND url != '' AND domain = '"
+		+ domain
+		+ "' ORDER BY stats_time DESC "
+		+ appendLimitToQuery(offset, limit);
+	try
+	{
+	    result = StatsSQL.getJSONQuery(pageViewsQuery);
+	    if (result != null)
+		StatsUtil.sendResponse(req, res, result.toString());
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception occured while fetching latest page views of a domain");
+	}
+    }
+    
+    /**
      * Returns page views based on given count
      * 
      * @param limit
@@ -261,8 +297,8 @@ public class StatsSQLUtil
 	{
 	    String limitString = req.getParameter("limit");
 	    int limit = StatsUtil.getIntegerValue(limitString, 5);
-	    String query = "SELECT * FROM page_views WHERE domain = " + StatsGoogleSQLUtil.encodeSQLColumnValue(domain)
-		    + " LIMIT " + limit;
+	    String query = "SELECT * FROM page_visits WHERE domain = "
+		    + StatsGoogleSQLUtil.encodeSQLColumnValue(domain) + " LIMIT " + limit;
 	    JSONArray result = StatsSQL.getJSONQuery(query);
 	    if (result != null)
 		StatsUtil.sendResponse(req, res, result.toString());
@@ -283,7 +319,7 @@ public class StatsSQLUtil
      */
     public static void deleteStatsBasedOnNamespace(String namespace)
     {
-	String deleteQuery = "DELETE FROM page_views WHERE" + StatsGoogleSQLUtil.appendDomainToQuery(namespace);
+	String deleteQuery = "DELETE FROM page_visits WHERE" + StatsGoogleSQLUtil.appendDomainToQuery(namespace);
 	
 	try
 	{
@@ -327,7 +363,7 @@ public class StatsSQLUtil
 	    String duration = req.getParameter("duration");
 	    String durationType = req.getParameter("durationType");
 	    String type = req.getParameter("type");
-	    String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = "
+	    String urlCountQuery = "SELECT COUNT(*) FROM page_visits WHERE domain = "
 		    + StatsGoogleSQLUtil.encodeSQLColumnValue(domain) + " AND email = "
 		    + StatsGoogleSQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
 	    
@@ -378,7 +414,7 @@ public class StatsSQLUtil
      */
     public static int getPageViewsCountForGivenDomain(String domain)
     {
-	String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = "
+	String pageViewsCount = "SELECT COUNT(*) FROM page_visits WHERE domain = "
 		+ StatsGoogleSQLUtil.encodeSQLColumnValue(domain);
 	
 	int count = 0;
@@ -414,7 +450,7 @@ public class StatsSQLUtil
 	if (StringUtils.isBlank(domain) || StringUtils.isBlank(email))
 	    return 0;
 	
-	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = "
+	String urlCountQuery = "SELECT COUNT(*) FROM page_visits WHERE domain = "
 		+ StatsGoogleSQLUtil.encodeSQLColumnValue(domain) + " AND email = "
 		+ StatsGoogleSQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
 	
@@ -469,7 +505,7 @@ public class StatsSQLUtil
 	// Returns (sign)HH:mm from total minutes.
 	String timeZoneOffset = StatsGoogleSQLUtil.convertMinutesToTime(timeZone);
 	
-	String urlCountQuery = "SELECT count(DISTINCT sid) AS count,count(sid) AS total FROM page_views WHERE domain = "
+	String urlCountQuery = "SELECT count(DISTINCT sid) AS count,count(sid) AS total FROM page_visits WHERE domain = "
 		+ StatsGoogleSQLUtil.encodeSQLColumnValue(domain);
 	
 	urlCountQuery += " AND stats_time BETWEEN CONVERT_TZ(" + StatsGoogleSQLUtil.encodeSQLColumnValue(startDate)
@@ -489,6 +525,52 @@ public class StatsSQLUtil
 	    return new JSONArray();
 	}
 	
+    }
+    
+    /**
+     * Executes segmentation sql query. Returns contact emails based on page
+     * visits filters.
+     * 
+     * @param query
+     * @return
+     */
+    public static JSONArray getContactEmails(String domain,String rules,String startTime,String endTime,String cursor,String pageSize)
+    {
+	try
+	{
+	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
+		    startTime, endTime, cursor, pageSize);
+	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
+	    return StatsSQL.getJSONQuery(segementationQuery);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    /**
+     * Executes segmentation sql query. Returns contact email count based on page
+     * visits filters.
+     * 
+     * @param query
+     * @return
+     */
+    public static JSONArray getContactEmailCount(String domain,String rules,String startTime,String endTime,String cursor,String pageSize)
+    {
+	try
+	{
+	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
+		    startTime, endTime, cursor, pageSize);
+	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
+	    return StatsSQL.getJSONQuery(segementationQuery);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
     
     public static String getEmails(Set<String> emails)
@@ -519,6 +601,22 @@ public class StatsSQLUtil
      * @return String.
      */
     public static String appendLimitToQuery(int offset, int limit)
+    {
+	
+	return " LIMIT " + offset + "," + limit;
+    }
+    
+    /**
+     * Appends offset and limit to query to retrieve results by page.
+     * 
+     * @param limit
+     *            - required limit.
+     * 
+     * @param offset
+     *            - offset of the required result set
+     * @return String.
+     */
+    public static String appendLimitToQuery(String offset, String limit)
     {
 	
 	return " LIMIT " + offset + "," + limit;
