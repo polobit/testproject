@@ -125,7 +125,7 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 <style>
 body {
 
-  background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-low.jpg');
+  background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/agile-login-page-low.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -332,10 +332,10 @@ if(isSafari && isWin)
        
         }
 
-        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
+        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/agile-login-page-high.png';
 
         // agile-login-page-high.png
-        	preload_login_pages();
+        	//preload_login_pages();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 
@@ -380,7 +380,7 @@ if(isSafari && isWin)
 			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>');
 		}
 
-		function preload_login_pages(){
+	/*	function preload_login_pages(){
 
 			for(var i=1; i < 10; i++){
 
@@ -395,7 +395,7 @@ if(isSafari && isWin)
 				}).appendTo('body');
 
 			}
-		}
+		}*/
 	</script>
 	<!-- Clicky code -->
  	<script src="//static.getclicky.com/js" type="text/javascript"></script>
