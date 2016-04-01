@@ -12,9 +12,9 @@
     <div class="panel-body">
 <div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
 {{#if expected_value}}
-<div class="m-b-sm text-lg font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
-<div class=" text-muted deal-track">
+<div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
 	
 {{#getTracksCount}}<span>{{pipeline.name}} , </span>{{/getTracksCount}}					
@@ -160,7 +160,7 @@
                       {{#if custom_field_type}}
                         <div class="m-b-xs">
                           <span class="contact-custom-name">
-                            <span class="text-light text-xs" title="{{name}}">{{name}}</span>
+                            <span class="text-light text-base" title="{{name}}">{{name}}</span>
                           </span>
                         </div>
                         <div class="note-created-time custom-value text-xs" title="" name="{{name}}">
@@ -168,7 +168,7 @@
                         </div>
                       {{else}}
                         <span class="contact-custom-name">
-                          <span class="text-light text-xs" title="{{name}}">{{name}}</span>
+                          <span class="text-light text-base" title="{{name}}">{{name}}</span>
                         </span>
                         <span class="contact-custom-value">
                           <span class="note-created-time custom-value text-xs" title="{{value}}" name="{{name}}">
