@@ -166,6 +166,10 @@ public class StatsSQL
 	// get the ResultSet object
 	ResultSet rs = executeQuery(query);
 	
+//	ResultSet rs1 = null;
+//	if (countQuery)
+//	    rs1 = executeQuery(query);
+	
 	if (rs == null)
 	    return null;
 	
@@ -212,6 +216,19 @@ public class StatsSQL
 		    System.out.println("Exception while iterating result set " + e.getMessage());
 		}
 	    }
+//	    if (countQuery)
+//	    {
+//		if (rs1 != null)
+//		{
+//		    if (rs1.next())
+//		    {
+//			int count = rs.getInt(1);
+//			JSONObject finalObject = (JSONObject) agentDetailsArray.get(agentDetailsArray.length() - 1);
+//			finalObject.put("total_rows_count", count);
+//		    }
+//		}
+//	    }
+	    
 	}
 	catch (Exception e)
 	{

@@ -2,6 +2,7 @@ package com.analytics.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.db.util.GoogleSQLUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -41,6 +43,8 @@ import com.googlecode.objectify.ObjectifyService;
 public class AnalyticsUtil
 {
     public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
+    
+    private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
     
     public static String getEmails(Set<String> emails)
     {
@@ -282,7 +286,17 @@ public class AnalyticsUtil
     {
 	Objectify ofy = ObjectifyService.begin();
 	List<Contact> contacts = null;
-        contacts = ofy.query(Contact.class).filter("properties.name","email").filter("properties.value IN",contactEmails).list();
+	com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type",Contact.Type.PERSON);
+	searchMap.put("properties.name","email");
+	searchMap.put("properties.value.IN",contactEmails);
+	contacts = dao.fetchAll(query);
+//	for (String propName : .keySet())
+//	{
+//	    q.filter(propName, map.get(propName));
+//	}
+//        contacts = ofy.query(Contact.class).filter("type",Contact.Type.PERSON).filter("properties.name","email").filter("properties.value IN",contactEmails).list();
 	return contacts;
     }
     
