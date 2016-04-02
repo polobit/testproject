@@ -266,7 +266,7 @@ public class AnalyticsUtil
 	    String mergedStats = HTTPUtil.accessURLUsingPost(statsServerUrl, postDataBytes);
 	    JSONArray contactEmailsJsonArray = new JSONArray(mergedStats);
 	    Set<String> emails = new HashSet<String>();
-	    for(int i=0;i<contactEmailsJsonArray.length();i++)
+	    for (int i = 0; i < contactEmailsJsonArray.length(); i++)
 	    {
 		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
 		emails.add(contactEmail.get("email").toString());
@@ -284,19 +284,28 @@ public class AnalyticsUtil
     @SuppressWarnings("unchecked")
     public static List<Contact> getContacts(Set<String> contactEmails)
     {
-	Objectify ofy = ObjectifyService.begin();
 	List<Contact> contacts = null;
-	com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type",Contact.Type.PERSON);
-	searchMap.put("properties.name","email");
-	searchMap.put("properties.value.IN",contactEmails);
-	contacts = dao.fetchAll(query);
-//	for (String propName : .keySet())
-//	{
-//	    q.filter(propName, map.get(propName));
-//	}
-//        contacts = ofy.query(Contact.class).filter("type",Contact.Type.PERSON).filter("properties.name","email").filter("properties.value IN",contactEmails).list();
+	if (contactEmails != null && contactEmails.size() > 0)
+	{
+	    Objectify ofy = ObjectifyService.begin();
+	    com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("type", Contact.Type.PERSON);
+	    searchMap.put("properties.name", "email");
+	    searchMap.put("properties.value.IN", contactEmails);
+	    for (String propName : searchMap.keySet())
+	    {
+		query.filter(propName, searchMap.get(propName));
+	    }
+	    contacts = dao.fetchAll(query);
+	}
+	
+	// for (String propName : .keySet())
+	// {
+	// q.filter(propName, map.get(propName));
+	// }
+	// contacts =
+	// ofy.query(Contact.class).filter("type",Contact.Type.PERSON).filter("properties.name","email").filter("properties.value IN",contactEmails).list();
 	return contacts;
     }
     
