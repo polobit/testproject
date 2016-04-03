@@ -268,7 +268,7 @@ public class MimeMessageParser
 		byte[] content = this.getContent(dataSource.getInputStream());
 
 		if (isBase64)
-			content = org.apache.geronimo.mail.util.Base64.decode(encodeBase64);
+			content = encodeBase64;
 
 		ByteArrayDataSource result = new ByteArrayDataSource(content, contentType);
 		String dataSourceName = getDataSourceName(part, dataSource);
@@ -357,7 +357,7 @@ public class MimeMessageParser
 			// System.out.println("byteArray: " + byteArray);
 			// }
 
-			saveFileToGCS(ds.getName(), ds.getContentType(), byteArray);
+			saveFileToGCS(ds.getName(), ds.getContentType(), org.apache.geronimo.mail.util.Base64.decode(byteArray));
 
 			// If content type is image then checking if it is inline image. If
 			// yes then removing "[image: Inline image 1]" from plain text and
