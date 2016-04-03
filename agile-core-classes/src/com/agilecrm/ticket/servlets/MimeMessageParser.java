@@ -6,8 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.activation.DataHandler;
@@ -23,7 +25,20 @@ import javax.mail.internet.MimePart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.json.JSONArray;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang.text.StrBuilder;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import com.agilecrm.export.gcs.GCSServiceAgile;
+import com.agilecrm.ticket.entitys.TicketDocuments;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
+import com.google.api.client.util.Base64;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * Parses a MimeMessage and stores the individual parts such a plain text, HTML
@@ -50,7 +65,7 @@ public class MimeMessageParser
 	private boolean isMultiPart;
 
 	/** List of attachment names and blob keys **/
-	private JSONArray attachmentNamesAndKeys;
+	private List<TicketDocuments> documentsList = null;
 
 	/**
 	 * Constructs an instance with the MimeMessage to be extracted.
@@ -63,7 +78,7 @@ public class MimeMessageParser
 		attachmentList = new ArrayList<DataSource>();
 		this.mimeMessage = message;
 		this.isMultiPart = false;
-		attachmentNamesAndKeys = new JSONArray();
+		documentsList = new ArrayList<TicketDocuments>();
 	}
 
 	/**
@@ -191,12 +206,8 @@ public class MimeMessageParser
 					Multipart mp = (Multipart) part.getContent();
 					int count = mp.getCount();
 
-					// iterate over all MimeBodyPart
-
 					for (int i = 0; i < count; i++)
-					{
 						parse(mp, (MimeBodyPart) mp.getBodyPart(i));
-					}
 				}
 				else
 				{
@@ -257,35 +268,78 @@ public class MimeMessageParser
 	 * @return Returns the attachmentList.
 	 * @throws Exception
 	 */
-	public List<DataSource> getAttachmentList() throws Exception
-	{
-		for (DataSource ds : attachmentList)
-		{
-			System.out.println("Attachment ContentType(): " + ds.getContentType());
-			System.out.println("Attachment GetName(): " + ds.getName());
-
-			//saveFileToGC(IOUtils.toByteArray(ds.getInputStream()), ds.getName(), ds.getContentType());
-		}
-
-		System.out.println("AttachmentNamesAndKeys: " + attachmentNamesAndKeys);
-		return attachmentList;
-	}
+	// public List<DataSource> getAttachmentList() throws Exception
+	// {
+	// for (DataSource ds : attachmentList)
+	// {
+	// System.out.println("Attachment ContentType(): " + ds.getContentType());
+	// System.out.println("Attachment GetName(): " + ds.getName());
+	//
+	// // saveFileToGC(IOUtils.toByteArray(ds.getInputStream()),
+	// // ds.getName(), ds.getContentType());
+	// }
+	//
+	// System.out.println("AttachmentNamesAndKeys: " + attachmentNamesAndKeys);
+	// return attachmentList;
+	// }
 
 	/**
 	 * @return Returns the attachment names and blob keys.
 	 * @throws Exception
 	 */
-	public JSONArray saveAttachments() throws Exception
+	public List<TicketDocuments> saveAttachments() throws Exception
 	{
+		String plainContent = (hasPlainContent()) ? this.plainContent : "";
+		String htmlContent = (hasHtmlContent()) ? this.htmlContent : "";
+
+		StrBuilder sb = new StrBuilder(htmlContent);
+		sb.replaceAll("3D", "").replaceAll("\"\"", "");
+
+		Document doc = Jsoup.parseBodyFragment(sb.toString(), "UTF-8");
+
 		for (DataSource ds : attachmentList)
 		{
-			System.out.println("Attachment ContentType(): " + ds.getContentType());
-			System.out.println("Attachment GetName(): " + ds.getName());
+			String fileName = ds.getName(), fileContentType = ds.getContentType(), fileContent = IOUtils.toString(ds
+					.getInputStream());
 
-			//saveFileToGC(IOUtils.toByteArray(ds.getInputStream()), ds.getName(), ds.getContentType());
+			byte[] byteArray = IOUtils.toByteArray(fileContent);
+
+			System.out.println("Attachment ContentType(): " + fileContentType);
+			System.out.println("Attachment GetName(): " + fileName);
+
+			// If content type is image then checking if it is inline image. If
+			// yes then removing "[image: Inline image 1]" from plain text and
+			// from html content
+			if (fileContentType.contains("image") || fileContentType.contains("img"))
+			{
+				byteArray = Base64.decodeBase64(fileContent);
+
+				Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
+
+				if (elements == null || elements.size() == 0)
+					continue;
+
+				Element element = elements.first();
+
+				plainContent = plainContent.replace("[image: " + element.attr("alt") + "]", "");
+
+				try
+				{
+					element.remove();
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
+			}
+
+			saveFileToGCS(ds.getName(), ds.getContentType(), byteArray);
 		}
 
-		return attachmentNamesAndKeys;
+		this.htmlContent = doc.body().html();
+		this.plainContent = plainContent;
+
+		return documentsList;
 	}
 
 	/** @return Returns the htmlContent if any */
@@ -293,6 +347,12 @@ public class MimeMessageParser
 	{
 		System.out.println("getHtmlContent(): " + htmlContent);
 		return htmlContent;
+	}
+
+	/** @return Returns the attchments if any */
+	public List<TicketDocuments> getAttachmentsList()
+	{
+		return documentsList;
 	}
 
 	/** @return true if a plain content is available */
@@ -313,29 +373,29 @@ public class MimeMessageParser
 		return this.attachmentList.size() > 0;
 	}
 
-	/**
-	 * Find an attachment using its name.
-	 * 
-	 * @param name
-	 *            the name of the attachment
-	 * @return the corresponding datasource or null if nothing was found
-	 * @throws Exception
-	 */
-	public DataSource findAttachmentByName(String name) throws Exception
-	{
-		DataSource dataSource;
-
-		for (int i = 0; i < getAttachmentList().size(); i++)
-		{
-			dataSource = getAttachmentList().get(i);
-			if (name.equalsIgnoreCase(dataSource.getName()))
-			{
-				return dataSource;
-			}
-		}
-
-		return null;
-	}
+	// /**
+	// * Find an attachment using its name.
+	// *
+	// * @param name
+	// * the name of the attachment
+	// * @return the corresponding datasource or null if nothing was found
+	// * @throws Exception
+	// */
+	// public DataSource findAttachmentByName(String name) throws Exception
+	// {
+	// DataSource dataSource;
+	//
+	// for (int i = 0; i < getAttachmentList().size(); i++)
+	// {
+	// dataSource = getAttachmentList().get(i);
+	// if (name.equalsIgnoreCase(dataSource.getName()))
+	// {
+	// return dataSource;
+	// }
+	// }
+	//
+	// return null;
+	// }
 
 	/**
 	 * Determines the name of the data source if it is not already set.
@@ -421,5 +481,39 @@ public class MimeMessageParser
 		{
 			return fullMimeType;
 		}
+	}
+
+	/**
+	 * Writes file content to GCS and returns service object to get file path.
+	 * 
+	 * @param fileName
+	 * @param fileType
+	 * @param fileContentType
+	 * @param currentTime
+	 * @return
+	 * @throws IOException
+	 */
+	public GCSServiceAgile saveFileToGCS(String fileName, String fileType, byte[] fileContent) throws IOException
+	{
+		if (fileType.contains("application/rar"))
+			fileType = "application/x-rar-compressed, application/octet-stream";
+		else if (fileType.contains("application/zip"))
+			fileType = "application/zip, application/octet-stream";
+
+		GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType).contentEncoding("UTF-8")
+				.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+
+		GCSServiceAgile service = new GCSServiceAgile((Calendar.getInstance().getTimeInMillis()) + fileName,
+				"ticket-attachments", options);
+
+		GcsOutputChannel writer = service.getOutputchannel();
+
+		writer.write(ByteBuffer.wrap(fileContent));
+		writer.close();
+
+		documentsList.add(new TicketDocuments(fileName, fileType, (long) fileContent.length, service
+				.getFilePathToDownload()));
+
+		return service;
 	}
 }

@@ -1,18 +1,18 @@
 package com.agilecrm.ticket.servlets;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +27,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -53,13 +48,11 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
-import com.google.api.client.util.Base64;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 public class SendgridInboundParser extends HttpServlet
 {
-
 	/**
 	 * 
 	 */
@@ -89,16 +82,6 @@ public class SendgridInboundParser extends HttpServlet
 					JSONObject json = getJSONFromMIME(request);
 
 					System.out.println("JSON keys list:");
-
-					for (Iterator iter = json.keys(); iter.hasNext();)
-					{
-						String keyName = (String) iter.next();
-
-						System.out.println("keyName: " + keyName);
-
-						if (keyName.contains("attachment"))
-							System.out.println(json.getString(keyName));
-					}
 
 					String envelope = json.getString("envelope");
 
@@ -162,77 +145,23 @@ public class SendgridInboundParser extends HttpServlet
 
 					List<String> ccEmails = getCCEmails(json);
 
-					String plainText = json.has("text") ? json.getString("text") : "", htmlText = json.has("html") ? json
-							.getString("html") : "";
+					// Get email key value as it contains plain text, html text
+					// and attachments data
+					String fileData = json.getString("eomail");
 
-					// Check if any attachments exists
-					Boolean attachmentExists = false;
-					List<TicketDocuments> documentsList = new ArrayList<TicketDocuments>();
+					Properties props = System.getProperties();
+					Session session = Session.getInstance(props);
 
-					if (json.has("attachments"))
-					{
-						try
-						{
-							int attachmentsCount = json.getInt("attachments");
+					MimeMessage message = new MimeMessage(session, new ByteArrayInputStream(fileData.toString()
+							.getBytes()));
 
-							if (attachmentsCount > 0)
-							{
-								attachmentExists = true;
+					MimeMessageParser messageParser = new MimeMessageParser(message).parse();
 
-								Document doc = Jsoup.parseBodyFragment(htmlText.toString(), "UTF-8");
+					String plainText = messageParser.hasPlainContent() ? messageParser.getPlainContent() : "";
+					String htmlText = messageParser.hasHtmlContent() ? messageParser.getHtmlContent() : "";
 
-								JSONObject attachmentInfo = new JSONObject(json.getString("attachment-info"));
-
-								for (Iterator<String> iter = attachmentInfo.keys(); iter.hasNext();)
-								{
-									String attachmentKeyName = iter.next();
-
-									JSONObject fileInfo = new JSONObject(attachmentInfo.getString(attachmentKeyName));
-
-									String fileName = "", fileType = fileInfo.getString("type");
-
-									if (fileInfo.has("filename"))
-										fileName = fileInfo.getString("filename");
-									else if (fileInfo.has("content-id"))
-										fileName = fileInfo.getString("content-id");
-
-									if (fileType.startsWith("image"))
-									{
-										Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
-
-										if (elements == null || elements.size() == 0)
-											continue;
-
-										Element element = elements.first();
-
-										plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
-
-										try
-										{
-											element.remove();
-										}
-										catch (Exception e)
-										{
-											System.out.println(ExceptionUtils.getFullStackTrace(e));
-										}
-									}
-
-									byte[] bytes = json.getString(attachmentKeyName).getBytes(StandardCharsets.UTF_8);
-
-									// Saving file to GCS
-									GCSServiceAgile service = TicketWebhook.saveFileToGCS(fileName, fileType, bytes);
-
-									// Saving file URL to document object
-									documentsList.add(new TicketDocuments(fileName, fileType, (long) bytes.length,
-											service.getFilePathToDownload()));
-								}
-							}
-						}
-						catch (Exception e)
-						{
-							System.out.println(ExceptionUtils.getFullStackTrace(e));
-						}
-					}
+					boolean attachmentExists = messageParser.hasAttachments();
+					List<TicketDocuments> documentsList = messageParser.getAttachmentsList();
 
 					Tickets ticket = null;
 
