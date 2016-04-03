@@ -323,14 +323,19 @@ public class MimeMessageParser
 			System.out.println("Attachment ContentType(): " + fileContentType);
 			System.out.println("Attachment GetName(): " + fileName);
 
+			boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
+
+			if (isImage)
+				byteArray = Base64.decodeBase64(fileContent);
+
 			saveFileToGCS(ds.getName(), ds.getContentType(), byteArray);
-			
+
 			// If content type is image then checking if it is inline image. If
 			// yes then removing "[image: Inline image 1]" from plain text and
 			// from html content
-			if (fileContentType.contains("image") || fileContentType.contains("img"))
+			if (isImage)
 			{
-				//byteArray = Base64.decodeBase64(fileContent);
+				byteArray = Base64.decodeBase64(fileContent);
 
 				Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
 
