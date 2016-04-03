@@ -268,7 +268,7 @@ public class MimeMessageParser
 		byte[] content = this.getContent(dataSource.getInputStream());
 
 		if (isBase64)
-			content = Base64.decodeBase64(new String(encodeBase64));
+			content = org.apache.geronimo.mail.util.Base64.decode(encodeBase64);
 
 		ByteArrayDataSource result = new ByteArrayDataSource(content, contentType);
 		String dataSourceName = getDataSourceName(part, dataSource);
