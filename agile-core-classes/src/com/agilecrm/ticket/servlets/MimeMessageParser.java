@@ -290,6 +290,12 @@ public class MimeMessageParser
 		String plainContent = (hasPlainContent()) ? this.plainContent : "";
 		String htmlContent = (hasHtmlContent()) ? this.htmlContent : "";
 
+		System.out.println("plainContent:");
+		System.out.println(plainContent);
+		
+		System.out.println("htmlContent:");
+		System.out.println(htmlContent);
+		
 		StrBuilder sb = new StrBuilder(htmlContent);
 		sb.replaceAll("3D", "").replaceAll("\"\"", "");
 
@@ -367,7 +373,7 @@ public class MimeMessageParser
 	/** @return true if attachments are available */
 	public boolean hasAttachments()
 	{
-		return this.attachmentList.size() > 0;
+		return this.documentsList.size() > 0;
 	}
 
 	// /**
@@ -511,6 +517,9 @@ public class MimeMessageParser
 		documentsList.add(new TicketDocuments(fileName, fileType, (long) fileContent.length, service
 				.getFilePathToDownload()));
 
+		System.out.println("Added saved document....");
+		System.out.println(documentsList);
+		
 		return service;
 	}
 }
