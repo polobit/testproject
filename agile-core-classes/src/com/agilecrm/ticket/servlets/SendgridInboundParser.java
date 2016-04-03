@@ -223,7 +223,7 @@ public class SendgridInboundParser extends HttpServlet
 					// Creating new Notes in TicketNotes table
 					TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID,
 							CREATED_BY.REQUESTER, nameEmail[0], nameEmail[1], plainText, htmlText, NOTE_TYPE.PUBLIC,
-							documentsList, json.getString("headers"));
+							documentsList, json.getString("email"));
 
 					notes.save();
 
