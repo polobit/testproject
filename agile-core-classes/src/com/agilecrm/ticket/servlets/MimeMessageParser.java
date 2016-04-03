@@ -252,16 +252,14 @@ public class MimeMessageParser
 
 		if (part.getContent() instanceof Base64DecoderStream)
 		{
-			System.out.println("Instacnce of Base64DecoderStream....");
-			
+			System.out.println("Instance of Base64DecoderStream....");
+
 			isBase64 = true;
 
 			Base64DecoderStream stream = (Base64DecoderStream) part.getInputStream();
 
 			byte[] byteArray = IOUtils.toByteArray(stream);
 			encodeBase64 = org.apache.commons.codec.binary.Base64.encodeBase64(byteArray, true);
-			//FileUtils.writeByteArrayToFile(new File("new-pdf.pdf"), encodeBase64);
-			System.out.println(new String(encodeBase64, "UTF-8"));
 		}
 
 		DataHandler dataHandler = part.getDataHandler();
@@ -270,7 +268,7 @@ public class MimeMessageParser
 		byte[] content = this.getContent(dataSource.getInputStream());
 
 		if (isBase64)
-			content = encodeBase64;
+			content = Base64.decodeBase64(new String(encodeBase64));
 
 		ByteArrayDataSource result = new ByteArrayDataSource(content, contentType);
 		String dataSourceName = getDataSourceName(part, dataSource);
@@ -351,13 +349,13 @@ public class MimeMessageParser
 
 			System.out.println("isImage: " + isImage);
 
-			if (isImage)
-			{
-				System.out.println("fileContent: " + fileContent);
-				byteArray = Base64.decodeBase64(fileContent);
-
-				System.out.println("byteArray: " + byteArray);
-			}
+			// if (isImage)
+			// {
+			// System.out.println("fileContent: " + fileContent);
+			// byteArray = Base64.decodeBase64(fileContent);
+			//
+			// System.out.println("byteArray: " + byteArray);
+			// }
 
 			saveFileToGCS(ds.getName(), ds.getContentType(), byteArray);
 
@@ -366,8 +364,6 @@ public class MimeMessageParser
 			// from html content
 			if (isImage)
 			{
-				byteArray = Base64.decodeBase64(fileContent);
-
 				Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
 
 				if (elements != null && elements.size() > 0)
