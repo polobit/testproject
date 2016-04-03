@@ -81,8 +81,6 @@ public class SendgridInboundParser extends HttpServlet
 				{
 					JSONObject json = getJSONFromMIME(request);
 
-					System.out.println("JSON keys list:");
-
 					String envelope = json.getString("envelope");
 
 					System.out.println("Envelope:" + envelope);

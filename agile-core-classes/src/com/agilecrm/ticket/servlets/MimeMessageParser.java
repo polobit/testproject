@@ -259,8 +259,6 @@ public class MimeMessageParser
 	/** @return Returns the plainContent if any */
 	public String getPlainContent()
 	{
-		System.out.println("MimeMessageParser getPlainContent(): " + plainContent);
-
 		return this.plainContent;
 	}
 
@@ -345,7 +343,6 @@ public class MimeMessageParser
 	/** @return Returns the htmlContent if any */
 	public String getHtmlContent()
 	{
-		System.out.println("getHtmlContent(): " + htmlContent);
 		return htmlContent;
 	}
 
