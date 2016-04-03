@@ -190,18 +190,28 @@ public class MimeMessageParser
 	{
 		if (part.isMimeType("text/plain") && (plainContent == null))
 		{
+			System.out.println("Plain content.....");
+			
 			plainContent = (String) part.getContent();
+			
+			System.out.println(plainContent);
 		}
 		else
 		{
 			if (part.isMimeType("text/html") && (htmlContent == null))
 			{
+				System.out.println("html content.....");
+				
 				htmlContent = (String) part.getContent();
+				
+				System.out.println(htmlContent);
 			}
 			else
 			{
 				if (part.isMimeType("multipart/*"))
 				{
+					System.out.println("multipart/*");
+					
 					this.isMultiPart = true;
 					Multipart mp = (Multipart) part.getContent();
 					int count = mp.getCount();
