@@ -3,6 +3,7 @@ package com.agilecrm.ticket.servlets;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -25,9 +26,11 @@ import javax.mail.internet.MimePart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.text.StrBuilder;
+import org.apache.geronimo.mail.util.Base64DecoderStream;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -244,10 +247,31 @@ public class MimeMessageParser
 	 */
 	protected DataSource createDataSource(Multipart parent, MimePart part) throws MessagingException, IOException
 	{
+		boolean isBase64 = false;
+		byte[] encodeBase64 = null;
+
+		if (part.getContent() instanceof Base64DecoderStream)
+		{
+			System.out.println("Instacnce of Base64DecoderStream....");
+			
+			isBase64 = true;
+
+			Base64DecoderStream stream = (Base64DecoderStream) part.getInputStream();
+
+			byte[] byteArray = IOUtils.toByteArray(stream);
+			encodeBase64 = org.apache.commons.codec.binary.Base64.encodeBase64(byteArray, true);
+			//FileUtils.writeByteArrayToFile(new File("new-pdf.pdf"), encodeBase64);
+			System.out.println(new String(encodeBase64, "UTF-8"));
+		}
+
 		DataHandler dataHandler = part.getDataHandler();
 		DataSource dataSource = dataHandler.getDataSource();
 		String contentType = getBaseMimeType(dataSource.getContentType());
 		byte[] content = this.getContent(dataSource.getInputStream());
+
+		if (isBase64)
+			content = encodeBase64;
+
 		ByteArrayDataSource result = new ByteArrayDataSource(content, contentType);
 		String dataSourceName = getDataSourceName(part, dataSource);
 

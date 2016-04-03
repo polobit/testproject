@@ -58,7 +58,7 @@ body {
 	}else{
 
 		try{
-			outputString = notes.mime_object;
+			out.println( notes.mime_object);
 		}catch(Exception e){
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
@@ -72,7 +72,7 @@ body {
 	</script>
 	<script type="text/javascript">
 
-		var mime = '<%= outputString%>';
+		<%-- var mime = '<%= outputString%>';
 		var type = "<%= type%>";
 
 		printMIMEObj(type, mime);
@@ -101,7 +101,7 @@ body {
 		function convertHTMLToString (key, value) {
 			// Replace the html tags
 			return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-		}
+		} --%>
 		
 	</script>
 </body>
