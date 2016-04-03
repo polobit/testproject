@@ -191,9 +191,9 @@ public class MimeMessageParser
 		if (part.isMimeType("text/plain") && (plainContent == null))
 		{
 			System.out.println("Plain content.....");
-			
+
 			plainContent = (String) part.getContent();
-			
+
 			System.out.println(plainContent);
 		}
 		else
@@ -201,9 +201,9 @@ public class MimeMessageParser
 			if (part.isMimeType("text/html") && (htmlContent == null))
 			{
 				System.out.println("html content.....");
-				
+
 				htmlContent = (String) part.getContent();
-				
+
 				System.out.println(htmlContent);
 			}
 			else
@@ -211,10 +211,12 @@ public class MimeMessageParser
 				if (part.isMimeType("multipart/*"))
 				{
 					System.out.println("multipart/*");
-					
+
 					this.isMultiPart = true;
 					Multipart mp = (Multipart) part.getContent();
 					int count = mp.getCount();
+
+					System.out.println("Total mime parts count: " + count);
 
 					for (int i = 0; i < count; i++)
 						parse(mp, (MimeBodyPart) mp.getBodyPart(i));
@@ -321,6 +323,8 @@ public class MimeMessageParser
 			System.out.println("Attachment ContentType(): " + fileContentType);
 			System.out.println("Attachment GetName(): " + fileName);
 
+			saveFileToGCS(ds.getName(), ds.getContentType(), byteArray);
+			
 			// If content type is image then checking if it is inline image. If
 			// yes then removing "[image: Inline image 1]" from plain text and
 			// from html content
@@ -330,24 +334,22 @@ public class MimeMessageParser
 
 				Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
 
-				if (elements == null || elements.size() == 0)
-					continue;
-
-				Element element = elements.first();
-
-				plainContent = plainContent.replace("[image: " + element.attr("alt") + "]", "");
-
-				try
+				if (elements != null && elements.size() > 0)
 				{
-					element.remove();
-				}
-				catch (Exception e)
-				{
-					System.out.println(ExceptionUtils.getFullStackTrace(e));
+					Element element = elements.first();
+
+					plainContent = plainContent.replace("[image: " + element.attr("alt") + "]", "");
+
+					try
+					{
+						element.remove();
+					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
 				}
 			}
-
-			saveFileToGCS(ds.getName(), ds.getContentType(), byteArray);
 		}
 
 		this.htmlContent = doc.body().html();
