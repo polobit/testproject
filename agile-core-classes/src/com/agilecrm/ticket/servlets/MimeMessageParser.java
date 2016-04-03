@@ -292,14 +292,14 @@ public class MimeMessageParser
 
 		System.out.println("plainContent:");
 		System.out.println(plainContent);
-		
+
 		System.out.println("htmlContent:");
 		System.out.println(htmlContent);
-		
+
 		StrBuilder sb = new StrBuilder(htmlContent);
 		sb.replaceAll("3D", "").replaceAll("\"\"", "");
 
-		Document doc = Jsoup.parseBodyFragment(sb.toString(), "UTF-8");
+		Document doc = Jsoup.parseBodyFragment(htmlContent, "UTF-8");
 
 		for (DataSource ds : attachmentList)
 		{
@@ -342,6 +342,12 @@ public class MimeMessageParser
 
 		this.htmlContent = doc.body().html();
 		this.plainContent = plainContent;
+
+		System.out.println("this.htmlContent :");
+		System.out.println(this.htmlContent);
+
+		System.out.println("this.plainContent:");
+		System.out.println(this.plainContent);
 
 		return documentsList;
 	}
@@ -519,7 +525,7 @@ public class MimeMessageParser
 
 		System.out.println("Added saved document....");
 		System.out.println(documentsList);
-		
+
 		return service;
 	}
 }

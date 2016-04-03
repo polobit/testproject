@@ -325,7 +325,7 @@ public class SendgridInboundParser extends HttpServlet
 				// System.out.println("Field value: ");
 				// System.out.println(IOUtils.toString(item.openStream()));
 
-				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream()));
+				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream(), "UTF-8"));
 
 				// if (item.isFormField())
 				// {
