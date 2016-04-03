@@ -58,7 +58,8 @@ body {
 	}else{
 
 		try{
-			out.println( notes.mime_object);
+			String headers = notes.mime_object.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
+			out.println(headers);
 		}catch(Exception e){
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
