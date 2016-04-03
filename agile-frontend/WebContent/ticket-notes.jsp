@@ -82,11 +82,11 @@ body {
 			if(type && type == "html")
 				return;
 
-			if(!mime || mime == null || mime == "undefind")
+			if(!mime || mime == null || mime == "undefined")
 				return;
 
-			if(typeof mime == "object")
-				mime = JSON.stringify(mime);
+			/* if(typeof mime == "object")
+				mime = JSON.stringify(mime); */
 
 			//mime = mime.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 

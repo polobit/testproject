@@ -325,8 +325,15 @@ public class MimeMessageParser
 
 			boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
 
+			System.out.println("isImage: " + isImage);
+
 			if (isImage)
+			{
+				System.out.println("fileContent: " + fileContent);
 				byteArray = Base64.decodeBase64(fileContent);
+
+				System.out.println("byteArray: " + byteArray);
+			}
 
 			saveFileToGCS(ds.getName(), ds.getContentType(), byteArray);
 
