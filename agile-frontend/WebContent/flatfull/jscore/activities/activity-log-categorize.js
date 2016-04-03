@@ -69,6 +69,21 @@ function initializeActivitiesListner(el){
 	}, null);
 
 });
+	/*Ticket related click event to show the modal when requester or assignee replies*/
+	$("#activities-listners").on('click', '.ticket-activity-notes', function(e) 
+{
+	e.preventDefault();
+   	var id = $(this).data("id");
+    var activity_ticket_notes = activitiesview.collection.get(id).toJSON();
+    console.log(activity_ticket_notes.entityObject);
+	getTemplate("ticket_activity_notes_modal", activity_ticket_notes, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		var emailinfo = $(template_ui);
+		emailinfo.modal('show');
+	}, null);
+
+});
 
 }
 function getDealObject(id)

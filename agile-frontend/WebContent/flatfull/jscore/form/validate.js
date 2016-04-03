@@ -227,7 +227,7 @@ function isValidForm(form) {
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);
-	},"Please use only letters (a-z & A-Z), numbers,. and _.");
+	},"Please use only letters (a-z & A-Z), numbers, '.' and '_'.");
 
 
 	$(form).validate({
