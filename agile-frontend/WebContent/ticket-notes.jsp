@@ -88,11 +88,11 @@ body {
 			if(typeof mime == "object")
 				mime = JSON.stringify(mime);
 
-			mime = mime.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			//mime = mime.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-			var mimeobj = JSON.parse(mime);
+			//var mimeobj = JSON.parse(mime);
 
-			$(".original_message").html(JSON.stringify(mimeobj, null, 4));
+			$(".original_message").html(mime);
 
 			// $(".original_message").html(JSON.stringify(mimeobj, convertHTMLToString, 4));
 

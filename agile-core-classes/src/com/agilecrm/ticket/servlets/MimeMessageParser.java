@@ -330,7 +330,7 @@ public class MimeMessageParser
 			// from html content
 			if (fileContentType.contains("image") || fileContentType.contains("img"))
 			{
-				byteArray = Base64.decodeBase64(fileContent);
+				//byteArray = Base64.decodeBase64(fileContent);
 
 				Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
 
