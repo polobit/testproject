@@ -72,7 +72,7 @@ body {
 	</script>
 	<script type="text/javascript">
 
-		var mime = <%= outputString%>;
+		var mime = '<%= outputString%>';
 		var type = "<%= type%>";
 
 		printMIMEObj(type, mime);

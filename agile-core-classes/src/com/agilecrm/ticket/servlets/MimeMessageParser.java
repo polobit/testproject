@@ -315,8 +315,8 @@ public class MimeMessageParser
 
 		for (DataSource ds : attachmentList)
 		{
-			String fileName = ds.getName(), fileContentType = ds.getContentType(), fileContent = IOUtils.toString(ds
-					.getInputStream());
+			String fileName = ds.getName(), fileContentType = ds.getContentType(), fileContent = IOUtils.toString(
+					ds.getInputStream(), "UTF-8");
 
 			byte[] byteArray = IOUtils.toByteArray(fileContent);
 
