@@ -211,15 +211,23 @@ public class TicketNotes
 	{
 		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(this);
 
+		System.out.println("Notes created with key: " + key);
+
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticket_key.getId());
 			boolean isPublicNotes = (note_type == NOTE_TYPE.PUBLIC);
-			
+
 			// If ticket created from agile dashboard then no need to send this
 			// ticket to end user
 			if (ticket.user_replies_count == 1 && isPublicNotes)
+			{
+				// Updating last notes key to ticket entity
+				ticket.last_notes_key = key;
+				ticket = ticket.putEntity();
+
 				return this;
+			}
 
 			ActivityType activityType = (isPublicNotes) ? ((created_by == CREATED_BY.AGENT) ? ActivityType.TICKET_ASSIGNEE_REPLIED
 					: ActivityType.TICKET_REQUESTER_REPLIED)
@@ -231,7 +239,7 @@ public class TicketNotes
 				// Updating last notes key to ticket entity
 				ticket.last_notes_key = key;
 				ticket = ticket.putEntity();
-				
+
 				if (created_by == CREATED_BY.AGENT)
 					// Send email thread to user
 					TicketNotesUtil.sendReplyToRequester(ticket);
@@ -287,5 +295,6 @@ public class TicketNotes
 	/**
 	 * Initialize partial DataAccessObject
 	 */
-	public static PartialDAO<TicketNotesPartial> partialDAO = new PartialDAO<TicketNotesPartial>(TicketNotesPartial.class);
+	public static PartialDAO<TicketNotesPartial> partialDAO = new PartialDAO<TicketNotesPartial>(
+			TicketNotesPartial.class);
 }
