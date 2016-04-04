@@ -9,7 +9,7 @@
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
 							data-placement="right"
-							data-title:" data-content="Contacts have unsubscribed or hard bounced in the past."
+							data-title:" data-content="Total email skipped recorded & unique skipped."
 							id="element" data-trigger="hover" />
 						</span></th>
 				<th>Emails Opened<span
@@ -47,7 +47,7 @@
 			</tr>
             <tr>
 				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>
-				<td>{{#if skipped}}{{skipped}} {{else}} - {{/if}}</td>
+				<td>{{#if skipped}}{{skipped}} ({{unique_skipped}}) {{else}} - {{/if}}</td>
 				<td>{{#if opened}}{{opened}} ({{unique_opened}}) {{else}} - {{/if}}</td>
 				<td>{{#if clicks}} {{clicks}} ({{unique_clicks}}) {{else}} - {{/if}}</td>
 				<td>{{#if unsubscribed}}{{unsubscribed}} {{else}} - {{/if}}</td>

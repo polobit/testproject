@@ -155,35 +155,6 @@ public class CampaignReportsAPI
 	    // To show hardbounce and softbounce only for email sent campaigns
 	    int statsLength = stats.length();
 
-	    try
-	    {
-		// Hard Bounce data
-		stats.put(new JSONObject().put("log_type", "HARD_BOUNCE").put(
-			"total",
-			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
-				EmailBounceType.HARD_BOUNCE, Long.parseLong(startTime) / 1000,
-				Long.parseLong(endTime) / 1000) : 0));
-
-		// Soft Bounce Data
-		stats.put(new JSONObject().put("log_type", "SOFT_BOUNCE").put(
-			"total",
-			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
-				EmailBounceType.SOFT_BOUNCE, Long.parseLong(startTime) / 1000,
-				Long.parseLong(endTime) / 1000) : 0));
-
-		// Soft Bounce Data
-		stats.put(new JSONObject().put("log_type", "SPAM").put(
-			"total",
-			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId, EmailBounceType.SPAM,
-				Long.parseLong(startTime) / 1000, Long.parseLong(endTime) / 1000) : 0));
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-		System.err.println("Exception occured while retrieving bounced stats from datastore..."
-			+ e.getMessage());
-	    }
-
 	    JSONObject statsJSON = new JSONObject();
 
 	    // Add log_type as key and its count as value
@@ -196,6 +167,9 @@ public class CampaignReportsAPI
 		
 		if (json.getString("log_type").equals("EMAIL_OPENED"))
 		    statsJSON.put("unique_opened", json.getString("count"));
+		
+		if (json.getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
+		    statsJSON.put("unique_skipped", json.getString("count"));
 
 		statsJSON.put(stats.getJSONObject(i).getString("log_type"), stats.getJSONObject(i).getInt("total"));
 	    }
