@@ -120,4 +120,5 @@ function deserializeRhsFilters(data) {
 
     $('#activities_date_range #range').html(
         start.toString('MMMM d, yyyy') + " - " + end.toString('MMMM d, yyyy'));
+    
 }

@@ -779,6 +779,4 @@ function bindChangeEvent(ele){
 			initWebstatsDateRange();
 									
 		}, $('#lhs_filters_segmentation', cel));
-
-
   }
