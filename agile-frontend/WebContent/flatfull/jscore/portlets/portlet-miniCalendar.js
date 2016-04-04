@@ -3,6 +3,9 @@
 * and google events along with adding and updating the events
 **/
 
+miniCalStartDate = null;
+miniCalEndDate = null;
+
 //json Object for collecting events
 var jso=[];
 
@@ -43,9 +46,13 @@ function minicalendar(el)
 		            			   $(el).find('.fc-header').css('height','250px');		
 
 		            		   jso=[];
-		            		   var date=new Date();
-		            		   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
-		            		   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+		            		   var date = new Date();
+		            		   var todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
+		            		   var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+		            		   
+		            		   miniCalStartDate = todayDate;							
+							   miniCalEndDate = endDate;
+
 		            		   var todayDiv='<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>';
 		            		   if(_agile_get_prefs('current_date_calendar')!=null)
 		            		   {
@@ -405,7 +412,7 @@ function minicalendar(el)
 /** set up the library and gapi used to get google events from google calendar 
  * If calendar not available , returns.
  **/
-function loadingGoogleEvents(el,startTime,endTime){
+function loadingGoogleEvents(el,startTime,endTime){	
 
 	$.getJSON('core/api/calendar-prefs/get', function(response)
 			{
@@ -449,8 +456,10 @@ function init_cal(el){
 	fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
 	fc.sourceFetchers.push(function(sourceOptions, start, end) {
-		if (sourceOptions.dataType == 'agile-events')
-			loadingGoogleEvents(el,start.getTime()/1000,end.getTime()/1000);
+		if (sourceOptions.dataType == 'agile-events'){
+			loadingGoogleEvents(el,start.getTime()/1000,end.getTime()/1000);	
+			getOfficeEvents(el, start.getTime(), end.getTime());				
+		}
 	});
 
 }
@@ -481,6 +490,8 @@ function googledata(el,response,startTime,endTime)
 
 
 		}
+
+		
 
 		//**Add the google Events in the list of events in events_show div **/
 		var len=$(".events_show").find('.list').find('li').length;
@@ -604,6 +615,153 @@ function renderGoogleEvents(events,fc_event,el)
 				}
 			}
 }
+
+function getOfficeEvents(el, startDateTime, endDateTime){	
+
+	var url = "core/api/officecalendar/office365-appointments?startDate="+ startDateTime +"&endDate="+ endDateTime;
+	$.getJSON(url, function(response){
+		if(response){			
+			var events = [];
+			for (var i=0; i<response.length; i++){		
+				var obj = response[i];
+				//Start Date
+				var startDate = Math.round((new Date(obj.start).getTime()) / 1000);
+				obj.start = startDate;
+				//End Date
+				var endDate = Math.round((new Date(obj.end).getTime()) / 1000);
+				obj.end = endDate;
+
+				obj.color ='#74ceff';
+				obj.backgroundColor ='#74ceff';
+				obj.allDay = false;
+				
+				events.push(obj);				
+				$('#calendar_container',el).fullCalendar('renderEvent', obj);					
+			}		
+
+			//**Add the google Events in the list of events in events_show div **/
+		var len = $(".events_show").find('.list').find('li').length;
+		var date = new Date();
+		$.each(events,function(index,ev){
+			var todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
+			var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+
+			if(_agile_get_prefs('current_date_calendar')!=null)
+			{
+				var cookie_date = new Date(_agile_get_prefs('current_date_calendar'));
+				todayDate = cookie_date;
+				endDate = new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
+
+			}
+			if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) 
+			{	
+				var event_list = '<li class="p-t-xs p-r-xs" style="color:'+ ev.color +'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>';
+				if(len != 0){
+					$(el).find('.list').find('small').each(function( index ){
+						if(ev.start.format('HH:MM') < $(this).text()){
+							$(this).parents('li').before(event_list);
+							return false;
+						}
+
+					});
+				} else{
+					$(el).find('.list').append(event_list);
+				}
+			}
+		});
+		_agile_delete_prefs('current_date_calendar');
+		setTimeout(function(){
+			//_agile_delete_prefs('current_date_calendar');
+			if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
+			{
+				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+			}
+		},5000);				
+		}else{			
+			console.log("Error occurred while fetching office records.");
+		}
+	});	
+
+}
+
+/** Rendering the events to the mini Calendar
+** Also all day events are broken into each day event to show on every day
+*/
+function renderOfficeEvents(events,fc_event,el)
+{
+	fc_event.startDate=new Date(fc_event.start);
+			fc_event.end=new Date(fc_event.end);
+			fc_event.color='#3a3f51';
+			fc_event.backgroundColor='#3a3f51';
+			if(fc_event.allDay==true){
+				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
+				fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
+				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+				if(a==1)
+				{
+					fc_event.start=fc_event.start.getTime()/1000;
+					fc_event.end=(fc_event.end.getTime()-1)/1000;
+					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+					events.push(fc_event);
+				}
+				else
+				{
+					for(var i=0;i<a;i++){
+						var new_json={};
+						new_json=JSON.parse(JSON.stringify(fc_event));
+						if(i==0){
+							new_json.start=fc_event.start.getTime()/1000;
+							new_json.end=new Date(fc_event.start.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+						}
+						else if(i<a){		
+							new_json.start=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,00,00,00).getTime()/1000;
+							new_json.end=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,23,59,59).getTime()/1000;
+						}
+						else{
+							new_json.start=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,00,00,00).getTime()/1000;
+							new_json.end=fc_event.end.getTime()/1000;
+						}
+						console.log(new_json);
+						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+						events.push(new_json);
+					}
+				}
+
+			} 
+			else
+			{
+				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+
+				if(a==0){
+					fc_event.start=fc_event.startDate.getTime()/1000;
+					fc_event.end=fc_event.end.getTime()/1000;
+					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+					events.push(fc_event);
+				}
+				else{
+					for(var i=0;i<=a;i++){
+						var new_json={};
+						new_json=JSON.parse(JSON.stringify(fc_event));
+						if(i==0){
+							new_json.start=fc_event.startDate.getTime()/1000;
+							new_json.end=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+						}
+						else if(i<a){		
+							new_json.start=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,00,00,00).getTime()/1000;
+							new_json.end=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+						}
+						else{
+							new_json.start=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,00,00,00).getTime()/1000;
+							new_json.end=fc_event.end.getTime()/1000;
+						}
+						console.log(new_json);
+						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+						events.push(new_json);
+					}
+				}
+			}
+}
+
 /*
  *  get the aspectratio(width/height) for minicalendar
  */
