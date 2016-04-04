@@ -2,6 +2,7 @@ package com.analytics.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -237,7 +238,7 @@ public class AnalyticsUtil
 	    return null;
     }
     
-    public static Set<String> getEmails(String filterJSON, String startTime, String endTime, String pageSize,
+    public static List<String> getEmails(String filterJSON, String startTime, String endTime, String pageSize,
 	    String cursor)
     {
 	try
@@ -265,12 +266,14 @@ public class AnalyticsUtil
 	    
 	    String mergedStats = HTTPUtil.accessURLUsingPost(statsServerUrl, postDataBytes);
 	    JSONArray contactEmailsJsonArray = new JSONArray(mergedStats);
-	    Set<String> emails = new HashSet<String>();
-	    for (int i = 0; i < contactEmailsJsonArray.length(); i++)
+	    List<String> emails = new ArrayList<String>();
+	    for (int i = 0; i < contactEmailsJsonArray.length() - 1; i++)
 	    {
 		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
 		emails.add(contactEmail.get("email").toString());
 	    }
+	    String emailCountString = emails.get(contactEmailsJsonArray.length() - 1);
+	    emails.add(emailCountString);
 	    return emails;
 	}
 	catch (Exception e)
@@ -282,11 +285,22 @@ public class AnalyticsUtil
     }
     
     @SuppressWarnings("unchecked")
-    public static List<Contact> getContacts(Set<String> contactEmails)
+    public static List<Contact> getContacts(List<String> contactEmails)
     {
 	List<Contact> contacts = null;
+	int emailCount = 0;
 	if (contactEmails != null && contactEmails.size() > 0)
 	{
+	    try
+	    {
+		String emailCountString = contactEmails.get(contactEmails.size() - 1);
+		emailCount = Integer.parseInt(emailCountString);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Exception occured while converting segmentation email count string to int "
+			+ e.getMessage());
+	    }
 	    Objectify ofy = ObjectifyService.begin();
 	    com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
 	    Map<String, Object> searchMap = new HashMap<String, Object>();
@@ -299,8 +313,9 @@ public class AnalyticsUtil
 	    }
 	    System.out.println(query.toString());
 	    contacts = dao.fetchAll(query);
-	}
-	
+	    Contact contact = contacts.get(contacts.size() - 1);
+	    contact.count = emailCount;
+	}	
 	// for (String propName : .keySet())
 	// {
 	// q.filter(propName, map.get(propName));

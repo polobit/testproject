@@ -159,16 +159,16 @@ public class StatsSQL
      * @return - json array
      * @throws Exception
      */
-    public static JSONArray getJSONQuery(String query) throws Exception
+    public static JSONArray getJSONQuery(String query,boolean countQuery) throws Exception
     {
 	System.out.println("Query " + query);
 	
 	// get the ResultSet object
 	ResultSet rs = executeQuery(query);
 	
-//	ResultSet rs1 = null;
-//	if (countQuery)
-//	    rs1 = executeQuery(query);
+	ResultSet rs1 = null;
+	if (countQuery)
+	    rs1 = executeQuery(query);
 	
 	if (rs == null)
 	    return null;
@@ -216,18 +216,19 @@ public class StatsSQL
 		    System.out.println("Exception while iterating result set " + e.getMessage());
 		}
 	    }
-//	    if (countQuery)
-//	    {
-//		if (rs1 != null)
-//		{
-//		    if (rs1.next())
-//		    {
-//			int count = rs.getInt(1);
-//			JSONObject finalObject = (JSONObject) agentDetailsArray.get(agentDetailsArray.length() - 1);
-//			finalObject.put("total_rows_count", count);
-//		    }
-//		}
-//	    }
+	    if (countQuery)
+	    {
+		rs1 = executeQuery("select found_rows()");
+		if (rs1 != null)
+		{
+		    if (rs1.next())
+		    {
+			int count = rs.getInt(1);
+			JSONObject finalObject = (JSONObject) agentDetailsArray.get(agentDetailsArray.length() - 1);
+			finalObject.put("total_rows_count", count);
+		    }
+		}
+	    }
 	    
 	}
 	catch (Exception e)
@@ -240,6 +241,7 @@ public class StatsSQL
 	{
 	    // close the Connection and ResultSet objects
 	    closeResultSet(rs);
+	    closeResultSet(rs1);
 	}
 	
 	return agentDetailsArray;
