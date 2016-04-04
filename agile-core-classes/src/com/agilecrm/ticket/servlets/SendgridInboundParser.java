@@ -52,6 +52,11 @@ import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
+/**
+ * 
+ * @author Sasi
+ * 
+ */
 public class SendgridInboundParser extends HttpServlet
 {
 	/**
@@ -66,6 +71,9 @@ public class SendgridInboundParser extends HttpServlet
 		System.out.println("Get method called..");
 	}
 
+	/**
+	 * 
+	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		try
@@ -88,10 +96,11 @@ public class SendgridInboundParser extends HttpServlet
 
 					JSONObject enveloperJSON = new JSONObject(envelope);
 					String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
-					
+
 					/**
-					 * Replacing helptor.com text with space so that we'll get a string
-					 * of namespace and group ID separated by delimeter '+'
+					 * Replacing helptor.com text with space so that we'll get a
+					 * string of namespace and group ID separated by delimeter
+					 * '+'
 					 */
 					String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX, "").split("\\+");
 
@@ -116,15 +125,15 @@ public class SendgridInboundParser extends HttpServlet
 					NamespaceManager.set(namespace);
 
 					/**
-					 * GroupID is converted with Base62. So to get original GroupID
-					 * converting back to decimal with Base62.
+					 * GroupID is converted with Base62. So to get original
+					 * GroupID converting back to decimal with Base62.
 					 */
 					Long groupID = TicketGroupUtil.getLongGroupID(toAddressArray[1]);
 
 					System.out.println("groupID: " + groupID);
 
-					boolean isNewTicket = isNewTicket(toAddressArray);;
-
+					boolean isNewTicket = isNewTicket(toAddressArray);
+					;
 
 					TicketGroups ticketGroup = null;
 
@@ -140,7 +149,7 @@ public class SendgridInboundParser extends HttpServlet
 						System.out.println("Invalid groupID: " + groupID);
 						return;
 					}
-					
+
 					List<String> ccEmails = getCCEmails(json);
 
 					// Get email key value as it contains plain text, html text
@@ -164,7 +173,7 @@ public class SendgridInboundParser extends HttpServlet
 					Tickets ticket = null;
 
 					String[] nameEmail = getNameAndEmail(json);
-					
+
 					if (isNewTicket)
 					{
 						// Creating new Ticket in Ticket table
@@ -245,6 +254,11 @@ public class SendgridInboundParser extends HttpServlet
 		}
 	}
 
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 */
 	private String[] getNameAndEmail(JSONObject json)
 	{
 		String name = "x", from = "customer@domain.com";
@@ -259,6 +273,11 @@ public class SendgridInboundParser extends HttpServlet
 
 			if (StringUtils.isBlank(name))
 				name = from.substring(0, from.lastIndexOf("@"));
+			else
+			{
+				if (name.contains("\""))
+					name = name.replace("\"", "");
+			}
 
 			System.out.println("name: " + name);
 			System.out.println("from: " + from);
@@ -271,6 +290,11 @@ public class SendgridInboundParser extends HttpServlet
 		return new String[] { name, from };
 	}
 
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 */
 	private List<String> getCCEmails(JSONObject json)
 	{
 		if (!json.has("cc"))
@@ -299,6 +323,11 @@ public class SendgridInboundParser extends HttpServlet
 		return new ArrayList<>();
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	private JSONObject getJSONFromMIME(HttpServletRequest request)
 	{
 		JSONObject dataJSON = new JSONObject();
@@ -315,35 +344,7 @@ public class SendgridInboundParser extends HttpServlet
 			{
 				item = iter.next();
 
-				// System.out.println("Field name: " + item.getFieldName());
-				// System.out.println("Field value: ");
-				// System.out.println(IOUtils.toString(item.openStream()));
-
 				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream(), "UTF-8"));
-
-				// if (item.isFormField())
-				// {
-				// System.out.println("Form field:  " + name);
-				// String value = IOUtils.toString(item.openStream());
-				//
-				// dataJSON.put(name, value);
-				// }
-				// else
-				// {
-				// name = item.getName();
-				// System.out.println("name==" + name);
-				//
-				// if (name != null && !"".equals(name))
-				// {
-				// String fileName = new File(item.getName()).getName();
-				// System.out.println("fileName: " + fileName);
-				// System.out.println("file content: ");
-				//
-				// String theString = IOUtils.toString(item.openStream());
-				//
-				// System.out.println(theString);
-				// }
-				// }
 			}
 		}
 		catch (Exception e)
@@ -353,7 +354,7 @@ public class SendgridInboundParser extends HttpServlet
 
 		return dataJSON;
 	}
-	
+
 	/**
 	 * If received ticket is reply to existing ticket then email address will be
 	 * in the form of namespace+groupid+ticketid@helptor.com
@@ -362,7 +363,7 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		return (toAddressArray.length == 3) ? false : true;
 	}
-	
+
 	public static void main(String[] args) throws JSONException, IOException
 	{
 		File file = new File("D:\\email.txt");

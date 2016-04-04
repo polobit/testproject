@@ -115,10 +115,12 @@ public class TicketFiltersUtil
 				case "group_id":
 				{
 					if (LHS.equalsIgnoreCase("assignee_id")  && RHS.equalsIgnoreCase("0")) {
+						
 						Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
 					   
-						RHS = domainUserKey.getId()+"";
-					}					
+						RHS = domainUserKey.getId() + "";
+					}
+					
 					if (operator != null && operator.contains("not"))
 						query.append("NOT " + LHS + "=" + RHS);
 					else
@@ -296,7 +298,7 @@ public class TicketFiltersUtil
 		conditions = new ArrayList<SearchRule>();
 		searchRule = new SearchRule();
 		searchRule.LHS = "assignee_id";
-		searchRule.CONDITION = RuleCondition.IS;
+		searchRule.CONDITION = RuleCondition.EQUALS;
 		searchRule.RHS = "0";
 		conditions.add(searchRule);
 
@@ -306,7 +308,5 @@ public class TicketFiltersUtil
 		myTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 		TicketFilters.dao.put(myTickets);
-
-	
 	}
 }
