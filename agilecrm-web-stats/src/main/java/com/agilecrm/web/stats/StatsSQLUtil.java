@@ -175,7 +175,7 @@ public class StatsSQLUtil
 	
 	try
 	{
-	    return StatsSQL.getJSONQuery(pageViews);
+	    return StatsSQL.getJSONQuery(pageViews,false);
 	}
 	catch (Exception e1)
 	{
@@ -210,7 +210,7 @@ public class StatsSQLUtil
 	
 	try
 	{
-	    return StatsSQL.getJSONQuery(pageViews);
+	    return StatsSQL.getJSONQuery(pageViews,false);
 	}
 	catch (Exception e1)
 	{
@@ -241,7 +241,7 @@ public class StatsSQLUtil
 		+ "' AND URL !='' AND EMAIL != '' ORDER BY stats_time DESC" + appendLimitToQuery(offset, limit);
 	try
 	{
-	    result = StatsSQL.getJSONQuery(pageViewsQuery);
+	    result = StatsSQL.getJSONQuery(pageViewsQuery,false);
 	    if (result != null)
 		StatsUtil.sendResponse(req, res, result.toString());
 	}
@@ -274,7 +274,7 @@ public class StatsSQLUtil
 		+ appendLimitToQuery(offset, limit);
 	try
 	{
-	    result = StatsSQL.getJSONQuery(pageViewsQuery);
+	    result = StatsSQL.getJSONQuery(pageViewsQuery,false);
 	    if (result != null)
 		StatsUtil.sendResponse(req, res, result.toString());
 	}
@@ -299,7 +299,7 @@ public class StatsSQLUtil
 	    int limit = StatsUtil.getIntegerValue(limitString, 5);
 	    String query = "SELECT * FROM page_visits WHERE domain = "
 		    + StatsGoogleSQLUtil.encodeSQLColumnValue(domain) + " LIMIT " + limit;
-	    JSONArray result = StatsSQL.getJSONQuery(query);
+	    JSONArray result = StatsSQL.getJSONQuery(query,false);
 	    if (result != null)
 		StatsUtil.sendResponse(req, res, result.toString());
 	}
@@ -517,7 +517,7 @@ public class StatsSQLUtil
 	
 	try
 	{
-	    return StatsSQL.getJSONQuery(urlCountQuery);
+	    return StatsSQL.getJSONQuery(urlCountQuery,false);
 	}
 	catch (Exception e)
 	{
@@ -541,7 +541,7 @@ public class StatsSQLUtil
 	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
 		    startTime, endTime, cursor, pageSize);
 	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
-	    return StatsSQL.getJSONQuery(segementationQuery);
+	    return StatsSQL.getJSONQuery(segementationQuery,true);
 	}
 	catch (Exception e)
 	{
@@ -564,7 +564,7 @@ public class StatsSQLUtil
 	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
 		    startTime, endTime, cursor, pageSize);
 	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
-	    return StatsSQL.getJSONQuery(segementationQuery);
+	    return StatsSQL.getJSONQuery(segementationQuery,false);
 	}
 	catch (Exception e)
 	{
