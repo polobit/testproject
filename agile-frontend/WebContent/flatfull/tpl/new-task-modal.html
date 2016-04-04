@@ -69,30 +69,26 @@
                 </div>
 
 
-                       <div class="row">
-                        <div class="col-sm-6">
-                        <div class="control-group form-group">
-                            <label class="control-label col-sm-6">Owner<span class="field_req">*</span></label>
-                            <div class="controls col-sm-5"  id="owners">
+                       <div class="control-group form-group">
+                            <label class="control-label col-sm-3">Owner<span class="field_req">*</span></label>
+                            <div class="controls col-sm-7" id="owners">
                                 <select id="owners-list" class="required form-control" name="owner_id"></select>
-                                <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/21-0-new.gif"></img>                          
+                                <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/21-0-new.gif"></img>
                             </div>
-                        </div>
-                        </div>
-                        <div class="col-sm-5">
-                        <div class="control-group form-group">
-                            <label for="priority_type" class="control-label col-sm-4"> Priority</label>
-                            <div class="controls col-sm-5" {{#is_mobile}} {{else}} style="padding: 0 2px 0 0px;" {{/is_mobile}}>
+                       </div>
+
+
+                       <div class="control-group form-group">
+                            <label for="priority_type" class="control-label col-sm-3">Priority</label>
+                            <div class="controls col-sm-7" >
                                 <select name="priority_type" id="priority_type" size="1" class="input-medium form-control">
                                         <option value="HIGH">High</option>
                                         <option value="NORMAL" selected="selected">Normal</option>
                                         <option value="LOW">Low</option>
-                                    </select>   
+                                    </select>
                             </div>
-                        </div>
-                    </div>
+                       </div>
 
-                </div>
 
                     <div class="control-group form-group">
                             <label for="status" class="control-label col-sm-3">Status</label>

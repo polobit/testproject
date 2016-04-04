@@ -30,22 +30,22 @@
           
           <div class="row">
                         <div class="col-sm-6">
-                        <div class="control-group form-group" style="margin-bottom:15px;">
-                            <label class="control-label col-sm-6">Value <span class="field_req">*</span></label>
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-6">Value<span class="field_req">*</span></label>
                             <div class="controls col-sm-5">
                               <input type="text" name="expected_value"
                 class="required  number form-control" min="0" max="1000000000000"
-                placeholder="Value of Deal"  style="font-size:13px"/>            
+                placeholder="Value of Deal" title="Value of Deal"  style="font-size:13px"/>            
                             </div>
                         </div>
                         </div>
                         <div class="col-sm-6">
-                        <div class="control-group form-group" style="margin-bottom:15px;">
-                            <label class="control-label col-sm-5"  {{#is_mobile}} {{else}} style="padding-left:0px;"{{/is_mobile}}>Probability (%) <span class="field_req">*</span></label>
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-5"  {{#is_mobile}} {{else}} style="padding-left:0px;"{{/is_mobile}}>Probability (%)<span class="field_req">*</span></label>
                             <div class="controls col-sm-3 {{#is_mobile}} {{else}} p-l-none {{/is_mobile}}">
                                 <input type="text" id="probability"
                 name="probability" value="20" class=" required digits form-control" max="100"
-                placeholder="Probability %" />      
+                placeholder="Probability %" title="Probability %" />      
                             </div>
                         </div>
                         </div>

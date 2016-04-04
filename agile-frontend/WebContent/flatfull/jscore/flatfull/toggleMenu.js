@@ -58,6 +58,11 @@ $(document).ready(function(){
    $("#taskDescriptionInfo").toggle();
    });
 
+$("#activityModal").on("click", "#eventDescriptionLink", function(e){
+ e.preventDefault();
+ $(this).hide();
+   $(".eventDescriptionInfo").toggle();
+   });
 //addDescriptionInfo();
 	
 	
