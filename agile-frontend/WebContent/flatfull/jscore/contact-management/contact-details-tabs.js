@@ -335,11 +335,15 @@ function get_property_JSON(contactJSON)
 function populate_send_email_details(el)
 {
 
-	$("#emailForm", el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name);
+	if(CURRENT_DOMAIN_USER && CURRENT_DOMAIN_USER.name)
+	{
+		//When name contains script word, we are getting that script as &#x73;cript from server side
+		$("#emailForm", el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name.replace(/&#x73;+/g, 's'));
+	}
 	if(CURRENT_DOMAIN_USER && CURRENT_DOMAIN_USER.email)
 	{
-		//When email contains script word, we are getting that script as &#x73;cript
-		$("#emailForm", el).find('input[name="from"]').val(CURRENT_DOMAIN_USER.email.replace("&#x73;", "s"));
+		//When email contains script word, we are getting that script as &#x73;cript from server side
+		$("#emailForm", el).find('input[name="from"]').val(CURRENT_DOMAIN_USER.email.replace(/&#x73;+/g, 's'));
 	}
 
 	// Fill hidden signature field using userprefs
