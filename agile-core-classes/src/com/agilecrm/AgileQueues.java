@@ -12,6 +12,7 @@ public class AgileQueues
 
     // Campaign Push Queue
     public static final String CAMPAIGN_QUEUE = "campaign-queue";
+    public static final String CAMPAIGN_LOG_QUEUE = "campaign-log-pull-queue";
     public static final String BULK_CAMPAIGN_QUEUE = "bulk-campaign-queue";
     public static final String NORMAL_CAMPAIGN_QUEUE = "normal-campaign-queue";
     public static final String UPDATE_WORKFLOWS_QUEUE = "update-workflows-queue";

@@ -98,6 +98,10 @@ cron:
   url: /backend/cron/cron-pull?q=normal-campaign-pull-queue
   schedule: every 1 mins
 
+- description: Normal Log Campaign Cron
+  url: /backend/cron/cron-pull?q=campaign-log-pull-queue
+  schedule: every 1 mins  
+
 - description: Bulk Campaign Cron
   url: /backend/cron/cron-pull?q=bulk-campaign-pull-queue
   schedule: every 1 mins
