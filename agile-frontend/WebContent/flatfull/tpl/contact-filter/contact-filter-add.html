@@ -437,12 +437,13 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp"  class="w-full form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state zip org_name custom_label custom_sfsadf org_custom_label country org_custom_sfsadf tags tags_time">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip org_name custom_label custom_sfsadf org_custom_label country org_custom_sfsadf">is</option>
+															<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf country tags tags_time">isn't</option>
-														
+														class="name company owner org_tag title email url phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf country">isn't</option>
+														<option value="NOTEQUALS" class="tags tags_time">isn't</option>	
 													<option value="ON" class="updated_time created_time">on</option>
 													<option value="AFTER" class="created_time updated_time">is
 														after</option>
@@ -572,11 +573,13 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state zip org_name custom_label custom_sfsadf org_custom_label country org_custom_sfsadf tags tags_time">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip org_name custom_label custom_sfsadf org_custom_label country org_custom_sfsadf">is</option>
+														<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf country tags tags_time">isn't</option>
+														class="name company owner org_tag title email url phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf country">isn't</option>
+														<option value="NOTEQUALS" class="tags tags_time">isn't</option>
 													<option value="EQUALS" class="lead_score">equals</option>
 													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
