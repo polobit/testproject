@@ -107,21 +107,21 @@ public class StatsUtil
     {
 	String ipAddress = null;
 	
-	String forwardedIpsStr = req.getHeader("X-Forwarded-For");
+	/*
+	 * String forwardedIpsStr = req.getHeader("X-Forwarded-For");
+	 * 
+	 * // Check if forwardedIps not empty if
+	 * (!StringUtils.isEmpty(forwardedIpsStr)) { // 'x-forwarded-for' header
+	 * may return multiple IP addresses in // the format:
+	 * "client IP, proxy 1 IP, proxy 2 IP" so take the // the first one
+	 * String[] forwardedIps = forwardedIpsStr.split(","); ipAddress =
+	 * forwardedIps[0]; }
+	 * 
+	 * // If ipAddress is empty, get remote address if
+	 * (StringUtils.isEmpty(ipAddress)) ipAddress = req.getRemoteAddr();
+	 */
 	
-	// Check if forwardedIps not empty
-	if (!StringUtils.isEmpty(forwardedIpsStr))
-	{
-	    // 'x-forwarded-for' header may return multiple IP addresses in
-	    // the format: "client IP, proxy 1 IP, proxy 2 IP" so take the
-	    // the first one
-	    String[] forwardedIps = forwardedIpsStr.split(",");
-	    ipAddress = forwardedIps[0];
-	}
-	
-	// If ipAddress is empty, get remote address
-	if (StringUtils.isEmpty(ipAddress))
-	    ipAddress = req.getRemoteAddr();
+	ipAddress = req.getRemoteAddr();
 	
 	return ipAddress;
     }

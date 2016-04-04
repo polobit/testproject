@@ -16,10 +16,10 @@
 $(function(){
      if(!HANDLEBARS_PRECOMPILATION)
           return;
-
-     console.time("loadtemplates");
-     tpl_directory.loadTemplates(["contact-view", "case", "document", "workflow", "portlets", "web-rules", "landingpages", "settings", "admin", "admin-settings"],
+      
+     startFunctionTimer("loadtemplates");
+     tpl_directory.loadTemplates(["contact-view", "case", "document", "workflow", "portlets", "web-rules", "landingpages", "settings", "admin", "admin-settings", "tickets"],
         function () {
-            console.timeEnd("loadtemplates");
+            endFunctionTimer("loadtemplates");
         });
 });

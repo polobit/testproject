@@ -975,6 +975,33 @@
 		<servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>TicketWebhook</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketWebhook</servlet-name>
+		<url-pattern>/ticket-module/backend/webhook</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>TicketOpenServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketOpenServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketOpenServlet</servlet-name>
+		<url-pattern>/ticket-module/backend/open</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketSLAServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<url-pattern>/backend/ticket/slacron</url-pattern>
+	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
@@ -1066,6 +1093,15 @@
         <servlet-name>TaskReminderUnitTest</servlet-name>
         <url-pattern>test/taskreminder/unit-test</url-pattern>
     </servlet-mapping>
+   <servlet>
+		<servlet-name>TicketsPdfServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketsPdfServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketsPdfServlet</servlet-name>
+		<url-pattern>/ticketsPdfServlet</url-pattern>
+	</servlet-mapping>
+	
     <servlet>
     
         <servlet-name>AllDomainStatsServlet</servlet-name>

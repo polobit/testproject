@@ -1366,9 +1366,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 		if (check_count == 0)
 		{
-			if(company_util.isCompany())
-				$('#bulk-actions').css('display', 'none');
-			else
+			
 				$("#bulk-action-btns button").addClass("disabled");
 		}
 	}

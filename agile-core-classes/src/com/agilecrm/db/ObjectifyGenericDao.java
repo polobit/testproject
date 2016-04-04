@@ -36,6 +36,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -53,6 +54,13 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
+import com.agilecrm.ticket.entitys.TicketCannedMessages;
+import com.agilecrm.ticket.entitys.TicketDocuments;
+import com.agilecrm.ticket.entitys.TicketFilters;
+import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.ContactViewPrefs;
@@ -120,7 +128,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 public class ObjectifyGenericDao<T> extends DAOBase
 {
 
-    static final String[] countRestrictedClassNames = new String[] { "contact", "activity" };
+    static final String[] countRestrictedClassNames = new String[] { "contact", "activity", "opportunity" };
 
     static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
 
@@ -226,6 +234,17 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	ObjectifyService.register(Office365CalendarPrefs.class);
 
+	// Ticket related entitys
+	ObjectifyService.register(Tickets.class);
+	ObjectifyService.register(TicketNotes.class);
+	ObjectifyService.register(TicketGroups.class);
+	ObjectifyService.register(TicketCannedMessages.class);
+	ObjectifyService.register(TicketFilters.class);
+	ObjectifyService.register(TicketDocuments.class);
+	//ObjectifyService.register(TicketActivity.class);
+	ObjectifyService.register(TicketLabels.class);
+	
+	
 	ObjectifyService.register(DealFilter.class);
 
 	ObjectifyService.register(LandingPage.class);
@@ -236,6 +255,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//All Domain Stats report for Agile Management
 	ObjectifyService.register(AllDomainStats.class);
+
+	// CSV Import status
+	ObjectifyService.register(ImportStatus.class);
 
     }
 
@@ -1056,6 +1078,25 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		}
 		
 		return keys;
+    }
+    
+    /**
+     * Convenience method to get number of entities with max limit based on properties map
+     * 
+     * @param map
+     * @return T matching object
+     */
+    public int getCountByPropertyWithLimit(Map<String, Object> map, int limit)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+	
+	q.limit(limit);
+
+	return getCount(q);
     }
     
 

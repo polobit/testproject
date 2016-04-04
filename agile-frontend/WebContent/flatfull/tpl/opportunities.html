@@ -1,4 +1,4 @@
-<script id="opportunities-collection-template" type="text/html">
+<script id="opportunities-header-list-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 {{#is_mobile}}
 {{else}}
@@ -48,6 +48,12 @@
             <li><a href="#add-dashlet">Add Dashlet</a></li>
           
           </ul>
+
+          {{else}}
+          <ul class="dropdown-menu pull-right">
+          <li><a href="#add-dashlet">Add Dashlet</a></li>
+          </ul>
+          
           {{/hasScope}}
           <!--
           {{#is_mobile}}
@@ -75,117 +81,8 @@
     </div>
   </div>
   </div>
-<div class="{{#is_mobile}} {{else}} wrapper-md {{/is_mobile}}">
-<div class="row">
-    <div class="col-md-9">
-        <div id="slate">
-        </div>
-        {{#if this.length}}
-        {{#is_mobile}}
-        {{else}}
-        <div id="total-pipeline-chart" class="w-full bg-white" style="height:300px"></div>
-        
-        <br />
-      <div>
-        <div class="btn-group pull-left" id="bulk-actions" style="display:none;">
-          <div class="btn btn-sm btn-default">Bulk Actions</div>
-          <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
-            <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu" id="view-actions">
-          {{#hasScope 'MANAGE_DEALS'}}
-            <li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
-          {{/hasScope}}
-            <li><a href="#" id="bulk_deals_milestone_change" data-toggle="modal">Change Milestone/Track</a></li>
-            <li class="divider"></li>
-            <li><a href="#deal_contact_add_tag_modal" data-toggle="modal">Add Tag to related Contacts</a></li>
-            {{#hasMenuScope 'CAMPAIGN'}}
-              <li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
-            {{/hasMenuScope}}
-            <li class="divider"></li>
-            <li><a href="#" id="bulk_deals_archive" data-toggle="modal">Archive</a></li>
-            <li><a href="#" id="bulk_deals_restore" data-toggle="modal">Restore</a></li>
-            <li class="divider"></li>
-            <li><a href="#" id="deal-delete-checked" data-toggle="modal">Delete</a></li>
-            
-          </ul>
-        </div>
-        <div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
-        <div class="clearfix"></div>
-        <br>
-      </div>
-      {{/is_mobile}}
-      <div class="panel panel-default" {{#is_mobile}} style="border:0px; border-radius:0px;" {{/is_mobile}}>
-      {{#is_mobile}} {{else}} <div class="panel-heading"> Deals</div>{{/is_mobile}}
-      <div class="table-responsive">
 
-                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
-
-          {{#is_mobile}}
-           {{else}}
-          <thead>
-                        <tr>
-                            <th>Opportunity</th>
-                            <th>Related To</th>
-                            <th>Value</th>
-                            <th>Milestone</th>
-                            <th>Close Date</th>
-                            <th>Owner</th>
-                        </tr>
-                    </thead>
-                    {{/is_mobile}}
-                    <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
-                    </tbody>
-                </table>
-            </div>
-            </div>
-        
-        {{/if}}
-        </div>
-
-        {{#is_mobile}}
-
-        {{else}}
-        
-    <div class="col-md-3">
-        <div class="data-block">
-        {{#is_mobile}}
-        {{else}}
-        
-            <div class="panel wrapper m-b-none">
-                <header>
-                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> Milestones</h4>
-                </header>
-                <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
-      </div>
-       {{/is_mobile}}
-
-      <div class="m-t-md">
-                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
-                    What are Milestones?
-                </h4>
-                
-                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
-                    Milestones are used to define the status of the deal.
-                </p>
-                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
-                    e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
-                </p>
-                
-                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
-                    What are Deals?
-                </h4>
-                
-                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs{{/is_mobile}}">
-                    Deals are opportunities you can continuously track throughout their life-cycle.
-                </p>
-            </div>
-        </div> 
-    </div>
-     {{/is_mobile}}
-
-</div>
-</div>
+  <div class="new-collection-deal-list"></div>
 
 </div>
 
@@ -538,4 +435,138 @@
       </div>
     </div>
   </div>
+</div>
+
+<script id="opportunities-collection-template" type="text/html">
+
+<div class="{{#is_mobile}} {{else}} wrapper-md {{/is_mobile}}">
+<div class="row">
+    <div class="col-md-9">
+        <div id="slate">
+        </div>
+        {{#if this.length}}
+        {{#is_mobile}}
+        {{else}}
+        <div id="total-pipeline-chart" class="w-full bg-white" style="height:300px;display:none;"></div>
+        
+        <br />
+      <div>
+        <div class="btn-group pull-left" id="bulk-actions" style="display:none;">
+          <div class="btn btn-sm btn-default">Bulk Actions</div>
+          <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" id="view-actions">
+          {{#hasScope 'MANAGE_DEALS'}}
+            <li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
+          {{/hasScope}}
+            <li><a href="#" id="bulk_deals_milestone_change" data-toggle="modal">Change Milestone/Track</a></li>
+            <li class="divider"></li>
+            <li><a href="#deal_contact_add_tag_modal" data-toggle="modal">Add Tag to related Contacts</a></li>
+            {{#hasMenuScope 'CAMPAIGN'}}
+              <li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
+            {{/hasMenuScope}}
+            <li class="divider"></li>
+            <li><a href="#" id="bulk_deals_archive" data-toggle="modal">Archive</a></li>
+            <li><a href="#" id="bulk_deals_restore" data-toggle="modal">Restore</a></li>
+            <li class="divider"></li>
+            <li><a href="#" id="bulk_deals_delete" data-toggle="modal">Delete</a></li>
+            
+          </ul>
+        </div>
+        <div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
+        <div class="clearfix"></div>
+        <br>
+      </div>
+      {{/is_mobile}}
+      <div class="panel panel-default" {{#is_mobile}} style="border:0px; border-radius:0px;" {{/is_mobile}}>
+      {{#is_mobile}} {{else}} <div class="panel-heading"> Deals</div>{{/is_mobile}}
+      <div class="table-responsive">
+
+                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap {{#is_mobile}} noDelete {{/is_mobile}}" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
+
+          {{#is_mobile}}
+           {{else}}
+          <thead>
+                        <tr>
+                            <th>Opportunity</th>
+                            <th>Related To</th>
+                            <th>Value</th>
+                            <th>Milestone</th>
+                            <th>Close Date</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    {{/is_mobile}}
+                    <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        
+        {{/if}}
+        </div>
+
+        {{#is_mobile}}
+
+        {{else}}
+        
+    <div class="col-md-3">
+        <div class="data-block">
+        {{#is_mobile}}
+        {{else}}
+        
+            <div class="panel wrapper m-b-none">
+                <header>
+                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> Milestones</h4>
+                </header>
+                <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
+      </div>
+       {{/is_mobile}}
+
+      <div class="m-t-md">
+                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
+                    What are Milestones?
+                </h4>
+                
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
+                    Milestones are used to define the status of the deal.
+                </p>
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
+                    e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
+                </p>
+                
+                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
+                    What are Deals?
+                </h4>
+                
+                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs{{/is_mobile}}">
+                    Deals are opportunities you can continuously track throughout their life-cycle.
+                </p>
+            </div>
+        </div> 
+    </div>
+     {{/is_mobile}}
+
+</div>
+</div>
+</script>
+
+<!-- Bulk delete ACLs confirmation-->
+<div id="deal_bulk_delete_acl_modal" class="deal_bulk_modal modal fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">Delete</h3>
+  </div>
+  <div class="modal-body">
+    You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?
+  </div>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+    <a href="#" id="deal-bulk-delete-acl" class="btn btn-sm btn-primary">Yes</a>
+  </div>
+</div>
+</div>
 </div>

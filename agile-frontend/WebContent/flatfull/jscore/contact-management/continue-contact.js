@@ -478,11 +478,10 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 	/*
 	 * Check whether there are any properties in existing contact, which can get
 	 * lost in contact update form. There are chances user adds a property(may
-	 * be stripe id..) using developers API, in order not to loose them
-	 * following verification is done
+	 * be stripe id..) using developers API and contact image saved as CUSTOM type,
+	 * in order not to loose them following verification is done
 	 */
-	 //Not added custome field data which is not there in form
-	/*if (obj.properties)
+	if (obj.properties)
 	{
 		var properties_temp = properties;
 		$
@@ -508,13 +507,13 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 												// in new properties then
 												// preserving them.
 												else if (new_property_index == (properties_temp.length - 1) && custom_fields_in_template
-														.indexOf(contact_property.name) == -1 && contact_property.type == "CUSTOM")
+														.indexOf(contact_property.name) == -1 && contact_property.type == "CUSTOM" && contact_property.name == "image")
 												{
 													properties.push(contact_property);
 												}
 											});
 						});
-	}*/
+	}
 
 	// Stores json object with "properties" as value
 	var propertiesList = [];

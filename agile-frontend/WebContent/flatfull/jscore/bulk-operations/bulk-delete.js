@@ -23,8 +23,8 @@ $(function(){
 
 		$(table).find('tr .tbody_check').each(function(index, element){
 			
-			// If element is checked store it's id in an array 
-			if($(element).is(':checked')){
+			// If element is checked store it's id in an array. !$(element).attr('disabled') included by Sasi to avoid disabled checkboxes
+			if($(element).is(':checked') && !$(element).attr('disabled')){
 				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
 				$(element).closest('tr').on("mouseenter", false);
 				index_array.push(index);
@@ -80,6 +80,31 @@ $(function(){
 			}
 			else
 			{
+				if($(table).hasClass('show-delete-modal')){
+
+					var json = {};
+					json.title = $(table).attr('data-bulk-delete-title');
+					json.msg = $(table).attr('data-bulk-delete-msg');
+
+					getTemplate("bulk-actions-delete-modal", json, undefined, function(template_ui){
+
+						if(!template_ui)
+							return;
+
+						$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function(){
+
+							$('#ticketsModal').on('click', 'a.bulk-delete', function(e){
+
+								$('#ticketsModal').modal('hide');
+								$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+								bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
+							});
+						});				
+					});
+
+					return;
+				}
+
 				// customize delete confirmation message
 				if(!customize_delete_message(table))
 					return;
@@ -318,13 +343,11 @@ function customize_bulk_delete(id_array, data_array){
 	if(Current_Route == 'users'){
 		$.each(data_array, function(index, model){
 			if(model.is_admin){
-				console.log(id_array.indexOf(model.id));
-				id_array.splice((id_array.indexOf(model.id)+1), 1);
-
+				id_array.splice(id_array.indexOf(model.id), 1);
 			}	
 		});
 		if(id_array.length == 0){
-			$('body').find(".master-tag").html('<div class="alert alert-danger delete-adminuser"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
 			return false;
 		}
 	}
@@ -389,7 +412,10 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			if(count >= 100 || count == 0)
 			{
 				if($(table).attr('id') == "contacts-table")
+				{
 					showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
+					CONTACTS_HARD_RELOAD = true;
+				}
 				if($(table).attr('id') == "companies"){
 					showNotyPopUp('information', "Your companies deletion will be processed shortly", "top", 5000);
 					COMPANIES_HARD_RELOAD = true;
@@ -424,6 +450,41 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			{}
 
 			$('.thead_check').attr("checked", false);
+			
+			switch(url){
+				case 'core/api/tickets/groups/bulk':{
+
+					if(id_array.length == App_Ticket_Module.groupsCollection.collection.length)
+						App_Ticket_Module.ticketGroups();
+					break;
+				}
+				case 'core/api/tickets/canned-messages/bulk':{
+					if(id_array.length == App_Ticket_Module.cannedResponseCollection.collection.length)
+						App_Ticket_Module.cannedResponses();
+					break;
+				}
+				case 'core/api/tickets/filters/bulk':{
+
+					  if(id_array.length == App_Ticket_Module.ticketFiltersList.collection.length)
+						App_Ticket_Module.ticketFilters();
+
+			    	  $.each(id_array, function(index, data){
+				      	App_Ticket_Module.ticketFiltersList.collection.remove(data);
+				      });
+
+				      if(id_array.indexOf(Ticket_Filter_ID) != -1){
+	                      var filterJSON = App_Ticket_Module.ticketFiltersList.collection.at(0).toJSON();
+			 			  Ticket_Filter_ID = filterJSON.id;
+			 		  }
+
+					break;
+				}
+				case 'core/api/tickets/labels/bulk':{
+					if(id_array.length == Ticket_Labels.labelsCollection.collection.length)
+						App_Ticket_Module.ticketLabels();
+					break;
+				}
+			}	
 			
 			// Show bulk operations only when thead check box is checked
 			toggle_contacts_bulk_actions_dropdown(undefined, true,$('.thead_check').parents('table').attr('id'));

@@ -647,9 +647,12 @@ var ContactsRouter = Backbone.Router.extend({
 		$(el).find('.content-tabs').tabCollapse(); 
 
 		$('#content').html(el);
-
+	/*	if($(".toggle-contact-image .contact-delete-option").length == 0) {
+			$(".toggle-contact-image .contact-edit-option").css("margin-left","10px");
+			}*/
 		// Check updates in the contact.
 		checkContactUpdated();
+
 
 		if(_agile_get_prefs('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -790,7 +793,29 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	importContacts : function()
 	{
-		$('#content').html('<div id="import-contacts-event-listener"></div>');
+
+		App_Contacts.importContacts = new CONTACTS_IMPORT_VIEW({
+			url : 'core/api/upload/status/CONTACTS',
+			template : "import-contacts",
+			postRenderCallback: function(el)
+			{
+				initializeImportEvents("import-contacts-event-listener");
+
+				if(import_tab_Id) {
+					 $('#import-tabs-content a[href="#'+import_tab_Id+'"]', el).tab('show');
+					 import_tab_Id=undefined;
+				}
+				else{
+					$('#import-tabs-content a[href="#csv-tab"]', el).tab('show');
+				}
+			}
+
+		});
+
+		$('#content').html(App_Contacts.importContacts.render().el);
+		
+/*
+$('#content').html('<div id="import-contacts-event-listener"></div>');
 		getTemplate("import-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -805,7 +830,8 @@ var ContactsRouter = Backbone.Router.extend({
 				$('#import-tabs-content a[href="#csv-tab"]').tab('show');
 			}
 
-		}, "#import-contacts-event-listener");       
+		}, "#import-contacts-event-listener");      
+		*/ 
 	},
 	
 

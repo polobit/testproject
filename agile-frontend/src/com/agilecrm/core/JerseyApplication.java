@@ -112,9 +112,24 @@ public class JerseyApplication extends Application
 	// s.add(com.agilecrm.core.api.webpage.WebPageAPI.class);
 	s.add(com.agilecrm.core.api.deals.DealFilterAPI.class);
 	s.add(com.agilecrm.core.api.widgets.GoogleWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.BrainTreeWidgetAPI.class);
 	s.add(com.agilecrm.core.api.deals.GoalsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.PaypalWidgetApi.class);
 	s.add(com.agilecrm.webhooks.triggers.util.AgileWebhookAPI.class);
+	
+	//Ticket Rest classes
+	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketGroupRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketNotesRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketGroupRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketCannedMessagesRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketFiltersRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketBulkActionsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketImportsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketLabelsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketReportsRest.class);
 
 	return s;
     }

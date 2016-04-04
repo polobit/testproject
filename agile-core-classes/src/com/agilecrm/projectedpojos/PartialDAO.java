@@ -2,10 +2,13 @@ package com.agilecrm.projectedpojos;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -29,6 +32,20 @@ public class PartialDAO<T extends ProjectionEntityParse> {
      */
     protected Class<T> clazz;
     
+    private static Set<String> ignoreFields = new HashSet<String>()
+	{
+		private static final long serialVersionUID = 1L;
+		{
+			add("id");
+			add("properties");
+			add("domain");
+			
+			/**Ticket related fields to ignore**/
+			add("ticket_notes_assinee");
+			add("group_email");
+		}
+	};
+    		
     /**
      * We've got to get the associated domain class somehow
      * 
@@ -66,16 +83,12 @@ public class PartialDAO<T extends ProjectionEntityParse> {
      * @return
      */
     public T get(Long id){
-    	// Create a basic query
-    	Query query = new Query(getActualDAOClassName(), KeyFactory.createKey(getActualDAOClassName(), id));
-    	
-    	// Add projection props
-    	query = addProjectionFields(query);
     	
     	try {
     		// Process Query
-    		Entity entity = getDataStore().prepare(query).asSingleEntity();
-    		return (T) this.clazz.newInstance().parseEntity(entity);
+    		Entity entity = getEntityFromId(id);
+    		if(entity != null)
+    			return (T) this.clazz.newInstance().parseEntity(entity);
 		} catch (Exception e) {
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
@@ -83,6 +96,32 @@ public class PartialDAO<T extends ProjectionEntityParse> {
     	return null;
     	
     }
+    
+    /**
+     * Partial Object with given type id
+     * @param id
+     * @return
+     */
+    public Entity getEntityFromId(Long id){
+    	// Create a basic query
+    	Query query = new Query(getActualDAOClassName(), KeyFactory.createKey(getActualDAOClassName(), id));
+    	
+    	// Add projection props
+    	query = addProjectionFields(query);
+    	
+    	System.out.println("query: " + query);
+    	
+    	try {
+    		// Process Query
+    		return getDataStore().prepare(query).asSingleEntity();
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	
+    	return null;
+    	
+    }
+    
     /**
      * List of objects with conditional base
      * @param map
@@ -116,15 +155,42 @@ public class PartialDAO<T extends ProjectionEntityParse> {
     }
     
     /**
+     * Partial Object with given type id
+     * @param id
+     * @return
+     */
+    public T get(Long id, String domainName){
+    	
+    	try {
+    		// Process Query
+    		Entity entity = getEntityFromId(id);
+    		
+    		if(entity != null){
+    			if(StringUtils.isNotBlank(domainName))
+        			entity.setProperty("domain", domainName);
+        		
+        		return (T) this.clazz.newInstance().parseEntity(entity);
+    		}
+    		
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	
+    	return null;
+    	
+    }
+    
+    /**
      * Add projection properties to query
      * @param query
      * @return
      */
     private Query addProjectionFields(Query query){
     	for(Field f : this.clazz.getFields()) {
-      	   if(f.getName().equals("id") || f.getName().equalsIgnoreCase("properties"))
-      		    continue;
-      	   
+/*      	   if(f.getName().equals("id") || f.getName().equalsIgnoreCase("properties"))
+      		    continue;*/
+    		if(ignoreFields.contains(f.getName().toLowerCase()))
+				continue;
       	  query.addProjection(new PropertyProjection(f.getName(), f.getType()));
       	}
     	

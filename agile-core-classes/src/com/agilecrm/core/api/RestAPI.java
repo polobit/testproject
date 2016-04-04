@@ -650,7 +650,6 @@ public class RestAPI
 	}
 
 	return contactList;
-
     }
 
 }

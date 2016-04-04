@@ -3400,7 +3400,7 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/company-default-image1.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3415,7 +3415,7 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
-								error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path('img/company-default-image1.png')+"'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3427,7 +3427,7 @@ $(function()
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-								error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path("img/company-default-image1.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -4137,10 +4137,10 @@ $(function()
 		{
 			if (i < parseInt(value))
 			{
-				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-value-on.png")+'" alt="' + i + '"></li>');
 				continue;
 			}
-			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-value-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
 	});
@@ -7137,6 +7137,30 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 Handlebars.registerHelper('is_IE_browser', function(options) {
 	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
+});
+
+
+Handlebars.registerHelper('brainTreeStatus', function(value) {
+	/**
+	 * Braintree transaction status.
+	 */
+	var BRAINTREE_STATUS = {
+		AUTHORIZED : "Authorized",
+		VOIDED : "Voided",
+		SUBMITTED_FOR_SETTLEMENT : "Submitted For Settlement",
+		SETTLED : "Settled",
+		AUTHORIZATION_EXPIRED : "Authorization Expired",
+		AUTHORIZING : "Authorizing",
+		SETTLEMENT_PENDING : "Settlement Pending",
+		SETTLEMENT_CONFIRMED : "Settlement Confirmed",
+		SETTLEMENT_DECLINED : "Settlement Declined",
+		FAILED : "Failed",
+		GATEWAY_REJECTED : "Gateway Rejected",
+		PROCESSOR_DECLINED : "Processor Declined",
+		SETTLING : "Settling"
+	};
+	
+	return BRAINTREE_STATUS[value];
 });
 
 function agile_is_mobile_browser(){

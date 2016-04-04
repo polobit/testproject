@@ -65,6 +65,9 @@ import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
+import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -75,6 +78,7 @@ import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
@@ -1349,7 +1353,8 @@ public class ContactsAPI
     @Path("/import/{key}/{type}")
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void contactsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ImportStatus contactsBulkSave(Contact contact, @PathParam("key") String key, @PathParam("type") String type)
     {
 	// it gives is 1000)
 	int currentEntityCount = ContactUtil.getCount();
@@ -1365,10 +1370,15 @@ public class ContactsAPI
 	CSVImporter<Contact> importer;
 	try
 	{
+	    ImportStatusDAO statusDAO = new ImportStatusDAO(NamespaceManager.get(), ImportType.CONTACTS);
+	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, info.getDomainId());
+
+	    statusDAO.createNewImportStatus(userKey, 0, blobKey.getKeyString());
 	    importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey, info.getDomainId(),
-		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount);
+		    new ObjectMapper().writeValueAsString(contact), Contact.class, currentEntityCount, statusDAO);
 
 	    PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
+	    return statusDAO.getImportStatus(NamespaceManager.get());
 	}
 
 	catch (IOException e)
@@ -1376,6 +1386,8 @@ public class ContactsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+
+	return null;
 
     }
 
@@ -1647,22 +1659,22 @@ public class ContactsAPI
 
 	return contact;
     }
-    
+
     /* Fetch all reference contacts to a contact or company or deal or case */
     @Path("/references")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getReferenceContacts(@QueryParam("references") String references)
     {
-    List<Long> refContactIdsList = new ArrayList<Long>();
-    String[] refContactsArray = references.split(",");
-    for (String contactId : refContactsArray)
-    {
-    if(!contactId.equals(""))
-    {
-    refContactIdsList.add(Long.valueOf(contactId));
-    }
-    }
+	List<Long> refContactIdsList = new ArrayList<Long>();
+	String[] refContactsArray = references.split(",");
+	for (String contactId : refContactsArray)
+	{
+	    if (!contactId.equals(""))
+	    {
+		refContactIdsList.add(Long.valueOf(contactId));
+	    }
+	}
 	return ContactUtil.getContactsBulk(refContactIdsList);
     }
 
@@ -1747,7 +1759,7 @@ public class ContactsAPI
 
 	return contact.getTagsList();
     }
-
+    
     @Path("delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -1776,5 +1788,22 @@ public class ContactsAPI
 	// Add to queue
 	Queue queue = QueueFactory.getQueue(AgileQueues.BULK_ACTION_QUEUE);
 	queue.addAsync(TaskOptions.Builder.withPayload(task));
+    }
+
+    @Path("/deleteContactImage")
+    @PUT
+	public void deleteContactImage(@QueryParam("id") Long id) 
+    {  
+    	Contact contact = ContactUtil.getContact(id);
+    	if(contact != null){
+    	List<ContactField> properties = contact.properties;
+    	System.out.println(properties.size());
+    	for(int i=0 ; i <properties.size(); i++){
+    		System.out.println(properties.get(i).name);
+    		if(properties.get(i).name.equalsIgnoreCase("image"))
+    			properties.remove(i);
+    	}
+    	contact.save();
+    }
     }
 }

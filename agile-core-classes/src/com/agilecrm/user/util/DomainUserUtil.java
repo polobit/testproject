@@ -160,7 +160,7 @@ public class DomainUserUtil
 
 	try
 	{
-		return partialDAO.get(id);
+		return partialDAO.get(id, oldNamespace);
 	}
 	catch (Exception e)
 	{
@@ -683,9 +683,11 @@ public class DomainUserUtil
     {
 	String oldnamespace = NamespaceManager.get();
 	System.out.println("-----------geting Userslist." + userKeys.size());
-
+	
+	System.out.println("oldnamespace: " + oldnamespace);
 	NamespaceManager.set("");
 
+	System.out.println("NamespaceManager.get(): " + NamespaceManager.get());
 	try
 	{
 	    List<DomainUser> userList = dao.fetchAllByKeys(userKeys);

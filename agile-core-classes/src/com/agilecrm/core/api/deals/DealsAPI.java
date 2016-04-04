@@ -1279,5 +1279,58 @@ public class DealsAPI
 	}
 	return OpportunityUtil.getPipelineConversionData(ownerId, min, max, trackId).toString();
     }
+    
+    /**
+     * Returns count of opportunities. 
+     * 
+     * @param ownerId
+     *            Owner of the deal.
+     * @param milestone
+     *            Deals Milestone.
+     * @param contactId
+     *            Id of the contact related to deal.
+     * @param fieldName
+     *            the name field to sort on.
+     * @param cursor
+     * @param count
+     *            page size.
+     * @return List of deals.
+     */
+    @Path("/based/count")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public JSONObject getOpportunitiesCountByFilter(@QueryParam("owner_id") String ownerId,
+	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
+	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
+	    @QueryParam("filters") String filters)
+    {
+    JSONObject dealsCountJSON = new JSONObject();
+    int dealsCount = 0;
+	
+    if (filters != null)
+	{
+	    System.out.println(filters);
+	    try
+	    {
+		org.json.JSONObject json = new org.json.JSONObject(filters);
+		if (milestone != null)
+		    json.put("milestone", milestone);
+		System.out.println(json.toString());
+		dealsCount = OpportunityUtil.getOpportunitiesCountByFilter(json, 0, cursor);
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+	    }
+	}else{
+		dealsCount = OpportunityUtil
+				.getOpportunitiesCountByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
+	}
+	
+	dealsCountJSON.put("count", dealsCount);
+	
+	return dealsCountJSON;
+    }
 
 }

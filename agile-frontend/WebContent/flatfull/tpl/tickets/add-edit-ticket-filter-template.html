@@ -1,0 +1,164 @@
+<script id="ticket-filter-add-edit-template" type="text/html">
+<div class="wrapper">
+    <div class="row">
+    	<div class="col-md-11">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+        			{{#if id}}Edit{{else}}Add{{/if}} Ticket View</h4>
+    			</div>
+                <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+                    {{#if id}}
+                        <input type="text" name="id" class="hide" value={{id}} >
+                    {{/if}}
+                    <fieldset class="wrapper"><br/>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="name">Name <span class="field_req">*</span></label> 
+                            <div class="col-md-6">
+                                <div class="controls">
+                                    <input type="text" id="name" name="name" value="{{name}}" class="required form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="name">Conditions <span class="field_req">*</span></label> 
+                            <div class="col-md-9">
+                                <div class="controls">
+                                    <table class="bg-transparent ticket-filter-conditions-table chained-table">
+                                        <tbody>
+                                            <tr class="chained controls" name="conditions">
+                                                <td>
+                                                    <div name="ruleType">
+                                                        <input type="text" class="hide" name="temp" class="required form-control"
+                                                            value="Contact" />
+                                                    </div>
+                                                </td>
+                                                <td class="lhs-block v-top p-b-xs">
+                                                    <div id="LHS" name="LHS" class="m-r-xs">
+                                                        <select name="temp" class="lhs form-control" id="LHS">
+                                                            <option value="status" selected="selected">Status</option>
+                                                            <option value="ticket_type">Type</option>
+                                                            <option value="priority">Priority</option>
+                                                        <!--<option value="requester">Requester</option>-->
+                                                        <!--<option value="company">Company</option>-->
+                                                            <option value="labels">Label</option>
+                                                            <option value="assignee_id">Assignee</option>
+                                                            <option value="group_id">Group</option>
+                                                            <option value="source">Source</option>
+                                                            <option value="ticket_last_updated_by">
+                                                                Last Updated By
+                                                            </option>
+                                                            <option value="subject" placeholder="Enter Text">Subject</option>
+                                                            <!-- <option value="notes" placeholder="Enter Text">Notes</option> -->
+                                                            <option value="ticket_favorite">Favorite Tickets</option>
+                                                            <option value="ticket_spam">Spammed Tickets</option>
+                                                            <option value="hrs_since_created" placeholder="Enter Hours">Hours Since Created</option>
+                                                            <option value="hrs_since_opened" placeholder="Enter Hours">Hours Since Open</option>
+                                                            <option value="hrs_since_closed" placeholder="Enter Hours">Hours Since Closed</option>
+                                                            <option value="hrs_since_assigned" placeholder="Enter Hours">Hours Since Assigned</option>
+                                                            <option value="hrs_since_requester_update" placeholder="Enter Hours">Hours Since Requester Update</option>
+                                                            <option value="hrs_since_assignee_update" placeholder="Enter Hours">Hours Since Assignee Update</option>
+                                                            <option value="hrs_since_due_date" placeholder="Enter Hours">Hours Since Due Date</option>
+                                                            <!-- <option value="hrs_untill_due_date" placeholder="Enter Hours">Hours Since Untill Due Date</option> -->
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="codition-block v-top">
+                                                    <div id="condition" name="CONDITION" class="m-r-xs">
+                                                        <select name="temp" class="form-control">
+                                                            <option value="TICKET_STATUS_IS" class="status">is</option>
+                                                            <option value="TICKET_STATUS_IS_NOT" class="status">isn&#39;t</option>
+
+                                                            <option value="TICKET_TYPE_IS" class="ticket_type">is</option>
+                                                            <option value="TICKET_TYPE_IS_NOT" class="ticket_type">isn&#39;t</option>
+
+                                                            <option value="TICKET_PRIORITY_IS" class="priority">is</option>
+                                                            <option value="TICKET_PRIORITY_IS_NOT" class="priority">isn&#39;t</option>
+
+                                                            <option value="TICKET_LABEL_IS" class="labels" related="RHS" url="/core/api/tickets/labels" parse_key="id" parse_value="label">is</option>
+                                                            <option value="TICKET_LABEL_IS_NOT" class="labels" related="RHS" url="/core/api/tickets/labels" parse_key="id" parse_value="label">isn&#39;t</option>
+
+                                                            <option value="IS" class="requester company tags">is</option>
+                                                            <option value="IS_NOT" class="requester company tags">isn&#39;t</option>
+
+                                                            <option value="EQUALS" class="assignee_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
+                                                            <option value="NOTEQUALS" class="assignee_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn&#39;t</option>
+
+                                                            <option value="EQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">is</option>
+                                                            <option value="NOTEQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">isn&#39;t</option>
+
+                                                            <option value="CONTAINS" class="subject notes">Contains</option>
+                                                            <option value="NOT_CONTAINS" class="subject notes">Not Contains</option>
+
+                                                            <option value="TICKET_SOURCE_IS" class="source">is</option>
+                                                            <option value="TICKET_SOURCE_IS_NOT" class="source">isn&#39;t</option>
+
+                                                            <!--<option value="STARTS_WITH" class="subject notes">Start With</option>
+                                                            <option value="ENDS_WITH" class="subject notes">Ends With</option>-->
+
+                                                            <option value="IS_GREATER_THAN" class="hrs_since_created hrs_since_opened 
+                                                                hrs_since_closed hrs_since_assigned hrs_since_requester_update hrs_since_assignee_update
+                                                                hrs_since_due_date hrs_untill_due_date">Greater Than</option>
+                                                            <option value="IS_LESS_THAN" class="hrs_since_created hrs_since_opened 
+                                                                hrs_since_closed hrs_since_assigned hrs_since_requester_update hrs_since_assignee_update
+                                                                hrs_since_due_date hrs_untill_due_date">Less Than</option>
+
+                                                            <option value="LAST_UPDATED_BY_AGENT" class="ticket_last_updated_by">Agent</option>
+                                                            <option value="LAST_UPDATED_BY_REQUESTER" class="ticket_last_updated_by">Requester</option>
+                                                            <option value="TICKET_IS" class="ticket_favorite ticket_spam">True</option>
+                                                            <option value="TICKET_IS_NOT" class="ticket_favorite ticket_spam">False</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="rhs-block controls v-top">
+                                                    <div id="RHS" class="rhs" name="RHS">
+                                                        <select class="form-control">
+                                                            <option value="NEW" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">New</option>
+                                                            <option value="OPEN" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">Open</option>
+                                                            <option value="PENDING" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">Pending</option>
+                                                            <option value="CLOSED" class="TICKET_STATUS_IS TICKET_STATUS_IS_NOT">Closed</option>
+
+                                                            <option value="PROBLEM" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">Problem</option>
+                                                            <option value="INCIDENT" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">Incident</option>
+                                                            <option value="QUESTION" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">Question</option>
+                                                            <option value="TASK" class="TICKET_TYPE_IS TICKET_TYPE_IS_NOT">Task</option>
+
+                                                            <option value="LOW" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">Low</option>
+                                                            <option value="MEDIUM" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">Medium</option>
+                                                            <option value="HIGH" class="TICKET_PRIORITY_IS TICKET_PRIORITY_IS_NOT">High</option>
+
+                                                            <option value="EMAIL" class="TICKET_SOURCE_IS TICKET_SOURCE_IS_NOT">Email</option>
+                                                            <option value="WEBFORM" class="TICKET_SOURCE_IS TICKET_SOURCE_IS_NOT">Web Form</option>
+                                                        </select>
+                                                        <input type="text" name="temp" class="IS IS_NOT CONTAINS NOT_CONTAINS STARTS_WITH ENDS_WITH form-control required"/>
+                                                        <input type="text" name="temp" class="IS_GREATER_THAN IS_LESS_THAN form-control number required"/>
+                                                        
+                                                    </div>
+                                                </td>
+                                                <td class="v-top">
+                                                    <i class="remove-filter-ticket-conditions filter-contacts-multiple-remove icon-remove-circle m-t-sm m-l-sm c-p text-md" style="display: none;"></i>
+                                                    <i class="clone-filter-ticket-conditions icon-plus inline-block m-t-sm m-l-sm c-p"></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><hr></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-actions col-sm-offset-3 col-md-9">
+                                <div class="form-actions">
+                                    <a type="reset" href='#ticket-views' class="btn btn-default btn-sm">Cancel</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">Save Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</script>

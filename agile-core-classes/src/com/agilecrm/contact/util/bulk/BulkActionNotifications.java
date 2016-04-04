@@ -50,7 +50,13 @@ public class BulkActionNotifications
 	 * Send mail bulk action
 	 */
 
-	SEND_EMAIL("Email successfully sent to %s contact(s)");
+	SEND_EMAIL("Email successfully sent to %s contact(s)"),
+	
+	/**
+	 * Ticket operations
+	 */
+
+	TICKET_BULK_ACTIONS(""), NEW_TICKET_RECEIVED("New ticket#%s received"), REQUESTER_REPLIED_TO_TICKET("%s replied to ticket#%s");
 
 	String message;
 
