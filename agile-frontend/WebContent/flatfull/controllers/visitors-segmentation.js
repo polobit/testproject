@@ -137,8 +137,12 @@ var VisitorsSegmentationRouter = Backbone.Router
                                 el, collection) {
 
                                 abortCountQueryCall();
-                                if(collection.models.length > 0)
-                                    getAndUpdateCollectionCountVisitors(postData,start_time,end_time);
+                                if(collection.models[collection.models.length-1].attributes.count>0){
+                                    
+                                    total_count = collection.models[collection.models.length-1].attributes.count;
+                                    count_message = "<small> (" + total_count + " Total) </small>";
+                                    $("#visitors-count").html(count_message)
+                                }                        
 
                                 
                                 if (!is_lhs_filter) {
@@ -182,26 +186,3 @@ var VisitorsSegmentationRouter = Backbone.Router
 
     });
 
-function getAndUpdateCollectionCountVisitors(filterJson,start_time,end_time) {
-    var count_message = "";
-    $("#contacts-count").html(count_message);
-    countURL = App_VisitorsSegmentation.webstatsListView.options.url + "/count";
-    abortCountQueryCall();
-    Count_XHR_Call = $.ajax({
-        type: "POST",
-        url: countURL,
-        data: {
-            filterJson: filterJson,
-            start_time: start_time,
-            end_time: end_time
-        },
-        success: function(result) {
-            data = parseInt(result);
-            count_message = "<small> (" + data + " Total) </small>";
-            $("#visitors-count").html(count_message)
-        }
-    });
-
-
-
-}
