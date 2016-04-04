@@ -133,7 +133,7 @@ public class SendgridInboundParser extends HttpServlet
 					 */
 					try
 					{
-						TicketGroupUtil.getTicketGroupById(groupID);
+						ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
 					}
 					catch (Exception e)
 					{
