@@ -272,7 +272,8 @@ public class AnalyticsUtil
 		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
 		emails.add(contactEmail.get("email").toString());
 	    }
-	    String emailCountString = emails.get(contactEmailsJsonArray.length() - 1);
+	    JSONObject emailCountObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length()-1);
+	    String emailCountString = emailCountObject.get("total_rows_count").toString();
 	    emails.add(emailCountString);
 	    return emails;
 	}
