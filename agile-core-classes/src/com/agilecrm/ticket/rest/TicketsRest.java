@@ -879,4 +879,34 @@ public class TicketsRest
 
 		return new JSONObject().put("status", "success").toString();
 	}
+
+	/**
+	 * Gets list of users of a domain
+	 * 
+	 * @return list of domain users
+	 */
+	@GET
+	@Path ("/users")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<DomainUser> getUsers()
+	{
+		try
+		{
+
+			String domain = NamespaceManager.get();
+			// Gets the users and update the password to the masked one
+			List<DomainUser> users = DomainUserUtil.getUsers(domain);
+			DomainUser domainUser =  new DomainUser();
+			domainUser.name = "Current User";
+			domainUser.id = (long) 0;
+			users.add(domainUser);
+			return users;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }
