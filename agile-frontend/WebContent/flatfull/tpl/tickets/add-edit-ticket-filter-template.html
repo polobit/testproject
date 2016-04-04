@@ -8,7 +8,9 @@
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
-                        <input type="text" name="id" class="hide" value={{id}} >
+                        <input type="text" name="id" class="hide" value="{{id}}"/>
+                        <input type="hidden" name="is_default_filter" class="hide" 
+                            value="{{is_default_filter}}"/>
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
