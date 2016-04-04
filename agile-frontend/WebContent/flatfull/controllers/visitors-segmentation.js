@@ -6,7 +6,7 @@ var VisitorsSegmentationRouter = Backbone.Router
         routes: {
 
             /* Webstats */
-            "visitorssegmentation": "visitorssegmentation"
+            "segments": "visitorssegmentation"
 
         },
 
@@ -137,12 +137,14 @@ var VisitorsSegmentationRouter = Backbone.Router
                                 el, collection) {
 
                                 abortCountQueryCall();
-                                if(collection.models[collection.models.length-1].attributes.count>0){
+                                if(collection.models.length==0)
+                                     $("#visitors-count").html("<small> (" + 0 + " Total) </small>");
+                                else{
                                     
                                     total_count = collection.models[collection.models.length-1].attributes.count;
                                     count_message = "<small> (" + total_count + " Total) </small>";
-                                    $("#visitors-count").html(count_message)
-                                }                        
+                                    $("#visitors-count").html(count_message);
+                                }                                               
 
                                 
                                 if (!is_lhs_filter) {
