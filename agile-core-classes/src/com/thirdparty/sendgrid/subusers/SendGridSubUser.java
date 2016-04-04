@@ -65,7 +65,7 @@ public class SendGridSubUser extends SendGridLib
 			 json.put(SUB_USER_PASSWORD, subUser.getPassword());
 		 
 		 if(StringUtils.isNotBlank(subUser.getIps().toString()))
-			 json.put(SUB_USER_IPS, subUser.getIps().toString());
+			 json.put(SUB_USER_IPS, subUser.getIps());
 		}catch(Exception e)
 		{
 			e.printStackTrace();
