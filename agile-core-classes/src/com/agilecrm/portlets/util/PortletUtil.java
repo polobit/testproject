@@ -1577,16 +1577,16 @@ public class PortletUtil {
 			{unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
 			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SPAM"))
-			{emailsSpam= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			{emailsSpam= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
 			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
-			{emailsSkipped= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			{emailsSkipped= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
 			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_HARD_BOUNCED"))
-			{hardBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			{hardBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
 			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SOFT_BOUNCED"))
-			{softBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			{softBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
 		
 			}
 			
