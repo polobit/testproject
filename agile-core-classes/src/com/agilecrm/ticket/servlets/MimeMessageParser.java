@@ -321,6 +321,9 @@ public class MimeMessageParser
 	 */
 	public List<TicketDocuments> saveAttachments() throws Exception
 	{
+		if(attachmentList == null || attachmentList.size() == 0)
+			return new ArrayList<>();
+			
 		String plainContent = (hasPlainContent()) ? this.plainContent : "";
 		String htmlContent = (hasHtmlContent()) ? this.htmlContent : "";
 
