@@ -453,6 +453,16 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	return str;
 });
+Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
+
+	if(!str)
+		return "";
+
+	str = str.trim();
+
+	str = str.replace(/(?:\r\n)/g, '<br/>');
+    return str;
+});
 
 Handlebars.registerHelper('get_ticket_uri', function(str, options) {
 	
