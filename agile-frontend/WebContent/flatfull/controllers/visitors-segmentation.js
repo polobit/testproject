@@ -106,7 +106,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                         } else {
 
                             if (!time_range)
-                                time_range = getTodayTimeWebstats();
+                                time_range = getYesterdayTimeWebstats();
 
                             start_time = time_range[0];
                             end_time = time_range[1];
