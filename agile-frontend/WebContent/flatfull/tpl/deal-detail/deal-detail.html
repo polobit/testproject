@@ -48,7 +48,7 @@
               <div title="Owner">
           	     <div class="contact-owner" id="change-owner-element">
             	   <div><small class="text-base text-muted"> Owner&nbsp;&nbsp;</small></div>
-            	   <a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d text-xs">      {{owner.name}}</a>
+            	   <a href="#"  data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-d text-xs">      {{owner.name}}</a>
               </div>
               </div>
     					</div>
@@ -86,11 +86,11 @@
         	<div><small class="text-base text-muted">Owner&nbsp;&nbsp;</small></div>
 		
 
-        	<div id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name c-p text-xs">{{owner.name}}</div>
+
+        	<div id="deal-owner" data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-p text-xs">{{owner.name}}</div>
 
           {{#hasScope "MANAGE_DEALS"}}
 
- 
         
         	<div class="btn-group v-middle dropdown deal-owner" id="change-deal-owner-ul" style="display: none">
         		 <a href="javascript:void(0);" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
@@ -163,7 +163,7 @@
                             <span class="text-light text-base" title="{{name}}">{{name}}</span>
                           </span>
                         </div>
-                        <div class="note-created-time custom-value text-xs" title="" name="{{name}}">
+                        <div class="note-created-time custom-color custom-value text-xs" title="" name="{{name}}">
                           {{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
                         </div>
                       {{else}}
@@ -171,7 +171,7 @@
                           <span class="text-light text-base" title="{{name}}">{{name}}</span>
                         </span>
                         <span class="contact-custom-value">
-                          <span class="note-created-time custom-value text-xs" title="{{value}}" name="{{name}}">
+                          <span class="note-created-time custom-color custom-value text-xs" title="{{value}}" name="{{name}}">
                             {{value}}
                           </span>
                         </span>
@@ -223,7 +223,7 @@
 <div>
         	<small class="text-base text-muted">Description</small>
 </div>
-<div class="text-xs">{{{show_link_in_statement description}}}</div>
+<div class="text-xs custom-color">{{{show_link_in_statement description}}}</div>
 </div>
 </div>
 </div>
