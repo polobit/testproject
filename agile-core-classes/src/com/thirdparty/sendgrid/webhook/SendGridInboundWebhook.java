@@ -72,17 +72,23 @@ public class SendGridInboundWebhook extends HttpServlet
 			
 			System.out.println("CURRENT namespace is " + NamespaceManager.get());
 
-			JSONObject message = new JSONObject();
-			message.put("subject", mailJSON.getString("subject"));
-			message.put("text", mailJSON.getString("text"));
-			message.put("html", mailJSON.getString("html"));
-			
 			if(!mailJSON.has(FROM))
 				return;
 			
 			String from = mailJSON.getString(FROM);
 			String fromEmail = EmailUtil.getEmail(from);
 			String fromName = EmailUtil.getEmailName(from);
+			
+			JSONObject message = new JSONObject();
+			
+			if(message.has("subject"))
+				message.put("subject", mailJSON.getString("subject"));
+			
+			if(message.has("text"))
+				message.put("text", mailJSON.getString("text"));
+			
+			if(message.has("html"))
+				message.put("html", mailJSON.getString("html"));
 			
 			if(MandrillWebhookTriggerInbound.confirmationEmails.contains(fromEmail.toLowerCase()))
 			{

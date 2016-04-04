@@ -341,7 +341,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	 * 
 	 * @param emailMessage
 	 */
-	private void parseEmailMessageAndRunCampaign(JSONObject emailMessage, String agileDomain)
+	public void parseEmailMessageAndRunCampaign(JSONObject emailMessage, String agileDomain)
 	{
 		if (emailMessage.has("html"))
 		{
