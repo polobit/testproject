@@ -296,8 +296,8 @@ public class AnalyticsUtil
 	    for (String propName : searchMap.keySet())
 	    {
 		query.filter(propName, searchMap.get(propName));
-		
 	    }
+	    System.out.println(query.toString());
 	    contacts = dao.fetchAll(query);
 	}
 	
