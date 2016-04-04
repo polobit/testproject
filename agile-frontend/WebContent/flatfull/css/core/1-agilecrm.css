@@ -3192,12 +3192,12 @@ table.hide-head-checkbox th label.i-checks {
 }
 
 .reports_tab_content{
-	 width: 420px;
+	 min-width: 420px;
     left: 200px;
     top: 0px;
     position: absolute;
     z-index: 1000;
-    height : 400px;
+   
 
 }
 
