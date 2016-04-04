@@ -219,6 +219,24 @@ public class APIKey
 	return dao.ofy().query(APIKey.class).filter("owner", currentUserKey).get();
 
     }
+    
+    /**
+     * Fetches the APIKey related to domain user. This method takes domainUsers
+     * id to get APIKey related to domain user. It is used when verifying the
+     * domain user and respective APIKey
+     * 
+     * @param domainUserId
+     * @return
+     */
+    public static boolean isValidAPIKey(Long domainUserId, String apiKey)
+    {
+	// Creates a domain user key from the id parameter
+	Key<DomainUser> currentUserKey = new Key<DomainUser>(DomainUser.class, domainUserId);
+
+	// Queries to get APIKey entity related to domain user key
+	return dao.ofy().query(APIKey.class).filter("owner", currentUserKey).filter("api_key", apiKey).count() > 0;
+
+    }
 
     /**
      * Returns Api key of Domain Owner. Domain Owner is the domain user having

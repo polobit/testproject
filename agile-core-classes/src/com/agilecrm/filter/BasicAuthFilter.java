@@ -113,7 +113,7 @@ public class BasicAuthFilter implements Filter
 		    // If domain user exists and the APIKey matches, request
 		    // is
 		    // given access
-		    if (isValidPassword(password, domainUser) || isValidAPIKey(password, domainUser))
+		    if (isValidPassword(password, domainUser) || APIKey.isValidAPIKey(domainUser.id, password))
 		    {
 			try
 			{
@@ -167,30 +167,6 @@ public class BasicAuthFilter implements Filter
 	UserInfo userInfo = new UserInfo("agilecrm.com/dev", domainUser.email, domainUser.name);
 
 	SessionManager.set(userInfo);
-    }
-
-    /**
-     * Checks if API key sent in request matches with user.
-     * 
-     * @param apiKey
-     * @param user
-     * @return
-     */
-    boolean isValidAPIKey(String apiKey, DomainUser user)
-    {
-	// Gets APIKey, to authenticate the user
-	APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
-
-	if (key == null)
-	    return false;
-
-	String apiKeyFromDB = key.api_key;
-
-	// Checks APIKey received in request and APIKey from DB
-	if (StringUtils.equals(apiKey, apiKeyFromDB))
-	    return true;
-
-	return false;
     }
 
     /**
