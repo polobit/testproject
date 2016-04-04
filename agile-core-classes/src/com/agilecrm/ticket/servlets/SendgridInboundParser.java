@@ -177,7 +177,7 @@ public class SendgridInboundParser extends HttpServlet
 						// BulkActionNotifications.publishNotification("New ticket #"
 						// +
 						// ticket.id + " received");
-						TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + "received");
+						TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
 					}
 					else
 					{
@@ -207,7 +207,7 @@ public class SendgridInboundParser extends HttpServlet
 						ticket.contactID = contact.id;
 
 						ticket.updateTicketAndSave(ccEmails, lastRepliedText, LAST_UPDATED_BY.REQUESTER, currentTime,
-								currentTime, null, attachmentExists, false);
+								currentTime, null, attachmentExists, false, true);
 
 						// Sending user replied notification
 						// BulkActionNotifications.publishNotification(ticket.requester_name

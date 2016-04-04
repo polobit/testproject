@@ -335,7 +335,7 @@ public class TicketWebhook extends HttpServlet
 				ticket.contactID = contact.id;
 
 				ticket.updateTicketAndSave(ccEmails, lastReplieText, LAST_UPDATED_BY.REQUESTER, currentTime,
-						currentTime, null, attachmentExists, false);
+						currentTime, null, attachmentExists, false, true);
 
 				// Sending user replied notification
 				// BulkActionNotifications.publishNotification(ticket.requester_name

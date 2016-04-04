@@ -74,12 +74,17 @@ function initializeActivitiesListner(el){
 {
 	e.preventDefault();
    	var id = $(this).data("id");
+    
     var activity_ticket_notes = activitiesview.collection.get(id).toJSON();
-    console.log(activity_ticket_notes.entityObject);
-	getTemplate("ticket_activity_notes_modal", activity_ticket_notes, undefined, function(template_ui){
+
+    //console.log(activity_ticket_notes.entityObject);
+	getTemplate("ticket-activity-notes-modal", activity_ticket_notes, undefined, function(template_ui){
+
 		if(!template_ui)
 			  return;
+
 		var emailinfo = $(template_ui);
+
 		emailinfo.modal('show');
 	}, null);
 

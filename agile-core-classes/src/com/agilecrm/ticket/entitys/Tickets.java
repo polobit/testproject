@@ -478,7 +478,7 @@ public class Tickets extends Cursor implements Serializable
 	 */
 	public Tickets updateTicketAndSave(List<String> cc_emails, String last_reply_plain_text,
 			LAST_UPDATED_BY last_updated_by, Long updated_time, Long customer_replied_time,
-			Long last_agent_replied_time, Boolean attachments_exists, Boolean isTicketClosed)
+			Long last_agent_replied_time, Boolean attachments_exists, Boolean isTicketClosed, boolean set_activity_user)
 	{
 		Long currentTime = Calendar.getInstance().getTimeInMillis();
 
@@ -555,7 +555,7 @@ public class Tickets extends Cursor implements Serializable
 		if (oldStatus != this.status)
 			// Logging status changed activity
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, this.contactID, this.id,
-					oldStatus.toString(), this.status.toString(), "status", false);
+					oldStatus.toString(), this.status.toString(), "status", set_activity_user);
 
 		// // Logging public notes activity
 		// if (isPublicNotes)
