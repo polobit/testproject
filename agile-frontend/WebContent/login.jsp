@@ -114,6 +114,7 @@ String logo_url = accountPrefs.logo;
 // Bg Image
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
+
 %>
 <!DOCTYPE html>
 
@@ -288,7 +289,8 @@ if(isSafari && isWin)
 						<div class="block">
 							<input class="hide" id="location_hash" name="location_hash"></input>
 						</div>
-						
+						<input class="hide" id="finger_print" name="finger_print"></input>
+						<input class="hide" id="components" name="components"></input>
 						</div>
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
@@ -325,6 +327,7 @@ if(isSafari && isWin)
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js"></script>
+
 	
 	<script type="text/javascript">
 		$(document).ready(function()
@@ -380,7 +383,15 @@ if(isSafari && isWin)
 		function preload_dashlet_libs(){ 
 			setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
 		}
+		$(function(){
+			new Fingerprint2().get(function(result, components){
+					$("#finger_print").val(result);
+		  			var componentArray = JSON.stringify(components);
+
+				});
+		});
 	</script>
+
 	<!-- Clicky code -->
  	<script src="//static.getclicky.com/js" type="text/javascript"></script>
 	<script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script> 

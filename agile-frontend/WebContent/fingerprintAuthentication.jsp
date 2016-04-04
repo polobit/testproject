@@ -205,16 +205,16 @@ position: fixed;width: 100%;top: 0px;
    				</div>
    				<form id="fingerprintForm" name="fingerprintForm" method="post" action="/" class="form-horizontal" onsubmit="return isValid();">
 					<fieldset>
-					<div  class="control-group form-group" style="margin-bottom:0px;">
-                         <label class="control-label col-sm-3">Enter OTP<span class="field_req">*</span></label>
-                         <div class="controls col-sm-7">
+					<div class="list-group list-group-sm">
+                         <div class="list-group-item">
                          <input type="hidden"  name="current_div" id="current_div"/>
-                                <input id="otp" placeholder="Enter OTP" type="text" name="otp" class="required form-control" />
+                                <input id="finger_print_otp" placeholder="Enter OTP" type="text" name="finger_print_otp" class="input-xlarge required form-control no-border" />
                          </div>
 
-           			 </div>
+           			</div>
+           			 
            			 <input type='submit' value="Send" class='btn btn-lg btn-primary btn-block'>
-
+           			
 					</fieldset>
 				</form>
 			

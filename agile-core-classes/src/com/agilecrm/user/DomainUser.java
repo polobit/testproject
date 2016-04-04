@@ -238,7 +238,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	
 
 	/** Browser Fingerprint */
-	public String finger_print;
+	public String finger_print = null;
 	
 
 	// Dao

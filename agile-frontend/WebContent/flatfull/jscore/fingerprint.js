@@ -1,4 +1,4 @@
-$(function(){
+/*$(function(){
     head.js("https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js", function(){
     	// Send hash to server
     	new Fingerprint2().get(function(result, components){
@@ -29,4 +29,4 @@ $(function(){
 
 		});
     });
-});
+});*/

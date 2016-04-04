@@ -423,11 +423,12 @@ public class UsersAPI
     }
 
 
-	@POST
+	/*@POST
+
 	@Path("/fingerprintscanner")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getFingerPrints(@QueryParam("result") String result,@FormParam("obj") String obj){
-		/*try{
+	public void getFingerPrints(@QueryParam("result") String result,@FormParam("obj") String obj){
+		try{
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			String existingFingerprint = domainUser.finger_print;
 			
@@ -442,8 +443,8 @@ public class UsersAPI
 		}
 		catch(Exception e){
 			
-		}*/
-		return result;
-	}
+
+		} }*/
+		
 
 }

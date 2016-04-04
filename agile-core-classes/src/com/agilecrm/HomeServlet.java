@@ -176,6 +176,30 @@ public class HomeServlet extends HttpServlet
 	    e.printStackTrace();
 	}
     }
+    
+    /**
+     * Saves finger println in domain user before request is forwarded to
+     * dashboard (home.jsp)
+     */
+    private void setFingerPrint(HttpServletRequest req)
+    {
+	try
+	{
+	    String userFingerPrint = (String) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VAL);
+	    if(StringUtils.isBlank(userFingerPrint))
+	    	return;
+		    
+	    // Gets current domain user and saves current fingerprint 
+	    
+	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+	    domainUser.finger_print = userFingerPrint;
+	    domainUser.save();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
 
     /**
      * Set last logged in time.<br/>
@@ -197,73 +221,59 @@ public class HomeServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
     {
 
-	// If user is not new, it calls method to set logged in time in current
-	// domain user and forwards request to home.jsp
-   
-	if (!isNewUser())
-	{
-		 
-		Object otpOption = req.getSession().getAttribute("return_otp");
-		
-		try {
-			if(otpOption == null || (Boolean) otpOption == true){
-				
-				// Saves logged in time in domain user.
-			    setLoggedInTime(req);
-			    setAccountTimezone(req);
+    	// If user is not new, it calls method to set logged in time in current
+    	// domain user and forwards request to home.jsp
+    	if (!isNewUser())
+    	{
+    		
+    		Boolean sessionFingerPrint = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VALID);
+    		if(sessionFingerPrint == null){
+    			req.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
+    			doGet(req, resp);
+    			return;
+    		}
+    		
+    		if(!sessionFingerPrint.booleanValue()){
+    			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
+    			return;
+    		}
+    		
+    	    // Saves logged in time in domain user.
+    	    setLoggedInTime(req);
+    	    setAccountTimezone(req);
+    	    
+    	    // Save user finger print
+    	    setFingerPrint(req);
 
-			    String old_ui = req.getParameter("old");
-			    if (old_ui != null)
-				req.getRequestDispatcher("home.jsp").forward(req, resp);
-			    else
-				req.getRequestDispatcher("home-flatfull.jsp").forward(req, resp);
+    	    String old_ui = req.getParameter("old");
+    	     
+    		req.getRequestDispatcher(old_ui != null ? "home.jsp" : "home-flatfull.jsp").forward(req, resp);
+    	    return;
+    	}
 
-			    return;
-			}
-			
-			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
-			return;
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			
-			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
-			return;
-			
-		}
-		
-		}
-
-	// If user is new user it will create new AgileUser and set cookie for
-	// initial page tour. It also calls to initialize defaults, if user is
-	// first user in the domain.
-	setUpAgileUser(req, resp);
+    	// If user is new user it will create new AgileUser and set cookie for
+    	// initial page tour. It also calls to initialize defaults, if user is
+    	// first user in the domain.
+    	setUpAgileUser(req, resp);
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
-    	try {
-		    	String otp= request.getParameter("otp");
-		    	Long newotp = Long.parseLong(otp);
-		    
-		    	Long generateotp = (Long) request.getSession().getAttribute("return_otp");
-		    	if(newotp == generateotp){
-		    		request.getSession().setAttribute("return_otp",true);
-		    		
-		    		doGet(request, response);
-		    		request.getSession().removeAttribute("return_otp");
-		    		return;
-		    		
-		    		
-		    	}
-		    	else{
-		    		request.getSession().setAttribute("return_otp",false);
-		    		request.getRequestDispatcher("fingerprintAuthentication.jsp").forward(request, response);
-						throw new Exception(
-								"Invalid OTP");
-					} 
+    	try 
+    	{
+	    	String otp = request.getParameter("finger_print_otp");
+	    	String generatedOTP = (String) request.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_OTP);
+	    	
+	    	if(StringUtils.isBlank(otp) || !otp.equals(generatedOTP)){
+	    		throw new Exception("Invalid OTP");
+	    	}
+	    	
+	    	request.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
+	    	doGet(request, response);
     	}
-    	catch(Exception e){}
+    	catch(Exception e){
+    		request.setAttribute("error", e.getMessage());
+    		request.getRequestDispatcher("fingerprintAuthentication.jsp").forward(request, response);
+    	}
     	
     }
   
@@ -351,4 +361,5 @@ public class HomeServlet extends HttpServlet
 	}
 	return user;
     }
+    
 }

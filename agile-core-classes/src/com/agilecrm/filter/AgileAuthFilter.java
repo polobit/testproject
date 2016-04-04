@@ -137,7 +137,7 @@ public class AgileAuthFilter implements Filter
 	    return;
 	}
 
-	chain.doFilter(request, response);
+	chain.doFilter(httpRequest, httpResponse);
 	return;
     }
 
