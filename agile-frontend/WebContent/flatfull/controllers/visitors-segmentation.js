@@ -147,7 +147,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                                 }                                               
 
                                                              
-                                if (!is_lhs_filter) {
+                               if (!is_lhs_filter) {
                                     setupAnalyticsLhsFilters(el);
                                     contactFiltersListeners("lhs_filters_segmentation");
 
