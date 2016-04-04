@@ -292,11 +292,12 @@ public class AnalyticsUtil
 	    Map<String, Object> searchMap = new HashMap<String, Object>();
 	    searchMap.put("type", Contact.Type.PERSON);
 	    searchMap.put("properties.name", "email");
-	    searchMap.put("properties.value.IN", contactEmails);
+	    searchMap.put("properties.value IN", contactEmails);
 	    for (String propName : searchMap.keySet())
 	    {
 		query.filter(propName, searchMap.get(propName));
 	    }
+	    System.out.println(query.toString());
 	    contacts = dao.fetchAll(query);
 	}
 	
