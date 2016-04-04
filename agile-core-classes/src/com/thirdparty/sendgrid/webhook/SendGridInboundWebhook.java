@@ -81,13 +81,13 @@ public class SendGridInboundWebhook extends HttpServlet
 			
 			JSONObject message = new JSONObject();
 			
-			if(message.has("subject"))
+			if(mailJSON.has("subject"))
 				message.put("subject", mailJSON.getString("subject"));
 			
-			if(message.has("text"))
+			if(mailJSON.has("text"))
 				message.put("text", mailJSON.getString("text"));
 			
-			if(message.has("html"))
+			if(mailJSON.has("html"))
 				message.put("html", mailJSON.getString("html"));
 			
 			if(MandrillWebhookTriggerInbound.confirmationEmails.contains(fromEmail.toLowerCase()))
