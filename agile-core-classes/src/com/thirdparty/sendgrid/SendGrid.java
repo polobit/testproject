@@ -18,6 +18,7 @@ import com.agilecrm.file.readers.DocumentFileInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -26,6 +27,7 @@ import com.thirdparty.mandrill.MandrillSendDeferredTask;
 import com.thirdparty.sendgrid.deferred.SendGridAttachmentDeferredTask;
 import com.thirdparty.sendgrid.lib.SendGridLib;
 import com.thirdparty.sendgrid.lib.SendGridLib.Email;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>SendGrid</code> is the core class that sends email using Send Grid API.
@@ -357,8 +359,10 @@ public class SendGrid
     {
     	if(apiUser == null && apiKey == null)
     	{
-    		apiUser = Globals.SENDGRID_API_USER_NAME;
-    		apiKey = Globals.SENDGRID_API_KEY;
+    		String domain = NamespaceManager.get();
+    		
+    		apiUser = (domain == null) ? Globals.SENDGRID_API_USER_NAME : SendGridSubUser.getAgileSubUserName(domain);
+    		apiKey = (domain == null) ? Globals.SENDGRID_API_KEY : SendGridSubUser.getAgileSubUserPwd(domain);
     	}
     	
     	SendGridLib sendGrid = new SendGridLib(apiUser, apiKey);

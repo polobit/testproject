@@ -25,6 +25,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
@@ -228,6 +229,9 @@ public class RegisterServlet extends HttpServlet
 	
 	// Create subaccount in Mandrill after registration
 	MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	
+	// Creates subUser in SendGrid after registration
+	SendGridUtil.createSendGridSubUser(domainUser);
 	
 	request.getSession().setAttribute("account_timezone", timezone);
 	try

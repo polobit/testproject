@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.json.JSONObject;
 
 import com.agilecrm.util.Base64Encoder;
@@ -24,6 +23,9 @@ public class SendGridSubUser extends SendGridLib
 	final String SUB_USER_PASSWORD = "password";
 	final String SUB_USER_IPS = "ips";
 
+	public final static String AGILE_SUB_USER_NAME_TOKEN = ".agilecrm";
+	public static String AGILE_SUB_USER_PWD_TOKEN = "@127";
+	
 	public SendGridSubUser(String username, String password)
 	{
 		super(username, password);
@@ -82,6 +84,7 @@ public class SendGridSubUser extends SendGridLib
 		public SubUser()
 		{
 			this.ips = new ArrayList<String>();
+			ips.add("167.89.89.43");
 		}
 		
 		public String getName()
@@ -123,6 +126,22 @@ public class SendGridSubUser extends SendGridLib
 		{
 			this.ips = ips;
 		}
+	}
+	
+	public static String getAgileSubUserName(String domain) throws IllegalArgumentException
+	{
+		if(StringUtils.isNotBlank(domain))
+			return domain + AGILE_SUB_USER_NAME_TOKEN;
+		
+		throw new IllegalArgumentException("Domain " + domain + " is not valid.");
+	}
+	
+	public static String getAgileSubUserPwd(String domain) throws IllegalArgumentException
+	{
+		if(StringUtils.isNotBlank(domain))
+			return domain + AGILE_SUB_USER_PWD_TOKEN;
+		
+		throw new IllegalArgumentException("Domain " + domain + " is not valid.");
 	}
 	
 }

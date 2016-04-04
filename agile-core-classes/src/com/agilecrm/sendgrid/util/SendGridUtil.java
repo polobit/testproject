@@ -1,5 +1,6 @@
 package com.agilecrm.sendgrid.util;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -12,9 +13,12 @@ import com.agilecrm.account.EmailGateway;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>SendGridUtil</code> is the utility class for bulk sending using
@@ -235,4 +239,40 @@ public class SendGridUtil
 
 	return false;
     }
+    
+    public static void createSendGridSubUser(String domain)
+    {
+    	if(StringUtils.isBlank(domain))
+    		return;
+    	
+    	DomainUser user = DomainUserUtil.getDomainOwner(domain);
+    	createSendGridSubUser(user);
+    }
+    
+    public static void createSendGridSubUser(DomainUser user) 
+    {
+    	try
+		{
+    		SendGridSubUser sendgrid = new SendGridSubUser(Globals.SENDGRID_API_USER_NAME, Globals.SENDGRID_API_KEY);
+        	
+        	SendGridSubUser.SubUser subUser = new SendGridSubUser.SubUser();
+        	subUser.setEmail(user.email);
+        	subUser.setName(SendGridSubUser.getAgileSubUserName(user.domain));
+        	subUser.setPassword(SendGridSubUser.getAgileSubUserPwd(user.domain));
+			String response = sendgrid.createSubUser(subUser);
+			
+			System.out.println("Response for subuser creation - " + response);
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			System.err.println("Unsupported encoding exception..." + e.getMessage());
+			e.printStackTrace();
+		}
+    	catch(Exception e)
+    	{
+    		System.err.println("Exception occured while creating subuser..." + e.getMessage());
+    		e.printStackTrace();
+    	}
+    }
+    
 }

@@ -25,9 +25,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HttpClientUtil;
 import com.google.cloud.sql.jdbc.internal.Url;
+import com.thirdparty.mandrill.exception.RetryException;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>SendGridLib</code> is the adopted library file from SendGrid with minimal changes.
@@ -207,10 +210,28 @@ public class SendGridLib {
         	
         	urlBuilder.setHeaders(headers);
         	
-        	String response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+        	String response = null;
         	
+        	try
+			{
+        		response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+        	
+	        	if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+						throw new RetryException(response);
+			}
+			catch (RetryException e)
+			{
+				
+				SendGridUtil.createSendGridSubUser(StringUtils.remove(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN));
+	        	
+				System.out.println("Retrying again for sending email....");
+				
+				response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
+				
+				System.out.println("Response after second attempt..." + response);
+			}
+	        	
         	return response;
-    	 
     }
 
     public static class Email implements Serializable {
