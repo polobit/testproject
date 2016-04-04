@@ -62,6 +62,7 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 			deals_list = Opportunity.dao.fetchAll(200, cursor, null);
 			try {
 				if(StringUtils.isEmpty(cursor) && count == 0 && currentCount == 0 && opportunitySchemaUpdateStats == null) {
+					System.out.println("In UpdateDealsOfDomainDeferredTask run method-----");
 					int total = (deals_list != null && deals_list.size() > 0)?deals_list.get(0).count : 0;
 					System.out.println("In UpdateDealsOfDomainDeferredTask run method-----total-------"+total);
 					createStats(total);
@@ -174,6 +175,7 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 	private void updateStats(String previousCursor,String failedIds, String status) {
 		NamespaceManager.set("");
 		try {
+			System.out.println("In UpdateDealsOfDomainDeferredTask updateStats method-----");
 			OpportunitySchemaUpdateStats opportunitySchemaUpdateStats = OpportunitySchemaUpdateStats.get(domain);
 			opportunitySchemaUpdateStats.count = count;
 			opportunitySchemaUpdateStats.cursor = previousCursor;
