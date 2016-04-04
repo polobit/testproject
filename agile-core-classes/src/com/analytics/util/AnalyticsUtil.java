@@ -272,9 +272,16 @@ public class AnalyticsUtil
 		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
 		emails.add(contactEmail.get("email").toString());
 	    }
-	    JSONObject emailCountObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length()-1);
-	    String emailCountString = emailCountObject.get("total_rows_count").toString();
-	    emails.add(emailCountString);
+	    try
+	    {
+		JSONObject emailCountObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length() - 1);
+		String emailCountString = emailCountObject.get("total_rows_count").toString();
+		emails.add(emailCountString);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("exception occured while fetching segmented email count "+ e.getMessage());
+	    }
 	    return emails;
 	}
 	catch (Exception e)
@@ -316,7 +323,7 @@ public class AnalyticsUtil
 	    contacts = dao.fetchAll(query);
 	    Contact contact = contacts.get(contacts.size() - 1);
 	    contact.count = emailCount;
-	}	
+	}
 	// for (String propName : .keySet())
 	// {
 	// q.filter(propName, map.get(propName));
