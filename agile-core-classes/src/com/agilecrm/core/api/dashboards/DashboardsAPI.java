@@ -78,9 +78,17 @@ public class DashboardsAPI {
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Dashboard updateDashboard(Dashboard dashboard) {
+	public Dashboard updateDashboard(Dashboard dashboard) throws Exception{
+		
+		if(dashboard != null){
+			Dashboard dashboard2 = DashboardUtil.getDashboard(dashboard.id);
+			if(!dashboard.name.equals(dashboard2.name)){
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Dashboard with this name already exists.").build());
+			}
+		}
+		
 		try {
-			if(dashboard!=null){	
+			if(dashboard != null){	
 				dashboard.save();
 			}
 		} catch (Exception e) {

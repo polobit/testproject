@@ -1187,16 +1187,16 @@ function insideAddListener()
 				});
 
 				if(is_add_for_all_disable) {
-					$('.add_to_all',$('#portletStreamModal')).attr("disabled", true);
+					$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", true);
 				}else {
-					$('.add_to_all',$('#portletStreamModal')).attr("disabled", false);
+					$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", false);
 				}
 			});
 	$('.modal-content').on(
 			"click",
 			'ul[name="route-list"] > li',
 			function() {
-				$('.add_to_all',$('#portletStreamModal')).attr("disabled", false);
+				$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", false);
 			});
 }
 function clickfunction(that,url,forAll,route){

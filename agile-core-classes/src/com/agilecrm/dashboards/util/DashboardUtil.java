@@ -5,6 +5,7 @@ import java.util.List;
 import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
 public class DashboardUtil {
@@ -47,6 +48,28 @@ public class DashboardUtil {
 			e.printStackTrace();
 		}
 		return isDuplicate;
+	}
+	
+	/**
+	 * Gets the dashboard with id
+	 *  
+	 * @return {@link Dashboard}
+	 */
+	public static Dashboard getDashboard(Long id){
+		try {
+			if(id != null){
+				return dao.get(id);
+			}
+		} catch(EntityNotFoundException enfe){
+			System.out.println("Entity not found in getDashboard");
+			enfe.printStackTrace();
+			return null;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
 	}
 
 }

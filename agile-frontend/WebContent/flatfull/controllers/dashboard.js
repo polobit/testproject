@@ -49,7 +49,10 @@ var DashboardsRouter = Backbone.Router.extend({
 				individual_tag_name : 'tr', sortKey : 'name',  
 				postRenderCallback : function(el)
 				{
-									
+					head.js('lib/jquery.timeago.js', function()
+					{
+						$(".time-ago", el).timeago();
+					});					
 				} });
 			this.dashboards_collection_view.collection.fetch();
 			$('#content').html(this.dashboards_collection_view.render().el);
