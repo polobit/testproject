@@ -63,6 +63,7 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 			try {
 				if(StringUtils.isEmpty(cursor) && count == 0 && currentCount == 0 && opportunitySchemaUpdateStats == null) {
 					int total = (deals_list != null && deals_list.size() > 0)?deals_list.get(0).count : 0;
+					System.out.println("In UpdateDealsOfDomainDeferredTask run method-----total-------"+total);
 					createStats(total);
 				}
 			} catch(Exception e) {
@@ -179,6 +180,7 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 			opportunitySchemaUpdateStats.status = status;
 			opportunitySchemaUpdateStats.failedIds = failedIds;
 			opportunitySchemaUpdateStats.save();
+			System.out.println("In UpdateDealsOfDomainDeferredTask updateStats method-----count-------"+count);
 		} catch(Exception e) {
 			System.err.println("Exception while updating stats for domain: "+ domain);
 			e.printStackTrace();
