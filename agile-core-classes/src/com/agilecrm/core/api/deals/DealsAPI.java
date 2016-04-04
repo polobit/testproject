@@ -826,7 +826,6 @@ public class DealsAPI
 	note.save();
 	if (updatedOpportunityid != null){
 		Opportunity opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
-		opportunity.updated_time = System.currentTimeMillis() / 1000 ; 
 		opportunity.save();
 	    return opportunity ; 
 	}

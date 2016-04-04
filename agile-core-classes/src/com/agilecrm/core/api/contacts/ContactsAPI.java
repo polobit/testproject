@@ -922,8 +922,18 @@ public class ContactsAPI
     public void deleteNotes(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray notesJSONArray = new JSONArray(model_ids);
-	Note.dao.deleteBulkByIds(notesJSONArray);
-    }
+	 if(notesJSONArray!=null && notesJSONArray.length()>0){
+		 for (int i = 0; i < notesJSONArray.length(); i++) {
+			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
+			 List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
+			for(Opportunity opp : deals){
+				opp.save();
+			}
+		 }
+		 
+	 }
+	 Note.dao.deleteBulkByIds(notesJSONArray);
+}
 
     /**
      * Deletes all selected deals of a particular contact

@@ -23,11 +23,15 @@ import org.json.JSONException;
 
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.GoogleCalendarUtil;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
@@ -152,6 +156,14 @@ public class EventsAPI
 		ActivitySave.createEventDeleteActivity(event);
 		if (event.type.toString().equalsIgnoreCase("WEB_APPOINTMENT"))
 		    GoogleCalendarUtil.deleteGoogleEvent(event);
+		  if(!(event.getDeal_ids()).isEmpty())
+	    	{
+	    		for(String oppr : event.getDeal_ids())
+	    		{
+	    			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr));
+	    			opportuinty.save();
+	    		}
+	    	}
 		event.delete();
 	    }
 	}
@@ -177,6 +189,14 @@ public class EventsAPI
 	try
 	{
 	    ActivitySave.createEventAddActivity(event);
+	    if(!(event.getDeal_ids()).isEmpty())
+    	{
+    		for(String oppr : event.getDeal_ids())
+    		{
+    			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
+    			opportuinty.save();
+    		}
+    	}
 	}
 	catch (Exception e)
 	{
@@ -197,7 +217,27 @@ public class EventsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Event updateEvent(Event event)
     {
+
+    Event oldEvent =EventUtil.getEvent(event.id);
+    if(oldEvent != null &&!(oldEvent.getDeal_ids()).isEmpty())
+   	{
+   		for(String oppr : oldEvent.getDeal_ids())
+   		{
+   			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
+   			opportuinty.save();
+   		}
+   	}
     UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.UPDATE, true);
+    event.save();
+    System.out.println(event.getDeal_ids());
+    if(event != null &&!(event.getDeal_ids()).isEmpty())
+	{
+		for(String oppr : event.getDeal_ids())
+		{
+			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
+			opportuinty.save();
+		}
+	}
 	try
 	{
 	    ActivitySave.createEventEditActivity(event);
@@ -207,7 +247,7 @@ public class EventsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	event.save();
+	
 	return event;
     }
 
@@ -224,6 +264,18 @@ public class EventsAPI
     public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray eventsJSONArray = new JSONArray(model_ids);
+    if(eventsJSONArray!=null && eventsJSONArray.length()>0){
+		  for (int i = 0; i < eventsJSONArray.length(); i++) {
+			 String eventId =  (String) eventsJSONArray.get(i);
+			 Event event = EventUtil.getEvent(Long.parseLong(eventId));
+			 if(!event.getDeal_ids().isEmpty()){
+				 for(String dealId : event.getDeal_ids()){
+					 Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
+					 oppr.save();
+				 }
+			 }
+         }
+     }
 	ActivitySave.createLogForBulkDeletes(EntityType.EVENT, eventsJSONArray,
 		String.valueOf(eventsJSONArray.length()), "");
 

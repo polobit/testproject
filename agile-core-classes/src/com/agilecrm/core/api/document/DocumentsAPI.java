@@ -17,10 +17,17 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.user.AgileUser;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>DocumentsAPI</code> includes REST calls to interact with
@@ -82,8 +89,22 @@ public class DocumentsAPI
 	try
 	{
 	    Document document = DocumentUtil.getDocument(id);
-	    if (document != null)
-		document.delete();
+	    if (document != null){
+	    	if(!(document.relatedDealKeys()).isEmpty())
+	    	{
+	    		for(Key<Opportunity> key : document.relatedDealKeys())
+	    		{
+	    			try {
+	    				Opportunity opp = Opportunity.dao.get(key);
+	    				opp.save();
+	    			} catch (EntityNotFoundException e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			}
+	    		}
+	    	}
+	    	document.delete();
+	    }
 	}
 	catch (Exception e)
 	{
@@ -116,6 +137,20 @@ public class DocumentsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	if(!(document.relatedDealKeys()).isEmpty())
+	{
+		for(Key<Opportunity> key : document.relatedDealKeys())
+		{
+			try {
+				Opportunity opp = Opportunity.dao.get(key);
+				opp.save();
+			} catch (EntityNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
 	return document;
     }
 
@@ -131,7 +166,7 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Document updateDocument(Document document)
     {
-
+    	Document oldDocument = DocumentUtil.getDocument(document.id);
 	try
 	{
 	    ActivitySave.createDocumentUpdateActivity(document);
@@ -141,9 +176,37 @@ public class DocumentsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	if(oldDocument != null && !(oldDocument.relatedDealKeys()).isEmpty())
+	{
+		for(Key<Opportunity> key : oldDocument.relatedDealKeys())
+		{
+			try {
+				Opportunity opp = Opportunity.dao.get(key);
+				opp.save();
+			} catch (EntityNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
 	if(document.network_type.equals("GOOGLE"))
 		document.size = 0L;
 	document.save();
+	if(!(document.relatedDealKeys()).isEmpty())
+	{
+		for(Key<Opportunity> key : document.relatedDealKeys())
+		{
+			try {
+				Opportunity opp = Opportunity.dao.get(key);
+				opp.save();
+			} catch (EntityNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
 	return document;
     }
 
@@ -160,6 +223,18 @@ public class DocumentsAPI
     public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray documentsJSONArray = new JSONArray(model_ids);
+	  if(documentsJSONArray!=null && documentsJSONArray.length()>0){
+		  for (int i = 0; i < documentsJSONArray.length(); i++) {
+			 String eventId =  (String) documentsJSONArray.get(i);
+			 Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
+			 if(!doc.getDeal_ids().isEmpty()){
+				 for(String dealId : doc.getDeal_ids()){
+					 Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
+					 oppr.save();
+				 }
+			 }
+         }
+     }
 	ActivitySave.createLogForBulkDeletes(EntityType.DOCUMENT, documentsJSONArray,
 		String.valueOf(documentsJSONArray.length()), "documents deleted");
 

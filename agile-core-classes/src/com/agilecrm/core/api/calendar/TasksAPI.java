@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.simple.JSONObject;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
@@ -35,6 +36,8 @@ import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
@@ -190,6 +193,13 @@ public class TasksAPI
 		ActivitySave.createTaskDeleteActivity(task);
 		if (!task.getNotes(id).isEmpty())
 		    NoteUtil.deleteBulkNotes(task.getNotes(id));
+		if(!(task.relatedDeals()).isEmpty())
+    	{
+    		for(Opportunity oppr : task.relatedDeals())
+    		{
+    			oppr.save();
+    		}
+    	}
 		task.delete();
 	    }
 	}
@@ -215,6 +225,13 @@ public class TasksAPI
 	try
 	{
 	    ActivitySave.createTaskAddActivity(task);
+		if(!(task.relatedDeals()).isEmpty())
+    	{
+    		for(Opportunity oppr : task.relatedDeals())
+    		{
+    			oppr.save();
+    		}
+    	}
 	}
 
 	catch (Exception e)
@@ -236,6 +253,22 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Task updateTask(Task task)
     {
+    	Task oldTask = TaskUtil.getTask(task.id);
+    	  if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())
+    		{
+    			for(Opportunity oppr : oldTask.relatedDeals())
+    			{
+    				oppr.save();
+    			}
+    		}
+    task.save();
+    if(!(task.relatedDeals()).isEmpty())
+	{
+		for(Opportunity oppr : task.relatedDeals())
+		{
+			oppr.save();
+		}
+	}
 	try
 	{
 	    ActivitySave.createTaskEditActivity(task);
@@ -245,7 +278,6 @@ public class TasksAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	task.save();
 	return TaskUtil.getTask(task.id);
     }
 
@@ -262,6 +294,19 @@ public class TasksAPI
     public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
+	 if(tasksJSONArray!=null && tasksJSONArray.length()>0){
+		 
+		 for (int i = 0; i < tasksJSONArray.length(); i++) {
+			 String taskId =  (String) tasksJSONArray.get(i);
+			 Task task = TaskUtil.getTask(Long.parseLong(taskId));
+			 if(!task.relatedDeals().isEmpty()){
+				 for(Opportunity oppr : task.relatedDeals()){
+					 oppr.save();
+				 }
+			 }
+        	
+         }
+     }
 	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
 		"");
 	Task.dao.deleteBulkByIds(tasksJSONArray);

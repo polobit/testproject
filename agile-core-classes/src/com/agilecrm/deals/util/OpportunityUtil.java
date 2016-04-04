@@ -28,6 +28,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.CustomFieldDef.Type;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -3003,5 +3004,14 @@ public class OpportunityUtil
 		    e.printStackTrace();
 		    return list;
 		}
+    }
+    /*
+     * Author @sankar
+     * date 1/apr/16
+     * */
+    public static List<Opportunity> getOpportunitiesByNote(Long noteId)
+    {
+   	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("related_notes", new Key<Note>(Note.class,noteId) );
+	return dao.fetchAll(q);
     }
 }
