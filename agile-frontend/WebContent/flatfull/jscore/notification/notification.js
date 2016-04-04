@@ -92,7 +92,8 @@ function subscribeToPubNub(domain)
 			}
 
 			// Ticket operations
-			if (message.type.indexOf('TICKET') != -1)
+			if (message.type && 
+					message.type.indexOf('TICKET') != -1)
 			{
 				loadServiceLibrary(function(){
 					Ticket_Utils.showNoty('information', message.message, 'bottomRight', 5000);
