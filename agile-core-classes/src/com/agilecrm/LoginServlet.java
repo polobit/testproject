@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 import com.agilecrm.ipaccess.AllowAccessMailServlet;
 import com.agilecrm.ipaccess.IpAccessUtil;
@@ -274,9 +275,12 @@ public class LoginServlet extends HttpServlet {
 		request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
 		
 		if(!isValid){
-			long generatedOTP = System.currentTimeMillis()/1000;	
-			SendMail.sendMail(domainUser.email, SendMail.NEW_REPLY, SendMail.OTP_EMAIL_TO_USER, generatedOTP);
-			
+			long generatedOTP = System.currentTimeMillis()/1000;
+			System.out.println(generatedOTP);
+			JSONObject result = new JSONObject();
+			result.put("email", domainUser.email);
+			result.put("geratedOTP", generatedOTP);
+			SendMail.sendMail(domainUser.email, SendMail.NEW_REPLY, SendMail.OTP_EMAIL_TO_USER, result);
 			request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
 		}
 
