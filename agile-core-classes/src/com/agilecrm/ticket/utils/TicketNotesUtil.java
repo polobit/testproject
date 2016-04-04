@@ -192,13 +192,8 @@ public class TicketNotesUtil
 
 		System.out.println("notesArray: " + notesArray);
 
-		String formattedSuffix = String.format(Globals.INBOUND_EMAIL_SUFFIX_NEW, NamespaceManager.get());
-
-		String fromAddress = group.group_name + "+" + ticket.id + formattedSuffix;
-
-		// String fromAddress = NamespaceManager.get() + "+" +
-		// TicketGroupUtil.getShortGroupID(group.id) + "+" + ticket.id
-		// + Globals.INBOUND_EMAIL_SUFFIX;
+		String fromAddress = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(group.id) + "+" + ticket.id
+				+ Globals.INBOUND_EMAIL_SUFFIX;
 
 		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
 				SendMail.TICKET_REPLY, json);

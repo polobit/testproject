@@ -138,8 +138,7 @@ public class TicketGroups
 			}
 		}
 
-		String temp = String.format(Globals.INBOUND_EMAIL_SUFFIX_NEW, NamespaceManager.get());
-		group_email = group_name + temp;
+		group_email = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(id) + Globals.INBOUND_EMAIL_SUFFIX;
 	}
 
 	@JsonIgnore

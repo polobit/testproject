@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -87,16 +88,17 @@ public class SendgridInboundParser extends HttpServlet
 
 					JSONObject enveloperJSON = new JSONObject(envelope);
 					String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
-
-					System.out.println("To address: " + toAddress);
-
+					
 					/**
-					 * Replacing helptor.com text with space so that we'll get a
-					 * string of namespace and group ID separated by delimeter
-					 * '+'
+					 * Replacing helptor.com text with space so that we'll get a string
+					 * of namespace and group ID separated by delimeter '+'
 					 */
-					String namespace = getSubDomain(toAddress);
+					String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX, "").split("\\+");
 
+					if (toAddressArray.length < 2)
+						return;
+
+					String namespace = toAddressArray[0];
 					System.out.println("namespace: " + namespace);
 
 					/**
@@ -113,18 +115,16 @@ public class SendgridInboundParser extends HttpServlet
 					// Setting namespace
 					NamespaceManager.set(namespace);
 
-					String groupName = toAddress.split("@")[0];
+					/**
+					 * GroupID is converted with Base62. So to get original GroupID
+					 * converting back to decimal with Base62.
+					 */
+					Long groupID = TicketGroupUtil.getLongGroupID(toAddressArray[1]);
 
-					System.out.println("groupName: " + groupName);
+					System.out.println("groupID: " + groupID);
 
-					String[] groupArray = groupName.split("\\+");
-					boolean isNewTicket = true;
+					boolean isNewTicket = isNewTicket(toAddressArray);;
 
-					if (groupArray.length >= 2)
-					{
-						groupName = groupArray[0];
-						isNewTicket = false;
-					}
 
 					TicketGroups ticketGroup = null;
 
@@ -133,14 +133,14 @@ public class SendgridInboundParser extends HttpServlet
 					 */
 					try
 					{
-						ticketGroup = TicketGroupUtil.getTicketGroupByName(groupName);
+						TicketGroupUtil.getTicketGroupById(groupID);
 					}
 					catch (Exception e)
 					{
-						System.out.println("Invalid group: " + groupName);
+						System.out.println("Invalid groupID: " + groupID);
 						return;
 					}
-
+					
 					List<String> ccEmails = getCCEmails(json);
 
 					// Get email key value as it contains plain text, html text
@@ -164,7 +164,7 @@ public class SendgridInboundParser extends HttpServlet
 					Tickets ticket = null;
 
 					String[] nameEmail = getNameAndEmail(json);
-
+					
 					if (isNewTicket)
 					{
 						// Creating new Ticket in Ticket table
@@ -183,7 +183,7 @@ public class SendgridInboundParser extends HttpServlet
 					{
 						try
 						{
-							ticket = TicketsUtil.getTicketByID(Long.parseLong(groupArray[1]));
+							ticket = TicketsUtil.getTicketByID(Long.parseLong(toAddressArray[2]));
 
 						}
 						catch (Exception e)
@@ -194,7 +194,7 @@ public class SendgridInboundParser extends HttpServlet
 						// Check if ticket exists
 						if (ticket == null)
 						{
-							System.out.println("Invalid ticketID or ticket has been deleted: " + groupArray[1]);
+							System.out.println("Invalid ticketID or ticket has been deleted: " + toAddressArray[2]);
 							return;
 						}
 
@@ -299,12 +299,6 @@ public class SendgridInboundParser extends HttpServlet
 		return new ArrayList<>();
 	}
 
-	private String getSubDomain(String toAddress)
-	{
-		String tailPart = toAddress.split("@")[1];
-		return tailPart.substring(0, tailPart.indexOf("."));
-	}
-
 	private JSONObject getJSONFromMIME(HttpServletRequest request)
 	{
 		JSONObject dataJSON = new JSONObject();
@@ -359,7 +353,16 @@ public class SendgridInboundParser extends HttpServlet
 
 		return dataJSON;
 	}
-
+	
+	/**
+	 * If received ticket is reply to existing ticket then email address will be
+	 * in the form of namespace+groupid+ticketid@helptor.com
+	 */
+	public static boolean isNewTicket(String[] toAddressArray)
+	{
+		return (toAddressArray.length == 3) ? false : true;
+	}
+	
 	public static void main(String[] args) throws JSONException, IOException
 	{
 		File file = new File("D:\\email.txt");
