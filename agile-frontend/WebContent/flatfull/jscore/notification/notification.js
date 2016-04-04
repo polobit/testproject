@@ -97,8 +97,9 @@ function subscribeToPubNub(domain)
 			{
 				loadServiceLibrary(function(){
 					Ticket_Utils.showNoty('information', message.message, 'bottomRight', 5000);
-					return;
 				});
+
+				return;
 			}
 			
 			if (message.type == "EVENT_REMINDER")

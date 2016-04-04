@@ -214,7 +214,7 @@ public class SendgridInboundParser extends HttpServlet
 						// + " replied to ticket#" + ticket.id);
 
 						TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name
-								+ " replied to ticket# " + ticket.id);
+								+ " replied to ticket #" + ticket.id);
 
 						// Execute note created by customer trigger
 						TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
