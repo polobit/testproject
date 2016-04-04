@@ -279,7 +279,7 @@
                     <div><i class="icon-envelope text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "email"}}</a></div>{{/property_is_exists}}
                     {{#property_is_exists "phone" event.contacts.[0].properties }}
                     <div><i class="icon-call-end text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "phone"}}</a></div>{{/property_is_exists}}
-                    <div><i class="icon-trophy" style="height: 6px; vertical-align: middle;font-size:1em;"></i> <a>{{event.contacts.[0].lead_score}}</a></div>
+                    <div><i class="icon-trophy text-muted m-r-xs" style="height: 6px; vertical-align: middle;font-size:1em;"></i> <a>{{event.contacts.[0].lead_score}}</a></div>
                     <div>{{setupRating event.contacts.[0].star_value}}</div>
                    {{/if_equals}}
      {{else}}
