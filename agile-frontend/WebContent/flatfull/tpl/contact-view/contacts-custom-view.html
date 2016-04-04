@@ -31,6 +31,38 @@
 <!-- Newly Added -->
 
 <div class="hbox hbox-auto-xs hbox-auto-sm">
+
+<!--  start filterstab section -->	
+
+	<div class="content-tabs-show filtersTabList m-none" id="filtersTab" role="tablist" aria-multiselectable="true">
+	 <div class="panel panel-default m-b-sm"> 
+	 <div class="panel-heading" role="tab" id="headingOne"> 
+	 <h4 class="panel-title text-left"> 
+	 <a role="button" data-toggle="collapse" data-parent="#filtersTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed" style="padding-left:16px;"> Filters</a> </h4> 
+	 </div> 
+	 <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;"> 
+	 <div class="panel-body">
+
+			<div class="" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
+
+			<div class="data-block">
+			<div id="lhs_filters_conatiner"></div>
+			<div class="wrapper bg-light p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-sm">
+			<div class="p-t-sm p-b-sm text-center">
+      <a href='#contact-filters' class="text-info">Add or Edit Filter</a></div>
+</div>
+</div>
+
+
+
+			</div>
+			</div>
+		
+
+       </div><!--  end panelbody section --> </div> </div>   </div>
+
+       <!--  end filterstab section -->
  
 	<div class="">
 		<div id="right-pane">
@@ -45,7 +77,7 @@
 	</div>
 	<div class="contacts-div">
 
-<div class="dta-contatiner table-responsive m-r-sm b-n contacts-inner-div">
+<div class="dta-contatiner table-responsive b-n contacts-inner-div">
 				<div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
 			    {{#unless this.length}}
 		        <div class="m-l-sm" id="slate">
@@ -90,12 +122,12 @@
 	style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
-	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);">Contacts<span id="contacts-count" class="m-l-xs">{{contacts_count}}</span>
+	    		<h3 class="inline-block m-n text-black">Contacts<span id="contacts-count" class="m-l-xs">{{contacts_count}}</span>
 	    			 
-	    			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+	    			<a id="contacts-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
             			<i id="icon-filter" class="fa fa-bars icon-white"></i>
           			</a>
-	    		</div>
+	    		</h3>
 	    		<br>
 				<div class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
     
