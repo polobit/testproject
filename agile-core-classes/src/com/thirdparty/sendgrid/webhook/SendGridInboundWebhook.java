@@ -49,12 +49,16 @@ public class SendGridInboundWebhook extends HttpServlet
 				return;
 			}
 			
+			
+			System.out.println("MailJSON is " + mailJSON.toString());
+			
 			MandrillWebhookTriggerInbound mwt = new MandrillWebhookTriggerInbound();
 			
 			String agileEmail = getAgileEmail(mailJSON);
 			String apiKey = mwt.getAgileDetail(agileEmail, AgileDetail.API_KEY);
 			String agileDomain = mwt.getAgileDetail(agileEmail, AgileDetail.DOMAIN);
 			
+			System.out.println("Agile Email - " + agileEmail + " apiKey - " + apiKey + " agileDomain - "+ agileDomain);
 			if (agileEmail == null || agileDomain == null || apiKey == null)
 				return;
 			
@@ -174,11 +178,11 @@ public class SendGridInboundWebhook extends HttpServlet
 				if(envelope.has("to"))
 					emails = envelope.getJSONArray("to");
 			}
-			
+			System.out.println("Emails: " + emails);
 			
 			for(int i=0; i< emails.length(); i++)
 			{
-				if(StringUtils.containsIgnoreCase(emails.getString(i), "@agle.cc"))
+				if(StringUtils.containsIgnoreCase(emails.getString(i), "@agle.cc") || StringUtils.containsIgnoreCase(emails.getString(i), "@pagenut.com"))
 					return emails.getString(i);
 			}
 		}
