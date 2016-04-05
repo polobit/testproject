@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
@@ -59,7 +58,7 @@ public class TicketNotesUtil
 	{
 		return TicketNotes.ticketNotesDao.get(notesID);
 	}
-	
+
 	/**
 	 * 
 	 * @param ticketID
@@ -84,15 +83,15 @@ public class TicketNotesUtil
 		searchMap.put("ticket_key", new Key<Tickets>(Tickets.class, ticketID));
 
 		List<TicketNotes> notes = TicketNotes.ticketNotesDao.listByPropertyAndOrder(searchMap, sortOrder);
-		
-		//Formatting plain text content
+
+		// Formatting plain text content
 		for (TicketNotes note : notes)
 		{
-			//note.plain_text = StringEscapeUtils.escapeHtml(note.plain_text);
+			// note.plain_text = StringEscapeUtils.escapeHtml(note.plain_text);
 			note.plain_text = TicketNotesUtil.convertNewLinesToBreakTags(note.plain_text);
 		}
 
-		//return inclDomainUsers(notes);
+		// return inclDomainUsers(notes);
 		return notes;
 	}
 
@@ -534,16 +533,16 @@ public class TicketNotesUtil
 
 		TicketNotes.ticketNotesDao.deleteKeys(notes);
 	}
-	
+
 	public static void main(String[] args)
 	{
 		String s = "hiiiiiiii\r\n\r\n2016-03-11 17:25 GMT+05:30 Sudha <sudha+QFp5CyjS4+199@helptor.com>:\r\n\r\n> Your request (#199) has been reviewed by support team.\r\n> [image: clickdesk-profile-pic]\r\n>\r\n> *Sudha*\r\n>\r\n> Mar 11, 11:55 AM (GMT)\r\n> hiiii\r\n>\r\n> Sent using Agile\r\n> <https://www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=sudha>\r\n> [image: clickdesk-profile-pic]\r\n>\r\n> *sudha P*\r\n>\r\n> Mar 11, 5:57 AM (GMT)\r\n> మరియు మాత్రమే\r\n> వారు మీ వెబ్సైట్ లేదా కాల్ సందర్శించడానికి క్లిక్ చెల్లిస్తారు\r\n> [image: clickdesk-profile-pic]\r\n>\r\n> *Sudha*\r\n>\r\n> Mar 11, 5:57 AM (GMT)\r\n> వారు మీ వెబ్సైట్ లేదా కాల్ సందర్శించడానికి క్లిక్ చెల్లిస్తారు\r\n>\r\n> Sent using Agile\r\n> <https://www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=sudha>\r\n> [image: clickdesk-profile-pic]\r\n>\r\n> *sudha P*\r\n>\r\n> Mar 11, 5:56 AM (GMT)\r\n> వారు మీరు శోధిస్తున్న సమయంలో ప్రకటనతో ప్రజలు చేరుకోవడానికి. మరియు మాత్రమే\r\n> వారు మీ వెబ్సైట్ లేదా కాల్ సందర్శించడానికి క్లిక్ చెల్లిస్తారు\r\n> This email is a service from My company. Delivered by Agile CRM\r\n> <https://www.agilecrm.com?utm_source=www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=null>\r\n>\r\n";
 		System.out.println(s);
 		System.out.println("Quoted text........");
 		System.out.println(removedQuotedRepliesFromPlainText(s));
-		
+
 		System.out.println("Next text..........");
-		
+
 		s = "Hi,\n\ndhaynadadsaf dsafndskanf sda\n\n\nThank you\n\n2016-03-19 22:49 GMT+05:30 sasi <sasi+OJ0FQV9Ae+5783832003346694@helptor.com\n>:\n\n> Your request (#5783832003346694) has been reviewed by support team.\n> [image: clickdesk-profile-pic]\n>\n> *sasi*\n>\n> Mar 19, 5:19 PM (GMT)\n> thnk you\n>\n> fadsf dsafdas fdsa\n>\n> f\n> sad fdsf safdsa fsa\n>\n> Sent using Agile\n> <https://www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=sasi>\n> [image: clickdesk-profile-pic]\n>\n> *Sasi Jolla*\n>\n> Mar 19, 5:18 PM (GMT)\n> హల్లో\n>\n> డియర్ వెబ్ యజమాని,\n>\n> మరింత ఖాతాదారులకు మరియు వినియోగదారులు వాంట్?\n>\n> మేము వాటిని Google (Yahoo & బింగ్) లో * మొదటి పేజీ న మీరు పెట్టటం ద్వారా\n> మీరు కనుగొనడంలో సహాయంగా.\n>\n>\n> మేము ఈ సీజన్లో కొన్ని ప్రత్యేక ఆఫర్లు ఉన్నాయి.\n> This email is a service from My company. Delivered by Agile CRM\n> <https://www.agilecrm.com?utm_source=www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=null>\n>\n\n\n";
 		System.out.println(s);
 		System.out.println("Quoted text........");

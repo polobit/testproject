@@ -367,8 +367,13 @@ var Ticket_Custom_Filters = {
 					break;
 				case 'assignee_id':
 					
-					if(condition.CONDITION == 'EQUALS')
+					if(condition.CONDITION == 'EQUALS'){
+
+						if(condition.RHS == '0')
+							condition.RHS = CURRENT_DOMAIN_USER.id;
+
 						$('input[value="' + condition.RHS + '"]').attr('checked', 'checked');
+					}
 					
 					break;	
 				case 'group_id':

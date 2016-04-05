@@ -214,7 +214,7 @@ function isValidForm(form) {
 		return true;
 	}, function(params, element) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
-		}
+		}	
 	);
 
 
@@ -223,6 +223,12 @@ function isValidForm(form) {
 		
 		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
 	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
+    
+    jQuery.validator.addMethod("tickets_group_name", function(value, element){
+
+		return /^[a-zA-Z0-9._]*$/.test(value);
+	},"Please use only letters (a-z & A-Z), numbers, '.' and '_'.");
+
 
 	//Image keyword validation for custom fields
 	jQuery.validator.addMethod("custom_field_keyword", function(value, element){

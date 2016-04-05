@@ -453,10 +453,24 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	return str;
 });
+Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
 
-Handlebars.registerHelper('get_current_filter_id', function(str, options) {
-	return Ticket_Filter_ID
+	if(!str)
+		return "";
+
+	str = str.trim();
+
+	str = str.replace(/(?:\r\n)/g, '<br/>');
+    return str;
 });
+
+Handlebars.registerHelper('get_ticket_uri', function(str, options) {
+	
+    	if(Ticket_Filter_ID)
+	       return "#tickets/filter/"+Ticket_Filter_ID;
+
+    	return "#tickets";
+    });
 
 /**
   * CSS text avatars
