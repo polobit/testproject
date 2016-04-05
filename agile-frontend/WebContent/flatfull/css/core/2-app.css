@@ -223,7 +223,7 @@ a:hover .caret-white {
   background-color: #edf1f2;
   border-color: #cfdadd;
 }
-#contact-tab-content ul li,#deal-tab-content ul li,#task_tab_detail ul li
+#contact-tab-content > ul > li,#deal-tab-content > ul > li,#task_tab_detail > ul > li
 {
    background-color: #fff;
     border: 1px solid #ddd;

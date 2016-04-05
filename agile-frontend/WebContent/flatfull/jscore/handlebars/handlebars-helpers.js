@@ -7178,7 +7178,6 @@ function agile_is_mobile_browser(){
 	return false;
  }
 
-
 Handlebars.registerHelper('multiple_Property_Element_List', function(name, properties,id, options)
 		{
 

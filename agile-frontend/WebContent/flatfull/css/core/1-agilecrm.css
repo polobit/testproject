@@ -1013,14 +1013,14 @@ li.deal-color.GREY:after { background: grey;}
   margin-bottom: 0px;
 }
 
-.milestone-column>div.milestones ul{
-  list-style: none;
-  margin-left: 0px;
-  margin-bottom: 0px;
-  min-height: calc(100vh - 200px);
+.milestone-column>div.milestones ul.milestones{
+	list-style: none;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	min-height: calc(100vh - 200px);
 }
 
-#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list li, #deals-by-paging-relax-model-list li
+#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list>li, #deals-by-paging-relax-model-list>li
 {
 margin:0px;
   cursor: move;
@@ -3080,6 +3080,7 @@ width : 150px;
 
 }
 }
+
 table.hide-head-checkbox th label.i-checks {
       visibility: hidden;
 }
@@ -3187,15 +3188,18 @@ table.hide-head-checkbox th label.i-checks {
 
 .contact_popover{ 
 
-  border-radius: 0px;
-  //width : 260px;
+	border-radius: 0px;
+	z-index:1026;
+	//width : 260px;
 }
 
-#contacts-table .popover-content{
-  padding: 0px;
+.contact_popover .popover{
+	max-width:100%;
+
 }
-#contacts-table .popover{
-  max-width:100%;
+
+.contact_popover .popover-content{
+	padding: 0px;
 }
 
 .contact_popover .arrow{

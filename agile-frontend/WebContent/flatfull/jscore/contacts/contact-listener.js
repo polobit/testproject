@@ -1,76 +1,171 @@
 var timer = undefined;
-function contactListener()
-{
-	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseenter','tr');
-		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseenter','tr',function(e){
+
+$(function(){
+	$('body').off('mouseover','.popover_contact');
+		$('body').on('mouseover','.popover_contact',function(e){
 			//e.stopPropagation();
 			var left=e.pageX;
             var that=$(this);
 
-
- 
-     
-
 			timer=setTimeout(function() {
-						 	
-						  	
-				if (!insidePopover)	{
+
+						 		
 		
-					 $('.popover').remove();	
-		 App_Contacts.contact_popover=$(that).data();
-		 try{
-		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
+					var contact_id=$(that).attr('data')
+		 //App_Contacts.contact_popover=$(that).attr('data');
+		  $.ajax({
+				type : 'GET',
+				url :  '/core/api/contacts/' + contact_id,
+				dataType : 'json',
+				success : function(data) {
+					App_Contacts.contact_popover=new Backbone.Model(data);
+		 		getTemplate("contacts-custom-view-popover", data, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 								$(that).popover(
         {
             "rel": "popover",
             "trigger": "manual",
-            "placement": "auto top",
+            "placement": "auto right",
             "html": "true",
             "content": template_ui,
+            "container" : 'body'
             });
 								$(that).popover('show');
-							$('.popover').addClass("contact_popover fadeInLeft animated");
-							$('.popover-content').html(template_ui);
-							$('.popover').css('left', left-100 + "px");
-							//$('.popover').css('left', ($('.dta-contatiner').offset().left + 90+"px"));
-							/*if (window.innerHeight - $(that).offset().top >= 400)
-                            $('.popover').css('top', ($(that).offset().top  + "px"));
-                        
-                         else{
-                         	if($(window).scrollTop()>($('#contacts-table .popover').offset().top-$('#contacts-table .popover').height()))
-                         		$('#contacts-table .popover').offset({ top : $(that).offset().top+20 });
-                         }*/
-                        	
-							 attachEvents(that,App_Contacts.contact_popover,true);
-						contact_list_starify('.popover',true);
+								
+						$('.popover').addClass("contact_popover fadeInLeft animated");
+							/*var top;
+							if (window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 400)
+       	  top = $(that).offset().top + 20 + 'px';
+       	else if(window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 200 &&  window.innerHeight - $(that).offset().top + $(window).scrollTop()<400)
+       	top = $(that).offset().top + 30 - $('.popover').height()/2+ 'px';
+        else
+         top = $(that).offset().top-$('.popover').height() + 'px';
+     $('.popover').css('top',top);
+       $('.popover').css('left',left+10+'px');*/
+
+						contact_list_starify('.popover',undefined);
 						
 					});
-		 		that.find('.data').attr('data');
+		 		//that.find('.data').attr('data');
 		 	}
-		 	catch(e){
-		 		return false;
-		 	}
-		 	}
+		 	});
+		 	
 		 }, 1000);
 });
-		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseleave','tr');
-	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseleave','tr',function(){
-		var that=$(this);
-	setTimeout(function() {
-		if (!insidePopover){
-			if($('.popover',that.parent()).length!=0)
-			{
+
+	$('body').off('mouseout','.popover_contact');
+		$('body').on('mouseout','.popover_contact',function(e){
+				var that=$(this);
+			if($('.popover').length!=0){
 			$(that).popover('hide');
 			$('.popover').remove();
-			}
 		}
-					
-	}, 200);
-	 clearTimeout(timer);
+		clearTimeout(timer);
+			});
+	});
+function contactListener(el)
+{
+	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseenter','tr > td:not(":first-child")');
+		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseenter','tr > td:not(":first-child")',function(e){
+			//e.stopPropagation();
+				var left=e.pageX;
+				left=left-100;
+				var top=0;
+            var that=$(this).parent();
+             popoverEnter(that,left,top,true);
+
+		
+});
+		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseleave','tr > td:not(":first-child")');
+	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseleave','tr > td:not(":first-child")',function(){
+		var that=$(this).parent();
+		popout(that);
 		
 	});
+
+
+	$(el).off('mouseenter','tr');
+		$(el).on('mouseenter','tr',function(e){
+			//e.stopPropagation();
+			//var left=e.pageX;
+            var that=$(this);
+             popoverEnter(that,undefined,0,undefined);
+});
+
+
+		$(el).off('mouseleave','tr');
+	$(el).on('mouseleave','tr',function(){
+		var that=$(this);
+		popout(that);
+		
+	});
+
+	$('#company-contacts-model-list').off('mouseenter','tr > td');
+		$('#company-contacts-model-list').on('mouseenter','tr > td',function(e){
+			var left=e.pageX;
+			left=left-100;
+            var that=$(this).parent();
+             popoverEnter(that,left,0,undefined);
+});
+		$('#company-contacts-model-list').off('mouseleave','tr > td');
+	$('#company-contacts-model-list').on('mouseleave','tr > td',function(){
+	var that=$(this).parent();
+		popout(that);
+		
+	});
+	$('#task-related-model-list').off('mouseenter','tr > td');
+		$('#task-related-model-list').on('mouseenter','tr > td',function(e){
+			var left=e.pageX;
+			left=left-100;
+            var that=$(this).parent();
+             popoverEnter(that,left,0,undefined);
+			
+});
+		$('#task-related-model-list').off('mouseleave','tr > td');
+	$('#task-related-model-list').on('mouseleave','tr > td',function(){
+		var that=$(this).parent();
+		popout(that);
+		
+	});
+	
+	$('#deal-related-model-list').off('mouseenter','tr > td');
+		$('#deal-related-model-list').on('mouseenter','tr > td',function(e){
+			var left=e.pageX;
+			left=left-100;
+            var that=$(this).parent();
+             popoverEnter(that,left,0,undefined);
+});
+		$('#deal-related-model-list').off('mouseleave','tr > td');
+	$('#deal-related-model-list').on('mouseleave','tr > td',function(){
+	var that=$(this).parent();
+		popout(that);
+		
+	});
+
+	
+	$('#workflow-other-subscribers-model-list').off('mouseenter','td.data .table-resp');
+		$('#workflow-other-subscribers-model-list').on('mouseenter','td.data .table-resp',function(e){
+			var left=e.pageX;
+            var that=$(this).parents('tr');
+            left=left-100;
+            if(insidePopover==true){
+ 			insidePopover=false;
+ 			$("time.campaign-started-time").timeago();
+				$("time.campaign-completed-time").timeago();
+
+ 		}
+             popoverEnter(that,left,0,undefined,true);
+		
+			});
+		$('#workflow-other-subscribers-model-list').off('mouseleave','td.data .table-resp');
+	$('#workflow-other-subscribers-model-list').on('mouseleave','td.data .table-resp',function(){
+		var that=$(this).parents('tr');
+		popout(that);
+		
+	});
+
+	
 }
 
 var insidePopover=false;
@@ -100,6 +195,7 @@ $('.popover').on('click', '#add-score', function(e){
 	    
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
+	    $('#lead-score').attr('title',add_score);
      if(listView!=undefined) 
      	temp_model= Contact_collection.set('lead_score', add_score);
    else {
@@ -140,6 +236,7 @@ $('.popover').on('click', '#minus-score', function(e){
 		
 		// Changes score in UI
 		$('#lead-score').text(sub_score);
+		 $('#lead-score').attr('title',sub_score);
 		
        if(listView!=undefined) 
        	temp_model=Contact_collection.set('lead_score', sub_score);
@@ -411,4 +508,73 @@ function contact_list_starify(el,listView) {
         });
     });
     
+}
+
+function popoverEnter(that,left,top,listView,campaigns_view)
+{
+
+
+ 
+     
+
+			timer=setTimeout(function() {
+						 	
+						  	
+				if (!insidePopover)	{
+		
+					 $('.popover').remove();	
+
+		 App_Contacts.contact_popover=$(that).data();
+		 try{
+		 		getTemplate("contacts-custom-view-popover",  App_Contacts.contact_popover.toJSON(), undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+								$(that).popover(
+        {
+            "rel": "popover",
+            "trigger": "manual",
+            "placement": "auto top",
+            "html": "true",
+            "content": template_ui,
+            "container" : 'body'
+            });
+								$(that).popover('show');
+															$('.popover').addClass("contact_popover fadeInLeft animated");
+							$('.popover-content').html(template_ui);
+							if(left!=undefined)
+							$('.popover').css('left', left + "px");
+						if(top!=undefined){
+						if (window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 250)
+       	  top = $(that).offset().top + 20 + 'px';
+        else
+         top = $(that).offset().top-$('.popover').height() + 'px';
+     $('.popover').css('top',top);}
+                        	
+							 attachEvents(that,App_Contacts.contact_popover,listView,campaigns_view);
+						contact_list_starify('.popover',listView);
+						
+					});
+		 		that.find('.data').attr('data');
+		 	}
+		 	catch(e){
+		 		return false;
+		 	}
+		 	}
+		 }, 1000);
+}
+
+function popout(that)
+{
+		
+	setTimeout(function() {
+		if (!insidePopover){
+			if($('.popover').length!=0)
+			{
+			$(that).popover('hide');
+			$('.popover').remove();
+			}
+		}
+					
+	}, 200);
+	 clearTimeout(timer);
 }
