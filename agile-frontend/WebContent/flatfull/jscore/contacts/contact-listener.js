@@ -195,6 +195,7 @@ $('.popover').on('click', '#add-score', function(e){
 	    
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
+	    $('#lead-score').attr('title',add_score);
      if(listView!=undefined) 
      	temp_model= Contact_collection.set('lead_score', add_score);
    else {
@@ -235,6 +236,7 @@ $('.popover').on('click', '#minus-score', function(e){
 		
 		// Changes score in UI
 		$('#lead-score').text(sub_score);
+		 $('#lead-score').attr('title',sub_score);
 		
        if(listView!=undefined) 
        	temp_model=Contact_collection.set('lead_score', sub_score);
