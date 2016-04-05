@@ -308,3 +308,99 @@ function serializeLhsFilters(element)
 	filters["contact_type"] = $(element).find('#contact_type').val();
 	return filters;
 }
+function serializeNewLhsFilters(element)
+{
+	var json_array = [];
+	var json_array_1 = [];
+	var filters = {};
+	$(element).find('a#lhs-filters-header').removeClass('bold-text');
+	$.each($(element).find('.lhs-contact-filter-row'), function(index, data) {
+		var json_object = {};
+		var currentElement = $(data)[0];
+		var RHS_VALUE, RHS_NEW_VALUE;
+		var CONDITION = $(currentElement).find('[name="CONDITION"]').val();
+		
+		var RHS_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS').children();
+		var RHS_NEW_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS_NEW').children();
+		if($(RHS_ELEMENT).val() != undefined) {			
+			RHS_VALUE = $(RHS_ELEMENT).val().trim();
+		}
+		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
+			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
+			date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+			RHS_VALUE = date.getTime() / 1000 ;
+		}
+		if ($(RHS_ELEMENT).hasClass("custom_contact") || $(RHS_ELEMENT).hasClass("custom_company")) {
+			RHS_VALUE = $(RHS_ELEMENT).parent().find("input").attr("data");
+		}
+		if ($(RHS_ELEMENT).hasClass("custom_contacts") || $(RHS_ELEMENT).hasClass("custom_companies")) {
+			$(RHS_ELEMENT).find("li").each(function(){
+				var json_object_1 = {};
+				var RHS_VALUE_1 = $(this).attr("data");
+				var LHS_1 = $(currentElement).find('[name="LHS"]').val();
+				if(RHS_VALUE_1)
+				{
+					json_object_1["LHS"] = LHS_1;
+					json_object_1["CONDITION"] = "EQUALS";
+					json_object_1["RHS"] = RHS_VALUE_1;
+					json_object_1["RHS_NEW"] = "";
+					json_array_1.push(json_object_1);
+					var fieldName = LHS_1.replace(/ +/g, '_');
+					fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@').replace(/[\/]/g,'\\/');
+					var currentElemnt = $(element).find('#'+fieldName+'_div');
+					$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+					$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
+				}
+			});
+			
+		}
+		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
+		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
+			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
+		if(CONDITION != "BETWEEN") {
+			date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+			RHS_NEW_VALUE = date.getTime() / 1000 ;
+		}
+		else {
+			date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+			RHS_NEW_VALUE =(date.getTime() +(24 * 60 * 60 * 1000) - 1) / 1000 ;
+		}
+			
+			
+		}
+		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
+			RHS_NEW_VALUE = RHS_NEW_VALUE.trim();
+		}
+		
+		// Set if value of input/select is valid
+		if ((RHS_VALUE && RHS_VALUE != null && RHS_VALUE != "") || CONDITION =="DEFINED" || CONDITION =="NOT_DEFINED") {
+			//if rhs_new exists and is empty dont consider this condition.
+			if(RHS_NEW_ELEMENT && RHS_NEW_ELEMENT.length > 0 ) {
+				if(!RHS_NEW_VALUE || RHS_NEW_VALUE == null || RHS_NEW_VALUE == "") {
+					//in jquery each return is equivalent to continue.
+					return;
+				}
+			}
+			var LHS = $(currentElement).find('[name="LHS"]').val();
+			json_object["LHS"] = LHS;
+			json_object["CONDITION"] = CONDITION;
+			json_object["RHS"] = RHS_VALUE;
+			json_object["RHS_NEW"] = RHS_NEW_VALUE;
+			json_array.push(json_object);
+			var fieldName = LHS.replace(/ +/g, '_');
+			fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@').replace(/[\/]/g,'\\/');
+			var currentElemnt = $(element).find('#'+fieldName+'_div');
+			$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+			$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
+		}
+		// Pushes each rule built from chained select in to an JSON array
+	});
+	filters["rules"] = json_array;
+	if(json_array_1)
+	{
+		filters["or_rules"] = json_array_1;
+	}
+	filters["contact_type"] = $(element).find('#contact_type').val();
+	return filters;
+}
+
