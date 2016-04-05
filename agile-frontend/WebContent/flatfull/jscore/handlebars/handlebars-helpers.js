@@ -6646,7 +6646,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	else if (p_name == 'Campaign stats')
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	else if (p_name == 'Campaign graph')
-		description = 'A Pie chart of Active, Completed and Removed subscribers of campaigns'
+		description = 'A pie chart of active, completed and removed subscribers of Campaigns'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
 	else if(p_name == 'Incoming Deals')

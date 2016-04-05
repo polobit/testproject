@@ -10629,7 +10629,7 @@ top:117px;
 	padding-left:0px;
 }
 
-.deals-by-milestone-portlet-body .highcharts-tooltip span {
+.deals-by-milestone-portlet-body .campaigns-graph-portlet-body .highcharts-tooltip span {
     background-color: #313030;
     opacity: 1;
     z-index: 9999!important;

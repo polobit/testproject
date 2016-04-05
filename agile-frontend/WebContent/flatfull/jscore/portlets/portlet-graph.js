@@ -128,7 +128,7 @@ var portlet_graph_utility = {
 	 * To display contacts count by campaigns stats portlet as pie graph
 	 */
 	campaignStatsPieGraph : function(selector, campaignStatusList,
-			campaignValuesList, campaignNumbersList) {
+			campaignValuesList) {
 		setupCharts(function(){
 							var emptyFlag = true;
 							$.each(campaignValuesList, function(index, value) {
@@ -170,10 +170,11 @@ var portlet_graph_utility = {
 													tooltip : {
 														formatter : function() {
 															return '<table>'
-																	+ '<tr> <td class="p-n"><b>'
+																	+ '<tr> <td class="p-n">'
+																	+ '<b>'
 																	+ campaignStatusList[this.point.x]
 																	+ '</b> Subscribers</td></tr>'
-																	+ '<tr><td class="p-n">Total Count : '
+																	+ '<tr><td class="p-n">Total Count: '
 																	+ '<b> '
 																	+ campaignValuesList[this.point.x].toLocaleString()
 																	+ '</b></td></tr>'
