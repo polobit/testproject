@@ -19,8 +19,6 @@ public class DomainUserPartial extends ProjectionEntityParse{
 	public String name;
 	public String pic;
 	
-	public String domain;
-	
 	public DomainUserPartial(){
 		super();
 		System.out.println("Default one");
