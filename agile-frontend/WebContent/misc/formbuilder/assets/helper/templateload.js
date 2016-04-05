@@ -1,10 +1,11 @@
 define([
 		'jquery', 'underscore', 'backbone', 'helper/pubsub', 'collections/my-form-snippets', 'views/my-form'], function($, _, Backbone, PubSub, MyFormSnippetsCollection, MyFormView)
 {
-	return { agile_form_load : function()
+	return { agile_template_load : function(api)
 	{
-		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
-		
+		var url = window.location.protocol + '//' + window.location.host + '/' + 'misc/formbuilder/templates/' +formTemplate + '/index.json';
+		console.log(url);
+
 		$.ajax({
 			url : url,
 			type: 'GET',
@@ -12,6 +13,10 @@ define([
 			success: function(data){
 				
 				saveform = JSON.parse(data.formJson);
+				console.log(saveform);
+				saveform[0].fields.agiledomain.value = window.location.hostname.split('.')[0];
+				saveform[0].fields.agileapi.value = api.api_key;
+				console.log(saveform);
 				
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {
@@ -29,22 +34,8 @@ define([
 			    	  }
 				} else {
 					$.getJSON( "/core/api/custom-fields", function(fields) {
-
-					for ( var j = 0; j < saveform.length; j++){
-
-							if(saveform[j].fields.agilefield){							
-							
-							var field = saveform[j].fields.agilefield.value;
-							
-							var agileFields = field.slice(0,15);
-														
-							if(field.length>15){
-								for(var k=field.length-1; k>=15; k--){
-									if(field[k].selected)
-										agileFields.push(field[k]);
-								}
-							}								
 					
+					var count = 0;
 					if(fields.length != 0)
 					{ 
 					for ( var i = 0; i < fields.length; i++)
@@ -53,16 +44,20 @@ define([
 							value.value = fields[i].field_label;
 							value.label = fields[i].field_label;
 							value.selected = false;
-							var count = 0;
-							for(var k=agileFields.length-1; k>=15; k--){
-								if(value.label == agileFields[k].label)
-									count++;								
-							}
-							if(count == 0)
-								agileFields.push(value);
+
+							for ( var j = 0; j < saveform.length; j++){
+							if(saveform[j].fields.agilefield){							
+							var field = saveform[j].fields.agilefield.value;
+							if(field.length>15 && count == 0){
+								for(var k=field.length; k>15; k--)
+									field.pop(field[k]);								
+							}								
+							field.push(value);
+							count++;		
 						}
-						saveform[j].fields.agilefield.value = agileFields;
-					}else{
+					}
+				}
+			}else{
 						for ( var i = 0; i < saveform.length; i++){
 							
 							if(saveform[i].fields.agilefield){		
@@ -74,8 +69,6 @@ define([
 						}
 					}
 				}
-			}
-		}
 					$('#form-label').text('Edit Form');
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
 				});

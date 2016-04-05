@@ -1,5 +1,6 @@
 <%
 String formId = request.getParameter("form");
+String template = request.getParameter("template");
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -18,6 +19,9 @@ String formId = request.getParameter("form");
       </style>
 	<script>
 		var formNumber = <%=formId%>;
+   <% if(template != null) { %>
+   var formTemplate = '<%=template%>';
+   <% } %>
 	</script>
 
    </head>
@@ -59,6 +63,6 @@ String formId = request.getParameter("form");
          </div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main-built.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
    </body>
 </html>
