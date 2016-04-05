@@ -42,6 +42,7 @@ public class AnalyticsServlet extends HttpServlet
      */
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
+	/*
 	// Domain
 	String domain = NamespaceManager.get();
 
@@ -133,6 +134,7 @@ public class AnalyticsServlet extends HttpServlet
 	    timeAfterLog = System.currentTimeMillis();
 		System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog-timeBeforeLog));
 	}
+	*/
     }
 
     /**
