@@ -1189,7 +1189,8 @@ var Tickets = {
 
 					clearContactWidetQueues(ticketModel.contactID);
 
-					loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
+					//loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
+					loadWidgets(App_Ticket_Module.ticketView.el, contact);
 				}
 			});
 
