@@ -11,12 +11,13 @@ var Agile_GA_Event_Tracker = {
 	/**
 	 * Send track event to google analytics
 	 */
-	track_event : function(action, label) {
+	track_event : function(action) {
 
 		if (!action)
 			return;
 
-		label = (!label) ? "-" : label;
+		var label = CURRENT_DOMAIN_USER.domain;
+		label = (!label) ? "localhost" : label;
 
 		try {
 			_gaq.push([ '_trackEvent', this.category, action, label ]);
@@ -30,3 +31,14 @@ var Agile_GA_Event_Tracker = {
 	}
 
 };
+
+$(function(){
+    $("body").on("click", ".ga-track-event", function(){
+         var action = $(this).attr("data-ga-text");
+         if(!action)
+         	 return;
+
+       Agile_GA_Event_Tracker.track_event(action);  	
+
+    });
+});
