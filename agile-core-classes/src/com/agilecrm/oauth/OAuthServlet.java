@@ -112,6 +112,7 @@ public class OAuthServlet extends HttpServlet {
 		properties.put("company", companyID);
 		properties.put("time", String.valueOf(System.currentTimeMillis()));
 		properties.put("isForAll", isForAll);
+		properties.put("version","v2");
 		String returnURL = null;
 		String resultType = "success";
 		String statusMSG = "QuickBooks Widget saved successfully";

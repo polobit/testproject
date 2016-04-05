@@ -142,6 +142,7 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 			{
 				$("time.campaign-started-time", el).timeago();
 				$("time.campaign-completed-time", el).timeago();
+				contactListener();
 			});
 
 			//$('#subscribers-campaign-name').text(workflow_name);
