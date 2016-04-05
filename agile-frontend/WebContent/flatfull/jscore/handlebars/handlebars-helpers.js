@@ -7194,3 +7194,16 @@ Handlebars.registerHelper('getAliasFromArry', function(array, options) {
 	return array[0];
 });
 
+// Helper function to return date in user selected format in  preferences.
+Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
+{
+
+	if (!date)
+		return;
+	var dateString = new Date(date);
+	if(dateString == "Invalid Date")
+		return getDateInFormatFromEpoc(date);
+	else
+		return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+	
+});

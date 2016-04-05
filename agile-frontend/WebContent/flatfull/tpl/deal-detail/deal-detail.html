@@ -141,9 +141,15 @@
                           <span class="text-light" title="{{name}}">{{name}}</span>
                         </span>
                         <span class="contact-custom-value">
-                          <span class="note-created-time custom-value" title="{{value}}" name="{{name}}">
-                            {{value}}
-                          </span>
+                          {{#if is_date}}
+                            <span class="note-created-time custom-value" title="{{stringToHumanDateInFormat value}}" name="{{name}}">
+                              {{stringToHumanDateInFormat value}}
+                            </span>
+                          {{else}}
+                            <span class="note-created-time custom-value" title="{{value}}" name="{{name}}">
+                              {{value}}
+                            </span>
+                          {{/if}}
                         </span>
                         <br/>
                       {{/if}}
