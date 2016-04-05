@@ -221,15 +221,15 @@ public class StatsSQL
 		rs1 = executeQuery("select found_rows()");
 		if (rs1 != null)
 		{
-		    if (rs1.next())
-		    {
-			int count = rs.getInt(1);
-			JSONObject finalObject = (JSONObject) agentDetailsArray.get(agentDetailsArray.length() - 1);
-			finalObject.put("total_rows_count", count);
+		    while (rs1.next())
+		    {			
+			int count = rs1.getInt(1);
+			JSONObject finalObject = new JSONObject();
+			finalObject.put("total_rows_count", ""+count);
+			agentDetailsArray.put(finalObject);
 		    }
 		}
-	    }
-	    
+	    }	    
 	}
 	catch (Exception e)
 	{
