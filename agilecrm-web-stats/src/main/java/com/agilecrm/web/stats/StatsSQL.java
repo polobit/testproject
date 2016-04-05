@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -167,6 +166,10 @@ public class StatsSQL
 	// get the ResultSet object
 	ResultSet rs = executeQuery(query);
 	
+//	ResultSet rs1 = null;
+//	if (countQuery)
+//	    rs1 = executeQuery(query);
+	
 	if (rs == null)
 	    return null;
 	
@@ -189,23 +192,44 @@ public class StatsSQL
 	    // iterate the ResultSet object
 	    while (rs.next())
 	    {
-		// create JSONObject for each record
-		JSONObject eachAgentJSON = new JSONObject();
-		
-		// Get the column names and put
-		// eachAgent record in agentJSONArray
-		for (int i = 1; i < numColumns + 1; i++)
+		try
 		{
-		    // Get the column names
-		    columnName = resultMetadata.getColumnName(i);
+		    // create JSONObject for each record
+		    JSONObject eachAgentJSON = new JSONObject();
 		    
-		    // put column name and value in json array
-		    eachAgentJSON.put(columnName, "" + rs.getString(columnName));
+		    // Get the column names and put
+		    // eachAgent record in agentJSONArray
+		    for (int i = 1; i < numColumns + 1; i++)
+		    {
+			// Get the column names
+			columnName = resultMetadata.getColumnName(i);
+			
+			// put column name and value in json array
+			eachAgentJSON.put(columnName, "" + rs.getString(columnName));
+		    }
+		    
+		    // place result data in agentDetailsArray
+		    agentDetailsArray.put(eachAgentJSON);
 		}
-		
-		// place result data in agentDetailsArray
-		agentDetailsArray.put(eachAgentJSON);
+		catch (Exception e)
+		{
+		    System.out.println("Exception while iterating result set " + e.getMessage());
+		}
 	    }
+//	    if (countQuery)
+//	    {
+//		rs1 = executeQuery("select found_rows()");
+//		if (rs1 != null)
+//		{
+//		    while (rs1.next())
+//		    {			
+//			int count = rs1.getInt(1);
+//			JSONObject finalObject = new JSONObject();
+//			finalObject.put("total_rows_count", ""+count);
+//			agentDetailsArray.put(finalObject);
+//		    }
+//		}
+//	    }	    
 	}
 	catch (Exception e)
 	{
@@ -217,6 +241,7 @@ public class StatsSQL
 	{
 	    // close the Connection and ResultSet objects
 	    closeResultSet(rs);
+	    //closeResultSet(rs1);
 	}
 	
 	return agentDetailsArray;
