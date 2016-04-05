@@ -22,7 +22,7 @@ var Agile_GA_Event_Tracker = {
 			_gaq.push([ '_trackEvent', this.category, action, label ]);
 		} catch (e) {
 			try {
-				ga('send', 'event', this.category, action, label);
+				ga('b.send', 'event', this.category, action, label);
 			} catch (e) {
 			}
 		}
