@@ -276,13 +276,15 @@ public class LoginServlet extends HttpServlet {
 				boolean isValidIP = IpAccessUtil.isValidIpOpenPanel(request);
 				System.out.println("validip"+isValidIP);
 				request.getSession().setAttribute(SESSION_IPACCESS_VALID, isValidIP);
-				
 				if(!isValid || !isValidIP){
 					
 					Long generatedOTP = System.currentTimeMillis()/1000;
-					System.out.println(generatedOTP);
-					
+				
+					System.out.println("generatedOTP "+generatedOTP);
 					domainUser.generatedOTP = generatedOTP + "";
+					domainUser.browser_os = request.getParameter("browser_os");
+					domainUser.browser_name = request.getParameter("browser_name");
+					domainUser.browser_version = request.getParameter("browser_version");
 					
 					// Simulate template
 					String template = SendMail.ALLOW_IP_ACCESS;

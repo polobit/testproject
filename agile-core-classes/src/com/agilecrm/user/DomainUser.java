@@ -240,6 +240,16 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	@NotSaved(IfDefault.class)
 	public String generatedOTP;
 
+	/**Broswer Information*/
+	@NotSaved(IfDefault.class)
+	public String browser_os;
+	
+	@NotSaved(IfDefault.class)
+	public String browser_version;
+	
+	@NotSaved(IfDefault.class)
+	public String browser_name;
+	
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
