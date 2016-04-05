@@ -773,12 +773,10 @@ function bindChangeEvent(ele){
 				deserializeLhsFilters($('#lhs-contact-filter-form'), _agile_get_prefs('dynamic_visitors_filter'));
 			
 			if(_agile_get_prefs('duration')!=null)
-    			deserializeRhsFilters($('#reportrange'),_agile_get_prefs('duration'));
+    			deserializeRhsFilters(_agile_get_prefs('duration'));
     		},500)
    
 			initWebstatsDateRange();
 									
 		}, $('#lhs_filters_segmentation', cel));
-
-
   }

@@ -1,5 +1,5 @@
 function initWebstatsDateRange() {
-    $('#reportrange')
+    $('#activities_date_range')
         .daterangepicker({
                 ranges: {
                     'Today': ['today', 'today'],
@@ -44,7 +44,7 @@ function initWebstatsDateRange() {
             },
             function(start, end) {
                 if (start && end) {
-                    $('#reportrange #range').html(
+                    $('#activities_date_range #range').html(
                         start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
                     VISITORS_HARD_RELOAD = true;
                     App_VisitorsSegmentation.visitorssegmentation(
@@ -54,7 +54,7 @@ function initWebstatsDateRange() {
                     var to_date = Date.today().add({
                         days: parseInt(-6)
                     });
-                    $('#reportrange #range').html(
+                    $('#activities_date_range #range').html(
                         to_date.toString('MMMM d, yyyy') + " - " + from_date
                         .toString('MMMM d, yyyy'));
                     VISITORS_HARD_RELOAD = true;
@@ -95,12 +95,14 @@ function getTimeWebstats() {
 
 }
 
-function getTodayTimeWebstats() {
+function getYesterdayTimeWebstats() {
 
     var time_range = new Array();
 
-    var start_time = getUTCMidNightEpochFromDate(Date.today());
-    var end_value = new Date().setHours(23, 59, 59);;
+    yesterday=Date.today();
+    yesterday.setDate(new Date().getDate()-1);
+    var start_time = getUTCMidNightEpochFromDate(yesterday);
+    var end_value = yesterday.setHours(23, 59, 59);;
     var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
 
     time_range[0] = start_time;
@@ -109,13 +111,14 @@ function getTodayTimeWebstats() {
     return time_range;
 }
 
-function deserializeRhsFilters(element, data) {
+function deserializeRhsFilters(data) {
 
     var range = data.split(",");
 
     var start = new Date(Number(range[0].substr(range[0].indexOf(":") + 1)));
     var end = new Date(Number(range[1].substr(range[1].indexOf(":") + 1)));
 
-    $('#reportrange #range').html(
+    $('#activities_date_range #range').html(
         start.toString('MMMM d, yyyy') + " - " + end.toString('MMMM d, yyyy'));
+    
 }

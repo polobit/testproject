@@ -21,8 +21,7 @@
                   <table id="visitors-table" class="table b-n no-radius  noCheckbox no-sorting panel agile-table " style="table-layout:auto">                
   					<div class="filter-criteria">
   					
-  					</div>
-  					
+  					</div>  					
                       <tbody id="segmentation-custom-view-model-list" route="contact/">
                       </tbody>
                   </table>
@@ -64,10 +63,15 @@
       
           </div>
           <div class="pull-right">
-          <div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm " >
-                 <i class="icon-calendar icon-small"></i>
-                 <span id="range">{{date-range "today" "0"}}</span>
-          </div> 	
+          <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
+            <span class="inline-block" style="padding: 3px 10px;">
+               <i class="icon-calendar icon-large m-r-xs"></i>
+                <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "yesterday" "-1"}}</span>
+             </span>
+             <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
+                <span class="caret  inline-block p-t-xs"></span>
+              </span>
+            </div>	
   	      </div>  	    
   	 </div>
      </div>
