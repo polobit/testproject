@@ -117,7 +117,7 @@ public class TicketGroups
 
 		return this;
 	}
-	
+
 	/**
 	 * 
 	 * @param groupIDsArray

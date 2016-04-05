@@ -2,9 +2,9 @@ define(
 		[
 				"jquery", "underscore", "backbone", "collections/snippets", "collections/my-form-snippets", "views/tab", "views/my-form",
 				"text!data/input.json", "text!data/radio.json", "text!data/select.json", "text!data/buttons.json", "text!data/form.json",
-				"text!templates/app/render.html", "helper/formload", "helper/formsave"
+				"text!templates/app/render.html", "helper/formload", "helper/formsave", "helper/templateload"
 		],
-		function($, _, Backbone, SnippetsCollection, MyFormSnippetsCollection, TabView, MyFormView, inputJSON, radioJSON, selectJSON, buttonsJSON, formJSON, renderTab, formLoad, formSave)
+		function($, _, Backbone, SnippetsCollection, MyFormSnippetsCollection, TabView, MyFormView, inputJSON, radioJSON, selectJSON, buttonsJSON, formJSON, renderTab, formLoad, formSave, templateLoad)
 		{
 			return { initialize : function()
 			{
@@ -49,8 +49,12 @@ define(
 								formLoad.agile_form_load();
 							}
 							else{
-								saveform = json;
-								new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(json) });
+								if(typeof formTemplate != "undefined") {
+									templateLoad.agile_template_load(api);
+								} else {
+									saveform = json;
+									new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(json) });
+								}	
 							}
 						});
 					});

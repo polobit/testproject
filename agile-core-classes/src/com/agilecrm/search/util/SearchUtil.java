@@ -98,7 +98,7 @@ public class SearchUtil
 
 	   
 
-	    System.out.println(field_name);
+	    //System.out.println(field_name);
 	    /*
 	     * Replaces special characters with "_" in field name
 	     */

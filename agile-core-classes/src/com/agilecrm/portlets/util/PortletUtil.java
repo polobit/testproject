@@ -56,6 +56,10 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.status.CampaignStatus;
+import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -125,6 +129,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Campaign graph",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
@@ -1817,5 +1822,67 @@ public class PortletUtil {
 		}
 		return dataJson;
 	}
+	
+	/**
+	 * This method is used for getting contact count of ACTIVE, DONE and REMOVED campaign status
+	 * @param campaignId
+	 * @param startTime
+	 * @return dataJson
+	 */
+	public static JSONObject getCampaignStatsForPieChart(String campaignId, Long startTime)
+	  {
+
+		JSONObject dataJson = new JSONObject();
+
+		List<String> campaignStatusList = new ArrayList<String>();
+		List<Double> contactValuesList = new ArrayList<Double>();
+		
+		double doneContactCount=0;
+		double activeContactCount=0;
+		double removeContactCount=0;
+		
+		try
+		{
+			if(campaignId.equals("All"))
+		 	{
+				//get all campaign list
+				List<Workflow> workflows = new ArrayList<Workflow>();
+				workflows = WorkflowUtil.getAllWorkflows();
+				
+				for(Workflow workflow : workflows)
+				  {
+					
+					doneContactCount +=CampaignSubscribersUtil.getContactCountByCampaignStats(workflow.id + "-" + CampaignStatus.Status.DONE, startTime);
+					activeContactCount +=CampaignSubscribersUtil.getContactCountByCampaignStats(workflow.id + "-" + CampaignStatus.Status.ACTIVE, startTime);
+					removeContactCount +=CampaignSubscribersUtil.getContactCountByCampaignStats(workflow.id + "-" + CampaignStatus.Status.REMOVED, startTime);	
+				   }
+		 	  }
+			else
+			 {			
+				 doneContactCount=CampaignSubscribersUtil.getContactCountByCampaignStats(campaignId + "-" + CampaignStatus.Status.DONE, startTime);
+				 activeContactCount=CampaignSubscribersUtil.getContactCountByCampaignStats(campaignId + "-" + CampaignStatus.Status.ACTIVE, startTime);
+				 removeContactCount=CampaignSubscribersUtil.getContactCountByCampaignStats(campaignId + "-" + CampaignStatus.Status.REMOVED, startTime);
+			 }
+			
+			campaignStatusList.add("Completed");
+			contactValuesList.add(doneContactCount);
+			
+			campaignStatusList.add("Active");
+			contactValuesList.add(activeContactCount);
+			
+			campaignStatusList.add("Removed");
+			contactValuesList.add(removeContactCount);
+			
+			dataJson.put("campaignStatusList", campaignStatusList);
+			dataJson.put("campaignValuesList", contactValuesList);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while getting contact campaign status count..." + e.getMessage());
+		}
+			
+			return dataJson;
+	  }
 
 }

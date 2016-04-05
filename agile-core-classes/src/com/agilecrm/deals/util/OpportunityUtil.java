@@ -1959,20 +1959,20 @@ public class OpportunityUtil
 	    {
 		if (milestone.won_milestone != null)
 		{
-		    Query<Opportunity> q = dao.ofy().query(Opportunity.class)
+		    count += dao.ofy().query(Opportunity.class)
 			    .filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
 			    .filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    count += dao.getCount(q);
+			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date").count();
+		   // count += dao.getCount(q);
 		}
 		else
 		{
-		    Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", "Won")
+		   count += dao.ofy().query(Opportunity.class).filter("milestone", "Won")
 			    .filter("won_date >= ", minTime).filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    count += dao.getCount(q);
+			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date").count();
+		    //count += dao.getCount(q);
 		}
 	    }
 	}
@@ -2004,12 +2004,12 @@ public class OpportunityUtil
 	    {
 		if (milestone.won_milestone != null)
 		{
-		    Query<Opportunity> q = dao.ofy().query(Opportunity.class)
-			    .filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
-			    .filter("won_date <= ", maxTime).filter("archived", false)
-			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    List<Opportunity> list = dao.fetchAll(q);
+		    List<Opportunity> list = dao.ofy().query(Opportunity.class)
+                .filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
+                .filter("won_date <= ", maxTime).filter("archived", false)
+                .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
+                .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date").list();
+            //List<Opportunity> list = dao.fetchAll(q);
 		    if (list != null)
 		    {
 			ownDealsList.addAll(list);

@@ -8,14 +8,16 @@
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
-                        <input type="text" name="id" class="hide" value={{id}} >
+                        <input type="text" name="id" class="hide" value="{{id}}"/>
+                        <input type="hidden" name="is_default_filter" class="hide" 
+                            value="{{is_default_filter}}"/>
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
                             <label class="control-label col-md-3" for="name">Name <span class="field_req">*</span></label> 
                             <div class="col-md-6">
                                 <div class="controls">
-                                    <input type="text" id="name" name="name" value="{{name}}" class="required form-control" />
+                                    <input type="text" id="name" name="name" value="{{name}}" class="required form-control" placeholder="View" maxlength="60"/>
                                 </div>
                             </div>
                         </div>
@@ -80,8 +82,8 @@
                                                             <option value="IS" class="requester company tags">is</option>
                                                             <option value="IS_NOT" class="requester company tags">isn&#39;t</option>
 
-                                                            <option value="EQUALS" class="assignee_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
-                                                            <option value="NOTEQUALS" class="assignee_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn&#39;t</option>
+                                                            <option value="EQUALS" class="assignee_id" related="RHS" url="/core/api/tickets/users" parse_key="id" parse_value="name">is</option>
+                                                            <option value="NOTEQUALS" class="assignee_id" related="RHS" url="/core/api/tickets/users" parse_key="id" parse_value="name">isn&#39;t</option>
 
                                                             <option value="EQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">is</option>
                                                             <option value="NOTEQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">isn&#39;t</option>

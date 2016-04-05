@@ -116,11 +116,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name phone company title org_tag jobtitle email phone city country state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name company owner country org_tag title email phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 													<option value="EQUALS" class="lead_score">equals</option>
@@ -174,6 +174,7 @@
 												<input id="updated_date" type="text" name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+													
 											</div>
 										</td>
 										<td class="rhs-new-block controls v-top">
@@ -283,11 +284,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="w-full form-control">
 													<option value="EQUALS"
-														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name phone company title org_tag jobtitle email phone city state zip org_name custom_label custom_sfsadf country org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="utm_campaign utm_content utm_medium utm_source utm_term first_name last_name company owner org_tag title email phone city state zip org_name custom_label custom_sfsadf country org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 													<option value="EQUALS" class="lead_score">equals</option>
@@ -343,6 +344,7 @@
 												<input id="updated_date" type="text" name="updated_date" style="text-overflow:none; "
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+													
 											</div>
 										</td>
 										<td class="rhs-new-block controls v-top">
@@ -423,6 +425,8 @@
 														<option value="owner_id">Owner</option>
 														<option value="name">Name</option>
 														<option value="url">Url</option>
+														<option value="country">Country</option>
+														<option value="lead_score">Score</option>
 													</optgroup>
 												
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -434,11 +438,13 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp"  class="w-full form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip org_name custom_label custom_sfsadf org_custom_label country org_custom_sfsadf">is</option>
+															<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">isn't</option>
+														class="name company owner org_tag title email url phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf country">isn't</option>
+														<option value="NOTEQUALS" class="tags tags_time">isn't</option>	
 													<option value="ON" class="updated_time created_time">on</option>
 													<option value="AFTER" class="created_time updated_time">is
 														after</option>
@@ -456,8 +462,8 @@
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
-													<option value="DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
-													<option value="NOT_DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
+													<option value="DEFINED" class="email name phone url country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
+													<option value="NOT_DEFINED" class="email name phone url country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
 												</select>
 											</div>
 										</td>
@@ -480,6 +486,7 @@
 												<input id="updated_date" type="text" name="updated_date" 
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+													
 											</div>
 										</td>
 										<td class="rhs-new-block controls v-top" >
@@ -488,6 +495,7 @@
 													class="BETWEEN input date required form-control"  placeholder="{{dateFormat}}" />
 												<input type="text" name="temp" 
 													class="BETWEEN_NUMBER number required form-control"/>
+													
 											</div>
 										</td>
 										<td class="nested-condition-block v-top">
@@ -554,6 +562,8 @@
 														<option value="owner_id">Owner</option>
 														<option value="name">Name</option>
 														<option value="url">Url</option>
+														<option value="country">Country</option>
+														<option value="lead_score">Score</option>
 													</optgroup>
 												
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -565,11 +575,13 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip org_name custom_label custom_sfsadf org_custom_label country org_custom_sfsadf">is</option>
+														<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">isn't</option>
+														class="name company owner org_tag title email url phone city state zip org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf country">isn't</option>
+														<option value="NOTEQUALS" class="tags tags_time">isn't</option>
 													<option value="EQUALS" class="lead_score">equals</option>
 													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
@@ -587,8 +599,8 @@
 														</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
-													<option value="DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
-													<option value="NOT_DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
+													<option value="DEFINED" class="email name phone url country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
+													<option value="NOT_DEFINED" class="email name phone url country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
 												</select>
 											</div>
 										</td>
@@ -611,6 +623,7 @@
 												<input id="updated_date" type="text" name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
+													
 											</div>
 										</td>
 										<td class="rhs-new-block controls v-top">

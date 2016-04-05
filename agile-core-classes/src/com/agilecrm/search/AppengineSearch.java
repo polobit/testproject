@@ -1,11 +1,15 @@
 package com.agilecrm.search;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.search.Index;
@@ -133,6 +137,36 @@ public class AppengineSearch<T>
 	    return query.simpleSearch(keyword, count, cursor);
 	return query.simpleSearchWithType(keyword, count, cursor, type);
     }
+    
+    //contact along with the company to search while adding the relation at the time of adding the deals
+    @SuppressWarnings("rawtypes")
+    public Collection getSimpleSearchResultsWithCompany(String keyword, Integer count, String cursor, String type)
+    {
+	System.out.println("simple search with company");
+	if (StringUtils.isEmpty(type)){
+		List<Contact> queryList  = (List<Contact>) query.simpleSearch(keyword, count, cursor);
+		System.out.println( queryList.size());
+		if(queryList.size() == 10){
+			Set<String> set = new HashSet<String>();
+			for (Contact  temp : queryList) {
+				if(temp.type.name().equals("PERSON")){
+					set.add(temp.contact_company_id);
+				}
+			}
+			if (set.size() == 1){
+				String id = set.iterator().next().toString();
+				Contact contact = ContactUtil.getContact(Long.parseLong(id));
+				queryList.remove(9);
+				queryList.add(0, contact);
+									
+			}
+		}
+		return queryList;
+	}
+	return query.simpleSearchWithType(keyword, count, cursor, type);
+    }
+
+    
 
     /**
      * Calls advanced search method in query document. It queries based on set

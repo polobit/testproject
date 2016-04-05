@@ -16,7 +16,7 @@
 
 	{{#get_ticket_labels_from_ids labels this}}{{/get_ticket_labels_from_ids}}
 
-	<td class="workflow-triggers"> 
+	<!--<td class="workflow-triggers"> 
 
 		{{#if labelsJSON}}
 		<div class="table-resp">
@@ -33,14 +33,17 @@
 			{{/if}}
 		</div>	
 		{{/if}}
-	</td>
+	</td>-->
 	
    	<td>
         <div class="table-resp">
-            <small class="edit-hover text-muted"> 
+            <small class="edit-hover text-muted" 
+            	title="{{epochToHumanDate "mmm dd, yyyy HH:MM" updated_time}}"> 
 				<i class="fa fa-clock-o m-r-xs"></i>
 		        <span>Last updated on&nbsp;</span>
-                <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+                <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}" 
+                	>{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}
+                </time>
             </small>
         </div>
     </td>  

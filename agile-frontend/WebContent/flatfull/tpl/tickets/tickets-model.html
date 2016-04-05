@@ -119,8 +119,12 @@
                   {{#if_equals last_updated_by 'AGENT'}}
                     {{#if last_ticket_notes}}
                       {{last_ticket_notes.ticket_notes_assinee.name}}
-                    {{else}}
-                      {{assignee.name}}
+                     {{else}}
+                       {{#if assigned_to_group}}
+                         {{group.group_name}}
+                       {{else}}
+                         {{assignee.name}}                      
+                       {{/if}}         
                     {{/if}}
                   {{else}}
                     {{requester_name}}
@@ -352,7 +356,11 @@
                     {{#if last_ticket_notes}}
                       {{last_ticket_notes.ticket_notes_assinee.name}}
                     {{else}}
-                      {{assignee.name}}
+                    {{#if assigned_to_group}}
+                      {{group.group_name}}
+                      {{else}}
+                      {{assignee.name}}                      
+                    {{/if}}         
                     {{/if}}
                   {{else}}
                     {{requester_name}}

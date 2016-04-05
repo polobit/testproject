@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.visitor.segmentation.SegmentationQueryGenerator;
+
 /**
  * <code>AnalyticsUtil</code> is the base class for handling SQL queries to
  * insert and get page-views analytics data. It also handles campaigns
@@ -525,6 +527,52 @@ public class StatsSQLUtil
 	
     }
     
+    /**
+     * Executes segmentation sql query. Returns contact emails based on page
+     * visits filters.
+     * 
+     * @param query
+     * @return
+     */
+    public static JSONArray getContactEmails(String domain,String rules,String startTime,String endTime,String cursor,String pageSize)
+    {
+	try
+	{
+	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
+		    startTime, endTime, cursor, pageSize);
+	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
+	    return StatsSQL.getJSONQuery(segementationQuery);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    /**
+     * Executes segmentation sql query. Returns contact email count based on page
+     * visits filters.
+     * 
+     * @param query
+     * @return
+     */
+    public static JSONArray getContactEmailCount(String domain,String rules,String startTime,String endTime,String cursor,String pageSize)
+    {
+	try
+	{
+	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
+		    startTime, endTime, cursor, pageSize);
+	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
+	    return StatsSQL.getJSONQuery(segementationQuery);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
     public static String getEmails(Set<String> emails)
     {
 	String emailString = "";
@@ -553,6 +601,22 @@ public class StatsSQLUtil
      * @return String.
      */
     public static String appendLimitToQuery(int offset, int limit)
+    {
+	
+	return " LIMIT " + offset + "," + limit;
+    }
+    
+    /**
+     * Appends offset and limit to query to retrieve results by page.
+     * 
+     * @param limit
+     *            - required limit.
+     * 
+     * @param offset
+     *            - offset of the required result set
+     * @return String.
+     */
+    public static String appendLimitToQuery(String offset, String limit)
     {
 	
 	return " LIMIT " + offset + "," + limit;

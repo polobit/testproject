@@ -139,6 +139,7 @@ function deserializeForm(data, form)
 								});
 							}
 
+
 							/*
 							 * Deserialize tags, tags are represented by list
 							 * elements prepended the respective input field. If
@@ -270,6 +271,20 @@ function deserializeForm(data, form)
 							 * Deserialize multiple checkboxes.
 							 */
 							else if (fel.hasClass('multiple-checkbox'))
+							{
+
+								/*
+								 * Iterates through options of the select and
+								 * call multiSelect function to select the
+								 * option
+								 */
+								for (var i = 0; i < el.length; i++)
+								{
+									$('input:checkbox[value="' + el[i] + '"]', fel).attr("checked", "checked");
+								}
+							}
+
+							else if (fel.hasClass('multiple-checkbox-adminprefs'))
 							{
 
 								/*

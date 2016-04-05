@@ -1342,6 +1342,13 @@ top:117px;
     padding: 8px;
     border-radius: 5px
 }
+.campaigns-graph-portlet-body .highcharts-tooltip span {
+    background-color: #313030;
+    opacity: 1;
+    z-index: 9999!important;
+    padding: 8px;
+    border-radius: 5px
+}
 .score-view img
 {
   opacity:0.5;

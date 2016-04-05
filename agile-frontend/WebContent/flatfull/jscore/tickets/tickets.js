@@ -1189,6 +1189,7 @@ var Tickets = {
 
 					clearContactWidetQueues(ticketModel.contactID);
 
+					//loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
 					loadWidgets(App_Ticket_Module.ticketView.el, contact);
 				}
 			});
@@ -1341,10 +1342,6 @@ var Tickets = {
 	initializeTicketSLA : function(el){
 		
 		var ticket = App_Ticket_Module.ticketView.model.toJSON();
-
-         		
-  		if(ticket.status == "CLOSED")
-  			return;
 
 		head.load(LIB_PATH + 'lib/date-charts.js', function()
 		{
