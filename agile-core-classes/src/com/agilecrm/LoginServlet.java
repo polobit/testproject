@@ -267,7 +267,7 @@ public class LoginServlet extends HttpServlet {
 
 		request.getSession().setAttribute("account_timezone", timezone);
 
-		        // Set FingerPrint to check in /home
+		      /*  // Set FingerPrint to check in /home
 				request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
 				String userFingerPrint = domainUser.finger_print;
 				
@@ -299,7 +299,7 @@ public class LoginServlet extends HttpServlet {
 					
 					SendMail.sendMail(domainUser.email, SendMail.NEW_REPLY_SUBJECT, template, domainUser);
 					request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
-				}
+				}*/
 
 
 		hash = (String) request.getSession().getAttribute(

@@ -229,7 +229,7 @@ public class HomeServlet extends HttpServlet
     	if (!isNewUser())
     	{
     		
-    		Boolean sessionFingerPrint = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VALID);
+    		/*Boolean sessionFingerPrint = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VALID);
     		Boolean sessionIP = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
     		if(sessionFingerPrint == null || sessionIP == null){
     			req.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
@@ -243,7 +243,7 @@ public class HomeServlet extends HttpServlet
     			req.setAttribute("ip_validation", sessionIP.booleanValue());
     			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
     			return;
-    		}
+    		}*/
     		
     	    // Saves logged in time in domain user.
     	    setLoggedInTime(req);
@@ -263,7 +263,7 @@ public class HomeServlet extends HttpServlet
     	// first user in the domain.
     	setUpAgileUser(req, resp);
     }
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  /*  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
     	try 
     	{
@@ -302,7 +302,7 @@ public class HomeServlet extends HttpServlet
     		request.getRequestDispatcher("fingerprintAuthentication.jsp?error=" + e.getMessage()).forward(request, response);
     	}
     	
-    }
+    }*/
   
     public static boolean isFirstTimeUser(HttpServletRequest req)
     {
