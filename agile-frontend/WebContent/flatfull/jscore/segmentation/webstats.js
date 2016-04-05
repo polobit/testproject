@@ -95,15 +95,15 @@ function getTimeWebstats() {
 
 }
 
-function getYesterdayTimeWebstats() {
+function getFirstTimeWebstats() {
 
     var time_range = new Array();
 
-    yesterday=Date.today();
-    yesterday.setDate(new Date().getDate()-1);
-    var start_time = getUTCMidNightEpochFromDate(yesterday);
-    var end_value = yesterday.setHours(23, 59, 59);;
-    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+    lastday=Date.today();
+    lastday.setDate(new Date().getDate()-6);
+    var start_time = getUTCMidNightEpochFromDate(lastday);
+    var end_value =new Date();
+    var end_time = getUTCMidNightEpochFromDate(end_value);
 
     time_range[0] = start_time;
     time_range[1] = end_time;

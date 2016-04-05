@@ -51,7 +51,8 @@ var VisitorsSegmentationRouter = Backbone.Router
                         });
                     return;
                 }
-
+                if(App_Contacts.contactViewModel)
+                    App_VisitorsSegmentation.webstatsViewModel.fields_set=App_Contacts.contactViewModel.fields_set;
                 view_data = App_VisitorsSegmentation.webstatsViewModel;
 
             }
@@ -106,7 +107,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                         } else {
 
                             if (!time_range)
-                                time_range = getYesterdayTimeWebstats();
+                                time_range = getFirstTimeWebstats();
 
                             start_time = time_range[0];
                             end_time = time_range[1];
@@ -140,7 +141,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                                 
                                if(collection.models.length==0)
                                      $("#visitors-count").html("<small> (" + 0 + " Total) </small>");
-                                else{
+                                else if(collection.models[collection.models.length-1].attributes.count){
                                     
                                     total_count = collection.models[collection.models.length-1].attributes.count;
                                     count_message = "<small> (" + total_count + " Total) </small>";
@@ -187,4 +188,3 @@ var VisitorsSegmentationRouter = Backbone.Router
         }
 
     });
-
