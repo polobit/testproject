@@ -1182,7 +1182,7 @@ var portlet_utility = {
 			if (base_model.get('settings').owner) {
 				owner_id = base_model.get('settings').owner;
 			}
-			var url = 'core/api/opportunity/details/'
+			var url = 'core/api/portlets/incomingDeals/'
 					+ owner_id
 					+ '?min='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -1209,7 +1209,7 @@ var portlet_utility = {
 			if (base_model.get('settings').source) {
 				source_id = base_model.get('settings').source;
 			}
-			var url = 'core/api/opportunity/details/'
+			var url = 'core/api/portlets/lossReason/'
 					+ owner_id + '/'
 					+ track_id + '/'
 					+ source_id
