@@ -51,7 +51,7 @@ public class SearchAPI
 	// condition is to use this call in the API calls.
 	if (StringUtils.isEmpty(count))
 	    count = "10";
-	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
+	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResultsWithCompany(keyword, Integer.parseInt(count),
 		cursor, type);
     }
 

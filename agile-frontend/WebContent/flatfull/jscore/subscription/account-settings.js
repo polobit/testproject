@@ -128,13 +128,12 @@ $(function(){
 			e.preventDefault();
 			$(this).closest(".modal").modal("hide");
 			CLICKDESK_LIVECHAT.show();
+			cancellationFeatureUsedMail("Chat");
 	});
 
 	$("#send-cancellation #account_cancel_support_btn").off("click");
 	$('#send-cancellation').on('click', '#account_cancel_support_btn', function(e) {
-			e.preventDefault();
-			
-			$(this).closest(".modal").modal("hide");
+			cancellationFeatureUsedMail("Schedule a Demo");
 	});
 
 	$("#send-cancellation #account_pause_btn").off("click");
@@ -145,6 +144,7 @@ $(function(){
 				url : 'core/api/subscription/pauseOrResumeSubscriptions?period='+period,
 				type : 'POST',
 				success : function(){
+					cancellationFeatureUsedMail("Account Pause");
 					location.reload(true);
 				},
 				error : function(response){
@@ -302,4 +302,17 @@ $('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e
 $("#warning-deletion-feedback").on('hidden.bs.modal', function(){
 	ACCOUNT_DELETE_REASON_JSON = undefined;
 });
+
+function cancellationFeatureUsedMail(type){
+	if(!type)
+		return;
+	var json={};
+	json.from=CURRENT_DOMAIN_USER.email;
+	json.to="venkat@agilecrm.com";
+	json.cc="mogulla@agilecrm.com";
+	json.bcc="raja@agilecrm.com";
+	json.subject="Cancellation Process Feature Used";
+	json.body="Username: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain+"<br>Feature Used: "+type;
+	sendEmail(json);
+};
 				

@@ -68,6 +68,9 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 		DEALS_LIST_COLLECTION.collection.add(newDealList);// main-collection
 	}
 
+	// Over write append function
+	DEALS_LIST_COLLECTION.appendItem = dealAppend;
+
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
 	initializeDealsListeners();
@@ -106,9 +109,6 @@ function initDealListCollection(milestones)
 			$('.mark-won, .mark-lost',el).tooltip();
 			
 		} });
-
-	// Over write append function
-	DEALS_LIST_COLLECTION.appendItem = dealAppend;
 
 }
 
@@ -181,7 +181,7 @@ function dealsFetch(base_model)
 		console.log($('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
 		var heading =  base_model.get("heading");
-		try
+		/*try
 		{
 			var count = data.at(0) ? data.at(0).toJSON().count : 0;
 			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
@@ -190,16 +190,18 @@ function dealsFetch(base_model)
         catch (err)
 		{
 			console.log(err);
-		}  
+		}*/  
         
         $('a.deal-notes').tooltip();
         	// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
-		dealTotalCountForPopover(heading);
-				
-		
-		
+		dealsCountFetch(base_model, function(deals_count){
+			if(deals_count <= 1000)
+			{
+				dealTotalCountForPopover(heading);
+			}
+		});
 	} });
 }
 
@@ -255,7 +257,7 @@ function initializeDealsListeners()
 	$("#opportunity-listners").off('mouseenter','.milestone-column > .dealtitle-angular');
 	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
     	var data = $(this).attr('data');
-		if(data){
+		if(data && $("#"+$(this).parent().attr("id")+"_count").text() != "1000+"){
 
 		var originalHeading = $(this).siblings().find('.milestones').attr('milestone');
 		var jsonDealData = JSON.parse(data);
@@ -348,4 +350,31 @@ console.log('------popover pipeline id-----', pipeline_id);
 			});
 	
 
+}
+
+function dealsCountFetch(base_model, callback)
+{
+	if (!base_model)
+		return;
+
+	// Define sub collection
+	var dealCount = new Base_Model_View({ url : base_model.get("url").replace("/based", "/based/count"), template : "", isNew : true });
+
+	dealCount.model.fetch({ success : function(data)
+	{
+		var count = data.get("count") ? data.get("count") : 0;
+		if(count > 1000)
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text((count-1)+"+");
+		}
+		else
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(count);
+		}
+		if(callback)
+		{
+			return callback(count);
+		}
+	} });
+	
 }

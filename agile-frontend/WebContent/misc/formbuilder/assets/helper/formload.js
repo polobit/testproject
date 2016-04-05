@@ -12,11 +12,11 @@ define([
 			success: function(data){
 				
 				saveform = JSON.parse(data.formJson);
-				$('#form-label').text('Edit Form');
-				new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });
 				
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {
+					$('#form-label').text('Edit Form');
+					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });
 					var formHtml = $("#render").val();
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
@@ -27,7 +27,23 @@ define([
 			    		  	try{window.parent.updateAgileFormDB(data);}catch(err){}
 			    		  }
 			    	  }
-
+				} else {
+					$.getJSON( "/core/api/custom-fields", function(fields) { 
+					for ( var j = 0; j < fields.length; j++)
+						{
+							var value = {};
+							value.value = fields[j].field_label;
+							value.label = fields[j].field_label;
+							value.selected = false;
+							for ( var i = 0; i < saveform.length; i++)
+						{
+							if(saveform[i].fields.agilefield)
+								saveform[i].fields.agilefield.value.push(value);
+						}
+					}
+					$('#form-label').text('Edit Form');
+					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
+				});
 				}
 				
 			}

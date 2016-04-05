@@ -40,16 +40,17 @@
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Domain</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
-                            {{get_current_domain}}                           
+                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs">Add Alias</a>{{/unless}}                           
                         </div>
                     </div>
-                    
+                    {{#if aliasNames}}
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Domain Alias</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
-                            {{#if aliasNames}}{{getAliasFromArry aliasNames}}{{else}}{{get_current_domain}} {{/if}}<a href="#change-domain" class="text-info p-l-xs">Change</a>                           
+                            {{getAliasFromArry aliasNames}} <a href="#change-domain" class="text-info p-l-xs">Change</a>                           
                         </div>
                     </div>
+                    {{/if}}
                     
 					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
 				</div>
@@ -108,9 +109,9 @@
                     
                     
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Domain<span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4 col-xs-4">Alias<span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
-                            <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" value="{{alias}}" />
+                            <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="Domain Alias" value="{{alias}}" />
                             <span for="alias" generated="true" class="help-inline text-xs"> </span>
                         </div>
                     </div>

@@ -160,7 +160,7 @@ public class DomainUserUtil
 
 	try
 	{
-		return partialDAO.get(id);
+		return partialDAO.get(id, oldNamespace);
 	}
 	catch (Exception e)
 	{

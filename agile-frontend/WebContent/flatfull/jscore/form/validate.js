@@ -230,6 +230,20 @@ function isValidForm(form) {
 	},"Please use only letters (a-z & A-Z), numbers, '.' and '_'.");
 
 
+	//Image keyword validation for custom fields
+	jQuery.validator.addMethod("custom_field_keyword", function(value, element){
+		
+		if(value=="image")
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+
+	},"<b>image</b> is a keyword in the system and it can't be added as a custom field.");
+
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,

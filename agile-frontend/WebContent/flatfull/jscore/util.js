@@ -702,12 +702,13 @@ function showPageBlockModal() {
 function  printCurrentDateMillis(type){
       console.info(type + " " + new Date().getTime());
 }
+
 function  startFunctionTimer(name){
-      console.time(name);
+	try{console.time(name);	}catch(e){}
 }
 
 function endFunctionTimer(name){
-      console.timeEnd(name);
+	try{console.timeEnd(name);	}catch(e){}
 }
 
 function loadServiceLibrary(callback){
@@ -716,4 +717,22 @@ function loadServiceLibrary(callback){
 		if(callback)
 			callback();
 	});
+}
+
+function sendEmail(json, callback){
+	$.ajax({
+
+			type : 'POST',
+			data : json,
+			url : 'core/api/emails/contact-us',
+			success : function()
+			{
+				if(callback && typeof(callback == "function"))
+					callback();
+			},
+			error : function(response)
+			{
+				showNotyPopUp("warning", data.responseText, "top");
+			}
+			});
 }

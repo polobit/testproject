@@ -22,7 +22,7 @@ public class StatsServlet extends HttpServlet
 {
     public static enum ACTIONS
     {
-	FETCH_PAGE_XVIEWS, FETCH_XACTIVITIES, FETCH_XLIMITED_VIEWS, URL_VISITED_XCOUNT, ERADICATEX
+	FETCH_PAGE_XVIEWS, FETCH_XACTIVITIES,FETCH_NEW_PAGEVIEWS,FETCH_XLIMITED_VIEWS, URL_VISITED_XCOUNT, ERADICATEX
     }
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -62,10 +62,14 @@ public class StatsServlet extends HttpServlet
 		if (StatsUtil.isValidRequest(req.getParameter("psd")))
 		    StatsSQLUtil.getCountForGivenURL(req, res, domain);
 		break;
+	    case FETCH_NEW_PAGEVIEWS:
+		if (StatsUtil.isValidRequest(req.getParameter("psd")))
+		    StatsSQLUtil.getLatestPageViewsOfDomain(req, res, domain);
+		break;
 	    case ERADICATEX:
 		if (StatsUtil.isValidRequest(req.getParameter("psd")))
 		    StatsSQLUtil.deleteStatsBasedOnNamespace(domain);
-		break;
+		break;	    
 	    default:
 		break;
 	    }
