@@ -2258,7 +2258,9 @@ color:#484848!important;
 
 /* start contact-details styles */
 
-#addDescriptionInfo, #taskDescriptionInfo{ display: none;}
 
-#addDescriptionLink:hover, #addDescriptionLink:focus, #taskDescriptionLink:hover, #taskDescriptionLink:focus{color:#19a9d5;} 
+#addDescriptionInfo, #taskDescriptionInfo, .eventDescriptionInfo{ display: none;}
+
+#addDescriptionLink:hover, #addDescriptionLink:focus, #taskDescriptionLink:hover, #taskDescriptionLink:focus,
+#eventDescriptionLink:hover, #eventDescriptionLink:focus{color:#19a9d5;} 
 

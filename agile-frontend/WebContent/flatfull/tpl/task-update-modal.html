@@ -2,7 +2,7 @@
  <div class="modal-dialog">
     <div class="modal-content">
 	<div class="modal-header">
-		<button class="close" data-dismiss="modal">x</button>
+		<button class="close" data-dismiss="modal">&times;</button>
 
 		<h3 class="modal-title">&nbsp;Edit Task</h3>
 	</div>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-sm-5">
                         <div class="control-group form-group">
-                            <label class="control-label col-sm-4" {{#is_mobile}} {{else}} style="text-align: left !important;"{{/is_mobile}}"> Time<span class="field_req">*</span></label>
+                            <label class="control-label col-sm-4"> Time<span class="field_req">*</span></label>
                             <div class="controls col-sm-5" {{#is_mobile}} {{else}} style="padding: 0 2px 0 0px;" {{/is_mobile}}>
                                 <input type="text" name="task_ending_time" class="update-task-timepicker required form-control" id="task_ending_time" style="width:100px" placeholder="Time">     
                             </div>

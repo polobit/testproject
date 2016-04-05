@@ -239,6 +239,7 @@ function isValidForm(form) {
 	},"<b>image</b> is a keyword in the system and it can't be added as a custom field.");
 
 	$(form).validate({
+		ignoreTitle: true,
 		rules : {
 			atleastThreeMonths : true,
 			multipleEmails: true,

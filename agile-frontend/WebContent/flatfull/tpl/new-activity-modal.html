@@ -3,7 +3,7 @@
  <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
-        <button class="close" data-dismiss="modal">×</button>
+        <button class="close" data-dismiss="modal">&times;</button>
         <h3 class="modal-title">&nbsp;New Event</h3>
     </div>
     <div class="modal-body">
@@ -25,11 +25,9 @@
                             </div>
                     </div>
                     
-                    <div class="row">
-                        <div class="col-sm-6">
-                        <div class="control-group form-group">
-                            <label for="priority_type"  class="control-label col-sm-6">Priority</label>
-                            <div class="controls col-sm-5">
+                               <div class="control-group form-group">
+                            <label for="priority_type" class="control-label col-sm-3">Priority</label>
+                            <div class="controls col-sm-7">
                                 <span class="input ">
                                     <select name="color" id="color" size="1" class="input-small form-control">
                                         <option value="red">High</option>
@@ -126,7 +124,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="control-group form-group" id="addEventDescription">
+
+                    <div class="form-group m-b-none">
+                    <div class="col-sm-offset-3 col-sm-7 text-left">
+        <a href="javascript:;" id="eventDescriptionLink" class="text-info"><i class="icon-plus"></i> Add Description</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                    <div class="control-group form-group eventDescriptionInfo" id="addEventDescription">
                     <label class="control-label col-sm-3"> Add Description</label>
                         <div class="controls col-sm-7"> 
                             <textarea rows="3" class="input form-control-F-width form-control" placeholder="Add Description" name="description" id="description"></textarea> 
