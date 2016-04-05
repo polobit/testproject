@@ -301,11 +301,11 @@
 	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
 							<div  class="text-lg score-view">
 							<i class="icon-trophy" style="height: 6px; vertical-align: middle;font-size:14px;"></i>
-								<span class="inline-block v-middle">
-									{{#if lead_score}} <span id="lead-score">{{lead_score}}</span>&nbsp;
+								<div class="inline-block v-middle text-ellipsis" style="width:2em">
+									{{#if lead_score}} <span title="{{lead_score}}" id="lead-score">{{lead_score}}</span>&nbsp;
 									{{else}} <span id="lead-score">0</span>&nbsp;
 									{{/if}}
-								</span>
+								</div>
 							{{#canEditContact owner.id}}
 								<span class="contact-score-control m-l-xs">
 									<ul class="inline-block list-none m-n p-n">
