@@ -628,7 +628,7 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 			}
 
 		});
-
+ 	$("body").off("click", "#segmentation-left-filters-toggle");
  	$('body').on('click', '#segmentation-left-filters-toggle', function(e)
 		{
 
