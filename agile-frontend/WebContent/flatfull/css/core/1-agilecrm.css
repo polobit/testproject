@@ -3623,3 +3623,19 @@ opacity: .3;
 #schedule_demo{
   margin-right: 214px;
 }
+.deal-edit-dropdown{
+	left: 261px;
+    top: 32px;
+    opacity:0.8;
+}
+.deal-track{
+	margin-top:-8px;
+}
+
+
+@media(max-width:630px){
+	.deal-detail-dropdown{
+		left: 350px;
+	}
+
+	}
