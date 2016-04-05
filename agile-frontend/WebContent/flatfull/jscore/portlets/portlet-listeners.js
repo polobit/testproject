@@ -961,6 +961,7 @@ function initializeAddPortletsListeners() {
 							"MiniCalendar" : updateImageS3Path("flatfull/img/dashboard_images/Mini-Calendar.jpg"),
 							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
 							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg"),
+							"Campaigngraph" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-status.jpg"),
 							"DealGoals" : updateImageS3Path("flatfull/img/dashboard_images/Quota.png"),
 							"IncomingDeals" : updateImageS3Path("flatfull/img/dashboard_images/incoming-deals-new.png"),
 							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis-new.png"),

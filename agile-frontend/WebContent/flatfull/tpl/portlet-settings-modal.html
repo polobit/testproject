@@ -945,6 +945,51 @@
 </div>
 </div>
 
+
+<div id="portletsCampaignGraphSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsCampaignGraphSettingsForm" name="portletsCampaignGraphSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">Duration</label>
+				<div class="controls col-sm-7">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="1-day" >Today</option>
+						<option value="24-hours" >Last 24 Hours</option>
+						<option value="this-week" >This Week</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="1-month">Last 30 Days</option>
+					</select>
+					
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">Campaign Type</label>
+				<div class="controls col-sm-7">
+					<select id="campaign_type" name="campaign_type" class="required form-control">
+						
+					</select>
+					
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>
+
 <div id="portletsGoalsSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">

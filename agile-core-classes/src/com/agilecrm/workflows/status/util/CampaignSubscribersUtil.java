@@ -7,6 +7,7 @@ import java.util.Map;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
 
 public class CampaignSubscribersUtil
 {
@@ -174,5 +175,30 @@ public class CampaignSubscribersUtil
 
 	return dao.getCountByProperty(subscribers);
     }
+    
+
+
+    /**
+     * Returns contacts count based on Campaign status
+     * 
+     * @param emailBounceType
+     *            - Hard or Soft
+     * @param startTime
+     *            - start time
+     * @param endTime
+     *            - end time
+     * @return int value
+     */
+    public static int getContactCountByCampaignStats(String campaignStatus, Long startTime)
+    {
+	HashMap<String, Object> properties = new HashMap<String, Object>();
+	properties.put("campaignStatus.status", campaignStatus);
+	properties.put("campaignStatus.start_time >=", startTime);
+
+	return dao.getCountByProperty(properties);
+    }
+
+	
+
 
 }

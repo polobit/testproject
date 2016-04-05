@@ -628,7 +628,7 @@ public class PortletsAPI {
 	{
 		return PortletUtil.getAverageDeviationForTasks(start_time, end_time);
 	}
-	
+
 	/**
 	 * Gets Incoming Deals portlet data
 	 * 
@@ -657,5 +657,17 @@ public class PortletsAPI {
     {
 	return OpportunityUtil.getDealswithLossReason(ownerId, pipelineId, sourceId, min, max).toString();
     }
+	/**
+	 * Gets contacts count based on campaign status
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/campaign-graph")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getCampaignGraphForPortlets(@QueryParam("start-date") String startDate,@QueryParam("campaign_type") String campaignType) throws Exception {
+		
+		return PortletUtil.getCampaignStatsForPieChart(campaignType, Long.parseLong(startDate));
+	}
 	
 }

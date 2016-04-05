@@ -192,6 +192,9 @@ var portlet_utility = {
 		} else if (portlet_type == "USERACTIVITY" && p_name == "Campaign stats") {
 			json['duration'] = "yesterday";
 			json['campaign_type'] = "All";
+		}else if (portlet_type == "USERACTIVITY" && p_name == "Campaign graph") {
+			json['duration'] = "1-month";
+			json['campaign_type'] = "All";
 		}
 		else if (portlet_type == "DEALS" && p_name == "Deal Goals") {
 			json['duration'] = "this-month";
@@ -323,6 +326,7 @@ var portlet_utility = {
 			"Mini Calendar" : "portlets-minicalendar",
 			"User Activities" : "portlets-activites",
 			"Campaign stats" : "portlets-campaign-stats-report",
+			"Campaign graph" : "portlets-campaign-graph-report",
 			"Deal Goals" : "portlets-deal-goals",
 			"Incoming Deals" : "portlets-incoming-deals",
 			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
@@ -406,6 +410,13 @@ var portlet_utility = {
 			that.get_campaign_stats_portlet_header(base_model, function(
 					header_name) {
 				$(el).find(".campaign_stats_header").html(header_name);
+			});
+			break;
+		}
+		case "Campaign graph": {
+			that.get_campaign_stats_portlet_header(base_model, function(
+					header_name) {
+				$(el).find(".campaign_graph_header").html(header_name);
 			});
 			break;
 		}
@@ -812,6 +823,16 @@ var portlet_utility = {
 
 								portlet_utility.addWidgetToGridster(base_model);
 							});
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Campaign graph": {
+			var url = '/core/api/portlets/campaign-graph?start-date='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&campaign_type='
+					+ base_model.get('settings').campaign_type;
+			portlet_graph_data_utility.campaignStatsGraphData(base_model,
+					selector, url);
 			setPortletContentHeight(base_model);
 			break;
 		}
@@ -1455,6 +1476,37 @@ var portlet_utility = {
 					.attr("selected", "selected");*/
 			break;
 		}
+		//campaign pie chart
+		case "Campaign graph": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsCampaignGraphSettingsModal");
+			elData = $('#portletsCampaignGraphSettingsModal');
+			$("#duration", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			var options = "<option value='All'>All Campaigns</option>";
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/workflows',
+				dataType : 'json',
+				success : function(data) {
+					$.each(data, function(index, campaignfilter) {
+						options += "<option value=" + campaignfilter.id + ">"
+								+ campaignfilter.name + "</option>";
+					});
+					$('#campaign_type', elData).html(options);
+					$("#campaign_type", elData).find(
+							'option[value='
+									+ base_model.get("settings").campaign_type
+									+ ']').attr("selected", "selected");
+					$('.loading-img').hide();
+				}
+			});
+			break;
+		}
+
 		case "Deals By Milestone": {
 			that.addPortletSettingsModalContent(base_model,
 					"portletsDealsByMilestoneSettingsModal");

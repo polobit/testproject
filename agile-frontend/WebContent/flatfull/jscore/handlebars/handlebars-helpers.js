@@ -5814,6 +5814,8 @@ $(function()
 			portlet_name = "Activity Overview";
 		else if(p_name=='Campaign stats')
 			portlet_name = "Campaign Stats";
+		else if(p_name=='Campaign graph')
+			portlet_name = "Campaign Status";
 		else if(p_name=='Average Deviation')
 			portlet_name = "Tasks Completion Time Deviation";
 		else
@@ -5866,6 +5868,8 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Campaign stats')
 			icon_name = 'icon-sitemap';
+		else if (p_name == 'Campaign graph')
+			icon_name = 'icon-pie-chart';
 		else if (p_name == 'Deal Goals')
 			icon_name = 'icon-flag';
 		else if (p_name == 'Lost Deal Analysis')
@@ -6645,6 +6649,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A mini calendar with an overview of your agenda for the day.'
 	else if (p_name == 'Campaign stats')
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
+	else if (p_name == 'Campaign graph')
+		description = 'A pie chart of active, completed and removed subscribers of Campaigns'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
 	else if(p_name == 'Incoming Deals')
