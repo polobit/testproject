@@ -138,7 +138,7 @@ var portlet_graph_utility = {
 							if (campaignStatusList.length == 0 || emptyFlag) {
 								$('#' + selector)
 										.html(
-												'<div class="portlet-error-message">No Contact Found</div>');
+												'<div class="portlet-error-message">No Subscribers Found</div>');
 							} else {
 								var data = [];
 								$.each(campaignStatusList, function(index, value) {
