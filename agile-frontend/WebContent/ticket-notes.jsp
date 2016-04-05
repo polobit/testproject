@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@page import="com.agilecrm.ticket.entitys.TicketDocuments"%>
 <%@page import="java.util.List"%>
 <%@page import="org.json.JSONArray"%>
@@ -58,8 +59,11 @@ body {
 	}else{
 
 		try{
-			String headers = notes.mime_object.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
-			out.println(headers);
+			String headers = notes.mime_object;
+			
+			String escapedHTML = StringEscapeUtils.escapeHtml(headers);
+			
+			out.println(escapedHTML.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>"));
 		}catch(Exception e){
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
