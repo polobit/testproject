@@ -42,3 +42,26 @@ $(function(){
 
     });
 });
+
+
+function track_with_save_success_model(ele){
+   try{
+   	
+   	  var href = location.href;
+   	  var action = "";
+	      
+	  if(href.indexOf("newsletter") != -1)
+	  	   action = "Save Campaign in Newsletter";
+	  else if(href.indexOf("auto_responder") != -1)
+	  	   action = "Save Campaign in Autoresponder";
+	  else if(href.indexOf("webrule-add") != -1)
+	  	   action = "Web Rule Added";
+	  else if(href.indexOf("landing-page-add") != -1)
+	  	   action = "Landing Page Created";
+
+	  if(action)
+		  Agile_GA_Event_Tracker.track_event(action); 
+
+   }catch(e){}
+   
+}

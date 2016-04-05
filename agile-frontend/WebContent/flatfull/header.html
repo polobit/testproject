@@ -331,8 +331,8 @@
 						</ul>
 
 						<div class="free-user-alert-message" style="display:none;">
-										<div id="free-user-md-text">You are currently on FREE Plan. <a class="text-info" href="#subscribe">Upgrade</a></div>
-										<div  id="free-user-sm-text"><a href="#subscribe">Still on FREE Plan?</a></div>
+										<div id="free-user-md-text">You are currently on FREE Plan. <a class="text-info" href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">Upgrade</a></div>
+										<div  id="free-user-sm-text"><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">Still on FREE Plan?</a></div>
 									</div>
   
  			<ul class="nav  navbar-nav  navbar-right show_shortcuts">	
@@ -437,7 +437,7 @@
 									<li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
 											<div class="pull-left">Theme & Layout</div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
 									<li class="divider"></li>
-									<li><a href="#subscribe"><!-- <i class="icon-cog"></i> -->
+									<li><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Plan & Upgrade in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
 											<div class="pull-left">Plan & Upgrade</div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
 									<li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
 											<div class="pull-left">Product Updates</div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
