@@ -86,6 +86,7 @@ public class ActivitySave
 	Object expectedvalue[] = deals.get("expected_value");
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
+	Object description[] = deals.get("description");
 	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
 
@@ -110,9 +111,9 @@ public class ActivitySave
 			    milestone[0].toString(), milestone[1].toString(), milestone[2].toString(), jsn);
 	    }
 
-	    if (name != null || expectedvalue != null || probablity != null || close_date != null)
+	    if (name != null || expectedvalue != null || probablity != null || close_date != null || description != null)
 	    {
-		List changed_data = getChangedData(name, expectedvalue, probablity, close_date);
+		List changed_data = getChangedData(name, expectedvalue, probablity, close_date,description);
 
 		ActivityUtil.createDealActivity(ActivityType.DEAL_EDIT, opportunity, changed_data.get(1).toString(),
 		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
@@ -255,11 +256,12 @@ public class ActivitySave
 	Object subject[] = tasks.get("subject");
 	Object task_type[] = tasks.get("task_type");
 	Object owner_name[] = tasks.get("Task_owner");
+	Object task_description[] = tasks.get("task_description");
 
 	JSONObject js = new JSONObject(new Gson().toJson(task));
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contacts"));
 	System.out.println(due + "  " + priority + "  " + status + "  " + progress + "  " + subject + " " + task_type
-	        + "  " + owner_name);
+	        + "  " + owner_name+""+task_description);
 	if (tasks.size() > 0)
 	{
 
@@ -297,9 +299,9 @@ public class ActivitySave
 		        owner_name[1].toString(), owner_name[2].toString(), jsn);
 	    }
 
-	    if (due != null || priority != null || subject != null || task_type != null)
+	    if (due != null || priority != null || subject != null || task_type != null  || task_description != null)
 	    {
-		List changed_data = getChangedData(due, priority, subject, task_type);
+		List changed_data = getChangedData(due, priority, subject, task_type,task_description);
 
 		ActivityUtil.createTaskActivity(ActivityType.TASK_EDIT, task, changed_data.get(1).toString(),
 		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
@@ -764,6 +766,58 @@ public class ActivitySave
 		olddata.add(title[1]);
 		newdata.add(title[0]);
 		changedfields.add(title[2]);
+	    }
+
+	list.add(olddata);
+	list.add(newdata);
+	list.add(changedfields);
+	return list;
+    }
+    
+    public static List getChangedData(Object[] name, Object[] expectedvalue, Object[] probablity, Object[] title,Object[] task_description)
+    {
+
+	List<Object> olddata = new ArrayList<Object>();
+
+	List<Object> list = new ArrayList<>();
+	List<Object> newdata = new ArrayList<Object>();
+	List<Object> changedfields = new ArrayList<Object>();
+	if (name != null)
+	    if (name[0] != null)
+	    {
+		olddata.add(name[1]);
+		newdata.add(name[0]);
+		changedfields.add(name[2]);
+	    }
+
+	if (expectedvalue != null)
+	    if (expectedvalue[0] != null)
+	    {
+		olddata.add(expectedvalue[1]);
+		newdata.add(expectedvalue[0]);
+		changedfields.add(expectedvalue[2]);
+	    }
+	if (probablity != null)
+	    if (probablity[0] != null)
+	    {
+		olddata.add(probablity[1]);
+		newdata.add(probablity[0]);
+		changedfields.add(probablity[2]);
+	    }
+
+	if (title != null)
+	    if (title[0] != null)
+	    {
+		olddata.add(title[1]);
+		newdata.add(title[0]);
+		changedfields.add(title[2]);
+	    }
+	if (task_description != null)
+	    if (task_description[0] != null)
+	    {
+		olddata.add(task_description[1]);
+		newdata.add(task_description[0]);
+		changedfields.add(task_description[2]);
 	    }
 
 	list.add(olddata);

@@ -6007,7 +6007,11 @@ $(function()
 		text = text.replace('priority', 'Priority');
 		// update category
 		text = text.replace('title', 'Title');
-
+		// Update task description
+		text = text.replace('task description' , 'Description'); 
+		// Update Deal description
+		text = text.replace('description' , 'Description');
+		
 		return text;
 
 	});
