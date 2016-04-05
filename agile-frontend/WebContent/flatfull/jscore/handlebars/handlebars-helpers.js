@@ -3578,10 +3578,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('lead_score', function(value)
 	{
-		if (this.lead_score > 0)
+		//if (this.lead_score > 0)
 			return this.lead_score;
-		else
-			return "";
+		//else
+		//	return "";
 	});
 
 	/**

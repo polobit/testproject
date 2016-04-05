@@ -799,7 +799,7 @@ public class Contact extends Cursor
 
 	this.lead_score = this.lead_score - score;
 
-	if (this.lead_score >= 0)
+	//if (this.lead_score >= 0)
 	    this.save();
 
     }
