@@ -16,8 +16,8 @@
                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tbody>
                                        <tr>
-                                          <td align="left"><img width="92" height="32" src="" style="display:block;width:92px;min-height:32px" class="CToWUd"></td>
-                                          <td align="right"><img width="32" height="32" style="display:block;width:32px;min-height:32px" src="" class="CToWUd"></td>
+                                          <td align="left"><img width="92" height="32" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" style="display:block;width:92px;min-height:32px" class="CToWUd"></td>
+                                          <!--<td align="right"><img width="32" height="32" style="display:block;width:32px;min-height:32px" src="" class="CToWUd"></td>-->
                                        </tr>
                                     </tbody>
                                  </table>
@@ -33,7 +33,7 @@
                                        </tr>
                                        <tr>
                                           <td width="32px"></td>
-                                          <td style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:24px;color:#ffffff;line-height:1.25">New sign-in from Chrome on Windows</td>
+                                          <td style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:24px;color:#ffffff;line-height:1.25">New sign-in from {{browser_name}} on {{browser_os}}</td>
                                           <td width="32px"></td>
                                        </tr>
                                        <tr>
@@ -61,49 +61,47 @@
                                                    </tr>
                                                    <tr>
                                                       <td style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:13px;color:#202020;line-height:1.5">
-                                                         Your Google Account <a href="mailto:srija.vanapalli.agilecrm@gmail.com" target="_blank">srija.vanapalli.agilecrm@<wbr>gmail.com</a> was just used to sign in from <span style="white-space:nowrap">Chrome</span> on <span style="white-space:nowrap">Windows</span>.
+                                                         Your Agile Account {{email}} was just used to sign in from <span style="white-space:nowrap">{{browser_name}}</span> on <span style="white-space:nowrap">{{browser_os}}</span>.
                                                          <table border="0" cellspacing="0" cellpadding="0" style="margin-top:48px;margin-bottom:48px">
                                                             <tbody>
                                                                <tr valign="middle">
                                                                   <td width="32px"></td>
-                                                                  <td align="center"><img src="" width="48px" height="48px" style="width:48px;min-height:48px;display:block;border-radius:50%" class="CToWUd"></td>
+                                                                  <td align="center"><img src="{{owner_pic}}" width="48px" height="48px" style="width:48px;min-height:48px;display:block;border-radius:50%" class="CToWUd"></td>
                                                                   <td width="16px"></td>
                                                                   <td style="line-height:1.2"><span style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:20px;color:#202020">{{domain}}</span><br><span style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:13px;color:#727272"><a  target="_blank">{{email}}</a></span></td>
                                                                </tr>
                                                                <tr valign="middle">
                                                                   <td width="32px" height="24px"></td>
-                                                                  <td align="center" height="24px"><img src="?ui=2&amp;ik=c7d19e4c70&amp;view=fimg&amp;th=153e177da55fc20e&amp;attid=0.2&amp;disp=emb&amp;attbid=ANGjdJ-5LXtcqo4aTmnuQMlID0HUUA0MpfqDH32xhtAGBQDdc6tvaFWXrnUdsFp1JaTxjVPuzoJ6kz-1tA2uylc583qo0w6OhIl1ZuRci4_jEm59A8iiVi7IW28N9aA&amp;sz=s0-l75-ft&amp;ats=1459824425916&amp;rm=153e177da55fc20e&amp;zw&amp;atsh=1" width="4px" height="10px" style="width:4px;min-height:10px;display:block" class="CToWUd"></td>
+                                                                  
                                                                </tr>
                                                                <tr valign="top">
                                                                   <td width="32px"></td>
                                                                   <td align="center"><img src="" width="48px" height="48px" style="width:48px;min-height:48px;display:block" class="CToWUd"></td>
                                                                   <td width="16px"></td>
-                                                                  <td style="line-height:1.2"><span style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:16px;color:#202020">GenaratedOTP : {{generatedOTP}}</span><br><span style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:13px;color:#727272"><br>Hyderabad, Telangana, India*<br>Chrome</span></td>
+                                                                  <td style="line-height:1.2"><span style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:16px;color:#202020;line-height: 1.1">GeneratedOTP : {{generatedOTP}}</span><span style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:13px;color:#727272"><br>
+                                                                  {{LOGGED_IN_TIME}},{{CITY}},{{COUNTRY}}*<br>
+                                                                  </span>
+                                                                  <span style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:13px;color:#727272">IP : 
+                                                                  {{IP_ADDRESS}}<br>
+                                                                  </span>
+                                                                  </td>
                                                                </tr>
                                                             </tbody>
                                                          </table>
                                                          
                                                       </td>
                                                    </tr>
-                                                   <tr height="32px"></tr>
+                                                   <tr height="32px"> 
+                                                      <td style="font-weight:bold">Have questions or need help?</td>
+                                                   </tr>
+                                                         <tr><td>Our customer service and support team is here to help you any
+                                                         way we can. Please email us at <a href="mailto:care@agilecrm.com" target="_blank">care@agilecrm.com</a></td>
+                                                    </tr>
                                                    <tr>
-                                                      <td style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:13px;color:#202020;line-height:1.5">Best,<br>The Google Accounts team</td>
+                                                      <td style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:13px;color:#202020;line-height:1.5"><br /> Best Wishes, <br /> AgileCRM Support. <br /> http://www.agilecrm.com</td>
                                                    </tr>
                                                    <tr height="16px"></tr>
-                                                   <tr>
-                                                      <td>
-                                                         <table style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:12px;color:#b9b9b9;line-height:1.5">
-                                                            <tbody>
-                                                               <tr>
-                                                                  <td>*The location is approximate and determined by the IP address it was coming from.<br></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td>This email can't receive replies. To give us feedback on this alert, <a href="https://support.google.com/accounts/contact/device_alert_feedback?hl=en" style="text-decoration:none;color:#4285f4" target="_blank">click here</a>.<br>For more information, visit the <a href="https://support.google.com/accounts/answer/2733203" style="text-decoration:none;color:#4285f4" target="_blank">Google Accounts Help Center</a>.</td>
-                                                               </tr>
-                                                            </tbody>
-                                                         </table>
-                                                      </td>
-                                                   </tr>
+                                                  
                                                 </tbody>
                                              </table>
                                           </td>
@@ -122,12 +120,14 @@
                                  <table style="font-family:Roboto-Regular,Helvetica,Arial,sans-serif;font-size:10px;color:#666666;line-height:18px;padding-bottom:10px">
                                     <tbody>
                                        <tr>
-                                          <td>You received this mandatory email service announcement to update you about important changes to your Google product or account.</td>
+                                          <td style="font-family:arial,sans-serif;font-size:14px;text-align:center;padding-top:15px">
+                                          Agile CRM, MS 35, 440 N Wolfe Road, Sunnyvale, CA 94085, USA.
+                                          </td>
                                        </tr>
                                        <tr>
-                                          <td>
-                                             <div style="direction:ltr;text-align:left">© 2016 Google Inc., 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA</div>
-                                          </td>
+                                             <td style="font-family:arial,sans-serif;font-size:9px;text-align:center;padding-top:15px;padding-left:15px;padding-right:15px">
+                                             This email sent to  because with this email an account with Agile CRM has been created and subscribed to our mailing list. If you would no longer get email updates from Agile CRM, you can unsubscribe <a>here.</a>
+                                             </td>
                                        </tr>
                                     </tbody>
                                  </table>

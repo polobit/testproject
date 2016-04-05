@@ -7,10 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
 
 import com.agilecrm.ipaccess.AllowAccessMailServlet;
 import com.agilecrm.ipaccess.IpAccess;
@@ -19,6 +17,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.user.DomainUser;
+//import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
@@ -49,12 +48,12 @@ import com.google.appengine.api.utils.SystemProperty;
 public class LoginServlet extends HttpServlet {
 	public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
 	public static String RETURN_PATH_SESSION_HASH = "return_hash";
-	
 	// FingerPrint verification
 	public static String SESSION_FINGERPRINT_VAL = "agile_fingerprint";
 	public static String SESSION_FINGERPRINT_OTP = "agile_otp";
 	public static String SESSION_FINGERPRINT_VALID = "agile_fingerprint_valid";
 	public static String SESSION_IPACCESS_VALID = "agile_ip_valid";
+
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -78,8 +77,13 @@ public class LoginServlet extends HttpServlet {
 		// Delete Login Session
 		request.getSession().removeAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME);
+
+
+		// Check if this subdomain even exists or alias exist
+
 		
 		// Check if this subdomain even exists
+
 		if (DomainUserUtil.count() == 0) {
 			response.sendRedirect(Globals.CHOOSE_DOMAIN);
 			return;
@@ -136,7 +140,7 @@ public class LoginServlet extends HttpServlet {
 
 		// Return to Login Page
 		request.getRequestDispatcher("login.jsp").forward(request, response);
-
+		
 	}
 
 	/**
@@ -196,10 +200,8 @@ public class LoginServlet extends HttpServlet {
 		// Hash to redirect after login
 		String hash = request.getParameter("location_hash");
 		
-		// Browser finger_print
 		String finger_print = request.getParameter("finger_print");
-		System.out.println(finger_print);
-		
+
 		if (!StringUtils.isEmpty(hash))
 			request.getSession().setAttribute(RETURN_PATH_SESSION_HASH, hash);
 
@@ -239,7 +241,7 @@ public class LoginServlet extends HttpServlet {
 		// Read Subdomain
 		String subdomain = NamespaceUtil.getNamespaceFromURL(request
 				.getServerName());
-
+		//subdomain = AliasDomainUtil.getActualDomain(subdomain);
 		if (!subdomain.equalsIgnoreCase(domainUser.domain))
 			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 				throw new Exception(
@@ -261,6 +263,9 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 		}
+
+
+		request.getSession().setAttribute("account_timezone", timezone);
 
 		        // Set FingerPrint to check in /home
 				request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
@@ -285,7 +290,7 @@ public class LoginServlet extends HttpServlet {
 					domainUser.browser_os = request.getParameter("browser_os");
 					domainUser.browser_name = request.getParameter("browser_name");
 					domainUser.browser_version = request.getParameter("browser_version");
-					
+					domainUser.owner_pic = domainUser.getOwnerPic();
 					// Simulate template
 					String template = SendMail.ALLOW_IP_ACCESS;
 					if(!isValid){
@@ -317,13 +322,13 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect(redirect);
 			return;
 		}
+
 		request.getSession().setAttribute("account_timezone", timezone);
 		
-				
+
 		response.sendRedirect("/");
 
 	}
-	
 
 	private void handleMulipleLogin(HttpServletResponse response)
 			throws Exception {
@@ -340,6 +345,4 @@ public class LoginServlet extends HttpServlet {
 		Queue queue = QueueFactory.getQueue("account-stats-update-queue");
 		queue.addAsync(TaskOptions.Builder.withPayload(stats));
 	}
-
-
 }

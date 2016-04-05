@@ -250,6 +250,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	@NotSaved(IfDefault.class)
 	public String browser_name;
 	
+	@NotSaved(IfDefault.class)
+	public String owner_pic;
+	
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
