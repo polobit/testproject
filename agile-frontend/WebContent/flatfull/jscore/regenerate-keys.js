@@ -79,6 +79,41 @@ $("#webhook_accordian").on('click', function(e) {
         put_allowed_domains(allowed_domains);
     });
 
+    $("#settings-blocked-ips").on('click',function(e){
+        var My_ip  
+        $.getJSON("https://api.ipify.org/?format=json", function(e) {
+                   My_ip =  e.ip;
+            });
+        setTimeout(function(){
+        var ips = get_blocked_ips()
+        var existing_ip = is_duplicate_blocked_ip(My_ip,ips);
+        if(existing_ip)
+        {
+            
+            $("#get_my_ip").addClass("hide");
+            return;
+        }
+            
+        else
+        {
+            $("#get_my_ip").removeClass("hide");
+            
+        }
+
+        },500);
+        
+    });
+
+    $("#get_my_ip").on('click',function(e){
+        var My_ip  
+        $.getJSON("https://api.ipify.org/?format=json", function(e) {
+                   My_ip =  e.ip;
+            });
+        setTimeout(function(){
+            $("#new_blocked_ip").val(My_ip);
+        },400);
+        
+    });
     $("#update_blocked_ips").off('click');
     $("#update_blocked_ips").on('click', function(e) {
         e.preventDefault();
