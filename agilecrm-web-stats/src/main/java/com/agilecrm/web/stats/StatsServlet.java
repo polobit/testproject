@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
 
 /**
  * <code>AnalyticsServlet</code> handles page-view requests from javascript.It
@@ -22,7 +21,7 @@ public class StatsServlet extends HttpServlet
 {
     public static enum ACTIONS
     {
-	FETCH_PAGE_XVIEWS, FETCH_XACTIVITIES,FETCH_NEW_PAGEVIEWS,FETCH_XLIMITED_VIEWS, URL_VISITED_XCOUNT, ERADICATEX
+	FETCH_PAGE_XVIEWS, FETCH_XACTIVITIES, FETCH_XLIMITED_VIEWS, FETCH_NEW_PAGEVIEWS, URL_VISITED_XCOUNT, ERADICATEX
     }
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -39,6 +38,7 @@ public class StatsServlet extends HttpServlet
      */
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
+	
 	String action = req.getParameter("action");
 	String domain = req.getParameter("domain");
 	if (StringUtils.isNotBlank(action) && StringUtils.isNotBlank(domain))
