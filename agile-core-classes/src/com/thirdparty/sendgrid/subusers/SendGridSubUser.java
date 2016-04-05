@@ -176,7 +176,7 @@ public class SendGridSubUser extends SendGridLib
 
 			String queryString = "subusers"
 					+ "="
-					+ URLEncoder.encode(username, "UTF-8")
+					+ URLEncoder.encode(getAgileSubUserName(domain), "UTF-8")
 					+ "&"
 					+ "start_date"
 					+ "="
