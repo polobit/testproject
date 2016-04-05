@@ -72,6 +72,9 @@ public class LandingPageServlet extends HttpServlet {
 					analyticsCode = String.format(analyticsCode, apiKey.js_api_key);
 				}					
 				
+				if(landingPage.elements_css != null){
+					fullXHtml = fullXHtml.replace("</head>", "<style id=\"elements-css\">"+landingPage.elements_css+"</style></head>");	
+				}
 				fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
 				fullXHtml = fullXHtml.replace("</body>", formSubmitCode+"<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
 				
