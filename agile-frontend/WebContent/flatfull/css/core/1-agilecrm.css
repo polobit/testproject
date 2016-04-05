@@ -3218,7 +3218,19 @@ table.hide-head-checkbox th label.i-checks {
   left:26px;
   font-size: 18px;
 }
-
+#cscorebox{
+	text-align:center;
+	right: 5px;
+	width: 56px;
+	padding-bottom: 0;padding-left: 0px;
+	padding-right: 0px;padding-top: 0px;
+	border-top-width: 1px;
+	margin-top: 6px;
+	top: -3px;
+	height: 28px;
+	left:26px;
+	font-size: 18px;
+}
 .well{
   background: none!important;
    border:none!important;

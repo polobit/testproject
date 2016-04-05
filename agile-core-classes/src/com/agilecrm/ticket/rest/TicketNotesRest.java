@@ -111,7 +111,7 @@ public class TicketNotesRest
 					// Updating ticket
 					ticket = ticket.updateTicketAndSave(ticket.cc_emails, ticket.last_reply_text,
 							ticket.last_updated_by, ticket.last_updated_time, ticket.last_customer_replied_time,
-							ticket.last_agent_replied_time, ticket.attachments_exists, true);
+							ticket.last_agent_replied_time, ticket.attachments_exists, true, false);
 				}
 			}
 			else
@@ -143,7 +143,7 @@ public class TicketNotesRest
 				// Updating existing ticket
 				ticket = ticket.updateTicketAndSave(ticket.cc_emails, plain_text, LAST_UPDATED_BY.AGENT, currentTime,
 						null, currentTime, (notes.attachments_list != null && notes.attachments_list.size() > 0) ? true
-								: false, notes.close_ticket);
+								: false, notes.close_ticket, false);
 
 				// Creating new Notes in TicketNotes table
 				ticketNotes = new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID, CREATED_BY.AGENT,

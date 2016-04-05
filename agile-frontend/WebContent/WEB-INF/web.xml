@@ -983,6 +983,14 @@
 		<servlet-name>TicketWebhook</servlet-name>
 		<url-pattern>/ticket-module/backend/webhook</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>TicketSendgridWebhook</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.SendgridInboundParser</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketSendgridWebhook</servlet-name>
+		<url-pattern>/ticket-module/backend/sendgrid_hook</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>TicketOpenServlet</servlet-name>

@@ -504,5 +504,9 @@
         <property name="ticket_key" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
-    
+    <datastore-index kind="TicketNotes" ancestor="true" source="manual">
+        <property name="assignee_key" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+        <property name="plain_text" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>

@@ -162,9 +162,11 @@
 	 **/
 	ticketDetailsByFilter : function(filter_id, ticket_id){
 
-		Ticket_Filter_ID = filter_id;
+		loadServiceLibrary(function(){
+			Ticket_Filter_ID = filter_id;
 
-		App_Ticket_Module.ticketDetails(ticket_id);
+			App_Ticket_Module.ticketDetails(ticket_id);
+		});
 	},
 
 	/**

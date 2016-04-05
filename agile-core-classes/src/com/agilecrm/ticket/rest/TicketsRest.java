@@ -326,8 +326,6 @@ public class TicketsRest
 			String html_text = ticket.html_text, plain_text = html_text;
 			html_text = html_text.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
 
-			CreatedBy createdBy = ticket.created_by;
-
 			if (StringUtils.isBlank(html_text))
 				throw new Exception("Please provide message body.");
 
@@ -364,7 +362,7 @@ public class TicketsRest
 			// Execute triggers
 			// TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 
-			BulkActionNotifications.publishNotification("Ticket#" + ticket.id + " has been created.");
+			BulkActionNotifications.publishNotification("Ticket #" + ticket.id + " has been created.");
 
 			return ticket;
 		}
@@ -881,4 +879,34 @@ public class TicketsRest
 
 		return new JSONObject().put("status", "success").toString();
 	}
+
+	/**
+	 * Gets list of users of a domain
+	 * 
+	 * @return list of domain users
+	 */
+	@GET
+	@Path ("/users")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<DomainUser> getUsers()
+	{
+		try
+		{
+
+			String domain = NamespaceManager.get();
+			// Gets the users and update the password to the masked one
+			List<DomainUser> users = DomainUserUtil.getUsers(domain);
+			DomainUser domainUser =  new DomainUser();
+			domainUser.name = "Current User";
+			domainUser.id = (long) 0;
+			users.add(domainUser);
+			return users;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

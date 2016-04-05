@@ -250,6 +250,7 @@ angular.module('builder.projects', [])
                       			  "name": landingPageName,
                       			  "html": projectPageData.html,
                       			  "css": projectPageData.css,
+                      			  "elements_css": $rootScope.frameHead.find('#elements-css').html(),
                       			  "js": projectPageData.js,
                       			  "title": projectPageData.title,
                       			  "tags": projectPageData.tags,

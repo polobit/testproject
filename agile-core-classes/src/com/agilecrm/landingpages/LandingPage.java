@@ -23,6 +23,9 @@ public class LandingPage
     public String css = null;
     
     @NotSaved(IfDefault.class)
+    public String elements_css = null;
+    
+    @NotSaved(IfDefault.class)
     public String js = null;
 
     @NotSaved(IfDefault.class)
