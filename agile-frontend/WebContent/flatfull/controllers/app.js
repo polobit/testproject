@@ -77,6 +77,9 @@ function currentRoute(route)
 		if(!temp.match("contact"))
 			SCROLL_POSITION = 0;
 	}
+
+	// Update Google Analytics Track Page
+	agile_update_ga_track_page(Current_Route);
 	
 	activateInfiniScroll();
 	// set_profile_noty();
