@@ -21,6 +21,7 @@ import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -800,6 +801,5 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldnamespace);
 	}
     }
-    
 
 }

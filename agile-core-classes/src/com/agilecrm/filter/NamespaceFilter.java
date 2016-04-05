@@ -216,7 +216,6 @@ public class NamespaceFilter implements Filter
 	  "hungry", "password", true, true); try { domainUser.save(); } catch
 	  (Exception e) { // TODO Auto-generated catch block
 	  e.printStackTrace(); } */
-	 
 
 	/*
 	 * AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");
