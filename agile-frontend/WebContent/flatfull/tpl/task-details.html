@@ -355,7 +355,7 @@
 
  {{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
 	<div>
-    {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+    {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" class="popover_contact" data="{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
     {{#if_equals "added_relatedcontacts" custom3}}
        attached to
       {{else}}

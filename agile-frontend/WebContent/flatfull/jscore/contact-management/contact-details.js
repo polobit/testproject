@@ -908,8 +908,8 @@ enterCompanyScore: function(e){
 		 	// Converts string type to Int
 		 	var sub_score = parseInt($('#lead-cscore').text());
 			
-		 	//if(sub_score <= 0)
-		 	//	return;
+		 	if(sub_score <= 0)
+		 		return;
 			
 		 	sub_score = sub_score - 1;
 			

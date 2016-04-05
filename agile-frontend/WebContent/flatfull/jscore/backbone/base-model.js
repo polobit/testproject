@@ -380,6 +380,8 @@ var Base_Model_View = Backbone.View
 									 */
 									success : function(model, response) 
 									{	
+										track_with_save_success_model($(targetEle));
+
 										// Removes disabled attribute of save button
 										enable_save_button($(targetEle));
 										

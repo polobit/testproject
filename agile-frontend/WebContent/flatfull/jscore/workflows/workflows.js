@@ -176,6 +176,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // Disables save button to prevent multiple save on click event issues
         disable_save_button($(targetEl));
 
+        track_with_save_success_model($(targetEl));
                 
         var workflowJSON = {};
 
