@@ -3197,6 +3197,7 @@ table.hide-head-checkbox th label.i-checks {
     top: 0px;
     position: absolute;
     z-index: 1000;
+    background-color: #dee5e7!important;
    
 
 }

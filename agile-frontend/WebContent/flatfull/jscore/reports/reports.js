@@ -146,19 +146,13 @@ function initializeReportsListeners(){
 							$(this).find('.sub-nav-tab').show();
 						//$('.reports_tab_content').show();
 					});
-			/*$('#reports-listerners-container')
-			.on(
-					"mouseleave",'#reports-tab-container>div>ul>li',function(e){
-						$(this).find('.sub-nav-tab').hide();
-						//$('.reports_tab_content').hide();
-						//$('.nav-tabs .active').removeClass('active');
-					});*/
+
 		$('#reports-listerners-container')
 			.off("mouseenter",'.sub-nav-tab');
 			$('#reports-listerners-container')
 			.on("mouseenter",'.sub-nav-tab',function(e){
 					$('.reports_tab_content').show();
-					var top= $(this).offset().top;top = top-150;
+					var top= $(this).offset().top;top = top-130;
 					$('.reports_tab_content').css('top',top+'px')
 				});
 			
