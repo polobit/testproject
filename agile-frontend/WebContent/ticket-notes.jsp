@@ -42,8 +42,13 @@ body {
 
 	<%
 	String outputString = null;
-	if(type != null && type.equalsIgnoreCase("html")){ 
-		out.println(notes.html_text);
+	if(type != null && type.equalsIgnoreCase("html")){ \
+		
+		String htmlText = notes.html_text;
+		htmlText = htmlText.replaceAll("(3D", "");
+		htmlText = htmlText.replaceAll("(http://", "//");
+	
+		out.println(htmlText);
 		out.println();
 		out.println();
 		out.println();
