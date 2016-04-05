@@ -70,6 +70,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                 $('#content').html(el);
                 initWebstatsDateRange();
                 contactFiltersListeners("lhs_filters_segmentation");
+                addClickEventSEgments($('#content').find("#visitors-table"));
 
                 $(".active").removeClass("active");
                 $("#segmentationmenu").addClass("active");
@@ -138,6 +139,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                                 el, collection) {
 
                                 abortCountQueryCall();
+                                addClickEventSEgments($('#content').find("#visitors-table"));
                                 
                                if(collection.models.length==0)
                                      $("#visitors-count").html("<small> (" + 0 + " Total) </small>");
@@ -187,4 +189,31 @@ var VisitorsSegmentationRouter = Backbone.Router
         }
 
     });
+
+
+function addClickEventSEgments(element){
+    $(element).on('click', '.agile-edit-row > tr > td:not(".checkbox")',
+            function(e) {
+        e.preventDefault();
+        //alert("click events");
+        var route = $(this).parents('.agile-edit-row').attr('route');
+        
+        // Newly added code for displaying contacts and companies in same table with different routes.
+        if($(this).closest('tr').find('[route]').length != 0)
+            route = $(this).closest('tr').find('[route]').attr('route');
+        
+        var data = $(this).closest('tr').find('.data').attr('data');
+
+        if(route == "contact/")
+            SCROLL_POSITION = window.pageYOffset;               
+
+                console.log(data);
+
+                if (data) {
+                    Backbone.history.navigate(route + data, {
+                        trigger : true
+                    });
+                }
+            });
+}
 
