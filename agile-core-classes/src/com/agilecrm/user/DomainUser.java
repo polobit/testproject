@@ -232,14 +232,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 
 	/** Helpdesk settings */
-
-	@Embedded
-	//public HelpdeskSettings helpdeskSettings = null;
 	
 
 	/** Browser Fingerprint */
 	public String finger_print = null;
 	
+	@NotSaved(IfDefault.class)
+	public String generatedOTP;
 
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);

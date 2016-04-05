@@ -138,8 +138,9 @@ public class SendMail
    	public static final String TICKET_FORWARD = "ticket_forward_email";
    	
    	//For browser Fingerprint
-   	public static final String NEW_REPLY = "wrong user";
    	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
+   	public static final String NEW_REPLY_SUBJECT = "wrong user";
+   	
    	
 
     /**

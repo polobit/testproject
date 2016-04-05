@@ -35,7 +35,7 @@ public class IpAccessAPI {
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public IpAccess createIPAccess(IpAccess ipAccess){
 		try {
-			ipAccess.Save();
+			ipAccess.save();
 			return ipAccess;
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -49,7 +49,7 @@ public class IpAccessAPI {
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public IpAccess updateIPAccess(IpAccess ipAccess){
 		try {
-			ipAccess.Save();
+			ipAccess.save();
 			return ipAccess;
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -75,7 +75,7 @@ public class IpAccessAPI {
 				ipAccess.ipList.remove(ip);
 			}
 			
-			ipAccess.Save();
+			ipAccess.save();
 			
 			System.out.println(ipAccess.ipList);
 		} catch (Exception e) {

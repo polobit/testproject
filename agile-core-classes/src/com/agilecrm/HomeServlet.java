@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
@@ -24,6 +26,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.Defaults;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>HomeServlet</code> handles request after login/new registration and
@@ -227,13 +230,17 @@ public class HomeServlet extends HttpServlet
     	{
     		
     		Boolean sessionFingerPrint = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VALID);
-    		if(sessionFingerPrint == null){
+    		Boolean sessionIP = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
+    		if(sessionFingerPrint == null || sessionIP == null){
     			req.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
+    			req.getSession().setAttribute(LoginServlet.SESSION_IPACCESS_VALID, true);
     			doGet(req, resp);
     			return;
     		}
     		
-    		if(!sessionFingerPrint.booleanValue()){
+    		if(!sessionFingerPrint.booleanValue() || !sessionIP.booleanValue()){
+    			
+    			req.setAttribute("ip_validation", sessionIP.booleanValue());
     			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
     			return;
     		}
@@ -261,18 +268,38 @@ public class HomeServlet extends HttpServlet
     	try 
     	{
 	    	String otp = request.getParameter("finger_print_otp");
-	    	String generatedOTP = (String) request.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_OTP);
+	    	String ipValid = request.getParameter("ip_validation");
+	    	Long generatedOTP = 0L;
 	    	
-	    	if(StringUtils.isBlank(otp) || !otp.equals(generatedOTP)){
+	    	try {
+	    		generatedOTP = (Long) request.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_OTP);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	
+	    	if(StringUtils.isBlank(otp) || !(Long.parseLong(otp) == generatedOTP)){
 	    		throw new Exception("Invalid OTP");
-	    	}
+	    	} 
 	    	
 	    	request.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
+	    	request.getSession().setAttribute(LoginServlet.SESSION_IPACCESS_VALID, true);
+	    	
+	    	// Add current ip to Ip List
+	    	if(StringUtils.isNotBlank(ipValid) && Boolean.parseBoolean(ipValid) == true)
+	    	{
+	    		IpAccess ipList =  IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
+	    		if(ipList != null && ipList.ipList != null){
+	    			ipList.ipList.add(request.getRemoteAddr());
+	    			ipList.save();
+	    		}
+	    	}
+	    	
 	    	doGet(request, response);
     	}
     	catch(Exception e){
-    		request.setAttribute("error", e.getMessage());
-    		request.getRequestDispatcher("fingerprintAuthentication.jsp").forward(request, response);
+    		e.printStackTrace();
+    		System.out.println(ExceptionUtils.getFullStackTrace(e));
+    		request.getRequestDispatcher("fingerprintAuthentication.jsp?error=" + e.getMessage()).forward(request, response);
     	}
     	
     }

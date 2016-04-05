@@ -249,7 +249,10 @@ public class NamespaceFilter implements Filter
     	try {
     		HttpServletRequest req = (HttpServletRequest) request;
     		String userAgent = req.getHeader("user-agent");
-    		
+    		 if (userAgent == null)
+    		    {
+    			return false;
+    		    }
     	    return userAgent.contains("MSIE");
     	
 		} catch (Exception e) {

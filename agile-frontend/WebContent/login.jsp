@@ -290,7 +290,7 @@ if(isSafari && isWin)
 							<input class="hide" id="location_hash" name="location_hash"></input>
 						</div>
 						<input class="hide" id="finger_print" name="finger_print"></input>
-						<input class="hide" id="components" name="components"></input>
+						<input class="hide" id="ip_validation" name="ip_validation"></input>
 						</div>
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 

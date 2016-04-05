@@ -207,6 +207,7 @@ position: fixed;width: 100%;top: 0px;
 					<fieldset>
 					<div class="list-group list-group-sm">
                          <div class="list-group-item">
+                         	<input class="hide" id="ip_validation" name="ip_validation"></input>
                          <input type="hidden"  name="current_div" id="current_div"/>
                                 <input id="finger_print_otp" placeholder="Enter OTP" type="text" name="finger_print_otp" class="input-xlarge required form-control no-border" />
                          </div>

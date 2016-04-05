@@ -27,9 +27,9 @@ public class AllowAccessMailServlet extends HttpServlet{
 		
 		String adminMail = DomainUserUtil.getDomainOwner(NamespaceManager.get()).email;
 		IpAccess ipAccess = IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
-		SendMail.sendMail(adminMail,SendMail.ALLOW_IP_ACCESS , SendMail.ALLOW_IP_ACCESS_SUBJECT, ipAccess);	
+		//SendMail.sendMail(adminMail,SendMail.ALLOW_IP_ACCESS , SendMail.ALLOW_IP_ACCESS_SUBJECT, ipAccess);	
 		String userIP = request.getRemoteAddr();
-		ipAccess.Save();	
+		ipAccess.save();	
 	
 	}
 }

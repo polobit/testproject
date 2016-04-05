@@ -38,7 +38,7 @@ public class IpAccess {
 		this.ipList =  ipList;
 	}
 
-	public void Save() {
+	public void save() {
 
 		if(this.created_time == null)
 			   this.created_time = Calendar.getInstance().getTimeInMillis() / 1000;

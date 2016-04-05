@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.ipaccess.AllowAccessMailServlet;
+import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -53,7 +54,7 @@ public class LoginServlet extends HttpServlet {
 	public static String SESSION_FINGERPRINT_VAL = "agile_fingerprint";
 	public static String SESSION_FINGERPRINT_OTP = "agile_otp";
 	public static String SESSION_FINGERPRINT_VALID = "agile_fingerprint_valid";
-	
+	public static String SESSION_IPACCESS_VALID = "agile_ip_valid";
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -261,28 +262,38 @@ public class LoginServlet extends HttpServlet {
 			request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 		}
 
-		request.getSession().setAttribute("account_timezone", timezone);
-		
-		// Set FingerPrint to check in /home
-		request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
-		String userFingerPrint = domainUser.finger_print;
-		
-		// Validate fingerprint value
-		boolean isValid = true;
-		if(StringUtils.isNotBlank(userFingerPrint))
-			isValid = userFingerPrint.equals(finger_print);
-		
-		request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
-		
-		if(!isValid){
-			long generatedOTP = System.currentTimeMillis()/1000;
-			System.out.println(generatedOTP);
-			JSONObject result = new JSONObject();
-			result.put("email", domainUser.email);
-			result.put("geratedOTP", generatedOTP);
-			SendMail.sendMail(domainUser.email, SendMail.NEW_REPLY, SendMail.OTP_EMAIL_TO_USER, result);
-			request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
-		}
+		        // Set FingerPrint to check in /home
+				request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
+				String userFingerPrint = domainUser.finger_print;
+				
+				// Validate fingerprint value
+				boolean isValid = true;
+				if(StringUtils.isNotBlank(userFingerPrint))
+					isValid = userFingerPrint.equals(finger_print);
+				
+				request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
+				
+				boolean isValidIP = IpAccessUtil.isValidIpOpenPanel(request);
+				System.out.println("validip"+isValidIP);
+				request.getSession().setAttribute(SESSION_IPACCESS_VALID, isValidIP);
+				
+				if(!isValid || !isValidIP){
+					
+					Long generatedOTP = System.currentTimeMillis()/1000;
+					System.out.println(generatedOTP);
+					
+					domainUser.generatedOTP = generatedOTP + "";
+					
+					// Simulate template
+					String template = SendMail.ALLOW_IP_ACCESS;
+					if(!isValid){
+						template = SendMail.OTP_EMAIL_TO_USER;
+					}
+					
+					SendMail.sendMail(domainUser.email, SendMail.NEW_REPLY_SUBJECT, template, domainUser);
+					request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
+				}
+
 
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
@@ -304,7 +315,9 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect(redirect);
 			return;
 		}
+		request.getSession().setAttribute("account_timezone", timezone);
 		
+				
 		response.sendRedirect("/");
 
 	}
@@ -326,11 +339,5 @@ public class LoginServlet extends HttpServlet {
 		queue.addAsync(TaskOptions.Builder.withPayload(stats));
 	}
 
-	public static void main(String[] args) {
-		String test = null;
-		if(test == null)
-			 System.out.println("null");
-		else 
-			System.out.println("Not");
-	}
+
 }
