@@ -10,9 +10,9 @@
 	    <div class="modal-body">
 			<div class="word-break-all" style="margin-bottom:5px;">
 				{{#if_equals activity_type "TICKET_CREATED"}}
-					{{{custom2}}}
+					{{{replace_newline_with_br custom2}}}
 				{{else}}
-					{{{custom1}}}
+					{{{replace_newline_with_br custom1}}}
 				{{/if_equals}}
 	       	</div>
 	    </div>
