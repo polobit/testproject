@@ -3590,6 +3590,7 @@ text-align:left;
 	margin-left: 10px!important;
 }
 
+
 .txt-small{
 	font-size: 12px;
 }
@@ -3598,6 +3599,7 @@ text-align:left;
  font-size: 13px !important;
 }
 
+
 /* Dashboard Search Custom Scrollbar Start */
 
 .dashboard-search-scroll-bar::-webkit-scrollbar {
@@ -3605,6 +3607,12 @@ text-align:left;
 	margin-right: 4px !important;
 	background:#eee;
 }
+/*
+#admin-previlages .nav-tabs{
+	border-radius:0px solid !important;
+	border-bottom:0px;
+
+}*/
 .dashboard-search-scroll-bar::-webkit-scrollbar-thumb {
 	 background: #bebebe;
 }
@@ -3623,6 +3631,25 @@ opacity: .3;
 #schedule_demo{
   margin-right: 214px;
 }
+
+
+/*#admin-previlages>div.m-xs>span{
+	margin-left:60px;
+
+} */
+
+.tab-content .tab-pane #sales-previlages .active{
+    display: block !important;
+    visibility: visible !important;
+}
+
+
+.nav-tabs li a#Sales_previlages, .nav-tabs li a#marketing_previlages
+{
+ color:#555!important;
+}
+
+
 .deal-edit-dropdown{
 	left: 261px;
     top: 32px;
@@ -3639,3 +3666,4 @@ opacity: .3;
 	}
 
 	}
+

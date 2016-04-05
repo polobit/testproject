@@ -149,6 +149,29 @@ function serializeForm(form_id) {
 		};
 	}).get());
 
+	arr = arr.concat($('#' + form_id + ' .multiple-checkbox-adminprefs').map(function() {
+		var fields_set = [];
+
+		$('input:checkbox:checked', this).each(function(index, element_checkbox){
+			if(!($(this).closest(".multiple-checkbox")) == undefined){
+				console.log("admin-prefs");
+			}
+			else if (($(this).closest(".multiple-checkbox")).length == 0 )
+			fields_set.push($(element_checkbox).val());
+		});
+		
+		console.log(fields_set);
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : fields_set
+		};
+	}).get());
+
+
+
 	/*
 	 * Chained select, Chained select is used for filters, which uses logical
 	 * input relation, field show have a class name "chained". Iterates through
