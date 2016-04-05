@@ -50,6 +50,7 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-size: 13px;
+  word-break: break-all;
 }
 
 .last-notes-drp-dwn {
