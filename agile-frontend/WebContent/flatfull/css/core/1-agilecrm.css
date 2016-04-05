@@ -3218,7 +3218,19 @@ table.hide-head-checkbox th label.i-checks {
   left:26px;
   font-size: 18px;
 }
-
+#cscorebox{
+	text-align:center;
+	right: 5px;
+	width: 56px;
+	padding-bottom: 0;padding-left: 0px;
+	padding-right: 0px;padding-top: 0px;
+	border-top-width: 1px;
+	margin-top: 6px;
+	top: -3px;
+	height: 28px;
+	left:26px;
+	font-size: 18px;
+}
 .well{
   background: none!important;
    border:none!important;
@@ -3620,6 +3632,7 @@ opacity: .3;
   margin-right: 214px;
 }
 
+
 /*#admin-previlages>div.m-xs>span{
 	margin-left:60px;
 
@@ -3635,4 +3648,22 @@ opacity: .3;
 {
  color:#555!important;
 }
+
+
+.deal-edit-dropdown{
+	left: 261px;
+    top: 32px;
+    opacity:0.8;
+}
+.deal-track{
+	margin-top:-8px;
+}
+
+
+@media(max-width:630px){
+	.deal-detail-dropdown{
+		left: 350px;
+	}
+
+	}
 

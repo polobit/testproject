@@ -12,7 +12,6 @@ var notification_prefs;
  */
 function downloadAndRegisterForNotifications()
 {
-
 	// As of now I know that this function is calling only once after loggin. so Updating due task count in this function;
 	getDueTasksCount(function(count){
 		var due_task_count= count;
@@ -92,12 +91,14 @@ function subscribeToPubNub(domain)
 			}
 
 			// Ticket operations
-			if (message.type.indexOf('TICKET') != -1)
+			if (message.type && 
+					message.type.indexOf('TICKET') != -1)
 			{
 				loadServiceLibrary(function(){
 					Ticket_Utils.showNoty('information', message.message, 'bottomRight', 5000);
-					return;
 				});
+
+				return;
 			}
 			
 			if (message.type == "EVENT_REMINDER")
@@ -160,7 +161,19 @@ function subscribeToPubNub(domain)
 				   
 			   return;
 			}
-
+			if(message.type == 'IS_BROWSING')
+			{
+			    get_contact_by_email(message.email,function(contact){
+			    	if(contact)
+			    	{
+			    		contact['notification'] = message.type;
+			    		contact['custom_value'] = message.custom_value;
+			    		message = contact;
+			    		_setupNotification(message);
+			    	}
+			    });	
+			    return;
+			}
 			// sets notification for notification preferences.
 			_setupNotification(message);
 		},
@@ -185,6 +198,7 @@ function _setupNotification(object)
 	// Inorder to avoid navigating to the contact
 	if (object.notification == 'CONTACT_DELETED')
 		object.id = "";
+	
 
 	// gets notification template.
 	getTemplate('notify-html', object, undefined, function(template_ui){
@@ -225,7 +239,6 @@ function notification_for_email_and_browsing(object, html)
 	if (object.notification == 'CLICKED_LINK' || object.notification == 'OPENED_EMAIL' || object.notification == 'IS_BROWSING')
 	{
 		var option = get_option(object.notification);
-
 		notification_based_on_type_of_contact(option, object, html, object.notification);
 		return;
 	}
@@ -686,4 +699,21 @@ function notification_play_button()
 		play_sound(sound);
 	});
 
+}	
+
+function get_contact_by_email(email,callback)
+{	
+	try
+	{
+		accessUrlUsingAjax("core/api/contacts/search/email/"+email, function(resp){
+			var responseJson = resp;
+			console.log("**** responseJson ****");
+			console.log(responseJson);
+			callback(responseJson)
+		});
+	} 
+	catch(e) 
+	{
+		return null;
+	}	
 }

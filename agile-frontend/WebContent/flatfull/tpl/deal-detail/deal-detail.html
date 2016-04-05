@@ -2,16 +2,19 @@
 <script id="deal-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
 <div class="hbox hbox-auto-xs {{#is_mobile}} wrapper-md {{else}} bg-light {{/is_mobile}}">
-<div class="col w-xl text-center-mobile-view {{#is_mobile}} bg-white  {{else}} bg-light lter b-r {{/is_mobile}}">
-<div class="vbox">
+<div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
+
 <div class="row-row">
-<div class="wrapper pos-rlt" id="deal-detail-actions-dropdown">
+<div  id="deal-detail-actions-dropdown" class="wrapper">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
-<div class="h3 font-thin custom-color m-b-xs" style="margin-right:12px;">{{#if name}}{{name}}{{/if}}</div>
+<div class="p-t-none">
+  <div class="panel panel-default m-b">
+    <div class="panel-body">
+<div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
 {{#if expected_value}}
-<div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
-<div class="m-b-sm text-muted">
+<div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
 	
 {{#getTracksCount}}<span>{{pipeline.name}} , </span>{{/getTracksCount}}					
@@ -35,23 +38,22 @@
 
 
 
-<div class="btn-group pos-abs pos-r pos-t" style="right:7px;">
+<div class="btn-group pos-abs " style="left:192px;top:29px;">
 <a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i> Restore</a>
 </div>
-
+    
 							
 							<div  class="deal-owner-block">
-						<div class="change-owner-succes"></div>
-     <div title="Owner">
-      	<div class="contact-owner" id="change-owner-element">
-        	<div><small class="text-xs text-muted"> Owner:&nbsp;&nbsp;</small></div>
-		
-        	<a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d">{{owner.name}}</a>
-        
-        	
-       </div>
-    </div>
-					</div>
+						  <div class="change-owner-succes"></div>
+              <div title="Owner">
+          	     <div class="contact-owner" id="change-owner-element">
+            	   <div><small class="text-base text-muted"> Owner&nbsp;&nbsp;</small></div>
+            	   <a href="#"  data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-d text-xs">      {{owner.name}}</a>
+              </div>
+              </div>
+    					</div>
+            
+
 
 
                         
@@ -59,10 +61,10 @@
 
 
 {{else}}                       
-<div class="pos-abs pos-r pos-t">
+<div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown">
 								
 								
-								<a class=" dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
+								<a class=" dropdown-toggle" data-toggle="dropdown"><span class="caret text-lg"></span></a>
 								<ul class="dropdown-menu pull-right deals-edit">
        <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-pencil-square" style="margin-right:2px;"></i> Edit</a></li>
                                     <li class="divider"></li>
@@ -74,45 +76,70 @@
 											class="fa fa-trash"></i> Delete</a></li>
 								</ul>
 </div>
+
+
+
 <div  class="deal-owner-position deal-owner-block">
 						<div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner" id="change-owner-element">
-        	<div><small class="text-xs text-muted">Owner:&nbsp;&nbsp;</small></div>
+        	<div><small class="text-base text-muted">Owner&nbsp;&nbsp;</small></div>
 		
-        	<div id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name c-p">{{owner.name}}</div>
+
+
+        	<div id="deal-owner" data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-p text-xs">{{owner.name}}</div>
+
           {{#hasScope "MANAGE_DEALS"}}
-        	<div class="btn-group v-middle" id="change-deal-owner-ul" style="display: none">
-        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+
+        
+        	<div class="btn-group v-middle dropdown deal-owner" id="change-deal-owner-ul" style="display: none">
+        		 <a href="javascript:void(0);" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+
         		 <ul id='deal-detail-owner' class="dropdown-menu"></ul>
         	</div>
           {{/hasScope}} 
        </div>
     </div>
 	</div>
+   
 					
 {{/if}}
-
+</div>
+</div>
+</div>
 <div>
 {{#if_equals pipeline.won_milestone milestone}}
   {{#if won_date}}
-    <div class="m-t-sm">
+    <div class="hidden-sm hidden-xs">
+    <div class="panel panel-default m-b">
+    <div class="panel-body">
+   
+
       <div>
-         <small class="text-xs text-muted">Won Date</small>
+         <small class="text-base text-muted">Won Date</small>
       </div>
-      <div>{{epochToHumanDateInFormat won_date}}</div>
+      <div class="text-xs">{{epochToHumanDateInFormat won_date}}</div>
+    </div>
+    </div>
     </div>
   {{else}}
     {{#if milestone_changed_time}}
+    <div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
+    <div class="panel panel-default m-b-none">
+    <div class="panel-body">
       <div class="m-t-sm">
         <div>
-          <small class="text-xs text-muted">Won Date</small>
+          <small class="text-base text-muted">Won Date</small>
         </div>
-        <div>{{epochToHumanDateInFormat milestone_changed_time}}</div>
+        <div class="text-xs">{{epochToHumanDateInFormat milestone_changed_time}}</div>
       </div>
+    </div>
+    </div>
+    </div>
     {{/if}}
   {{/if}}
 {{/if_equals}}
+
 
                            
 
@@ -122,77 +149,102 @@
 								<div class="l-h">
 									
 									{{#if custom_data}}
-                                      <div class="m-t-sm">
-                                      <small class="text-xs text-muted">Custom Data</small>
-                                       </div>
+                  <div class="hidden-sm hidden-xs " >
+                  <div class="panel panel-default ">
+                    <div class="panel-body">
+                                     
+                                      <small class="text-base text-muted">Custom Data</small>
+                      <div>                
 									{{#getDealCustomProperties custom_data}}
 									{{#each_with_index this}}             	
                       {{#if custom_field_type}}
                         <div class="m-b-xs">
                           <span class="contact-custom-name">
-                            <span class="text-light" title="{{name}}">{{name}}</span>
+                            <span class="text-light text-base" title="{{name}}">{{name}}</span>
                           </span>
                         </div>
-                        <div class="note-created-time custom-value" title="" name="{{name}}">
+                        <div class="note-created-time custom-color custom-value text-xs" title="" name="{{name}}">
                           {{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
                         </div>
                       {{else}}
                         <span class="contact-custom-name">
-                          <span class="text-light" title="{{name}}">{{name}}</span>
+                          <span class="text-light text-base" title="{{name}}">{{name}}</span>
                         </span>
                         <span class="contact-custom-value">
-                          <span class="note-created-time custom-value" title="{{value}}" name="{{name}}">
-                            {{value}}
-                          </span>
+
+                          {{#if is_date}}
+                            <span class="note-created-time custom-value" title="{{stringToHumanDateInFormat value}}" name="{{name}}">
+                              {{stringToHumanDateInFormat value}}
+                            </span>
+                          {{else}}
+                            <span class="note-created-time custom-value" title="{{value}}" name="{{name}}">
+                              {{value}}
+                            </span>
+                          {{/if}}
+
                         </span>
                         <br/>
                       {{/if}}
 										{{/each_with_index}}
 									{{/getDealCustomProperties}}
-                                    {{/if}}
-											
-                               <div class="clearfix"></div>
-                            </div>	
+                  </div>
+                  </div>
+                  </div>
+                  </div>
 
-						
-				
-					
+                 {{/if}}
+                           <div class="clearfix"></div>
+                            </div>	
 
 					</div>
 
-<div class="m-t-sm">
+
+
+
 {{#if contacts}}
+<div class=" hidden-sm hidden-xs">
+  <div class="panel panel-default m-b">
+    <div class="panel-body">
 <div class="m-b-xs">
-        	<small class="text-xs text-muted">Related to</small>
+        	<small class="text-base text-muted">Related to</small>
 </div>
-{{/if}}
+
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		<a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
         		<a href="#company/{{id}}" class="activate-link thumb m-b-xs"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
-        {{/each}}
-      </div> 
-					</div>
+      {{/each}}
+      
+      </div>
+    </div>
+  </div>
+  {{/if}}
+  </div>
 
-
-<div class="m-t-sm">
 {{#if description}}
+<div class="hidden-sm hidden-xs " >
+  <div class="panel panel-default m-b ">
+    <div class="panel-body">
 <div>
-        	<small class="text-xs text-muted">Description</small>
+        	<small class="text-base text-muted">Description</small>
 </div>
-<div>{{{show_link_in_statement description}}}</div>
+<div class="text-xs custom-color">{{{show_link_in_statement description}}}</div>
+</div>
+</div>
+</div>
 {{/if}}
-</div>
+
+
 
 
 
 						</div>
 					</div>
 				</div>
-			</div>
+			
 			
 <div class="col  {{#is_mobile}}  {{else}} bg-white {{/is_mobile}}">
 <div class="vbox" style="display:block">

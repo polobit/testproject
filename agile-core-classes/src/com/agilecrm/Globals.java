@@ -133,16 +133,15 @@ public class Globals
     public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdiBIgnIhxVdzKKdnWohGfPmrOD";
     public static final String QUICKBOOKS_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
     
-    public static final String QUICKBOOKS_WIDGET_APP_KEY = "a572c32cb35f8b404cbbadbb224fbd6d0fc6";
+  /*  public static final String QUICKBOOKS_WIDGET_APP_KEY = "a572c32cb35f8b404cbbadbb224fbd6d0fc6";
     public static final String QUICKBOOKS_WIDGET_CONSUMER_KEY = "qyprdiBIgnIhxVdzKKdnWohGfPmrOD";
     public static final String QUICKBOOKS_WIDGET_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
+*/
 
-
-  /*  //New App Keys for widget Issue (AgileCRM Widget APP)
+  //New App Keys for widget Issue (AgileCRM Widget APP)
     public static final String QUICKBOOKS_WIDGET_APP_KEY = "df14ce2bbf0ccb40debbeacbf914b4c9a105";
     public static final String QUICKBOOKS_WIDGET_CONSUMER_KEY = "qyprdkWGHkoQFLC1CT21TCDOA4lmcu";
     public static final String QUICKBOOKS_WIDGET_CONSUMER_SECRET = "ajSKfhERVhlqHbucMt0yZO7bBGhf9KC5RjvlEGXx";
-    */
     
     /** test facebook app details */
     // public static final String FACEBOOK_APP_ID = "1472962409608031";
@@ -216,6 +215,7 @@ public class Globals
 	public static final String GRAVATAR_SECURE_DEFAULT_IMAGE_URL = "https://clickdesk.agilecrm.com/flatfull/images/flatfull/user-default.jpg";
 	// Inbound email address suffix
 	public static final String INBOUND_EMAIL_SUFFIX = "@helptor.com";
+	
 	// Gravatar image URL
 	public static final String GRAVATAR_SECURE_IMAGE_URL = "https://secure.gravatar.com/avatar/"; 
 }

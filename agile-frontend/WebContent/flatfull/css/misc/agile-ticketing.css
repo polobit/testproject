@@ -50,6 +50,7 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-size: 13px;
+  word-break: break-all;
 }
 
 .last-notes-drp-dwn {
@@ -535,4 +536,8 @@ form#new-ticket ul.chosen-choices {
         float:left;       
 
     }
+}
+
+.word-break-all{
+  word-break: break-all;
 }

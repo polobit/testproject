@@ -237,6 +237,9 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #lead-score' : 'onGetScorebox',
     	'focusout #scorebox' : 'getScore',
 	   	'keyup  #scorebox' : 'scoreValEnter',
+	   	'click #lead-cscore' : 'onCompanyGetScorebox',
+	   	'focusout #cscorebox' : 'getCompanyScore',
+	   	'keyup  #cscorebox' : 'enterCompanyScore',
     	'click #cadd' : 'onCaddScore',
     	'click #cminus' :'onCremoveScore',
 
@@ -809,11 +812,33 @@ onGetScorebox:  function(e){
 	   $("#scorebox").val($("#lead-score").text());
 	   $("#scorebox").focus();
 	}, 
+
 // on Mouse click Getting the Input field
 getScore:  function(e){
 		e.preventDefault();
 		this.updateScoreValue();
 	
+	},
+
+enterCompanyScore: function(e){
+	    e.preventDefault();
+	   if(e.keyCode == 13){
+	   		this.updateCompanyScoreValue();
+	   }	
+	},
+
+	onCompanyGetScorebox:  function(e){
+	    e.preventDefault();
+	   //$('[data-toggle="tooltip"]').tooltip();
+	   $("#cscorebox").removeClass("hide");
+	   $("#lead-cscore").addClass("hide");
+	   $("#cscorebox").val($("#lead-cscore").text());
+	   $("#cscorebox").focus();
+	}, 
+
+	getCompanyScore:  function(e){
+		e.preventDefault();
+		this.updateCompanyScoreValue();
 	},
 
 	onCaddScore :  function(e){
@@ -858,9 +883,8 @@ getScore:  function(e){
 		// Converts string type to Int
 		var sub_score = parseInt($('#lead-score').text());
 		
-		if(sub_score <= 0)
-			return;
-		
+		//if(sub_score <= 0)
+		//	return;		
 		sub_score = sub_score - 1;
 		
 		// Changes score in UI
@@ -884,8 +908,8 @@ getScore:  function(e){
 		 	// Converts string type to Int
 		 	var sub_score = parseInt($('#lead-cscore').text());
 			
-		 	if(sub_score <= 0)
-		 		return;
+		 	//if(sub_score <= 0)
+		 	//	return;
 			
 		 	sub_score = sub_score - 1;
 			
@@ -1188,11 +1212,46 @@ updateScoreValue :function(){
 		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
-		if ((scoreboxval != prvs && (!isNaN(scoreboxval)) && (scoreboxval>=0))|| $("#scorebox").val()==""){ 
+		if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val()==""){ 
 			if($("#scorebox").val()==""){scoreboxval=0;
 			}					
 			App_Contacts.contactDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
 			var contact_model =  App_Contacts.contactDetailView.model.toJSON();			
+			var new_model = new Backbone.Model();
+			new_model.url = 'core/api/contacts';
+			new_model.save(contact_model,{
+			success: function(model){
+					}
+				});							
+		}
+		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
+			alert("Please enter a valid number.");
+			scoreboxval=prvs;
+		}
+		else{
+			if(scoreboxval== prvs){
+			scoreboxval=prvs;
+			}
+		}
+		$('#lead-score').attr("data-original-title", scoreboxval);
+		$('#lead-score').text(scoreboxval).removeClass("hide");
+	   	$("#scorebox").addClass("hide").val(scoreboxval);
+	   	$("#lead-score").attr("title",scoreboxval);
+	},
+
+	updateCompanyScoreValue :function(){
+		var scoreboxval = parseInt($("#cscorebox").val());
+		var decemialcheck=$("#cscorebox").val();
+		//var txt=$("#scorebox").text();
+		//var partxt=parseInt($("#scorebox").text());
+		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
+		var contact_model =  App_Companies.companyDetailView.model.toJSON();
+		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
+		if ((scoreboxval != prvs && (!isNaN(scoreboxval)) && (scoreboxval>=0))|| $("#cscorebox").val()==""){ 
+			if($("#cscorebox").val()==""){scoreboxval=0;
+			}					
+			App_Companies.companyDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
+			var contact_model =  App_Companies.companyDetailView.model.toJSON();			
 			var new_model = new Backbone.Model();
 			new_model.url = 'core/api/contacts';
 			new_model.save(contact_model,{
@@ -1206,14 +1265,14 @@ updateScoreValue :function(){
 		}
 		else{
 			if(scoreboxval== prvs){
-			scoreboxval=prvs;
+				scoreboxval=prvs;
 			}
 		}
-		$('#lead-score').attr("data-original-title", scoreboxval);
-		$('#lead-score').text(scoreboxval).removeClass("hide");
-	   	$("#scorebox").addClass("hide").val(scoreboxval);
-	   	$("#lead-score").attr("title",scoreboxval);
-	}	
+		$('#lead-cscore').attr("data-original-title", scoreboxval);
+		$('#lead-cscore').text(scoreboxval).removeClass("hide");
+	   	$("#cscorebox").addClass("hide").val(scoreboxval);
+	   	$("#lead-cscore").attr("title",scoreboxval);
+	}
 });
 
 $(function(){
