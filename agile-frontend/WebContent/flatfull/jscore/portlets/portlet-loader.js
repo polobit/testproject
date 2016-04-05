@@ -151,6 +151,7 @@ function loadPortlets(route,el){
 			
 
 			initializePortletsListeners();
+			contactListener();
 
 		} });
 

@@ -27,6 +27,7 @@ function fill_company_related_contacts(companyId, htmlId, context_el)
 		{
 			// var cel = App_Contacts.contactsListView.el;
 			// var collection = App_Contacts.contactsListView.collection;
+			contactListener();
 		} });
 
 	companyContactsView.collection.fetch();

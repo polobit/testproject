@@ -80,7 +80,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 	dashboard : function()
 	{
-
+		insidePopover=false;
 		$(".active").removeClass("active");
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
@@ -120,7 +120,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 * all at once.
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
-		{
+	{
 		insidePopover=false;
 		if(SCROLL_POSITION)
 		{
@@ -790,7 +790,29 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	importContacts : function()
 	{
-		$('#content').html('<div id="import-contacts-event-listener"></div>');
+
+		App_Contacts.importContacts = new CONTACTS_IMPORT_VIEW({
+			url : 'core/api/upload/status/CONTACTS',
+			template : "import-contacts",
+			postRenderCallback: function(el)
+			{
+				initializeImportEvents("import-contacts-event-listener");
+
+				if(import_tab_Id) {
+					 $('#import-tabs-content a[href="#'+import_tab_Id+'"]', el).tab('show');
+					 import_tab_Id=undefined;
+				}
+				else{
+					$('#import-tabs-content a[href="#csv-tab"]', el).tab('show');
+				}
+			}
+
+		});
+
+		$('#content').html(App_Contacts.importContacts.render().el);
+		
+/*
+$('#content').html('<div id="import-contacts-event-listener"></div>');
 		getTemplate("import-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -805,7 +827,8 @@ var ContactsRouter = Backbone.Router.extend({
 				$('#import-tabs-content a[href="#csv-tab"]').tab('show');
 			}
 
-		}, "#import-contacts-event-listener");       
+		}, "#import-contacts-event-listener");      
+		*/ 
 	},
 	
 
@@ -1241,6 +1264,7 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	var countURL = "";
     	if(type == "contacts")
     		countURL = App_Contacts.contactsListView.options.url + "/count";
+
     	else if(type == "workflows")
     		countURL = countFetchURL + "/count";
      	else
@@ -1248,6 +1272,7 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
     	// Hide bulk action checkbox
     	$(".thead_check", el).closest("label").css("visibility", "hidden");
+
     	$("table", el).addClass("hide-head-checkbox");
 
     	abortCountQueryCall();

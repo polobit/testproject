@@ -297,7 +297,8 @@ var CompaniesRouter = Backbone.Router
 	 * 
 	 */
 	companyDetails : function(id, company){
-
+		
+		insidePopover=false;
 		// For getting custom fields
 		if (App_Companies.customFieldsList == null || App_Companies.customFieldsList == undefined)
 		{
@@ -386,7 +387,7 @@ var CompaniesRouter = Backbone.Router
 
 				company_util.starify(el);
 				company_util.show_map(el);
-				// fill_owners(el, contact.toJSON());
+				// fill_owners(eidl, contact.toJSON());
 				// loadWidgets(el, contact.toJSON());
 
 			} });

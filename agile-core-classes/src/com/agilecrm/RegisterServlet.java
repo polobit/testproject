@@ -200,6 +200,10 @@ public class RegisterServlet extends HttpServlet
 
 	if (name != null)
 	    name = name.trim();
+	
+	// Redirect to first page if name and password is empty (This is added newly from website users)
+	if(StringUtils.isBlank(name) && StringUtils.isBlank(password))
+		throw new Exception("");
 
 	// Get reference code
 

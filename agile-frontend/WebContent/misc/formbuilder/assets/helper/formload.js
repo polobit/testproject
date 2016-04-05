@@ -20,7 +20,7 @@ define([
 					var formHtml = $("#render").val();
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
-			    		  $('#agileFormHolder style').remove();
+			    		  // $('#agileFormHolder style').remove();
 
 			    		  if(typeof data.formHtml == "undefined" || data.formHtml == "") {
 			    		  	data.formHtml = formHtml;

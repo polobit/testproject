@@ -291,7 +291,7 @@
     <name>ticket-bulk-actions</name>
     <rate>10/s</rate>
     <max-concurrent-requests>30</max-concurrent-requests>
-  <target>agile-normal-bulk</target>
+  	<target>agile-ticket-module</target>
   </queue>
 
   <queue>

@@ -235,7 +235,7 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 				
 				if(key != undefined && value != undefined)
 				{
-					
+					console.log(key); 
 					if(key.indexOf("*") == 0)
 					{
 						key  = key.substr(1);
@@ -336,7 +336,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
 
 
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
-    return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
+    return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + " " + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+ " " + set_event(uiFieldDefinition) + " " + set_attrs(uiFieldDefinition) + "> " + selectOptionAttributes + "</select>";
            
 }
 
@@ -425,6 +425,10 @@ function generateDefaultUI(uiFieldDefinition) {
 
     var tagName = uiFieldDefinition.fieldType;
 
+    // Event and Event Handler
+    var event = uiFieldDefinition.event;
+    var eventHandler = uiFieldDefinition.eventHandler;
+   
     // Attributes
     var attributes = "";
     
@@ -470,7 +474,7 @@ function generateDefaultUI(uiFieldDefinition) {
 		 return ("<" + tagName + " " + attributes + " />");
 	}else
 
-    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style)+"/>";
+    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style) + " " + set_event(uiFieldDefinition) + "/>";
 
 }
 //Bhasuri 
@@ -487,6 +491,36 @@ function getStyleAttribute(styleAttributes)
 	
 		return style+"'";
 	}
+
+function set_event(uiFieldDefinition)
+{
+	var event = uiFieldDefinition.event;
+	var eventHandler = uiFieldDefinition.eventHandler;
+	var target_type = uiFieldDefinition.target_type;
+
+	if(!event || !eventHandler)
+		return "";
+
+	if(eventHandler.indexOf("(") == -1 && eventHandler.indexOf(")") == -1)
+	{
+		if(target_type)
+			eventHandler = eventHandler+"(this,'"+target_type+"')";
+		else
+			eventHandler = eventHandler+"(this)";
+	}
+
+	return event + "=" + "\"" + eventHandler + "\"";
+}
+
+function set_attrs(uiFieldDefinition)
+{
+	var attr = "";
+
+	if(uiFieldDefinition.invisible)
+		attr = "invisible" + "=" + uiFieldDefinition.invisible;
+
+	return attr;
+}
 
 function loadTinyMCE(name)
 {
@@ -541,7 +575,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 
 	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a></label><br/><br/> ";
 	
-	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' type='textarea' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea> ";		
+	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea> ";		
 	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 35px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
 	$(htmlDiv).appendTo(container);	

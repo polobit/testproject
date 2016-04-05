@@ -1,0 +1,138 @@
+<script id="ticket-macro-add-edit-template" type="text/html">
+<div class="custom-animated custom-fadeInUp hide-rainbow">
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel wrapper">
+            <form id="ticket-macro-form" name="ticket-macro-form">
+
+                <fieldset>
+                    <div class="control-group form-group">
+                        <label class="control-label"><b>Name of Macro:</b> <span class="field_req">*</span></label>
+                        
+						<div class="controls">
+                            <div class="row">
+                                <div class="col-md-5 col-sm-4 col-xs-4">
+									{{#if id}}<input name="id" type="hidden" value="{{id}}"/>{{/if}}
+                                    <input name="name" type="text" id="macro-name" class="col-md-3 form-control required w-md" placeholder="Name of macro" value="{{name}}"/>
+									<input name="actions" id="macro-actions" type="hidden" value=""/>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-4">
+                                    <span id="macro-msg" class="text-center"></span>
+                                </div>
+                                <div class="col-md-4 col-sm-5 col-xs-4">
+                                    <a data-toggle="modal" id="macro-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">Need help? Watch our tutorial.</a>
+                                    
+                                        <button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-ticket-macro">Save Macro</button>
+                                  
+                                </div>
+                                <div class="save-macro-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="designer-tour">
+                    <IFRAME SRC="ticket-macro-designer.html" id="designer" frameBorder="0" name="designer" WIDTH="100%" HEIGHT="900px"></IFRAME>
+                    </div>
+                    <br />
+                   
+                    <div class="save-macro-img inline-block"></div>
+                    <br />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+
+<script id="ticket-macros-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+            
+            <h3 class="pull-left font-thin h3">Macros</h3>
+            
+            <div class="pull-right">
+                <a href="#macro-add" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Macro</a>
+            </div>
+            <div class="clearfix"></div>
+        
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+
+        {{#unless this.length}}
+        <div class="col-md-9 col-sm-9">
+            <div id="slate">
+        </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+            <div class="col-md-9 col-sm-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">Macros List</div>
+                <div class="table-responsive">
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/ticket/macros/delete" id="macros-tour-step">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th style="width:35%">Name</th>
+                            <th style="width:25%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-macros-model-list" route="macro-edit/" class="c-p"> </tbody>
+                </table>
+                </div>
+                </div>
+            </div>
+        {{/if}}
+    <div class="col-md-3 col-sm-3" id="learn-macros">
+                    
+            <h4 class="m-t-none h4 m-b-sm">
+                What are Macros?
+            </h4>
+            
+            <p>
+                Triggers are pre-defined conditions set up by you. If a condition is satisfied, you can choose an action to follow using macro automation.
+            </p>
+            <p>
+                e.g. If a user registers on your website, you can automate the macro to send a welcome email. The user registering on site is the trigger.
+            </p>
+        
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="ticket-macros-model-template" type="text/html">
+	<td class="hide data" data="{{id}}">{{id}}</td>
+	<td><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
+
+   
+	<td> 
+        {{#if updated_time}}
+        <div class="table-resp">
+            <small class="edit-hover text-muted"> 
+				<i class="fa fa-clock-o m-r-xs"></i>
+		        <span><em>Modified</em>&nbsp;</span>
+                <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+            </small>
+        </div>
+        {{else}}
+        <div>
+            <small class="edit-hover text-muted"> 
+				<i class="fa fa-clock-o m-r-xs"></i>
+		       <span><em>Created</em>&nbsp;</span>
+               <time class="macro-created-time b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+         	</small>
+        </div>
+        {{/if}}
+    </td>  
+<br />
+</script>

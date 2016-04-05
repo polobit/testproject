@@ -467,6 +467,7 @@ var portlet_utility = {
 						sortKey : "-created_time",
 						postRenderCallback : function(p_el) {
 							portlet_utility.addWidgetToGridster(base_model);
+							contactListener(p_el);
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -708,6 +709,7 @@ var portlet_utility = {
 
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 						$("time", p_el).timeago();
+						
 
 					});
 					contact_detail_page_infi_scroll($('.activity_body',

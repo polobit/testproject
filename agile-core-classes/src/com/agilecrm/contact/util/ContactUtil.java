@@ -42,6 +42,7 @@ import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -1870,7 +1871,48 @@ public class ContactUtil
 	}
 	return image_email;
     }
-    
+    /**
+     * Creates contact in DB for the given name and email
+     * 
+     * @param firstName
+     * @param email
+     * @return new created contact
+     */
+	public static Contact createContact(String name, String email)
+	{
+		if(StringUtils.isBlank(name) || StringUtils.isBlank(email))
+			return null;
+		
+		Contact contact = new Contact();
+		contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, email, null));
+		
+		String[] names = name.split(" ");
+		
+		if (names.length > 1)
+		{
+			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, names[0], null));
+			
+			contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, names[1],
+					null));
+		}else{
+			contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, name, null));
+		}
+		
+		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+		contact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
+		
+		try
+		{
+			contact.save();
+		}
+		catch (PlanRestrictedException e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return contact;
+	}
+
     /**
      * Gets a partial opportunity based on its id
      * 
@@ -1899,6 +1941,25 @@ public class ContactUtil
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		    e.printStackTrace();
 		    return list;
+		}
+    }
+	 /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static ContactPartial getPartialContact(Long id)
+    {
+		try
+		{
+			return partialDAO.get(id);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    e.printStackTrace();
+		    return null;
 		}
     }
 }

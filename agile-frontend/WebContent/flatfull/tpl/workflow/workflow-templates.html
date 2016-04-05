@@ -1,275 +1,373 @@
 <script type="text/html" id="workflow-categories-template">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-md-12">
-       <h3 class="pull-left font-light h3">Select a template <small> New Campaign</small></h3>
-	   <div class="pull-right"> 
-           <a href="#workflow-add" class="btn btn-default btn-sm btn-addon" title="Start with an empty campaign">Custom</a>
-	   </div>
-	   <div class="clearfix"></div>
-     </div>
-</div>
-</div>
-<div class="wrapper-md lter b-b" style="border-bottom:none">
-<div id="workflows-tab-container">
-<div class="tab-container">
-
-<ul class="nav nav-tabs" id="subTab">
-
-										    <li role="presentation" class="active" data-tab="1">
-												<a href="#general" role="tab" name="general" data-toggle="tab" aria-control="general" id="general1">General</a>
-											</li>
-											<li role="presentation" data-tab="2">
-												<a href="#marketing-automation" name="marketing-automation" aria-control="marketing-automation" role="tab" data-toggle="tab" id="marketing-automation1">Marketing Automation</a>
-											</li>
-											<li role="presentation" data-tab="3">
-												<a href="#saas" role="tab" name="saas" data-toggle="tab" aria-control="saas" id="saas1">SaaS</a>
-											</li>
-											<li role="presentation" data-tab="4">
-												<a href="#ecommerce" name="ecommerce" aria-control="ecommerce" role="tab" data-toggle="tab" id="ecommerce1">E-commerce</a>
-											</li>
-</ul>
-<!-- start of tab1 -->
-            <div class="tab-content" style=" display: block;">
-            	<div class="tab-pane active" role="tab-panel" id="general">
-<div class="row">
-	<div class="col-md-3 col-sm-6 col-xs-12">
-    	<div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none">
-                <i class="icon-file-text icon-4x"></i>
-            		</div>
-            		<b>Newsletter</b>
-        			</div>
-        			<br>
-        			<!-- Description -->
-        			<div class="ellipsis-multiline m-b-md" rel="tooltip" title="Send a newsletter and see reports on opens and clicks">
-            			Send a newsletter and see reports on opens and clicks
-        			</div>
-        		<!-- Add button -->
-        		<div>
-            	<a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/general/newsletter">Go</a>
-        	</div>
-    </div>
-	</div>
-   <div class="col-md-3 col-sm-6 col-xs-12">
-	<div class="panel wrapper text-center b-a">
-        			<!-- Icon and Title -->
-        			<div>
-            			<div class="p-b-sm p-l-none p-r-none">
-                			<i class="icon-time icon-4x"></i>
-            			</div>
-            			<b>Autoresponder</b>
-        			</div>
-        			<br>
-        			<!-- Description -->
-        		<div class="ellipsis-multiline m-b-md" rel="tooltip" title="Send emails and follow-up automatically after a specified duration">
-            		Send emails and follow-up automatically after a specified duration
-        		</div>
-        		<!-- Add button -->
-        	<div>
-            	<a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/general/auto_responder">Go</a>
-        	</div>
-    </div>
-	</div>
-</div>
-
-</div>  <!-- End of tab-pane -->
-
-<!-- end of tab1-->
-<!-- start of tab2 -->
-            	<div class="tab-pane" role="tab-panel" id="marketing-automation">
-<div class="row">
-	<div class="col-md-3 col-sm-6 col-xs-12">
-    	<div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div class="p-t-md p-l-none p-r-none p-b-sm">
-                <i class="icon-star-half-full icon-4x"></i>
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="pull-left font-light h3">
+                    Select a template <small> New Campaign</small>
+                </h3>
+                <div class="pull-right">
+                    <a href="#workflow-add" class="btn btn-default btn-sm btn-addon"
+                        title="Start with an empty campaign">Custom</a>
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <b>Lead Scoring</b>
-        </div>
-        <br>
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Score your leads when they click email links and browse the website">
-            Score your leads when they click email links and browse the website
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/marketing-automation/lead_scoring">Go</a>
         </div>
     </div>
-	</div>
-   <div class="col-md-3 col-sm-6 col-xs-12">
-	<div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div class="p-t-md p-l-none p-r-none p-b-sm">
-                <i class="icon-twitter icon-4x"></i>
+    <div class="wrapper-md lter b-b" style="border-bottom: none">
+        <div id="workflows-tab-container">
+            <div class="tab-container">
+
+                <ul class="nav nav-tabs" id="subTab">
+
+                    <li role="presentation" class="active" data-tab="1"><a
+                        href="#general" role="tab" name="general" data-toggle="tab"
+                        aria-control="general" id="general1">General</a></li>
+                    <li role="presentation" data-tab="2"><a
+                        href="#marketing-automation" name="marketing-automation"
+                        aria-control="marketing-automation" role="tab" data-toggle="tab"
+                        id="marketing-automation1">Marketing Automation</a></li>
+                    <li role="presentation" data-tab="3"><a href="#saas"
+                        role="tab" name="saas" data-toggle="tab" aria-control="saas"
+                        id="saas1">SaaS</a></li>
+                    <li role="presentation" data-tab="4"><a href="#ecommerce"
+                        name="ecommerce" aria-control="ecommerce" role="tab"
+                        data-toggle="tab" id="ecommerce1">E-commerce</a></li>
+                    <li role="presentation" data-tab="5"><a href="#service"
+                        name="service" aria-control="service" role="tab" data-toggle="tab"
+                        id="service1">Service</a></li>
+                </ul>
+                <!-- start of tab1 -->
+                <div class="tab-content" style="display: block;">
+                    <div class="tab-pane active" role="tab-panel" id="general">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-b-sm p-l-none p-r-none">
+                                            <i class="icon-file-text icon-4x"></i>
+                                        </div>
+                                        <b>Newsletter</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Send a newsletter and see reports on opens and clicks">
+                                        Send a newsletter and see reports on opens and clicks</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/general/newsletter">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-b-sm p-l-none p-r-none">
+                                            <i class="icon-time icon-4x"></i>
+                                        </div>
+                                        <b>Autoresponder</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Send emails and follow-up automatically after a specified duration">
+                                        Send emails and follow-up automatically after a specified
+                                        duration</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/general/auto_responder">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End of tab-pane -->
+
+                    <!-- end of tab1-->
+                    <!-- start of tab2 -->
+                    <div class="tab-pane" role="tab-panel" id="marketing-automation">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-star-half-full icon-4x"></i>
+                                        </div>
+                                        <b>Lead Scoring</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Score your leads when they click email links and browse the website">
+                                        Score your leads when they click email links and browse the
+                                        website</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/marketing-automation/lead_scoring">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-twitter icon-4x"></i>
+                                        </div>
+                                        <b>Social Campaign</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Reach out to prospects on social media. Send automated Tweets">
+                                        Reach out to prospects on social media. Send automated Tweets
+                                    </div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/marketing-automation/social_campaign">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-beaker icon-4x"></i>
+                                        </div>
+                                        <b>A/B Test</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="A/B test your emails. Compare results and optimize messages">
+                                        A/B test your emails. Compare results and optimize messages</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/marketing-automation/ab_testing">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End of tab-pane -->
+
+                    <!-- end of tab2-->
+                    <!-- start of tab3 -->
+                    <div class="tab-pane" role="tab-panel" id="saas">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-gift icon-4x"></i>
+                                        </div>
+                                        <b>Signup Welcome</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Send a welcome email after users signup">Send a
+                                        welcome email after users signup</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/saas/signup_welcome">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-plane icon-4x"></i>
+                                        </div>
+                                        <b>User Onboarding</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Help your users with timely communication to bring them onboard and improve retention">
+                                        Help your users with timely communication to bring them
+                                        onboard and improve retention</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/saas/user_onboarding">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-level-up icon-4x"></i>
+                                        </div>
+                                        <b>Trial Conversion</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Identify who among your free/trial users are ready to convert and reach out to them">
+                                        Identify who among your free/trial users are ready to convert
+                                        and reach out to them</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/saas/trial_conversion">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <!-- End of tab-pane -->
+
+                    <!-- end of tab3-->
+                    
+                    <!-- start of tab4 -->
+                    <div class="tab-pane" role="tab-panel" id="ecommerce">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-shopping-cart icon-4x"></i>
+                                        </div>
+                                        <b>Cart Abandonment</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Detect when your users abandon cart and send them relavent communication">
+                                        Detect when your users abandon cart and send them relevant
+                                        communication</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/ecommerce/cart_abandonment">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-bullseye icon-4x"></i>
+                                        </div>
+                                        <b>Targeted Promo</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Send relevant and timely promotional communication to users based on their interests and actions">
+                                        Send relevant and timely promotional communication to users
+                                        based on their interests and actions</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/ecommerce/targeted_promo">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of tab-pane -->
+                    <!-- end of tab4-->
+
+                    <!-- start of tab4 -->
+                    <div class="tab-pane" role="tab-panel" id="service">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="icon-clock icon-4x"></i>
+                                        </div>
+                                        <b>Set SLA</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="Send a welcome email after users signup">Text</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/service/set_sla">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="fa fa-thumbs-o-up icon-4x"></i>
+                                        </div>
+                                        <b>Send Acknowledgement to Customer</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="title">Text</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/service/acknowledgement_to_customer">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel wrapper text-center b-a">
+                                    <!-- Icon and Title -->
+                                    <div>
+                                        <div class="p-t-md p-l-none p-r-none p-b-sm">
+                                            <i class="fa fa-send-o icon-4x"></i>
+                                        </div>
+                                        <b>Send email to group</b>
+                                    </div>
+                                    <br>
+                                    <!-- Description -->
+                                    <div class="ellipsis-multiline m-b-md" rel="tooltip"
+                                        title="title">Text</div>
+                                    <!-- Add button -->
+                                    <div>
+                                        <a class="btn btn-sm btn-default workflow-template-add"
+                                            href="#workflow-add/service/email_to_group">Go</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of tab-pane -->
+                    <!-- end of tab4-->
+
+                </div>
+                <!-- End of tab-content -->
+
             </div>
-            <b>Social Campaign</b>
-        </div>
-        <br>
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Reach out to prospects on social media. Send automated Tweets">
-            Reach out to prospects on social media. Send automated Tweets
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/marketing-automation/social_campaign">Go</a>
+            <!-- End of tab-container -->
+
         </div>
     </div>
-	</div>
-	<div class="col-md-3 col-sm-6 col-xs-12">
-		<div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div class="p-t-md p-l-none p-r-none p-b-sm">
-                <i class="icon-beaker icon-4x"></i>
-            </div>
-            <b>A/B Test</b>
-        </div>
-        <br>
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="A/B test your emails. Compare results and optimize messages">
-            A/B test your emails. Compare results and optimize messages
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/marketing-automation/ab_testing">Go</a>
-        </div>
-    </div>
-	</div>
 </div>
 
-</div>  <!-- End of tab-pane -->
-
-<!-- end of tab2-->
-<!-- start of tab3 -->
-            	<div class="tab-pane" role="tab-panel" id="saas">
-<div class="row">
-	<div class="col-md-3 col-sm-6 col-xs-12">
-    	 <div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div class="p-t-md p-l-none p-r-none p-b-sm">
-                <i class="icon-gift icon-4x"></i>
-            </div>
-            <b>Signup Welcome</b>
-        </div>
-        <br>
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Send a welcome email after users signup">
-            Send a welcome email after users signup
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/saas/signup_welcome">Go</a>
-        </div>
-    </div>
-	</div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-		 <div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div class="p-t-md p-l-none p-r-none p-b-sm">
-                <i class="icon-plane icon-4x"></i>
-            </div>
-            <b>User Onboarding</b>
-        </div>
-        <br>
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Help your users with timely communication to bring them onboard and improve retention">
-            Help your users with timely communication to bring them onboard and improve retention
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/saas/user_onboarding">Go</a>
-        </div>
-    </div>
-	</div>
-	<div class="col-md-3 col-sm-6 col-xs-12">
-		<div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div class="p-t-md p-l-none p-r-none p-b-sm">
-                <i class="icon-level-up icon-4x"></i>
-            </div>
-            <b>Trial Conversion</b>
-        </div>
-        <br>
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Identify who among your free/trial users are ready to convert and reach out to them">
-            Identify who among your free/trial users are ready to convert and reach out to them
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/saas/trial_conversion">Go</a>
-        </div>
-    </div>
-	</div>
-</div>
-
-
-</div>  <!-- End of tab-pane -->
-
-<!-- end of tab3-->
-<!-- start of tab4 -->
-
-            	<div class="tab-pane" role="tab-panel" id="ecommerce">
-<div class="row">
-	<div class="col-md-3 col-sm-6 col-xs-12">
-    	<div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div class="p-t-md p-l-none p-r-none p-b-sm">
-                <i class="icon-shopping-cart icon-4x"></i>
-            </div>
-            <b>Cart Abandonment</b>
-        </div>
-        <br>
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Detect when your users abandon cart and send them relavent communication">
-            Detect when your users abandon cart and send them relevant communication
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/ecommerce/cart_abandonment">Go</a>
-        </div>
-    </div>
-	</div>
-   <div class="col-md-3 col-sm-6 col-xs-12">
-		 <div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div class="p-t-md p-l-none p-r-none p-b-sm">
-                <i class="icon-bullseye icon-4x"></i>
-            </div>
-            <b>Targeted Promo</b>
-        </div>
-        <br>
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Send relevant and timely promotional communication to users based on their interests and actions">
-            Send relevant and timely promotional communication to users based on their interests and actions
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default workflow-template-add" href="#workflow-add/ecommerce/targeted_promo">Go</a>
-        </div>
-    </div>
-	</div>
-</div>
-</div>
-
-</div>  <!-- End of tab-pane -->
-
-            </div>  <!-- End of tab-content -->
-<!-- end of tab4-->
-
-        </div>
-</div>
-</div>
-</div>
 </script>

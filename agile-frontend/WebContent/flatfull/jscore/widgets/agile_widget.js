@@ -289,7 +289,7 @@ function agile_crm_get_widget(pluginName)
 	 * while loading plugins
 	 */
 	console.log($('#' + pluginName));
-	var model_data = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
+	var model_data = $('#' + pluginName, get_current_view_el()).data('model');
 
 	console.log(model_data);
 
@@ -308,7 +308,7 @@ function agile_crm_get_widget_prefs(pluginName)
 	pluginName = pluginName.replace(/ +/g, '');
 	console.log("in get widget prefs " + pluginName);
 	// Gets data attribute of from the plugin, and return prefs from that object
-	return $('#' + pluginName, App_Contacts.contactDetailView.el).data('model').toJSON().prefs;
+	return $('#' + pluginName, get_current_view_el()).data('model').toJSON().prefs;
 }
 
 /**
@@ -324,11 +324,11 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 	console.log(pluginName);
 	pluginName = pluginName.replace(/ +/g, '');
 
-	console.log(App_Contacts.contactDetailView.el);
-	console.log($('#' + pluginName, App_Contacts.contactDetailView.el));
+	console.log(get_current_view_el());
+	console.log($('#' + pluginName, get_current_view_el()));
 
 	// Get the model from the the element
-	var widget = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
+	var widget = $('#' + pluginName, get_current_view_el()).data('model');
 
 	console.log(widget);
 	// Set changed preferences to widget backbone model
@@ -347,7 +347,7 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 		console.log("Saved widget: " + data.toJSON());
 		
 		// Set the changed model data to respective plugin div as data
-		$('#' + pluginName, App_Contacts.contactDetailView.el).data('model', widget);
+		$('#' + pluginName, get_current_view_el()).data('model', widget);
 		
 		if (callback && typeof (callback) === "function")
 		{
@@ -641,5 +641,16 @@ function agile_crm_get_current_view()
 	if(App_Contacts.contactDetailView)
 		return App_Contacts.contactDetailView.el;
 	
+	return undefined;
+}
+
+function get_current_view_el()
+{
+	if(Current_Route.indexOf('contact') != -1 && App_Contacts.contactDetailView)
+		return App_Contacts.contactDetailView.el;
+	
+	if(Current_Route.indexOf('ticket') != -1 && App_Ticket_Module.ticketView)
+		return App_Ticket_Module.ticketView.el;
+
 	return undefined;
 }

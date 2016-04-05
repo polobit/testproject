@@ -280,79 +280,116 @@ function minicalendar(el)
 		            		   el.parent().css('z-index',3);
 		            		   var reletedContacts = '';
 		            		   var meeting_type = '';
+		            		   var that = $(this);
+
 		            		   if(CURRENT_AGILE_USER.domainUser.ownerPic=="" || CURRENT_AGILE_USER.domainUser.ownerPic=="no image")
-		            			   event.eventOwner.pic=gravatarImgForPortlets(25);
-		            		   if (event.contacts)
-		            		   {
-		            			   if (event.contacts.length > 0)
-		            				   reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
-		            		   }
-		            		   if (event.contacts)
-		            		   {
-		            			   for (var i = 0; i < event.contacts.length; i++)
-		            			   {
-		            				   if (event.contacts[i].type == "PERSON")
-		            				   {
-		            					   var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
-		            					   if (last_name == undefined)
-		            						   last_name = "";
-		            					   reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-		            							   event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
-		            				   }
-		            				   else
-		            				   {
-		            					   try
-		            					   {
-		            						   reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
-		            								   event.contacts[i].properties, "name") + '</a>';
-		            					   }
-		            					   catch (err)
-		            					   {
-		            						   console.log("error");
-		            					   }
-		            				   }
-		            				   if (i != event.contacts.length - 1)
-		            					   reletedContacts += ', ';
-		            			   }
-		            		   }
-		            		   if (event.meeting_type && event.description)
-		            		   {
-		            			   meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + event.description + '</span>';
-		            		   }
+		            			   event.owner.pic=gravatarImgForPortlets(25);
 
-		            		   else if (event.description)
-		            		   {
-		            			   meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + event.description + '</span>';
-		            		   }
-
-		            		   var leftorright = 'bottom';
+		            			if(that.data("data_fetched"))
+								{
+									event.contacts=that.data("data_fetched");
+									
+									var leftorright = 'bottom';
 		            		   var pullupornot = '';
 		            		   var popoverElement = '';
+
+		            		   var eventJSON = {};
+										
+										eventJSON.leftorright = leftorright;
+										
+										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
+										
 		            		   if(event.type=="AGILE"){
-		            			   popoverElement = '<div class="fc-overlay ' + leftorright + '" style="width:100%;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-		            			   .format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.eventOwner.pic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-		            			   $(this).append(popoverElement);
-		            			   $(this).find('.fc-overlay').find('.arrow').css('top','70px');
+		            			  
+		            			  that.append($(getTemplate("calendar-mouseover-popover-miniCalendar", eventJSON)));
+		            			   that.find('.fc-overlay').find('.arrow').css('top','70px');
 		            		   }
-		            		   else{
-		            			   popoverElement = '<div class="fc-overlay ' + leftorright + '" style="width:100%;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-		            			   .format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-		            			   $(this).append(popoverElement);
-		            		   }
-		            		   var overlay=$(this).find('.fc-overlay');
+		            		   
+		            		   var overlay=that.find('.fc-overlay');
 		            		   if(event.start.getDay()==4 || event.start.getDay()==5 || event.start.getDay()==6){
 		            			   overlay.css('left','-180px');
 		            			   overlay.find('.arrow').css('left','91%');
 		            		   }
-		            		   if(reletedContacts!='' || meeting_type!=''){
-		            			   overlay.css('top','-95px');
-		            			   overlay.find('.arrow').css('top','84px');
-		            		   }
-		            		   if(reletedContacts!='' && meeting_type!=''){
+		            		   if(event.contacts.length>1){
+		            		   
+		            		   if(meeting_type!=''){
 		            			   overlay.css('top','-108px');
 		            			   overlay.find('.arrow').css('top','98px');
 		            		   }
+		            		   else{
+		            		   	overlay.css('top','-95px');
+		            			   overlay.find('.arrow').css('top','84px');
+		            			}
+		            		}
+		            		else{
+
+		            		   if(event.contacts.length>0){
+		            		   		var top = overlay.height();
+		            		   		var arrowTop= top-22;
+		            		   		top=top-9;
+		            			   overlay.css('top', '-'+top+'px');
+		            			   overlay.find('.arrow').css('top',arrowTop+'px');
+		            		   }
+		            		  
+		            		}
 		            		   overlay.show();
+									return;
+								}
+		            			if(event.id!=undefined){
+		            			accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
+											console.log(data);
+											event.contacts=data;
+											that.data("data_fetched",data);
+		            		  
+		            		
+
+
+		            		   var leftorright = 'bottom';
+		            		   var pullupornot = '';
+		            		   var popoverElement = '';
+
+		            		   var eventJSON = {};
+										
+										eventJSON.leftorright = leftorright;
+										
+										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
+										
+		            		   if(event.type=="AGILE"){
+		            			  
+		            			  that.append($(getTemplate("calendar-mouseover-popover-miniCalendar", eventJSON)));
+		            			   that.find('.fc-overlay').find('.arrow').css('top','70px');
+		            		   }
+		            		   
+		            		   var overlay=that.find('.fc-overlay');
+		            		   if(event.start.getDay()==4 || event.start.getDay()==5 || event.start.getDay()==6){
+		            			   overlay.css('left','-180px');
+		            			   overlay.find('.arrow').css('left','91%');
+		            		   }
+		            		   if(event.contacts.length>1){
+		            		   
+		            		   if(meeting_type!=''){
+		            			   overlay.css('top','-108px');
+		            			   overlay.find('.arrow').css('top','98px');
+		            		   }
+		            		   else{
+		            		   	overlay.css('top','-95px');
+		            			   overlay.find('.arrow').css('top','84px');
+		            			}
+		            		}
+		            		else{
+
+		            		   if(event.contacts.length>0){
+		            		   		var top = overlay.height();
+		            		   		var arrowTop= top-22;
+		            		   		top=top-9;
+		            			   overlay.css('top', '-'+top+'px');
+		            			   overlay.find('.arrow').css('top',arrowTop+'px');
+		            		   }
+		            		  
+		            		}
+		            		   overlay.show();
+		            		});
+							}
 		            	   },
 		            	   eventMouseout : function(event, jsEvent, view)
 		            	   {

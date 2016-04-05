@@ -123,6 +123,7 @@ if(is_free_plan && is_first_time_user)
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
+
 %>
 
 
@@ -287,7 +288,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
-  <li class="line dk"></li>
+  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span>Marketing</span>
               </li>
@@ -330,6 +331,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
+  <li class="line dk m-t-none m-b-none" style="height: 1px; display: none;"></li>
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs" style="display: none;">
+    <span>Support</span>
+  </li>
+  <li id="tickets" style="display: none;">
+    <a  href="#tickets">
+      <i class="icon icon-ticket"></i>
+      <span>Help Desk</span>
+    </a>
+  </li>            
   </ul>
 
 
@@ -681,22 +692,26 @@ head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, funct
         showVideoForRegisteredUser();
 });
 
+// head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
+
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
-else
-	head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION);
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
 
 var en;
-
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
 
 
+// head.ready('library', function() {
+
 head.ready(function() {
-	
+
 if(!HANDLEBARS_PRECOMPILATION){
-    downloadTemplate("tpl.js", function(){             
+    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
+    {
+        downloadTemplate("tpl.js");
+        downloadTemplate("contact-view.js");
     });
 }
  
@@ -708,28 +723,36 @@ head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-mi
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
-	 $('[data-toggle="tooltip"]').tooltip();  
-   
+
    try{
-    //Code to display alerts of widgets.
-    showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+      $('[data-toggle="tooltip"]').tooltip();  
+      //Code to display alerts of widgets.
+      showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
    }catch(e){}
 	 
 	//Resting the variables.
-	<%  session.removeAttribute("widgetMsgType");
-	session.removeAttribute("widgetMsg"); %>
+	<% session.removeAttribute("widgetMsgType");
+	   session.removeAttribute("widgetMsg"); 
+  %>
 	
 	try{
       var sig = CURRENT_USER_PREFS.signature;
       sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-
       CURRENT_USER_PREFS.signature = sig;
 	}catch(e){}
+
 });
 
 });    
 function load_globalize()
 {
+
+  if (typeof Globalize != "function") {
+    setTimeout(function() {
+      load_globalize();
+    }, 500);
+    return;
+  }
 
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");

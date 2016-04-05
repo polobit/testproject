@@ -1,0 +1,252 @@
+<script id="ticket-custom-filters-template" type="text/html">
+<div class="wrapper hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+        <div class="col-md-12 p-n m-b-xs">Assignee</div>
+        <div class="col-md-12 p-n assignee-select txt-small"><small>Loading...</small></div>
+        <div class="col-md-12 p-n m-t-xs m-b-xs">Group</div>
+        <div class="col-md-12 p-n group-select txt-small"><small>Loading...</small></div>
+    </div>
+  </div>
+</div>
+<div class="wrapper hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+      <div class="col-md-12 p-n m-b-xs">Labels</div>
+      <div class="col-md-12 p-n m-b-xs cusom-filter-labels choose-labels txt-small">
+        <select data-placeholder="Search Labels" class="chosen-select form-control" multiple class="w-md"></select>
+      </div>
+      <div class="col-md-12 p-n m-t-xs">
+        Created Date 
+        <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-created-date" style="font-size: 10px;">Clear</a>
+      </div>
+      <div class="col-md-12 p-n m-t-xs">
+        <input id="created-date-input" name="created-date-input" type="text" class="form-control input-sm created-date-input" placeholder="Choose Date">
+      </div>
+      <div class="col-md-12 p-n m-t-sm">
+        Due Date 
+        <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-due-date" style="font-size: 10px;">Clear</a>
+      </div>
+      <div class="col-md-12 p-n m-t-xs">
+        <input type="text" name="due-date-input" class="form-control input-sm due-date-input" placeholder="Choose Date">
+      </div>
+      <div class="col-md-12 p-n">
+        <div class="col-md-2 p-n text-center">
+          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="overdue">Overdue</a>
+        </div>
+        <div class="col-md-1 p-n text-center m-l-xs"> | </div>
+        <div class="col-md-3 p-n">
+          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="tomorrow">Tomorrow</a>
+        </div>
+        <!--<div class="col-md-1 p-n text-center"> | </div>
+        <div class="col-md-1 p-n text-center">
+          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_two_days">+2</a>
+        </div>-->
+        <div class="col-md-1 p-n text-center"> | </div>
+        <div class="col-md-1 p-n text-center">
+          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_three_days">+3</a>
+        </div>
+        <div class="col-md-1 p-n text-center"> | </div>
+        <div class="col-md-1 p-n text-center">
+          <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_five_days">+5</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="wrapper hidden-sm hidden-xs p-b-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="col-md-12 p-n m-b-xs">Status</div>
+        <div class="col-md-12 p-n txt-small">
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="status" name="status" value="NEW" type="checkbox">
+              <i></i>
+            </label> New
+          </div>
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="status" name="status" value="OPEN" type="checkbox">
+              <i></i>
+            </label> Open
+          </div>
+        </div>
+        <div class="col-md-12 p-n txt-small">
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="status" name="status" value="PENDING" type="checkbox">
+              <i></i>
+            </label> Pending
+          </div>
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="status" name="status" value="CLOSED" type="checkbox">
+              <i></i>
+            </label> Closed
+          </div>
+        </div>
+        <div class="col-md-12 p-n m-t-xs m-b-xs">Priority</div>
+        <div class="col-md-12 p-n txt-small">
+          <div class="col-md-4 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="priority" name="priority" value="LOW" type="checkbox"><i></i>
+            </label> Low
+          </div>
+          <div class="col-md-5 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="priority" name="priority" value="MEDIUM" type="checkbox"><i></i>
+            </label> Medium
+          </div>
+          <div class="col-md-3 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="priority" name="priority" value="HIGH" type="checkbox"><i></i>
+            </label> High
+          </div>
+        </div>
+        
+      </div>
+    </div>
+</div>
+<div class="wrapper hidden-sm hidden-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="col-md-12 p-n m-b-xs">Type</div>
+        <div class="col-md-12 p-n txt-small">
+          <div class="col-md-12 p-n">
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="ticket_type" name="ticket_type" value="INCIDENT" type="checkbox">
+              <i></i>
+            </label> Incident
+          </div>
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="ticket_type" name="ticket_type" value="PROBLEM" type="checkbox">
+              <i></i>
+            </label> Problem
+          </div>
+        </div>
+        <div class="col-md-12 p-n">
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="ticket_type" name="ticket_type" value="TASK" type="checkbox">
+              <i></i>
+            </label> Task
+          </div>
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="ticket_type" name="ticket_type" value="QUESTION" type="checkbox">
+              <i></i>
+            </label> Question
+          </div>
+        </div>
+        <div class="col-md-12 p-n">
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="favorite" name="ticket_favorite" value="true" type="checkbox">
+              <i></i>
+            </label> Favorite
+          </div>
+          <div class="col-md-6 p-n">
+            <label class="i-checks i-checks-sm">
+              <input class="spam" name="ticket_spam" value="true" type="checkbox">
+              <i></i>
+            </label> Spam
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="save-as-filter-container">
+  <a href="javascript:void(0);" class="c-p txt-small link-color clear-custom-filter">Clear</a>
+  <a href="javascript:void(0);" class="c-p txt-small link-color pull-right save-new-filter">Save as</a>
+</div>
+</script>
+
+<script id="ticket-filter-assignee-template" type="text/html">
+  {{#all_assignees}}
+     <div>
+      <label class="i-checks i-checks-sm">
+        <input name="assignee_id" value="{{this.id}}" type="checkbox">
+        <i></i>
+      </label> {{this.name}}
+    </div>
+  {{/all_assignees}}  
+</script>
+<script id="ticket-filter-group-template" type="text/html">
+  {{#all_groups}}
+    <div>
+      <label class="i-checks i-checks-sm">
+        <input name="group_id" value="{{this.id}}" type="checkbox">
+        <i></i>
+      </label> {{this.group_name}}
+    </div>
+  {{/all_groups}}  
+</script>
+<script id="ticket-create-filter-modal-template" type="text/html">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button class="close" data-dismiss="modal">x</button>
+              <h3 class="modal-title"><i class="icon icon-save"></i> Save as</h3>
+          </div>
+          <div class="modal-body">
+            <form id="saveFilterForm" name="saveFilterForm" class="form-horizontal">
+              <div class="form-group">
+                <div class="col-lg-3 col-md-offset-1">
+                  <div class="radio">
+                    <label class="i-checks">
+                      <input type="radio" class="create-new-filter" name="save-type" value="new" checked><i></i> Create new
+                    </label>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="radio">
+                    <label class="i-checks">
+                      <input type="radio" class="update-filter" name="save-type" value="replace"><i></i> Replace existing
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group update-name">
+                <label class="col-lg-3 control-label">View name<span class="field_req">*</span></label>
+                <div class="col-lg-7">
+                <input type="text" name="name" class="form-control required"  placeholder="View name" 
+                  value="{{get_current_filter_name}}">
+                </div>
+              </div>
+              <div class="form-group choose-filter display-none">
+                <label class="col-lg-3 control-label">Replace <span class="field_req">*</span></label>
+                <div class="col-lg-7">
+                  <select name="filter-collection" class="form-control required">
+                    {{{get_filters_select_options}}}
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+              <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+              <a href="javascript:void(0);" data-loading-text="Save" class="save btn btn-sm btn-primary">Save</a>
+              &nbsp;&nbsp;<span id="msg"></span>
+          </div>
+      </div>
+  </div>
+</script>
+<script id="ticket-lhs-assignees-collection-template" type="text/html">
+  <div id="ticket-lhs-assignees-model-list"></div>
+</script>
+<script id="ticket-lhs-assignees-model-template" type="text/html">
+  <label class="i-checks i-checks-sm">
+    <input name="assignee_id" value="{{id}}" type="checkbox"><i></i>
+  </label> {{name}}
+</script>
+<script id="ticket-lhs-groups-collection-template" type="text/html">
+  <div id="ticket-lhs-groups-model-list"></div>
+</script>
+<script id="ticket-lhs-groups-model-template" type="text/html">
+  <label class="i-checks i-checks-sm">
+    <input name="group_id" value="{{id}}" type="checkbox"><i></i>
+  </label> {{group_name}}
+</script>

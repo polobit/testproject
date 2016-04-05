@@ -198,7 +198,7 @@ public class NewCondition extends TaskletAdapter
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branch);
 	}
 	
-	public boolean evaluateExpression(String variable1, String variable2, String ifType,String comparator){
+	public static boolean evaluateExpression(String variable1, String variable2, String ifType,String comparator){
 		// Get Variables
 				
 				boolean branch = false;

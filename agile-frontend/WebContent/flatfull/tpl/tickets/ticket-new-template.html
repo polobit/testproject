@@ -1,0 +1,214 @@
+<script id="ticket-new-modal-template" type="text/html">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button class="close" data-dismiss="modal">x</button>
+      <h3 class="modal-title"><i class="icon icon-envelop"></i> Create Ticket</h3>
+    </div>
+    <div id="modal-body">
+      <div class="modal-body">
+        <form id="new-ticket" name="new-ticket">
+          <fieldset>
+            <div class="control-group form-group search-contact-row m-b-sm">
+              <div class="row">
+                  <input type="hidden" id="contact_id" name="contact_id">
+                  <input type="hidden" id="requester_name" name="requester_name">
+                  <div class="control-group col-md-6">
+                      <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+                      <span class="controls">
+                        <input type="text" id="requester_email" autocomplete="off" name="requester_email" placeholder="Search contacts" class="required form-control email">
+                        <a class="text-xs pull-right link-color add-ticket-contact" href="javascript:void(0);">
+                          Add new contact
+                        </a>
+                      </span>
+                  </div>
+                  
+              </div>
+            </div>
+            <div class="control-group form-group new-contact-row display-none m-b-sm">
+              <div class="row">
+                  <div class="control-group col-md-6">
+                      <label class="control-label"><b>First name</b> <span class="field_req">*</span></label>
+                      <span class="controls">
+                        <input type="text" id="first_name" autocomplete="off" name="first_name" placeholder="E.g Mark" class="required form-control">
+                      </span>
+                  </div>
+                  <div class="control-group col-md-6">
+                      <label class="control-label"><b>Last name</b></label>
+                      <span class="controls">
+                        <input type="text" id="last_name" autocomplete="off" name="last_name" placeholder="E.g Twain" class="form-control">
+                      </span>
+                  </div>
+              </div>
+            </div>
+            <div class="control-group form-group new-contact-row display-none m-b-sm">
+              <div class="row">
+                  <div class="control-group col-md-6">
+                      <label class="control-label"><b>Email</b> <span class="field_req">*</span></label>
+                      <span class="controls">
+                        <input type="text" id="email_input" autocomplete="off" name="email_input" placeholder="E.g mark.twain@gmail.com" class="required form-control email">
+                        <a class="text-xs pull-right link-color add-ticket-contact" href="javascript:void(0);">
+                          Search contact
+                        </a>
+                      </span>
+                  </div>
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="row">
+                  <div class="control-group col-md-6">
+                    <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
+                    <span class="controls">
+                      <input type="text" name="subject" autocomplete="off" class="form-control required"  placeholder="Subject">
+                    </span>
+                  </div>
+                  <div class="control-group col-md-6">
+                      <label class="control-label"><b>Cc</b></label>
+                      <span class="controls">
+                        <div class="cc-emails-st">
+                          <ul class="cc-emails m-n p-n" name="cc_emails">
+                              <li class="tag m-r-xs m-b-xs inline-block">
+                                <input type="text" placeholder="Search contact" id="cc_email_field" class="cc_emails_st" autocomplete="off">
+                              </li>
+                          </ul>
+                        </div>  
+                      </span>
+                  </div>
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="row">
+                  <div class="control-group col-md-6">
+                    <label class="control-label"><b>Status</b></label>
+                      <span class="controls">
+                        <select id="status" name="status" class="form-control status">
+                            <option value="OPEN">Open</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="CLOSED">Closed</option>
+                        </select>
+                      </span>
+                  </div>
+                  <div class="control-group col-md-6">
+                      <label class="control-label"><b>Priority</b></label>
+                      <span class="controls">
+                        <select id="priority" name="priority" class="form-control">
+                            <option value="LOW">Low</option>
+                            <option value="MEDIUM">Medium</option>
+                            <option value="HIGH">High</option>
+                        </select>
+                      </span>
+                  </div>
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="row">
+                  <div class="control-group col-md-6">
+                    <label class="control-label"><b>Assignee</b></label>
+                      <span class="controls">
+                        <select id="groupID" name="groupID" class="form-control required group_id">
+                          
+                        </select>
+                      </span>
+                  </div>
+                  <div class="control-group col-md-6">
+                      <label class="control-label block"><b>Labels</b></label>
+                      <span class="controls">
+                        <select name="labels" data-placeholder="Search Labels" class="chosen-select form-control" multiple class="w-md">
+                        </select>
+                      </span>
+                  </div>
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="row">
+                  <div class="control-group col-md-12">
+                    <label class="control-label"><b>Message</b> <span class="field_req">*</span></label>
+                    <span class="controls">
+                      <textarea name="html_text" class="form-control required create_ticket_textarea" style="min-height:76px;max-height:400px;text-indent: 0px; overflow-y: hidden; resize: none;padding: 8px;"></textarea>
+                    </span>
+                  </div>
+              </div>
+            </div>
+          </fieldset>  
+        </form>
+      </div>
+      <div class="modal-footer">
+          <span class="form-action-error pull-left" style="color: red;"></span>
+          <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a> 
+          <a id="create-ticket" href="javascript:void(0);" class="btn btn-sm btn-primary save" data-loading-text="Create">Create</a>
+          <span class="save-status"></span>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+<script id="ticket-tag-template" type="text/html">
+  <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{tag}}">
+    <span>
+      <a class="anchor m-r-xs" href="javascript:void(0);">{{tag}}</a>
+      <a class="close remove-ticket-tags text-lg" tag="{{tag}}">&times</a>
+    </span>
+  </li>
+</script>
+
+<script id="cc-email-li-template" type="text/html">
+  <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{email}}">
+    <span class="farword_remove_email">
+      <a class="anchor m-r-xs {{#if err_email}}boder-btm-dot{{/if}}" href="javascript:void(0);" >
+        {{email}}
+      </a>
+      <a class="close {{#if new_ticket}}{{else}}remove-ticket-cc-emails{{/if}} text-lg">&times</a>
+    </span>
+  </li>
+</script>
+
+<script id="forward-email-li-template" type="text/html">
+  <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{email}}">
+    <span class="farword_remove_email">
+      <a class="anchor m-r-xs {{#if err_email}}boder-btm-dot{{/if}}" href="javascript:void(0);" >{{email}}</a>
+      <a class="close remove-ticket-forward-emails text-lg">&times</a>
+    </span>
+  </li>
+</script>
+
+<script id="ticket-attachment-li-template" type="text/html">
+  <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">
+    <span>
+      <i class="fa fa-paperclip"></i> <a class="anchor m-r-xs" href="{{url}}" target="_blank">{{name}}</a>
+      <a class="close remove-attachment text-lg">×</a>
+    </span>
+  </li>
+</script>
+<script id="select-assignee-dropdown-template" type="text/html">
+{{#each this}}
+    <option value="{{id}}">{{group_name}}</option>
+{{/each}}
+<option role='separator' disabled>------------------------------------------------------</option>
+{{#each this}}
+  <optgroup data-group-id="{{id}}" data-group-email="{{group_email}}" label="{{group_name}}">
+    {{#group_users}}
+      <option data-assignee-id="{{id}}" value="{{../id}}" {{#if ../is_default}}
+        {{#is_current_logged_in_user id}}selected{{/is_current_logged_in_user}}{{/if}}>
+        {{name}}
+      </option>
+    {{/group_users}}
+  </optgroup>
+{{/each}}
+</script>
+<script id="select-assignee-ticket-dropdown-template" type="text/html">
+<option>Select</option>
+{{#each this}}
+    <option value="{{id}}" group_id="{{id}}">{{group_name}}</option>
+{{/each}}
+<option role='separator' disabled>------------------------------------------------------</option>
+{{#each this}}
+  <optgroup data-group-id="{{id}}" data-group-email="{{group_email}}" label="{{group_name}}">
+    {{#group_users}}
+      <option data-assignee-id="{{id}}" value="{{../id}}" {{#if ../is_default}}
+        {{#is_current_logged_in_user id}}selected{{/is_current_logged_in_user}}{{/if}}>
+        {{name}}
+      </option>
+    {{/group_users}}
+  </optgroup>
+{{/each}}
+</script>

@@ -1,0 +1,42 @@
+<script id="ticket-canned-response-collection-template" type="text/html">
+{{#unless this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="text-center padder-v">
+                <h4 class="m-t-none m-b-xs">You don&#39;t have any canned responses</h4>
+                <div class="m-b-xs">
+                    Create frequently type messages as canned responses. Choose the required canned response when sending reply to without typing the same message again.
+                </div>
+                <div>
+                    <a href="#add-canned-response" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                        Add Canned Response
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/unless}}
+{{#if this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="pull-right">
+                <a href="#add-canned-response" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span> Add
+                </a>
+            </div>
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th style="width:20%">Title</th>
+                            <th style="width:25%">Message</th>
+                            <th style="width:25%">Labels</th>
+                            <th style="width:20%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-canned-response-model-list" route="edit-canned-response/" class="c-p"> </tbody>
+            </table>
+        </div>
+    </div>
+{{/if}}
+</script>

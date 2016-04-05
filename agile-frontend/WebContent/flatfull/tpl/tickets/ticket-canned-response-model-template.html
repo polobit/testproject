@@ -1,0 +1,48 @@
+<script id="ticket-canned-response-model-template" type="text/html">
+	<td class="hide data" data="{{id}}">{{id}}</td>
+	<td>
+		<div class="table-resp">
+			<div class="pull-left text-ellipsis">
+				<a class="text-cap pull-left text-ellipsis w-full">{{title}}</a>
+			</div>
+		</div>
+	</td>
+  	<div class="clearfix"></div>
+    <td class="workflow-triggers"> 
+		<div class="table-resp">
+			{{message}}
+		</div>	
+	</td>
+
+	{{#get_ticket_labels_from_ids labels this}}{{/get_ticket_labels_from_ids}}
+
+	<td class="workflow-triggers"> 
+
+		{{#if labelsJSON}}
+		<div class="table-resp">
+			{{#if labelsJSON}}
+				<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+					{{#each labelsJSON}}
+						<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs">
+							<span>
+								<a class="anchor m-r-xs custom-color" style="color:#363f44" href="javascript:void(0);">{{label}}</a>
+							</span>
+						</li>
+					{{/each}}
+				</ul>
+			{{/if}}
+		</div>	
+		{{/if}}
+	</td>
+	
+   	<td>
+        <div class="table-resp">
+            <small class="edit-hover text-muted"> 
+				<i class="fa fa-clock-o m-r-xs"></i>
+		        <span>Last updated on&nbsp;</span>
+                <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+            </small>
+        </div>
+    </td>  
+<br />
+</script>

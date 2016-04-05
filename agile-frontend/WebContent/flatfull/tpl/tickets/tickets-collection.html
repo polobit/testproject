@@ -1,0 +1,428 @@
+<script id="ticket-collection-template" type="text/html">
+	{{#unless this.length}}
+		<div class="tickets-div">
+			<div class="wrapper p-n">
+	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+					<div class="panel-heading no-shadow" style="border-bottom: 0;">
+				      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
+					      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
+					    </label>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Assignee</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage labels</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+					    <div class="btn-group dropdown">
+				          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">More <span class="caret"></span></button>
+				        </div>
+
+					    <div class="btn-group dropdown pull-right">
+					      <a href="javascript:void(0);" class="btn btn-default m-r-sm btn-sm"
+					    		onclick="App_Ticket_Module.renderNewTicketModalView();">New Ticket</a>
+				          <button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
+					    		{{#is_single_row_view}}
+					    			<i class="fa fa-ellipsis-h"></i>
+					    		{{else}}
+					    			<i class="fa fa-navicon"></i>
+					    		{{/is_single_row_view}}
+					    	</button>
+				        </div>
+				    </div>
+				    <div class="form-inline no-footer">
+			    		<div class="row m-n">
+			    			<div class="col-sm-12 p-n">
+			    				{{#is_helpdesk_enabled}}
+				    				<div class="text-center padder-v b-t">
+										<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+										<div class="m-b-xs">
+											You can create new views from 
+											<a class="link-color" href="/#add-ticket-view">Help Desk settings</a>
+										</div>
+										<!-- <div>
+											<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+												Configure Help Desk
+											</a>
+										</div> -->
+									</div>
+								{{else}}
+									<div class="text-center padder-v b-t">
+										<h4 class="m-t-none m-b-xs">Configure email forwarding to receive tickets to Help Desk</h4>
+										<div class="m-b-sm">
+											Configure your help desk system to answer customer queries from your Agile Dashboard.
+										</div>
+										<div>
+											<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+												Configure Help Desk
+											</a>
+										</div>
+									</div>
+								{{/is_helpdesk_enabled}}
+			    			</div>
+			    		</div>
+			    	</div>
+				</div>
+			</div>
+		</div>
+	{{else}}
+		<div class="tickets-div">
+			<div class="wrapper p-n">
+	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+					<div class="panel-heading no-shadow" style="border-bottom: 0;">
+				      	<label class="i-checks i-checks-sm select-all" style="margin-left: 1px;vertical-align: text-top;">
+					      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
+					    </label>
+					    <a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Assignee</a>
+					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</a>
+					    <a href="#tickets/bulk-actions/manage-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage Labels</a>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">Delete</button>
+					    <div class="btn-group dropdown m-r-xs">
+				          <button class="btn btn-default btn-sm bulk-action-btn" data-toggle="dropdown" aria-expanded="false">More  <span class="caret"></span></button>
+				          <ul class="dropdown-menu dropdown-menu-right">
+				            <li><a href="javascript:void(0);" class="bulk-favorite-tickets">
+				            		Mark as Favorite
+				            	</a>
+				            </li>
+				            <li>
+				            	<a href="javascript:void(0);" class="bulk-spam-tickets">
+				            		Mark as Spam
+				            	</a>
+				            </li>
+				          </ul>
+				        </div>
+					    
+					    <div class="btn-group dropdown pull-right">
+					    	<a href="javascript:void(0);" class="btn btn-default m-r-sm btn-sm"
+					    		onclick="App_Ticket_Module.renderNewTicketModalView();">New Ticket</a>
+					    	<button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
+					    		{{#is_single_row_view}}
+					    			<i class="fa fa-ellipsis-h"></i>
+					    		{{else}}
+					    			<i class="fa fa-navicon"></i>
+					    		{{/is_single_row_view}}
+					    	</button>
+				        </div>
+				    </div>
+				    <div class="form-inline no-footer">
+			    		<div class="row m-n">
+			    			<div id="tickets-bulk-select" class="text-center"></div>
+			    			<div class="col-sm-12 p-n ticket-collection-container">
+			    				<table class="table table-striped onlySorting m-b-none t-l-fix">
+									<tbody id="ticket-model-list" route="ticket/" class="tickets-collection"></tbody>
+								</table>
+			    			</div>
+			    		</div>
+			    	</div>
+				</div>
+			</div>
+		</div>
+	{{/unless}}
+</script>
+<script id="ticket-single-row-collection-template" type="text/html">
+	<div class="tickets-div">
+		{{#unless this.length}}
+			<div class="tickets-div">
+				<div class="wrapper p-n">
+		    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+						<div class="panel-heading no-shadow" style="border-bottom: 0;">
+					      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
+						      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
+						    </label>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-l-sm m-r-xs disabled">Assignee</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage Labels</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Close</button>
+						    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Delete</button>
+						    <div class="btn-group dropdown">
+					          <button class="btn btn-default btn-sm bulk-action-btn disabled" data-toggle="dropdown" aria-expanded="false">More <span class="caret"></span></button>
+					        </div>
+
+						    <div class="btn-group dropdown pull-right">
+						      <a href="javascript:void(0);" class="btn btn-default btn-sm m-r-sm"
+					    			onclick="App_Ticket_Module.renderNewTicketModalView();">New Ticket</a>
+					          <button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
+						    		{{#is_single_row_view}}
+						    			<i class="fa fa-ellipsis-h"></i>
+						    		{{else}}
+						    			<i class="fa fa-navicon"></i>
+						    		{{/is_single_row_view}}
+						    	</button>
+					        </div>
+					    </div>
+					    <div class="form-inline no-footer">
+				    		<div class="row m-n">
+				    			<div class="col-sm-12 p-n">
+				    				{{#is_helpdesk_enabled}}
+					    				<div class="text-center padder-v b-t">
+											<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+											<div class="m-b-xs">
+												You can create new views from 
+												<a class="link-color" href="/#add-ticket-view">Help Desk settings</a>
+											</div>
+											<!-- <div>
+												<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+													Configure Help Desk
+												</a>
+											</div> -->
+										</div>
+									{{else}}
+										<div class="text-center padder-v b-t">
+											<h4 class="m-t-none m-b-xs">Configure email forwarding to receive tickets to Help Desk</h4>
+											<div class="m-b-sm">
+												Configure your help desk system to answer customer queries from your Agile Dashboard.
+											</div>
+											<div>
+												<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+													Configure Help Desk
+												</a>
+											</div>
+										</div>
+									{{/is_helpdesk_enabled}}
+				    			</div>
+				    		</div>
+				    	</div>
+					</div>
+				</div>
+			</div>
+	    {{/unless}}
+	    {{#if this.length}}
+	    	<div class="wrapper p-n">
+	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+					<div class="panel-heading no-shadow" style="border-bottom: 0;">
+						<label class="i-checks i-checks-sm m-b-none select-all" style="margin-left: 1px;vertical-align: text-top;">
+							<input type="checkbox" class="ticket-checkbox select-all"><i></i>
+						</label>
+				      	<a href="#tickets/bulk-actions/change-assignee" class="btn btn-default bulk-action-btn btn-sm m-r-xs m-l-sm disabled">Assignee</a>
+					    <a href="#tickets/bulk-actions/execute-workflows" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Workflow</a>
+					    <a href="#tickets/bulk-actions/manage-labels" class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled">Manage Labels</a>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
+					    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">Delete</button>
+					    <div class="btn-group dropdown m-r-xs">
+				          <button class="btn btn-default btn-sm bulk-action-btn" data-toggle="dropdown" aria-expanded="false">More  <span class="caret"></span></button>
+				          <ul class="dropdown-menu dropdown-menu-right">
+				            <li><a href="javascript:void(0);" class="bulk-favorite-tickets">
+				            		Mark as Favorite
+				            	</a>
+				            </li>
+				            <li>
+				            	<a href="javascript:void(0);" class="bulk-spam-tickets">
+				            		Mark as Spam
+				            	</a>
+				            </li>
+				          </ul>
+				        </div>
+
+					    <div class="btn-group dropdown pull-right">
+					    	<a href="javascript:void(0);" class="btn btn-default btn-sm m-r-sm"
+					    		onclick="App_Ticket_Module.renderNewTicketModalView();">New Ticket</a>
+				          <button class="btn btn-sm btn-default toggle-collection-view {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
+					    		{{#is_single_row_view}}
+					    			<i class="fa fa-ellipsis-h"></i>
+					    		{{else}}
+					    			<i class="fa fa-navicon"></i>
+					    		{{/is_single_row_view}}
+					    	</button>
+					    	
+				          	<ul class="dropdown-menu dropdown-menu-right choose-columns m-t-none">
+					          	<li class="dropdown-header text-base">Choose Columns</li>
+								<li><a href="javascript:void(0);" class="p-b-none">
+										<label class="i-checks i-checks-sm">
+				                        <input name="id" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'id'}}checked{{/is_column_selected}}><i></i></label> Id
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+					                	<label class="i-checks i-checks-sm">
+					                    <input name="subject" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'subject'}}checked{{/is_column_selected}}><i></i></label> Subject
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="requester_name" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'requester_name'}}checked{{/is_column_selected}}><i></i></label> Requester Name
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="requester_email" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'requester_email'}}checked{{/is_column_selected}}><i></i></label> Requester Email
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="due_date" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'due_date'}}checked{{/is_column_selected}}><i></i></label> Due Date
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="priority" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'priority'}}checked{{/is_column_selected}}><i></i></label> Priority
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="status" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'status'}}checked{{/is_column_selected}}><i></i></label> Status
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="assignee" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'assignee'}}checked{{/is_column_selected}}><i></i></label> Assignee
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="group" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'group'}}checked{{/is_column_selected}}><i></i></label> Group
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="assigned_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'assigned_time'}}checked{{/is_column_selected}}><i></i></label> Assigned Date
+				                    </a>
+				                </li>
+				               	<li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="ticket_type" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'ticket_type'}}checked{{/is_column_selected}}><i></i></label> Ticket Type
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="last_updated_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'last_updated_time'}}checked{{/is_column_selected}}><i></i></label> Last Updated Date
+				                    </a>
+				                </li>
+				               <!-- <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="organization" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'organization'}}checked{{/is_column_selected}}><i></i></label> Organization
+				                    </a>
+				                </li> -->
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="closed_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'closed_time'}}checked{{/is_column_selected}}><i></i></label> Closed Date
+				                    </a>
+				                </li>
+				                <li><a href="javascript:void(0);" class="p-b-none">
+				                		<label class="i-checks i-checks-sm">
+				                        <input name="created_time" type="checkbox" class="choose-column-chbx" {{#is_single_row_view}}{{else}}disabled {{/is_single_row_view}}{{#is_column_selected 'created_time'}}checked{{/is_column_selected}}><i></i></label> Created Date
+				                    </a>
+				                </li>
+					          </ul>
+				            </li>
+				          </ul>
+				        </div>
+				    </div>
+				    <div class="form-inline no-footer">
+			    		<div class="row m-n ticket-collection-row" style="overflow-x:auto;">
+			    			<div id="tickets-bulk-select" class="text-center"></div>
+			    			<div class="col-sm-12 p-n ticket-collection-container">
+			    				<table class="table table-striped single-row m-b-none b-t b-b no-sorting">
+									<thead>
+										<tr>
+											<th></th>
+											<th></th>
+											<th></th>
+											{{#is_column_selected 'id'}}
+												<th class="id">Id</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'subject'}}
+												<th class="subject">Subject</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'requester_name'}}
+												<th class="requester_name">Requester&nbsp;Name</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'requester_email'}}
+												<th class="requester_email">Requester&nbsp;Email</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'due_date'}}
+												<th class="due_date">Due&nbsp;Date</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'priority'}}
+												<th class="priority">Priority</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'status'}}
+												<th class="status">Status</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'assignee'}}
+												<th class="assignee">Assignee</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'group'}}
+												<th class="group">Group</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'assigned_time'}}
+												<th class="assigned_time">Assigned&nbsp;Date</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'ticket_type'}}
+												<th class="ticket_type">Ticket&nbsp;Type</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'last_updated_time'}}
+												<th class="last_updated_time ">Last&nbsp;Updated&nbsp;Date</th>
+											{{/is_column_selected}}
+											
+											<!--<th class="organization {{#is_column_selected 'organization'}}{{else}}display-none{{/is_column_selected}}">Organization</th>-->
+											{{#is_column_selected 'closed_time'}}
+												<th class="closed_time">Closed&nbsp;Date</th>
+											{{/is_column_selected}}
+											{{#is_column_selected 'created_time'}}
+											    <th class="created_time">Created&nbsp;Date</th>
+												{{else}}display-none
+											{{/is_column_selected}}
+											<!-- <th class="contact_details {{#is_column_selected 'contact_details'}}{{else}}display-none{{/is_column_selected}}">Contact&nbsp;details</th> -->
+										</tr>
+									</thead>
+									<tbody id="ticket-single-row-model-list" class="tickets-collection ticket-single-row-model-list"
+										route="tickets/filter/{{get_current_ticket_filter}}/ticket/">
+									</tbody>
+								</table>
+			    			</div>
+			    		</div>
+			    	</div>
+				</div>
+			</div>
+		{{/if}}
+	</div>
+</script>
+<script  id="ticket-collection-loader-template" type="text/html">
+<div class="tickets-div">
+	<div class="wrapper p-n">
+		<div class="panel panel-default no-radius no-shadow" style="border-bottom: 0;border-left: 0;">
+			<div class="panel-heading">
+				<label class="i-checks i-checks-sm" style="margin-left: 1px;vertical-align: text-top;">
+			      <input class="ticket-checkbox select-all" type="checkbox"><i></i>
+			    </label>
+				<button class="btn btn-default bulk-action-btn btn-sm {{#is_single_row_view}}{{else}}m-l-sm{{/is_single_row_view}} m-r-xs disabled m-l-sm">Assignee</button>
+				<button class="btn btn-default btn-sm m-r-xs disabled">Workflow</button>
+		      	<button class="btn btn-default btn-sm m-r-xs disabled">Manage Labels</button>
+			    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-close">Close</button>
+			    <button class="btn btn-default bulk-action-btn btn-sm m-r-xs disabled bulk-ticket-delete">Delete</button>
+			    <div class="btn-group dropdown m-r-xs">
+		          <button class="btn btn-default btn-sm disabled bulk-action-btn" data-toggle="dropdown" aria-expanded="false">More  <span class="caret"></span></button>
+		          <ul class="dropdown-menu dropdown-menu-right">
+		            <li><a href="javascript:void(0);" class="bulk-favorite-tickets">
+		            		Mark as Favorite
+		            	</a>
+		            </li>
+		            <li>
+		            	<a href="javascript:void(0);" class="bulk-spam-tickets">
+		            		Mark as Spam
+		            	</a>
+		            </li>
+		          </ul>
+		        </div>
+
+			    <div class="btn-group dropdown pull-right">
+			      <a href="javascript:void(0);" class="btn btn-default btn-sm m-r-sm disabled"
+					    			onclick="App_Ticket_Module.renderNewTicketModalView();">New Ticket</a>
+		          <button class="btn btn-sm btn-default toggle-collection-view disabled {{#is_single_row_view}}single-line{{else}}multi-line{{/is_single_row_view}}">
+			    		{{#is_single_row_view}}
+			    			<i class="fa fa-ellipsis-h"></i>
+			    		{{else}}
+			    			<i class="fa fa-navicon"></i>
+			    		{{/is_single_row_view}}
+			    	</button>
+		        </div>
+		    </div>
+		    <div class="form-inline no-footer">
+	    		<div class="row m-n">
+	    			<div class="col-sm-12 p-t">
+	    				<img class="loading" style="padding-left: 10px; padding-right: 5px; opacity: 0.5; margin: 10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/ajax-loader-cursor.gif">
+	    			</div>
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+</script>

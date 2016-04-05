@@ -51,12 +51,24 @@
 								<input type="hidden" id="type" value="contacts" class="form-control">
 	        					<fieldset>
 								{{#canSyncContacts}}
-	           					<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
-								{{else}}
-	           					<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV fil>
-	           					</span>
-								<span class="m-l-xs"><i>Needs import privilege.</i></span>
-								{{/canSyncContacts}}
+				{{#if ../type}}
+						<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
+						<span class="m-l-xs"><i>
+							{{#if total_count}}
+										Import in process
+									{{else}}
+										Import is scheduled
+										
+							{{/if}}
+						</i></span>
+						
+					{{else}}
+           				<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">Upload CSV file</div>
+           		{{/if}}
+					{{else}}
+           				<span class="btn btn-sm btn-default inline-block" disabled="">Upload CSV file</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+			{{/canSyncContacts}}
 	        					</fieldset>
 						    </form>
 						</div>
@@ -77,7 +89,7 @@
 							<input type="hidden" id="type" value="company" class="form-control">
         					<fieldset>
 							{{#canSyncContacts}}
-           					<div class="btn btn-sm upload btn-default inline-block">Upload CSV file</div>
+           					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">Upload CSV file</div>
 							{{else}}
            					<span class="btn btn-sm btn-default inline-block"  disabled="">Upload CSV file</span>
 							<span style="margin-left:5px"><i>Needs import privilege.</i></span>
@@ -686,4 +698,3 @@
 
 
 </script>
-

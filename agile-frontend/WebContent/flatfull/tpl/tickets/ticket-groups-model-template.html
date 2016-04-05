@@ -1,0 +1,29 @@
+<script id="ticket-groups-model-template" type="text/html">
+	<td class="hide data" {{#if is_default}}default_group{{/if}} data="{{id}}">
+		{{id}}
+	</td>
+	<td>
+		<div class="table-resp">
+			<div class="pull-left text-ellipsis">
+				<a class="text-cap pull-left text-ellipsis w-full">{{group_name}}</a>
+			</div>
+		</div>
+	</td>
+  	<div class="clearfix"></div>
+    <td>
+    	<span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
+   		<a id="grp-{{id}}" class="m-xs a-frwd-email" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-copied-text="Email copied to clipboard">
+     			<i class="icon-copy copy_email_clipboard_icon" ></i>
+     	</a>
+	</td>
+   	<td>
+        <div class="table-resp">
+            <small class="edit-hover text-muted"> 
+				<i class="fa fa-clock-o m-r-xs"></i>
+		        <span>Last updated on&nbsp;</span>
+                <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+            </small>
+        </div>
+    </td> 
+<br />
+</script>

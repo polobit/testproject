@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -70,6 +75,11 @@ public class Activity extends Cursor
 		this.user_name = user_name;
 	}
 
+	public void setUser(Key<DomainUser> user)
+	{
+		this.user = user;
+	}
+
 	/**
      * List of contact ids related to a task
      */
@@ -100,7 +110,7 @@ public class Activity extends Cursor
      */
     public static enum EntityType
     {
-	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT
+	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT, TICKET
     };
 
     /**
@@ -113,7 +123,8 @@ public class Activity extends Cursor
 
 	DOCUMENT_REMOVE, CAMPAIGN, BULK_ACTION, BULK_DELETE, EVENT_RELATED_CONTACTS, TASK_RELATED_CONTACTS, DEAL_RELATED_CONTACTS, BULK_EMAIL_SENT, DEAL_LOST, TAG_ADD, TAG_REMOVE, EMAIL_SENT, EVENT_ADD, DEAL_CHANGE, DEAL_ADD, DEAL_EDIT, DEAL_DELETE, DEAL_OWNER_CHANGE, DEAL_MILESTONE_CHANGE, DEAL_CLOSE, DOCUMENT_ADD, NOTE_ADD, CALL, CONTACT_OWNER_CHANGE,
 
-	CONTACT_CREATE, COMPANY_CREATE, CONTACT_DELETE, COMPANY_DELETE, DEAL_ARCHIVE, DEAL_RESTORE, CONTACT_IMPORT, CONTACT_EXPORT, COMPANY_IMPORT, COMPANY_EXPORT, DEAL_IMPORT, DEAL_EXPORT, CAMPAIGN_CREATE, CAMPAIGN_EDIT, CAMPAIGN_DELETE, MERGE_CONTACT
+	CONTACT_CREATE, COMPANY_CREATE, CONTACT_DELETE, COMPANY_DELETE, DEAL_ARCHIVE, DEAL_RESTORE, CONTACT_IMPORT, CONTACT_EXPORT, COMPANY_IMPORT, COMPANY_EXPORT, DEAL_IMPORT, DEAL_EXPORT, CAMPAIGN_CREATE, CAMPAIGN_EDIT, CAMPAIGN_DELETE, MERGE_CONTACT,
+	TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_LABEL_ADD, TICKET_LABEL_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE, TICKET_MARKED_SPAM, TICKET_MARKED_UNSPAM, BULK_ACTION_MANAGE_LABELS, BULK_ACTION_CHANGE_ASSIGNEE, BULK_ACTION_EXECUTE_WORKFLOW, BULK_ACTION_CLOSE_TICKETS, BULK_ACTION_DELETE_TICKETS, TICKET_TAG_ADD, TICKET_TAG_REMOVE, SET_DUE_DATE, DUE_DATE_CHANGED, DUE_DATE_REMOVED,TICKET_CC_EMAIL_ADD, TICKET_CC_EMAIL_REMOVE, TICKET_NOTES_FORWARD, BULK_ACTION_FAVORITE_TICKETS, BULK_ACTION_SPAM_TICKETS
     };
 
     /**
@@ -174,6 +185,12 @@ public class Activity extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String related_contact_ids;
+    
+	/**
+	 * saves domain user id who performed the operation
+	 */
+	@NotSaved
+	public Long domainUserID = null;
 
     // Dao
     private static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);
@@ -194,12 +211,23 @@ public class Activity extends Cursor
      * @throws Exception
      *             when Domain User not exists with respect to id.
      */
-    /*
-     * @XmlElement(name = "user") public DomainUser getUser() throws Exception {
-     * if (user != null) { try { // Gets Domain User Object return
-     * DomainUserUtil.getDomainUser(user.getId()); } catch (Exception e) {
-     * e.printStackTrace(); } } return null; }
-     */
+    
+      public DomainUserPartial getdomainUser() throws Exception 
+      {
+    	  if (user != null)
+    	  { 
+    		  try
+    		  { 
+			  	return DomainUserUtil.getPartialDomainUser(user.getId());
+			  } 
+    		  catch (Exception e)
+    		  {
+    			  System.out.println(ExceptionUtils.getFullStackTrace(e));
+    		  }
+    	  } 
+    	  
+    	  return null; 
+      }
 
     /*  *//**
      * 
@@ -273,7 +301,13 @@ public class Activity extends Cursor
 	    user = new Key<DomainUser>(DomainUser.class, userInfo.getDomainId());
 	}
     }
-
+    
+    @PostLoad
+	private void postLoad()
+	{
+		if (user != null)
+			domainUserID = user.getId();
+	}
     /*
      * (non-Javadoc)
      * 
