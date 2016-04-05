@@ -18,6 +18,7 @@ $(function(){
 				url :  '/core/api/contacts/' + contact_id,
 				dataType : 'json',
 				success : function(data) {
+					if(data!=undefined){
 					App_Contacts.contact_popover=new Backbone.Model(data);
 		 		getTemplate("contacts-custom-view-popover", data, undefined, function(template_ui){
 						if(!template_ui)
@@ -34,19 +35,12 @@ $(function(){
 								$(that).popover('show');
 								
 						$('.popover').addClass("contact_popover fadeInLeft animated");
-							/*var top;
-							if (window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 400)
-       	  top = $(that).offset().top + 20 + 'px';
-       	else if(window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 200 &&  window.innerHeight - $(that).offset().top + $(window).scrollTop()<400)
-       	top = $(that).offset().top + 30 - $('.popover').height()/2+ 'px';
-        else
-         top = $(that).offset().top-$('.popover').height() + 'px';
-     $('.popover').css('top',top);
-       $('.popover').css('left',left+10+'px');*/
+
 
 						contact_list_starify('.popover',undefined);
 						
 					});
+		 	}
 		 		//that.find('.data').attr('data');
 		 	}
 		 	});
