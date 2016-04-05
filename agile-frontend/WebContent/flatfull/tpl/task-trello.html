@@ -156,10 +156,10 @@
          <div class="task-related-to" title="Related To">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+        			<a href="#contact/{{id}}" class="activate-link task-related-contacts text-sm text-muted text-cap">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        			<a href="#company/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "name"}}</a>
+        			<a href="#company/{{id}}" class="activate-link task-related-contacts text-sm text-muted text-cap">{{getPropertyValue properties "name"}}</a>
         		{{/if_contact_type}}
         	{{/each}}
 		 </div>
