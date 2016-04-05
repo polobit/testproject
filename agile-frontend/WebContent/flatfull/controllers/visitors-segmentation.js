@@ -160,8 +160,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                         // Defines appendItem for custom view
                         web_scope.webstatsListView.appendItem = function(
                             base_model) {
-                            contactTableView(base_model, undefined,
-                                web_scope.webstatsListView);
+                            SegmentsTableView(base_model,web_scope.webstatsListView);
                         };
 
                         // Fetch collection
@@ -188,3 +187,4 @@ var VisitorsSegmentationRouter = Backbone.Router
         }
 
     });
+
