@@ -45,10 +45,20 @@ body {
 	if(type != null && type.equalsIgnoreCase("html")){
 		
 		String htmlText = notes.html_text;
-		/* htmlText = htmlText.replaceAll("(3D", "");
-		htmlText = htmlText.replaceAll("(http://", "//"); */
-	
-		out.println(htmlText);
+		
+		/* try{
+			
+			htmlText = htmlText.replace("3D", "");
+			htmlText = htmlText.replace("=C2=A0", " ");
+			htmlText = htmlText.replace("(http://", "//"); 
+		}
+		catch(Exception e){
+			
+		} */
+	%>
+		<%= htmlText%>
+	<%
+		//out.println(htmlText);
 		out.println();
 		out.println();
 		out.println();

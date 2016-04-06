@@ -1,8 +1,15 @@
 package com.agilecrm.ticket.servlets;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -10,11 +17,13 @@ import java.util.Properties;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.net.QuotedPrintableCodec;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -391,8 +400,51 @@ public class SendgridInboundParser extends HttpServlet
 
 		ticketID = elements.get(0).text();
 
-		System.out.print("Ticket found in html content: " + ticketID);
+		System.out.println("Ticket found in html content: " + ticketID);
 
 		return ticketID;
+	}
+
+	public static void main(String[] args) throws Exception
+	{
+		QuotedPrintableCodec qa = new QuotedPrintableCodec();
+
+		String s = "<div dir=3D\"ltr\"><div><div><div><div><div><div><div><div><div><div>fsad<br/>=</div>=C2=A0f<br/></div>dsa<br/><br/></div>fd safsa f<br/></div>sda<br/><br/><br/>=f<br/></div>asd fdsa fdsa fsd<br/><br/><br/><br/></div>f<br/></div>s<br/></div>af =<br/></div>ds<br/><br/><br/><br/><br/></div>=C2=A0sadf safdsa<br/></div>";
+		System.out.println(convertStreamToString(MimeUtility.decode(new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8)),
+				"quoted-printable")));
+	}
+
+	public static String convertStreamToString(InputStream is) throws IOException
+	{
+		/*
+		 * To convert the InputStream to String we use the Reader.read(char[]
+		 * buffer) method. We iterate until the Reader return -1 which means
+		 * there's no more data to read. We use the StringWriter class to
+		 * produce the string.
+		 */
+		if (is != null)
+		{
+			Writer writer = new StringWriter();
+
+			char[] buffer = new char[1024];
+			try
+			{
+				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8.toString()));
+				int n;
+				while ((n = reader.read(buffer)) != -1)
+				{
+					writer.write(buffer, 0, n);
+				}
+			}
+			finally
+			{
+				is.close();
+			}
+			return writer.toString();
+		}
+		else
+		{
+			return "";
+		}
 	}
 }
