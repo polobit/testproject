@@ -1,203 +1,70 @@
 <body>
-	<div>
-		<div
-			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
-			<div
-				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
-				<table style="width: 100%; background-color: #8A6086;">
-					<tbody>
-						<tr>
-							<td valign="middle" height="32px"
-								style="padding: 0; color: white">{{HashMap.report.name}} ({{HashMap.count}})</td>
-							<td valign="right" height="32px"
+      <div>
+	   <div	style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
+		<div style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
+			<table style="width: 100%; background-color: #8A6086;">
+			     <tbody>
+				   <tr>
+					<td valign="middle" height="32px"
+					    style="padding: 0; color: white">{{HashMap.report_name}}</td>
+					<td valign="right" height="32px"
 								style="padding: 0; color: white; text-align: right">{{HashMap.duration}}
-								Report</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div
-				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-				{{#HashMap.limit_message}}
-                <p>***Showing first 100 (of {{HashMap.count}}) contacts***</p>
-                {{/HashMap.limit_message}}
+					    Report</td>
+				    </tr>
+				</tbody>
+			  </table>
+		   </div>
+	       <div style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
+			<b> {{#HashMap.campaign_name}} {{HashMap.campaign_name}} {{/HashMap.campaign_name}}</b>
 
-				<table width="100%" cellpadding="5" cellspacing="0"style:"margin-top:-40px">
-					<thead>
-						<tr bgcolor="#CCCCCC">
-							{{#LinkedHashMap.fields}}
-							<th align="left" style="font-size: 12px"><strong>{{.}}</strong></th>
-							{{/LinkedHashMap.fields}}
+		    <table width="100%" cellpadding="5" cellspacing="0" style="margin-top: 20px; border: 2px solid #edf1f2;">
+			
+  		    <tbody>
+                         <tr style="text-align:center;">
+ 			   <td style="border-right: 2px solid #edf1f2;">
+			        <div style="margin:15px">Emails Sent</div> 
+				<div   style="margin:15px; color:#23B7E5;"><strong>{{HashMap.emailSent}}</strong></div>
+			   </td>
+			   <td style="border-right: 2px solid #edf1f2;">			       
+			        <div style="margin:15px">Emails Skipped</div> 
+				<div   style="margin:15px; color:#FAD733;"><strong>{{HashMap.emailSkipped}}</strong></div>
+			   </td>
+			   <td style="border-right: 2px solid #edf1f2;">			       
+			        <div style="margin:15px">Emails Open</div> 
+				<div   style="margin:15px; color:#08C;"><strong>{{HashMap.emailOpened}}</strong></div>
+			   </td>
+			    <td>
+			        <div style="margin:15px">Emails Clicked</div> 
+				<div   style="margin:15px; color:rgb(18, 209, 18);"><strong>{{HashMap.emailClicked}}</strong></div>
+			   </td>
+			 </tr>
 
-							<!-- 				<th align="left" style="font-size: 12px"><strong>Tags</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Work</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Lead</strong></th>
-							
-								{{#custom_fields}}
-									<th align="left" align="center"
-										style="font-size: 12px"><strong>{{field_label}}</strong></th>
-								{{/custom_fields}}
-							 -->
-						</tr>
-					</thead>
-					<tbody>
-						{{#HashMap.report_results}}
-						<tr>
-							{{#log_type}} {{#total}} {{count}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								{{log_type.value}}</td> {{/total.value}} {{#count.value}}
-
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								<span
-								style="display: inline; padding-right: 10px; height: auto;">
-									<img class="thumbnail" src="{{image}}" width="40px"
-									height="40px" style="display: inline">
-							</span> <span
-								style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; white-space: nowrap; width: 12em; overflow: hidden;">
-									<b> {{log_type.value}}&nbsp;{{total.value}} </b> <br>
-									{{count.value}}
-							</span>
-							</td> {{/details.image}} {{/first_name}} {{#last_name}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								{{last_name.value}}</td> {{/last_name}} {{#created_time}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								{{created_time}}</td> {{/created_time}} 
-								 {{#phone}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								{{phone.value}}</td> {{/phone}} 
-								 {{#website}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								{{website.value}}</td> {{/website}} {{#image}} {{#image.value}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								<img class="thumbnail" src="{{image.value}}" width="40px"
-								height="40px" style="display: inline">
-							</td> {{/image.value}} {{^image.value}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								<img class="thumbnail"
-								src="https://secure.gravatar.com/avatar/8ee08c67fe0de091e6116e0ad1cd778b.jpg?s=40&d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png"
-								width="40px" height="40px" style="display: inline">
-							</td> {{/image.value}} {{/image}} {{#email}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								{{email.value}}</td> {{/email}} {{#title}}
-							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{title.value}}</b></td>
-							{{/title}} {{#tags}}
-							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{tags}}</b></td>
-							{{/tags}} {{#updated_time}}
-							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{updated_time}}</b></td>
-							{{/updated_time}} {{#company}}
-							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{company.value}}</b></td>
-							{{/company}}
-							{{#lead_score}}
-								<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{lead_score}}</b></td>
-							{{/lead_score}}
-							{{#lead_owner}}
-								<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{.}}</b></td>
-							{{/lead_owner}}
-							{{#custom}}
-									<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{value}}</b></td>
-							{{/custom}}
-							{{#last_contacted}}
-							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{last_contacted}}</b></td>
-							{{/last_contacted}}
-							{{#last_emailed}}
-							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{last_emailed}}</b></td>
-							{{/last_emailed}}
-							{{#last_called}}
-							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{last_called}}</b></td>
-							{{/last_called}}
-
-
-							<!-- 							
-						{{^image}}
-						<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-							{{value}}
-							</td>
-						{{/image}} 
-						{{#image}}
-							{{#first_name}}
-								{{#last_name}}
-									
-									
-									<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								<span style="display: inline; padding-right: 10px; height: auto;">
-									<img class="thumbnail" src="{{image}}" width="40px"
-										height="40px" style="display: inline">
-								</span>
-								<span
-									style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; white-space: nowrap; width: 12em; overflow: hidden;">
-									<b> {{first_name.value}}&nbsp;{{last_name.value}}  </b> <br> {{email.value}}
-								</span></td> 
-									
-									
-									
-								{{/last_name}}
-							{{/first_name}}
-							
-						{{/image}} -->
-
-							<!-- 	<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								{{#image}}
-								<span style="display: inline; padding-right: 10px; height: auto;">
-									<img class="thumbnail" src="{{image}}" width="40px"
-										height="40px" style="display: inline">
-								</span>
-								{{/image}}
-								{{^image}}
-								<span style="display: inline; padding-right: 10px; height: auto;">
-									<img class="thumbnail" src="https://secure.gravatar.com/avatar/8ee08c67fe0de091e6116e0ad1cd778b.jpg?s=40&d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" width="40px"
-										height="40px" style="display: inline">
-								</span>
-								{{/image}}
-								<span
-									style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; white-space: nowrap; width: 12em; overflow: hidden;">
-									<b> {{first_name}}&nbsp;{{last_name}}  </b> <br> {{email}}
-								</span></td> 
-								<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><strong>{{tags}}</strong></td>
-							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{contact_properties.title}} <br> <b>{{contact_properties.company}}</b></td>
-								<td  valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{lead_score}}</td>
-							{{#custom}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{value}}</td>
-							{{/custom}} -->
-
-							{{/details}} {{#custom_fields}}
-							<td align="left" valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{value}}</td>
-							{{/custom_fields}}
-						</tr>
-
-						{{/HashMap.report_results}}
-					</tbody>
-				</table>
-
+			 <tr style="text-align:center;">
+ 			   <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">
+			        <div style="margin:15px">Hard Bounce</div> 
+				<div   style="margin:15px; color:#009688;"><strong>{{HashMap.hardBounce}}</strong></div>
+			   </td>
+			   <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">			       
+			        <div style="margin:15px">Soft Bounce</div> 
+				<div   style="margin:15px; color:#9C27B0;"><strong>{{HashMap.softBounce}}</strong></div>
+			   </td>
+			   <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">			       
+			        <div style="margin:15px">Unsubscribe</div> 
+				<div   style="margin:15px; color:rgb(205,15,0);"><strong>{{HashMap.emailUnsubscribed}}</strong></div>
+			   </td>
+			    <td style=" border-top: 2px solid #edf1f2;">
+			        <div style="margin:15px">Spam</div> 
+				<div   style="margin:15px; color:#FF4343;"><strong>{{HashMap.email_status}}</strong></div>
+			   </td>
+			 </tr>
+			</tbody>
+		     </table>
+		     	<br>
+		     	<p><span style="font-weight:bold">Note - </span> Your remaining email credit is : <span style="font-weight:bold">{{HashMap.email_status}} </p>
+		     	 
 				<br />
 				<p>You are receiving this email as you have created a report 
-					<span>"{{HashMap.report.name}}"</span> at Agile CRM.
+					<span>"{{HashMap.report_name}}"</span> at Agile CRM.
 				 	You can manage <a href="https://{{HashMap.domain}}.agilecrm.com/#reports" target="_blank">reports</a> here.</p>
 				<br/>
 				<p style="font-weight: bold;">Have questions or need help?</p>

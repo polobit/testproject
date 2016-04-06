@@ -39,8 +39,10 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.util.TagSearchUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 //import org.json.JSONObject;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>ReportsAPI</code> lass includes REST calls to interact with
@@ -140,82 +142,11 @@ public class CampaignReportsAPI
     @Path("/show-results/{report_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getReportResults(@PathParam("report_id") String id,
-	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public String getReportResults(@PathParam("report_id") String report_id)
     {
 	try
 	{
-
-	    // Fetches report based on report id
-	    Reports report = ReportsUtil.getReport(Long.parseLong(id));
-	    Date dt = new Date();
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	    String endDate = sdf.format(dt);
-	    TimeZone timeZone = TimeZone.getTimeZone(report.report_timezone);
-	    JSONArray jsonArray = new JSONArray();
-	    
-	    if(report.duration == Reports.Duration.DAILY){
-	    	Calendar cal = Calendar.getInstance();
-	    	cal.setTime(dt);
-	    	cal.add(Calendar.DATE, -1);
-	    	Date startDateTime = cal.getTime();
-	    	String startDate = sdf.format(startDateTime);
-	    	//jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate, timeZone.getRawOffset()+"", null);
-	    }else if(report.duration == Reports.Duration.WEEKLY){
-	    	Calendar cal = Calendar.getInstance();
-	    	cal.setTime(dt);
-	    	cal.add(Calendar.DATE, -7);
-	    	Date startDateTime = cal.getTime();
-	    	String startDate = sdf.format(startDateTime);
-		    //jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate,timeZone.getRawOffset()+"", null);
-		}else if(report.duration == Reports.Duration.MONTHLY){
-			Calendar cal = Calendar.getInstance();
-	    	cal.setTime(dt);
-	    	cal.add(Calendar.DATE, -30);
-	    	Date startDateTime = cal.getTime();
-	    	String startDate = sdf.format(startDateTime);
-		    //jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate,timeZone.getRawOffset()+"", null);
-		}
-	    
-	    JSONObject emails_opened = new JSONObject();
-	    emails_opened.put("log_type", "EMAIL_OPENED");
-	    emails_opened.put("count", 5);
-	    emails_opened.put("total", 10);
-	    jsonArray.put(emails_opened);
-	    
-	    JSONObject emails_sent = new JSONObject();
-	    emails_sent.put("log_type", "EMAIL_SENT");
-	    emails_sent.put("count", 3);
-	    emails_sent.put("total", 8);
-	    jsonArray.put(emails_sent);
-	    
-	    JSONObject emails_clicked = new JSONObject();
-	    emails_clicked.put("log_type", "EMAIL_CLICKED");
-	    emails_clicked.put("count", 4);
-	    emails_clicked.put("total", 6);
-	    jsonArray.put(emails_clicked);
-	    
-	    JSONObject emails_unsubscribed = new JSONObject();
-	    emails_unsubscribed.put("log_type", "UNSUBSCRIBED");
-	    emails_unsubscribed.put("count", 2);
-	    emails_unsubscribed.put("total", 5);
-	    jsonArray.put(emails_unsubscribed);
-
-	    // Search rule to specify type is person
-	    SearchRule rule = new SearchRule();
-	    rule.RHS = "PERSON";
-	    rule.CONDITION = RuleCondition.EQUALS;
-	    rule.LHS = "type";
-
-	    report.rules.add(rule);
-
-	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules,
-		    null);
-
-	    // Generates report results
-	    Collection<Contact> contacts = report.generateReports(Integer.parseInt(count), cursor);
-
-	    return jsonArray.toString();
+		return ReportsUtil.showCampaignReport(report_id);
 	}
 	catch (Exception e)
 	{

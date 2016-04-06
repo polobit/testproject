@@ -42,6 +42,7 @@ import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.portlets.util.PortletUtil;
 import com.agilecrm.reports.deferred.CampaignReportsDeferredTask;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -58,6 +59,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -205,20 +207,10 @@ public class ReportsUtil
 
 	    Map<String, LinkedHashSet<String>> fieldsList = new LinkedHashMap<String, LinkedHashSet<String>>();
 	    fieldsList.put("fields", reportHeadings);
-
-//	    // Set number of results in count variable
-//	    if (results.get("report_results") != null)
-//	    {
-//	    	JSONArray resultsCollection = new JSONArray(results.get("report_results"));
-//		System.out.println("available = " + resultsCollection.length());
-//		if (resultsCollection.length() == 0)
-//		    continue;
-//	    }
-
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
 
 	    // Send reports email
-	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.CAMPAIGN_REPORTS,
 		    new Object[] { results, fieldsList });
 	    }catch(Exception e){
 	    	System.out.println("Exception occured in sending email report:"+e.getMessage() );
@@ -228,71 +220,132 @@ public class ReportsUtil
     
     public static Map<String, Object> processCampaignReports(Reports report)
     {
-	Map<String, Object> domain_details = new HashMap<String, Object>();
-	
-	JSONArray jsonArray = new JSONArray();
-	
-	// Fetches report based on report id
-    Date dt = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    String endDate = sdf.format(dt);
-    TimeZone timeZone = TimeZone.getTimeZone(report.report_timezone);
-    
-    if(report.duration == Reports.Duration.DAILY){
-    	Calendar cal = Calendar.getInstance();
-    	cal.setTime(dt);
-    	cal.add(Calendar.DATE, -1);
-    	Date startDateTime = cal.getTime();
-    	String startDate = sdf.format(startDateTime);
-    	//jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate, timeZone.getRawOffset()+"", null);
-    }else if(report.duration == Reports.Duration.WEEKLY){
-    	Calendar cal = Calendar.getInstance();
-    	cal.setTime(dt);
-    	cal.add(Calendar.DATE, -7);
-    	Date startDateTime = cal.getTime();
-    	String startDate = sdf.format(startDateTime);
-	    //jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate,timeZone.getRawOffset()+"", null);
-	}else if(report.duration == Reports.Duration.MONTHLY){
-		Calendar cal = Calendar.getInstance();
-    	cal.setTime(dt);
-    	cal.add(Calendar.DATE, -30);
-    	Date startDateTime = cal.getTime();
-    	String startDate = sdf.format(startDateTime);
-	    //jsonArray = CampaignReportsSQLUtil.getEachCampaignStatsForTable(report.campaignId, startDate, endDate,timeZone.getRawOffset()+"", null);
-	}
-	
-	try{
-	JSONObject emails_opened = new JSONObject();
-    emails_opened.put("log_type", "EMAIL_OPENED");
-    emails_opened.put("count", 5);
-    emails_opened.put("total", 10);
-    jsonArray.put(emails_opened);
-    
-    JSONObject emails_sent = new JSONObject();
-    emails_sent.put("log_type", "EMAIL_SENT");
-    emails_sent.put("count", 3);
-    emails_sent.put("total", 8);
-    jsonArray.put(emails_sent);
-    
-    JSONObject emails_clicked = new JSONObject();
-    emails_clicked.put("log_type", "EMAIL_CLICKED");
-    emails_clicked.put("count", 4);
-    emails_clicked.put("total", 6);
-    jsonArray.put(emails_clicked);
-    
-    JSONObject emails_unsubscribed = new JSONObject();
-    emails_unsubscribed.put("log_type", "UNSUBSCRIBED");
-    emails_unsubscribed.put("count", 2);
-    emails_unsubscribed.put("total", 5);
-    jsonArray.put(emails_unsubscribed);
-	}catch(Exception e){
-		System.out.println("Exception occured:"+e.getMessage());
-	}
-	
-	domain_details.put("report_results", jsonArray.toString());
+		Map<String, Object> statsJSON = new HashMap<String, Object>();
+		
+		JSONArray jsonArray = new JSONArray();
+		
+		// Fetches report based on report id
+	    Date dt = new Date();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    String endDate = sdf.format(dt);
+	    TimeZone timeZone = TimeZone.getTimeZone(report.report_timezone);
+	    
+	    int emailsClicked = 0;
+		int emailsOpened =0;
+		int emailsent = 0;
+		int unsubscribe =0;
+		int hardBounce=0;
+		int softBounce=0;
+		int emailsSkipped=0;
+		int emailsSpam=0;
 
-	// Return results
-	return domain_details;
+		    JSONArray campaignEmailsJSONArray =new JSONArray();
+		    
+		    if(report.duration == Reports.Duration.DAILY){
+		    	Calendar cal = Calendar.getInstance();
+		    	cal.setTime(dt);
+		    	cal.add(Calendar.DATE, -1);
+		    	Date startDateTime = cal.getTime();
+		    	String startDate = sdf.format(startDateTime);
+		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+		    }
+		    else if(report.duration == Reports.Duration.WEEKLY){
+		    	Calendar cal = Calendar.getInstance();
+		    	cal.setTime(dt);
+		    	cal.add(Calendar.DATE, -7);
+		    	Date startDateTime = cal.getTime();
+		    	String startDate = sdf.format(startDateTime);
+		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+			}
+		    else if(report.duration == Reports.Duration.MONTHLY){
+				Calendar cal = Calendar.getInstance();
+		    	cal.setTime(dt);
+		    	cal.add(Calendar.DATE, -30);
+		    	Date startDateTime = cal.getTime();
+		    	String startDate = sdf.format(startDateTime);
+		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+			}
+			    	
+		try
+		{
+		if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0)
+		{					
+			for(int i=0;i<campaignEmailsJSONArray.length();i++){
+	
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_OPENED"))
+				{
+					emailsOpened = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
+				{
+					emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
+				{
+					emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
+				{
+					unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SPAM"))
+				{
+					emailsSpam= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
+				{
+					emailsSkipped= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_HARD_BOUNCED"))
+				{
+					hardBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SOFT_BOUNCED"))
+				{
+					softBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+		     } //End of for loop
+		  }  //End of if statement
+			
+			statsJSON.put("emailopened",emailsOpened);
+			statsJSON.put("emailclicked",emailsClicked);
+			statsJSON.put("emailsent",emailsent);
+			statsJSON.put("emailunsubscribed",unsubscribe);
+			statsJSON.put("emailSpam",emailsSpam);
+			statsJSON.put("emailSkipped", emailsSkipped);
+			statsJSON.put("hardBounce", hardBounce);
+			statsJSON.put("softBounce", softBounce);		
+	    
+			if(report.campaignId.equals("All"))
+				statsJSON.put("campaign_name", "All Campaigns"+WorkflowUtil.getCampaignName(report.campaignId));
+			else
+				statsJSON.put("campaign_name", "Campaign Name : "+WorkflowUtil.getCampaignName(report.campaignId));
+				statsJSON.put("report_name", report.name);
+				statsJSON.put("domain", NamespaceManager.get());
+				statsJSON.put("email_status", getTotalEmailCredit());
+				
+		         return statsJSON;
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception occured in gettingCamapign report on show results:"+e.getMessage());
+			    return null;
+	        }
     }
 
     /**
@@ -1020,5 +1073,152 @@ public class ReportsUtil
 	             startTimeMilli = startCalendar.getTimeInMillis();
 	        }
 	        return final_json;
+    }
+    
+    /**
+     * It will return campaign report
+     * 
+     * @param report_id
+     * 				-String report id
+     * @return stats
+     * 				-json
+     */
+    public static String showCampaignReport(String report_id)
+    {
+		int emailsClicked = 0;
+		int emailsOpened =0;
+		int emailsent = 0;
+		int unsubscribe =0;
+		int hardBounce=0;
+		int softBounce=0;
+		int emailsSkipped=0;
+		int emailsSpam=0;
+
+	    // Fetches report based on report id
+	    Reports report = ReportsUtil.getReport(Long.parseLong(report_id));
+	    
+	    Date dt = new Date();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    
+	    String endDate = sdf.format(dt);
+	    TimeZone timeZone = TimeZone.getTimeZone(report.report_timezone);
+	    
+	    JSONObject statsJSON = new JSONObject();
+	    JSONArray campaignEmailsJSONArray =new JSONArray();
+	    
+	    if(report.duration == Reports.Duration.DAILY){
+	    	Calendar cal = Calendar.getInstance();
+	    	cal.setTime(dt);
+	    	cal.add(Calendar.DATE, -1);
+	    	Date startDateTime = cal.getTime();
+	    	String startDate = sdf.format(startDateTime);
+	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+	    }
+	    else if(report.duration == Reports.Duration.WEEKLY){
+	    	Calendar cal = Calendar.getInstance();
+	    	cal.setTime(dt);
+	    	cal.add(Calendar.DATE, -7);
+	    	Date startDateTime = cal.getTime();
+	    	String startDate = sdf.format(startDateTime);
+	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+		}
+	    else if(report.duration == Reports.Duration.MONTHLY){
+			Calendar cal = Calendar.getInstance();
+	    	cal.setTime(dt);
+	    	cal.add(Calendar.DATE, -30);
+	    	Date startDateTime = cal.getTime();
+	    	String startDate = sdf.format(startDateTime);
+	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+		}
+	    
+		System.out.println("Campaign stats are : "+campaignEmailsJSONArray);
+		
+		try{
+		if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0)
+		{					
+			for(int i=0;i<campaignEmailsJSONArray.length();i++){
+
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_OPENED"))
+				{
+					emailsOpened = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
+				{
+					emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
+				{
+					emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
+				{
+					unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SPAM"))
+				{
+					emailsSpam= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
+				{
+					emailsSkipped= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_HARD_BOUNCED"))
+				{
+					hardBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+				
+				if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SOFT_BOUNCED"))
+				{
+					softBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));
+					continue;
+				}
+		     } //End of for loop
+		  }  //End of if statement
+			
+			statsJSON.put("emailopened",emailsOpened);
+			statsJSON.put("emailclicked",emailsClicked);
+			statsJSON.put("emailsent",emailsent);
+			statsJSON.put("emailunsubscribed",unsubscribe);
+			statsJSON.put("emailSpam",emailsSpam);
+			statsJSON.put("emailSkipped", emailsSkipped);
+			statsJSON.put("hardBounce", hardBounce);
+			statsJSON.put("softBounce", softBounce);  
+			
+			if(report.campaignId.equals("All"))
+				statsJSON.put("campaign_name", "All Campaigns"+WorkflowUtil.getCampaignName(report.campaignId));
+			else
+				statsJSON.put("campaign_name", "Campaign Name : "+WorkflowUtil.getCampaignName(report.campaignId));
+			
+			statsJSON.put("report_name", report.name);
+			statsJSON.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
+			
+	         return statsJSON.toString();
+		}
+		catch (Exception e)
+		{
+		System.out.println("Exception occured in gettingCamapign report on show results:"+e.getMessage());
+	    return null;
+	}
+    }
+    
+    public static int getTotalEmailCredit(){
+    	int emailCount=	BillingRestrictionUtil.getBillingRestrictionFromDB().one_time_emails_count;
+    	
+    	if(emailCount<0)
+    		 emailCount=5000+emailCount;
+    	return emailCount;
     }
 }

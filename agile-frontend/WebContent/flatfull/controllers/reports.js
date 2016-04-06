@@ -534,14 +534,12 @@ var ReportsRouter = Backbone.Router
 			 * report id, send request to process results, and shows them
 			 */
 			campaignReportInstantResults : function(id, report)
-			{
-
+			{	
 				if (!report)
 				{
 					// If reports view is not defined, navigates to reports
-					if (!this.reports || !this.reports.collection || this.reports.collection.length == 0 || this.reports.collection.get(id) == null)
+					if (!this.reports  || this.reports.collection.get(id) == null)
 					{
-
 						// Shows loading while report is being fetched
 						$("#content").html(getRandomLoadingImg());
 						var reportModel = new Backbone.Model();
@@ -549,7 +547,7 @@ var ReportsRouter = Backbone.Router
 						reportModel.fetch({ success : function(data)
 						{
 							// Fetches reports and call to show instant results
-							App_Reports.reportInstantResults(id, data.toJSON());
+							App_Reports.campaignReportInstantResults(id, data.toJSON());
 						} });
 						return;
 
@@ -560,28 +558,13 @@ var ReportsRouter = Backbone.Router
 					}
 
 				}
-
 				// Stores in global variable, as it is required to build custom
 				// table
 				// headings
 				REPORT = report;
 
-				var report_results_view = new Base_Collection_View({ url : "core/api/campaignReports/show-results/" + id, modelData : report,
-					templateKey : "report-campaign-search", individual_tag_name : 'tr', cursor : true, sort_collection : false, page_size : 15, });// Collection
+				var report_results_view = new Base_Model_View({ url : "core/api/campaignReports/show-results/" + id, template : "campaign-report-via-email"});// Collection
 				var _that = this;
-				
-				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
-				{
-					// Report built with custom table, as reports should be
-					// shown with
-					// custom order selected by user
-					report_results_view.appendItem = function(base_model)
-					{
-						reportsContactTableView(base_model, customDatefields, this);
-					};
-
-					report_results_view.collection.fetch();
-				});
 				$("#content").html(report_results_view.render().el);
 			},
 

@@ -1098,3 +1098,79 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 </div>
 </div>
 </script>
+
+
+
+<script id="campaign-report-via-email-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="m-n font-thin h3 pull-left">Campaign Report </small> </h1>
+             <div class="clearfix"></div> 
+        </div>
+    </div>
+</div>
+{{#if report_name }}
+ <div style="padding:25px;">
+       <div style="background-color: #fff; font-family: Arial, sans-serif; padding: 5px">
+       
+           <div style="font-size: 14px; background-color: #fff; padding: 10px">
+           <table style="width: 100%; background-color: #fff;">
+                 <tbody>
+                   <tr style="font-weight: bold;color: #23B7E5;">
+                    <td valign="middle" height="32px" >{{report_name}}</td>
+                    <td valign="right" height="32px" style="text-align: right" >{{duration}} Report </td>
+                    </tr>
+                </tbody>
+              </table>
+            <b>{{campaign_name}}</b>
+
+            <table width="100%" cellpadding="5" cellspacing="0" style="margin-top: 20px; border: 2px solid #edf1f2;">
+            
+            <tbody>
+                         <tr style="text-align:center;">
+               <td style="border-right: 2px solid #edf1f2;">
+                    <div style="margin:15px">Emails Sent</div> 
+                <div   style="margin:15px; color:#23B7E5; font-size: 18px;"><strong>{{emailSent}}</strong></div>
+               </td>
+               <td style="border-right: 2px solid #edf1f2;">                   
+                    <div style="margin:15px">Emails Skipped</div> 
+                <div   style="margin:15px; color:#FAD733; font-size: 18px;"><strong>{{emailSkipped}}</strong></div>
+               </td>
+               <td style="border-right: 2px solid #edf1f2;">                   
+                    <div style="margin:15px">Emails Open</div> 
+                <div style="margin:15px; color:#08C; font-size: 18px;"><strong>{{emailOpened}}</strong></div>
+               </td>
+                <td>
+                    <div style="margin:15px">Emails Clicked</div> 
+                <div   style="margin:15px; color:rgb(18, 209, 18); font-size: 18px;"><strong>{{emailClicked}}</strong></div>
+               </td>
+             </tr>
+
+             <tr style="text-align:center;">
+               <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">
+                    <div style="margin:15px">Hard Bounce</div> 
+                <div   style="margin:15px; color:#009688; font-size: 18px;"><strong>{{hardBounce}}</strong></div>
+               </td>
+               <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">                
+                    <div style="margin:15px">Soft Bounce</div> 
+                <div   style="margin:15px; color:#9C27B0; font-size: 18px;"><strong>{{softBounce}}</strong></div>
+               </td>
+               <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">                
+                    <div style="margin:15px">Unsubscribe</div> 
+                <div   style="margin:15px; color:rgb(205,15,0); font-size: 18px;"><strong>{{emailUnsubscribed}}</strong></div>
+               </td>
+                <td style=" border-top: 2px solid #edf1f2;">
+                    <div style="margin:15px">Spam</div> 
+                <div   style="margin:15px; color:#FF4343; font-size: 18px;"><strong>{{emailSpam}}</strong></div>
+               </td>
+             </tr>
+            </tbody>
+             </table>
+            </div>
+        </div>
+    </div>{{else}}
+
+    <h1>No campaign report found...</h1>
+    {{/if}}
+</script>
