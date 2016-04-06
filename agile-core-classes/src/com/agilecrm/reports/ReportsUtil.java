@@ -38,6 +38,7 @@ import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.db.util.GoogleSQLUtil;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.GoalsUtil;
@@ -58,6 +59,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -228,7 +230,7 @@ public class ReportsUtil
 	    Date dt = new Date();
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    String endDate = sdf.format(dt);
-	    TimeZone timeZone = TimeZone.getTimeZone(report.report_timezone);
+	    String timeZone = getTimeZoneOffSet(TimeZone.getTimeZone(report.report_timezone));
 	    
 	    int emailsClicked = 0;
 		int emailsOpened =0;
@@ -247,7 +249,7 @@ public class ReportsUtil
 		    	cal.add(Calendar.DATE, -1);
 		    	Date startDateTime = cal.getTime();
 		    	String startDate = sdf.format(startDateTime);
-		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone);
 		    }
 		    else if(report.duration == Reports.Duration.WEEKLY){
 		    	Calendar cal = Calendar.getInstance();
@@ -255,7 +257,7 @@ public class ReportsUtil
 		    	cal.add(Calendar.DATE, -7);
 		    	Date startDateTime = cal.getTime();
 		    	String startDate = sdf.format(startDateTime);
-		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone);
 			}
 		    else if(report.duration == Reports.Duration.MONTHLY){
 				Calendar cal = Calendar.getInstance();
@@ -263,7 +265,7 @@ public class ReportsUtil
 		    	cal.add(Calendar.DATE, -30);
 		    	Date startDateTime = cal.getTime();
 		    	String startDate = sdf.format(startDateTime);
-		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+		    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone);
 			}
 			    	
 		try
@@ -1101,7 +1103,7 @@ public class ReportsUtil
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    
 	    String endDate = sdf.format(dt);
-	    TimeZone timeZone = TimeZone.getTimeZone(report.report_timezone);
+	    String timeZone = getTimeZoneOffSet(TimeZone.getTimeZone(report.report_timezone));
 	    
 	    JSONObject statsJSON = new JSONObject();
 	    JSONArray campaignEmailsJSONArray =new JSONArray();
@@ -1112,7 +1114,7 @@ public class ReportsUtil
 	    	cal.add(Calendar.DATE, -1);
 	    	Date startDateTime = cal.getTime();
 	    	String startDate = sdf.format(startDateTime);
-	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone);
 	    }
 	    else if(report.duration == Reports.Duration.WEEKLY){
 	    	Calendar cal = Calendar.getInstance();
@@ -1120,7 +1122,7 @@ public class ReportsUtil
 	    	cal.add(Calendar.DATE, -7);
 	    	Date startDateTime = cal.getTime();
 	    	String startDate = sdf.format(startDateTime);
-	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone);
 		}
 	    else if(report.duration == Reports.Duration.MONTHLY){
 			Calendar cal = Calendar.getInstance();
@@ -1128,7 +1130,7 @@ public class ReportsUtil
 	    	cal.add(Calendar.DATE, -30);
 	    	Date startDateTime = cal.getTime();
 	    	String startDate = sdf.format(startDateTime);
-	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone.getRawOffset()+"");
+	    	campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId, startDate,	endDate, timeZone);
 		}
 	    
 		System.out.println("Campaign stats are : "+campaignEmailsJSONArray);
@@ -1214,6 +1216,10 @@ public class ReportsUtil
 	}
     }
     
+    /**
+     * get number of credited email 
+     * @return emailCount
+     */
     public static int getTotalEmailCredit(){
     	int emailCount=	BillingRestrictionUtil.getBillingRestrictionFromDB().one_time_emails_count;
     	
@@ -1221,4 +1227,23 @@ public class ReportsUtil
     		 emailCount=5000+emailCount;
     	return emailCount;
     }
+    
+    public static String getTimeZoneOffSet(TimeZone timeZone)
+    {
+          String offSet=String.valueOf(timeZone.getRawOffset()/60000);
+          if (offSet.charAt(0) == '-')
+      	   {
+      	      offSet = offSet.split("-")[1];
+      	      return "+"+offSet;      	       
+      	}
+      	else if (offSet.charAt(0) == '+')
+      	{
+      	    offSet = offSet.split("+")[1];
+      	    return "-"+offSet;
+      	}
+          return "-"+offSet;
+    	
+    }
+   
+   
 }
