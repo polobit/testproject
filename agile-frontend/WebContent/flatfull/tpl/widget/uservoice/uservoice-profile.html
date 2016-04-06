@@ -88,20 +88,22 @@
 {{#if comments.length}}
 	{{#each comments}}
 		<li class="list-group-item r-none b-l-none b-r-none text-xs" style="width:249px;">	
-			<div class="row">			
+			<div class="row">		
 				<div class="col-md-12 word-break font-bold text-sm" title="{{getSuggestionName suggestion.id}}">
 					{{getSuggestionName suggestion.id}}
 				</div>
 			</div>
-			<div class="row">				
-				<div class="col-md-12 m-t-sm word-break" style="max-height: 120px; overflow: hidden;">
+			<div class="row">	
+				<div class="col-md-12 m-t-sm line-clamp line-clamp-3 text-flow-ellipsis word-break">
 					{{#decodeString formatted_text}}{{/decodeString}}
 				</div>
-			</div>	
+			</div>
 			<div class="row">
 				{{#if suggestion.url}}			
 					<div class="pull-left p-sm">
-						<a class="btn btn-xs btn-default" target="_blank" href="{{suggestion.url}}">View on Uservoice</a>
+						<a class="btn btn-xs btn-default" target="_blank" href="{{suggestion.url}}">
+							View on Uservoice
+						</a>
 					</div>
 				{{/if}}
 			</div>					
