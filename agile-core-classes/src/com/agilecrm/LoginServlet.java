@@ -290,21 +290,7 @@ public class LoginServlet extends HttpServlet {
 				
 					System.out.println("generatedOTP "+generatedOTP);
 					//domainUser.generatedOTP = generatedOTP + "";
-					Map<String, String> data = new HashMap<String, String>();
-					String otp = generatedOTP.toString();
-					data.put("generatedOTP", otp);
-					data.put("browser_os", request.getParameter("browser_os"));
-					data.put("browser_name", request.getParameter("browser_Name"));
-					data.put("browser_version",request.getParameter("browser_version"));
-					data.put("owner_pic", domainUser.getOwnerPic());
-					data.put("email", domainUser.email);
-					data.put("domain", domainUser.domain);
-					data.put("IP_Address", request.getRemoteAddr());
-					data.put("created-time", domainUser.getCreatedTime().toString());
-					data.put("city",request.getHeader("X-AppEngine-City").toUpperCase());
-					data.put("country",request.getHeader("X-AppEngine-Country"));
-					data.put("region", request.getHeader("X-AppEngine-Region").toUpperCase());
-					System.out.println("data "+data);
+					Map<String,String> data = getInformationToSend(request, generatedOTP);
 					// Simulate template
 					String template = SendMail.ALLOW_IP_ACCESS;
 					String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
@@ -344,6 +330,25 @@ public class LoginServlet extends HttpServlet {
 
 		response.sendRedirect("/");
 
+	}
+	public Map<String, String > getInformationToSend(HttpServletRequest request,Long generatedOTP)throws Exception{
+		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(request.getParameter("email"));
+		Map<String, String> data = new HashMap<String, String>();
+		String otp = generatedOTP.toString();
+		data.put("generatedOTP", otp);
+		data.put("browser_os", request.getParameter("browser_os"));
+		data.put("browser_name", request.getParameter("browser_Name"));
+		data.put("browser_version",request.getParameter("browser_version"));
+		data.put("owner_pic", domainUser.getOwnerPic());
+		data.put("email", domainUser.email);
+		data.put("domain", domainUser.domain);
+		data.put("IP_Address", request.getRemoteAddr());
+		data.put("created-time", domainUser.getCreatedTime().toString());
+		data.put("city",request.getHeader("X-AppEngine-City"));
+		data.put("country",request.getHeader("X-AppEngine-Country"));
+		data.put("region", request.getHeader("X-AppEngine-Region"));
+		System.out.println("data "+data);
+		return data;
 	}
 
 	private void handleMulipleLogin(HttpServletResponse response)
