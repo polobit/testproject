@@ -535,33 +535,7 @@ var ReportsRouter = Backbone.Router
 			 */
 			campaignReportInstantResults : function(id, report)
 			{	
-				if (!report)
-				{
-					// If reports view is not defined, navigates to reports
-					if (!this.reports  || this.reports.collection.get(id) == null)
-					{
-						// Shows loading while report is being fetched
-						$("#content").html(getRandomLoadingImg());
-						var reportModel = new Backbone.Model();
-						reportModel.url = "core/api/campaignReports/" + id;
-						reportModel.fetch({ success : function(data)
-						{
-							// Fetches reports and call to show instant results
-							App_Reports.campaignReportInstantResults(id, data.toJSON());
-						} });
-						return;
-
-					}
-					else
-					{
-						report = this.reports.collection.get(id).toJSON();
-					}
-
-				}
-				// Stores in global variable, as it is required to build custom
-				// table
-				// headings
-				REPORT = report;
+				
 
 				var report_results_view = new Base_Model_View({ url : "core/api/campaignReports/show-results/" + id, template : "campaign-report-via-email"});// Collection
 				var _that = this;
