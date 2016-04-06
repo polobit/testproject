@@ -1688,9 +1688,11 @@ public class PortletUtil {
 		return json;
 	}
 	
-	public static List<Activity> getPortletActivitydata(int max,String cursor) {
-		System.out.println("Inside list");
-		List<Activity> list=ActivityUtil.getActivities(max, cursor);
+	public static List<Activity> getPortletActivitydata(String entitytype, Long userid, int max,
+			String cursor, Long starttime, Long endtime) {
+		
+		List<Activity> list = ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, max, cursor,
+	        starttime, endtime, null);
 		System.out.println("Size of List"+list.size());
 		System.out.println(list);
 		return list;

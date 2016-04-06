@@ -562,11 +562,15 @@ public class PortletsAPI {
 	@Path("/customer-activity")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Activity> getPortletActivityData(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)throws Exception {
+	public List<Activity> getPortletActivityData(@QueryParam("entity_type") String entitytype,
+	    @QueryParam("user_id") Long userid, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
+	    @QueryParam("end_time") Long endtime)throws Exception {
 		
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		if(count!=null){
-		return PortletUtil.getPortletActivitydata(Integer.parseInt(count), cursor);
+		return PortletUtil.getPortletActivitydata(entitytype, userid, Integer.parseInt(count), cursor,
+	        starttime, endtime);
 		}
 		else
 			return null;
