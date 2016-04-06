@@ -322,10 +322,10 @@ public class ReportsUtil
 		     } //End of for loop
 		  }  //End of if statement
 			
-			statsJSON.put("emailopened",emailsOpened);
-			statsJSON.put("emailclicked",emailsClicked);
-			statsJSON.put("emailsent",emailsent);
-			statsJSON.put("emailunsubscribed",unsubscribe);
+			statsJSON.put("emailOpened",emailsOpened);
+			statsJSON.put("emailClicked",emailsClicked);
+			statsJSON.put("emailSent",emailsent);
+			statsJSON.put("emailUnsubscribed",unsubscribe);
 			statsJSON.put("emailSpam",emailsSpam);
 			statsJSON.put("emailSkipped", emailsSkipped);
 			statsJSON.put("hardBounce", hardBounce);
@@ -1188,10 +1188,10 @@ public class ReportsUtil
 		     } //End of for loop
 		  }  //End of if statement
 			
-			statsJSON.put("emailopened",emailsOpened);
-			statsJSON.put("emailclicked",emailsClicked);
-			statsJSON.put("emailsent",emailsent);
-			statsJSON.put("emailunsubscribed",unsubscribe);
+			statsJSON.put("emailOpened",emailsOpened);
+			statsJSON.put("emailClicked",emailsClicked);
+			statsJSON.put("emailSent",emailsent);
+			statsJSON.put("emailUnsubscribed",unsubscribe);
 			statsJSON.put("emailSpam",emailsSpam);
 			statsJSON.put("emailSkipped", emailsSkipped);
 			statsJSON.put("hardBounce", hardBounce);
