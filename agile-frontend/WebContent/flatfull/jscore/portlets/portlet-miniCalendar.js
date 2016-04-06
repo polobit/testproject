@@ -483,19 +483,17 @@ function googledata(el,response,startTime,endTime)
 			{
 		var events = new Array();
 		console.log(resp);
-		for (var j = 0; j < resp.items.length; j++)
-		{
-			var fc_event = google2fcEvent(resp.items[j]);
-			renderGoogleEvents(events,fc_event,el);
-
-
+		if(resp.items){
+			for (var j = 0; j < resp.items.length; j++)
+			{
+				var fc_event = google2fcEvent(resp.items[j]);
+				renderGoogleEvents(events,fc_event,el);
+			}
 		}
 
-		
-
 		//**Add the google Events in the list of events in events_show div **/
-		var len=$(".events_show").find('.list').find('li').length;
-		var date=new Date();
+		var len = $(".events_show").find('.list').find('li').length;
+		var date = new Date();
 		$.each(events,function(index,ev){
 			var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 			var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
@@ -525,6 +523,7 @@ function googledata(el,response,startTime,endTime)
 					$(el).find('.list').append(event_list);
 			}
 		});
+
 		_agile_delete_prefs('current_date_calendar');
 		setTimeout(function(){
 			//_agile_delete_prefs('current_date_calendar');
@@ -533,9 +532,7 @@ function googledata(el,response,startTime,endTime)
 				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 			}
 		},5000);
-
-
-			});
+	});
 }
 
 /** Rendering the events to the mini Calendar
@@ -619,30 +616,21 @@ function renderGoogleEvents(events,fc_event,el)
 function getOfficeEvents(el, startDateTime, endDateTime){	
 
 	var url = "core/api/officecalendar/office365-appointments?startDate="+ startDateTime +"&endDate="+ endDateTime;
+	var officeEvents = new Array();
+
 	$.getJSON(url, function(response){
-		if(response){			
-			var events = [];
+		if(response){						
 			for (var i=0; i<response.length; i++){		
 				var obj = response[i];
-				//Start Date
-				var startDate = Math.round((new Date(obj.start).getTime()) / 1000);
-				obj.start = startDate;
-				//End Date
-				var endDate = Math.round((new Date(obj.end).getTime()) / 1000);
-				obj.end = endDate;
-
-				obj.color ='#74ceff';
-				obj.backgroundColor ='#74ceff';
 				obj.allDay = false;
-				
-				events.push(obj);				
-				$('#calendar_container',el).fullCalendar('renderEvent', obj);					
+				//officeEvents.push(obj);				
+				renderOfficeEvents(officeEvents, obj, el);								
 			}		
 
 			//**Add the google Events in the list of events in events_show div **/
 		var len = $(".events_show").find('.list').find('li').length;
 		var date = new Date();
-		$.each(events,function(index,ev){
+		$.each(officeEvents,function(index,ev){
 			var todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 			var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 
@@ -687,22 +675,22 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 /** Rendering the events to the mini Calendar
 ** Also all day events are broken into each day event to show on every day
 */
-function renderOfficeEvents(events,fc_event,el)
+function renderOfficeEvents(officeEvents, fc_event, el)
 {
-	fc_event.startDate=new Date(fc_event.start);
-			fc_event.end=new Date(fc_event.end);
-			fc_event.color='#3a3f51';
-			fc_event.backgroundColor='#3a3f51';
-			if(fc_event.allDay==true){
+	fc_event.startDate = new Date(fc_event.start);
+			fc_event.end = new Date(fc_event.end);
+			fc_event.color='#74ceff';
+			fc_event.backgroundColor='#74ceff';
+			if(fc_event.allDay == true){
 				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
-				fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
+				fc_event.end = new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
-				if(a==1)
+				if(a == 1)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
 					fc_event.end=(fc_event.end.getTime()-1)/1000;
 					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
-					events.push(fc_event);
+					officeEvents.push(fc_event);
 				}
 				else
 				{
@@ -723,7 +711,7 @@ function renderOfficeEvents(events,fc_event,el)
 						}
 						console.log(new_json);
 						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
-						events.push(new_json);
+						officeEvents.push(new_json);
 					}
 				}
 
@@ -736,7 +724,7 @@ function renderOfficeEvents(events,fc_event,el)
 					fc_event.start=fc_event.startDate.getTime()/1000;
 					fc_event.end=fc_event.end.getTime()/1000;
 					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
-					events.push(fc_event);
+					officeEvents.push(fc_event);
 				}
 				else{
 					for(var i=0;i<=a;i++){
@@ -756,7 +744,7 @@ function renderOfficeEvents(events,fc_event,el)
 						}
 						console.log(new_json);
 						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
-						events.push(new_json);
+						officeEvents.push(new_json);
 					}
 				}
 			}
