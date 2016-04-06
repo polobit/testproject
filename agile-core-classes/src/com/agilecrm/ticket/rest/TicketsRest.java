@@ -362,8 +362,9 @@ public class TicketsRest
 			// Execute triggers
 			// TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 
-			BulkActionNotifications.publishNotification("Ticket #" + ticket.id + " has been created.");
-
+//			BulkActionNotifications.publishNotification("Ticket #" + ticket.id + " has been created.");
+			TicketBulkActionsBackendsRest.publishNotification("Ticket #" + ticket.id + " has been created.");
+			
 			return ticket;
 		}
 		catch (Exception e)
