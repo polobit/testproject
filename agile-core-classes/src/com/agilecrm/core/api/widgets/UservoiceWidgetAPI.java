@@ -17,7 +17,7 @@ public class UservoiceWidgetAPI {
 
 	@Path("profile/{widget-id}/{email}")
 	@GET
-	@Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String getPaypalProfileAndInvoices(
 			@PathParam("widget-id") Long widgetId,
 			@PathParam("email") String email) {

@@ -48,6 +48,11 @@ function update_collection_with_prefs(data) {
 
 function save_widget_prefs(pluginName, prefs, callback) {
 	console.log("In save_widget_prefs.");
+	
+	var msgType = "success";
+	var displayName = pluginName;
+	var msg = displayName+" widget saved successfully";	
+
 	/*
 	 * Get widget model from collection based on the name attribute of the
 	 * widget model
@@ -79,7 +84,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 			data.set('is_added', true);
 			models[0].set(data);
 			var widgetID = data.id;
-			var displayName;
+			
 			if(pluginName  == "Rapleaf"){
 				displayName = "Towerdata"
 			}else if(pluginName == "HelpScout"){
@@ -88,10 +93,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				displayName = "Twilio";
 			}else{
 				displayName = pluginName;
-			}
-
-			var msgType = "success";
-			var msg = displayName+" widget saved successfully";
+			}			
 
 			if(widgetID){
 
@@ -150,7 +152,14 @@ function save_widget_prefs(pluginName, prefs, callback) {
 
 		}, error : function(data){
 			console.log(data);
-			alert("error occurred"+data);
+			msgType = "error";
+			
+			if(displayName == "Uservoice"){							
+				msg = ("Error occurred while saving "+displayName);
+			}
+
+			showNotyPopUp(msgType , msg, "bottomRight");
+			$('#save_prefs').removeAttr('disabled');
 		}
 	});
 }

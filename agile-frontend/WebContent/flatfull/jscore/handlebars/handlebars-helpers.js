@@ -810,6 +810,10 @@ $(function()
 	});
 
 
+	Handlebars.registerHelper('decodeString', function(data){
+		return data;
+	});
+
 	/**
 	 * Helper function to return date string from epoch time
 	 */

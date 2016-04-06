@@ -145,16 +145,19 @@ public class UservoiceAPI {
 			response.append(inputLine);
 		}
 		in.close();
+		
+
 		System.out.println(response.toString());
+
 		resultObj = new JSONObject(response.toString());
 		return resultObj;
 	}
 
 	public static void main(String args[]) {
-		 String email = "premtammina22@gmail.com";
-		 String domain = "masala124";
-		 String API_KEY = "Od0Vo5spH4BeFOwotefuw";
-		 String API_SECRET = "Sv7Wib2alD1K2Ih4Ns9ytgFp33ERTmFedlr6k9pA";
+		String email = "premtammina22@gmail.com";
+		String domain = "masala124";
+		String API_KEY = "Od0Vo5spH4BeFOwotefuw";
+		String API_SECRET = "Sv7Wib2alD1K2Ih4Ns9ytgFp33ERTmFedlr6k9pA";
 
 		// String email = "Alekhyaoffice365@gmail.com";
 		// String domain = "alekhyak89";

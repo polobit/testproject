@@ -62,12 +62,11 @@ function loadData(contact_id){
 	if(Email && Email != ""){
 		console.log("Has mail ID in uservoice");
 		var queueName = "widget_queue_"+ contact_id;
-		queueGetRequest(queueName, "core/api/widgets/uservoice/profile/" + uservoice_Plugin_Id + "/"+ Email, "", 
+		queueGetRequest(queueName, "core/api/widgets/uservoice/profile/" + uservoice_Plugin_Id + "/"+ Email, "json",
 		function success(data){		
 			console.log(data);	
 			var sendData = {};
-			if(data){
-				data = JSON.parse(data);												
+			if(data){																				
 				if(data.userInfo.email_address){						
 					sendData.userInfo = data.userInfo;
 					uservoiceOBJ.suggestions = data.suggestions;					

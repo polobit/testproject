@@ -15,7 +15,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.SMSGatewayUtil;
@@ -25,7 +24,6 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.CustomWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -93,17 +91,12 @@ public class WidgetsAPI {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget createWidget(Widget widget) {
+	public Widget createWidget(Widget widget)throws Exception {
 		System.out.println("In widgets api create");
-		if (widget != null) {
-			try {
-				WidgetsAPI.checkValidDetails(widget);
-				widget.save();
-				return widget;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (widget != null) {			
+			WidgetsAPI.checkValidDetails(widget);
+			widget.save();
+			return widget;			
 		}
 		return null;
 	}
@@ -157,16 +150,11 @@ public class WidgetsAPI {
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget updateWidget(Widget widget) {
-		if (widget != null) {
-			try {
-				WidgetsAPI.checkValidDetails(widget);
-				widget.save();
-				return widget;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+	public Widget updateWidget(Widget widget)throws Exception {
+		if (widget != null) {			
+			WidgetsAPI.checkValidDetails(widget);
+			widget.save();
+			return widget;			
 		}
 		return null;
 	}
