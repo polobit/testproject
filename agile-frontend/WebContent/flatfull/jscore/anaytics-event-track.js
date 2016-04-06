@@ -73,7 +73,7 @@ function agile_update_ga_track_page(hash_content){
 		if(hash_content.split("/").length > 1)
 		   hash_content = hash_content.split("/")[1];
 
-		ga('set', 'page', '/#' + hash_content);
+		ga('b.set', 'page', '/#' + hash_content);
 		ga('b.send', 'pageview');
 	}catch(e){}
 }
