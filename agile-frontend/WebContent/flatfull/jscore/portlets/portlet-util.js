@@ -205,7 +205,11 @@ var portlet_utility = {
 		else if (portlet_type == "TASKSANDEVENTS" && p_name == "Average Deviation") {
 			json['duration'] = "1-day";
 		}
+		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
+			json['activity_type'] = "ALL";
+			json['duration'] = "1-day";
 		return json;
+	}
 	},
 
 	/**
@@ -700,6 +704,10 @@ var portlet_utility = {
 					options+='&entity_type=ALL';
 				else
 				options+='&entity_type='+base_model.get('settings').activity_type;
+			if(base_model.get('settings').duration == undefined){
+				start_date_str="1-day";
+				end_date_str="TOMORROW";
+			}
 			if (base_model.get('settings').owner != undefined
 					&& base_model.get('settings').owner != "") 
 				options+='&user_id='+base_model.get('settings').owner;
