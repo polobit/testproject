@@ -309,8 +309,9 @@
   
   <queue>
     <name>last-contacted-update-queue</name>
-    <rate>10/s</rate>
-    <max-concurrent-requests>20</max-concurrent-requests>
+    <bucket-size>40</bucket-size>
+    <rate>20/s</rate>
+    <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
