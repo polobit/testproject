@@ -607,7 +607,7 @@ function initializeSendEmailListeners(){
 
 	});
 	
-	$('#send-email-listener-container').on('click', '.send-email-close', function(e)
+	/*$('#send-email-listener-container').on('click', '.send-email-close', function(e)
 	{
 		e.preventDefault();
 		if($("#eattachment_key","#emailForm").attr('name')=="edoc_key")
@@ -618,7 +618,7 @@ function initializeSendEmailListeners(){
 		{
 			Backbone.history.navigate("contacts" , {trigger: true});							
 		}
-	});
+	});*/
 	/**
 	 * Sends email to the target email. Before sending, validates and serializes
 	 * email form.

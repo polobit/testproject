@@ -147,7 +147,16 @@ public class DocumentNote extends Cursor
      * 
      */
     
-    
+    /**
+	 * Delete DocumentNote.
+	 */
+	public void delete()
+	{
+		
+		dao.delete(this);
+	}
+
+	
     public DocumentNote(String subject, String description)
     {
 	this.description = description;

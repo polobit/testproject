@@ -41,7 +41,7 @@
                     <div class="text">
                         You can add document by clicking the button below or the one on the right side of the page.
                     </div>
-                    <a href="#" class="documents-add btn btn-default btn-sm m-t-xs"><i class="fa fa-plus-circle"></i>  Add Document</a>
+                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> Add eDoc</a> <a href="#documents/attachment" class="documents-add btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  Add Document</a>
                 </div>
                 <div class="clearfix">
                 </div>
@@ -121,7 +121,7 @@
 </td>
 </script>
 <script id="document-etype-select-collection-template" type="text/html">
-{{#unless this.length}}
+        {{#unless this.length}}
         <div class="bg-light lter b-b wrapper-md">
             <h1 class="m-n font-thin h3"><i class="icon-plus-sign">
             </i> Select Document Template </h1>
@@ -146,8 +146,10 @@
         {{/unless}}
         {{#if this.length}}
                 <div class="bg-light lter b-b wrapper-md">
-                    <h1 class="m-n font-thin h3"><i class="icon-plus-sign">
+                    <h1 class="m-n font-thin h3 pull-left"><i class="icon-plus-sign">
                     </i> Select Document Template </h1>
+                    <a href="#document-templates" class="documents-add btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle" /> Add Document Template</a>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="wrapper-md">
                     <div class="row">
@@ -218,7 +220,7 @@
         {{#if this.length}}
        <div class="panel b-a panel-default" style="height:90%;">
             <div class="panel-heading" >Latest Comments</div>
-                <div class="list-group list-group-sp" id="documents-comments-history">
+                <div class="list-group list-group-sp" id="documents-comments-history" style="overflow-y:scroll;max-height:calc(110vh - 300px);">
                     <section class="scroll">
                         <form>
                           <div class="ref-log">  

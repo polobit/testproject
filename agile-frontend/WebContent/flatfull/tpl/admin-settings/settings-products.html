@@ -17,6 +17,7 @@
                     </div>
                      <div class="box-right pull-left">
                         <h4 class="m-t-none">You do not have any Products currently.</h4>
+                         <div class="text">You can add product by clicking the button below or the one on the right side of the page.</div>
                             <a href="#product-add" class="btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Products</a>
                     </div>
                     <div class="clearfix"></div>
@@ -28,7 +29,7 @@
 {{#if this.length}}
     <div class="row">
         <div class="col-md-12 col-sm-12">
-                    <div class=" table-responsive"> 
+                    <div class=" table-responsive" style="overflow:hidden;"> 
                     <table class="table table-striped agile-table panel table-layout-mob-view showCheckboxes" url="core/api/products/bulk?action_type=DELETE">
                         <thead>
                             <tr>
@@ -111,7 +112,7 @@
         					<label class="control-label col-md-3" for="pprice">Price <span class="field_req ">*</span></label> 
                             <div class="col-md-9">
                            		<div class="controls">
-            						<input type="text" id="pprice" name="price" class="required number form-control" placeholder="Price" autocapitalize="off" min="0" max="1000000000000"/> 
+                                	<input type="text" id="pprice" name="price" class="required number form-control" placeholder="Price" min="0" max="1000000000000"/> 
             					</div>
                             </div>
         				</div>

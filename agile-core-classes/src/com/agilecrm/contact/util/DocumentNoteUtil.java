@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.agilecrm.activities.Category;
 import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Query;
@@ -29,15 +30,33 @@ public class DocumentNoteUtil
     // Dao
     private static ObjectifyGenericDao<DocumentNote> dao = new ObjectifyGenericDao<DocumentNote>(DocumentNote.class);
 
-    /**
-     * Gets all the notes related to a contact
-     * 
-     * @param contactId
-     *            contact id to get its notes
-     * @return list of notes related to a contact
-     * @throws Exception
-     */
+    
 
+    public DocumentNote getDocumentNote(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return null;
+    }
+    /**
+     * Delete the DocumentNote.
+     * 
+     * @param id
+     *            id of the documentnote which has to be deleted.
+     */
+    public void deleteDocumentNote(Long id)
+    {
+	DocumentNote dnte = getDocumentNote(id);
+	dao.delete(dnte);
+    }
+    
+   
     public static List<DocumentNote> getDocumentsNotes(String document_id,int max, String cursor) throws Exception
     {
     	

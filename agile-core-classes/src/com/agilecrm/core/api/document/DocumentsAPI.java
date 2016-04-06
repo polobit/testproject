@@ -161,11 +161,26 @@ public class DocumentsAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
-	JSONArray documentsJSONArray = new JSONArray(model_ids);
-	ActivitySave.createLogForBulkDeletes(EntityType.DOCUMENT, documentsJSONArray,
-		String.valueOf(documentsJSONArray.length()), "documents deleted");
+		JSONArray documentsJSONArray = new JSONArray(model_ids);
+		if (documentsJSONArray != null && documentsJSONArray.length() > 0)
+	    {
+			for (int i = 0; i <= documentsJSONArray.length() - 1; i++)
+			{
+				try{
+					
+					DocumentUtil.deleteDocumentNotes(documentsJSONArray.getString(i));
+				}
+				catch (Exception e)
+			    {
+					e.printStackTrace();
+			    }
+			}	
+	    }	
 
-	Document.dao.deleteBulkByIds(documentsJSONArray);
+		ActivitySave.createLogForBulkDeletes(EntityType.DOCUMENT, documentsJSONArray,
+			String.valueOf(documentsJSONArray.length()), "documents deleted");
+	
+		Document.dao.deleteBulkByIds(documentsJSONArray);
     }
 
     /**

@@ -562,6 +562,7 @@ function populate_deal_products(el, value,form_id){
 	$(form_id).off('keyup');
 	$(form_id).off('keypress');
 	$(form_id).off('blur');
+	$(".modal-body").off('click');
 	
 	$("#deal_products_div",el).html("");
 	App_Deal_Details.deal_products_collection_view=null;
@@ -579,12 +580,27 @@ function populate_deal_products(el, value,form_id){
 		$("#discount_type",form_id).val("Value");
 	$("#discount_type_btn span:first-child",form_id).text($("#discount_type",form_id).val());
 	//Init
+
+	$(".modal-body").on(
+			"click",form_id,
+			function(e)
+			{
+				var source = e.target || e.srcElement;
+				if(source.id=="discount_type_btn" || $(source).hasClass("caret"))
+					return;
+				if($(source).hasClass("caret"))
+					return;
+				if($(".discounttype-input-group-btn",me._form_id).hasClass("open"))
+				{
+					$(".discounttype-input-group-btn",me._form_id).removeClass("open");
+				}	
+			});
 	$(form_id).on(
 			"click",".toggleHead",
 			function(e)
 			{
 				$(this).find('i').toggleClass('icon-plus-sign').toggleClass('icon-minus-sign');
-				$(this).next().toggleClass("hide")
+				$(this).next().toggleClass("hide");
 				//$(this).next().slideToggle('fast');
 				me.Process();
 			});
@@ -633,6 +649,11 @@ function populate_deal_products(el, value,form_id){
 								function(e)
 								{
 									me.close(e,"blur");
+								});
+						$(me._form_id).on("blur",".discounttype-input-group-btn ul",
+								function(e)
+								{
+									$(".discounttype-input-group-btn",me._form_id).removeClass("open");
 								});
 						$(me._form_id).on("click",".discounttype-input-group-btn ul li a",
 								function(e)
@@ -837,15 +858,16 @@ function populate_deal_products(el, value,form_id){
 					}
 					else
 					{
-						if($.isNumeric(value))
+						if($.isNumeric(value) && parseFloat(value)>=0)
 						{
 							$(source).removeClass('block').addClass('hide');			
 							var objTD=$(source).parent('td');
 							objTD.children().eq(0).removeClass('hide').addClass('block');
 						}		
+
 					}
 						
-					if($.isNumeric(value))
+					if($.isNumeric(value) && parseFloat(value)>=0)
 					{
 
 						
@@ -877,6 +899,7 @@ function populate_deal_products(el, value,form_id){
 					}
 						
 					this.input.removeClass('hide').addClass('block');
+					this.input.focus();
 					$(this.input).attr("prev_val",$(this.input).val())
 					jSpan.removeClass('block').addClass('hide');
 					
@@ -968,17 +991,24 @@ function ValidateDealDiscountAmt(_form_id)
 						App_Deal_Details.deal_products_collection_view.collection.models[key].set("total",iQtyPriceTotal)
 						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
 						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
+						{
+						
 							iTotal+=iQtyPriceTotal;		
+						}	
 					}
-
+					if(iTotal ==0 )
+					{
+						$(".calculation-error-status",_form_id).html("Alteast one products should be selected to apply discount")
+						return false;		
+					}
 					if(parseFloat(iDiscountValue)>parseFloat(iTotal))
 					{
-						$(".calculation-error-status",_form_id).html("Discount Value cannot be greater than Total Products Value")
+						$(".calculation-error-status",_form_id).html("Discount value cannot be greater than total products value")
 						return false;	
 					}
 					if(parseFloat(iDiscountValue)<0)
 					{
-						$(".calculation-error-status",_form_id).html("Discount Value cannot be less than 0")
+						$(".calculation-error-status",_form_id).html("Discount value cannot be less than 0")
 						return false;	
 					}	
 				}

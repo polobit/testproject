@@ -425,7 +425,7 @@ function proc_add_document(model_json)
 				if(contactcompanydealtype=="deal")
 				{
 					sPricingTable= get_pricingtable_from_deal(model_json)	
-					$('.deal_tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ model_json.id +'">'+model_json.name+'</li>');
+					$('.deal_tags',el).append('<li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ model_json.id +'">'+model_json.name+'</li>');
 				}
 				else 
 				{

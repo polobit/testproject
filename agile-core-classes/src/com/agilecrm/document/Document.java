@@ -31,6 +31,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
+import com.agilecrm.contact.DocumentNote;
 
 /**
  * 

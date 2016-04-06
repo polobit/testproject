@@ -53,7 +53,7 @@ public class Product
      * price of this product.
      * 
      */
-    private float price = 0;
+    private Double price = 0.0;
 
     /**
      * Type of the entity to which this product belongs.
@@ -68,7 +68,7 @@ public class Product
 
     }
 
-    public Product(String name, String description, float price)
+    public Product(String name, String description, Double price)
     {
 	this.name = name;
 	this.price = price;
@@ -78,7 +78,7 @@ public class Product
     /**
      * @return the price
      */
-    public float getPrice()
+    public Double getPrice()
     {
 	return price;
     }
@@ -150,7 +150,7 @@ public class Product
      * @param entity_type
      *            the entity_type to set
      */
-    public void setPrice(float price)
+    public void setPrice(Double price)
     {
 	this.price = price;
     }

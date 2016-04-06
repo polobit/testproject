@@ -1,5 +1,6 @@
 <script id="deal-products-collection-template" type="text/html">
-<table id="" class="  table table-bordered checkbox dealproducts_table table-responsive noDelete agile-table panel table-layout-mob-view" url="core/api/products" style="padding-top:0px;border-bottom:0px;border-left:0px;">  
+<div class="table-responsive" style="max-width:540px;">
+<table id="" class="  table table-bordered checkbox dealproducts_table  noDelete agile-table panel table-layout-mob-view" url="core/api/products" style="padding-top:0px;border-left:0px;">  
             <thead>
                 <tr>
 					<th style="width:5%;"><label class="i-checks i-checks-sm m-b-none "><input type="checkbox" class=" dealproducts_th_checkbox thead_check" value=""><i></i></label></th>	   
@@ -12,6 +13,7 @@
             </thead>
 			<tbody id='deal-products-model-list' ></tbody>            
         </table>
+  </div>      
 </script>
 
 <script id="deal-products-model-template" type="text/html">
@@ -29,7 +31,7 @@
 	   	</div>
 	</td>
 	<td class='data dealproducts_td_qty'>
-    	<span class="dealproducts_td_qty_span">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" maxlength="4" placeholder="Enter Qty" type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
+    	<span class="dealproducts_td_qty_span" style="cursor:pointer;">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" maxlength="4" style="width: 100%;margin: 0px;box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;" placeholder="Enter Qty" type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
 	</td>
 	<td class='data'>
     	{{price}}
