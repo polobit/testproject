@@ -175,7 +175,7 @@ public class StatsSQLUtil
 	
 	try
 	{
-	    return StatsSQL.getJSONQuery(pageViews,false);
+	    return StatsSQL.getJSONQuery(pageViews);
 	}
 	catch (Exception e1)
 	{
@@ -210,7 +210,7 @@ public class StatsSQLUtil
 	
 	try
 	{
-	    return StatsSQL.getJSONQuery(pageViews,false);
+	    return StatsSQL.getJSONQuery(pageViews);
 	}
 	catch (Exception e1)
 	{
@@ -241,7 +241,7 @@ public class StatsSQLUtil
 		+ "' AND URL !='' AND EMAIL != '' ORDER BY stats_time DESC" + appendLimitToQuery(offset, limit);
 	try
 	{
-	    result = StatsSQL.getJSONQuery(pageViewsQuery,false);
+	    result = StatsSQL.getJSONQuery(pageViewsQuery);
 	    if (result != null)
 		StatsUtil.sendResponse(req, res, result.toString());
 	}
@@ -274,7 +274,7 @@ public class StatsSQLUtil
 		+ appendLimitToQuery(offset, limit);
 	try
 	{
-	    result = StatsSQL.getJSONQuery(pageViewsQuery,false);
+	    result = StatsSQL.getJSONQuery(pageViewsQuery);
 	    if (result != null)
 		StatsUtil.sendResponse(req, res, result.toString());
 	}
@@ -299,7 +299,7 @@ public class StatsSQLUtil
 	    int limit = StatsUtil.getIntegerValue(limitString, 5);
 	    String query = "SELECT * FROM page_visits WHERE domain = "
 		    + StatsGoogleSQLUtil.encodeSQLColumnValue(domain) + " LIMIT " + limit;
-	    JSONArray result = StatsSQL.getJSONQuery(query,false);
+	    JSONArray result = StatsSQL.getJSONQuery(query);
 	    if (result != null)
 		StatsUtil.sendResponse(req, res, result.toString());
 	}
@@ -517,7 +517,7 @@ public class StatsSQLUtil
 	
 	try
 	{
-	    return StatsSQL.getJSONQuery(urlCountQuery,false);
+	    return StatsSQL.getJSONQuery(urlCountQuery);
 	}
 	catch (Exception e)
 	{
@@ -541,30 +541,7 @@ public class StatsSQLUtil
 	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
 		    startTime, endTime, cursor, pageSize);
 	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
-	    return StatsSQL.getJSONQuery(segementationQuery,true);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-    
-    /**
-     * Executes segmentation sql query. Returns contact email count based on page
-     * visits filters.
-     * 
-     * @param query
-     * @return
-     */
-    public static JSONArray getContactEmailCount(String domain,String rules,String startTime,String endTime,String cursor,String pageSize)
-    {
-	try
-	{
-	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
-		    startTime, endTime, cursor, pageSize);
-	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
-	    return StatsSQL.getJSONQuery(segementationQuery,false);
+	    return StatsSQL.getSegments(segementationQuery);
 	}
 	catch (Exception e)
 	{
