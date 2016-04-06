@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
-
+import com.agilecrm.Globals;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.projectedpojos.TicketGroupsPartial;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -167,11 +167,11 @@ public class TicketGroupUtil
 		try
 		{
 			List<DomainUserPartial> domainUsers = DomainUserUtil.getPartialDomainUsers(NamespaceManager.get());
-			
+
 			for (TicketGroups group : ticketGroups)
 			{
 				List<DomainUserPartial> groupUsers = new ArrayList<DomainUserPartial>();
-				
+
 				for (DomainUserPartial domainUser : domainUsers)
 				{
 					if (group.agents_keys.contains(domainUser.id))
@@ -229,5 +229,15 @@ public class TicketGroupUtil
 	public static Long getLongGroupID(String id)
 	{
 		return Base62.fromOtherBaseToDecimal(62, id);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static String getInboundSuffix()
+	{
+		return VersioningUtil.isProductionAPP() ? Globals.INBOUND_EMAIL_SUFFIX_MAIN
+				: Globals.INBOUND_EMAIL_SUFFIX_SANDBOX;
 	}
 }

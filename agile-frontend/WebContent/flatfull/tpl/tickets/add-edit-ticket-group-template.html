@@ -31,13 +31,21 @@
                                     </div>
                                 </div>
                             </div>
-                        {{/if}} 
+                        {{/if}}
                         <div class="control-group form-group">
                             <label class="control-label col-md-3" for="name">Users <span class="field_req">*</span></label> 
                             <div class="col-md-8 m-t-xs">
                                 <div class="controls">
                                     <div id="users-collection" class="controls multiple-checkbox" name="agents_keys">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="send_as">Send as</label> 
+                            <div class="col-md-6">
+                                <div class="controls">
+                                    <input type="text" name="send_as" id="send_as" value="{{send_as}}" class="form-control required email" placeholder="Email" minlength="4" maxlength="30">
                                 </div>
                             </div>
                         </div>

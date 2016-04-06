@@ -7,10 +7,10 @@ import java.util.List;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
 
-import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
@@ -46,6 +46,11 @@ public class TicketGroups
 	 * Stores ticket group name i.e support, sales etc
 	 */
 	public String group_name = "";
+
+	/**
+	 * Stores send as email address
+	 */
+	public String send_as = "";
 
 	/**
 	 * Stores last Group edited time
@@ -138,7 +143,8 @@ public class TicketGroups
 			}
 		}
 
-		group_email = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(id) + Globals.INBOUND_EMAIL_SUFFIX;
+		group_email = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(id)
+				+ TicketGroupUtil.getInboundSuffix();
 	}
 
 	@JsonIgnore
@@ -169,5 +175,4 @@ public class TicketGroups
 
 		return (this.id.longValue() == group.id.longValue());
 	}
-
 }

@@ -193,7 +193,9 @@ public class TicketNotesUtil
 		System.out.println("notesArray: " + notesArray);
 
 		String fromAddress = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(group.id) + "+" + ticket.id
-				+ Globals.INBOUND_EMAIL_SUFFIX;
+				+ TicketGroupUtil.getInboundSuffix();
+
+		fromAddress = StringUtils.isNotBlank(group.send_as) ? group.send_as : fromAddress;
 
 		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
 				SendMail.TICKET_REPLY, json);

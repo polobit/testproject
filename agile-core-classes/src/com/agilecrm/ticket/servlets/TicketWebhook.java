@@ -135,7 +135,7 @@ public class TicketWebhook extends HttpServlet
 			 * Replacing helptor.com text with space so that we'll get a string
 			 * of namespace and group ID separated by delimeter '+'
 			 */
-			String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX, "").split("\\+");
+			String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX_MAIN, "").split("\\+");
 
 			if (toAddressArray.length < 2)
 				return;

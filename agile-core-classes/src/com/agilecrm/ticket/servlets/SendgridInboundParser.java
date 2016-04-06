@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
@@ -102,7 +104,9 @@ public class SendgridInboundParser extends HttpServlet
 					 * string of namespace and group ID separated by delimeter
 					 * '+'
 					 */
-					String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX, "").split("\\+");
+					String inboundSuffix = TicketGroupUtil.getInboundSuffix();
+
+					String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
 
 					if (toAddressArray.length < 2)
 						return;
@@ -131,9 +135,6 @@ public class SendgridInboundParser extends HttpServlet
 					Long groupID = TicketGroupUtil.getLongGroupID(toAddressArray[1]);
 
 					System.out.println("groupID: " + groupID);
-
-					boolean isNewTicket = isNewTicket(toAddressArray);
-					;
 
 					TicketGroups ticketGroup = null;
 
@@ -174,6 +175,11 @@ public class SendgridInboundParser extends HttpServlet
 
 					String[] nameEmail = getNameAndEmail(json);
 
+					// boolean isNewTicket = isNewTicket(toAddressArray);
+					String ticketID = extractTicketIDFromHtml(htmlText);
+
+					boolean isNewTicket = StringUtils.isBlank(ticketID) ? false : true;
+
 					if (isNewTicket)
 					{
 						// Creating new Ticket in Ticket table
@@ -192,7 +198,7 @@ public class SendgridInboundParser extends HttpServlet
 					{
 						try
 						{
-							ticket = TicketsUtil.getTicketByID(Long.parseLong(toAddressArray[2]));
+							ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
 
 						}
 						catch (Exception e)
@@ -362,6 +368,34 @@ public class SendgridInboundParser extends HttpServlet
 	public static boolean isNewTicket(String[] toAddressArray)
 	{
 		return (toAddressArray.length == 3) ? false : true;
+	}
+
+	/**
+	 * 
+	 * @param htmlContent
+	 * @return ticketID
+	 */
+	public static String extractTicketIDFromHtml(String htmlContent)
+	{
+		if (StringUtils.isBlank(htmlContent))
+			return "";
+
+		String ticketID = "";
+
+		// the pattern we want to search for
+		Pattern pattern = Pattern.compile(Globals.TICKET_ID_PATTERN);
+		Matcher matcher = pattern.matcher(htmlContent);
+
+		// if we find a match, get the ticket id
+		if (matcher.find())
+		{
+			// get the ticket id
+			ticketID = matcher.group(1);
+
+			System.out.print("Ticket found in html content: " + ticketID);
+		}
+
+		return ticketID;
 	}
 
 	public static void main(String[] args) throws JSONException, IOException
