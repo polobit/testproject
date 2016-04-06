@@ -79,7 +79,7 @@ $("#webhook_accordian").on('click', function(e) {
         put_allowed_domains(allowed_domains);
     });
 
-    $("#settings-blocked-ips").on('click',function(e){
+    $("#ip_filters").on('click',function(e){
         var My_ip  
         $.getJSON("https://api.ipify.org/?format=json", function(e) {
                    My_ip =  e.ip;
