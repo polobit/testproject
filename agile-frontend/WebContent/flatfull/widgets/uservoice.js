@@ -61,32 +61,37 @@ function loadUservoiceComments(offSet){
 function loadData(contact_id){	
 	if(Email && Email != ""){
 		console.log("Has mail ID in uservoice");
-		var queueName = "widget_queue_"+ contact_id;
-		queueGetRequest(queueName, "core/api/widgets/uservoice/profile/" + uservoice_Plugin_Id + "/"+ Email, "json",
-		function success(data){		
-			console.log(data);	
-			var sendData = {};
-			if(data){																				
-				if(data.userInfo.email_address){						
-					sendData.userInfo = data.userInfo;
-					uservoiceOBJ.suggestions = data.suggestions;					
-					uservoiceOBJ.comments = data.comments.comments;
-				}
-			}			
-			getTemplate('uservoice-profile', sendData, undefined, function(template_ui){				
-		 		if(!template_ui){
-		    		return;		    		
-		    	}
-		    	$('#Uservoice').html(template_ui);
-		    }, "#Uservoice");
+			var URL = "core/api/widgets/uservoice/profile/" + uservoice_Plugin_Id + "/"+ Email;
+				$.ajax({
+				    type: "GET",
+				    url: URL,
+				    contentType: "application/json; charset=utf-8",
+				    dataType: "json",				    
+				    success: function(data) {
+				       console.log(data);	
+						var sendData = {};
+						if(data){																				
+							if(data.userInfo.email_address){						
+								sendData.userInfo = data.userInfo;
+								uservoiceOBJ.suggestions = data.suggestions;					
+								uservoiceOBJ.comments = data.comments.comments;
+							}
+						}			
+						getTemplate('uservoice-profile', sendData, undefined, function(template_ui){				
+					 		if(!template_ui){
+					    		return;		    		
+					    	}
+					    	$('#Uservoice').html(template_ui);
+					    }, "#Uservoice");
 
-		   
-			loadUservoiceComments(0);
-		}, 
-		function error(data){
-			console.log("Has error in uservoice");
-			$('#Uservoice').html('<div class="wrapper-sm">Error occured while fetching comments</div>');
-		});				
+					   
+						loadUservoiceComments(0);
+				    },
+				    error: function (xhr, textStatus, errorThrown) {
+				        console.log("Has error in uservoice");
+						$('#Uservoice').html('<div class="wrapper-sm">Error occured while fetching comments</div>');
+				    }
+				});								
 	}else{		
 		$('#Uservoice').html('<div class="wrapper-sm">Email not found.</div>');
 	}	

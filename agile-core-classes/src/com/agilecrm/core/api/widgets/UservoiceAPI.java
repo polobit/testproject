@@ -104,7 +104,7 @@ public class UservoiceAPI {
 
 		int responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(new InputStreamReader(
-				con.getInputStream()));
+				con.getInputStream(), "UTF-8"));
 		String inputLine;
 
 		StringBuffer response = new StringBuffer();
@@ -137,7 +137,7 @@ public class UservoiceAPI {
 
 		int responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(new InputStreamReader(
-				con.getInputStream()));
+				con.getInputStream(), "UTF-8"));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 
@@ -145,7 +145,6 @@ public class UservoiceAPI {
 			response.append(inputLine);
 		}
 		in.close();
-		
 
 		System.out.println(response.toString());
 
