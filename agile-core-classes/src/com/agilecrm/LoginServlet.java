@@ -297,11 +297,13 @@ public class LoginServlet extends HttpServlet {
 					data.put("browser_name", request.getParameter("browser_Name"));
 					data.put("browser_version",request.getParameter("browser_version"));
 					data.put("owner_pic", domainUser.getOwnerPic());
+					data.put("email", domainUser.email);
+					data.put("domain", domainUser.domain);
 					data.put("IP_Address", request.getRemoteAddr());
 					data.put("created-time", domainUser.getCreatedTime().toString());
-					data.put("city",request.getHeader("X-AppEngine-City"));
+					data.put("city",request.getHeader("X-AppEngine-City").toUpperCase());
 					data.put("country",request.getHeader("X-AppEngine-Country"));
-					data.put("region", request.getHeader("X-AppEngine-Region"));
+					data.put("region", request.getHeader("X-AppEngine-Region").toUpperCase());
 					System.out.println("data "+data);
 					// Simulate template
 					String template = SendMail.ALLOW_IP_ACCESS;
