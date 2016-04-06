@@ -59,7 +59,7 @@ public class SegmentationQueryGenerator
 	    if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)
 		    && StringUtils.isNotBlank(filterJsonString))
 	    {
-		segmentationQuery = "select email from page_visits where domain = '" + domain
+		segmentationQuery = "select SQL_CALC_FOUND_ROWS email from page_visits where domain = '" + domain
 			+ "' and email!='' and stats_time between '" + startTime + "' and  '" + endTime + "' ";
 		
 		List<SegmentationRule> rules = new ArrayList<SegmentationRule>();
