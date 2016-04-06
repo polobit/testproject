@@ -199,7 +199,8 @@ public class TicketGroupRest
 			// Set updated values
 			dbGroup.group_name = ticketGroup.group_name;
 			dbGroup.setAgents_key_list(agents_key_list);
-
+			dbGroup.send_as = ticketGroup.send_as;
+					
 			dbGroup.save();
 
 			return dbGroup;
