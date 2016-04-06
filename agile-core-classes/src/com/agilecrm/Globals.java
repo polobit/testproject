@@ -216,7 +216,7 @@ public class Globals
 	public static final String GRAVATAR_SECURE_DEFAULT_IMAGE_URL = "https://clickdesk.agilecrm.com/flatfull/images/flatfull/user-default.jpg";
 	// Inbound email address suffix
 	public static final String INBOUND_EMAIL_SUFFIX_MAIN = "@helptor.com";
-	public static final String INBOUND_EMAIL_SUFFIX_SANDBOX = "@kikchat.com";
+	public static final String INBOUND_EMAIL_SUFFIX_SANDBOX = "@crm.io";
 	public static final String TICKET_ID_PATTERN = "<div class=\"agl_tckt_id\" style=\"display:none;\">(\\d+)</div>";
 	
 	// Gravatar image URL
