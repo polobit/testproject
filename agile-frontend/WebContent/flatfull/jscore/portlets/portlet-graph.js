@@ -58,7 +58,7 @@ var portlet_graph_utility = {
 																	+ '<td class="p-n"><b>'
 																	+ milestoneNumbersList[this.point.x]
 																	+ '</b></td></tr>'
-																	+ '<tr><td class="p-n">Total Value:'+' '+'</td>'
+																	+ '<tr><td style="padding-right:1px">Total Value:'+' '+'</td>'
 																	+ '<td class="p-n"><b>'
 																	+ portlet_utility
 																			.getPortletsCurrencySymbol()
