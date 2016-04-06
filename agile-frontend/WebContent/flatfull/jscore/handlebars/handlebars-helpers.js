@@ -821,7 +821,7 @@ $(function()
 	{
 		if(date){
 			var newDate = new Date(date);
-			newDate = (newDate.getMonth() + 1) + '/' + newDate.getDate() + '/' +  newDate.getFullYear();
+			newDate = (newDate.getMonth() + 1) + '/' + newDate.getDate() + '/' +  newDate.getFullYear() + " "+ newDate.getHours()+":"+newDate.getMinutes()+":"+newDate.getSeconds();
 			return newDate;
 		}
 	});
