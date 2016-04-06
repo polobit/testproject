@@ -178,7 +178,7 @@ public class SendgridInboundParser extends HttpServlet
 					// boolean isNewTicket = isNewTicket(toAddressArray);
 					String ticketID = extractTicketIDFromHtml(htmlText);
 
-					boolean isNewTicket = StringUtils.isBlank(ticketID) ? false : true;
+					boolean isNewTicket = StringUtils.isBlank(ticketID) ? true : false;
 
 					if (isNewTicket)
 					{
@@ -388,13 +388,10 @@ public class SendgridInboundParser extends HttpServlet
 
 		// if we find a match, get the ticket id
 		if (matcher.find())
-		{
-			// get the ticket id
 			ticketID = matcher.group(1);
-
-			System.out.print("Ticket found in html content: " + ticketID);
-		}
-
+		
+		System.out.print("Ticket found in html content: " + ticketID);
+		
 		return ticketID;
 	}
 
