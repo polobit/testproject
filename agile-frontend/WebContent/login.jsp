@@ -127,9 +127,9 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 body {
 	
 	<% 
-	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+	if(!MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 
-		background-color: rgba(0, 0, 0, 0);
+		background-color: #f0f3f4;
 	
 	<% }else {  %>
 	
@@ -148,7 +148,7 @@ body {
 
 .text-white
 {
-color:#fff!important;
+color:#fff;
 }
 input
 {
@@ -158,7 +158,9 @@ a:hover
 {
 text-decoration:underline;
 }
-
+#mobile .tags-color{
+color:#58666e !important;
+}
 .error {
 	color: white !important;
 	background-color: #c74949;
@@ -176,16 +178,6 @@ position: fixed;width: 100%;top: 0px;
 	#simple-modal {
 		display: none;
 	}
-}
-.overlay:before{
-  content: "";
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    background-color: black;
-    opacity: 0.25;
 }
 .view{
 	position: absolute;
@@ -233,12 +225,20 @@ if(isSafari && isWin)
 	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
-  			<div class="container w-xxl w-auto-xs view">
-				
-					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
+  			<div class="container w-xxl w-auto-xs view"
+  			<%
+  			if(!MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+		id="mobile"
+	<% }else {  %> <%}%>>
+	<%
+				if(!MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+				<div >
+		<img class="navbar-brand col-md-offset-2" src="images/agile-crm-logo.png"  ></img></div>
+	<% }else {  %> 
+					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t tags-color text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
-				
+				<%}%>
 				<div>
 				
 				<form id='oauth' name='oauth' method='post'>
@@ -267,7 +267,7 @@ if(isSafari && isWin)
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 				</form>
 			<!-- 	<div class="clearfix"></div> -->
-				<div class="wrapper text-center text-white">
+				<div class="wrapper text-center tags-color text-white tags-color">
       				<strong>Sign in using your registered account</strong>
    				</div>
 				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isValid();">
@@ -303,14 +303,20 @@ if(isSafari && isWin)
 					
 				
 
-				
-		<div class="text-center text-white m-t m-b">
+		<div 		
+		
+		<%
+  			if(!MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+		id="mobile"
+	<% }else {  %> <%}%> >
+	<div class="text-center tags-color text-white m-t m-b" >
 		<small>Login with</small> 
-		<a title="Login with Google" data='google' href='#' class="openid_large_btn google text-white">Google</a>&nbsp|&nbsp
-		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo text-white">Yahoo</a><br/>	
-		<small>Do not have an account?</small> <a href="/register" class="text-white">Sign Up</a><br/>
-		<small>Forgot</small> <a href="/forgot-password" class="text-white">Password? </a><a href="/forgot-domain" class="text-white">Domain?</a>
+		<a title="Login with Google" data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
+		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
+		<small>Do not have an account?</small> <a href="/register" class="tags-color text-white">Sign Up</a><br/>
+		<small>Forgot</small> <a href="/forgot-password" class="tags-color text-white">Password? </a><a href="/forgot-domain" class="tags-color text-white">Domain?</a>
 		</div>
+	</div>
 		
 		</form>
 		</div>
