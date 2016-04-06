@@ -130,7 +130,7 @@ public class SendMail
 
 	//For AllowAccessIP
 	public static final String ALLOW_IP_ACCESS = "allow_ip_access";
-	public static final String ALLOW_IP_ACCESS_SUBJECT = "Add IP to allow access";
+	public static final String ALLOW_IP_ACCESS_SUBJECT = "You have not added an IP address.";
 
 	// Ticket template names
    	public static final String TICKET_REPLY = "ticket_reply_email";
@@ -139,7 +139,7 @@ public class SendMail
    	
    	//For browser Fingerprint
    	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
-   	public static final String NEW_REPLY_SUBJECT = "wrong user";
+   	public static final String NEW_REPLY_SUBJECT = "New sign-in";
    	
    	
 
