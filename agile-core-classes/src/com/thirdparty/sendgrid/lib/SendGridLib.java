@@ -529,6 +529,25 @@ public class SendGridLib {
 
 		public String getSmtpJsonString()
 		{
+			JSONObject SMTPJSON = new JSONObject();
+			
+			try
+			{
+				if(this.smtpJsonString != null)
+					SMTPJSON = new JSONObject(smtpJsonString);
+				
+				// Adds filters to disable SendGrid's Clicks and Opens
+				SMTPJSON.put(SendGridUtil.FILTERS, SendGridUtil.getFilterJSON());
+				
+				if(SMTPJSON.length() > 0)
+					this.smtpJsonString = SMTPJSON.toString();
+			}
+			catch (JSONException e)
+			{
+				System.err.println("Exception occured while getting SMTP json..." + e.getMessage());
+				e.printStackTrace();
+			}
+			
 			return this.smtpJsonString;
 		}
 

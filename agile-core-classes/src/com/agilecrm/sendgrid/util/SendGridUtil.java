@@ -32,6 +32,9 @@ public class SendGridUtil
 
     public static final String UNIQUE_ARGUMENTS = "unique_args";
     public static final String SUBSTITUTION_TAG = "sub";
+    public static final String FILTERS = "filters";
+    public static final String CLICKTRACK = "clicktrack";
+    public static final String OPENTRACK = "opentrack";
 
     /**
      * Sendgrid custom substitution tags
@@ -194,7 +197,44 @@ public class SendGridUtil
 		new JSONObject().put(SendGridSubVars.SUBJECT.getString(), json.getJSONArray(SENDGRID_SUBJECT_LIST))
 			.put(SendGridSubVars.HTML.getString(), json.getJSONArray(SENDGRID_HTML_LIST))
 			.put(SendGridSubVars.TEXT.getString(), json.getJSONArray(SENDGRID_TEXT_LIST)));
+	
+	SMTPJSON.put(FILTERS, getFilterJSON());
+	
 	return SMTPJSON;
+    }
+    
+    public static JSONObject getFilterJSON()
+    {
+    	JSONObject filterJSON = new JSONObject();
+    	try
+		{
+			filterJSON.put(CLICKTRACK, getSettingsJSON(0));
+			filterJSON.put(OPENTRACK, getSettingsJSON(0));
+		}
+		catch (JSONException e)
+		{
+			System.err.println("Exception occured in filter settings JSON..." + e.getMessage());
+			e.printStackTrace();
+		}
+    	return filterJSON;
+    }
+    
+    private static JSONObject getSettingsJSON(int enable)
+    {
+    	JSONObject settingsJSON = new JSONObject();
+    	
+    	try
+		{
+			settingsJSON.put("settings", new JSONObject().put("enable", enable));
+		}
+		catch (JSONException e)
+		{
+			System.err.println("Exception occured in settings JSON..." + e.getMessage());
+			e.printStackTrace();
+		};
+		
+		return settingsJSON;
+    			
     }
 
     /**
