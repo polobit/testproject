@@ -18,7 +18,7 @@
   		        </div>
   		        {{/unless}}
   		        {{#if this.length}}
-                  <table id="visitors-table" class="table b-n no-radius  noCheckbox no-sorting panel agile-table " style="table-layout:auto">                
+                  <table id="visitors-table" class="table b-n no-radius  noCheckbox onlySorting panel agile-table " style="table-layout:auto">                
   					<div class="filter-criteria">
   					
   					</div>  					
@@ -59,7 +59,7 @@
   	    			<a id="segmentation-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
               			<i id="icon-filter" class="fa fa-bars icon-white"></i>
             	</a>
-              <small><span class="label label-sm bg-danger m-l-xs">Beta</span></small>
+              <small><span class="btn btn-xs bg-danger m-l-xs" style=" margin-top: -7px;  font-size: 10px; padding-bottom: 0px;">Beta</span></small>
   	    		</div>	    			   
             
           </div>
@@ -88,15 +88,20 @@
   		        </div>
   		        {{/unless}}
   		        {{#if this.length}}
-                  <table id="visitors-table" class="table table-striped  noCheckbox no-sorting panel agile-table"   style="table-layout:auto">               
+                  <table id="visitors-table" class="table table-striped  noCheckbox onlySorting panel agile-table"   style="table-layout:auto">               
   					<div class="filter-criteria">
   					
   					</div>
   				 
-  					<thead>
-                          <tr style="text-transform: capitalize;">
-                              {{webstatsTableHeadings "fields_set"}}
-                          </tr>
+  					<thead>     <tr>
+                            <th></th>
+                             <th>Basic Info</th>
+                            <th>Company</th>
+                            <th>Tags</th>
+                            <th>Score</th>
+                            <th>Star Value</th>                            
+                        </tr>
+                          
                       </thead>
                        
                       <tbody id="segmentation-custom-view-model-list" route="contact/">
@@ -124,15 +129,22 @@
   		        </div>
   		        {{/unless}}
   		        {{#if this.length}}
-                  <table id="visitors-table" class="table table-striped noCheckbox no-sorting panel agile-table"  style="table-layout:auto">                
+                  <table id="visitors-table" class="table table-striped noCheckbox onlySorting panel agile-table"  style="table-layout:auto">                
   					<div class="filter-criteria">
   					
   					</div>
   
   					<thead>
-                          <tr style="text-transform: capitalize;">
-                              {{webstatsTableHeadings "fields_set"}}
+                          <tr>
+                            <th></th>
+                            <th>Basic Info</th>
+                            <th>Company</th>
+                            <th>Tags</th>
+                            <th>Score</th>
+                            <th>Star Value</th>                            
                           </tr>
+
+
                       </thead>
                       <tbody id="segmentation-custom-view-table-model-list" route="contact/">
                       </tbody>
@@ -141,3 +153,94 @@
   				</div>
               </div>
 </script>
+
+
+<script id="segmentation-custom-view-model-template" type="text/html">    
+  <td></td>  
+
+  <td class="data" data={{id}}>
+  <div class="table-resp" style="width:15em;">
+    <div class="thumb-sm agile-img">
+      <a href="#contact/{{id}}" class="activate-link">
+      <img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+    </a>
+    </div>
+      <span>
+    <span>
+      <a class="text-cap">
+        {{contact_name properties type}}</a> </span>
+        <br>
+          <small>{{getPropertyValue properties "email"}}</small>
+      </span>
+  </div>
+  </td>
+  <td class="data" data="{{id}}">
+      <div class="text-ellipsis" style="width:15em;">
+        <a class="text-cap">{{getPropertyValue properties "company"}}</a>
+      </div>
+  </td>
+  <td class="data" data="{{id}}">
+   <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;">  
+    {{#each tags}}
+        <span class="label bg-light dk text-tiny">{{this}}</span> 
+    {{/each}}
+  </div>
+  </td>
+  <td class='data' data='{{id}}'>
+       <div style="width:5em;">
+      {{lead_score}}
+       </div>
+  </td>
+  <td class='data' data='{{id}}'>
+     <ul class="m-n p-n list-none"  style="width:8em;">
+      {{setupRating star_value}}
+    </ul>
+  </td> 
+  
+</script>
+
+
+<script id="segmentation-custom-view-table-model-template" type="text/html">    
+  <td></td>  
+
+  <td class="data" data={{id}}>
+  <div class="table-resp" style="width:15em;">
+    <div class="thumb-sm agile-img">
+      <a href="#contact/{{id}}" class="activate-link">
+      <img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+    </a>
+    </div>
+      <span>
+    <span>
+      <a class="text-cap">
+        {{contact_name properties type}}</a> </span>
+        <br>
+          <small>{{getPropertyValue properties "email"}}</small>
+      </span>
+  </div>
+  </td>
+  <td class="data" data="{{id}}">
+      <div class="text-ellipsis" style="width:15em;">
+        <a class="text-cap">{{getPropertyValue properties "company"}}</a>
+      </div>
+  </td>
+  <td class="data" data="{{id}}">
+   <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;">  
+    {{#each tags}}
+        <span class="label bg-light dk text-tiny">{{this}}</span> 
+    {{/each}}
+  </div>
+  </td>
+  <td class='data' data='{{id}}' style="width:5em;">
+       <div>
+      {{lead_score}}
+       </div>
+  </td>
+  <td class='data' data='{{id}}' style="width:8em;">
+     <ul class="m-n p-n list-none"> 
+      {{setupRating star_value}}
+    </ul>
+  </td>
+  
+</script>
+
