@@ -2,6 +2,8 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -107,6 +109,7 @@ public class LoginServlet extends HttpServlet {
 				
 			}*/
 			
+						
 			if (!StringUtils.isEmpty(multipleLogin)) {
 				handleMulipleLogin(response);
 				return;
@@ -283,21 +286,32 @@ public class LoginServlet extends HttpServlet {
 				request.getSession().setAttribute(SESSION_IPACCESS_VALID, isValidIP);
 				if(!isValid || !isValidIP){
 					
-					Long generatedOTP = System.currentTimeMillis()/1000;
+					Long generatedOTP = System.currentTimeMillis()/100000;
 				
 					System.out.println("generatedOTP "+generatedOTP);
-					domainUser.generatedOTP = generatedOTP + "";
-					domainUser.browser_os = request.getParameter("browser_os");
-					domainUser.browser_name = request.getParameter("browser_name");
-					domainUser.browser_version = request.getParameter("browser_version");
-					domainUser.owner_pic = domainUser.getOwnerPic();
+					//domainUser.generatedOTP = generatedOTP + "";
+					Map<String, String> data = new HashMap<String, String>();
+					String otp = generatedOTP.toString();
+					data.put("generatedOTP", otp);
+					data.put("browser_os", request.getParameter("browser_os"));
+					data.put("browser_name", request.getParameter("browser_Name"));
+					data.put("browser_version",request.getParameter("browser_version"));
+					data.put("owner_pic", domainUser.getOwnerPic());
+					data.put("IP_Address", request.getRemoteAddr());
+					data.put("created-time", domainUser.getCreatedTime().toString());
+					data.put("city",request.getHeader("X-AppEngine-City"));
+					data.put("country",request.getHeader("X-AppEngine-Country"));
+					data.put("region", request.getHeader("X-AppEngine-Region"));
+					System.out.println("data "+data);
 					// Simulate template
 					String template = SendMail.ALLOW_IP_ACCESS;
+					String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
 					if(!isValid){
 						template = SendMail.OTP_EMAIL_TO_USER;
+						subject = SendMail.OTP_REPLY_SUBJECT;
 					}
-					
-					SendMail.sendMail(domainUser.email, SendMail.NEW_REPLY_SUBJECT, template, domainUser);
+					System.out.println(domainUser);
+					SendMail.sendMail(domainUser.email, subject, template, data);
 					request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
 				}
 

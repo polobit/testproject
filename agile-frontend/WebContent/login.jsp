@@ -291,7 +291,7 @@ if(isSafari && isWin)
 						</div>
 						<input class="hide" id="finger_print" name="finger_print"></input>
 						<input class="hide" id="ip_validation" name="ip_validation"></input>
-						<input class="hide" id="browser_name" name="browser_name"></input>
+						<input class="hide" id="browser_Name" name="browser_Name"></input>
 						<input class="hide" id="browser_version" name="browser_version"></input>
 						<input class="hide" id="browser_os" name="browser_os"></input>
 						</div>
@@ -530,7 +530,7 @@ if(isSafari && isWin)
 				};
 				BrowserDetect.init();
 				$('#browser_os').val(BrowserDetect.OS);
-				$('#browser_name').val(BrowserDetect.browser);
+				$('#browser_Name').val(BrowserDetect.browser);
 				$('#browser_version').val(BrowserDetect.version);
 		});
 	</script>

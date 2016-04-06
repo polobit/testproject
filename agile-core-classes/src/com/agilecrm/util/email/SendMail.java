@@ -139,7 +139,7 @@ public class SendMail
    	
    	//For browser Fingerprint
    	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
-   	public static final String NEW_REPLY_SUBJECT = "New sign-in";
+   	public static final String OTP_REPLY_SUBJECT = "New sign-in";
    	
    	
 
