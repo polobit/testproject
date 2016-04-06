@@ -2,6 +2,8 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -343,10 +345,9 @@ public class LoginServlet extends HttpServlet {
 		data.put("email", domainUser.email);
 		data.put("domain", domainUser.domain);
 		data.put("IP_Address", request.getRemoteAddr());
-		data.put("created-time", domainUser.getCreatedTime().toString());
-		data.put("city",request.getHeader("X-AppEngine-City"));
+		/*data.put("city",request.getHeader("X-AppEngine-City"));
 		data.put("country",request.getHeader("X-AppEngine-Country"));
-		data.put("region", request.getHeader("X-AppEngine-Region"));
+		data.put("region", request.getHeader("X-AppEngine-Region"));*/
 		System.out.println("data "+data);
 		return data;
 	}
