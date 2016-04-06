@@ -297,6 +297,13 @@ public class TicketNotesUtil
 		JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail, fromName, toAddress, ccEmailString, "", "",
 				subject, emailHTML, emailBody, "", "");
 
+		// Included x-headers
+		JSONObject headers = messageJSON.getJSONObject(Mandrill.MANDRILL_HEADERS);
+		headers.put("X-Agl-Tckt-Id", dataJSON.getString("ticket_id"));
+
+		// Putting back headers to messageJSON
+		messageJSON.put(Mandrill.MANDRILL_HEADERS, headers);
+
 		String response = null;
 
 		mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);

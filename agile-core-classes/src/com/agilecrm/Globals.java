@@ -217,7 +217,6 @@ public class Globals
 	// Inbound email address suffix
 	public static final String INBOUND_EMAIL_SUFFIX_MAIN = "@helptor.com";
 	public static final String INBOUND_EMAIL_SUFFIX_SANDBOX = "@crm.io";
-	public static final String TICKET_ID_PATTERN = "<span style=\"font-size: 0px; min-height: 0px; max-height: 0px; line-height: 0px; color: rgb(0, 0, 0);\">(\\d+)</span>";
 	
 	// Gravatar image URL
 	public static final String GRAVATAR_SECURE_IMAGE_URL = "https://secure.gravatar.com/avatar/"; 

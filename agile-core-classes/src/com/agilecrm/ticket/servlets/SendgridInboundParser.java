@@ -1,17 +1,12 @@
 package com.agilecrm.ticket.servlets;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
@@ -29,8 +24,10 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
-import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
@@ -377,29 +374,25 @@ public class SendgridInboundParser extends HttpServlet
 	 */
 	public static String extractTicketIDFromHtml(String htmlContent)
 	{
-		if (StringUtils.isBlank(htmlContent))
-			return "";
-
 		String ticketID = "";
 
-		// the pattern we want to search for
-		Pattern pattern = Pattern.compile(Globals.TICKET_ID_PATTERN);
-		Matcher matcher = pattern.matcher(htmlContent);
+		if (StringUtils.isBlank(htmlContent))
+			return ticketID;
 
-		// if we find a match, get the ticket id
-		if (matcher.find())
-			ticketID = matcher.group(1);
-		
+		Document doc = Jsoup.parseBodyFragment(htmlContent, "UTF-8");
+
+		Elements elements = doc.select("[title=agl_tckt_id]");
+
+		if (elements == null || elements.size() == 0)
+		{
+			System.out.print("No ticketID found...");
+			return ticketID;
+		}
+
+		ticketID = elements.get(0).text();
+
 		System.out.print("Ticket found in html content: " + ticketID);
-		
+
 		return ticketID;
-	}
-
-	public static void main(String[] args) throws JSONException, IOException
-	{
-		File file = new File("D:\\email.txt");
-		FileInputStream inputStream = new FileInputStream(file);
-
-		System.out.println(IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()));
 	}
 }
