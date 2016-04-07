@@ -243,7 +243,7 @@ public class AnalyticsUtil
     {
 	try
 	{
-	    String statsServerUrl = "https://1-2-dot-agilecrm-web-stats.appspot.com/visitors";
+	    String statsServerUrl = "https://1-4-dot-agilecrm-web-stats.appspot.com/visitors";
 	    Map<String, String> params = new LinkedHashMap<String, String>();
 	    params.put("filter_json", filterJSON);
 	    params.put("cursor", cursor);

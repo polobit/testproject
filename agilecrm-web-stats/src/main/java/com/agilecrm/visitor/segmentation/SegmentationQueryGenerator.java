@@ -40,8 +40,8 @@ public class SegmentationQueryGenerator
     }
     
     /**
-     * This method is responsible for generating sql query from LHS and RHS
-     * filters JSON.
+     * This method is responsible for generating segmentation sql query from LHS
+     * and RHS filters JSON.
      * 
      * @param domain
      * @param filterJsonString
@@ -56,47 +56,59 @@ public class SegmentationQueryGenerator
 	String segmentationQuery = "";
 	try
 	{
-	    if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)
-		    && StringUtils.isNotBlank(filterJsonString))
+	    segmentationQuery = "select SQL_CALC_FOUND_ROWS email from page_visits where domain = '" + domain
+		    + "' and email!='' and stats_time between '" + startTime + "' and  '" + endTime + "' ";
+	    String extraConditions = " group by email order by stats_time desc ";
+	    if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime))
 	    {
-		segmentationQuery = "select SQL_CALC_FOUND_ROWS email from page_visits where domain = '" + domain
-			+ "' and email!='' and stats_time between '" + startTime + "' and  '" + endTime + "' ";
-		
-		List<SegmentationRule> rules = new ArrayList<SegmentationRule>();
-		JSONObject filterJsonObject = new JSONObject(filterJsonString);
-		JSONArray filters = filterJsonObject.getJSONArray("rules");
-		SegmentationRule sessionsQuery = null;
-		for (int i = 0; i < filters.length(); i++)
+		if (filterJsonString != null)
 		{
-		    SegmentationRule segmentationRule = new SegmentationRule();
-		    String inputType = (String) filters.getJSONObject(i).get("LHS");
-		    segmentationRule.LHS = getColumnName(inputType);
-		    segmentationRule.CONDITION = (String) filters.getJSONObject(i).get("CONDITION");
-		    segmentationRule.RHS = (String) filters.getJSONObject(i).get("RHS");
-		    if (segmentationRule.CONDITION.equals("IN_BETWEEN"))
-			segmentationRule.RHS_NEW = (String) filters.getJSONObject(i).get("RHS_NEW");
-		    if (inputType.equalsIgnoreCase("webstats"))
-			sessionsQuery = segmentationRule;
-		    else
-			rules.add(segmentationRule);
-		}
-		if (rules.size() > 0)
-		{
-		    String conditionsQuery = constructQuery(rules);
-		    segmentationQuery = segmentationQuery + conditionsQuery;
-		    String extraConditions = " group by email order by stats_time desc ";		    
-		    segmentationQuery = segmentationQuery + extraConditions;
-		    if (sessionsQuery != null)
+		    List<SegmentationRule> rules = new ArrayList<SegmentationRule>();
+		    
+		    JSONObject filterJsonObject = new JSONObject(filterJsonString);
+		    JSONArray filters = filterJsonObject.getJSONArray("rules");
+		    SegmentationRule sessionsQuery = null;
+		    for (int i = 0; i < filters.length(); i++)
 		    {
-			List<SegmentationRule> sessionsQueryList = new ArrayList<SegmentationRule>();
-			sessionsQueryList.add(sessionsQuery);
-			segmentationQuery = segmentationQuery + constructQuery(sessionsQueryList);
+			SegmentationRule segmentationRule = new SegmentationRule();
+			String inputType = (String) filters.getJSONObject(i).get("LHS");
+			segmentationRule.LHS = getColumnName(inputType);
+			segmentationRule.CONDITION = (String) filters.getJSONObject(i).get("CONDITION");
+			segmentationRule.RHS = (String) filters.getJSONObject(i).get("RHS");
+			if (segmentationRule.CONDITION.equals("IN_BETWEEN"))
+			    segmentationRule.RHS_NEW = (String) filters.getJSONObject(i).get("RHS_NEW");
+			if (inputType.equalsIgnoreCase("webstats"))
+			    sessionsQuery = segmentationRule;
+			else
+			    rules.add(segmentationRule);
 		    }
+		    if (rules.size() > 0)
+		    {
+			String conditionsQuery = constructQuery(rules);
+			segmentationQuery = segmentationQuery + conditionsQuery;
+			segmentationQuery = segmentationQuery + extraConditions;
+			if (sessionsQuery != null)
+			{
+			    List<SegmentationRule> sessionsQueryList = new ArrayList<SegmentationRule>();
+			    sessionsQueryList.add(sessionsQuery);
+			    segmentationQuery = segmentationQuery + constructQuery(sessionsQueryList);
+			}
+			segmentationQuery = segmentationQuery + StatsSQLUtil.appendLimitToQuery(cursor, pageSize);
+		    }
+		    log.info(segmentationQuery);
+		}
+		else
+		{
+		    segmentationQuery = segmentationQuery + extraConditions;
 		    segmentationQuery = segmentationQuery + StatsSQLUtil.appendLimitToQuery(cursor, pageSize);
+		    log.info(segmentationQuery);
 		}
 	    }
-	    log.info(segmentationQuery);
-	    return segmentationQuery;
+	    else 
+	    {
+		// start time and end time range is mandatory.
+		return null;
+	    }
 	}
 	catch (Exception e)
 	{
@@ -104,6 +116,7 @@ public class SegmentationQueryGenerator
 	    System.out.println();
 	    return null;
 	}
+	return segmentationQuery;
     }
     
     /**
