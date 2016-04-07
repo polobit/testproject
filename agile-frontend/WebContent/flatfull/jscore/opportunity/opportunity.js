@@ -912,6 +912,8 @@ function populate_deal_products(el, value,form_id){
 					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
 					{
 						var iQtyPriceTotal= parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("qty")) *parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("price"))
+						if(iQtyPriceTotal.toFixed)
+							iQtyPriceTotal=iQtyPriceTotal.toFixed(2)
 						App_Deal_Details.deal_products_collection_view.collection.models[key].set("total",iQtyPriceTotal)
 						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
 						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
