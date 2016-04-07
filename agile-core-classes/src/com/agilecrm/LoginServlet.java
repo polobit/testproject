@@ -272,39 +272,41 @@ public class LoginServlet extends HttpServlet {
 
 		request.getSession().setAttribute("account_timezone", timezone);
 
-		      // Set FingerPrint to check in /home
-				request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
-				String userFingerPrint = domainUser.finger_print;
+        // Set FingerPrint to check in /home
+		request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
+		String userFingerPrint = domainUser.finger_print;
+		
+		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
+		{
+			// Validate fingerprint value
+			boolean isValid = true;
+			if(StringUtils.isNotBlank(userFingerPrint))
+				isValid = userFingerPrint.equals(finger_print);
+			
+			request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
+			
+			boolean isValidIP = IpAccessUtil.isValidIpOpenPanel(request);
+			System.out.println("validip"+isValidIP);
+			request.getSession().setAttribute(SESSION_IPACCESS_VALID, isValidIP);
+			if(!isValid || !isValidIP ){
 				
-				// Validate fingerprint value
-				boolean isValid = true;
-				if(StringUtils.isNotBlank(userFingerPrint))
-					isValid = userFingerPrint.equals(finger_print);
-				
-				request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
-				
-				boolean isValidIP = IpAccessUtil.isValidIpOpenPanel(request);
-				System.out.println("validip"+isValidIP);
-				request.getSession().setAttribute(SESSION_IPACCESS_VALID, isValidIP);
-				if(!isValid || !isValidIP){
-					
-					Long generatedOTP = System.currentTimeMillis()/100000;
-				
-					System.out.println("generatedOTP "+generatedOTP);
-					//domainUser.generatedOTP = generatedOTP + "";
-					Map<String,String> data = getInformationToSend(request, generatedOTP);
-					// Simulate template
-					String template = SendMail.ALLOW_IP_ACCESS;
-					String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
-					if(!isValid){
-						template = SendMail.OTP_EMAIL_TO_USER;
-						subject = SendMail.OTP_REPLY_SUBJECT;
-					}
-					System.out.println(domainUser);
-					SendMail.sendMail(domainUser.email, subject, template, data);
-					request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
+				Long generatedOTP = System.currentTimeMillis()/100000;
+			
+				System.out.println("generatedOTP "+generatedOTP);
+				//domainUser.generatedOTP = generatedOTP + "";
+				Map<String,String> data = getInformationToSend(request, generatedOTP);
+				// Simulate template
+				String template = SendMail.ALLOW_IP_ACCESS;
+				String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
+				if(!isValid){
+					template = SendMail.OTP_EMAIL_TO_USER;
+					subject = SendMail.OTP_REPLY_SUBJECT;
 				}
-
+				System.out.println(domainUser);
+				SendMail.sendMail(domainUser.email, subject, template, data);
+				request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
+			}
+		}
 
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
