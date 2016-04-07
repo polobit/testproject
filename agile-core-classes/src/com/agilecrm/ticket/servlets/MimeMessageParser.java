@@ -196,7 +196,7 @@ public class MimeMessageParser
 		{
 			System.out.println("Plain content.....");
 
-			plainContent = IOUtils.toString(part.getInputStream(), "utf-8");
+			plainContent = IOUtils.toString(part.getInputStream(), "UTF-8");
 
 			System.out.println(plainContent);
 		}
@@ -208,7 +208,7 @@ public class MimeMessageParser
 
 				// htmlContent = (String) part.getContent();
 				//InputStream stream = MimeUtility.decode(part.getInputStream(), "quoted-printable");
-				htmlContent = IOUtils.toString(part.getInputStream(), "utf-8");
+				htmlContent = IOUtils.toString(part.getInputStream(), "UTF-8");
 
 				System.out.println(htmlContent);
 			}

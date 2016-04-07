@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.agilecrm.contact.Contact;
@@ -421,6 +422,8 @@ public class SendgridInboundParser extends HttpServlet
 		String plainText = messageParser.hasPlainContent() ? messageParser.getPlainContent() : "";
 		String htmlText = messageParser.hasHtmlContent() ? messageParser.getHtmlContent() : "";
 
-		System.out.println();
+		Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
+
+		System.out.println(doc.body().html());
 	}
 }

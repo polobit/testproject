@@ -458,13 +458,13 @@ public class TicketNotesUtil
 			if (StringUtils.isBlank(html))
 				return html;
 
-			Document doc = Jsoup.parse(html, "UTF-8");
+			Document doc = Jsoup.parseBodyFragment(html, "UTF-8");
 
 			// Right now considering only mails from gmail
 			for (Element element : doc.select("div.gmail_extra"))
 				element.remove();
 
-			return doc.toString();
+			return doc.body().html();
 		}
 		catch (Exception e)
 		{
