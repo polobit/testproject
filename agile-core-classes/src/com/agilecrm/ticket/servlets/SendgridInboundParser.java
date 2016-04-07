@@ -423,7 +423,8 @@ public class SendgridInboundParser extends HttpServlet
 		String htmlText = messageParser.hasHtmlContent() ? messageParser.getHtmlContent() : "";
 
 		Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
-
+		
+		System.out.println("htmlText...");
 		System.out.println(doc.body().html());
 	}
 }

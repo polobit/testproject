@@ -2,10 +2,12 @@ package com.agilecrm.ticket.servlets;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -208,8 +210,15 @@ public class MimeMessageParser
 
 				// htmlContent = (String) part.getContent();
 				//InputStream stream = MimeUtility.decode(part.getInputStream(), "quoted-printable");
-				htmlContent = IOUtils.toString(part.getInputStream(), "UTF-8");
-
+				//htmlContent = IOUtils.toString(part.getInputStream(), "UTF-8");
+				
+				InputStreamReader isr = new InputStreamReader(part.getInputStream(), "UTF-8");
+				BufferedReader br = new BufferedReader(isr);
+				
+				String line = "";
+				while((line = br.readLine()) != null)
+					htmlContent += line;
+				
 				System.out.println(htmlContent);
 			}
 			else
