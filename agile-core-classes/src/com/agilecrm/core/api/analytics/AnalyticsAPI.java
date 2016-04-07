@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.analytics;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +24,6 @@ import com.analytics.util.AnalyticsUtil;
 import com.campaignio.reports.CampaignReportsUtil;
 import com.campaignio.reports.DateUtil;
 import com.google.appengine.api.NamespaceManager;
-
 
 /**
  * <code>AnalyticsAPI</code> is the API class that handles web-stats requests.
@@ -92,40 +92,42 @@ public class AnalyticsAPI
 	return sessionsCount.toString();
 	
     }
-
-
+    
     @POST
     @Path("/filter/dynamic-filter")
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Contact> filterCustomers(@FormParam("filterJson") String filterJson,
-        @FormParam("page_size") String count, @FormParam("cursor") String cursor , @FormParam("start_time") Long startTime , @FormParam("end_time") Long endTime ,@FormParam("timeZone") String timeZone) 
+    public String filterCustomers(@FormParam("filterJson") String filterJson,
+	    @FormParam("page_size") String countString, @FormParam("cursor") String cursorString,
+	    @FormParam("start_time") Long startTime, @FormParam("end_time") Long endTime,
+	    @FormParam("timeZone") String timeZone)
     {
-	List<Contact> contacts = null;
+	JSONArray contacts = new JSONArray();
 	try
 	{
-	    if(StringUtils.isBlank(cursor))
-		cursor = "0";
-	    String startTimeString = DateUtil.getMySQLNowDateFormat(startTime,timeZone);
-	    String endTimeString = DateUtil.getMySQLNowDateFormat(endTime,timeZone);
-	    List<String> contactEmails = AnalyticsUtil.getEmails(filterJson, startTimeString, endTimeString, count, cursor);
-	    System.out.println("Emails count " + contactEmails.size());
-	    for(int i=0;i<contactEmails.size();i++)
-		System.out.println("email " + contactEmails.get(i));
-	    contacts = AnalyticsUtil.getContacts(contactEmails);
+	    int cursor = AnalyticsUtil.getIntegerValue(cursorString, 0);
+	    int count = AnalyticsUtil.getIntegerValue(countString, 20);
+	    if (StringUtils.isBlank(cursorString))
+		cursorString = "0";
+	    String startTimeString = DateUtil.getMySQLNowDateFormat(startTime, timeZone);
+	    String endTimeString = DateUtil.getMySQLNowDateFormat(endTime, timeZone);
+	    List<String> contactEmails = AnalyticsUtil.getEmails(filterJson, startTimeString, endTimeString,
+		    countString, cursorString);
+	    contacts = AnalyticsUtil.getContacts(contactEmails, cursor, count);
 	}
 	catch (Exception e)
 	{
-	    return null;
+	    return contacts.toString();
 	}
-	return contacts;
+	return contacts.toString();
     }
     
     @POST
     @Path("/filter/dynamic-filter/count")
-    public int getCountVisitors(@FormParam("filterJson") String filterJson, @FormParam("start_time") Long startTime , @FormParam("end_time") Long endTime) 
+    public int getCountVisitors(@FormParam("filterJson") String filterJson, @FormParam("start_time") Long startTime,
+	    @FormParam("end_time") Long endTime)
     {
-        return 0;
+	return 0;
     }
     
 }

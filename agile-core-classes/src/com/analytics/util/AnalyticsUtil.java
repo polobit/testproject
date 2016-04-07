@@ -293,37 +293,64 @@ public class AnalyticsUtil
     }
     
     @SuppressWarnings("unchecked")
-    public static List<Contact> getContacts(List<String> contactEmails)
+    public static JSONArray getContacts(List<String> contactEmails, int cursor, int count)
     {
 	List<Contact> contacts = null;
-	int emailCount = 0;
+	JSONArray contactsArray = new JSONArray();
+	int totalEmailCount = 0;
 	if (contactEmails != null && contactEmails.size() > 0)
 	{
 	    try
 	    {
-		String emailCountString = contactEmails.get(contactEmails.size() - 1);
-		emailCount = Integer.parseInt(emailCountString);
-		contactEmails.remove(contactEmails.size() - 1);
+		try
+		{
+		    String emailCountString = contactEmails.get(contactEmails.size() - 1);
+		    totalEmailCount = Integer.parseInt(emailCountString);
+		    contactEmails.remove(contactEmails.size() - 1);
+		}
+		catch (Exception e)
+		{
+		    System.out.println("Exception occured while converting segmentation email count string to int "
+			    + e.getMessage());
+		}
+		Objectify ofy = ObjectifyService.begin();
+		for (int i = 0; i < contactEmails.size(); i++)
+		{
+		    com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
+		    Map<String, Object> searchMap = new HashMap<String, Object>();
+		    searchMap.put("type", Contact.Type.PERSON);
+		    searchMap.put("properties.name", "email");
+		    searchMap.put("properties.value", contactEmails.get(i));
+		    for (String propName : searchMap.keySet())
+			query.filter(propName, searchMap.get(propName));
+		    System.out.println(query.toString());
+		    Contact contact = dao.fetch(query);
+		    if (contact != null)
+		    {
+			ObjectMapper mapper = new ObjectMapper();
+			String contactString = mapper.writeValueAsString(contact);
+			JSONObject contactJSON = new JSONObject(contactString);
+			contactsArray.put(contactJSON);
+		    }
+		    else
+		    {
+			JSONObject contactJSON = buildDummyContact(contactEmails.get(i));
+			contactsArray.put(contactJSON);
+		    }
+		}
+		JSONObject contactJSON = contactsArray.getJSONObject(contactsArray.length() - 1);
+		contactJSON.put("count", totalEmailCount);
+		cursor = cursor + count;
+		if (totalEmailCount > count)
+		{
+		    contactJSON.put("cursor", cursor);
+		}
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("Exception occured while converting segmentation email count string to int "
-			+ e.getMessage());
+		System.out.println("Exception occured while fetching segmented contacts " + e.getMessage());
 	    }
-	    Objectify ofy = ObjectifyService.begin();
-	    com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
-	    Map<String, Object> searchMap = new HashMap<String, Object>();
-	    searchMap.put("type", Contact.Type.PERSON);
-	    searchMap.put("properties.name", "email");
-	    searchMap.put("properties.value IN", contactEmails);
-	    for (String propName : searchMap.keySet())
-	    {
-		query.filter(propName, searchMap.get(propName));
-	    }
-	    System.out.println(query.toString());
-	    contacts = dao.fetchAll(query);
-	    Contact contact = contacts.get(contacts.size() - 1);
-	    contact.count = emailCount;
+	    
 	}
 	// for (String propName : .keySet())
 	// {
@@ -331,7 +358,45 @@ public class AnalyticsUtil
 	// }
 	// contacts =
 	// ofy.query(Contact.class).filter("type",Contact.Type.PERSON).filter("properties.name","email").filter("properties.value IN",contactEmails).list();
-	return contacts;
+	return contactsArray;
+    }
+    
+    private static JSONObject buildDummyContact(String email)
+    {
+	JSONObject contact = new JSONObject();
+	JSONArray properties = new JSONArray();
+	JSONObject emailProperty = new JSONObject();
+	try
+	{
+	    emailProperty.put("type", "SYSTEM");
+	    emailProperty.put("name", "email");
+	    emailProperty.put("value", email);
+	    properties.put(emailProperty);
+	    contact.put("properties", properties);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception occured while building dummy contact " + e.getMessage());
+	}
+	return contact;
+    }
+    
+    public static int getIntegerValue(String value, int defaultValue)
+    {
+	int result = defaultValue;
+	if (StringUtils.isNotBlank(value))
+	{
+	    try
+	    {
+		result = Integer.parseInt(value);
+	    }
+	    catch (Exception e)
+	    {
+		result = defaultValue;
+		return result;
+	    }
+	}
+	return result;
     }
     
 }
