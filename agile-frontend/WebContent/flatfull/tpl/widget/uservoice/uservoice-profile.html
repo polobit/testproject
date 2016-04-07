@@ -1,0 +1,118 @@
+<script id="uservoice-login-template" type="text/html">
+	<div>
+		<form  id="uservoice_login_form" name="uservoice_login_form" method="post">
+	    	<fieldset>			
+				<label>Enter your Uservoice details </label>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="uv_api_key" placeholder="API Key" class="input-medium required widget_input_box form-control" value="" name="uv_api_key">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="uv_secert_key" class="input-medium required widget_input_box form-control"  placeholder="Secert Key" value="" name="uv_secert_key">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="uv_domain_name" class="input-medium required widget_input_box form-control"  placeholder="Domain Name" value="" name="uv_domain_name">
+						</input>
+					</div>
+				</div>
+				<div class="text-center">		
+				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				</div>
+			 </fieldset>
+	    </form>
+	</div>
+</script>
+
+<script id="uservoice-profile-template" type="text/html">
+{{#if userInfo}}
+
+<div class="wrapper-sm">
+  <div class="row">
+  		<div class="col-md-3">
+		<a class="thumb m-r-sm" style="cursor: initial;">
+			{{#if userInfo.avatar_url}}
+				<img src="{{userInfo.avatar_url}}" width="36" height="36" alt="" class="img-circle" style="cursor: initial;"/>
+			{{else}}
+				<img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" alt="" class="img-circle"/>
+			{{/if}}	
+		</a>
+  </div>
+  <div class="col-md-9">  	
+  	{{#if userInfo.name}}
+			<a class="text-cap text-base m-b-xs" style="cursor: initial;">{{userInfo.name}}</a>	
+	{{/if}}		
+	<div class="row">
+			<div class="col-md-5">
+				<div class="pull-right">:</div> Role
+			</div>
+			<div class="col-md-6 p-n">
+				{{#if userInfo.is_admin}}
+					 Admin
+				{{else}}
+					 General User
+				{{/if}}
+			</div>
+	</div>
+	<div class="row">
+			<div class="col-md-5">
+				<div class="pull-right">:</div> Status
+			</div>
+			<div class="col-md-6 p-n">
+				{{#if_equals userInfo.allowed_state "allowed"}}
+					 Active
+				{{else}}
+					 Blocked
+				{{/if_equals}}
+			</div>
+	</div>
+  </div>
+</div>
+<div class="clear-fix"></div>
+</div>
+<div id="uservoice-comments"></div>
+{{else}}
+	<div class="wrapper-sm">
+		User not found.
+	</div>
+{{/if}}
+</script>
+
+<script id="uservoice-transactions-template" type="text/html">
+{{#if comments.length}}
+	{{#each comments}}
+		<li class="list-group-item r-none b-l-none b-r-none text-xs" style="width:249px;">	
+			<div class="row">		
+				<div class="col-md-12 word-break font-bold text-sm" title="{{getSuggestionName suggestion.id}}">
+					{{getSuggestionName suggestion.id}}
+				</div>
+			</div>
+			<div class="row">	
+				<div class="col-md-12 m-t-sm line-clamp line-clamp-3 text-flow-ellipsis word-break" style="max-height:4.2em;">
+					{{#decodeString formatted_text}}{{/decodeString}}
+				</div>
+			</div>
+			<div class="row">
+				{{#if suggestion.url}}			
+					<div class="pull-left p-sm">
+						<a class="btn btn-xs btn-default" target="_blank" href="{{suggestion.url}}">
+							View on Uservoice
+						</a>
+					</div>
+				{{/if}}
+			</div>					
+			<div class="clear-fix"></div>												
+			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{uservoicedate created_at}}">{{uservoicedate created_at}}</time>
+			</small>
+		</li>
+	{{/each}}
+{{else}}
+	<li class="list-group-item r-none b-l-none b-r-none"> No Comments </li>
+{{/if}}
+</script>

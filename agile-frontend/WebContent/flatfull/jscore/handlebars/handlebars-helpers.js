@@ -17,7 +17,6 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
-
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
 		if(amount == 0){
@@ -813,6 +812,21 @@ $(function()
 	});
 
 
+	Handlebars.registerHelper('decodeString', function(data){
+		return data;
+	});
+
+	/**
+	 * Helper function to return date string from epoch time
+	 */
+	Handlebars.registerHelper('uservoicedate', function(date)
+	{
+		if(date){
+			var newDate = new Date(date);
+			newDate = (newDate.getMonth() + 1) + '/' + newDate.getDate() + '/' +  newDate.getFullYear() + " "+ newDate.getHours()+":"+newDate.getMinutes()+":"+newDate.getSeconds();
+			return newDate;
+		}
+	});
 
 	// Helper function to return date in user selected format in  preferences.
 
@@ -7212,4 +7226,10 @@ Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
 	else
 		return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
 	
+});
+
+Handlebars.registerHelper('getSuggestionName', function(suggestionId){
+		if(suggestionId){
+			return uservoiceOBJ.suggestions[suggestionId];
+		}		
 });

@@ -329,6 +329,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("formbuilder.js")
 	}
+	if (templateName.indexOf("uservoice") == 0)
+	{
+		template_relative_urls.push("uservoice.js");
+	}
 	return template_relative_urls;
 }
 
