@@ -797,7 +797,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
-	$('#opportunity-listners').off('mouseenter', '#opportunities-model-list > tr');
+	/*$('#opportunity-listners').off('mouseenter', '#opportunities-model-list > tr');
 	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
         var data = $(this).find('.data').attr('data');
 
@@ -818,10 +818,10 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	        	"container": 'body'
 	        });
 
-			/**
+			*
 	         * Checks for last 'tr' and change placement of popover to 'top' inorder
 	         * to prevent scrolling on last row of list
-	         **/
+	         *
 	       $('#opportunities-model-list > tr:last').popover({
 	        	"rel" : "popover",
 	        	"trigger" : "hover",
@@ -836,14 +836,14 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 
 		}, null);
      });
-	
+	*/
     /**
      * On mouse out on the row hides the popover.
      **/
-    $('#opportunity-listners').off('mouseleave', '#opportunities-model-list > tr');
+   /* $('#opportunity-listners').off('mouseleave', '#opportunities-model-list > tr');
 	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
     	 $(this).popover('hide');
-    });
+    });*/
 	
     /**
      * On click on the row hides the popover.
