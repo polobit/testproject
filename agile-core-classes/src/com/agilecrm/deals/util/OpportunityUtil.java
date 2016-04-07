@@ -298,8 +298,12 @@ public class OpportunityUtil
 	    try
 	    {
 		// Total and Pipeline (total * probability)
-		double total = opportunity.expected_value;
-		double pipeline = opportunity.expected_value * opportunity.probability / 100;
+		double total = 0D;
+        double pipeline = 0D;
+         if(opportunity.expected_value!=null){
+            total=opportunity.expected_value;
+            pipeline=opportunity.expected_value * opportunity.probability / 100;
+         }
 
 		/*
 		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
@@ -874,8 +878,13 @@ public class OpportunityUtil
 		if (opportunity.milestone.equalsIgnoreCase(lostMilestone))
 		    opportunity.probability = 0;
 		// Total and Pipeline (total * probability)
-		double total = opportunity.expected_value;
-		double pipeline = opportunity.expected_value * opportunity.probability / 100;
+		double total = 0D;
+        double pipeline = 0D;
+         if(opportunity.expected_value!=null){
+            total=opportunity.expected_value;
+            pipeline=opportunity.expected_value * opportunity.probability / 100;
+         }
+		
 
 		/*
 		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
@@ -2185,7 +2194,10 @@ public class OpportunityUtil
 		    if (type.equalsIgnoreCase("deals"))
 			count++;
 		    else
+            {
+                 if(revenue!=null)
 			count = count + revenue;
+        }
 		    sourcecount1.put(source_id.toString(), count);
 		    newDealsObject.put(createdtime, sourcecount1);
 		}
@@ -2355,6 +2367,7 @@ public class OpportunityUtil
 		    int count = sourceObject.getInt("count");
 		    count++;
 		    Double total = sourceObject.getDouble("total");
+            if(value!=null)
 		    total = total + value;
 		    sourceObject.put("count", count);
 		    sourceObject.put("total", total);
@@ -2416,6 +2429,7 @@ public class OpportunityUtil
 	if (pipelineId != null)
 	{
 	    milestone1 = MilestoneUtil.getMilestone(pipelineId);
+	    if(milestone1!=null){
 	    if (milestone1.lost_milestone != null)
 	    {
 		conditionsMap.put("milestone", milestone1.lost_milestone);
@@ -2481,6 +2495,7 @@ public class OpportunityUtil
 			else
 				list2.add(list_it);
 		}
+	    }
 	    }
 	}
 	else
@@ -2628,6 +2643,7 @@ public class OpportunityUtil
 		    int count = sourceObject.getInt("count");
 		    count++;
 		    Double total = sourceObject.getDouble("total");
+            if(value!=null)
 		    total = total + value;
 		    sourceObject.put("count", count);
 		    sourceObject.put("total", total);

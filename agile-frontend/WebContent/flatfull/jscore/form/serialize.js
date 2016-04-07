@@ -302,7 +302,7 @@ function serializeLhsFilters(element)
 		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
 			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
 
-			RHS_VALUE = getGMTEpochFromDate(date);
+			RHS_VALUE = getGMTEpochFromDateForDynamicFilters(date);
 		}
 		if ($(RHS_ELEMENT).hasClass("custom_contact") || $(RHS_ELEMENT).hasClass("custom_company")) {
 			RHS_VALUE = $(RHS_ELEMENT).parent().find("input").attr("data");
@@ -332,11 +332,10 @@ function serializeLhsFilters(element)
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
 			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
 		if(CONDITION != "BETWEEN") {
-			RHS_NEW_VALUE = getGMTEpochFromDate(date);
+			RHS_NEW_VALUE = getGMTEpochFromDateForDynamicFilters(date);
 		}
 		else {
-			date = new Date(getGMTEpochFromDate(date) + (24 * 60 * 60 * 1000) - 1);
-
+			date = new Date(getGMTEpochFromDateForDynamicFilters(date) + (24 * 60 * 60 * 1000) - 1);
 			RHS_NEW_VALUE = date.getTime();
 		}
 			

@@ -628,6 +628,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 try{console.time("startbackbone");}catch(e){}
 
+var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
+
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
