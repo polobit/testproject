@@ -312,7 +312,7 @@ public class NewCondition extends TaskletAdapter
 					if (comparator.equalsIgnoreCase(COMPARATOR_IN))
 					{
 						String[] variables = variable2.split(",");
-						for (int i = 0; i < variables.length - 1; i++) {
+						for (int i = 0; i < variables.length; i++) {
 							if (variable1.toLowerCase().equalsIgnoreCase(variables[i].trim().toLowerCase())) {
 								branch = true;
 								break;
