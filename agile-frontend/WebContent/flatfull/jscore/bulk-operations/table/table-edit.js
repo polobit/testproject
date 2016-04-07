@@ -18,7 +18,7 @@ $(function() {
 			function(e) {
 		e.preventDefault();
 		
-		var route = $('.agile-edit-row').attr('route');
+		var route = $(this).parents('.agile-edit-row').attr('route');
 		
 		// Newly added code for displaying contacts and companies in same table with different routes.
 		if($(this).closest('tr').find('[route]').length != 0)

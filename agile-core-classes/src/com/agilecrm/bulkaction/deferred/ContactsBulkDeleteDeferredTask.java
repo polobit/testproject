@@ -9,15 +9,16 @@ import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.VersioningUtil;
 import com.googlecode.objectify.Key;
 
 public class ContactsBulkDeleteDeferredTask extends BulkActionAdaptor
 {
 
-    private ContactsBulkDeleteDeferredTask()
-    {
-
-    }
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     public ContactsBulkDeleteDeferredTask(Long domainUserId, String namespace, Set<Key<Contact>> contactKeySet)
     {
@@ -31,7 +32,7 @@ public class ContactsBulkDeleteDeferredTask extends BulkActionAdaptor
     {
 
 	System.out.println("checking delete operation.");
-	if (StringUtils.isEmpty(namespace))
+	if (StringUtils.isEmpty(namespace) && !VersioningUtil.isLocalHost())
 	    return false;
 
 	return true;

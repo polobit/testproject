@@ -2,8 +2,13 @@ package com.agilecrm.contact;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import net.sf.json.JSONObject;
+
+import com.agilecrm.contact.exception.DuplicateCustomFieldException;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.util.ContactViewPrefsUtil;
@@ -41,7 +46,7 @@ public class CustomFieldDef
      */
     public enum Type
     {
-	TEXT, DATE, LIST, CHECKBOX, TEXTAREA, NUMBER, FORMULA
+	TEXT, DATE, LIST, CHECKBOX, TEXTAREA, NUMBER, FORMULA, CONTACT, COMPANY
     };
 
     /**
@@ -150,13 +155,32 @@ public class CustomFieldDef
 	    // Fetches all custom fields to check label duplicates
 	    for (CustomFieldDef customField : dao.fetchAll())
 	    {
+	    
+    	if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id
+    			&& customField.scope != this.scope && customField.field_type != this.field_type)
+		{
+    		throw new DuplicateCustomFieldException(customField.field_type.toString());
+		}
 
 		if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id
 			&& customField.scope == this.scope)
 		{
-		    throw new Exception();
+			throw new DuplicateCustomFieldException("Sorry, a custom field with that name is already present.");
 		}
 	    }
+	else 
+	{
+		for (CustomFieldDef customField : dao.fetchAll())
+	    {
+	    
+    	if (customField.field_label.equalsIgnoreCase(this.field_label) 
+    			&& customField.scope != this.scope && customField.field_type != this.field_type)
+		{
+    		throw new DuplicateCustomFieldException(customField.field_type.toString());
+		}
+    	
+	    }
+	}
 
 	dao.put(this);
     }

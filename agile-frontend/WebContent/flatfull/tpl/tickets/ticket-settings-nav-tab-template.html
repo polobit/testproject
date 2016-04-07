@@ -1,0 +1,27 @@
+ <script id="ticket-settings-nav-tab-template" type="text/html">	
+	<div class="tab-container m-b-none">
+    	<ul class="nav nav-tabs b-b-none">
+        	<li {{#if groups}}class="active"{{/if}}>
+         		<a href="#ticket-groups" class="b-l-none">
+         			Groups
+         		</a>
+         	</li>
+            <li {{#if labels}}class="active"{{/if}}>
+                <a href="#ticket-labels" class="b-l-none">
+                    Labels
+                </a>
+            </li>
+         	<li {{#if canned_responses}}class="active"{{/if}}>
+         		<a href="#canned-responses">
+         			Canned Responses
+         		</a>
+         	</li>
+		 	<li {{#if filters}}class="active"{{/if}}>
+		 		<a href="#ticket-views">
+		 			Views
+		 		</a>
+		 	</li>
+       </ul>
+	</div>
+	<div class="tab-pane active ticket-settings"></div>
+</script>	

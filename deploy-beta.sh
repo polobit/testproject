@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout sandbox_latest_converse
+git checkout new-modals
 
-git pull origin sandbox_latest_converse
+git pull origin new-modals
 
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 

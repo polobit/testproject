@@ -26,7 +26,9 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.reports.ActivityReports.ActivityType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -343,10 +345,13 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsWon)
 	    {
 		wonValue += deal.expected_value;
+		
+		Milestone pipeline = OpportunityUtil.getOpportunityPipeline(deal);
+		String pipeLineName = (pipeline != null) ? pipeline.name : "";
 
 		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
-		if (!deal.getPipeline().name.equals("Default"))
-		    summary += ", " + deal.getPipeline().name;
+		if (!pipeLineName.equals("Default"))
+		    summary += ", " + pipeLineName;
 		summary += ")";
 		wonActivities.get(deal.id).custom4 = summary;
 		wonCount++;
@@ -354,9 +359,13 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsLost)
 	    {
 		lostValue += deal.expected_value;
+		
+		Milestone pipeline = OpportunityUtil.getOpportunityPipeline(deal);
+		String pipeLineName = (pipeline != null) ? pipeline.name : "";
+		
 		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
-		if (!deal.getPipeline().name.equals("Default"))
-		    summary += ", " + deal.getPipeline().name;
+		if (!pipeLineName.equals("Default"))
+		    summary += ", " + pipeLineName;
 		summary += ")";
 		lostActivities.get(deal.id).custom4 = summary;
 		lostCount++;
@@ -365,9 +374,13 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsCreated)
 	    {
 		newValue += deal.expected_value;
+		
+		Milestone pipeline = OpportunityUtil.getOpportunityPipeline(deal);
+		String pipeLineName = (pipeline != null) ? pipeline.name : "";
+		
 		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
-		if (!deal.getPipeline().name.equals("Default"))
-		    summary += ", " + deal.getPipeline().name;
+		if (!pipeLineName.equals("Default"))
+		    summary += ", " + pipeLineName;
 		summary += ")";
 		newDealActivities.get(deal.id).custom4 = summary;
 		newCount++;
@@ -376,10 +389,14 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsMileChange)
 	    {
 		mileValue += deal.expected_value;
+		
+		Milestone pipeline = OpportunityUtil.getOpportunityPipeline(deal);
+		String pipeLineName = (pipeline != null) ? pipeline.name : "";
+		
 		String summary = "(" + currency + " " + formatter.format(deal.expected_value) + ", " + deal.probability
 			+ "%";
-		if (!deal.getPipeline().name.equals("Default"))
-		    summary += ", " + deal.getPipeline().name;
+		if (!pipeLineName.equals("Default"))
+		    summary += ", " + pipeLineName;
 		summary += ")";
 		mileChangeActivities.get(deal.id).custom4 = summary;
 		mileCount++;

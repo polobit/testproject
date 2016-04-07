@@ -55,6 +55,11 @@ public class StringUtils2
 	for (String token : tokens)
 	    for (int i = 1; i <= token.length(); i++)
 		into.add(token.substring(0, i));
+	
+	if (tokens !=null && tokens.length > 1 && name !=null)
+	{
+		into.add(name.replaceAll(" ", ""));
+	}
 
 	return into;
     }

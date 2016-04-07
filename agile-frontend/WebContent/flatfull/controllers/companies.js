@@ -272,9 +272,10 @@ var CompaniesRouter = Backbone.Router
 		}
 		else
 		{
-			$('#content').find('.contacts-div').html(this.companiesListView.el);
+			$('#content').find('.contacts-inner-div').html(this.companiesListView.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
 			COMPANIES_HARD_RELOAD = true;
 		}
 
@@ -292,7 +293,8 @@ var CompaniesRouter = Backbone.Router
 	 * 
 	 */
 	companyDetails : function(id, company){
-
+		
+		insidePopover=false;
 		// For getting custom fields
 		if (App_Companies.customFieldsList == null || App_Companies.customFieldsList == undefined)
 		{
@@ -381,7 +383,7 @@ var CompaniesRouter = Backbone.Router
 
 				company_util.starify(el);
 				company_util.show_map(el);
-				// fill_owners(el, contact.toJSON());
+				// fill_owners(eidl, contact.toJSON());
 				// loadWidgets(el, contact.toJSON());
 
 			} });

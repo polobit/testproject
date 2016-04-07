@@ -286,8 +286,15 @@ public class BillingRestrictionUtil {
 		ErrorMessages errorMessage = ErrorMessages.valueOf(className);
 		String reason = errorMessage == null ? "Limit Reached" : errorMessage
 				.getMessage();
-
+		
+		if(className !=null && className.equalsIgnoreCase("Contact"))
+		{
+		throw new PlanRestrictedException(reason, null);
+		}
+		else
+		{
 		throw new PlanRestrictedException(reason);
+		}
 	}
 
 	public static void throwLimitExceededException(ErrorMessages errorMessage) {

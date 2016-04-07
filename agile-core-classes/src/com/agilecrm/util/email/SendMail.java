@@ -110,6 +110,9 @@ public class SendMail
     public static final String CSV_IMPORT_NOTIFICATION = "csv_reports";
     public static final String CSV_IMPORT_NOTIFICATION_SUBJECT = "CSV Import report";
 
+    public static final String CSV_IMPORT_DELAY_NOTIFICATION = "csv_delay_notifier";
+    public static final String CSV_IMPORT_DELAY_NOTIFICATION_SUBJECT = "CSV Import Delay";
+
     public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
     public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
     public static final String EXPORT_DEALS_CSV = "export_csv";
@@ -120,14 +123,19 @@ public class SendMail
 
     public static final String STRIPE_IMPORT_NOTIFICATION = "contact_sync_notification_template";
     public static final String STRIPE_IMPORT_NOTIFICATION_SUBJECT = "Stripe Import Report";
-    
+
     public static final String FROM_VERIFICATION_EMAIL = "from_verification_email";
     public static final String FROM_VERIFICATION_EMAIL_SUBJECT = "Verify your Email";
 
 	// For campaign sharing
 	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
 	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
-
+	
+	// Ticket template names
+   	public static final String TICKET_REPLY = "ticket_reply_email";
+   	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
+   	public static final String TICKET_FORWARD = "ticket_forward_email";
+   	
     /**
      * From Name of email.
      */

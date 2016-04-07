@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"></meta>
+</head>
+<body>  
+     <p style="font-family:Arial,sans-serif;font-size:16px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242"><strong>  
+      
+             {{subject}}</strong></p>
+             
+     <br/><hr/>                        
+         	<table border="0" style="margin-bottom:10px;">
+		<tbody>
+			<tr  style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">
+				<td width="20%">
+					<b>Requester</b> :<span style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">{{requester_name}}</span>
+				</td>
+				<td width="30%">
+					<b>Requester email</b> :<span style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">{{requester_email}}</span>
+				</td>
+				<td>
+					<b>Created Time</b> :<span style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">{{ticket_created_time}} </span> 
+				</td>
+				
+			</tr>	
+		</tbody>
+	</table>
+         	
+         	<table border="0" style="margin: 0px;">
+		<tbody>
+			<tr style="font-family:Arial,Assigneesans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">
+				<td width="20%">
+					<b>Assignee</b> :<span style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">{{agent_name}} </span>
+					 {{^agent_name}} <span style="font-family:Arial,sans-serif;font-size:14px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">      -</span>{{/agent_name}}
+				</td>
+				<td width="20%">
+					<b>Group</b> :<span style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">{{group_name}} </span>
+					 {{^group_name}} <span style="font-family:Arial,sans-serif;font-size:14px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">      -</span>{{/group_name}}
+				</td>
+				
+				<td width="20%">
+					<b>Status</b> :<span style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">{{status}} </span>
+				</td>
+				
+				<td width="20%">
+					<b>Type</b> :<span style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">{{type}} </span>
+				</td>
+				<td width="20%">
+					<b>Priority</b> :<span style="font-family:Arial,sans-serif;font-size:12px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">{{priority}} </span>
+				</td>
+				
+			</tr>				
+		</tbody>
+	</table>
+
+
+	<main>
+	 </main>
+<div style="width:100%!important;">
+            <div style="font-family:Arial,sans-serif;font-size:12px;color:#555;">
+                
+               <hr/>
+               {{#note_json_array}}
+                <div>
+                                                    <p style="font-family:Arial,sans-serif;font-size:14px;line-height:19px;margin-bottom:0;margin-top:0;padding:0;color:#424242">
+                                                    	<strong>{{user_name}}</strong> <span style="font-family:Arial,sans-serif;font-size:12px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#A8A8A8">{{created_time}}</span>
+                                                    </p>
+                                                     
+                                                    
+													<div width="100px"></div>
+													
+													<div> {{{html_text}}} </div>
+                                                    
+                                                
+                    {{#attachments_exists}}
+                    	                        	{{#attachments_list}}
+	                                            			<a href="{{url}}" target="_blank">{{name}}</a>
+														
+	                                            	{{/attachments_list}}
+	                                            
+	               {{/attachments_exists}}
+	               
+	               
+	           <hr style="height:1px;border:none;color:#F0F0F0;background-color:#F0F0F0;margin-top:10px" />     
+                </div>
+              
+               {{/note_json_array}}
+				
+                <div style="color:#A8A8A8;margin:10px 0 14px 0;padding-top:8px;">
+                	This email is a service from {{company_name}}. Delivered by <a href="https://www.agilecrm.com?utm_source=www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=null" style="text-decoration:none" target="_blank">Agile CRM</a>
+               </div>
+           </div>
+            
+        </div>
+</body>
+</html>

@@ -79,7 +79,7 @@ public class EmailsAPI
     @Path("send-email")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
+    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("cc") String cc, @QueryParam("bcc") String bcc,
 	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
     {
 	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null,null);
@@ -141,7 +141,7 @@ public class EmailsAPI
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to,
+    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to, @FormParam("cc") String cc, @FormParam("bcc") String bcc,
 	    @FormParam("subject") String subject, @FormParam("body") String body) throws Exception
     {
 	String oldNamespace = NamespaceManager.get();
@@ -150,7 +150,7 @@ public class EmailsAPI
 	{
 	    // To avoid sending through subaccount
 	    NamespaceManager.set("");
-	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null,null);
+	    Mandrill.sendMail(false, fromEmail, fromEmail, to, cc, bcc, subject, fromEmail, body, null, null, null,null);
 	}
 	catch (Exception e)
 	{
@@ -186,39 +186,64 @@ public class EmailsAPI
 	{
 
 	    // Removes unwanted spaces in between commas
-	    String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+	   // String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
 
 	    // Gets gmailPrefs url if not null, otherwise imap url.
-	    String url = ContactEmailUtil.getEmailsFetchURL(AgileUser.getCurrentAgileUser(), normalisedEmail, offset,
-		    count);
+	   // String url = ContactEmailUtil.getEmailsFetchURL(AgileUser.getCurrentAgileUser(), normalisedEmail, offset,
+		//    count);
 
 	    // If both are not set, return Contact emails.
-	    if (url == null)
-	    {
+	  //  if (url == null)
+	  //  {
+		//passing the agile mail and sending the URL of rest of the pararm
+
 		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0],
 			null);
+		JSONObject res = new JSONObject();
 
 		// return in the same format {emails:[]}
-		return new JSONObject().put("emails", contactEmails).toString();
-	    }
+		EmailPrefs emailPrefs = null;
+		List<String> mailUrls = new ArrayList<>();
+		
+		try
+		{
+		    emailPrefs = ContactEmailUtil.getEmailPrefs();
+		    mailUrls = emailPrefs.getFetchUrls();
+		    String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
+		    for(int i=0; i< mailUrls.size();i++){
+		    	if(mailUrls.get(i).equals(agileEmailsUrl)){
+		    		mailUrls.remove(i);
+		    	}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		res.put("emails", contactEmails);
+		res.put("emailPrefs", mailUrls);
+		return res.toString();
+		
+	  //  }
+
 
 	    // Returns imap emails, usually in form of {emails:[]}, if not build
 	    // result like that.
-	    String jsonResult = HTTPUtil.accessURL(url);
+	   // String jsonResult = HTTPUtil.accessURL(url);
 
 	    // Convert emails to json.
-	    JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+	  //  JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
 
 	    // Fetches JSONArray from {emails:[]}
-	    JSONArray emailsArray = emails.getJSONArray("emails");
+	  //  JSONArray emailsArray = emails.getJSONArray("emails");
 
 	    // Add owner email to each email and parse each email body.
-	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, "");
+	 //   emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, "");
 
 	    // Merges imap emails and contact emails.
-	    emailsArray = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0], emailsArray);
+	  ///  emailsArray = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0], emailsArray);
 
-	    return emails.toString();
+	  //  return emails.toString();
 	}
 	catch (Exception e)
 	{

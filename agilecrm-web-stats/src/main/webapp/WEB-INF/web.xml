@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<servlet>
+		<servlet-name>AnalyticsServlet</servlet-name>
+		<servlet-class>com.agilecrm.web.stats.StatsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AnalyticsServlet</servlet-name>
+		<url-pattern>/stats</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>AddAnalyticsServlet</servlet-name>
+		<servlet-class>com.agilecrm.web.stats.AddStatsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddAnalyticsServlet</servlet-name>
+		<url-pattern>/addstats</url-pattern>
+	</servlet-mapping>
+</web-app>

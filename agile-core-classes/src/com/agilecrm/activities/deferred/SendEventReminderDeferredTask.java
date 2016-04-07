@@ -84,7 +84,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    AgileUser agileUser = null;
 		    try
 		    {
-			domainuser = eventList.get(i).getOwner();
+			domainuser = eventList.get(i).eventOwner();
 		    }
 
 		    catch (TransientFailureException tfe)
@@ -241,7 +241,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			}
 		    }
 		    Map<String, Object> currentEvent = eventListMap.get(0);
-		    List<Contact> contactList = eventList.get(i).getContacts();
+		    List<Contact> contactList = eventList.get(i).relatedContacts();
 		    List<Map<String, Object>> contactListMap = new ArrayList<Map<String, Object>>();
 		    for (Contact contact : contactList)
 		    {

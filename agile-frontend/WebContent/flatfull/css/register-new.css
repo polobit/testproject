@@ -2,7 +2,7 @@ body {
   background-image: url('../images/flatfull/agile-registration-page-low.jpg');
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 100% 100%;
+  background-size: cover;
   background-attachment: fixed;
 }
 
@@ -281,6 +281,7 @@ margin-bottom:7px;
 .terms-field {
   color: #00B5FF;
 }
+
 
 
 @media all and (max-width: 767px) {

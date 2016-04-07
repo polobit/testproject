@@ -18,10 +18,13 @@ public class AgileQueues
 
     // Cron Push Queue
     public static final String CRON_QUEUE = "cron-queue";
+    public static final String MANDRILL_QUEUE = "mandrill-queue";
     public static final String CRON_INTERRUPT_QUEUE = "cron-interrupt-queue";
 
     public static final String ACCOUNT_STATS_UPDATE_QUEUE = "account-stats-update-queue";
     public static final String CONTACTS_DELETE_QUEUE = "contacts-delete-queue";
+    public static final String CONTACTS_POST_DELETE_QUEUE = "contacts-post-delete-queue";
+
     public static final String OWNER_CHANGE_QUEUE = "owner-change-queue";
     public static final String CAMPAIGN_SUBSCRIBE_QUEUE = "campaign-subscribe-queue";
     public static final String BULK_TAGS_QUEUE = "bulk-tags-queue";
@@ -63,4 +66,8 @@ public class AgileQueues
 
     // Contacts and Deal push queue
     public static final String WEBHOOKS_REGISTER_ADD_QUEUE = "webhooks-register-add-queue";
+
+	//Ticketing queue
+	public static final String TICKET_BULK_ACTIONS_QUEUE = "ticket-bulk-actions";
+
 }

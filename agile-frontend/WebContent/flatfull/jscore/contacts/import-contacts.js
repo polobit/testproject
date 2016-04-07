@@ -1,17 +1,47 @@
 BLOB_KEY = undefined;
+
+var CONTACTS_IMPORT_VIEW = Base_Model_View.extend({
+	events : {
+		"click .upload-contacts-ele" :  "initializeImportButton",
+		"#import-cancel" : "importCancel"
+	},
+	initializeImportButton : function(e)
+	{
+		e.preventDefault();
+		var element = e.target;
+
+		// get hidden value file type
+		var type = $(element).parents('form').children("#type").val();
+
+		var newwindow = window.open("upload-contacts.jsp?type=" + type + "", 'name', 'height=310,width=500');
+
+		if (window.focus)
+		{
+			newwindow.focus();
+		}
+	},
+	importCancel : function(e)
+	{
+		// Sends empty JSON to remove
+		// contact uploaded
+		App_Contacts.importContacts.render(true);
+	}
+
+
+});
+
 function initializeImportEvents(id){
 
 if(!id)
 	  id = "content";
 
-$('#' + id  + " .upload").off('click');
-$('#' + id).on('click', '.upload', function(e)
+	$('#' + id  + " .upload").off('click');
+	$('#' + id).on('click', '.upload', function(e)
 	{
-
 		// get hidden value file type
 		var type = $(this).parents('form').children("#type").val();
-
 		e.preventDefault();
+
 		var newwindow = window.open("upload-contacts.jsp?type=" + type + "", 'name', 'height=310,width=500');
 
 		if (window.focus)
@@ -32,14 +62,7 @@ $('#' + id).on('click', '.upload', function(e)
 		// Sends empty JSON to remove
 		// contact uploaded
 		var $firstDiv = $('#content').children().first();
-		getTemplate('import-contacts', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$firstDiv.html($(template_ui));	
-					initializeImportEvents($firstDiv.attr('id'));
-
-				}, $firstDiv);
-		
+		App_Contacts.importContacts.render(true);
 	});
 	
 	// cancel option for deals import
@@ -60,7 +83,7 @@ $('#' + id).on('click', '.upload', function(e)
 			});
 
 $('#' + id  + " #import-contacts").off('click');
-$('#' + id).on('change', '.import-select', function(e) {
+$('#' + id).on('change', '.contacts-import-select', function(e) {
     
     importContactsValidate();
 
@@ -215,6 +238,16 @@ $('#' + id).on('click', '#import-contacts', function(e)
 								// contact uploaded
 								var $firstDiv = $('#content').first();
 
+								App_Contacts.importContacts.model.fetch({
+									success : function(data)
+									{
+										showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
+										addTagAgile(IMPORT_TAG);
+										console.log(data);
+									}
+
+								})
+/*
 								getTemplate("import-contacts", {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
@@ -224,10 +257,10 @@ $('#' + id).on('click', '#import-contacts', function(e)
 									showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
 									addTagAgile(IMPORT_TAG);
 
-								}, $firstDiv);
+								}, $firstDiv);*/
 
 								
-							}, });
+							}});
 
 					})
 
@@ -401,14 +434,8 @@ $('#' + id).on('click', '#import-comp', function(e)
 							// contact uploaded
 							var $firstDiv = $('#content').first();
 
-							getTemplate("import-contacts", {}, undefined, function(template_ui){
-									if(!template_ui)
-										  return;
-									$firstDiv.html($(template_ui));
-									initializeImportEvents($firstDiv.attr('id'));
-									showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
-							}, $firstDiv);	
-
+							App_Contacts.importContacts.render(true);
+							showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
 						}, });
 
 				});
@@ -424,16 +451,16 @@ $('#' + id).on('click', '#import-deals', function(e)
 						return;
 
 					var upload_valudation_errors = {
-							"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
-							"deal_duplicated" : { "error_message" : "Deal Name field is duplicated" },
-							"deal_value_duplicated" : { "error_message" : "Deal value field is duplicated" },
-							"deal_track_duplicated" : { "error_message" : "Deal track field is duplicated" },
-							"deal_milestone_duplicated" : {"error_message" : "Milestone field is duplicated."},
-							"deal_related_contact_duplicated" : {"error_message" : "Deal relatsTo field duplicated" },
-							"deal_probability_duplicated" : {"error_message" : "Deal probability field is duplicated"},
-							"deal_close_date_duplicated" : {"error_message" : "Deal close date field is duplicated"},
-							"deal_note_duplicated" : {"error_message" : "Deal Note field duplicated"},
-							"deal_description_duplicated" : {"error_message":"Deal descriptions field is duplicated"},
+							"deal_name_missing" : { "error_message" : "'Deal Name' is mandatory!" },
+							"deal_duplicated" : { "error_message" : "'Name' already exists!" },
+							"deal_value_duplicated" : { "error_message" : "'Value' already exists!" },
+							"deal_track_duplicated" : { "error_message" : "'Track' already exists!" },
+							"deal_milestone_duplicated" : {"error_message" : "'Milestone' already exists!"},
+							"deal_related_contact_duplicated" : {"error_message" : "'Related to' already exists!" },
+							"deal_probability_duplicated" : {"error_message" : "'Probability' already exists!"},
+							"deal_close_date_duplicated" : {"error_message" : "'Close date' already exists!"},
+							"deal_note_duplicated" : {"error_message" : "'Note' already exists!"},
+							"deal_description_duplicated" : {"error_message":"'Description' already exists!"},
 					}
 					var models = [];
 
@@ -491,7 +518,7 @@ $('#' + id).on('click', '#import-deals', function(e)
 						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_duplicated, undefined, function(template_ui){
 								if(!template_ui)
 									  return;
-								$("#import-validation-error").html($(template_ui));
+						$("#import-validation-error").html($(template_ui));
 						}, "#import-validation-error");
 						return false;
 					}

@@ -47,8 +47,10 @@ public class TestTask implements DeferredTask
     }
     
     public static void main(String[] args) {
-    	
-    	System.out.println("Contact".equalsIgnoreCase("COntact"));
+    	String str = "abc";
+    	for (int i = 0; i < str.length(); i++) {
+			System.out.print((int) str.charAt(i));
+		}
 	}
 
 }

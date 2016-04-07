@@ -39,7 +39,9 @@ $(function()
 	App_FacebookPageTabRouter = new FacebookPageTabRouter();
 	App_Companies = new CompaniesRouter();
 	App_Datasync = new DataSyncRouter();
+	App_Ticket_Module = new TicketsUtilRouter();
 	App_LandingPageRouter = new LandingPageRouter();
+	App_EmailBuilderRouter = new EmailBuilderRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
@@ -65,6 +67,8 @@ var Current_Route;
  */
 function currentRoute(route)
 {
+	endFunctionTimer("startbackbone");
+	
 	Current_Route = window.location.hash.split("#")[1];
 	
 	if(SCROLL_POSITION)
@@ -73,6 +77,9 @@ function currentRoute(route)
 		if(!temp.match("contact"))
 			SCROLL_POSITION = 0;
 	}
+
+	// Update Google Analytics Track Page
+	agile_update_ga_track_page(Current_Route);
 	
 	activateInfiniScroll();
 	// set_profile_noty();
@@ -90,6 +97,11 @@ function currentRoute(route)
 	// disposeEvents();
 
 	// load_clickdesk_code();
+	try{
+		showPageBlockModal();
+	}catch(e){
+	}
+	
 	 showUpgradeNoty();
 
 	 // Check the user permission to view the current route.
@@ -156,3 +168,8 @@ function executeWebRulesOnRoute(){
 	        return;
 	  }
 }
+
+$(document).ready(function(){
+
+  setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
+});

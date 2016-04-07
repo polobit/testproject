@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
@@ -35,6 +36,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -52,7 +54,15 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
+import com.agilecrm.ticket.entitys.TicketCannedMessages;
+import com.agilecrm.ticket.entitys.TicketDocuments;
+import com.agilecrm.ticket.entitys.TicketFilters;
+import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -79,7 +89,12 @@ import com.campaignio.twitter.TwitterJobQueue;
 import com.campaignio.urlshortener.URLShortener;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -113,7 +128,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 public class ObjectifyGenericDao<T> extends DAOBase
 {
 
-    static final String[] countRestrictedClassNames = new String[] { "contact", "activity" };
+    static final String[] countRestrictedClassNames = new String[] { "contact", "activity", "opportunity" };
 
     static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
 
@@ -131,6 +146,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(ContactViewPrefs.class);
 	ObjectifyService.register(AgileUser.class);
 	ObjectifyService.register(DomainUser.class);
+	ObjectifyService.register(AliasDomain.class);
 	ObjectifyService.register(Tag.class);
 	ObjectifyService.register(SocialPrefs.class);
 	ObjectifyService.register(AccountPrefs.class);
@@ -218,6 +234,17 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	ObjectifyService.register(Office365CalendarPrefs.class);
 
+	// Ticket related entitys
+	ObjectifyService.register(Tickets.class);
+	ObjectifyService.register(TicketNotes.class);
+	ObjectifyService.register(TicketGroups.class);
+	ObjectifyService.register(TicketCannedMessages.class);
+	ObjectifyService.register(TicketFilters.class);
+	ObjectifyService.register(TicketDocuments.class);
+	//ObjectifyService.register(TicketActivity.class);
+	ObjectifyService.register(TicketLabels.class);
+	
+	
 	ObjectifyService.register(DealFilter.class);
 
 	ObjectifyService.register(LandingPage.class);
@@ -225,6 +252,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Goals.class);
 
 	ObjectifyService.register(Webhook.class);
+	
+	//All Domain Stats report for Agile Management
+	ObjectifyService.register(AllDomainStats.class);
+
+	// CSV Import status
+	ObjectifyService.register(ImportStatus.class);
 
     }
 
@@ -1034,5 +1067,37 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	}
 	return id;
     }
+    
+    public List<com.google.appengine.api.datastore.Key> convertKeysToNativeKeys(List<Key<T>> ids_list)
+    {
+    	List<com.google.appengine.api.datastore.Key> keys = new ArrayList<com.google.appengine.api.datastore.Key>();
+		Iterator<Key<T>> iteartor = ids_list.iterator();
+		while (iteartor.hasNext()) {
+			Key<T> key = (Key<T>) iteartor.next();
+			keys.add(KeyFactory.createKey(key.getKind(), key.getId()));
+		}
+		
+		return keys;
+    }
+    
+    /**
+     * Convenience method to get number of entities with max limit based on properties map
+     * 
+     * @param map
+     * @return T matching object
+     */
+    public int getCountByPropertyWithLimit(Map<String, Object> map, int limit)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+	
+	q.limit(limit);
+
+	return getCount(q);
+    }
+    
 
 }

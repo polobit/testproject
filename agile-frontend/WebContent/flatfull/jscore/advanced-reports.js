@@ -48,7 +48,7 @@ function initFunnelCharts(callback)
 			callback();
 		});
 	}
-	fillSelect("owner", "core/api/users", undefined, function()
+	fillSelect("owner", "core/api/users/partial", undefined, function()
 			{
 				$('#owner').change(function()
 				{
@@ -88,7 +88,7 @@ function initReportsForCalls(callback){
 			callback();
 		});
 	
-	fillSelect("users", "core/api/users", undefined, function()
+	fillSelect("users", "core/api/users/partial", undefined, function()
 			{
 				$('#users').change(function()
 				{
@@ -145,7 +145,7 @@ function initSalesCharts(callback){
 			});
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
 
-		fillSelect("owner", "core/api/users", undefined, function()
+		fillSelect("owner", "core/api/users/partial", undefined, function()
 		{
 			$('#owner').change(function()
 			{
@@ -354,7 +354,7 @@ function initUserReports(callback){
 
 	callback();	
 
-		fillSelect("owner", "core/api/users", undefined, function()
+		fillSelect("owner", "core/api/users/partial", undefined, function()
 		{
 			$('#owner').change(function()
 			{
@@ -744,7 +744,7 @@ function initRepReports(callback){
 
 	
 
-	fillSelect("owner", "core/api/users", undefined, function()
+	fillSelect("owner", "core/api/users/partial", undefined, function()
 		{
 			$('select[id="owner"]').find('option[value="'+CURRENT_DOMAIN_USER.id+'"]').attr("selected",true);
 			callback();					

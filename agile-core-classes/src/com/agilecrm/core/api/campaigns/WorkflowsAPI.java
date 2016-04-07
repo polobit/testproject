@@ -21,10 +21,12 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AllDomainStats;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -151,6 +153,10 @@ public class WorkflowsAPI {
 		try {
 			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_CREATE,
 					workflow, null);
+			
+			//Increase count of Campaign for AllDomainstats report in database
+			AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.CAMPAIGN_COUNT);
+			
 		} catch (Exception e) {
 			System.out
 					.println("exception occured while creating workflow creation activity");

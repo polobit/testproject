@@ -12,14 +12,14 @@ function program1(depth0,data) {
   if (helper = helpers.fname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.fname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" type=\"text\" class=\"required\" style=\"height: 24px;\" />\r\n				";
+    + "\" type=\"text\" class=\"required\" style=\"height: 24px;width: 265px;\" />\r\n				";
   return buffer;
   }
 
 function program3(depth0,data) {
   
   
-  return "\r\n					<input name=\"first_name\" id=\"fname\" placeholder=\"First name\" type=\"text\" class=\"required\" style=\"height: 24px;\" />\r\n				";
+  return "\r\n					<input name=\"first_name\" id=\"fname\" placeholder=\"First name\" type=\"text\" class=\"required\" style=\"height: 24px;width: 265px;\" />\r\n				";
   }
 
 function program5(depth0,data) {
@@ -29,14 +29,14 @@ function program5(depth0,data) {
   if (helper = helpers.lname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.lname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" class=\"required\" type=\"text\" style=\"height: 24px;\" />\r\n					";
+    + "\" class=\"required\" type=\"text\" style=\"height: 24px;width: 265px;\" />\r\n					";
   return buffer;
   }
 
 function program7(depth0,data) {
   
   
-  return "\r\n						<input name=\"last_name\" id=\"lname\" placeholder=\"Last name\" type=\"text\" style=\"height: 24px;\" />\r\n					";
+  return "\r\n						<input name=\"last_name\" id=\"lname\" placeholder=\"Last name\" type=\"text\" style=\"height: 24px;width: 265px;\" />\r\n					";
   }
 
   buffer += "<form class=\"gadget-contact-form form-horizontal\" name=\"gadget_contact_form\" method=\"post\" style=\"margin:0px;\">\r\n	<fieldset>\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:10px; border-top:1px solid #e5e5e5;\">\r\n			<label class=\"control-label\" for=\"fname\"><b>First Name</b><span class=\"field_req\">*</span></label>\r\n  			<div class=\"controls\">\r\n				";
@@ -49,53 +49,14 @@ function program7(depth0,data) {
   if (helper = helpers.email) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.email); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" type=\"text\" style=\"height: 24px;\" />\r\n			</div>\r\n		</div>\r\n		\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">\r\n			<label class=\"control-label\" for=\"phone\"><b>Phone number</b></label>\r\n			<div class=\"controls\">\r\n				 <input name=\"phone\" id=\"phone\" placeholder=\"Phone number\" value=\"";
+    + "\" type=\"text\" style=\"height: 24px;width: 265px;\" />\r\n			</div>\r\n		</div>\r\n		\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">\r\n			<label class=\"control-label\" for=\"phone\"><b>Phone number</b></label>\r\n			<div class=\"controls\">\r\n				 <input name=\"phone\" id=\"phone\" placeholder=\"Phone number\" value=\"";
   if (helper = helpers.phone) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.phone); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" type=\"text\" style=\"height: 24px;\" />\r\n			</div>\r\n		</div>\r\n  		\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">\r\n       		<label class=\"control-label\" for=\"tags\"><b>Tags</b></label>\r\n			<div class=\"controls\">\r\n				 <input name=\"tags\" id=\"tags\" placeholder=\"Tags\" type=\"text\" style=\"height: 24px;\" />\r\n			</div>\r\n    	</div>\r\n	\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">\r\n			<label class=\"control-label\" for=\"company\"><b>Company</b></label>\r\n			<div class=\"controls\">\r\n				<input name=\"company\" id=\"company\" placeholder=\"Company\" type=\"text\" style=\"height: 24px;\" />\r\n			</div>\r\n  		</div>\r\n\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">\r\n       		<label class=\"control-label\" for=\"title\"><b>Job Description</b></label>\r\n			<div class=\"controls\">\r\n				<input name=\"title\" id=\"title\" placeholder=\"Job title\" type=\"text\" style=\"height: 24px;\" />\r\n			</div>\r\n	  	</div>\r\n	</div>\r\n	<div class=\"form-actions\" style=\"padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;\">\r\n		<a type=\"submit\" class=\"btn btn-primary gadget-contact-validate\" style=\"padding:2px 6px 2px;\">Add Contact</a>\r\n		<a class=\"cancel btn\" style=\"padding:2px 6px 2px; margin-left:5px;\">Cancel</a>\r\n		<img class=\"contact-add-waiting\" style=\"display:none;width:16px; margin-left:10px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\r\n		<i class=\"contact-add-status\" style=\"color:indianred; margin-left:10px; display:none;\">Contact not found.</i>\r\n	</div>\r\n</fieldset>\r\n</form>	";
+    + "\" type=\"text\" style=\"height: 24px;width: 265px;\" />\r\n			</div>\r\n		</div>\r\n  		\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">\r\n       		<label class=\"control-label\" for=\"tags\"><b>Tags</b></label>\r\n			<div class=\"controls\">\r\n				 <input name=\"tags\" id=\"tags\" placeholder=\"Tags\" type=\"text\" style=\"height: 24px;width: 265px;\" />\r\n			</div>\r\n    	</div>\r\n	\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">\r\n			<label class=\"control-label\" for=\"company\"><b>Company</b></label>\r\n			<div class=\"controls\">\r\n				<input name=\"company\" id=\"company\" placeholder=\"Company\" type=\"text\" style=\"height: 24px;width: 265px;\" />\r\n			</div>\r\n  		</div>\r\n\r\n		<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">\r\n       		<label class=\"control-label\" for=\"title\"><b>Job Description</b></label>\r\n			<div class=\"controls\">\r\n				<input name=\"title\" id=\"title\" placeholder=\"Job title\" type=\"text\" style=\"height: 24px;width: 265px;\" />\r\n			</div>\r\n	  	</div>\r\n	</div>\r\n	<div class=\"form-actions\" style=\"padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;\">\r\n		<a type=\"submit\" class=\"btn btn-primary gadget-contact-validate\" style=\"padding:2px 6px 2px;\">Add Contact</a>\r\n		<a class=\"cancel btn\" style=\"padding:2px 6px 2px; margin-left:5px;\">Cancel</a>\r\n		<img class=\"contact-add-waiting\" style=\"display:none;width:16px; margin-left:10px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\r\n		<i class=\"contact-add-status\" style=\"color:indianred; margin-left:10px; display:none;\">Contact not found.</i>\r\n	</div>\r\n</fieldset>\r\n</form>	";
   return buffer;
   });
-templates['gadget-campaign'] = template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n								";
-  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n							";
-  return buffer;
-  }
-function program2(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\r\n									<option value=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</option>\r\n								";
-  return buffer;
-  }
-
-  buffer += "<!--  Add to Campaign Form -->\r\n	<div class=\"gadget-campaign\" row-fluid\">\r\n        <form class=\"gadget-campaign-form form-horizontal\" name=\"gadget_campaign_form\" method=\"post\" style=\"margin:0px;\">\r\n            <fieldset style=\"margin:0px;\">\r\n				<input type=\"hidden\" name=\"email\" value='";
-  if (helper = helpers.email) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.email); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' />\r\n                \r\n				<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">       \r\n                    <label class=\"control-label\" for=\"campaign-select\">Select campaign<span class=\"field_req\">*</span></label>\r\n                    <div class=\"controls\">\r\n                        <select name=\"id\" id=\"campaign-select\" class=\"required\" style=\"width:210px;\">\r\n							<option value=\"\">Select..</option>\r\n							";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.length), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                        </select>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"form-actions\" style=\"padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;\">         \r\n                    <a type=\"submit\" class=\"btn btn-primary gadget-campaign-validate\" style=\"padding:2px 6px 2px;\">Add to Campaign</a> \r\n                    <a class=\"cancel btn \" data-tab-identity=\"campaigns\" style=\"padding:2px 6px 2px; margin-left:5px;\">Cancel</a>\r\n					<img class=\"campaign-add-waiting\" style=\"display:none;width:16px; margin-left:10px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\r\n                </div>\r\n            </fieldset>\r\n        </form>\r\n    </div>";
-  return buffer;
-  });
-templates['gadget-campaigns-list'] = template(function (Handlebars,depth0,helpers,partials,data) {
+templates['gadget-campaign-summary'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function", self=this;
@@ -124,7 +85,7 @@ function program2(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n         <div>\r\n           <h3 style=\"display: inline-block; margin-right: 5px\">Completed Campaigns: </h3> <ul class=\"tagsinput\">\r\n                   ";
+  buffer += "\r\n         <div>\r\n           <h3 style=\"display: inline-block; margin-right:5px; margin-left:30px\">Completed Campaigns: </h3> <ul class=\"tagsinput\">\r\n                   ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.done), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                    </ul>\r\n         </div>\r\n         <br>\r\n         ";
@@ -158,7 +119,7 @@ function program7(depth0,data) {
 function program9(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n         <div>\r\n           <h3 id=\"contact-active-campaigns\" style=\"display: inline-block; margin-right: 5px; \">Active Campaigns: </h3> \r\n           <ul class=\"tagsinput active-campaigns\">\r\n                   ";
+  buffer += "\r\n         <div>\r\n           <h3 id=\"contact-active-campaigns\" style=\"display: inline-block; margin-right:5px; margin-left:30px; \">Active Campaigns: </h3> \r\n           <ul class=\"tagsinput active-campaigns\">\r\n                   ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.active), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n                    </ul>\r\n         </div>\r\n         ";
@@ -174,11 +135,11 @@ function program10(depth0,data) {
     + "\"><span>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.campaign_name), {hash:{},inverse:self.program(11, program11, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n							<!-- <a class=\"close remove-active-campaign\" campaign_name=\"";
-  if (helper = helpers.campaign_name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.campaign_name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += "\r\n						<a class=\"close remove-active-campaign\" campaign_id=\"";
+  if (helper = helpers.campaign_id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.campaign_id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" title=\"Remove from Campaign\">&times</a> --></span></li> \r\n					";
+    + "\" title=\"Remove from Campaign\">&times</a> </span></li> \r\n					";
   return buffer;
   }
 function program11(depth0,data) {
@@ -187,40 +148,81 @@ function program11(depth0,data) {
   return "Active Campaign";
   }
 
-function program13(depth0,data) {
+  buffer += "<div style=\"margin-bottom:20px\">\r\n	<div>\r\n		 ";
+  stack1 = (helper = helpers.contact_campaigns || (depth0 && depth0.contact_campaigns),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, depth0, "campaignStatus", options) : helperMissing.call(depth0, "contact_campaigns", depth0, "campaignStatus", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n    </div>\r\n\r\n</div>";
+  return buffer;
+  });
+templates['gadget-campaign'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n								";
+  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n							";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\r\n									<option value=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</option>\r\n								";
+  return buffer;
+  }
+
+  buffer += "<!--  Add to Campaign Form -->\r\n	<div class=\"gadget-campaign\" row-fluid\">\r\n        <form class=\"gadget-campaign-form form-horizontal\" name=\"gadget_campaign_form\" method=\"post\">\r\n            <fieldset style=\"margin:0px;\">\r\n				<input type=\"hidden\" name=\"email\" value='";
+  if (helper = helpers.email) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.email); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' />\r\n                \r\n				<div class=\"control-group\" style=\"margin:0px; padding-top:6px;\">       \r\n                    <label class=\"control-label\" for=\"campaign-select\">Select campaign<span class=\"field_req\">*</span></label>\r\n                    <div class=\"controls\">\r\n                        <select name=\"id\" id=\"campaign-select\" class=\"required\" style=\"width:265px;\">\r\n							<option value=\"\">Select..</option>\r\n							";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.length), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                        </select>\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"form-actions\" style=\"padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;\">         \r\n                    <a type=\"submit\" class=\"btn btn-primary gadget-campaign-validate\" style=\"padding:2px 6px 2px;\">Add to Campaign</a> \r\n                    <a class=\"cancel btn \" data-tab-identity=\"campaigns\" style=\"padding:2px 6px 2px; margin-left:5px;\">Cancel</a>\r\n					<img class=\"campaign-add-waiting\" style=\"display:none;width:16px; margin-left:10px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\r\n                </div>\r\n            </fieldset>\r\n        </form>\r\n    </div>";
+  return buffer;
+  });
+templates['gadget-campaigns-list'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\r\n		";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.response), {hash:{},inverse:self.noop,fn:self.programWithDepth(14, program14, data, depth0),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.response), {hash:{},inverse:self.noop,fn:self.programWithDepth(2, program2, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n	";
   return buffer;
   }
-function program14(depth0,data,depth1) {
+function program2(depth0,data,depth1) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\r\n			";
-  stack1 = (helper = helpers.stringToJSON || (depth0 && depth0.stringToJSON),options={hash:{},inverse:self.noop,fn:self.programWithDepth(15, program15, data, depth1),data:data},helper ? helper.call(depth0, depth0, "", options) : helperMissing.call(depth0, "stringToJSON", depth0, "", options));
+  stack1 = (helper = helpers.stringToJSON || (depth0 && depth0.stringToJSON),options={hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth1),data:data},helper ? helper.call(depth0, depth0, "", options) : helperMissing.call(depth0, "stringToJSON", depth0, "", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n		";
   return buffer;
   }
-function program15(depth0,data,depth2) {
+function program3(depth0,data,depth2) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\r\n<li style=\"padding:5px;margin:5px;border:1px solid #ddd;\">\r\n	<div style=\"display:block;\">\r\n		<div id=\"campaigns\" class=\"activity-text-block\">\r\n			<span class=\"activity-block-owner pull-right\">\r\n				";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.log_type), {hash:{},inverse:self.program(18, program18, data),fn:self.programWithDepth(16, program16, data, depth2),data:data});
+  buffer += "\r\n<li style=\"margin:2px;\">\r\n	<div style=\"display:block;\">\r\n		<div id=\"campaigns\" class=\"activity-text-block\">\r\n			<span class=\"activity-block-owner pull-left\" style=\" margin-right: 5px;\">\r\n				";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.log_type), {hash:{},inverse:self.program(6, program6, data),fn:self.programWithDepth(4, program4, data, depth2),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n			</span>\r\n			\r\n\r\n			<h4><b>"
-    + escapeExpression((helper = helpers.titleFromEnums || (depth0 && depth0.titleFromEnums),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.log_type), options) : helperMissing.call(depth0, "titleFromEnums", (depth0 && depth0.log_type), options)))
-    + "</b></h4></br>\r\n\r\n 			<p>";
-  stack1 = (helper = helpers.if_email_sent || (depth0 && depth0.if_email_sent),options={hash:{},inverse:self.program(22, program22, data),fn:self.program(20, program20, data),data:data},helper ? helper.call(depth0, depth0, "log_type", options) : helperMissing.call(depth0, "if_email_sent", depth0, "log_type", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</p>\r\n\r\n			<small class=\"edit-hover\" style=\"margin-right:10px; color:#b2b0b1;\">\r\n				<time class=\"log-created-time\" datetime=\""
-    + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.time), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.time), options)))
-    + "\" style=\"border-bottom:dotted 1px #999\">"
-    + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.time), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.time), options)))
-    + "</time>\r\n				<p class=\"pull-right\">Campaign - <a target=\"_blank\" href=\""
+  buffer += "\r\n			</span>\r\n			\r\n			<div class=\"edit-hover pull-right\" style=\"margin-right: 12px;\">Campaign - <a target=\"_blank\" href=\""
     + escapeExpression(((stack1 = (depth2 && depth2.ac_path)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "#workflow/";
   if (helper = helpers.campaign_id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -230,13 +232,22 @@ function program15(depth0,data,depth2) {
   if (helper = helpers.campaign_name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.campaign_name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</a></p>\r\n			</small>	\r\n		</div>\r\n	</div>\r\n</li>\r\n			";
+    + "</a></div>\r\n			<div><a style=\"text-decoration: none\"><b>"
+    + escapeExpression((helper = helpers.titleFromEnums || (depth0 && depth0.titleFromEnums),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.log_type), options) : helperMissing.call(depth0, "titleFromEnums", (depth0 && depth0.log_type), options)))
+    + "</b></a></div>\r\n\r\n 			<p>";
+  stack1 = (helper = helpers.if_email_sent || (depth0 && depth0.if_email_sent),options={hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, depth0, "log_type", options) : helperMissing.call(depth0, "if_email_sent", depth0, "log_type", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</p>\r\n\r\n			<div class=\"edit-hover pull-right\" style=\"margin-right: 10px; color:#b2b0b1;margin-top: -13px;\">\r\n				<div class=\"pull-right\">\r\n					<i class=\"fa fa-clock-o m-r-xs text-muted\"></i>\r\n					<time class=\"log-created-time text-muted\" datetime=\""
+    + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "", (depth0 && depth0.time), options) : helperMissing.call(depth0, "epochToHumanDate", "", (depth0 && depth0.time), options)))
+    + "\">"
+    + escapeExpression((helper = helpers.epochToHumanDate || (depth0 && depth0.epochToHumanDate),options={hash:{},data:data},helper ? helper.call(depth0, "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.time), options) : helperMissing.call(depth0, "epochToHumanDate", "ddd mmm dd yyyy HH:MM:ss", (depth0 && depth0.time), options)))
+    + "</time>\r\n				</div>	\r\n			</div>	\r\n		</div>\r\n	</div>\r\n</li><hr style=\"border-top: 1px solid #DDDDDD;\">\r\n			";
   return buffer;
   }
-function program16(depth0,data,depth3) {
+function program4(depth0,data,depth3) {
   
   var buffer = "", stack1, helper;
-  buffer += "\r\n					<img class=\"user-img\" width=\"40\" height=\"40\" alt=\"\" src=\""
+  buffer += "\r\n					<img class=\"user-img\" width=\"30\" height=\"30\" alt=\"\" src=\""
     + escapeExpression(((stack1 = (depth3 && depth3.lib_path)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "img/campaigns/";
   if (helper = helpers.log_type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -246,13 +257,13 @@ function program16(depth0,data,depth3) {
   return buffer;
   }
 
-function program18(depth0,data) {
+function program6(depth0,data) {
   
   
-  return "\r\n					<img class=\"user-img\" width=\"40\" height=\"40\" src=\"https://d13pkp0ru5xuwf.cloudfront.net/css/images/user-default.png\">\r\n				";
+  return "\r\n					<img class=\"user-img\" width=\"30\" height=\"30\" src=\"https://d13pkp0ru5xuwf.cloudfront.net/css/images/user-default.png\">\r\n				";
   }
 
-function program20(depth0,data) {
+function program8(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += " Subject: ";
@@ -263,7 +274,7 @@ function program20(depth0,data) {
   return buffer;
   }
 
-function program22(depth0,data) {
+function program10(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += " ";
@@ -274,17 +285,14 @@ function program22(depth0,data) {
   return buffer;
   }
 
-function program24(depth0,data) {
+function program12(depth0,data) {
   
   
-  return "\r\n		<li>\r\n			<div style=\"display:block;\" class=\"activity\">\r\n				<div id=\"notes\" class=\"activity-text-block\">\r\n					<p style=\"display:inline; margin-right:10px;\">You have no campaigns for this contact.</p>\r\n					<a class=\"action-add-campaign\" style=\"display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;\"><i class=\"icon-plus\" style=\"text-decoration:none; margin-right:2px;\"></i><span>Add to Campaign</span></a>\r\n				</div>\r\n			</div>\r\n		</li>\r\n	";
+  return "\r\n		<li>\r\n			<div style=\"display:block;\" class=\"activity\">\r\n				<div id=\"notes\" class=\"activity-text-block\">\r\n					<p style=\"display:inline; margin-right:10px;\">You have no campaigns for this contact.</p>\r\n					<a class=\"action-add-campaign\" style=\"display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:none; line-height:25px;\"><i class=\"fa fa-plus-square\" style=\"text-decoration:none; margin-right:2px;\"></i><span>Add to Campaign</span></a>\r\n				</div>\r\n			</div>\r\n		</li>\r\n	";
   }
 
-  buffer += "<div style=\"margin-bottom:20px\">\r\n	<div>\r\n		 ";
-  stack1 = (helper = helpers.contact_campaigns || (depth0 && depth0.contact_campaigns),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.response), "campaignStatus", options) : helperMissing.call(depth0, "contact_campaigns", (depth0 && depth0.response), "campaignStatus", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n    </div>\r\n\r\n</div>\r\n\r\n<!-- Campaign logs tab -->\r\n<ul style=\"list-style-type:none; margin-right:25px;\"> \r\n";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.response)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.program(24, program24, data),fn:self.program(13, program13, data),data:data});
+  buffer += "<!-- Campaign logs tab -->\r\n<ul style=\"list-style-type:none; margin-right:25px;\"> \r\n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.response)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.program(12, program12, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n</ul>";
   return buffer;
@@ -297,7 +305,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\r\n<!-- contact exist -->			\r\n		<div class=\"contact-minified row-fluid\">\r\n			<div style=\"max-width:95%; display:inline-block;\">\r\n				<div style=\"text-overflow: ellipsis; white-space: nowrap; overflow: hidden;\">\r\n					<a class=\"gadget-show-contact display-toggle\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-plus\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Show</span></a><span title=\""
+  buffer += "\r\n<!-- contact exist -->			\r\n		<div class=\"contact-minified row-fluid\">\r\n			<div style=\"max-width:95%; display:inline-block;\">\r\n				<div style=\"text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-left: 11px;\">\r\n					<a class=\"gadget-show-contact display-toggle\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"fa fa-plus-square toggle-tag\" style=\"text-decoration:none; margin-right:5px;margin-top: 2px;\"></i></a><span title=\""
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "first_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "first_name", options)))
     + " "
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "last_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "last_name", options)))
@@ -305,31 +313,31 @@ function program1(depth0,data) {
   if (helper = helpers.email) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.email); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + ")\" style=\"cursor:default;\"> "
+    + ")\" style=\"cursor:default;\">\r\n					<font style=\" font-weight: 600;margin-left: -10px;\">\r\n					"
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "first_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "first_name", options)))
     + " "
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "last_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "last_name", options)))
-    + " (";
+    + "\r\n					</font>(";
   if (helper = helpers.email) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.email); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + ") </span>\r\n				</div>\r\n			</div>\r\n		</div>\r\n\r\n		<div class=\"row-fluid show-contact-summary\" style=\"display:none; margin-top:10px;\"> \r\n  			\r\n		</div>\r\n\r\n   		<div class=\"option-tabs row-fluid\" style=\"display:none;\">\r\n\r\n		</div>\r\n	";
+    + ") </span>\r\n				</div>\r\n			</div>\r\n		</div>\r\n\r\n		<div class=\"row-fluid show-contact-summary\" style=\"display:none;margin-top: -13px; margin-left: 31px;\"> \r\n  			\r\n		</div>\r\n\r\n   		<div class=\"option-tabs row-fluid\" style=\"display:none;margin-left: 11px;\">\r\n\r\n		</div>\r\n	";
   return buffer;
   }
 
 function program3(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n<!--contact not exist, add contact -->\r\n		<div class=\"agile-no-contact row-fluid\">	\r\n			<div class=\"contact-list-width\" style=\"max-width:75%; display:inline-block;\">\r\n				<div style=\"text-overflow: ellipsis; white-space: nowrap; overflow: hidden;\">\r\n					";
+  buffer += "\r\n<!--contact not exist, add contact -->\r\n		<div class=\"agile-no-contact row-fluid\">	\r\n			<div class=\"contact-list-width\" style=\"max-width:75%; display:inline-block;\">\r\n				<div style=\"text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin-left: 12px;margin-bottom: 5px;\">\r\n					";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.fname), {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n				</div>\r\n			</div>\r\n			<i class=\"contact-search-status\" style=\"color:indianred; margin-left:20px; position:absolute;\">Contact not found</i>\r\n		</div>\r\n      	<div class=\"show-add-contact-form row-fluid\" style=\"display:none;\">\r\n			\r\n		</div>\r\n	";
+  buffer += "\r\n				</div>\r\n			</div>\r\n			<p class=\"contact-search-status\" style=\"color:indianred; margin-left:15px; position:absolute;\">Contact does not exist</p>\r\n		</div>\r\n      	<div class=\"show-add-contact-form row-fluid\" style=\"display:none;\">\r\n			\r\n		</div>\r\n	";
   return buffer;
   }
 function program4(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\r\n						<a class=\"gadget-add-contact\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-plus\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Add</span></a><span title=\"";
+  buffer += "\r\n						<a class=\"gadget-add-contact\" style=\"cursor:pointer; text-decoration:none; font-weight:bold;\"><i class=\"fa fa-plus\" id=\"contact-hide-show\" style=\"text-decoration:none; margin-right:5px;\"></i></a><span title=\"";
   if (helper = helpers.fname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.fname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -353,14 +361,14 @@ function program4(depth0,data) {
   if (helper = helpers.email) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.email); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + ")</span> <span style=\"margin-left:10px;\">in Agile Contacts</span></span>\r\n					";
+    + ")</span> <span style=\"margin-left:10px;color: rgb(205, 92, 92);\">Contact does not exist</span></span>\r\n					";
   return buffer;
   }
 
 function program6(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\r\n						<a class=\"gadget-add-contact\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-plus\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Add</span></a><span title=\"";
+  buffer += "\r\n						<a class=\"gadget-add-contact\" style=\"cursor:pointer; text-decoration:none; font-weight:bold;\"><i class=\"fa fa-plus\" id=\"contact-hide-show\" style=\"text-decoration:none; margin-right:5px;\"></i></a><span title=\"";
   if (helper = helpers.email) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.email); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -368,7 +376,7 @@ function program6(depth0,data) {
   if (helper = helpers.email) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.email); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + " <span style=\"margin-left:10px;\">in Agile Contacts</span></span>\r\n					";
+    + " <span style=\"margin-left:10px;color: rgb(205, 92, 92);\">Contact does not exist</span></span>\r\n					";
   return buffer;
   }
 
@@ -379,9 +387,26 @@ function program6(depth0,data) {
 templates['gadget-contact-summary'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\r\n													<div class=\"score-value inline-block font-bold\" style=\"display:inline-block; font-size: 11px; vertical-align:middle; cursor:default; min-width:16px; text-align:center;\"data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Score your leads to get high quality\" onmouseover=\"cursor1.style.color='black';\" onmouseout=\"cursor1.style.color='white';\">\r\n														";
+  if (helper = helpers.lead_score) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.lead_score); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\r\n													</div>\r\n												";
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "\r\n													<div class=\"score-value inline-block font-bold\" style=\"display:inline-block; font-size: 11px; vertical-align:middle; cursor:default; min-width:16px; text-align:center;\"data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Score your leads to get high quality\" onmouseover=\"cursor1.style.color='black';\" onmouseout=\"cursor1.style.color='white';\">\r\n														0\r\n													</div>\r\n												";
+  }
+
+function program5(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\r\n						";
@@ -392,13 +417,13 @@ function program1(depth0,data) {
   return buffer;
   }
 
-function program3(depth0,data) {
+function program7(depth0,data) {
   
   var buffer = "";
   return buffer;
   }
 
-function program5(depth0,data) {
+function program9(depth0,data) {
   
   var stack1, helper;
   if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -406,26 +431,12 @@ function program5(depth0,data) {
   return escapeExpression(stack1);
   }
 
-function program7(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\r\n													<div class=\"score-value\" style=\"display:inline-block; font-size:15px; margin-right:2px; vertical-align:middle; cursor:default; min-width:16px; width:16px; text-align:center;\">\r\n														";
-  if (helper = helpers.lead_score) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.lead_score); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\r\n													</div>\r\n												";
-  return buffer;
-  }
-
-function program9(depth0,data) {
-  
-  
-  return "\r\n													<div class=\"score-value\" style=\"display:inline-block; font-size:15px; margin-right:2px; vertical-align:middle; cursor:default; min-width:16px; width:16px; text-align:center;\">\r\n														0\r\n													</div>\r\n												";
-  }
-
-  buffer += "		\r\n<!-- 1st coloum (conatct image) -->\r\n				<div class=\"span1\" style=\"min-width:65px;\">\r\n					<div class=\"thumbnails\">\r\n	   					<div class=\"span12\">\r\n    						<img  class='thumbnail' src=\""
+  buffer += "		\r\n<!-- 1st coloum (conatct image) -->\r\n				<div class=\"span1\" style=\"min-width:65px;\">\r\n					<div class=\"thumbnails\">\r\n	   					<div class=\"span12\">\r\n	   						<div style=\"position: relative;margin-right: 16px;\">\r\n	   						<div class=\"score-scope\" unselectable=\"on\" onselectstart=\"return false\">\r\n	   							<span style=\"position: absolute;right: -10px;background-color: #27c24c;border-radius:10px;color: #fff;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top: 6px;\">\r\n													";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.lead_score), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n								</span>\r\n								<span id=\"cursor1\" style=\"position: absolute;right: -28px;border-radius:10px;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top: 6px;color:white;\" onmouseover=\"this.style.color='black';\" onmouseout=\"this.style.color='white';\">				\r\n												<ul style=\"margin:0; list-style-type:none; display:inline-block; vertical-align:middle;\">\r\n													<input type=\"hidden\" name=\"email\" value=\"ghanshyam.agile@gmail.com\">\r\n													<li style=\"line-height:7px;\"><i class=\"icon-sort-up add-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Add Score\"></i></li>\r\n													<li style=\"line-height:4px;\"><i class=\"icon-sort-down subtract-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Subtract Score\"></i></li>\r\n												</ul>\r\n								</span>			\r\n							</div>\r\n\r\n    							<img  class='upload_pic imgholder submit w-full img-circle w-full img-circle b-2x b' src=\""
     + escapeExpression((helper = helpers.gravatarurl || (depth0 && depth0.gravatarurl),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), 50, options) : helperMissing.call(depth0, "gravatarurl", (depth0 && depth0.properties), 50, options)))
-    + "\" width=\"50\" height=\"50\" />\r\n		   				</div>\r\n					</div>\r\n    			</div>\r\n\r\n<!-- 2nd coloum (conatct details) -->\r\n				<div class=\"span8\" style=\"margin-left:0;\">\r\n<!-- First row (Name) - Starts -->\r\n					<div class=\"row-fluid\">\r\n						<div style=\"display:inline-block; max-width: 16em; vertical-align:middle;\">\r\n							<div style=\"height: 20px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;\">\r\n								<b>\r\n									<font size=\"4\" title=\""
+    + "\" style=\"width:60px;height:49px;border: 2px solid #9CC96B\" />\r\n		   					</div>\r\n		   				</div>\r\n					</div>\r\n    			</div>\r\n\r\n<!-- 2nd coloum (conatct details) -->\r\n				<div class=\"span8\" style=\"margin-left:7px;\">\r\n<!-- First row (Name) - Starts -->\r\n					<div class=\"row-fluid\">\r\n						<div style=\"display:inline-block; max-width: 16em; vertical-align:middle;\">\r\n							<div>\r\n								<b>\r\n									<font style=\"font-size: 14px;\" title=\""
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "first_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "first_name", options)))
     + " "
     + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "last_name", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "last_name", options)))
@@ -441,25 +452,21 @@ function program9(depth0,data) {
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" style=\"margin-left:6px; text-decoration:none; vertical-align:middle;\"><i class=\"icon-external-link\" title=\"Show contact in Agile\"></i></a><br/>\r\n					</div>\r\n<!-- First row (Name) - Ends -->\r\n\r\n<!-- Second row (Title, Company) - Starts -->					\r\n					<div class=\"row-fluid\">\r\n					";
-  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, "title", options) : helperMissing.call(depth0, "if_propertyName", "title", options));
+    + "\" style=\"margin-left:6px; text-decoration:none; vertical-align:middle;\"><i class=\"fa fa-external-link-square\" title=\"Show contact in Agile\"></i></a><br/>\r\n					</div>\r\n<!-- First row (Name) - Ends -->\r\n\r\n<!-- Second row (Title, Company) - Starts -->					\r\n					<div class=\"row-fluid\">\r\n					";
+  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, "title", options) : helperMissing.call(depth0, "if_propertyName", "title", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n					";
-  stack1 = (helper = helpers.comma_in_between_property || (depth0 && depth0.comma_in_between_property),options={hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, "title", "company", (depth0 && depth0.properties), options) : helperMissing.call(depth0, "comma_in_between_property", "title", "company", (depth0 && depth0.properties), options));
+  stack1 = (helper = helpers.comma_in_between_property || (depth0 && depth0.comma_in_between_property),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, "title", "company", (depth0 && depth0.properties), options) : helperMissing.call(depth0, "comma_in_between_property", "title", "company", (depth0 && depth0.properties), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n					";
-  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, "company", options) : helperMissing.call(depth0, "if_propertyName", "company", options));
+  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, "company", options) : helperMissing.call(depth0, "if_propertyName", "company", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n					</div>\r\n<!-- Second row (Title, Company) - Ends -->\r\n\r\n<!-- Third row (tags) - Starts -->					\r\n					<div class=\"row-fluid\">\r\n						<div class=\"span11\">	 		\r\n						<div class=\"add-tag\">\r\n							<div style=\"padding-top:4px;\">\r\n								<ul id=\"added_tags_ul\" class=\"tagsinput\">\r\n									<li class=\"tag\" style=\"display: none; padding:1px 4px;\">\r\n											<span>\r\n											<span class=\"anchor tag-name\" style=\"float:left; cursor:default;\">lead</span>\r\n											<a class=\"close remove-tag remove-tag-icon\" style=\"float:left; line-height:16px;\" title=\"Remove Tag\">&times;</a>\r\n										</span>\r\n									</li> \r\n								</ul>\r\n								<div style=\"display: inline-block; vertical-align:top;\" >\r\n										<form id=\"add_tags_form\" name=\"add_tags_form\" method=\"post\" style=\"display: none; margin-bottom: 0px; margin-top:1px;\">\r\n										<div style=\"margin-bottom:0px;\">\r\n											<input type=\"hidden\" name=\"email\" value='";
-  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, "email", options) : helperMissing.call(depth0, "if_propertyName", "email", options));
+  buffer += "\r\n					</div>\r\n<!-- Second row (Title, Company) - Ends -->\r\n					<div class=\"row-fluid\" style=\"margin-bottom: 1px;\">\r\n					"
+    + escapeExpression((helper = helpers.getPropertyValue || (depth0 && depth0.getPropertyValue),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.properties), "email", options) : helperMissing.call(depth0, "getPropertyValue", (depth0 && depth0.properties), "email", options)))
+    + "\r\n					</div>\r\n<!-- Third row (tags) - Starts -->					\r\n					<div class=\"row-fluid\">\r\n						<div class=\"span11\">	 		\r\n						<div class=\"add-tag\">\r\n							<div style=\"padding-top:4px;\">\r\n								<ul id=\"added_tags_ul\" class=\"tagsinput\">\r\n									<li class=\"tag\" style=\"display: none; padding:1px 4px;\">\r\n											<span>\r\n											<span class=\"anchor tag-name\" style=\"float:left; cursor:default;\">lead</span>\r\n											<a class=\"close remove-tag remove-tag-icon\" style=\"float:left; line-height:16px;\" title=\"Remove Tag\">&times;</a>\r\n										</span>\r\n									</li> \r\n								</ul>\r\n								<div style=\"display: inline-block; vertical-align:top;\" >\r\n										<form id=\"add_tags_form\" name=\"add_tags_form\" method=\"post\" style=\"display: none; margin-bottom: 0px; margin-top:1px;\">\r\n										<div style=\"margin-bottom:0px;\">\r\n											<input type=\"hidden\" name=\"email\" value='";
+  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, "email", options) : helperMissing.call(depth0, "if_propertyName", "email", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "'/>\r\n											<input class=\"tags-typeahead ignore-comma-keydown input-small\" name=\"tags\" type=\"text\" id=\"tags\" style=\"margin: 0px;\" placeholder=\"Enter tag\" autocomplete=\"off\">\r\n											<a type=\"submit\" class=\"btn\" id=\"contact_add_tags\" style=\"margin-left: 10px; padding: 1px 10px;\">Add</a>\r\n										</div>\r\n									</form>\r\n									<img class=\"tag-waiting\" style=\"display:none; width:16px; margin-top:6px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\r\n									<i id=\"add_tags\" class=\"icon-plus toggle-tag\" style=\"cursor:pointer; margin-top:4px; display:block;\" title=\"Add Tag\"></i>\r\n								</div>\r\n							</div>\r\n						</div>\r\n						</div>\r\n					</div>\r\n<!-- Third row (Tags) - End -->\r\n				</div>\r\n\r\n<!-- 3rd coloum -->				\r\n				<div class=\"span3 contact-col-3\" style=\"margin-left:0; position:absolute; right:28;\">\r\n					\r\n					<div class=\"row-fluid\">\r\n								<div class=\"btn-group row-fluid\" style=\"display:inline-block; min-width:72px; margin-bottom:10px;\">\r\n									<div class=\"pull-right\">\r\n										<a class=\"btn dropdown-toggle\" data-toggle=\"dropdown\" style=\"width:70px;\"><b>+</b> Add<span class=\"caret\" style=\"margin-left:5px;\"></span></a>\r\n  										<ul class=\"dropdown-menu pull-right\">\r\n   											<!-- dropdown menu links -->\r\n											<li class=\"action-add-note\"><a style=\"cursor:default;\">Add Note</a></li>\r\n											<li class=\"action-add-email-note\"><a style=\"cursor:default;\">Add Email as Note</a></li>\r\n											<li class=\"action-add-task\"><a style=\"cursor:default;\">Add Task</a></li>\r\n											<li class=\"action-add-deal\"><a style=\"cursor:default;\">Add Deal</a></li>\r\n											<li class=\"action-add-campaign\"><a style=\"cursor:default;\">Add to Campaign</a></li>\r\n										</ul>\r\n									</div>\r\n								</div>\r\n							</div>\r\n					\r\n					\r\n					<div class=\"row-fluid\">\r\n						<div class=\"span12\" style=\"min-width:95px;\">\r\n\r\n							<div class=\"row-fluid unselectable score-scope\" unselectable=\"on\" onselectstart=\"return false\">\r\n								<div class=\"pull-right\">\r\n									<ul style=\"margin:0 2px 10px 0; min-width:90px; list-style-type:none; width:auto; height:26px; display:table; border:1px solid rgba(0, 0, 0, 0.15); box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05); border-radius:3px;\">\r\n										<li style=\"line-height:26px;\">\r\n											<div style=\"display:inline; padding-right:2px; margin-right: 4px; margin-left: 5px; border-right: 1px dotted rgba(0, 0, 0, 0.20);\">\r\n												<span style=\"font-weight:bold; font-size:13px; cursor:default;\">Score</span>\r\n											</div>\r\n											<div style=\"display:inline;\">\r\n												";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.lead_score), {hash:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n												<ul style=\"margin:0; list-style-type:none; display:inline-block; vertical-align:middle;\">\r\n													<input type=\"hidden\" name=\"email\" value='";
-  stack1 = (helper = helpers.if_propertyName || (depth0 && depth0.if_propertyName),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, "email", options) : helperMissing.call(depth0, "if_propertyName", "email", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "'/>\r\n													<li style=\"line-height:5px;\"><i class=\"icon-sort-up add-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Add Score\"></i></li>\r\n													<li style=\"line-height:4px;\"><i class=\"icon-sort-down subtract-score\" style=\"font-size:12px; cursor:pointer;\" title=\"Subtract Score\"></i></li>\r\n												</ul>\r\n											</div>\r\n										</li>\r\n									</ul>\r\n								</div>\r\n							</div>\r\n\r\n							\r\n						</div>\r\n					</div>\r\n				</div>\r\n<!-- end of contact info-->";
+  buffer += "'/>\r\n											<input class=\"tags-typeahead ignore-comma-keydown input-small\" name=\"tags\" type=\"text\" id=\"tags\" style=\"margin: 0px;\" placeholder=\"Enter tag\" autocomplete=\"off\">\r\n											<a type=\"submit\" class=\"btn\" id=\"contact_add_tags\" style=\"margin-left: 10px; padding: 1px 10px;\">Add</a>\r\n										</div>\r\n									</form>\r\n									<img class=\"tag-waiting\" style=\"display:none; width:16px; margin-top:6px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\r\n									<i id=\"add_tags\" class=\"icon-plus toggle-tag\" style=\"cursor:pointer; margin-top:4px; display:block;\" title=\"Add Tag\"></i>\r\n								</div>\r\n							</div>\r\n						</div>\r\n						</div>\r\n					</div>\r\n<!-- Third row (Tags) - End -->\r\n				</div>\r\n\r\n<!-- 3rd coloum -->				\r\n				<div class=\"span3 contact-col-3\" style=\"margin-left:0; position:absolute; right:28;\">\r\n					\r\n					<div class=\"row-fluid\" >\r\n								<div class=\"btn-group row-fluid\" style=\"display:inline-block; min-width:72px; margin-bottom:10px;\">\r\n									<div class=\"pull-right\" style=\"background-color: #F2F2F2;\" onmouseover=\"this.style.backgroundColor ='#DBDBDB';\" onmouseout=\"this.style.backgroundColor ='#F2F2F2';\">\r\n										<a id=\"dropdown_switching\" title=\"\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" aria-expanded=\"true\"> \r\n											<i class=\"fa fa-ellipsis-h filter-ellip-menu-st b b-light\" style=\"padding:2px 9px;cursor:pointer;\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Add\"></i> </a>\r\n										<ul class=\"dropdown-menu pull-right\">\r\n   											<!-- dropdown menu links -->\r\n											<li class=\"action-add-note\"><a style=\"cursor:default;\">Add Note</a></li>\r\n											<li class=\"action-add-email-note\"><a style=\"cursor:default;\">Add Email as Note</a></li>\r\n											<li class=\"action-add-task\"><a style=\"cursor:default;\">Add Task</a></li>\r\n											<li class=\"action-add-deal\"><a style=\"cursor:default;\">Add Deal</a></li>\r\n											<li class=\"action-add-campaign\"><a style=\"cursor:default;\">Add to Campaign</a></li>\r\n										</ul>\r\n									</div>\r\n								</div>\r\n							</div>\r\n					\r\n						\r\n<!-- end of contact info-->";
   return buffer;
   });
 templates['gadget-deal'] = template(function (Handlebars,depth0,helpers,partials,data) {
@@ -797,7 +804,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n		<div class=\"well well-small gadget-contact-details-tab\" style='margin:0px;border-radius:0px;box-shadow:none;background-color:white;border:0px; border-left:0px; border-right:0px;'>\r\n			<div class=\"show-form\" data-content=\""
+  buffer += "\r\n		<div class=\"well well-small gadget-contact-details-tab\" style='margin:0px;border-radius:0px;box-shadow:none;background-color:white;border:0px; border-left:0px; border-right:0px;padding: 9px 0px;'>\r\n			<div class=\"show-form\" data-content=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.email)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\r\n<!--email list -->\r\n				<div class=\"contact-list\">\r\n					<div class=\"agile-no-contact row-fluid\">\r\n						<div class=\"contact-list-width\" style=\"max-width:95%; display:inline-block; vertical-align:middle;\">\r\n							<div style=\"text-overflow: ellipsis; white-space: nowrap; overflow: hidden;\">\r\n								";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.name), {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
@@ -808,7 +815,7 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n									<a class=\"gadget-search-contact\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search</span></a><span title=\""
+  buffer += "\r\n									<b>Contact &nbsp</b><span title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "  ("
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.email)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -818,28 +825,28 @@ function program2(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.lname)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " ("
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.email)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ") <span style=\"margin-left:10px;\">in Agile Contacts</span></span>\r\n								";
+    + ")</span><div style=\"display: inline-block;vertical-align: middle; margin-left: 3px;\"><a class=\"gadget-search-contact btn btn-primary\" style=\"cursor:pointer; margin:0px 10px 0px 0px; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search in Agile</span></a></div>\r\n								";
   return buffer;
   }
 
 function program4(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n									<a class=\"gadget-search-contact\" style=\"cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search</span></a><span title=\""
+  buffer += "\r\n									<b>Contact &nbsp</b><span title=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.email)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" style=\"cursor:default;\"> "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.value)),stack1 == null || stack1 === false ? stack1 : stack1.email)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " <span style=\"margin-left:10px;\">in Agile Contacts</span></span>\r\n								";
+    + " </span><div style=\"display: inline-block;vertical-align: middle; margin-left: 3px;\"><a class=\"gadget-search-contact btn btn-primary\" style=\"cursor:pointer; margin:0px 10px 0px 0px; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search in Agile</span></a></div>\r\n								";
   return buffer;
   }
 
 function program6(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n<!--Search email panel -->			\r\n			<div class=\"well well-small gadget-contact-details-tab\" style=\"margin:0px 0px -1px 0px;box-shadow:none;border-radius:0px;background-color:#f2f2f2;border:0px;\">\r\n				<div class=\"show-form\">\r\n					<div>\r\n						<div class=\"row-fluid\">\r\n							\r\n	<!-- Search mail UI area start-->\r\n							<div style=\"line-height:22px;\">\r\n								<div class=\"search-pannel-inner\">\r\n									\r\n									<div style=\"display: inline-block;vertical-align: middle;\">\r\n										<a class=\"gadget-search-contact search-mail-button\" style=\"cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search</span></a>\r\n									</div>\r\n									<div class=\"btn-group\" style=\"display: inline-block;vertical-align: middle;margin: 0 10px 0 0;\">\r\n										<select id=\"search_drop_down\" class=\"agile-mail-dropdown\" style=\"width:auto; margin:0px;\">\r\n											<!-- dropdown menu links -->\r\n											";
+  buffer += "\r\n<!--Search email panel -->			\r\n			<div class=\"well well-small gadget-contact-details-tab\" style=\"margin:0px 0px -1px 0px;box-shadow:none;border-radius:0px;background-color:#f2f2f2;border:0px;\">\r\n				<div class=\"show-form\">\r\n					<div>\r\n						<div class=\"row-fluid\">\r\n							\r\n	<!-- Search mail UI area start-->\r\n							<div style=\"line-height:22px;\">\r\n								<div class=\"search-pannel-inner\">\r\n									\r\n									<div style=\"display: inline-block;vertical-align: middle;\">\r\n										<b>Contact &nbsp</b>\r\n									</div>\r\n									<div class=\"btn-group\" style=\"display: inline-block;vertical-align: middle;margin: 0 10px 0 0;\">\r\n										<select id=\"search_drop_down\" class=\"agile-mail-dropdown\" style=\"width:auto; margin:0px;height: 30px;padding: 0px 5px;\">\r\n											<!-- dropdown menu links -->\r\n											";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "	\r\n										</select>\r\n									</div>\r\n									<div style=\"display: inline-block;vertical-align: middle;\">\r\n										<span style=\"display:inline-block;\">in Agile Contacts</span>\r\n										<img class=\"contact-search-waiting\" style=\"margin-left:20px; display:none; width:13px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\r\n										<i class=\"contact-search-status\" style=\"display:none; color:indianred; margin-left:20px;\">Contact not found</i>\r\n									</div>\r\n								</div>\r\n							</div>\r\n	<!-- Search mail UI area end-->						\r\n						</div>\r\n					</div>\r\n				</div>\r\n			</div>\r\n	";
+  buffer += "	\r\n										</select>\r\n									</div>\r\n									<div style=\"display: inline-block;vertical-align: middle;\">\r\n										<a class=\"gadget-search-contact search-mail-button gadget-search-contact search-mail-button btn btn-primary\" style=\"cursor:pointer; margin:0px 10px 0px 0px; font-weight:bold;\"><i class=\"icon-search\" style=\"text-decoration:none; margin-right:5px;\"></i><span>Search in Agile</span></a>\r\n									</div>\r\n									<div style=\"display: inline-block;vertical-align: middle;\">\r\n										<img class=\"contact-search-waiting\" style=\"margin-left:20px; display:none; width:13px;\" src=\"https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif\"></img>\r\n										<p class=\"contact-search-status\" style=\"display:none; color:indianred; margin-bottom: 1px;\">Contact does not exist</p>\r\n									</div>\r\n								</div>\r\n							</div>\r\n	<!-- Search mail UI area end-->						\r\n						</div>\r\n					</div>\r\n				</div>\r\n			</div>\r\n	";
   return buffer;
   }
 function program7(depth0,data) {

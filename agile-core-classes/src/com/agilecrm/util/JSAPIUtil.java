@@ -3,6 +3,7 @@ package com.agilecrm.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,6 +12,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 public class JSAPIUtil
@@ -90,4 +92,14 @@ public class JSAPIUtil
 	    WorkflowSubscribeUtil.subscribe(contact, Long.parseLong(campaignIdsArr[i]));
 	}
     }
+    
+    public static boolean isRequestFromOurDomain()
+    {
+    String domain = NamespaceManager.get();
+    if(!StringUtils.isEmpty(domain) && domain.equalsIgnoreCase("our"))
+    	return true;
+    
+    return false;
+    }
+    
 }

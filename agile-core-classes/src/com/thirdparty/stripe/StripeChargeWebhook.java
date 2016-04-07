@@ -3,6 +3,7 @@ package com.thirdparty.stripe;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,19 +20,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.stripe.model.Event;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.subscription.stripe.StripeUtil;
+import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
+import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandlerImpl;
+import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
+import com.stripe.exception.StripeException;
 
 @SuppressWarnings("serial")
 public class StripeChargeWebhook extends HttpServlet
@@ -63,10 +78,44 @@ public class StripeChargeWebhook extends HttpServlet
 	{
 	    JSONObject stripeJson = new JSONObject(stripeData);
 	    System.out.println("stripe json is " + stripeJson);
+	    
+	    if (stripeJson.getJSONObject("data").getJSONObject("object").has("amount")){
+	    String amount = stripeJson.getJSONObject("data").getJSONObject("object").getString("amount");
+	    System.out.println("Amount is :"+ amount);
+	    stripeJson.getJSONObject("data").getJSONObject("object").remove("amount");
+	    System.out.println("Removing amount attribute in json");
+	    stripeJson.getJSONObject("data").getJSONObject("object").put("amount", Double.parseDouble(amount)/100);
+	    System.out.println("Calculating amount in dollars and updating it in json");
+	    }
+	    
+	    if (stripeJson.getJSONObject("data").getJSONObject("object").has("amount_refunded")){
+	    	String amount_refunded = stripeJson.getJSONObject("data").getJSONObject("object").getString("amount_refunded");
+	    	stripeJson.getJSONObject("data").getJSONObject("object").remove("amount_refunded");
+	    	stripeJson.getJSONObject("data").getJSONObject("object").put("amount_refunded", Double.parseDouble(amount_refunded)/100);
+	    }
 
 	    String eventType = stripeJson.getString("type");
 	    System.out.println("stripe post event type is " + eventType);
+	    
+//	    String newNamespace="";
+//		try
+//		{
+//			// Get Namespace from event
+//			StripeWebhookServlet stripeWebhookServlet = new StripeWebhookServlet();
+//			newNamespace = stripeWebhookServlet.getNamespaceFromEvent(stripeJson);
+//			
+//		}
+//		catch (StripeException e)
+//		{
+//			// TODO Auto-generated catch block
+//			System.out.println("Exception occured in getting name space:"+e.getMessage());
+//		}
 
+//		System.out.println("Namespace for event : " + newNamespace);
+
+	    URL url = new URL(request.getRequestURL().toString());
+		String namespace = NamespaceUtil.getNamespaceFromURL(url);
+		
 	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);
 	    if (stripeEventJson == null)
 	    {
@@ -83,7 +132,33 @@ public class StripeChargeWebhook extends HttpServlet
 		if (StringUtils.equals(trigger.trigger_stripe_event, eventType.replace(".", "_").toUpperCase()))
 		{
 		    String email = getStripeEmail(stripeJson, eventType);
-		    Contact contact = ContactUtil.searchContactByEmail(email);
+		    //Event event = new Gson().fromJson(stripeData, Event.class);
+		    Event event = null;
+			try {
+				event = StripeUtil.getEventFromJSON(stripeJson.toString());
+			} catch (AuthenticationException | InvalidRequestException
+					| APIConnectionException | CardException | APIException e1) {
+				// TODO Auto-generated catch block
+				System.out.println("Exception occured in fetching event from json:"+ e1.getMessage());
+			}
+		    //StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
+		    //webhookHandlerImpl.init(stripeJson.toString(), event);
+		    
+		    //StripeWebhookHandlerImpl stripeWebhookHandlerImpl = new StripeWebhookHandlerImpl();
+		    Contact contact = null;
+		    if(namespace.equals("our")){
+		    	StripeWebhookHandler webhookHandlerImpl = new StripeWebhookHandlerImpl();
+			    webhookHandlerImpl.init(stripeJson.toString(), event);
+			    contact = webhookHandlerImpl.getContactFromOurDomain();
+		    }else{
+		    	contact = ContactUtil.searchContactByEmail(email);
+		    }
+			if(contact!=null)
+			{
+			email = contact.getContactFieldValue(contact.EMAIL);
+			}
+				
+		    //Contact contact = ContactUtil.searchContactByEmail(email);
 
 		    Boolean newContact = false;
 		    List<ContactField> contactProperties = new ArrayList<ContactField>();
@@ -149,9 +224,10 @@ public class StripeChargeWebhook extends HttpServlet
 		    else
 			contact.properties = updateAgileContactProperties(contact.properties, contactProperties);
 
+		    if(!namespace.equals("our")){
 		    contact.setContactOwner(owner);
+		    }
 		    contact.save();
-
 		    if (getTriggerRunResult(newContact, trigger))
 		    {
 			System.out.println("Assigning campaign to contact ... ");
@@ -164,7 +240,7 @@ public class StripeChargeWebhook extends HttpServlet
 	}
 	catch (JSONException e)
 	{
-	    e.printStackTrace();
+	    System.out.println("JSON Exception occured:"+e.getMessage());
 	}
     }
 

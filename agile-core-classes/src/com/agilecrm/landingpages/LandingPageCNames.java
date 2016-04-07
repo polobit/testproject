@@ -5,6 +5,7 @@ import java.net.URL;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
@@ -27,6 +28,9 @@ public class LandingPageCNames
     public String cname;
     
     public String cname_host;
+    
+    @Transient
+    public boolean isDuplicateCName = false;
 
     public static ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
 
@@ -46,7 +50,29 @@ public class LandingPageCNames
 		NamespaceManager.set("");
 		try
 		{
-		    dao.put(this);
+			LandingPageUtil lputil = new LandingPageUtil();
+			if(this.id == null){
+			    //when creating
+				if(!cname.isEmpty() && lputil.isCNameExists(cname)) {
+					isDuplicateCName = true;
+					return;
+				} else {
+					dao.put(this);					
+				}
+			} else {				
+				//update
+				if(!cname.isEmpty()) {
+					if(id != 0L) {
+						isDuplicateCName = lputil.isCNameExists(cname,id);
+					} else {
+						isDuplicateCName = lputil.isCNameExists(cname);
+					}
+					if(isDuplicateCName) {
+						return;
+					}					
+					dao.put(this);
+				}				
+			}    
 		}
 		finally
 		{

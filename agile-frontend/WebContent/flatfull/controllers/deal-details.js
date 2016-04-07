@@ -42,10 +42,16 @@ var DealDetailsRouter = Backbone.Router.extend({
 			}
 
 		} });
-
-		var ele = this.dealDetailView.render(true).el;
-		$("#deal-detail-page").html(getRandomLoadingImg());
-		$('#deal-detail-page').html(ele);
+		var that = this;
+		this.dealDetailView.model.fetch({success : function(data){
+			var ele = that.dealDetailView.render(true).el;
+			$("#deal-detail-page").html(getRandomLoadingImg());
+			$('#deal-detail-page').html(ele);
+		},error : function(data, response){
+			hideTransitionBar();
+			if(response && response.status == '403')
+				$('#deal-detail-page').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; '+response.responseText+'</strong></h2>');
+		} })
 
 	},
 
@@ -100,7 +106,7 @@ var DealDetailsRouter = Backbone.Router.extend({
  */
 function fill_deal_owners(el, data, callback)
 {
-	var optionsTemplate = "<li><a class='deal-owner-list' data='{{id}}'>{{name}}</a></li>";
+	var optionsTemplate = "<li><a href='javascript:void(0);' class='deal-owner-list' data='{{id}}'>{{name}}</a></li>";
 	fillSelect('deal-detail-owner', '/core/api/users', 'domainUsers', callback, optionsTemplate, true);
 }
 

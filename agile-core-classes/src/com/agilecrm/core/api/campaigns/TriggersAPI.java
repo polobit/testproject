@@ -16,6 +16,8 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AllDomainStats;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 
@@ -59,6 +61,10 @@ public class TriggersAPI
     public Trigger createTrigger(Trigger trigger)
     {
 	trigger.save();
+	
+	//Increase count of Trigger for AllDomainstats report in database
+		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.TRIGGER_COUNT);
+	
 	return trigger;
     }
 

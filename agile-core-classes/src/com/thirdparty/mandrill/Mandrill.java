@@ -232,6 +232,8 @@ public class Mandrill
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, cc, bcc, replyTo, subject,
 		    html, text, metadata, attachments);
 
+	    if(messageJSON!=null)
+			System.out.println("support debug:Mandrill.messageJSON:" + messageJSON.toString());
 	    // Task for sending emails with attachments
 	    String mailJSONString = mailJSON.toString().replaceAll("}", ",");
 	    String messageJSONString = messageJSON.toString();
@@ -247,6 +249,10 @@ public class Mandrill
 	    else
 	    {
 		JSONArray attachmentsJSON = getAttachmentsJSON(attachments);
+		if(attachmentsJSON!=null)
+		{
+			System.out.println("support debug:Mandrill.sendMail:" + attachmentsJSON.toString());
+		}
 		messageJSON.put(MANDRILL_ATTACHMENTS, attachmentsJSON);
 
 		mailJSON.put(MANDRILL_MESSAGE, messageJSON);

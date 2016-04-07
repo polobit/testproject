@@ -42,6 +42,7 @@ public class AnalyticsServlet extends HttpServlet
      */
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
+	/*
 	// Domain
 	String domain = NamespaceManager.get();
 
@@ -101,8 +102,8 @@ public class AnalyticsServlet extends HttpServlet
 	System.out.println("Before log " + timeBeforeLog);
 	
 	// Insert into table
-	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
-		    city, cityLatLong);
+	//AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
+	//	    city, cityLatLong);
 	    
 
 	Long timeAfterLog = System.currentTimeMillis();
@@ -133,6 +134,7 @@ public class AnalyticsServlet extends HttpServlet
 	    timeAfterLog = System.currentTimeMillis();
 		System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog-timeBeforeLog));
 	}
+	*/
     }
 
     /**

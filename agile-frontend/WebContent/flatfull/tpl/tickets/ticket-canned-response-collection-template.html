@@ -1,0 +1,56 @@
+<script id="ticket-canned-response-collection-template" type="text/html">
+{{#unless this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="text-center padder-v">
+                <h4 class="m-t-none m-b-xs">You don&#39;t have any canned responses</h4>
+                <div class="m-b-xs">
+                    Create frequently type messages as canned responses. Choose the required canned response when sending reply to without typing the same message again.
+                </div>
+                <div>
+                    <a href="#add-canned-response" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                        Add Canned Response
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/unless}}
+{{#if this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="pull-right">
+                <a href="#add-canned-response" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span> Add
+                </a>
+            </div>
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th style="width:33%">Title</th>
+                            <th style="width:30%">Message</th>
+                             <!--<th style="width:30%">Labels</th> -->
+                            <th style="width:36%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-canned-response-model-list" route="edit-canned-response/" class="c-p"> </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none">
+        <div class="data-block">
+            <div class="p-l p-r">
+                <h4 class="m-t-none">What are Recommendations?</h4>           
+                <p>
+                    Get automated smart recommendations based on canned responses and ticket labels.
+                </p>
+                <br/>
+                <p>
+                    <iframe width="254" height="142" src="https://www.youtube.com/embed/I4mj_MpQsUI" frameborder="0" allowfullscreen></iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+{{/if}}
+</script>

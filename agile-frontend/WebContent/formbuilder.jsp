@@ -1,5 +1,6 @@
 <%
 String formId = request.getParameter("form");
+String template = request.getParameter("template");
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -14,9 +15,13 @@ String formId = request.getParameter("form");
       <![endif]-->
       <style type="text/css">
       input[type=url],textarea{border:1px solid #ccc;border-radius:4px;box-shadow:0 1px 1px rgba(0,0,0,.075) inset;color:#555;font-size:14px;line-height:1.42857;transition:border-color .15s ease-in-out 0s,box-shadow .15s ease-in-out 0s;width:100%;margin:0}
+         .agile-label{float:left;overflow:hidden;padding:7px 25px 0 0;text-align:left;word-wrap:break-word;width:100%;font-size:15px}
       </style>
 	<script>
 		var formNumber = <%=formId%>;
+   <% if(template != null) { %>
+   var formTemplate = '<%=template%>';
+   <% } %>
 	</script>
 
    </head>
@@ -58,6 +63,6 @@ String formId = request.getParameter("form");
          </div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main-built.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
    </body>
 </html>

@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -65,7 +66,7 @@ public class DealTriggerUtil
 		if (opportunity == null)
 			return;
 
-		executeTriggerForDealsBasedOnCondition(opportunity.getContacts(), null, opportunity, Trigger.Type.DEAL_IS_ADDED);
+		executeTriggerForDealsBasedOnCondition(opportunity.relatedContacts(), null, opportunity, Trigger.Type.DEAL_IS_ADDED);
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class DealTriggerUtil
 				+ " of deal " + updatedOpportunity.name);
 
 			// execute trigger for deal milestone change.
-			executeTriggerForDealsBasedOnCondition(updatedOpportunity.getContacts(), oldOpportunity, updatedOpportunity,
+			executeTriggerForDealsBasedOnCondition(updatedOpportunity.relatedContacts(), oldOpportunity, updatedOpportunity,
 				Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
 		}
 		catch(Exception e)
@@ -127,7 +128,7 @@ public class DealTriggerUtil
 
 				// Fetches triggers based on delete deal condition and runs
 				// each trigger campaign
-				executeTriggerForDealsBasedOnCondition(opportunityObject.getContacts(), null, opportunityObject,
+				executeTriggerForDealsBasedOnCondition(opportunityObject.relatedContacts(), null, opportunityObject,
 						Trigger.Type.DEAL_IS_DELETED);
 			}
 		}
@@ -311,7 +312,8 @@ public class DealTriggerUtil
 
 		try
 		{
-			isDefault = opportunity.getPipeline().isDefault;
+			
+			isDefault =  OpportunityUtil.getOpportunityPipeline(opportunity).isDefault;
 			trackAndMilestone = opportunity.getPipeline_id() + "_" + opportunity.milestone;
 
 			for (Trigger trigger : triggers)
@@ -362,7 +364,7 @@ public class DealTriggerUtil
 			List<Trigger> milestoneTriggers = DealTriggerUtil.getTriggersForMilestoneChange(updatedDeal, triggers);
 
 			if (!milestoneTriggers.isEmpty())
-				DealTriggerUtil.triggerCampaign(updatedDeal.getContacts(), updatedDeal, null, milestoneTriggers);
+				DealTriggerUtil.triggerCampaign(updatedDeal.relatedContacts(), updatedDeal, null, milestoneTriggers);
 		}
 		catch (Exception e)
 		{
