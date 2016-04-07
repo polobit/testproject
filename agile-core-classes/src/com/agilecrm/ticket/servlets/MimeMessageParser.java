@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -205,7 +206,9 @@ public class MimeMessageParser
 			{
 				System.out.println("html content.....");
 
-				htmlContent = (String) part.getContent();
+				// htmlContent = (String) part.getContent();
+				InputStream stream = MimeUtility.decode(part.getInputStream(), "quoted-printable");
+				htmlContent = IOUtils.toString(stream, "UTF-8");
 
 				System.out.println(htmlContent);
 			}
@@ -321,9 +324,9 @@ public class MimeMessageParser
 	 */
 	public List<TicketDocuments> saveAttachments() throws Exception
 	{
-		if(attachmentList == null || attachmentList.size() == 0)
+		if (attachmentList == null || attachmentList.size() == 0)
 			return new ArrayList<>();
-			
+
 		String plainContent = (hasPlainContent()) ? this.plainContent : "";
 		String htmlContent = (hasHtmlContent()) ? this.htmlContent : "";
 

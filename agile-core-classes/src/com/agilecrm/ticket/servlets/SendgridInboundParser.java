@@ -410,8 +410,7 @@ public class SendgridInboundParser extends HttpServlet
 		QuotedPrintableCodec qa = new QuotedPrintableCodec();
 
 		String s = "<div dir=3D\"ltr\"><div><div><div><div><div><div><div><div><div><div>fsad<br/>=</div>=C2=A0f<br/></div>dsa<br/><br/></div>fd safsa f<br/></div>sda<br/><br/><br/>=f<br/></div>asd fdsa fdsa fsd<br/><br/><br/><br/></div>f<br/></div>s<br/></div>af =<br/></div>ds<br/><br/><br/><br/><br/></div>=C2=A0sadf safdsa<br/></div>";
-		System.out.println(convertStreamToString(MimeUtility.decode(new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8)),
-				"quoted-printable")));
+		System.out.println();
 	}
 
 	public static String convertStreamToString(InputStream is) throws IOException
