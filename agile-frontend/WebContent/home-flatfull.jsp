@@ -311,7 +311,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
    <li id="segmentationmenu">
     <a  href="#segments">
-       <i class="fa fa-users"></i>
+       <i class="icon-screenshot"></i>
       <span>Segments</span>  
     </a>
   </li>

@@ -161,7 +161,8 @@
   <td></td>  
 
   <td class="data" data={{id}}>
-  <div class="table-resp" style="width:15em;">
+  {{#if id}}
+    <div class="table-resp">
     <div class="thumb-sm agile-img">
       <a href="#contact/{{id}}" class="activate-link">
       <img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
@@ -175,6 +176,22 @@
           <small>{{getPropertyValue properties "email"}}</small>
       </span>
   </div>
+   {{else}}
+   {{else}}
+   <div class="table-resp">
+    <div class="thumb-sm">
+      <img  src="{{defaultGravatarurl 36}}" />
+    </div>
+    <span style="float: right;position: absolute;left: 375px;">
+    <span>
+    <a class="text-cap">
+       Contact is deleted.</a> </span>
+        <br>
+          <small>{{getPropertyValue properties "email"}}</small>
+      </span>
+  </div>
+
+  {{/if}}
   </td>
   <td class="data" data="{{id}}">
       <div class="text-ellipsis" style="width:15em;">
@@ -204,9 +221,8 @@
 
 <script id="segmentation-custom-view-table-model-template" type="text/html">    
   <td></td>  
-
-  <td class="data" data={{id}}>
-  <div class="table-resp" style="width:15em;">
+  {{#if id}}
+    <div class="table-resp">
     <div class="thumb-sm agile-img">
       <a href="#contact/{{id}}" class="activate-link">
       <img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
@@ -220,6 +236,21 @@
           <small>{{getPropertyValue properties "email"}}</small>
       </span>
   </div>
+   {{else}}
+   <div class="table-resp">
+    <div class="thumb-sm">
+      <img  src="{{defaultGravatarurl 36}}" />
+    </div>
+    <span style="float: right;position: absolute;left: 375px;">
+    <span>
+    <a class="text-cap">
+       Contact is deleted.</a> </span>
+        <br>
+          <small>{{getPropertyValue properties "email"}}</small>
+      </span>
+  </div>
+
+  {{/if}}
   </td>
   <td class="data" data="{{id}}">
       <div class="text-ellipsis" style="width:15em;">
