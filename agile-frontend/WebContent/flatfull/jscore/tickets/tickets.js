@@ -986,7 +986,7 @@ var Tickets = {
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/update-cc-emails";
 		var json = {command: command, email: email, id: Current_Ticket_ID};
 
-		this.updateModel(url, json, function(){
+		this.updateModel(url, json, function(model){
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
@@ -996,6 +996,9 @@ var Tickets = {
             $('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
 
 			Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
+            if(callback)
+            	callback(model);
+
 		});
 	},
 
