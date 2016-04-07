@@ -268,7 +268,7 @@ public class HomeServlet extends HttpServlet
     	try 
     	{
 	    	String otp = request.getParameter("finger_print_otp");
-	    	String ipValid = request.getParameter("ip_validation");
+	    	String ipValid = request.getRemoteAddr();
 	    	Long generatedOTP = 0L;
 	    	
 	    	try {
@@ -283,14 +283,15 @@ public class HomeServlet extends HttpServlet
 	    	
 	    	request.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
 	    	request.getSession().setAttribute(LoginServlet.SESSION_IPACCESS_VALID, true);
-	    	
+	    	//Boolean sessionIP = (Boolean) request.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
 	    	// Add current ip to Ip List
-	    	if(StringUtils.isNotBlank(ipValid) && Boolean.parseBoolean(ipValid) == true)
+	    	if(StringUtils.isNotBlank(ipValid) )
 	    	{
 	    		IpAccess ipList =  IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
 	    		if(ipList != null && ipList.ipList != null){
 	    			ipList.ipList.add(request.getRemoteAddr());
 	    			ipList.save();
+	    			System.out.println(ipList);
 	    			
 	    		}
 	    	}
