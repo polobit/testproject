@@ -61,7 +61,7 @@ public class SegmentationQueryGenerator
 	    String extraConditions = " group by email order by stats_time desc ";
 	    if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime))
 	    {
-		if (filterJsonString != null)
+		if (StringUtils.isNotBlank(filterJsonString) && !filterJsonString.equals("null"))
 		{
 		    List<SegmentationRule> rules = new ArrayList<SegmentationRule>();
 		    

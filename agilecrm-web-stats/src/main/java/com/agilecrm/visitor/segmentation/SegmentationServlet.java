@@ -58,6 +58,7 @@ public class SegmentationServlet extends HttpServlet
 	}
 	else
 	    stringBuilder.append("");
+	
 	String[] paramsArray = stringBuilder.toString().split("&");
 	Map<String, String> params = new LinkedHashMap<String, String>();
 	for (int i = 0; i < paramsArray.length; i++)

@@ -280,7 +280,7 @@ public class AnalyticsUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("exception occured while fetching segmented email count "+ e.getMessage());
+		System.out.println("exception occured while fetching segmented email count " + e.getMessage());
 	    }
 	    return emails;
 	}
@@ -303,6 +303,7 @@ public class AnalyticsUtil
 	    {
 		String emailCountString = contactEmails.get(contactEmails.size() - 1);
 		emailCount = Integer.parseInt(emailCountString);
+		contactEmails.remove(contactEmails.size() - 1);
 	    }
 	    catch (Exception e)
 	    {
