@@ -2,6 +2,8 @@ package com.agilecrm.ticket.servlets;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -407,43 +409,18 @@ public class SendgridInboundParser extends HttpServlet
 
 	public static void main(String[] args) throws Exception
 	{
-		QuotedPrintableCodec qa = new QuotedPrintableCodec();
+		FileInputStream fin = new FileInputStream(new File("D:\\email1.txt"));
 
-		String s = "<div dir=3D\"ltr\"><div><div><div><div><div><div><div><div><div><div>fsad<br/>=</div>=C2=A0f<br/></div>dsa<br/><br/></div>fd safsa f<br/></div>sda<br/><br/><br/>=f<br/></div>asd fdsa fdsa fsd<br/><br/><br/><br/></div>f<br/></div>s<br/></div>af =<br/></div>ds<br/><br/><br/><br/><br/></div>=C2=A0sadf safdsa<br/></div>";
+		Properties props = System.getProperties();
+		Session session = Session.getInstance(props);
+
+		MimeMessage message = new MimeMessage(session, fin);
+
+		MimeMessageParser messageParser = new MimeMessageParser(message).parse();
+
+		String plainText = messageParser.hasPlainContent() ? messageParser.getPlainContent() : "";
+		String htmlText = messageParser.hasHtmlContent() ? messageParser.getHtmlContent() : "";
+
 		System.out.println();
-	}
-
-	public static String convertStreamToString(InputStream is) throws IOException
-	{
-		/*
-		 * To convert the InputStream to String we use the Reader.read(char[]
-		 * buffer) method. We iterate until the Reader return -1 which means
-		 * there's no more data to read. We use the StringWriter class to
-		 * produce the string.
-		 */
-		if (is != null)
-		{
-			Writer writer = new StringWriter();
-
-			char[] buffer = new char[1024];
-			try
-			{
-				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8.toString()));
-				int n;
-				while ((n = reader.read(buffer)) != -1)
-				{
-					writer.write(buffer, 0, n);
-				}
-			}
-			finally
-			{
-				is.close();
-			}
-			return writer.toString();
-		}
-		else
-		{
-			return "";
-		}
 	}
 }
