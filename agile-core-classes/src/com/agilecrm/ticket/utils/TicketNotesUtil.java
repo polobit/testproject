@@ -299,7 +299,8 @@ public class TicketNotesUtil
 
 		// Included x-headers
 		JSONObject headers = messageJSON.getJSONObject(Mandrill.MANDRILL_HEADERS);
-		headers.put("X-Agl-Tckt-Id", dataJSON.getString("ticket_id"));
+		headers.put("Message-ID", (dataJSON.getString("ticket_id") + "+" + (Calendar.getInstance().getTimeInMillis()))
+				+ "@agilecrm.com");
 
 		// Putting back headers to messageJSON
 		messageJSON.put(Mandrill.MANDRILL_HEADERS, headers);
