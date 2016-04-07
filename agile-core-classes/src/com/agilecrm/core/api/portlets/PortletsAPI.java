@@ -540,7 +540,7 @@ public class PortletsAPI {
 			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
 		else
 			json.put("user", null);
-		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		//PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletLeaderboardData(json);
 	}
 	/**
