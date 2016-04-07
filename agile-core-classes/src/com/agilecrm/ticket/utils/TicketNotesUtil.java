@@ -192,8 +192,7 @@ public class TicketNotesUtil
 
 		System.out.println("notesArray: " + notesArray);
 
-		String fromAddress = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(group.id) + "+" + ticket.id
-				+ TicketGroupUtil.getInboundSuffix();
+		String fromAddress = group.group_email;
 
 		fromAddress = StringUtils.isNotBlank(group.send_as) ? group.send_as : fromAddress;
 
