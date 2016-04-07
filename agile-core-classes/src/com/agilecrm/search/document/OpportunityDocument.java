@@ -69,6 +69,9 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	// Sets owner of the opportunity
 	if (opportunityOwner != null)
 	    doc.addField(Field.newBuilder().setName("owner_id").setText(opportunity.id.toString()));
+	
+	doc.setId(opportunity.id.toString()).build();
+	
 	return doc;
     }
 
