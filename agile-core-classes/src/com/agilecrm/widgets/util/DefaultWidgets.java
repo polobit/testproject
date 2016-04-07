@@ -85,7 +85,7 @@ public class DefaultWidgets {
 				"/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
 				"Uservoice",
-				"Uservoice makes Product Management to help companies build better products their users. We think helping you create happy users who love your products is big business.",
+				"UserVoice is a powerful tool that helps build better products and support integrating easy-to-use feedback and ideas from customers.",
 				"/widgets/uservoice.js", "/widgets/Uservoice_lg_logo.png",
 				"/widgets/UserVoice_md_logo.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
