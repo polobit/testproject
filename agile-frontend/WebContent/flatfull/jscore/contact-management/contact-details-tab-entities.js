@@ -329,6 +329,7 @@ function loadMailTabView(contact_details_tab_scope,email_server,mail_server_url,
 		postRenderCallback : function(el)
 		{	
 			model = mailAccountsView.model.toJSON();
+			
 			if(model.hasEmailAccountsConfigured)
 				has_email_configured = true;
 			else
@@ -368,6 +369,7 @@ function loadMailTabView(contact_details_tab_scope,email_server,mail_server_url,
 			} 						
 		}
 	});
+	
 	$('#mail-account-types', App_Contacts.contactDetailView.el).html(mailAccountsView.render().el);	 
 }
 
@@ -414,6 +416,7 @@ function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_u
 		contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), mailsView);
 		$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 	}});
+
 	mailsView.collection.fetch();
 	$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render().el);
 }

@@ -838,7 +838,7 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 
 	// Fetches mails collection
 	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
-	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
 		$('#company-mail', App_Companies.companyDetailView.el).find("#no-email").css('display','block');
@@ -855,7 +855,7 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 	
 		if(!has_email_configured)
 			$('#email-prefs-verification',App_Companies.companyDetailView.el).css('display', 'block');
-		contact_detail_page_infi_scroll($('#contact-dtl', App_Companies.companyDetailView.el), mailsView);
+		contact_detail_page_infi_scroll($('#infinite-scroller-company-details', App_Companies.companyDetailView.el), mailsView);
 		$('#company-mail #company-mails-span', App_Companies.companyDetailView.el).remove();
 	}});
 	mailsView.collection.fetch();
@@ -954,7 +954,7 @@ function loadAllMailsView(company_detail_tab_scope,has_email_configured,fetched_
 	}
 	this.configured_sync_email = "";
 	mailsView = new Base_Collection_View({data : fetched_emails,
-	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
