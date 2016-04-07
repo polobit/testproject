@@ -82,6 +82,7 @@ function getTimeWebstats() {
     var end_value = $.trim(range[1]);
     end_value = end_value + " 23:59:59";
     var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+    end_time += (((23 * 60 * 60) + (59 * 60) + 59) * 1000);
 
     time_range[0] = start_time;
     time_range[1] = end_time;
