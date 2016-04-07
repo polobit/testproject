@@ -105,58 +105,6 @@ function checkContactUpdated(){
 		});
 }
 
-function inlineNameChange(e,data){
-
-			if(data == "contactName")
-				return;
-
-           // Get actual name
-          var first = $("#Contact-input-firstname").val();
-          var last  = $("#Contact-input-lastname").val();
-          firstName =first.trim();
-          lastName =last.trim();
-          if(!firstName)
-          {
-          	$("#Contact-input-firstname").addClass("error-inputfield");
-          	return;
-          }
-          /*if(!lastName)
-          {
-          	$("#Contact-input-lastname").addClass("error-inputfield");
-          	return;
-          }*/
-          if(agile_crm_is_model_property_changed("first_name", firstName)){
-				// Update first name
-          		agile_crm_update_contact("first_name", firstName, function()
-          		{
-          		$("#Contact-input").addClass("hidden");
-          		$("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
-          		$("#Contact-input-firstname" ).removeClass("error-inputfield");
-          		$("#Contact-input-lastname" ).removeClass("error-inputfield");	
-              return;
-          		});
-          		// Toggle fields
-          }
-
-          if(agile_crm_is_model_property_changed("last_name", lastName)){
-          	   // Update last name
-          	   agile_crm_update_contact("last_name", lastName,function(){
-          	   	$("#Contact-input").addClass("hidden");
-          		$("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
-          		$("#Contact-input-firstname").removeClass("error-inputfield");
-          		$("#Contact-input-lastname").removeClass("error-inputfield");
-              return ;
-          	   });
-          	   // Toggle fields
-          }
-
-          // Toggle fields
-		      $("#Contact-input").addClass("hidden");
-          $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
-          $("#Contact-input-firstname").removeClass("error-inputfield");
-          $("#Contact-input-lastname").removeClass("error-inputfield"); 
-    }
-
    function inlineCompanyNameChange(el){
     
     console.log("inlineCompanyNameChange");
@@ -180,6 +128,58 @@ function inlineNameChange(e,data){
           $("#company-inline-input").removeClass("error-inputfield");
 
   }
+
+  function inlineNameChange(e,data){
+
+      
+           // Get actual name
+          var first = $("#Contact-input-firstname").val();
+          var last  = $("#Contact-input-lastname").val();
+          firstName =first.trim();
+          lastName =last.trim();
+          if(!firstName)
+          {
+            $("#Contact-input-firstname").addClass("error-inputfield");
+            return;
+          }
+          /*if(!lastName)
+          {
+            $("#Contact-input-lastname").addClass("error-inputfield");
+            return;
+          }*/
+          if(agile_crm_is_model_property_changed("first_name", firstName)){
+        // Update first name
+              agile_crm_update_contact("first_name", firstName, function()
+              {
+              $("#Contact-input").addClass("hidden");
+              $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+              $("#Contact-input-firstname" ).removeClass("error-inputfield");
+              $("#Contact-input-lastname" ).removeClass("error-inputfield");  
+              return;
+              });
+              // Toggle fields
+          }
+
+          if(agile_crm_is_model_property_changed("last_name", lastName)){
+               // Update last name
+               agile_crm_update_contact("last_name", lastName,function(){
+                $("#Contact-input").addClass("hidden");
+              $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+              $("#Contact-input-firstname").removeClass("error-inputfield");
+              $("#Contact-input-lastname").removeClass("error-inputfield");
+              return ;
+               });
+               // Toggle fields
+          }
+
+          // Toggle fields
+          $("#Contact-input").addClass("hidden");
+          $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
+          $("#Contact-input-firstname").removeClass("error-inputfield");
+          $("#Contact-input-lastname").removeClass("error-inputfield"); 
+    }
+
+
 
 /**
  * Shows all the domain users names as ul drop down list 
@@ -366,8 +366,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contactName'  : 'togglehiddenfield',
       'keydown #Contact-input-firstname' : 'contactNameChange',
       'keydown  #Contact-input-lastname' : 'contactNameChange',
-    	//'blur #Contact-input input ' : 'inlineNameChange',
-        /** End of inliner edits **/
+    	'blur #Contact-input' : 'contact_inline_edit' ,       /** End of inliner edits **/
 
     	/** Company events **/
     	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
@@ -391,7 +390,9 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     
    
   /*xedit enter key press event listening and calling the name name chanage method*/  
-  
+  contact_inline_edit :function(e){
+    console.log("harsha");
+  },
   contactNameChange : function(e)
   {
     if(e.keyCode == 13)
@@ -406,10 +407,9 @@ show and hide the input for editing the contact name and saving that
 		
 		$("#contactName").toggleClass("hidden");
 		$("#Contact-input").toggleClass("hidden");
-
-		if($("#Contactedit-text").hasClass("hidden"))
+    console.log(this);
+		if(!$("#Contact-input").hasClass("hidden"))
 		{
-			$("#Contact-input-firstname").focus();
 			$("#Contact-input-lastname").focus();	
 		}
 

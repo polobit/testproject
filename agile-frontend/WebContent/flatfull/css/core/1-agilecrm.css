@@ -3245,10 +3245,9 @@ table.hide-head-checkbox th label.i-checks {
 
 .error-inputfield
 {
- border:1px solid red;
+border:1px solid red !important;
+background: none!important;
 
-  background: none!important;
-   border:none!important;
     
 }
 
