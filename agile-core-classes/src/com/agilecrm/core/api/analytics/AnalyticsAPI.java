@@ -109,6 +109,9 @@ public class AnalyticsAPI
 	    String startTimeString = DateUtil.getMySQLNowDateFormat(startTime,timeZone);
 	    String endTimeString = DateUtil.getMySQLNowDateFormat(endTime,timeZone);
 	    List<String> contactEmails = AnalyticsUtil.getEmails(filterJson, startTimeString, endTimeString, count, cursor);
+	    System.out.println("Emails count " + contactEmails.size());
+	    for(int i=0;i<contactEmails.size();i++)
+		System.out.println("email " + contactEmails.get(i));
 	    contacts = AnalyticsUtil.getContacts(contactEmails);
 	}
 	catch (Exception e)

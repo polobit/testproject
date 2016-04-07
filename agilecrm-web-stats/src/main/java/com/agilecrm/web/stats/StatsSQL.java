@@ -258,7 +258,7 @@ public class StatsSQL
 	    
 	    rs1 = stmt1.executeQuery("select found_rows()");
 	    
-	    if (rs1 != null)
+	    if (rs1 != null && segments.length() > 0)
 	    {
 		while (rs1.next())
 		{
