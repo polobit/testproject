@@ -130,7 +130,7 @@ function initializeReportsListeners(){
 					//}
 				//});
 					});
-			$('#reports-listerners-container')
+			/*$('#reports-listerners-container')
 			.off(
 					"click",'#reports-tab-container>div>ul>li');
 			$('#reports-listerners-container')
@@ -181,7 +181,7 @@ function initializeReportsListeners(){
 
 		$(this).addClass('active');
 		$("#"+tab_id).addClass('active');
-					});
+					});*/
 			
 
 }
