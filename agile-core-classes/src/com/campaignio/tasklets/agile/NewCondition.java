@@ -82,6 +82,10 @@ public class NewCondition extends TaskletAdapter
 	 * Compares for substring
 	 */
 	public static String COMPARATOR_CONTAINS = "contains";
+	/**
+	 * Compares for in condition
+	 */
+	public static String COMPARATOR_IN = "in";
 
 	/**
 	 * Variable 1
@@ -304,6 +308,19 @@ public class NewCondition extends TaskletAdapter
 						if (variable1.toLowerCase().contains(variable2.toLowerCase()))
 							branch = true;
 					}
+					
+					if (comparator.equalsIgnoreCase(COMPARATOR_IN))
+					{
+						String[] variables = variable2.split(",");
+						for (int i = 0; i < variables.length - 1; i++) {
+							if (variable1.toLowerCase().equalsIgnoreCase(variables[i].trim().toLowerCase())) {
+								branch = true;
+								break;
+							}
+
+					}
+
+			}
 
 				}
 				catch (Exception e)
