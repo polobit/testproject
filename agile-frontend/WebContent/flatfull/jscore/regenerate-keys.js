@@ -79,41 +79,14 @@ $("#webhook_accordian").on('click', function(e) {
         put_allowed_domains(allowed_domains);
     });
 
-    $("#ip_filters").on('click',function(e){
-        var My_ip  
-        $.getJSON("https://api.ipify.org/?format=json", function(e) {
-                   My_ip =  e.ip;
-            });
-        setTimeout(function(){
-        var ips = get_blocked_ips()
-        var existing_ip = is_duplicate_blocked_ip(My_ip,ips);
-        if(existing_ip)
-        {
-            
-            $("#get_my_ip").addClass("hide");
-            return;
-        }
-            
-        else
-        {
-            $("#get_my_ip").removeClass("hide");
-            
-        }
-
-        },500);
+   
         
-    });
-
-    $("#get_my_ip").on('click',function(e){
-        var My_ip  
-        $.getJSON("https://api.ipify.org/?format=json", function(e) {
-                   My_ip =  e.ip;
-            });
-        setTimeout(function(){
-            $("#new_blocked_ip").val(My_ip);
-        },400);
-        
-    });
+        $("#get_my_ip").on('click',function(e){
+             $("#new_blocked_ip").val(USER_IP_ADDRESS);
+              $("#ip_error_message").addClass("hide");
+            $("#empty_ip_message").addClass("hide");
+        });
+  
     $("#update_blocked_ips").off('click');
     $("#update_blocked_ips").on('click', function(e) {
         e.preventDefault();
@@ -122,10 +95,18 @@ $("#webhook_accordian").on('click', function(e) {
         var new_blocked_ip = $("#new_blocked_ip").val();
         if (!new_blocked_ip || is_duplicate_blocked_ip(new_blocked_ip, blocked_ips) || !is_valid_ip(new_blocked_ip)) {
             $(this).removeAttr("disabled");
+            $("#empty_ip_message").removeClass("hide");
+            if(is_duplicate_blocked_ip(new_blocked_ip, blocked_ips))
+            $("#ip_error_message").removeClass("hide");
+            else
+            $("#empty_ip_message").removeClass("hide");  
             return;
         }
         blocked_ips = blocked_ips ? blocked_ips + ", " + new_blocked_ip : new_blocked_ip;
         put_blocked_ips(blocked_ips);
+        $("#ip_error_message").addClass("hide");
+        $("#empty_ip_message").addClass("hide");
+
     });
 
     $(".blocked-ip-delete").off('click');
