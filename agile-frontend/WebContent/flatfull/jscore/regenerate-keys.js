@@ -90,12 +90,14 @@ $("#webhook_accordian").on('click', function(e) {
     $("#update_blocked_ips").off('click');
     $("#update_blocked_ips").on('click', function(e) {
         e.preventDefault();
+        $("#ip_error_message").addClass("hide");
+            $("#empty_ip_message").addClass("hide");
         $(this).attr("disabled", "disabled");
         var blocked_ips = get_blocked_ips();
         var new_blocked_ip = $("#new_blocked_ip").val();
         if (!new_blocked_ip || is_duplicate_blocked_ip(new_blocked_ip, blocked_ips) || !is_valid_ip(new_blocked_ip)) {
             $(this).removeAttr("disabled");
-            $("#empty_ip_message").removeClass("hide");
+            
             if(is_duplicate_blocked_ip(new_blocked_ip, blocked_ips))
             $("#ip_error_message").removeClass("hide");
             else
