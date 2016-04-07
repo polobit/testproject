@@ -39,9 +39,8 @@ function loadUservoiceComments(offSet){
   					$(this).text(jQuery.timeago($(this).attr('datetime')));
 				});							
 			});
-		},null);
-		
-		$('#uservoice-comments').append(showMoreUservoiceCommments);
+			$('#uservoice-comments').append(showMoreUservoiceCommments);
+		},null);				
 	}else{
 		var result = {};
 		result.comments = uservoiceOBJ.comments.slice(offSet, uservoiceOBJ.comments.length);

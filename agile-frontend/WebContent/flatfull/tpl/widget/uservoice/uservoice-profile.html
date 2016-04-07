@@ -36,17 +36,17 @@
 <div class="wrapper-sm">
   <div class="row">
   		<div class="col-md-3">
-		<a class="thumb m-r-sm">
+		<a class="thumb m-r-sm" style="cursor: initial;">
 			{{#if userInfo.avatar_url}}
 				<img src="{{userInfo.avatar_url}}" width="36" height="36" alt="" class="img-circle" style="cursor: initial;"/>
 			{{else}}
-				<img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" alt="" class="img-circle" style="cursor: initial;"/>
+				<img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" alt="" class="img-circle"/>
 			{{/if}}	
 		</a>
   </div>
   <div class="col-md-9">  	
   	{{#if userInfo.name}}
-			<a class="text-cap text-base m-b-xs">{{userInfo.name}}</a>	
+			<a class="text-cap text-base m-b-xs" style="cursor: initial;">{{userInfo.name}}</a>	
 	{{/if}}		
 	<div class="row">
 			<div class="col-md-5">
@@ -94,7 +94,7 @@
 				</div>
 			</div>
 			<div class="row">	
-				<div class="col-md-12 m-t-sm line-clamp line-clamp-3 text-flow-ellipsis word-break">
+				<div class="col-md-12 m-t-sm line-clamp line-clamp-3 text-flow-ellipsis word-break" style="max-height:4.2em;">
 					{{#decodeString formatted_text}}{{/decodeString}}
 				</div>
 			</div>

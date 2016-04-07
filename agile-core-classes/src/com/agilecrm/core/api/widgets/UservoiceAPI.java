@@ -79,7 +79,7 @@ public class UservoiceAPI {
 	public JSONObject getuserComments(String userId) throws Exception {
 		String url = "https://" + subDomain + ".uservoice.com/api/v1/users/"
 				+ userId + "/comments.json";
-		String parameters = "client=" + API_KEY;
+		String parameters = "client=" + API_KEY + "&per_page=500";
 		JSONObject resultObj = getData(url, parameters);
 		return resultObj;
 	}
