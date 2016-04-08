@@ -924,7 +924,32 @@ Deleted  {{custom1}} Campaigns<br/>
             <h3 class="activity-heading font-thin h3  pull-left"><span>User Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h3>
             
 		<div class="pull-right" id="activity-log-header-div">
-		<div class="btn-group pull-right type-task-button c-p">
+		<div class="btn-group pull-left" role="group">
+                <a href="#activities" class="btn btn-default btn-sm bg-light">User Activities</a> 
+                <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">Contact Activities</a>
+            </div>
+
+
+            <div id="activities_date_range" style="line-height:20px;" 
+            class="btn-group pull-left activity-date-filter c-p m-t-none">
+            <span class="inline-block" style="padding: 3px 10px;">
+               <i class="icon-calendar icon-large m-r-xs"></i>
+                <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
+             </span>
+             <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
+                <span class="caret  inline-block p-t-xs"></span>
+              </span>
+            </div>
+
+            <div class="btn-group pull-left activity-log-button c-p m-r-sm">
+                <div class="btn btn-default btn-sm selected_name" id="selectedusername">All Users</div>
+                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="user-select"></ul>
+            </div>
+
+		<div class="btn-group pull-left type-task-button c-p">
                 <div class="btn btn-default btn-sm selected_name" id="selectedentity_type">All Activities</div>
                 <a class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
@@ -947,31 +972,8 @@ Deleted  {{custom1}} Campaigns<br/>
 					                    
                 </ul>
             </div>            
-		<div class="btn-group pull-right activity-log-button c-p m-r">
-                <div class="btn btn-default btn-sm selected_name" id="selectedusername">All Users</div>
-                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
-                <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" id="user-select"></ul>
-            </div>
+		
 
-            <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
-            <span class="inline-block" style="padding: 3px 10px;">
-               <i class="icon-calendar icon-large m-r-xs"></i>
-                <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
-             </span>
-             <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
-                <span class="caret  inline-block p-t-xs"></span>
-              </span>
-            </div>
-            <div class="btn-group m-r pull-right" role="group">
-                <a href="#activities" class="btn btn-default btn-sm bg-light">User Activities</a> 
-                <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">Contact Activities</a>
-            </div>
-            
-          
-
-            
         </div>
         <div class="clearfix"></div>
    

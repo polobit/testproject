@@ -14,7 +14,7 @@
 	<div id="slate"></div>
 	{{#if this.length}}
     <div class="table-responsive">
-        <table class="table table-bordered table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates emailTemplates"  url="core/api/email/templates/bulk" >
+        <table class="table table-bordered table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk" >
            
             <thead>
                 <tr>

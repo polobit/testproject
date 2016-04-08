@@ -11,7 +11,8 @@
 		<div class="panel panel-default">
 		<div class="panel-heading">Tasks List</div>
         <div class="table-responsive">
-        <table class="table table-striped showCheckboxes no-sorting panel m-b-none agile-table table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+        <table class="table table-striped showCheckboxes no-sorting panel m-b-none 
+        {{#is_mobile}} {{else}} agile-table {{/is_mobile}} table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
             <thead>
                 <tr>
 					<th style="width:10%;" class="header">Owner</th>
