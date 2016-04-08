@@ -83,8 +83,7 @@ public class ReportsDeferredTask implements DeferredTask
 		try
 		{
 			System.out.println("In ReportsDeferredTask run method before ContactReportDeferredTaskCreation created");
-			ContactReportDeferredTaskCreation contactReportDeferredTaskCreation =new ContactReportDeferredTaskCreation();
-			contactReportDeferredTaskCreation.createContactDeferredTask(domain, report.id, time,
+			ContactReportDeferredTaskCreation.createContactDeferredTask(domain, report.id, time,
 			    report.report_timezone);
 			System.out.println("In ReportsDeferredTask run method after ContactReportDeferredTaskCreation created");
 		}
