@@ -336,7 +336,7 @@ public class SendgridInboundParser extends HttpServlet
 					System.out.println("fileName: " + fileName);
 					System.out.println("fileType: " + fileType);
 					
-					if (!ignoreBase64Conversion.contains(fileType))
+					if (ignoreBase64Conversion.contains(fileType))
 						dataArray = attachmentContent.getBytes(StandardCharsets.UTF_8);
 					else
 						dataArray = Base64.decode(attachmentContent.getBytes(StandardCharsets.UTF_8));
