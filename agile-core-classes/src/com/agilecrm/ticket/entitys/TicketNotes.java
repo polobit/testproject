@@ -111,17 +111,17 @@ public class TicketNotes
 	 */
 	public String html_text = "";
 
-	/**
-	 * Stores original notes content in plain text format
-	 */
-	@JsonIgnore
-	public String original_plain_text = "";
-
-	/**
-	 * Stores original notes content in html text format
-	 */
-	@JsonIgnore
-	public String original_html_text = "";
+	// /**
+	// * Stores original notes content in plain text format
+	// */
+	// @JsonIgnore
+	// public String original_plain_text = "";
+	//
+	// /**
+	// * Stores original notes content in html text format
+	// */
+	// @JsonIgnore
+	// public String original_html_text = "";
 
 	/**
 	 * Stores mime object
@@ -177,7 +177,7 @@ public class TicketNotes
 
 	public TicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by, String requester_name,
 			String requester_email, String original_plain_text, String original_html_text, NOTE_TYPE note_type,
-			List<TicketDocuments> attachments_list, String mimeObject)
+			List<TicketDocuments> attachments_list, String mimeObject, boolean isNewTicket)
 	{
 		super();
 
@@ -192,8 +192,8 @@ public class TicketNotes
 		this.created_by = created_by;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;
-		this.original_plain_text = original_plain_text;
-		this.original_html_text = original_html_text;
+		// this.original_plain_text = original_plain_text;
+		// this.original_html_text = original_html_text;
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
 
@@ -201,8 +201,15 @@ public class TicketNotes
 		// status changed activity next
 		this.created_time = (Calendar.getInstance().getTimeInMillis() - 60000);
 
-		this.plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text).trim();
-		this.html_text = TicketNotesUtil.removedQuotedRepliesFromHTMLText(original_html_text).trim();
+		// If not new ticket then remove quoted texts in both contents
+		if (!isNewTicket)
+		{
+			original_plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text).trim();
+			original_html_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_html_text).trim();
+		}
+
+		this.plain_text = original_plain_text;
+		this.html_text = original_html_text;
 
 		this.mime_object = mimeObject;
 	}

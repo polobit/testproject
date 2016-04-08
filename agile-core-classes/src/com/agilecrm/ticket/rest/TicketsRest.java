@@ -353,7 +353,7 @@ public class TicketsRest
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
 					ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
-					attachmentsList, "");
+					attachmentsList, "", true);
 			notes.save();
 
 			ticket.groupID = ticket.group_id.getId();
@@ -866,7 +866,7 @@ public class TicketsRest
 				// Creating new Notes in TicketNotes table
 				TicketNotes notes = new TicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER,
 						"Sasi", "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC,
-						new ArrayList<TicketDocuments>(), "");
+						new ArrayList<TicketDocuments>(), "", true);
 				notes.save();
 			}
 		}

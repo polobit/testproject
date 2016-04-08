@@ -350,7 +350,7 @@ public class TicketWebhook extends HttpServlet
 
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName,
-					fromEmail, plainText, htmlText, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
+					fromEmail, plainText, htmlText, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString(), isNewTicket);
 			notes.save();
 
 			NamespaceManager.set(oldNamespace);
