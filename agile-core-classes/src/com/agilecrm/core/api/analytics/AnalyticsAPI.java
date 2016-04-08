@@ -96,7 +96,7 @@ public class AnalyticsAPI
     @POST
     @Path("/filter/dynamic-filter")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON + ";charset=utf-8" , MediaType.APPLICATION_XML })
     public String filterCustomers(@FormParam("filterJson") String filterJson,
 	    @FormParam("page_size") String countString, @FormParam("cursor") String cursorString,
 	    @FormParam("start_time") Long startTime, @FormParam("end_time") Long endTime,
