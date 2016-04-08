@@ -103,9 +103,6 @@ public class SendgridInboundParser extends HttpServlet
 				{
 					JSONObject json = getJSONFromMIME(request);
 
-					System.out.println("json...");
-					System.out.println(json);
-
 					String envelope = json.getString("envelope");
 
 					System.out.println("Envelope:" + envelope);
@@ -269,7 +266,6 @@ public class SendgridInboundParser extends HttpServlet
 						try
 						{
 							ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
-
 						}
 						catch (Exception e)
 						{
@@ -499,8 +495,7 @@ public class SendgridInboundParser extends HttpServlet
 
 				String fieldName = item.getFieldName(), contentData = "", contentType = item.getContentType();
 
-				System.out.println("Field name: " + fieldName);
-				System.out.println("ContentType(): " + contentType);
+				System.out.println("Field names found: " + fieldName);
 
 				if (fieldName.matches("^attachment\\d$") && !ignoreBase64Conversion.contains(contentType))
 				{
@@ -600,16 +595,6 @@ public class SendgridInboundParser extends HttpServlet
 
 	public static void main(String[] args) throws Exception
 	{
-		String ss = "?PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR\u0000\u0000\u0000,\u0000\u0000\u0000\"\b\u0002\u0000\u0000\u0000??&\u0000\u0000\u0000\u0001sRGB\u0000??\u001c?\u0000\u0000\u0000\u0004gAMA\u0000\u0000??\u000b?a\u0005\u0000\u0000\u0000\tpHYs\u0000\u0000\u000e?\u0000\u0000\u000e?\u0001?o?d\u0000\u0000\u0000bIDATXGcx+?2??a?]\u0000t??#`)a4$FC\u0002?P\u0018M\u0013?ib4M?Fs?h?\u0018?\u001d#2w????iD6`iUN\u0010??.R?V?Adj?(\u001bu?h?1Zw????r\u0002\u0000?2?g??\u001c?\u0000\u0000\u0000\u0000IEND?B`?";
-		InputStream stream = new ByteArrayInputStream(ss.getBytes(StandardCharsets.UTF_8));
-
-		byte[] byteArray = IOUtils.toByteArray(stream);
-		byte[] encodeBase64 = org.apache.commons.codec.binary.Base64.encodeBase64(byteArray, true);
-
-		FileOutputStream fos = new FileOutputStream("D:\\img.png");
-		fos.write(encodeBase64);
-		fos.close();
-
-		System.out.println(new String(encodeBase64));
+		System.out.println("reply\r\ntest..\r\n\r\n".trim());
 	}
 }
