@@ -206,19 +206,25 @@ public class MimeMessageParser
 		{
 			if (part.isMimeType("text/html") && (htmlContent == null))
 			{
+				if (htmlContent == null)
+					htmlContent = "";
+
 				System.out.println("html content.....");
 
 				// htmlContent = (String) part.getContent();
-				//InputStream stream = MimeUtility.decode(part.getInputStream(), "quoted-printable");
-				//htmlContent = IOUtils.toString(part.getInputStream(), "UTF-8");
-				
+				// InputStream stream =
+				// MimeUtility.decode(part.getInputStream(),
+				// "quoted-printable");
+				// htmlContent = IOUtils.toString(part.getInputStream(),
+				// "UTF-8");
+
 				InputStreamReader isr = new InputStreamReader(part.getInputStream(), "UTF-8");
 				BufferedReader br = new BufferedReader(isr);
-				
+
 				String line = "";
-				while((line = br.readLine()) != null)
+				while ((line = br.readLine()) != null)
 					htmlContent += line;
-				
+
 				System.out.println(htmlContent);
 			}
 			else
@@ -339,12 +345,6 @@ public class MimeMessageParser
 		String plainContent = (hasPlainContent()) ? this.plainContent : "";
 		String htmlContent = (hasHtmlContent()) ? this.htmlContent : "";
 
-		System.out.println("plainContent:");
-		System.out.println(plainContent);
-
-		System.out.println("htmlContent:");
-		System.out.println(htmlContent);
-
 		StrBuilder sb = new StrBuilder(htmlContent);
 		sb.replaceAll("3D", "").replaceAll("\"\"", "");
 
@@ -364,19 +364,8 @@ public class MimeMessageParser
 
 			System.out.println("isImage: " + isImage);
 
-			// if (isImage)
-			// {
-			// System.out.println("fileContent: " + fileContent);
-			// byteArray = Base64.decodeBase64(fileContent);
-			//
-			// System.out.println("byteArray: " + byteArray);
-			// }
-
 			saveFileToGCS(ds.getName(), ds.getContentType(), org.apache.geronimo.mail.util.Base64.decode(byteArray));
 
-			// If content type is image then checking if it is inline image. If
-			// yes then removing "[image: Inline image 1]" from plain text and
-			// from html content
 			if (isImage)
 			{
 				Elements elements = doc.getElementsByAttributeValue("src", "cid:" + fileName);
@@ -401,12 +390,6 @@ public class MimeMessageParser
 
 		this.htmlContent = doc.body().html();
 		this.plainContent = plainContent;
-
-		System.out.println("this.htmlContent :");
-		System.out.println(this.htmlContent);
-
-		System.out.println("this.plainContent:");
-		System.out.println(this.plainContent);
 
 		return documentsList;
 	}

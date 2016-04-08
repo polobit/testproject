@@ -1,16 +1,11 @@
 package com.agilecrm.ticket.servlets;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,28 +14,28 @@ import java.util.Properties;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.net.QuotedPrintableCodec;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.MultipartStream.ItemInputStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.geronimo.mail.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -60,6 +55,8 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -74,6 +71,13 @@ public class SendgridInboundParser extends HttpServlet
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	List<String> ignoreBase64Conversion = new ArrayList<String>()
+	{
+		{
+			add("text/plain");
+		}
+	};
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
@@ -164,21 +168,36 @@ public class SendgridInboundParser extends HttpServlet
 
 					// Get email key value as it contains plain text, html text
 					// and attachments data
-					String fileData = json.getString("email");
+					String fileData = json.getString("headers");
 
-					Properties props = System.getProperties();
-					Session session = Session.getInstance(props);
+					// Properties props = System.getProperties();
+					// Session session = Session.getInstance(props);
 
-					MimeMessage message = new MimeMessage(session, new ByteArrayInputStream(fileData.toString()
-							.getBytes()));
+					// MimeMessage message = new MimeMessage(session, new
+					// ByteArrayInputStream(fileData.toString()
+					// .getBytes()));
 
-					MimeMessageParser messageParser = new MimeMessageParser(message).parse();
+					// MimeMessageParser messageParser = new
+					// MimeMessageParser(message).parse();
 
-					String plainText = messageParser.hasPlainContent() ? messageParser.getPlainContent() : "";
-					String htmlText = messageParser.hasHtmlContent() ? messageParser.getHtmlContent() : "";
+					String plainText = "", htmlText = "";
 
-					boolean attachmentExists = messageParser.hasAttachments();
-					List<TicketDocuments> documentsList = messageParser.getAttachmentsList();
+					if (json.has("text"))
+						plainText = json.getString("text");
+
+					if (json.has("text"))
+						htmlText = json.getString("html");
+
+					// String htmlText = messageParser.hasHtmlContent() ?
+					// messageParser.getHtmlContent() : "";
+
+					boolean attachmentExists = false;
+
+					if (json.has("attachments"))
+						attachmentExists = json.getInt("attachments") > 0 ? true : false;
+
+					List<TicketDocuments> documentsList = (attachmentExists) ? getAttachmentsList(json)
+							: (new ArrayList<TicketDocuments>());
 
 					Tickets ticket = null;
 
@@ -247,7 +266,7 @@ public class SendgridInboundParser extends HttpServlet
 					// Creating new Notes in TicketNotes table
 					TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID,
 							CREATED_BY.REQUESTER, nameEmail[0], nameEmail[1], plainText, htmlText, NOTE_TYPE.PUBLIC,
-							documentsList, json.getString("email"));
+							documentsList, json.toString());
 
 					notes.save();
 
@@ -267,6 +286,72 @@ public class SendgridInboundParser extends HttpServlet
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
+	}
+
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 */
+	private List<TicketDocuments> getAttachmentsList(JSONObject json)
+	{
+		List<TicketDocuments> documentsList = new ArrayList<TicketDocuments>();
+
+		try
+		{
+			int count = json.getInt("attachments");
+			JSONObject attachmentsInfo = new JSONObject(json.getString("attachment-info"));
+
+			for (int i = 1; i <= count; i++)
+			{
+				try
+				{
+					String attachmentContent = json.getString("attachment" + i);
+
+					JSONObject attachmentInfo = new JSONObject(attachmentsInfo.getString("attachment" + i));
+
+					String fileName = "", fileType = "";
+
+					if (attachmentInfo.has("type"))
+						fileType = attachmentInfo.getString("type");
+
+					if (attachmentInfo.has("filename"))
+						fileName = attachmentInfo.getString("filename");
+
+					if (StringUtils.isBlank(fileName))
+					{
+						// Other cases yet to handle
+						if (fileType.contains("image") || fileType.contains("img"))
+						{
+							if (attachmentInfo.has("content-id"))
+								fileName = attachmentInfo.getString("content-id");
+						}
+					}
+
+					byte[] dataArray = null;
+
+					if (!ignoreBase64Conversion.contains(fileType))
+						dataArray = attachmentContent.getBytes(StandardCharsets.UTF_8);
+					else
+						dataArray = Base64.decode(attachmentContent.getBytes(StandardCharsets.UTF_8));
+
+					GCSServiceAgile service = saveFileToGCS(fileName, fileType, dataArray);
+
+					documentsList.add(new TicketDocuments(fileName, fileType, (long) dataArray.length, service
+							.getFilePathToDownload()));
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return documentsList;
 	}
 
 	/**
@@ -357,9 +442,31 @@ public class SendgridInboundParser extends HttpServlet
 
 			while (iter.hasNext())
 			{
+				// item = iter.next();
+				//
+				// dataJSON.put(item.getFieldName(),
+				// IOUtils.toString(item.openStream(), "UTF-8"));
+
 				item = iter.next();
 
-				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream(), "UTF-8"));
+				String fieldName = item.getFieldName(), contentData = "", contentType = item.getContentType();
+
+				System.out.println("Field name: " + fieldName);
+				System.out.println("ContentType(): " + contentType);
+
+				if (fieldName.matches("^attachment\\d$") && !ignoreBase64Conversion.contains(contentType))
+				{
+					ItemInputStream stream = (ItemInputStream) item.openStream();
+
+					byte[] byteArray = IOUtils.toByteArray(stream);
+					byte[] encodeBase64 = org.apache.commons.codec.binary.Base64.encodeBase64(byteArray, true);
+
+					contentData = new String(encodeBase64);
+				}
+				else
+					contentData = IOUtils.toString(item.openStream(), "UTF-8");
+
+				dataJSON.put(fieldName, contentData);
 			}
 		}
 		catch (Exception e)
@@ -408,23 +515,51 @@ public class SendgridInboundParser extends HttpServlet
 		return ticketID;
 	}
 
+	/**
+	 * Writes file content to GCS and returns service object to get file path.
+	 * 
+	 * @param fileName
+	 * @param fileType
+	 * @param fileContentType
+	 * @param currentTime
+	 * @return
+	 * @throws IOException
+	 */
+	public GCSServiceAgile saveFileToGCS(String fileName, String fileType, byte[] fileContent) throws IOException
+	{
+		if (fileType.contains("application/rar"))
+			fileType = "application/x-rar-compressed, application/octet-stream";
+		else if (fileType.contains("application/zip"))
+			fileType = "application/zip, application/octet-stream";
+
+		GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType).contentEncoding("UTF-8")
+				.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+
+		GCSServiceAgile service = new GCSServiceAgile((Calendar.getInstance().getTimeInMillis()) + fileName,
+				"ticket-attachments", options);
+
+		GcsOutputChannel writer = service.getOutputchannel();
+
+		writer.write(ByteBuffer.wrap(fileContent));
+		writer.close();
+
+		System.out.println("Added saved document....");
+
+		return service;
+	}
+
 	public static void main(String[] args) throws Exception
 	{
-		FileInputStream fin = new FileInputStream(new File("D:\\email1.txt"));
+		String ss = "?PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR\u0000\u0000\u0000,\u0000\u0000\u0000\"\b\u0002\u0000\u0000\u0000??&\u0000\u0000\u0000\u0001sRGB\u0000??\u001c?\u0000\u0000\u0000\u0004gAMA\u0000\u0000??\u000b?a\u0005\u0000\u0000\u0000\tpHYs\u0000\u0000\u000e?\u0000\u0000\u000e?\u0001?o?d\u0000\u0000\u0000bIDATXGcx+?2??a?]\u0000t??#`)a4$FC\u0002?P\u0018M\u0013?ib4M?Fs?h?\u0018?\u001d#2w????iD6`iUN\u0010??.R?V?Adj?(\u001bu?h?1Zw????r\u0002\u0000?2?g??\u001c?\u0000\u0000\u0000\u0000IEND?B`?";
+		InputStream stream = new ByteArrayInputStream(ss.getBytes(StandardCharsets.UTF_8));
 
-		Properties props = System.getProperties();
-		Session session = Session.getInstance(props);
+		byte[] byteArray = IOUtils.toByteArray(stream);
+		byte[] encodeBase64 = org.apache.commons.codec.binary.Base64.encodeBase64(byteArray, true);
 
-		MimeMessage message = new MimeMessage(session, fin);
+		FileOutputStream fos = new FileOutputStream("D:\\img.png");
+		fos.write(encodeBase64);
+		fos.close();
 
-		MimeMessageParser messageParser = new MimeMessageParser(message).parse();
-
-		String plainText = messageParser.hasPlainContent() ? messageParser.getPlainContent() : "";
-		String htmlText = messageParser.hasHtmlContent() ? messageParser.getHtmlContent() : "";
-
-		Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
-		
-		System.out.println("htmlText...");
-		System.out.println(doc.body().html());
+		System.out.println(new String(encodeBase64));
 	}
 }
