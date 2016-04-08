@@ -28,20 +28,7 @@ var VisitorsSegmentationRouter = Backbone.Router
             // Default url for contacts route
             var url = 'core/api/web-stats/filter/dynamic-filter';
 
-            if (this.webstatsListView && this.webstatsListView.collection.url == url) {
-
-                var el = App_VisitorsSegmentation.webstatsListView
-                    .render(true).el;
-
-                $('#content').html(el);
-                initWebstatsDateRange();
-                contactFiltersListeners("lhs_filters_segmentation");
-                //addClickEventSEgments($('#content').find("#visitors-table"));
-
-                $(".active").removeClass("active");
-                $("#segmentationmenu").addClass("active");
-                return;
-            }
+            
             if (_agile_get_prefs('dynamic_visitors_filter')) {
 
                 postData = _agile_get_prefs('dynamic_visitors_filter');
