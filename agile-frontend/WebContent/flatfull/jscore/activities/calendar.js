@@ -781,6 +781,8 @@ function setUpStarRating(value){
 }
 
 function calendar_Popover(event,calendarView,that,popover_min_width,that_event,leftorright,pullupornot,popoverElement,reletedContacts,meeting_type){
+									$('.fc-overlayw').hide();
+								$('.fc-overlayw').remove();
 									if (calendarView == "month")
 									{
 										console.log("month");
