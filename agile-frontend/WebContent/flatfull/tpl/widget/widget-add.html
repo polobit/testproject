@@ -74,11 +74,13 @@
 					</div>
 					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
-    			<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
-  					<i class="fa fa-users"></i>
-  				</a>
-    			<a class="btn btn-sm btn-default install-custom-widget" href="#Custom-widget" widget-name="{{name}}">Add</a>
-				<a class="btn btn-sm btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>    		
+    			<div class="text-center">																		
+					<div class="btn-group">
+						<a class="btn btn-sm btn-default" href="#Custom-widget" widget-name="{{name}}">
+        					Add custom widget
+						</a>
+					</div>					
+				</div>				   		
 			{{/if}}
 		{{else}}
 			{{#if is_added}}
@@ -315,35 +317,9 @@
 			<div id="ecommerce" class="row"></div>
 		</div>
 		<div class="tab-pane" id="custom-widget-tab">
-
-			<div id="custom" class="row">
-				<div class="col-md-4" id="custom-widget" >
-					<div class="panel panel-default widget-add" style="min-height:220px;">
-					<div class="panel-heading">
-    					<center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/widgets/custom_widget.png'}}" /></center>
-    				</div>
-    				<div class="panel-body">
-    					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="You can now develop your own custom widget in javascript or any backend server language.">
-							You can now develop your own custom widget in javascript or any backend server language.
-						</div>
-    					 <div class="text-center">
-							{{#isAdmin}}											
-								<div class="btn-group" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" href="#Custom-widget" widget-name="{{name}}">Add custom widget
-  									</a>
-								</div>
-							{{else}}
-								<a class="btn btn-sm btn-default m-t-md" href="#Custom-widget" widget-name="{{name}}">
-									Add custom widget
-								</a>
-							{{/isAdmin}}
-						</div>
-					</div>
-				</div>
-			</div>
+			<div id="custom" class="row"></div>
 		</div>
 	</div>
-</div>
 </script>
 
 
