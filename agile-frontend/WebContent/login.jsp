@@ -127,14 +127,13 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 body {
 	
 	<% 
-	if(!MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 
 		background-color: #f0f3f4;
 	
 	<% }else {  %>
-	
-	
-		background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg');
+
+background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high-prog.jpg');
 	
 		<%}%>
   
@@ -227,13 +226,13 @@ if(isSafari && isWin)
 		<div ui-view="" class="fade-in-right-big smooth">
   			<div class="container w-xxl w-auto-xs view"
   			<%
-  			if(!MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+  			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 		id="mobile"
 	<% }else {  %> <%}%>>
 	<%
-				if(!MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+				if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 				<div >
-		<img class="navbar-brand col-md-offset-2" src="images/agile-crm-logo.png"  ></img></div>
+		<img class="navbar-brand col-md-offset-2" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png"  ></img></div>
 	<% }else {  %> 
 					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t tags-color text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
@@ -306,7 +305,7 @@ if(isSafari && isWin)
 		<div 		
 		
 		<%
-  			if(!MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+  			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 		id="mobile"
 	<% }else {  %> <%}%> >
 	<div class="text-center tags-color text-white m-t m-b" >
