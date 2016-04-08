@@ -21,6 +21,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.util.common.base.Charsets;
 
 /**
@@ -92,7 +93,7 @@ public class BasicAuthFilter implements Filter
 		    // Get AgileUser
 		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 
-		    if (domainUser == null)
+		    if (domainUser == null || !domainUser.domain.equals(NamespaceManager.get()))
 		    {
 			JSONObject duser = new JSONObject();
 

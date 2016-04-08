@@ -376,25 +376,6 @@ public class Opportunity extends Cursor implements Serializable
 	return 0L;
     }
 
-    @XmlElement(name = "pipeline")
-    public Milestone getPipeline() throws Exception
-    {
-	if (pipeline != null)
-	{
-	    try
-	    {
-		// Gets Domain User Object
-		// return MilestoneUtil.getMilestone(pipeline.getId());
-	    	return null;
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	return null;
-    }
-
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 

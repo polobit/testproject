@@ -39,6 +39,7 @@ $(function()
 	App_FacebookPageTabRouter = new FacebookPageTabRouter();
 	App_Companies = new CompaniesRouter();
 	App_Datasync = new DataSyncRouter();
+	App_Ticket_Module = new TicketsUtilRouter();
 	App_LandingPageRouter = new LandingPageRouter();
 	App_EmailBuilderRouter = new EmailBuilderRouter();
 
@@ -76,6 +77,9 @@ function currentRoute(route)
 		if(!temp.match("contact"))
 			SCROLL_POSITION = 0;
 	}
+
+	// Update Google Analytics Track Page
+	agile_update_ga_track_page(Current_Route);
 	
 	activateInfiniScroll();
 	// set_profile_noty();
@@ -164,3 +168,8 @@ function executeWebRulesOnRoute(){
 	        return;
 	  }
 }
+
+$(document).ready(function(){
+
+  setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
+});

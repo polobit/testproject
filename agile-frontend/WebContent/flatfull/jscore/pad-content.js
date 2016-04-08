@@ -103,6 +103,18 @@ var CONTENT_JSON = {
 		"route" : "#contact-view-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"no-tickets" : {
+		"title" : "You do not have any Tickets currently.",
+		"description" : "Tickets can be problem, incident, question or task escalated by your customers. Set up email forwarding to receive tickets.",
+		"button_text" : "Set up forwarding",
+		"route" : "#ticket-groups",
+		"image" : "/img/clipboard.png"
+	},
+	"no-ticket-filters" : {
+		"title" : "You do not have any Tickets Filters currently.",
+		"description" : "Tickets Filters are set of conditions to view Tickets which satisfies conditions.",
+		"image" : "/img/clipboard.png"
+	},
 	"dashboard" : {
 		"contacts" : {
 			"title" : "There is no recent activity",

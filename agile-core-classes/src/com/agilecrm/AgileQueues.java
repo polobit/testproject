@@ -66,4 +66,11 @@ public class AgileQueues
 
     // Contacts and Deal push queue
     public static final String WEBHOOKS_REGISTER_ADD_QUEUE = "webhooks-register-add-queue";
+
+	//Ticketing queue
+	public static final String TICKET_BULK_ACTIONS_QUEUE = "ticket-bulk-actions";
+	
+	//Deals update to textsearch queue
+	public static final String DEALS_SCHEMA_CHANGE_QUEUE = "deals-schema-change-queue";
+
 }

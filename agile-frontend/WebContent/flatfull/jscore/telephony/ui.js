@@ -6,7 +6,7 @@ $(function()
 	/**
 	 * On click of dialpad button on call noty, will display/remove keypad.
 	 */
-	$('body').on('click', '.dialpad', function(e)
+	$('body').on('click', '.dialpad,.noty_sip_dialpad', function(e)
 	{
 		e.preventDefault();
 
@@ -97,7 +97,7 @@ $(function()
 		e.preventDefault();
 
 		// Display
-		showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Call ended with  </b>' + User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
+		showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Call ended with  </b>' + User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
 
 		// SIP hangup call.
 		hangupCall();

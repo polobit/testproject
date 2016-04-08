@@ -7,6 +7,7 @@ cat $(find ../WebContent/flatfull/controllers ! -path ../WebContent/flatfull/con
 ## Not path is set to avoid duplicating backbone js files that is already included and min files that should not be include again jscore.
 cat $(find ../WebContent/flatfull/jscore ! -path ../WebContent/flatfull/jscore/backbone/\*.js ! -path  ../WebContent/flatfull/jscore/min/*.js \
 	! -path  ../WebContent/flatfull/jscore/min/flatfull/\*.js \
+	! -path  ../WebContent/flatfull/jscore/tickets/\*.js \
 	! -path ../WebContent/flatfull/jscore/social-suite/\*.js -name "*.js" 
 	) >> ../WebContent/jscore/min/flatfull/js-all-min.js
 
@@ -20,15 +21,9 @@ cat ../WebContent/tpl/min/precompiled/flatfull/socialsuite.js >  ../WebContent/t
 cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/tpl/min/precompiled/flatfull/socialsuite-all.js
 #rm ../WebContent/tpl/min/precompiled/flatfull/temp.js
 
-## Create a basic tpl by combining basic feature tpl's
-## rm ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-## cat ../WebContent/tpl/min/precompiled/flatfull/tpl.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-## cat ../WebContent/tpl/min/precompiled/flatfull/contact-view.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-## cat ../WebContent/tpl/min/precompiled/flatfull/case.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-## cat ../WebContent/tpl/min/precompiled/flatfull/document.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-## cat ../WebContent/tpl/min/precompiled/flatfull/workflow.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-## cat ../WebContent/tpl/min/precompiled/flatfull/portlets.js >> ../WebContent/tpl/min/precompiled/flatfull/tpl-combined.js
-
+## Social suite into templates
+cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets-min.js
+java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
 
 
 ## Webrules into templates

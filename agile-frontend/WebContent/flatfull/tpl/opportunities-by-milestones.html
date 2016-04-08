@@ -43,6 +43,11 @@
 						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
 						<li><a href="#add-dashlet">Add Dashlet</a></li>
 					</ul>
+
+					{{else}}
+					<ul class="dropdown-menu pull-right">
+					<li><a href="#add-dashlet">Add Dashlet</a></li>
+					</ul>
 					{{/hasScope}}
 					<!--
 					{{#is_mobile}}
@@ -307,7 +312,7 @@
 
 <script id="related-to-contacts-template" type="text/html">
 	{{#if_contact_type "PERSON"}}	
-		<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+		<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
     {{/if_contact_type}}
 	{{#if_contact_type "COMPANY"}}
      	<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>

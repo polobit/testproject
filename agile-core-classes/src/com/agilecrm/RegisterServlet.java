@@ -195,11 +195,19 @@ public class RegisterServlet extends HttpServlet
 
 	// Get Name
 	String name = request.getParameter("name");
+	
+	System.out.println("email = " + email);
+	System.out.println("name = " + name);
+	System.out.println("password = " + password);
 
 	String timezone = request.getParameter("account_timezone");
 
 	if (name != null)
 	    name = name.trim();
+	
+	// Redirect to first page if name and password is empty (This is added newly from website users)
+	if(StringUtils.isBlank(name) && StringUtils.isBlank(password))
+		throw new Exception("");
 
 	// Get reference code
 

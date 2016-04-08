@@ -3,6 +3,7 @@ package com.agilecrm.activities;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.workflows.Workflow;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Objectify;
@@ -34,7 +35,9 @@ public class DaoActivity
 
 	TASK(Task.class),
 
-	CAMPAIGN(Workflow.class);
+	CAMPAIGN(Workflow.class),
+	
+	TICKET(Tickets.class);
 
 	Class clazz;
 

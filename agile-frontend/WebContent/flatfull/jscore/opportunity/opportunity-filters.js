@@ -476,10 +476,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 							
 							$(this).attr('disabled', 'disabled');
 							var input = {};
-							var filterJSON = JSON.stringify($.parseJSON(_agile_get_prefs('deal-filters')));
-							if (!_agile_get_prefs("agile_deal_view"))
-								filterJSON.pipeline_id = _agile_get_prefs('agile_deal_track');
-							input.filter = filterJSON;
+							input.filter = getDealFilters();
 							 // Shows message
 						    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
 						    $(this).parent('.modal-footer').find('.deals-export-csv-message').append($save_info);

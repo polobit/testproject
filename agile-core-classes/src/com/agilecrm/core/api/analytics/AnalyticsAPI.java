@@ -43,7 +43,7 @@ public class AnalyticsAPI
 	
 	String email = AnalyticsUtil.getCompositeString(EmailUtil.getStringTokenSet(searchEmail, ","));
 	String domain = NamespaceManager.get();
-	String url = AnalyticsUtil.getStatsUrlForAllPageViews(email, domain);
+	String url = AnalyticsUtil.getStatsUrlForPageViewsOfEmail(email, domain);
 	return AnalyticsSQLUtil.getPageViewsFromStatsServer(url);
     }
     

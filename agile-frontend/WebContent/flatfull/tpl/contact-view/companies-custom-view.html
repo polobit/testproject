@@ -77,15 +77,15 @@
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
 
-	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);">Companies<span id="contacts-count" class="m-l-xs">{{companies_count}}</span>
+	    		<h3 class="inline-block m-n text-black font-thin">Companies<span id="contacts-count" class="m-l-xs">{{companies_count}}</span>
 
 	    			{{#is_mobile}}
 					{{else}}
-	    			<a id="companies-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+	    			<a id="companies-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
             			<i id="icon-filter" class="fa fa-bars icon-white"></i>
           			</a>
           			{{/is_mobile}}
-	    		</div><br>
+	    		</h3><br>
 				<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div> 
 
 			 </div>
@@ -103,12 +103,12 @@
 
 	 				<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm {{#is_mobile}} {{else}}  {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
 
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Send Email</button>	
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Change Owner</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Send Email</button>	
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Change Owner</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
-					    <button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    <button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Export as CSV</button>
 					    {{/hasScope}}
-					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs disabled" style="font-size:10px">Delete</button>
+					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >Delete</button>
 					    
 				    </div>
 					

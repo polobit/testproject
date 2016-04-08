@@ -78,7 +78,7 @@ public abstract class StripeWebhookHandler
 	return user;
     }
 
-    protected Contact getContactFromOurDomain()
+    public Contact getContactFromOurDomain()
     {
 	if (contact != null)
 	    return contact;
@@ -172,6 +172,8 @@ public abstract class StripeWebhookHandler
 	if (!StringUtils.isEmpty(domain))
 	    return domain;
 
+	//System.out.println("Event is:"+event);
+	//System.out.println("Event.getData() is:"+event.getData());
 	StripeObject stripeObject = event.getData().getObject();
 
 	// If type is customer deletion stripe return customer object which
