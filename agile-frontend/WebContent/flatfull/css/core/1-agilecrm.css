@@ -3584,3 +3584,10 @@ text-align:left;
 #pause_settings:hover #month_id{
 	margin-left: 10px!important;
 }
+
+.app-aside-dock #segmentationmenu a i{
+	    margin-bottom: -10px;
+}
+app-aside-fixed #segmentationmenu a i, app-aside-folded #segmentationmenu a i{
+	line-height: 2.5em;
+}

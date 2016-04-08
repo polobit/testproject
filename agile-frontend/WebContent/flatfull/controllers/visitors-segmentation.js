@@ -76,7 +76,6 @@ var VisitorsSegmentationRouter = Backbone.Router
                             individual_tag_name: 'tr',
                             slateKey: slateKey,
                             cursor: true,
-                            scroll_symbol: 'scroll',
                             request_method: 'POST',
                             post_data: {
                                 'filterJson': postData,

@@ -311,7 +311,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
    <li id="segmentationmenu">
     <a  href="#segments">
-       <i class="icon-large icon-screenshot" style="margin-bottom:-10px"></i>
+       <i class="icon-large icon-screenshot"></i>
       <span>Segments</span>  
     </a>
   </li>
