@@ -74,7 +74,7 @@ body {
 	}else{
 
 		try{
-			String outputString = notes.mime_object;
+			outputString = notes.mime_object;
 			
 			/* String escapedHTML = StringEscapeUtils.escapeHtml(headers);
 			

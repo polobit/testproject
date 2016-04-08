@@ -334,9 +334,12 @@ public class SendgridInboundParser extends HttpServlet
 					byte[] dataArray = null;
 
 					if (!ignoreBase64Conversion.contains(fileType))
-						dataArray = attachmentContent.getBytes();
+						dataArray = attachmentContent.getBytes(StandardCharsets.UTF_8);
 					else
-						dataArray = Base64.decode(attachmentContent.getBytes());
+						dataArray = Base64.decode(attachmentContent.getBytes(StandardCharsets.UTF_8));
+
+					System.out.println("Attachment...");
+					System.out.println(new String(dataArray));
 
 					GCSServiceAgile service = saveFileToGCS(fileName, fileType, dataArray);
 
