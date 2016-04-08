@@ -1,3 +1,4 @@
+var popover_call;
 /**
  * 
  * Describes the given object is an array or not
@@ -370,7 +371,7 @@ function showCalendar(users)
 									return;
 								}
 								if(event.id!=undefined){
-								accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
+								popover_call=accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
 											console.log(data);
 											that.data("data_fetched",data);
 											event.contacts=data;
@@ -381,6 +382,7 @@ function showCalendar(users)
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
+							popover_call.abort();
 							$(this).parent().find('.fc-overlayw').hide();
 							$(this).parent().find('.fc-overlayw').remove();
 							$(this).find(".ui-resizable-handle").hide();

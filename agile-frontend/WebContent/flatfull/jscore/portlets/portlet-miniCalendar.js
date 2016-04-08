@@ -287,6 +287,8 @@ function minicalendar(el)
 
 		            			if(that.data("data_fetched"))
 								{
+									$('.fc-overlay').hide();
+		            		  			$('.fc-overlay').remove();
 									event.contacts=that.data("data_fetched");
 									
 									var leftorright = 'bottom';
@@ -340,7 +342,8 @@ function minicalendar(el)
 											console.log(data);
 											event.contacts=data;
 											that.data("data_fetched",data);
-		            		  
+		            		  			$('.fc-overlay').hide();
+		            		  			$('.fc-overlay').remove();
 		            		
 
 
