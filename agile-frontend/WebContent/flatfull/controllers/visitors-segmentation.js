@@ -47,7 +47,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                 postData = _agile_get_prefs('dynamic_visitors_filter');
             }
 
-            var slateKey = getCompanyPadcontentKey(url);
+            var slateKey = getSegmentPadcontentKey(url);
             if (is_lhs_filter) {
                 template_key = "segmentation-custom-view-table";
 
