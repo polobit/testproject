@@ -44,6 +44,10 @@ public class Territory extends TaskletAdapter
 		    {
 				JSONObject zone = zonesArray.getJSONObject(i); 
 				
+				// For New Territory nodes, IN_ZONE_COMPARE is removed, so by default OR
+				if(!zone.has(IN_ZONE_COMPARE))
+					zone.put(IN_ZONE_COMPARE, "or");
+				
 				String branch = zone.getString(DYNAMIC_GRID);
 				
 				// If 'NoMatch' continue

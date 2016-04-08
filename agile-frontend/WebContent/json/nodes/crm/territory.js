@@ -81,20 +81,6 @@
                   "title": "Enter a value. Please make sure that codes (e.g., IN) are compared by default for country type.",
                   "fieldType": "input",                    
                   "type": "text"
-              },
-              {
-                "label": "Within Territory",
-                "name" : "in_zone_compare",
-                "fieldType":"select",
-                "type": "select",
-                "required":"required",
-                "options": {
-                  "And": "and",
-                  "Or": "or"
-                },
-                "title":"Select within territory condition.",
-                "in_grid_popup" : false,
-                "add_in_each_row": true
               }
 				],
 			"defaultvalues":
@@ -103,8 +89,7 @@
                   "dynamicgrid": "Nomatch",
                   "location_type" : "-",
                   "comparator": "-",
-                  "location_value" : "-",
-                  "in_zone_compare": "-"
+                  "location_value" : "-"
                 } 
 					 ]
 		},
