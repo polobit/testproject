@@ -1,9 +1,6 @@
 package com.agilecrm.ticket.servlets;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -251,8 +248,7 @@ public class SendgridInboundParser extends HttpServlet
 					{
 						// Creating new Ticket in Ticket table
 						ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1],
-								json.getString("subject"), ccEmails,
-								TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), Status.NEW, Type.PROBLEM,
+								json.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM,
 								Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists,
 								json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
 
