@@ -56,6 +56,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	if(opportunity.name != null)
 	{
 		//We are adding deal name to search tokens without spaces to search deal with full name
+		search_tokens.append(" ");
 		search_tokens.append(opportunity.name.replaceAll(" ", ""));
 	}
 
