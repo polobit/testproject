@@ -39,8 +39,8 @@
 					</a>
 					{{#hasScope "MANAGE_DEALS"}}
 					<ul class="dropdown-menu pull-right">
-						<li><a href="#import-deals" >Import from CSV</a></li>
-						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
+						<li><a href="#import-deals" >Import</a></li>
+						<li><a href="#" class="deals-export-csv">Export</a></li>
 						<li><a href="#add-dashlet">Add Dashlet</a></li>
 					</ul>
 
@@ -347,8 +347,8 @@
     <p class="deal-popover-p pull-left" style="margin:2px;overflow:hidden !important;text-overflow:ellipsis;max-width:calc(100% - 35px);">
     	<span>{{heading}}</span ></p><span class="pull-right">{{dealNumber}}</span><div class="clearfix"></div>
      </div>
-    <p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total Value:</span><span> {{symbol}}{{dealcount}}</span></p>
-    <p class="deal-popover-p" style="margin:2px"><span>Avg. Value:</span><span> {{symbol}}{{avgDeal}}</span></p>
+    <p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total:</span><span> {{symbol}}{{dealcount}}</span></p>
+    <p class="deal-popover-p" style="margin:2px"><span>Average:</span><span> {{symbol}}{{avgDeal}}</span></p>
 </div>
 </script>
 
@@ -376,11 +376,11 @@
        			
        	<div class="contact-owner text-base" id="change-owner-element">
         	
-		<p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total Value:</span><span> {{symbol}}{{dealcount}}</span></p>
+		<p class="deal-popover-p" style="margin:2px;margin-top:4px;"><span>Total:</span><span> {{symbol}}{{dealcount}}</span></p>
        </div>
        </div>
        		<div class=" p-b-xs">
-			<p class="deal-popover-p" style="margin:2px"><span>Avg. Value:</span><span> {{symbol}}{{avgDeal}}</span></p>
+			<p class="deal-popover-p" style="margin:2px"><span>Average:</span><span> {{symbol}}{{avgDeal}}</span></p>
        		</div>
                    </div>
 	   	          </div>	
