@@ -371,12 +371,16 @@ function showCalendar(users)
 									return;
 								}
 								if(event.id!=undefined){
-								popover_call=accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
+								popover_call=
+								$.ajax({ 
+									url : "/core/api/events/contacts-related?id="+event.id, 
+									dataType : 'json',
+									success : function(data){
 											console.log(data);
 											that.data("data_fetched",data);
 											event.contacts=data;
 												calendar_Popover(event,calendarView,that,popover_min_width,that_event,leftorright,pullupornot,popoverElement,reletedContacts,meeting_type)
-											
+									}		
 							});
 						}
 						},
