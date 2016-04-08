@@ -10,10 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Properties;
 
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.agilecrm.contact.Contact;
@@ -202,6 +200,47 @@ public class SendgridInboundParser extends HttpServlet
 					List<TicketDocuments> documentsList = (attachmentExists) ? getAttachmentsList(json)
 							: (new ArrayList<TicketDocuments>());
 
+					try
+					{
+						Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
+
+						for (TicketDocuments ticketDocument : documentsList)
+						{
+							String fileContentType = ticketDocument.extension;
+
+							boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
+
+							if (isImage)
+							{
+								Elements elements = doc
+										.getElementsByAttributeValue("src", "cid:" + ticketDocument.name);
+
+								if (elements != null && elements.size() > 0)
+								{
+									Element element = elements.first();
+
+									plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
+
+									try
+									{
+										element.remove();
+									}
+									catch (Exception e)
+									{
+										System.out.println(ExceptionUtils.getFullStackTrace(e));
+									}
+								}
+							}
+						}
+
+						if (documentsList != null && documentsList.size() > 0)
+							htmlText = doc.body().html();
+					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
+
 					Tickets ticket = null;
 
 					String[] nameEmail = getNameAndEmail(json);
@@ -332,10 +371,10 @@ public class SendgridInboundParser extends HttpServlet
 					}
 
 					byte[] dataArray = null;
-					
+
 					System.out.println("fileName: " + fileName);
 					System.out.println("fileType: " + fileType);
-					
+
 					if (ignoreBase64Conversion.contains(fileType))
 						dataArray = attachmentContent.getBytes(StandardCharsets.UTF_8);
 					else

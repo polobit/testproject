@@ -114,8 +114,7 @@ body {
 
 			//$(".original_message").html(mime);
 
-			$(".original_message").html(JSON.stringify(mimeobj, convertHTMLToString, 4));
-
+			$(".original_message").html(JSON.stringify(mimeobj, null, 4));
 		}
 		
 		function convertHTMLToString (key, value) {
