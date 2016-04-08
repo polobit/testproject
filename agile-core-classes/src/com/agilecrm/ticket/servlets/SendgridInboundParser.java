@@ -105,6 +105,9 @@ public class SendgridInboundParser extends HttpServlet
 				{
 					JSONObject json = getJSONFromMIME(request);
 
+					System.out.println("json...");
+					System.out.println(json);
+
 					String envelope = json.getString("envelope");
 
 					System.out.println("Envelope:" + envelope);
@@ -168,7 +171,7 @@ public class SendgridInboundParser extends HttpServlet
 
 					// Get email key value as it contains plain text, html text
 					// and attachments data
-//					String fileData = json.getString("headers");
+					// String fileData = json.getString("headers");
 
 					// Properties props = System.getProperties();
 					// Session session = Session.getInstance(props);
@@ -331,9 +334,9 @@ public class SendgridInboundParser extends HttpServlet
 					byte[] dataArray = null;
 
 					if (!ignoreBase64Conversion.contains(fileType))
-						dataArray = attachmentContent.getBytes(StandardCharsets.UTF_8);
+						dataArray = attachmentContent.getBytes();
 					else
-						dataArray = Base64.decode(attachmentContent.getBytes(StandardCharsets.UTF_8));
+						dataArray = Base64.decode(attachmentContent.getBytes());
 
 					GCSServiceAgile service = saveFileToGCS(fileName, fileType, dataArray);
 
@@ -456,6 +459,8 @@ public class SendgridInboundParser extends HttpServlet
 
 				if (fieldName.matches("^attachment\\d$") && !ignoreBase64Conversion.contains(contentType))
 				{
+					System.out.println("Encoding to base64....");
+
 					ItemInputStream stream = (ItemInputStream) item.openStream();
 
 					byte[] byteArray = IOUtils.toByteArray(stream);
