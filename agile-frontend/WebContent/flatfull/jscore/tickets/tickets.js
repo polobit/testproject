@@ -644,7 +644,7 @@ var Tickets = {
 			var selectedGroup = App_Ticket_Module.ticketView.model.toJSON().groupID;
 
 			if(!selectedAssignee)
-				$('#ticket-assignee', el).find("option[group_id='"+selectedGroup+"']").attr('selected', 'selected');
+				$('#ticket-assignee', el).find("option[data-group-id='"+selectedGroup+"']").attr('selected', 'selected');
 			else
       		 	$('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[data-assignee-id='"+selectedAssignee+"']").attr('selected', 'selected');
       		
