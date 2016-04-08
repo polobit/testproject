@@ -168,7 +168,7 @@ public class SendgridInboundParser extends HttpServlet
 
 					// Get email key value as it contains plain text, html text
 					// and attachments data
-					String fileData = json.getString("headers");
+//					String fileData = json.getString("headers");
 
 					// Properties props = System.getProperties();
 					// Session session = Session.getInstance(props);
@@ -185,7 +185,7 @@ public class SendgridInboundParser extends HttpServlet
 					if (json.has("text"))
 						plainText = json.getString("text");
 
-					if (json.has("text"))
+					if (json.has("html"))
 						htmlText = json.getString("html");
 
 					// String htmlText = messageParser.hasHtmlContent() ?
