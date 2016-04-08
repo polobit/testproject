@@ -13,11 +13,32 @@ var Widget_Collection_Events = Base_Collection_View.extend({
 var Widget_Model_Events = Base_Model_View.extend({
 
    events : {
-        "click #stripe_url" : "stripeUrl",
+      "click #stripe_url" : "stripeUrl",
    	  "click .save-agile-widget" : "saveWidgetPrefs",
    	  "click .connect_shopify" : "connectShopify",
-   	  "click .revoke-widget" : "revokeWidget"
+   	  "click .revoke-widget" : "revokeWidget",
+      "change #script_type" : "scriptType",
+      "click #cancel_custom_widget" : "cancelWidget"
+
    },
+
+  scriptType: function(){
+      var script_type = $('#script_type').val();
+      if (script_type == "script"){
+        $('#script_div').show();
+        $('#url_div').hide();
+        return;
+      }
+
+      if (script_type == "url"){
+        $('#script_div').hide();
+        $('#url_div').show();
+      }
+  },
+
+  cancelWidget: function(){
+    Backbone.history.navigate('add-widget', { trigger : true });
+  },
 
    stripeUrl: function(){
      var url = $('#stripe_url').attr('url');

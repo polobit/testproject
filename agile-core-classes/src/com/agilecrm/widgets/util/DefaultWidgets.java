@@ -118,6 +118,12 @@ public class DefaultWidgets {
 		WidgetType.CALL));
 		widgets.add(new Widget("Skype", "Make and receive calls from your contacts using your Skype Account.",
 		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));
+		
+		widgets.add(new Widget(
+				"Custom",
+				"You can now develop your own custom widget in javascript or any backend server language.",
+				"/widgets/custom.js", "widgets/custom_widget.png",
+				"widgets/custom_widget.png", null, WidgetType.CUSTOM));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

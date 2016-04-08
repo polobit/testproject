@@ -243,7 +243,7 @@ function initializeWidgetSettingsListeners(){
 		}, dataType : 'json' });
 
 	});
-	
+                
 }
 
 

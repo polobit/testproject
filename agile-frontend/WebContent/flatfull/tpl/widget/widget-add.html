@@ -329,10 +329,13 @@
     					 <div class="text-center">
 							{{#isAdmin}}											
 								<div class="btn-group" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
+  									<a type="button" class="btn btn-sm btn-default" href="#Custom-widget" widget-name="{{name}}">Add custom widget
+  									</a>
 								</div>
 							{{else}}
-								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
+								<a class="btn btn-sm btn-default m-t-md" href="#Custom-widget" widget-name="{{name}}">
+									Add custom widget
+								</a>
 							{{/isAdmin}}
 						</div>
 					</div>
@@ -420,10 +423,14 @@
     					 <div class="text-center">
 							{{#isAdmin}}											
 								<div class="btn-group m-t-md" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>  									
+  									<a type="button" class="btn btn-sm btn-default" href="#Custom-widget">
+  										Add custom widget
+  									</a>  									
 								</div>
 							{{else}}
-								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
+								<a class="btn btn-sm btn-default m-t-md" href="#Custom-widget">
+									Add custom widget
+								</a>
 							{{/isAdmin}}
 						</div>
 					</div>
@@ -538,12 +545,10 @@
 <div>{{show_link_in_statement error_message}}</div>
 <a href="{{error_url}}" class"text-l-none" widget-name="{{name}}">Try again</a>
 </script>
+
 <script id="custom-widget-settings-template" type="text/html">
-<div class="panel panel-heading widget-edit">
-	<div class="panel-heading">
-		<h4 class="h4">Edit custom widget details</h4>
-	</div>
-<div class="panel-body">
+<div class="widget-edit">
+	<div class="panel-body">
 		<form class="b-b-none m-t-n-sm m-b-none" id="custom_widget_form" name="custom_widget_login_form" method="post">
 	    	<fieldset>
 				<input type="hidden" id="widget_type" class="input-medium required" style="width:90%" value="CUSTOM" name="widget_type"></input>
@@ -573,7 +578,69 @@
 			 </fieldset>
 	    </form>
 	</div>
-	</div>
+</div>
+</script>
+
+<script id="custom-widget-edit-template" type="text/html">
+<form id="clickdesk_login_form" name="clickdesk_login_form" method="post">
+	<fieldset>
+		<p>Create your own custom widget in javascript or any backend server language.</p>
+		<label>Enter your custom widget details </label>						
+		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control"value="CUSTOM" name="widget_type">
+		</input>
+		<div class="control-group form-group">
+			<div class="controls">
+				<input type="text" id="name" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="name">
+				</input>				
+			</div>
+		</div>
+		<div class="control-group form-group">
+			<div class="controls">								
+				<input type="text" id="description" class="input-medium required widget_input_box form-control"placeholder="description" name="description">
+				</input>
+			</div>
+		</div>
+		<div class="control-group form-group">
+			<div class="controls">								
+				<select name="script_type" id="script_type" class="required form-control">
+					<option value="script">HTML</option> 
+					<option value="url">URL</option> 
+				</select>
+			</div>
+		</div>
+		<div class="control-group form-group">
+			<div class="controls">
+				<span id="script_div">
+					<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a>
+					</span>
+					<textarea rows="4" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"/>					
+				</span>
+				<span id="url_div" style="display:none;">
+					<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a>
+					</span>
+					<input type="url" id="url" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url">
+					</input>
+				</span>
+			</div>
+		</div>	
+		<div class="control-group form-group">
+			<div class="controls">
+				<input type="url" id="logo_url" class="input-medium required widget_input_box form-control" placeholder="Logo URL" name="logo_url">
+				</input>
+			</div>
+		</div>
+		<div class="control-group form-group">
+			<div class="controls">
+				<input type="url" id="mini_logo_url" class="input-medium required widget_input_box form-control" placeholder="Mini logo URL" name="mini_logo_url">
+				</input>
+			</div>
+		</div>
+		<div class="text-center">			
+			<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
+            <a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">Cancel</a>
+		</div>
+	</fieldset>
+</form>
 </script>
 
 <script  id="widget-acls-modal-content-template" type="text/html">
