@@ -637,17 +637,24 @@ var Tickets = {
 		fillSelect('ticket-assignee', '/core/api/tickets/groups', '', function(collection){
 
 			Tickets.groupsList = collection.toJSON();
-			
-			$('#ticket-assignee', el).html(getTemplate('select-assignee-ticket-dropdown', collection.toJSON()));
+			 	 
+		    $('#ticket-assignee', el).html(getTemplate('select-assignee-ticket-dropdown', collection.toJSON()));
 
 			var selectedAssignee = App_Ticket_Module.ticketView.model.toJSON().assigneeID;
 			var selectedGroup = App_Ticket_Module.ticketView.model.toJSON().groupID;
 
+			
 			if(!selectedAssignee)
-				$('#ticket-assignee', el).find("option[data-group-id='"+selectedGroup+"']").attr('selected', 'selected');
-			else
+				$('#ticket-assignee', el).find("option[group_id='"+selectedGroup+"']").attr('selected', 'selected');
+			else{
+
+				var assignee_name_length = $('#ticket-assignee', el).find("option[data-assignee-id='"+selectedAssignee+"']").length;
+      		 	 
+      		 	if(assignee_name_length == 0)
+      		 	    $('#ticket-assignee', el).find("option[value="+"0"+"]").attr('selected', 'selected');
+                else
       		 	$('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[data-assignee-id='"+selectedAssignee+"']").attr('selected', 'selected');
-      		
+      		}
 			// If current user not 
       		if(selectedAssignee != CURRENT_DOMAIN_USER.id 
       			&& Tickets.isCurrentUserExistInGroup(selectedGroup, Tickets.groupsList))
