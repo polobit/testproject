@@ -13,9 +13,13 @@ public class ContactReportDeferredTaskCreation
 	    throws IOException
     {
 	System.out.println("Time in create createDeferredTask ============ " + time);
+	System.out.println("domain in create createContactDeferredTask ============ " + domain);
+	System.out.println("reportid in create createContactDeferredTask ============ " + reportid);
+	System.out.println("In ContactReportDeferredTaskCreation before SendContactReportDeferredTask created");
 	// Start a task queue for each domain
 	SendContactReportDeferredTask send_contact_report_deferred_task = new SendContactReportDeferredTask(domain,
 	        time, reportid, timezone);
+	System.out.println("In ContactReportDeferredTaskCreation after SendContactReportDeferredTask created");
 	Queue queue = QueueFactory.getQueue("reports-queue");
 	TaskOptions options = TaskOptions.Builder.withPayload(send_contact_report_deferred_task);
 	options.etaMillis(time * 1000);

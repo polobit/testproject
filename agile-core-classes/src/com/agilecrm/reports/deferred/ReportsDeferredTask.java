@@ -56,6 +56,7 @@ public class ReportsDeferredTask implements DeferredTask
     @Override
     public void run()
     {
+    System.out.println("ReportsDeferredTask run method calling");
 	if (domain == null && domain_id != null)
 	{
 	    DomainUser user = DomainUserUtil.getDomainUser(domain_id);
@@ -76,13 +77,16 @@ public class ReportsDeferredTask implements DeferredTask
 	    // reports and sends report
 	    for (Reports report : reports)
 	    {
+	    System.out.println("In ReportsDeferredTask run method reports looping----------"+report.id);
 		Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
 		        report.activity_weekday, report.activity_day, report.report_timezone, duration);
 		try
 		{
+			System.out.println("In ReportsDeferredTask run method before ContactReportDeferredTaskCreation created");
 			ContactReportDeferredTaskCreation contactReportDeferredTaskCreation =new ContactReportDeferredTaskCreation();
 			contactReportDeferredTaskCreation.createContactDeferredTask(domain, report.id, time,
 			    report.report_timezone);
+			System.out.println("In ReportsDeferredTask run method after ContactReportDeferredTaskCreation created");
 		}
 		catch (IOException e)
 		{
