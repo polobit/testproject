@@ -148,7 +148,8 @@
 
 
                       </thead>
-                      <tbody id="segmentation-custom-view-table-model-list" route="contact/">
+                      <tbody id="segmentation-custom-view-table-model-list" route="contact/"
+                      >
                       </tbody>
                   </table>
                   {{/if}}
@@ -157,17 +158,17 @@
 </script>
 
 
-<script id="segmentation-custom-view-model-template" type="text/html">    
+<script id="segmentation-custom-view-model-template" type="text/html"> 
   <td></td>  
 
   <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}}>
-    <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
+    <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
       <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
           {{#if id}}
             <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
           {{else}}
             <img src="{{defaultGravatarurl 36}}"/>
-            {{/if}}
+          {{/if}}
       </div>
       <div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
           {{#if id}}
@@ -175,7 +176,7 @@
             {{getPropertyValue properties "last_name"}} </a>
             <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
           {{else}}
-                <a class="text-cap custom-link">Contact is deleted</a>
+                <a class="text-cap custom-link">Someone visited your website </a>
                 <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
             {{/if}}
         </div>  
@@ -198,13 +199,14 @@
       {{lead_score}}
        </div>
   </td>
-  {{#if id}}
+  
   <td class='data' data='{{id}}'>
+  {{#if id}}
      <ul class="m-n p-n list-none" style="width:8em;">
       {{setupRating star_value}}
     </ul>
-  </td>
   {{/if}}
+  </td>
   
 </script>
 
@@ -212,7 +214,7 @@
 <script id="segmentation-custom-view-table-model-template" type="text/html">    
   <td></td>  
   <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}}>
-    <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
+    <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
       <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
           {{#if id}}
             <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
@@ -226,7 +228,7 @@
             {{getPropertyValue properties "last_name"}} </a>
             <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
           {{else}}
-                <a class="text-cap custom-link">Contact is deleted</a>
+                <a class="text-cap custom-link">Someone visited your website</a>
                 <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
             {{/if}}
         </div>  
@@ -249,12 +251,14 @@
       {{lead_score}}
        </div>
   </td>
-  {{#if id}}
+  
   <td class='data' data='{{id}}'>
+  {{#if id}}
      <ul class="m-n p-n list-none" style="width:8em;">
       {{setupRating star_value}}
     </ul>
+    {{/if}}
   </td>
-  {{/if}}
+  
   
 </script>
