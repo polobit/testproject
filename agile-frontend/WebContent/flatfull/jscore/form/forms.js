@@ -26,7 +26,7 @@ var Form_Collection_Events = Base_Collection_View.extend({
 
 	 	//embed code
 	 	var embed = "<div id=\""+window.location.host+"_"+$(e.target).data("formid")+"\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
-	 	embed  = embed + "<script>load_agile_form(\""+window.location.host+"_"+$(e.target).data("formid")+"\");</script>";
+	 	embed  = embed + "<script>loadAgileCRMForm(\""+window.location.host+"_"+$(e.target).data("formid")+"\");</script>";
 		$codeShareModalEl.find("#embedCodeArea").text(embed);
 	},
 
