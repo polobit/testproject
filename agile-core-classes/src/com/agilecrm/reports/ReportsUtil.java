@@ -334,7 +334,7 @@ public class ReportsUtil
 			statsJSON.put("softBounce", softBounce);		
 	    
 			if(report.campaignId.equals("All"))
-				statsJSON.put("campaign_name", "All Campaigns"+WorkflowUtil.getCampaignName(report.campaignId));
+				statsJSON.put("campaign_name", "All Campaigns");
 			else
 				statsJSON.put("campaign_name", "Campaign Name : "+WorkflowUtil.getCampaignName(report.campaignId));
 				statsJSON.put("report_name", report.name);
@@ -1200,7 +1200,7 @@ public class ReportsUtil
 			statsJSON.put("softBounce", softBounce);  
 			
 			if(report.campaignId.equals("All"))
-				statsJSON.put("campaign_name", "All Campaigns"+WorkflowUtil.getCampaignName(report.campaignId));
+				statsJSON.put("campaign_name", "All Campaigns");
 			else
 				statsJSON.put("campaign_name", "Campaign Name : "+WorkflowUtil.getCampaignName(report.campaignId));
 			
