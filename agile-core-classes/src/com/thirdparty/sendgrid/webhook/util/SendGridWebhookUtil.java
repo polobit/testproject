@@ -24,6 +24,9 @@ public class SendGridWebhookUtil
 	public static final String SENDGRID_EVENT_UNSUBSCRIBE = "unsubscribe";
 	public static final String SENDGRID_EVENT_SPAMREPORT = "spamreport";
 	public static final String SENDGRID_EVENT_URL = "url";
+	
+	public static final String SENDGRID_VERSION = "version";
+	public static final String SENDGRID_VERSION_NUMBER = "3";
 
 	/**
 	 * Adds webhook to SendGrid account
@@ -64,7 +67,9 @@ public class SendGridWebhookUtil
 					+ SENDGRID_EVENT_CLICK + "=" + URLEncoder.encode("0", "UTF-8") + "&" 
 					+ SENDGRID_EVENT_UNSUBSCRIBE + "=" + URLEncoder.encode("0", "UTF-8") + "&"
 					+ SENDGRID_EVENT_SPAMREPORT + "=" + URLEncoder.encode("1", "UTF-8") + "&" 
-					+ SENDGRID_EVENT_URL + "=" + URLEncoder.encode(webhookURL, "UTF-8");
+					+ SENDGRID_EVENT_URL + "=" + URLEncoder.encode(webhookURL, "UTF-8") + "&" 
+					+ SENDGRID_VERSION + "=" + SENDGRID_VERSION_NUMBER;
+					;
 
 			response = HTTPUtil.accessURLUsingPost(SENDGRID_WEBHOOK_URL, queryString);
 
