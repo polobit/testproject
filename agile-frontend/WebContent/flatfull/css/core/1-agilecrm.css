@@ -3586,7 +3586,7 @@ text-align:left;
 }
 
 .app-aside-dock #segmentationmenu a i{
-	    margin-bottom: -10px;
+	    margin-bottom: -4px;
 }
 .app-aside-fixed #segmentationmenu a i , .app-aside-folded #segmentationmenu a i{
 	line-height: 2.5em;
