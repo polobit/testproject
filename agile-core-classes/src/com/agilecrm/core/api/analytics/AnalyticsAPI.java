@@ -122,12 +122,4 @@ public class AnalyticsAPI
 	return contacts.toString();
     }
     
-    @POST
-    @Path("/filter/dynamic-filter/count")
-    public int getCountVisitors(@FormParam("filterJson") String filterJson, @FormParam("start_time") Long startTime,
-	    @FormParam("end_time") Long endTime)
-    {
-	return 0;
-    }
-    
 }

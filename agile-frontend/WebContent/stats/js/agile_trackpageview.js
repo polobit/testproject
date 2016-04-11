@@ -10,7 +10,7 @@
  */
 function agile_trackPageview(callback)
 {
-	var Track_Visitor_Server_URL = "https://agilecrm-web-stats.appspot.com";
+	var Track_Visitor_Server_URL = "https://1-5-beta-dot-agilecrm-web-stats.appspot.com";
 
 	// Get guid
 	var guid = agile_guid.get();
