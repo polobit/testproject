@@ -22,7 +22,9 @@ import org.json.JSONObject;
 
 import com.agilecrm.ticket.entitys.TicketCannedMessages;
 import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.utils.TicketCannedMessagesUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
@@ -100,7 +102,10 @@ public class TicketCannedMessagesRest
 			cannedMessage.set_Labels(labelsKeysList);
 
 			TicketCannedMessages.dao.put(cannedMessage);
-
+			
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.CANNED_RESPONSES);
+						
 			return cannedMessage;
 		}
 		catch (Exception e)

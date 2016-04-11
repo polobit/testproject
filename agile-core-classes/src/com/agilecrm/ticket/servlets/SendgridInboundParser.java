@@ -35,6 +35,7 @@ import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -47,6 +48,7 @@ import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
@@ -308,6 +310,9 @@ public class SendgridInboundParser extends HttpServlet
 
 					notes.save();
 
+					// Updating ticket count DB
+					TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
+
 					NamespaceManager.set(oldNamespace);
 
 					System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime)
@@ -522,10 +527,10 @@ public class SendgridInboundParser extends HttpServlet
 	 * If received ticket is reply to existing ticket then email address will be
 	 * in the form of namespace+groupid+ticketid@helptor.com
 	 */
-	public static boolean isNewTicket(String[] toAddressArray)
-	{
-		return (toAddressArray.length == 3) ? false : true;
-	}
+	// public static boolean isNewTicket(String[] toAddressArray)
+	// {
+	// return (toAddressArray.length == 3) ? false : true;
+	// }
 
 	/**
 	 * 
@@ -549,7 +554,8 @@ public class SendgridInboundParser extends HttpServlet
 			return ticketID;
 		}
 
-		ticketID = elements.get(0).text();
+		// Fetching last span
+		ticketID = elements.get(elements.size() - 1).text();
 
 		System.out.println("Ticket found in html content: " + ticketID);
 

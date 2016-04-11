@@ -135,6 +135,7 @@ public class SendMail
    	public static final String TICKET_REPLY = "ticket_reply_email";
    	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
    	public static final String TICKET_FORWARD = "ticket_forward_email";
+   	public static final String TICKET_STATS = "ticket_stats";
    	
     /**
      * From Name of email.

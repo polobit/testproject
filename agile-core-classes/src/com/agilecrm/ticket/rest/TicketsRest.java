@@ -42,6 +42,7 @@ import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.TicketWorkflow;
@@ -53,6 +54,7 @@ import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -361,9 +363,13 @@ public class TicketsRest
 			// Execute triggers
 			// TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 
-//			BulkActionNotifications.publishNotification("Ticket #" + ticket.id + " has been created.");
+			// BulkActionNotifications.publishNotification("Ticket #" +
+			// ticket.id + " has been created.");
 			TicketBulkActionsBackendsRest.publishNotification("Ticket #" + ticket.id + " has been created.");
-			
+
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
+
 			return ticket;
 		}
 		catch (Exception e)
@@ -886,7 +892,7 @@ public class TicketsRest
 	 * @return list of domain users
 	 */
 	@GET
-	@Path ("/users")
+	@Path("/users")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<DomainUser> getUsers()
 	{
@@ -896,7 +902,7 @@ public class TicketsRest
 			String domain = NamespaceManager.get();
 			// Gets the users and update the password to the masked one
 			List<DomainUser> users = DomainUserUtil.getUsers(domain);
-			DomainUser domainUser =  new DomainUser();
+			DomainUser domainUser = new DomainUser();
 			domainUser.name = "Current User";
 			domainUser.id = (long) 0;
 			users.add(domainUser);

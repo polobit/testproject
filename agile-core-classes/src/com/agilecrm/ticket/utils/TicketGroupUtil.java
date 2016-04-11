@@ -9,6 +9,7 @@ import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.projectedpojos.TicketGroupsPartial;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -50,7 +51,10 @@ public class TicketGroupUtil
 		supportGroup.setOwner_key(ownerKey);
 
 		TicketGroups.ticketGroupsDao.put(supportGroup);
-
+		
+		// Updating ticket count DB
+		TicketStatsUtil.updateEntity(TicketStats.GROUPS_COUNT);
+					
 		return supportGroup;
 	}
 

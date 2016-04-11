@@ -131,3 +131,7 @@ cron:
   url: /ticket-module/backend/wakeup-servlet
   schedule: every 1 mins
   target: agile-ticket-module
+  
+- description: Ticket stats report
+  url: /ticket-module/backend/ticket_stats
+  schedule: every day 03:00
