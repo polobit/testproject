@@ -25,4 +25,25 @@ public class ModuleUtil
 
 	return "";
     }
+    
+    public static String getCurrentModuleName(String modulename)
+    {
+	try
+	{
+	    ModulesService moduleService = ModulesServiceFactory.getModulesService();
+
+	    // Get the backend handling the current request.
+	    String moduleName = moduleService.getDefaultVersion(modulename);
+
+	    System.out.println("Current Backend Name is " + moduleName);
+
+	    return moduleName;
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while getting current backend name..." + e.getMessage());
+	}
+
+	return "";
+    }
 }
