@@ -1996,19 +1996,39 @@ Sent email to {{#if this.entityObject}}<a href="#contact/{{entity_id}}"  data="{
 
 {{#if_equals "BULK_ACTION" activity_type}}
 
+
+{{#if_equals "contacts" label}}	
 {{#if_equals "ADD_TAG" custom1}}
 Added  tag to {{custom3}} Contacts<br/>
-<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<small class="activities_second_line m-t-none text-sm text-ellipsis">
 <i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added.
-</small></div>
+</small>
 {{/if_equals}}
 
 
 {{#if_equals "REMOVE_TAG" custom1}}
 Removed tag from {{custom3}} Contacts<br/>
-<div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
+<small class="activities_second_line m-t-none text-sm text-ellipsis">
 <i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
-</small></div>
+</small>
+{{/if_equals}}
+
+{{else}}
+
+{{#if_equals "ADD_TAG" custom1}}
+Added  tag to {{custom3}} Companies<br/>
+<small class="activities_second_line m-t-none text-sm text-ellipsis">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added.
+</small>
+{{/if_equals}}
+
+
+{{#if_equals "REMOVE_TAG" custom1}}
+Removed tag from {{custom3}} Companies<br/>
+<small class="activities_second_line m-t-none text-sm text-ellipsis">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
+</small>
+{{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "ASIGN_WORKFLOW" custom1}}
