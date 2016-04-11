@@ -31,18 +31,27 @@ public class TicketStatsUtil
 		try
 		{
 			System.out.println("Returning record...");
-			
-			return TicketStats.ticketStatsdao.getByProperty("created_time", created_time);
+
+			TicketStats stats = TicketStats.ticketStatsdao.getByProperty("created_time", created_time);
+
+			if (stats == null)
+			{
+				System.out.println("No record found. Creating new record...");
+				return new TicketStats(created_time);
+			}
+
+			return stats;
 		}
 		catch (Exception e)
 		{
-			System.out.println("No record found. Returning empty object.");
-			return new TicketStats(created_time);
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 		finally
 		{
 			NamespaceManager.set(oldNamespace);
 		}
+
+		return new TicketStats(created_time);
 	}
 
 	public static void updateEntity(final String fieldName)
@@ -61,7 +70,7 @@ public class TicketStatsUtil
 				try
 				{
 					System.out.println("In run method...");
-					
+
 					DateUtil dateUtil = new DateUtil();
 
 					long created_time = dateUtil.toMidnight().getCalendar().getTimeInMillis();
@@ -73,7 +82,7 @@ public class TicketStatsUtil
 					ticketStats.incrementField(fieldName);
 
 					ticketStats.save();
-					
+
 					System.out.println("Entity updated successfully...");
 				}
 				catch (Exception e)
