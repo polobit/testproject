@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.entitys;
 
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -16,6 +17,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  * @author Sasi
  * 
  */
+@XmlRootElement
 public class TicketStats
 {
 	/**
