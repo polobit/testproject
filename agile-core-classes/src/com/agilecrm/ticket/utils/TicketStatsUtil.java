@@ -32,15 +32,7 @@ public class TicketStatsUtil
 		{
 			System.out.println("Returning record...");
 
-			TicketStats stats = TicketStats.ticketStatsdao.getByProperty("created_time", created_time);
-
-			if (stats == null)
-			{
-				System.out.println("No record found. Creating new record...");
-				return new TicketStats(created_time);
-			}
-
-			return stats;
+			return TicketStats.ticketStatsdao.getByProperty("created_time", created_time);
 		}
 		catch (Exception e)
 		{
@@ -51,7 +43,7 @@ public class TicketStatsUtil
 			NamespaceManager.set(oldNamespace);
 		}
 
-		return new TicketStats(created_time);
+		return null;
 	}
 
 	public static void updateEntity(final String fieldName)
@@ -78,6 +70,12 @@ public class TicketStatsUtil
 
 					// Getting current day stats count details
 					TicketStats ticketStats = getTicketStats(created_time);
+
+					if (ticketStats == null)
+					{
+						System.out.println("No record found. Creating new record...");
+						ticketStats = new TicketStats(created_time);
+					}
 
 					ticketStats.incrementField(fieldName);
 

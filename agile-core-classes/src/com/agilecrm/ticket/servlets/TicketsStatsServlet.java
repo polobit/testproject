@@ -81,5 +81,7 @@ public class TicketsStatsServlet extends HttpServlet
 
 			return;
 		}
+		
+		System.out.println("Object not found..");
 	}
 }
