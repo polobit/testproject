@@ -177,9 +177,27 @@
 	};
 	
 	acl_util.initTagACL = function(el){
-		$('#new_tag_acl',el).off('change').on('change',function(){
+	$('body').on('click','#disable_new_tags',function(e){
+	if($('#disable_new_tags').text().trim() == 'Enable')
+	{
+		
+		$('#disable_new_tags').text("Disable");
+		
+		updateTagAcl(true);
+		console.log(false);
+	}
+	else if($('#disable_new_tags').text().trim() == 'Disable')
+	{
+		$('#disable_new_tags').text("Enable");
+		
+		updateTagAcl(false);
+		//$('#disable_new_tags').attr("option","");
+
+	}  
+	});
+	/*	$('#new_tag_acl',el).off('change').on('change',function(){
 			updateTagAcl($(this).is(':checked'));
-		});
+		});*/
 		setTagACL(el);
 	}
 }(window.acl_util = window.acl_util || {}, $));
