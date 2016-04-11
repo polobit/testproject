@@ -52,6 +52,9 @@ public class AgileQueues
     // Campaign push queues
     public static final String NORMAL_CAMPAIGN_PUSH_QUEUE = "normal-campaign-push-queue";
     
+    //Wakeup or interrupt push queues
+    public static final String TIMEOUT_PUSH_QUEUE = "timeout-push-queue";
+    
     // Email pull queues
     public static final String BULK_EMAIL_PULL_QUEUE = "bulk-email-pull-queue";
     public static final String NORMAL_EMAIL_PULL_QUEUE = "normal-email-pull-queue";
