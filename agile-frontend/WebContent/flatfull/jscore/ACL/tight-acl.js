@@ -178,17 +178,17 @@
 	
 	acl_util.initTagACL = function(el){
 	$('body').on('click','#disable_new_tags',function(e){
-	if($('#disable_new_tags').text().trim() == 'Enable')
+	if($('#disable_new_tags').text().trim() == 'Enable Access')
 	{
 		
-		$('#disable_new_tags').text("Disable");
+		$('#disable_new_tags').text("Disable Access");
 		
 		updateTagAcl(true);
 		console.log(false);
 	}
-	else if($('#disable_new_tags').text().trim() == 'Disable')
+	else if($('#disable_new_tags').text().trim() == 'Disable Access')
 	{
-		$('#disable_new_tags').text("Enable");
+		$('#disable_new_tags').text("Enable Access");
 		
 		updateTagAcl(false);
 		//$('#disable_new_tags').attr("option","");
