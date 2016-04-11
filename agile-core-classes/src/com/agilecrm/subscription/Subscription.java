@@ -452,6 +452,7 @@ public class Subscription {
 		restriction.incrementEmailCreditsCount(quantity*1000);
 		System.out.println("last_credit_id:: "+invoiceItemId+" Credits count:: "+restriction.email_credits_count+" at:: "+System.currentTimeMillis());
 		restriction.last_credit_id = invoiceItemId;
+		restriction.canChangeLastCreditId = true;
 		restriction.save();
 		System.out.println("Credits purchased successfully ::"+System.currentTimeMillis());
 	}

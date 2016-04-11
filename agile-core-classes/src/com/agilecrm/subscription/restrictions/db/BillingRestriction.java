@@ -160,6 +160,9 @@ public class BillingRestriction
   	
   	@NotSaved(IfDefault.class)
   	public Boolean isAutoRenewalEnabled = false;
+  	
+  	@NotSaved
+  	public boolean canChangeLastCreditId = false;
 
     public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(
 	    BillingRestriction.class);
@@ -439,6 +442,9 @@ public class BillingRestriction
 	// Updating backup count from that of DB entity
 	this.one_time_emails_backup = one_time_emails_count;
 	this.email_credits_backup = email_credits_count;
+	
+	if(!this.canChangeLastCreditId)
+		this.last_credit_id = restriction.last_credit_id; 
 
     }
 
