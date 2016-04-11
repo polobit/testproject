@@ -1089,7 +1089,7 @@ public class OpportunityUtil
 		}
 	    }
 
-	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
+	    searchMap.putAll(getDateFilterCondition(filterJson, sortField));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
 	   
 	    /*
@@ -1338,20 +1338,23 @@ public class OpportunityUtil
 		if (json.getString(fieldName + "_filter").equalsIgnoreCase("on")
 			&& checkJsonString(json, fieldName +"_start"))
 		{
-		    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-		    searchMap.put(fieldName, closeDate);
+		    long closeDateStart = Long.parseLong(json.getString(fieldName + "_start"));
+		    long closeDateEnd = closeDateStart + (24*60*60*1000);
+		    searchMap.put(fieldName+" >= ", closeDateStart);
+		    searchMap.put(fieldName+" < ", closeDateEnd);
+		    
 		}
 		else if (json.getString(fieldName + "_filter").equalsIgnoreCase("after")
 				&& checkJsonString(json, fieldName +"_start"))
 			{
 			    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-			    searchMap.put(fieldName+">", closeDate);
+			    searchMap.put(fieldName+" > ", closeDate);
 			}
 		else if (json.getString(fieldName + "_filter").equalsIgnoreCase("before")
 				&& checkJsonString(json, fieldName +"_start"))
 			{
 			    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-			    searchMap.put(fieldName+"<", closeDate);
+			    searchMap.put(fieldName+" < ", closeDate);
 			}
 		else
 		{ 
@@ -1359,12 +1362,12 @@ public class OpportunityUtil
 			    if (checkJsonString(json, fieldName + "_start"))
 			    {
 				long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-				searchMap.put(fieldName + " >", closeDate);
+				searchMap.put(fieldName + " >= ", closeDate);
 			    }
 			    if (checkJsonString(json, fieldName + "_end"))
 			    {
-				long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
-				searchMap.put(fieldName + " <", closeDate);
+				long closeDate = Long.parseLong(json.getString(fieldName + "_end"))+(24*60*60*1000);
+				searchMap.put(fieldName + " < ", closeDate);
 			    }
 			}
 		}
