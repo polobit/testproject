@@ -57,7 +57,7 @@ public class SegmentationQueryGenerator
 	try
 	{
 	    segmentationQuery = "select SQL_CALC_FOUND_ROWS email from page_visits where domain = '" + domain
-		    + "' and email!='' and stats_time between '" + startTime + "' and  '" + endTime + "' ";
+		    + "' and email!='' and email!='null' and stats_time between '" + startTime + "' and  '" + endTime + "' ";
 	    String extraConditions = " group by email order by stats_time desc ";
 	    if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime))
 	    {
