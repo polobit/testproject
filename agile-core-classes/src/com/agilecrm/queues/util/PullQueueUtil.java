@@ -6,9 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.AgileQueues;
-import com.agilecrm.queues.backend.ModuleUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.LeaseOptions;
 import com.google.appengine.api.taskqueue.Queue;
@@ -116,7 +114,7 @@ public class PullQueueUtil
 	    // Create Task and push it into Task Queue
 	    String currentQueueName = getCampaignQueueName(queueName);
 	    Queue queue = QueueFactory.getQueue(currentQueueName);
-	    TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).header("Host",ModuleUtil.getCurrentModuleName("agile-campaigns-bulk")).param("queue_name", queueName)
+	    TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
 		    .method(Method.POST);
 	    queue.addAsync(taskOptions);
 	}
