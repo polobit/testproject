@@ -799,14 +799,14 @@
 		<url-pattern>/backend/cron/cron-pull/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- <servlet>
+	<servlet>
 		<servlet-name>BackendPullServlet</servlet-name>
 		<servlet-class>com.agilecrm.queues.backend.BackendPullServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>BackendPullServlet</servlet-name>
 		<url-pattern>/backend-pull</url-pattern>
-	</servlet-mapping> -->
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Unsubscribe</servlet-name>
