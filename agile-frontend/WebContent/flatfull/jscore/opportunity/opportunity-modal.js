@@ -427,15 +427,22 @@ function updateDeal(ele, editFromMilestoneView)
 		               ,"ORANGE":"#ff6600","RED":"#ff0000","BLACK":"#000000","WHITE":"#ffffff","GREY":"#808080"};
 
     var colorcode = color[value.colorName];
-      if(!colorcode)
+    if(!colorcode)
       	  colorcode = "#808080";
-      $('#color1' , dealForm).attr('value', colorcode);
-      $('.colorPicker-picker', dealForm).css("background-color", colorcode);
-
-
-
+    $('#color1' , dealForm).attr('value', colorcode);
+    $('.colorPicker-picker', dealForm).css("background-color", colorcode);
+     if (value.tagsWithTime && value.tagsWithTime.length)
+		{
+			var i;
+			for(i=0;i<value.tagsWithTime.length;i++){
+				var data =value.tagsWithTime[i].tag ; 
+				$('#tags_source_person_modal', dealForm)
+				.find(".tags")
+				.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag">&times</a></li>');
+			} 
+	}
+	
     $("#opportunityUpdateModal").modal('show');
-
 	// Hide archive button, if the is already archived.
 	if (value.archived)
 	{

@@ -262,7 +262,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		console.log(App_Deal_Details.dealDetailView.model.toJSON());
 		var currentdeal = App_Deal_Details.dealDetailView.model;
 		updateDeal(currentdeal);
-
+		// To set typeahead for tags
+		setup_tags_typeahead();
 	},
 
 	showDealNote: function(e)

@@ -47,6 +47,8 @@ var DealDetailsRouter = Backbone.Router.extend({
 			var ele = that.dealDetailView.render(true).el;
 			$("#deal-detail-page").html(getRandomLoadingImg());
 			$('#deal-detail-page').html(ele);
+			// To set typeahead for tags
+			setup_tags_typeahead();
 		},error : function(data, response){
 			hideTransitionBar();
 			if(response && response.status == '403')
