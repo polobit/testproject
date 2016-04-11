@@ -105,7 +105,7 @@ var ContactsRouter = Backbone.Router.extend({
 			});
 		}
 
-		if(CURRENT_USER_DASHBOARDS && CURRENT_USER_DASHBOARDS.length == 0)
+		if(!dashboardJSON["id"])
 		{
 			dashboard_name = "DashBoard";
 		}
