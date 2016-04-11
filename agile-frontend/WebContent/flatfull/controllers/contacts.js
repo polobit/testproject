@@ -105,6 +105,11 @@ var ContactsRouter = Backbone.Router.extend({
 			});
 		}
 
+		if(CURRENT_USER_DASHBOARDS && CURRENT_USER_DASHBOARDS.length == 0)
+		{
+			dashboard_name = "DashBoard";
+		}
+
 		getTemplate('portlets', dashboardJSON, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
