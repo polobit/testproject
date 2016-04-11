@@ -1,6 +1,6 @@
 var timer = undefined;
 
-$(function(){
+  	$(function(){
 	$('body').off('mouseover','.popover_contact');
 		$('body').on('mouseover','.popover_contact',function(e){
 			//e.stopPropagation();
@@ -9,7 +9,9 @@ $(function(){
 
 			timer=setTimeout(function() {
 
-						 		
+			if (!insidePopover)	{
+		
+					 $('.popover').remove();				 		
 		
 					var contact_id=$(that).attr('data')
 		 //App_Contacts.contact_popover=$(that).attr('data');
@@ -34,9 +36,9 @@ $(function(){
             });
 								$(that).popover('show');
 								
-						$('.popover').addClass("contact_popover fadeInLeft animated");
-
-
+						$('.popover').addClass("contact_popover ");
+						$('.popover').addClass("contact_popover fadeInLeft  animated");
+						attachEvents(that,App_Contacts.contact_popover);
 						contact_list_starify('.popover',undefined);
 						
 					});
@@ -44,18 +46,25 @@ $(function(){
 		 		//that.find('.data').attr('data');
 		 	}
 		 	});
+		}
 		 	
 		 }, 1000);
 });
 
 	$('body').off('mouseout','.popover_contact');
 		$('body').on('mouseout','.popover_contact',function(e){
-				var that=$(this);
-			if($('.popover').length!=0){
+			var that=$(this).parent();
+				setTimeout(function() {
+		if (!insidePopover){
+			if($('.popover').length!=0)
+			{
 			$(that).popover('hide');
 			$('.popover').remove();
+			}
 		}
-		clearTimeout(timer);
+					
+	}, 200);
+	 clearTimeout(timer);
 			});
 	});
 function contactListener(el)
@@ -533,7 +542,7 @@ function popoverEnter(that,left,top,listView,campaigns_view)
             "container" : 'body'
             });
 								$(that).popover('show');
-															$('.popover').addClass("contact_popover fadeInLeft animated");
+							$('.popover').addClass("contact_popover fadeInLeft animated");
 							$('.popover-content').html(template_ui);
 							if(left!=undefined)
 							$('.popover').css('left', left + "px");
