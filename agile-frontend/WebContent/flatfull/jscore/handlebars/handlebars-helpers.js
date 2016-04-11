@@ -1076,26 +1076,7 @@ $(function()
 		return new Handlebars.SafeString(el);
 	});
 
-	Handlebars.registerHelper('webstatsTableHeadings', function(item)
-		{
-
-			var el = "";
-			$.each(App_VisitorsSegmentation.webstatsViewModel[item], function(index, element)
-			{
-				
-				if (element.indexOf("CUSTOM_") == 0) {
-					element = element.split("_")[1];
-					el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
-				}
-				else {
-				element = element.replace("_", " ")
-				el = el.concat('<th>' + ucfirst(element) + '</th>');
-				}	
-
-			});
-
-			return new Handlebars.SafeString(el);
-		});
+	
 		/**
 		 * Returns table headings for reports custom contacts list view
 		 */

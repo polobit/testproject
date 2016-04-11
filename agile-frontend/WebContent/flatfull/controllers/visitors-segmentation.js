@@ -89,8 +89,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                             postRenderCallback: function(
                                 el, collection) {
 
-                                abortCountQueryCall();
-                                                                
+                                                                                             
                                if(collection.models.length==0)
                                      $("#visitors-count").html("<small> (" + 0 + " Total) </small>");
                                 else if(collection.models[collection.models.length-1].attributes.count){

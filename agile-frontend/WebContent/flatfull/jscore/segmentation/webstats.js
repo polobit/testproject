@@ -78,11 +78,10 @@ function getTimeWebstats() {
     var time_range = new Array();
 
     var range = $('#range').html().split("-");
-    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+    var start_time = new Date(range[0]).getTime();
     var end_value = $.trim(range[1]);
     end_value = end_value + " 23:59:59";
-    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
-    end_time += (((23 * 60 * 60) + (59 * 60) + 59) * 1000);
+    var end_time = new Date(end_value).getTime();
 
     time_range[0] = start_time;
     time_range[1] = end_time;
@@ -102,9 +101,9 @@ function getFirstTimeWebstats() {
 
     lastday=Date.today();
     lastday.setDate(new Date().getDate()-6);
-    var start_time = getUTCMidNightEpochFromDate(lastday);
+    var start_time = lastday.getTime();
     var end_value =new Date();
-    var end_time = getUTCMidNightEpochFromDate(end_value);
+    var end_time = end_value.getTime();
 
     time_range[0] = start_time;
     time_range[1] = end_time;

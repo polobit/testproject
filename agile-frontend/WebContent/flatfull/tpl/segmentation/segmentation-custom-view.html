@@ -1,264 +1,228 @@
 <script id="segmentation-custom-view-collection-template" type="text/html">
-  {{#is_mobile}}
-  
-  
-  <!-- Newly Added -->
-  
-  <div class="hbox hbox-auto-xs hbox-auto-sm">
-   
-    <div class="">
-      <div id="right-pane">
-    
-    <div class="visitors-div">
-  
-  <div class="dta-contatiner table-responsive m-r-sm b-n">
-          <div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
-            {{#unless this.length}}
-              <div class="m-l-sm" id="slate">
-              </div>
-              {{/unless}}
-              {{#if this.length}}
-                  <table id="visitors-table" class="table b-n no-radius  noCheckbox onlySorting panel agile-table " style="table-layout:auto">                
-            <div class="filter-criteria">
-            
-            </div>            
-                      <tbody id="segmentation-custom-view-model-list" route="contact/">
-                      </tbody>
-                  </table>
-                  {{/if}}
-          </div>
-              </div>
-          </div>
-     </div>
-            
-          </div>
-  
-  <!-- Newly Added -->
-  
-  {{else}}
-  
-  <!-- Newly Added -->
-  
-  <div class="hbox hbox-auto-xs hbox-auto-sm">
-    
-    <div class="col w-lg dk b-r bg-auto" id="segmentation-lhs-filters-toggle" >
-  
-      <div class="data-block">
-        <div id="lhs_filters_segmentation">
-      </div>
-  
-  </div>
-    </div>
-    <div class="col">
-      <div id="right-pane">
-    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
-        <div class="btn-toolbar m-l-none pos-rlt">
-          <div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
-            <div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);">Contacts<span id="visitors-count" class="m-l-xs">{{contacts_count}}</span>
-               
-              <a id="segmentation-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-                    <i id="icon-filter" class="fa fa-bars icon-white"></i>
-              </a>
-             <small><span class="label label-sm bg-danger m-l-xs" style="position: relative;
-                        top: -3px;">Beta</span>
-              </small>
-            </div>               
-            
-          </div>
-          <div class="pull-right">
-          <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
-            <span class="inline-block" style="padding: 3px 10px;">
-               <i class="icon-calendar icon-large m-r-xs"></i>
-                <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
-             </span>
-             <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
-                <span class="caret  inline-block p-t-xs"></span>
-              </span>
-            </div>  
-          </div>        
-     </div>
-     </div>
-
-    <div class="visitors-div">
-  
-  
-  <div class="dta-contatiner table-responsive m-r-sm ">
-
-          <div class="panel panel-default" style="overflow-x:auto; border-left:none;">
-            {{#unless this.length}}
-              <div class="m-l-sm" id="slate">
-              </div>
-              {{/unless}}
-              {{#if this.length}}
-                  <table id="visitors-table" class="table table-striped  noCheckbox onlySorting panel agile-table"   style="table-layout:auto">               
-            <div class="filter-criteria">
-            
+{{#is_mobile}}
+<!-- Newly Added -->
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+<div class="">
+   <div id="right-pane">
+      <div class="visitors-div">
+         <div class="dta-contatiner table-responsive m-r-sm b-n">
+            <div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
+               {{#unless this.length}}
+               <div class="m-l-sm" id="slate">
+               </div>
+               {{/unless}}
+               {{#if this.length}}
+               <table id="visitors-table" class="table b-n no-radius  noCheckbox onlySorting panel agile-table " style="table-layout:auto">
+                  <div class="filter-criteria">
+                  </div>
+                  <tbody id="segmentation-custom-view-model-list" route="contact/">
+                  </tbody>
+               </table>
+               {{/if}}
             </div>
-           
-            <thead>     <tr>
-                            <th style="display: none;width:5%;"></th>
-                             <th>Basic Info</th>
-                            <th>Company</th>
-                            <th>Tags</th>
-                            <th class="text-ellipsis">Lead Score</th>
-                            <th class="text-ellipsis">Star Value</th>                            
-                        </tr>
-                          
-                      </thead>
-                       
-                      <tbody id="segmentation-custom-view-model-list" route="contact/">
-                      </tbody>
-                  </table>
-                  {{/if}}
-          </div>
-              </div>
-          </div>
-     </div>
-            
-          
-  
-  <!-- Newly Added -->
-  
-  {{/is_mobile}}
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Newly Added -->
+{{else}}
+<!-- Newly Added -->
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+<div class="col w-lg dk b-r bg-auto" id="segmentation-lhs-filters-toggle" >
+   <div class="data-block">
+      <div id="lhs_filters_segmentation">
+      </div>
+   </div>
+</div>
+<div class="col">
+<div id="right-pane">
+   <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+      <div class="btn-toolbar m-l-none pos-rlt">
+         <div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
+            <div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);">Contacts<span id="visitors-count" class="m-l-xs">{{contacts_count}}</span>
+               <a id="segmentation-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+               <i id="icon-filter" class="fa fa-bars icon-white"></i>
+               </a>
+               <small><span class="label label-sm bg-danger m-l-xs" style="position: relative;
+                  top: -3px;">Beta</span>
+               </small>
+            </div>
+         </div>
+         <div class="pull-right">
+            <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
+               <span class="inline-block" style="padding: 3px 10px;">
+               <i class="icon-calendar icon-large m-r-xs"></i>
+               <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
+               </span>
+               <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
+               <span class="caret  inline-block p-t-xs"></span>
+               </span>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="visitors-div">
+      <div class="dta-contatiner table-responsive m-r-sm ">
+         <div class="panel panel-default" style="overflow-x:auto; border-left:none;">
+            {{#unless this.length}}
+            <div class="m-l-sm" id="slate">
+            </div>
+            {{/unless}}
+            {{#if this.length}}
+            <table id="visitors-table" class="table table-striped  noCheckbox onlySorting panel agile-table"   style="table-layout:auto">
+               <div class="filter-criteria">
+               </div>
+               <thead>
+                  <tr>
+                     <th style="display: none;width:5%;"></th>
+                     <th>Basic Info</th>
+                     <th>Company</th>
+                     <th>Tags</th>
+                     <th class="text-ellipsis">Lead Score</th>
+                     <th class="text-ellipsis">Star Value</th>
+                  </tr>
+               </thead>
+               <tbody id="segmentation-custom-view-model-list" route="contact/">
+               </tbody>
+            </table>
+            {{/if}}
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Newly Added -->
+{{/is_mobile}}
       
 </script>
 <script id="segmentation-custom-view-table-collection-template" type="text/html">
   <div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
-
-          <div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
-            {{#unless this.length}}
-              <div class="m-l-sm" id="slate">
-              </div>
-              {{/unless}}
-              {{#if this.length}}
-                  <table id="visitors-table" class="table table-striped noCheckbox onlySorting panel agile-table"  style="table-layout:auto">                
-            <div class="filter-criteria">
-            
-            </div>
-  
-            <thead>
-                          <tr>
-                            <th style="display: none; width:5%;"></th>
-                            <th>Basic Info</th>
-                            <th>Company</th>
-                            <th>Tags</th>
-                            <th class="text-ellipsis">Lead Score</th>
-                            <th class="text-ellipsis">Star Value</th>                            
-                          </tr>
-
-
-                      </thead>
-                      <tbody id="segmentation-custom-view-table-model-list" route="contact/"
-                      >
-                      </tbody>
-                  </table>
-                  {{/if}}
-          </div>
-              </div>
+   <div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
+      {{#unless this.length}}
+      <div class="m-l-sm" id="slate">
+      </div>
+      {{/unless}}
+      {{#if this.length}}
+      <table id="visitors-table" class="table table-striped noCheckbox onlySorting panel agile-table"  style="table-layout:auto">
+         <div class="filter-criteria">
+         </div>
+         <thead>
+            <tr>
+               <th style="display: none; width:5%;"></th>
+               <th>Basic Info</th>
+               <th>Company</th>
+               <th>Tags</th>
+               <th class="text-ellipsis">Lead Score</th>
+               <th class="text-ellipsis">Star Value</th>
+            </tr>
+         </thead>
+         <tbody id="segmentation-custom-view-table-model-list" route="contact/"
+            >
+         </tbody>
+      </table>
+      {{/if}}
+   </div>
+</div>
 </script>
 
 
 <script id="segmentation-custom-view-model-template" type="text/html"> 
-  <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>  
-
-  <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
-    <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
-      <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
-          {{#if id}}
-            <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
-          {{else}}
-            <img src="{{defaultGravatarurl 36}}"/>
-          {{/if}}
-      </div>
-      <div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
-          {{#if id}}
-            <a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
-            {{getPropertyValue properties "last_name"}} </a>
-            <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
-          {{else}}
-                <span class="text-cap custom-link">Someone visited your website </span>
-                <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
-            {{/if}}
-        </div>  
-  </div>
+<td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>
+<td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
+<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
+<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
+   {{#if id}}
+   <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+   {{else}}
+   <img src="{{defaultGravatarurl 36}}"/>
+   {{/if}}
+</div>
+<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
+{{#if id}}
+<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+{{getPropertyValue properties "last_name"}} </a>
+<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
+{{else}}
+<span class="text-cap custom-link">Someone visited your website </span>
+<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
+{{/if}}
+</div>  
+</div>
 </td>
-  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
-      <div class="text-ellipsis" style="width:15em;">
-        <a class="text-cap">{{getPropertyValue properties "company"}}</a>
-      </div>
-  </td>
-  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
+<td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
+   <div class="text-ellipsis" style="width:15em;">
+      <a class="text-cap">{{getPropertyValue properties "company"}}</a>
+   </div>
+</td>
+<td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
    <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:12em;">  
-    {{#each tags}}
-        <span class="label bg-light dk text-tiny">{{this}}</span> 
-    {{/each}}
-  </div>
-  </td>
-  <td class='data' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}}width:8em;">
-       <div >
+      {{#each tags}}
+      <span class="label bg-light dk text-tiny">{{this}}</span> 
+      {{/each}}
+   </div>
+</td>
+<td class='data' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}}width:8em;">
+   <div >
       {{lead_score}}
-       </div>
-  </td>
-  
-  <td class='data text-ellipsis' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}} width:8em;">
-  {{#if id}}
-     <ul class="m-n p-n list-none">
+   </div>
+</td>
+<td class='data text-ellipsis' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}} width:8em;">
+   {{#if id}}
+   <ul class="m-n p-n list-none">
       {{setupRating star_value}}
-    </ul>
-  {{/if}}
-  </td>
+   </ul>
+   {{/if}}
+</td>
   
 </script>
 
 
 <script id="segmentation-custom-view-table-model-template" type="text/html">    
-  <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>  
-  <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
-    <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
-      <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
-          {{#if id}}
-            <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
-          {{else}}
-            <img src="{{defaultGravatarurl 36}}"/>
-            {{/if}}
-      </div>
-      <div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
-          {{#if id}}
-            <a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
-            {{getPropertyValue properties "last_name"}} </a>
-            <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
-          {{else}}
-                <span class="text-cap custom-link">Someone visited your website </span>
-                <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
-            {{/if}}
-        </div>  
-  </div>
+  <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>
+<td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
+<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
+<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
+   {{#if id}}
+   <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+   {{else}}
+   <img src="{{defaultGravatarurl 36}}"/>
+   {{/if}}
+</div>
+<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
+{{#if id}}
+<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+{{getPropertyValue properties "last_name"}} </a>
+<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
+{{else}}
+<span class="text-cap custom-link">Someone visited your website </span>
+<div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
+{{/if}}
+</div>  
+</div>
 </td>
-  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
-      <div class="text-ellipsis" style="width:15em;">
-        <a class="text-cap">{{getPropertyValue properties "company"}}</a>
-      </div>
-  </td>
-  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
+<td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
+   <div class="text-ellipsis" style="width:15em;">
+      <a class="text-cap">{{getPropertyValue properties "company"}}</a>
+   </div>
+</td>
+<td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
    <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:12em;">  
-    {{#each tags}}
-        <span class="label bg-light dk text-tiny">{{this}}</span> 
-    {{/each}}
-  </div>
-  </td>
-  <td class='data' data='{{id}}' style="width:8em;{{#if id}}{{else}} cursor:default;{{/if}}">
-       <div>
+      {{#each tags}}
+      <span class="label bg-light dk text-tiny">{{this}}</span> 
+      {{/each}}
+   </div>
+</td>
+<td class='data' data='{{id}}' style="width:8em;{{#if id}}{{else}} cursor:default;{{/if}}">
+   <div>
       {{lead_score}}
-       </div>
-  </td>
-  
-  <td class='data text-ellipsis' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}}width:8em;">
-  {{#if id}}
-     <ul class="m-n p-n list-none">
+   </div>
+</td>
+<td class='data text-ellipsis' data='{{id}}' style="{{#if id}}{{else}} cursor:default;{{/if}}width:8em;">
+   {{#if id}}
+   <ul class="m-n p-n list-none">
       {{setupRating star_value}}
-    </ul>
-    {{/if}}
-  </td>
+   </ul>
+   {{/if}}
+</td>
   
   
 </script>
