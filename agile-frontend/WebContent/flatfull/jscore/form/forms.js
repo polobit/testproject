@@ -8,6 +8,7 @@ var Form_Collection_Events = Base_Collection_View.extend({
 
 	codePublish : function(e){
 		e.preventDefault();
+		$(".modal-backdrop").hide();
 
 		//full source code
 		var $codeShareModalEl = $("#codeShareModal");
@@ -24,10 +25,9 @@ var Form_Collection_Events = Base_Collection_View.extend({
 	 	$codeShareModalEl.find("#iframeArea").text(iframe);
 
 	 	//embed code
-	 	var embed = "<div id=\""+window.location.host+"-"+$(e.target).data("formid")+"\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
-	 	embed  = embed + "<script>load_agile_form(\""+window.location.host+"-"+$(e.target).data("formid")+"\");</script>";
+	 	var embed = "<div id=\""+window.location.host+"_"+$(e.target).data("formid")+"\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
+	 	embed  = embed + "<script>load_agile_form(\""+window.location.host+"_"+$(e.target).data("formid")+"\");</script>";
 		$codeShareModalEl.find("#embedCodeArea").text(embed);
 	},
 
 });
-
