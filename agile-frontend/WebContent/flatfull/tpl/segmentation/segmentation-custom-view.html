@@ -161,7 +161,7 @@
 <script id="segmentation-custom-view-model-template" type="text/html"> 
   <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>  
 
-  <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;"{{/if}}>
+  <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
     <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
       <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
           {{#if id}}
@@ -182,12 +182,12 @@
         </div>  
   </div>
 </td>
-  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;"{{/if}}>
+  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
       <div class="text-ellipsis" style="width:15em;">
         <a class="text-cap">{{getPropertyValue properties "company"}}</a>
       </div>
   </td>
-  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;"{{/if}}>
+  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
    <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:12em;">  
     {{#each tags}}
         <span class="label bg-light dk text-tiny">{{this}}</span> 
@@ -213,7 +213,7 @@
 
 <script id="segmentation-custom-view-table-model-template" type="text/html">    
   <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>  
-  <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;"{{/if}}>
+  <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
     <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:17em;" {{/is_mobile}}>
       <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
           {{#if id}}
@@ -234,12 +234,12 @@
         </div>  
   </div>
 </td>
-  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;"{{/if}}>
+  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
       <div class="text-ellipsis" style="width:15em;">
         <a class="text-cap">{{getPropertyValue properties "company"}}</a>
       </div>
   </td>
-  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;"{{/if}}>
+  <td class="data" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
    <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:12em;">  
     {{#each tags}}
         <span class="label bg-light dk text-tiny">{{this}}</span> 
