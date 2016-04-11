@@ -57,8 +57,10 @@ public class SegmentationQueryGenerator
 	try
 	{
 	    segmentationQuery = "select SQL_CALC_FOUND_ROWS email from page_visits where domain = '" + domain
-		    + "' and email!='' and email!='null' and stats_time between '" + startTime + "' and  '" + endTime + "' ";
-	    String extraConditions = " group by email order by stats_time desc ";
+		    + "' and email!='' and email!='null' and stats_time between '" + startTime + "' and  '" + endTime
+		    + "' ";
+	    String groupByEmail = " group by email ";
+	    String orderByTime = " order by stats_time desc ";
 	    if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime))
 	    {
 		if (StringUtils.isNotBlank(filterJsonString) && !filterJsonString.equals("null"))
@@ -82,29 +84,30 @@ public class SegmentationQueryGenerator
 			else
 			    rules.add(segmentationRule);
 		    }
-		    if (rules.size() > 0)
+		    if (rules.size() > 0 || sessionsQuery!=null)
 		    {
 			String conditionsQuery = constructQuery(rules);
 			segmentationQuery = segmentationQuery + conditionsQuery;
-			segmentationQuery = segmentationQuery + extraConditions;
+			segmentationQuery = segmentationQuery + groupByEmail;
 			if (sessionsQuery != null)
 			{
 			    List<SegmentationRule> sessionsQueryList = new ArrayList<SegmentationRule>();
 			    sessionsQueryList.add(sessionsQuery);
 			    segmentationQuery = segmentationQuery + constructQuery(sessionsQueryList);
 			}
+			segmentationQuery = segmentationQuery + orderByTime;
 			segmentationQuery = segmentationQuery + StatsSQLUtil.appendLimitToQuery(cursor, pageSize);
 		    }
 		    log.info(segmentationQuery);
 		}
 		else
 		{
-		    segmentationQuery = segmentationQuery + extraConditions;
+		    segmentationQuery = segmentationQuery + groupByEmail;
 		    segmentationQuery = segmentationQuery + StatsSQLUtil.appendLimitToQuery(cursor, pageSize);
 		    log.info(segmentationQuery);
 		}
 	    }
-	    else 
+	    else
 	    {
 		// start time and end time range is mandatory.
 		return null;
