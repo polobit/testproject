@@ -36,16 +36,16 @@
       </div>
       {{/is_mobile}}
       <div class="btn-group m-r-xs inline-block" id="deals-action">
-          <a href="#deals-add" class="deals-add btn btn-default btn-sm"><i class="icon-plus-sign" /> Add Deal
+          <a href="#deals-add" class="deals-add btn btn-default btn-sm" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> Add Deal
           </a>
           <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
             <span class="caret"></span>
           </a>
           {{#hasScope "MANAGE_DEALS"}}
           <ul class="dropdown-menu pull-right">
-            <li><a href="#import-deals" >Import from CSV</a></li>
-            <li><a href="#" class="deals-export-csv">Export as CSV</a></li>
-            <li><a href="#add-dashlet">Add Dashlet</a></li>
+            <li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import from CSV</a></li>
+            <li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export as CSV</a></li>
+            <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">Add Dashlet</a></li>
           
           </ul>
 
