@@ -14,6 +14,7 @@ import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -64,9 +65,11 @@ public class TicketsStatsServlet extends HttpServlet
 
 				EmailSender emailSender = EmailSender.getEmailSender();
 
-				emailSender.sendEmail("ticketstats@agilecrm.com", "Agile CRM", "manohar@agilecrm.com",
-						"service@agilecrm.com", "", "Ticket stats report for " + current_date, null, emailHTML, "",
-						null, new ArrayList<Long>(), new ArrayList<BlobKey>());
+				String toEmail = VersioningUtil.isProductionAPP() ? "manohar@agilecrm.com" : "sasi@clickdesk.com";
+
+				emailSender.sendEmail("ticketstats@agilecrm.com", "Agile CRM", toEmail, "service@agilecrm.com", "",
+						"Ticket stats report for " + current_date, null, emailHTML, "", null, new ArrayList<Long>(),
+						new ArrayList<BlobKey>());
 
 				System.out.println("Sent email report");
 			}
