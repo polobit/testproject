@@ -78,7 +78,9 @@ public class CronPullServlet extends HttpServlet
 	    while(count>0){
 	    	try
 	    	{
+	    		long startTime = System.currentTimeMillis();
 	    		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
+	    		System.out.println("Took" +(System.currentTimeMillis()-startTime)+" milliseconds to process backendpullqueue ");
 	    	}
 	    	catch (Exception e)
 	    	{
