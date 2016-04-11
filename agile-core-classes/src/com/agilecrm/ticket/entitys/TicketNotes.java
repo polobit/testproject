@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -175,6 +174,21 @@ public class TicketNotes
 		super();
 	}
 
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param group_id
+	 * @param assignee_id
+	 * @param created_by
+	 * @param requester_name
+	 * @param requester_email
+	 * @param original_plain_text
+	 * @param original_html_text
+	 * @param note_type
+	 * @param attachments_list
+	 * @param mimeObject
+	 * @param isNewTicket
+	 */
 	public TicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by, String requester_name,
 			String requester_email, String original_plain_text, String original_html_text, NOTE_TYPE note_type,
 			List<TicketDocuments> attachments_list, String mimeObject, boolean isNewTicket)

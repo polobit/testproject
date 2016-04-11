@@ -56,8 +56,20 @@ import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
+ * <code>SendgridInboundParser</code> is the root class for handling inbound
+ * events from Sendgrid. Sendgrid posts the inbound event data to this servlet.
+ * Inbound data format can be found below.
  * 
- * @author Sasi
+ * <p>
+ * Inbound data can be a new ticket or reply to existing ticket. Attachments in
+ * the ticket are saved to Google cloud storage and related URLs will be saved
+ * along with {@link TicketNotes}.
+ * </p>
+ * 
+ * @author Sasi on 28-Sep-2015
+ * @see <a
+ *      href="https://sendgrid.com/docs/API_Reference/Webhooks/parse.html">Sendgrid
+ *      Inbound data format</a>
  * 
  */
 public class SendgridInboundParser extends HttpServlet
@@ -67,17 +79,26 @@ public class SendgridInboundParser extends HttpServlet
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * List of content types to avoid base64 conversion
+	 */
 	List<String> ignoreBase64Conversion = new ArrayList<String>()
 	{
+		private static final long serialVersionUID = 1L;
+
 		{
 			add("text/plain");
 		}
 	};
 
+	/**
+	 *
+	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		PrintWriter pw = response.getWriter();
 		pw.write("Get");
+
 		System.out.println("Get method called..");
 	}
 
@@ -108,7 +129,7 @@ public class SendgridInboundParser extends HttpServlet
 					String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
 
 					/**
-					 * Replacing helptor.com text with space so that we'll get a
+					 * Replacing email suffix with space so that we'll get a
 					 * string of namespace and group ID separated by delimeter
 					 * '+'
 					 */
@@ -161,20 +182,6 @@ public class SendgridInboundParser extends HttpServlet
 
 					List<String> ccEmails = getCCEmails(json);
 
-					// Get email key value as it contains plain text, html text
-					// and attachments data
-					// String fileData = json.getString("headers");
-
-					// Properties props = System.getProperties();
-					// Session session = Session.getInstance(props);
-
-					// MimeMessage message = new MimeMessage(session, new
-					// ByteArrayInputStream(fileData.toString()
-					// .getBytes()));
-
-					// MimeMessageParser messageParser = new
-					// MimeMessageParser(message).parse();
-
 					String plainText = "", htmlText = "";
 
 					if (json.has("text"))
@@ -182,9 +189,6 @@ public class SendgridInboundParser extends HttpServlet
 
 					if (json.has("html"))
 						htmlText = json.getString("html");
-
-					// String htmlText = messageParser.hasHtmlContent() ?
-					// messageParser.getHtmlContent() : "";
 
 					boolean attachmentExists = false;
 
@@ -196,33 +200,39 @@ public class SendgridInboundParser extends HttpServlet
 
 					try
 					{
+						// Creating jsoup object to remove inline image tags
 						Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
 
+						/**
+						 * Iterating through each attachment and removing inline
+						 * image text and tags fron plain text content and html
+						 * content
+						 */
 						for (TicketDocuments ticketDocument : documentsList)
 						{
 							String fileContentType = ticketDocument.extension;
 
 							boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
 
-							if (isImage)
+							if (!isImage)
+								continue;
+
+							Elements elements = doc.getElementsByAttributeValue("src", "cid:" + ticketDocument.name);
+
+							if (elements == null || elements.size() == 0)
+								continue;
+
+							for (Element element : elements)
 							{
-								Elements elements = doc
-										.getElementsByAttributeValue("src", "cid:" + ticketDocument.name);
+								plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
 
-								if (elements != null && elements.size() > 0)
+								try
 								{
-									Element element = elements.first();
-
-									plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
-
-									try
-									{
-										element.remove();
-									}
-									catch (Exception e)
-									{
-										System.out.println(ExceptionUtils.getFullStackTrace(e));
-									}
+									element.remove();
+								}
+								catch (Exception e)
+								{
+									System.out.println(ExceptionUtils.getFullStackTrace(e));
 								}
 							}
 						}
@@ -248,13 +258,10 @@ public class SendgridInboundParser extends HttpServlet
 					{
 						// Creating new Ticket in Ticket table
 						ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1],
-								json.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM,
-								Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists,
-								json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
+								json.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW,
+								Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, json.getString("sender_ip"),
+								new ArrayList<Key<TicketLabels>>());
 
-						// BulkActionNotifications.publishNotification("New ticket #"
-						// +
-						// ticket.id + " received");
 						TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
 					}
 					else
@@ -287,9 +294,6 @@ public class SendgridInboundParser extends HttpServlet
 								currentTime, null, attachmentExists, false, true);
 
 						// Sending user replied notification
-						// BulkActionNotifications.publishNotification(ticket.requester_name
-						// + " replied to ticket#" + ticket.id);
-
 						TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name
 								+ " replied to ticket #" + ticket.id);
 
@@ -313,7 +317,6 @@ public class SendgridInboundParser extends HttpServlet
 			catch (Exception e)
 			{
 				System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
-				e.printStackTrace();
 			}
 		}
 		catch (Exception e)
@@ -323,9 +326,10 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Saves the attachments in the ticket to google cloud storage.
 	 * 
 	 * @param json
-	 * @return
+	 * @return TicketDocuments list which contains file name, URL and its size.
 	 */
 	private List<TicketDocuments> getAttachmentsList(JSONObject json)
 	{
@@ -334,6 +338,7 @@ public class SendgridInboundParser extends HttpServlet
 		try
 		{
 			int count = json.getInt("attachments");
+
 			JSONObject attachmentsInfo = new JSONObject(json.getString("attachment-info"));
 
 			for (int i = 1; i <= count; i++)
@@ -352,15 +357,8 @@ public class SendgridInboundParser extends HttpServlet
 					if (attachmentInfo.has("filename"))
 						fileName = attachmentInfo.getString("filename");
 
-					if (StringUtils.isBlank(fileName))
-					{
-						// Other cases yet to handle
-						if (fileType.contains("image") || fileType.contains("img"))
-						{
-							if (attachmentInfo.has("content-id"))
-								fileName = attachmentInfo.getString("content-id");
-						}
-					}
+					if (attachmentInfo.has("content-id") && (fileType.contains("image") || fileType.contains("img")))
+						fileName = attachmentInfo.getString("content-id");
 
 					byte[] dataArray = null;
 
@@ -372,10 +370,9 @@ public class SendgridInboundParser extends HttpServlet
 					else
 						dataArray = Base64.decode(attachmentContent.getBytes(StandardCharsets.UTF_8));
 
-					System.out.println("Attachment...");
-					System.out.println(new String(dataArray));
-
 					GCSServiceAgile service = saveFileToGCS(fileName, fileType, dataArray);
+
+					System.out.println("Attachment saved successfully.");
 
 					documentsList.add(new TicketDocuments(fileName, fileType, (long) dataArray.length, service
 							.getFilePathToDownload()));
@@ -431,9 +428,10 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Converts the cc emails we got in ticket to List of strings.
 	 * 
 	 * @param json
-	 * @return
+	 * @return CC emails list
 	 */
 	private List<String> getCCEmails(JSONObject json)
 	{
@@ -464,9 +462,11 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Converts the data in post request to json object. Post data format can be
+	 * at https://sendgrid.com/docs/API_Reference/Webhooks/parse.html.
 	 * 
 	 * @param request
-	 * @return
+	 * @return json object
 	 */
 	private JSONObject getJSONFromMIME(HttpServletRequest request)
 	{
@@ -482,17 +482,17 @@ public class SendgridInboundParser extends HttpServlet
 
 			while (iter.hasNext())
 			{
-				// item = iter.next();
-				//
-				// dataJSON.put(item.getFieldName(),
-				// IOUtils.toString(item.openStream(), "UTF-8"));
-
 				item = iter.next();
 
 				String fieldName = item.getFieldName(), contentData = "", contentType = item.getContentType();
 
 				System.out.println("Field names found: " + fieldName);
 
+				/**
+				 * Verifying if fetched field matches with "attachmentX" (X can
+				 * any number from 1-9). If so we need to encode content with
+				 * Base64Encoder.
+				 */
 				if (fieldName.matches("^attachment\\d$") && !ignoreBase64Conversion.contains(contentType))
 				{
 					System.out.println("Encoding to base64....");
