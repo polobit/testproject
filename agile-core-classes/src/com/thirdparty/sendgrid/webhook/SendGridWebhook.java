@@ -29,12 +29,15 @@ public class SendGridWebhook extends HttpServlet
 	public static final String HARD_BOUNCE = "bounce";
 	public static final String SOFT_BOUNCE = "deferred";
 	public static final String SPAM_REPORT = "spam report";
+	public static final String DROPPED = "dropped";
 
 	public static final String EMAIL = "email";
 
 	public static final String SUBJECT = "subject";
 	public static final String DOMAIN = "domain";
 	public static final String CAMPAIGN_ID = "campaign_id";
+	
+	private static final String REASON = "reason";
 
 	public void service(HttpServletRequest req, HttpServletResponse res)
 	{
@@ -89,7 +92,8 @@ public class SendGridWebhook extends HttpServlet
 				// Set to contact if event is HardBounce or SoftBounce
 				if (StringUtils.equalsIgnoreCase(event, HARD_BOUNCE)
 						|| StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
-						|| StringUtils.equalsIgnoreCase(event, SPAM_REPORT))
+						|| StringUtils.equalsIgnoreCase(event, SPAM_REPORT)
+						|| StringUtils.equalsIgnoreCase(event, DROPPED))
 				{
 					//setBounceStatusToContact(eventJSON);
 					
@@ -138,6 +142,18 @@ public class SendGridWebhook extends HttpServlet
 			// Get email subject
 			if (eventJSON.has(SUBJECT))
 				subject = eventJSON.getString(SUBJECT);
+			
+			// For Dropped event, check whether it is Bounced Address, then save it against contact
+			if(StringUtils.equalsIgnoreCase(eventJSON.getString(EVENT), DROPPED) && eventJSON.has(REASON))
+			{
+				String reason = eventJSON.getString(REASON);
+				
+				System.out.println("Reason is " + reason);
+				
+				if(StringUtils.containsIgnoreCase(reason, "Bounced Address"))
+					eventJSON.put(EVENT, HARD_BOUNCE);
+			}
+				
 
 			// By default SOFT_BOUNCE
 			EmailBounceType type = EmailBounceType.SOFT_BOUNCE;

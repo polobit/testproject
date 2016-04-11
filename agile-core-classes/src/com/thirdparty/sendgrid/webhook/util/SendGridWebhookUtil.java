@@ -60,7 +60,7 @@ public class SendGridWebhookUtil
 					+ SendGrid.SENDGRID_API_PARAM_API_KEY + "=" + URLEncoder.encode(password, "UTF-8") + "&"
 					+ SENDGRID_EVENT_NAME + "=" + URLEncoder.encode(SENDGRID_EVENT_NOTIFY, "UTF-8") + "&"
 					+ SENDGRID_EVENT_PROCESSED + "=" + URLEncoder.encode("0", "UTF-8") + "&" 
-					+ SENDGRID_EVENT_DROPPED + "=" + URLEncoder.encode("0", "UTF-8") + "&" 
+					+ SENDGRID_EVENT_DROPPED + "=" + URLEncoder.encode("1", "UTF-8") + "&" 
 					+ SENDGRID_EVENT_DEFERRED + "="	+ URLEncoder.encode("1", "UTF-8") + "&" 
 					+ SENDGRID_EVENT_DELIVERED + "=" + URLEncoder.encode("0", "UTF-8") + "&" 
 					+ SENDGRID_EVENT_BOUNCE + "=" + URLEncoder.encode("1", "UTF-8") + "&"
