@@ -821,15 +821,15 @@ public class Opportunity extends Cursor implements Serializable
     	      
     	      if (userPrefs !=null && userPrefs.currency !=null)
     	      {
-    	       userpref_currency_type = UserPrefsUtil.getCurrentUserPrefs().currency.substring(0,3).toUpperCase();
+    	       userpref_currency_type = UserPrefsUtil.getCurrentUserPrefs().currency.toUpperCase();
     	      }
     	       
     	      if(userpref_currency_type == null)
-    	           userpref_currency_type =  "USD" ;
+    	           userpref_currency_type =  "USD-$" ;
     	      if(currency_type == null || currency_type.isEmpty() )
     	               currency_type = userpref_currency_type ; 
     	      
-    	      String  deal_currency_type = currency_type.substring(0,3);
+    	      String  deal_currency_type = currency_type;
     	         	      
     	      if(userpref_currency_type.equalsIgnoreCase(deal_currency_type))
     	         { 

@@ -3003,7 +3003,7 @@ width: 915px;
 .ccw_unit_selector_cnt{
 	border-bottom: 1px solid gainsboro;
     -webkit-border-radius: 2px 0px 0px 2px;
-    overflow: hidden;
+    overflow: inherit;
     position: relative;
   width: 113px;
     height: 34px;
