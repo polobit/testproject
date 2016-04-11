@@ -2,13 +2,39 @@ package com.analytics.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.db.util.GoogleSQLUtil;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.util.HTTPUtil;
+import com.analytics.Analytics;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>AnalyticsUtil</code> is the utility class for Analytics. It merges page
@@ -18,6 +44,8 @@ import com.google.appengine.api.NamespaceManager;
 public class AnalyticsUtil
 {
     public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
+    
+    private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
     
     public static String getEmails(Set<String> emails)
     {
@@ -190,7 +218,7 @@ public class AnalyticsUtil
      */
     public static String getStatsServerUrl(String domain)
     {
-	String statsServerUrl = "https://agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
+	String statsServerUrl = "http://localhost:8080/stats?domain=" + domain + "&psd="
 		+ STATS_SEREVR_HTTP_REQUEST_PWD;
 	return statsServerUrl;
     }
@@ -224,6 +252,167 @@ public class AnalyticsUtil
 	    return array1;
 	else
 	    return null;
+    }
+    
+    public static List<String> getEmails(String filterJSON, String startTime, String endTime, String pageSize,
+	    String cursor)
+    {
+	try
+	{
+	    String statsServerUrl = "https://1-4-dot-agilecrm-web-stats.appspot.com/visitors";
+	    Map<String, String> params = new LinkedHashMap<String, String>();
+	    params.put("filter_json", filterJSON);
+	    params.put("cursor", cursor);
+	    params.put("page_size", pageSize);
+	    params.put("start_time", startTime);
+	    params.put("end_time", endTime);
+	    params.put("domain", NamespaceManager.get());
+	    params.put("psd", STATS_SEREVR_HTTP_REQUEST_PWD);
+	    
+	    StringBuilder postData = new StringBuilder();
+	    for (Map.Entry<String, String> param : params.entrySet())
+	    {
+		if (postData.length() != 0)
+		    postData.append('&');
+		postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+		postData.append('=');
+		postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+	    }
+	    String postDataBytes = postData.toString();
+	    
+	    String mergedStats = HTTPUtil.accessURLUsingPost(statsServerUrl, postDataBytes);
+	    JSONArray contactEmailsJsonArray = new JSONArray(mergedStats);
+	    List<String> emails = new ArrayList<String>();
+	    for (int i = 0; i < contactEmailsJsonArray.length() - 1; i++)
+	    {
+		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
+		emails.add(contactEmail.get("email").toString());
+	    }
+	    try
+	    {
+		JSONObject emailCountObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length() - 1);
+		String emailCountString = emailCountObject.get("total_rows_count").toString();
+		emails.add(emailCountString);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("exception occured while fetching segmented email count " + e.getMessage());
+	    }
+	    return emails;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    return null;
+	}
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static JSONArray getContacts(List<String> contactEmails, int cursor, int count)
+    {
+	List<Contact> contacts = null;
+	JSONArray contactsArray = new JSONArray();
+	int totalEmailCount = 0;
+	if (contactEmails != null && contactEmails.size() > 0)
+	{
+	    try
+	    {
+		try
+		{
+		    String emailCountString = contactEmails.get(contactEmails.size() - 1);
+		    totalEmailCount = Integer.parseInt(emailCountString);
+		    contactEmails.remove(contactEmails.size() - 1);
+		}
+		catch (Exception e)
+		{
+		    System.out.println("Exception occured while converting segmentation email count string to int "
+			    + e.getMessage());
+		}
+		Objectify ofy = ObjectifyService.begin();
+		for (int i = 0; i < contactEmails.size(); i++)
+		{
+		    com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
+		    Map<String, Object> searchMap = new HashMap<String, Object>();
+		    searchMap.put("type", Contact.Type.PERSON);
+		    searchMap.put("properties.name", "email");
+		    searchMap.put("properties.value", contactEmails.get(i));
+		    for (String propName : searchMap.keySet())
+			query.filter(propName, searchMap.get(propName));
+		    System.out.println(query.toString());
+		    Contact contact = dao.fetch(query);
+		    if (contact != null)
+		    {
+			ObjectMapper mapper = new ObjectMapper();
+			String contactString = mapper.writeValueAsString(contact);
+			JSONObject contactJSON = new JSONObject(contactString);
+			contactsArray.put(contactJSON);
+		    }
+		    else
+		    {
+			JSONObject contactJSON = buildDummyContact(contactEmails.get(i));
+			contactsArray.put(contactJSON);
+		    }
+		}
+		JSONObject contactJSON = contactsArray.getJSONObject(contactsArray.length() - 1);
+		contactJSON.put("count", totalEmailCount);
+		cursor = cursor + count;
+		if (totalEmailCount > count)
+		{
+		    contactJSON.put("cursor", cursor);
+		}
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Exception occured while fetching segmented contacts " + e.getMessage());
+	    }
+	    
+	}
+	// for (String propName : .keySet())
+	// {
+	// q.filter(propName, map.get(propName));
+	// }
+	// contacts =
+	// ofy.query(Contact.class).filter("type",Contact.Type.PERSON).filter("properties.name","email").filter("properties.value IN",contactEmails).list();
+	return contactsArray;
+    }
+    
+    private static JSONObject buildDummyContact(String email)
+    {
+	JSONObject contact = new JSONObject();
+	JSONArray properties = new JSONArray();
+	JSONObject emailProperty = new JSONObject();
+	try
+	{
+	    emailProperty.put("type", "SYSTEM");
+	    emailProperty.put("name", "email");
+	    emailProperty.put("value", email);
+	    properties.put(emailProperty);
+	    contact.put("properties", properties);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception occured while building dummy contact " + e.getMessage());
+	}
+	return contact;
+    }
+    
+    public static int getIntegerValue(String value, int defaultValue)
+    {
+	int result = defaultValue;
+	if (StringUtils.isNotBlank(value))
+	{
+	    try
+	    {
+		result = Integer.parseInt(value);
+	    }
+	    catch (Exception e)
+	    {
+		result = defaultValue;
+		return result;
+	    }
+	}
+	return result;
     }
     
 }
