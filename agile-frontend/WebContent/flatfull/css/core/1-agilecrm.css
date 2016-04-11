@@ -3591,3 +3591,6 @@ text-align:left;
 .app-aside-fixed #segmentationmenu a i , .app-aside-folded #segmentationmenu a i{
 	line-height: 2.5em;
 }
+.app-aside-folded #segmentationmenu a span{
+	line-height: 2.6em;
+}
