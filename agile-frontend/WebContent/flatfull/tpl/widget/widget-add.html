@@ -66,12 +66,9 @@
 						<a class="btn btn-sm btn-default m-r-sm acl_widget" widget-data="{{stringifyObject this}}">
   							<i class="fa fa-users"></i>
   						</a>
-        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
-        				<a class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-						<ul class="dropdown-menu text-base">
-							<li><a id="remove-widget" widget-name="{{name}}">Uninstall</a></li>
-						</ul>
-					</div>
+  						<a class="btn btn-sm btn-default m-r-sm" href="#Custom-widget/{{id}}" widget-name="{{name}}">Edit</a>
+        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>  
+        			</div>
 					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
     			<div class="text-center">																		
@@ -559,20 +556,19 @@
 
 <script id="custom-widget-edit-template" type="text/html">
 <form id="clickdesk_login_form" name="clickdesk_login_form" method="post">
-	<fieldset>
-		<p>Create your own custom widget in javascript or any backend server language.</p>
+	<fieldset>		
 		<label>Enter your custom widget details </label>						
-		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control"value="CUSTOM" name="widget_type">
-		</input>
+		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control" value="CUSTOM" name="widget_type"/>		
+		<input type="hidden" id="id" class="input-medium required widget_input_box form-control"value="{{id}}" name="id"/>		
 		<div class="control-group form-group">
 			<div class="controls">
-				<input type="text" id="name" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="name">
+				<input type="text" id="name" value="{{name}}" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="name">
 				</input>				
 			</div>
 		</div>
 		<div class="control-group form-group">
 			<div class="controls">								
-				<input type="text" id="description" class="input-medium required widget_input_box form-control"placeholder="description" name="description">
+				<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control"placeholder="description" name="description">
 				</input>
 			</div>
 		</div>
@@ -589,25 +585,24 @@
 				<span id="script_div">
 					<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a>
 					</span>
-					<textarea rows="4" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"/>					
+					<textarea rows="4" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API">{{script}}</textarea>					
 				</span>
 				<span id="url_div" style="display:none;">
 					<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a>
 					</span>
-					<input type="url" id="url" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url">
-					</input>
+					<input type="url" id="url" value="{{url}}" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url"/>					
 				</span>
 			</div>
 		</div>	
 		<div class="control-group form-group">
 			<div class="controls">
-				<input type="url" id="logo_url" class="input-medium required widget_input_box form-control" placeholder="Logo URL" name="logo_url">
+				<input type="url" id="logo_url" value="{{logo_url}}" class="input-medium required widget_input_box form-control" placeholder="Logo URL" name="logo_url">
 				</input>
 			</div>
 		</div>
 		<div class="control-group form-group">
 			<div class="controls">
-				<input type="url" id="mini_logo_url" class="input-medium required widget_input_box form-control" placeholder="Mini logo URL" name="mini_logo_url">
+				<input type="url" id="mini_logo_url" value="{{mini_logo_url}}" class="input-medium required widget_input_box form-control" placeholder="Mini logo URL" name="mini_logo_url">
 				</input>
 			</div>
 		</div>

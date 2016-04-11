@@ -56,9 +56,9 @@ public class WidgetUtil {
 	public static List<Widget> setIsAddedStatus(List<Widget> widgets) {
 		// Getting the list widget saved by the current user.
 		List<Widget> currentWidgets = getAddedWidgetsForCurrentUser();
-
-		for (Widget widget : widgets)
-			for (Widget currentWidget : currentWidgets)
+		// || currentWidget.widget_type.equals(WidgetType.CUSTOM)
+		for (Widget widget : widgets) {
+			for (Widget currentWidget : currentWidgets) {				
 				if (currentWidget.name.equals(widget.name)) {
 					// Setting true to know that widget is configured.
 					widget.is_added = true;
@@ -66,6 +66,8 @@ public class WidgetUtil {
 					widget.prefs = currentWidget.prefs;
 					widget.listOfUsers = currentWidget.listOfUsers;
 				}
+			}
+		}
 
 		return widgets;
 	}
@@ -173,9 +175,8 @@ public class WidgetUtil {
 		}
 	}
 
-		/**
-	 * @author prakash 
-	 * To get added  widget with itegation type
+	/**
+	 * @author prakash To get added widget with itegation type
 	 * 
 	 * 
 	 * @param name
@@ -193,10 +194,9 @@ public class WidgetUtil {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * @author - prakash
-	 * Gets the widget based on the widget type and user id.
+	 * @author - prakash Gets the widget based on the widget type and user id.
 	 * 
 	 * @param name
 	 *            {@link Integration type}. Type of the widget
@@ -220,7 +220,6 @@ public class WidgetUtil {
 			return null;
 		}
 	}
-	
 
 	/**
 	 * Gets the widget based on the widget name and user id.
@@ -247,7 +246,7 @@ public class WidgetUtil {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Gets the widget based on the widget name and user id.
 	 * 
@@ -283,7 +282,7 @@ public class WidgetUtil {
 	public static void removeWidgetForAllUsers(String name) {
 		dao.deleteKeys(dao.listKeysByProperty("name", name));
 	}
-	
+
 	/**
 	 * 
 	 * 
@@ -291,17 +290,18 @@ public class WidgetUtil {
 	 */
 	public static void removeCurrentUserCustomWidget(String name) {
 		Objectify ofy = ObjectifyService.begin();
-		
+
 		// Creates Current AgileUser key
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-					AgileUser.getCurrentAgileUser().id);
+				AgileUser.getCurrentAgileUser().id);
 
 		/*
 		 * Fetches list of widgets related to AgileUser key and adds is_added
 		 * field as true to default widgets if not present
 		 */
-		List<CustomWidget> widgets = ofy.query(CustomWidget.class).ancestor(userKey).filter("name", name).list();
-		
+		List<CustomWidget> widgets = ofy.query(CustomWidget.class)
+				.ancestor(userKey).filter("name", name).list();
+
 		for (CustomWidget customWidget : widgets) {
 			// check if widget is custom widget and delete it.
 			if (WidgetType.CUSTOM == customWidget.widget_type) {
