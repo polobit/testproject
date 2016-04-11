@@ -9,10 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.thirdparty.email.webhook.util.EmailWebhookUtil;
 
 @SuppressWarnings("serial")
@@ -84,7 +90,15 @@ public class SendGridWebhook extends HttpServlet
 				if (StringUtils.equalsIgnoreCase(event, HARD_BOUNCE)
 						|| StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
 						|| StringUtils.equalsIgnoreCase(event, SPAM_REPORT))
-					setBounceStatusToContact(eventJSON);
+				{
+					//setBounceStatusToContact(eventJSON);
+					
+					//System.out.println(eventJSON.toString());
+					SendGridDeferredTask sendGridDeferredTask = new SendGridDeferredTask(eventJSON.toString());
+					
+					Queue queue = QueueFactory.getQueue(AgileQueues.MANDRILL_QUEUE);
+					queue.add(TaskOptions.Builder.withPayload(sendGridDeferredTask));
+				}
 			}
 
 		}
@@ -101,7 +115,7 @@ public class SendGridWebhook extends HttpServlet
 	 * @param eventJSON
 	 *            webhook event
 	 */
-	private void setBounceStatusToContact(JSONObject eventJSON)
+	public void setBounceStatusToContact(JSONObject eventJSON)
 	{
 		String oldNamespace = NamespaceManager.get();
 		String subject = null;
@@ -156,4 +170,41 @@ public class SendGridWebhook extends HttpServlet
 
 	}
 
+}
+
+/**
+ * <code>SendGridDeferredTask</code> is the deferred task for executing email events like bounce, spam etc
+ * 
+ * @author naresh
+ *
+ */
+class SendGridDeferredTask implements DeferredTask
+{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9175934454595478511L;
+	
+	String eventJSON = null;
+	
+	public SendGridDeferredTask(String eventJSON)
+	{
+		this.eventJSON = eventJSON;
+	}
+	
+	public void run()
+	{
+		try
+		{
+			JSONObject json = new JSONObject(eventJSON);
+			SendGridWebhook sw = new SendGridWebhook();
+			sw.setBounceStatusToContact(json);
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			System.err.println("JSONException occured in SendGridDeferredTask..." + e.getMessage());
+		}
+	}
 }
