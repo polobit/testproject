@@ -720,6 +720,7 @@ var portlet_utility = {
 			if(base_model.get('settings').duration == undefined){
 				start_date_str="this-quarter-start";
 				end_date_str="this-quarter-end";
+				base_model.get('settings').duration='this-quarter';
 			}
 			if (base_model.get('settings').owner != undefined
 					&& base_model.get('settings').owner != "") 

@@ -190,6 +190,8 @@ public class PortletUtil {
 					json.put("duration","1-week");
 				else if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks")) && !json.containsKey("duration"))
 					json.put("duration","1-day");
+				else if(portlet.name!=null && portlet.name.equalsIgnoreCase("User Activities") && !json.containsKey("duration"))
+					json.put("duration","this-quarter");
 				portlet.settings=json;
 			}else{
 				if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks"))){
