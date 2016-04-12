@@ -64,7 +64,11 @@ public class WidgetUtil {
 					widget.is_added = true;
 					widget.id = currentWidget.id;
 					widget.prefs = currentWidget.prefs;
+					if (currentWidget.listOfUsers == null) {
+						currentWidget.save();
+					}
 					widget.listOfUsers = currentWidget.listOfUsers;
+
 				}
 			}
 		}

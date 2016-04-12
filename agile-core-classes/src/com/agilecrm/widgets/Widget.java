@@ -248,6 +248,7 @@ public class Widget {
 			this.listOfUsers = userList.toString();
 			this.add_by_admin = isAdmin;
 		}
+		
 		if (user == null) {
 			user = new Key<AgileUser>(AgileUser.class,
 					AgileUser.getCurrentAgileUser().id);
