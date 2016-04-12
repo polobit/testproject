@@ -250,7 +250,7 @@
 					Ticket_Utils.enableTooltips(el);
 
 					//Showing ticket labels as selected labels
-					Ticket_Labels.showSelectedLabels(data.labels, $(el));
+					Ticket_Labels.showSelectedLabels(data.labels, $(el), true);
 
 					//Load RHS side bar widgets
 					Tickets.loadWidgets(App_Ticket_Module.ticketView.el);

@@ -637,17 +637,24 @@ var Tickets = {
 		fillSelect('ticket-assignee', '/core/api/tickets/groups', '', function(collection){
 
 			Tickets.groupsList = collection.toJSON();
-			
-			$('#ticket-assignee', el).html(getTemplate('select-assignee-ticket-dropdown', collection.toJSON()));
+			 	 
+		    $('#ticket-assignee', el).html(getTemplate('select-assignee-ticket-dropdown', collection.toJSON()));
 
 			var selectedAssignee = App_Ticket_Module.ticketView.model.toJSON().assigneeID;
 			var selectedGroup = App_Ticket_Module.ticketView.model.toJSON().groupID;
 
+			
 			if(!selectedAssignee)
 				$('#ticket-assignee', el).find("option[group_id='"+selectedGroup+"']").attr('selected', 'selected');
-			else
+			else{
+
+				var assignee_name_length = $('#ticket-assignee', el).find("option[data-assignee-id='"+selectedAssignee+"']").length;
+      		 	 
+      		 	if(assignee_name_length == 0)
+      		 	    $('#ticket-assignee', el).find("option[value="+"0"+"]").attr('selected', 'selected');
+                else
       		 	$('#ticket-assignee', el).find("optgroup[data-group-id='"+selectedGroup+"']").find("option[data-assignee-id='"+selectedAssignee+"']").attr('selected', 'selected');
-      		
+      		}
 			// If current user not 
       		if(selectedAssignee != CURRENT_DOMAIN_USER.id 
       			&& Tickets.isCurrentUserExistInGroup(selectedGroup, Tickets.groupsList))
@@ -986,7 +993,7 @@ var Tickets = {
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/update-cc-emails";
 		var json = {command: command, email: email, id: Current_Ticket_ID};
 
-		this.updateModel(url, json, function(){
+		this.updateModel(url, json, function(model){
 
 			Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, json);
 
@@ -996,6 +1003,9 @@ var Tickets = {
             $('ul.cc-emails').prepend(getTemplate('cc-email-li', {email: email}));
 
 			Ticket_Utils.showNoty('information', msg, 'bottomRight', 5000);
+            if(callback)
+            	callback(model);
+
 		});
 	},
 
