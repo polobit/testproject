@@ -30,7 +30,13 @@
           <ul class="dropdown-menu pull-right">
               <li><a href="#deal-rc-0" class="deals-list-view" onclick="return false;">List View</a></li>
               
-            <li><a href="#deal-rc-1" class="deals-pipelined-view">Milestone View</a></li>
+           <li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
+              <ul class="dropdown-menu" style="min-width:130px!important">
+                <li><a href="#deal-rc-1" id="deal-milestone-regular">Relaxed</a></li>
+                <li><a href="#deal-rc-2" id="deal-milestone-compact">Compact</a></li>
+                <li><a href="#deal-rc-3" id="deal-milestone-fit">Fit</a></li>
+              </ul>
+            </li>
             
           </ul>
       </div>
@@ -440,16 +446,13 @@
 <script id="opportunities-collection-template" type="text/html">
 
 <div class="{{#is_mobile}} {{else}} wrapper-md {{/is_mobile}}">
-<div class="row">
-    <div class="col-md-9">
+<div >
+    <div>
         <div id="slate">
         </div>
         {{#if this.length}}
         {{#is_mobile}}
         {{else}}
-        <div id="total-pipeline-chart" class="w-full bg-white" style="height:300px;display:none;"></div>
-        
-        <br />
       <div>
         <div class="btn-group pull-left" id="bulk-actions" style="display:none;">
           <div class="btn btn-sm btn-default">Bulk Actions</div>
@@ -507,46 +510,7 @@
         {{/if}}
         </div>
 
-        {{#is_mobile}}
-
-        {{else}}
-        
-    <div class="col-md-3">
-        <div class="data-block">
-        {{#is_mobile}}
-        {{else}}
-        
-            <div class="panel wrapper m-b-none">
-                <header>
-                    <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> Milestones</h4>
-                </header>
-                <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
-      </div>
-       {{/is_mobile}}
-
-      <div class="m-t-md">
-                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
-                    What are Milestones?
-                </h4>
-                
-                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
-                    Milestones are used to define the status of the deal.
-                </p>
-                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs {{/is_mobile}}">
-                    e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
-                </p>
-                
-                <h4 class="m-t-none m-b-sm h4 text-center-xs {{#is_mobile}} text-center text-md {{/is_mobile}}">
-                    What are Deals?
-                </h4>
-                
-                <p class="{{#is_mobile}} text-center p-l-md p-r-md text-xs{{/is_mobile}}">
-                    Deals are opportunities you can continuously track throughout their life-cycle.
-                </p>
-            </div>
-        </div> 
-    </div>
-     {{/is_mobile}}
+       
 
 </div>
 </div>

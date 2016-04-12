@@ -33,8 +33,6 @@ public class EmailsAddedDeferredTask implements DeferredTask {
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("user_name",owner.name);
 		SendMail.sendMail(owner.email, SendMail.FREE_EMAILS_UPDATED_SUBJECT, SendMail.FREE_EMAILS_UPDATED, data);
-		
-		
 	}
 	
 	/**

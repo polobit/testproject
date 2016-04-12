@@ -940,7 +940,14 @@ function show_bulk_owner_change_page()
 
 		// var tags = get_tags('tagsBulkForm');
 
+		 if (company_util.isCompany()) {
+        Backbone.history.navigate("company-bulk-tags", {
+            trigger: true
+        })
+    } else {
+
 		Backbone.history.navigate("bulk-tags", { trigger : true });
+	}
 
 		setup_tags_typeahead();
 
@@ -1040,8 +1047,14 @@ function show_bulk_owner_change_page()
 		var id_array = get_contacts_bulk_ids();
 
 		// var tags = get_tags('tagsBulkForm');
+		 if (company_util.isCompany()) {
+        Backbone.history.navigate("company-bulk-tags-remove", {
+            trigger: true
+        })
+    } else {
 
 		Backbone.history.navigate("bulk-tags-remove", { trigger : true });
+	}
 
 		setup_tags_typeahead();
 

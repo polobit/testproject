@@ -48,6 +48,11 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues, editRowInde
 
         // event handlers for zones
         zones_popup_handler($popup, editRowIndex);
+        if(uiFieldDefinition.name == "and_key_grid" || uiFieldDefinition.name == "or_key_grid" )
+        {
+        condition_popup_handler($popup,jsonValues);
+        }
+
 
 	},
 	modal: true,
@@ -55,6 +60,10 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues, editRowInde
 	show: 'slide',	
 	buttons: buttons	
     	});    
+}
+
+function condition_popup_handler(popup,jsonValues){
+	popup.find('select#condition_merge').val(jsonValues[1].value).attr('selected', 'selected')
 }
 
 

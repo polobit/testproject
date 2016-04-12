@@ -1188,3 +1188,73 @@
 </div>
 </div>
 </div>
+
+<div class="modal  fade" id="portletsUserActivitiesSettingsModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsUserActivitiesSettingsForm" name="portletsUserActivitiesSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
+			<div class="control-group form-group" id="portletsActivitiesOwner">
+				<label class="control-label col-sm-3">Owner</label>
+				<div class="controls col-sm-7">
+					<select id="owner-user-activities" name="owner" class="form-control">
+						
+					</select>
+					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsActivityType">
+				<label class="control-label col-sm-3">Type</label>
+				<div class="controls col-sm-7">
+					<select id="activity_type" name="activity_type" class="form-control">
+						<option value="ALL" >All Activities</option>
+						<option value="CALL">Calls</option>
+						<option value="CAMPAIGN">Campaings</option>
+						<option value="CONTACT">Contacts</option>
+                     
+					{{#hasMenuScope 'DEALS'}}
+                     	<option value="DEAL">Deals</option>
+					{{/hasMenuScope}}
+                    {{#hasMenuScope 'DOCUMENT'}}
+                       <option value="DOCUMENT">Documents</option>
+                    {{/hasMenuScope}}
+					 <option value="EVENT">Events</option>
+					 <option value="TASK">Tasks</option>
+					 <option value="TICKET">Ticket</option>
+					 
+					</select>
+				</div>
+			</div>
+			
+			<div class="control-group form-group">
+				<label class="control-label col-sm-3">Duration</label>
+				<div class="controls col-sm-7">
+					<select id="duration-user-activities" name="duration" class="form-control">
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="1-month">Last 30 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="last-month" >Last Month</option>
+						<option value="this-quarter">This Quarter</option>
+						<option value="last-quarter">Last Quarter</option>
+						<option value="this-year">This Year</option>
+						<option value="last-year">Last Year</option>
+					</select>
+
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+	</div>
+</div>
+</div>
+</div>

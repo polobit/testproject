@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
@@ -38,7 +39,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	String apiKey = req.getParameter("api-key");
 	System.out.println("API KEY is " + apiKey);
 
-	Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 	System.out.println("Owner is " + owner);
 	if (owner == null)
 	{

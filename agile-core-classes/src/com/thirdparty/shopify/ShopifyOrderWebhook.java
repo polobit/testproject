@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
@@ -42,7 +43,7 @@ public class ShopifyOrderWebhook extends HttpServlet
 			requestParamsCopy.remove("apikey");
 			
 			// Get owner
-			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+			Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 			if (owner == null)
 				return;
 

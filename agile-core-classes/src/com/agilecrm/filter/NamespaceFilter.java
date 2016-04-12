@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -210,12 +211,11 @@ public class NamespaceFilter implements Filter
     {
 	System.out.println(request.getServerName());
 
-	/*
-	 * DomainUser domainUser = new DomainUser(null, "yaswanth@invox.com",
-	 * "hungry", "password", true, true); try { domainUser.save(); } catch
-	 * (Exception e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); }
-	 */
+	
+	 /* DomainUser domainUser = new DomainUser(null, "govind@invox.com",
+	  "hungry", "password", true, true); try { domainUser.save(); } catch
+	  (Exception e) { // TODO Auto-generated catch block
+	  e.printStackTrace(); } */
 
 	/*
 	 * AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");

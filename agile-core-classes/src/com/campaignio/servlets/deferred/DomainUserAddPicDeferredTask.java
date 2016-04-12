@@ -5,14 +5,9 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
-import com.agilecrm.util.NamespaceUtil;
-import com.campaignio.cron.util.CronUtil;
-import com.campaignio.tasklets.util.CampaignConstants;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -45,9 +40,6 @@ public class DomainUserAddPicDeferredTask implements DeferredTask {
 			System.out.println("domainUsers = " + domainUsers.size());
 			
 			for (DomainUser domainUser : domainUsers) {
-				
-				/*if(StringUtils.isNotBlank(domainUser.pic))
-					continue;*/
 				
 				String pic = domainUser.getOwnerPic();
 				
