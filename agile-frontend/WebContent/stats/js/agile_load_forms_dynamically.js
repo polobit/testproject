@@ -10,4 +10,12 @@ function loadAgileCRMForm(id){
 
 function showAgileCRMForm(formJson,formHolderId) {
 	document.getElementById(formHolderId).innerHTML = formJson.formHtml;
+	var onloadScript = document.getElementById("agileFormHolder").getElementsByTagName("script");
+	alert(onloadScript);
+    onloadScript[0].parentElement.removeChild(onloadScript[0]);
+    alert(onloadScript);
+	var script = document.createElement('script');
+    script.id = "agileCRMFormLoadScript";
+    script.text = onloadScript;
+    document.body.appendChild(script);
 }
