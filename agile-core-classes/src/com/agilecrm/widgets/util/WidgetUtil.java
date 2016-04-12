@@ -136,14 +136,15 @@ public class WidgetUtil {
 		 */
 		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
 				.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
-		Long userID = AgileUser.getCurrentAgileUser().id;
-		String domainUserID = AgileUser
-				.getCurrentAgileUserFromDomainUser(userID).id.toString();
+
+		String userID = AgileUser.getCurrentAgileUser().id.toString();
+		// String domainUserID =
+		// AgileUser.getCurrentAgileUserFromDomainUser(userID).id.toString();
 		for (int i = 0; i < widgets.size(); i++) {
 			Widget widget = widgets.get(i);
 			if (widget.add_by_admin
 					&& (widget.listOfUsers != null && userID != null && !widget.listOfUsers
-							.contains(domainUserID))) {
+							.contains(userID))) {
 				widgets.remove(i);
 			}
 		}
@@ -154,7 +155,7 @@ public class WidgetUtil {
 		for (int i = 0; i < adminWidgets.size(); i++) {
 			Widget widget = adminWidgets.get(i);
 			if (widget.listOfUsers != null && userID != null
-					&& !widget.listOfUsers.contains(domainUserID)) {
+					&& !widget.listOfUsers.contains(userID)) {
 				adminWidgets.remove(i);
 			}
 		}

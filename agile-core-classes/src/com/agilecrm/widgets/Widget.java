@@ -1,13 +1,10 @@
 package com.agilecrm.widgets;
 
-import java.util.List;
-
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.core.api.widgets.WidgetsAPI;
@@ -15,10 +12,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.util.DefaultWidgets;
-import com.agilecrm.widgets.util.WidgetUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
