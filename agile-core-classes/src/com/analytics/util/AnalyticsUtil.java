@@ -218,7 +218,7 @@ public class AnalyticsUtil
      */
     public static String getStatsServerUrl(String domain)
     {
-	String statsServerUrl = "https://1-5-beta-dot-agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
+	String statsServerUrl = "https://agilecrm-web-stats.appspot.com/stats?domain=" + domain + "&psd="
 		+ STATS_SEREVR_HTTP_REQUEST_PWD;
 	return statsServerUrl;
     }
@@ -259,7 +259,7 @@ public class AnalyticsUtil
     {
 	try
 	{
-	    String statsServerUrl = "https://1-5-beta-dot-agilecrm-web-stats.appspot.com/visitors";
+	    String statsServerUrl = "https://agilecrm-web-stats.appspot.com/visitors";
 	    Map<String, String> params = new LinkedHashMap<String, String>();
 	    params.put("filter_json", filterJSON);
 	    params.put("cursor", cursor);
