@@ -63,9 +63,11 @@
 			{{#if id}}
 				{{add_tag "Widgets"}}
 					<div class="btn-group inline-block">
+					{{#isAdmin}}
 						<a class="btn btn-sm btn-default m-r-sm acl_widget" widget-data="{{stringifyObject this}}">
   							<i class="fa fa-users"></i>
   						</a>
+  					{{/isAdmin}}
   						<a class="btn btn-sm btn-default m-r-sm" href="#Custom-widget/{{id}}" widget-name="{{name}}">Edit</a>
         				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>  
         			</div>

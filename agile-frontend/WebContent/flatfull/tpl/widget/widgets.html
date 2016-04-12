@@ -7,7 +7,11 @@
     {{else}}
       <div class="panel" id="{{remove_spaces name}}-container">       
     {{/if_equals}}
-	   <h4 class="widget_header_name font-thin padder m-b-none b-b p-b-sm p-r-none b-light" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
+    	{{#if add_by_admin}}
+	   		<h4 class="widget_header_name font-thin padder m-n p-t-sm b-b p-b-sm p-r-none b-light" style="background-color: #f9f9f9;" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
+	   {{else}}
+	   		<h4 class="widget_header_name font-thin padder m-b-none b-b p-b-sm p-r-none b-light" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
+	   {{/if}}
 		{{#if_equals name "Linkedin"}}LinkedIn
         {{else}}{{#if_equals name "GooglePlus"}}Google+
                 {{else}}{{#if_equals name "HelpScout"}}Help Scout
