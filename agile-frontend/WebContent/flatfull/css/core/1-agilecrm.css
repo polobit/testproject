@@ -837,9 +837,9 @@ tbody a.no-style-a {
 }
 /* Handle */
 #opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb, #opportunities-by-paging-model-list  ::-webkit-scrollbar-thumb {
-/* -webkit-border-radius: 10px;
+ -webkit-border-radius: 10px;
  border-radius: 10px;
- -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
+/* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
  background: #bebebe;
  
 }
