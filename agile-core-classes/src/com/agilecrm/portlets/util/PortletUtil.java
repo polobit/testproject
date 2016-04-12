@@ -192,7 +192,17 @@ public class PortletUtil {
 					json.put("duration","1-day");
 					portlet.settings=json;
 				}
+				else
+				{
+					if(portlet.name!=null && portlet.name.equalsIgnoreCase("User Activities") ){
+						JSONObject json=new JSONObject();
+						json.put("duration","1-day");
+					json.put("activity_type","ALL");
+					portlet.settings=json;
+					}
+				}
 			}
+
 			if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
 		}
@@ -924,6 +934,11 @@ public class PortletUtil {
 			JSONObject dealGoalPortletJSON = new JSONObject();
 			dealGoalPortletJSON.put("duration","this-month");
 			dealGoalsPortlet.prefs = dealGoalPortletJSON.toString();
+
+			JSONObject activitiesPortletJSON = new JSONObject();
+			activitiesPortletJSON.put("duration","1-day");
+			activitiesPortletJSON.put("activity_type","ALL");
+			activityPortlet.prefs = activitiesPortletJSON.toString();
 			
 			JSONObject onboardingPortletJSON = new JSONObject();
 			List<String> onboardingSteps = new ArrayList<>();
