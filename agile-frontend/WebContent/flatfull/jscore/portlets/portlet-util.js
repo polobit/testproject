@@ -208,7 +208,12 @@ var portlet_utility = {
 		else if (portlet_type == "TASKSANDEVENTS" && p_name == "Average Deviation") {
 			json['duration'] = "1-day";
 		}
+		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
+			json['activity_type'] = "ALL";
+			json['duration'] = "this-quarter";
+		}	
 		return json;
+	
 	},
 
 	/**
@@ -707,8 +712,24 @@ var portlet_utility = {
 			break;
 		}
 		case "User Activities": {
+			var options="?";
+			if(base_model.get('settings').activity_type == undefined)
+					options+='&entity_type=ALL';
+				else
+				options+='&entity_type='+base_model.get('settings').activity_type;
+			if(base_model.get('settings').duration == undefined){
+				start_date_str="1-day";
+				end_date_str="TOMORROW";
+			}
+			if (base_model.get('settings').owner != undefined
+					&& base_model.get('settings').owner != "") 
+				options+='&user_id='+base_model.get('settings').owner;
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
-				url : '/core/api/portlets/customer-activity',
+				url : '/core/api/portlets/customer-activity'+options
+				+ '&start_time='
+				+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&end_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str),
 				sortKey : 'time',
 				descending : true,
 				templateKey : "portlets-activities-list-log",
@@ -1882,6 +1903,17 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 						break;
+		}
+
+		case "User Activities" : {
+			that.addPortletSettingsModalContent(base_model,"portletsUserActivitiesSettingsModal");
+			elData = $("#portletsUserActivitiesSettingsModal");
+			portlet_utility.setOwners("owner-user-activities", base_model, elData);
+			$("#duration-user-activities", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
 		}
 		}
 		if (base_model.get('name') == "Pending Deals"

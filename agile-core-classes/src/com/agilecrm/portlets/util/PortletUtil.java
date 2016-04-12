@@ -197,7 +197,17 @@ public class PortletUtil {
 					json.put("duration","1-day");
 					portlet.settings=json;
 				}
+				else
+				{
+					if(portlet.name!=null && portlet.name.equalsIgnoreCase("User Activities") ){
+						JSONObject json=new JSONObject();
+						json.put("duration","this-quarter");
+					json.put("activity_type","ALL");
+					portlet.settings=json;
+					}
+				}
 			}
+
 			if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
 		}
@@ -937,6 +947,11 @@ public class PortletUtil {
 			JSONObject dealGoalPortletJSON = new JSONObject();
 			dealGoalPortletJSON.put("duration","this-month");
 			dealGoalsPortlet.prefs = dealGoalPortletJSON.toString();
+
+			JSONObject activitiesPortletJSON = new JSONObject();
+			activitiesPortletJSON.put("duration","this-quarter");
+			activitiesPortletJSON.put("activity_type","ALL");
+			activityPortlet.prefs = activitiesPortletJSON.toString();
 			
 			JSONObject onboardingPortletJSON = new JSONObject();
 			List<String> onboardingSteps = new ArrayList<>();
@@ -1726,9 +1741,11 @@ public class PortletUtil {
 		return json;
 	}
 	
-	public static List<Activity> getPortletActivitydata(int max,String cursor) {
-		System.out.println("Inside list");
-		List<Activity> list=ActivityUtil.getActivities(max, cursor);
+	public static List<Activity> getPortletActivitydata(String entitytype, Long userid, int max,
+			String cursor, Long starttime, Long endtime) {
+		
+		List<Activity> list = ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, max, cursor,
+	        starttime, endtime, null);
 		System.out.println("Size of List"+list.size());
 		System.out.println(list);
 		return list;
