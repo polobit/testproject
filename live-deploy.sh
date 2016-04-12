@@ -25,6 +25,8 @@ git pull origin sandbox_flatfull_modules
 
 ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
-#appcfg.sh -A agile-crm-cloud -V "async" update target/agile-java-server/"$1".war/
+echo "deploying in version $2"
+
+appcfg.sh -A agile-crm-cloud -V $2 update target/agile-java-server/"$1".war/
 
 #cd ../
