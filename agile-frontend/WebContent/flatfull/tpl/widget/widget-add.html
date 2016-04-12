@@ -60,7 +60,7 @@
     <div class="text-center">
 
 		{{#if_equals widget_type "CUSTOM"}}
-			{{#if is_added}}
+			{{#if id}}
 				{{add_tag "Widgets"}}
 					<div class="btn-group inline-block">
 						<a class="btn btn-sm btn-default m-r-sm acl_widget" widget-data="{{stringifyObject this}}">
@@ -558,54 +558,104 @@
 <form id="clickdesk_login_form" name="clickdesk_login_form" method="post">
 	<fieldset>		
 		<label>Enter your custom widget details </label>						
-		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control" value="CUSTOM" name="widget_type"/>		
-		<input type="hidden" id="id" class="input-medium required widget_input_box form-control"value="{{id}}" name="id"/>		
-		<div class="control-group form-group">
-			<div class="controls">
-				<input type="text" id="name" value="{{name}}" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="name">
-				</input>				
+		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control"value="CUSTOM" name="widget_type"/>
+		{{#if id}}
+			<input type="hidden" id="id" class="input-medium required widget_input_box form-control"value="{{id}}" name="id"/>		
+			<div class="control-group form-group">
+				<div class="controls">
+					<input type="text" id="name" value="{{name}}" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="name">
+					</input>				
+				</div>
 			</div>
-		</div>
-		<div class="control-group form-group">
-			<div class="controls">								
-				<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control"placeholder="description" name="description">
-				</input>
+			<div class="control-group form-group">
+				<div class="controls">								
+					<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control"placeholder="description" name="description">
+					</input>
+				</div>
 			</div>
-		</div>
-		<div class="control-group form-group">
-			<div class="controls">								
-				<select name="script_type" id="script_type" class="required form-control">
-					<option value="script">HTML</option> 
-					<option value="url">URL</option> 
-				</select>
+			<div class="control-group form-group">
+				<div class="controls">								
+					<select name="script_type" id="script_type" class="required form-control">
+						<option value="script">HTML</option> 
+						<option value="url">URL</option> 
+					</select>
+				</div>
 			</div>
-		</div>
-		<div class="control-group form-group">
-			<div class="controls">
-				<span id="script_div">
-					<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a>
+			<div class="control-group form-group">
+				<div class="controls">
+					<span id="script_div">
+						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a>
+						</span>
+						<textarea rows="4" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API">{{script}}</textarea>					
 					</span>
-					<textarea rows="4" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API">{{script}}</textarea>					
-				</span>
-				<span id="url_div" style="display:none;">
-					<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a>
+					<span id="url_div" style="display:none;">
+						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a>
+						</span>
+						<input type="url" id="url" value="{{url}}" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url"/>					
 					</span>
-					<input type="url" id="url" value="{{url}}" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url"/>					
-				</span>
+				</div>
+			</div>	
+			<div class="control-group form-group">
+				<div class="controls">
+					<input type="url" id="logo_url" value="{{logo_url}}" class="input-medium required widget_input_box form-control" placeholder="Logo URL" name="logo_url">
+					</input>
+				</div>
 			</div>
-		</div>	
-		<div class="control-group form-group">
-			<div class="controls">
-				<input type="url" id="logo_url" value="{{logo_url}}" class="input-medium required widget_input_box form-control" placeholder="Logo URL" name="logo_url">
-				</input>
+			<div class="control-group form-group">
+				<div class="controls">
+					<input type="url" id="mini_logo_url" value="{{mini_logo_url}}" class="input-medium required widget_input_box form-control" placeholder="Mini logo URL" name="mini_logo_url">
+					</input>
+				</div>
 			</div>
-		</div>
-		<div class="control-group form-group">
-			<div class="controls">
-				<input type="url" id="mini_logo_url" value="{{mini_logo_url}}" class="input-medium required widget_input_box form-control" placeholder="Mini logo URL" name="mini_logo_url">
-				</input>
-			</div>
-		</div>
+		  {{else}}
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="name" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="name">
+						</input>				
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">								
+						<input type="text" id="description" class="input-medium required widget_input_box form-control"placeholder="description" name="description">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">								
+						<select name="script_type" id="script_type" class="required form-control">
+							<option value="script">HTML</option> 
+							<option value="url">URL</option> 
+						</select>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<span id="script_div">
+							<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a>
+							</span>
+							<textarea rows="4" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"/>					
+						</span>
+						<span id="url_div" style="display:none;">
+							<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a>
+							</span>
+							<input type="url" id="url" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url">
+							</input>
+						</span>
+					</div>
+				</div>	
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="url" id="logo_url" class="input-medium required widget_input_box form-control" placeholder="Logo URL" name="logo_url">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="url" id="mini_logo_url" class="input-medium required widget_input_box form-control" placeholder="Mini logo URL" name="mini_logo_url">
+						</input>
+					</div>
+				</div>
+		{{/if}}
 		<div class="text-center">			
 			<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
             <a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">Cancel</a>

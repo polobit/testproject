@@ -58,8 +58,9 @@ public class WidgetUtil {
 		List<Widget> currentWidgets = getAddedWidgetsForCurrentUser();
 		// || currentWidget.widget_type.equals(WidgetType.CUSTOM)
 		for (Widget widget : widgets) {
-			for (Widget currentWidget : currentWidgets) {				
-				if (currentWidget.name.equals(widget.name)) {
+			for (Widget currentWidget : currentWidgets) {
+				if (currentWidget.name.equals(widget.name)
+						|| currentWidget.widget_type.equals(WidgetType.CUSTOM)) {
 					// Setting true to know that widget is configured.
 					widget.is_added = true;
 					widget.id = currentWidget.id;
@@ -95,7 +96,8 @@ public class WidgetUtil {
 		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
 				.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
 
-		for (Widget widget : widgets) {
+		for (int i = 0; i < widgets.size(); i++) {
+			Widget widget = widgets.get(i);
 			if (WidgetType.EMAIL.equals(widget.widget_type)) {
 				System.out
 						.println("Converting widget type email to integrations...");
@@ -107,6 +109,12 @@ public class WidgetUtil {
 				widgets.remove(widget);
 
 				break;
+			}
+
+			String userID = AgileUser.getCurrentAgileUser().id.toString();
+			if (widget.listOfUsers != null && userID != null
+					&& !widget.listOfUsers.contains(userID)) {
+				widgets.remove(i);
 			}
 		}
 
