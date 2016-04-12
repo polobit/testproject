@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -92,6 +93,50 @@ public class StatsUtil
 	
 	Long timeAfterLog = System.currentTimeMillis();
 	System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog - timeBeforeLog));
+	
+	// Show notification with url
+	if (StringUtils.isNotBlank(email) && !StringUtils.equals(email, "null"))
+	{
+	    JSONObject json = new JSONObject();
+	    try
+	    {
+		// If not null or empty - remove query params from urls
+		if (!StringUtils.isEmpty(url))
+		    url = StringUtils.split(url, '?')[0];
+		json.put("custom_value", url);
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+	    }
+	    timeBeforeLog = System.currentTimeMillis();
+	    System.out.println("Before log " + timeBeforeLog);
+	    
+	    sendNotification(domain, "IS_BROWSING", email, json);
+	    
+	    timeAfterLog = System.currentTimeMillis();
+	    System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog - timeBeforeLog));
+	}
+	
+    }
+    
+    /**
+     * This method responsible for sending pubnub message when contact browsing
+     * our customer web site. We will show this message as noty message when
+     * customer browsing his agilecrm domain.
+     * 
+     * @param domain
+     * @param type
+     * @param email
+     * @param customValue
+     */
+    public static void sendNotification(String domain, String type, String email, JSONObject customValue)
+    {
+	JSONObject json = new JSONObject();
+	json.put("custom_value", customValue.get("custom_value"));
+	json.put("type", type);
+	json.put("email", email);
+	PubNub.pubNubPush(domain, json);
     }
     
     /**

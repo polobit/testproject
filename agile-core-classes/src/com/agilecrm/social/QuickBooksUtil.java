@@ -181,7 +181,7 @@ public class QuickBooksUtil
 	{
 	    String err = response;
 	    if (response.contains("401"))
-		err = "Authentication Error. Please re-configure you QuickBooks integration.";
+		err = "Authentication Error. Please re-configure your QuickBooks integration.";
 
 	    throw new Exception(err);
 	}

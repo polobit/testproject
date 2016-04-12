@@ -1236,16 +1236,16 @@ public class CSVUtil
 			    String dealDate = dealPropValues[i];
 			    if (dealDate != null && !dealDate.isEmpty())
 			    {
-				// date is dd-MM-yyyy format
-				String[] data = dealDate.split("-");
+				// date is mm/dd/yyyy format
+				String[] data = dealDate.split("/");
 				if (data.length == 3)
 				{
 				    try
 				    {
 					Calendar c = Calendar.getInstance();
 					int year = Integer.parseInt(data[2].trim());
-					int month = Integer.parseInt(data[1].trim());
-					int day = Integer.parseInt(data[0].trim());
+					int month = Integer.parseInt(data[0].trim());
+					int day = Integer.parseInt(data[1].trim());
 					if (month > 0)
 					{
 					    month = month - 1;

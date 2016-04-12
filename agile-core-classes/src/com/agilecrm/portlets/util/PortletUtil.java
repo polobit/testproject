@@ -56,6 +56,10 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.status.CampaignStatus;
+import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -125,6 +129,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Campaign graph",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
@@ -461,6 +466,7 @@ public class PortletUtil {
 	}
 	public static JSONObject getDealsByMilestoneData(JSONObject json)throws Exception{
 		JSONObject dealsByMilestoneJSON=new JSONObject();
+		try{
 		if(json!=null){
 			if(json.get("deals")!=null && (json.get("deals").toString().equalsIgnoreCase("all-deals") || json.get("deals").toString().equalsIgnoreCase("my-deals")) && json.get("track")!=null){
 				List<String> milestonesList=new ArrayList<String>();
@@ -487,16 +493,17 @@ public class PortletUtil {
 				dealsByMilestoneJSON.put("milestonesList",milestonesList);
 				dealsByMilestoneJSON.put("milestoneValuesList",milestoneValuesList);
 				dealsByMilestoneJSON.put("milestoneNumbersList",milestoneNumbersList);
-				if(milestone.won_milestone != null){
+				if(milestone!=null && milestone.won_milestone != null){
 					dealsByMilestoneJSON.put("wonMilestone",milestone.won_milestone);
 				}else{
 					dealsByMilestoneJSON.put("wonMilestone","Won");
 				}
-				if(milestone.lost_milestone != null){
+				if(milestone!=null && milestone.lost_milestone != null){
 					dealsByMilestoneJSON.put("lostMilestone",milestone.lost_milestone);
 				}else{
 					dealsByMilestoneJSON.put("lostMilestone","Lost");
 				}
+
 			}
 		}
 		List<Milestone> milestoneList=MilestoneUtil.getMilestonesList();
@@ -506,6 +513,12 @@ public class PortletUtil {
 		}
 		dealsByMilestoneJSON.put("milestoneMap",milestoneMap);
 		
+		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return dealsByMilestoneJSON;
 	}
 	public static JSONObject getClosuresPerPersonData(JSONObject json)throws Exception{
@@ -1358,6 +1371,7 @@ public class PortletUtil {
 						Double milestoneValue = 0d;
 						if(wonDealsList!=null){
 							for(Opportunity opportunity : wonDealsList){
+								if(opportunity.expected_value!=null)
 								milestoneValue += opportunity.expected_value;
 							}
 						}
@@ -1528,6 +1542,10 @@ public class PortletUtil {
 		int emailsOpened =0;
 		int emailsent = 0;
 		int unsubscribe =0;
+		int hardBounce=0;
+		int softBounce=0;
+		int emailsSkipped=0;
+		int emailsSpam=0;
 		String a="";
 		JSONArray campaignEmailsJSONArray;
 		long minTime=0L;
@@ -1562,12 +1580,28 @@ public class PortletUtil {
 
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_OPENED"))
 			{emailsOpened = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
 			{emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
 			{emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
 			{unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SPAM"))
+			{emailsSpam= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
+			{emailsSkipped= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_HARD_BOUNCED"))
+			{hardBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SOFT_BOUNCED"))
+			{softBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+		
 			}
 			
 			}
@@ -1578,10 +1612,14 @@ public class PortletUtil {
 		}
 		
 	}
-		datajson.put("emailopened",emailsOpened);
+		    datajson.put("emailopened",emailsOpened);
 			datajson.put("emailclicked",emailsClicked);
 			datajson.put("emailsent",emailsent);
 			datajson.put("emailunsubscribed",unsubscribe);
+			datajson.put("emailSpam",emailsSpam);
+			datajson.put("emailSkipped", emailsSkipped);
+			datajson.put("hardBounce", hardBounce);
+			datajson.put("softBounce", softBounce);
 		return datajson;
 		}
 		
@@ -1623,13 +1661,13 @@ public class PortletUtil {
 			if(campaignType.equalsIgnoreCase("All"))	 
 				 query  =  "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+ 
 									" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
-									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED', 'EMAIL_SPAM', 'EMAIL_SENDING_SKIPPED', 'EMAIL_HARD_BOUNCED', 'EMAIL_SOFT_BOUNCED')"+
 									" AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " +
 										 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
 			else
 				 query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
 									"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
-									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED', 'EMAIL_SPAM', 'EMAIL_SENDING_SKIPPED', 'EMAIL_HARD_BOUNCED', 'EMAIL_SOFT_BOUNCED')"+
 									"AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
 									"AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type " ;
                 
@@ -1710,12 +1748,15 @@ public class PortletUtil {
 		Long count_goal=0L;
 		Double value=0.0;
 		Double amount_goal=0.0;
-		JSONObject json=new JSONObject();;
+		JSONObject json=new JSONObject();
+		try{
 		List<Opportunity> opportunities=OpportunityUtil.getWonDealsListWithOwner(minTime, maxTime, owner_id);
 		if(opportunities!=null){
 			for(Opportunity opp:opportunities){
+				if(opp.expected_value!=null){
 			value = value+opp.expected_value;
 			count++;
+				}
 		}
 		}
 		json.put("dealcount", count);
@@ -1732,6 +1773,11 @@ public class PortletUtil {
 			json.put("goalCount",count_goal);
 			json.put("goalAmount", amount_goal);
 	}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return json;
 	}
 	
@@ -1775,11 +1821,13 @@ public class PortletUtil {
 					int count=0;
 					for(Task task:tasksList){
 						Long time_deviation=0L;
+						if(task.task_completed_time!=null && task.due!=null){
 						if(task.task_completed_time>task.due)
 							{
 							time_deviation=(task.task_completed_time-task.due);
 							count++;
 							}
+						}
 						Total_closure+=time_deviation;
 								}
 					l.add((long)count);
@@ -1817,5 +1865,67 @@ public class PortletUtil {
 		}
 		return dataJson;
 	}
+	
+	/**
+	 * This method is used for getting contact count of ACTIVE, DONE and REMOVED campaign status
+	 * @param campaignId
+	 * @param startTime
+	 * @return dataJson
+	 */
+	public static JSONObject getCampaignStatsForPieChart(String campaignId, Long startTime)
+	  {
+
+		JSONObject dataJson = new JSONObject();
+
+		List<String> campaignStatusList = new ArrayList<String>();
+		List<Double> contactValuesList = new ArrayList<Double>();
+		
+		double doneContactCount=0;
+		double activeContactCount=0;
+		double removeContactCount=0;
+		
+		try
+		{
+			if(campaignId.equals("All"))
+		 	{
+				//get all campaign list
+				List<Workflow> workflows = new ArrayList<Workflow>();
+				workflows = WorkflowUtil.getAllWorkflows();
+				
+				for(Workflow workflow : workflows)
+				  {
+					
+					doneContactCount +=CampaignSubscribersUtil.getContactCountByCampaignStats(workflow.id + "-" + CampaignStatus.Status.DONE, startTime);
+					activeContactCount +=CampaignSubscribersUtil.getContactCountByCampaignStats(workflow.id + "-" + CampaignStatus.Status.ACTIVE, startTime);
+					removeContactCount +=CampaignSubscribersUtil.getContactCountByCampaignStats(workflow.id + "-" + CampaignStatus.Status.REMOVED, startTime);	
+				   }
+		 	  }
+			else
+			 {			
+				 doneContactCount=CampaignSubscribersUtil.getContactCountByCampaignStats(campaignId + "-" + CampaignStatus.Status.DONE, startTime);
+				 activeContactCount=CampaignSubscribersUtil.getContactCountByCampaignStats(campaignId + "-" + CampaignStatus.Status.ACTIVE, startTime);
+				 removeContactCount=CampaignSubscribersUtil.getContactCountByCampaignStats(campaignId + "-" + CampaignStatus.Status.REMOVED, startTime);
+			 }
+			
+			campaignStatusList.add("Completed");
+			contactValuesList.add(doneContactCount);
+			
+			campaignStatusList.add("Active");
+			contactValuesList.add(activeContactCount);
+			
+			campaignStatusList.add("Removed");
+			contactValuesList.add(removeContactCount);
+			
+			dataJson.put("campaignStatusList", campaignStatusList);
+			dataJson.put("campaignValuesList", contactValuesList);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while getting contact campaign status count..." + e.getMessage());
+		}
+			
+			return dataJson;
+	  }
 
 }

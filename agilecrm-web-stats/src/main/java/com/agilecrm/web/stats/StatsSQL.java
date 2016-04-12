@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -167,11 +166,149 @@ public class StatsSQL
 	// get the ResultSet object
 	ResultSet rs = executeQuery(query);
 	
+//	ResultSet rs1 = null;
+//	if (countQuery)
+//	    rs1 = executeQuery(query);
+	
 	if (rs == null)
 	    return null;
 	
 	System.out.println("RS " + rs);
 	
+	// JSONArray for each record
+	JSONArray agentDetailsArray = new JSONArray();
+	
+	// get the resultset metadata object to get the column names
+	ResultSetMetaData resultMetadata = rs.getMetaData();
+	
+	// get the column count in the resultset object
+	int numColumns = resultMetadata.getColumnCount();
+	
+	// variable for get the name of the column
+	String columnName = null;
+	
+	try
+	{
+	    // iterate the ResultSet object
+	    while (rs.next())
+	    {
+		try
+		{
+		    // create JSONObject for each record
+		    JSONObject eachAgentJSON = new JSONObject();
+		    
+		    // Get the column names and put
+		    // eachAgent record in agentJSONArray
+		    for (int i = 1; i < numColumns + 1; i++)
+		    {
+			// Get the column names
+			columnName = resultMetadata.getColumnName(i);
+			
+			// put column name and value in json array
+			eachAgentJSON.put(columnName, "" + rs.getString(columnName));
+		    }
+		    
+		    // place result data in agentDetailsArray
+		    agentDetailsArray.put(eachAgentJSON);
+		}
+		catch (Exception e)
+		{
+		    System.out.println("Exception while iterating result set " + e.getMessage());
+		}
+	    }
+//	    if (countQuery)
+//	    {
+//		rs1 = executeQuery("select found_rows()");
+//		if (rs1 != null)
+//		{
+//		    while (rs1.next())
+//		    {			
+//			int count = rs1.getInt(1);
+//			JSONObject finalObject = new JSONObject();
+//			finalObject.put("total_rows_count", ""+count);
+//			agentDetailsArray.put(finalObject);
+//		    }
+//		}
+//	    }	    
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception while mapping result set" + e);
+	    return agentDetailsArray;
+	}
+	finally
+	{
+	    // close the Connection and ResultSet objects
+	    closeResultSet(rs);
+	    //closeResultSet(rs1);
+	}
+	
+	return agentDetailsArray;
+    }
+    
+    public static JSONArray getSegments(String query) throws Exception
+    {
+	System.out.println("Query " + query);
+	ResultSet rs = null;
+	ResultSet rs1 = null;
+	Statement stmt1 = null;
+	JSONArray segments = null;
+	try
+	{
+	    // get the connection object
+	    Connection conn = getConnection();
+	    if (conn == null)
+		return null;
+	    
+	    // creates the statement object
+	    Statement stmt = conn.createStatement();
+	    // get the ResultSet object
+	    rs = stmt.executeQuery(query);
+	    
+	    if (rs == null)
+		return null;
+	    
+	    System.out.println("RS " + rs);
+	    
+	    segments = parseResultSet(rs);
+	    
+	    stmt1 = conn.createStatement();
+	    
+	    rs1 = stmt1.executeQuery("select found_rows()");
+	    
+	    if (rs1 != null && segments.length() > 0)
+	    {
+		while (rs1.next())
+		{
+		    int count = rs1.getInt(1);
+		    JSONObject finalObject = new JSONObject();
+		    finalObject.put("total_rows_count", "" + count);
+		    segments.put(finalObject);
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception while mapping result set" + e);
+	    return segments;
+	}
+	finally
+	{
+	    // close the Connection and ResultSet objects
+	    closeResultSet(rs);
+	    if (rs1 != null)
+		rs1.close();
+	    if (stmt1 != null)
+		stmt1.close();
+	    
+	}
+	return segments;
+    }
+    
+    public static JSONArray parseResultSet(ResultSet rs) throws Exception
+    {
 	// JSONArray for each record
 	JSONArray agentDetailsArray = new JSONArray();
 	
@@ -220,12 +357,6 @@ public class StatsSQL
 	    System.out.println("Exception while mapping result set" + e);
 	    return agentDetailsArray;
 	}
-	finally
-	{
-	    // close the Connection and ResultSet objects
-	    closeResultSet(rs);
-	}
-	
 	return agentDetailsArray;
     }
     

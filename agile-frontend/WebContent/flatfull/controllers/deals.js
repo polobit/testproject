@@ -66,6 +66,7 @@ var DealsRouter = Backbone.Router.extend({
 				//setupNewDealFilters();
 				initializeDealListners();
 				loadPortlets('Deals');
+				contactListener();
 
 			}, "#opportunity-listners");
 		}
@@ -123,7 +124,7 @@ var DealsRouter = Backbone.Router.extend({
 						setupDealFilters(cel);
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
-						
+						contactListener();
 						setTimeout(function(){
 							$('#delete-checked',el).attr("id","deal-delete-checked");
 						},500);
@@ -227,6 +228,7 @@ var DealsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				initializeDealListners();
+				contactListener();
 				var usersCollection = new Base_Collection_View({ url : '/core/api/users', sort_collection : false });
 				usersCollection.collection.fetch({
 					success : function(data){
@@ -294,6 +296,7 @@ var DealsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				initializeDealListners();
+				contactListener();
 				deserializeForm(deal_filter_json, $("#dealsFilterForm"));
 				$('input[name=name]').trigger('focus');
 				var usersCollection = new Base_Collection_View({ url : '/core/api/users', sort_collection : false });

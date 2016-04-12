@@ -1,0 +1,20 @@
+{
+    "templates": [
+        {
+            "category": "General",
+            "description": "Category description here",
+            "list": [
+                {
+                    "id": "subscribeus",
+                    "displayname": "Subscribe Us",
+                    "description": "this is sample text"
+                },           
+				{
+                    "id": "contactus",
+                    "displayname": "Contact Us",
+                    "description": "this is sample text"
+                }                	
+            ]
+        }
+    ]
+}

@@ -30,6 +30,7 @@ function initializeLandingPageListeners() {
     		if(App_LandingPageRouter.LandingPageCollectionView) {
     			App_LandingPageRouter.LandingPageCollectionView.collection.fetch();
     		}
+    		track_with_save_success_model(e.currentTarget);
     	} else {
     		if(!$("#landingpagename").val().trim()) {
     			$('html, body').animate({scrollTop: $('body').offset().top}, 500);

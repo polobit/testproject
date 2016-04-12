@@ -40,6 +40,7 @@ var task_details_tab = {
 								contactRelatedView = new Base_Collection_View({ url : '/core/api/tasks/' + id + "/contacts", templateKey : "task-related", individual_tag_name : 'tr',
 												sortKey : "created_time", descending : true, postRenderCallback : function(el)
 												{
+													contactListener();
 
 												} });
 								contactRelatedView.collection.fetch();

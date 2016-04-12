@@ -259,24 +259,43 @@
 	   {{#if event.contacts.length}}
 	   		<i class="icon-user text-muted m-r-xs"></i>
 	   {{/if}}
-	   {{#each event.contacts}}
-	       {{#if_equals this.entity_type "contact_entity"}}
-	             {{#if_equals this.type "COMPANY"}}
-	              		<a class="text-info" href="#company/{{this.id}}">
-	              			{{getPropertyValue this.properties "name"}}
-	              		</a>
-	              	{{else}}
-	              	    <a class="text-info" href="#contact/{{this.id}}">
-	              			{{getPropertyValue this.properties "first_name"}} {{getPropertyValue this.properties "first_name"}}
-	              		</a>
-	       		 {{/if_equals}}   
-	       	{{else}}
-	       	     <a class="text-info" href="#contact/{{this.id}}">
-	       	     	 {{getPropertyValue this.properties "name"}}
-	       	     </a> 
-	       {{/if_equals}}
-	       {{#if @last}} {{else}}, {{/if}}
-	   {{/each}}
+	   {{#if_equals event.contacts.length 1}}
+               {{#if_equals event.contacts.[0].type "COMPANY"}}
+               <a class="text-info" href="#company/{{event.contacts.id}}">
+                      {{getPropertyValue event.contacts.[0].properties "name"}}
+                    </a>
+
+                    {{#property_is_exists "url" event.contacts.[0].properties }}
+                    <div><i class="icon-envelope text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "url"}}</a></div>{{/property_is_exists}}
+                   {{#property_is_exists "phone" event.contacts.[0].properties }}
+                    <div><i class="icon-call-end text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "phone"}}</a></div>{{/property_is_exists}}
+                    <div class="m-l-md">{{setupRating event.contacts.[0].star_value}}</div>
+                    {{else}}
+                    	<a class="text-info" href="#contact/{{event.contacts.id}}">
+                      {{getPropertyValue event.contacts.[0].properties "first_name"}}
+                    </a>
+
+                     {{#property_is_exists "email" event.contacts.[0].properties }}
+                    <div><i class="icon-envelope text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "email"}}</a></div>{{/property_is_exists}}
+                    {{#property_is_exists "phone" event.contacts.[0].properties }}
+                    <div><i class="icon-call-end text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "phone"}}</a></div>{{/property_is_exists}}
+                    <div><i class="icon-trophy text-muted m-r-xs" style="height: 6px; vertical-align: middle;font-size:1em;"></i> <a>{{event.contacts.[0].lead_score}}</a></div>
+                    <div>{{setupRating event.contacts.[0].star_value}}</div>
+                   {{/if_equals}}
+     {{else}}
+     {{#each event.contacts}}
+               {{#if_equals this.type "COMPANY"}}
+                    <a class="text-info" href="#company/{{this.id}}">
+                      {{getPropertyValue this.properties "name"}}
+                    </a>
+                  {{else}}
+                      <a class="text-info" href="#contact/{{this.id}}">
+                      {{getPropertyValue this.properties "first_name"}} {{getPropertyValue this.properties "last_name"}}
+                    </a>
+             {{/if_equals}}   
+         {{#if @last}} {{else}}, {{/if}}
+     {{/each}}
+     {{/if_equals}}
 	{{/if}}
 </script>
 
@@ -308,7 +327,7 @@
 	       	<div class="line b-b b-light"></div>
 	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.eventOwner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">
@@ -349,7 +368,7 @@
 			<div class="line b-b b-light"></div>
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.eventOwner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">
@@ -390,7 +409,7 @@
 			<div class="line b-b b-light"></div>
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.eventOwner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">
@@ -401,4 +420,27 @@
 		 	</div>
 		</div>
 	</div>											
+</script>
+
+<script id="calendar-mouseover-popover-miniCalendar-template" type="text/html">
+	<div class="fc-overlay {{leftorright}}" style="width:100%;">
+	    <div class="panel bg-white b-a pos-rlt p-sm">
+	       	<span class="arrow {{leftorright}} {{pullupornot}}"></span>
+	       	<div class="h4 font-thin m-b-sm">
+	       		<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}} </div>
+	       	</div>
+	       	<div class="line b-b b-light"></div>
+	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
+				<div class="pull-right" style="width:10%;">
+					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+				</div>
+			</div>
+			<div class="text-ellipsis">
+		 	    {{get_template_type "calendar-popover-contacts"}}
+		 	</div>
+		 	<div class="text-ellipsis">
+		 	     {{get_template_type "calendar-popover-meeting-type"}}
+		 	</div>
+		</div>
+	</div>
 </script>								

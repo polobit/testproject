@@ -56,7 +56,9 @@ var agile_company_sort_configuration = [
 	buildProperty("Star Value", "star_value"),
 
 	// Name
-	buildProperty("Name", "name")
+	buildProperty("Name", "name"),
+	//Score
+	buildProperty("Score", "lead_score")
 ];
 
 var sort_company_configuration = {
