@@ -22,8 +22,8 @@ cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/t
 #rm ../WebContent/tpl/min/precompiled/flatfull/temp.js
 
 ## Tickets module min file
-cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets.min.js
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets.min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets.min.js
+cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets-min.js
+java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
 
 
 ## Webrules into templates
