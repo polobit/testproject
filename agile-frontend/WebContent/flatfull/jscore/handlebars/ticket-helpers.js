@@ -460,7 +460,7 @@ Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
 
 	str = str.trim();
 
-	str = str.replace(/(?:\r\n)/g, '<br/>');
+	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return str;
 });
 

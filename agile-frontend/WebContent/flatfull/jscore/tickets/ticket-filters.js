@@ -1,6 +1,7 @@
-
+//Ticket_Filters varaible contains methods allows to create/update tcket filters in helpdesk settings tab.
 var Ticket_Filters = {
 
+	//Initializing chaining on select fields.
 	initChaining: function(el, data){
 
 		var el_self = $(el).clone();
@@ -45,6 +46,8 @@ var Ticket_Filters = {
 		}
 	},
 
+	//Clones ticket filter select dropdowns to add new condition to views. 
+	//It will be fired when clicked on plus icon in add filter
 	cloneTicketFiltersRow : function(event){
 
 		// To solve chaining issue when cloned
@@ -66,12 +69,14 @@ var Ticket_Filters = {
 		}, null);
 	},
 
+	//Removes selected condition when clicked on close button
 	removeTicketFiltersRow : function(event){
 
 		var $currentTarget = $(event.currentTarget);
 		$currentTarget.closest("tr").remove();
 	},
 
+	//Fetches all views from DB
 	fetchFiltersCollection: function(callback){
 		
 		var force_render = true;

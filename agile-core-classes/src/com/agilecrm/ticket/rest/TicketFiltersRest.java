@@ -17,7 +17,9 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.ticket.entitys.TicketFilters;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
@@ -70,6 +72,9 @@ public class TicketFiltersRest
 			newFilter.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 			TicketFilters.dao.put(newFilter);
+
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.VIEW_COUNT);
 
 			return newFilter;
 		}
