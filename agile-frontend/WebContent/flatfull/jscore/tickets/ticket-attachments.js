@@ -1,6 +1,7 @@
-console.log('Loading tickets lib...');
+//Ticket_Attachments variable contains functions which can used to attach documents to tickets.
 var Ticket_Attachments = {
-	
+		
+	//Fetches documents from DB
 	renderExistingDocs: function(selectId, el){
 		
 		var collection_def = Backbone.Collection.extend({ url : 'core/api/documents'});
@@ -68,6 +69,8 @@ var Ticket_Attachments = {
 		$(e.target).closest('li').remove();
 	},
 
+	//When user submitted the form selected documents list be parsed and returns 
+	//a json containing selected file name, url and its size
 	serializeList: function(form_id){
 
 		var array = [];

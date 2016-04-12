@@ -32,7 +32,6 @@ import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -43,6 +42,7 @@ import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.TicketWorkflow;
@@ -54,6 +54,7 @@ import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -354,7 +355,7 @@ public class TicketsRest
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
 					ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
-					attachmentsList, "");
+					attachmentsList, "", true);
 			notes.save();
 
 			ticket.groupID = ticket.group_id.getId();
@@ -362,7 +363,12 @@ public class TicketsRest
 			// Execute triggers
 			// TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 
-			BulkActionNotifications.publishNotification("Ticket #" + ticket.id + " has been created.");
+			// BulkActionNotifications.publishNotification("Ticket #" +
+			// ticket.id + " has been created.");
+			TicketBulkActionsBackendsRest.publishNotification("Ticket #" + ticket.id + " has been created.");
+
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
 
 			return ticket;
 		}
@@ -866,7 +872,7 @@ public class TicketsRest
 				// Creating new Notes in TicketNotes table
 				TicketNotes notes = new TicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER,
 						"Sasi", "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC,
-						new ArrayList<TicketDocuments>(), "");
+						new ArrayList<TicketDocuments>(), "", true);
 				notes.save();
 			}
 		}
@@ -886,7 +892,7 @@ public class TicketsRest
 	 * @return list of domain users
 	 */
 	@GET
-	@Path ("/users")
+	@Path("/users")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<DomainUser> getUsers()
 	{
@@ -896,7 +902,7 @@ public class TicketsRest
 			String domain = NamespaceManager.get();
 			// Gets the users and update the password to the masked one
 			List<DomainUser> users = DomainUserUtil.getUsers(domain);
-			DomainUser domainUser =  new DomainUser();
+			DomainUser domainUser = new DomainUser();
 			domainUser.name = "Current User";
 			domainUser.id = (long) 0;
 			users.add(domainUser);
@@ -905,6 +911,31 @@ public class TicketsRest
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Gets list of users of a domain
+	 * 
+	 * @return list of domain users
+	 */
+	@GET
+	@Path("/stats")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getStats()
+	{
+		try
+		{
+			TicketStats stats = TicketStats.ticketStatsdao.getByProperty("created_time", 1460399400l);
+			
+			JSONObject json = new JSONObject(stats.toString());
+			
+			return json.toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
 	}
