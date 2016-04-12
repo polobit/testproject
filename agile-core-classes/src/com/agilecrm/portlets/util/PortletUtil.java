@@ -196,7 +196,7 @@ public class PortletUtil {
 				{
 					if(portlet.name!=null && portlet.name.equalsIgnoreCase("User Activities") ){
 						JSONObject json=new JSONObject();
-						json.put("duration","1-day");
+						json.put("duration","this-quarter");
 					json.put("activity_type","ALL");
 					portlet.settings=json;
 					}
@@ -936,7 +936,7 @@ public class PortletUtil {
 			dealGoalsPortlet.prefs = dealGoalPortletJSON.toString();
 
 			JSONObject activitiesPortletJSON = new JSONObject();
-			activitiesPortletJSON.put("duration","1-day");
+			activitiesPortletJSON.put("duration","this-quarter");
 			activitiesPortletJSON.put("activity_type","ALL");
 			activityPortlet.prefs = activitiesPortletJSON.toString();
 			

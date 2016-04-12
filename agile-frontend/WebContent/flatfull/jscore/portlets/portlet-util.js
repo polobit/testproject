@@ -207,7 +207,7 @@ var portlet_utility = {
 		}
 		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
 			json['activity_type'] = "ALL";
-			json['duration'] = "1-day";
+			json['duration'] = "this-quarter";
 		}	
 		return json;
 	
@@ -1824,6 +1824,11 @@ var portlet_utility = {
 			that.addPortletSettingsModalContent(base_model,"portletsUserActivitiesSettingsModal");
 			elData = $("#portletsUserActivitiesSettingsModal");
 			portlet_utility.setOwners("owner-user-activities", base_model, elData);
+			$("#duration-user-activities", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
 		}
 		}
 		if (base_model.get('name') == "Pending Deals"
