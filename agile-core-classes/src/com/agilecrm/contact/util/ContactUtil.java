@@ -1916,12 +1916,12 @@ public class ContactUtil
 	{
 		Tag tagObject = new Tag("helpdesk");
 
-	    if (!contact.tagsWithTime.contains(tagObject))
-	    	contact.tagsWithTime.add(tagObject);
-	    
+	    contact.tagsWithTime.add(tagObject);
 	    contact.save();
+	    
+	    ActivitySave.createTagAddActivity(contact);
 	}
-	catch (PlanRestrictedException e)
+	catch (Exception e)
 	{
 	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	}
