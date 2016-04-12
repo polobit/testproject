@@ -1168,15 +1168,18 @@ public class ActivitySave
     	if(domainuser.id != null)
 		{
 			DomainUser old_user = DomainUserUtil.getDomainUser(domainuser.id);
+			System.out.println(!domainuser.name.equals(old_user.name)+"name");
 			if(!domainuser.name.equals(old_user.name) )
 			{
 				activity.activity_type = activity.activity_type.User_Name_Change;
 			}
-			if(!domainuser.email.equals(old_user.email))
+			System.out.println(!domainuser.email.equals(old_user.email)+"email");
+			 if(!domainuser.email.equals(old_user.email))
 			{
 				activity.activity_type  = activity.activity_type.User_Email_Change;
 			}
-			if(!domainuser.password.equals(old_user.password))
+			 System.out.println(!domainuser.password.equals(old_user.password)+"password");
+			 if(!domainuser.password.equals(old_user.password))
 			{
 				activity.activity_type = activity.activity_type.User_Password_Change;
 			}
