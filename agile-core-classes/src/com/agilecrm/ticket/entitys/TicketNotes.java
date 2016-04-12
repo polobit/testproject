@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -111,17 +110,17 @@ public class TicketNotes
 	 */
 	public String html_text = "";
 
-	/**
-	 * Stores original notes content in plain text format
-	 */
-	@JsonIgnore
-	public String original_plain_text = "";
-
-	/**
-	 * Stores original notes content in html text format
-	 */
-	@JsonIgnore
-	public String original_html_text = "";
+	// /**
+	// * Stores original notes content in plain text format
+	// */
+	// @JsonIgnore
+	// public String original_plain_text = "";
+	//
+	// /**
+	// * Stores original notes content in html text format
+	// */
+	// @JsonIgnore
+	// public String original_html_text = "";
 
 	/**
 	 * Stores mime object
@@ -175,9 +174,24 @@ public class TicketNotes
 		super();
 	}
 
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param group_id
+	 * @param assignee_id
+	 * @param created_by
+	 * @param requester_name
+	 * @param requester_email
+	 * @param original_plain_text
+	 * @param original_html_text
+	 * @param note_type
+	 * @param attachments_list
+	 * @param mimeObject
+	 * @param isNewTicket
+	 */
 	public TicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by, String requester_name,
 			String requester_email, String original_plain_text, String original_html_text, NOTE_TYPE note_type,
-			List<TicketDocuments> attachments_list, String mimeObject)
+			List<TicketDocuments> attachments_list, String mimeObject, boolean isNewTicket)
 	{
 		super();
 
@@ -192,8 +206,8 @@ public class TicketNotes
 		this.created_by = created_by;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;
-		this.original_plain_text = original_plain_text;
-		this.original_html_text = original_html_text;
+		// this.original_plain_text = original_plain_text;
+		// this.original_html_text = original_html_text;
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
 
@@ -201,8 +215,15 @@ public class TicketNotes
 		// status changed activity next
 		this.created_time = (Calendar.getInstance().getTimeInMillis() - 60000);
 
-		this.plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text);
-		this.html_text = TicketNotesUtil.removedQuotedRepliesFromHTMLText(original_html_text);
+		// If not new ticket then remove quoted texts in both contents
+		if (!isNewTicket)
+		{
+			original_plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text).trim();
+			original_html_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_html_text).trim();
+		}
+
+		this.plain_text = original_plain_text;
+		this.html_text = original_html_text;
 
 		this.mime_object = mimeObject;
 	}

@@ -985,7 +985,7 @@ public class TicketsUtil
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, group.id, null, CREATED_BY.REQUESTER, "Customer",
 					"customer@domain.com", plainText, TicketNotesUtil.convertNewLinesToBreakTags(plainText),
-					NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
+					NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "", true);
 			notes.save();
 		}
 		catch (Exception e)

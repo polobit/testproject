@@ -10,6 +10,12 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.NotSaved;
 
+/**
+ * <code>TicketLabels</code> represents tags to tickets.
+ * 
+ * @author Sasi
+ * 
+ */
 @XmlRootElement
 public class TicketLabels extends Cursor implements Serializable
 {

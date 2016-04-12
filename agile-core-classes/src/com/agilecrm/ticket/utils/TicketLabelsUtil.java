@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.ticket.entitys.TicketLabels;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /**
@@ -52,6 +53,9 @@ public class TicketLabelsUtil
 
 		TicketLabels.dao.put(ticketLabel);
 
+		// Updating ticket count DB
+		TicketStatsUtil.updateEntity(TicketStats.LABELS_COUNT);
+
 		return ticketLabel;
 	}
 
@@ -61,7 +65,7 @@ public class TicketLabelsUtil
 
 		if (oldTicketLabel != null && !oldTicketLabel.id.equals(ticketLabel.id))
 			throw new Exception("Label already exists.");
-		
+
 		TicketLabels.dao.put(ticketLabel);
 
 		return ticketLabel;
