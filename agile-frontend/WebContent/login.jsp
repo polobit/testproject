@@ -147,7 +147,7 @@ background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInte
 
 .text-white
 {
-color:#fff;
+color:#fff !important;
 }
 input
 {
