@@ -534,7 +534,9 @@ function googledata(el,response,startTime,endTime)
 	.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
 	request.execute(function(resp)
 			{
-
+		head.js('flatfull/lib/web-calendar-event/moment.min.js', function(){
+		head.js('flatfull/lib/web-calendar-event/moment-timezone-with-data.js',function() {
+			
 		var events = new Array();
 		console.log(resp);
 		if(resp.items){
@@ -610,7 +612,8 @@ function googledata(el,response,startTime,endTime)
 			}
 		},5000);
 	});
-
+	});
+    });
 }
 
 /** Rendering the events to the mini Calendar
