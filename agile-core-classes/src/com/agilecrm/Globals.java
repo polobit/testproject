@@ -85,7 +85,7 @@ public class Globals
     // public static final String STRIPE_LIVE_CLIENT_ID =
     // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
-    public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    public static final String STRIPE_LIVE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String STRIPE_TEST_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
@@ -214,7 +214,8 @@ public class Globals
 	//	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
 	public static final String GRAVATAR_SECURE_DEFAULT_IMAGE_URL = "https://clickdesk.agilecrm.com/flatfull/images/flatfull/user-default.jpg";
 	// Inbound email address suffix
-	public static final String INBOUND_EMAIL_SUFFIX = "@helptor.com";
+	public static final String INBOUND_EMAIL_SUFFIX_MAIN = "@helptor.com";
+	public static final String INBOUND_EMAIL_SUFFIX_SANDBOX = "@crm.io";
 	
 	// Gravatar image URL
 	public static final String GRAVATAR_SECURE_IMAGE_URL = "https://secure.gravatar.com/avatar/"; 

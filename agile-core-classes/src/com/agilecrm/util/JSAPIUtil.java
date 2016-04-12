@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.user.DomainUser;
@@ -77,11 +78,7 @@ public class JSAPIUtil
 
     public static Key<DomainUser> getDomainUserKeyFromInputKey(String key)
     {
-	if (APIKey.isPresent(key))
-	    return APIKey.getDomainUserKeyRelatedToAPIKey(key);
-	else if (APIKey.isValidJSKey(key))
-	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(key);
-	return null;
+    return APIKeyUtil.getAPIKeyDomainOwnerKey(key);
     }
 
     public static void subscribeCampaigns(String campaignIds, Contact contact)

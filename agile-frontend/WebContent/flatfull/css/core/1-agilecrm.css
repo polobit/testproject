@@ -3663,3 +3663,26 @@ opacity: .3;
 
 	}
 
+.app-aside-dock #segmentationmenu a i{
+
+	    margin-bottom: -4px;
+
+}
+
+.app-aside-fixed #segmentationmenu a i , .app-aside-folded #segmentationmenu a i{
+	line-height: 2.5em;
+
+}
+.app-aside-folded #segmentationmenu a span{
+	line-height: 2.6em;
+}
+#lhs_filters_segmentation .panel-body{
+	padding: 5px 15px;
+	min-height: 35px;
+}
+#lhs_filters_segmentation #lhs-filters-header{
+	font-size : 14px;
+}
+#lhs_filters_segmentation #lhs-filters-header i{
+	top : 3px;
+}

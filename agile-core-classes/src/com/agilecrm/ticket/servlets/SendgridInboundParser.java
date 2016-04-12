@@ -1,18 +1,13 @@
 package com.agilecrm.ticket.servlets;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Properties;
 
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,20 +15,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.MultipartStream.ItemInputStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.geronimo.mail.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -46,15 +48,30 @@ import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
+ * <code>SendgridInboundParser</code> is the root class for handling inbound
+ * events from Sendgrid. Sendgrid posts the inbound event data to this servlet.
+ * Inbound data format can be found below.
  * 
- * @author Sasi
+ * <p>
+ * Inbound data can be a new ticket or reply to existing ticket. Attachments in
+ * the ticket are saved to Google cloud storage and related URLs will be saved
+ * along with {@link TicketNotes}.
+ * </p>
+ * 
+ * @author Sasi on 28-Sep-2015
+ * @see <a
+ *      href="https://sendgrid.com/docs/API_Reference/Webhooks/parse.html">Sendgrid
+ *      Inbound data format</a>
  * 
  */
 public class SendgridInboundParser extends HttpServlet
@@ -64,10 +81,26 @@ public class SendgridInboundParser extends HttpServlet
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * List of content types to avoid base64 conversion
+	 */
+	List<String> ignoreBase64Conversion = new ArrayList<String>()
+	{
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("text/plain");
+		}
+	};
+
+	/**
+	 *
+	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		PrintWriter pw = response.getWriter();
 		pw.write("Get");
+
 		System.out.println("Get method called..");
 	}
 
@@ -98,11 +131,13 @@ public class SendgridInboundParser extends HttpServlet
 					String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
 
 					/**
-					 * Replacing helptor.com text with space so that we'll get a
+					 * Replacing email suffix with space so that we'll get a
 					 * string of namespace and group ID separated by delimeter
 					 * '+'
 					 */
-					String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX, "").split("\\+");
+					String inboundSuffix = TicketGroupUtil.getInboundSuffix();
+
+					String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
 
 					if (toAddressArray.length < 2)
 						return;
@@ -132,9 +167,6 @@ public class SendgridInboundParser extends HttpServlet
 
 					System.out.println("groupID: " + groupID);
 
-					boolean isNewTicket = isNewTicket(toAddressArray);
-					;
-
 					TicketGroups ticketGroup = null;
 
 					/**
@@ -152,48 +184,93 @@ public class SendgridInboundParser extends HttpServlet
 
 					List<String> ccEmails = getCCEmails(json);
 
-					// Get email key value as it contains plain text, html text
-					// and attachments data
-					String fileData = json.getString("email");
+					String plainText = "", htmlText = "";
 
-					Properties props = System.getProperties();
-					Session session = Session.getInstance(props);
+					if (json.has("text"))
+						plainText = json.getString("text");
 
-					MimeMessage message = new MimeMessage(session, new ByteArrayInputStream(fileData.toString()
-							.getBytes()));
+					if (json.has("html"))
+						htmlText = json.getString("html");
 
-					MimeMessageParser messageParser = new MimeMessageParser(message).parse();
+					boolean attachmentExists = false;
 
-					String plainText = messageParser.hasPlainContent() ? messageParser.getPlainContent() : "";
-					String htmlText = messageParser.hasHtmlContent() ? messageParser.getHtmlContent() : "";
+					if (json.has("attachments"))
+						attachmentExists = json.getInt("attachments") > 0 ? true : false;
 
-					boolean attachmentExists = messageParser.hasAttachments();
-					List<TicketDocuments> documentsList = messageParser.getAttachmentsList();
+					List<TicketDocuments> documentsList = (attachmentExists) ? getAttachmentsList(json)
+							: (new ArrayList<TicketDocuments>());
+
+					try
+					{
+						// Creating jsoup object to remove inline image tags
+						Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
+
+						/**
+						 * Iterating through each attachment and removing inline
+						 * image text and tags fron plain text content and html
+						 * content
+						 */
+						for (TicketDocuments ticketDocument : documentsList)
+						{
+							String fileContentType = ticketDocument.extension;
+
+							boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
+
+							if (!isImage)
+								continue;
+
+							Elements elements = doc.getElementsByAttributeValue("src", "cid:" + ticketDocument.name);
+
+							if (elements == null || elements.size() == 0)
+								continue;
+
+							for (Element element : elements)
+							{
+								plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
+
+								try
+								{
+									element.remove();
+								}
+								catch (Exception e)
+								{
+									System.out.println(ExceptionUtils.getFullStackTrace(e));
+								}
+							}
+						}
+
+						if (documentsList != null && documentsList.size() > 0)
+							htmlText = doc.body().html();
+					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
 
 					Tickets ticket = null;
 
 					String[] nameEmail = getNameAndEmail(json);
 
+					// boolean isNewTicket = isNewTicket(toAddressArray);
+					String ticketID = extractTicketIDFromHtml(htmlText);
+
+					boolean isNewTicket = StringUtils.isBlank(ticketID) ? true : false;
+
 					if (isNewTicket)
 					{
 						// Creating new Ticket in Ticket table
 						ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1],
-								json.getString("subject"), ccEmails,
-								TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText), Status.NEW, Type.PROBLEM,
-								Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists,
-								json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
+								json.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW,
+								Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, json.getString("sender_ip"),
+								new ArrayList<Key<TicketLabels>>());
 
-						// BulkActionNotifications.publishNotification("New ticket #"
-						// +
-						// ticket.id + " received");
 						TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
 					}
 					else
 					{
 						try
 						{
-							ticket = TicketsUtil.getTicketByID(Long.parseLong(toAddressArray[2]));
-
+							ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
 						}
 						catch (Exception e)
 						{
@@ -219,9 +296,6 @@ public class SendgridInboundParser extends HttpServlet
 								currentTime, null, attachmentExists, false, true);
 
 						// Sending user replied notification
-						// BulkActionNotifications.publishNotification(ticket.requester_name
-						// + " replied to ticket#" + ticket.id);
-
 						TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name
 								+ " replied to ticket #" + ticket.id);
 
@@ -232,9 +306,12 @@ public class SendgridInboundParser extends HttpServlet
 					// Creating new Notes in TicketNotes table
 					TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID,
 							CREATED_BY.REQUESTER, nameEmail[0], nameEmail[1], plainText, htmlText, NOTE_TYPE.PUBLIC,
-							documentsList, json.getString("email"));
+							documentsList, json.toString(), isNewTicket);
 
 					notes.save();
+
+					// Updating ticket count DB
+					TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
 
 					NamespaceManager.set(oldNamespace);
 
@@ -245,13 +322,78 @@ public class SendgridInboundParser extends HttpServlet
 			catch (Exception e)
 			{
 				System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
-				e.printStackTrace();
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
+	}
+
+	/**
+	 * Saves the attachments in the ticket to google cloud storage.
+	 * 
+	 * @param json
+	 * @return TicketDocuments list which contains file name, URL and its size.
+	 */
+	private List<TicketDocuments> getAttachmentsList(JSONObject json)
+	{
+		List<TicketDocuments> documentsList = new ArrayList<TicketDocuments>();
+
+		try
+		{
+			int count = json.getInt("attachments");
+
+			JSONObject attachmentsInfo = new JSONObject(json.getString("attachment-info"));
+
+			for (int i = 1; i <= count; i++)
+			{
+				try
+				{
+					String attachmentContent = json.getString("attachment" + i);
+
+					JSONObject attachmentInfo = new JSONObject(attachmentsInfo.getString("attachment" + i));
+
+					String fileName = "", fileType = "";
+
+					if (attachmentInfo.has("type"))
+						fileType = attachmentInfo.getString("type");
+
+					if (attachmentInfo.has("filename"))
+						fileName = attachmentInfo.getString("filename");
+
+					if (attachmentInfo.has("content-id") && (fileType.contains("image") || fileType.contains("img")))
+						fileName = attachmentInfo.getString("content-id");
+
+					byte[] dataArray = null;
+
+					System.out.println("fileName: " + fileName);
+					System.out.println("fileType: " + fileType);
+
+					if (ignoreBase64Conversion.contains(fileType))
+						dataArray = attachmentContent.getBytes(StandardCharsets.UTF_8);
+					else
+						dataArray = Base64.decode(attachmentContent.getBytes(StandardCharsets.UTF_8));
+
+					GCSServiceAgile service = saveFileToGCS(fileName, fileType, dataArray);
+
+					System.out.println("Attachment saved successfully.");
+
+					documentsList.add(new TicketDocuments(fileName, fileType, (long) dataArray.length, service
+							.getFilePathToDownload()));
+				}
+				catch (Exception e)
+				{
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return documentsList;
 	}
 
 	/**
@@ -291,9 +433,10 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Converts the cc emails we got in ticket to List of strings.
 	 * 
 	 * @param json
-	 * @return
+	 * @return CC emails list
 	 */
 	private List<String> getCCEmails(JSONObject json)
 	{
@@ -324,9 +467,11 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Converts the data in post request to json object. Post data format can be
+	 * at https://sendgrid.com/docs/API_Reference/Webhooks/parse.html.
 	 * 
 	 * @param request
-	 * @return
+	 * @return json object
 	 */
 	private JSONObject getJSONFromMIME(HttpServletRequest request)
 	{
@@ -344,7 +489,30 @@ public class SendgridInboundParser extends HttpServlet
 			{
 				item = iter.next();
 
-				dataJSON.put(item.getFieldName(), IOUtils.toString(item.openStream(), "UTF-8"));
+				String fieldName = item.getFieldName(), contentData = "", contentType = item.getContentType();
+
+				System.out.println("Field names found: " + fieldName);
+
+				/**
+				 * Verifying if fetched field matches with "attachmentX" (X can
+				 * any number from 1-9). If so we need to encode content with
+				 * Base64Encoder.
+				 */
+				if (fieldName.matches("^attachment\\d$") && !ignoreBase64Conversion.contains(contentType))
+				{
+					System.out.println("Encoding to base64....");
+
+					ItemInputStream stream = (ItemInputStream) item.openStream();
+
+					byte[] byteArray = IOUtils.toByteArray(stream);
+					byte[] encodeBase64 = org.apache.commons.codec.binary.Base64.encodeBase64(byteArray, true);
+
+					contentData = new String(encodeBase64);
+				}
+				else
+					contentData = IOUtils.toString(item.openStream(), "UTF-8");
+
+				dataJSON.put(fieldName, contentData);
 			}
 		}
 		catch (Exception e)
@@ -359,16 +527,76 @@ public class SendgridInboundParser extends HttpServlet
 	 * If received ticket is reply to existing ticket then email address will be
 	 * in the form of namespace+groupid+ticketid@helptor.com
 	 */
-	public static boolean isNewTicket(String[] toAddressArray)
+	// public static boolean isNewTicket(String[] toAddressArray)
+	// {
+	// return (toAddressArray.length == 3) ? false : true;
+	// }
+
+	/**
+	 * 
+	 * @param htmlContent
+	 * @return ticketID
+	 */
+	public static String extractTicketIDFromHtml(String htmlContent)
 	{
-		return (toAddressArray.length == 3) ? false : true;
+		String ticketID = "";
+
+		if (StringUtils.isBlank(htmlContent))
+			return ticketID;
+
+		Document doc = Jsoup.parseBodyFragment(htmlContent, "UTF-8");
+
+		Elements elements = doc.select("[title=agl_tckt_id]");
+
+		if (elements == null || elements.size() == 0)
+		{
+			System.out.print("No ticketID found...");
+			return ticketID;
+		}
+
+		// Fetching last span
+		ticketID = elements.get(elements.size() - 1).text();
+
+		System.out.println("Ticket found in html content: " + ticketID);
+
+		return ticketID;
 	}
 
-	public static void main(String[] args) throws JSONException, IOException
+	/**
+	 * Writes file content to GCS and returns service object to get file path.
+	 * 
+	 * @param fileName
+	 * @param fileType
+	 * @param fileContentType
+	 * @param currentTime
+	 * @return
+	 * @throws IOException
+	 */
+	public GCSServiceAgile saveFileToGCS(String fileName, String fileType, byte[] fileContent) throws IOException
 	{
-		File file = new File("D:\\email.txt");
-		FileInputStream inputStream = new FileInputStream(file);
+		if (fileType.contains("application/rar"))
+			fileType = "application/x-rar-compressed, application/octet-stream";
+		else if (fileType.contains("application/zip"))
+			fileType = "application/zip, application/octet-stream";
 
-		System.out.println(IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()));
+		GcsFileOptions options = new GcsFileOptions.Builder().mimeType(fileType).contentEncoding("UTF-8")
+				.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+
+		GCSServiceAgile service = new GCSServiceAgile((Calendar.getInstance().getTimeInMillis()) + fileName,
+				"ticket-attachments", options);
+
+		GcsOutputChannel writer = service.getOutputchannel();
+
+		writer.write(ByteBuffer.wrap(fileContent));
+		writer.close();
+
+		System.out.println("Added saved document....");
+
+		return service;
+	}
+
+	public static void main(String[] args) throws Exception
+	{
+		System.out.println("reply\r\ntest..\r\n\r\n".trim());
 	}
 }

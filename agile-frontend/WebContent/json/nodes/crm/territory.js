@@ -67,7 +67,8 @@
                 "options": {
                       "equal to": "equal_to",
                       "not equal to": "not_equal_to",
-                      "contains": "contains"
+                      "contains": "contains",
+                      "in": "in"
                 },
                 "title": "Select condition",
                 "fieldType": "select",
