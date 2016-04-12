@@ -23,9 +23,11 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketGroupsPartial;
+import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -338,6 +340,18 @@ public class Tickets extends Cursor implements Serializable
 	public List<Long> contact_ids = new ArrayList<Long>();
 
 	/**
+	 * Stores ticket last public notes id
+	 */
+	@JsonIgnore
+	public Key<TicketNotes> last_notes_key = null;
+
+	/**
+	 * Stores last ticket notes object to send it to client
+	 */
+	@NotSaved
+	public TicketNotesPartial last_ticket_notes = null;
+
+	/**
 	 * Default constructor
 	 */
 	public Tickets()
@@ -395,7 +409,8 @@ public class Tickets extends Cursor implements Serializable
 			this.created_by = createdBy;
 
 			// Adding 1 min extra time make its creation time greater than
-			// contact creation time otherwise ticket creation will show first rather than contact creation in ticket timeline
+			// contact creation time otherwise ticket creation will show first
+			// rather than contact creation in ticket timeline
 			Long epochTime = Calendar.getInstance().getTimeInMillis() + 60000;
 
 			if (assignee_id != null)
@@ -417,6 +432,10 @@ public class Tickets extends Cursor implements Serializable
 			this.created_time = epochTime;
 			this.last_updated_time = epochTime;
 			this.last_customer_replied_time = epochTime;
+			
+			if(status == Status.CLOSED)
+				this.closed_time = epochTime;
+			
 			this.last_updated_by = LAST_UPDATED_BY.REQUESTER;
 			this.requester_ip_address = ipAddress;
 			this.user_replies_count = 1;
@@ -459,7 +478,7 @@ public class Tickets extends Cursor implements Serializable
 	 */
 	public Tickets updateTicketAndSave(List<String> cc_emails, String last_reply_plain_text,
 			LAST_UPDATED_BY last_updated_by, Long updated_time, Long customer_replied_time,
-			Long last_agent_replied_time, Boolean attachments_exists, Boolean isTicketClosed)
+			Long last_agent_replied_time, Boolean attachments_exists, Boolean isTicketClosed, boolean set_activity_user)
 	{
 		Long currentTime = Calendar.getInstance().getTimeInMillis();
 
@@ -536,19 +555,7 @@ public class Tickets extends Cursor implements Serializable
 		if (oldStatus != this.status)
 			// Logging status changed activity
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, this.contactID, this.id,
-					oldStatus.toString(), this.status.toString(), "status", false);
-
-		// // Logging public notes activity
-		// if (isPublicNotes)
-		// {
-		// ActivityType activityType = (last_updated_by ==
-		// LAST_UPDATED_BY.REQUESTER) ? ActivityType.TICKET_REQUESTER_REPLIED
-		// : ActivityType.TICKET_ASSIGNEE_REPLIED;
-		//
-		// ActivityUtil.createTicketActivity(activityType, this.contactID,
-		// this.id, "", last_reply_plain_text,
-		// "html_text");
-		// }
+					oldStatus.toString(), this.status.toString(), "status", set_activity_user);
 
 		this.save();
 
@@ -561,10 +568,29 @@ public class Tickets extends Cursor implements Serializable
 		return this;
 	}
 
-	public Tickets save()
+	/**
+	 * Updates datastore entity alone
+	 * 
+	 * @return current ticket entity
+	 */
+	public Tickets putEntity()
 	{
 		// Updating ticket entity
 		Tickets.ticketsDao.put(this);
+
+		return this;
+	}
+
+	/**
+	 * Updates datastore entity and text search as well
+	 * 
+	 * @return current ticket entity
+	 */
+	public Tickets save()
+	{
+		// Updating ticket entity
+		// Tickets.ticketsDao.put(this);
+		putEntity();
 
 		// Updating text search data
 		new TicketsDocument().edit(this);
@@ -751,6 +777,27 @@ public class Tickets extends Cursor implements Serializable
 			contact = ContactUtil.createContact(requester_name, requester_email);
 
 		return contact;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public TicketNotesPartial getLast_ticket_notes()
+	{
+		if(last_notes_key != null){
+			
+			try
+			{
+				return TicketNotesUtil.getTicketNotesPartialByID(last_notes_key.getId());
+			}
+			catch (Exception e)
+			{
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		}
+		
+		return null;
 	}
 
 	@Override

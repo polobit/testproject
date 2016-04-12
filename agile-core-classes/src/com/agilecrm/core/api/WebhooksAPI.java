@@ -12,9 +12,11 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.JSAPIUtil;
@@ -99,12 +101,8 @@ public class WebhooksAPI
 	    Note note = mapper.readValue(json, Note.class);
 	    note.addRelatedContacts(contact.id.toString());
 
-	    DomainUser domainUser = null;
-	    if (APIKey.isPresent(apiKey))
-		domainUser = APIKey.getDomainUserRelatedToAPIKey(apiKey);
-	    if (APIKey.isValidJSKey(apiKey))
-		domainUser = APIKey.getDomainUserRelatedToJSAPIKey(apiKey);
-
+	    DomainUserPartial domainUser = APIKeyUtil.getAPIKeyDomainUser(apiKey);
+	  
 	    if (domainUser == null)
 		return "{\"error\" : \"Error occured\"}";
 	    note.owner_id = domainUser.id.toString();

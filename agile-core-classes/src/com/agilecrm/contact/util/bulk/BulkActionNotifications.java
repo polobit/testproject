@@ -56,8 +56,13 @@ public class BulkActionNotifications
 	 * Ticket operations
 	 */
 
-	TICKET_BULK_ACTIONS(""), NEW_TICKET_RECEIVED("New ticket#%s received"), REQUESTER_REPLIED_TO_TICKET("%s replied to ticket#%s");
-
+	TICKET_BULK_ACTIONS(""), NEW_TICKET_RECEIVED("New ticket#%s received"), REQUESTER_REPLIED_TO_TICKET("%s replied to ticket#%s"),
+	
+	/**
+	 * Companies tag operation
+	 */
+	COMPANY_ADD_TAGS("Tag(s) %s added to %s companies"), COMPANY_REMOVE_TAGS(
+			"Tag(s) %s removed from %s companies");
 	String message;
 
 	BulkAction(String message)

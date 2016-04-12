@@ -39,7 +39,7 @@ public class Defaults
 	saveDefaultNotes();
 	TicketFiltersUtil.saveDefaultFilters();
 	//saveDefaultWorkflowsAndTriggers();
-	TicketsUtil.createDefaultTicket();
+	//TicketsUtil.createDefaultTicket();
     }
 
 	/**

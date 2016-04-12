@@ -220,7 +220,7 @@ function addNodeInternal(node)
     object.onDoubleClick = function ()
     {        
 		console.log(this.getProperty("JSON"));
-		if(!parent.App_Workflows.is_disabled)
+		//if(!parent.App_Workflows.is_disabled)
 		constructNodeFromDefinition(this.getProperty("NodeDefinition"), this.getProperty("JSON"), this.getId())
     }
 

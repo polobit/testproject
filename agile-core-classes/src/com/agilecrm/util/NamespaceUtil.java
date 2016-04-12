@@ -43,7 +43,7 @@ public class NamespaceUtil
 		Set<String> namespaces = new HashSet<String>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-		FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+		FetchOptions options = FetchOptions.Builder.withChunkSize(500);
 
 		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
 
@@ -76,7 +76,7 @@ public class NamespaceUtil
 		Set<String> namespaces = new HashSet<String>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-		FetchOptions options = FetchOptions.Builder.withChunkSize(1000).limit(limit).offset(offset);
+		FetchOptions options = FetchOptions.Builder.withChunkSize(500).limit(limit).offset(offset);
 
 		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
 

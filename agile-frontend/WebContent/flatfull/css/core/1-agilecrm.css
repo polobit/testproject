@@ -1013,14 +1013,14 @@ li.deal-color.GREY:after { background: grey;}
   margin-bottom: 0px;
 }
 
-.milestone-column>div.milestones ul{
-  list-style: none;
-  margin-left: 0px;
-  margin-bottom: 0px;
-  min-height: calc(100vh - 200px);
+.milestone-column>div.milestones ul.milestones{
+	list-style: none;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	min-height: calc(100vh - 200px);
 }
 
-#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list li, #deals-by-paging-relax-model-list li
+#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list>li, #deals-by-paging-relax-model-list>li
 {
 margin:0px;
   cursor: move;
@@ -2991,7 +2991,7 @@ width: 915px;
 
 }
 
-#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span, .lost-deal-analysis-portlet-pie .highcharts-tooltip span 
+#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span, .lost-deal-analysis-portlet-pie .highcharts-tooltip span , .portlet_graph .highcharts-tooltip>span
 {
    background-color: #313030;
      opacity: 1;
@@ -2999,14 +2999,10 @@ width: 915px;
      padding: 8px;
      border-radius: 5px
  }
- #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip, .lost-deal-analysis-portlet-pie svg .highcharts-tooltip {
-  visibility: hidden!important;
- }
 
-/* #deals-reports .highcharts-data-labels
- {
-  text-transform: capitalize;
- }*/
+ #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip, .lost-deal-analysis-portlet-pie svg .highcharts-tooltip , .portlet_graph svg .highcharts-tooltip {
+ 	visibility: hidden!important;
+ }
 
  #deals-chart .highcharts-legend{
   text-transform: capitalize;
@@ -3080,6 +3076,7 @@ width : 150px;
 
 }
 }
+
 table.hide-head-checkbox th label.i-checks {
       visibility: hidden;
 }
@@ -3187,15 +3184,18 @@ table.hide-head-checkbox th label.i-checks {
 
 .contact_popover{ 
 
-  border-radius: 0px;
-  //width : 260px;
+	border-radius: 0px;
+	z-index:1026;
+	//width : 260px;
 }
 
-#contacts-table .popover-content{
-  padding: 0px;
+.contact_popover .popover{
+	max-width:100%;
+
 }
-#contacts-table .popover{
-  max-width:100%;
+
+.contact_popover .popover-content{
+	padding: 0px;
 }
 
 .contact_popover .arrow{
@@ -3214,7 +3214,19 @@ table.hide-head-checkbox th label.i-checks {
   left:26px;
   font-size: 18px;
 }
-
+#cscorebox{
+	text-align:center;
+	right: 5px;
+	width: 56px;
+	padding-bottom: 0;padding-left: 0px;
+	padding-right: 0px;padding-top: 0px;
+	border-top-width: 1px;
+	margin-top: 6px;
+	top: -3px;
+	height: 28px;
+	left:26px;
+	font-size: 18px;
+}
 .well{
   background: none!important;
    border:none!important;
@@ -3574,6 +3586,7 @@ text-align:left;
 	margin-left: 10px!important;
 }
 
+
 .txt-small{
 	font-size: 12px;
 }
@@ -3582,6 +3595,7 @@ text-align:left;
  font-size: 13px !important;
 }
 
+
 /* Dashboard Search Custom Scrollbar Start */
 
 .dashboard-search-scroll-bar::-webkit-scrollbar {
@@ -3589,12 +3603,19 @@ text-align:left;
 	margin-right: 4px !important;
 	background:#eee;
 }
+/*
+#admin-previlages .nav-tabs{
+	border-radius:0px solid !important;
+	border-bottom:0px;
+
+}*/
 .dashboard-search-scroll-bar::-webkit-scrollbar-thumb {
 	 background: #bebebe;
 }
 
 /* Dashboard Search Custom Scrollbar End */
-=======
+
+
 /* Custom Scrollbar Start */
 
 .email-editor-custom-scroll-bar ::-webkit-scrollbar {
@@ -3614,3 +3635,77 @@ text-align:left;
 .mce-statusbar{
 	display: none !important;
 }
+
+.toggle-contact-image{
+ display:none;
+}
+#contact-container:hover .toggle-contact-image{
+display: block;
+margin-left: 33px;
+}
+#contact-container:hover .contact-image-view{
+opacity: .3;
+}
+#schedule_demo{
+  margin-right: 214px;
+}
+
+
+/*#admin-previlages>div.m-xs>span{
+	margin-left:60px;
+
+} */
+
+.tab-content .tab-pane #sales-previlages .active{
+    display: block !important;
+    visibility: visible !important;
+}
+
+
+.nav-tabs li a#Sales_previlages, .nav-tabs li a#marketing_previlages
+{
+ color:#555!important;
+}
+
+
+.deal-edit-dropdown{
+	left: 261px;
+    top: 32px;
+    opacity:0.8;
+}
+.deal-track{
+	margin-top:-8px;
+}
+
+
+@media(max-width:630px){
+	.deal-detail-dropdown{
+		left: 350px;
+	}
+
+	}
+
+.app-aside-dock #segmentationmenu a i{
+
+	    margin-bottom: -4px;
+
+}
+
+.app-aside-fixed #segmentationmenu a i , .app-aside-folded #segmentationmenu a i{
+	line-height: 2.5em;
+
+}
+.app-aside-folded #segmentationmenu a span{
+	line-height: 2.6em;
+}
+#lhs_filters_segmentation .panel-body{
+	padding: 5px 15px;
+	min-height: 35px;
+}
+#lhs_filters_segmentation #lhs-filters-header{
+	font-size : 14px;
+}
+#lhs_filters_segmentation #lhs-filters-header i{
+	top : 3px;
+}
+>>>>>>> 83e1c9cd62e1b219883a731dfad2f08da79fbacc

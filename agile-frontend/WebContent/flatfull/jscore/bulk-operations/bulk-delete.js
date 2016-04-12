@@ -343,13 +343,11 @@ function customize_bulk_delete(id_array, data_array){
 	if(Current_Route == 'users'){
 		$.each(data_array, function(index, model){
 			if(model.is_admin){
-				console.log(id_array.indexOf(model.id));
-				id_array.splice((id_array.indexOf(model.id)+1), 1);
-
+				id_array.splice(id_array.indexOf(model.id), 1);
 			}	
 		});
 		if(id_array.length == 0){
-			$('body').find(".master-tag").html('<div class="alert alert-danger delete-adminuser"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
 			return false;
 		}
 	}

@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
@@ -383,11 +384,7 @@ public class AgileForm extends HttpServlet
 
     public static com.googlecode.objectify.Key<DomainUser> getDomainUserKeyFromInputKey(String key)
     {
-	if (APIKey.isPresent(key))
-	    return APIKey.getDomainUserKeyRelatedToAPIKey(key);
-	else if (APIKey.isValidJSKey(key))
-	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(key);
-	return null;
+    	return APIKeyUtil.getAPIKeyDomainOwnerKey(key);
     }
 
     public static ContactField buildCustomContactProperty(String name, String value, String subType)

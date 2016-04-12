@@ -45,6 +45,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	IPlIST.add("49.206.56.84");
 	IPlIST.add("117.247.178.90");
 	IPlIST.add("183.83.0.113");
+	IPlIST.add("117.247.109.22");
     }
 
     /**

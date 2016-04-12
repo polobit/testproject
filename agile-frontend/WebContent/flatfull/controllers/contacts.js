@@ -80,7 +80,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 	dashboard : function()
 	{
-
+		insidePopover=false;
 		$(".active").removeClass("active");
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
@@ -120,7 +120,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 * all at once.
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
-		{
+	{
 		insidePopover=false;
 		if(SCROLL_POSITION)
 		{
@@ -647,9 +647,12 @@ var ContactsRouter = Backbone.Router.extend({
 		$(el).find('.content-tabs').tabCollapse(); 
 
 		$('#content').html(el);
-
+	/*	if($(".toggle-contact-image .contact-delete-option").length == 0) {
+			$(".toggle-contact-image .contact-edit-option").css("margin-left","10px");
+			}*/
 		// Check updates in the contact.
 		checkContactUpdated();
+
 
 		if(_agile_get_prefs('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -1264,6 +1267,7 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	var countURL = "";
     	if(type == "contacts")
     		countURL = App_Contacts.contactsListView.options.url + "/count";
+
     	else if(type == "workflows")
     		countURL = countFetchURL + "/count";
      	else
@@ -1271,6 +1275,7 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
     	// Hide bulk action checkbox
     	$(".thead_check", el).closest("label").css("visibility", "hidden");
+
     	$("table", el).addClass("hide-head-checkbox");
 
     	abortCountQueryCall();

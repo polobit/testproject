@@ -796,6 +796,15 @@ public class ActivityUtil
 					mapvalue[2] = "milestone";
 					dealmap.put("milestone", mapvalue);
 				}
+			if (obj.description != null)
+				if (!oldobj.description.equalsIgnoreCase(obj.description))
+				{
+					Object[] mapvalue = new Object[5];
+					mapvalue[0] = obj.description;
+					mapvalue[1] = oldobj.description;
+					mapvalue[2] = "description";
+					dealmap.put("description", mapvalue);
+				}
 			JSONObject js = new JSONObject(new Gson().toJson(obj));
 			JSONArray jsn = js.getJSONArray("contact_ids");
 			jsn = ActivitySave.getExistingContactsJsonArray(jsn);
@@ -1130,6 +1139,16 @@ public class ActivityUtil
 					mapvalue[1] = DomainUserUtil.getDomainUser(oldobj.getTaskOwner().id).name;
 					mapvalue[2] = "Task_owner";
 					taskmap.put("Task_owner", mapvalue);
+
+				}
+			if (oldobj.taskDescription != null && obj.taskDescription != null)
+				if (!oldobj.taskDescription.toString().equalsIgnoreCase(obj.taskDescription.toString()))
+				{
+					Object[] mapvalue = new Object[3];
+					mapvalue[0] = obj.taskDescription;
+					mapvalue[1] = oldobj.taskDescription;
+					mapvalue[2] = "task_description";
+					taskmap.put("task_description", mapvalue);
 
 				}
 			JSONObject js = new JSONObject(new Gson().toJson(obj));

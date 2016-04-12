@@ -4,7 +4,7 @@
 <span type="hidden" id={{gravatarurl properties 50}}></span>
 <span type="hidden" id="https://www.google.com/s2/favicons?domain={{getPropertyValue properties "url"}}"></span>
 
-   {{#if entity_type}}
+   {{#if_equals entity_type deal}}
        <span><a href="#deals" id="notification-deal-id" style="color:black;font-weight:bold">{{name}}</a></span>
    {{else}}
        {{#if_contact_type "PERSON"}}
@@ -18,7 +18,7 @@
                <a href="#company/{{id}}" id="notification-contact-id" style="color:black;font-weight:bold;">{{getPropertyValue properties "name"}}</a>
            </span>  
         {{/if_contact_type}}
-   {{/if}} 
+   {{/if_equals}} 
     <span style="margin-left:2px" id= "notification-type">{{#if_notification_type}} {{notification}} {{/if_notification_type}}</span>
 </div>
 </script>

@@ -1342,6 +1342,13 @@ top:117px;
     padding: 8px;
     border-radius: 5px
 }
+.campaigns-graph-portlet-body .highcharts-tooltip span {
+    background-color: #313030;
+    opacity: 1;
+    z-index: 9999!important;
+    padding: 8px;
+    border-radius: 5px
+}
 .score-view img
 {
   opacity:0.5;
@@ -1671,6 +1678,9 @@ light.lter.b-b.wrapper-md .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wra
   #contacts-lhs-filters-toggle,#companies-lhs-filters-toggle {
     display: none;
   }
+  .filtersTabList #contacts-lhs-filters-toggle{
+    display: block;
+  }
   .panel-middle-align-mobile .col-xs-6:first-child {
   text-align: right;
   }
@@ -1734,7 +1744,9 @@ text-align: center;
 #clear-lhs-contact-filters {
   display: none;
 }
-
+.filtersTabList #clear-lhs-contact-filters {
+  display: block;
+}
 .leaderboard_portlet_header ul li {
   display: none;
 }
@@ -2258,7 +2270,10 @@ color:#484848!important;
 
 /* start contact-details styles */
 
-
-
-
+#addDescriptionInfo, #taskDescriptionInfo, .eventDescriptionInfo{ display: none;}
+.text-black {
+  color: #000;
+}
+#addDescriptionLink:hover, #addDescriptionLink:focus, #taskDescriptionLink:hover, #taskDescriptionLink:focus,
+#eventDescriptionLink:hover, #eventDescriptionLink:focus{color:#19a9d5;} 
 

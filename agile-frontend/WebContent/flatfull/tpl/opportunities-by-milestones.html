@@ -23,7 +23,7 @@
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#deal-rc-0" class="deals-list-view">List View</a></li>
 						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu" style="min-width:130px">
 								<li><a href="#deal-rc-1" id="deal-milestone-regular">Relaxed</a></li>
 								<li><a href="#deal-rc-2" id="deal-milestone-compact">Compact</a></li>
 								<li><a href="#deal-rc-3" id="deal-milestone-fit">Fit</a></li>
@@ -32,16 +32,21 @@
 					</ul>
 			</div>
 			<div class="btn-group inline-block m-l-xs" id="deals-action">
-					<a href="#deals-add" class="deals-add btn btn-sm  btn-default"><i class="icon-plus-sign" /> Add Deal
+					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> Add Deal
 					</a>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
 					{{#hasScope "MANAGE_DEALS"}}
 					<ul class="dropdown-menu pull-right">
-						<li><a href="#import-deals" >Import from CSV</a></li>
-						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
-						<li><a href="#add-dashlet">Add Dashlet</a></li>
+						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import from CSV</a></li>
+						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export as CSV</a></li>
+						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">Add Dashlet</a></li>
+					</ul>
+
+					{{else}}
+					<ul class="dropdown-menu pull-right">
+					<li><a href="#add-dashlet">Add Dashlet</a></li>
 					</ul>
 					{{/hasScope}}
 					<!--
@@ -307,7 +312,7 @@
 
 <script id="related-to-contacts-template" type="text/html">
 	{{#if_contact_type "PERSON"}}	
-		<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+		<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
     {{/if_contact_type}}
 	{{#if_contact_type "COMPANY"}}
      	<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>

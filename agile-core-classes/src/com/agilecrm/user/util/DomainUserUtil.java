@@ -21,6 +21,7 @@ import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -160,7 +161,7 @@ public class DomainUserUtil
 
 	try
 	{
-		return partialDAO.get(id);
+		return partialDAO.get(id, oldNamespace);
 	}
 	catch (Exception e)
 	{
@@ -235,7 +236,10 @@ public class DomainUserUtil
 	    {
 		public int compare(DomainUser one, DomainUser other)
 		{
-		    return one.name.toLowerCase().compareTo(other.name.toLowerCase());
+			if(one.name != null && other.name != null)
+				return one.name.toLowerCase().compareTo(other.name.toLowerCase());
+			else 
+				return 0;
 		}
 	    });
 
@@ -488,6 +492,32 @@ public class DomainUserUtil
      *            name of the domain
      * @return domain user, who is owner
      */
+    public static Key<DomainUser> getDomainOwnerKey(String domain)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	Key<DomainUser> userKey = null;
+	try
+	{
+		userKey = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).getKey();
+	    if (userKey == null)
+	    	userKey = new Key<DomainUser>(DomainUser.class, getDomainOwnerHack(domain).id);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
+	return userKey;
+    }
+    
+    /**
+     * Gets account owners of the given domain
+     * 
+     * @param domain
+     *            name of the domain
+     * @return domain user, who is owner
+     */
     public static DomainUser getDomainOwner(String domain)
     {
 	String oldNamespace = NamespaceManager.get();
@@ -495,9 +525,9 @@ public class DomainUserUtil
 	DomainUser user = null;
 	try
 	{
-	    user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
+		user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
 	    if (user == null)
-		user = getDomainOwnerHack(domain);
+	    	user = getDomainOwnerHack(domain);
 	}
 	finally
 	{
@@ -774,6 +804,5 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldnamespace);
 	}
     }
-    
 
 }

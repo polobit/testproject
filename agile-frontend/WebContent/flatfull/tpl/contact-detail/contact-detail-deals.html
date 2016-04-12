@@ -68,7 +68,7 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}" class="text-capitalize">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact text-capitalize">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
         					<a href="#company/{{id}}" class="text-capitalize">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}

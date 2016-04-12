@@ -1,5 +1,10 @@
 var FormsRouter = Backbone.Router.extend({
-	routes : { "forms" : "formSettings" },
+	
+	routes : { 
+		"forms" : "formSettings",
+		"form-builder-templates" : "getListOfTemplates" 
+	},
+
 	formSettings : function()
 	{
 		console.log("forms collection template");
@@ -13,4 +18,34 @@ var FormsRouter = Backbone.Router.extend({
 			} })
 		this.formsListView.collection.fetch();
 		$("#content").html(this.formsListView.el);
-	} });
+	},
+
+	getListOfTemplates : function()
+	{
+		$('#content').html("<link rel='stylesheet' type='text/css' href='flatfull/css/jquery.fancybox.css'><div id='formbuilder-listeners'></div>");
+        
+        head.js('flatfull/lib/jquery.fancybox.js',function() {
+            $.getJSON("misc/formbuilder/templates/templates.json", function(data) {
+
+               getTemplate("formbuilder-categories", data.templates[0], undefined, function(ui){
+                    $("#formbuilder-listeners").html($(ui));
+                }, "#formbuilder-listeners");
+                
+                $(".form_fancybox").fancybox({
+                    'autoDimensions': true,
+                    'padding'       : 0,
+                    'autoScale'     : true,
+                    'overflow'		: 'visible'
+                 });
+
+                hideTransitionBar();
+            });
+        });
+        
+        $(".active").removeClass("active");
+	
+	} 
+
+
+
+});

@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
@@ -51,7 +52,7 @@ public class UnbounceWebhook extends HttpServlet
 	    String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 
 	    // Get owner from API
-	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+	    Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 
 	    // Send Error if owner is not found
 	    if (owner == null)

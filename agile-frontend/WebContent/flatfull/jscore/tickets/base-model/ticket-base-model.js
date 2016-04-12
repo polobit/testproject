@@ -1,3 +1,4 @@
+//Ticket_Base_Model let you bind events on dom elements when view is rendered.
 var Ticket_Base_Model = Base_Model_View.extend({
 
 	events:{
@@ -251,7 +252,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 	toggleTimeline: function(e){
 
-		var tooltip_text = 'Show timeline';
+		var tooltip_text = 'Show Timeline';
 		if($('.ticket-timeline-container').is(':visible'))
 		{
 			//Rendering ticket notes
@@ -260,7 +261,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		}
 		else{
 			Ticket_Timeline.render_individual_ticket_timeline();
-			tooltip_text = 'Show comments';
+			tooltip_text = 'Show Comments';
 			Tickets.toggleActivitiesUI("hide");
 		}
 

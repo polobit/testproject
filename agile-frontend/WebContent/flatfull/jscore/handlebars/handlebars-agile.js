@@ -251,6 +251,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("xero.js");
 	}
+	else if (templateName.indexOf("braintree") == 0)
+	{
+		template_relative_urls.push("braintree.js");
+	}
 	else if (templateName.indexOf("quickbooks") == 0)
 	{
 		template_relative_urls.push("quickbooks.js");
@@ -305,6 +309,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("emailbuilder.js");
 	}
+	if (templateName.indexOf("segmentation") == 0)
+	{
+		template_relative_urls.push("segmentation.js");
+	}
 	if (templateName.indexOf("ticket") == 0)
 	{
 		template_relative_urls.push("tickets.js");
@@ -320,6 +328,14 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("skype") == 0)
 	{
 		template_relative_urls.push("skype.js");
+	}
+	if(templateName.indexOf("formbuilder") == 0)
+	{
+		template_relative_urls.push("formbuilder.js")
+	}
+	if (templateName.indexOf("uservoice") == 0)
+	{
+		template_relative_urls.push("uservoice.js");
 	}
 	return template_relative_urls;
 }
@@ -1115,15 +1131,16 @@ function getDealCustomProperties(items)
 					{
 						if(allCustomFields[i].name==fields[j].name)
 						{
+							fields[j].is_date = true;
 							if(!fields[j].value)
 								return '';
-							if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
+							/*if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
 								fields[j].value = convertDateFromUKtoUS(fields[j].value);
 							var dateString = new Date(fields[j].value);
 							if(dateString == "Invalid Date")
 								fields[j].value = getDateInFormatFromEpoc(fields[j].value);
 							else
-								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);*/
 
 							finalFields.push(fields[j]);
 							break;

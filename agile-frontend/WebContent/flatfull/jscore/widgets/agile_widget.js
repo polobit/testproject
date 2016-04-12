@@ -185,7 +185,7 @@ function agile_crm_update_contact_properties(propertiesArray, callback)
 		var flag = false;
 
 		// Iterates through each property in contact properties
-		$.each(properties, function(index, property)
+$.each(properties, function(index, property)
 		{
 			/*
 			 * checks for the match with given property name in properties list
@@ -225,15 +225,32 @@ function agile_crm_update_contact_properties(propertiesArray, callback)
 
 	// If property is new then new field is created
 	contact_model.set({ "properties" : properties }, { silent : true });
-	contact_model.url = "core/api/contacts";
+	var model = new Backbone.Model();
+	model.url = "core/api/contacts";
+
 
 	// Save model
-	contact_model.save({ success : function(model, response)
+	model.save(contact_model.toJSON(), { success : function(model, response)
 	{
-		console.log('contact saving ');
+		contact_model.set(model.toJSON(), { silent: true });
 		if (callback && typeof (callback) == "function")
 			callback();
 	} }, { silent : true });
+	var properties = contact_model.get("properties");
+	var i;
+	for (i = 0; i < properties.length; i++) {
+			 if(properties[i].name == "image"){
+			 	var url = properties[i].value;
+			 	var id = "contact-container";
+			 	$('#' + id).find('.contact-image-view').html('');
+	            $('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;" type="submit" />');
+				if($(".toggle-contact-image .contact-delete-option").length == 0) {
+			 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
+				$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").removeAttr('style');
+				$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("float","left");
+	}
+			 }
+	} 
 }
 
 /**

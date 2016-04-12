@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@page import="com.agilecrm.ticket.entitys.TicketDocuments"%>
 <%@page import="java.util.List"%>
 <%@page import="org.json.JSONArray"%>
@@ -41,8 +42,23 @@ body {
 
 	<%
 	String outputString = null;
-	if(type != null && type.equalsIgnoreCase("html")){ 
-		out.println(notes.html_text);
+	if(type != null && type.equalsIgnoreCase("html")){
+		
+		String htmlText = notes.html_text;
+		
+		/* try{
+			
+			htmlText = htmlText.replace("3D", "");
+			htmlText = htmlText.replace("=C2=A0", " ");
+			htmlText = htmlText.replace("(http://", "//"); 
+		}
+		catch(Exception e){
+			
+		} */
+	%>
+		<%= htmlText%>
+	<%
+		//out.println(htmlText);
 		out.println();
 		out.println();
 		out.println();
@@ -53,12 +69,16 @@ body {
 			List<TicketDocuments> documents = notes.attachments_list;
 			
 			for(TicketDocuments document : documents)
-				out.println("<a href="+ document.url +"  target=\"_blank\">" + document.name + "</a>");
+				out.println("<a href="+ document.url +"  target=\"_blank\">" + document.name + "</a><br/>");
 		}
 	}else{
 
 		try{
 			outputString = notes.mime_object;
+			
+			/* String escapedHTML = StringEscapeUtils.escapeHtml(headers);
+			
+			out.println(escapedHTML.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>")); */
 		}catch(Exception e){
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
@@ -72,7 +92,7 @@ body {
 	</script>
 	<script type="text/javascript">
 
-		var mime = <%= outputString%>;
+	 	var mime = <%= outputString%>;
 		var type = "<%= type%>";
 
 		printMIMEObj(type, mime);
@@ -82,7 +102,7 @@ body {
 			if(type && type == "html")
 				return;
 
-			if(!mime || mime == null || mime == "undefind")
+			if(!mime || mime == null || mime == "undefined")
 				return;
 
 			if(typeof mime == "object")
@@ -92,10 +112,9 @@ body {
 
 			var mimeobj = JSON.parse(mime);
 
+			//$(".original_message").html(mime);
+
 			$(".original_message").html(JSON.stringify(mimeobj, null, 4));
-
-			// $(".original_message").html(JSON.stringify(mimeobj, convertHTMLToString, 4));
-
 		}
 		
 		function convertHTMLToString (key, value) {

@@ -65,7 +65,8 @@ var DealsRouter = Backbone.Router.extend({
 				setupDealFilters();
 				//setupNewDealFilters();
 				initializeDealListners();
-				
+				loadPortlets('Deals');
+				contactListener();
 
 			}, "#opportunity-listners");
 		}
@@ -74,6 +75,11 @@ var DealsRouter = Backbone.Router.extend({
 			var that = this;
 			setupNewDealFilters(function(){
 				DEALS_LIST_COLLECTION = null;
+				getTemplate("opportunities-header-list", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#opportunity-listners').html($(template_ui));
+				
 				var query = ''
 				if (_agile_get_prefs('deal-filters'))
 				{
@@ -93,14 +99,32 @@ var DealsRouter = Backbone.Router.extend({
 						includeTimeAgo(el);
 						// Shows Milestones Pie
 						pieMilestonesByPipeline(pipeline_id);
-						// Shows deals chart
-						dealsLineChartByPipeline(pipeline_id);
+
+						var dealCount = new Base_Model_View({ url : 'core/api/opportunity/based/count?pipeline_id=' + pipeline_id + query, template : "" });
+
+						dealCount.model.fetch({ success : function(data)
+						{
+							var count = data.get("count") ? data.get("count") : 0;
+							if(count != undefined && count <= 1000)
+							{
+								// Shows deals chart
+								$("#total-pipeline-chart").show();
+								dealsLineChartByPipeline(pipeline_id);
+							}
+							else if(count != undefined && count > 1000){
+								$("#total-pipeline-chart").hide();
+							}
+							if(App_Deals.opportunityCollectionView.collection && App_Deals.opportunityCollectionView.collection.models[0])
+							{
+								App_Deals.opportunityCollectionView.collection.models[0].set({ "count" : count }, { silent : true })
+							}
+						} });
 						deal_bulk_actions.init_dom(el);
 						setupDealsTracksList(cel);
 						setupDealFilters(cel);
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
-						loadPortlets('Deals',el);
+						contactListener();
 						setTimeout(function(){
 							$('#delete-checked',el).attr("id","deal-delete-checked");
 						},500);
@@ -114,13 +138,15 @@ var DealsRouter = Backbone.Router.extend({
 					} });
 				that.opportunityCollectionView.collection.fetch();
 
-				$('#opportunity-listners').html(that.opportunityCollectionView.render().el);
+				$('.new-collection-deal-list').html(that.opportunityCollectionView.render().el);
+				loadPortlets('Deals');
 			});
+});
 		}
 
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
-		loadPortlets('Deals');
+		
 		setTimeout(function()
 		{
 			$('a.deal-notes').tooltip();
@@ -202,6 +228,7 @@ var DealsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				initializeDealListners();
+				contactListener();
 				var usersCollection = new Base_Collection_View({ url : '/core/api/users', sort_collection : false });
 				usersCollection.collection.fetch({
 					success : function(data){
@@ -269,6 +296,7 @@ var DealsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				initializeDealListners();
+				contactListener();
 				deserializeForm(deal_filter_json, $("#dealsFilterForm"));
 				$('input[name=name]').trigger('focus');
 				var usersCollection = new Base_Collection_View({ url : '/core/api/users', sort_collection : false });

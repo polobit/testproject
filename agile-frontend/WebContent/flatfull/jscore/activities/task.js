@@ -290,7 +290,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 	}
 	var startarray = (json.task_ending_time).split(":");
 	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
-
+	
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask

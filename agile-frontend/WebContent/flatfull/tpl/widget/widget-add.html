@@ -23,10 +23,19 @@
 				<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
 				</center>  
         	{{else}}
+        	{{#if_equals name "Braintree"}}
+				<center>  
+  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
+  					<img src="{{logo_url}}" style="height: 47px;">
+  				</span>
+				<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+				</center>  
+        	{{else}}
       <center> 
         <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" />
       </center>   
 			 {{/if_equals}}
+		{{/if_equals}}
 		{{/if_equals}}
    {{/if_equals}}
    {{/if_equals}}
