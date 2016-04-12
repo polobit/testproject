@@ -859,6 +859,10 @@ function populate_deal_products(el, value,form_id){
 					}
 					else
 					{
+						if(!$.isNumeric(value) || parseFloat(value)<=1)
+						{
+							return;
+						}
 						if($.isNumeric(value) && parseFloat(value)>=1)
 						{
 							$(source).removeClass('block').addClass('hide');			
@@ -992,7 +996,6 @@ function ValidateDealDiscountAmt(_form_id)
 					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
 					{
 						var iQtyPriceTotal= parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("qty")) *parseFloat( App_Deal_Details.deal_products_collection_view.collection.models[key].get("price"))
-						App_Deal_Details.deal_products_collection_view.collection.models[key].set("total",iQtyPriceTotal)
 						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
 						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
 						{
