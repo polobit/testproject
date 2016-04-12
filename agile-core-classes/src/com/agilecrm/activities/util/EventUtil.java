@@ -673,4 +673,9 @@ public class EventUtil
     	}
 		return filteredEvents;
     }
+
+    public static List<Contact> getEventsRelatedContacts(Long id){
+    	Event event= getEvent(id);
+    	return event.relatedContacts();
+    }
 }

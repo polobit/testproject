@@ -130,6 +130,8 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.ticket.rest.TicketImportsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketLabelsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketReportsRest.class);
+	
+	s.add(com.agilecrm.core.api.widgets.UservoiceWidgetAPI.class);
 
 	return s;
     }

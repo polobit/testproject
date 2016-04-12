@@ -82,7 +82,7 @@
         <h3 class="pull-left font-thin h3">Reports</h3>
 
         <div class="pull-right">
-            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block">Configure Dashlet Reports</a>
+            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block" onclick="Agile_GA_Event_Tracker.track_event('Configure Dashlet Reports')">Configure Dashlet Reports</a>
             
         </div>
     </div>
@@ -144,7 +144,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#contact-reports">Go</a>
+            <a class="btn btn-sm btn-default" href="#contact-reports" onclick="Agile_GA_Event_Tracker.track_event('Contact Reports')">Go</a>
         </div>
     </div>
 </div>
@@ -172,7 +172,7 @@
         <!-- Add button -->
             {{#hasMenuScope 'ACTIVITY'}}
                 <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade">Go</a>
+                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade" onclick="Agile_GA_Event_Tracker.track_event('Activity Reports')">Go</a>
                 </div>
                 
             {{else}}
@@ -217,7 +217,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/growth">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/growth" onclick="Agile_GA_Event_Tracker.track_event('Growth Graphs')">Go</a>
         </div>
     </div>
 </div>
@@ -238,7 +238,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/funnel">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/funnel" onclick="Agile_GA_Event_Tracker.track_event('Funnel Graphs')">Go</a>
         </div>
     </div>
 </div>
@@ -259,7 +259,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/cohorts">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/cohorts" onclick="Agile_GA_Event_Tracker.track_event('Ratio Reports')">Go</a>
         </div>
     </div>
 </div>   
@@ -286,7 +286,7 @@
         <!-- Add button -->
        
         <div >
-            <a id="campaign_id" class="btn btn-sm btn-default" href="#">Go</a>
+            <a id="campaign_id" class="btn btn-sm btn-default" href="#" onclick="Agile_GA_Event_Tracker.track_event('Campaign Stats')">Go</a>
 
         </div>
     </div>
@@ -311,7 +311,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats">Go</a>
+            <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats" onclick="Agile_GA_Event_Tracker.track_event('Compare Campaigns')">Go</a>
         </div>
     </div>
 </div>
@@ -340,7 +340,7 @@
         <!-- Add button -->
           
                 <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                      <a class="btn btn-sm btn-default" href="#activities">Go</a>
+                      <a class="btn btn-sm btn-default" href="#activities" onclick="Agile_GA_Event_Tracker.track_event('User Activities')">Go</a>
                 </div>
             {{else}}
             <!-- Description -->
@@ -377,7 +377,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#contact-activities">Go</a>
+            <a class="btn btn-sm btn-default" href="#contact-activities" onclick="Agile_GA_Event_Tracker.track_event('Contact Activities')">Go</a>
         </div>
     </div>
 </div>
@@ -402,7 +402,7 @@
         </div>
         <!-- Add button -->
 
-     <div><a class="btn btn-sm btn-default" href="#report-calls/total-calls">Go</a></div>
+     <div><a class="btn btn-sm btn-default" href="#report-calls/total-calls" onclick="Agile_GA_Event_Tracker.track_event('Calls by User')">Go</a></div>
                  
             
              <div class="clearfix"></div>
@@ -426,7 +426,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/average-calls">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-calls/average-calls" onclick="Agile_GA_Event_Tracker.track_event('Average call duration')">Go</a>
         </div>
     </div>
 </div>
@@ -448,7 +448,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" id="call-activity-link">Go</a>
+            <a class="btn btn-sm btn-default" id="call-activity-link" onclick="Agile_GA_Event_Tracker.track_event('Call Logs')">Go</a>
         </div>
     </div>
 </div>
@@ -469,7 +469,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/pie-graph">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-calls/pie-graph" onclick="Agile_GA_Event_Tracker.track_event('Call Outcomes')">Go</a>
         </div>
     </div>
 </div>
@@ -490,7 +490,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/timebased">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-calls/timebased" onclick="Agile_GA_Event_Tracker.track_event('Call Report-Time Based')">Go</a>
         </div>
     </div>
 </div>
@@ -518,7 +518,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#report-deals">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-deals" onclick="Agile_GA_Event_Tracker.track_event('Incoming Deals')">Go</a>
         </div>
     </div>
 </div>
@@ -540,7 +540,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-lossReason">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-lossReason" onclick="Agile_GA_Event_Tracker.track_event('Lost Deal Analysis' )">Go</a>
         </div>
     </div>
 </div>
@@ -561,7 +561,7 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#reports-wonDeals">Go</a>
+            <a class="btn btn-sm btn-default" href="#reports-wonDeals" onclick="Agile_GA_Event_Tracker.track_event('Revenue by Source')">Go</a>
         </div>
     </div>
  </div>
@@ -581,7 +581,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#report-sales">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-sales" onclick="Agile_GA_Event_Tracker.track_event('Salesforecast')">Go</a>
         </div>
     </div>
 </div>
@@ -602,7 +602,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#user-reports">Go</a>
+            <a class="btn btn-sm btn-default" href="#user-reports" onclick="Agile_GA_Event_Tracker.track_event('User Reports' )">Go</a>
         </div>
     </div>
 </div>
@@ -625,7 +625,7 @@
         </div>
         <!-- Add button -->
         <div  style="display:inline;">
-            <a class="btn btn-sm btn-default" href="#rep-reports">Go</a>
+            <a class="btn btn-sm btn-default" href="#rep-reports" onclick="Agile_GA_Event_Tracker.track_event('Rep Performance' )">Go</a>
         </div>
 
             {{else}}
@@ -659,7 +659,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#report-comparison">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-comparison" onclick="Agile_GA_Event_Tracker.track_event('Comparision Reports' )">Go</a>
         </div>
     </div>
 </div>

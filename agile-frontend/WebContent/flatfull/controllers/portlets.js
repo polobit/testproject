@@ -64,7 +64,7 @@ var PortletsRouter = Backbone.Router
 										updateImageS3Path('flatfull/img/dashboard_images/Task-report.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/Task.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/User-Activities.png'),
-										updateImageS3Path('flatfull/img/dashboard_images/Campaign-stats.jpg'),
+										updateImageS3Path('flatfull/img/dashboard_images/Campaign-stats-new.jpg'),
 										updateImageS3Path('flatfull/img/dashboard_images/Quota.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/incoming-deals-new.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/lost-deal-analysis-new.png'),

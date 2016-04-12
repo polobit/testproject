@@ -4,6 +4,14 @@
 		<tbody>
 			<tr>
 				<th>Emails Sent</th>
+				<th>Emails Skipped<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Total email skipped recorded & unique skipped."
+							id="element" data-trigger="hover" />
+						</span></th>
 				<th>Emails Opened<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
@@ -12,6 +20,7 @@
 							data-title:" data-content="Total email opens recorded & unique opens."
 							id="element" data-trigger="hover" />
 						</span></th>
+				
 				<th>Clicks<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
@@ -38,6 +47,7 @@
 			</tr>
             <tr>
 				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>
+				<td>{{#if skipped}}{{skipped}} ({{unique_skipped}}) {{else}} - {{/if}}</td>
 				<td>{{#if opened}}{{opened}} ({{unique_opened}}) {{else}} - {{/if}}</td>
 				<td>{{#if clicks}} {{clicks}} ({{unique_clicks}}) {{else}} - {{/if}}</td>
 				<td>{{#if unsubscribed}}{{unsubscribed}} {{else}} - {{/if}}</td>

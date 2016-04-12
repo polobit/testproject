@@ -310,6 +310,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
+   <li id="segmentationmenu">
+    <a  href="#segments">
+       <i class="icon-large icon-screenshot"></i>
+      <span>Segments</span>  
+    </a>
+  </li>
   <li id="landing-pages-menu">
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
@@ -327,7 +333,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <i class="icon-bar-chart icon-white"></i>
       <span>Reports</span>
     </a>
-  </li>
+  </li>  
+  
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
@@ -612,9 +619,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-
-
-   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -627,6 +632,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <script>
 
 try{console.time("startbackbone");}catch(e){}
+
+var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
@@ -813,7 +820,7 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
         </div>
                
         <div class="modal-footer">
-                 <a href="http://salescal.agilecrm.com/" target="_blank" class="btn btn-primary" id="schedule_demo">Schedule a Demo</a>
+                 <a href="http://salescal.agilecrm.com/" target="_blank" class="btn btn-primary" id="schedule_demo" onclick="Agile_GA_Event_Tracker.track_event('Demo from Getting Started Video');">Schedule a Demo</a>
         </div>                     
                                  
         </div>

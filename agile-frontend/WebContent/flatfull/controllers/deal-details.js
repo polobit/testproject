@@ -106,7 +106,7 @@ var DealDetailsRouter = Backbone.Router.extend({
  */
 function fill_deal_owners(el, data, callback)
 {
-	var optionsTemplate = "<li><a class='deal-owner-list' data='{{id}}'>{{name}}</a></li>";
+	var optionsTemplate = "<li><a href='javascript:void(0);' class='deal-owner-list' data='{{id}}'>{{name}}</a></li>";
 	fillSelect('deal-detail-owner', '/core/api/users', 'domainUsers', callback, optionsTemplate, true);
 }
 

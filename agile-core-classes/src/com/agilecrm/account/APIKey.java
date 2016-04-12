@@ -44,10 +44,10 @@ public class APIKey
 
     // Allowed Domains
     public String allowed_domains = "localhost, *";
-    
+
     // Blocked IP Addresses String
     public String blocked_ips = null;
-    
+
     /**
      * Domain User Key
      */
@@ -170,13 +170,7 @@ public class APIKey
     public static Boolean isPresent(String key)
     {
 	// Queries APIKey entities with the apikey parameter
-	APIKey apiKey = dao.ofy().query(APIKey.class).filter("api_key", key).get();
-
-	// Returns true if key exists
-	if (apiKey != null)
-	    return true;
-
-	return false;
+	return dao.ofy().query(APIKey.class).filter("api_key", key).count() > 0;
     }
 
     /**
@@ -334,11 +328,7 @@ public class APIKey
      */
     public static Boolean isValidJSKey(String key)
     {
-	APIKey apiKey = dao.ofy().query(APIKey.class).filter("js_api_key", key).get();
-
-	if (apiKey != null)
-	    return true;
-	return false;
+	return dao.ofy().query(APIKey.class).filter("js_api_key", key).count() > 0;
     }
 
     /**
@@ -365,7 +355,7 @@ public class APIKey
 	APIKey key = getAPIKey();
 	return key.allowed_domains;
     }
-    
+
     /**
      * Update blocked ips of APIKey Object
      */

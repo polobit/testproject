@@ -508,5 +508,9 @@
         <property name="assignee_key" direction="asc"/>
         <property name="created_time" direction="asc"/>
         <property name="plain_text" direction="asc"/>
+    </datastore-index>   
+    <datastore-index kind="Contact" ancestor="false" source="manual">
+        <property name="campaignStatus.status" direction="asc"/>
+        <property name="campaignStatus.start_time" direction="asc"/>
     </datastore-index>
 </datastore-indexes>
