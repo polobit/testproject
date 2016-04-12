@@ -236,7 +236,10 @@ public class DomainUserUtil
 	    {
 		public int compare(DomainUser one, DomainUser other)
 		{
-		    return one.name.toLowerCase().compareTo(other.name.toLowerCase());
+			if(one.name != null && other.name != null)
+				return one.name.toLowerCase().compareTo(other.name.toLowerCase());
+			else 
+				return 0;
 		}
 	    });
 
