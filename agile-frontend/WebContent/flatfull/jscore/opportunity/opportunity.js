@@ -586,7 +586,7 @@ function populate_deal_products(el, value,form_id){
 			function(e)
 			{
 				var source = e.target || e.srcElement;
-				if(source.id=="discount_type_btn" || $(source).hasClass("caret"))
+				if(source.id=="discount_type_btn" || $(source).hasClass("caret") || $(source).hasClass("m-r-xs"))
 					return;
 				if($(source).hasClass("caret"))
 					return;
@@ -834,6 +834,7 @@ function populate_deal_products(el, value,form_id){
 					this.$el.addClass("editing");
 
 					this.input.focus();
+					$(this.input).val($(this.input).val());
 
 				}
 				this.close=function(e,type)
@@ -844,7 +845,7 @@ function populate_deal_products(el, value,form_id){
 					//type-enter/blur
 					if(type=="blur")
 					{
-						if(!$.isNumeric(value))
+						if(!$.isNumeric(value) || parseFloat(value)<=0)
 						{
 							value=$(source).attr("prev_val");
 							if(!$.isNumeric(value))
@@ -858,7 +859,7 @@ function populate_deal_products(el, value,form_id){
 					}
 					else
 					{
-						if($.isNumeric(value) && parseFloat(value)>=0)
+						if($.isNumeric(value) && parseFloat(value)>=1)
 						{
 							$(source).removeClass('block').addClass('hide');			
 							var objTD=$(source).parent('td');
@@ -867,7 +868,7 @@ function populate_deal_products(el, value,form_id){
 
 					}
 						
-					if($.isNumeric(value) && parseFloat(value)>=0)
+					if($.isNumeric(value) && parseFloat(value)>=1)
 					{
 
 						
@@ -901,6 +902,7 @@ function populate_deal_products(el, value,form_id){
 					this.input.removeClass('hide').addClass('block');
 					this.input.focus();
 					$(this.input).attr("prev_val",$(this.input).val())
+					$(this.input).val($(this.input).val())
 					jSpan.removeClass('block').addClass('hide');
 					
 
@@ -1000,7 +1002,7 @@ function ValidateDealDiscountAmt(_form_id)
 					}
 					if(iTotal ==0 )
 					{
-						$(".calculation-error-status",_form_id).html("Alteast one products should be selected to apply discount")
+						$(".calculation-error-status",_form_id).html("Atleast one product should be selected to apply discount")
 						return false;		
 					}
 					if(parseFloat(iDiscountValue)>parseFloat(iTotal))
