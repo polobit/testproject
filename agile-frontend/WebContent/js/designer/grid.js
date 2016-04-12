@@ -504,16 +504,24 @@ function zones_popup_handler($popup, edit_row_index, jsonValues){
     
    try
    {
-        // Make merge fields value selected
-        $popup.find('[name="undefined"]').val(jsonValues[1].value).attr('selected', 'selected');
+        var value = jsonValues[1].value;
 
-        // For New Territory node, Zone comparator is removed
-        if($popup.find('[name="in_zone_compare"]').length == 0)
-            return;
+        if(value)
+        {
+            if(value != '{{location.country}}' && value != '{{location.state}}' && value != '{{location.city}}')
+                value = 'CUSTOM_FIELD';
+
+            // Make merge fields value selected
+            $popup.find('[name="undefined"]').val(value).attr('selected', 'selected');
+
+            // For New Territory node, Zone comparator is removed
+            if($popup.find('[name="in_zone_compare"]').length == 0)
+                return;
+        }
    }
    catch(err)
    {
-
+        console.log("Error occured in zones popup handler" + err);
    }
 
     var $zone_comparator = $popup.find('[name="in_zone_compare"]');
