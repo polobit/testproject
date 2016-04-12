@@ -147,7 +147,7 @@ background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInte
 
 .text-white
 {
-color:#fff !important;
+color:#fff;
 }
 input
 {
@@ -157,9 +157,9 @@ a:hover
 {
 text-decoration:underline;
 }
-/*#mobile .tags-color{
+#mobile .tags-color{
 color:#58666e !important;
-}*/
+}
 .error {
 	color: white !important;
 	background-color: #c74949;
