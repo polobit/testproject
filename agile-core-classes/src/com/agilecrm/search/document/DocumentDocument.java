@@ -105,4 +105,11 @@ public class DocumentDocument extends com.agilecrm.search.document.Document impl
 
 	return Document.dao.fetchAllByKeys(document_keys);
     }
+
+	@Override
+	public void addAsync(Object entity)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

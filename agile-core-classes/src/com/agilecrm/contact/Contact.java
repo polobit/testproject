@@ -43,6 +43,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.search.SearchException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.annotation.AlsoLoad;
@@ -481,6 +482,11 @@ public class Contact extends Cursor
 	    try
 	    {
 		search.add(this);
+	    }
+	    
+	    catch (SearchException se)
+	    {
+	    	search.addAsync(this);
 	    }
 	    catch (Exception e)
 	    {
