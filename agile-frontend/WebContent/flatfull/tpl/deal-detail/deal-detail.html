@@ -1,13 +1,13 @@
 
 <script id="deal-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
-<div class="hbox hbox-auto-xs {{#is_mobile}} wrapper-md {{else}} bg-light {{/is_mobile}}">
-<div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
+<div class="hbox hbox-auto-xs dealDetailList {{#is_mobile}} {{else}} bg-light {{/is_mobile}}">
+<div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view taskDetailsCol">
 
 <div class="row-row">
-<div  id="deal-detail-actions-dropdown" class="wrapper">
+<div  id="deal-detail-actions-dropdown" class="wrapper {{#is_mobile}} p-b-xs {{/is_mobile}}">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
-<div class="p-t-none">
+<div class="p-t-none pos-rlt">
   <div class="panel panel-default m-b">
     <div class="panel-body">
 <div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
@@ -61,7 +61,7 @@
 
 
 {{else}}                       
-<div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown">
+<div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown dealEditDropdown">
 								
 								
 								<a class=" dropdown-toggle" data-toggle="dropdown"><span class="caret text-lg"></span></a>
@@ -150,7 +150,7 @@
 									
 									{{#if custom_data}}
                   <div class="hidden-sm hidden-xs " >
-                  <div class="panel panel-default ">
+                  <div class="panel panel-default m-b ">
                     <div class="panel-body">
                                      
                                       <small class="text-base text-muted">Custom Data</small>
@@ -246,7 +246,7 @@
 				</div>
 			
 			
-<div class="col  {{#is_mobile}}  {{else}} bg-white {{/is_mobile}}">
+<div class="col  dealsTabListCenter bg-white">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">			
 <div id="deal-details">

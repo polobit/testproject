@@ -2003,6 +2003,7 @@ width: 1%!important;
 .social-video{ width: 100% !important;}
 #socialsuite-tabs-content .social-app-content { padding-bottom: 0px ;}
 .emailTemplates .namethead { padding: 8px 15px 8px 5px;}
+.dealsTabListCenter { background: inherit;}
 
 }
 
@@ -2260,6 +2261,7 @@ color:#484848!important;
 .emailTemplates tr th:first-child{ width: 2% !important;}
 .min-h-auto{ min-height: auto !important;}
 .prefs-view{ display: inline !important;}
+.dealEditDropdown{ left: inherit; right: 8px; top: 20px;}
 
 @media all and (min-width: 768px) and (max-width: 1024px) { 
 
@@ -2271,7 +2273,12 @@ color:#484848!important;
   }
   #workflows-listener-container .pull-left.font-thin.h3 small{ font-size: 55%;}
   #landingpages-model-list tr td:first-child{ vertical-align: top !important;}
-  .contDetails{ display: table !important;}
+  .contDetails{ display: table;}
+  .contDetails .col, .companyDetails .col, .taskListDetails .col, .dealDetailList .col{ display:block; height: auto;}
+  .contRightWidgets{ width: auto;}
+  .tabListCenter{ margin-left: 15px; margin-right: 15px;}
+  .stars-m-l{ margin-left: 60%;}
+  .taskDetailsCol{ width: 100%; text-align: center;}
 }
 
 @media all and (min-width: 768px) and (max-width: 1100px) { 
@@ -2287,10 +2294,18 @@ color:#484848!important;
 }
 @media (max-width: 1024px){
 .deal_custom_replace{ display: none !important;}
-.details-mobile-view {
+.details-mobile-view, .company-details-mobile-view {
   width: 100%;
 }
+.companytabListCenter, .dealsTabListCenter{ margin-left: 15px; margin-right: 15px;}
+.companyDetails .vbox{ min-height: auto;}
+.taskTabListCenter{ margin-left: 15px; margin-right: 15px; margin-top: 15px;}
+.taskDetailsCol{ border-right: none;}
+}
 
+@media (max-width: 420px){
+.companytabListCenter .nav li a{ padding: 10px 4px !important;}
+.taskTabListCenter .nav li a{ padding-left: 12px; padding-right: 12px;}
 }
 
 .moreDetailsTab{ margin: 14px auto 0;} 

@@ -6,7 +6,7 @@
 
 
 <div id = "contact-dtl" class="app-content-full  h-full dock-view-fixing">
-<div class="hbox hbox-auto-xs hbox-auto-sm bg-light" >
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light contDetails" >
   
 
   <div class="col  details-mobile-view b-r bg-light lter vbox-mobile-view">
@@ -236,7 +236,7 @@
 
 					<div class="row">
 					<div class="col-xs-12 col-sm-7 text-center">
-					 <div id='star' class="contact-star"></div>
+					 <div id='star' class="contact-star stars-m-l"></div>
 					</div>		
 
 
@@ -914,7 +914,7 @@ class="icon-plus"></i> <span >Add</span></a>
 
 					<div class="row">
 					<div class="col-xs-12 col-sm-7 text-center">
-					 <div id='star' class="contact-star"></div>
+					 <div id='star' class="contact-star stars-m-l"></div>
 					</div>		
 
 
@@ -1373,7 +1373,7 @@ class="icon-plus"></i> <span >Add</span></a>
 
 
 
-<div class="col bg-white">
+<div class="col bg-white tabListCenter">
  <div class="vbox" style="display:block">
   <div class="row-row" style="display:block">
   <div>
@@ -1384,7 +1384,7 @@ class="icon-plus"></i> <span >Add</span></a>
 		<!--  starting time line view -->
 		<div  id="contacts-inner-tabs">
         <div class="tab-container bg-light hide-margin-mobile">
-<div class="pull-left p-sm bg-light text-xs text-muted hidden-sm hidden-xs" id="prev"><i class="fa fa-chevron-left"></i></div>
+<div class="pull-left p-sm bg-light text-xs text-muted hidden-xs" id="prev"><i class="fa fa-chevron-left"></i></div>
 			<ul class="nav nav-tabs bg-light pull-left b-n content-tabs"  role="tablist" id="contactDetailsTab">
 		<li class=""><a data-toggle="tab" role="tab" href="#timeline" onclick="setTimeout(function(){$(window).resize()}, 1000)">Timeline</a></li>
 				<li class=""><a data-toggle="tab" role="tab"  href="#notes">Notes</a></li>
@@ -1408,7 +1408,7 @@ class="icon-plus"></i> <span >Add</span></a>
          </ul> 
          </li>  -->
 			</ul> 
-<div class="pull-left p-sm bg-light text-xs text-muted hidden-xs hidden-sm" id="next"><i class="fa fa-chevron-right"></i></div>
+<div class="pull-left p-sm bg-light text-xs text-muted hidden-xs" id="next"><i class="fa fa-chevron-right"></i></div>
 <div class="clearfix"></div>
            </div>
 			<div class="tab-content no-tab-cell hidden-xs" id="contact-tab-content">
@@ -1473,8 +1473,8 @@ class="icon-plus"></i> <span >Add</span></a>
   </div>
   </div>
 
-  <div class="contact-right-widgetsview box-border  col w-lg   bg-auto {{#is_mobile}} p-t-none bg-white m-b m-l m-r {{else}}
-    b-l bg-light lter {{/is_mobile}}">
+  <div class="contact-right-widgetsview box-border  col w-lg   bg-auto contRightWidgets 
+  {{#is_mobile}} p-t-none bg-white m-b m-l m-r m-t {{else}} b-l bg-light lter {{/is_mobile}}">
  	 <div class="vbox">
    <div class="row-row">
    <div>
