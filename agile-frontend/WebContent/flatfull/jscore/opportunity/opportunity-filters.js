@@ -867,6 +867,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
     	e.preventDefault();
     	_agile_delete_prefs('deal-milestone-view');
+    	_agile_delete_prefs("agile_deal_view");
     	App_Deals.deals();
     });
 	
@@ -874,6 +875,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	$('#opportunity-listners').on('click', '#deal-milestone-compact', function(e) {
     	e.preventDefault();
     	_agile_set_prefs('deal-milestone-view','compact');
+    	_agile_delete_prefs("agile_deal_view");
     	App_Deals.deals();
     });
 	
@@ -881,6 +883,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	$('#opportunity-listners').on('click', '#deal-milestone-fit', function(e) {
     	e.preventDefault();
     	_agile_set_prefs('deal-milestone-view','fit');
+    	_agile_delete_prefs("agile_deal_view");
     	App_Deals.deals();
     });
 
