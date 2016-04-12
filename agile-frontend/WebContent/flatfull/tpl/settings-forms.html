@@ -36,13 +36,13 @@
 		<div class="data-container">
 			<div class="panel panel-default">
 			<div class="panel-heading">Forms List</div>
-			<table class="table table-bordered table-striped showCheckboxes c-p agile-table" url="core/api/forms/bulk">
+			<table class="table table-striped showCheckboxes c-p agile-table tableHeader tab-layout" url="core/api/forms/bulk" data-resizable-columns-id="form-template">
 				
 				<thead>
 					<tr>
-						<th style="width:50%">Form Title</th>
-						<th style="width:50%">Last Modified</th>
-						<th style="width:50%"></th>
+						<th data-resizable-column-id="form_title" class="text-ellipsis">Form Title</th>
+						<th data-resizable-column-id="last_modified" class="text-ellipsis">Last Modified</th>
+						<th data-resizable-column-id="share"></th>
 					</tr>
 				</thead>
 				<tbody id="forms-model-list" class="c-p"></tbody>
@@ -84,7 +84,7 @@
 	</td>
 	<td>
 	    <div class="table-resp hide" id="formcode_manager">
-		<a class="codeshare" ><i class="fa fa-file-code-o" data-formid="{{id}}"></i><span data-formid="{{id}}" style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>
+		<a class="codeshare" ><i class="fa fa-file-code-o" data-formid="{{id}}"></i><span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>
 		</div>
 	</td>
 	</br>

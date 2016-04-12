@@ -7,8 +7,9 @@ var Form_Collection_Events = Base_Collection_View.extend({
 	},
 
 	codePublish : function(e){
-		e.preventDefault();
+		
 		$(".modal-backdrop").hide();
+		e.preventDefault();
 
 		//full source code
 		var $codeShareModalEl = $("#codeShareModal");
@@ -25,7 +26,7 @@ var Form_Collection_Events = Base_Collection_View.extend({
 	 	$codeShareModalEl.find("#iframeArea").text(iframe);
 
 	 	//embed code
-	 	var embed = "<div id=\""+window.location.host+"_"+$(e.target).data("formid")+" class=\"agile_crm_form_embed\"\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
+	 	var embed = "<div id=\""+window.location.host+"_"+$(e.target).data("formid")+"\" class=\"agile_crm_form_embed\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
 		$codeShareModalEl.find("#embedCodeArea").text(embed);
 	},
 
