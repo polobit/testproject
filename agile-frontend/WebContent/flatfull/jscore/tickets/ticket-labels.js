@@ -2,7 +2,7 @@ var Ticket_Labels = {
 
 	labelsCollection : undefined,
 
-	initChoosenSelect : function(el, initChoosenSelect, execute_callback) {
+	initChoosenSelect : function(el, execute_callback) {
 
 		this.loadChosenLibrary(function() {
 			var $select = $(".chosen-select", el);
