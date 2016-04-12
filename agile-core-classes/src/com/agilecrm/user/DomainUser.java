@@ -998,6 +998,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	public String getScheduleid(String name)
 	{
+	if(name == null)
+		  name = " ";
+	
 	return name.replace(" ", "_");
 	}
 

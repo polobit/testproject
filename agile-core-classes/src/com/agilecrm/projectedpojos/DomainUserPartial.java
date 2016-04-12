@@ -22,6 +22,7 @@ public class DomainUserPartial extends ProjectionEntityParse{
 	public String name;
 	public String pic;
 	public String schedule_id;
+	
 	public String calendar_url;
 	
 	public DomainUserPartial(){
