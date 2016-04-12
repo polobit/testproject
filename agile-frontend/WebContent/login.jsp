@@ -147,7 +147,7 @@ background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInte
 
 .text-white
 {
-color:#fff;
+color:#fff !important;
 }
 input
 {
@@ -157,9 +157,9 @@ a:hover
 {
 text-decoration:underline;
 }
-#mobile .tags-color{
+/*#mobile .tags-color{
 color:#58666e !important;
-}
+}*/
 .error {
 	color: white !important;
 	background-color: #c74949;
@@ -232,7 +232,7 @@ if(isSafari && isWin)
 	<%
 				if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 				<div >
-		<img class="navbar-brand col-md-offset-2" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png"  ></img></div>
+		<img class="block" style="margin:0px auto;" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png"  ></img></div>
 	<% }else {  %> 
 					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t tags-color text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
