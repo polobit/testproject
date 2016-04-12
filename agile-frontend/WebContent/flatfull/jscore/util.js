@@ -725,7 +725,7 @@ function endFunctionTimer(name){
 }
 
 function loadServiceLibrary(callback){
-	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets-min.js' + "?_=" + _AGILE_VERSION, function(){
+	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets.min.js' + "?_=" + _AGILE_VERSION, function(){
 
 		if(callback)
 			callback();
