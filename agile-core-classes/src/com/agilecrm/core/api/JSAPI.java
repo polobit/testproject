@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
@@ -1104,7 +1105,8 @@ public class JSAPI
 		    contact.addProperty(field);
 		}
 	    }
-	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    // Set owner not required : customer issu
+	    // contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 
 	    // To set company again, if company updated this is mandatory.
 	    contact.contact_company_id = null;

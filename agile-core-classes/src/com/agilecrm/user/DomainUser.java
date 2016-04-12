@@ -775,6 +775,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			}
 
 		}
+		
+		// Set schedule id
+		if(this.id != null && StringUtils.isBlank(schedule_id))
+		{
+			this.schedule_id = domainuser.schedule_id;
+			if(StringUtils.isBlank(schedule_id))
+				this.schedule_id = getScheduleid(name);
+			
+		} else if(this.id == null){
+			this.schedule_id = getScheduleid(name);
+		}
 
 		// Sets user scopes
 		setScopes();
@@ -987,17 +998,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	public String getScheduleid(String name)
 	{
-		String scheduleid = null;
-		if (name.contains(" "))
-		{
-			scheduleid = name.replace(" ", "_");
-			return scheduleid;
-		}
-		else
-		{
-			scheduleid = name;
-			return scheduleid;
-		}
+	if(name == null)
+		  name = " ";
+	
+	return name.replace(" ", "_");
 	}
 
 	/**
@@ -1080,7 +1084,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		// beta-sandbox
 		// "https://"+domainUser.domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com"
 		// version "https://"+domainUser.domain+".agilecrm.com"
-
+		
 		String calendar_url = VersioningUtil.getHostURLByApp(domain);
 
 		if (StringUtils.isNotBlank(schedule_id))

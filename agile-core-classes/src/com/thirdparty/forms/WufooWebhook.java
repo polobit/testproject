@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
@@ -43,7 +44,7 @@ public class WufooWebhook extends HttpServlet
 	    String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 
 	    // Get domain user from API key
-	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+	    Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 
 	    // Create note(Note) and properties(ContactField) list
 	    List<Note> notes = new ArrayList<Note>();

@@ -23,6 +23,7 @@ import org.json.JSONException;
 import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.deferred.CompanyDeleteDeferredTask;
@@ -1901,7 +1902,7 @@ public class ContactUtil
 	{
 	    contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, names[0], null));
 
-	    contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, names[1], null));
+	    contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, name.replace(names[0], "").trim(), null));
 	}
 	else
 	{
@@ -1913,9 +1914,14 @@ public class ContactUtil
 
 	try
 	{
+		Tag tagObject = new Tag("helpdesk");
+
+	    contact.tagsWithTime.add(tagObject);
 	    contact.save();
+	    
+	    ActivitySave.createTagAddActivity(contact);
 	}
-	catch (PlanRestrictedException e)
+	catch (Exception e)
 	{
 	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	}

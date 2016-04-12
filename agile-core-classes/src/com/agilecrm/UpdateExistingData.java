@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.cleanup.CleanupUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
@@ -81,7 +82,7 @@ public class UpdateExistingData extends HttpServlet
 	try
 	{
 	    NamespaceManager.set(namespace);
-	    Key<DomainUser> user = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	    Key<DomainUser> user = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 	    Integer page_size = 0;
 	    if (count != null)
 	    {

@@ -42,6 +42,7 @@ $(function()
 	App_Ticket_Module = new TicketsUtilRouter();
 	App_LandingPageRouter = new LandingPageRouter();
 	App_EmailBuilderRouter = new EmailBuilderRouter();
+	App_VisitorsSegmentation=new VisitorsSegmentationRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)

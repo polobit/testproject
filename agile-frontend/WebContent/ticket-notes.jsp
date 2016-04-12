@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@page import="com.agilecrm.ticket.entitys.TicketDocuments"%>
 <%@page import="java.util.List"%>
 <%@page import="org.json.JSONArray"%>
@@ -41,8 +42,23 @@ body {
 
 	<%
 	String outputString = null;
-	if(type != null && type.equalsIgnoreCase("html")){ 
-		out.println(notes.html_text);
+	if(type != null && type.equalsIgnoreCase("html")){
+		
+		String htmlText = notes.html_text;
+		
+		/* try{
+			
+			htmlText = htmlText.replace("3D", "");
+			htmlText = htmlText.replace("=C2=A0", " ");
+			htmlText = htmlText.replace("(http://", "//"); 
+		}
+		catch(Exception e){
+			
+		} */
+	%>
+		<%= htmlText%>
+	<%
+		//out.println(htmlText);
 		out.println();
 		out.println();
 		out.println();
@@ -58,8 +74,11 @@ body {
 	}else{
 
 		try{
-			String headers = notes.mime_object.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>");
-			out.println(headers);
+			outputString = notes.mime_object;
+			
+			/* String escapedHTML = StringEscapeUtils.escapeHtml(headers);
+			
+			out.println(escapedHTML.replaceAll("(\r\n|\n\r|\r|\n)", "<br/>")); */
 		}catch(Exception e){
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
@@ -73,7 +92,7 @@ body {
 	</script>
 	<script type="text/javascript">
 
-		<%-- var mime = '<%= outputString%>';
+	 	var mime = <%= outputString%>;
 		var type = "<%= type%>";
 
 		printMIMEObj(type, mime);
@@ -86,23 +105,22 @@ body {
 			if(!mime || mime == null || mime == "undefined")
 				return;
 
-			/* if(typeof mime == "object")
-				mime = JSON.stringify(mime); */
+			if(typeof mime == "object")
+				mime = JSON.stringify(mime);
 
-			//mime = mime.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			mime = mime.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-			//var mimeobj = JSON.parse(mime);
+			var mimeobj = JSON.parse(mime);
 
-			$(".original_message").html(mime);
+			//$(".original_message").html(mime);
 
-			// $(".original_message").html(JSON.stringify(mimeobj, convertHTMLToString, 4));
-
+			$(".original_message").html(JSON.stringify(mimeobj, null, 4));
 		}
 		
 		function convertHTMLToString (key, value) {
 			// Replace the html tags
 			return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-		} --%>
+		}
 		
 	</script>
 </body>

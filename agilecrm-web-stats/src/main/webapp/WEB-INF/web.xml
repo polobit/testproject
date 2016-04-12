@@ -19,4 +19,12 @@
 		<servlet-name>AddAnalyticsServlet</servlet-name>
 		<url-pattern>/addstats</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>SegmentationServlet</servlet-name>
+		<servlet-class>com.agilecrm.visitor.segmentation.SegmentationServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SegmentationServlet</servlet-name>
+		<url-pattern>/visitors</url-pattern>
+	</servlet-mapping>
 </web-app>

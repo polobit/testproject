@@ -458,8 +458,8 @@ function updateDeal(ele, editFromMilestoneView)
 		if (value.owner)
 		{
 			$("#owners-list", dealForm).find('option[value=' + value['owner'].id + ']').attr("selected", "selected");
-			$("#owners-list", $("#opportunityUpdateForm")).closest('div').find('.loading-img').hide();
 		}
+		$("#owners-list", $("#opportunityUpdateForm")).closest('div').find('.loading-img').hide();
 	});
 
 	// Fills the pipelines list in the select menu.
