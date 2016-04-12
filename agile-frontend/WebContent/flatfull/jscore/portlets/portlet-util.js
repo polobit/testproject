@@ -208,8 +208,9 @@ var portlet_utility = {
 		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
 			json['activity_type'] = "ALL";
 			json['duration'] = "1-day";
+		}	
 		return json;
-	}
+	
 	},
 
 	/**
