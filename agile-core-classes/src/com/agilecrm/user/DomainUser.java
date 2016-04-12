@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -235,7 +236,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	
 
 	/** Browser Fingerprint */
-	public String finger_print = null;
+	public Set<String> finger_prints;
 	
 	@NotSaved(IfDefault.class)
 	public String generatedOTP;
@@ -288,8 +289,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		this.name = name;
 		this.password = password;
 		this.is_admin = isAdmin;
-		this.is_account_owner = isAccountOwner;
-		
+		this.is_account_owner = isAccountOwner;	
 	}
 
 	/**

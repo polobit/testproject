@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -700,6 +703,21 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldnamespace);
 	}
     }
+    
+    /** Check whether fingerprint present or not in list*/
+    public static  boolean isValidFingerPrint(HttpServletRequest request){
+		
+		// Gets the fingerprints
+		DomainUser fingerprints = DomainUserUtil.getDomainOwner(NamespaceManager.get()); 		
+		//Checks the wheather fingerprintlist is null or not  
+		if(fingerprints == null || fingerprints.finger_prints == null || fingerprints.finger_prints.size() == 0)
+			 return true;
+		
+		// Gets the userfingerprint from request
+		String userfingerprint = request.getParameter("finger_print");
+		// Checks the condition is userfingerprint present in the list or not
+		return fingerprints.finger_prints.contains(userfingerprint);
+	}
     
 
 }

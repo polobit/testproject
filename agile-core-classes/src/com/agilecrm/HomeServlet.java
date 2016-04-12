@@ -1,6 +1,8 @@
 package com.agilecrm;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -188,14 +190,18 @@ public class HomeServlet extends HttpServlet
     {
 	try
 	{
-	    String userFingerPrint = (String) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VAL);
+	    String userFingerPrint = req.getParameter("finger_print");  	
+	    System.out.println(userFingerPrint);
 	    if(StringUtils.isBlank(userFingerPrint))
 	    	return;
 		    
 	    // Gets current domain user and saves current fingerprint 
-	    
 	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-	    domainUser.finger_print = userFingerPrint;
+	    
+	    if(domainUser.finger_prints == null)
+	    	domainUser.finger_prints = new HashSet();
+	    
+	    domainUser.finger_prints.add(userFingerPrint);
 	    domainUser.save();
 	}
 	catch (Exception e)
@@ -228,7 +234,6 @@ public class HomeServlet extends HttpServlet
     	// domain user and forwards request to home.jsp
     	if (!isNewUser())
     	{
-    		
     		Boolean sessionFingerPrint = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VALID);
     		Boolean sessionIP = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
     		if(sessionFingerPrint == null || sessionIP == null){

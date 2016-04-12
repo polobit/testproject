@@ -269,19 +269,16 @@ public class LoginServlet extends HttpServlet {
 			request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 		}
 
-
-		request.getSession().setAttribute("account_timezone", timezone);
-
+		request.getSession().setAttribute("account_timezone", timezone);	
+		
         // Set FingerPrint to check in /home
 		request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
-		String userFingerPrint = domainUser.finger_print;
-		
+		System.out.println("fingerprint " + request.getSession().getAttribute(SESSION_FINGERPRINT_VAL) );
 		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
 		{
 			// Validate fingerprint value
-			boolean isValid = true;
-			if(StringUtils.isNotBlank(userFingerPrint))
-				isValid = userFingerPrint.equals(finger_print);
+			boolean isValid = DomainUserUtil.isValidFingerPrint(request);
+			System.out.println(isValid);
 			
 			request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
 			
@@ -300,7 +297,7 @@ public class LoginServlet extends HttpServlet {
 				String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
 				if(!isValid){
 					template = SendMail.OTP_EMAIL_TO_USER;
-					subject = SendMail.OTP_REPLY_SUBJECT;
+					subject =  "New sign-in from "+request.getParameter("browser_Name")+"on "+request.getParameter("browser_os"); 
 				}
 				System.out.println(domainUser);
 				SendMail.sendMail(domainUser.email, subject, template, data);

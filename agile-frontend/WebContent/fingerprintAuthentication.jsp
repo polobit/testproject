@@ -201,7 +201,7 @@ position: fixed;width: 100%;top: 0px;
 				
 			<!-- 	<div class="clearfix"></div> -->
 				<div class="wrapper text-center text-white">
-      				<strong>Enter OTP</strong>
+      				<strong>We have sent the verification code to your registered email ID, please authenticate your account for access.</strong>
    				</div>
    				<form id="fingerprintForm" name="fingerprintForm" method="post" action="/" class="form-horizontal" onsubmit="return isValid();">
 					<fieldset>
