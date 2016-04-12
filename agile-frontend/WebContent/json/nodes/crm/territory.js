@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/crm/territory.png",
     "icon": "json/nodes/icons/crm/territory.png",
     "info": "Compares given location conditions across territories.",
-    "help": "Compares the contact’s address against the territories defined. Each territory can have multiple criteria and the Operator (And/OR) with in each territory can also be defined. If No Match happens, then a Default Nomatch Route will be taken.",
+    "help": "Compares the contact’s address against the territories defined. If No Match happens, then a Default Nomatch Route will be taken.",
     "author": "Naresh",
     "company": "Agile CRM",
     "language": "en",
@@ -82,20 +82,6 @@
                   "title": "Enter a value. Please make sure that codes (e.g., IN) are compared by default for country type.",
                   "fieldType": "input",                    
                   "type": "text"
-              },
-              {
-                "label": "Within Territory",
-                "name" : "in_zone_compare",
-                "fieldType":"select",
-                "type": "select",
-                "required":"required",
-                "options": {
-                  "And": "and",
-                  "Or": "or"
-                },
-                "title":"Select within territory condition.",
-                "in_grid_popup" : false,
-                "add_in_each_row": true
               }
 				],
 			"defaultvalues":
@@ -104,13 +90,12 @@
                   "dynamicgrid": "Nomatch",
                   "location_type" : "-",
                   "comparator": "-",
-                  "location_value" : "-",
-                  "in_zone_compare": "-"
+                  "location_value" : "-"
                 } 
 					 ]
 		},
     {
-            "label": "Compares the contact’s address against the territories defined. Each territory can take multiple criteria and also allows defining the operator (AND/OR) within each territory. If there’s no match, then a default No match route will be taken.<br/><br/> In Agile, countries are saved with their respective 2 letter codes by default as per ISO 3166-1 standard (e.g., IN for India, AU for Australia etc).",
+            "label": "Compares the contact’s address against the territories defined. If there’s no match, then a default No match route will be taken.<br/><br/> In Agile, countries are saved with their respective 2 letter codes by default as per ISO 3166-1 standard (e.g., IN for India, AU for Australia etc).",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
