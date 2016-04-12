@@ -2287,9 +2287,14 @@ Deleted  {{custom1}} Campaigns<br/>
 		<div class="portlet_header portlet_edit_icons panel-heading">
 		
 		<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Activities</span>
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Activities</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+
+	{{get_portlet_duration settings.duration}}
+				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
 				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>			
 </div>
