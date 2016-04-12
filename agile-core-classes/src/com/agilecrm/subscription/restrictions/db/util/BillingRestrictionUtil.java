@@ -188,8 +188,12 @@ public class BillingRestrictionUtil {
 		//Added by Sasi on Apr-8-2016 to avoid contact creation when new ticket is received.
 		if("agile-ticket-module".equalsIgnoreCase(moduleName)) {
 			
+			System.out.println("Current moduel is agile-ticket-module..");
+			
 			DomainUser domainOwner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
 			info =  new UserInfo("agilecrm.com", domainOwner.email, domainOwner.name);
+			
+			System.out.println("Info..." + info);
 		}
 		
 		if (info == null) {
