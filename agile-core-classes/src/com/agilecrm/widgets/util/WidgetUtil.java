@@ -137,7 +137,7 @@ public class WidgetUtil {
 		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
 				.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
 
-		String userID = AgileUser.getCurrentAgileUser().id.toString();
+		String userID = AgileUser.getCurrentAgileUser().domain_user_id.toString();
 		// String domainUserID =
 		// AgileUser.getCurrentAgileUserFromDomainUser(userID).id.toString();
 		for (int i = 0; i < widgets.size(); i++) {
