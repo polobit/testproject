@@ -570,7 +570,7 @@ var Tickets = {
 		$(el).on('mouseover mouseout', ".toggle-collection-view.single-line, ul.choose-columns", function(e){
 			e.preventDefault();
 			
-			if (event.type == 'mouseover'){
+			if (e.type == 'mouseover'){
 
 				$('ul.choose-columns').closest('div').addClass('open');
 				return;
