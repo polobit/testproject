@@ -47,7 +47,8 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues, editRowInde
 		$(this).css({'max-height': 500, 'overflow-y': 'auto'}); 
 
         // event handlers for zones
-        zones_popup_handler($popup, editRowIndex, jsonValues);
+        if(uiFieldDefinition.name == NODES_CONSTANTS.TERRITORIES)
+            zones_popup_handler($popup, editRowIndex, jsonValues);
 
 	},
 	modal: true,
