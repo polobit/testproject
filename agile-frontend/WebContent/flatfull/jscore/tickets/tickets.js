@@ -1396,6 +1396,8 @@ var Tickets = {
 	  		if(currentTicketJSON.status == "CLOSED")
 	  			return;
 	  		
+	  		console.log('Ticket status: ' + currentTicketJSON.status);
+
 	  		var value = $(this).data('value'), current_date = new Date();
 
 	  		switch(value){
