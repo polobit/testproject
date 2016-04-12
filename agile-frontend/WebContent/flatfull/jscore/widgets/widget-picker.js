@@ -155,6 +155,7 @@ function initializeWidgetSettingsListeners(){
 
 							that.attr('widget-data',JSON.stringify(widgetData));
 							console.log('Widget ACL updated');
+							Widgets_View = undefined;
 							$("#widget-acls-modal").html(template_ui).modal('hide');
 						}
 					});
