@@ -773,6 +773,20 @@ public class Contact extends Cursor
 	TagUtil.deleteTags(tagslist);
 
     }
+    
+    /**
+     * Sets score to a contact
+     * 
+     * @param score
+     *            value of the score to be added
+     */
+    public void setScore(Integer score)
+    {
+
+	this.lead_score = score;
+	this.save();
+
+    }
 
     /**
      * Adds score to a contact

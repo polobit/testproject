@@ -1,3 +1,5 @@
+//Ticket_Bulk_Ops handles bulk operations performed by assignee. It initializes the events on
+//all checkboxes and bulk operation buttons.
 var Ticket_Bulk_Ops = {
 
 	selected_all_filter_tickets : false,
@@ -181,6 +183,7 @@ var Ticket_Bulk_Ops = {
 		return Ticket_Bulk_Ops.selected_ticket_ids.toString();
 	},
 
+	//When bulk operation is performed we need to change template accordingly.
 	renderTemplate: function(action_type){
 
 		if (!App_Ticket_Module.ticketsCollection || App_Ticket_Module.ticketsCollection.collection.length == 0)
@@ -401,38 +404,7 @@ var Ticket_Bulk_Ops = {
 				break;
 		}
 	},
-
-	// bulkManageLabels: function(e){
-
-	// 	var saveButton = $('.bulk-manage-labels');
-	// 	disable_save_button(saveButton);
-
-	// 	var tagsObj = get_tags('bulk-labels').pop();
-
-	// 	if(tagsObj['value'].length == 0)
-	// 	{
-	// 		var $err_msg = $('.error-tags');
-	// 		$err_msg.show();
-	// 		setTimeout(function(){$err_msg.hide();}, 3000);
-	// 		enable_save_button(saveButton);
-	// 		return;
-	// 	}
-
-	// 	var url = '/core/api/tickets/bulk-actions/add-tags';
-
-	// 	var json = {};
-	// 	json.tags = tagsObj['value'].toString();
-	// 	json.ticket_ids = Ticket_Bulk_Ops.getSelectedTickesObj();
-	// 	json.command = saveButton.hasClass('bulk-add-labels') ? 'add' : 'remove';
-
-	// 	if(Ticket_Bulk_Ops.selected_all_filter_tickets)
-	// 		json.filter_id =  Ticket_Filter_ID;
-
-	// 	this.ajax_call(url, json, function(){
-	// 		enable_save_button(saveButton);
-	// 	});
-	// },
-
+	
 	ajax_call: function(url, data, callback){
 
 		$.ajax({

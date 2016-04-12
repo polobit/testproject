@@ -1,3 +1,4 @@
+//Ticket_Base_Model let you bind events on dom elements when view is rendered.
 var Ticket_Base_Model = Base_Model_View.extend({
 
 	events:{

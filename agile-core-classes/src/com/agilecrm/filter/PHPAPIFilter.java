@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -35,10 +36,10 @@ public class PHPAPIFilter implements Filter
 	String agileId = req.getParameter("id");
 	if (agileId != null)
 	{
-	    if (APIKey.isPresent(agileId))
+	    if (APIKeyUtil.isPresent(agileId))
 	    {
 		UserInfo userInfo = (UserInfo) req.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-		DomainUser domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
+		DomainUser domainUser = APIKeyUtil.getDomainUserRelatedToAPIKey(agileId);
 		if (userInfo == null || !userInfo.getEmail().equalsIgnoreCase(domainUser.email))
 		{
 		    userInfo = new UserInfo("agilecrm.com/php", domainUser.email, domainUser.name);

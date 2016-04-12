@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -95,9 +96,9 @@ public class AnalyticsServlet extends HttpServlet
 	if (StringUtils.isBlank(domain))
 	    return;
 	
-	if(isBlockedIp(ip, domain))
+	/*if(isBlockedIp(ip, domain))
 	    return;
-	    
+	 */  
 	Long timeBeforeLog = System.currentTimeMillis();
 	System.out.println("Before log " + timeBeforeLog);
 	
