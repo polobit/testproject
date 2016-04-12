@@ -27,6 +27,6 @@ ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
 echo "deploying in version $2"
 
-appcfg.sh -A agile-crm-cloud -V $2 update target/agile-java-server/"$1".war/
+appcfg.sh -A agile-crm-cloud -V $2 update ../target/agile-java-server/"$1".war/
 
 #cd ../
