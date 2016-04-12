@@ -117,7 +117,7 @@ function initializeWidgetSettingsListeners(){
 		// Fetching widget ID.
 		var widgetData = $(this).attr('widget-data');		
 		var that = $(this);
-		$.getJSON( "core/api/admin_panel/getAllDomainUsers", function(data){	
+		$.getJSON( "core/api/users", function(data){	
 			var result ={}; 
 			result.widget = JSON.parse(widgetData);							
 			var userList = JSON.stringify(result.widget.listOfUsers);
