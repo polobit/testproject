@@ -8,7 +8,7 @@ var Form_Collection_Events = Base_Collection_View.extend({
 
 	codePublish : function(e){
 		
-		$(".modal-backdrop").hide();
+		$("#codeShareModal").hide();
 		e.preventDefault();
 
 		//full source code
@@ -29,7 +29,6 @@ var Form_Collection_Events = Base_Collection_View.extend({
 	 	var embed = "<div id=\""+window.location.host+"_"+$(e.target).data("formid")+"\" class=\"agile_crm_form_embed\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
 		$codeShareModalEl.find("#embedCodeArea").text(embed);
 	},
-
 });
 
 $('body').on('mouseenter','#forms-model-list tr', function(e){
@@ -39,3 +38,15 @@ $('body').on('mouseenter','#forms-model-list tr', function(e){
 $('body').on('mouseleave','#forms-model-list tr', function(e){
          $(this).find('#formcode_manager').addClass('hide');
     });
+
+$('#codeShareModal').on('focus','.form-control',function(){
+	var $this = $(this);
+    $this.select();
+
+    // Work around Chrome's little problem
+    $this.mouseup(function() {
+        // Prevent further mouseup intervention
+        $this.unbind("mouseup");
+        return false;
+    });
+});

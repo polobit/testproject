@@ -23,6 +23,6 @@ function showAgileCRMForm(formJson,formHolderId) {
 window.addEventListener('load', function() { 
 	var element = document.getElementsByClassName("agile_crm_form_embed");
     if( element != null) {
-      loadAgileCRMForm(element.getAttribute("id"));
+      loadAgileCRMForm(element[0].getAttribute("id"));
     }
-}, false);
+},false);
