@@ -19,3 +19,10 @@ function showAgileCRMForm(formJson,formHolderId) {
     script.text = onloadScript;
     document.body.appendChild(script);
 }
+
+window.addEventListener('load', function() { 
+	var element = document.getElementsByClassName("agile_crm_form_embed");
+    if( element != null) {
+      loadAgileCRMForm(element.getAttribute("id"));
+    }
+}, false);

@@ -42,11 +42,10 @@
 					<tr>
 						<th style="width:50%">Form Title</th>
 						<th style="width:50%">Last Modified</th>
-						<th style="width:50%">Share</th>
+						<th style="width:50%"></th>
 					</tr>
 				</thead>
-				<tbody id="forms-model-list">
-				</tbody>
+				<tbody id="forms-model-list" class="c-p"></tbody>
 			</table>
 			</div>
 		</div>
@@ -84,7 +83,9 @@
 		</a>
 	</td>
 	<td>
-		<a class="codeshare" ><span data-formid="{{id}}" style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">Share</span></a>
+	    <div class="table-resp hide" id="formcode_manager">
+		<a class="codeshare" ><i class="fa fa-file-code-o" data-formid="{{id}}"></i><span data-formid="{{id}}" style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>
+		</div>
 	</td>
 	</br>
 </script>

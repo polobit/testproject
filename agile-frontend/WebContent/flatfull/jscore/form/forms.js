@@ -25,9 +25,16 @@ var Form_Collection_Events = Base_Collection_View.extend({
 	 	$codeShareModalEl.find("#iframeArea").text(iframe);
 
 	 	//embed code
-	 	var embed = "<div id=\""+window.location.host+"_"+$(e.target).data("formid")+"\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
-	 	embed  = embed + "<script>loadAgileCRMForm(\""+window.location.host+"_"+$(e.target).data("formid")+"\");</script>";
+	 	var embed = "<div id=\""+window.location.host+"_"+$(e.target).data("formid")+" class=\"agile_crm_form_embed\"\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
 		$codeShareModalEl.find("#embedCodeArea").text(embed);
 	},
 
 });
+
+$('body').on('mouseenter','#forms-model-list tr', function(e){
+         $(this).find('#formcode_manager').removeClass('hide');
+    });
+
+$('body').on('mouseleave','#forms-model-list tr', function(e){
+         $(this).find('#formcode_manager').addClass('hide');
+    });
