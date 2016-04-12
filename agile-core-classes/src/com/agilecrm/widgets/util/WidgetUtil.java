@@ -59,8 +59,7 @@ public class WidgetUtil {
 		// || currentWidget.widget_type.equals(WidgetType.CUSTOM)
 		for (Widget widget : widgets) {
 			for (Widget currentWidget : currentWidgets) {
-				if (currentWidget.name.equals(widget.name)
-						|| currentWidget.widget_type.equals(WidgetType.CUSTOM)) {
+				if (currentWidget.name.equals(widget.name)) {
 					// Setting true to know that widget is configured.
 					widget.is_added = true;
 					widget.id = currentWidget.id;
@@ -110,13 +109,57 @@ public class WidgetUtil {
 
 				break;
 			}
+		}
 
-			String userID = AgileUser.getCurrentAgileUser().id.toString();
-			if (widget.listOfUsers != null && userID != null
-					&& !widget.listOfUsers.contains(userID)) {
+		return widgets;
+	}
+
+	/**
+	 * Gets all the widget of the current user.
+	 * 
+	 * <p>
+	 * Default widgets - which are added and Custom widgets - which are added
+	 * </p>
+	 * 
+	 * @return {@link List} of {@link Widget}s
+	 */
+	public static List<Widget> getActiveWidgetsForCurrentUser() {
+		Objectify ofy = ObjectifyService.begin();
+
+		// Creates Current AgileUser key
+		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+				AgileUser.getCurrentAgileUser().id);
+
+		/*
+		 * Fetches list of widgets related to AgileUser key and adds is_added
+		 * field as true to default widgets if not present
+		 */
+		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+				.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
+		Long userID = AgileUser.getCurrentAgileUser().id;
+		String domainUserID = AgileUser
+				.getCurrentAgileUserFromDomainUser(userID).id.toString();
+		for (int i = 0; i < widgets.size(); i++) {
+			Widget widget = widgets.get(i);
+			if (widget.add_by_admin
+					&& (widget.listOfUsers != null && userID != null && !widget.listOfUsers
+							.contains(domainUserID))) {
 				widgets.remove(i);
 			}
 		}
+
+		List<Widget> adminWidgets = ofy.query(Widget.class)
+				.filter("add_by_admin =", true).list();
+
+		for (int i = 0; i < adminWidgets.size(); i++) {
+			Widget widget = adminWidgets.get(i);
+			if (widget.listOfUsers != null && userID != null
+					&& !widget.listOfUsers.contains(domainUserID)) {
+				adminWidgets.remove(i);
+			}
+		}
+
+		widgets.addAll(adminWidgets);
 
 		return widgets;
 	}

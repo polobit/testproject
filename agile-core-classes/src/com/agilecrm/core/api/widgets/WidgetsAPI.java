@@ -63,7 +63,7 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Widget> getWidgets() {
 		// Returns list of widgets saved by current user
-		return WidgetUtil.getAddedWidgetsForCurrentUser();
+		return WidgetUtil.getActiveWidgetsForCurrentUser();
 	}
 
 	/**
