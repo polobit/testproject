@@ -44,9 +44,7 @@ public class TicketsStatsServlet extends HttpServlet
 
 		System.out.println("current_date.." + current_date);
 
-		yesterdayTime = yesterdayTime / 1000L;
-
-		TicketStats stats = TicketStatsUtil.getTicketStats(yesterdayTime);
+		TicketStats stats = TicketStatsUtil.getTicketStats(yesterdayTime / 1000L);
 
 		if (stats != null)
 		{

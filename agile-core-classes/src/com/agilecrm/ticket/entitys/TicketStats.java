@@ -1,16 +1,16 @@
 package com.agilecrm.ticket.entitys;
 
+import java.io.Serializable;
+
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.agilecrm.AllDomainStats;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
-import com.googlecode.objectify.annotation.NotSaved;
 
 /**
  * 
@@ -18,7 +18,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  * 
  */
 @XmlRootElement
-public class TicketStats
+public class TicketStats implements Serializable
 {
 	/**
 	 * All Domain Stats Id
@@ -30,13 +30,13 @@ public class TicketStats
 	 * Created Time
 	 */
 	@Indexed
-	private Long created_time = 0L;
+	public Long created_time = 0L;
 
-	private Long groups = 0L;
-	private Long labels = 0L;
-	private Long canned_responses = 0L;
-	private Long views = 0L;
-	private Long tickets_received = 0l;
+	public Long groups = 0L;
+	public Long labels = 0L;
+	public Long canned_responses = 0L;
+	public Long views = 0L;
+	public Long tickets_received = 0l;
 
 	/**
 	 * Stores the property names in final variables, for reading flexibility of
@@ -117,7 +117,7 @@ public class TicketStats
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
 		return "Tickets []";

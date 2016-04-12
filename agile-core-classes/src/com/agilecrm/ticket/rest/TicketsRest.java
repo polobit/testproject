@@ -914,5 +914,30 @@ public class TicketsRest
 			return null;
 		}
 	}
+	
+	/**
+	 * Gets list of users of a domain
+	 * 
+	 * @return list of domain users
+	 */
+	@GET
+	@Path("/stats")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getStats()
+	{
+		try
+		{
+			TicketStats stats = TicketStats.ticketStatsdao.getByProperty("created_time", 1460399400l);
+			
+			JSONObject json = new JSONObject(stats.toString());
+			
+			return json.toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			return null;
+		}
+	}
 
 }
