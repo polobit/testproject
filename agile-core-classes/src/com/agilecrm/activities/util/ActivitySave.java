@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
+import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
@@ -23,6 +24,7 @@ import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
 
@@ -1155,4 +1157,33 @@ public class ActivitySave
 	return Jsoup.parse(html).text();
     }
 
+    /*
+     * creates user activity when user edit
+     */
+    public static Activity createUserEditActivity(DomainUser domainuser)
+    {
+    	Activity activity = new Activity();
+    	activity.entity_type = EntityType.USER;
+    	activity.entity_id = domainuser.id;
+    	if(domainuser.id != null)
+		{
+			DomainUser old_user = DomainUserUtil.getDomainUser(domainuser.id);
+			if(!domainuser.name.equals(old_user.name) )
+			{
+				activity.activity_type = activity.activity_type.User_Name_Change;
+			}
+			if(!domainuser.email.equals(old_user.email))
+			{
+				activity.activity_type  = activity.activity_type.User_Email_Change;
+			}
+			if(!domainuser.password.equals(old_user.password))
+			{
+				activity.activity_type = activity.activity_type.User_Password_Change;
+			}
+			
+			activity.save();
+    	}
+		return activity;
+   
+}
 }

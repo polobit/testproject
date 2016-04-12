@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.ticket.entitys.HelpdeskSettings;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -213,6 +214,14 @@ public class UsersAPI
 							"Owner should always be an administrator. Please select administrator option and try again.");
 				}
 				owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+			}
+			try
+			{
+				ActivitySave.createUserEditActivity(domainUser);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
 			}
 			domainUser.save();
 			if (owner != null && !domainUser.id.equals(owner.id))
