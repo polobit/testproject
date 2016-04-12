@@ -126,7 +126,7 @@ public class PullScheduler
 	{
 	    System.out.println("Infinite loop started at : " + System.currentTimeMillis());
 	    int i = 0;
-	    while (i < 2 || shouldContinue())
+	    while (shouldContinue())
 	    {
 		System.out.println("while loop started at :" + System.currentTimeMillis() + "iteration : " + i);
 		List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
