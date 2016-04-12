@@ -706,8 +706,8 @@ var portlet_utility = {
 				else
 				options+='&entity_type='+base_model.get('settings').activity_type;
 			if(base_model.get('settings').duration == undefined){
-				start_date_str="1-day";
-				end_date_str="TOMORROW";
+				start_date_str="this-quarter-start";
+				end_date_str="this-quarter-start";
 			}
 			if (base_model.get('settings').owner != undefined
 					&& base_model.get('settings').owner != "") 
