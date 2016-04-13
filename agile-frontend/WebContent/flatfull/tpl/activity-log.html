@@ -545,8 +545,22 @@ Rescheduled Event '{{../label}}'<br/>
 
 
 <!-- end event condition-->
+<!-- start of user condition -->
+{{#if_equals "User_Email_Change" activity_type}}
+User Email Changed from {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom2}}
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} User Email Changed.{{/unless}} User Email {{#if this.entityObject}}{{/if}} changed . 
+</small></div>
+{{/if_equals}}
 
-<!-- start of contact condition-->
+{{#if_equals "User_Name_Change" activity_type}}
+User Name Changed from  {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom2}}
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} User Name Changed.{{/unless}} User Name {{#if this.entityObject}}{{/if}} changed . 
+</small></div>
+{{/if_equals}}
+
+<!--  end of user condition --><!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
 
 {{#if_equals "CONTACT_CREATE" activity_type}}

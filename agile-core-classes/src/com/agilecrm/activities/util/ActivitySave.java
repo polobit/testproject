@@ -1160,7 +1160,7 @@ public class ActivitySave
     /*
      * creates user activity when user edit
      */
-    public static Activity createUserEditActivity(DomainUser domainuser)
+    public static void  createUserEditActivity(DomainUser domainuser)
     {
     	Activity activity = new Activity();
     	activity.entity_type = EntityType.USER;
@@ -1172,21 +1172,33 @@ public class ActivitySave
 			if(!domainuser.name.equals(old_user.name) )
 			{
 				activity.activity_type = activity.activity_type.User_Name_Change;
+				activity.custom1 = old_user.name;
+				activity.custom2 = domainuser.name;
+				activity.save();
+				activity.id =null;
 			}
+			
 			System.out.println(!domainuser.email.equals(old_user.email)+"email");
 			 if(!domainuser.email.equals(old_user.email))
 			{
-				activity.activity_type  = activity.activity_type.User_Email_Change;
+				activity.activity_type = activity.activity_type.User_Email_Change;
+				activity.custom1 = old_user.email;
+				activity.custom2 = domainuser.email;
+				activity.save();
+				activity.id = null;
 			}
-			 System.out.println(!domainuser.password.equals(old_user.password)+"password");
-			 if(!domainuser.password.equals(old_user.password))
-			{
-				activity.activity_type = activity.activity_type.User_Password_Change;
-			}
+		
 			
-			activity.save();
+			 if(!domainuser.scopes.equals(old_user.scopes))
+			 {
+				 activity.activity_type = activity.activity_type.User_Permissions_Change;
+				 activity.save();
+			 }
+			 
+			
+			
     	}
-		return activity;
+		
    
 }
 }
