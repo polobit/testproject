@@ -17,6 +17,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HttpClientUtil;
+import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
@@ -67,12 +68,12 @@ public class SendGridUtil
     {
 	try
 	{
-	    EmailGateway emailGateway = emailSender.emailGateway;
-	    String apiUser = (emailGateway == null) ? Globals.SENDGRID_API_USER_NAME : emailGateway.api_user;
-	    String apiKey = (emailGateway == null) ? Globals.SENDGRID_API_KEY : emailGateway.api_key;
-
 	    MailDeferredTask firstSendGridDefferedTask = tasks.get(0);
-
+	    
+	    // SendGrid Credentials based on domain and gateway
+	    JSONObject credentials = getSendGridCredentials(firstSendGridDefferedTask.domain, emailSender.emailGateway);
+	    String apiUser = credentials.getString("api_user"), apiKey = credentials.getString("api_key");
+	    
 	    // Email fields lists
 	    JSONArray toArray = new JSONArray();
 	    JSONArray subjectArray = new JSONArray();
@@ -162,8 +163,28 @@ public class SendGridUtil
 			SendGridSubVars.HTML.getString(), SendGridSubVars.TEXT.getString(),
 			getSMTPJSON(tempArray.getJSONObject(i), firstSendGridDefferedTask).toString());
 
-		HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
-			"application/x-www-form-urlencoded", postData);
+			try
+			{
+				String response = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
+				"application/x-www-form-urlencoded", postData);
+				
+				// If response consists of 'Bad Username', throws Retry exception
+        		if(StringUtils.contains(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+						throw new RetryException(response);
+				
+			}
+			catch(RetryException rex)
+			{
+				// Create SubUser
+				SendGridUtil.createSendGridSubUser(StringUtils.remove(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN));
+	        	
+				System.out.println("Retrying again for sending email in bulk emails....");
+				
+				String res = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
+						"application/x-www-form-urlencoded", postData);
+				
+				System.out.println("Response after second attempt in bulk emails..." + res);
+			}
 	    }
 
 	}
@@ -280,19 +301,23 @@ public class SendGridUtil
 	return false;
     }
     
-    public static void createSendGridSubUser(String domain)
+    public static void createSendGridSubUser(String domain) throws IllegalArgumentException, Exception
     {
     	if(StringUtils.isBlank(domain))
     		return;
     	
     	DomainUser user = DomainUserUtil.getDomainOwner(domain);
+    	
     	createSendGridSubUser(user);
     }
     
-    public static void createSendGridSubUser(DomainUser user) 
+    public static void createSendGridSubUser(DomainUser user) throws IllegalArgumentException, Exception
     {
     	try
 		{
+    		if(user == null)
+    			throw new IllegalArgumentException("DomainUser is null, can't create SubUser in SendGrid");
+    		
     		SendGridSubUser sendgrid = new SendGridSubUser(Globals.SENDGRID_API_USER_NAME, Globals.SENDGRID_API_KEY);
         	
         	SendGridSubUser.SubUser subUser = new SendGridSubUser.SubUser();
@@ -310,11 +335,39 @@ public class SendGridUtil
 			System.err.println("Unsupported encoding exception..." + e.getMessage());
 			e.printStackTrace();
 		}
-    	catch(Exception e)
-    	{
-    		System.err.println("Exception occured while creating subuser..." + e.getMessage());
-    		e.printStackTrace();
-    	}
     }
+    
+    private static JSONObject getSendGridCredentials(String agileDomain, EmailGateway emailGateway)
+    {
+    	String apiUser = null, apiKey = null;
+    	
+    	// If no gateway configured
+    	if(emailGateway == null)
+    	{
+    		apiUser = (StringUtils.isBlank(agileDomain)) ? Globals.SENDGRID_API_USER_NAME : SendGridSubUser.getAgileSubUserName(agileDomain);
+    		apiKey = (StringUtils.isBlank(agileDomain)) ? Globals.SENDGRID_API_KEY : SendGridSubUser.getAgileSubUserPwd(agileDomain);
+		}
+    	else
+    	{
+    		apiUser = emailGateway.api_user;
+    		apiKey = emailGateway.api_key;
+    	}
+    	
+    	JSONObject credentials = new JSONObject();
+    	
+    	try
+		{
+			credentials.put("api_user", apiUser);
+			credentials.put("api_key", apiKey);
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+    	
+    	return credentials;
+    	
+	    
+    } 
     
 }

@@ -58,7 +58,7 @@ public class HttpClientUtil
      * @param postData
      *            - post data
      */
-    public static void accessPostURLUsingHttpClient(String url, String contentType, String postData)
+    public static String accessPostURLUsingHttpClient(String url, String contentType, String postData)
     {
 	try
 	{
@@ -87,8 +87,12 @@ public class HttpClientUtil
 	    }
 
 	    br.close();
-
-	    System.out.println("Response:  " + sb.toString());
+	    
+	    String res = sb.toString();
+	    
+	    System.out.println("Response:  " + res);
+	    
+	    return res;
 	}
 	catch (Exception e)
 	{
@@ -98,9 +102,11 @@ public class HttpClientUtil
 
 	    System.err.println("Sending again normally...");
 
+	    String response = null;
+	    
 	    try
 	    {
-		String response = HTTPUtil.accessURLUsingPost(url, postData);
+		 response = HTTPUtil.accessURLUsingPost(url, postData);
 
 		System.out.println("Response in HttpClientUtil..." + response);
 	    }
@@ -109,6 +115,8 @@ public class HttpClientUtil
 		e1.printStackTrace();
 		System.err.println("Exception occured in HttpClientUtil while sending again..." + e1.getMessage());
 	    }
+	    
+	    return response;
 	}
     }
     

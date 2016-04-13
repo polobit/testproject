@@ -226,8 +226,14 @@ public class SendGridLib {
 			{
 				
 				// Create SubUser
-				SendGridUtil.createSendGridSubUser(StringUtils.remove(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN));
-	        	
+				try
+				{
+					SendGridUtil.createSendGridSubUser(StringUtils.remove(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN));
+				}
+				catch (Exception e1)
+				{
+					e1.printStackTrace();
+				}
 				System.out.println("Retrying again for sending email....");
 				
 				response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
