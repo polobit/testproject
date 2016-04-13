@@ -361,32 +361,36 @@ public class SendGrid
     	{
     		String domain = NamespaceManager.get();
     		
-    		apiUser = (domain == null) ? Globals.SENDGRID_API_USER_NAME : SendGridSubUser.getAgileSubUserName(domain);
-    		apiKey = (domain == null) ? Globals.SENDGRID_API_KEY : SendGridSubUser.getAgileSubUserPwd(domain);
+    		apiUser = (StringUtils.isBlank(domain)) ? Globals.SENDGRID_API_USER_NAME : SendGridSubUser.getAgileSubUserName(domain);
+    		apiKey = (StringUtils.isBlank(domain)) ? Globals.SENDGRID_API_KEY : SendGridSubUser.getAgileSubUserPwd(domain);
     	}
     	
     	SendGridLib sendGrid = new SendGridLib(apiUser, apiKey);
+    	
     	SendGridLib.Email email = new SendGridLib.Email();
 
+    	// From
     	email.setFrom(fromEmail).setFromName(fromName);
     	
+    	// To
     	for(String emailString: EmailUtil.getStringTokenArray(to, ","))
     		email.addTo(EmailUtil.getEmail(emailString), EmailUtil.getEmailName(emailString));
     	
+    	// CC
     	if (!StringUtils.isEmpty(cc))
     		email.addCc(EmailUtil.getStringTokenArray(cc, ","));
     	
+    	// BCC
     	if (!StringUtils.isEmpty(bcc))
     		email.addBcc(EmailUtil.getStringTokenArray(bcc, ","));
     	
+    	// Subject
     	email.setSubject(subject);
     	
-    	// If replyTo empty, set From
-    	if(StringUtils.isEmpty(replyTo))
-    		replyTo = fromEmail;
-    	
+    	// Reply To
     	email.setReplyTo(replyTo);
     	
+    	// Email Body
     	email.setHtml(html);
     	email.setText(text);
     	
@@ -415,7 +419,6 @@ public class SendGrid
 			}
 			catch (IOException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    }

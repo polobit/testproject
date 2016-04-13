@@ -151,7 +151,7 @@ public class SendGridSubUser extends SendGridLib
 	
 	public static String getSubUserStatistics(String domain, EmailGateway gateway)
 	{
-		String response = null;
+		String response = null, queryString = "", url = "https://api.sendgrid.com/v3/stats";
 		
 		try
 		{
@@ -170,26 +170,24 @@ public class SendGridSubUser extends SendGridLib
 			{
 				username = Globals.SENDGRID_API_USER_NAME;
 				password = Globals.SENDGRID_API_KEY;
+				
+				queryString = "subusers" + "=" + URLEncoder.encode(getAgileSubUserName(domain), "UTF-8")+ "&";
+				url = "https://api.sendgrid.com/v3/subusers/stats";
 			}
 			
 			long timestamp = System.currentTimeMillis();
 
-			String queryString = "subusers"
-					+ "="
-					+ URLEncoder.encode(getAgileSubUserName(domain), "UTF-8")
-					+ "&"
-					+ "start_date"
+			queryString += "start_date"
 					+ "="
 					+ URLEncoder.encode(DateUtil.getDateInGivenFormat(timestamp - (30 * 24 * 60 * 60 * 1000l), "YYYY-MM-dd", null), "UTF-8")
 					+ "&"
 					+ "end_date"
 					+ "="
 					+ URLEncoder.encode(DateUtil.getDateInGivenFormat(timestamp, "YYYY-MM-dd", null)
-							,
-							"UTF-8")
+							, "UTF-8")
 					+"&"+ "aggregated_by" + "=" + URLEncoder.encode("month", "UTF-8");
 			
-			response = HTTPUtil.accessURLUsingAuthentication("https://api.sendgrid.com/v3/subusers/stats", username, password,
+			response = HTTPUtil.accessURLUsingAuthentication(url, username, password,
 					"GET", queryString, false, null, "application/json");
 		}
 		catch (Exception e)

@@ -365,14 +365,11 @@ public class EmailGatewayUtil
     {
 	try
 	{
-	    // For domain "clickdeskengage" - use SendGrid API
-	    if (StringUtils.equals(domain, Globals.CLICKDESK_ENGAGE_DOMAIN))
-	    {
-		SendGrid.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
-		return;
-	    }
-	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api)) && ((documentIds != null && documentIds.size() != 0) || (blobKeys != null && blobKeys.size() != 0)) || (EMAIL_API.SES.equals(emailGateway.email_api) && attachments!=null && attachments.length !=0))
+	    // If no gateway setup, sends email through Agile's default
+	    if (emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api))
+	    		&& ((documentIds != null && documentIds.size() != 0) 
+	    		|| (blobKeys != null && blobKeys.size() != 0)) 
+	    		|| (EMAIL_API.SES.equals(emailGateway.email_api) && attachments!=null && attachments.length !=0))
 	    {
 			//Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 			//		mandrillMetadata, documentIds, blobKeys, attachments);
@@ -391,6 +388,7 @@ public class EmailGatewayUtil
 		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
 		        subject, replyTo, html, text, null, documentIds, blobKeys, attachments);
 	    
+	    // If SES
 	    else if (EMAIL_API.SES.equals(emailGateway.email_api))
 	    {
 	    	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain, fromEmail,

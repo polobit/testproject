@@ -216,12 +216,14 @@ public class SendGridLib {
 			{
         		response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
         	
-	        	if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
+	        	// If response consists of 'Bad Username', throws Retry exception
+        		if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
 						throw new RetryException(response);
 			}
 			catch (RetryException e)
 			{
 				
+				// Create SubUser
 				SendGridUtil.createSendGridSubUser(StringUtils.remove(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN));
 	        	
 				System.out.println("Retrying again for sending email....");
@@ -358,6 +360,11 @@ public class SendGridLib {
         }
 
         public Email setReplyTo(String replyto) {
+        	
+        	// Make From as Reply To email if it is empty
+        	if(replyto != null && !replyto.isEmpty())
+        		replyto = from;
+        	
             this.replyto = replyto;
             return this;
         }
