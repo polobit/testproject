@@ -299,6 +299,8 @@ public class SendGridUtil
         	subUser.setEmail(user.email);
         	subUser.setName(SendGridSubUser.getAgileSubUserName(user.domain));
         	subUser.setPassword(SendGridSubUser.getAgileSubUserPwd(user.domain));
+        	
+        	System.out.println("SubUser is " + subUser.toString());
 			String response = sendgrid.createSubUser(subUser);
 			
 			System.out.println("Response for subuser creation - " + response);

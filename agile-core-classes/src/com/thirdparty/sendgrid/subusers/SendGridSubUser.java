@@ -131,6 +131,15 @@ public class SendGridSubUser extends SendGridLib
 		{
 			this.ips = ips;
 		}
+		
+		/* (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		public String toString()
+		{
+			return "SubUser name is " +  name + " Password is " + password + " Email is " + email;
+		}
+		
 	}
 	
 	public static String getAgileSubUserName(String domain) throws IllegalArgumentException

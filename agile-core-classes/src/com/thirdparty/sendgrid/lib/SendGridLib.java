@@ -199,6 +199,8 @@ public class SendGridLib {
         	HttpClientUtil.URLBuilder urlBuilder = new HttpClientUtil.URLBuilder(this.url + this.endpoint);
         	urlBuilder.setMethod("POST");
         	
+        	System.out.println("Username: " + this.username + " Password: " + this.password);
+        	
         	Map<String, String> headers = new HashMap<String, String>();
         	headers.put(urlBuilder.USER_AGENT, USER_AGENT);
         	headers.put(urlBuilder.AUTHORIZATION, "Basic " + Base64Encoder.encode(this.username +":" + this.password));
