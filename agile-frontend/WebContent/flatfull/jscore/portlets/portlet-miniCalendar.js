@@ -465,7 +465,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 					var date=new Date();
 					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 				}
-			},5000);
+			},7000);
 			_agile_delete_prefs('current_date_calendar');
 		}
 		console.log(response);
@@ -560,6 +560,12 @@ function googledata(el,response,startTime,endTime)
 		var len=$(".events_show",el).find('.list').find('li').length;
 		var date=new Date();
 		$.each(events,function(index,ev){
+
+			 if($(el).find('.portlet-calendar-error-message').length!=0)
+		            						   {
+		            							   $(el).find('.portlet-calendar-error-message').css('display','none');
+		            							   $(el).find('.minical-portlet-event-add').css('display','none');
+		            						   }
 			var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 			var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 
@@ -595,7 +601,7 @@ function googledata(el,response,startTime,endTime)
 			{
 				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 			}
-		},5000);
+		},7000);
 	});
 
 }
