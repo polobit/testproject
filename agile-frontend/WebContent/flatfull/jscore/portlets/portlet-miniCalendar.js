@@ -512,6 +512,7 @@ function init_cal(el){
 	});
 
 }
+
 /**
  * Get the Google events from attached goodle calendar 
  */
@@ -525,24 +526,20 @@ function googledata(el,response,startTime,endTime)
 	var gDateStart = startDate.toISOString();
 	var endDate = new Date((endTime * 1000)-(timezone_offset*60*1000));
 	var gDateEnd = endDate.toISOString();
-
-
-
-			
 	// Retrieve the events from primary
 	var request = gapi.client.calendar.events
 	.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
-	request.execute(function(resp)
-			{
+	request.execute(function(resp){
+
 		head.js('flatfull/lib/web-calendar-event/moment.min.js', function(){
 		head.js('flatfull/lib/web-calendar-event/moment-timezone-with-data.js',function() {
-			
-		var events = new Array();
-		console.log(resp);
-		if(resp.items){
-			for (var j = 0; j < resp.items.length; j++)
-			{
-				var fc_event = google2fcEvent(resp.items[j]);
+
+			var events = new Array();
+			console.log(resp);
+			if(resp.items){
+				for (var j = 0; j < resp.items.length; j++)
+				{
+					var fc_event = google2fcEvent(resp.items[j]);
 					
 					var utcTime = new Date(fc_event.start).toUTCString();
 					var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
@@ -551,69 +548,54 @@ function googledata(el,response,startTime,endTime)
 					tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
   					fc_event.end = tz.format();
 
-				renderGoogleEvents(events,fc_event,el);
-			}
-		}
-		console.log($("#calendar_container", el).fullCalendar("getView").visStart);
-
-		$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_google" + $(el).attr('id')]);
-			var events_clone = events.slice(0);
-			functions["event_mini_google" + $(el).attr('id')] = function(start, end, callback)
-			{
-				console.log(this);
-				console.log($("#calendar_container", el).fullCalendar("getView").visStart);
-				if($('#calendar_container', el).fullCalendar('getView').visStart.getTime()!=start.getTime())
-					return;
-				callback(events_clone);
-				
-			}
-
-			$('#calendar_container',el).fullCalendar('addEventSource', functions["event_mini_google" + $(el).attr('id')]);
-			events_clone = [];
-
-		//**Add the google Events in the list of events in events_show div **/
-		var len=$(".events_show",el).find('.list').find('li').length;
-		var date=new Date();
-		$.each(events,function(index,ev){
-			var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
-			var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
-
-			if(_agile_get_prefs('current_date_calendar')!=null)
-			{
-				var cookie_date=new Date(_agile_get_prefs('current_date_calendar'));
-				todayDate=cookie_date;
-				endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
-
-			}
-			if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) 
-			{	
-				var event_list='<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>';
-				if(len!=0){
-					$(el).find('.list').find('small').each(function( index ) 
-							{
-						if(ev.start.format('HH:MM')<$(this).text())
-						{
-							$(this).parents('li').before(event_list);
-							return false;
-						}
-
-							});
+					renderGoogleEvents(events,fc_event,el);
 				}
-				else
-					$(el).find('.list').append(event_list);
 			}
+
+			//**Add the google Events in the list of events in events_show div **/
+			var len = $(".events_show").find('.list').find('li').length;
+			var date = new Date();
+			$.each(events,function(index,ev){
+				var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
+				var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+
+				if(_agile_get_prefs('current_date_calendar')!=null)
+				{
+					var cookie_date=new Date(_agile_get_prefs('current_date_calendar'));
+					todayDate=cookie_date;
+					endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
+
+				}
+				if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) 
+				{	
+					var event_list='<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>';
+					if(len!=0){
+						$(el).find('.list').find('small').each(function( index ) 
+								{
+							if(ev.start.format('HH:MM')<$(this).text())
+							{
+								$(this).parents('li').before(event_list);
+								return false;
+							}
+
+								});
+					}
+					else
+						$(el).find('.list').append(event_list);
+				}
+			});
+
+			_agile_delete_prefs('current_date_calendar');
+			setTimeout(function(){
+				//_agile_delete_prefs('current_date_calendar');
+				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
+				{
+					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+				}
+			},5000);
 		});
-		_agile_delete_prefs('current_date_calendar');
-		setTimeout(function(){
-			//_agile_delete_prefs('current_date_calendar');
-			if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
-			{
-				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
-			}
-		},5000);
+		});
 	});
-	});
-    });
 }
 
 /** Rendering the events to the mini Calendar
