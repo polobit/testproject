@@ -18,7 +18,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.projectedpojos.DomainUserPartial;
@@ -303,8 +305,12 @@ public class TicketNotesUtil
 		System.out.println("mailJSON: " + mailJSON);
 		long start_time = System.currentTimeMillis();
 
-		response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL,
-				mailJSON.toString());
+		EmailGatewayUtil.sendEmail(null, NamespaceManager.get(), fromEmail, fromName, toAddress, ccEmailString, "",
+				subject, "", emailHTML, "", "", null, null);
+		
+		// response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
+		// + Mandrill.MANDRILL_API_MESSAGE_CALL,
+		// mailJSON.toString());
 
 		long process_time = System.currentTimeMillis() - start_time;
 

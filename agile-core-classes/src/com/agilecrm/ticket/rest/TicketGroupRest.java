@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
@@ -205,6 +206,9 @@ public class TicketGroupRest
 			dbGroup.group_name = ticketGroup.group_name;
 			dbGroup.setAgents_key_list(agents_key_list);
 			dbGroup.send_as = ticketGroup.send_as;
+			
+			if(ticketGroup.template_id != null)
+				dbGroup.email_template_key = new Key<>(EmailTemplates.class, ticketGroup.template_id);
 					
 			dbGroup.save();
 

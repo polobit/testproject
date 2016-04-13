@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
 
+import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
@@ -61,12 +62,24 @@ public class TicketGroups
 	 */
 	@JsonIgnore
 	private List<Key<DomainUser>> agents_key_list = new ArrayList<Key<DomainUser>>();
-
+	
+	/**
+	 * Stores chosen email template id
+	 */
+	@JsonIgnore
+	public Key<EmailTemplates> email_template_key = null;
+	
 	/**
 	 * Stores list of agent id's
 	 */
 	@NotSaved
 	public List<Long> agents_keys = new ArrayList<Long>();
+	
+	/**
+	 * Stores list of agent id's
+	 */
+	@NotSaved
+	public Long template_id = null;
 
 	/**
 	 * Stores current domain user key as owner.
@@ -141,7 +154,10 @@ public class TicketGroups
 				agents_keys.add(key.getId());
 			}
 		}
-
+		
+		if(email_template_key != null)
+			template_id = email_template_key.getId();
+		
 		group_email = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(id)
 				+ TicketGroupUtil.getInboundSuffix();
 	}

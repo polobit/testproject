@@ -373,6 +373,12 @@
 
 	 					//Fetches domain users collection and shows them in add group form
 	 					App_Ticket_Module.renderUsersCollection($('#users-collection', el));
+
+	 					var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+	 					//Fetching all email templates
+						fillSelect('template_id', '/core/api/email/templates', '', 
+							function(collection){}, optionTemplate, false, el);
 	 				}
 	 			});
 
@@ -422,6 +428,17 @@
 	 						//Selecting domain users who are exists in current group
 	 						for(var i=0; i < agents_keys.length; i++)
 	 							$("input[data='"+ agents_keys[i] +"']").attr('checked', 'checked');
+
+	 						var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+		 					//Fetching all email templates and selecting chosen template
+							fillSelect('template_id', '/core/api/email/templates', '', 
+								function(){
+
+									if(data.template_id)
+										$('#template_id option[value=' + data.template_id + ']', el).attr('selected','selected');
+								
+								}, optionTemplate, false, el);
 
 	 						//Initializing copy to clipboard button
 	 						loadZeroclipboard2(function()
