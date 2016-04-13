@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$2" = true ] ; then
-	scp -i $EC2_PERMISSIONS -r ../WebContent/jscore/min/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/app/$1/jscore/min/flatfull/
+	scp -i $EC2_PERMISSIONS -r ../WebContent/jscore/min/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/app/$1/jscore/min/
 	scp -i $EC2_PERMISSIONS -r ../WebContent/tpl/min/precompiled/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/app/$1/tpl/min/precompiled/
 	echo "Updated production version : $1"
 else
