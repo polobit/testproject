@@ -710,7 +710,10 @@ function addTagsTypeaheadLhsFilters(tagsJSON, element)
 
 	$.each(tagsJSON, function(index, element)
 	{
-		tags_array.push(element.tag.toString());
+		if ($.inArray(element.tag.toString(), tags_array) == -1)
+		{
+			tags_array.push(element.tag.toString());
+		}
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
