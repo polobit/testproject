@@ -526,7 +526,7 @@ function googledata(el,response,startTime,endTime)
 			
 	// Retrieve the events from primary
 	var request = gapi.client.calendar.events
-	.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
+	.list({ 'calendarId' : 'primary', maxResults : 1000, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
 	request.execute(function(resp)
 			{
 
