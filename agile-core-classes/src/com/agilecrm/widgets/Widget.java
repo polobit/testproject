@@ -242,13 +242,13 @@ public class Widget {
 		DomainUser domainUser = agileUser.getDomainUser();
 		boolean isAdmin = domainUser.is_admin;
 
-		if (isAdmin && this.id == null) {
+		if (isAdmin && (this.id == null || this.listOfUsers == null)) {
 			JSONArray userList = new JSONArray();
 			userList.put(domainUser.id);
 			this.listOfUsers = userList.toString();
 			this.add_by_admin = isAdmin;
 		}
-		
+
 		if (user == null) {
 			user = new Key<AgileUser>(AgileUser.class,
 					AgileUser.getCurrentAgileUser().id);
