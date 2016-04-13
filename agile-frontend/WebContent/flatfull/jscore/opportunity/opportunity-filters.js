@@ -164,8 +164,8 @@ function setupNewDealFilters(callback)
 }
 function setNewDealFilters(data){
 	var filters_list = data.toJSON();
-	var filters_ui = "<li><a class='default_deal_filter'>All</a></li>" +
-					 "<li><a class='deal-filter' id='my-deals'>My Deals</a></li>" + 
+	var filters_ui = "<li><a href='javascript:void(0)' class='default_deal_filter'>All</a></li>" +
+					 "<li><a href='javascript:void(0)' class='deal-filter' id='my-deals'>My Deals</a></li>" + 
 					 "<li class='divider'></li>" + 
 					 "<li><a href='#deal-filters'>Add/Edit Filter&nbsp;&nbsp;<span class='label bg-danger'>Beta</span></a></li>";
 	if (filters_list && filters_list.length > 0)

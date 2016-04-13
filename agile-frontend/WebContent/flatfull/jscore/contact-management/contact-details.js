@@ -110,9 +110,9 @@ function checkContactUpdated(){
  * to change the owner of a contact 
  */
 function fill_owners(el, data, callback){
-	var optionsTemplate = "<li><a class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
+	var optionsTemplate = "<li><a href='javascript:void(0)' class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
 	if(company_util.isCompany())
-		optionsTemplate = "<li><a class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
+		optionsTemplate = "<li><a href='javascript:void(0)' class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
 	
     fillSelect('contact-detail-owner','/core/api/users/partial', 'domainUsers', callback, optionsTemplate, true); 
 }

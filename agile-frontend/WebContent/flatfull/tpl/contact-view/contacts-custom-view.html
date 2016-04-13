@@ -163,7 +163,7 @@
     	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
     	
     	
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
         	<!--<li>
             	<a href="#contacts" class="DefaultView">Default</a>
 				 a href="#contacts" class="GridView">Grid View</a 
@@ -171,7 +171,7 @@
 			<li class="divider"></li>-->
 			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
 
-				<ul class="dropdown-menu" id="contact-sort-views">
+				<ul class="dropdown-menu" id="contact-sort-views" role="menu">
 					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
 					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
 					<li class="divider"></li>
@@ -199,10 +199,12 @@
     	
 	</div>
     <div class="btn-group">
+
         <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
-        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-		<ul class="dropdown-menu pull-right">
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+		<ul class="dropdown-menu pull-right" role="menu">
 			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import from CSV</a></li>
+
 			<li><a href="#import">Import from Salesforce</a></li>
 			
 		</ul>

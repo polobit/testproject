@@ -434,7 +434,7 @@ e.preventDefault();
 $('.popover').on('click', '#contact-owner-popover', function(e){
 	var that=$(this);
 	  e.preventDefault();
-	  var optionsTemplate = "<li><a class='contact-owner-list-popover' data='{{id}}'>{{name}}</a></li>";
+	  var optionsTemplate = "<li><a href='javascript:void(0)' class='contact-owner-list-popover' data='{{id}}'>{{name}}</a></li>";
          fillSelect('contact-detail-owner-popover','/core/api/users/partial', 'domainUsers', function()
 			{
 									$(that).css('display', 'none');
