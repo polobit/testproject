@@ -8,17 +8,17 @@ var Form_Collection_Events = Base_Collection_View.extend({
 
 	codePublish : function(e){
 		
-		$("#codeShareModal").hide();
+		$("#modal-backdrop").hide();
 		e.preventDefault();
 
 		//full source code
 		var $codeShareModalEl = $("#codeShareModal");
 		$codeShareModalEl.html(getTemplate("formbuilder-codeshare")).modal("show");
-	 	var currentModel = App_Forms.formsListView.collection.get($(e.target).data("formid"));
+	 	var currentModel = App_Forms.formsListView.collection.get($(e.currentTarget).data("formid"));
 	 	$codeShareModalEl.find("#fullsourceArea").text(currentModel.get("formHtml"));
 
 	 	//permanent link
-	 	var link = window.location.protocol + "//" +window.location.host+ "/form.jsp?id"+"=" +$(e.target).data("formid");
+	 	var link = window.location.protocol + "//" +window.location.host+ "/form.jsp?id"+"=" +$(e.currentTarget).data("formid");
 	 	$codeShareModalEl.find("#linkArea").text(link);
 
 	 	//iframe code
@@ -26,7 +26,7 @@ var Form_Collection_Events = Base_Collection_View.extend({
 	 	$codeShareModalEl.find("#iframeArea").text(iframe);
 
 	 	//embed code
-	 	var embed = "<div id=\""+window.location.host+"_"+$(e.target).data("formid")+"\" class=\"agile_crm_form_embed\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
+	 	var embed = "<div id=\""+window.location.host+"_"+$(e.currentTarget).data("formid")+"\" class=\"agile_crm_form_embed\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
 		$codeShareModalEl.find("#embedCodeArea").text(embed);
 	},
 });
