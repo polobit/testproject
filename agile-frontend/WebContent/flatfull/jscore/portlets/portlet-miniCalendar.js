@@ -552,6 +552,22 @@ function googledata(el,response,startTime,endTime)
 				}
 			}
 
+			console.log($("#calendar_container", el).fullCalendar("getView").visStart);
+
+		$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_google" + $(el).attr('id')]);
+			var events_clone = events.slice(0);
+			functions["event_mini_google" + $(el).attr('id')] = function(start, end, callback)
+			{
+				console.log(this);
+				console.log($("#calendar_container", el).fullCalendar("getView").visStart);
+				if($('#calendar_container', el).fullCalendar('getView').visStart.getTime()!=start.getTime())
+					return;
+				callback(events_clone);
+				
+			}
+
+			$('#calendar_container',el).fullCalendar('addEventSource', functions["event_mini_google" + $(el).attr('id')]);
+			events_clone = [];
 			//**Add the google Events in the list of events in events_show div **/
 			var len = $(".events_show").find('.list').find('li').length;
 			var date = new Date();
@@ -610,7 +626,7 @@ function renderGoogleEvents(events,fc_event,el)
 			if(fc_event.allDay==true){
 				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 				fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+				var a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24))
 				if(a==1)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
