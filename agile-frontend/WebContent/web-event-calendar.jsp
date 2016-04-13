@@ -284,8 +284,8 @@ if (scheduleid != null && multiple_users){  %>
 					<div class="numberlt" id="two">2</div>
 					<div class="event-title" style="margin-bottom:7px;">
 						<span class="pull-left">Select Date and Time</span>
-						<span class="timezone">														
-								<select name="user_timezone" class="form-control" id="user_timezone">
+						<span class="timezone">												<span id="base_timezone"></span>
+								<select name="user_timezone" class="form-control hidden" id="user_timezone" >
                                 	<optgroup label="US/Canada">
 										<option value="US/Arizona">US/Arizona</option>
 										<option value="US/Alaska">US/Alaska</option>
@@ -1279,7 +1279,12 @@ var BUFFERTIME=null;
 		          $(".segment1").removeClass("blockdiv");
 	            }
 			SELECTED_TIMEZONE=jstz.determine().name();			
+			$('#base_timezone').text(SELECTED_TIMEZONE);
 			$('#user_timezone').val(SELECTED_TIMEZONE);
+			$('#base_timezone').on('click',function(){
+				$('#base_timezone').addClass('hidden');
+				$('#user_timezone').removeClass('hidden');
+			});
 			$("#current_local_time").html("Current Time: "+getConvertedTimeFromEpoch(new Date().getTime()/1000) );
 			console.log("bodyonlod  : " + Selected_Date);
 		
