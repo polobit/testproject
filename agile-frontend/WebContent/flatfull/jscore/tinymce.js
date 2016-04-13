@@ -393,7 +393,9 @@ function get_merge_field_objs()
 		json['Custom'] = custom_fields;
 
 	//Return json if path isn't email-template
-	if(Current_Route.indexOf('emailbuilder/') == -1)
+	if(Current_Route.indexOf('emailbuilder-add') == -1 || 
+		Current_Route.indexOf('email-template-add') == -1 ||
+		Current_Route.indexOf('emailbuilder/') == -1)
 		return {contact: contact_merge_fields, custom: custom_fields};
 
 	var ticket_merge_fields = {
