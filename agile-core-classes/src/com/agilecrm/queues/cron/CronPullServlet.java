@@ -73,12 +73,12 @@ public class CronPullServlet extends HttpServlet
 	if (tasksCount > FETCH_LIMIT)
 	{
 	    System.out.println("Running " + queueName + " tasks in backend...");
-	    int count = FETCH_LIMIT/400+1;
+	    int count = tasksCount/400+1;
 
 	    while(count>0){
 	    	try
 	    	{
-	    		System.out.println("backendpullqueue iteration count:" +count +"and FETCH_LIMIT:" + FETCH_LIMIT);
+	    		System.out.println("backendpullqueue iteration count:" +count +"and tasksCount:" + tasksCount);
 	    		long startTime = System.currentTimeMillis();
 	    		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
 	    		System.out.println("Took" +(System.currentTimeMillis()-startTime)+" milliseconds to process backendpullqueue ");
