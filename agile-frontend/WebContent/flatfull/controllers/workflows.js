@@ -734,7 +734,7 @@ var WorkflowsRouter = Backbone.Router
 						// Populate contact filters list and make obtained
 						// contact filter
 						// selected
-						if (type == 'RUNS_DAILY' || type == 'RUNS_WEEKLY' || type == 'RUNS_MONTHLY')
+						if (type == 'RUNS_DAILY' || type == 'RUNS_WEEKLY' || type == 'RUNS_MONTHLY' || type == 'RUNS_HOURLY')
 						{
 							var trigger_filter_value = currentTrigger.toJSON()['contact_filter_id'];
 							populate_contact_filters_in_trigger($('form#addTriggerForm', el), 'contact-filter', trigger_filter_value);

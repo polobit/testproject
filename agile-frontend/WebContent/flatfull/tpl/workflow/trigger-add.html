@@ -42,6 +42,7 @@
                                         <option value="DEAL_IS_DELETED">Deal is deleted</option>
                                         <option value="DEAL_MILESTONE_IS_CHANGED">Deal milestone is changed</option>
 										<optgroup label="Timer">
+										<option value="RUNS_HOURLY">Hourly</option>
 										<option value="RUNS_DAILY">Daily</option>
                                         <option value="RUNS_WEEKLY">Weekly</option>
                                         <option value="RUNS_MONTHLY">Monthly</option>
@@ -482,6 +483,25 @@
 
 
 <div id="general" class="row">
+			<div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center b-a">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="icon-time icon-3x"></i>
+                        </div>
+                        <b>Hourly</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Run a campaign on a filtered list of contacts every hour.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_HOURLY"  >Go</a>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="panel wrapper text-center b-a">
                     <!-- Icon and Title -->

@@ -105,6 +105,8 @@ public class TriggerUtil
 			conditionsMap.put("type", Trigger.Type.RUNS_WEEKLY);
 		else if (period.equalsIgnoreCase("MONTHLY"))
 			conditionsMap.put("type", Trigger.Type.RUNS_MONTHLY);
+		else if (period.equalsIgnoreCase("HOURLY"))
+			conditionsMap.put("type", Trigger.Type.RUNS_HOURLY);
 		return dao.listByProperty(conditionsMap);
 	}
 
@@ -123,6 +125,8 @@ public class TriggerUtil
 			conditionsMap.put("type", Trigger.Type.RUNS_WEEKLY);
 		else if (period.equalsIgnoreCase("MONTHLY"))
 			conditionsMap.put("type", Trigger.Type.RUNS_MONTHLY);
+		else if (period.equalsIgnoreCase("HOURLY"))
+			conditionsMap.put("type", Trigger.Type.RUNS_HOURLY);
 		return dao.getCountByProperty(conditionsMap);
 	}
 
