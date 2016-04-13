@@ -189,7 +189,7 @@ public class SendGridSubUser extends SendGridLib
 							"UTF-8")
 					+"&"+ "aggregated_by" + "=" + URLEncoder.encode("month", "UTF-8");
 			
-			response = HTTPUtil.accessURLUsingAuthentication("https://api.sendgrid.com/v3/subusers/stats", "agilecrm1", "send@agile1",
+			response = HTTPUtil.accessURLUsingAuthentication("https://api.sendgrid.com/v3/subusers/stats", username, password,
 					"GET", queryString, false, null, "application/json");
 		}
 		catch (Exception e)
