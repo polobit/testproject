@@ -12,6 +12,7 @@
   </queue>
   <queue>
     <name>campaign-log-pull-queue</name>
+    <mode>pull</mode>
     <rate>10/s</rate>
     <bucket-size>10</bucket-size>
     <max-concurrent-requests>40</max-concurrent-requests>
