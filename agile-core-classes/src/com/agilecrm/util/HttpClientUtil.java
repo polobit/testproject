@@ -23,6 +23,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 
 
 /**
@@ -140,6 +141,8 @@ public class HttpClientUtil
 
     		System.out.println(response.getStatusLine().getStatusCode());
     		System.out.println(response.getStatusLine().getReasonPhrase());
+    		System.out.println("Response is " + EntityUtils.toString(response.getEntity()));
+    		
 		    br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
 		    StringBuffer sb = new StringBuffer();

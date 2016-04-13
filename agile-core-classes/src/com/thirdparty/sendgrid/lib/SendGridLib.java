@@ -14,21 +14,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HttpClientUtil;
-import com.google.cloud.sql.jdbc.internal.Url;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
@@ -123,6 +119,8 @@ public class SendGridLib {
             builder.addTextBody("api_key", this.password);
         }
 
+        System.out.println("Email object " + email.toString());
+        
         String[] tos = email.getTos();
         String[] tonames = email.getToNames();
         String[] ccs = email.getCcs();
@@ -218,6 +216,8 @@ public class SendGridLib {
 			{
         		response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, this.buildBody(email));
         	
+        		System.out.println("Response for first attempt is " + response);
+        		
 	        	// If response consists of 'Bad Username', throws Retry exception
         		if(StringUtils.contains(this.username, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN) && StringUtils.containsIgnoreCase(response, "Bad username"))
 						throw new RetryException(response);
@@ -234,6 +234,11 @@ public class SendGridLib {
 				
 				System.out.println("Response after second attempt..." + response);
 			}
+        	catch(Exception ex)
+        	{
+        		System.err.println(ExceptionUtils.getFullStackTrace(ex));
+        		System.err.println("Exception occured while sending emails..." + response);
+        	}
 	        	
         	return response;
     }
@@ -563,6 +568,27 @@ public class SendGridLib {
 		public void setSmtpJsonString(String smtpJsonString)
 		{
 			this.smtpJsonString = smtpJsonString;
+		}
+		
+		public String toString()
+		{
+			JSONObject json = new JSONObject();
+			
+			try
+			{
+				json.put("FromEmail", from);
+				json.put("FromName", fromname);
+				json.put("To", to.toString());
+				json.put("CC", cc.toString());
+				json.put("BCC", bcc.toString());
+			}
+			catch (JSONException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return json.toString();
 		}
         
     }
