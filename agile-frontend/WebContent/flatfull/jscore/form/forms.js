@@ -13,7 +13,7 @@ var Form_Collection_Events = Base_Collection_View.extend({
 
 		//full source code
 		var $codeShareModalEl = $("#codeShareModal");
-		$codeShareModalEl.html(getTemplate("formbuilder-codeshare")).modal("show");
+		$codeShareModalEl.html(getTemplate("formbuilder-codeshare",{})).modal("show");
 	 	var currentModel = App_Forms.formsListView.collection.get($(e.currentTarget).data("formid"));
 	 	$codeShareModalEl.find("#fullsourceArea").text(currentModel.get("formHtml"));
 
