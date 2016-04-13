@@ -769,7 +769,7 @@ function loadMailTabView_company(company_detail_tab_scope,email_server,mail_serv
 	var model = "";
 	var email_dropdown_html = "";
 	var from_email = "";
-    mailAccountsView_company = new Base_Model_View({ url : 'core/api/emails/synced-accounts', template : "email-account-types",change:false,
+    mailAccountsView_company = new Base_Model_View({ url : 'core/api/emails/synced-accounts', template : "email-company-account-types",change:false,
 		postRenderCallback : function(el)
 		{	
 			model = mailAccountsView_company.model.toJSON();

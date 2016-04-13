@@ -1,12 +1,9 @@
 <script id="email-account-types-template" type="text/html">
     <div  class="m-b-md m-t-md m-r-sm" align="right">
-   {{#if_equals type "PERSON"}} 
+   
 		<a href="#send-email/{{getCurrentContactProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none contact"><i class="fa fa-envelope"></i> &nbsp; Send Email
 		</a>
-	{{else}}
-		<a href="#send-email/{{getCurrentCompanyProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none company"><i class="fa fa-envelope"></i> &nbsp; Send Email
-		</a>
-	{{/if_equals}}
+	
 	<div class="btn-group pos-rlt">
 	<button class="btn btn-sm btn-default filter-dropdown" id="email-type-select">Agile</button>
 	<button class="btn btn-sm btn-default dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
@@ -71,6 +68,77 @@
 	</div>
 	<div class="clearfix"></div>
 </script>
+
+<script id="email-company-account-types-template" type="text/html">
+    <div  class="m-b-md m-t-md m-r-sm" align="right">
+   
+		<a href="#send-email/{{getCurrentCompanyProperty "email"}}" id="send-new-email" class="btn btn-default btn-sm blue btn-slate-action m-t-none company"><i class="fa fa-envelope"></i> &nbsp; Send Email
+		</a>
+	<div class="btn-group pos-rlt">
+	<button class="btn btn-sm btn-default filter-dropdown" id="email-type-select">Agile</button>
+	<button class="btn btn-sm btn-default dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
+	<span class="caret"></span>
+	</button>
+	<ul id = "mail-account-type-select" class="pull-right dropdown-menu">
+    <li>
+	<a href="" class="agile-emails" email-server="all" data-url="all" email-server-type="all">All Mail</a>
+	</li>
+	{{#if agileUserName}}
+	<li>
+	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?search_email=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>Agile</a>
+	</li>
+	{{/if}}
+	{{#if gmailUserNames}}
+	{{#each gmailUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="fa fa-google" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if imapUserNames}}
+	{{#each imapUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if exchangeUserNames}}
+	{{#each exchangeUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedGmailUserNames}}
+	{{#each sharedGmailUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedImapUserNames}}
+	{{#each sharedImapUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedExchangeUserNames}}
+	{{#each sharedExchangeUserNames}}
+	<li>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	</ul>
+	
+	<label id="has_email_configured" style="display:none">{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}</label>
+	
+	</div>
+	</div>
+	<div class="clearfix"></div>
+</script>
+
 <script id="email-social-collection-template" type="text/html">
 {{#unless this.length}}
     <div class="wrapper p-t-none">
