@@ -32,6 +32,7 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
+import com.agilecrm.contact.js.JSContact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
@@ -106,10 +107,10 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
 	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(contact);
+	    	return JSAPIUtil.generateContactMissingError();
+	    
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    
 	}
 	catch (Exception e)
 	{
@@ -187,7 +188,9 @@ public class JSAPI
 	    }
 	    if (StringUtils.isNotBlank(campaignIds))
 		JSAPIUtil.subscribeCampaigns(campaignIds, contact);
-	    return mapper.writeValueAsString(contact);
+	    
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (PlanRestrictedException e)
 	{
@@ -198,6 +201,11 @@ public class JSAPI
 	    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
 	}
 	catch (IOException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return null;
@@ -388,7 +396,8 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
 	    }
 
-	    return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
 
 	}
 	catch (JsonGenerationException e)
@@ -402,6 +411,11 @@ public class JSAPI
 	    return e.getMessage();
 	}
 	catch (IOException e)
+	{
+	    e.printStackTrace();
+	    return e.getMessage();
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return e.getMessage();
@@ -445,7 +459,8 @@ public class JSAPI
 
 	    contact.removeTags(tagsArray);
 
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 
 	}
 	catch (Exception e)
@@ -481,7 +496,8 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    contact.addScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
@@ -521,7 +537,8 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    contact.subtractScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
@@ -610,7 +627,8 @@ public class JSAPI
 	    properties.add(field);
 	    contact.properties = properties;
 	    contact.save();
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (JSONException e)
 	{
@@ -625,6 +643,10 @@ public class JSAPI
 	    return null;
 	}
 	catch (IOException e)
+	{
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    return null;
 	}
@@ -1125,7 +1147,8 @@ public class JSAPI
 	    else
 		contact.save();
 
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (JsonGenerationException e)
 	{
@@ -1143,6 +1166,11 @@ public class JSAPI
 	    return null;
 	}
 	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return null;
@@ -1200,7 +1228,8 @@ public class JSAPI
 	    {
 		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
 	    }
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
