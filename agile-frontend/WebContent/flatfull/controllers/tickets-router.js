@@ -258,8 +258,9 @@
 					//Initializing Assignee dropdown with groups and assignees
 					Tickets.fillAssigneeAndGroup(el);
 
-					//Initializing date picker on due date field
+					//Initializing date picker on due date fields
 					Tickets.initializeTicketSLA(el);
+					Tickets.initializeTicketSLAinHours(el);
 
 					// Fill next, Prev navigation
 					Tickets.ticket_detail_view_navigation(id, el)
@@ -285,6 +286,7 @@
 
 					// Get previous ticket 
 					Tickets.showPreviousTicketCount(data.requester_email, el);	
+					
 				}
 			});
 
