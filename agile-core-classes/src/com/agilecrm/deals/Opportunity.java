@@ -991,6 +991,9 @@ public class Opportunity extends Cursor implements Serializable
 	for (Tag tag :tagsWithTime){
 		tag.createdTime = System.currentTimeMillis();
 	}
+	for (Tag tag :tagsWithTime){
+		tags.add(tag.tag);
+	}
 
     }
 

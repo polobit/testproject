@@ -528,3 +528,36 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 			})
 
 }
+function saveDealTag(tag) {
+	var flag ;
+	var fieldValue= tag ;
+	if (!isValidTag(fieldValue, true)) {
+		$(field).focus();
+		return;
+	}
+	if(TAGS){
+		var i;
+		for(i=0;i<TAGS.length ; i++){
+			if(TAGS[i].attributes.tag == fieldValue){
+				flag = 1;
+				break;
+			}
+		}
+	}
+	if(flag == 1) {
+		return;
+	}
+
+	var tagObject = {};
+	tagObject.tag = fieldValue.trim();
+
+	var model = new BaseModel(tagObject);
+	model.url = "core/api/tags";
+	model.save([], {
+		success : function(response) {
+			// Adds tag to global connection
+			if(tagsCollection && tagsCollection.models)
+				tagsCollection.add(response.toJSON());
+		}
+	});
+}

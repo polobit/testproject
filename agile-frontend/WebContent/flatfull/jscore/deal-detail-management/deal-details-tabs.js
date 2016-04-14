@@ -132,8 +132,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
    		  	});
 	    	
 	    	// Checks if tag already exists in contact
-			if($.inArray(new_tags, json.tags) >= 0)
+			if($.inArray(new_tags, json.tags) >= 0){
+				$("#addTagsForm").css("display", "none");
+        		$("#add-tags").css("display", "block");
 				return;
+			}
 			acl_util.canAddTag(new_tags.toString(),function(respnse){
 		    	json.tagsWithTime.push({"tag" : new_tags.toString()});
 	   			
@@ -142,17 +145,12 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		        contact.url = 'core/api/opportunity';
 		        contact.save(json,{
 		       		success: function(data){
-		       					       			
-		       			// Get all existing tags of the contact to compare with the added tags
-		       			var old_tags = [];
-		       			$.each($('#added-tags-ul').children(), function(index, element){
-		       				old_tags.push($(element).attr('data'));
-	       				});
 		       			
 		       			// Updates to both model and collection
 		       			App_Deal_Details.dealDetailView.model.set(data.toJSON(), {silent : true});
 		       			App_Deal_Details.dealDetailView.render(true);		       			
 		       			console.log(new_tags);
+		       			saveDealTag(new_tags);
 		       			// Adds the added tags (if new) to tags collection
 		       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
 		       		},

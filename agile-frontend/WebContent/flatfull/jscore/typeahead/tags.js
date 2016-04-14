@@ -82,23 +82,31 @@ function setup_tags_typeahead(callback) {
     		if((this.$element).closest(".control-group").hasClass('save-tag')){
     			
     			var json = null;
+                var url = 'core/api/contacts';
     			if(callback!=undefined)
     			{ callback(tag);
     				return;
     			}
-    			if(company_util.isCompany())
+                if(App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
+                   
+                    json =  App_Deal_Details.dealDetailView.model.toJSON();
+                    url = 'core/api/opportunity' ; 
+                }
+    			else if(company_util.isCompany())
     				json = App_Companies.companyDetailView.model.toJSON();
     			else
     				json = App_Contacts.contactDetailView.model.toJSON();
     			
     			// Checks if tag already exists in contact
-    			if($.inArray(tag, json.tags) >= 0)
-    				return;
+    			if($.inArray(tag, json.tags) >= 0){
+    				$("#addTagsForm").css("display", "none");
+                    $("#add-tags").css("display", "block");
+                    return;
+                }
 
     			json.tagsWithTime.push({"tag" : tag});
-    			
-    			
-    			saveEntity(json, 'core/api/contacts', function(data){
+    			    			
+    			saveEntity(json, url , function(data){
     				$("#addTagsForm").css("display", "none");
         		    $("#add-tags").css("display", "block");
         		    
@@ -108,8 +116,19 @@ function setup_tags_typeahead(callback) {
        					
 	       				old_tags.push($(element).attr('data'));
        				});
+                    if(App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
+                        App_Deal_Details.dealDetailView.model.set(data.toJSON(), {silent : true});
+                        App_Deal_Details.dealDetailView.render(true);
+                        saveDealTag(tag);
+                        // Append to the list, when no match is found 
+                    /*    if ($.inArray(tag, old_tags) == -1) {
+                            var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}"><span><a class="anchor m-r-xs" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+                            // Adds contact name to tags ul as li element
+                            $('#added-tags-ul').append(template({name : tag}));
+                        }   */
+                    }
 	       			
-	       			if(company_util.isCompany()){
+	       			else if(company_util.isCompany()){
 	       				App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
 	       			// Append to the list, when no match is found 
 		       			if ($.inArray(tag, old_tags) == -1) {
@@ -134,7 +153,7 @@ function setup_tags_typeahead(callback) {
     			});
     	        return;
     		}
-    		
+
     		// To store existing tags in form.
     		var tags_temp = [];
     		
@@ -157,8 +176,18 @@ function setup_tags_typeahead(callback) {
     	if(e.which == 13 && !isTagsTypeaheadActive)
     		{
     			e.preventDefault();
+                var json = null;
+                var url = null;
+                if(App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
     			
-    			var contact_json = App_Contacts.contactDetailView.model.toJSON();
+    			     json = App_Deal_Details.dealDetailView.model.toJSON();
+                     url = 'core/api/opportunity' ;
+                }
+                else {
+
+                     json = App_Contacts.contactDetailView.model.toJSON();
+                     url = 'core/api/contacts' ;
+                }
     	
     			var tag = $(this).val().trim();
     			
@@ -191,20 +220,26 @@ function setup_tags_typeahead(callback) {
         			if ($.inArray(tag, old_tags) != -1) 
         				return;
        			
-        			contact_json.tagsWithTime.push({"tag" : tag});
+        			json.tagsWithTime.push({"tag" : tag});
         	    	
-        			saveEntity(contact_json, 'core/api/contacts',  function(data) {
+        			saveEntity(json, url ,  function(data) {
+                     if(App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
+                        App_Deal_Details.dealDetailView.model.set(data.toJSON(), {silent : true});
+                        App_Deal_Details.dealDetailView.render(true);
+                        saveDealTag(tag);
+                        }
+                        else{
         				// Updates to both model and collection
         				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
         				addTagToTimelineDynamically(tag, data.get("tagsWithTime"));
+                        var template = Handlebars.compile('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{name}}" ><span><a class="anchor m-r-xs" href="#tags/{{name}}">{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+                        // Adds contact name to tags ul as li element
+                        $('#added-tags-ul').append(template({name : tag}));
+                        }
         				tagsCollection.add(new BaseModel( {"tag" : tag} ));
         			$("#addTagsForm").css("display", "none");
         		    $("#add-tags").css("display", "block");
-
-                    var template = Handlebars.compile('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{name}}" ><span><a class="anchor m-r-xs" href="#tags/{{name}}">{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
-
-                    // Adds contact name to tags ul as li element
-                    $('#added-tags-ul').append(template({name : tag}));
                     
         			},function(model,response){
         				console.log(response);
