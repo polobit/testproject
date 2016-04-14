@@ -399,9 +399,15 @@ public class SendGrid
     		email.setSmtpJsonString(SMTPHeaderJSON);
     	
     	if (documentIds != null && documentIds.size() > 0)
+    	{
     		sendDocumentAsMailAttachment(apiUser, apiKey, email, documentIds.get(0));
+    		return "Added to Document Queue.";
+    	}
 	    else if (blobKeys != null && blobKeys.size() > 0)
+	    {
 	    	sendBlobAsMailAttachment(apiUser, apiKey, email, blobKeys.get(0));
+	    	return "Added to Blob Queue";
+	    }
 	    else if (attachmentData != null && attachmentData.length > 0)
 	    {
 	    	String fileName = getFileName(attachmentData);
