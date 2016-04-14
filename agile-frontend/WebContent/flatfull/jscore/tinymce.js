@@ -399,7 +399,7 @@ function get_merge_field_objs()
 		return json;
 
 	var ticket_merge_fields = {
-		"Ticket ID": "{{id}}",
+		"Ticket ID": "{{ticket_id}}",
 		"Subject": "{{subject}}",
 		"Requester Name": "{{requester_name}}",
 		"Requester Email": "{{requester_email}}",

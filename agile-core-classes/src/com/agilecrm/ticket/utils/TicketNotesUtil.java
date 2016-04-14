@@ -174,7 +174,7 @@ public class TicketNotesUtil
 		if (StringUtils.isBlank(agentName))
 			agentName = "";
 
-		json.put("id", ticket.id);
+		json.put("ticket_id", ticket.id);
 		json.put("group_name", groupName);
 		json.put("agent_name", agentName);
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
