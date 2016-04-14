@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -250,7 +251,10 @@ public class SendgridInboundParser extends HttpServlet
 					Tickets ticket = null;
 
 					String[] nameEmail = getNameAndEmail(json);
-
+					
+					System.out.println("Name & email fetched: ");
+					System.out.println(Arrays.toString(nameEmail));
+					
 					// boolean isNewTicket = isNewTicket(toAddressArray);
 					String ticketID = extractTicketIDFromHtml(htmlText);
 
@@ -403,23 +407,23 @@ public class SendgridInboundParser extends HttpServlet
 	 */
 	private String[] getNameAndEmail(JSONObject json)
 	{
-		String name = "x", from = "customer@domain.com";
+		String name = "", from = "";
 		try
 		{
-			from = json.getString("from");
+			from = json.getString("from"); name = from;
 
 			int delimeterIndex = from.indexOf("<");
 
-			name = from.substring(0, delimeterIndex).trim();
-			from = from.substring((delimeterIndex + 1), from.indexOf(">")).trim();
-
-			if (StringUtils.isBlank(name))
+			if (delimeterIndex == -1)
 				name = from.substring(0, from.lastIndexOf("@"));
 			else
 			{
-				if (name.contains("\""))
-					name = name.replace("\"", "");
+				name = from.substring(0, delimeterIndex).trim();
+				from = from.substring((delimeterIndex + 1), from.indexOf(">")).trim();
 			}
+
+			if (name.contains("\""))
+				name = name.replace("\"", "");
 
 			System.out.println("name: " + name);
 			System.out.println("from: " + from);
