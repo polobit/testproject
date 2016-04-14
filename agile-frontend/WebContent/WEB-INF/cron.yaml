@@ -133,6 +133,6 @@ cron:
   target: agile-ticket-module
 
 - description: Expired Sessions Cleanup
-  url: /_ah/sessioncleanup
-  schedule: every 30 mins
+  url: /_ah/sessioncleanup?clear
+  schedule: every 5 mins
 
