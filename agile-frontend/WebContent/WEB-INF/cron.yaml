@@ -131,3 +131,8 @@ cron:
   url: /ticket-module/backend/wakeup-servlet
   schedule: every 1 mins
   target: agile-ticket-module
+
+- description: Expired Sessions Cleanup
+  url: /_ah/sessioncleanup
+  schedule: every 30 mins
+
