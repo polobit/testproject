@@ -78,7 +78,8 @@
                         "greater than or equals": "greater_than_or_equals",
                         "not equal to": "not_equal_to",
                         "equal to": "equal_to",
-                        "contains": "contains"
+                        "contains": "contains",
+                        "in": "in"
                     },
                     "fieldType": "select",
                     "type": "select" 
@@ -161,7 +162,8 @@
                        "greater than or equals": "greater_than_or_equals",
                        "not equal to": "not_equal_to",
                        "equal to": "equal_to",
-                       "contains": "contains"
+                       "contains": "contains",
+                       "in": "in"
                    },
                    "fieldType": "select",
                    "type": "select" 

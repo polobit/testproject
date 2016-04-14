@@ -557,18 +557,6 @@ public class Tickets extends Cursor implements Serializable
 			ActivityUtil.createTicketActivity(ActivityType.TICKET_STATUS_CHANGE, this.contactID, this.id,
 					oldStatus.toString(), this.status.toString(), "status", set_activity_user);
 
-		// // Logging public notes activity
-		// if (isPublicNotes)
-		// {
-		// ActivityType activityType = (last_updated_by ==
-		// LAST_UPDATED_BY.REQUESTER) ? ActivityType.TICKET_REQUESTER_REPLIED
-		// : ActivityType.TICKET_ASSIGNEE_REPLIED;
-		//
-		// ActivityUtil.createTicketActivity(activityType, this.contactID,
-		// this.id, "", last_reply_plain_text,
-		// "html_text");
-		// }
-
 		this.save();
 
 		if (assigneeChanged)

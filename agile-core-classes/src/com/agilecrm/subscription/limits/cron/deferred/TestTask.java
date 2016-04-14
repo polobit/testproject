@@ -1,6 +1,7 @@
 package com.agilecrm.subscription.limits.cron.deferred;
 
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,10 +48,12 @@ public class TestTask implements DeferredTask
     }
     
     public static void main(String[] args) {
-    	String str = "abc";
+    	String str = "Agile";
+    	Set set = new TreeSet();
     	for (int i = 0; i < str.length(); i++) {
-			System.out.print((int) str.charAt(i));
+    		set.add(str.charAt(i));
 		}
+    	System.out.println(set);
 	}
 
 }

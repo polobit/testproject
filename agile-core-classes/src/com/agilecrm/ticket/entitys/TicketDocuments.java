@@ -9,6 +9,13 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * <code>TicketDocuments</code> represents attachment that we received along
+ * with tickets.
+ * 
+ * @author Sasi
+ * 
+ */
 @XmlRootElement
 public class TicketDocuments
 {

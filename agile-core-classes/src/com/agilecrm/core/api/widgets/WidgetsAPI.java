@@ -98,14 +98,9 @@ public class WidgetsAPI {
 	public Widget createWidget(Widget widget) throws Exception {
 		System.out.println("In widgets api create");
 		if (widget != null) {
-			try {
-				WidgetsAPI.checkValidDetails(widget);
-				widget.save();
-				return widget;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			WidgetsAPI.checkValidDetails(widget);
+			widget.save();
+			return widget;
 		}
 
 		return null;
@@ -358,6 +353,14 @@ public class WidgetsAPI {
 			BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
 					privateKey);
 			JSONArray resultObj = bUtil.getTransactions("test@agilecrm.com");
+		}
+		if (widget.name.equals("Uservoice")) {
+			String prefs = widget.prefs;
+			JSONObject prefsObj = new JSONObject(prefs);
+			String API_KEY = prefsObj.getString("uv_api_key");
+			String API_SECRET = prefsObj.getString("uv_secert_key");
+			String domain = prefsObj.getString("uv_domain_name");
+			UservoiceAPI uv = new UservoiceAPI(domain, API_KEY, API_SECRET);
 		}
 	}
 }

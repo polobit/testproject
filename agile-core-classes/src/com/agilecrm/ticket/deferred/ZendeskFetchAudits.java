@@ -132,7 +132,7 @@ public class ZendeskFetchAudits implements DeferredTask
 								// Creating new Notes in TicketNotes table
 								TicketNotes notes = new TicketNotes(ticket.id, ticket.groupID, null,
 										CREATED_BY.REQUESTER, ticket.requester_name, ticket.requester_email, body,
-										body, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
+										body, NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "", true);
 
 								notes.created_time = date.getTime();
 								notes.save();
@@ -141,7 +141,7 @@ public class ZendeskFetchAudits implements DeferredTask
 							{
 								TicketNotes notes = new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
 										CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, body, body,
-										NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "");
+										NOTE_TYPE.PUBLIC, new ArrayList<TicketDocuments>(), "", true);
 
 								notes.save();
 							}
@@ -158,7 +158,7 @@ public class ZendeskFetchAudits implements DeferredTask
 								domainUser = domainOwner;
 
 							TicketNotes notes =new TicketNotes(ticket.id, null, domainUser.id, CREATED_BY.AGENT, "", "",
-									body, body, NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>(), "");
+									body, body, NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>(), "", true);
 							
 							notes.save();
 						}

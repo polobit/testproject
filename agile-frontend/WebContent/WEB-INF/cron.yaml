@@ -51,6 +51,7 @@ cron:
 - description: Due Tasks Reminder
   url: /backend/cron/tasks
   schedule: every day 07:00
+  target: agile-normal-bulk
   
 - description: Twitter5
   url: /backend/cron/twitter?rate=rate_limit_5
@@ -131,3 +132,7 @@ cron:
   url: /ticket-module/backend/wakeup-servlet
   schedule: every 1 mins
   target: agile-ticket-module
+  
+- description: Ticket stats report
+  url: /ticket-module/backend/ticket_stats
+  schedule: every day 03:00

@@ -16,6 +16,7 @@ import org.json.JSONArray;
 
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.ContactSchemaUpdateStats;
+import com.agilecrm.OpportunitySchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
@@ -60,6 +61,7 @@ import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.AliasDomain;
@@ -89,12 +91,8 @@ import com.campaignio.twitter.TwitterJobQueue;
 import com.campaignio.urlshortener.URLShortener;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -243,6 +241,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(TicketDocuments.class);
 	//ObjectifyService.register(TicketActivity.class);
 	ObjectifyService.register(TicketLabels.class);
+	ObjectifyService.register(TicketStats.class);
 	
 	
 	ObjectifyService.register(DealFilter.class);
@@ -258,6 +257,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// CSV Import status
 	ObjectifyService.register(ImportStatus.class);
+	
+	//For deals update in textsearch
+	ObjectifyService.register(OpportunitySchemaUpdateStats.class);
 
     }
 
@@ -770,6 +772,24 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	}
 	return results;
     }
+    
+    /**
+     * Convenience method to get key matching to multiple properties
+     * 
+     * @param map
+     * @return list of keys of type T
+     */
+    public Key<T> getKeyByProperty(Map<String, Object> map)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+
+	return q.getKey();
+    }
+    
 
     /**
      * Convenience method to get list of keys matching a single property

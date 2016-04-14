@@ -541,30 +541,7 @@ public class StatsSQLUtil
 	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
 		    startTime, endTime, cursor, pageSize);
 	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
-	    return StatsSQL.getJSONQuery(segementationQuery);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-    
-    /**
-     * Executes segmentation sql query. Returns contact email count based on page
-     * visits filters.
-     * 
-     * @param query
-     * @return
-     */
-    public static JSONArray getContactEmailCount(String domain,String rules,String startTime,String endTime,String cursor,String pageSize)
-    {
-	try
-	{
-	    SegmentationQueryGenerator segmentationQueryGenerator = new SegmentationQueryGenerator(domain, rules,
-		    startTime, endTime, cursor, pageSize);
-	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
-	    return StatsSQL.getJSONQuery(segementationQuery);
+	    return StatsSQL.getSegments(segementationQuery);	  
 	}
 	catch (Exception e)
 	{

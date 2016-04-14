@@ -353,7 +353,14 @@ function getGMTEpochFromDateForCustomFilters(date)
 	// Adding offset to date returns GMT time 
 	return date.getTime() - (date.getTimezoneOffset() * 60 * 1000);
 	}
-
+function getGMTEpochFromDateForDynamicFilters(date)
+{
+	var current_sys_date = new Date();
+	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+	var offset = (date.getTimezoneOffset() * 60 * 1000) ;
+	// Adding offset to date returns GMT time 
+	return date.getTime();
+	}
 /**
  * Returns local epoch time based form GMT time
  * 
@@ -366,6 +373,12 @@ function getLocalTimeFromGMTMilliseconds(time_in_milliseconds)
 
 	// Subtracting epoch offset from epoch time;
 	return date.getTime() - (date.getTimezoneOffset() * 60 * 1000);
+}
+function getLocalTimeFromGMTMillisecondsforDynamicFilters(time_in_milliseconds)
+{
+	var date = new Date(parseInt(time_in_milliseconds));
+	
+	return date.getTime();
 }
 
 function showTextGravatar(selector, element)
@@ -712,7 +725,7 @@ function endFunctionTimer(name){
 }
 
 function loadServiceLibrary(callback){
-	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets-min.js' + "?_=" + _AGILE_VERSION, function(){
+	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets-min.js' + "?_=" + (_AGILE_VERSION + '1'), function(){
 
 		if(callback)
 			callback();

@@ -16,7 +16,7 @@
  * @param base_model
  */
 var CURRENT_VIEW_OBJECT;
-var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Starred","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
+var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Star Value","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
 
 
 var ifFromRender=false;
