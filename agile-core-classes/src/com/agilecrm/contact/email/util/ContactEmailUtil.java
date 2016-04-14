@@ -183,6 +183,8 @@ public class ContactEmailUtil
 			// When multiple emails separated by comma are given
 			for (String toEmail : toEmailSet)
 			{
+				System.out.println("To Email is " + toEmail);
+				
 				// Returns email-id e.g., Naresh <naresh@agilecrm.com >
 				String email = EmailUtil.getEmail(toEmail);
 

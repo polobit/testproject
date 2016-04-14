@@ -123,8 +123,7 @@ public class HttpClientUtil
     public static String accessURLUsingHttpClient(URLBuilder urlBuilder, HttpEntity httpEntity)
     {
     	HttpUriRequest request = null;
-    	BufferedReader br = null;
-    	
+
     	try
     	{
     		if(urlBuilder.getMethod().equalsIgnoreCase("GET"))
@@ -149,19 +148,11 @@ public class HttpClientUtil
 
     		System.out.println(response.getStatusLine().getStatusCode());
     		System.out.println(response.getStatusLine().getReasonPhrase());
-    		System.out.println("Response is " + EntityUtils.toString(response.getEntity()));
+    		String res =  EntityUtils.toString(response.getEntity());
     		
-		    br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
-
-		    StringBuffer sb = new StringBuffer();
-		    String output;
-
-		    while ((output = br.readLine()) != null)
-		    {
-		    	sb.append(output);
-		    }
-
-		    return sb.toString();
+    		System.out.println("Response is " + res);
+    		
+    		return res;
     		
     	}
     	catch(Exception e)
@@ -169,18 +160,6 @@ public class HttpClientUtil
     		e.printStackTrace();
     		System.err.println("Exception occured while sending request..." + e.getMessage());
     		return null;
-    	}
-    	
-    	finally
-    	{
-    		 try
-			{
-				br.close();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
     	}
     }
     

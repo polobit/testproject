@@ -585,6 +585,7 @@ public class SendGridLib {
 				json.put("FromEmail", from);
 				json.put("FromName", fromname);
 				json.put("To", to.toString());
+				json.put("ToNames", toname.toString());
 				json.put("CC", cc.toString());
 				json.put("BCC", bcc.toString());
 			}
