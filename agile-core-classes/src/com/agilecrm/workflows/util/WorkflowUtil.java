@@ -49,7 +49,11 @@ public class WorkflowUtil
 	{
 		try
 		{
-			return dao.get(id);
+			Workflow worflow =  dao.get(id);
+			if(worflow.access_level == 1L || worflow.access_level == DomainUserUtil.getCurentUserId())
+					return worflow;
+			
+			throw new Exception("This Workflow is not related to yours.");
 		}
 		catch (Exception e)
 		{
