@@ -121,11 +121,11 @@ function openFacebookModal() {
 	var feed_json = {
 			method : 'feed',
 			message : 'We\'re using ClickDesk live chat and help desk software to increase sales, conversions and customer happiness :)',
-			link : 'https://www.clickdesk.com',
-			name : 'ClickDesk Livechat Service',
-			caption : 'www.clickdesk.com',
-			description : 'Customizable live chat app with voice and video chat, email help desk, screen sharing, analytics and extensive integrations. Sign up now!',
-			picture : 'https://www.clickdesk.com/img/fb-clickdesk-logo.png',
+			link : 'https://www.agilecrm.com',
+			name : 'CRM, Sales and Marketing Automation Software',
+			caption : 'www.agilecrm.com.com',
+			description : 'All-in-one powerful and affordable Customer Relationship Management (CRM) software with sales and marketing automation for small businesses. Sign up now!',
+			picture : 'https://doxhze3l6s7v9.cloudfront.net/beta/static/images/agilecrm-logo.jpg',
 			display : 'dialog'
 		};
 
@@ -168,10 +168,9 @@ function load_facebook_lib_for_referrals() {
 	// Facebook
 	head.js("https://connect.facebook.net/en_US/all.js", function() {
 
-		// 575730259135499
 		window.fbAsyncInit = function() {
 			FB.init({
-				appId : "1472694689634803",
+				appId : "827039704106675",
 				status : true,
 				cookie : true,
 				xfbml : true,
@@ -194,15 +193,29 @@ function trackReferrals(type){
 	switch(type){
 			case "facebook":
 				showNotyPopUp("information", "Your submission is successful, thank you.", "top");
+				sendReferralTrackMail("Shared on facebook");
 				return;
 			case "follow":
 				showNotyPopUp("information", "You are following Agile CRM on Twitter. Congratulations!", "top");
+				sendReferralTrackMail("Following on twitter");
 				return;
 			case "tweet":
 				showNotyPopUp("information", "Your tweet has been posted successfully.", "top");
+				sendReferralTrackMail("Tweet");
 				return;
 			default:
 				return;
 		}
 	//Agile_GA_Event_Tracker.track_event("refer_"+type,CURRENT_DOMAIN_USER.domain)
+}
+function sendReferralTrackMail(type, callback)
+{
+	var json = {};
+	json.from=CURRENT_DOMAIN_USER.email;
+	json.to = "narmada@agilecrm.com";
+	json.cc = "venkat@agilecrm.com";
+	json.bcc = "mogulla@agilecrm.com";
+	json.subject = "Referrals feature used";	
+	json.body = "Username: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain+"<br>Type: "+type;
+	sendEmail(json);
 }
