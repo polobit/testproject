@@ -82,7 +82,10 @@ public class NamespaceFilter implements Filter
 	
 	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/spi"))
 	    return true;
-	
+
+	//Filter request for /_ah/sessioncleanup - Expired Session Cleanup Servlet
+	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/sessioncleanup"))
+	    return true;
 
 	// Read Subdomain
 	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
