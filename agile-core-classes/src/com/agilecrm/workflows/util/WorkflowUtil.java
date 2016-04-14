@@ -1,12 +1,17 @@
 package com.agilecrm.workflows.util;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.googlecode.objectify.Key;
@@ -60,13 +65,24 @@ public class WorkflowUtil
 	 */
 	public static List<Workflow> getAllWorkflows()
 	{
-		return dao.ofy().query(Workflow.class).order("name").list();
+		Map map = new HashMap();
+		
+		Long userId = DomainUserUtil.getCurentUserId();
+		if(userId != null){
+			Set set = new HashSet();
+			set.add(1L);
+			set.add(userId);
+			
+			map.put("access_level in", set);
+		}
+		
+		return dao.listByPropertyAndOrder(map, "name");
+		
 	}
 
 	// returns all workflows count
 	public static int getCount()
 	{
-
 		return Workflow.dao.count();
 	}
 
@@ -83,7 +99,20 @@ public class WorkflowUtil
 	 */
 	public static List<Workflow> getAllWorkflows(int max, String cursor)
 	{
-		return dao.fetchAllByOrder(max, cursor, null, true, false, "name");
+		
+		Long userId = DomainUserUtil.getCurentUserId();
+		Map map = new HashMap();
+		
+		if(userId != null)
+		{
+			Set set = new HashSet();
+			set.add(1L);
+			set.add(userId);
+			
+			map.put("access_level in", set);
+		}
+		
+		return dao.fetchAllByOrder(max, cursor, map, true, false, "name");
 	}
 
 	/**

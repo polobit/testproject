@@ -262,6 +262,19 @@ public class DomainUserUtil
 
 	return getDomainUserKey(info.getDomainId());
     }
+    
+    /**
+     * Get Current User key
+     */
+    public static Long getCurentUserId()
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return null;
+
+	return info.getDomainId();
+    }
+    
 
     /**
      * Gets current domain user using SessionManager

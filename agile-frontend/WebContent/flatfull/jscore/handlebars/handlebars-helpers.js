@@ -5027,6 +5027,11 @@ $(function()
 		return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getAccountOwnerId', function(options)
+	{
+		return CURRENT_DOMAIN_USER.id;
+	});
+
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
 		if (canEditContact(owner_id))

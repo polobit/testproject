@@ -226,6 +226,8 @@ var WorkflowsRouter = Backbone.Router
 						$('#unsubscribe-action', el).val(unsubscribe.action);
 						
 						$('#unsubscribe-action', el).trigger('change');
+
+						$('#access_level', el).val(that.workflow_model.get("access_level"));
 						console.log($(el).html());
 						if(that.is_disabled)
 								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");

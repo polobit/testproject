@@ -166,7 +166,9 @@ var Workflow_Model_Events = Base_Model_View.extend({
                                     "unsubscribe_subject": unsubscribe_subject
                                }
 
-        
+        // Access Level
+        var access_permission = $('#access_level').val();
+
         // Check for valid name
         if (isNotValid(name)) {
             alert("Name not valid");
@@ -183,7 +185,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(targetEl).attr('id') === 'duplicate-workflow-top' || $(targetEl).attr('id') === 'duplicate-workflow-bottom') 
         {
-            create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);   
+            create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, access_permission);   
 
         }
         // Update workflow
@@ -198,6 +200,8 @@ var Workflow_Model_Events = Base_Model_View.extend({
             App_Workflows.workflow_model.set("rules", designerJSON);
             App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
             App_Workflows.workflow_model.set("is_disabled", is_disabled);
+            App_Workflows.workflow_model.set("access_level", access_permission);
+            
             App_Workflows.workflow_model.save({}, {success: function(){
                 
                 enable_save_button($clicked_button);
@@ -389,7 +393,7 @@ $(function(){
  * @param unsubscribe_json - unsubscribe data of workflow
  * @param $clicked_button - jquery object to know clicked button
  **/
-function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, was_disabled)
+function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, was_disabled, access_level)
 {
 	var workflowJSON = {};
 	
@@ -398,6 +402,7 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
     workflowJSON.unsubscribe = unsubscribe_json;
     workflowJSON.is_disabled = is_disabled;
     workflowJSON.was_disabled = was_disabled;
+    workflowJSON.access_level = access_level;
     
     var workflow = new Backbone.Model(workflowJSON);
     App_Workflows.workflow_list_view.collection.create(workflow,{

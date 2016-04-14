@@ -1,6 +1,8 @@
 package com.agilecrm.workflows;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -115,6 +117,9 @@ public class Workflow extends Cursor {
 
 	@Indexed
 	public boolean is_disabled = false;
+	
+	@Indexed
+	public Long access_level = 1L;  
 
 	/**
 	 * Initialize DataAccessObject.
@@ -245,11 +250,14 @@ public class Workflow extends Cursor {
 								.entity("Please change the given name. Same kind of name already exists.")
 								.build());
 		}
-
+		
+		
+		Workflow oldWorkflow = null;
+		
 		// Old workflow
 		if (id != null) {
 			// to compare given name with existing ones.
-			Workflow oldWorkflow = WorkflowUtil.getWorkflow(id);
+			oldWorkflow = WorkflowUtil.getWorkflow(id);
 
 			// Verifies only when workflow name updated
 			if (!oldWorkflow.name.equals(name)) {
@@ -261,6 +269,8 @@ public class Workflow extends Cursor {
 									.build());
 			}
 		}
+		
+		setAccessLevel(oldWorkflow);
 	}
 
 	/**
@@ -300,6 +310,16 @@ public class Workflow extends Cursor {
 				|| StringUtils.equalsIgnoreCase(unsubscribe.unsubscribe_name,
 						"null"))
 			unsubscribe.unsubscribe_name = name;
+	}
+	
+	public void setAccessLevel(Workflow oldWorkflow){
+		if(access_level == null || access_level == 0L){
+			
+			if(oldWorkflow != null && oldWorkflow.access_level != null && oldWorkflow.access_level != 0L)
+				access_level = oldWorkflow.access_level;
+			else
+				access_level = 1L;
+		}
 	}
 
 	public String toString() {
