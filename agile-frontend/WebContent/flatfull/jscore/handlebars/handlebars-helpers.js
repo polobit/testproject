@@ -7233,3 +7233,10 @@ Handlebars.registerHelper('getSuggestionName', function(suggestionId){
 			return uservoiceOBJ.suggestions[suggestionId];
 		}		
 });
+
+Handlebars.registerHelper('removeSpecialCharacter',function(value){
+          var value = value.replace(/[^\w\s]/gi, '-');
+          return value;
+
+});
+

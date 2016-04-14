@@ -11,17 +11,36 @@
 		<div class="panel panel-default">
 		<div class="panel-heading">Tasks List</div>
         <div class="table-responsive">
-        <table class="table table-striped showCheckboxes no-sorting panel m-b-none agile-table table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+        <table class="table table-striped showCheckboxes no-sorting panel m-b-none 
+        {{#is_mobile}} {{else}} agile-table {{/is_mobile}} table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+            
+            {{#is_mobile}}
             <thead>
                 <tr>
-					<th style="width:10%;" class="header">Owner</th>
-					<th style="width:30%;" class="header">Task Name</th>
+					<th style="width:10%;" class="header text-ellipsis">Owner</th>
+					<th style="width:30%;" class="header text-ellipsis">Task Name</th>
+                    <th style="width:10%;" class="header text-ellipsis">Category</th>
+                   	<th style="width:10%;" class="header text-ellipsis">Priority</th>
+					<th style="width:10%;" class="header text-ellipsis">Due Date</th>
+                    <th style="width:30%;" class="header text-ellipsis">Related To</th>
+                </tr>
+            </thead>
+
+            {{else}}
+
+            <thead>
+                <tr>
+                    <th style="width:10%;" class="header">Owner</th>
+                    <th style="width:30%;" class="header">Task Name</th>
                     <th style="width:10%;" class="header">Category</th>
-                   	<th style="width:10%;" class="header">Priority</th>
-					<th style="width:10%;" class="header">Due Date</th>
+                    <th style="width:10%;" class="header">Priority</th>
+                    <th style="width:10%;" class="header">Due Date</th>
                     <th style="width:30%;" class="header">Related To</th>
                 </tr>
             </thead>
+
+            {{/is_mobile}}
+
             <tbody id="tasks-list-model-list" class="c-p" route="task/">
             </tbody>
         </table>

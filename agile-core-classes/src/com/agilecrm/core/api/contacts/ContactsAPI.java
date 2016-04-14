@@ -1182,7 +1182,7 @@ public class ContactsAPI
      * merge duplicated contacts and related items such as
      * notes,document,events,task,deals and documents
      * 
-     * @param Contact
+     * @param JSContact
      *            contact and duplication contact ids
      * @return Single Contact
      */
