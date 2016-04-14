@@ -125,6 +125,7 @@ function checkContactUpdated(){
          /* toggle fields*/
           $("#company-inline-input").addClass("hidden");
           $("#company-name-text").text(companyname).removeClass("hidden");
+          $("#company-name-text").addClass("text-capitalize ");
           $("#company-inline-input").removeClass("error-inputfield");
 
   }
@@ -153,6 +154,7 @@ function checkContactUpdated(){
               {
               $("#Contact-input").addClass("hidden");
               $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+              $("#contactName").addClass("text-capitalize ");
               $("#Contact-input-firstname" ).removeClass("error-inputfield");
               $("#Contact-input-lastname" ).removeClass("error-inputfield");  
               return;
@@ -165,6 +167,7 @@ function checkContactUpdated(){
                agile_crm_update_contact("last_name", lastName,function(){
                 $("#Contact-input").addClass("hidden");
               $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+              $("#contactName").addClass("text-capitalize ");
               $("#Contact-input-firstname").removeClass("error-inputfield");
               $("#Contact-input-lastname").removeClass("error-inputfield");
               return ;
@@ -175,6 +178,7 @@ function checkContactUpdated(){
           // Toggle fields
           $("#Contact-input").addClass("hidden");
           $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
+          $("#contactName").addClass("text-capitalize ");
           $("#Contact-input-firstname").removeClass("error-inputfield");
           $("#Contact-input-lastname").removeClass("error-inputfield"); 
     }
