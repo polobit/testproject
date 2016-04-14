@@ -2,8 +2,10 @@ package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -805,6 +807,43 @@ public class ActivityUtil
 					mapvalue[2] = "description";
 					dealmap.put("description", mapvalue);
 				}
+			if(obj.tagsWithTime.size() ==0  &&  oldobj.tagsWithTime.size() >0 ){
+				Set <String> tagset = new HashSet<String>() ;
+				Object[] mapvalue = new Object[3];
+				for (int i= 0;i< oldobj.tagsWithTime.size();i++){
+					tagset.add(oldobj.tagsWithTime.get(i).tag);
+				}
+				mapvalue[1] = tagset ;
+				mapvalue[2] = "tags";
+				dealmap.put("tags", mapvalue);
+				
+				}
+			else if(obj.tagsWithTime.size() >0  &&  oldobj.tagsWithTime.size() ==0 ){
+				Set <String> tagset = new HashSet<String>() ;
+				Object[] mapvalue = new Object[3];
+				for (int i= 0;i< obj.tagsWithTime.size();i++){
+					tagset.add(obj.tagsWithTime.get(i).tag);
+				}
+				mapvalue[0] = tagset ;
+				mapvalue[2] = "tags";
+				dealmap.put("tags", mapvalue);
+				}
+			else if(obj.tagsWithTime.size() >0  &&  oldobj.tagsWithTime.size() >0 ) {
+				Set <String> tagset = new HashSet<String>() ;
+				Object[] mapvalue = new Object[3];
+				for (int i= 0;i< oldobj.tagsWithTime.size();i++){
+					tagset.add(oldobj.tagsWithTime.get(i).tag);
+				}
+				mapvalue[1] = tagset ;
+				 tagset = new HashSet<String>() ;
+				for (int i= 0;i< obj.tagsWithTime.size();i++){
+					tagset.add(obj.tagsWithTime.get(i).tag);
+				}
+				mapvalue[0] = tagset;
+				mapvalue[2] = "tags";
+				dealmap.put("tags", mapvalue);
+				}
+			
 			JSONObject js = new JSONObject(new Gson().toJson(obj));
 			JSONArray jsn = js.getJSONArray("contact_ids");
 			jsn = ActivitySave.getExistingContactsJsonArray(jsn);

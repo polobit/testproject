@@ -1,8 +1,10 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +55,13 @@ public class ActivitySave
 
 	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name,
 	        opportunity.expected_value.toString(), String.valueOf(opportunity.probability), jsn);
+	if(opportunity.tagsWithTime.size() >0){
+		Set <String> tagset = new HashSet<String>() ;
+		for (int i= 0;i< opportunity.tagsWithTime.size();i++){
+			tagset.add(opportunity.tagsWithTime.get(i).tag);
+		}
+		ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_ADD, opportunity, tagset.toString(), "", "tags", jsn);
+	}
 
     }
 
@@ -87,6 +96,7 @@ public class ActivitySave
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
 	Object description[] = deals.get("description");
+	Object tags[] = deals.get("tags");
 	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
 
@@ -117,6 +127,14 @@ public class ActivitySave
 
 		ActivityUtil.createDealActivity(ActivityType.DEAL_EDIT, opportunity, changed_data.get(1).toString(),
 		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
+	    }
+	    if(tags.length > 0){
+	    	if(tags[0] != null && tags[1] != null)
+	    		ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_CHANGE, opportunity, tags[0].toString(), tags[1].toString(), tags[2].toString(), jsn);
+	    	else if(tags[0] == null && tags[1] != null)
+	    		ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_DELETE, opportunity, "", tags[1].toString(), tags[2].toString(), jsn);
+	    	else if(tags[0] != null && tags[1] == null)	
+	    		ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_ADD, opportunity, tags[0].toString(), "", tags[2].toString(), jsn);
 	    }
 	}
 

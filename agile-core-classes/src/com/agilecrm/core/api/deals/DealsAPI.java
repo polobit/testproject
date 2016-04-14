@@ -309,6 +309,9 @@ public class DealsAPI
 		    .entity("Deal not saved properly.").build());
 	}
 	opportunity.save();
+	if(opportunity.tagsWithTime.size() > 0){
+		
+	}
 	try
 	{
 	    ActivitySave.createDealAddActivity(opportunity);

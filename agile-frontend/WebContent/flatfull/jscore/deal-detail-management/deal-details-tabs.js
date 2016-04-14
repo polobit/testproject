@@ -47,9 +47,123 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	'click .deal-add-event' : 'dealAddEvent',
     	'click .event-edit-deal-tab' : 'dealEditEvent',
 		'click .deal-event-delete' : 'dealEditDelete', 
-		'click .activity-delete' : 'deleteActivity',  	
+		'click .activity-delete' : 'deleteActivity',  
+		'click #add-tags' : 'onAddDealTag',	
+		'click .remove-tags' : 'onRemoveDealTag',
+		'click #deal-add-tags' : 'onAddDealTags',
     	
     },
+      /**
+	 * Shows a form to add tags with typeahead option
+	 */ 
+    onAddDealTag : function(e){
+    	e.preventDefault();
+
+		$(e.currentTarget).css("display", "none");
+		$("#addTagsForm").removeClass("hidden");
+		$("#addTagsForm").css("display", "block");
+		$("#addTags").focus();
+		setup_tags_typeahead();
+	
+    },
+    onRemoveDealTag : function(e){
+
+    	e.preventDefault();
+    	var targetEl = $(e.currentTarget);
+
+		var tag = $(targetEl).attr("tag");
+		removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
+		console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
+		
+     	var json = App_Deal_Details.dealDetailView.model.toJSON();
+     	
+     	// Returns contact with deleted tag value
+     	json = delete_contact_tag(json, tag);
+     	var that = targetEl;
+     	
+     	// Unbinds click so user cannot select delete again
+     	$(targetEl).unbind("click");
+     	
+        var deal = new Backbone.Model();
+        deal.url = 'core/api/opportunity';
+        deal.save(json, {
+       		success: function(data)
+       			{ 	      		
+       				$(that).closest("li").parent('ul').find('.loading').remove();
+       				$(that).closest("li").remove();
+       				
+       			// Updates to both model and collection
+	       			App_Deal_Details.dealDetailView.model.set(data.toJSON(), {silent : true});
+	       			App_Deal_Details.dealDetailView.render(true);
+	       		}
+        });
+	
+    },
+     /**
+	 * "click" event of add button of tags form in contact detail view
+	 * Pushes the added tags into tags array attribute of the contact and saves it
+	 */ 
+	 onAddDealTags : function(e){
+	 	e.preventDefault();
+		
+	    // Add Tags
+		var new_tags = get_new_tags('addTags');
+		if(new_tags)new_tags=new_tags.trim();
+		
+		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
+		{
+			console.log(new_tags);
+			return;
+		}
+		if (!isValidTag(new_tags, true)) {
+			return;
+		}
+		$('#add-tags').css("display", "block");
+		$("#addTagsForm").css("display", "none");
+		console.log(new_tags);
+		
+		if(new_tags) {
+			var json = App_Deal_Details.dealDetailView.model.toJSON();
+	    		
+	    	
+	    	// Reset form
+	    	$('#addTagsForm input').each (function(){
+   		  	  	$(e.currentTarget).val("");
+   		  	});
+	    	
+	    	// Checks if tag already exists in contact
+			if($.inArray(new_tags, json.tags) >= 0)
+				return;
+			acl_util.canAddTag(new_tags.toString(),function(respnse){
+		    	json.tagsWithTime.push({"tag" : new_tags.toString()});
+	   			
+		    	// Save the contact with added tags
+		    	var contact = new Backbone.Model();
+		        contact.url = 'core/api/opportunity';
+		        contact.save(json,{
+		       		success: function(data){
+		       					       			
+		       			// Get all existing tags of the contact to compare with the added tags
+		       			var old_tags = [];
+		       			$.each($('#added-tags-ul').children(), function(index, element){
+		       				old_tags.push($(element).attr('data'));
+	       				});
+		       			
+		       			// Updates to both model and collection
+		       			App_Deal_Details.dealDetailView.model.set(data.toJSON(), {silent : true});
+		       			App_Deal_Details.dealDetailView.render(true);		       			
+		       			console.log(new_tags);
+		       			// Adds the added tags (if new) to tags collection
+		       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
+		       		},
+		       		error: function(model,response){
+		       			console.log(response);
+		       			alert(response.responseText);
+		       		}
+		        });
+			});
+		}
+	 },
 
 	/**
 	 * Fetches all the notes related to the deal and shows the notes collection
