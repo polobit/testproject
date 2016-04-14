@@ -406,7 +406,9 @@ function get_merge_field_objs()
 		"Priority": "{{priority}}",
 		"Status": "{{status}}",
 		"Ticket Comments": "{{{ticket_comments}}}",
-		"Footer": "{{{ticket_footer}}}"
+		"Footer": "{{{ticket_footer}}}",
+		"Group": "{{group_name}}",
+		"Assignee": "{{agent_name}}"
 	};
 
 	json['Ticket'] = ticket_merge_fields

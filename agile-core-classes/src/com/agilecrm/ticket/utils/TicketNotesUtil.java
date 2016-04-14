@@ -206,8 +206,8 @@ public class TicketNotesUtil
 		json.put("subject", ticket.subject);
 		json.put("requester_name", ticket.requester_name);
 		json.put("requester_email", ticket.requester_email);
-		json.put("priority", ticket.priority);
-		json.put("status", ticket.status);
+		json.put("priority", StringUtils.capitalize(ticket.priority.toString()));
+		json.put("status", StringUtils.capitalize(ticket.status.toString()));
 
 		System.out.println("notesArray: " + notesArray);
 
