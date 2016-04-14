@@ -196,8 +196,8 @@ public class SendGridSubUser extends SendGridLib
 							, "UTF-8")
 					+"&"+ "aggregated_by" + "=" + URLEncoder.encode("month", "UTF-8");
 			
-			response = HTTPUtil.accessURLUsingAuthentication(url, username, password,
-					"GET", queryString, false, null, "application/json");
+			response = HTTPUtil.accessURLUsingAuthentication(url + "?" + queryString, username, password,
+					"GET", null, false, "application/json", "application/json");
 		}
 		catch (Exception e)
 		{
