@@ -2323,3 +2323,20 @@ color:#484848!important;
 #addDescriptionLink:hover, #addDescriptionLink:focus, #taskDescriptionLink:hover, #taskDescriptionLink:focus,
 #eventDescriptionLink:hover, #eventDescriptionLink:focus{color:#19a9d5;} 
 
+.mobile_lhs_filters_conatiner #lhs_filters_conatiner .panel-body, .savedFlitersMain .panel-body
+{ padding: 8px 15px; min-height: 35px;}
+.savedFlitersMain #lhs-filters-header i{ top: 3px;}
+.mobile-contact-filter-list .dropdown-menu{ left: 0;}
+.mobile-contact-filter-list .dropdown-menu li{ padding: 0 !important; border-bottom: none;}
+.mobile-contact-filter-list .dropdown-menu li a{ padding: 8px 15px;}
+
+
+
+
+
+
+
+
+
+
+

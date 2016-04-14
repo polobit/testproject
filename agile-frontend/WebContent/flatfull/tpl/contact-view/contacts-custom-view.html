@@ -35,7 +35,7 @@
 <!--  start filterstab section -->	
 
 	<div class="content-tabs-show filtersTabList m-none" id="filtersTab" role="tablist" aria-multiselectable="true">
-	 <div class="panel panel-default m-b-sm"> 
+	 <div class="panel panel-default m-b-sm bg-transparent"> 
 	 <div class="panel-heading" role="tab" id="headingOne"> 
 	 <h4 class="panel-title text-left"> 
 	 <a role="button" data-toggle="collapse" data-parent="#filtersTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed" style="padding-left:16px;"> Filters</a> </h4> 
@@ -45,11 +45,28 @@
 
 			<div class="" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
 
-			<div class="data-block">
+			<div class="data-block mobile_lhs_filters_conatiner">
 			<div id="lhs_filters_conatiner"></div>
+			<hr class="m m-t-sm m-b-sm" style="border-top: 1px solid #DCDCDC;">
+					<div class="wrapper bg-light p-b-xs p-t-xs savedFlitersMain">
+					<div class="panel panel-default m-b-none">
+					<div class="panel-body">
+					<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+					<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
+					Saved filters
+					<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+					 
+					 <div id="filter-list" class="hide mobile-contact-filter-list"></div>
+			
+					</div>
+
+					</div>
+					</div>
+					</div>
+
 			<div class="wrapper bg-light p-b-xs p-t-xs">
   <div class="panel panel-default m-b-sm">
-			<div class="p-t-sm p-b-sm text-center">
+			<div class="p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">
       <a href='#contact-filters' class="text-info">Add or Edit Filter</a></div>
 </div>
 </div>

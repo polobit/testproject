@@ -1,4 +1,10 @@
 <script id="contact-filter-list-collection-template" type="text/html">
+{{#is_mobile}}
+<ul id = "contact-filter-list-model-list" class="pull-left dropdown-menu block w-full pos-rlt p-n m-t-sm m-b-sm b-n box-shadow-none">
+	</ul>
+
+{{else}}
+
 <div class="btn-group"  id="filters-tour-step">
 	<button class="btn btn-default btn-sm filter-dropdown "><i class="icon-filter" style="margin-right:3px"></i></button>
 	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -18,6 +24,7 @@
 		<!--<li><a class="filter" id="system-LEADS"  data="Leads" href="#contact-filter/system-LEADS">Leads</a></li>-->
 	</ul>
 </div>
+{{/is_mobile}}
 </script>
 
 <script id="contact-filter-list-model-template" type="text/html">
