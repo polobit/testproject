@@ -149,6 +149,29 @@ function serializeForm(form_id) {
 		};
 	}).get());
 
+	arr = arr.concat($('#' + form_id + ' .multiple-checkbox-adminprefs').map(function() {
+		var fields_set = [];
+
+		$('input:checkbox:checked', this).each(function(index, element_checkbox){
+			if(!($(this).closest(".multiple-checkbox")) == undefined){
+				console.log("admin-prefs");
+			}
+			else if (($(this).closest(".multiple-checkbox")).length == 0 )
+			fields_set.push($(element_checkbox).val());
+		});
+		
+		console.log(fields_set);
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : fields_set
+		};
+	}).get());
+
+
+
 	/*
 	 * Chained select, Chained select is used for filters, which uses logical
 	 * input relation, field show have a class name "chained". Iterates through
@@ -279,7 +302,7 @@ function serializeLhsFilters(element)
 		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
 			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
 
-			RHS_VALUE = getGMTEpochFromDate(date);
+			RHS_VALUE = getGMTEpochFromDateForDynamicFilters(date);
 		}
 		if ($(RHS_ELEMENT).hasClass("custom_contact") || $(RHS_ELEMENT).hasClass("custom_company")) {
 			RHS_VALUE = $(RHS_ELEMENT).parent().find("input").attr("data");
@@ -309,11 +332,10 @@ function serializeLhsFilters(element)
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
 			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
 		if(CONDITION != "BETWEEN") {
-			RHS_NEW_VALUE = getGMTEpochFromDate(date);
+			RHS_NEW_VALUE = getGMTEpochFromDateForDynamicFilters(date);
 		}
 		else {
-			date = new Date(getGMTEpochFromDate(date) + (24 * 60 * 60 * 1000) - 1);
-
+			date = new Date(getGMTEpochFromDateForDynamicFilters(date) + (24 * 60 * 60 * 1000) - 1);
 			RHS_NEW_VALUE = date.getTime();
 		}
 			

@@ -45,9 +45,10 @@ public class ReportServlet extends HttpServlet
 
 	for (String namespace : domains)
 	{
+		System.out.println("In ReportServlet doGet method looping doamins----------"+namespace);
 	    // Created a deferred task for report generation
 	    ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(namespace, duration);
-
+	    System.out.println("In ReportServlet doGet method after ReportsDeferredTask created");
 	    // Add to queue
 	    Queue queue = QueueFactory.getQueue("reports-queue");
 	    queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));

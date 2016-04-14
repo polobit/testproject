@@ -192,8 +192,9 @@ public class TicketNotesUtil
 
 		System.out.println("notesArray: " + notesArray);
 
-		String fromAddress = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(group.id) + "+" + ticket.id
-				+ Globals.INBOUND_EMAIL_SUFFIX;
+		String fromAddress = group.group_email;
+
+		fromAddress = StringUtils.isNotBlank(group.send_as) ? group.send_as : fromAddress;
 
 		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
 				SendMail.TICKET_REPLY, json);
@@ -449,13 +450,13 @@ public class TicketNotesUtil
 			if (StringUtils.isBlank(html))
 				return html;
 
-			Document doc = Jsoup.parse(html, "UTF-8");
+			Document doc = Jsoup.parseBodyFragment(html, "UTF-8");
 
 			// Right now considering only mails from gmail
 			for (Element element : doc.select("div.gmail_extra"))
 				element.remove();
 
-			return doc.toString();
+			return doc.body().html();
 		}
 		catch (Exception e)
 		{

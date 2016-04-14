@@ -2,24 +2,26 @@ var Ticket_Labels = {
 
 	labelsCollection : undefined,
 
-	initChoosenSelect : function(el) {
+	initChoosenSelect : function(el, execute_callback) {
 
 		this.loadChosenLibrary(function() {
 			var $select = $(".chosen-select", el);
 
 			// Initliazing multi select drop down
 			$select.chosen({no_results_text: "No labels found"});
+            
+            if(execute_callback) {
+				$select.off('change');
+				$select.on('change', function(evt, params) {
 
-			$select.off('change');
-			$select.on('change', function(evt, params) {
+					if (params && params.deselected) {
+						Ticket_Labels.updateLabel(params.deselected, 'remove');
+						return;
+					}
 
-				if (params && params.deselected) {
-					Ticket_Labels.updateLabel(params.deselected, 'remove');
-					return;
-				}
-
-				Ticket_Labels.updateLabel(params.selected, 'add');
-			});
+					Ticket_Labels.updateLabel(params.selected, 'add');
+				});
+		    }
 		});
 	},
 
@@ -46,16 +48,16 @@ var Ticket_Labels = {
 		});
 	},
 
-	showSelectedLabels : function(labels, el) {
+	showSelectedLabels : function(labels, el, execute_callback) {
 
 		this.fetchCollection(function() {
-			Ticket_Labels.prepareOptionsList(labels, el);
+			Ticket_Labels.prepareOptionsList(labels, el, execute_callback);
 		});
 
 		return;
 	},
 
-	prepareOptionsList : function(labels, el) {
+	prepareOptionsList : function(labels, el, execute_callback) {
 
 		if (!this.labelsCollection)
 			return;
@@ -76,7 +78,7 @@ var Ticket_Labels = {
 		$(".chosen-select", el).html(optionList);
 
 		// Initializing type ahead for tags
-		this.initChoosenSelect(el);
+		this.initChoosenSelect(el, execute_callback);
 	},
 
 	updateLabel : function(label, command, callback) {

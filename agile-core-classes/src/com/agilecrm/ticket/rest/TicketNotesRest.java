@@ -102,7 +102,7 @@ public class TicketNotesRest
 			{
 				ticketNotes = new TicketNotes(ticket.id, ticket.groupID, DomainUserUtil.getCurentUserKey().getId(),
 						CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text,
-						NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>(), "");
+						NOTE_TYPE.PRIVATE, new ArrayList<TicketDocuments>(), "", false);
 
 				ticketNotes.save();
 
@@ -148,7 +148,7 @@ public class TicketNotesRest
 				// Creating new Notes in TicketNotes table
 				ticketNotes = new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID, CREATED_BY.AGENT,
 						ticket.requester_name, ticket.requester_email, plain_text, html_text, notes.note_type,
-						new ArrayList<TicketDocuments>(), "");
+						new ArrayList<TicketDocuments>(), "", false);
 
 				ticketNotes.save();
 			}

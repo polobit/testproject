@@ -120,7 +120,7 @@
 	<div id="email-reply-div" class="pull-left rightThumbView">
         
 			<div class="pull-left text-cap text-md custom-color contact-title-dynamic">
-<a class="email-subject" id={{id}}  href="#collapse-{{id}}">{{subject}}</a>
+<a class="email-subject" id={{removeSpecialCharacter id}}  href="#collapse-{{removeSpecialCharacter id}}">{{subject}}</a>
 	{{#containString owner_email from}}
 			<i class="icon-reply text-muted"></i>
 		{{else}}
@@ -143,12 +143,12 @@
 </div>
 		<div class="clearfix"></div>	
 
-			<div class="m-b-xs ellipsis-multi-line collapse-{{id}}" style="height:70px">
+			<div class="m-b-xs ellipsis-multi-line collapse-{{removeSpecialCharacter id}}" style="height:70px">
 				<div>
 					<div class="email-body space-normal">{{{message}}}</div>
 				</div>
       		</div>
-			<div id="collapse-{{id}}" class="collapse activity-email-collapse">
+			<div id="collapse-{{removeSpecialCharacter id}}" class="collapse activity-email-collapse">
 				<ul class="email-headers p-n">
                 	<li class="b-n-imp p-n m-t-xs"><strong>From:</strong> {{from}}</li> 
 						

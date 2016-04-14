@@ -176,6 +176,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // Disables save button to prevent multiple save on click event issues
         disable_save_button($(targetEl));
 
+        track_with_save_success_model($(targetEl));
                 
         var workflowJSON = {};
 
@@ -486,6 +487,10 @@ function fill_logs_slate(id, type)
 		    	"title": "No emails sent yet",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    },
+            "EMAIL_SENDING_SKIPPED": {
+                "title": "No emails skipped yet",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
 		    "EMAIL_OPENED": {
 		    	"title": "No emails opened in this campaign",
 				"image": updateImageS3Path("/img/clipboard.png")
