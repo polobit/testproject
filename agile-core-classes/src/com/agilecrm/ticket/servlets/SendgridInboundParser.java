@@ -37,6 +37,7 @@ import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketStats;
+import com.agilecrm.ticket.entitys.TicketsBackup;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -112,6 +113,8 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		try
 		{
+			Key<TicketsBackup> backupKey = null;
+			
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
 			System.out.println("isMultipart: " + isMultipart);
@@ -123,7 +126,10 @@ public class SendgridInboundParser extends HttpServlet
 				if (isMultipart)
 				{
 					JSONObject json = getJSONFromMIME(request);
-
+					
+					//Adding record to tickets backup db
+					backupKey = new TicketsBackup(json.toString()).save();
+					
 					String envelope = json.getString("envelope");
 
 					System.out.println("Envelope:" + envelope);
@@ -252,8 +258,7 @@ public class SendgridInboundParser extends HttpServlet
 
 					String[] nameEmail = getNameAndEmail(json);
 					
-					System.out.println("Name & email fetched: ");
-					System.out.println(Arrays.toString(nameEmail));
+					System.out.println("Name & email fetched: " + Arrays.toString(nameEmail));
 					
 					// boolean isNewTicket = isNewTicket(toAddressArray);
 					String ticketID = extractTicketIDFromHtml(htmlText);
@@ -314,18 +319,21 @@ public class SendgridInboundParser extends HttpServlet
 
 					notes.save();
 
-					// Updating ticket count DB
+					// Updating ticket count DB. Async job.
 					TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
 
 					NamespaceManager.set(oldNamespace);
 
 					System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime)
 							+ "ms");
+					
+					//Removing backup if everything is ok
+					TicketsBackup.delete(backupKey);
 				}
 			}
 			catch (Exception e)
 			{
-				System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
 			}
 		}
 		catch (Exception e)
