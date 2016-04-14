@@ -136,6 +136,8 @@ public class SendMail
    	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
    	public static final String TICKET_FORWARD = "ticket_forward_email";
    	public static final String TICKET_STATS = "ticket_stats";
+   	public static final String TICKET_COMMENTS = "ticket_comments";
+   	public static final String TICKET_FOOTER = "ticket_footer";
    	
     /**
      * From Name of email.
@@ -150,7 +152,7 @@ public class SendMail
     /**
      * Templates path where template files exist.
      */
-    public static final String TEMPLATES_PATH = "misc/email/";
+    public static final String TEMPLATES_PATH = "D://Workspace//.metadata//.plugins//org.eclipse.wst.server.core//tmp0//agile-java-server//agile-frontend.war//misc//email//";
 
     /**
      * Html body template extension.

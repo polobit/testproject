@@ -19,8 +19,10 @@ import org.jsoup.nodes.Element;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.projectedpojos.DomainUserPartial;
@@ -38,6 +40,7 @@ import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -140,7 +143,15 @@ public class TicketNotesUtil
 	 */
 	public static void sendReplyToRequester(Tickets ticket) throws Exception
 	{
-		JSONObject json = new JSONObject();
+		Contact contact = ContactUtil.getContact(ticket.contact_key.getId());
+
+		// Converting contact object to json object
+		JSONObject json = AgileTaskletUtil.getSubscriberJSON(contact);
+		json = json.getJSONObject("data");
+		
+		System.out.println("json: " + json);
+
+		//JSONObject json = new JSONObject();
 
 		List<TicketNotes> notesList = getTicketNotes(ticket.id, "-created_time");
 
@@ -163,7 +174,7 @@ public class TicketNotesUtil
 		if (StringUtils.isBlank(agentName))
 			agentName = "";
 
-		json.put("ticket_id", ticket.id);
+		json.put("id", ticket.id);
 		json.put("group_name", groupName);
 		json.put("agent_name", agentName);
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
@@ -183,8 +194,7 @@ public class TicketNotesUtil
 			if (notes.note_type == NOTE_TYPE.PRIVATE)
 				continue;
 
-			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes,
-					ContactUtil.getContact(ticket.contact_key.getId()));
+			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, contact);
 
 			if (eachNoteJSON != null)
 				notesArray.put(eachNoteJSON);
@@ -192,14 +202,101 @@ public class TicketNotesUtil
 
 		json.put("note_json_array", notesArray);
 
+		// Set merge fields data
+		json.put("subject", ticket.subject);
+		json.put("requester_name", ticket.requester_name);
+		json.put("requester_email", ticket.requester_email);
+		json.put("priority", ticket.priority);
+		json.put("status", ticket.status);
+
 		System.out.println("notesArray: " + notesArray);
+
+		String html = prepareHTML(group, json);
 
 		String fromAddress = group.group_email;
 
 		fromAddress = StringUtils.isNotBlank(group.send_as) ? group.send_as : fromAddress;
 
-		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
-				SendMail.TICKET_REPLY, json);
+		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails, html);
+	}
+
+	public static String prepareHTML(TicketGroups group, JSONObject dataJSON)
+	{
+		try
+		{
+			// No template is chosen so returning default template html content
+			if (group.template_id == null)
+				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON);
+
+			dataJSON.put("ticket_comments",
+					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+			dataJSON.put("ticket_footer",
+					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+
+			EmailTemplates emailTemplates = EmailTemplatesUtil.getEmailTemplate(group.template_id);
+
+			return MustacheUtil.compile(emailTemplates.text, dataJSON);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		return "";
+	}
+
+	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail,
+			List<String> ccEmails, String emailHTML) throws Exception
+	{
+		String oldNamespace = NamespaceManager.get();
+
+		try
+		{
+			// Read template - HTML
+			// String emailHTML = MustacheUtil.templatize(template +
+			// SendMail.TEMPLATE_HTML_EXT, dataJSON);
+
+			// JSONObject mailJSON = Mandrill.setMandrillAPIKey(null,
+			// NamespaceManager.get(), null);
+
+			String ccEmailString = "";
+			for (String ccEmail : ccEmails)
+				ccEmailString += ccEmail + ",";
+
+			// All email params are inserted into Message json
+			// JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail,
+			// fromName, toAddress, ccEmailString, "", "",
+			// subject, emailHTML, emailBody, "", "");
+			//
+			// mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
+			//
+			// System.out.println("mailJSON: " + mailJSON);
+			long start_time = System.currentTimeMillis();
+
+			NamespaceManager.set("");
+
+			EmailGatewayUtil.sendEmail(null, NamespaceManager.get(), fromEmail, fromName, toAddress, ccEmailString, "",
+					subject, "", emailHTML, "", "", null, null);
+
+			// response =
+			// HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
+			// + Mandrill.MANDRILL_API_MESSAGE_CALL,
+			// mailJSON.toString());
+
+			long process_time = System.currentTimeMillis() - start_time;
+
+			System.out.println("Process time for sending mandrill " + process_time + "ms");
+
+			NamespaceManager.set(oldNamespace);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
 
 	/**
@@ -267,58 +364,6 @@ public class TicketNotesUtil
 		}
 
 		return json;
-	}
-
-	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail,
-			List<String> ccEmails, String template, JSONObject dataJSON) throws Exception
-	{
-		// Read template - HTML
-		String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, dataJSON);
-
-		// Read template - Body
-		String emailBody = MustacheUtil.templatize(template + SendMail.TEMPLATE_BODY_EXT, dataJSON);
-
-		// If both are null, nothing to be sent
-		if (emailHTML == null && emailBody == null)
-		{
-			System.err.println("Email could not be sent as no matching templates were found " + template);
-			return;
-		}
-
-		String oldNamespace = NamespaceManager.get();
-		NamespaceManager.set("");
-
-		JSONObject mailJSON = Mandrill.setMandrillAPIKey(null, NamespaceManager.get(), null);
-
-		String ccEmailString = "";
-		for (String ccEmail : ccEmails)
-			ccEmailString += ccEmail + ",";
-
-		// All email params are inserted into Message json
-		JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail, fromName, toAddress, ccEmailString, "", "",
-				subject, emailHTML, emailBody, "", "");
-
-		String response = null;
-
-		mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
-
-		System.out.println("mailJSON: " + mailJSON);
-		long start_time = System.currentTimeMillis();
-
-		EmailGatewayUtil.sendEmail(null, NamespaceManager.get(), fromEmail, fromName, toAddress, ccEmailString, "",
-				subject, "", emailHTML, "", "", null, null);
-		
-		// response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
-		// + Mandrill.MANDRILL_API_MESSAGE_CALL,
-		// mailJSON.toString());
-
-		long process_time = System.currentTimeMillis() - start_time;
-
-		System.out.println("Process time for sending mandrill " + process_time + "ms");
-
-		System.out.println("Response for first attempt " + response);
-
-		NamespaceManager.set(oldNamespace);
 	}
 
 	/**

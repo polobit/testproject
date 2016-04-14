@@ -76,7 +76,7 @@ public class TicketGroups
 	public List<Long> agents_keys = new ArrayList<Long>();
 	
 	/**
-	 * Stores list of agent id's
+	 * Stores email template key id
 	 */
 	@NotSaved
 	public Long template_id = null;

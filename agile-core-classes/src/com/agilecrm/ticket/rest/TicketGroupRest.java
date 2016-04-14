@@ -146,10 +146,10 @@ public class TicketGroupRest
 
 			ticketGroup.setAgents_key_list(agents_key_list);
 			ticketGroup.save();
-			
+
 			// Updating ticket count DB
 			TicketStatsUtil.updateEntity(TicketStats.GROUPS_COUNT);
-			
+
 			return ticketGroup;
 		}
 		catch (Exception e)
@@ -206,10 +206,10 @@ public class TicketGroupRest
 			dbGroup.group_name = ticketGroup.group_name;
 			dbGroup.setAgents_key_list(agents_key_list);
 			dbGroup.send_as = ticketGroup.send_as;
-			
-			if(ticketGroup.template_id != null)
-				dbGroup.email_template_key = new Key<>(EmailTemplates.class, ticketGroup.template_id);
-					
+
+			dbGroup.email_template_key = (ticketGroup.template_id != null) ? new Key<>(EmailTemplates.class,
+					ticketGroup.template_id) : null;
+
 			dbGroup.save();
 
 			return dbGroup;

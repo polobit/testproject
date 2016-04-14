@@ -396,16 +396,17 @@ function get_merge_field_objs()
 	if(Current_Route.indexOf('emailbuilder-add') == -1 && 
 		Current_Route.indexOf('email-template-add') == -1 &&
 		Current_Route.indexOf('emailbuilder/') == -1)
-		return {contact: contact_merge_fields, custom: custom_fields};
+		return json;
 
 	var ticket_merge_fields = {
+		"Ticket ID": "{{id}}",
+		"Subject": "{{subject}}",
 		"Requester Name": "{{requester_name}}",
 		"Requester Email": "{{requester_email}}",
-		"Subject": "{{subject}}",
-		"Ticket ID": "{{id}}",
 		"Priority": "{{priority}}",
 		"Status": "{{status}}",
-		"Ticket Comments": "{{ticket_comments}}"
+		"Ticket Comments": "{{{ticket_comments}}}",
+		"Footer": "{{{ticket_footer}}}"
 	};
 
 	json['Ticket'] = ticket_merge_fields
