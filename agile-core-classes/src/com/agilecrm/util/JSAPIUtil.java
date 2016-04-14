@@ -108,8 +108,10 @@ public class JSAPIUtil
     {
     String domain = NamespaceManager.get();
     List<String> whiteList = new ArrayList<String>();
-    whiteList.add("narmada");
-    whiteList.add("sort");
+    whiteList.add("retest");
+    whiteList.add("daparthi");
+    whiteList.add("pjb98341");
+    whiteList.add("fenopix");
     
     if(!StringUtils.isEmpty(domain) && whiteList.contains(domain))
     	return true;
