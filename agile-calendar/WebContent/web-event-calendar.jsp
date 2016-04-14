@@ -292,10 +292,10 @@ if (scheduleid != null && multiple_users){  %>
 				<div class="col-sm-10 segment segment2 me-disable "
 					style="display: table;display:none">
 					<div class="numberlt" id="two">2</div>
-					<div class="event-title" style="margin-bottom:7px;">
+					<div class="event-title" style="margin-bottom:4px;margin-top:2px;">
 						<span class="pull-left">Select Date and Time</span>
-						<span class="timezone">														<span id="base_timezone "></span>
-								<select name="user_timezone" class="form-control hidden" id="user_timezone">
+						<span class="timezone ">														<span id="base_timezone "></span>
+								<select name="user_timezone" class="form-control hidden m-b-none m-t-n-sm" style="font-weight:normal;" id="user_timezone">
                                 	<optgroup label="US/Canada">
 										<option value="US/Arizona">US/Arizona</option>
 										<option value="US/Alaska">US/Alaska</option>
