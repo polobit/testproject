@@ -86,7 +86,10 @@
 				],
 			"defaultvalues":
 					[
-			           
+					 	{
+					 		"keyName":"Accept",
+					 		"valueName":"text/plain"
+					 	}	 
 					]
 		},
         {
