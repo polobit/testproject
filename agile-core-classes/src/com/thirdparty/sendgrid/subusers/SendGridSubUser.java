@@ -39,7 +39,7 @@ public class SendGridSubUser extends SendGridLib
 	
 	//Stats Attributes
 	
-	final static String EMAIL_SENT = "processed";
+	final static String EMAIL_SENT = "requests";
 	final static String HARD_BOUNCE = "bounces";
 	final static String SOFT_BOUNCE = "deferred";
 	final static String SPAM_REPORT = "spam_reports";
@@ -316,7 +316,7 @@ public class SendGridSubUser extends SendGridLib
 				  }
 			   }
 			allStatsJSON.put("hardBounce", hardBounce);
-			allStatsJSON.put("SoftBounce", softBounce);
+			allStatsJSON.put("softBounce", softBounce);
 			allStatsJSON.put("rejected", rejected);
 			allStatsJSON.put("spamReported", spamReported);
 			allStatsJSON.put("dailyEmailSent", dailyEmailSent);
