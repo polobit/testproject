@@ -23,6 +23,19 @@
 				tight_acl.DEAL_PER = true;
 				App_ACL.notAllowed(obj);
 			}
+		if(Current_Route.indexOf('tasks') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('CALENDAR') > -1))
+		  {
+		   obj.entity = 'Tasks';
+		   tight_acl.ACTIVITY_PER = true;
+		   App_ACL.notAllowed(obj);
+		  }
+
+		  if(Current_Route.indexOf('calendar') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('CALENDAR') > -1))
+		  {
+		   obj.entity = 'Calendar';
+		   tight_acl.ACTIVITY_PER = true;
+		   App_ACL.notAllowed(obj);
+		  }
 		if(Current_Route.indexOf('activit') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('ACTIVITY') > -1))
 		{
 			obj.entity = 'Acivities';
@@ -164,9 +177,26 @@
 	};
 	
 	acl_util.initTagACL = function(el){
-		$('#new_tag_acl',el).off('change').on('change',function(){
+	$('#disable_new_tags').on('click',function(e){
+	if($('#disable_new_tags').text().trim() == 'Enable Access')
+	{
+		
+		$('#disable_new_tags').text("Disable Access");
+		
+		updateTagAcl(true);console.log(false);
+	}
+	else if($('#disable_new_tags').text().trim() == 'Disable Access')
+	{
+		$('#disable_new_tags').text("Enable Access");
+		
+		updateTagAcl(false);
+		//$('#disable_new_tags').attr("option","");
+
+	}  
+	});
+	/*	$('#new_tag_acl',el).off('change').on('change',function(){
 			updateTagAcl($(this).is(':checked'));
-		});
+		});*/
 		setTagACL(el);
 	}
 }(window.acl_util = window.acl_util || {}, $));

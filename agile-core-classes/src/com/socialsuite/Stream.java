@@ -74,6 +74,9 @@ public class Stream
      */
     public int column_index;
 
+    // stream version
+    public int stream_version = 1;
+
     /** object of objectify for dB operations on Stream. */
     public static ObjectifyGenericDao<Stream> dao = new ObjectifyGenericDao<Stream>(Stream.class);
 
@@ -148,6 +151,7 @@ public class Stream
 	{
 	    this.keyword = "@" + this.screen_name;
 	}
+        stream_version = 2;
     }
 
     /** Display all details of Stream. */

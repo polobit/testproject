@@ -12,6 +12,9 @@ var TYPEHEAD_NAMES = {};
 
 var TYPEHEAD_TYPE = {};
 
+// Saves map of key: name and value: related contacts of a deal
+var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
+
 /**
  * This script file defines simple search keywords entered in input fields are
  * sent to back end as query through bootstrap typeahead. Methods render,
@@ -159,6 +162,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 									TYPEHEAD_EMAILS[tag_name] = getContactEmail(item);
 
 									TYPEHEAD_NAMES[tag_name] = getContactName(item);
+
+									TYPEHEAD_DEAL_RELATED_CONTACTS[tag_name] = item.contacts;
 									
 									if(item.type == 'PERSON')
 										TYPEHEAD_TYPE[tag_name] = '#contact/';
@@ -178,7 +183,15 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 						{
 							self.$menu.empty();
 							/* Sets css to html data to be displayed */
-							self.$menu.css("width", 300);							
+							if(self.$element.attr("id") == "searchText")
+							{
+								self.$menu.css({"width" : 300, "max-height" : "calc(100vh - 50px)", "overflow-y" : "auto"});
+								self.$menu.addClass("dashboard-search-scroll-bar");	
+							}
+							else
+							{
+								self.$menu.css("width", 300);
+							}					
 
 							/*
 							 * Calls render because menu needs to be initialized
@@ -192,6 +205,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							 */
 							if (!$(self.$menu.find('li').last()).hasClass('loading-results'))
 							{
+								self.$menu
 								self.$menu.html('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
 								self.render();
 							}
@@ -254,6 +268,13 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 						 */
 						updater : function(items)
 						{
+
+							//in mobile hiding the searchbar onclick
+							setTimeout(function(){
+								$('.search-mobile').addClass('hide');
+								$('.add-modal-mobile , #search-menu-mobile').addClass('visible-xs');
+							},200);
+
 							// To verify whether the entity (task, deal etc..)
 							// related to same contact twice
 							var tag_not_exist = true;
@@ -335,8 +356,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 									$('#' + id, el)
 											.closest("div.controls")
 											.find(".tags")
-											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block"  data="' + TYPEHEAD_EMAILS[items] + '"><a class="text-white" href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '">' + items_temp + '</a><a class="close text-white m-l-xs" id="remove_tag">&times</a></li>');
+											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp, "email")));
+
 
 								}
 
@@ -355,14 +376,54 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								});
 								// add tag
 								if (tag_not_exist)
+								{
+									var dealJSON = get_tag_item_json(items, items_temp, "deals");
+									var related_contact_ids = "";
+									var relatedContactsJOSN = dealJSON["related_contacts"];
+									$.each(relatedContactsJOSN, function(index, relContact){
+										var rel_contact_exist = true;
+										// If tag already exists returns
+										$.each($('ul.tags', el).children('li'), function(index, tag)
+										{
+											if ($(tag).attr('data') == relContact.id)
+											{
+												rel_contact_exist = false;
+												return;
+											}
+										});
+
+										if(rel_contact_exist)
+										{
+											related_contact_ids += relContact.id + " ";
+											var tplJSON = {};
+											tplJSON.email_item = relContact.id;
+											if(relContact.type == 'PERSON'){
+												tplJSON.type_item = '#contact/';
+											}
+											else if(relContact.type == 'COMPANY'){
+												tplJSON.type_item = '#company/';
+											}
+											tplJSON.tag_item = relContact.id;
+											tplJSON.item = getContactName(relContact);
+											$('ul.tags', el).append(getTemplate("tag-item-li", tplJSON));
+										}
+									});
+									dealJSON.related_contact_ids = related_contact_ids;
 									$('.deal_tags', el)
-											.append(
-													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="#deal/' + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+											.append(getTemplate("tag-deal-item-li", dealJSON));
+								}
 							}
 							else
 							{
 								// If tag already exists returns
-								$.each($('.tags', el).children('li'), function(index, tag)
+								var targetContainer = this.$menu.closest("div.controls").find('.tags');
+								if(targetContainer.length == 0){
+									targetContainer = this.$menu.closest("div.control-group").find('.tags'); 
+								} else if(targetContainer.length == 0){
+									targetContainer = this.$menu.closest("div.form-group").find('.tags'); 	
+								}
+									
+								$.each(targetContainer.children('li'), function(index, tag)
 								{
 
 									if ($(tag).attr('data') == TYPEHEAD_TAGS[items])
@@ -374,12 +435,13 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
 								// add tag
 								if (tag_not_exist)
-									$('.tags', el)
-											.append(
-													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+									targetContainer
+											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp)));
+
+											
 							}
 							//Sets modal backdrop height to modal dialog height after select the tag
-							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+70);
+							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+180);
 						},
 						// Needs to be overridden to set timedelay on search
 						keyup : function(e)
@@ -486,12 +548,18 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 												return;
 											}
 										});
-										if (email_check)
+										if (email_check){
+
+											var emailJSON = {};
+											emailJSON.email_item = email_value;
+											emailJSON.item = email_value;
 											$('#' + id, el)
 													.closest("div.controls")
 													.find(".tags")
-													.append(
-															'<li class="tag"  style="display: inline-block;" data="' + email_value + '"><a style="cursor:pointer;">' + email_value + '</a><a class="close" id="remove_tag">&times</a></li>');
+													.append(getTemplate("tag-item-li", emailJSON));
+													
+										}
+											
 										this.select();
 									}
 									else
@@ -540,6 +608,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							this.$menu.hide();
 							this.shown = false;
 							return this;
+
+							
+
 						},
 
 						// Handles cursor exiting the textbox
@@ -560,6 +631,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 $("body").on("click", '#remove_tag', function(event)
 {
 	event.preventDefault();
+	if($(this).parent().attr("data-deal-related-contacts"))
+	{
+		var deal_related_contacts = $(this).parent().attr("data-deal-related-contacts").split(" ");
+		var el = $(this).closest("form");
+		$.each(deal_related_contacts, function(index, contact_id){
+			$("li[data="+contact_id+"]", el).remove();
+		});
+	}
 	$(this).parent().remove();
 });
 
@@ -754,6 +833,12 @@ function appendItemInResult(item)
 			$("#contact-typeahead-heading", this.el).show();
 			$("#contact-results", this.el).append(i);
 		}
+		if (type == "company_entity")
+		{
+
+			$("#company-typeahead-heading", this.el).show();
+			$("#company-results", this.el).append(i);
+		}
 		if (type == "deal")
 		{
 			$("#deal-typeahead-heading", this.el).show();
@@ -769,6 +854,34 @@ function appendItemInResult(item)
 			$("#document-typeahead-heading", this.el).show();
 			$("#document-results", this.el).append(i);
 		}
+		if (type == "tickets")
+		{
+			$("#tickets-typeahead-heading", this.el).show();
+			$("#ticket-results", this.el).append(i);
+		}
 	}
 
+}
+
+function get_tag_item_json(items, items_temp, type){
+
+	var tag_item_json = {};
+
+	if(type == "email"){
+		tag_item_json.email_item = TYPEHEAD_EMAILS[items];
+		tag_item_json.type_item = TYPEHEAD_TYPE[items];
+	} else if(type == "deals") {
+		tag_item_json.email_item = TYPEHEAD_TAGS[items];
+		tag_item_json.type_item = TYPEHEAD_TYPE[items];
+		tag_item_json.related_contacts = TYPEHEAD_DEAL_RELATED_CONTACTS[items];
+	}else {
+		tag_item_json.email_item = TYPEHEAD_TAGS[items];
+		tag_item_json.type_item = TYPEHEAD_TYPE[items];
+	}
+	
+	tag_item_json.tag_item = TYPEHEAD_TAGS[items];
+	tag_item_json.item = items_temp;
+
+	console.log(tag_item_json);
+	return tag_item_json;
 }

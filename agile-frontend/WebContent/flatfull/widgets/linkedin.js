@@ -230,7 +230,7 @@ function setupLinkedinOAuth()
 	// Shows a link button in the UI which connects to the above URL
 	$('#Linkedin')
 			.html(
-					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >Build professional relationships with contacts and keep a tab on their business interests.<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>Link Your LinkedIn</a></p></div>");
+					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >Build professional relationships with contacts and keep a tab on their business interests.<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>Link your LinkedIn</a></p></div>");
 }
 
 /**
@@ -373,7 +373,7 @@ function getLinkedinMatchingProfiles()
 	 * Reads from cookie (local storage HTML5), since widgets are saved using
 	 * local storage when matches are fetched for the first time on the contact
 	 */
-	var data = localStorage.getItem('Agile_linkedin_matches_' + contact_id);
+	var data = _agile_get_prefs('Agile_linkedin_matches_' + contact_id);
 
 	// If cookie is not available, fetches results from LinkedIn
 	if (!data)
@@ -384,10 +384,9 @@ function getLinkedinMatchingProfiles()
 		 */
 		queueGetRequest("widget_queue_", "/core/api/widgets/social/match/" + LinkedIn_Plugin_Id + "/" + contact_id, 'json', function(data)
 		{
-			if(islocalStorageHasSpace()){
-				// Store social results in cookie of particular contact
-				localStorage.setItem('Agile_linkedin_matches_' + contact_id, JSON.stringify(data));
-			}
+			// Store social results in cookie of particular contact
+			_agile_set_prefs('Agile_linkedin_matches_' + contact_id, JSON.stringify(data));
+			
 			// Shows LinkedIn matches in LinkedIn widget
 			showLinkedinMatchingProfiles(data);
 			

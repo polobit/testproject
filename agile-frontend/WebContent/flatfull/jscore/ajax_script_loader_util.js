@@ -48,7 +48,8 @@ function loadMiscScripts() {
     		_agile_execute_web_rules();
     });
 
-	// load_urls_on_ajax_stop('lib/user-voice.js');
+    if(!agile_is_mobile_browser())
+		load_urls_on_ajax_stop('lib/user-voice.js');
 
 	// load_clickdesk_code();
 
@@ -110,4 +111,6 @@ function load_analytics_code(){
 	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	  ga('create', 'UA-44894190-1', 'auto');
 	  ga('send', 'pageview');
+	  ga('create', 'UA-75813054-1', {'name':'b'});
+	  ga('b.send', 'pageview');
 }

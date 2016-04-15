@@ -36,7 +36,7 @@
 			if (event != null) {
 			    duration=(event.end-event.start)/60;
 			    event_title=event.title;
-			    dom_user=event.getOwner();
+			    dom_user=event.eventOwner();
 			    user_name = dom_user.name;
 				timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(dom_user.id);
 				if (StringUtils.isEmpty(timezone))

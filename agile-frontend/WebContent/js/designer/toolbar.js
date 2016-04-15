@@ -8,7 +8,7 @@ function downloadNodes(callback) {
 
         // Load Ajax Files
         $.ajaxq("toolbarnodes", {
-            url: url,
+            url: url +"?_v=1452064428",
             cache: true,
             dataType: 'json',
             success: function (data) {
@@ -108,7 +108,7 @@ function downloadAdvancedNodes() {
     	
         // Load Ajax Files
         $.ajaxq("toolbarnodes", {
-            url: url,
+            url: url+"?_v=1452064428",
             cache: true,
             dataType: 'json',
             success: function (data) {

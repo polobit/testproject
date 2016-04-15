@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -42,6 +43,7 @@ public class AnalyticsServlet extends HttpServlet
      */
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
+	/*
 	// Domain
 	String domain = NamespaceManager.get();
 
@@ -94,14 +96,20 @@ public class AnalyticsServlet extends HttpServlet
 	if (StringUtils.isBlank(domain))
 	    return;
 	
-	if(isBlockedIp(ip, domain))
+	/*if(isBlockedIp(ip, domain))
 	    return;
-	    
+	 */  
+	//Long timeBeforeLog = System.currentTimeMillis();
+	//System.out.println("Before log " + timeBeforeLog);
+	
 	// Insert into table
-	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
-		    city, cityLatLong);
+	//AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
+	//	    city, cityLatLong);
 	    
-
+	/*
+	Long timeAfterLog = System.currentTimeMillis();
+	System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog-timeBeforeLog));
+	
 	// Show notification with url
 	if (StringUtils.isNotBlank(email) && !StringUtils.equals(email, "null"))
 	{
@@ -119,8 +127,15 @@ public class AnalyticsServlet extends HttpServlet
 		e.printStackTrace();
 	    }
 
+	    timeBeforeLog = System.currentTimeMillis();
+		System.out.println("Before log " + timeBeforeLog);
+		
 	    NotificationPrefsUtil.executeNotification(Type.IS_BROWSING, ContactUtil.searchContactByEmail(email), json);
+	    
+	    timeAfterLog = System.currentTimeMillis();
+		System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog-timeBeforeLog));
 	}
+	*/
     }
 
     /**

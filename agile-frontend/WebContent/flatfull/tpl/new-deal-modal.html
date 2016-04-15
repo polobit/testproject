@@ -3,9 +3,9 @@
   <div class="modal-dialog">
     <div class="modal-content" style="border-radius:0px;">
   <div class="modal-header">
-    <button class="close" data-dismiss="modal">x</button>
+    <button class="close" data-dismiss="modal">&times;</button>
     <h3 class="modal-title" style="font-size:18px;">
-      &nbsp;Add Deal
+      &nbsp;New Deal
     </h3>
   </div>
   <div class="modal-body">
@@ -24,10 +24,10 @@
               class="field_req">*</span></label>
             <div class="controls col-sm-7" id="owners">
               <select id="owners-list" class="required form-control" name="owner_id"></select>
-              <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
+              <img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif">
             </div>
           </div>
-          <div class="control-group form-group">
+            <div class="control-group form-group">
             <label class="control-label col-sm-3">Value <span
               class="field_req">*</span></label>
             <div class="controls col-sm-7">
@@ -229,6 +229,9 @@
             </div>
             </div>  
           </div>
+          
+
+        
           <div class="control-group form-group">
             <label class="control-label col-sm-3">Milestone<span
               class="field_req">*</span></label>
@@ -294,7 +297,15 @@
           <input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i> Archive </label>
         </div>
         <div id="custom-field-deals"></div>
-          <div class="control-group form-group">
+
+        <div class="form-group m-b-none">
+                    <div class="col-sm-offset-3 col-sm-7 text-left">
+        <a href="javascript:;" id="addDescriptionLink" class="text-info"><i class="icon-plus"></i> Add Description</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+          <div class="control-group form-group" id="addDescriptionInfo">
             <label class="control-label col-sm-3">Description</label>
             <div class="controls col-sm-7">
               <textarea id="description" name="description" rows="3"

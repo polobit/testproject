@@ -35,6 +35,13 @@ public enum ImportStatus
     LIMIT_REACHED,
 
     /** access denied. */
-    ACCESS_DENIED;
-
+    ACCESS_DENIED,
+    
+    TOTAL_TASKS,
+    SAVED_TASKS,
+    
+    TOTAL_ACCOUNTS,
+    SAVED_ACCOUNTS,
+    MERGED_ACCOUNTS,
+    
 }

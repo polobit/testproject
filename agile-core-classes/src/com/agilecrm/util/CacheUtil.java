@@ -146,4 +146,74 @@ public class CacheUtil
 	    NamespaceManager.set(oldNamespace);
 	}
     }
+    
+    /**
+     * Deletes key within namespace
+     * 
+     * @param key
+     */
+    public static void deleteCacheWithinNamespace(String key)
+    {
+    	try
+    	{
+    	    MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+    	    
+    	    if (syncCache.contains(key))
+    		syncCache.delete(key);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    System.err.println("Exception occured while deleting from cache..." + e.getMessage());
+    	}
+    }
+    
+    /**
+     * Enabling lock on memcache key
+     * 
+     * Source:
+     * http://stackoverflow.com/questions/14907908/google-app-engine-how-
+     * to-make-synchronized-actions-using-memcache-or-datastore
+     * 
+     * @param syncKey
+     * @param maxWait - Max wait time in millis
+     * 
+     * @return
+     */
+    public static boolean acquireLock(String syncKey, long maxWait)
+    {
+	     MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+	     long start = System.currentTimeMillis();
+     
+	     while (true)
+	     {
+		      if (memcacheService.increment(syncKey, 1L, 0L) == 1L)
+		    	  return true;
+		      
+		      // If timeout return
+		      if (System.currentTimeMillis() - start > maxWait)
+		          return true;
+		       
+		      try
+		      {
+		    	  Thread.sleep(maxWait);
+		      }
+		      catch (InterruptedException e)
+		      {
+		    	  System.err.println("Thread got interrupted..." + e.getMessage());
+		    	  e.printStackTrace();
+		      }
+	     }
+    }
+
+    /**
+     * Decrement value of key in Cache
+     * 
+     * @param syncKey
+     */
+    public static void decrement(String syncKey)
+    {
+     // If sync key exists decrement by -1 else set its value to 0
+     MemcacheServiceFactory.getMemcacheService().increment(syncKey, -1, 0L);
+    }
 }

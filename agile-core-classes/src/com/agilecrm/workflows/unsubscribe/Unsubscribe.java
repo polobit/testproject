@@ -12,16 +12,14 @@ package com.agilecrm.workflows.unsubscribe;
  * @author Naresh
  * 
  */
-public class Unsubscribe
-{
+public class Unsubscribe {
 
     /**
      * To show respective content in unsubscribe page based on action
      * 
      */
-    public enum Action
-    {
-	UNSUBSCRIBE_FROM_THIS_CAMPAIGN, UNSUBSCRIBE_FROM_ALL, ASK_USER
+    public enum Action {
+        UNSUBSCRIBE_FROM_THIS_CAMPAIGN, UNSUBSCRIBE_FROM_ALL, ASK_USER
     }
 
     public Action action = null;
@@ -30,18 +28,20 @@ public class Unsubscribe
      * Tag to be added to subscriber, when subscriber confirms Unsubscribe
      */
     public String tag = null;
-    
+
     /**
-     * From email of unsubscribe confirmation email 
+     * From email of unsubscribe confirmation email
      */
     public String unsubscribe_email = null;
-    
+
+    public String unsubscribe_name = null;
+
+    public String unsubscribe_subject = null;
 
     /**
      * Default Unsubscribe
      */
-    public Unsubscribe()
-    {
+    public Unsubscribe() {
     }
 
     /**
@@ -53,10 +53,9 @@ public class Unsubscribe
      *            - Tag to be added for unsubscribed subscriber.
      * 
      */
-    public Unsubscribe(String tag, Action action)
-    {
-	this.tag = tag;
-	this.action = action;
+    public Unsubscribe(String tag, Action action) {
+        this.tag = tag;
+        this.action = action;
     }
 
 }

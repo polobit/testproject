@@ -283,7 +283,7 @@ function capitalizeFirstLetter(string) {
 function gmap_set_icons(email,width){
 	
 	if (email == undefined || email == "")
-		return LIB_PATH_FLATFULL + 'images/flatfull/anonymous_visitor.png';
+		return LIB_PATH_FLATFULL + 'images/anonymous_visitor.png';
 	return prepareLettergravatar(email);
 	
 }

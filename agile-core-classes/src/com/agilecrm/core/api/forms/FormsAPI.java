@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AllDomainStats;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 
@@ -50,6 +52,11 @@ public class FormsAPI
 	    JSONObject formJson = new JSONObject(formString);
 	    String name = formJson.getString("formName");
 	    String json = formJson.getString("formJson");
+	    String html = null;
+	    if(formJson.has("formHtml"))
+	    {
+	    html = formJson.getString("formHtml");
+	    }
 
 	    if (StringUtils.isBlank(name) || !Character.isLetter(name.charAt(0)))
 	    {
@@ -69,14 +76,18 @@ public class FormsAPI
 	    }
 	    else if (savedForm == null)
 	    {
-		form = new Form();
-		saveForm = true;
+			form = new Form();
+			saveForm = true;
+			
+			//Increase count of Campaign for AllDomainstats report in database
+			AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.FORM_COUNT);
 	    }
 
 	    if (saveForm)
 	    {
 		form.formName = name;
 		form.formJson = json;
+		form.formHtml = html;
 		form.save();
 		response.setStatus(HttpServletResponse.SC_OK);
 		return;

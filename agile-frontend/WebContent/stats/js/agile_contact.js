@@ -44,11 +44,29 @@ function agile_createContact(data, callback)
 	// Get campaigns from cookie
 	var campaigns_from_cookie = agile_read_cookie(agile_guid.cookie_campaigns);
 
+	// Get utm params from cookie
+	var utm_params_from_cookie = agile_getUtmParamsAsProperties();
+
 	// Add properties to model
 	model.properties = properties;
 
 	if(original_ref)
 		properties.push(agile_propertyJSON("original_ref", original_ref));
+
+	// Save utm params in contact properties
+	if(utm_params_from_cookie && utm_params_from_cookie.size != 0)
+	{
+		try
+		{
+			// Merge with properties array
+			properties.push.apply(properties, utm_params_from_cookie);
+		}
+		catch(err)
+		{
+			console.debug("Error occured while pushing utm params " + err);
+		}
+	}
+
 
 	if (data["tags"])
 	{
@@ -230,3 +248,28 @@ function agile_createCompany(data, callback)
 	// Callback
 	agile_json(agile_url, callback);
 }
+
+/**
+* Returns all utm params as Contact Custom Parameters
+**/
+function agile_getUtmParamsAsProperties()
+{
+	var properties = [];
+
+	try
+	{
+		var utm_params = agile_getUtmParams();
+
+		for(var param in utm_params){
+
+		if(utm_params.hasOwnProperty(param))
+			properties.push(agile_propertyJSON(param, utm_params[param]));
+		}
+	}
+	catch(err){
+		console.debug(err);
+	}
+
+	return properties;
+}
+

@@ -19,7 +19,7 @@ $(function()
 			$("#forNoteForm", "#" + formId).html($(template_ui));	
 			$(".deal-note-label").show();
 			// Hide + Add note link
-			$(that).hide();
+			//$(that).hide();
 
 		}, $("#forNoteForm", "#" + formId));
 	});			

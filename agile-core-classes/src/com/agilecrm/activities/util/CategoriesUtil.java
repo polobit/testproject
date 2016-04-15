@@ -1,6 +1,8 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -255,6 +257,13 @@ public class CategoriesUtil
     	if (type.equals(Category.EntityType.DEAL_LOST_REASON.toString()) || type.equals(Category.EntityType.DEAL_SOURCE.toString()))
     	{
     		categoriesList = dao.ofy().query(Category.class).filter("entity_type", type).filter("label !=", "Default_"+type.toLowerCase()+"_").list();
+    		
+    		Collections.sort(categoriesList,new Comparator<Category>(){
+				@Override  
+                public int compare(Category o1, Category o2){
+					return o1.getOrder().compareTo(o2.getOrder());  
+                }
+            });
     	}
     	
 	} 

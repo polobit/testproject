@@ -8,6 +8,8 @@ import org.apache.log4j.Level;
 
 import com.Globals;
 import com.agilecrm.api.stats.APIStats;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.logger.AgileAPILogger;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.threads.TaskExcecutorThreadPool;
@@ -17,6 +19,7 @@ import com.google.api.services.taskqueue.Taskqueue.Tasks.Lease;
 import com.google.api.services.taskqueue.model.Task;
 import com.google.api.services.taskqueue.model.TaskQueue;
 import com.google.api.services.taskqueue.model.TaskQueue.Stats;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.apphosting.api.ApiProxy;
@@ -141,6 +144,22 @@ public class TaskQueueStatsDaemon extends Thread
 	    leaseTasks();
 	}
 
+	try
+	{
+	    closeResources();
+	}
+	catch (Exception e)
+	{
+	    logger.error("Error while uninstalling");
+	}
+	finally
+	{
+	    logger.info("Interupting thread : " + Thread.currentThread().getName());
+	    // Interrupts the current tread
+	    APIStats.interruptThread(Thread.currentThread());
+	    logger.info("Exiting thread : " + Thread.currentThread().getName());
+	}
+
 	/*
 	 * int total = getTotalTasks(); if (total > 0) { //
 	 * threadPool.wakeUpAllThreads(); // }
@@ -167,7 +186,7 @@ public class TaskQueueStatsDaemon extends Thread
      * 
      * @throws IOException
      */
-    private void setRemoteAPI() throws IOException
+    protected void setRemoteAPI() throws IOException
     {
 	System.out.println("setting remote api in thread " + Thread.currentThread().getName());
 
@@ -209,7 +228,8 @@ public class TaskQueueStatsDaemon extends Thread
     {
 
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
-		.credentials(Globals.USER_ID, Globals.PASSWORD);
+		.useApplicationDefaultCredential();
+
 	installer.install(options);
 
 	threadLocalDelegate = ApiProxy.getDelegate();
@@ -330,14 +350,14 @@ public class TaskQueueStatsDaemon extends Thread
 		    try
 		    {
 			System.out.println("waiting");
-			wait(wairPeriodInMilliSeconds);
+			sleep(wairPeriodInMilliSeconds);
 		    }
 		    catch (InterruptedException e)
 		    {
 			logger.log(Level.WARN, e.getMessage() + ", " + Thread.currentThread().getName());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			wait(wairPeriodInMilliSeconds);
+			sleep(wairPeriodInMilliSeconds);
 		    }
 		    continue;
 		}
@@ -349,7 +369,7 @@ public class TaskQueueStatsDaemon extends Thread
 
 		t.run();
 
-	    } while (true);
+	    } while (true && APIStats.shouldContinue());
 	}
 	catch (Exception e)
 	{
@@ -418,5 +438,37 @@ public class TaskQueueStatsDaemon extends Thread
 	    logger.info(e.getMessage());
 	    return leaseTasksOld();
 	}
+    }
+
+    private void closeResources() throws Exception
+    {
+	uninstall();
+    }
+
+    public static void main(String[] args)
+    {
+	System.out.println("Initializing project");
+	for (int i = 10; i < 20; i++)
+	{
+
+	    TaskQueueStatsDaemon demo = new TaskQueueStatsDaemon("demo");
+	    try
+	    {
+		demo.setRemoteAPI();
+		System.out.println("setting namespace Local" + i);
+	    }
+	    catch (IOException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return;
+	    }
+
+	    NamespaceManager.set("local");
+	    List<Contact> contacts = ContactUtil.getAll(10, null);
+	    System.out.println("Contact list : " + contacts);
+	    demo.uninstall();
+	}
+
     }
 }

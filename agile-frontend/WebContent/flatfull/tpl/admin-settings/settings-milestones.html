@@ -1,22 +1,23 @@
 <script id="settings-milestones-tab-template" type="text/html">
 	<div class="tab-container m-b-none">
-           <ul class="nav nav-tabs">
+           <ul class="nav nav-tabs b-b-none">
              <li class="settings-milestones"><a href="#milestones" class="b-l-none">Tracks and Milestones</a></li>
              <li class="settings-lost-reasons"><a href="#lost-reasons">Loss Reasons</a></li>
 			 <li class="settings-deal-sources"><a href="#deal-sources">Sources</a></li>
+			 <li class="settings-deal-goal"><a href="#goals">Goals</a></li>
            </ul>
 	</div>
 	<div class="tab-pane active" id="settings-milestones-tab-content">
 </script>
 <script id="admin-settings-milestones-collection-template"
 	type="text/html">
-	<div class='col panel wrapper'>
+	<div class='col panel wrapper b-t'>
 		<div class="hbox h-auto m-b-sm">
 			<h4>
 			{{#isTracksEligible}}
 				<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn btn-default btn-addon btn-sm" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a>
 			{{else}}
-				<span class="btn btn-default disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
+				<span class="btn btn-default  btn-addon btn-sm disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
 				<div class="clearfix"></div>
 			{{/isTracksEligible}}
 			</h4>
@@ -49,7 +50,7 @@
 		<div id="admin-settings-deal-sources"></div> -->
 	</div>
 <!-- Help Text -->
-<div class="col w-md panel wrapper">
+<div class="col w-md  wrapper pos-rlt track-milestone-text">
 	<div class="data-block">
 		<div class="p-l p-r">
 			<h4 class="m-t-none">What are Tracks and Milestones?</h4>			
@@ -108,7 +109,7 @@
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Milestone</a></div>
+					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field btn btn-sm btn-default btn-addon"><i class="icon-plus-sign"></i> Add Milestone</a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
 						<input id="add_new_milestone" class="add_new_milestone form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Milestone">
 						<a class="btn btn-default btn-addon btn-sm add_milestone m-b-xxs m-t-n-xxs" data-toggle="modal" id="add_milestone" href="#">Add</a>
@@ -129,29 +130,30 @@
 
 <script id="admin-settings-lost-reasons-collection-template" type="text/html">
 <div class="panel wrapper">
-	<div class="">
-		<table id="lost-reasons-table" class="table table-bordered agile-table onlySorting m-b-n-xs table-hover">
-			<tbody id="admin-settings-lost-reasons-model-list" class="admin-settings-lost-reasons-model-list" style="word-break:normal!important;" ></tbody>
-		</table>
-	</div>
-	<form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post>
-		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Reason</a></div>
+<form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
+		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> Add Reason</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
 			<input id="lost_reason_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="New Loss Reason">
 			<input type="hidden" name="entity_type" value="DEAL_LOST_REASON" />
 			<a class="btn btn-default btn-addon btn-sm add_lost_reason m-t-n-xxs" data-toggle="modal" id="add_lost_reason" href="#">Add</a>
 			<span id="lost_reason_name_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-			<span id="lost_reason_chars_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+			<span id="lost_reason_chars_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Loss reason name should start with an alphabet and can not contain special characters other than underscore, space and hyphen.</span>
 			<span id="lost_reason_existed_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
 		</div>
 	</form>
+	<div class="">
+		<table id="lost-reasons-table" class="table table-bordered agile-table onlySorting m-b-n-xs table-hover">
+			<tbody id="admin-settings-lost-reasons-model-list" class="admin-settings-lost-reasons-model-list" style="word-break:normal!important;" ></tbody>
+		</table>
+	</div>
+	
 <div>
 </script>
 
 <script id="admin-settings-lost-reasons-model-template" type="text/html">
 <td>
 	<form id="lostReasonsForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
-	<div class="pull-left inline-block v-top text-ellipsis lost_reason_name_div text-cap" style="width:80%">{{label}}</div>
+	<div class="pull-left inline-block v-top text-ellipsis lost_reason_name_div" style="width:80%">{{label}}</div>
 	<div class="pull-left inline-block v-top text-ellipsis lost_reason_name_input" style="width:80%;display:none;">
 		<input id="{{id}}" name="label" class="form-control input-sm required inline-block update_lost_reason" style="width:145px;" type="text" value="{{label}}">
 		<a class="btn btn-default btn-addon btn-sm updates_lost_reason m-t-n-xxs" data-toggle="modal" id="updates_lost_reason" href="#">Update</a>
@@ -159,7 +161,6 @@
 		<input type="hidden" name="entity_type" value="{{entity_type}}" />
 		<input type="hidden" name="created_time" value="{{created_time}}" />
 		<span id="lost_reason_name_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-		<span id="lost_reason_chars_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
 		<span id="lost_reason_existed_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
 	</div>
 	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
@@ -170,35 +171,37 @@
 			<i title="Delete Reason" class="icon-trash"></i>
 		</a>
 	</div>
+	<span id="lost_reason_chars_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline pull-left" style="display:none;">Loss reason name should start with an alphabet and can not contain special characters other than underscore, space and hyphen.</span>
 	</form>
 </td>
 </script>
 
 <script id="admin-settings-deal-sources-collection-template" type="text/html">
 <div class="panel wrapper">
-	<div class="">
-		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
-			<tbody id="admin-settings-deal-sources-model-list" class="admin-settings-deal-sources-model-list" style="word-break:normal!important;" ></tbody>
-		</table>
-	</div>
-	<form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post>
-		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Source</a></div>
+<form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
+		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> Add Source</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
 			<input id="deal_source_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="New Source">
 			<input type="hidden" name="entity_type" value="DEAL_SOURCE" />
 			<a class="btn btn-default btn-addon btn-sm add_deal_source m-t-n-xxs" data-toggle="modal" id="add_deal_source" href="#">Add</a>
 			<span id="deal_source_name_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-			<span id="deal_source_chars_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+			<span id="deal_source_chars_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source name should start with an alphabet and can not contain special characters other than underscore, space and hyphen.</span>
 			<span id="deal_source_existed_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
 		</div>
 	</form>
+	<div class="">
+		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
+			<tbody id="admin-settings-deal-sources-model-list" class="admin-settings-deal-sources-model-list" style="word-break:normal!important;" ></tbody>
+		</table>
+	</div>
+	
 <div>
 </script>
 
 <script id="admin-settings-deal-sources-model-template" type="text/html">
 <td>
 	<form id="dealSourcesForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
-	<div class="pull-left inline-block v-top text-ellipsis deal_source_name_div text-cap" style="width:80%">{{label}}</div>
+	<div class="pull-left inline-block v-top text-ellipsis deal_source_name_div" style="width:80%">{{label}}</div>
 	<div class="pull-left inline-block v-top text-ellipsis deal_source_name_input" style="width:80%;display:none;">
 		<input id="{{id}}" name="label" class="form-control input-sm required inline-block update_deal_source" style="width:145px;" type="text" value="{{label}}">
 		<a class="btn btn-default btn-addon btn-sm updates_deal_source m-t-n-xxs" data-toggle="modal" id="updates_deal_source" href="#">Update</a>
@@ -206,7 +209,6 @@
 		<input type="hidden" name="entity_type" value="{{entity_type}}" />
 		<input type="hidden" name="created_time" value="{{created_time}}" />
 		<span id="deal_source_name_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-		<span id="deal_source_chars_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
 		<span id="deal_source_existed_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
 	</div>
 	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
@@ -216,7 +218,75 @@
 		<a class="deal-source-delete text-l-none-hover c-p text-xs m-l-sm hover-show">
 			<i title="Delete Source" class="icon-trash"></i>
 		</a>
+		<a class="deal-source-move text-l-none-hover c-p text-xs m-l-sm hover-show">
+			<i title="Drag Source" class="icon-move"></i>
+		</a>
 	</div>
+	<span id="deal_source_chars_error_{{id}}" for="deal_source_name" generated="true" class="help-inline pull-left" style="display:none;">Source name should start with an alphabet and can not contain special characters other than underscore, space and hyphen.</span>
+	<input type="hidden" name="order" value="{{order}}" />
+	</form>
+</td>
+</script>
+
+<script id="admin-settings-deal-goals-collection-template" type="text/html">
+
+<div class="panel wrapper">
+	<div class="form-horizontal">
+	<div class="w-md pull-right">
+	<label>Duration</label>
+	<div id="goal_duration">
+				<span data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">{{currentDateInFormat 'mmmm yyyy'}}</span>
+			</div>
+			</div>
+		<!--	<div class="Goal_period"></div> -->
+	<div class="control-group form-group">
+               <div class="controls col-md-12 col-lg-8 col-sm-12 col-xs-12">
+		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
+				<thead class="panel-heading"><tr>
+					<th><div></div><div class="pull-right width-goal text-center m-r-lg">Value</div><div class="pull-right width-goal text-center" style="margin-right:80px">Count</div></th>
+				</tr></thead>
+				<tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list" style="word-break:normal!important;" >
+			</tbody>
+		</table>
+				
+			</div><!-- End of controls col-sm-6 -->
+	</div> <!-- End of control-group form-group -->
+
+
+		<div class="control-group form-group  m-b-none">
+	
+                  <div class="col-md-12 col-lg-8 col-sm-12 col-xs-12"><label style="padding-left:20px">Total</label>
+  			<div class="width-goal text-center pull-right m-r-xxl" >{{currencySymbol}} <label class="Amount_goal" value=0>0</label></div>
+  		<div class="Count_goal width-goal text-center pull-right col-xs-offset-1" style="margin-right:65px" value=0>0</div>
+  		
+  		</div>
+  		<div class="col-sm-offset-3 col-sm-8 col-xs-offset-4 col-xs-8">
+            
+                <div><a class="btn btn-sm btn-primary goalSave pull-left">Save Changes</a></div>
+                <div class="Goals_message pull-left p-l-sm"></div>
+          
+           </div>
+	
+ </div>
+</div>
+
+</div>
+</div>
+</script>
+
+<script id="admin-settings-deal-goals-model-template" type="text/html">
+<td>
+	<div id={{id}} class="goal pull-left inline-block v-top text-ellipsis text-cap">{{name}}
+		
+	</div>
+	<div class="pull-right input-group">
+		<span class="input-group-addon mozilla-addon" style="display:inline; padding:5px 3px 1px;">{{currencySymbol}}</span><input class="amount width-goal" type="text"><small class="amount_percent m-l-xs thumb-tiny"></small>
+		<span id="goal_amount_error"  generated="true" class="help-inline" style="display:none">Please enter a valid number.</span>
+		</div>
+		<div class="pull-right m-r-md input-group">
+		<input class="count width-goal" type="text"><small class="count_percent m-l-xs thumb-tiny"></small>
+		<span id="goal_count_error"  generated="true" class="help-inline" style="display:none;">Please enter a valid number.</span>
+		</div>
 	</form>
 </td>
 </script>

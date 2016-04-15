@@ -36,7 +36,7 @@ public abstract class UserAccessControl
 
     public static enum AccessControlClasses
     {
-	Contact(ContactAccessControl.class), Opportunity(OpportunityAccessControl.class), Tag(TagAccessControl.class);
+	Contact(ContactAccessControl.class), Opportunity(OpportunityAccessControl.class), Tag(TagAccessControl.class), Event(EventAccessControl.class);
 
 	Class<? extends UserAccessControl> clazz;
 

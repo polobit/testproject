@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.core.api.widgets.WidgetsAPI;
@@ -243,7 +244,7 @@ public class Widget
      */
     public void save()
     {    	
-		//System.out.println("Is For All : "+ this.isForAll);
+    	
 		if(this.isForAll){
 			String domain = NamespaceManager.get();
 			System.out.println("*** domain "+domain);
@@ -270,6 +271,7 @@ public class Widget
 			if (user == null){
 	    		user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);    		
 	    	}
+			
 			dao.put(this);
 		}    
     }

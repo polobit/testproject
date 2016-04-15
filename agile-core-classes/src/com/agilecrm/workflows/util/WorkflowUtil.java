@@ -186,6 +186,13 @@ public class WorkflowUtil
 	{
 		return (Workflow) dao.ofy().query(Workflow.class).filter("name", campaignName);
 	}
+	
+	public static int getWorkflowCountOfCurrentUser(long startTime,long endTime,Long ownerId)
+	{
+		return dao.ofy().query(Workflow.class)
+				.filter("creator_key", new Key<DomainUser>(DomainUser.class, ownerId))
+				.filter("created_time >=", startTime).filter("created_time <", endTime).count();
+	}
 
 	/**
 	 * Updates the list of workflows

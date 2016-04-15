@@ -133,6 +133,12 @@ var contact_details_tab = {
 	            postRenderCallback: function(el) {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	            		 $(".deal-created-time", el).timeago();
+	            	$(el).find('ul li').each(function(){
+				    $(this).addClass("deal-color");
+				    $(this).addClass($(this).find("input").attr("class"));
+			        });
+
+
 	            	})
 	            }
 	        });
@@ -210,16 +216,16 @@ var contact_details_tab = {
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
-				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
+				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
 				return;	
 			}
 
 			get_web_stats_count_for_domain(function(count){
 
 				// To avoid unnecessary JSAPI count, first verify in cookie
-				if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
+				if(!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
 				{
-					$('#stats', App_Contacts.contactDetailView.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+					$('#stats', App_Contacts.contactDetailView.el).html('<h4 class="webstats-msg space-normal  wrapper-sm font-normal m-none"><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
 					return;
 				}
 
@@ -371,7 +377,7 @@ function loadMailTabView(contact_details_tab_scope,email_server,mail_server_url,
  */
 function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_url,email_server,email)
 {	
-	$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm pull-left"  src= "/img/ajax-loader-cursor.gif"></img></span>');
+	$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm pull-left"  src= "'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'"></img></span>');
 	this.configured_sync_email = "";
 	var cursor = true;
 
@@ -439,7 +445,7 @@ function fetchMailsFromAllAccounts(contact_details_tab_scope,has_email_configure
 	{
 		if(fetch_urls.length > 0)
 		{
-			$('#mail-account-types', App_Contacts.contactDetailView.el).prepend('<span id="mails-span"> <img class="all-mails-loading p-r-xs m-b m-l-sm pull-left"  src= "/img/ajax-loader-cursor.gif"></img></span>');
+			$('#mail-account-types', App_Contacts.contactDetailView.el).prepend('<span id="mails-span"> <img class="all-mails-loading p-r-xs m-b m-l-sm pull-left"  src= "'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'"></img></span>');
 			$('#mail-account-types', App_Contacts.contactDetailView.el).find('.all-mails-loading').css("display","block");
 		}
 		for(var i=0;i<fetch_urls.length;i++)
@@ -533,7 +539,7 @@ function loadAllMailsView(contact_details_tab_scope,has_email_configured,fetched
  */
 function fetch_mailserverurl_from_cookie(model)
 {
-	var cookie_value = readCookie(email_server_type_cookie_name);
+	var cookie_value = _agile_get_prefs(email_server_type_cookie_name);
 	var final_url = "";
 	var cookie_info = [];
 	if(cookie_value)
@@ -706,14 +712,14 @@ function contact_detail_page_infi_scroll(element_id, targetCollection)
 			console.log('in fetch');
 			// Add loading icon
 			$(targetCollection.infiniScroll.options.target).append(
-					'<div class="scroll-loading"> <img src="/img/ajax-loader-cursor.gif" style="margin-left: 44%;"> </div>');
+					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
 		}
 		});
 }
 function showMailsInfoMessages()
 {
 	showMailsErrorMessages();
-	if(mailsView.collection.length > 0)
+	if(mailsView.collection.length > 20)
 	{
 		if(($('#all-emails-info',App_Contacts.contactDetailView.el).length === 0))
 		{
@@ -750,7 +756,7 @@ function killAllPreviousRequests()
 }
 function show_no_email_alert()
 {
-	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
+	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 }
 
 function show_resubscribe_modal(){

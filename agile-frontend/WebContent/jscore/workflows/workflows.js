@@ -76,10 +76,11 @@ $(function(){
         
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
         var unsubscribe_action = $('#unsubscribe-action').val();
-        
+        var unsubscribe_name = $('#unsubscribe-name').val().trim();
         var unsubscribe_json ={
         		               		"tag":unsubscribe_tag,
-        		               		"action":unsubscribe_action
+        		               		"action":unsubscribe_action,
+                                    "unsubscribe_name": unsubscribe_name
         		               }
         
         // Check for valid name

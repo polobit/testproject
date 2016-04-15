@@ -1,3 +1,5 @@
+var callschart=new Array();
+var taskReport=new Array();
 var portlet_graph_utility = {
 
 	/**
@@ -5,11 +7,7 @@ var portlet_graph_utility = {
 	 */
 	dealsByMilestonePieGraph : function(selector, milestonesList,
 			milestoneValuesList, milestoneNumbersList) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
+		setupCharts(function(){
 							var emptyFlag = true;
 							$.each(milestoneValuesList, function(index, value) {
 								if (value > 0)
@@ -56,7 +54,7 @@ var portlet_graph_utility = {
 																	+ '<td class="p-n"><b>'
 																	+ milestoneNumbersList[this.point.x]
 																	+ '</b></td></tr>'
-																	+ '<tr><td class="p-n">Total Value: </td>'
+																	+ '<tr><td style="padding-right:1px">Total Value:'+' '+'</td>'
 																	+ '<td class="p-n"><b>'
 																	+ portlet_utility
 																			.getPortletsCurrencySymbol()
@@ -83,7 +81,8 @@ var portlet_graph_utility = {
 														},
 														pie : {
 															borderWidth : 0,
-															innerSize : '50%',
+															innerSize : '35%',
+															size:'45%',
 															dataLabels : {
 																enabled : true,
 																useHTML : true,
@@ -120,19 +119,133 @@ var portlet_graph_utility = {
 														name : 'Deal',
 														data : data
 													} ],
-													exporting : {
-														enabled : false
-													}
-												});
+																									});
 							}
 						});
 	},
 
 	/**
+	 * To display contacts count by campaigns stats portlet as pie graph
+	 */
+	campaignStatsPieGraph : function(selector, campaignStatusList,
+			campaignValuesList) {
+		setupCharts(function(){
+							var emptyFlag = true;
+							$.each(campaignValuesList, function(index, value) {
+								if (value > 0)
+									emptyFlag = false;
+							});
+							if (campaignStatusList.length == 0 || emptyFlag) {
+								$('#' + selector)
+										.html(
+												'<div class="portlet-error-message">No Subscribers Found</div>');
+							} else {
+								var data = [];
+								$.each(campaignStatusList, function(index, value) {
+									data.push([ value,
+											campaignValuesList[index] ]);
+								});
+								$('#' + selector)
+										.highcharts(
+												{
+													chart : {
+														type : 'pie',
+														marginRight : 20
+													},
+													colors : [ '#55BF3B',
+															'#23b7e5',
+															'#ff0000',
+															'#27c24c',
+															'#f05050',
+															"#aaeeee",
+															"#ff0066",
+															"#eeaaee",
+															"#7266ba",
+															"#DF5353",
+															"#7798BF",
+															"#aaeeee" ],
+													title : {
+														text : ''
+													},
+													tooltip : {
+														formatter : function() {
+															return '<table>'
+																	+ '<tr> <td class="p-n">'
+																	+ '<b>'
+																	+ campaignStatusList[this.point.x]
+																	+ '</b> Subscribers</td></tr>'
+																	+ '<tr><td class="p-n">Total Count: '
+																	+ '<b> '
+																	+ campaignValuesList[this.point.x].toLocaleString()
+																	+ '</b></td></tr>'
+																	+ '</table>';
+														},
+														shared : true,
+														useHTML : true,
+														borderWidth : 1,
+														backgroundColor : '#313030',
+														shadow : false,
+														borderColor : '#000',
+														borderRadius : 3,
+														style : {
+															color : '#EFEFEF'
+														}
+													},
+													plotOptions : {
+														series : {
+															borderWidth : 0
+														},
+														pie : {
+															borderWidth : 0,
+															innerSize : '35%',
+															size:'45%',
+															dataLabels : {
+																enabled : true,
+																useHTML : true,
+																/*
+																 * connectorWidth:
+																 * 0,
+																 */
+																softConnector : true,
+																formatter : function() {
+																	return '<div class="text-center"><span style="color:'
+																			+ this.point.color
+																			+ '"><b>'
+																			+ this.point.name
+																			+ '</b></span><br/>'
+																			+ '<span style="color:'
+																			+ this.point.color
+																			+ '"><b>'
+																			+ Math
+																					.round(this.point.percentage)
+																			+ '%</b></span></div>';
+																},
+																/*
+																 * format: '<b>{point.name}</b>:
+																 * {point.percentage:.1f}',
+																 */
+																distance : 30,
+																x : 2,
+																y : -10
+															},
+															showInLegend : false
+														}
+													},
+													series : [ {
+														name : 'Contact',
+														data : data
+													} ],
+																									});
+							}
+						});
+	},
+
+
+	/**
 	 * To display closers per person portlet as bar graph
 	 */
-	closuresPerPersonBarGraph : function(selector, catges, data, text, name) {
-		head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function() {
+	closuresPerPersonBarGraph : function(selector, catges, data, text, name, base_model) {
+		setupCharts(function(){
 			$('#' + selector).highcharts(
 					{
 						chart : {
@@ -153,7 +266,7 @@ var portlet_graph_utility = {
 							allowDecimals : false
 						},
 						legend : {
-							enabled : false
+							enabled : portlet_utility.is_legend_enable(base_model),
 						},
 						tooltip : {
 							formatter : function() {
@@ -180,9 +293,6 @@ var portlet_graph_utility = {
 							name : name,
 							data : data
 						} ],
-						exporting : {
-							enabled : false
-						}
 					});
 		});
 	},
@@ -190,13 +300,17 @@ var portlet_graph_utility = {
 	/**
 	 * To display deals funnel portlet as funnel graph
 	 */
-	dealsFunnelGraph : function(selector, funnel_data) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/funnel.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
+	dealsFunnelGraph : function(selector, funnel_data, base_model) {
+		var currency = '';
+		var series_name = "Revenue";
+		if (base_model && base_model.get("settings")["split-by"] && base_model.get("settings")["split-by"] == "count") {
+			series_name = "Deals";
+		}
+		else {
+			currency = portlet_utility.getPortletsCurrencySymbol();
+		}
+		setupCharts(function(){
+						
 							if (funnel_data == undefined
 									|| (funnel_data != undefined && funnel_data.length == 0)) {
 								$('#' + selector)
@@ -209,7 +323,8 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'funnel',
-													marginRight : 20,
+													marginLeft:-85,
+													marginBottom: 20,
 													className : 'deals-funnel-portlet'
 												},
 												colors : [ "#23b7e5",
@@ -226,15 +341,14 @@ var portlet_graph_utility = {
 														dataLabels : {
 															enabled : true,
 															useHTML : true,
-															format : '<div class="text-center"><span style="color:{point.color}"><b>{point.name}</b></span><br/>'
+															format : '<div class="text-center"><span style="color:{point.color}">{point.name}</span><br>'
 																	+ '<span style="color:{point.color}">('
-																	+ portlet_utility
-																			.getPortletsCurrencySymbol()
+																	+ currency
 																	+ '{point.y:,.0f})</span></div>',
 															softConnector : true
 														},
 														neckWidth : '20%',
-														neckHeight : '20%',
+														neckHeight : '25%',
 
 														// -- Other available
 														// options
@@ -245,9 +359,8 @@ var portlet_graph_utility = {
 													}
 												},
 												tooltip : {
-													pointFormat : '<span>{series.name}:<b>'
-															+ portlet_utility
-																	.getPortletsCurrencySymbol()
+													pointFormat : '<span>{series.name}: <b>'
+															+ currency
 															+ '{point.y:,.0f}</b></span>',
 													shared : true,
 													useHTML : true,
@@ -261,12 +374,10 @@ var portlet_graph_utility = {
 													}
 												},
 												series : [ {
-													name : 'Value',
+													name : series_name,
 													data : funnel_data
 												} ],
-												exporting : {
-													enabled : false
-												}
+											
 											});
 						});
 	},
@@ -276,10 +387,7 @@ var portlet_graph_utility = {
 	 */
 	emailsSentBarGraph : function(selector, domainUsersList, series,
 			mailsCountList, mailsOpenedCountList, text, colors) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+		setupCharts(function(){
 							$('#' + selector)
 									.highcharts(
 											{
@@ -334,9 +442,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-													enabled : false
-												},
+									
 												colors : colors
 											});
 						});
@@ -357,7 +463,7 @@ var portlet_graph_utility = {
 			flag = false;
 		}
 		if (flag) {
-			head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function() {
+			setupCharts(function(){
 				$('#' + selector).highcharts(
 						{
 							chart : {
@@ -365,6 +471,15 @@ var portlet_graph_utility = {
 								marginRight : 20,
 							// plotBorderWidth: 1,
 							// plotBorderColor: '#F4F4F5'
+							   events: {
+							   		load: function(){
+							   			console.log("load");
+							   			portlet_utility.toggle_chart_legends(this, base_model);
+							   		}, redraw : function(){
+							   			console.log("redraw");
+							   			portlet_utility.toggle_chart_legends(this, base_model);
+							   		}
+							   },
 							},
 							title : {
 								text : ''
@@ -416,9 +531,7 @@ var portlet_graph_utility = {
 								}
 							},
 							series : series,
-							exporting : {
-								enabled : false
-							},
+				
 							tooltip : {
 								borderWidth : 1,
 								backgroundColor : '#313030',
@@ -438,7 +551,9 @@ var portlet_graph_utility = {
 								layout : 'vertical',
 								floating : true,
 								align : 'right',
-								verticalAlign : 'top'
+								enabled:portlet_utility.is_legend_enable(base_model),
+								verticalAlign : 'top',
+								y: 30
 							},
 							colors : [ "#23b7e5", "#27c24c", "#7266ba",
 									"#fad733", "#f05050", "#aaeeee", "#ff0066",
@@ -451,17 +566,23 @@ var portlet_graph_utility = {
 	/**
 	 * To display deals assigned portlet as bar graph
 	 */
-	dealsAssignedBarGraph : function(selector, catges, dealsCountList) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+	dealsAssignedBarGraph : function(selector, catges, dealsCountList, base_model) {
+		setupCharts(function(){
 							$('#' + selector)
 									.highcharts(
 											{
 												chart : {
 													type : 'bar',
-													marginRight : 20
+													marginRight : 20,
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
 												},
 												title : {
 													text : ''
@@ -477,7 +598,7 @@ var portlet_graph_utility = {
 													allowDecimals : false
 												},
 												legend : {
-													enabled : false
+													enabled : portlet_utility.is_legend_enable(base_model),
 												},
 												tooltip : {
 													formatter : function() {
@@ -508,9 +629,7 @@ var portlet_graph_utility = {
 													name : 'Assigned Deals',
 													data : dealsCountList
 												} ],
-												exporting : {
-													enabled : false
-												}
+									
 											});
 						});
 	},
@@ -520,18 +639,31 @@ var portlet_graph_utility = {
 	 */
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
-			domainUserImgList) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+			domainUserImgList,base_model) {
+			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
+		var pos = '' + column_position + '' + row_position;
+		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
+		if(selector=='calls-chart')
+			height=domainUsersList.length*30+120;
+		setupCharts(function(){
 							
-							$('#'+selector).highcharts({
+							callschart[parseInt(pos)]=new Highcharts.Chart({
 								chart: {
+									renderTo : selector,
 						            type: 'bar',
 						            marginRight: 100,
 						            plotBorderWidth: 1,
-						            plotBorderColor: '#F4F4F5'
+						            plotBorderColor: '#F4F4F5',
+						            height:height,
+						            events: {
+								   		load: function(){
+								   			console.log("load");
+								   			portlet_utility.toggle_chart_legends(this, base_model);
+								   		}, redraw : function(){
+								   			console.log("redraw");
+								   			portlet_utility.toggle_chart_legends(this, base_model);
+								   		}
+								   },
 						        },
 						        title: {
 						            text: ''
@@ -556,7 +688,7 @@ var portlet_graph_utility = {
 						    				color : '#98a6ad',
 						    				fontSize : '11px'
 						    			},
-						                useHTML: true
+						                useHTML: true,
 						            },
 						            gridLineWidth : 0,
 						    		gridLineColor : '#F4F4F5',
@@ -578,11 +710,12 @@ var portlet_graph_utility = {
 						    			}
 						    		}
 						        },
-						        tooltip: {
+						       tooltip: {
 						        	formatter: function(){
 						        		var tt = '';
 						        		if(text=="Calls Duration (Mins)")
 						        			tt = '<table>' + 
+						        					'<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 					        		              '<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
@@ -592,13 +725,14 @@ var portlet_graph_utility = {
 						        			
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
+						        				tt += 	'<tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
+						        							'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(this.points[0].point.y))+'</b></td></tr>';
 						        			}
 						        			tt += '</table>';
 						        			
 						        		}else{
-						        			tt += '<table>';
+						        			tt += '<table><tr><td class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';
@@ -615,7 +749,35 @@ var portlet_graph_utility = {
 						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
 						        			}
-						        			tt += '</table>';
+						        			if(this.points[4]!=undefined && this.points[4].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[4].series.color+';padding:0">'+this.points[4].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[4].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[5]!=undefined && this.points[5].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[5].series.color+';padding:0">'+this.points[5].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[5].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[6]!=undefined && this.points[6].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[6].series.color+';padding:0">'+this.points[6].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[6].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[7]!=undefined && this.points[7].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[7].series.color+';padding:0">'+this.points[7].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[7].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[8]!=undefined && this.points[8].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[8].series.color+';padding:0">'+this.points[8].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[8].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[9]!=undefined && this.points[9].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[9].series.color+';padding:0">'+this.points[9].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[9].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[10]!=undefined && this.points[10].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[10].series.color+';padding:0">'+this.points[10].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[10].point.y+'</b></td></tr>';
+						        			}
+						        			tt += '<tr><td>Total:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}
 						        		return tt;
 						        	},
@@ -637,7 +799,7 @@ var portlet_graph_utility = {
 						                borderWidth : 0
 						            },
 						            column: {
-						                pointPadding: 0.2,
+						                pointPadding: 0.5,
 						                borderWidth: 0
 						            },
 						            bar : {
@@ -645,10 +807,7 @@ var portlet_graph_utility = {
 						    		}
 						        },
 						        series: series,
-						        exporting: {
-							        enabled: false
-							    },
-							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
+							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 							    legend : {
 									itemStyle : {
 										fontSize : '10px',
@@ -658,7 +817,9 @@ var portlet_graph_utility = {
 									layout : 'vertical',
 									floating : true,
 									align : 'right',
-									verticalAlign : 'top'
+									enabled:portlet_utility.is_legend_enable(base_model),
+									verticalAlign : 'top',
+									y:30
 								}
 						    });
 							
@@ -671,7 +832,7 @@ var portlet_graph_utility = {
 	 */
 	callsByPersonPieGraph :function(selector,categoryList,valueList){
 
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
+	setupCharts(function(){
 		var emptyFlag = true;
 		$.each(valueList,function(index,value){
 			if(value>0)
@@ -698,7 +859,7 @@ var portlet_graph_utility = {
 		            type: 'pie',
 		            marginRight: 20
 		        },
-		        colors : ['#7266ba','#23b7e5','#fad733','#27c24c','#f05050',"#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353", "#7798BF","#aaeeee"],
+		        colors : ["#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 		        title: {
 		            text: ''
 		        },
@@ -748,9 +909,7 @@ var portlet_graph_utility = {
 		            name: "",
 		            data: data
 		        }],
-		        exporting: {
-			        enabled: false
-			    }
+
 		    });
 		}
 	});
@@ -761,31 +920,80 @@ var portlet_graph_utility = {
 	 * To display task report portlet as bar graph
 	 */
 	taskReportBarGraph : function(selector, groupByList, series, text,
-			base_model, domainUserNamesList) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
-							$('#' + selector)
-									.highcharts(
-											{
+			base_model, domainUserNamesList,CountData,yaxistitle) {
+			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
+		var pos = '' + column_position + '' + row_position;
+
+		setupCharts(function(){
+							taskReport[parseInt(pos)]=new Highcharts.Chart({
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
 														"#fad733", "#f05050",
-														"#aaeeee", "#ff0066",
+														"#aaeeee", "#f4a460",
 														"#eeaaee", "#55BF3B",
 														"#DF5353" ],
 												chart : {
+													renderTo:selector,
 													type : 'bar',
-													marginRight : 20
+													marginRight : 80,
+													height:groupByList.length*30+($('#'+selector).height()-30),
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
 												},
 												title : {
 													text : ''
 												},
+												
 												xAxis : {
 													categories : groupByList,
 													labels : {
 														formatter : function() {
+															if(base_model.get('name')=='Average Deviation')
+															{
+																var userIndex = 0;
+																for ( var i = 0; i < groupByList.length; i++) {
+																	if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) != "no image")
+																		userIndex = i;
+																	else if (this.value == groupByList[i]
+																			&& groupByList[i]
+																					.substring(
+																							0,
+																							8) == "no image")
+																		userIndex = parseInt(groupByList[i]
+																				.substring(
+																						9,
+																						10));
+																}
+																if (this.value != undefined
+																		&& this.value != ""
+																		&& this.value
+																				.substring(
+																						0,
+																						8) != "no image")
+																	return '<img src="'
+																			+ this.value.split('#')[0]
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+																else
+																	return '<img src="'
+																			+ gravatarImgForPortlets(25)
+																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
+																			+ domainUserNamesList[userIndex]
+																			+ '"/>';
+															}
+																else{
 															if (base_model
 																	.get('settings')["group-by"] == "user") {
 																var userIndex = 0;
@@ -813,7 +1021,7 @@ var portlet_graph_utility = {
 																						0,
 																						8) != "no image")
 																	return '<img src="'
-																			+ this.value
+																			+ this.value.split('#')[0]
 																			+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
 																			+ domainUserNamesList[userIndex]
 																			+ '"/>';
@@ -834,6 +1042,7 @@ var portlet_graph_utility = {
 																	return this.value;
 																}
 															}
+														}
 														},
 														style : {
 															color : '#98a6ad',
@@ -849,7 +1058,7 @@ var portlet_graph_utility = {
 												yAxis : {
 													min : 0,
 													title : {
-														text : ''
+														text : yaxistitle
 													},
 													allowDecimals : false,
 													gridLineWidth : 1,
@@ -875,9 +1084,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-													enabled : false
-												},
+										
 												tooltip : {
 													borderWidth : 1,
 													backgroundColor : '#313030',
@@ -888,7 +1095,35 @@ var portlet_graph_utility = {
 														color : '#EFEFEF'
 													},
 													formatter : function() {
-														if (base_model
+														if( base_model.get('name')=='Average Deviation'){
+															var userIndex = 0;
+															for ( var i = 0; i < groupByList.length; i++) {
+																if (this.key == groupByList[i])
+																	userIndex = i;
+															}
+															return '<div>'
+																	+ '<div class="p-n">'
+																	+ domainUserNamesList[userIndex]
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ 'Deviation Time'
+																	+ ':'
+																	+ portlet_utility.getPortletsTimeConversion(Math.round(this.y))
+																	+ ' </div>'
+																	+ '<div class="p-n" style="color:'
+																	+ this.series.color
+																	+ ';">'
+																	+ this.series.name
+																	+ ': '
+																	+ portlet_utility.getNumberWithCommasForPortlets(CountData[this.series.index][this.point.x])
+																	+ ' </div>'
+																	+ '</div>';
+															
+														}
+														
+													else	if (base_model
 																.get('settings')["group-by"] == "user") {
 															var userIndex = 0;
 															for ( var i = 0; i < groupByList.length; i++) {
@@ -896,9 +1131,7 @@ var portlet_graph_utility = {
 																	userIndex = i;
 															}
 															return '<div>'
-																	+ '<div class="p-n" style="color:'
-																	+ this.series.color
-																	+ ';">'
+																	+ '<div class="p-n">'
 																	+ domainUserNamesList[userIndex]
 																	+ ' </div>'
 																	+ '<div class="p-n" style="color:'
@@ -937,6 +1170,8 @@ var portlet_graph_utility = {
 													floating : true,
 													align : 'right',
 													verticalAlign : 'top',
+													y:30,
+													enabled:portlet_utility.is_legend_enable(base_model),
 													labelFormatter : function() {
 														if (this.name.length > 12) {
 															return this.name
@@ -956,10 +1191,7 @@ var portlet_graph_utility = {
 	 * To display revenue graph portlet as area spline graph
 	 */
 	portletDealRevenueGraph : function(selector, series, base_model, categories) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						function() {
+		setupCharts(function(){
 							if (series == undefined && categories != undefined
 									&& categories.length == 0) {
 								$('#' + selector)
@@ -972,7 +1204,17 @@ var portlet_graph_utility = {
 											{
 												chart : {
 													type : 'areaspline',
-													marginRight : 20
+													marginRight : 20,
+													events: {
+												   		load: function(){
+												   			console.log("load");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}, redraw : function(){
+												   			console.log("redraw");
+												   			portlet_utility.toggle_chart_legends(this, base_model);
+												   		}
+												   },
+
 												},
 												title : {
 													text : ''
@@ -1030,9 +1272,7 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-												exporting : {
-													enabled : false
-												},
+										
 												tooltip : {
 													borderWidth : 1,
 													backgroundColor : '#313030',
@@ -1054,7 +1294,7 @@ var portlet_graph_utility = {
 																+ this.series.color
 																+ '>'
 																+ this.series.name
-																+ '</font> : '
+																+ '</font>: '
 																+ portlet_utility
 																		.getPortletsCurrencySymbol()
 																+ ''
@@ -1074,7 +1314,9 @@ var portlet_graph_utility = {
 													layout : 'vertical',
 													floating : true,
 													align : 'right',
-													verticalAlign : 'top'
+													enabled:portlet_utility.is_legend_enable(base_model),
+													verticalAlign : 'top',
+													y : 30,
 												},
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
@@ -1091,11 +1333,7 @@ var portlet_graph_utility = {
 	 */
 	emailsOpenedPieChart : function(selector, data, emailsSentCount,
 			emailsOpenedCount) {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
+setupCharts(function(){
 							if (emailsSentCount == 0 && emailsOpenedCount == 0) {
 								$('#' + selector)
 										.html(
@@ -1191,9 +1429,7 @@ var portlet_graph_utility = {
 													name : 'Deal',
 													data : data
 												} ],
-												exporting : {
-													enabled : false
-												}
+												
 											});
 						});
 	},
@@ -1202,11 +1438,7 @@ var portlet_graph_utility = {
 	 * To display campaigns stats portlet as pie graph 
 	 */
 	campstatsPieChart : function() {
-		head
-				.js(
-						LIB_PATH + 'lib/flot/highcharts-3.js',
-						LIB_PATH + 'lib/flot/no-data-to-display.js',
-						function() {
+	setupCharts(function(){
 							var color;
 							//var innersize='100%';
 							var dis = 0;
@@ -1303,7 +1535,6 @@ var portlet_graph_utility = {
 												},
 												legend : {
 													enabled : false,
-
 												},
 												plotOptions : {
 													series : {
@@ -1376,9 +1607,103 @@ var portlet_graph_utility = {
 													// name: 'Deal',
 													data : data
 												} ],
-												exporting : {
-													enabled : false
-												}
+										
+											});
+						});
+	},
+	dealGoalsPieGraph : function(selector, data1,data2,colors)
+	{
+			var series = [];
+							series.push([ "Goals Left",
+									data2 - data1 ]);
+							series.push([ "Won", data1 ]);
+							//portlet_graph_utility.emailsOpenedPieChart(selector,series,data1,data2);
+							setupCharts(function(){
+							$('#' + selector)
+									.highcharts(
+											{
+												chart : {
+													type : 'pie',
+													backgroundColor:'transparent',
+
+												},
+												colors : colors,
+												title : {
+													text : ''
+												},
+												tooltip : {
+													backgroundColor : '#313030',
+													borderColor : '#000',
+													borderRadius : 3,
+													/*style : {
+														color : '#EFEFEF'
+													},*/
+													enabled : true,
+													formatter:  function(){
+														
+													return  '<div class="p-n"><b><font color='+this.point.color+'>'+ this.point.name +' '+ Math.round(this.point.percentage).toString()+'%</font></b></div>';
+					                        
+												},
+												useHTML : true,
+												},
+												legend : {
+													itemStyle : {
+														fontSize : '10px',
+														color : '#98a6ad'
+													},
+													borderWidth : 0,
+													layout : 'vertical',
+													floating : true,
+													align : 'right',
+													verticalAlign : 'top',
+													symbolHeight: 0,
+													symbolWidth: 0,
+													symbolRadius: 0,
+																	labelFormatter : function()
+											{
+												if(this.name=="Won"){
+												var s = '<div> ' + (this.percentage)
+														.toFixed(2) + '%<b></div>';
+												return s;
+											}
+											}, 
+												},
+												plotOptions : {
+													series : {
+														borderWidth : 0,
+														states : {
+															hover : {
+																enabled : false
+															}
+														}
+													},
+													pie : {
+														borderWidth : 0,
+														//innerSize : 50,
+														dataLabels : {
+															enabled : false,
+															
+														},
+														showInLegend : true,
+														//enableMouseTracking : false,
+														point : {
+															events : {
+																legendItemClick : function() {
+																	return false;
+																}
+															}
+														}
+													}
+												},
+												exporting :
+												{
+													enabled : false,
+												},
+												series : [ {
+													name : 'Goal',
+													data : series
+												} ],
+											
 											});
 						});
 	},

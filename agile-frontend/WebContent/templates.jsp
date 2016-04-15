@@ -106,8 +106,9 @@
  							</h3>
 							<div class="pull-right">
 					            <div class="inline-block">
+					            <a class="btn btn-sm btn-info" onclick="window.close()" id="goToEditor" href="#" style="margin-right: 20px;">Go To Editor</a> 
 								    <div class="btn-group">
-       									<a class="btn btn-sm btn-default" href="cd_tiny_mce.jsp?id=<%= id%>">Create your own</a> 
+       									<a class="btn btn-sm btn-info" href="cd_tiny_mce.jsp?id=<%= id%>">Create your own</a> 
 									</div>
 								</div>
             				</div>
@@ -180,11 +181,14 @@ $(function(){
 	var url;
 	
       if(type === 'email')
+      {
       		url='/misc/email-templates/email_templates_structure.js';
+      		//hide Go To Editor Button from email template
+      		 $("#goToEditor").hide();
+      }
 
       if(type === 'web_rules')
-    	  url='/misc/modal-templates/modal_templates_structure.js';
-      
+    	  url='/misc/modal-templates/modal_templates_structure.js';     
     	  
    		// Gets email_templates_structure.js
 		get_templates_json(url, function(e){ 

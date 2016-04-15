@@ -60,6 +60,15 @@ public class DefaultWidgets {
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
+				"Braintree",
+				"Braintree enables individuals and businesses to accept payments over the internet.",
+				"/widgets/braintree.js", "/img/plugins/braintree-lg-logo.png",
+				"/widgets/braintree-sm-logo.png", null, WidgetType.BILLING));
+		widgets.add(new Widget(
+				"PayPal","PayPal is the faster, safer way for online invoicing  web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.",
+				"/widgets/paypal.js", "/img/plugins/paypal_logo_png.png",
+				"/widgets/paypal_icon.png", null, WidgetType.BILLING));
+		widgets.add(new Widget(
 				"HelpScout",
 				"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
 				"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png",
@@ -79,6 +88,11 @@ public class DefaultWidgets {
 				"Facebook is a social utility that connects people with friends and others who work, study and live around them.",
 				"/widgets/facebook.js", "/widgets/facebook.png",
 				"/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
+		widgets.add(new Widget(
+				"Uservoice",
+				"UserVoice is a powerful tool that helps build better products and support integrating easy-to-use feedback and ideas from customers.",
+				"/widgets/uservoice.js", "/widgets/Uservoice_lg_logo.png",
+				"/widgets/UserVoice_md_logo.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
 				"Shopify",
 				"Shopify is a powerful ecommerce solution that includes everything you need to create an online store.",
@@ -109,12 +123,12 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
-//		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
-//
-//		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
-//
-//
-//		WidgetType.CALL));
+		
+		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
+		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
+		WidgetType.CALL));
+		widgets.add(new Widget("Skype", "Make and receive calls from your contacts using your Skype Account.",
+		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
@@ -137,7 +151,7 @@ public class DefaultWidgets {
 				.contains(widgetName)) {
 			return WidgetType.SUPPORT;
 		} else if (Arrays.asList(
-				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript" })
+				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript", "Bria","Skype"})
 				.contains(widgetName)) {
 			return WidgetType.CALL;
 		} else if (Arrays.asList(new String[] { "FreshBooks", "Stripe" })

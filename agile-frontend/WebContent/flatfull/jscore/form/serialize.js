@@ -34,12 +34,12 @@ function serializeForm(form_id) {
 		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
 			return {
 				"name" : this.name,
-				"value" : new Date(convertDateFromUKtoUS(this.value)).getTime() / 1000
+				"value" : getFormattedDateObjectWithString(this.value).getTime() / 1000
 			};
 		else
 			return {
 				"name" : this.name,
-				"value" : new Date(this.value).getTime() / 1000
+				"value" : getFormattedDateObjectWithString(this.value).getTime() / 1000
 			};
 	}).get());
 	
@@ -52,6 +52,40 @@ function serializeForm(form_id) {
 	}).get());
 	console.log(arr);
 	
+	//Included to set content editable data
+	arr = arr.concat($('#' + form_id + ' div[contenteditable="true"]').map(function() {
+
+		var $editable_div = $('div[contenteditable="true"]');
+
+		return {
+			"name" : $editable_div.attr('data-name'),
+			"value" : $editable_div.html()
+		};
+	}).get());
+
+	// Serialize cc_emails
+	arr = arr.concat($('#' + form_id + ' [name="cc_emails"]').map(function() {
+
+        var array = [];
+        $.each($(this).children(), function(g, h) {
+
+    		if($(h).attr("data"))
+        		array.push(($(h).attr("data")).toString());
+	    });
+
+	    return { name: 'cc_emails', value: array };
+
+	}).get());
+
+	// Serialize sortable widget data
+	arr = arr.concat($('#' + form_id + ' .selected_columns').map(function() {
+
+	    return { name: $(this).attr('name'), value: $(this).sortable("toArray") };
+
+	}).get());
+
+	//Serialize attachments list
+	//arr = arr.concat(Ticket_Attachments.serializeList(form_id));
 
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
@@ -85,6 +119,18 @@ function serializeForm(form_id) {
 			"value" : fields_set
 		};
 	}).get());
+
+
+	arr = arr.concat($('#' + form_id + ' .chosen-select').map(function() {
+		var fields_set = [];
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : $(this).val()
+		};
+	}).get());
 	
 	arr = arr.concat($('#' + form_id + ' .multiple-checkbox').map(function() {
 		var fields_set = [];
@@ -102,6 +148,29 @@ function serializeForm(form_id) {
 			"value" : fields_set
 		};
 	}).get());
+
+	arr = arr.concat($('#' + form_id + ' .multiple-checkbox-adminprefs').map(function() {
+		var fields_set = [];
+
+		$('input:checkbox:checked', this).each(function(index, element_checkbox){
+			if(!($(this).closest(".multiple-checkbox")) == undefined){
+				console.log("admin-prefs");
+			}
+			else if (($(this).closest(".multiple-checkbox")).length == 0 )
+			fields_set.push($(element_checkbox).val());
+		});
+		
+		console.log(fields_set);
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : fields_set
+		};
+	}).get());
+
+
 
 	/*
 	 * Chained select, Chained select is used for filters, which uses logical
@@ -152,12 +221,12 @@ function serializeChainedElement(element)
 
 		// If type of the field is "date" then return epoch time
 		if ($(data).hasClass("date")) {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(data).val()));
-			else
-				date = new Date($(data).val());
-			value = getGMTEpochFromDate(date);
+			var date = getFormattedDateObjectWithString($(data).val());
+
+			value = getGMTEpochFromDateForCustomFilters(date);
+		}
+		else if ($(data).hasClass("contact_custom_field") || $(data).hasClass("company_custom_field")) {
+			value = $(data).attr("data");
 		}
 
 		// Value of input/select
@@ -172,6 +241,14 @@ function serializeChainedElement(element)
 			json_object[name] = value;
 		// Pushes each rule built from chained select in to an JSON array
 	});
+	if(json_object.CONDITION == "BETWEEN") {
+	    var newdate = (json_object.RHS_NEW + (24 * 60 * 60 * 1000) - 1);
+       json_object.RHS_NEW = newdate;
+	}
+	if(json_object.nested_condition == "BETWEEN") {
+	    var newdate = (json_object.nested_rhs + (24 * 60 * 60 * 1000) - 1);
+       json_object.nested_rhs = newdate;
+	}
 	return json_object;
 }
 
@@ -195,13 +272,20 @@ $(function(){
 	}
 	
 	$('.modal').on('shown.bs.modal', function(event){
+		var modalClassLength =  event.target.classList.length;
+		if(event.target.classList[modalClassLength - 2] == "focusRelatedTo"){
+			$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
+		}
+		else {
 		$('form', this).focus_first();
+		}	
 	});
 });
 
 function serializeLhsFilters(element)
 {
 	var json_array = [];
+	var json_array_1 = [];
 	var filters = {};
 	$(element).find('a#lhs-filters-header').removeClass('bold-text');
 	$.each($(element).find('.lhs-contact-filter-row'), function(index, data) {
@@ -216,21 +300,46 @@ function serializeLhsFilters(element)
 			RHS_VALUE = $(RHS_ELEMENT).val().trim();
 		}
 		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(RHS_ELEMENT).val()));
-			else
-				date = new Date($(RHS_ELEMENT).val());
-			RHS_VALUE = getGMTEpochFromDate(date);
+			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
+
+			RHS_VALUE = getGMTEpochFromDateForDynamicFilters(date);
+		}
+		if ($(RHS_ELEMENT).hasClass("custom_contact") || $(RHS_ELEMENT).hasClass("custom_company")) {
+			RHS_VALUE = $(RHS_ELEMENT).parent().find("input").attr("data");
+		}
+		if ($(RHS_ELEMENT).hasClass("custom_contacts") || $(RHS_ELEMENT).hasClass("custom_companies")) {
+			$(RHS_ELEMENT).find("li").each(function(){
+				var json_object_1 = {};
+				var RHS_VALUE_1 = $(this).attr("data");
+				var LHS_1 = $(currentElement).find('[name="LHS"]').val();
+				if(RHS_VALUE_1)
+				{
+					json_object_1["LHS"] = LHS_1;
+					json_object_1["CONDITION"] = "EQUALS";
+					json_object_1["RHS"] = RHS_VALUE_1;
+					json_object_1["RHS_NEW"] = "";
+					json_array_1.push(json_object_1);
+					var fieldName = LHS_1.replace(/ +/g, '_');
+					fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@').replace(/[\/]/g,'\\/');
+					var currentElemnt = $(element).find('#'+fieldName+'_div');
+					$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+					$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
+				}
+			});
+			
 		}
 		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
-			var date;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				date = new Date(convertDateFromUKtoUS($(RHS_NEW_ELEMENT).val()));
-			else
-				date = new Date($(RHS_NEW_ELEMENT).val());
-			RHS_NEW_VALUE = getGMTEpochFromDate(date);
+			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
+		if(CONDITION != "BETWEEN") {
+			RHS_NEW_VALUE = getGMTEpochFromDateForDynamicFilters(date);
+		}
+		else {
+			date = new Date(getGMTEpochFromDateForDynamicFilters(date) + (24 * 60 * 60 * 1000) - 1);
+			RHS_NEW_VALUE = date.getTime();
+		}
+			
+			
 		}
 		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
 			RHS_NEW_VALUE = RHS_NEW_VALUE.trim();
@@ -260,6 +369,10 @@ function serializeLhsFilters(element)
 		// Pushes each rule built from chained select in to an JSON array
 	});
 	filters["rules"] = json_array;
+	if(json_array_1)
+	{
+		filters["or_rules"] = json_array_1;
+	}
 	filters["contact_type"] = $(element).find('#contact_type').val();
 	return filters;
 }

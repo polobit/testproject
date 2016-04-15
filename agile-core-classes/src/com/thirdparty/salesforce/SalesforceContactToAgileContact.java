@@ -1,14 +1,18 @@
 package com.thirdparty.salesforce;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Task;
+import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -99,8 +103,7 @@ public class SalesforceContactToAgileContact
 				+ " Accounts imported from Salesforce");
 	}
 
-	public static void saveSalesforceContactsInAgile(ContactPrefs contactPrefs, JSONArray arrayOfContacts,
-			Key<DomainUser> ownerKey)
+	public static void saveSalesforceContactsInAgile(ContactPrefs contactPrefs, JSONArray arrayOfContacts)
 	{
 		System.out.println("In save contacts of salesforce");
 		System.out.println(arrayOfContacts.length());
@@ -113,7 +116,7 @@ public class SalesforceContactToAgileContact
 				System.out.println(arrayOfContacts.getJSONObject(i));
 				JSONObject jsonObject = arrayOfContacts.getJSONObject(i);
 
-				Contact agileContact = saveContactInAgile(contactPrefs, jsonObject, ownerKey);
+				Contact agileContact = saveContactInAgile(contactPrefs, jsonObject);
 
 				if (agileContact.id != 0l)
 					counter += 1;
@@ -128,6 +131,36 @@ public class SalesforceContactToAgileContact
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, String.valueOf(counter)
 				+ " contacts imported from Salesforce");
 	}
+	
+	public static void saveSalesforceTaskssInAgile(ContactPrefs contactPrefs, JSONArray arrayOfTasks)
+	{
+		System.out.println("In save tasks of salesforce");
+		System.out.println(arrayOfTasks.length());
+		int counter = 0;
+
+		for (int i = 0; i < arrayOfTasks.length(); i++)
+		{
+			try
+			{
+				System.out.println(arrayOfTasks.getJSONObject(i));
+				JSONObject jsonObject = arrayOfTasks.getJSONObject(i);
+
+				Task agileTask = saveTaskInAgile(contactPrefs, jsonObject);
+
+				if (agileTask.id != 0l)
+					counter += 1;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+			}
+		}
+
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, String.valueOf(counter)
+				+ " tasks imported from Salesforce");
+	}
+	
 
 	public static void saveSalesforceLeadsInAgile(JSONArray arrayOfLeads, Key<DomainUser> ownerKey) throws Exception
 	{
@@ -367,7 +400,7 @@ public class SalesforceContactToAgileContact
 					System.out.println(contactJSON);
 					if (contactJSON.length() != 0)
 					{
-						Contact contact = saveContactInAgile(contactPrefs, contactJSON, ownerKey);
+						Contact contact = saveContactInAgile(contactPrefs, contactJSON);
 						System.out.println("saved contact");
 						System.out.println(contact);
 
@@ -394,7 +427,72 @@ public class SalesforceContactToAgileContact
 				+ " cases imported from Salesforce");
 	}
 
-	public static Contact saveContactInAgile(ContactPrefs contactPrefs, JSONObject jsonObject, Key<DomainUser> ownerKey)
+	public static Task saveTaskInAgile(ContactPrefs contactPrefs, JSONObject jsonObject)
+			throws Exception
+	{
+		System.out.println("In task contact of agile");
+		Task agileTask = new Task();
+		
+		if(jsonObject.has("Subject"))
+		agileTask.subject = jsonObject.getString("Subject");
+		
+		if(jsonObject.has("Status")){
+
+			String status = jsonObject.getString("Status");
+			agileTask.status = Task.Status.YET_TO_START;
+			if(StringUtils.isNotBlank(status)){
+				switch (status) {
+				case "Completed":
+					agileTask.status = Task.Status.COMPLETED;
+					break;
+				case "In Progress":
+					agileTask.status = Task.Status.IN_PROGRESS;
+					break;
+				}
+			}
+		
+		}
+		
+		if(jsonObject.has("Priority")){
+			String type = jsonObject.getString("Priority");
+			agileTask.priority_type = Task.PriorityType.NORMAL;
+			if(StringUtils.isNotBlank(type)){
+				switch (type) {
+				case "High":
+					agileTask.priority_type = Task.PriorityType.HIGH;
+					break;
+				case "Normal":
+					agileTask.priority_type = Task.PriorityType.NORMAL;
+					break;
+				case "Low":
+					agileTask.priority_type = Task.PriorityType.LOW;
+					break;
+				}
+			}
+		}
+		
+		if(jsonObject.has("Description")){
+			String desc = jsonObject.getString("Description");
+			agileTask.note_description = desc;
+		}
+		
+		if(jsonObject.has("ActivityDate")){
+			String date = jsonObject.getString("ActivityDate");
+			try {
+				DateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+				agileTask.due = formatter.parse(date).getTime();
+			} catch (Exception e) {
+			}
+		}
+
+		// Add contacts and deals pending here
+		
+		agileTask.save();
+		
+		return agileTask;
+	}
+	
+	public static Contact saveContactInAgile(ContactPrefs contactPrefs, JSONObject jsonObject)
 			throws Exception
 	{
 		System.out.println("In save contact of agile");
@@ -475,7 +573,7 @@ public class SalesforceContactToAgileContact
 		agileContact.properties = fields;
 
 		System.out.println(agileContact);
-		agileContact.setContactOwner(ownerKey);
+		// agileContact.setContactOwner(ownerKey);
 		agileContact.save();
 
 		// as note
@@ -500,7 +598,6 @@ public class SalesforceContactToAgileContact
 
 			note.addRelatedContacts(String.valueOf(agileContact.id));
 			System.out.println("In note ");
-			System.out.println(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
 			note.setOwner(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
 			note.save();
 			System.out.println(note.id);

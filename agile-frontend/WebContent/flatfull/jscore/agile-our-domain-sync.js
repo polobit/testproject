@@ -23,7 +23,7 @@ function our_domain_set_account() {
 		_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
 
 	else
-		_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
+		_agile.set_account('fdpa0sc7i1putehsp8ajh81efh', 'our');
 
 	_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
@@ -251,10 +251,10 @@ function add_account_canceled_info(info, callback) {
  */
 
 function add_referrar_info_as_note() {
-	var utmsource = readCookie("_agile_utm_source");
-	var utmcampaign = readCookie("_agile_utm_campaign");
-	var utmmedium = readCookie("_agile_utm_medium");
-	var utmreferencedomain = readCookie("agile_reference_domain");
+	var utmsource = _agile_get_prefs("_agile_utm_source");
+	var utmcampaign = _agile_get_prefs("_agile_utm_campaign");
+	var utmmedium = _agile_get_prefs("_agile_utm_medium");
+	var utmreferencedomain = _agile_get_prefs("agile_reference_domain");
 	if (utmsource && utmcampaign && utmmedium && utmreferencedomain) {
 		var note = {};
 		note.subject = "Referrer";
@@ -264,7 +264,7 @@ function add_referrar_info_as_note() {
 
 		_agile.add_note(note, function(data) {
 			console.log(data);
-			eraseCookie("agile_reference_domain");
+			_agile_delete_prefs("agile_reference_domain");
 
 		});
 	}
@@ -286,7 +286,7 @@ function our_domain_sync() {
 
 		our_domain_set_account();
 
-		var domain = readCookie(DOMAIN_COOKIE_FOR_WEBSITE);
+		var domain = _agile_get_prefs(DOMAIN_COOKIE_FOR_WEBSITE);
 
 		// Sets different cookie if user logs into different domain
 		if (!domain || domain != CURRENT_DOMAIN_USER["domain"])
@@ -315,18 +315,23 @@ function our_domain_sync() {
 					first_name.length + 1).trim() : '';
 
 			// Creates a new contact and assigns it to global value
-			_agile.create_contact({
-				"email" : CURRENT_DOMAIN_USER['email'],
-				"first_name" : first_name,
-				"last_name" : last_name
-			}, function(data) {
-				Agile_Contact = data;
-				// Shows noty
-				// set_profile_noty();
-				add_custom_fields_to_our_domain();
+			var email = CURRENT_DOMAIN_USER['email'];
+			var emailType = email.split("@")[1].split(".")[0];
+			if(emailType != "yopmail")
+			{
+				_agile.create_contact({
+					"email" : CURRENT_DOMAIN_USER['email'],
+					"first_name" : first_name,
+					"last_name" : last_name
+				}, function(data) {
+					Agile_Contact = data;
+					// Shows noty
+					// set_profile_noty();
+					add_custom_fields_to_our_domain();
 
-				initWebrules();
-			});
+					initWebrules();
+				});
+			}
 
 		})
 		// Gets contact based on the the email of the user logged in
@@ -657,5 +662,38 @@ function add_plan_change_info_as_note_to_owner(cus_email, plan_type, plan_id, qu
 			callback(data);
 
 	}, cus_email);
+
+}
+
+function update_contact_in_our_domain(user_email, response, callback){
+
+	console.log("update_contact_in_our_domain");
+
+	if(!response || !response.email){
+		processCallback(callback);
+		return;
+	}
+
+	try{
+
+		if (CURRENT_DOMAIN_USER.email != user_email)
+		   _agile.set_email(user_email);
+
+		_agile.update_contact({
+		    "email": response.email
+		}, {
+		    success: function (data) {
+		        console.log("success");
+		        processCallback(callback);
+		    },
+		    error: function (data) {
+		        console.log("error");
+		        processCallback(callback);
+		    }
+		});
+
+	}catch(e){
+		processCallback(callback);
+	}
 
 }

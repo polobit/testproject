@@ -24,23 +24,25 @@ function setupLhsFilters(cel, is_company)
 
 			$('#lhs_filters_conatiner', cel).html($(template_ui));
 
-			fillSelect('owner_select', '/core/api/users', undefined, function()
-			{
-				if (!COMPANY_CUSTOM_FIELDS)
+			setTimeout(function(){
+				fillSelect('owner_select', '/core/api/users/partial', undefined, function()
 				{
-					$.getJSON("core/api/custom-fields/searchable/scope?scope=COMPANY", function(fields)
+					if (!COMPANY_CUSTOM_FIELDS)
 					{
-						COMPANY_CUSTOM_FIELDS = fields;
-						loadCustomFiledsFilters(fields, cel, is_company);
-						return;
-					})
-				}
-				else
-				{
-					loadCustomFiledsFilters(COMPANY_CUSTOM_FIELDS, cel, is_company);
-				}
-			
-			}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
+						$.getJSON("core/api/custom-fields/searchable/scope?scope=COMPANY", function(fields)
+						{
+							COMPANY_CUSTOM_FIELDS = fields;
+							loadCustomFiledsFilters(fields, cel, is_company);
+							return;
+						})
+					}
+					else
+					{
+						loadCustomFiledsFilters(COMPANY_CUSTOM_FIELDS, cel, is_company);
+					}
+				
+				}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
+			}, 500);
 
 		}, $('#lhs_filters_conatiner', cel));
 
@@ -55,31 +57,33 @@ function setupLhsFilters(cel, is_company)
 				  return;
 			$('#lhs_filters_conatiner', cel).html($(template_ui));
 			
-			fillSelect('owner_select', '/core/api/users', undefined, function()
-			{
-				fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
+			setTimeout(function(){
+				fillSelect('owner_select', '/core/api/users/partial', undefined, function()
 				{
-					// loading image is added to hidden select by fillselect
-					// remove it manually.
-					$('#campaign_select_master').next('.loading').remove();
-					$('#campaign_select').html($('#campaign_select_master').html());
-					if (!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
+					fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
 					{
-						$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields)
+						// loading image is added to hidden select by fillselect
+						// remove it manually.
+						$('#campaign_select_master').next('.loading').remove();
+						$('#campaign_select').html($('#campaign_select_master').html());
+						if (!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 						{
-							SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
-							loadCustomFiledsFilters(fields, cel, is_company);
-							return;
-						})
-					}
-					else
-					{
-						loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
-					}
-					$('[data-toggle="tooltip"]').tooltip();
-					//showDynamicFilters();
+							$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields)
+							{
+								SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
+								loadCustomFiledsFilters(fields, cel, is_company);
+								return;
+							})
+						}
+						else
+						{
+							loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
+						}
+						$('[data-toggle="tooltip"]').tooltip();
+						//showDynamicFilters();
+					}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 				}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
-			}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
+			}, 500);
 
 		}, $('#lhs_filters_conatiner', cel));
 
@@ -104,14 +108,66 @@ function loadCustomFiledsFilters(fields, cel, is_company)
 		// 'mm/dd/yyyy'});
 
 		scramble_filter_input_names(cel);
-		if (is_company && readData('dynamic_company_filter'))
+		if (is_company && _agile_get_prefs('dynamic_company_filter'))
 		{
-			deserializeLhsFilters($('#lhs-contact-filter-form'), readData('dynamic_company_filter'));
+			deserializeLhsFilters($('#lhs-contact-filter-form'), _agile_get_prefs('dynamic_company_filter'));
 		}
-		if (!is_company && readData('dynamic_contact_filter'))
+		if (!is_company && _agile_get_prefs('dynamic_contact_filter'))
 		{
-			deserializeLhsFilters($('#lhs-contact-filter-form'), readData('dynamic_contact_filter'));
+			deserializeLhsFilters($('#lhs-contact-filter-form'), _agile_get_prefs('dynamic_contact_filter'));
 		}
+
+		$.each(fields, function()
+		{
+			if(this.field_type == "CONTACT")
+			{
+				var id = this.id;
+				var fxn_display_contact = function(data, item)
+				{
+					if($("ul[id='in_"+id+"']", cel).find("li[data="+data+"]").length == 0)
+					{
+						$("ul[id='in_"+id+"']", cel)
+							.append(
+									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_contact_in_lhs">&times</a></li>');
+							$("#in_"+id).parent().find("input").trigger('custom_blur');
+					}
+				}
+				agile_type_ahead($("#in_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact, 'type=PERSON');
+				var fxn_display_contact = function(data, item)
+				{
+					setTimeout(function(){
+						$("#is_"+id).parent().find("input").attr("data", data);
+						$("#is_"+id).parent().find("input").val(item);
+						$("#is_"+id).parent().find("input").trigger('custom_blur');
+					},10);
+				}
+				agile_type_ahead($("#is_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact, 'type=PERSON');
+			}
+			else if(this.field_type == "COMPANY")
+			{
+				var id = this.id;
+				var fxn_display_contact = function(data, item)
+				{
+					if($("ul[id='in_"+id+"']", cel).find("li[data="+data+"]").length == 0)
+					{
+						$("ul[id='in_"+id+"']", cel)
+							.append(
+									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#company/' + data + '">' + item + '</a><a class="close" id="remove_contact_in_lhs">&times</a></li>');
+							$("#in_"+id).parent().find("input").trigger('custom_blur');
+					}
+				}
+				agile_type_ahead($("#in_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact, 'type=COMPANY');
+				var fxn_display_contact = function(data, item)
+				{
+					setTimeout(function(){
+						$("#is_"+id).parent().find("input").attr("data", data);
+						$("#is_"+id).parent().find("input").val(item);
+						$("#is_"+id).parent().find("input").trigger('custom_blur');
+					},10);
+				}
+				agile_type_ahead($("#is_"+this.id).parent().find("input").attr("id"), cel, contacts_typeahead, fxn_display_contact, 'type=COMPANY');
+			}
+		});
 
 	}, $('#custom-filter-fields', cel));
 	
@@ -124,21 +180,30 @@ function submitLhsFilter()
 	// erase filter cookies
 	var contact_type = formData.contact_type;
 	if(contact_type == 'COMPANY') {
-		eraseCookie('company_filter');
-		eraseData('dynamic_company_filter');
-		if (formData != null && formData.rules.length > 0)
+		_agile_delete_prefs('company_filter');
+		_agile_delete_prefs('dynamic_company_filter');
+		if (formData != null && (formData.rules.length > 0 || formData.or_rules.length > 0))
 		{
-			storeData('dynamic_company_filter', JSON.stringify(formData));
-			//createCookie('company_filter', "Companies");
+			_agile_set_prefs('dynamic_company_filter', JSON.stringify(formData));
+			//_agile_set_prefs('company_filter', "Companies");
 		}
 		COMPANIES_HARD_RELOAD=true;
 		App_Companies.companies(undefined, undefined, undefined, true);
-	} else {
-		eraseCookie('contact_filter');
-		eraseCookie('contact_filter_type');
-		eraseData('dynamic_contact_filter');
+	} else if(contact_type == 'VISITOR') {
+
+		_agile_delete_prefs('dynamic_visitors_filter');
 		if (formData != null && formData.rules.length > 0)
-			storeData('dynamic_contact_filter', JSON.stringify(formData));
+			_agile_set_prefs('dynamic_visitors_filter', JSON.stringify(formData));
+
+		VISITORS_HARD_RELOAD=true;
+		App_VisitorsSegmentation.visitorssegmentation(getTimeWebstats(),true);
+	}else {
+		
+		_agile_delete_prefs('contact_filter');
+		_agile_delete_prefs('contact_filter_type');
+		_agile_delete_prefs('dynamic_contact_filter');
+		if (formData != null && (formData.rules.length > 0 || formData.or_rules.length > 0))
+			_agile_set_prefs('dynamic_contact_filter', JSON.stringify(formData));
 		CONTACTS_HARD_RELOAD=true;
 		App_Contacts.contacts(undefined, undefined, undefined, true);
 	}
@@ -147,8 +212,10 @@ function submitLhsFilter()
 
 function contactFiltersListeners(container_id){
 
+	$('[data-toggle="tooltip"]').tooltip();
+
 if(!container_id)
-	  container_id = 'conatcts-listeners-conatainer';
+	  container_id = 'contacts-listener-container';
 
 $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 {
@@ -179,20 +246,31 @@ $('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 {
 	
 	$(this).addClass('hide');
-	var container = $(this).parents('.lhs-row-filter');
-	$(container).find('#RHS').children().val("").attr('prev-val', "");
+	var container = $(this).parents('.lhs-contact-filter-row');
+	$(container).find('#RHS:not(.no-filter-action)').children().val("").attr('prev-val', "");
+	$(container).find('#RHS').children().val("").attr('prev-val', "").attr('data', "");
 	$(container).find('#RHS_NEW').filter(visibleFilter).children().val("").attr('prev-val', "");
 	$(container).find('select[name="CONDITION"]').val($(container).find('select[name="CONDITION"] option:first').val()).attr('prev-val', "");
 	$(container).find('select[name="CONDITION"]').trigger('change');
 	$(container).find('a#lhs-filters-header').find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 	$(container).find('a#lhs-filters-header').next().addClass('hide');
+	if($(container).find('#RHS').find('ul.custom_contacts').find('li'))
+	{
+		$(container).find('#RHS').find('ul.custom_contacts').find('li').remove();
+	}
+	if($(container).find('#RHS').find('ul.custom_companies').find('li'))
+	{
+		$(container).find('#RHS').find('ul.custom_companies').find('li').remove();
+	}
 	submitLhsFilter();
 });
 
 $('#' + container_id).on('click', '#clear-lhs-contact-filters', function(e)
 {
 	e.preventDefault();
-	eraseData('dynamic_contact_filter');
+	console.log("clicked");
+
+	_agile_delete_prefs('dynamic_contact_filter');
 	CONTACTS_HARD_RELOAD = true;
 	App_Contacts.contacts();
 });
@@ -200,9 +278,17 @@ $('#' + container_id).on('click', '#clear-lhs-contact-filters', function(e)
 $('#' + container_id).on('click', '#clear-lhs-company-filters', function(e)
 {
 	e.preventDefault();
-	eraseData('dynamic_company_filter');
+	_agile_delete_prefs('dynamic_company_filter');
 	COMPANIES_HARD_RELOAD=true;
 	App_Companies.companies();
+});
+$('#' + container_id).on('click', '#clear-lhs-segmentation-filters', function(e)
+{
+	e.preventDefault();
+	_agile_delete_prefs('dynamic_visitors_filter');
+	_agile_delete_prefs('duration');
+	VISITORS_HARD_RELOAD=true;
+	 App_VisitorsSegmentation.visitorssegmentation();
 });
 
 $('#' + container_id).on('click', '#lhs-filters-header', function(e)
@@ -216,10 +302,33 @@ $('#' + container_id).on('click', '#lhs-filters-header', function(e)
 $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
 {
 	var selected = $(this).val();
+	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_contacts') || 
+		$(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_companies'))
+	{
+		$(this).parent().find("div.IN").removeClass("hide");
+		$(this).parent().find("div.EQUALS").addClass("hide");
+		$(this).parent().find("div.EQUALS").find("input").val("").attr("data", "");
+		return;
+	}
+	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_contact') || 
+		$(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_company'))
+	{
+		$(this).parent().find("div.IN").addClass("hide");
+		$(this).parent().find("div.EQUALS").removeClass("hide");
+		if (!$(this).parent().find("div.EQUALS").find("input").val())
+		{
+			return;
+		}
+	}
 	$(this).parent().find('div.condition_container').addClass('hide');
 	$(this).parent().find('div.condition_container.' + selected).removeClass('hide');
 	$(this).parent().find('div.condition_container.' + selected).find('#RHS :not(input.date)').focus();
 	var rhs = $(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().val();
+	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_contact') || 
+		$(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_company'))
+	{
+		rhs = $(this).parent().find('div.condition_container.' + selected).find('#RHS').find('input').attr("data");
+	}
 	var rhs_new_exist = false;
 	var rhs_new = "";
 	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS_NEW') != undefined)
@@ -227,7 +336,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDIT
 		rhs_new_exist = true;
 		rhs_new = $(this).parent().find('div.condition_container.' + selected).find('#RHS_NEW').children().first().val();
 	}
-	if (rhs != "" && (!rhs_new_exist || rhs_new != ""))
+	if (rhs != "" && (rhs != undefined || selected == "DEFINED" || selected == "NOT_DEFINED") && (!rhs_new_exist || rhs_new != ""))
 	{
 		submitLhsFilter();
 	}
@@ -270,7 +379,24 @@ $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS inp
 	}
 });
 
-$('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date,.filters-tags-typeahead)', function(e)
+$('#' + container_id).on('custom_blur', '#lhs-contact-filter-form #RHS input.typeahead_contacts:not(.date)', function(e)
+{
+	console.log("I am in blur " + $(this).val());
+	var prevVal = $(this).attr('prev-val');
+	var currVal = $(this).val().trim();
+	$(this).attr('prev-val', currVal);
+	submitLhsFilter();
+	$(this).blur();
+});
+
+// Filter Contacts- Remove Multiple
+$('#' + container_id).on('click', '#remove_contact_in_lhs', function(e)
+{
+	$(this).parent().remove();
+	submitLhsFilter();
+});
+
+$('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date,.filters-tags-typeahead,.typeahead_contacts)', function(e)
 {
 	console.log("I am in blur " + $(this).val());
 	if (e.type == 'focusout' || e.keyCode == '13')
@@ -472,15 +598,57 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 			if ($('#contacts-lhs-filters-toggle').is(':visible'))
 			{
 				$('#contacts-lhs-filters-toggle').hide();
-				createCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS, "hide");
+				_agile_set_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS, "hide");
 			}
 			else
 			{
 				$('#contacts-lhs-filters-toggle').show();
-				createCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS, "show");
+				_agile_set_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS, "show");
 			}
 
 		});
+
+    $("body").off("click", "#companies-left-filters-toggle");
+ 	$('body').on('click', '#companies-left-filters-toggle', function(e)
+		{
+
+			e.preventDefault();
+
+			if ($('#companies-lhs-filters-toggle').is(':visible'))
+			{
+				$('#companies-lhs-filters-toggle').hide();
+				_agile_set_prefs('companiesFilterStatus','display:none');
+				e.preventDefault();
+			}
+			else
+			{
+				$('#companies-lhs-filters-toggle').show();
+				_agile_set_prefs('companiesFilterStatus','');
+				e.preventDefault();
+			}
+
+		});
+ 	$("body").off("click", "#segmentation-left-filters-toggle");
+ 	$('body').on('click', '#segmentation-left-filters-toggle', function(e)
+		{
+
+			e.preventDefault();
+
+			if ($('#segmentation-lhs-filters-toggle').is(':visible'))
+			{
+				$('#segmentation-lhs-filters-toggle').hide();
+				_agile_set_prefs('segmentationFilterStatus','display:none');
+				e.preventDefault();
+			}
+			else
+			{
+				$('#segmentation-lhs-filters-toggle').show();
+				_agile_set_prefs('segmentationFilterStatus','');
+				e.preventDefault();
+			}
+
+		});
+     	
 
 
       $('#' + container_id).on('click', '.contacts-view', function(e)
@@ -490,10 +658,10 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
     				var data=$(this).attr("data");
     				if(data=="list"){
     					CONTACTS_HARD_RELOAD=true;
-    					eraseCookie("agile_contact_view");
+    					_agile_delete_prefs("agile_contact_view");
     				}
     				else if(data=="grid"){
-    					createCookie("agile_contact_view","grid-view");
+    					_agile_set_prefs("agile_contact_view","grid-view");
     					CONTACTS_HARD_RELOAD=true;
     				}
     				if(window.location.hash.indexOf("tags")==1){
@@ -542,7 +710,10 @@ function addTagsTypeaheadLhsFilters(tagsJSON, element)
 
 	$.each(tagsJSON, function(index, element)
 	{
-		tags_array.push(element.tag.toString());
+		if ($.inArray(element.tag.toString(), tags_array) == -1)
+		{
+			tags_array.push(element.tag.toString());
+		}
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
@@ -590,3 +761,26 @@ function bindChangeEvent(ele){
 
 
 }
+
+//for segmentation lhs filters
+ function setupAnalyticsLhsFilters (cel){   
+	
+		getTemplate("segmentation-lhs-filters", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$('#lhs_filters_segmentation', cel).html($(template_ui));
+			$("input.date", cel).datepicker({ format :CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+			 setTimeout(function() {
+			if(_agile_get_prefs('dynamic_visitors_filter')!=null)	
+				deserializeLhsFilters($('#lhs-contact-filter-form'), _agile_get_prefs('dynamic_visitors_filter'));
+			
+			if(_agile_get_prefs('duration')!=null)
+    			deserializeRhsFilters(_agile_get_prefs('duration'));
+    		},500)
+   
+			initWebstatsDateRange();
+									
+		}, $('#lhs_filters_segmentation', cel));
+  }
+

@@ -40,7 +40,7 @@ function OnScrollDiv(elementDiv)
 		// Append loading icon.
 		$(elementDiv)
 				.append(
-						'<span id="stream-waiting-modal-' + streamId + '" class="social-loader-icon text-center"><img class="thumb-tiny" src="img/ajax-spinner.gif"></span>');
+						'<span id="stream-waiting-modal-' + streamId + '" class="social-loader-icon text-center"><img class="thumb-tiny" src="'+updateImageS3Path("img/ajax-spinner.gif")+'"></span>');
 
 		/*
 		 * Calls TwitterAPI class to request for 20 more updates tweeted before

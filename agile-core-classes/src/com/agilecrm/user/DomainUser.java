@@ -27,6 +27,7 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.ticket.entitys.HelpdeskSettings;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
@@ -136,7 +137,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	// menu scopes in future
 	@NotSaved(IfDefault.class)
 	public HashSet<NavbarConstants> restricted_menu_scopes = null;
-
+	
+	/**
+	 * Pic of the domain user
+	 */
+	@NotSaved(IfDefault.class)
+	public String pic = null;
+	
 	/**
 	 * Name of the domain user
 	 */
@@ -224,7 +231,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public static final String CITY = "city";
 	public static final String LAT_LONG = "lat_long";
 	public static final String IP_ADDRESS = "ip_address";
+	
+	/**
+	 * Is form db updated 
+	 */
+	public boolean is_forms_updated = false;
 
+	/** Helpdesk settings */
+
+	@Embedded
+	public HelpdeskSettings helpdeskSettings = null;
+	
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
@@ -531,7 +548,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 			// Checks if super user is disabled, and throws exception if super
 			// is disabled
-			checkSuperUserDisabled(domainUser);
+			//checkSuperUserDisabled(domainUser);
 
 			// Checks and throws exception if user is admin and disabled
 			checkAdminDisabled();
@@ -542,7 +559,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				sendNotification();
 			}
 
-			sendPasswordChangedNotification(domainUser.encrypted_password);
+			//sendPasswordChangedNotification(domainUser.encrypted_password);
 		}
 		else if (id != null && !is_account_owner)
 		{
@@ -568,7 +585,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		{
 			if (checkMaxUsersInPlan())
 				return;
-
+			checkAdminDisabled();
 			sendWelcomeEmail();
 		}
 
@@ -577,6 +594,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		try
 		{
+			// Assigning Random avatar
+			if (pic == null)
+				pic = new UserPrefs().chooseRandomAvatar();
+			
 			dao.put(this);
 
 			/*
@@ -754,6 +775,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			}
 
 		}
+		
+		// Set schedule id
+		if(this.id != null && StringUtils.isBlank(schedule_id))
+		{
+			this.schedule_id = domainuser.schedule_id;
+			if(StringUtils.isBlank(schedule_id))
+				this.schedule_id = getScheduleid(name);
+			
+		} else if(this.id == null){
+			this.schedule_id = getScheduleid(name);
+		}
 
 		// Sets user scopes
 		setScopes();
@@ -811,7 +843,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			loadScopes();
 
 			loadMenuScopes();
-
+			
+			if(helpdeskSettings == null)
+				helpdeskSettings = new HelpdeskSettings().defaultSettings();
 		}
 		catch (Exception e)
 		{
@@ -964,17 +998,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	public String getScheduleid(String name)
 	{
-		String scheduleid = null;
-		if (name.contains(" "))
-		{
-			scheduleid = name.replace(" ", "_");
-			return scheduleid;
-		}
-		else
-		{
-			scheduleid = name;
-			return scheduleid;
-		}
+	if(name == null)
+		  name = " ";
+	
+	return name.replace(" ", "_");
 	}
 
 	/**
@@ -1003,7 +1030,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 * @throws Exception
 	 */
 	@XmlElement
-	public String getOwnerPic() throws Exception
+	public String getOwnerPic()
 	{
 		AgileUser agileUser = null;
 		UserPrefs userPrefs = null;
@@ -1057,7 +1084,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		// beta-sandbox
 		// "https://"+domainUser.domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com"
 		// version "https://"+domainUser.domain+".agilecrm.com"
-
+		
 		String calendar_url = VersioningUtil.getHostURLByApp(domain);
 
 		if (StringUtils.isNotBlank(schedule_id))

@@ -51,8 +51,15 @@ public class TaskletThread implements Work
 
 	try
 	{
-	    // Set namespace
-	    NamespaceManager.set("remote_api");
+	    try
+	    {
+		// Set namespace
+		NamespaceManager.set("remote_api");
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Unable to set remote API");
+	    }
 
 	    System.out.println("Running leased tasks");
 	    // TriggerFutureHook.install();
@@ -69,6 +76,7 @@ public class TaskletThread implements Work
 		{
 		    DeferredTask deferredTask = convertResponseToDeferredTask(task);
 
+		    System.out.println("Deferred Task : " + deferredTask);
 		    System.out.println("instance of CSVImporter : " + (deferredTask instanceof CSVImporter));
 		    if (deferredTask instanceof BigTask)
 		    {

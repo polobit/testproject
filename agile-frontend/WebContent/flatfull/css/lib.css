@@ -3758,12 +3758,12 @@ border-radius: 2px;
   	color: white;
   	font-weight: bold;
 }
-.portlet-category-ms-container{
+/*.portlet-category-ms-container{
 	background: transparent url('../../img/switch.png') no-repeat 164px 40px!important;
 }
 .portlet-user-ms-container{
 	background: transparent url('../../img/switch.png') no-repeat 164px 50px!important;
-}
+}*/
 .leaderboard_portlet_header{
 	border-bottom: 1px solid #edf1f2!important;
 }

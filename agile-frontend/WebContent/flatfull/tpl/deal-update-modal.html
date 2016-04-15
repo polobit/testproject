@@ -4,7 +4,7 @@
 <div class="modal-dialog">
     <div class="modal-content" style="border-radius:0px;">
   <div class="modal-header">
-    <button class="close" data-dismiss="modal">x</button>
+    <button class="close" data-dismiss="modal">&times;</button>
     <h3 class="modal-title" style="font-size:18px;">&nbsp;Edit Deal</h3>
   </div>
   <div class="modal-body">
@@ -28,7 +28,7 @@
             <div class="controls col-sm-7" id="owners">
               <select id="owners-list" class="required form-control" name="owner_id"></select>
 
-              <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
+              <img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif">
 
             </div>
         </div>
@@ -312,10 +312,17 @@
                 class="input col-md-8 form-control" placeholder="Add Comment"></textarea>
             </div>
         </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="control-group form-group">
+              <div id="forNoteForm" class="controls"></div>
+              <ul style="display:none;" id="notes" name="notes" class="notes"></ul>
+            </div>
+          </div>
         </div>
       </fieldset>
-
     </form>
+    </div>
     <div class="modal-footer" id="deals-add-footer">
     <span class="error-status" style="color:red;"></span>
     <a href="#" class="btn btn-sm btn-default" id="opportunity_archive" title="Archive deal">Archive</a>
@@ -324,7 +331,6 @@
       Changes</a> <span class="save-status"></span>
   </div>
   </div>
-</div>
 </div>
 </div>
 <!-- End of Modal views -->

@@ -1,9 +1,9 @@
 <script id="deals-collection-template" type="text/html">
   {{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">{{contactShortName}} is not associated with any deals. </h4>
@@ -34,8 +34,8 @@
 <div  class="activity block pos-rlt">
 	<div>
 		<div class="activity-block-owner  thumb-xs pull-left m-r-sm avatar">
-			{{#if pic}}
-				<img class="user-img r r-2x" alt="" src="{{pic}}" >
+			{{#if owner.pic}}
+				<img class="user-img r r-2x" alt="" src="{{owner.pic}}" >
 			{{else}}
 				<img class="user-img r r-2x" src="{{defaultGravatarurl 40}}">
 			{{/if}}
@@ -43,7 +43,7 @@
 		</div>
 		
 <div class="pull-left rightThumbView">			
-		<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color" href="#deal/{{id}}"><div class="text-md text-cap custom-color">{{name}}</div></a></div>
+		<div class="pull-left contact-title-dynamic"><a class="text-md text-cap custom-color" href="#deal/{{id}}"><div class="text-md text-cap custom-color text-ellipsis">{{name}}</div></a></div>
 		<div class="pull-right">
 		<small class="edit-hover m-r-sm text-muted">
          <i class="fa fa-clock-o text-muted m-r-xs"></i>
@@ -68,10 +68,10 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact text-capitalize">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}" class="text-capitalize">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
@@ -93,6 +93,7 @@
 	<div class="clearfix"></div>
 </div>
 <div class="clearfix"></div>
+<input type="hidden" name="{{colorName}}" class="{{colorName}}"/>
 </div>
 </div>
 </script>

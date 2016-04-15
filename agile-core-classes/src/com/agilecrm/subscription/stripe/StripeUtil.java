@@ -322,7 +322,10 @@ public class StripeUtil {
 		try {
 			cu = Customer.retrieve(cus_id);
 
-			cu.getSubscriptions().retrieve(sub_id).cancel(null);
+			com.stripe.model.Subscription subscription = cu.getSubscriptions().retrieve(sub_id);
+			subscription.cancel(null);
+			if(subscription.getPlan().getId().contains("email"))
+				SubscriptionUtil.deleteEmailSubscription();
 			System.out.println("subscription successfully deleted");
 		} catch (AuthenticationException e) {
 			// TODO Auto-generated catch block

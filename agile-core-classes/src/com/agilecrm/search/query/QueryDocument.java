@@ -4,13 +4,19 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
@@ -25,7 +31,6 @@ import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SortExpression;
 import com.google.appengine.api.search.SortExpression.SortDirection;
 import com.google.appengine.api.search.SortOptions;
-import com.google.appengine.api.search.checkers.SearchApiLimits;
 import com.googlecode.objectify.Key;
 
 /**
@@ -319,21 +324,57 @@ public class QueryDocument<T> implements QueryInterface
 	{
 	    SortOptions sortOptions = null;
 	    SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
+
 	    if (orderBy.startsWith("-"))
 	    {
-	    orderBy = orderBy.substring(1);
-		sortExpressionBuilder = sortExpressionBuilder.setDirection(
-			SortDirection.DESCENDING);
+		orderBy = orderBy.substring(1);
+		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.DESCENDING);
 	    }
 	    else
 	    {
-		sortExpressionBuilder = sortExpressionBuilder.setDirection(
-			SortDirection.ASCENDING);
+		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.ASCENDING);
 	    }
 	    sortExpressionBuilder.setExpression(orderBy);
-	    if (orderBy.contains("time") || orderBy.contains("last_contacted"))
+
+	    if (ContactFilterUtil.isCustomField(orderBy))
 	    {
-		sortExpressionBuilder.setExpression(orderBy+"_epoch").setDefaultValueNumeric(0.0);
+		String[] fragments = orderBy.split("_AGILE_CUSTOM_");
+
+		if (fragments.length > 1)
+		{
+		    String type = fragments[1];
+		    com.agilecrm.contact.CustomFieldDef.Type field_type = null;
+		    try
+		    {
+			field_type = com.agilecrm.contact.CustomFieldDef.Type.valueOf(type);
+		    }
+		    catch (Exception e)
+		    {
+
+		    }
+		    orderBy = fragments[0];
+		    if (field_type == null)
+		    {
+			sortExpressionBuilder.setDefaultValueNumeric(0.0);
+		    }
+		    else if (field_type == com.agilecrm.contact.CustomFieldDef.Type.TEXT
+			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.LIST
+			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.TEXTAREA)
+		    {
+			sortExpressionBuilder.setDefaultValue("");
+		    }
+		    else if (field_type == com.agilecrm.contact.CustomFieldDef.Type.DATE
+			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.NUMBER)
+		    {
+			sortExpressionBuilder.setDefaultValueNumeric(0.0);
+		    }
+
+		    sortExpressionBuilder.setExpression(orderBy);
+		}
+	    }
+	    else if (orderBy.contains("time") || orderBy.contains("last_contacted"))
+	    {
+		sortExpressionBuilder.setExpression(orderBy + "_epoch").setDefaultValueNumeric(0.0);
 	    }
 	    else if (orderBy.contains("name"))
 	    {
@@ -677,9 +718,27 @@ public class QueryDocument<T> implements QueryInterface
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
 	    agileCursor.count = availableResults.intValue();
 	}
-
+	if(entities.size() == 10 ){
+		Set<String> set = new HashSet<String>(); 
+		int count = 0;
+		for(Object m : entities){
+			if(m instanceof Contact);
+				Contact contact = (Contact) m;
+				set.add(contact.contact_company_id);
+				count = count+1;
+		}
+		if(count == 10 && set.size()==1){
+			String id = set.iterator().next().toString();
+			Contact contact = ContactUtil.getContact(Long.parseLong(id));
+			if(contact != null){
+				entities.remove(9);
+				entities.add(contact);
+			}
+		}
+	}
 	return entities;
     }
+    
 
     /**
      * Iterates though contact documents in and fetch respective entities from

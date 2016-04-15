@@ -9,6 +9,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.googlecode.objectify.Key;
@@ -224,4 +225,5 @@ public class NoteUtil
     {
 	Note.dao.deleteAll(list);
     }
+    
 }

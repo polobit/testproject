@@ -6,8 +6,18 @@
  * @module Contact management
  * @author Rammohan
  */
+ var Agile_Old_Hash;
 $(function()
 {
+
+	
+	$(window).on("hashchange", function(e){
+		var oldUrl = e.originalEvent.oldURL;
+		if(!oldUrl){
+			 return;
+		}
+		Agile_Old_Hash = oldUrl.split("#")[1];
+	});
 
 	$('body').on('click', '.edit-note', function(e)
 	{
@@ -124,6 +134,9 @@ $(function()
 		var el = $("#noteForm");
 		agile_type_ahead("note_related_to", el, contacts_typeahead);
 	});
+	//when click on emailbutton automatically it takes contact details
+
+	
 
 	/**
 	 * "Hide" event of note modal to remove contacts appended to related to
@@ -166,12 +179,12 @@ $(function()
 			var note = data.toJSON();
 
 			console.log(note);
-			console.log(notesView.collection.toJSON());
 			// Add model to collection. Disabled sort while adding and called
 			// sort explicitly, as sort is not working when it is called by add
 			// function
 			if (notesView && notesView.collection)
 			{
+			console.log(notesView.collection.toJSON());
 				if(notesView.collection.get(note.id))
 				{
 					notesView.collection.get(note.id).set(new BaseModel(note));

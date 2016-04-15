@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.campaignio.tasklets.agile.SendEmail;
 import com.google.appengine.api.NamespaceManager;
 
 public class EmailLinksConversion
@@ -33,6 +34,7 @@ public class EmailLinksConversion
      * Flag whether to append contact data to clicked url or not
      */
     public static String AGILE_EMAIL_PUSH = "1";
+    public static String AGILE_EMAIL_PUSH_EMAIL_ONLY = "2";
 
     /**
      * Validates links present in the email body (either in text or html)
@@ -51,13 +53,18 @@ public class EmailLinksConversion
 	        && !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
 	        && (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(
 	                ".agilecrm.com")) && !str.toLowerCase().contains("www.w3.org")
-	        && !str.toLowerCase().startsWith("http://goo.gl") && !str.toLowerCase().startsWith("http://agle.cc")
+	        && !str.toLowerCase().startsWith("http://agle.cc")
 	        && !str.toLowerCase().startsWith("http://unscr.be"))
 	    return true;
 
 	return false;
     }
 
+    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String pushParam)
+    {
+    	return convertLinksUsingJSOUP(input, subscriberId, campaignId, null, pushParam);
+    }
+    
     /**
      * Converts all links within href in HTML
      * 
@@ -71,7 +78,7 @@ public class EmailLinksConversion
      *            - boolean value to push contact data
      * @return String
      */
-    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, boolean doPush)
+    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String personalEmailTrackerId, String pushParam)
     {
 	// If empty return
 	if (StringUtils.isBlank(input))
@@ -93,7 +100,7 @@ public class EmailLinksConversion
 		domainURL = domainURL.substring(0, domainURL.length() - 1);
 	    }
 
-	    String sid = "", cid = "", push = "", url = "";
+	    String sid = "", cid = "", push = "", url = "", tid = "";
 
 	    // Add contactId as param if not empty
 	    if (!StringUtils.isBlank(subscriberId))
@@ -102,9 +109,17 @@ public class EmailLinksConversion
 	    // Add campaign id as param if not empty
 	    if (!StringUtils.isBlank(campaignId))
 		cid = "&c=" + URLEncoder.encode(campaignId, "UTF-8");
+	    
+	    if(!StringUtils.isBlank(personalEmailTrackerId))
+	    	tid = "&t=" + URLEncoder.encode(personalEmailTrackerId, "UTF-8");
 
-	    if (doPush)
-		push = "&p=" + URLEncoder.encode(AGILE_EMAIL_PUSH, "UTF-8");
+	    // Push parameter
+	    if (StringUtils.isNotBlank(pushParam) && StringUtils.containsIgnoreCase(pushParam, "yes_and_push"))
+	    {
+	    	String param = getPushParam(pushParam);
+	    		
+	    	push = "&p=" + URLEncoder.encode(param, "UTF-8");
+	    }
 
 	    // All href links
 	    for (Element link : links)
@@ -121,7 +136,7 @@ public class EmailLinksConversion
 		{
 		    link.attr("href",
 			    domainURL + "/click?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
-			            + cid + sid + push);
+			            + cid + sid + tid + push);
 		}
 	    }
 
@@ -135,6 +150,16 @@ public class EmailLinksConversion
 
 	return input;
     }
+
+	public static String getPushParam(String typeOfPush)
+	{
+		String param = AGILE_EMAIL_PUSH;
+		
+		if(StringUtils.equalsIgnoreCase(typeOfPush, SendEmail.TRACK_CLICKS_YES_AND_PUSH_AND_EMAIL_ONLY))
+			param = AGILE_EMAIL_PUSH_EMAIL_ONLY;
+		
+		return param;
+	}
 
     /**
      * Replaces http urls with agile tracking urls

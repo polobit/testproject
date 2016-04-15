@@ -22,6 +22,7 @@
             "dynamicName": "name",
             "dynamicValue": "id",
             "fieldType": "dynamicselect",
+            "callback": "update_list_with_disabled",
             "type": "select"
         },
         {

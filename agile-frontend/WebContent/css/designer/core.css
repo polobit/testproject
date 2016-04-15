@@ -48,6 +48,20 @@ padding:0.6em 10px;
 text-align:left;
 }
 
+
+ #spam_button_email{ top:-41px;  }
+ @-moz-document url-prefix() { 
+  #spam_button_email{
+     top:-46px;
+  }
+}
+ #spam_button_email_html{ top:-76px;  }
+ @-moz-document url-prefix() { 
+  #spam_button_email_html{
+     top:-81px;
+  }
+}
+
 #nodeui th {
 border:1px solid #EEEEEE;
 padding:0.6em 10px;
@@ -631,4 +645,9 @@ margin-bottom:10px;
 }
 .anti-blur *{
 	opacity: 1 !important
+}
+.inbound-help-text,.inbound-help-text:hover {
+    text-decoration: none;
+    border-bottom: 1px dashed #b2b0b1;
+    color: #b2b0b1
 }

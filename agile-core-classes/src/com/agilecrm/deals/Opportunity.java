@@ -27,12 +27,15 @@ import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -75,7 +78,14 @@ import com.googlecode.objectify.condition.IfDefault;
 @Cached
 public class Opportunity extends Cursor implements Serializable
 {
-	
+
+    /* enum for color for the deal */
+    public enum Color
+    {
+	VIOLET, INDIGO, BLUE, GREEN, YELLOW, ORANGE, RED, WHITE, BLACK, GREY;
+    }
+
+    public Color colorName;
     /**
      * Opportunity Id.
      */
@@ -202,6 +212,9 @@ public class Opportunity extends Cursor implements Serializable
     @NotSaved
     public String note_subject = null;
 
+    @NotSaved
+    public Long note_created_time = 0L;
+
     /**
      * Related notes objects fetched using notes id's.
      */
@@ -247,6 +260,12 @@ public class Opportunity extends Cursor implements Serializable
      */
     @NotSaved(IfDefault.class)
     private Key<Category> dealSource = null;
+    
+    /**
+     * Total Deal value
+     */
+    @NotSaved
+    public Double total_deal_value = 0d;
 
     /**
      * ObjectifyDao of Opportunity.
@@ -323,8 +342,20 @@ public class Opportunity extends Cursor implements Serializable
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
-   
-    
+
+    }
+
+    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
+	    String track, String ownerId, String deal_color)
+    {
+	this.name = name;
+	this.description = description;
+	this.expected_value = expectedValue;
+	this.milestone = milestone;
+	this.probability = probability;
+	this.track = track;
+	this.owner_id = ownerId;
+	this.colorName = Color.valueOf(deal_color);
     }
 
     public Opportunity(String name, String description, Double expectedValue, Long pipelineId, String milestone,
@@ -339,7 +370,6 @@ public class Opportunity extends Cursor implements Serializable
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
-	
     }
     
     public Opportunity(String name, String description, Double expectedValue, Long pipelineId, String milestone,
@@ -364,12 +394,14 @@ public class Opportunity extends Cursor implements Serializable
      * @return list of contact objects as xml element related with a deal.
      */
     @XmlElement
-    public List<Contact> getContacts()
+    public List<ContactPartial> getContacts()
     {
-	Objectify ofy = ObjectifyService.begin();
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	contacts_list.addAll(ofy.get(this.related_contacts).values());
-	return contacts_list;
+    	return ContactUtil.getPartialContacts(this.related_contacts);
+    }
+    
+    public List<Contact> relatedContacts()
+    {
+    	return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
     public void addContactIds(String id)
@@ -404,24 +436,6 @@ public class Opportunity extends Cursor implements Serializable
 	return 0L;
     }
 
-    @XmlElement(name = "pipeline")
-    public Milestone getPipeline() throws Exception
-    {
-	if (pipeline != null)
-	{
-	    try
-	    {
-		// Gets Domain User Object
-		return MilestoneUtil.getMilestone(pipeline.getId());
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	return null;
-    }
-
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
@@ -430,14 +444,15 @@ public class Opportunity extends Cursor implements Serializable
      *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "owner")
-    public DomainUser getOwner() throws Exception
+    public DomainUserPartial getOwner() throws Exception
     {
 	if (ownerKey != null)
 	{
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(ownerKey.getId());
+		return DomainUserUtil.getPartialDomainUser(ownerKey.getId());
+	    	
 	    }
 	    catch (Exception e)
 	    {
@@ -445,39 +460,6 @@ public class Opportunity extends Cursor implements Serializable
 	    }
 	}
 	return null;
-    }
-
-    /**
-     * Gets picture of owner who created deal. Owner picture is retrieved from
-     * user prefs of domain user who created deal and is used to display owner
-     * picture in deals list.
-     * 
-     * @return picture of owner.
-     * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key.
-     */
-    @XmlElement
-    public String getPic() throws Exception
-    {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-	    if (userprefs != null)
-		return userprefs.pic;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-
-	}
-
-	return "";
     }
 
     /**
@@ -489,7 +471,7 @@ public class Opportunity extends Cursor implements Serializable
     @XmlElement
     public List<Note> getNotes()
     {
-	return Note.dao.fetchAllByKeys(this.related_notes);
+	  return Note.dao.fetchAllByKeys(this.related_notes);
     }
 
     public Long getLost_reason_id()
@@ -563,8 +545,9 @@ public class Opportunity extends Cursor implements Serializable
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
-	if(oldOpportunity==null){
-		 // If the deal is won, change the probability to 100.
+	if (oldOpportunity == null)
+	{
+	    // If the deal is won, change the probability to 100.
 	    if (this.milestone.equalsIgnoreCase(wonMilestone))
 		this.probability = 100;
 
@@ -654,8 +637,7 @@ public class Opportunity extends Cursor implements Serializable
     @PrePersist
     private void PrePersist() throws IOException, JSONException
     {
-    	
-    	
+   	
     // Sets the currency conversion value
     	
     	 try {
@@ -692,8 +674,10 @@ public class Opportunity extends Cursor implements Serializable
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		   }
-    	
-     
+
+	if (colorName == null)
+	    colorName = Color.GREY;
+
 	// Initializes created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
@@ -751,18 +735,34 @@ public class Opportunity extends Cursor implements Serializable
 		// Create note
 		Note note = null;
 		// Create note
-		if (this.note_subject != null)
-		    note = new Note(this.note_subject, this.note_description);
-		else
-		    note = new Note(null, this.note_description);
-		// Save note
-		note.save();
-
-		if (this.id != null)
+		if (this.note_created_time != 0)
 		{
-		    ActivitySave.createNoteAddForDeal(note, this);
-		}
+		    if (this.note_subject != null)
+			note = new Note(this.note_subject, this.note_description, this.note_created_time);
+		    else
+			note = new Note(null, this.note_description, this.note_created_time);
+		    // Save note
+		    note.save();
 
+		    if (this.id != null)
+		    {
+			ActivitySave.createNoteAddForDeal(note, this);
+		    }
+		}
+		else
+		{
+		    if (this.note_subject != null)
+			note = new Note(this.note_subject, this.note_description);
+		    else
+			note = new Note(null, this.note_description);
+		    // Save note
+		    note.save();
+
+		    if (this.id != null)
+		    {
+			ActivitySave.createNoteAddForDeal(note, this);
+		    }
+		}
 		// Add note to task
 		this.related_notes.add(new Key<Note>(Note.class, note.id));
 	    }
@@ -777,8 +777,16 @@ public class Opportunity extends Cursor implements Serializable
 		// Create note
 		Note note = null;
 		// Create note
-		if (this.note_subject != null)
-		    note = new Note(this.note_subject, null);
+		if (this.note_created_time != 0)
+		{
+		    if (this.note_subject != null)
+			note = new Note(this.note_subject, null, this.note_created_time);
+		}
+		else
+		{
+		    if (this.note_subject != null)
+			note = new Note(this.note_subject, null);
+		}
 		// Save note
 		note.save();
 		if (this.id != null)
@@ -887,6 +895,59 @@ public class Opportunity extends Cursor implements Serializable
 	 * if (milestone_changed_time == 0L) milestone_changed_time =
 	 * System.currentTimeMillis() / 1000;
 	 */
+
+    }
+
+    public void addCustomData(CustomFieldData field)
+    {
+	System.out.println("Custom filed received is = " + field);
+	addCustomDataWithoutSaving(field);
+	save();
+
+    }
+
+    public CustomFieldData addCustomDataWithoutSaving(CustomFieldData dealField)
+    {
+	CustomFieldData field = this.getContactFieldByName(dealField.name);
+	String fieldName = field == null ? dealField.name : field.name;
+
+	if (field == null)
+	{
+	    this.custom_data.add(dealField);
+	}
+	else
+	{
+	    field.updateField(dealField);
+	}
+	return field;
+
+    }
+
+    public CustomFieldData getContactFieldByName(String fieldName)
+    {
+	// Iterates through all the properties and returns matching property
+	for (CustomFieldData field : custom_data)
+	{
+	    if (fieldName.equals(field.name))
+		return field;
+	}
+	return null;
+    }
+
+    public void addContactIdsToDeal(List<String> contact_idsList)
+    {
+	List<String> al = new ArrayList<String>();
+	for (String contact_id : contact_idsList)
+	{
+
+	    if (!this.getContact_ids().contains(contact_id))
+	    {
+		al.add(contact_id);
+	    }
+	}
+
+	contact_ids = al;
+	save();
 
     }
 

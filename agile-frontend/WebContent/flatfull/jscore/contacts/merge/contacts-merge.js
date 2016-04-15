@@ -86,7 +86,7 @@ $(function()
 												return;
 								$(this).attr('disabled', 'disabled');
 								$('#contact-merge-cancel').attr('disabled', 'disabled');
-								$('#contact-merge-cancel').after('<img class="contact-merge-loading p-r-xs m-b"  src= "img/21-0.gif"></img>');
+								$('#contact-merge-cancel').after('<img class="contact-merge-loading p-r-xs m-b"  src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 								var checked = false;
 								var selected_fields = [];
 								var table = $('body').find('#merge-contacts-table');

@@ -1,6 +1,8 @@
 
   .jslider .jslider-bg i,
   .jslider .jslider-pointer { background: url(../img/jslider.png) no-repeat 0 0; }
+  
+
 
   .jslider { display: block; width: 100%; height: 1em; position: relative; top: 0.6em; font-family: Arial, sans-serif; }
   .jslider table { width: 100%; border-collapse: collapse; border: 0; }
@@ -38,3 +40,14 @@
   .jslider-single .jslider-value-to,
   .jslider-single .jslider-bg .v,
   .jslider-limitless .jslider-label { display: none; }
+
+  @media all and (max-width: 767px) {
+    .jslider .jslider-pointer {
+      background: url(../img/jslider-mobile.png) no-repeat 0 -54px;
+      width: 31px;
+      height: 30px;
+      top: -9px;
+    }
+    .jslider .jslider-pointer-hover { background-position: 0px -54px; }
+  }
+

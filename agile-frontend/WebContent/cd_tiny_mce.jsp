@@ -368,10 +368,7 @@ function initialize_tinymce_editor(){
             editor.on('change', function(e) {
             	
             	var editor_contents = tinyMCE.activeEditor.getContent();
-            	if(!is_webrule_type()){
-            	editor_contents = remove_script_tags(editor_contents);
-            	tinyMCE.activeEditor.setContent(editor_contents)
-            	}
+            	
                 var isWarning = should_warn(editor_contents);
                 showWarning(isWarning);
             });

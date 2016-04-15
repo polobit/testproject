@@ -41,7 +41,7 @@ var TAG_MODEL_VIEW = Backbone.View
 				 * Checks for last 'tr' and change placement of popover to 'top'
 				 * inorder to prevent scrolling on last row of list
 				 */
-				$(this.el).popover(
+				/*$(this.el).popover(
 						{
 							"rel" : "popover",
 							"trigger" : "click",
@@ -52,7 +52,7 @@ var TAG_MODEL_VIEW = Backbone.View
 							"html" : true,
 							'data-container' : this.el
 						// "data-container" : '.tag'
-						});
+						});*/
 
 
 				$.getJSON('core/api/tags/getstats/' + this.model.get('tag'),
@@ -60,11 +60,20 @@ var TAG_MODEL_VIEW = Backbone.View
 							_that.model.set('availableCount',
 									data.availableCount);
 							console.log(_that.model.toJSON());
-							$(_that.el).attr(
+							$(_that.el).find('.tag_tooltip').tooltip({
+						        title: _that.model.get('availableCount')+ " Contacts",
+						        placement : 'right'
+						    }).on("mouseleave",function(){
+						    	$(".tags-management #actions").hide();
+						    });
+						    
+						    $(_that.el).find('.tag_tooltip').trigger("mouseover");
+						    $(_that.el).find('.details').hide();
+							/*$(_that.el).attr(
 									'data-content',
 									_that.model.get('availableCount')
 											+ " Contacts");
-							$(_that.el).popover('show');
+							$(_that.el).popover('show');*/
 						})
 			},
 			renameTag : function(e) {
@@ -134,6 +143,9 @@ var TAG_MODEL_VIEW = Backbone.View
 																		+ newTag
 																		+ "\". This may take a while. You may see the renamed tag on some contacts while this happens",
 																"top", 5000);
+
+													renameTags(newTag, oldTag);
+													App_Admin_Settings.tagManagement();
 												}
 											});
 
@@ -207,6 +219,7 @@ var TAG_MODEL_VIEW = Backbone.View
 																	.get('tag')
 															+ "\".  You may see the deleted tag on some contacts while this happens",
 													"top", 5000);
+											App_Admin_Settings.tagManagement();
 										}
 									});
 						});
@@ -251,7 +264,7 @@ function append_tag_management(base_model) {
 	console.log($('div[tag-alphabet="' + encodeURI(key) + '"]', this.el))
 
 	var el = itemView.render().el;
-	$(el).addClass('tag bg-white');
+	$(el).addClass('tag bg-white').css("margin-top","10px");
 	
 	var tag_name = base_model.get('tag');
 	if(!isValidTag(tag_name, false)) {
@@ -377,6 +390,10 @@ function saveTag(field) {
 			showNotyPopUp('information', "New tag \"" + model.get('tag')
 					+ "\" created.", "top", 5000);
 
+			// Adds tag to global connection
+			if(tagsCollection && tagsCollection.models)
+				tagsCollection.add(response.toJSON());
+            App_Admin_Settings.tagManagement();
 		}
 	});
 	console.log(App_Admin_Settings);
@@ -390,7 +407,7 @@ function isValidTag(tag, showAlert) {
 	var regexString = '^['+r+']['+r+' 0-9_-]*$';
 	var is_valid = new RegExp(regexString).test(tag);
 	if (showAlert && !is_valid)
-		alert("Tag name should start with an alphabet and can not contain special characters other than underscore, space and hypen");
+		alert("Tag name should start with an alphabet and cannot contain special characters other than underscore and space.");
 	return is_valid;
 }
 

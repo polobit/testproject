@@ -46,7 +46,7 @@ function navigateToDetailsPage(data, name)
 		break;
 	}
 	console.log(model);
-	if (model.entity_type == "contact_entity")
+	if (model.entity_type == "contact_entity" || model.entity_type == "company_entity")
 	{
 		if(model.type == "COMPANY")
 			App_Companies.navigate("company/" + data, { trigger : true });
@@ -93,6 +93,29 @@ function navigateToDetailsPage(data, name)
 
 		console.log(model);
 		updateDocument(new BaseModel(model));
+		return;
+	}
+
+	if(model.entity_type == "tickets")
+	{
+		/*if(!tight_acl.checkPermission('DOCUMENT')){
+			var obj = {};
+			obj.entity = 'Documents';
+
+			getTemplate('no-permission',obj, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$(template_ui).modal('show');
+			}, null);
+
+			return;
+		}*/
+
+		var url = '#ticket/' +  model.id;
+
+		Backbone.history.navigate(url, {trigger : true});
+
 		return;
 	}
 		

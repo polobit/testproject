@@ -119,25 +119,23 @@ public class UserPrefsUtil
      */
     public static String getUserTimezoneFromUserPrefs(Long id)
     {
-	if (id == null)
-	{
-	    // Agile User
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	    if (agileUser == null)
-		return null;
-
-	    // Get Prefs
-	    return getUserPrefs(agileUser).timezone;
-	}
-	else
-	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
-	    if (agileUser == null)
-		return null;
-	    UserPrefs userPrefs = getUserPrefs(agileUser);
-	    return userPrefs.timezone;
-
-	}
+    	String timeZone = null;
+    	
+    	if (id != null){
+    		AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
+    		 if (agileUser != null){
+    			 // Get Prefs
+    		 	timeZone = getUserPrefs(agileUser).timezone;
+    		 }    		
+    	}
+	   
+		if(timeZone == null){
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		    UserPrefs userPrefs = getUserPrefs(agileUser);
+		    timeZone = userPrefs.timezone;
+		}	
+		
+	    return timeZone;
     }
 
     public static String getMapperString(UserPrefs prefs)

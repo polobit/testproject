@@ -228,6 +228,9 @@ public class ContactsSynctoGoogle
 	 * Iterates through each contacts and adds a batch request based on
 	 * whether it is new contact or updated contact
 	 */
+	
+	boolean contactCreate = true;
+	
 	for (int i = 0; i < contacts_list_size; i++)
 	{
 

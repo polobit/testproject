@@ -5,7 +5,7 @@
         <div class="panel-heading">
             <div class="pull-left m-t-xs">Email Templates</div>
 			<div class="pull-right">
-            	<a href="#email-template-add" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
+            	<a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
            		 <span><i class="icon-plus-sign" /></span> New</a>
 			</div>
 			<div class="clearfix"></div>
@@ -14,17 +14,20 @@
 	<div id="slate"></div>
 	{{#if this.length}}
     <div class="table-responsive">
-        <table class="table table-bordered table-striped showCheckboxes panel agile-table table-layout-mob-view" url="core/api/email/templates/bulk" >
+        <table class="table table-bordered table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates"  url="core/api/email/templates/bulk" >
            
             <thead>
                 <tr>
                     <th class="hide">Id</th>                    
-					<th style="width:30%;">Name</th>
+					<th style="width:30%;" class="{{#is_mobile}} p-l-none {{/is_mobile}}">Name {{#is_mobile}} & Subject {{/is_mobile}} </th>
+                    {{#is_mobile}}
+                    {{else}}
                     <th style="width:30%;">Subject</th>
                     <th style="width:40%;"></th>
+                    {{/is_mobile}}
                 </tr>
             </thead>
-            <tbody id="settings-email-templates-model-list" route="email-template/">
+            <tbody id="settings-email-templates-model-list" route="emailbuilder/">
             </tbody>
         </table>
      </div>
@@ -55,10 +58,16 @@
  <script id="settings-email-templates-model-template" type="text/html">
     <td class='data hide' data='{{id}}'></td>
     <td>
-		<div class="table-resp">
+		<div class="table-resp {{#is_mobile}} text-ellipsis {{/is_mobile}}" {{#is_mobile}} style="width:63vw;" {{/is_mobile}}>
     		{{name}}
+            {{#is_mobile}}
+            <br>
+            {{subject}}
+            {{/is_mobile}}
     	</div>
     </td>
+    {{#is_mobile}}
+    {{else}}
     <td>
     	<div class="table-resp">
     		{{subject}}
@@ -71,4 +80,5 @@
           </div>
        {{/if}}
     </td>
+    {{/is_mobile}}
 </script>

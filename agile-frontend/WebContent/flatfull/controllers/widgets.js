@@ -23,6 +23,8 @@ var WidgetsRouter = Backbone.Router
                 "HelpScout/:id" : "HelpScout",
                 "Zendesk" : "Zendesk",
                 "Zendesk/:id" : "Zendesk",
+                "Uservoice" : "Uservoice",
+                "Uservoice/:id" : "Uservoice",
                 // Calling widgets
                 "Sip" : "Sip",
                 "Sip/:id" : "Sip",
@@ -40,17 +42,23 @@ var WidgetsRouter = Backbone.Router
                 "FreshBooks/:id" : "FreshBooks",
                 "Stripe" : "Stripe",
                 "Stripe/:id" : "Stripe",
+                "Braintree" : "Braintree",
+                "Braintree/:id" : "Braintree",
                 "Xero" : "Xero",
                 "Xero/:id" : "Xero",
                 "QuickBooks" : "QuickBooks",
                 "QuickBooks/:id" : "QuickBooks",
+                "PayPal" : "PayPal",
+                "PayPal/:id" : "PayPal",
                 // Ecommerce widgets
                 "Shopify" : "Shopify",
                 "Shopify/:id" : "Shopify",
                 // Custom widget
                 "Custom-widget" : "Custom",
                 "Custom-widget/:id" : "Custom",
-                "Bria" : "Bria", "Bria/:id" : "Bria"
+				"Bria" : "Bria", "Bria/:id" : "Bria",
+				"Skype" : "Skype", "Skype/:id" : "Skype"
+
                 	
             },
 
@@ -70,10 +78,9 @@ var WidgetsRouter = Backbone.Router
                         sort_collection : false,
                         individual_tag_name : 'div',
                         postRenderCallback : function(el) {
-                            var widgetTab = localStorage.getItem("widget_tab");
+                            var widgetTab = _agile_get_prefs("widget_tab");
                             if(!widgetTab || widgetTab == null) {
-                                if(islocalStorageHasSpace())
-                                   localStorage.setItem('widget_tab', "call-tab");
+                                _agile_set_prefs('widget_tab', "call-tab");
                                 widgetTab = "call-tab";
                             }
                             $('#prefs-tabs-content a[href="#'+widgetTab+'"]').tab('show');
@@ -81,8 +88,7 @@ var WidgetsRouter = Backbone.Router
                             $("#prefs-tabs-content .tab-container ul li").off("click");
                             $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
                                 var temp = $(this).find("a").attr("href").split("#");
-                                if(islocalStorageHasSpace())
-                                    localStorage.setItem('widget_tab', temp[1]);
+                                _agile_set_prefs('widget_tab', temp[1]);
                             });
                             build_custom_widget_form(el);
                             /*setTimeout(function() {
@@ -138,10 +144,17 @@ var WidgetsRouter = Backbone.Router
 			/**
 			 * Manages Bria widget
 			 */
-			// Bria : function(id) {
-			// 	addConfigurableWidget(id, "Bria", 'bria-login');
-			// },
-
+			 Bria : function(id) {
+			 	addConfigurableWidget(id, "Bria", 'bria-login');
+			 },
+			 
+			 /**
+			 * Manages Skype widget
+			 */
+			 Skype : function(id) {
+			 	addConfigurableWidget(id, "Skype", 'skype-login');
+			 },
+			 
             /**
              * Manages Rapleaf widget
              */
@@ -161,6 +174,13 @@ var WidgetsRouter = Backbone.Router
              */
             Zendesk : function(id) {
                 addConfigurableWidget(id, "Zendesk", "zendesk-login");
+            },
+            
+            /**
+             * Manages Uservoice widget
+             */            
+            Uservoice : function(id){
+                addConfigurableWidget(id, "Uservoice", "uservoice-login");
             },
 
             /**
@@ -253,6 +273,24 @@ var WidgetsRouter = Backbone.Router
 
             },
 
+           /**
+            *
+            */
+            PayPal : function(id){
+
+               if (!id) {
+                    addOAuthWidget(
+                            "PayPal",
+                            "paypal-login",
+                            ('/paypalScribe?isForAll=' + isForAll + '&return_url='
+                                    + encodeURIComponent(window.location.href)));
+                } else {
+                    addWidgetProfile(id, "PayPal", "paypal-revoke-access",
+                            "core/api/widgets/paypal");
+                }
+
+            },
+
             /**
              * Manages Shopify widget
              */
@@ -293,14 +331,19 @@ var WidgetsRouter = Backbone.Router
                     addOAuthWidget(
                             "Stripe",
                             "stripe-login",
-                            ('/scribe?service=stripe&linkType=widget&isForAll=' + isForAll
-                                    + '&return_url='
-                                    + encodeURIComponent(window.location.href)));
+                            ('/scribe?service=stripe&linkType=widget&isForAll=' + isForAll));                   
                 } else {
                     addWidgetProfile(id, "Stripe", "stripe-revoke-access",
                             "core/api/widgets/Stripe");
                 }
 
+            },
+
+            /**
+             * Manages Stripe widget
+             */
+            Braintree : function(id) {
+               addConfigurableWidget(id, "Braintree", "braintree-login");
             },
 
             /**
@@ -370,12 +413,14 @@ function renderWidgetView(templateName, url, model, renderEle){
         isNew : true,
         data : model,
         postRenderCallback : function(el) {
-            deserializeWidget(model, el);
-            var widgetTab = localStorage.getItem("widget_tab");
+            if(model && model.name != "Stripe"){
+                deserializeWidget(model, el);
+            }
+            var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
             initializeTabListeners("widget_tab", "add-widget");
         }
     });
-
-    $(renderEle).html(widgetModel.render().el);
+    var output = widgetModel.render().el;
+    $(renderEle).html(output);
 }

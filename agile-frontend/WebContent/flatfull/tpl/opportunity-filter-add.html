@@ -1,0 +1,103 @@
+<script id="filter-deals-template" type="text/html">
+<div class="bg-light lter b-b wrapper-md">
+	{{#if id}} 
+		<h3  class="formheading h3 font-thin m-n">Edit Deal Filter
+			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="Use filters to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences." id="element" data-trigger="hover"></span>
+		</h3>
+	{{else}}
+        <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> Add Deal Filter
+        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="Use filters to sort deals with a specific criteria to find patterns. You can save your preferred filters and fetch the deals based on saved preferences." id="element" data-trigger="hover">
+			</span>
+		</h3>
+     {{/if}}
+</div>
+<div class="wrapper-md">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="dealsFilterForm" name="dealsFilterForm" class="form-horizontal">
+				<fieldset>
+					<div class="control-group form-group">
+						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
+						<div class="controls col-sm-6">
+							<input type="text" name="name" class="required form-control" autofocus/>
+						</div>
+					</div>
+					<!-- <div class="control-group form-group">
+						<label class="control-label col-sm-2">View Type<span class="field_req">*</span></label>
+						<div class="controls col-sm-6">
+							<div id="contact_type_filter" name="contact_type_filter">
+								<select name="view_type" id="view_type" class="form-control">
+									<option value="list">List View</option>
+									<option value="milestone">Milestone View</option>
+								</select>
+							</div>
+						</div>
+					</div> -->
+					<div class="control-group form-group">
+						<label class="control-label col-sm-2">Owner</label>
+						<div class="controls col-sm-6" >
+							<select id="owners-list-filters" name="owner_id" class="form-control"></select>
+							<img class="loading-img" src="img/21-0.gif"></img>
+						</div>
+					</div>
+					<div class="control-group form-group" id="filter-track">
+						<label class="control-label col-sm-2">Track</label>
+						<div class="controls col-sm-6" id="track_div">
+							<select id="filter_pipeline" name="pipeline_id" class="form-control"></select>
+							<img class="loading-img" src="img/21-0.gif"></img>
+						</div>
+					</div>
+					<div class="control-group form-group" id="filter-milestone">
+						<label class="control-label col-sm-2">Milestone</label>
+						<div class="controls col-sm-6" id="milestone_div">
+							<select id="milestone" name="milestone" class="form-control"></select>
+							<img class="loading-img" src="img/21-0.gif" style="display:none;"></img>
+						</div>
+					</div>
+						
+					<div class="control-group form-group" id="deal-value-filter">
+						<label class="control-label col-sm-2">Value</label>
+						<div class="controls col-sm-2" id="value_div">
+								<select id="value_filter" name="value_filter" class="filter_type form-control m-b-sm" data="expected_value">
+									<option value="equals">Equals</option>
+									<option value="between">Between</option>
+								</select>
+						</div>
+						<div class="controls col-sm-4 equals">
+							<input type="number" id="value" name="value" placeholder="Value" class="equals form-control positive_number"/>
+						</div>
+						<div class="controls col-sm-2 hide between">
+							<input type="number" id="value_start" name="value_start" class="between form-control positive_number" placeholder="Min Value"/>
+						</div>
+						<div class="controls col-sm-2 hide between"> 
+								<input type="number" id="value_end" name="value_end" placeholder="Max Value" class="between form-control positive_number" />
+						</div>
+					</div>
+					<div class="control-group form-group">
+						<label class="control-label col-sm-2">State</label>
+						<div class="controls col-sm-6" id="archived_div">
+							<span><select id="archived" name="archived" class="form-control">
+									<option value="true">Archived</option>
+									<option value="false" selected>Active</option>
+									<option value="all">All</option>
+							</select></span>
+						</div>
+					</div>
+					<div class="line line-lg b-b"></div>
+					<div class="row">
+						<div class="form-actions col-sm-offset-2 col-sm-10">
+							<a href="#deal-filters" class="btn btn-sm btn-default">Cancel</a>
+							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a> 
+						</div>
+					</div>
+					{{#if id}}
+						<input type="hidden" name="id" value="{{id}}" />
+						<input type="hidden" name="created_time" value="{{created_time}}" />
+						<input type="hidden" name="filter_owner_id" value="{{filterOwner.id}}" />
+					{{/if}}
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+</script>

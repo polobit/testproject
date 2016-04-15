@@ -113,6 +113,7 @@ label {
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 
+
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);

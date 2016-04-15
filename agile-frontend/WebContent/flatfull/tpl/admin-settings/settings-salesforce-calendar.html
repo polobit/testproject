@@ -1,0 +1,75 @@
+<script id="admin-settings-import-salesforce-prefs-template" type="text/html">
+<div class="row">
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <center> 
+                    <img class="m-b-none img-responsive thumb-xl bg-transparent" src="img/icons/logo-salesforce.png">
+                </center>
+            </div>
+            <div class="panel-body">            
+                <form id="salesforce-prefs" name="prefs">
+                        {{#if id}}
+                            <input type ="hidden" value = "{{id}}" name ="id">
+                        {{/if}} 
+                             <input type ="hidden" name="type" value = "SALESFORCE" name ="id">
+                          
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" required="required" class="form-control" id="username" name="userName" placeholder="Username" value="{{username}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" required="required" class="form-control" id="password" name="password" placeholder="Password" value="{{password}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="apiKey">API Token</label>
+                            <input id="apiKey" required="required" name="apiKey" class="form-control"  type="text" placeholder="API Key" value="{{apiKey}}">
+                        </div>
+
+                        <div class="control-group form-group multiple-checkbox checkedMultiCheckbox" name="importOptions">
+                            <label class="control-label">Select Below List Items to Import</label>
+                            <div class="controls">
+                                <div class="checkbox">
+                                    <label class="i-checks i-checks-sm">
+                                    <input id="accounts" type="checkbox" value="accounts" {{#unless id}}checked="checked"{{/unless}}><i></i> Accounts
+                                    </label>
+                                </div>       
+                            </div>
+                            <div class="controls">
+                                <div class="checkbox">
+                                    <label class="i-checks i-checks-sm">
+                                    <input id="contacts" type="checkbox" value="contacts" {{#unless id}}checked="checked"{{/unless}}><i></i> Contacts
+                                    </label>
+                                </div>       
+                            </div>
+                            <div class="controls">
+                                <div class="checkbox">
+                                    <label class="i-checks i-checks-sm">
+                                    <input id="tasks" type="checkbox" value="tasks" {{#unless id}}checked="checked"{{/unless}}><i></i> Tasks
+                                    </label>
+                                </div>       
+                            </div>
+                            <div class="controls">
+                                <small>
+                                    Note : Associated notes will automatically be added to the selected list items.
+                                </small>       
+                            </div>
+                            
+                        </div>
+
+
+                </form>
+                <div class="form-actions text-center">
+                   {{#if id}}
+                    <a class="btn btn-sm btn-danger " data_sync_type="SALESFORCE" data_sync_id="{{id}}" id="sync-import-prefs-delete">Disable</a>
+                   {{else}}
+                     <a type="reset" class="btn btn-default btn-sm" href="#import" onclick="import_tab_Id='salesforce-tab'">Cancel</a>
+                   {{/if}}
+                    <a type="submit" class="save btn btn-sm btn-primary">Import</a>
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
+</script>

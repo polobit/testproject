@@ -7,6 +7,18 @@ import org.json.JSONObject;
 
 public class JSONUtil
 {
+	public static String getJSONValue(JSONObject obj, String keyName)
+    {
+		try {
+			if(obj.has(keyName))
+				  return obj.getString(keyName);
+		} catch (Exception e) {
+		}
+		
+		return null;
+	
+    }
+	
     public static String toJSONString(Object obj)
     {
 	ObjectMapper mapper = new ObjectMapper();

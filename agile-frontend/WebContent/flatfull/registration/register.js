@@ -1,4 +1,4 @@
-function isDuplicateAccount(url, form, successCallback, errorCallback)
+ function isDuplicateAccount(url, form, successCallback, errorCallback)
 		{		 
 			 $.post(url, {}, function(data){
 				 console.log(data);
@@ -72,7 +72,7 @@ function submitForm(form, submit_button)
 
 function getRegisterURL(domain)
 {
-	if(version == null || version === "null")
+	if(typeof version === "undefined" || version == null || version === "null")
 	{
 		return  "https://" + domain + ".agilecrm.com/register";
 	}
@@ -124,19 +124,17 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 
 						var email = $("#" + emailField).val();
 						var domain = $("#" + subdomainField).val();
-
 						var url =  "/backend/register-check?email=" + encodeURIComponent(email) +"&domain="+ domain;
-						 
 						 $(submit_button).attr("disabled", "disabled");
-
+						 
 						isDuplicateAccount(url, form, function(data) {
 						 	 hideEmailErrorMessage();
 						 	  hideDomainErrorMessage();
-						 	$(submit_button).removeAttr("disabled");
-						 	 
-						 	 submitForm(form, submit_button);
+						 	$(submit_button).removeAttr("disabled"); 
+							 submitForm(form, submit_button);
+							 $('.loading-image').removeClass("hide");
 						 }, function(error){
-
+						 	$('.loading-image').addClass("hide");
 						 	$(submit_button).removeAttr("disabled");
 
 						 	if(domain)
@@ -148,6 +146,7 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 								showEmailErrorMessage(error);
 						 	}
 						 	console.log(error);
+						 	
 						 });
 						
 						 

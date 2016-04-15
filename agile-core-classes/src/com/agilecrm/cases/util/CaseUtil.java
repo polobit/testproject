@@ -6,9 +6,11 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Event;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
@@ -151,5 +153,21 @@ public class CaseUtil
 	    conditionsMap.put("related_contacts_key", new Key<Contact>(Contact.class, contactId));
 
 	return dao.listByProperty(conditionsMap);
+    }
+    
+    public static int getCasesOfUser(long startTime,long endTime,Long ownerId)
+    {
+    	try
+    	{
+
+    	    // Gets list of tasks filtered on given conditions
+    	    return dao.ofy().query(Case.class).filter("owner_key", new Key<DomainUser>(DomainUser.class, ownerId))
+    		    .filter("created_time >=", startTime).filter("created_time <", endTime).count();
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    return 0;
+    	}
     }
 }

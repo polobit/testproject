@@ -4,10 +4,21 @@
 
 <div id="integrationstats">
 	<div class="">
-           <ul class="nav nav-tabs" id="integration-stats">
+           <ul class="nav nav-tabs stats-tabs-border" id="integration-stats">
+           {{#is_mobile}}
+
+             <li><a href="#account-stats-new" data-toggle="tab" ><i class="icon-user-following"></i></a></li>
+             <li><a href="#email-stats-new" data-toggle="tab" ><i class="icon-envelope"></i></a></li>
+			 <li><a href="#sms-stats-new" data-toggle="tab"><i class="icon-screen-smartphone"></i></a></li>
+
+			 {{else}}
+
+
              <li><a href="#account-stats-new" data-toggle="tab" >Account</a></li>
              <li><a href="#email-stats-new" data-toggle="tab" >Email</a></li>
 			 <li><a href="#sms-stats-new" data-toggle="tab">SMS</a></li>
+
+			 {{/is_mobile}}
            </ul>
 	</div>
  	<div class="tab-content panel wrapper" id="stats-tab-content">
@@ -174,13 +185,13 @@
 						<tr><td>Delivered</td><td> {{numberWithCommas Delivered}}</td></tr>
 						<tr><td>Undelivered
 						<span class="v-top">
-						<img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
 						data-content="This can happen for a number of reasons including carrier content filtering, availability of the destination handset, etc." 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</td><td>{{numberWithCommas Undelivered}}</td></tr>
 						<tr><td>Failed
 						<span class="v-top">
-						<img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
+						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag-tiny v-top" rel="popover" data-placement="right" data-title:"="" 
 						data-content="This can happen for various reasons including incorrect number, improper number format, queue overflows or  account suspensions. Twilio does not charge you for failed messages." 
 						id="element" data-trigger="hover" data-original-title=""></span>
 						</td><td>{{numberWithCommas Failed}} </td></tr>

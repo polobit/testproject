@@ -13,7 +13,6 @@
             <input name="id" type="hidden" value="{{id}}" /> 
             {{/if}} -->
             <div>
-                <div class="pull-left">
 				{{#if picture}} 
 					<i class="media-grid thumb thumb-wrapper"> 
 						{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
@@ -25,23 +24,18 @@
 				{{else}} 
 					<i class="media-grid"> <img class="thumbnail m-b-none thumb" src="{{emailGravatarurl 50 email}}" /> </i>
 			   	{{/if}}
-                </div>
-			   		<div class="pull-left m-l-xs">
-			   			<span class="block m-t-sm">{{name}}</span>
-                		<span class="block">{{email}}</span>
-                	</div>
-                    <div class="clearfix"></div> 
+			   	<label>{{name}}</label>
 			</div>
             <div class="control-group form-group m-t">
 	            <div class="controls">
 	                <a href="#" class="gmail-share-settings-select text-info" oid={{id}}><i class='icon-plus-sign'/></i> Sharing settings</a>
 	                <span class ="gmail-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
-       				 <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
+       				 <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
         			</span>
 				    <span class="gmail-share-select" style="display:none;">
 				   	<a href="#" class="gmail-share-settings-cancel" name = "gmail" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> Sharing settings</a>
 				   	<span style="vertical-align:text-top;margin-left:-3px">         
-       				 <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
+       				 <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
         			</span>
                     <br>
 				   	<label class="control-label m-t-sm">Select users to share with</label>

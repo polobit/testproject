@@ -1,5 +1,8 @@
 package com.agilecrm.user.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,17 +12,29 @@ import java.util.Set;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
+import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>DomainUserUtil</code> is utility class used to process data of
@@ -43,6 +58,9 @@ public class DomainUserUtil
 {
     // Dao
     public static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
+    
+    // Partial Dao
+    public static PartialDAO<DomainUserPartial> partialDAO = new PartialDAO<DomainUserPartial>(DomainUserPartial.class);
 
     /**
      * Generates a password of length eight characters and sends an email to the
@@ -129,6 +147,64 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldNamespace);
 	}
     }
+    
+    /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static DomainUserPartial getPartialDomainUser(Long id)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+		return partialDAO.get(id, oldNamespace);
+	}
+	catch (Exception e)
+	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+    
+    /**
+     * Gets a user based on its id
+     * 
+     * @param id
+     * @return
+     */
+    public static List<DomainUserPartial> getPartialDomainUsers(String domainname)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+		Map map = new HashMap();
+		map.put("domain", domainname);
+		
+		return partialDAO.listByProperty(map);
+		
+	}
+	catch (Exception e)
+	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
 
     /**
      * Creates domain user key
@@ -153,7 +229,21 @@ public class DomainUserUtil
 
 	try
 	{
-	    return dao.listByProperty("domain", domain);
+	    List<DomainUser> domainUsers = dao.listByProperty("domain", domain);
+
+	    // Now sort by name.
+	    Collections.sort(domainUsers, new Comparator<DomainUser>()
+	    {
+		public int compare(DomainUser one, DomainUser other)
+		{
+			if(one.name != null && other.name != null)
+				return one.name.toLowerCase().compareTo(other.name.toLowerCase());
+			else 
+				return 0;
+		}
+	    });
+
+	    return domainUsers;
 	}
 	finally
 	{
@@ -402,6 +492,32 @@ public class DomainUserUtil
      *            name of the domain
      * @return domain user, who is owner
      */
+    public static Key<DomainUser> getDomainOwnerKey(String domain)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	Key<DomainUser> userKey = null;
+	try
+	{
+		userKey = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).getKey();
+	    if (userKey == null)
+	    	userKey = new Key<DomainUser>(DomainUser.class, getDomainOwnerHack(domain).id);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
+	return userKey;
+    }
+    
+    /**
+     * Gets account owners of the given domain
+     * 
+     * @param domain
+     *            name of the domain
+     * @return domain user, who is owner
+     */
     public static DomainUser getDomainOwner(String domain)
     {
 	String oldNamespace = NamespaceManager.get();
@@ -409,9 +525,9 @@ public class DomainUserUtil
 	DomainUser user = null;
 	try
 	{
-	    user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
+		user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
 	    if (user == null)
-		user = getDomainOwnerHack(domain);
+	    	user = getDomainOwnerHack(domain);
 	}
 	finally
 	{
@@ -597,9 +713,11 @@ public class DomainUserUtil
     {
 	String oldnamespace = NamespaceManager.get();
 	System.out.println("-----------geting Userslist." + userKeys.size());
-
+	
+	System.out.println("oldnamespace: " + oldnamespace);
 	NamespaceManager.set("");
 
+	System.out.println("NamespaceManager.get(): " + NamespaceManager.get());
 	try
 	{
 	    List<DomainUser> userList = dao.fetchAllByKeys(userKeys);

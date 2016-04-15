@@ -12,12 +12,12 @@ var PortletsRouter = Backbone.Router
 			adddashlet : function() {
 
 				// Back to dashboard if gridster not initalized
-				if (!gridster) {
+				/*if (!gridster) {
 					App_Portlets.navigate("dashboard", {
 						trigger : true
 					});
 					return;
-				} 
+				} */
 
 					
 				$('#content').html("<div id='portlets-add-listener'></div>");
@@ -46,29 +46,35 @@ var PortletsRouter = Backbone.Router
 								// Preload images (Images are not showing while
 								// popover if they are not preloaded)
 								preloadImages([
-										'flatfull/img/dashboard_images/Mini-Calendar.jpg',
-										'flatfull/img/dashboard_images/stats.png',
-										'flatfull/img/dashboard_images/Leaderboard.png',
-										'flatfull/img/dashboard_images/account-information.png',
-										'flatfull/img/dashboard_images/Activities.png',
-										'flatfull/img/dashboard_images/Agile-Blog.png',
-										'flatfull/img/dashboard_images/Calls.png',
-										'flatfull/img/dashboard_images/Deals-Funnel.png',
-										'flatfull/img/dashboard_images/Email-opened.png',
-										'flatfull/img/dashboard_images/Events.png',
-										'flatfull/img/dashboard_images/Milestone.png',
-										'flatfull/img/dashboard_images/My-contacts.png',
-										'flatfull/img/dashboard_images/Pending-Deals.png',
-										'flatfull/img/dashboard_images/Revenue-graph.png',
-										'flatfull/img/dashboard_images/Tag-Graph.png',
-										'flatfull/img/dashboard_images/Task-report.png',
-										'flatfull/img/dashboard_images/Task.png',
-										'flatfull/img/dashboard_images/User-Activities.png',
-										'flatfull/img/dashboard_images/Campaign-stats.jpg',
+										updateImageS3Path('flatfull/img/dashboard_images/Mini-Calendar.jpg'),
+										updateImageS3Path('flatfull/img/dashboard_images/stats.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Leaderboard.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/account-information.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Activities.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Agile-Blog.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Calls.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Deals-Funnel.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Email-opened.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Events.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Milestone.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/My-contacts.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Pending-Deals.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Revenue-graph.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Tag-Graph.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Task-report.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Task.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/User-Activities.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Campaign-stats-new.jpg'),
+										updateImageS3Path('flatfull/img/dashboard_images/Quota.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/incoming-deals-new.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/lost-deal-analysis-new.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Average_deviation.png'),
+
 
 								]);
 								// Event initializers
 								initializeAddPortletsListeners();
+								//initializePortletsListeners();
 							}
 						});
 
@@ -112,11 +118,11 @@ function deletePortlet(el) {
 
 	var deleteWarnHTML = "";
 
-	if (header_text && header_text.trim() != "Getting started")
+	if (header_text && header_text.trim() != "Getting Started")
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - "
 				+ header_text.trim() + " " + header_sub_text.trim() + "?";
 
-	else if (header_text && header_text.trim() == "Getting started")
+	else if (header_text && header_text.trim() == "Getting Started")
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - "
 				+ header_text.trim()
 				+ "?<br/>This dashlet can't be added back again.";
@@ -130,6 +136,13 @@ function deletePortlet(el) {
 
 	else if (model.get("name") == "Mini Calendar")
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - Mini Calendar?";
+
+	else if (model.get("name") == "Deal Goals")
+		deleteWarnHTML = "Are you sure you want to delete Dashlet - Deal Goals "
+				+ portlet_utility.getDurationForPortlets(
+						model.get("settings").duration, function(duration) {
+							return duration;
+						}) + "?";
 
 	else
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - Activity Overview "
@@ -163,4 +176,23 @@ function displayTimeAgo(elmnt)
 	console.log($("article.stream-item").parent());
 	
 	$("article.stream-item").parent().addClass("social-striped");
+}
+
+
+function updateImageS3Path(imageUrl){
+
+	if(!imageUrl)
+		  imageUrl = "";
+	
+	try{
+		if(imageUrl){
+			imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
+	    }	
+	}catch(e){}
+		  
+
+	if(!S3_STATIC_IMAGE_PATH)
+		S3_STATIC_IMAGE_PATH = "//doxhze3l6s7v9.cloudfront.net/beta/static/";
+
+	return (S3_STATIC_IMAGE_PATH + imageUrl);
 }

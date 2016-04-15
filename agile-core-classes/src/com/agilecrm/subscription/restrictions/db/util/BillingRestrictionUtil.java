@@ -7,17 +7,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.deferred.EmailsAddedDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 @XmlRootElement
 public class BillingRestrictionUtil {
@@ -83,8 +93,7 @@ public class BillingRestrictionUtil {
 
 	public static BillingRestriction getBillingRestrictionFromDB() {
 		System.out.println(NamespaceManager.get());
-		BillingRestriction restriction = BillingRestriction.dao.ofy()
-				.query(BillingRestriction.class).get();
+		BillingRestriction restriction = getRestrictionFromDB();
 
 		// Gets respective PlanLimits class based on plan.
 		restriction.planDetails = PlanLimits
@@ -97,16 +106,23 @@ public class BillingRestrictionUtil {
 	}
 
 	public static BillingRestriction getBillingRestrictionFromDbWithoutSubscription() {
-		BillingRestriction restriction = BillingRestriction.dao.ofy()
-				.query(BillingRestriction.class).get();
-
+		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
 		if (restriction == null) {
 			restriction = BillingRestriction.getInstance(null, null);
 			restriction.refresh(true);
 			restriction.save();
-
-		}
-
+			return restriction;
+		}	
+		return restriction;
+	}
+	
+	
+	public static BillingRestriction getRestrictionFromDB(){
+		System.out.println("Fetching restriction from db");
+		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+		System.out.println("Done fetching restriction from db");
+		if(restriction.checkToUpdateFreeEmails())
+			restriction.refreshEmails();
 		return restriction;
 	}
 
@@ -165,7 +181,21 @@ public class BillingRestrictionUtil {
 	 */
 	public static BillingRestriction getInstance() {
 		UserInfo info = SessionManager.get();
-
+		
+		String moduleName = VersioningUtil.getCurrentModuleName();
+		
+		//Session.get() may return others session. To avoid we are explicitly setting current namespace billing info.
+		//Added by Sasi on Apr-8-2016 to avoid contact creation when new ticket is received.
+		if("agile-ticket-module".equalsIgnoreCase(moduleName)) {
+			
+			System.out.println("Current moduel is agile-ticket-module..");
+			
+			DomainUser domainOwner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+			info =  new UserInfo("agilecrm.com", domainOwner.email, domainOwner.name);
+			
+			System.out.println("Info..." + info);
+		}
+		
 		if (info == null) {
 			System.out.println("UserInfo is null...");
 			return BillingRestriction.getInstance(null, null);
@@ -271,8 +301,15 @@ public class BillingRestrictionUtil {
 		ErrorMessages errorMessage = ErrorMessages.valueOf(className);
 		String reason = errorMessage == null ? "Limit Reached" : errorMessage
 				.getMessage();
-
+		
+		if(className !=null && className.equalsIgnoreCase("Contact"))
+		{
+		throw new PlanRestrictedException(reason, null);
+		}
+		else
+		{
 		throw new PlanRestrictedException(reason);
+		}
 	}
 
 	public static void throwLimitExceededException(ErrorMessages errorMessage) {
@@ -388,7 +425,24 @@ public class BillingRestrictionUtil {
 
 			return billingRestriction;
 		} catch (Exception e) {
+			System.out.println("got exception while retrieving billing restriction");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
 	}
+	
+	public static void sendFreeEmailsUpdatedMail(){
+		try {
+			EmailsAddedDeferredTask task = new EmailsAddedDeferredTask(NamespaceManager.get());
+			// Add to queue
+			Queue queue = QueueFactory.getQueue(AgileQueues.EMAILS_ADDED_QUEUE);
+			queue.add(TaskOptions.Builder.withTaskName(NamespaceManager.get()).payload(task));
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Task already created with domain: "+NamespaceManager.get());
+			e.printStackTrace();
+		}
+		
+	}
+	
 }

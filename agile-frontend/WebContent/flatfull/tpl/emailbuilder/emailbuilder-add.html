@@ -1,0 +1,127 @@
+<script id="emailbuilder-add-template" type="text/html">
+<div class="custom-animated custom-fadeInUp hide-rainbow">
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel wrapper">
+
+<div id="loadingImgHolder">
+<img class="loading" style="padding-left:10px;padding-right:5px;opacity:0.5;" src= "//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif"></img>
+</div>
+
+            <form id="emailBuilderForm">
+                <fieldset>
+
+<div id="emailBuilderTopOptionsHolder" style="display:none;">
+
+<div class="row n-m">
+
+<div class="col-md-3">
+  <div class="form-group">
+    <b>Name of template:</b> <span class="field_req">*</span><br>
+    <input type="text" class="form-control required" name="nameoftemplate" id="nameoftemplate" placeholder="Name of template">
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="form-group">
+    <b>Subject:</b> <span class="field_req">*</span><br>
+    <input type="text" class="form-control required" name="subject" id="subject" placeholder="Enter subject">
+    <input type="hidden" class="form-control" id="templateid" value="{{#if_equals action "edit"}}{{templateId}}{{/if_equals}}">
+  </div>
+</div>
+
+<div class="col-md-2">
+    <span id="nameoftemplate-msg" class="text-center"></span>
+</div>
+
+<div class="col-md-4">
+     <div class="form-group right m-l-sm">
+        <br>
+        <a href="#email-templates" class="btn btn-default btn-sm">Cancel</a>
+    </div>
+    <div class="form-group right {{#if_equals action "edit"}} m-r-n-sm {{/if_equals}}">
+        <br>
+        {{#if_equals action "edit"}}
+        <button class="btn btn-primary btn-sm btn-addon saveEmailBuilderButton" style="
+    width: 90px;"><i class="icon-plus-sign"></i><span class="saveEmailBuilderButtonText">Save</span></button>
+        <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm m-l-n-xs" data-toggle="dropdown" aria-expanded="false"> 
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu pull-right emailbuilder-copy">
+                                                <li>
+                                                    <a class="sendTestEmailButton">
+                                                        <i class="fa fa-envelope" style="width: 20px;"></i>Send Test
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#emailbuilder-copy/{{templateId}}" id="copy-emailbuilder">
+                                                        <i class="fa fa-clipboard" style="width: 20px;"></i>Copy
+                                                    </a>
+                                                </li>
+                                            </ul>
+        {{else}}
+        <button class="btn btn-primary btn-sm btn-addon saveEmailBuilderButton"><span class="saveEmailBuilderButtonText">Save</span></button>
+        {{/if_equals}}
+    </div>
+    <div class="form-group right m-r-sm"> 
+        <br>&nbsp;&nbsp;<button class="btn btn-default btn-sm" id="mainsourcepreview"><i class="glyphicon-eye-open glyphicon"></i> Preview</button>
+    </div>
+    <!--<div class="form-group right">
+        <br><button class="btn btn-default btn-sm sendTestEmailButton">Send Test Email</button>
+    </div>-->
+</div>
+
+</div>
+
+  <!-- <ul class="nav nav-tabs" style="width:70%">
+    <li class="active"><a href="#emailHtmlVersion" data-toggle="tab">HTML</a></li>
+    <li><a href="#emailTextVersion" data-toggle="tab">Text</a></li>
+  </ul> -->
+
+</div>
+
+<br>
+  <div class="tab-content">
+    <div class="tab-pane active" id="emailHtmlVersion">
+        <div id="emailBuilderHolder">
+    <iframe src="misc/emailbuilder/index.jsp?tmpid={{templateId}}&action={{action}}" id="emailBuilderFrame" frameBorder="0" name="emailBuilderIfr" width="100%" height="0"></iframe>
+        </div>
+    </div>
+    <div class="tab-pane" id="emailTextVersion">
+        <textarea rows="8" cols="8" class="form-control-F-width form-control" name="text_email" id="text_email" style="padding:10px;"></textarea>
+    </div>
+  </div>
+<br>
+
+<div id="attachmentsHolderElement" class="row col-md-6" style="display:none;">
+  <div class="form-group" id="tpl-attachment-select">
+    <b>Attachment:</b><br>
+    <a href="#" class="addAttachmentLink text-info"><i class='icon-plus-sign'/></i> Add Attachment</a>
+    
+    <span id="attachmentSelectBoxHolder" style="display:none;">
+        <select id="attachmentSelectBox" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
+        </select>
+        <a href="#" class="btn btn-default btn-sm attachmentCancelBtn">Cancel</a>
+        <a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm attachmentAddBtn">Add</a>
+        <span id="attachmentSelectBoxRequired" for="attachmentSelectBox" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+    </span>
+
+    <span id="attachmentHolder" style="display:none">
+        <div class="email-attchment-bg form-control inline-block">
+            <div id="attachment_text" class="text-ellipsis"></div>
+            <input type="hidden" id="attachment_id" name="attachment_id" value=""/>
+        </div> 
+        <a href="#" class="attachmentCancelBtn pos-rlt pos-t-n-xs"><i class="icon-remove-circle"></i></a>     
+    </span>
+
+  </div>
+</div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</script>

@@ -130,7 +130,7 @@
 						 encodeURIComponent(json.body);
 					
 					// Shows message 
-				    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
+				    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
 				    $("#msg", this.el).append($save_info);
 					$save_info.show().delay(2000).fadeOut("slow");
 					

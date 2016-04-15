@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+
+	<!--  ITE8 Is -->
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	
+	<title>Agile</title>		
+
+	<!-- include jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+	
+	<!-- include jQuery UI autocomplete and dependencies - Naresh 30/10/2013-->
+	<script src="js/lib/jqueryui/jquery.ui.widget.min.js"></script>
+	<script src="js/lib/jqueryui/jquery.ui.position.min.js"></script>
+	<script src="js/lib/jqueryui/jquery.ui.menu.min.js"></script>
+	<script src="js/lib/jqueryui/jquery.ui.autocomplete.min.js"></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js" type="text/javascript"></script>
+	
+	<!-- Ajax Manager UI -->
+	<script src="js/lib/ajaxm/ajaxq.js" type="text/javascript"></script>
+
+	<!-- Tooltip, Validator - jquerytools -->
+	<script src="js/lib/jquerytools/tooltip.js" type="text/javascript"></script>
+	<script src="js/lib/jquerytools/validator.js" type="text/javascript"></script>
+
+	<!-- Draw2D -->
+	<script src="js/lib/draw2d/draw2d.js" type="text/javascript"></script>
+	<script src="js/lib/draw2d/shape-all.js" type="text/javascript"></script>
+	<script src="js/lib/draw2d/serializer.js" type="text/javascript"></script>
+	<script src="js/lib/draw2d/deserializer.js" type="text/javascript"></script>
+
+	<!-- JSON Library -->
+	<script src="js/lib/json/json2.js" type="text/javascript"></script>
+
+	<!-- Translator -->
+	<script src="js/task-designer/translator.js" type="text/javascript"></script>
+
+	<!-- Invox JS -->
+	<script src="js/task-designer/invox.js" type="text/javascript"></script>
+
+	<!-- Invox Form Validator -->
+	<script src="js/task-designer/formvalidator.js" type="text/javascript"></script>
+ 
+	<!-- Grid JS -->
+	<script src="js/task-designer/grid.js" type="text/javascript"></script>
+<script src="js/task-designer/audiogrid.js" type="text/javascript"></script>
+
+	
+	<!-- include the Global Path -->
+	<script src="js/task-designer/globals.js" type="text/javascript"></script>
+
+	<!-- Core -->
+	<script src="js/task-designer/core.js" type="text/javascript"></script>
+
+	<!-- UI -->
+	<script src="js/task-designer/ui.js" type="text/javascript"></script>
+	
+	<!--  Addon (+) -->
+	<script src="js/task-designer/addon.js" type="text/javascript"></script>
+	
+	<!-- Toolbar -->
+	<script src="js/task-designer/toolbar.js" type="text/javascript"></script>
+
+	<!-- Designer -->
+	<script src="js/task-designer/designer.js" type="text/javascript"></script>
+	<script src="js/task-designer/dynamicnodes.js" type="text/javascript"></script>
+	
+
+	<!-- Node UI -->
+	<script src="js/task-designer/nodeui.js" type="text/javascript"></script>
+	
+	<!-- Desinger Util functions Naresh 30/10/2013 -->
+    <script src="js/task-designer/designerutil.js" type="text/javascript"></script>
+	
+	<!-- YQL Cross Domain -->
+	<script src="js/task-designer/yql.js" type="text/javascript"></script>
+
+	<!-- Context Menu -->
+	<script src="js/lib/contextmenu/contextmenu.js" type="text/javascript"></script>
+
+	<!-- Deserialize -->
+	<script src="js/lib/deserialize/deserializeform.js" type="text/javascript"></script>
+
+	
+	<!-- Block UI -->
+	<script src="js/lib/blockui/jquery.blockUI.js"></script>
+	
+	<!--  Multi  -->
+	<script src="js/lib/multifield/jquery.multiFieldExtender.min.js"></script>
+	
+	<!--  Tiny MCE Editor -->
+	<script src="js/task-designer/tinymce/tinymce.min.js" type="text/javascript"></script>
+
+	<!-- tooltip, tabs, validator styling -->
+	<link rel="stylesheet" type="text/css" href="css/designer/core.css" />
+	<link rel="stylesheet" type="text/css" href="css/designer/menubar.css" />
+	<link rel="stylesheet" type="text/css" href="css/designer/tooltip.css" />
+	<link rel="stylesheet" type="text/css" href="css/designer/validator.css" />
+
+	<!-- context menu css -->
+	<link rel="stylesheet" type="text/css" href="css/designer/contextmenu.css" />
+
+	<!-- Catalog -->
+	<link rel="stylesheet" type="text/css" href="css/designer/catalog.css" />
+
+	<!-- Uploadify -->
+	<link rel="stylesheet" href="css/designer/uploadify/uploadify.css" type="text/css"/>
+
+
+	<!-- Draw 2d -->
+	<link rel="stylesheet" type="text/css" href="css/designer/draw2d.css" />
+
+	<!--<link type="text/css" href="css/black-tie/jquery-ui-1.8.2.custom.css" rel="stylesheet" />-->
+	<link rel="stylesheet" type="text/css" href="css/designer/start/jquery-ui-1.8.5.custom.css" />
+
+	<!-- Theme Switcher -->
+	<!--<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+	<script type="text/javascript"src="http://jqueryui.com/themeroller/themeswitchertool/"></script>	
+ -->
+ 
+ <style>
+ 
+/* To avoid box shadow by default in firefox*/
+ :-moz-ui-invalid {
+  box-shadow:none;
+}
+
+ </style>
+</head>
+
+<body>
+
+
+
+
+<!-- Place holder for the toolkit - designer and toolbars -->
+
+<div id = "maincontainer">
+
+	<div id = "designercontainer">
+
+		<div id="designer" class="ui-widget-content">
+		
+			<!-- Designer -->			 
+			<div id = "paintarea" style="padding-top:15px">
+				
+				<!-- Toolbar -->
+				<div class="toolbar_content">
+				
+				<!-- Tool bar Padding, name & Horizontal line (Yasin/3-09-10) -->
+				 <div id="toolbartabs" style="width:70px;margin:0 6px 6px;font-size:9px;">
+					<ul style="display: none;">
+						<!-- <li><a href="#toolbar" style="padding: 0.5em 0.4em">Email</a></li>
+						<li><a href="#advanced" style="padding: 0.5em 0.4em">SMS</a></li>
+						 -->
+						 <li><a href="#toolbar" >1</a></li>
+						<!-- <li><a href="#advanced" >2</a></li> -->
+						 
+					</ul>
+				  
+				    <div id="toolbar" class="ui-widget ui-widget-content ui-corner-all " style="font-size:9px;padding:0;">
+						<div id="leftmenunodetemplate" class="nodetitle" style="display:none;" align="center">
+							<div style="cursor:move;">
+							<img border="0" style="margin:6px 6px;"/>
+							<label class="ui-widget" id="name"></label>
+							</div>
+							<hr style="width:70%" class="ui-widget-content"/>
+					    </div>
+				    </div>
+				
+				 <!-- <div id="advanced" class="ui-widget ui-widget-content ui-corner-all " style="font-size:9px;padding:0;">
+				    </div>
+				    
+				    <div id="leftmenunodetemplatetab" class="nodetiletab" style="display:none;" align="center">
+							<div style="cursor:move;">
+							<img border="0" style="margin:6px 6px;"/>
+							<label class="ui-widget"  id="name"></label>
+							</div>
+							<hr style="width:70%" class="ui-widget-content"/>
+					 </div>
+				  </div> 
+				-->
+				  
+				  
+			<!-- Catalog Add more image(below toolbar)  (yasin/3-09-10)  --> 
+			<!--  <div class="addmorebutton ui-widget ui-widget-content ui-corner-all"> 
+				     <div align="center"> 
+					 <img  style="cursor:pointer;" id="showcatalog" src="css/task-designer/images/draw2d/add-more.png" /></div> 
+				</div> 
+			 -->		
+			</div>
+		
+		</div>
+		
+
+	</div>
+</div>	
+<!-- End of Designer -->
+
+
+<!-- Node Template UI -->
+<div id="nodeui" style="display:none">
+</div>
+
+
+<!-- Grid popup template -->
+<div id="gridpopup" style="display:none" class="ui-widget">
+	<form>
+		<!-- the tabs. li will added depending on the category -->
+		<fieldset>
+			<div class="tabs"><ul></ul></div>
+		</fieldset>
+
+		<div id="errorsdiv" style="padding:2px 4px;"></div>
+	</form>
+</div>
+<!-- End of Grid Popup -->
+
+<!-- Node Template -->
+
+<!--  Node ui changes (Yasin/3-09-10)-->
+<div style="display:none">
+	<form id="nodetemplate" class="ui-widget"  onsubmit="return false;">
+		<fieldset>
+			<div style="display:block; height:80px; width:590px; ">
+				<div style="display:inline;" >
+					
+					<div  style="width:380px;float:left;" >	
+						<img id="icon" border='0' src='' width="66px" height="66px" style="float:left;margin-right: 10px"/>
+						<div style="height:44px;overflow:auto;padding: 10px;" class="ui-widget-content ui-corner-all">
+							<span  id="info" style="line-height: 1.5;font-weight: bold;"></span>
+						</div>
+					</div>
+					<div style="float:left;width:185px;margin-left: 10px;padding: 5px;display: block;" class="ui-widget-content ui-corner-all">
+						<label style="line-height: 2;">Node Name:</label>
+						
+						<input type="text" name="nodename" required="Yes" style="padding:2px;width: 150px;background: url('images/draw2d/mouseoveredit.png');background-repeat: no-repeat ;background-position: 134px;" title="You can edit node name." />
+						<!-- <img src="images/edit1.png" style="width: 16px;vertical-align: middle;"/>  -->
+					</div>	
+					
+				</div>
+
+				
+			</div>
+			
+			<!-- the tabs. li will added depending on the category -->
+			<div class="tabs">
+				<ul></ul>
+				
+			</div>
+		</fieldset>
+<!--  End of node ui changes (Yasin/3-09-10)-->
+		<div id="errorsdiv" style="padding:2px 4px;"></div>
+	</form>
+</div>
+<!-- End of Node Template -->
+
+<!-- Context Menu -->
+<div class="contextMenu" id="myMenu">
+	<ul>
+	  <li class="edit"><a href="#edit"></a></li>
+	  <li class="delete"><a href="#delete"></a></li>
+	 <li class="duplicate"><a href="#duplicate"></a></li>
+	</ul>
+</div>
+<!-- End of Context Menu -->
+
+
+
+<!--   Connectors -->
+<div style="display:none" id="connectortemplate">
+	<form class="ui-widget"  onsubmit="return false;">
+		<fieldset>
+			<div style="display:inline;">
+				<p id="info"></p>
+				<!-- <div><b>Author: </b><div id="author" style="display:inline;"></div></div>
+				<div><b>Company: </b><div id="company" style="display:inline;"></div></div>-->
+			</div>
+
+			<!-- the tabs. li will added depending on the category -->
+			<div class="tabs">
+				<ul></ul>
+			</div>
+		</fieldset>
+
+		<div id="errorsdiv" style="padding:2px 4px;"></div>
+	</form>
+</div>
+<!-- End of Connector Template -->
+
+
+<!--  Add extension Port-->
+<div id="addextension" style="display:none;">
+	<form onSubmit="return false;" >
+		<div>
+			<label for="Name">Name</label><input type="text" fieldtype="input" ismultiple="true" multiple="multiple" id="name" name="name" required="required" label="Name"/>
+		</div>
+		<div>
+			<label for="Number">Number</label><input type="number" fieldtype="input" max="999" ismultiple="true" multiple="multiple" id="number" name="number" required="required" label="Number"/>
+		</div>
+		<div id="errorsdiv" style="padding:2px 4px;">
+		</div>
+	</form>
+</div>
+<!--  Add extension -->
+
+
+<!-- Catalog container --> 
+<div id="catalog" class="ui-widget ui-widget-header ui-corner-all" style="display:none"> 
+	<select id="catalogfilter" style="margin:0 10px"></select> 
+	<input id="catalogsearch" style="margin:0 10px"/><button id="catalogsearchbutton">Search</button>	
+</div> 
+<!-- End of Catalog container --> 
+ 
+<!-- Catalog template --> 
+<ul id="catalogtemplate" class="column" style="display:none;list-style-type:none"> 
+        <li> 
+		<!--class block is added on the catalogtemplate which gives each block on template--> 
+		<div class="catalogtemp ui-widget ui-widget-content ui-corner-all"> 
+			<!-- name --> 
+			 <center><img id="icon" width="66px" height="66px" border='0' src=''/></center> 
+			 <div id="name" class="catalogname"></div> 
+			 <div id="info" class="cataloginfo"></div> 
+			<!-- <div id="author"></div>
+			 <div id="company"></div>  -->	
+			<!-- Add --> 
+			<button id="add" style="float:right;margin:5px 0">Add this</button> 
+    		</div> 
+         </li> 
+</ul> 
+<!-- End of Catalog template --> 
+
+<!-- addons tabs Ramesh 12/10/2010--> 
+<div id="addontabs" style="display:none"> 
+	<ul> 
+		<li><a href="#crmAddons">Contact</a><br /></li>
+		<li><a href="#emailAddons">Email</a><br /></li>
+		<li><a href="#mobileAddons">Mobile</a><br /></li> 
+		<li><a href="#webAddons">Web</a><br /></li>	
+		<li><a href="#socialAddons">Social</a><br /></li>
+		 <!--    <li><a href="#socialAddons">Social</a><br /></li> 
+		 <li><a href="#urlAddons">URL</a><br /></li> -->
+		<li><a href="#utilitiesAddons">Utilities</a><br /></li> 
+		<li><a href="#developersAddons">Developers</a><br /></li> 
+	</ul> 
+	
+	<div id="crmAddons"></div> 
+	<div id="emailAddons"></div>
+	<div id="webAddons"></div>
+	<div id="socialAddons"></div>
+	<div id="mobileAddons"></div> 
+	 <!--   <div id="socialAddons"></div> 
+	<div id="urlAddons"></div>  -->
+	<div id="utilitiesAddons"></div> 
+ 	<div id="developersAddons"></div> 
+ 
+ 
+</div> 
+<!-- end of addons Tabs --> 
+
+
+</div>
+
+<script>
+	var parentTaskDesignerJSON;
+	try {
+	 parentTaskDesignerJSON = JSON.stringify(parent.App_Ticket_Module.macroModelview.model.toJSON().actions);
+	} catch (e) {
+	}
+	
+	// Default Nodes to be populated
+	var First_Nodes_Toolbar_Global = new Array(
+			"json/nodes/ticket/macro/status.js",
+			"json/nodes/ticket/macro/priority.js",
+			"json/nodes/ticket/macro/type.js",
+			"json/nodes/ticket/macro/email_user.js",
+			"json/nodes/ticket/macro/email_group.js",
+			"json/nodes/ticket/macro/group.js",
+			"json/nodes/ticket/macro/assignee.js",
+			"json/nodes/ticket/macro/tags.js");
+
+	var Second_Nodes_Toolbar_Global = new Array();
+	
+	function getUserTicketGroups(){
+		
+		alert("in");
+	}
+</script>
+
+</body>
+</html>
+

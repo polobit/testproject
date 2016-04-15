@@ -61,12 +61,22 @@ function generateRadioUI(uiFieldDefinition) {
     // Select options will be json pairs (key,values)	
     var options = uiFieldDefinition.options;
 
+    var eventHandler = uiFieldDefinition.eventHandler;
+    var event = uiFieldDefinition.event;
+    var style = uiFieldDefinition.style ? getStyleAttribute(uiFieldDefinition.style) : "" ;
+
     // Add all elements defined
     var selectOptionAttributes = "";
     $.each(
     options, function (key, value) {
 
-        var input = "<input type=\"radio\" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + " >" + value + "</input>";
+        var input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\" >" + value + "</input>";
+ 
+        if(event && eventHandler){
+        	input = "<input type=\"radio\""+ style  +" name=\"" + uiFieldDefinition.name + "\" value=\"" + key + "\""+event+"="+eventHandler+"(this,'"+ uiFieldDefinition.target_type +"')"+">" + value + "</input>";
+        }
+        
+
         selectOptionAttributes += input;
     });
 
@@ -124,10 +134,20 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var eventHandler = uiFieldDefinition.eventHandler;
 	var event = uiFieldDefinition.event;
 
-	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+
+	// Useful for changes after select list loaded
+	var callback = uiFieldDefinition.callback;
+
+    var attr = "";
+
+	if(type == "multiselect")
+		attr = "multiple";
+
+	var selectContainer = $("<select "+ attr +" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+
 
 	if(event && eventHandler)
-		selectContainer = $("<select id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
+		selectContainer = $("<select "+ attr +" id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
 	
 	// For From Email select, options need to rearranged
 	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")
@@ -150,7 +170,20 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	}
 
 	// Fetches data and fill select
-	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type)
+	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($select, data)
+			{
+				try
+				{
+					if(callback)
+						{
+							window[callback]($select, data);
+						}
+				}
+				catch(err)
+				{
+					console.log('error occured...' + err);
+				}
+			});
 	
 	return selectContainer;
 }
@@ -196,13 +229,13 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 				
 				var appendName = eval("json."+ appendNameField);
 				
-				// Append name to email like Naresh <naresh@agilecrm.com>
+				// Append name to email like Naresh <naresh@agilecrm.com    >
 				if(key!= undefined && appendName != undefined)
 					key = appendName + " &lt;"+key+"&gt;";
 				
 				if(key != undefined && value != undefined)
 				{
-					
+					console.log(key); 
 					if(key.indexOf("*") == 0)
 					{
 						key  = key.substr(1);
@@ -268,6 +301,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	options = getTaskCategories("categories");
     }
 
+
     if(options == null)
     	options = "";
     
@@ -298,15 +332,17 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
   
     if(uiFieldDefinition.fieldType == "campaign_list")
     return "<select multiple name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
-     
+    
+
+
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
-    return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
+    return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + " " + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+ " " + set_event(uiFieldDefinition) + " " + set_attrs(uiFieldDefinition) + "> " + selectOptionAttributes + "</select>";
            
 }
 
 function generateMilestonesSelectUI(uiFieldDefinition)
 {
-	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id +"'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + "</select>");
 	var options = uiFieldDefinition.options;
 	var selectOptionAttributes ="";
 	
@@ -389,6 +425,10 @@ function generateDefaultUI(uiFieldDefinition) {
 
     var tagName = uiFieldDefinition.fieldType;
 
+    // Event and Event Handler
+    var event = uiFieldDefinition.event;
+    var eventHandler = uiFieldDefinition.eventHandler;
+   
     // Attributes
     var attributes = "";
     
@@ -417,13 +457,13 @@ function generateDefaultUI(uiFieldDefinition) {
     }
     
     // Add checked
-      /* 
+      
 	  //This is appended 'checked' for all attributes.( commented by yasin(13-09-10))
 	
 	  if(isChecked)
 	  attributes += " checked";
 	 
-	  */ 
+	  
     
     // alert(tagName +":" + attributes);
     // Adds tag and attributes
@@ -434,7 +474,7 @@ function generateDefaultUI(uiFieldDefinition) {
 		 return ("<" + tagName + " " + attributes + " />");
 	}else
 
-    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style)+"/>";
+    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style) + " " + set_event(uiFieldDefinition) + "/>";
 
 }
 //Bhasuri 
@@ -451,6 +491,36 @@ function getStyleAttribute(styleAttributes)
 	
 		return style+"'";
 	}
+
+function set_event(uiFieldDefinition)
+{
+	var event = uiFieldDefinition.event;
+	var eventHandler = uiFieldDefinition.eventHandler;
+	var target_type = uiFieldDefinition.target_type;
+
+	if(!event || !eventHandler)
+		return "";
+
+	if(eventHandler.indexOf("(") == -1 && eventHandler.indexOf(")") == -1)
+	{
+		if(target_type)
+			eventHandler = eventHandler+"(this,'"+target_type+"')";
+		else
+			eventHandler = eventHandler+"(this)";
+	}
+
+	return event + "=" + "\"" + eventHandler + "\"";
+}
+
+function set_attrs(uiFieldDefinition)
+{
+	var attr = "";
+
+	if(uiFieldDefinition.invisible)
+		attr = "invisible" + "=" + uiFieldDefinition.invisible;
+
+	return attr;
+}
 
 function loadTinyMCE(name)
 {
@@ -505,8 +575,8 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 
 	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a></label><br/><br/> ";
 	
-	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' type='textarea' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea> ";		
-	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 20px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
+	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea> ";		
+	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 35px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
 	$(htmlDiv).appendTo(container);	
 }
@@ -673,7 +743,9 @@ function _generateUIFields(selector, ui) {
 
         // Radio
         if (uiFieldType == "radio") {
-	    
+        	addLabel(uiFieldDefinition.label,container);
+	    	uiField = generateRadioUI(uiFieldDefinition);
+	    	$(uiField).appendTo(container);
             continue;
         }
 
@@ -688,8 +760,12 @@ function _generateUIFields(selector, ui) {
           
            // Target element to insert merge field on option selected
            if("target_type" in uiFieldDefinition)
-        	   uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField");
-           
+           {
+           	if(!uiFieldDefinition.eventHandler)
+           	   uiFieldDefinition.eventHandler = "insertSelectedMergeField";
+           	
+        	   uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.eventHandler);
+           }
            else
         	   uiField = generateSelectUI(uiFieldDefinition);
            
@@ -919,9 +995,9 @@ function constructUI(selector, uiDefinition) {
     
  
   
-
+	 
    // select all desired input fields and attach tooltips to them``
-   selector.find("input").tooltip({
+   selector.find("input").not(":radio").tooltip({
 
        // place tooltip on the right edge
        position: "center right",

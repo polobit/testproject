@@ -27,6 +27,16 @@ var portlet_utility = {
 		$("#deals", elData).find(
 				'option[value=' + base_model.get("settings").deals + ']').attr(
 				"selected", "selected");
+		if(base_model.get("name") == "Deals Funnel" && base_model.get("settings")["split-by"]) {
+			$("#deals-funnel-split-by", elData).find(
+					'option[value=' + base_model.get("settings")["split-by"] + ']').attr(
+					"selected", "selected");
+		}
+		else if(base_model.get("name") == "Deals Funnel") {
+			$("#deals-funnel-split-by", elData).find(
+					'option[value=revenue]').attr(
+					"selected", "selected");
+		}
 	},
 
 	/**
@@ -125,6 +135,7 @@ var portlet_utility = {
 		}
 	},
 
+
 	/**
 	 * getting default portlet settings for all portlets
 	 */
@@ -181,8 +192,28 @@ var portlet_utility = {
 		} else if (portlet_type == "USERACTIVITY" && p_name == "Campaign stats") {
 			json['duration'] = "yesterday";
 			json['campaign_type'] = "All";
+		}else if (portlet_type == "USERACTIVITY" && p_name == "Campaign graph") {
+			json['duration'] = "1-month";
+			json['campaign_type'] = "All";
 		}
+		else if (portlet_type == "DEALS" && p_name == "Deal Goals") {
+			json['duration'] = "this-month";
+		} else if (portlet_type == "DEALS" && p_name == "Incoming Deals") {
+			json['type'] = "deals";
+			json['frequency'] = "daily";
+			json['duration'] = "1-week";
+		} else if (portlet_type == "DEALS" && p_name == "Lost Deal Analysis") {
+			json['duration'] = "1-week";
+		}
+		else if (portlet_type == "TASKSANDEVENTS" && p_name == "Average Deviation") {
+			json['duration'] = "1-day";
+		}
+		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
+			json['activity_type'] = "ALL";
+			json['duration'] = "this-quarter";
+		}	
 		return json;
+	
 	},
 
 	/**
@@ -299,7 +330,12 @@ var portlet_utility = {
 			"Account Details" : "portlets-account",
 			"Mini Calendar" : "portlets-minicalendar",
 			"User Activities" : "portlets-activites",
-			"Campaign stats" : "portlets-campaign-stats-report"
+			"Campaign stats" : "portlets-campaign-stats-report",
+			"Campaign graph" : "portlets-campaign-graph-report",
+			"Deal Goals" : "portlets-deal-goals",
+			"Incoming Deals" : "portlets-incoming-deals",
+			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
+			"Average Deviation" : "portlets-Tasks-Deviation",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -382,6 +418,19 @@ var portlet_utility = {
 			});
 			break;
 		}
+		case "Campaign graph": {
+			that.get_campaign_stats_portlet_header(base_model, function(
+					header_name) {
+				$(el).find(".campaign_graph_header").html(header_name);
+			});
+			break;
+		}
+
+		case "Deal Goals": {
+			$(el).find('.portlet_body').parent().css('background',
+					'#f0f3f4');
+			break;
+		}
 		case "Stats Report": {
 			$(el).find('.stats_report_portlet_body').parent().css('background',
 					'#f0f3f4');
@@ -434,6 +483,7 @@ var portlet_utility = {
 						sortKey : "-created_time",
 						postRenderCallback : function(p_el) {
 							portlet_utility.addWidgetToGridster(base_model);
+							contactListener(p_el);
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -458,6 +508,7 @@ var portlet_utility = {
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 								$(".time-ago", p_el).timeago();
+								initializePortletsListeners();
 							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
@@ -491,16 +542,24 @@ var portlet_utility = {
 			break;
 		}
 		case "Pending Deals": {
+			var options="";
+			if (base_model.get('settings').track != undefined
+					&& base_model.get('settings').track != "anyTrack") 
+				options+='&track='+base_model.get('settings').track;
+			if (base_model.get('settings').milestone != undefined
+					&& base_model.get('settings').milestone != "anyMilestone")
+				options+='&milestone='+base_model.get('settings').milestone;
 			App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View(
 					{
 						url : '/core/api/portlets/pending-deals?deals='
-								+ base_model.get('settings').deals,
+								+ base_model.get('settings').deals+options,
 						templateKey : 'portlets-opportunities',
 						sort_collection : false,
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 								$(".time-ago", p_el).timeago();
+								initializePortletsListeners();
 							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
@@ -550,6 +609,7 @@ var portlet_utility = {
 											.getStartAndEndDatesOnDue(start_date_str),
 									portlet_utility
 											.getStartAndEndDatesOnDue(end_date_str));
+							initializePortletsListeners();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -573,6 +633,7 @@ var portlet_utility = {
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
 							portlet_utility.addWidgetToGridster(base_model);
+							initializePortletsListeners();
 						}
 					});
 			portlet_utility.renderPortletsInnerCollection(
@@ -651,8 +712,25 @@ var portlet_utility = {
 			break;
 		}
 		case "User Activities": {
+			var options="?";
+			if(base_model.get('settings').activity_type == undefined)
+					options+='&entity_type=ALL';
+				else
+				options+='&entity_type='+base_model.get('settings').activity_type;
+			if(base_model.get('settings').duration == undefined){
+				start_date_str="this-quarter-start";
+				end_date_str="this-quarter-end";
+				base_model.get('settings').duration='this-quarter';
+			}
+			if (base_model.get('settings').owner != undefined
+					&& base_model.get('settings').owner != "") 
+				options+='&user_id='+base_model.get('settings').owner;
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
-				url : '/core/api/portlets/customer-activity',
+				url : '/core/api/portlets/customer-activity'+options
+				+ '&start_time='
+				+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&end_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str),
 				sortKey : 'time',
 				descending : true,
 				templateKey : "portlets-activities-list-log",
@@ -664,6 +742,7 @@ var portlet_utility = {
 
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 						$("time", p_el).timeago();
+						
 
 					});
 					contact_detail_page_infi_scroll($('.activity_body',
@@ -681,7 +760,8 @@ var portlet_utility = {
 			break;
 		}
 		case "Campaign stats": {
-			var emailsSentCount, emailsOpenedCount, emailsClickedCount, emailsUnsubscribed, that = portlet_ele;
+			var emailsSentCount, emailsOpenedCount, emailsClickedCount, emailsUnsubscribed,
+			emailsSpamCount, emailsSkippedCount, emailsHardBounceCount, emailsSoftBounceCount, that = portlet_ele;
 			var url = '/core/api/portlets/campaign-stats?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -697,7 +777,7 @@ var portlet_utility = {
 							that
 									.find('#emails-sent-count')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 
 			portlet_graph_data_utility
@@ -708,43 +788,62 @@ var portlet_utility = {
 								emailsOpenedCount = data["emailopened"];
 								emailsClickedCount = data["emailclicked"];
 								emailsUnsubscribed = data["emailunsubscribed"];
-								if (emailsSentCount == 0) {
-									that.find('#emails-sent').css('width',
-											'100%').css('height', '100%');
-									that
-											.find('#emails-sent')
-											.html(
-													'<div class="portlet-error-message">No Email activity</div>');
-								} else {
+								emailsSpamCount = data["emailSpam"];
+								emailsSkippedCount = data["emailSkipped"];
+								emailsHardBounceCount = data["hardBounce"];
+								emailsSoftBounceCount = data["softBounce"];
+				
 									that
 											.find('#emails-opened')
 											.css('display', 'block')
 											.addClass(
-													'pull-left p-xs b-b b-light w-half');
+													'pull-left p-xs b-b b-r b-light w-half');
 									that
 											.find('#emails-clicked')
 											.css('display', 'block')
 											.addClass(
-													'pull-left p-xs b-r b-light w-half');
+													'pull-left p-xs b-b b-light w-half');
+
+									that.find('#emails-hard-bounce').css('display', 'block').addClass('pull-left p-xs b-r b-light w-half');
+
+									that.find('#emails-soft-bounce').css('display', 'block').addClass('pull-left p-xs b-r b-light w-half');
+
 									that.find('#emails-unsubscribed').css(
 											'display', 'block').addClass(
-											'pull-left p-xs w-half');
+											'pull-left p-xs b-r b-light w-half');
 									that
 											.find('#emails-sent')
 											.addClass(
-													'pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+													'pull-left p-xs b-r b-b b-light w-half overflow-hidden');
 
 									that
 											.find('#emails-sent-count')
 											.text(
 													portlet_utility
 															.getNumberWithCommasForPortlets(emailsSentCount));
-									that.find('#emails-sent-label').text(
+											that.find('#emails-sent-label').text(
 											"Emails sent");
+
+									that.find('#emails-skipped')
+											.addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+
+									that.find('#emails-skipped-count')
+											.text(portlet_utility.getNumberWithCommasForPortlets(emailsSkippedCount));
+
+									that.find('#emails-skipped-label').text("Skipped");
+
+									that.find('#emails-spam')
+											.addClass('pull-left p-xs b-r b-light w-half overflow-hidden');
+
+									that.find('#emails-spam-count')
+											.text(portlet_utility.getNumberWithCommasForPortlets(emailsSpamCount));
+
+									that.find('#emails-spam-label').text("Spam");
+
 									that
 											.find('#emails-opened')
 											.html(
-													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'
+													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:#08C;">'
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsOpenedCount)
 															+ '</div></div>');
@@ -755,17 +854,38 @@ var portlet_utility = {
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsClickedCount)
 															+ '</div></div>');
+
+									that.find('#emails-hard-bounce')
+											.html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Hard Bounced</div><div class="text-count text-center" style="color:#009688;">'
+															+ portlet_utility
+																	.getNumberWithCommasForPortlets(emailsHardBounceCount)
+															+ '</div></div>');
+
+									that.find('#emails-soft-bounce')
+											.html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Soft Bounced</div><div class="text-count text-center" style="color:#9C27B0;">'
+															+ portlet_utility
+																	.getNumberWithCommasForPortlets(emailsSoftBounceCount)
+															+ '</div></div>');
 									that
 											.find('#emails-unsubscribed')
 											.html(
-													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'
+													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(205,15,0);">'
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsUnsubscribed)
-															+ '</div>');
-								}
+															+ '</div></div>');
 
 								portlet_utility.addWidgetToGridster(base_model);
 							});
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Campaign graph": {
+			var url = '/core/api/portlets/campaign-graph?start-date='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&campaign_type='
+					+ base_model.get('settings').campaign_type;
+			portlet_graph_data_utility.campaignStatsGraphData(base_model,
+					selector, url);
 			setPortletContentHeight(base_model);
 			break;
 		}
@@ -925,7 +1045,7 @@ var portlet_utility = {
 							that
 									.find('#new-contacts-count')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -953,7 +1073,7 @@ var portlet_utility = {
 							that
 									.find('#won-deal-value')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -989,7 +1109,7 @@ var portlet_utility = {
 							that
 									.find('#new-deal-value')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -1025,30 +1145,45 @@ var portlet_utility = {
 							that
 									.find('#emails-sent-count')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
+			var emailsSentCount = 0;
+			if (_agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id)) {
+				emailsSentCount = _agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id);
+			}
+			that.find('#emails-sent-count').text(portlet_utility.getNumberWithCommasForPortlets(emailsSentCount));
+			that.find('#emails-sent-label').text("Campaign emails sent");
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
 							campaignEmailsSentsurl,
 							function(data) {
-								that
+								if(emailsSentCount > data["emailsSentCount"]) {
+									that
 										.find('#emails-sent-count')
 										.text(
 												portlet_utility
 														.getNumberWithCommasForPortlets(data["emailsSentCount"]));
+								}
+								else {
+									that.find('#emails-sent-count')
+									  .prop('number', emailsSentCount)
+									  .animateNumber(
+									    {
+									      number: data["emailsSentCount"]
+									    },
+									    2000
+									  );
+								}
 								that.find('#emails-sent-label').text(
 										"Campaign emails sent");
+								_agile_set_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id, data["emailsSentCount"]);
 							});
 			setPortletContentHeight(base_model);
 			break;
 		}
 		case "Mini Calendar": {
-			head
-					.js(
-							LIB_PATH + 'lib/jquery-ui.min.js',
-							'lib/fullcalendar.min.js',
-							function() {
-								$('.portlet_body_calendar', $('#portlet-res'))
+
+								$('.portlet_body_calendar', $("#ui-id-"+column_position+"-"+row_position))
 										.attr(
 												'id',
 												'p-body-calendar'
@@ -1067,7 +1202,14 @@ var portlet_utility = {
 																	getRandomLoadingImg());
 													setPortletContentHeight(base_model);
 													App_Portlets.refetchEvents = false;
-													minicalendar($(this));
+													App_Portlets.eventCalendar=$(this);
+													var that=$(this);
+																head
+					.js(
+							LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 
+							'lib/fullcalendar.min.js',
+							function() {
+													minicalendar(that);
 												});
 							});
 			break;
@@ -1077,6 +1219,107 @@ var portlet_utility = {
 			break;
 		}
 
+		case "Deal Goals" : {
+
+					portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
+					el).find('.goals_portlet_body');
+					portlet_ele
+						.attr('id', 'p-body-' + column_position + '-' + row_position);
+					var that=portlet_ele;
+			   selector= portlet_ele.attr('id');
+			var url = '/core/api/portlets/goals/'+CURRENT_DOMAIN_USER.id
+						+ '?start-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str)
+								+ '&end-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str);
+			portlet_graph_data_utility
+					.fetchPortletsGraphData(
+							url,
+							function(data) {
+								that.find('.deal_count').html(
+									portlet_utility.getNumberWithCommasForPortlets(data["dealcount"]));
+								that.find('.goal_count').html('Won Deals <br> from '+
+										portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+' Goals');
+								that.find('.deal_amount').html(portlet_utility.getPortletsCurrencySymbol()+
+									'' +
+									portlet_utility.getNumberWithCommasForPortlets(data["dealAmount"]));
+								that.find('.goal_amount').html('Revenue <br> from '+portlet_utility.getPortletsCurrencySymbol()+
+									'' +
+									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' Goals');
+									portlet_graph_data_utility.dealGoalsGraphData(selector,data,column_position,row_position);
+							});
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Incoming Deals": {
+			var owner_id = 0;
+			if (base_model.get('settings').owner) {
+				owner_id = base_model.get('settings').owner;
+			}
+			var url = 'core/api/portlets/incomingDeals/'
+					+ owner_id
+					+ '?min='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&max='
+					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1)
+					+ '&frequency='
+					+ base_model.get('settings').frequency
+					+ '&type='
+					+ base_model.get('settings').type;
+			portlet_graph_data_utility.incomingDealsGraphData(base_model, selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Lost Deal Analysis": {
+			var owner_id = 0;
+			var track_id = 0;
+			var source_id = 0;
+			if (base_model.get('settings').owner) {
+				owner_id = base_model.get('settings').owner;
+			}
+			if (base_model.get('settings').track) {
+				track_id = base_model.get('settings').track;
+			}
+			if (base_model.get('settings').source) {
+				source_id = base_model.get('settings').source;
+			}
+			var url = 'core/api/portlets/lossReason/'
+					+ owner_id + '/'
+					+ track_id + '/'
+					+ source_id
+					+ '?min='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&max='
+					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1);
+
+			var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
+			var topPos = 50 * sizey;
+			if (sizey == 2 || sizey == 3)
+				topPos += 50;
+			$('#' + selector)
+					.html(
+							"<div class='text-center v-middle opa-half' style='margin-top:"
+									+ topPos
+									+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+			$("#"+selector).addClass("lost-deal-analysis-portlet-pie");
+			pieforReports(url, selector, '', undefined, true);
+				setPortletContentHeight(base_model);
+			break;
+		}
+			case "Average Deviation": {
+			var url = '/core/api/portlets/averageDeviation?start-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str)
+								+ '&end-date='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str);
+			portlet_graph_data_utility.taskDeviationGraphData(base_model,
+					selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
 		}
 	},
 
@@ -1210,8 +1453,113 @@ var portlet_utility = {
 			$("#deals", elData).find(
 					'option[value=' + base_model.get("settings").deals + ']')
 					.attr("selected", "selected");
+			if (base_model.get('settings').track == "anyTrack") {
+				options += '<option value="anyTrack" selected="selected">Any</option>';
+			} else {
+				options += '<option value="anyTrack">Any</option>';
+			}
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/pipelines',
+				dataType : 'json',
+				success : function(data) {
+					$.each(data, function(index, trackObj) {
+						if (base_model.get('settings').track == trackObj.id)
+							options += "<option value=" + trackObj.id
+									+ " selected='selected'>" + trackObj.name
+									+ "</option>";
+						else
+							options += "<option value=" + trackObj.id + ">"
+									+ trackObj.name + "</option>";
+					});
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
+					var track = $('#track', elData).val();
+		if (track!='anyTrack')
+		{
+			
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/milestone/'+track,
+				dataType : 'json',
+				success : function(data) {
+					var milestonesList=data.milestones.split(",");
+					var lost=data.lost_milestone;
+					var won= data.won_milestone;
+					$('#milestone').html('');
+					if(milestonesList.length > 1)
+					{
+						$('#milestone', elData).html('<option value="anyMilestone">Any</option>');
+					}
+					$.each(milestonesList, function(index, milestone){
+						if(lost!=null && won!=null){
+							if(!(milestone==lost) && !(milestone==won) )
+							
+						$('#milestone', elData).append('<option value="'+milestone+'">'+milestone+'</option>');
+					}
+						else
+						{
+							if(!(milestone=='Won') && !(milestone=='Lost') )
+							
+						$('#milestone', elData).append('<option value="'+milestone+'">'+milestone+'</option>');
+						}
+					});
+					if(base_model.get('settings').milestone && track == base_model.get('settings').track)
+									{
+										$('#milestone',elData).find('option[value="'+base_model.get('settings').milestone+'"]').attr("selected", "selected");
+									}
+				}
+			});
+		}
+		else
+		{
+			$('#milestone', elData).html('<option value="anyMilestone">Any</option>');
+		}
+
+				}
+			});
+	
+			/*if (base_model.get('settings').milestone == "anyMilestone") {
+				options += '<option value="anyMilestone" selected="selected">Any</option>';
+			} else {
+				options += '<option value="anyMilestone">Any</option>';
+			}
+			$("#milestone", elData).find(
+					'option[value=' + base_model.get("settings").milestone + ']')
+					.attr("selected", "selected");*/
 			break;
 		}
+		//campaign pie chart
+		case "Campaign graph": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsCampaignGraphSettingsModal");
+			elData = $('#portletsCampaignGraphSettingsModal');
+			$("#duration", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			var options = "<option value='All'>All Campaigns</option>";
+			$.ajax({
+				type : 'GET',
+				url : '/core/api/workflows',
+				dataType : 'json',
+				success : function(data) {
+					$.each(data, function(index, campaignfilter) {
+						options += "<option value=" + campaignfilter.id + ">"
+								+ campaignfilter.name + "</option>";
+					});
+					$('#campaign_type', elData).html(options);
+					$("#campaign_type", elData).find(
+							'option[value='
+									+ base_model.get("settings").campaign_type
+									+ ']').attr("selected", "selected");
+					$('.loading-img').hide();
+				}
+			});
+			break;
+		}
+
 		case "Deals By Milestone": {
 			that.addPortletSettingsModalContent(base_model,
 					"portletsDealsByMilestoneSettingsModal");
@@ -1506,6 +1854,68 @@ var portlet_utility = {
 			});
 			break;
 		}
+
+		case "Deal Goals": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsGoalsSettingsModal");
+			elData = $('#portletsGoalsSettingsModal');
+			$("#duration", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;
+		}
+		case "Incoming Deals": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsIncomingDealsSettingsModal");
+			elData = $('#portletsIncomingDealsSettingsModal');
+			$("#duration-incoming-deals", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			$("#split-by-incoming-deals", elData).find('option[value='+ base_model.get("settings")["type"] + ']').attr("selected", "selected");
+			$("#frequency-incoming-deals", elData).find('option[value='+ base_model.get("settings")["frequency"] + ']').attr("selected", "selected");
+			portlet_utility.setOwners("owner", base_model, elData);
+			break;
+		}
+		case "Lost Deal Analysis": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsLostDealAnalysisSettingsModal");
+			elData = $('#portletsLostDealAnalysisSettingsModal');
+			$("#duration-lost-deal-analysis", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			portlet_utility.setOwners("owner-lost-deal-analysis", base_model, elData);
+			portlet_utility.setTracks("track-lost-deal-analysis", base_model, elData);
+			portlet_utility.setSources("source-lost-deal-analysis", base_model, elData);
+			break;
+		}
+
+		case "Average Deviation": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsTaskClosureSettingsModal");
+			elData = $('#portletsTaskClosureSettingsModal');
+			$("#duration", elData).find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+						break;
+		}
+
+		case "User Activities" : {
+			that.addPortletSettingsModalContent(base_model,"portletsUserActivitiesSettingsModal");
+			elData = $("#portletsUserActivitiesSettingsModal");
+			portlet_utility.setOwners("owner-user-activities", base_model, elData);
+			$("#duration-user-activities", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+		}
 		}
 		if (base_model.get('name') == "Pending Deals"
 				|| base_model.get('name') == "Deals By Milestone"
@@ -1547,7 +1957,7 @@ var portlet_utility = {
 				var options = '';
 				$.ajax({
 					type : 'GET',
-					url : '/core/api/users',
+					url : '/core/api/users/partial',
 					dataType : 'json',
 					success : function(data) {
 						$.each(data, function(index, domainUser) {
@@ -1579,7 +1989,7 @@ var portlet_utility = {
 				var options = '';
 				$.ajax({
 					type : 'GET',
-					url : '/core/api/users',
+					url : '/core/api/users/partial',
 					dataType : 'json',
 					success : function(data) {
 						$.each(data, function(index, domainUser) {
@@ -1635,6 +2045,19 @@ var portlet_utility = {
 			return value.toFixed(2).toString().replace(
 					/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 	},
+	/**
+	 * Get the number with english number format (ex : 782,345,32.32)
+	 */
+	getNumberWithCommasAndDecimalsForPortlets : function(value) {
+
+		value = parseFloat(value);
+		if (value == 0)
+			return value;
+
+		if (value)
+			return value.toFixed(2).toString().replace(
+					/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+	},
 
 	/**
 	 * Get the time format in (h m s) by passing seconds
@@ -1652,8 +2075,10 @@ var portlet_utility = {
 		var secs = Math
 				.floor(((diffInSeconds % (24 * 60 * 60)) % (60 * 60)) % 60);
 
+		if(days!=0)
+			duration += ' ' + days + 'd';
 		if (hrs != 0)
-			duration += '' + ((days * 24) + hrs) + 'h';
+			duration += ' ' + hrs + 'h';
 		if (mins != 0)
 			duration += ' ' + mins + 'm';
 		if (secs != 0)
@@ -1910,6 +2335,20 @@ var portlet_utility = {
 			d.setDate(1);
 		}
 
+		// last year start
+		if (duration == "last-year-start") {
+			d.setFullYear(d.getFullYear() - 1);
+			d.setMonth(d.getMonth() - d.getMonth());
+			d.setDate(1);
+		}
+
+		// last year end
+		if (duration == "last-year-end") {
+			d.setFullYear(d.getFullYear());
+			d.setMonth(d.getMonth() - d.getMonth());
+			d.setDate(1);
+		}
+
 		return (getGMTTimeFromDate(d) / 1000);
 	},
 
@@ -1937,11 +2376,11 @@ var portlet_utility = {
 				base_model.get("size_y"), base_model.get("column_position"),
 				base_model.get("row_position"));
 
-		gridster.set_dom_grid_height();
+		/*gridster.set_dom_grid_height();
 		window
 				.scrollTo(
 						0,
-						((parseInt($('#' + portletId).attr('data-row')) - 1) * 200) + 5);
+						((parseInt($('#' + portletId).attr('data-row')) - 1) * 200) + 5);*/
 
 	},
 
@@ -1955,6 +2394,100 @@ var portlet_utility = {
 			}
 		});
 	
-	}
 
+	},
+
+	is_legend_enable_in_desktop : function(base_model){
+	        
+	        if(!base_model.get("size_x") || base_model.get("size_x") > 1)
+	        		return true;	
+
+	        return false;
+	},
+
+	is_legend_enable : function(base_model){
+		return (!agile_is_mobile_browser()) ? true : false;
+	},
+
+	toggle_chart_legends: function(chart, base_model){
+		if(!chart.series)
+			  return;
+
+		var items = chart.series; 
+		for (var i = 0; i < items.length; i++) {
+			this.toggle_legend_item(chart, items[i], base_model);
+		};
+
+	},
+	toggle_legend_item : function(chart, item, base_model){
+		if(this.is_legend_enable_in_desktop(base_model))
+		{
+			item.options.showInLegend = true;
+			try{
+				chart.legend.renderItem(item);	
+			}catch(e){}
+			try{
+				chart.legend.render();	
+			}catch(e){}
+    		
+		}else {
+			item.options.showInLegend = false;
+    		item.legendItem = null;
+    		try{
+				chart.legend.destroyItem(item);	
+			}catch(e){}
+			try{
+				chart.legend.render();	
+			}catch(e){}
+		}
+	},
+
+	/**
+	 * Set owners data in incoming deals and lost deal analysis portlet
+	 * settings.
+	 */
+	setOwners : function(ele_id, base_model, elData) {
+		var options = '<option value="">All</option>';
+		$.ajax({
+			type : 'GET',
+			url : '/core/api/users/partial',
+			dataType : 'json',
+			success : function(data) {
+				$.each(data, function(index, domainUser) {
+					options += "<option value=" + domainUser.id + ">"
+								+ domainUser.name + "</option>";
+				});
+				$('#' + ele_id, elData).html(options);
+				$('#' + ele_id, elData).find("option[value="+base_model.get("settings")["owner"]+"]").attr("selected", "selected");
+				$('.loading-img').hide();
+			}
+		});
+	},
+
+	setSources : function(ele_id, base_model, elData) {
+		var sources = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
+		sources.collection.fetch({
+			success: function(data){
+				var jsonModel = data.toJSON();
+				var html =  '<option class="default-select" value="">All Sources</option>' + 
+							'<option class="default-select" value="1">Unknown</option>';
+				
+				$.each(jsonModel,function(index,dealSource){
+					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				});
+				$('#'+ele_id, elData).html(html);
+				$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["source"]+']').attr("selected", "selected");
+
+				// Hide loading bar
+				hideTransitionBar();
+			}
+		});
+	},
+
+	setTracks : function(ele_id, base_model, elData) {
+		fillSelect(ele_id, "/core/api/milestone/pipelines", undefined, function()
+		{
+			$('#'+ele_id, elData).find('option[value='+base_model.get("settings")["track"]+']').attr("selected", "selected");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
+	}
 };

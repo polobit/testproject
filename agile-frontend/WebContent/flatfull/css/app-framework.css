@@ -5,6 +5,9 @@
 {
 	cursor:default;
 }
+.c-progress{
+  cursor:progress;
+}
 .c-p
 {
 	cursor:pointer;
@@ -1221,5 +1224,8 @@
 	box-sizing:content-box;
 }
 
+.disable-cp{
+  cursor:not-allowed;
+}
 /*ending box sizing related properties*/
 

@@ -57,10 +57,33 @@ function workflow_alerts(title, message , template, callback){
 	}, null);
 }
 
-function send_verify_email()
+function workflow_spam_alerts(reason, score , template, callback){
+	
+	var JSONValues = {};
+	JSONValues["title"] = "Spam Result";
+	JSONValues["score"] = score;
+	JSONValues["reason"]=reason;
+	
+	getTemplate(template, JSONValues, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+			
+		var $modal = $(template_ui);
+		$modal.modal('show');	
+
+		if(callback && typeof (callback) === "function")
+			callback($modal);
+
+	}, null);
+}
+
+function send_verify_email(el)
 {
 	// On Enter Key
-	$('#verify-email-form').find('input').on('keypress', function(e){
+	var $input = $('#verify-email-form', el).find('input');
+
+	$input.off('keypress');
+	$input.on('keypress', function(e){
 		
 		// Enter key
 		if(e.type== 'keypress' && e.which != 13)
@@ -72,7 +95,8 @@ function send_verify_email()
 		$('#verify-email-send').trigger('click');
 	});
 
-	$('#verify-email-send').on('click', function(e){
+	$('#verify-email-send', el).off('click');
+	$('#verify-email-send', el).on('click', function(e){
 		
 		e.preventDefault();
 
@@ -103,7 +127,8 @@ function send_verify_email()
 			     $('#verify-email-form').find('div.row input').val(json.email);
 
 			     $('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'>Verification email sent to &#39;"+json.email+"&#39;. Please check your email and complete the verification process.</p>");
-			     $('#verify-email-send').removeAttr('href').removeAttr('id').attr('data-dismiss', 'modal').text('Done');
+			     $('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('Done');
+
 			},
 			error: function(response)
 			{
@@ -116,7 +141,7 @@ function send_verify_email()
 					$('#verify-email-form').find('div.row input').val(json.email);
 			     
 					$('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'> &#39;"+json.email+"&#39; is not verified yet. Please check your email and complete the verification process.</p>");
-					$('#verify-email-send').removeAttr('href').removeAttr('id').attr('data-dismiss', 'modal').text('Done');
+					$('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('Done');
 					
 //					$("#verify-ignore").show();
 					return;

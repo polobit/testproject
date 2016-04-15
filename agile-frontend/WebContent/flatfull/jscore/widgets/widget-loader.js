@@ -35,7 +35,7 @@ function loadWidgets(el, contact)
 					// If scripts aren't loaded earlier, setup is initialized
 					if (is_widget_view_new)
 					{
-						set_up_widgets(el, widgets_el);
+						set_up_widgets(el, widgets_el, contact.id);
 					}
 					is_widget_view_new = false;
 				})
@@ -72,7 +72,7 @@ function loadWidgets(el, contact)
 
 				$('#widgets', el).html(Widgets_View.render(true).el);
 				// Sets up widget
-				set_up_widgets(el, Widgets_View.el);
+				set_up_widgets(el, Widgets_View.el, contact.id);
 
 			}
 			widgetBindingsLoader();
@@ -185,7 +185,7 @@ function process_url(url)
  * @param el
  * @param widgets_el
  */
-function set_up_widgets(el, widgets_el)
+function set_up_widgets(el, widgets_el, contact_id)
 {
 	/*
 	 * Iterates through all the models (widgets) in the collection, and scripts
@@ -205,7 +205,9 @@ function set_up_widgets(el, widgets_el)
 		 */
 		$('#' + model.get('selector'), widgets_el).data('model', model);
 
-		var contact_id = App_Contacts.contactDetailView.model.get("id");
+		if(!contact_id)
+			contact_id = App_Contacts.contactDetailView.model.get("id");
+		
 		/*
 		 * Checks if widget is minimized, if minimized script is not loaded
 		 */
@@ -242,15 +244,17 @@ function set_up_widgets(el, widgets_el)
 		if (model.get("widget_type") == "CUSTOM")
 		{
 
-			if ($('#' + model.get('selector') + '-container').length)
-			{
-				setup_custom_widget(model, widgets_el)
-			}
-			else
-				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e)
-				{
-					setup_custom_widget(model, widgets_el)
+			if ($('#' + model.get('selector') + '-container').length){
+				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
+					setup_custom_widget(model, widgets_el);
 				});
+
+				//setup_custom_widget(model, widgets_el)
+			}else {
+				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
+					setup_custom_widget(model, widgets_el);
+				});
+			}
 		}
 	}, this);
 	enableWidgetSoring(widgets_el);
@@ -315,7 +319,7 @@ function enableWidgetSoring(el)
 		$('.widget-sortable', el).sortable();
 
 		// Makes icon-cursor-move on widgets panel as handle for sorting
-		$('.widget-sortable', el).sortable("option", "handle", ".icon-cursor-move");
+		$('.widget-sortable', el).sortable("option", "handle", ".icon-widget-move");
 
 		/*
 		 * This event is called after sorting stops to save new positions of

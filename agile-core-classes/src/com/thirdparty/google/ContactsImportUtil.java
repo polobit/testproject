@@ -55,6 +55,7 @@ public class ContactsImportUtil
      */
     public static void initilaizeImportBackend(ContactPrefs contactPrefs, boolean isSyncImmediately)
     {
+    	
 	// notifies user after adding contacts
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Import scheduled");
 

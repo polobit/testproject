@@ -13,9 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.EventReminder;
 import com.agilecrm.contact.Contact;
@@ -36,6 +39,7 @@ import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
+import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
  * <code>RegisterServlet</code> class registers the user account in agile crm.
@@ -192,11 +196,19 @@ public class RegisterServlet extends HttpServlet
 
 	// Get Name
 	String name = request.getParameter("name");
+	
+	System.out.println("email = " + email);
+	System.out.println("name = " + name);
+	System.out.println("password = " + password);
 
 	String timezone = request.getParameter("account_timezone");
 
 	if (name != null)
 	    name = name.trim();
+	
+	// Redirect to first page if name and password is empty (This is added newly from website users)
+	if(StringUtils.isBlank(name) && StringUtils.isBlank(password))
+		throw new Exception("");
 
 	// Get reference code
 
@@ -214,19 +226,29 @@ public class RegisterServlet extends HttpServlet
 	setAccountPrefsTimezone(request);
 
 	EventReminder.getEventReminder(domainUser.domain, null);
+	
+	// Create subaccount in Mandrill after registration
+	MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
 	{
-	    // Creates contact in our domain
-	    createUserInOurDomain(request, domainUser);
+		String emailType = (email.split("@")[1]).split("\\.")[0];
+		System.out.println("email:: "+email+" and emailType :: "+emailType);
+	    // Creates contact in our domain if it is not yopmail
+		if(!StringUtils.equalsIgnoreCase("yopmail", emailType))
+	    	createUserInOurDomain(request, domainUser);
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
 
 	String redirectionURL = VersioningUtil.getURL(domainUser.domain, request);
-	redirectionURL+= "/#subscribe";
+	String planValue = request.getParameter(RegistrationGlobals.PLAN_TYPE);
+	if(!planValue.equals("Free"))
+		redirectionURL+= "#subscribe";
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);
     }
@@ -246,6 +268,9 @@ public class RegisterServlet extends HttpServlet
 	String companyType = request.getParameter(RegistrationGlobals.COMPANY_TYPE);
 	String role = request.getParameter(RegistrationGlobals.USER_ROLE);
 	String phoneNumber = request.getParameter(RegistrationGlobals.PHONE_NUMBER);
+	String country = request.getHeader("X-AppEngine-Country");
+	String state = request.getHeader("X-AppEngine-Region");
+	String city = request.getHeader("X-AppEngine-City");
 
 	List<ContactField> properties = new ArrayList<ContactField>();
 
@@ -312,6 +337,13 @@ public class RegisterServlet extends HttpServlet
 	    }
 
 	    properties.add(createField(RegistrationGlobals.DOMAIN, userDomain));
+	    properties.add(createField(RegistrationGlobals.IP, request.getRemoteAddr()));
+	    
+	    JSONObject json = new JSONObject();
+	    json.put("city", city);
+	    json.put("state", state);
+	    json.put("country", country);
+	    properties.add(createField(Contact.ADDRESS, json.toString()));
 
 	    NamespaceManager.set(Globals.COMPANY_DOMAIN);
 
@@ -329,11 +361,11 @@ public class RegisterServlet extends HttpServlet
 	    String version = VersioningUtil.getAppVersion(request);
 	    if (!StringUtils.isEmpty(version))
 	    {
-		key = APIKey.getDomainUserKeyRelatedToAPIKey("td2h2iv4njd4mbalruce18q7n4");
+		key = APIKeyUtil.getDomainUserKeyRelatedToAPIKey("fdpa0sc7i1putehsp8ajh81efh");
 	    }
 	    else
 	    {
-		key = APIKey.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
+		key = APIKeyUtil.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
 	    }
 
 	    Tag signupTag = new Tag(RegistrationGlobals.SIGN_UP_TAG);
@@ -361,6 +393,7 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
 	finally
@@ -569,4 +602,10 @@ public class RegisterServlet extends HttpServlet
 	    System.out.println("Exception in setting timezone in account prefs.");
 	}
     }
+    
+    public static void main(String[] args) {
+    	String email = "info@mpagenciadigital.com.br";
+    	String emailType = (email.split("@")[1]).split("\\.")[0];
+    	System.out.println(emailType);
+	}
 }

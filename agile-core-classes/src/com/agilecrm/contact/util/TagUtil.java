@@ -136,7 +136,7 @@ public class TagUtil
 	    try
 	    {
 		System.out.println("tag name : " + tagName);
-		queue.add(TaskOptions.Builder.withPayload(task).taskName(tagName));
+		queue.addAsync(TaskOptions.Builder.withPayload(task).taskName(tagName));
 	    }
 	    catch (TaskAlreadyExistsException e)
 	    {
@@ -282,7 +282,7 @@ public class TagUtil
 	tags = TagUtil.getTags();
 
 	// Sets tags in memcache for with expiry of 1 hour
-	CacheUtil.setCache(NamespaceManager.get() + "_tags", tags, 2 * 60 * 60 * 1000);
+	CacheUtil.setCache(NamespaceManager.get() + "_tags", tags, 1 * 60 * 60 * 1000);
 
 	return tags;
     }
@@ -452,7 +452,7 @@ public class TagUtil
 	return tagString;
     }
 
-    public static void validateTag(String tag)
+    public static void validateTag(String tag) throws WebApplicationException
     {
 	System.out.println("validating tag " + tag);
 	if (!TagValidator.getInstance().validate(tag))

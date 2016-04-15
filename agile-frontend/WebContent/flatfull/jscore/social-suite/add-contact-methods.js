@@ -48,26 +48,33 @@ function socialsuite_add_website()
  */
 function changeProperty()
 {
-	var display = $('#network_handle', $('#personModal')).css("display");
-	var picDisplay = $("#pic", $('#personModal')).css("display");
-	var picValue = $("#pic", $('#personModal')).html();
+	
+	try{
+		var display = $('#network_handle', $('#personModal')).css("display");
+		var picDisplay = $("#pic", $('#personModal')).css("display");
+		var picValue = $("#pic", $('#personModal')).html();
 
-	if ((picDisplay == 'inline' || picDisplay == 'block') && picValue != '')
-	{
-		if (display == 'none')
-			document.getElementById("network_handle").className = 'after-img-load-hide';
-		else if (display == 'block')
-			document.getElementById("network_handle").className = 'after-img-load-show';
+		var $networkEle = $("#network_handle");
+		var $handle = $("#handle");;
 
-		document.getElementById("handle").className = 'add-form-input';
-	}
-	else if ((picDisplay == 'none' || picDisplay == null || picDisplay == '') || (picValue == null || picValue == ''))
-	{
-		if (display == 'none')
-			document.getElementById("network_handle").className = 'network-handle';
-		else if (display == 'block')
-			document.getElementById("network_handle").className = 'socialsuite-network-handle';
+		if ((picDisplay == 'inline' || picDisplay == 'block') && picValue != '')
+		{
+			if (display == 'none')
+				$networkEle.removeAttr('class').addClass('after-img-load-hide');
+			else if (display == 'block')
+				$networkEle.removeAttr('class').addClass('after-img-load-show');
 
-		document.getElementById("handle").className = '';
-	}
+			$handle.removeAttr('class').addClass('add-form-input');
+		}
+		else if ((picDisplay == 'none' || picDisplay == null || picDisplay == '') || (picValue == null || picValue == ''))
+		{
+			if (display == 'none')
+				$networkEle.removeAttr('class').addClass('network-handle');
+			else if (display == 'block')
+				$networkEle.removeAttr('class').addClass('socialsuite-network-handle');
+
+			$handle.removeAttr('class');
+		}
+
+	}catch(e){}
 }

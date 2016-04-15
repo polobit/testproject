@@ -9,10 +9,16 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.thirdparty.mandrill.Mandrill;
+import com.thirdparty.mandrill.exception.RetryException;
+import com.thirdparty.mandrill.subaccounts.util.deferred.SubaccountCheckDeferredTask;
 
 /**
  * <code>MandrillSubAccounts</code> handles subaccounts of Mandrill API. Each
@@ -377,5 +383,58 @@ public class MandrillSubAccounts
 
 	updateMandrillSubAccount(subaccountJSON.getString(MANDRILL_SUBACCOUNT_ID), null, notesJSON.toString());
     }
+
+	/**
+	 * Verifies whether subaccount exists, if not creates
+	 * 
+	 * @param subaccountId
+	 * @param apiKey
+	 */
+	public static void checkSubAccountExists(String subaccountId, String apiKey){
+		
+		if(StringUtils.isBlank(subaccountId) || StringUtils.isBlank(apiKey))
+			return;
+		
+		// To get the response
+		String response = updateMandrillSubAccount(subaccountId, apiKey, "");
+		
+		 if (StringUtils.contains(response, "Unknown_Subaccount"))
+		 {
+			try 
+			{
+				// throw retry exception and create new subaccount
+				throw new RetryException("Unknown Mandrill Subaccount");
+			} 
+			catch (RetryException e) {
+				
+				 // Creates new subaccount
+			    createMandrillSubAccount(subaccountId, apiKey);
+			}
+		 }
+	}
+	
+	/**
+	 * Creates subaccount in Agile Mandrill account.
+	 * 
+	 * @param subaccount
+	 */
+	public static void createSubAccountInAgileMandrill(String subaccount)
+	{
+		
+		if(StringUtils.isBlank(subaccount))
+			return;
+		
+		String[] apiKeys = { Globals.MANDRIL_API_KEY_VALUE, Globals.MANDRILL_API_KEY_VALUE_2 };
+		
+		Queue queue = QueueFactory.getQueue(AgileQueues.ACCOUNT_STATS_UPDATE_QUEUE);
+				
+		// Creates subaccount in both accounts
+		for(int i = 0; i < apiKeys.length; i++)
+		{
+			SubaccountCheckDeferredTask task = new SubaccountCheckDeferredTask(apiKeys[i], subaccount);
+			queue.add(TaskOptions.Builder.withPayload(task));
+		}
+		
+	}
 
 }

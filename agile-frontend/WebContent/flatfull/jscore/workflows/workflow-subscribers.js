@@ -128,6 +128,8 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 	//var workflow_model = App_Workflows.workflow_list_view.collection.get(workflow_id);
 	//var workflow_name = workflow_model.get("name");
 
+	abortCountQueryCall();
+
 	var subscribers_collection = new Base_Collection_View({ 
 		url : fetch_url, 
 		templateKey : template_key,
@@ -140,9 +142,13 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 			{
 				$("time.campaign-started-time", el).timeago();
 				$("time.campaign-completed-time", el).timeago();
+				contactListener();
 			});
 
 			//$('#subscribers-campaign-name').text(workflow_name);
+			
+			// Call to get Count 
+			getAndUpdateCollectionCount("workflows", el, fetch_url);
 
 		},
 		appendItemCallback : function(el)
@@ -171,46 +177,46 @@ function fill_subscribers_slate(id, type)
 		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
 		        "button_text" : "Add subscribers",
 				"route" : "#contacts",
-		        "image": "/img/clipboard.png"
+		        "image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "completed-subscribers": {
 		        "title": "No contact assigned to this campaign",
 		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
 		        "button_text" : "Add subscribers",
 				"route" : "#contacts",
-		        "image": "/img/clipboard.png"
+		        "image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "removed-subscribers": {
 		        "title": "No contact removed from this campaign",
 		        "description": "Removed subscribers are the contacts deleted from the active campaign",
-		        "image": "/img/clipboard.png"
+		        "image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "all-subscribers": {
 		        "title": "No current or past subscribers for this campaign",
 		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
 		        "button_text" : "Add subscribers",
 				"route" : "#contacts",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "unsubscribe-subscribers": {
 		    	"title": "No unsubscriptions for this campaign",
 		        "description": "Great! No one unsubscribed from this campaign",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "hardbounced-subscribers": {
 		    	"title": "No hard bounces for this campaign",
 		        "description": "Great! No email get hardbounced",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "softbounced-subscribers": {
 		    	"title": "No soft bounces for this campaign",
 		        "description": "Great! No email get softbounced",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "spam-reported-subscribers": {
 		    	"title": "No one reported spam for this campaign",
 		        "description": "Great! No one reported spam yet",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    }
 		}
 

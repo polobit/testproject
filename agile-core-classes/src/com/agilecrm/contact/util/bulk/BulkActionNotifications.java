@@ -28,6 +28,12 @@ public class BulkActionNotifications
 	 */
 	COMPANIES_CSV_IMPORT("%s companies imported"), EXPORT_COMPANIES_CSV(
 			"Companies export operation is complete. Email is sent to you with the CSV file."),
+			
+	/**
+	 * Import Tasks Bulk action notification
+	 */
+	TASKS_CSV_IMPORT("%s tasks imported"),
+			
 	/**
 	 * Import Deals Bulk action notification
 	 */
@@ -44,8 +50,19 @@ public class BulkActionNotifications
 	 * Send mail bulk action
 	 */
 
-	SEND_EMAIL("Email successfully sent to %s contact(s)");
+	SEND_EMAIL("Email successfully sent to %s contact(s)"),
+	
+	/**
+	 * Ticket operations
+	 */
 
+	TICKET_BULK_ACTIONS(""), NEW_TICKET_RECEIVED("New ticket#%s received"), REQUESTER_REPLIED_TO_TICKET("%s replied to ticket#%s"),
+	
+	/**
+	 * Companies tag operation
+	 */
+	COMPANY_ADD_TAGS("Tag(s) %s added to %s companies"), COMPANY_REMOVE_TAGS(
+			"Tag(s) %s removed from %s companies");
 	String message;
 
 	BulkAction(String message)

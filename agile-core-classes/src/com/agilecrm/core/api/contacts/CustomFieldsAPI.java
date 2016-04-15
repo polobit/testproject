@@ -22,6 +22,7 @@ import org.json.JSONException;
 
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.exception.DuplicateCustomFieldException;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 
 /**
@@ -154,7 +155,7 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<CustomFieldDef> getSearchableCustomFieldsByScope(@QueryParam("scope") String scope)
     {
-	try
+    try
 	{
 	    if (scope == null)
 		CustomFieldDefUtil.getSearchableCustomFields();
@@ -301,16 +302,19 @@ public class CustomFieldsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public CustomFieldDef createCustomField(CustomFieldDef customField)
+    public CustomFieldDef createCustomField(CustomFieldDef customField)throws Exception
     {
 	try
 	{
 	    customField.save();
 	}
+	catch (DuplicateCustomFieldException e)
+	{
+	    throw e;
+	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, a custom field with that name is already present.").build());
+	    e.printStackTrace();
 	}
 	return customField;
     }
@@ -325,16 +329,19 @@ public class CustomFieldsAPI
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public CustomFieldDef updateCustomField(CustomFieldDef customField)
+    public CustomFieldDef updateCustomField(CustomFieldDef customField)throws Exception
     {
 	try
 	{
 	    customField.save();
 	}
+	catch (DuplicateCustomFieldException e)
+	{
+	    throw e;
+	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, a custom field with that name is already present.").build());
+	    e.printStackTrace();
 	}
 	return customField;
     }

@@ -232,11 +232,16 @@ public class Mandrill
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, cc, bcc, replyTo, subject,
 		    html, text, metadata, attachments);
 
+	    if(messageJSON!=null)
+			System.out.println("support debug:Mandrill.messageJSON:" + messageJSON.toString());
 	    // Task for sending emails with attachments
 	    String mailJSONString = mailJSON.toString().replaceAll("}", ",");
 	    String messageJSONString = messageJSON.toString();
 	    String response = null;
 
+	    // Checks whether subaccount exists or not
+	    MandrillSubAccounts.checkSubAccountExists(subaccount, mailJSON.getString(MANDRILL_API_KEY));
+	    
 	    if (documentIds != null && documentIds.size() > 0)
 		sendDocumentAsMailAttachment(documentIds.get(0), mailJSONString, messageJSONString);
 	    else if (blobKeys != null && blobKeys.size() > 0)
@@ -244,6 +249,10 @@ public class Mandrill
 	    else
 	    {
 		JSONArray attachmentsJSON = getAttachmentsJSON(attachments);
+		if(attachmentsJSON!=null)
+		{
+			System.out.println("support debug:Mandrill.sendMail:" + attachmentsJSON.toString());
+		}
 		messageJSON.put(MANDRILL_ATTACHMENTS, attachmentsJSON);
 
 		mailJSON.put(MANDRILL_MESSAGE, messageJSON);
@@ -516,9 +525,11 @@ public class Mandrill
 	JSONObject headersJSON = new JSONObject();
 	try
 	{
-	    // insert replyTo if not empty and not equals to from.
-	    if (!StringUtils.isBlank(replyTo) && !fromEmail.equals(replyTo))
-		headersJSON.put(MANDRILL_REPLY_TO, replyTo);
+        //replyTo if empty and not equals to from.
+        if (StringUtils.isBlank(replyTo))
+            replyTo = fromEmail; 
+
+        headersJSON.put(MANDRILL_REPLY_TO, replyTo);
 
 	    headersJSON.put("Content-Type", "application/json; charset=UTF-8");
 

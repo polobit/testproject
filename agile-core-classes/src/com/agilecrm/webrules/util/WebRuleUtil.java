@@ -1,18 +1,21 @@
 package com.agilecrm.webrules.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.webrules.WebRule;
+import com.googlecode.objectify.Key;
 
 public class WebRuleUtil
 {
     public static List<WebRule> getAllWebRules()
     {
-	return WebRule.dao.fetchAll();
+	    return WebRule.dao.fetchAllByKeys(WebRule.dao.listKeysByProperty(new HashMap()));
     }
 
     //returns all webrule count 

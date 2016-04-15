@@ -2,7 +2,7 @@
  * user name can be redundant so we need user's id too.*/
 function getUserDetails(callback)
 {
-	$.getJSON('/core/api/users', function(users)
+	$.getJSON('/core/api/users/partial', function(users)
 	{
 		for ( var i in users)
 		{
@@ -146,6 +146,9 @@ function getCriteria()
 	// If criteria is not selected then make it default one
 	if (!criteria)
 		criteria = "DUE";
+
+	if(agile_is_mobile_browser())
+		criteria = "LIST";
 
 	return criteria;
 }

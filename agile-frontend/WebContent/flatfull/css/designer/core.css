@@ -42,6 +42,18 @@ textarea { display:block; margin-bottom:10px;}
 fieldset { padding:0; border:0; margin-top:25px; }
 button { margin-right:4px;}
 
+ #spam_button_email{ top:-41px;  }
+ @-moz-document url-prefix() { 
+  #spam_button_email{
+     top:-46px;
+  }
+}
+ #spam_button_email_html{ top:-76px;  }
+ @-moz-document url-prefix() { 
+  #spam_button_email_html{
+     top:-81px;
+  }
+}
 #nodeui td {
 border:1px solid #EEEEEE;
 padding:0.6em 10px;

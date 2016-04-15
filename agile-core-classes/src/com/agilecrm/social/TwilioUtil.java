@@ -250,7 +250,7 @@ public class TwilioUtil
 	 * @return {@link JSONArray} of calls with their recordings
 	 * @throws Exception
 	 */
-	public static JSONArray getCallLogsWithRecordings(TwilioRestClient client, String to, String page, String pageToken)
+	public static JSONArray getCallLogsWithRecordings(TwilioRestClient client, String to, String page, String pageToken, String direction)
 			throws Exception
 	{
 		JSONArray logs = new JSONArray();
@@ -258,7 +258,7 @@ public class TwilioUtil
 		try
 		{
 			// retrieve call logs from Twilio
-			JSONArray array = getCallLogs(client, to, page, pageToken);
+			JSONArray array = getCallLogs(client, to, page, pageToken, direction);
 			String callSid;
 			String url1 = array.getString(array.length() - 1);
 			List<NameValuePair> params1 = URLEncodedUtils.parse(new URI(url1), "UTF-8");
@@ -327,13 +327,18 @@ public class TwilioUtil
 	 * @return {@link JSONArray} of call logs
 	 * @throws Exception
 	 */
-	private static JSONArray getCallLogs(TwilioRestClient client, String to, String page, String pageToken)
+	private static JSONArray getCallLogs(TwilioRestClient client, String to, String page, String pageToken, String direction)
 			throws Exception
 	{
 		// parameters required to retrieve logs
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("To", to);
-		params.put("PageSize", "10");
+		if(direction.equalsIgnoreCase("incoming")){
+			params.put("From", to);
+			params.put("PageSize", "10");
+		}else{
+			params.put("To", to);
+			params.put("PageSize", "10");
+		}
 
 		if (page != null && pageToken != null){
 			params.put("Page", page);
@@ -882,7 +887,7 @@ public class TwilioUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONArray getCallLogsWithRecordingsFromTwilioIO(Widget widget, String to) throws Exception
+	public static JSONArray getCallLogsWithRecordingsFromTwilioIO(Widget widget, String to, String direction) throws Exception
 	{
 		JSONArray logs = new JSONArray();
 
@@ -900,7 +905,7 @@ public class TwilioUtil
 			 * person and agile authentication token
 			 */
 			TwilioRestClient newClient = new TwilioRestClient(accountSid, accAuthToken, null);
-			logs = getCallLogsWithRecordings(newClient, to, null, null);
+			logs = getCallLogsWithRecordings(newClient, to, null, null, direction);
 
 			System.out.println("TwilioIO call logs : " + logs);
 			return logs;
@@ -921,7 +926,7 @@ public class TwilioUtil
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONArray getCallLogsByPage(Widget widget, String to, String page, String pageToken) throws Exception
+	public static JSONArray getCallLogsByPage(Widget widget, String to, String page, String pageToken, String direction) throws Exception
 	{
 		JSONArray logs = new JSONArray();
 		try
@@ -938,7 +943,7 @@ public class TwilioUtil
 			 * person and agile authentication token
 			 */
 			TwilioRestClient newClient = new TwilioRestClient(accountSid, accAuthToken, null);
-			logs = getCallLogsWithRecordings(newClient, to, page, pageToken);
+			logs = getCallLogsWithRecordings(newClient, to, page, pageToken, direction);
 			System.out.println("getCallLogsByPage call logs : " + logs);
 			return logs;
 		}

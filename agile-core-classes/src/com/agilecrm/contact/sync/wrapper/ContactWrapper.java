@@ -81,13 +81,13 @@ public abstract class ContactWrapper implements IContactWrapper
 	setFirstName();
 	setLastName();
 	setEmail();
+	//setSyncId();
 	setOrganization();
 	setPhoneNumber();
 	setDescription();
 	setAddress();
 	setTag();
 	setJobTitle();
-
 	addMoreCustomInfo();
 
 	return contact;
@@ -133,6 +133,14 @@ public abstract class ContactWrapper implements IContactWrapper
 	addPropertyToContact(getEmail());
     }
 
+  /*  *//**
+     * Sets the email.
+     *//*
+    private void setSyncId()
+    {
+	addPropertyToContact(getSyncId());
+    }*/
+    
     /**
      * Sets the phone number.
      */

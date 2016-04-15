@@ -512,10 +512,10 @@ table.fc-border-separate {
 .fc-agenda .ui-resizable-resizing {
     _overflow: hidden
 }
-.ms-container {
+/*.ms-container {
     background: transparent url('../img/switch.png') no-repeat 164px 80px;
 }
-
+*/
 @charset "utf-8";
 /* CSS Document */
 
@@ -2164,13 +2164,13 @@ border-radius: 2px;
   	color: white;
   	font-weight: bold;
 }
-.portlet-category-ms-container{
+/*.portlet-category-ms-container{
 	background: transparent url('../../img/switch.png') no-repeat 164px 40px!important;
 }
 .portlet-user-ms-container{
 	background: transparent url('../../img/switch.png') no-repeat 164px 50px!important;
 }
-.leaderboard_portlet_header{
+*/.leaderboard_portlet_header{
 	border-bottom: 1px solid #edf1f2!important;
 }
 .leaderboard_portlet_header ul li div.panel-heading{

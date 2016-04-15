@@ -82,7 +82,7 @@ function addContactToQuickbooks(first_name, last_name, contact_id)
 {
 
 	// Shows loading image until set up is shown
-	$('#QuickBooks').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
+	$('#QuickBooks').html(QUICKBOOKS_PROFILE_LOAD_IMAGE);
 
     /*
      * send GET request to the URL to add client in Quickbooks based on widget

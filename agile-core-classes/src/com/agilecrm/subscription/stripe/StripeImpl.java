@@ -2,19 +2,27 @@ package com.agilecrm.subscription.stripe;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -22,6 +30,7 @@ import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerSubscriptionCollection;
 import com.stripe.model.Invoice;
+import com.stripe.model.InvoiceItem;
 import com.stripe.net.RequestOptions;
 import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 
@@ -81,12 +90,48 @@ public class StripeImpl implements AgileBilling {
 	public JSONObject createCustomer(CreditCard cardDetails, Plan plan)
 			throws Exception {
 
-		// Creates customer and add subscription to it
+		// Creates customer with card details
 		Customer customer = Customer.create(StripeUtil.getCustomerParams(
-				cardDetails, plan));
+				cardDetails));
 
-		plan.subscription_id = customer.getSubscription().getId();
+		//plan.subscription_id = customer.getSubscription().getId();
+		// Free trial for 7 days for new customers
+		Map<String, Object> updateParams = new HashMap<String, Object>();
+		updateParams.put("plan", plan.plan_id);
+		updateParams.put("quantity", plan.quantity);
+		boolean isTrialAllowed = false;
+		String namespace = NamespaceManager.get();
+		DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		NamespaceManager.set("our");
+		System.out.println("Changed name space to::: "+NamespaceManager.get());
+		try
+		{
+			System.out.println("OUR domain user Email:: "+user.email);
+			// Fetches contact form our domain
+			Contact contact = ContactUtil.searchContactByEmail(user.email);
+			System.out.println("contact in our domain :::"+contact.name);
+			LinkedHashSet<String> tagsList = contact.tags;
+			if(tagsList.contains("Trial"))
+				isTrialAllowed = true;
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.err.println("Exception occured while retrieving tags..." + e.getMessage());
+		}
 
+		finally
+		{
+		    NamespaceManager.set(namespace);
+		}
+		if(!plan.plan_id.contains("email")  && !plan.plan_type.name().contains("STARTER") && plan.trialStatus.equals("apply") && isTrialAllowed){
+			plan.trialStatus = "applied";
+			updateParams.put("trial_end", new DateUtil().addDays(7).getTime().getTime() / 1000);
+			//For testing just 2 hours to cancel trial
+			//updateParams.put("trial_end", new DateUtil().addMinutes(30).getTime().getTime()/1000);
+		}
+		customer.createSubscription(updateParams);
+		
 		System.out.println(customer);
 		System.out.println(StripeUtil.getJSONFromCustomer(customer));
 		// Return Customer JSON
@@ -212,7 +257,37 @@ public class StripeImpl implements AgileBilling {
 		if (oldSubscription != null) {
 			oldSubscription.update(updateParams);
 		} else {
+			boolean isTrialAllowed = false;
+			String namespace = NamespaceManager.get();
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			NamespaceManager.set("our");
+			System.out.println("Changed name space to::: "+NamespaceManager.get());
+			try
+			{
+				System.out.println("OUR domain user Email:: "+user.email);
+				// Fetches contact form our domain
+				Contact contact = ContactUtil.searchContactByEmail(user.email);
+				System.out.println("contact in our domain :::"+contact.name);
+				LinkedHashSet<String> tagsList = contact.tags;
+				if(!tagsList.contains("Cancellation Request") && !tagsList.contains("Cancelled Trial") && tagsList.contains("Trial"))
+					isTrialAllowed = true;
+			}
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			    System.err.println("Exception occured while retrieving tags..." + e.getMessage());
+			}
 
+			finally
+			{
+			    NamespaceManager.set(namespace);
+			}
+			if(!isTrialAllowed && !plan.plan_type.name().contains("STARTER") && plan.trialStatus.equals("apply")){
+				plan.trialStatus = "applied";
+				updateParams.put("trial_end", new DateUtil().addDays(7).getTime().getTime() / 1000);
+				//For testing just 2 hours to cancel trial
+				//updateParams.put("trial_end", new DateUtil().addMinutes(30).getTime().getTime()/1000);
+			}
 			customer.createSubscription(updateParams);
 
 			if (!customer_metadata.isEmpty()) {
@@ -282,7 +357,7 @@ public class StripeImpl implements AgileBilling {
 
 		// Updates customer with changed card details
 		customer = customer.update(updateParams);
-
+		payPendingInvoices(stripeCustomer);
 		return StripeUtil.getJSONFromCustomer(customer);
 	}
 
@@ -309,6 +384,7 @@ public class StripeImpl implements AgileBilling {
 		// invoices of a customer form stripe)
 		invoiceParams.put("customer",
 				StripeUtil.getCustomerFromJson(stripeCustomer).getId());
+		invoiceParams.put("limit",100);
 		/*
 		 * Fetches all invoices for given stripe customer id and returns
 		 * invoices
@@ -449,7 +525,7 @@ public class StripeImpl implements AgileBilling {
 
 		// If there exists email plan, then it is updated instead of creating
 		// new subscription
-		try {
+		
 
 			/**
 			 * Retrieves all subscriptions from customer object. It is used to
@@ -530,11 +606,7 @@ public class StripeImpl implements AgileBilling {
 			// subscription.plan);
 			return StripeUtil.getJSONFromCustomer(customer_new);
 
-		} catch (StripeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		
 
 	}
 
@@ -550,5 +622,98 @@ public class StripeImpl implements AgileBilling {
 		// Returns Customer object as JSONObject
 		return StripeUtil.getJSONFromCustomer(customer);
 	}
-
+	
+	@Override
+	public void cancelEmailSubscription(JSONObject cust){
+		try {
+			Customer customer = StripeUtil.getCustomerFromJson(cust);
+			List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
+			for(com.stripe.model.Subscription subscription : subscriptions){
+				if(subscription != null && subscription.getPlan().getId().contains("email")){
+					subscription.cancel(null);
+					return;
+				}
+			}
+		} catch (StripeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public Invoice getUpcomingInvoice(JSONObject stripeCustomer, Plan plan) throws StripeException{
+		Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		System.out.println("cust id:: "+customer.getId());
+		List<com.stripe.model.Subscription> subs = customer.getSubscriptions().getData();
+		for(com.stripe.model.Subscription sub : subs){
+			if(!sub.getPlan().getId().contains("email")){
+				invoiceParams.put("subscription", sub.getId());
+				System.out.println("sub id:: "+sub.getId());
+			}
+		}
+		invoiceParams.put("customer", customer.getId());
+		invoiceParams.put("subscription_quantity", plan.quantity);
+		invoiceParams.put("subscription_prorate", true);
+		invoiceParams.put("subscription_plan", plan.plan_id);
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setApiKey(Globals.STRIPE_API_KEY);
+		builder.setStripeVersion("2015-10-16");
+		RequestOptions options = builder.build();
+		Invoice invoice = Invoice.upcoming(invoiceParams, options);
+		System.out.println("Invoice===  "+invoice);
+		return invoice;
+	}
+	
+	// Create InvoiceIterm and pay to purchase life time emails
+	public void purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
+		Customer customer = StripeUtil.getCustomerFromJson(customerJSON);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("customer", customer.getId());
+		params.put("amount", quantity*4*100);
+		params.put("currency", "usd");
+		params.put("description", quantity*1000+" Email Credits");
+		InvoiceItem invoiceItem = InvoiceItem.create(params);
+		System.out.println("invoiceItem for email credits "+invoiceItem);
+		params.remove("amount");
+		params.remove("currency");
+		try{
+			Invoice invoice = Invoice.create(params).pay();
+			System.out.println("invoice for email credits "+invoice);
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			params.remove("description");
+			params.put("limit", 1);
+			List<InvoiceItem> invoiceItems = InvoiceItem.all(params).getData();
+			invoiceItems.get(0).delete();
+			throw new Exception(e.getMessage());
+		}
+		
+		
+	}
+	
+	public void addTrial(Long trialEnd) throws Exception{
+		// Fetches subscription from customer object in stripe
+		Subscription subscription = SubscriptionUtil.getSubscription();
+		Customer customer = StripeUtil.getCustomerFromJson(new JSONObject(subscription.billing_data_json_string));
+		List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
+		for(com.stripe.model.Subscription sub : subscriptions){
+			Map<String, Object> updateParams = new HashMap<String, Object>();
+			if(trialEnd == 0)
+				updateParams.put("trial_end", "now");
+			else
+				updateParams.put("trial_end", trialEnd);
+			sub.update(updateParams);
+		}
+		if(trialEnd == 0)
+		{
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("customer", customer.getId());
+			try{
+				Invoice invoice = Invoice.create(params).pay();
+				System.out.println("invoice for email credits "+invoice);
+			}catch(Exception e){
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				e.printStackTrace();
+			}
+		}
+	}
 }

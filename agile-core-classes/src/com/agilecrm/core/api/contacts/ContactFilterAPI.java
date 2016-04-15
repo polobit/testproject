@@ -3,6 +3,7 @@ package com.agilecrm.core.api.contacts;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -130,6 +131,37 @@ public class ContactFilterAPI
 	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor, sortKey);
 
 	return ContactFilterUtil.getContacts(id, null, null, sortKey);
+    }
+    
+    /**
+     * Returns {@link Contact}s list based on the {@link SearchRule} in the
+     * {@link ContactFilter} which is fetched by its id. It checks the type of
+     * request, whether filter is on custom built criteria or default filters,
+     * based on which results are returned returned
+     * 
+     * @param id
+     *            {@link ContactFilter} id
+     * @return {@link Collection} list of contact
+     */
+    @Path("/query/list/{filter_id}/count")
+    @GET
+    public int getQueryResultsList(@PathParam("filter_id") String id)
+    {
+	System.out.println("filter_id : " + id);
+
+	if (id.contains("system-"))
+    {
+	id = id.split("-")[1];
+
+	ContactFilter.DefaultFilter filter = ContactFilter.DefaultFilter.valueOf(id);
+	if (filter != null){
+		return Contact.dao.getCountByProperty(ContactFilterUtil.getDefaultContactSearchMap(filter));
+	}
+
+	return 0;
+    }
+	
+	return 0;
     }
 
     /**

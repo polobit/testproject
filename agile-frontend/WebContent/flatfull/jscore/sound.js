@@ -20,6 +20,7 @@ function play_sound(sound, is_web_url)
 	{
 		// If browser supports html5 audio
 		audio = new Audio(sound_url);
+		audio.autoplay = true;
 		audio.play();
 	}
 	catch (err)

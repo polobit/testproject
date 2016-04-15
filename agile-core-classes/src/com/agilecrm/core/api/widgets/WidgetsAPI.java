@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -14,11 +15,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.social.BrainTreeUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -85,16 +90,19 @@ public class WidgetsAPI {
 	 * @param widget
 	 *            {@link Widget}
 	 * @return {@link Widget}
+	 * @throws JSONException
 	 */
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget createWidget(Widget widget) {
+	public Widget createWidget(Widget widget) throws Exception {
 		System.out.println("In widgets api create");
 		if (widget != null) {
+			WidgetsAPI.checkValidDetails(widget);
 			widget.save();
 			return widget;
 		}
+
 		return null;
 	}
 
@@ -117,8 +125,21 @@ public class WidgetsAPI {
 			if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
 				return null;
 			}
-			System.out.println(customWidget);
+
 			customWidget.save();
+
+			Widget widget = new Widget();
+			widget.isForAll = customWidget.custom_isForAll;
+			widget.script = customWidget.script;
+			widget.logo_url = customWidget.logo_url;
+			widget.fav_ico_url = customWidget.fav_ico_url;
+			widget.description = customWidget.description;
+			widget.name = customWidget.name;
+			widget.widget_type = customWidget.widget_type;
+			widget.save();
+
+			customWidget.is_added = true;
+
 			return customWidget;
 		}
 		return null;
@@ -134,8 +155,9 @@ public class WidgetsAPI {
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget updateWidget(Widget widget) {
+	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
+			WidgetsAPI.checkValidDetails(widget);
 			widget.save();
 			return widget;
 		}
@@ -171,17 +193,7 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void removeCustomWidget(@QueryParam("widget_name") String widget_name) {
 		// Deletes widget based on name
-		CustomWidget customWidget = CustomWidgets.getCustomWidget(widget_name);
-		if (customWidget != null) {
-			// check if widget is custom widget and delete it
-			if (WidgetType.CUSTOM == customWidget.widget_type) {
-				// removes the widget for all agile users
-				WidgetUtil.removeWidgetForAllUsers(widget_name);
-
-				// removes it from custom widgets database
-				customWidget.delete();
-			}
-		}
+		CustomWidgets.deleteCurrentUserWidget(widget_name);
 	}
 
 	/**
@@ -301,5 +313,54 @@ public class WidgetsAPI {
 			widget.delete();
 		}
 		System.err.println("The widget is null and id is " + id);
+	}
+
+	/**
+	 * return the default_call widget otherwise null
+	 * 
+	 * name and default_call are the attribute to be ooked at ui side...
+	 * 
+	 * 
+	 * @return null or widget
+	 */
+
+	@Path("/availableCallWidgets")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Widget> getDefaultCallWIdgetName() {
+		List<Widget> widgets = new ArrayList<Widget>();
+		// ArrayList<String> callOptionName = new ArrayList<>();
+
+		widgets.addAll(WidgetUtil.getWidget(WidgetType.CALL));
+		/*
+		 * if(!widgets.isEmpty()){ for(Widget widget : widgets){
+		 * callOptionName.add(widget.name); }
+		 * System.out.println("Available call options : " +
+		 * callOptionName.toString()); }else{
+		 * System.out.println("No default call widget found sending null ...");
+		 * }
+		 */
+
+		return widgets;
+	}
+
+	public static void checkValidDetails(Widget widget) throws Exception {
+		if (widget.name.equals("Braintree")) {
+			JSONObject prefsObj = new JSONObject(widget.prefs);
+			String merchantId = prefsObj.getString("merchant_id");
+			String publicKey = prefsObj.getString("public_key");
+			String privateKey = prefsObj.getString("private_key");
+			BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
+					privateKey);
+			JSONArray resultObj = bUtil.getTransactions("test@agilecrm.com");
+		}
+		if (widget.name.equals("Uservoice")) {
+			String prefs = widget.prefs;
+			JSONObject prefsObj = new JSONObject(prefs);
+			String API_KEY = prefsObj.getString("uv_api_key");
+			String API_SECRET = prefsObj.getString("uv_secert_key");
+			String domain = prefsObj.getString("uv_domain_name");
+			UservoiceAPI uv = new UservoiceAPI(domain, API_KEY, API_SECRET);
+		}
 	}
 }

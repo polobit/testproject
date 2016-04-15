@@ -26,7 +26,7 @@ function agile_user_associated() {
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', Contacts_Json);
-		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:10px;" id="delete-button"><i class="icon-trash" style="font-size:1em;"></i></span>');
+		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top: 20px;" id="delete-button"><a style="font-size:1em;">Disassociate</a></span>');
 		$('#delete-button').live('click',agile_delete_all_prefs);
 	});
 	

@@ -316,3 +316,98 @@ small {
 	background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%,
 		white)
 }
+
+.Bria_call.active
+{
+	opacity : 0.3;
+}
+
+.Bria_call.disable
+{
+	zoom : 1;
+	opacity:0.3;
+}
+
+
+.Bria_call.active:hover
+{
+	zoom : 1.05;
+	opacity : 1;
+}
+
+.Bria_call.disable:hover
+{
+	zoom : 1;
+	opacity:0.3;
+}
+
+.Skype_call.active
+{
+	opacity : 0.3;
+}
+
+.Skype_call.disable
+{
+	zoom : 1;
+	opacity:0.3;
+}
+
+
+.Skype_call.active:hover
+{
+	opacity : 1;
+	zoom : 1.05;
+}
+
+.Skype_call.disable:hover
+{
+	zoom : 1;
+	opacity:0.3;
+}
+
+.TwilioIO_call.active
+{
+	opacity : 0.3;
+}
+
+.TwilioIO_call.disable
+{
+	zoom : 1;
+	opacity:0.3;
+}
+
+.TwilioIO_call.active:hover
+{
+	opacity : 1;
+	zoom : 1.05;
+}
+
+.TwilioIO_call.disable:hover
+{
+	zoom : 1;
+	opacity:0.3;
+}
+
+.Sip_call.active
+{
+	opacity : 0.3;
+}
+
+.Sip_call.disable
+{
+	zoom : 1;
+	opacity:0.3;
+}
+
+
+.Sip_call.active:hover
+{
+	opacity : 1;
+	zoom : 1.05;
+}
+
+.Sip_call.disable:hover
+{
+	zoom : 1;
+	opacity:0.3;
+}

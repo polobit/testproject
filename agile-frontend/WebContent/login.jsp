@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.MathUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="java.util.TimeZone"%>
@@ -6,6 +7,7 @@
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.MobileUADetector"%>
 <%
 /*
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
@@ -84,21 +86,28 @@ System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
   
 String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+
+//Static images s3 path
+String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
+	  S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL();
 }
 
 // Users can show their logo on login page. 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
+// Bg Image
+int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
+
 %>
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" style="background:transparent;">
 <head>
 <meta charset="utf-8">
 <meta name="globalsign-domain-verification"
@@ -111,29 +120,46 @@ String logo_url = accountPrefs.logo;
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 body {
-   background-image: url('../flatfull/images/flatfull/agile-login-page-low.jpg');
+	
+	<% 
+	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+
+		background-color: #f0f3f4;
+	
+	<% }else {  %>
+
+background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high-prog.jpg');
+	
+		<%}%>
+  
+
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 100% 100%;
+  background-size: cover;
   background-attachment: fixed;
 }
 
 
 .text-white
 {
-color:#fff!important;
+color:#fff !important;
 }
 input
 {
-color:#000!Important;
+color:#000 !Important;
 }
 a:hover
 {
 text-decoration:underline;
 }
-
+#mobile .tags-color{
+color:#58666e !important;
+}
 .error {
 	color: white !important;
 	background-color: #c74949;
@@ -147,40 +173,71 @@ text-decoration:underline;
 position: fixed;width: 100%;top: 0px;
 }
 
+@media all and (max-width: 767px) {
+	#simple-modal {
+		display: none;
+	}
+}
+.view{
+	position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
 </style>
 
 <script>
+
+
+/*
 var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
 var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
-if(isIE || isIENew) 
-	window.location = '/error/not-supported.jsp';
+if(isIE || isIENew)
+ window.location = '/error/not-supported.jsp';
+*/
 
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
 if(isSafari && isWin) 
-	window.location = '/error/not-supported.jsp';
+ window.location = '/error/not-supported.jsp';
 
 </script>
 
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
+
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-      <script src="lib/ie/html5.js"></script>
+<!--[if lt IE 9]>	 
+	<script src="lib/ie/html5.js"></script>
     <![endif]-->
 
 </head>
 
-<body>
+<body  class="overlay">
 <div id="openid_btns">
 					   	
-	<div class="app app-header-fixed app-aside-fixed" id="app">
+	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
-  			<div class="container w-xxl w-auto-xs">
-				
-					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
+  			<div class="container w-xxl w-auto-xs view"
+  			<%
+  			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+		id="mobile"
+	<% }else {  %> <%}%>>
+	<%
+				if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+				<div >
+		<img class="block" style="margin:0px auto;" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png"  ></img></div>
+	<% }else {  %> 
+					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t tags-color text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
-				
+				<%}%>
 				<div>
 				
 				<form id='oauth' name='oauth' method='post'>
@@ -209,7 +266,7 @@ if(isSafari && isWin)
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 				</form>
 			<!-- 	<div class="clearfix"></div> -->
-				<div class="wrapper text-center text-white">
+				<div class="wrapper text-center tags-color text-white tags-color">
       				<strong>Sign in using your registered account</strong>
    				</div>
 				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isValid();">
@@ -245,14 +302,20 @@ if(isSafari && isWin)
 					
 				
 
-				
-		<div class="text-center text-white m-t m-b">
+		<div 		
+		
+		<%
+  			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+		id="mobile"
+	<% }else {  %> <%}%> >
+	<div class="text-center tags-color text-white m-t m-b" >
 		<small>Login with</small> 
-		<a title="Login with Google" data='google' href='#' class="openid_large_btn google text-white">Google</a>&nbsp|&nbsp
-		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo text-white">Yahoo</a><br/>	
-		<small>Do not have an account?</small> <a href="/register" class="text-white">Sign Up</a><br/>
-		<small>Forgot</small> <a href="/forgot-password" class="text-white">Password? </a><a href="/forgot-domain" class="text-white">Domain?</a>
+		<a title="Login with Google" data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
+		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
+		<small>Do not have an account?</small> <a href="/register" class="tags-color text-white">Sign Up</a><br/>
+		<small>Forgot</small> <a href="/forgot-password" class="tags-color text-white">Password? </a><a href="/forgot-domain" class="tags-color text-white">Domain?</a>
 		</div>
+	</div>
 		
 		</form>
 		</div>
@@ -266,24 +329,31 @@ if(isSafari && isWin)
 	</div>
 	
 	<!-- JQUery Core and UI CDN -->
-	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
+	
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+
 
 			var login_hash = window.location.hash;
 
 			// Sets location hash in hidden fields
 			if(login_hash)
 				$("#location_hash").val(login_hash);
-
-        var newImg = new Image;
+        /*var newImg = new Image;
         newImg.onload = function() {
+        
         $("body").css("background-image","url('"+this.src+"')");
-        }
-        newImg.src = 'flatfull/images/flatfull/agile-login-page-high.png';
+       
+        }*/
+
+      //  newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
+
+        // agile-login-page-high.png
+        	preload_login_pages();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 
@@ -303,6 +373,9 @@ if(isSafari && isWin)
 				 $(this).closest('div').fadeOut('slow', function() {
 				   });
 				 });
+
+
+			// $('input, textarea').placeholder();
 			
 		});
 		
@@ -314,7 +387,32 @@ if(isSafari && isWin)
 		}
 
 		function preload_dashlet_libs(){ 
-			setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
+
+			if ($.active > 0) {
+				setTimeout(function() {
+					preload_dashlet_libs();
+				}, 500);
+				return;
+			}
+
+			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>');
+		}
+
+		function preload_login_pages(){
+
+			for(var i=1; i < 10; i++){
+
+				$('<img/>', {
+				    class: 'hide',
+				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-high.jpg',
+				}).appendTo('body');
+
+				/*$('<img/>', {
+				    class: 'hide',
+				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-low.jpg',
+				}).appendTo('body');*/
+
+			}
 		}
 	</script>
 	<!-- Clicky code -->

@@ -1,3 +1,6 @@
+<%@page import="com.agilecrm.user.AliasDomain"%>
+<%@page import="com.agilecrm.user.util.AliasDomainUtil"%>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
@@ -24,12 +27,19 @@ if(!StringUtils.isEmpty(email))
 	}
 	else
 	{
-	   success = "Redirecting to " + domainUser.domain;
-	   response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com");
+	   String domain = domainUser.domain;
+	   AliasDomain aliasDomain = AliasDomainUtil.getAliasDomain(domain);
+	   if(aliasDomain != null)
+		   domain = aliasDomain.alias.get(0);
+	   success = "Redirecting to " + domain;
+	   String url = VersioningUtil.getURL(domain, request);
+	   response.sendRedirect(url);
 	}
 	
 	System.out.println(error + " " + success);
 }
+//Static images s3 path
+String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("flatfull/", "");
 
 %>
 <!DOCTYPE html>
@@ -54,10 +64,13 @@ if(!StringUtils.isEmpty(email))
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 
 body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
+background-image:url('<%=S3_STATIC_IMAGE_PATH%>/images/buildings-low.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
@@ -86,8 +99,18 @@ text-decoration:underline;
 .close {
 	  color: #000 !important;
 }
-<!-- 
-@media (min-width: 900px) {
+
+
+@media all and (max-width: 767px) {
+
+body {
+  background-size: cover;
+
+}
+  
+}
+
+<!-- @media (min-width: 900px) {
 body {
 	padding-top: 30px;
 	}
@@ -109,8 +132,8 @@ body {
 
 .alert-success {
 	  color: #3c763d !important;
-}
--->
+} -->
+
 </style> 
 
  <!-- JQUery Core and UI CDN -->
@@ -121,7 +144,9 @@ body {
 
 <script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
-
+<!--[if lt IE 10]>
+<script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
+<![endif]-->
 <!-- <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,
@@ -186,7 +211,7 @@ jQuery.validator.setDefaults({
 				
 				<div class="list-group list-group-sm">
 					<div class="list-group-item">
-						<input class="input-xlarge field required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
+						<input class="input-xlarge  required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
 					</div>
 				</div>
 					  <input type='submit' value="Submit" class='btn btn-lg btn-primary btn-block forgot_domain_btn'>
@@ -212,7 +237,7 @@ jQuery.validator.setDefaults({
       	newImg.onload = function() {
     	$("body").css("background-image","url('"+this.src+"')");
   		 }
-		newImg.src = 'flatfull/images/flatfull/buildings.jpg';
+		newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/buildings.jpg';
 		
 		  //form is self submitted
           $("#forgot_domain").validate({

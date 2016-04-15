@@ -11,8 +11,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -104,6 +107,32 @@ public class Note extends Cursor
     @NotSaved
     public String entity_type = "note";
 
+    // added some variable for logcall which is a special type of note//
+
+    /**
+     * phoneNumber of the related contact
+     */
+    @NotSaved(IfDefault.class)
+    public String phone = null;
+
+    /**
+     * callType of the logPhone
+     */
+    @NotSaved(IfDefault.class)
+    public String callType = null;
+
+    /**
+     * status of the logPhone
+     */
+    @NotSaved(IfDefault.class)
+    public String status = null;
+
+    /**
+     * duration of the logPhone
+     */
+    @NotSaved(IfDefault.class)
+    public Long duration = null;
+
     // Dao
     public static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(Note.class);
 
@@ -132,6 +161,23 @@ public class Note extends Cursor
     }
 
     /**
+     * Creates a note object with subject, description and created_time
+     * 
+     * @param subject
+     *            subject of the note
+     * @param description
+     *            description of the note
+     * 
+     */
+    public Note(String subject, String description, Long created_time)
+    {
+	this.description = description;
+	if (subject != null)
+	    this.subject = subject;
+	this.created_time = created_time;
+    }
+
+    /**
      * Saves a note in the database
      */
     public void save()
@@ -151,7 +197,7 @@ public class Note extends Cursor
     }
 
     /**
-     * Remove related contact owner. Used for delete note of specific contact. 
+     * Remove related contact owner. Used for delete note of specific contact.
      * 
      * @param contactKey
      */
@@ -182,6 +228,10 @@ public class Note extends Cursor
 	    this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id.toString())));
 	}
 
+	// Store Created Time
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
+
 	/**
 	 * Commented because not to fill AgileUser as owner for new notes.
 	 */
@@ -203,9 +253,6 @@ public class Note extends Cursor
 	// Saves domain user key
 	domain_owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 
-	// Store Created Time
-	if (created_time == 0L)
-	    created_time = System.currentTimeMillis() / 1000;
     }
 
     /**
@@ -214,12 +261,9 @@ public class Note extends Cursor
      * @return list of contact objects as xml element related with a deal.
      */
     @XmlElement
-    public List<Contact> getContacts()
+    public List<ContactPartial> getContacts()
     {
-	Objectify ofy = ObjectifyService.begin();
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	contacts_list.addAll(ofy.get(this.related_contacts).values());
-	return contacts_list;
+    return ContactUtil.getPartialContacts(this.related_contacts);
     }
 
     public void addContactIds(String id)
@@ -257,7 +301,7 @@ public class Note extends Cursor
     {
 	if (owner != null)
 	{
-	    Objectify ofy = ObjectifyService.begin();
+	    /*Objectify ofy = ObjectifyService.begin();
 	    try
 	    {
 		return ofy.query(UserPrefs.class).ancestor(owner).get();
@@ -265,7 +309,7 @@ public class Note extends Cursor
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
-	    }
+	    }*/
 	}
 	return null;
     }
@@ -278,14 +322,14 @@ public class Note extends Cursor
      *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "domainOwner")
-    public DomainUser getDomainOwner() throws Exception
+    public DomainUserPartial getDomainOwner() throws Exception
     {
 	if (domain_owner != null)
 	{
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(domain_owner.getId());
+		return DomainUserUtil.getPartialDomainUser(domain_owner.getId());
 	    }
 	    catch (Exception e)
 	    {
@@ -296,38 +340,70 @@ public class Note extends Cursor
     }
 
     /**
-     * Gets picture of owner who created deal. Owner picture is retrieved from
-     * user prefs of domain user who created deal and is used to display owner
-     * picture in deals list.
+     * Returns hours to logphone.
      * 
-     * @return picture of owner.
-     * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key.
+     * @return
      */
-    @XmlElement(name = "ownerPic")
-    public String getOwnerPic() throws Exception
+    @XmlElement(name = "hour")
+    public Long getHour()
     {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
 	try
 	{
-	    // Get owner pic through agileuser prefs
-	    if (domain_owner != null)
-		agileuser = AgileUser.getCurrentAgileUserFromDomainUser(domain_owner.getId());
-
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-
-	    if (userprefs != null)
-		return userprefs.pic;
+	    Long timeInSec = this.duration;
+	    Long hour = timeInSec / 3600;
+	    return hour;
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+	    return null;
 	}
 
-	return "";
+    }
+
+    /**
+     * Returns minutes to logphone.
+     * 
+     * @return
+     */
+    @XmlElement(name = "min")
+    public Long getMin()
+    {
+	try
+	{
+
+	    Long timeInSec = this.duration;
+	    Long hour = timeInSec / 3600;
+	    Long min = (timeInSec - (hour * 3600)) / 60;
+	    return min;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+
+    /**
+     * Returns second to logphone.
+     * 
+     * @return
+     */
+    @XmlElement(name = "sec")
+    public Long getSec()
+    {
+	try
+	{
+	    Long timeInSec = this.duration;
+	    Long hour = timeInSec / 3600;
+	    Long min = (timeInSec - (hour * 3600)) / 60;
+	    Long sec = timeInSec - (hour * 3600) - (min * 60);
+	    return sec;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
     }
 
     @Override

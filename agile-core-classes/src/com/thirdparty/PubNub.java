@@ -21,6 +21,8 @@ import com.pubnub.api.Pubnub;
 public class PubNub
 {
 
+	static Pubnub pubnub = new Pubnub(Globals.PUBNUB_PUBLISH_KEY, Globals.PUBNUB_SUBSCRIBE_KEY);
+	
     /**
      * Publishes message to the given channel.
      * 
@@ -34,7 +36,6 @@ public class PubNub
     {
 	try
 	{
-	    Pubnub pubnub = new Pubnub(Globals.PUBNUB_PUBLISH_KEY, Globals.PUBNUB_SUBSCRIBE_KEY);
 
 	    // Publish Message - response with 0 for any error, 1 for success.
 	    JSONArray response = pubnub.publish(channel, messageJSON);

@@ -222,7 +222,9 @@ public class BusinessHours extends TaskletAdapter
 				// continue;
 
 				// Check time
-				String currentTime = "" + calendar.get(Calendar.HOUR_OF_DAY) + "" + calendar.get(Calendar.MINUTE);
+//				String currentTime = "" + calendar.get(Calendar.HOUR_OF_DAY) + "" + calendar.get(Calendar.MINUTE);
+				String currentTime = String.format("%02d%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+				
 				if (currentTime.length() < 4)
 				{
 					currentTime = "0" + currentTime;
@@ -260,5 +262,4 @@ public class BusinessHours extends TaskletAdapter
 		}
 		return false;
 	}
-
 }

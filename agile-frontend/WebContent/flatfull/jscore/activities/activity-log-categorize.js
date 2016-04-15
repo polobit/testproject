@@ -69,6 +69,26 @@ function initializeActivitiesListner(el){
 	}, null);
 
 });
+	/*Ticket related click event to show the modal when requester or assignee replies*/
+	$("#activities-listners").on('click', '.ticket-activity-notes', function(e) 
+{
+	e.preventDefault();
+   	var id = $(this).data("id");
+    
+    var activity_ticket_notes = activitiesview.collection.get(id).toJSON();
+
+    //console.log(activity_ticket_notes.entityObject);
+	getTemplate("ticket-activity-notes-modal", activity_ticket_notes, undefined, function(template_ui){
+
+		if(!template_ui)
+			  return;
+
+		var emailinfo = $(template_ui);
+
+		emailinfo.modal('show');
+	}, null);
+
+});
 
 }
 function getDealObject(id)
@@ -108,13 +128,14 @@ function getActivityObject(id)
 
 function update_event_activity(ele)
 {
+	$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+	
 	var value = JSON.parse(ele);
 	deserializeForm(value, $("#updateActivityForm"));
-	$("#updateActivityModal").modal('show');
-
 	$('.update-start-timepicker').val(fillTimePicker(value.start));
-
 	$('.update-end-timepicker').val(fillTimePicker(value.end));
+
+	$("#updateActivityModal").modal('show');
 
 	if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 	{
@@ -160,21 +181,29 @@ function getModal()
 function updateactivity__task(ele)
 {
 	var value = JSON.parse(ele);
-	deserializeForm(value, $("#updateTaskForm"));
-	$("#updateTaskModal").modal('show');
-	// Fills owner select element
-	populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-	{
-		$("#updateTaskForm").find("#owners-list").html(data);
-		if (value.taskOwner)
+
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+
+	loadProgressSlider($("#updateTaskForm"), function(el){
+
+		deserializeForm(value, $("#updateTaskForm"));
+		// Fills owner select element
+		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
 		{
-			$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-		}
-		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			$("#updateTaskForm").find("#owners-list").html(data);
+			if (value.taskOwner)
+			{
+				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+			}
+			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+		});
+
+		// Add notes in task modal
+		showNoteOnForm("updateTaskForm", value.notes);
+
 	});
 
-	// Add notes in task modal
-	showNoteOnForm("updateTaskForm", value.notes);
+	
 }
 
 function updatedeals(ele)

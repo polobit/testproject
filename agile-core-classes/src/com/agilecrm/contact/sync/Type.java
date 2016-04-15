@@ -27,11 +27,10 @@ import com.thirdparty.xero.XeroSyncImpl;
  */
 public enum Type implements Serializable
 {
-    GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
-	    ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
-	    ShopifySyncImpl.class, "Shopify Import Status"), QUICKBOOK(QuickBookSyncImpl.class,
-	    "QuickBooks Import Status"), XERO(XeroSyncImpl.class, "Xero Import Status"), FRESHBOOKS(
-	    FreshbooksSyncImpl.class, "Freshbooks Import Status");
+    GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), 
+    ZOHO(ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"),
+    SHOPIFY(ShopifySyncImpl.class, "Shopify Import Status"), QUICKBOOK(QuickBookSyncImpl.class, "QuickBooks Import Status"), 
+    XERO(XeroSyncImpl.class, "Xero Import Status"), FRESHBOOKS(FreshbooksSyncImpl.class, "Freshbooks Import Status"), OFFICE365(FreshbooksSyncImpl.class, "Office 365 Import Status"),;
 
     Class<? extends IContactSyncService> clazz;
     String notificationEmailSubject = "";

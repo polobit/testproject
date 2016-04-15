@@ -1,5 +1,15 @@
 //Stores report object, so it can be used while creating report table headings
 var REPORT;
+
+$(function()
+{
+  $('body').on('mouseover','.highcharts-container',function(e){
+      $(this).find('.highcharts-button').show();
+  });
+  $('body').on('mouseout','.highcharts-container',function(e){
+      $(this).find('.highcharts-button').hide();
+  });
+});
 /**
  * Initializes listener to perform various event function related to contact
  * reports
@@ -91,6 +101,15 @@ function initializeReportsListeners(){
 		var el = $("#report_advanced span i");
 		el.toggleClass("fa-minus").toggleClass("fa-plus");
 			});
+
+		$('.col-md-3')
+			.on(
+					"mouseenter",
+					'.show_screenshot',
+					function(e) {
+
+						$('.show_screenshot').popover();
+					});
 }
 
 function reportsContactTableView(base_model, customDatefields, view)

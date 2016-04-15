@@ -1,3 +1,4 @@
+var popover_call;
 /**
  * 
  * Describes the given object is an array or not
@@ -19,11 +20,16 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
+	var eventFilters;
+	var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
 
-	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+	if(eventData){
+		eventFilters = eventData[CURRENT_AGILE_USER.id];
+	}
+
 	var agile_event = false;
 	if (eventFilters)
-	{
+	{		
 		var type_of_cal = eventFilters.cal_type;
 		var owners = eventFilters.owner_ids;
 		if (owners && owners.length > 0)
@@ -45,7 +51,7 @@ function load_events_from_google(callback)
 				if(inArray >= 0){
 					//continue
 				}else{
-					return
+					return;
 				}
 			}
 			else{
@@ -61,13 +67,19 @@ function load_events_from_google(callback)
 //		}
 	}
 
-	// Name of the cookie to store/ calendar prefs. Current user id is set
+	get_google_calendar_prefs(callback);
+
+}
+
+function get_google_calendar_prefs(callback)
+{
+		// Name of the cookie to store/ calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
 
 	// Reads existing cookie
-	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
+	var _agile_calendar_prefs_cookie = _agile_get_prefs(google_calendar_cookie_name);
 
 	// If cookie is not null, then it check it token is still valid; checks
 	// based on expiry time.
@@ -75,13 +87,14 @@ function load_events_from_google(callback)
 	{
 		var prefs = JSON.parse(_agile_calendar_prefs_cookie);
 
+
 		// Checks if token expired. It considers expire before 2 minutes window
 		// of actual expiry time.
 		if (prefs.expires_at - (2 * 60 * 1000) >= new Date().getTime())
 		{
 			// Returns token to the callback accoring to specification of gcal
-			get_google_calendar_event_source(prefs, callback);
-			return;
+			return get_google_calendar_event_source(prefs, callback);
+			
 		}
 
 		// Erases cookie if token is expired and sends request to backend to
@@ -98,8 +111,8 @@ function load_events_from_google(callback)
 			return;
 
 		// Creates cookie
-		createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
-		get_google_calendar_event_source(prefs, callback);
+		_agile_set_prefs(google_calendar_cookie_name, JSON.stringify(prefs));
+		return get_google_calendar_event_source(prefs, callback);
 	});
 }
 
@@ -109,7 +122,40 @@ function load_events_from_google(callback)
 function erase_google_calendar_prefs_cookie()
 {
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
-	eraseCookie(google_calendar_cookie_name);
+	_agile_delete_prefs(google_calendar_cookie_name);
+	_agile_delete_prefs(google_calendar_cookie_name);
+}
+
+function get_calendar_ids_form_prefs(data)
+{
+
+		if(!data)
+			return;
+
+		var calendar_ids = ["primary"];
+
+		if(data.prefs)
+		{
+			
+
+			try
+			{
+				var prefs;
+				if(typeof data.prefs != 'object')
+					prefs = JSON.parse(data.prefs);
+				else
+					prefs = data.prefs;
+
+				if(prefs.fields != null)
+				calendar_ids = prefs.fields;		
+			}
+			catch (err)
+			{
+				console.log(err);
+			}
+		}
+
+		return calendar_ids;
 }
 
 // Returns token in to gcal callback in specified format
@@ -117,7 +163,10 @@ function get_google_calendar_event_source(data, callback)
 {
 
 	if (callback && typeof (callback) === "function")
-		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal" });
+	{
+		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal", calendarIds : get_calendar_ids_form_prefs(data)});
+	}
+	return true;
 }
 
 /**
@@ -128,10 +177,9 @@ function showCalendar(users)
 {
 
 	_init_gcal_options(users);
-	putGoogleCalendarLink();
-	putOfficeCalendarLink();
+	put_thirdparty_calendar_links();
 	
-	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
+	var calendarView = (!_agile_get_prefs('calendarDefaultView')) ? 'month' : _agile_get_prefs('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	var contentHeight = 400;
 	if (calendarView == "agendaDay" || calendarView == "agendaWeek")
@@ -160,13 +208,19 @@ function showCalendar(users)
 						 */
 
 						eventSources : [
-								{ events : function(start, end, callback)
+								{ 	
+									events : function(start, end, callback)
 								{
-
-									var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+									var eventFilters;
+									var eventData = JSON.parse(_agile_get_prefs('event-lhs-filters'));	
+	
+									if(eventData){
+										eventFilters = eventData[CURRENT_AGILE_USER.id];
+									}																		
+									
 									var agile_event_owners = '';
 									if (eventFilters)
-									{
+									{										
 										var type_of_cal = eventFilters.cal_type;
 										var owners = eventFilters.owner_ids;
 
@@ -198,20 +252,21 @@ function showCalendar(users)
 											//Office
 											var inArray = type_of_cal.indexOf("office");
 											if(inArray >= 0){
-												loadOfficeEvents(start.getTime(), end.getTime());
+												addOffice365CalendarEvents();
 											}
-											
-											$("#loading_calendar_events").hide();
 											
 											//Agile
 											var inArray = type_of_cal.indexOf("agile");
-											if(inArray >= 0){
+											if(inArray >= 0 ||( owners && owners.length > 0)){
 												//continue
 											}else{
+												callback([]);
 												return;
 											}
 										}
 										
+										
+
 //										if ((type_of_cal.length == 1 && type_of_cal[0] == 'google' && owners.length == 1 && owners[0] == CURRENT_AGILE_USER.id) || type_of_cal.length == 0 && owners.length == 0)
 //										{
 //											$("#loading_calendar_events").hide();
@@ -220,7 +275,7 @@ function showCalendar(users)
 									}
 
 									/*
-									 * if (readCookie('event-filters') &&
+									 * if (_agile_get_prefs('event-filters') &&
 									 * eventFilters.type == 'google') {
 									 * $("#loading_calendar_events").hide();
 									 * return; }
@@ -229,63 +284,59 @@ function showCalendar(users)
 									start_end_array.startTime = start.getTime() / 1000;
 									start_end_array.endTime = end.getTime() / 1000;
 									console.log(start_end_array.startTime+" : "+start_end_array.endTime);
-									createCookie('fullcalendar_start_end_time', JSON.stringify(start_end_array));
+									_agile_set_prefs('fullcalendar_start_end_time', JSON.stringify(start_end_array));
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
 									
+
 									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
+									//callback([]);
+									return eventsURL
+
+								//		return true;
+
+								},
+								dataType: 'agile-events'
+
+								},
+								{
+									dataType : 'agile-gcal',
 									
-									$.getJSON(eventsURL, function(doc)
-									{
-										try{
-										$.each(doc, function(index, data)
-										{
-											// decides the color of event based
-											// on owner id
-											console.log(data);
-											data = renderEventBasedOnOwner(data);
-										});
-
-										if (doc)
-										{
-
-											callback(doc);
-
-										}
-										}
-										catch(err){
-												$("#loading_calendar_events").hide();
-										}
-									});
-								} }, { dataType : 'agile-gcal' }
+								},
+								
+							
 						],
 						header : { left : 'prev', center : 'title', right : 'next' },
 						defaultView : calendarView,
 						slotEventOverlap : false,
 						viewDisplay : function(view)
 						{
-							createCookie('calendarDefaultView', view.name, 90);
+							_agile_set_prefs('calendarDefaultView', view.name, 90);
 							$(".fc-agenda-axis").addClass('bg-light lter');
 						},
 						loading : function(bool)
 						{
 							if (bool)
 							{
-
+								pushLoading();
 								$("#loading_calendar_events").remove();
-								$('.fc-header-left')
+								$('.fc-header-left','#calendar_event')
 										.append(
 												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 										.show();
-								$('.fc-header-left').show();
+								$('.fc-header-left','#calendar_event').show();
 
 							}
 							else
 							{
-								// $('#loading').hide();
-								$("#loading_calendar_events").hide();
-								start_tour('calendar');
+								if(popLoading() <= 0)
+								{
+									// $('#loading').hide();
+									$("#loading_calendar_events").hide();
+									start_tour('calendar');	
+								}
+								
 							}
 							$(".fc-agenda-axis").addClass('bg-light lter');
 							$(".ui-resizable-handle").hide();
@@ -301,202 +352,41 @@ function showCalendar(users)
 						eventMouseover : function(event, jsEvent, view)
 						{
 
-							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
+							calendarView = (!_agile_get_prefs('calendarDefaultView')) ? 'month' : _agile_get_prefs('calendarDefaultView');
 							var reletedContacts = '';
 							var meeting_type = '';
 							 	
-								if(event.contacts != null){
-									if (event.contacts.length > 0){
-										reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
-									}
-									for (var i = 0; i < event.contacts.length; i++)
-									{
-										if (event.contacts[i].entity_type == "contact_entity")
-										{
-											var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
-											if (last_name == undefined)
-												last_name = "";
-											if(event.contacts[i].type == 'COMPANY')
-												reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
-													event.contacts[i].properties, "name") + '</a>';
-											else
-												reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-														event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
-										}else{
-											reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-													event.contacts[i].properties, "name") + '</a>';
-										}
-										if (i != event.contacts.length - 1){
-											reletedContacts += ', ';
-										}
-									}
-								}
+								
 								
 								var leftorright = 'left';	
 								var pullupornot = '';
 								var popoverElement = '';
 								var popover_min_width = 300;
-									
-									if (event.meeting_type && event.description){
-										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
-									}else if (event.description){
-										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + addDotsAtEnd(event.description) + '</span>';
-									}
-											
-									if (calendarView == "month")
-									{
-										popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
-										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
-										var top = jsEvent.currentTarget.offsetTop;
-										if ($('.fc-border-separate:visible').width() - left < popover_min_width)
-										{
-											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
-											leftorright = 'right';
-										}
-										if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
-										{
-											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
-											top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
-											leftorright = 'top';
-										}
-										if(event.type == "officeCalendar"){
-											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + 
-																 '<div class="panel bg-white b-a pos-rlt p-sm">' + 
-																 '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + 
-																 '<div class="m-b-sm"><div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' +
-																 '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start.format('dd-mmm-yyyy HH:MM') + '</div>' + 
-																 '<div class="text-ellipsis">' + reletedContacts + '</div>' + 
-																 '<div class="text-ellipsis">' + meeting_type + '</div>' + 
-																 '</div>' + '</div>';
-											$(this).after(popoverElement);
-										}else{
-											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-											$(this).after(popoverElement);
-										}
-										
-										if ($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
-												.height())
-										{
-											$(this).parent().find('.fc-overlayw').css("top",
-													top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
-										}
-										if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
-										{
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
-										}
-										if (($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
-												this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
-										{
-											$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
-											top = jsEvent.currentTarget.offsetTop - $(this).parent().find('.fc-overlayw').height() + 10;
-											$(this).parent().find('.fc-overlayw').css({ "top" : top + "px", "lef" : left + "px" });
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
-										}
-									}
-									else if (calendarView == "agendaWeek")
-									{
-										popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
-										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
-										var top = jsEvent.currentTarget.offsetTop;
-										if ($('.fc-agenda-slots:visible').width() - left < popover_min_width)
-										{
-											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
-											leftorright = 'right';
-										}
-										
-										if(event.type == "officeCalendar"){
-											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + 
-																 '<div class="panel bg-white b-a pos-rlt p-sm">' + 
-																 '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + 
-																 '<div class="m-b-sm"><div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' +
-																 '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start.format('dd-mmm-yyyy HH:MM') + '</div>' + 
-																 '<div class="text-ellipsis">' + reletedContacts + '</div>' + 
-																 '<div class="text-ellipsis">' + meeting_type + '</div>' + 
-																 '</div>' + '</div>';
-											$(this).after(popoverElement);
-										}else{
-											// var event_width =
-											// jsEvent.currentTarget.offsetWidth;
-											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-											$(this).after(popoverElement);									
-										}
-										
-										if ($('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
-										{
-											$(this).parent().find('.fc-overlayw').css("top",
-													top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
-										}
-									}
-									else if (calendarView == "agendaDay")
-									{
-										var left = jsEvent.currentTarget.offsetLeft;
-										var top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
-										leftorright = 'top';
-										if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
-										{
-											left = jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth);
-										}
-										
-										if(event.type == "officeCalendar"){
-											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + 
-																 '<div class="panel bg-white b-a pos-rlt p-sm">' + 
-																 '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + 
-																 '<div class="m-b-sm"><div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' +
-																 '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start.format('dd-mmm-yyyy HH:MM') + '</div>' + 
-																 '<div class="text-ellipsis">' + reletedContacts + '</div>' + 
-																 '<div class="text-ellipsis">' + meeting_type + '</div>' + 
-																 '</div>' + '</div>';
-											$(this).after(popoverElement);
-										}else{
-											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-											$(this).after(popoverElement);
-										}
-										
-										$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
-										if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
-										{
-											$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
-										}
-										if ((jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
-												.height() - jsEvent.currentTarget.offsetHeight < $(this).parent().find('.fc-overlayw').height() + 10))
-										{
-											$(this).parent().find('.fc-overlayw').css("top", jsEvent.currentTarget.offsetTop + 40 + "px");
-										}
-										if ((jsEvent.currentTarget.offsetTop > $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
-												.height() - (jsEvent.currentTarget.offsetHeight + jsEvent.currentTarget.offsetTop) < $(this).parent().find(
-												'.fc-overlayw').height() + 10))
-										{
-											$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
-											$(this).parent().find('.fc-overlayw').css(
-													"top",
-													$('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetHeight - $(this).parent().find('.fc-overlayw')
-															.height() + 7 + "px");
-											if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
-											{
-												$(this).parent().find('.fc-overlayw')
-														.css(
-																"left",
-																jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible')
-																		.width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth) + "px");
-											}
-										}
-									}
-							$(jsEvent.currentTarget).css('z-index', 9);
-							if (event.allDay){
-								$(jsEvent.currentTarget.parentElement).css('z-index', 9);
-							}
-							$(this).parent().find('.fc-overlayw').show();
-							$(this).find(".ui-resizable-handle").show();
+								var that = $(this);	
+								var that_event = jsEvent.currentTarget;
+								if(that.data("data_fetched"))
+								{
+									event.contacts=that.data("data_fetched");
+									calendar_Popover(event,calendarView,that,popover_min_width,that_event,leftorright,pullupornot,popoverElement,reletedContacts,meeting_type)
+									return;
+								}
+								if(event.id!=undefined){
+								popover_call=
+								$.ajax({ 
+									url : "/core/api/events/contacts-related?id="+event.id, 
+									dataType : 'json',
+									success : function(data){
+											console.log(data);
+											that.data("data_fetched",data);
+											event.contacts=data;
+												calendar_Popover(event,calendarView,that,popover_min_width,that_event,leftorright,pullupornot,popoverElement,reletedContacts,meeting_type)
+									}		
+							});
+						}
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
+							popover_call.abort();
 							$(this).parent().find('.fc-overlayw').hide();
 							$(this).parent().find('.fc-overlayw').remove();
 							$(this).find(".ui-resizable-handle").hide();
@@ -538,7 +428,7 @@ function showCalendar(users)
 						select : function(start, end, allDay)
 						{
 							// Show a new event
-							$('#activityModal').modal('show');
+							$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 							highlight_event();
 
 							// Set Date for Event
@@ -587,6 +477,12 @@ function showCalendar(users)
 						 */
 						eventDrop : function(event1, dayDelta, minuteDelta, allDay, revertFunc)
 						{
+							
+							if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != event1.owner.id)){
+								revertFunc();
+								$("#moveEventErrorModal").html(getTemplate("move-event-error-modal")).modal('show');
+								return;
+							}
 
 							// Confirm from the user about the change
 							if (!confirm("Are you sure about this change?"))
@@ -611,8 +507,11 @@ function showCalendar(users)
 								_contacts.push(jsoncontacts[i].id);
 
 							}
+							if(event.owner)
+							event.owner_id = event.owner.id;
 							delete event.contacts;
 							delete event.owner;
+							event
 							event.contacts = _contacts;
 							var eventModel = new Backbone.Model();
 							eventModel.url = 'core/api/events';
@@ -632,6 +531,11 @@ function showCalendar(users)
 
 							if (isNaN(event.id))
 								return;
+
+							// Show edit modal for the event
+							$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal("show");
+
+
 							// Deserialize
 							deserializeForm(event, $("#updateActivityForm"));
 
@@ -691,9 +595,8 @@ function showCalendar(users)
 								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
-							// Show edit modal for the event
-							$("#updateActivityModal").modal('show');
 							
+							App_Calendar.current_event = event;
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 							// Fills owner select element
@@ -710,14 +613,14 @@ function showEventFilters()
 {
 	$('#filter_options').show();
 
-	if (readCookie("agile_calendar_view"))
+	if (_agile_get_prefs("agile_calendar_view"))
 		$('#filter_options .calendar-view').hide();
 	else
 		$('#filter_options .list-view').hide();
 
-	if (readCookie('event-filters'))
+	if (_agile_get_prefs('event-filters'))
 	{
-		var eventFilters = JSON.parse(readCookie('event-filters'));
+		var eventFilters = JSON.parse(_agile_get_prefs('event-filters'));
 		$('#event-owner').val(eventFilters.owner_id);
 		$('#event_type').val(eventFilters.type);
 	}
@@ -751,24 +654,18 @@ function loadDefaultFilters(callback)
 {
 	// Create a cookie with default option, if there is no cookie related to
 	// event filter.
-	if (!readCookie('event-filters'))
+	if (!_agile_get_prefs('event-filters'))
 	{
-		$.getJSON('/core/api/users/agileusers', function(users)
+		$.getJSON('/core/api/users/current-agile-user', function(user)
 		{
-			if (users)
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-				$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-						var json = {};
-						json.owner_id = user.id.toString();
-						json.type = '';
-						createCookie('event-filters', JSON.stringify(json));
-					}
-				});
+				var json = {};
+				json.owner_id = user.id.toString();
+				json.type = '';
+				_agile_set_prefs('event-filters', JSON.stringify(json));
 			}
-
+			
 			if (callback)
 				callback();
 		});
@@ -805,7 +702,9 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
-
+function refreshcal(){
+	fullCal.fullCalendar('refetchEvents');
+}
 
 /**
  * gets the agileusers to build calendar filters
@@ -835,10 +734,203 @@ function getCalendarUsersDetails(callback)
 				json_user.id = user.id;
 				json_user.name = user.domainUser.name;
 				json_user.domain_user_id = user.domainUser.id;
-				json_users.push(json_user);
+				if (hasScope("VIEW_CALENDAR")) {
+					json_users.push(json_user);
+				}
 			}
 		});
 		return callback(json_users);
 
 	});
+}
+
+/*
+function multiple_property_list(item,propertyName)
+{
+	
+
+	// Gets properties list field from contact
+	var properties = item;
+	var property_list = [];
+
+	
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and retrieves value of the
+	 * property if it matches
+	 
+	$.each(properties, function(index, property)
+	{
+		if (property.name == propertyName)
+		{
+			property_list.push(property);
+		}
+	});
+
+	// If property is defined then return property value list
+	return property_list;
+}*/
+
+function setUpStarRating(value){
+
+
+		var element = "";
+		for (var i = 0; i < 5; i++)
+		{
+			if (i < parseInt(value))
+			{
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
+				continue;
+			}
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
+		}
+		return element;
+}
+
+function calendar_Popover(event,calendarView,that,popover_min_width,that_event,leftorright,pullupornot,popoverElement,reletedContacts,meeting_type){
+									$('.fc-overlayw').hide();
+								$('.fc-overlayw').remove();
+									if (calendarView == "month")
+									{
+										console.log("month");
+
+										popover_min_width = that.parents('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
+										var left =that_event.offsetLeft + that_event.offsetWidth + 10;
+										var top = that_event.offsetTop;
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - left < popover_min_width)
+										{
+											left = that_event.offsetLeft - popover_min_width - 10;
+											leftorright = 'right';
+										}
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < that_event.offsetWidth)
+										{
+											left = ((that_event.offsetLeft + that_event.offsetWidth + 10) / 2) - (popover_min_width / 2);
+											top = that_event.offsetTop + that_event.offsetHeight + 10;
+											leftorright = 'top';
+										}
+
+										var eventJSON = {};
+										
+										eventJSON.leftorright = leftorright;eventJSON.popover_min_width = popover_min_width;
+										eventJSON.popover_min_width = popover_min_width;eventJSON.left = left;eventJSON.top = top;
+										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
+										
+							  
+
+										if(event.type == "officeCalendar"){
+											that.after($(getTemplate("office-calendar-mouseover-popover", eventJSON)));
+										}else{
+											that.after($(getTemplate("calendar-mouseover-popover", eventJSON)));
+										}
+										
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw')
+												.height())
+										{
+											that.parent().find('.fc-overlayw').css("top",
+													top - that.parent().find('.fc-overlayw').height() + that_event.offsetHeight + 20 + "px");
+											that.parent().find('.fc-overlayw').find('.arrow').css("top", that.parent().find('.fc-overlayw').height() - 31 + "px");
+										}
+										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < that_event.offsetWidth)
+										{
+											that.parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
+										}
+										if ((that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - that_event.offsetTop - that_event.offsetHeight - 10 < that
+										.parent().find('.fc-overlayw').height() + 10) && (that.parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < that_event.offsetWidth))
+										{
+											that.parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+											left = ((that_event.offsetLeft + that_event.offsetWidth + 10) / 2) - (popover_min_width / 2);
+											top = that_event.offsetTop - that.parent().find('.fc-overlayw').height() + 10;
+											that.parent().find('.fc-overlayw').css({ "top" : top + "px", "lef" : left + "px" });
+											that.parent().find('.fc-overlayw').find('.arrow').css("top",that.parent().find('.fc-overlayw').height() - 22 + "px");
+										}
+										
+									}
+									else if (calendarView == "agendaWeek")
+									{
+										console.log("agendaWeek");
+										popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
+										var left = that_event.offsetLeft + that_event.offsetWidth + 10;
+										var top = that_event.offsetTop;
+										if ($('.fc-agenda-slots:visible').width() - left < popover_min_width)
+										{
+											left = that_event.offsetLeft - popover_min_width - 10;
+											leftorright = 'right';
+										}
+
+										var eventJSON = {};
+										eventJSON.leftorright = leftorright;eventJSON.popover_min_width = popover_min_width;
+										eventJSON.left = left;eventJSON.top = top;
+										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
+										
+										if(event.type == "officeCalendar"){
+											that.after(getTemplate("week-office-calendar-mouseover-popover", eventJSON));
+										}else{
+											that.after(getTemplate("week-calendar-mouseover-popover", eventJSON));
+										}
+										
+										if ($('.fc-agenda-slots:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw').height())
+										{
+											that.parent().find('.fc-overlayw').css("top",
+													top - that.parent().find('.fc-overlayw').height() + that_event.offsetHeight + 20 + "px");
+											that.parent().find('.fc-overlayw').find('.arrow').css("top", that.parent().find('.fc-overlayw').height() - 31 + "px");
+										}
+									}
+									else if (calendarView == "agendaDay")
+									{
+										console.log("agendaDay");
+										var left = that_event.offsetLeft;
+										var top = that_event.offsetTop + that_event.offsetHeight + 10;
+										leftorright = 'top';
+										if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
+										{
+											left = that_event.offsetLeft - that_event.offsetWidth - ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft - that_event.offsetWidth);
+										}
+										
+										var eventJSON = {};
+										eventJSON.leftorright = leftorright;eventJSON.popover_min_width = popover_min_width;
+										eventJSON.left = left;eventJSON.top = top;
+										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
+										if(event.type == "officeCalendar"){
+											that.after(getTemplate("day-office-calendar-mouseover-popover", eventJSON));
+										}else{
+											try{
+												that.after(getTemplate("day-calendar-mouseover-popover", eventJSON));
+											}catch(e){}
+										}
+										
+										that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
+										if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
+										{
+											that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
+										}
+										if ((that_event.offsetTop < that.parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
+												.height() - that_event.offsetHeight < that.parent().find('.fc-overlayw').height() + 10))
+										{
+											that.parent().find('.fc-overlayw').css("top", that_event.offsetTop + 40 + "px");
+										}
+										if ((that_event.offsetTop > that.parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
+												.height() - (that_event.offsetHeight + that_event.offsetTop) < that.parent().find(
+												'.fc-overlayw').height() + 10))
+										{
+											that.parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+											that.parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
+											that.parent().find('.fc-overlayw').css(
+													"top",
+													$('.fc-agenda-slots:visible').height() - that_event.offsetHeight -that.parent().find('.fc-overlayw')
+															.height() + 7 + "px");
+											if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
+											{
+												that.parent().find('.fc-overlayw')
+														.css(
+																"left",
+																that_event.offsetLeft - that_event.offsetWidth - ($('.fc-agenda-slots:visible')
+																		.width() - that_event.offsetLeft - that_event.offsetWidth) + "px");
+											}
+										}
+									}
+							$(that_event).css('z-index', 9);
+							if (event.allDay){
+								$(that_event.parentElement).css('z-index', 9);
+							}
+							that.parent().find('.fc-overlayw').show();
+							that.find(".ui-resizable-handle").show();
 }

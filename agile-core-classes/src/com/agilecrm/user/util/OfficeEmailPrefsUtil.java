@@ -8,7 +8,6 @@ import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.core.api.prefs.OfficePrefsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;

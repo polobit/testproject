@@ -11,6 +11,7 @@ public class RegistrationGlobals
     public static final String SIGN_UP_TAG = "Signup";
     public static final String DOMAIN_OWNER_TAG = "Domain Owner";
     public static final String REGISTRATION_PLAN_IN_SESSION = "_signup_plan";
+    public static final String IP = "IP";
 
     /**
      * Request parameters

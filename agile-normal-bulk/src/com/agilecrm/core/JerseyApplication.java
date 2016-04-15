@@ -46,6 +46,7 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.campaigns.WorkflowTemplatesAPI.class);
 		s.add(com.agilecrm.core.api.prefs.SocialPrefsAPI.class);
 		s.add(com.agilecrm.core.api.UsersAPI.class);
+		s.add(com.agilecrm.core.api.AliasDomainAPI.class);
 		s.add(com.agilecrm.core.api.API.class);
 		s.add(com.agilecrm.core.api.widgets.WidgetsAPI.class);
 		s.add(com.agilecrm.core.api.bulkactions.backends.BulkActionsAPI.class);
@@ -100,6 +101,8 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.deals.DealsBulkActionsAPI.class);
 		s.add(com.agilecrm.core.api.forms.FormsAPI.class);
 		s.add(com.agilecrm.core.api.WebhooksAPI.class);
+		s.add(com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest.class);
+		s.add(com.agilecrm.ticket.rest.TicketImportsRest.class);
 		return s;
 	}
 }

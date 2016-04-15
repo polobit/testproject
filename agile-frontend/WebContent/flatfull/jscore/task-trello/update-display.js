@@ -33,7 +33,7 @@ function displaySettings()
 }
 
 // Load and display slider in update task modal of task for progress.
-function loadProgressSlider(el)
+function loadProgressSlider(el, callback)
 {
 	head.load(LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
@@ -46,6 +46,9 @@ function loadProgressSlider(el)
 				changeProgress(value, $(".status", el).val(), el);
 			}
 		});
+
+		if(callback)
+			  callback(el);
 	});
 }
 
@@ -122,15 +125,23 @@ function setForm(formToSet)
 
 	if (isComplete == "true")
 	{
-		// Show slider for progress
-		showProgressSlider(100, COMPLETED, formToSet);
+		// loadProgressSlider(formToSet, function(formToSet){
+				// Show slider for progress
+				showProgressSlider(100, COMPLETED, formToSet);
+		// });
 	}
 	else
 	{
-		// Show slider for progress
-		showProgressSlider($('#progress', formToSet).val(), $('#status', formToSet).val(), formToSet);
+		// loadProgressSlider(formToSet, function(formToSet){
 
-		$(".progress_slider", formToSet).slider("value", $('#progress', formToSet).val());
+			// Show slider for progress
+			showProgressSlider($('#progress', formToSet).val(), $('#status', formToSet).val(), formToSet);
+
+			$(".progress_slider", formToSet).slider("value", $('#progress', formToSet).val());
+
+		// });
+
+		
 	}
 }
 
@@ -334,6 +345,15 @@ function hideListViewAndShowLoading()
 	$('#new-task-list-based-condition').show();
 	$('#task-list-based-condition').hide();
 	$('.tasks-count').html("");
+
+	var criteria = getCriteria();
+	if(criteria && criteria != 'CALENDAR'){
+		//Hide the calendar view
+		$('#task-calendar-based-condition').addClass("hide");
+		$('#task-calendar-based-condition').html("");
+		// Hide daya and month buttons
+		$('#calendarTasksButtons').addClass("hide");
+	}
 	
 	// Shows loading image untill data gets ready for displaying
 	$('#new-task-list-based-condition').html(LOADING_HTML);	
@@ -356,6 +376,12 @@ function displayListView()
 	
 	// Hide list view
 	$(".list-view").hide();
+
+	// Display calendar view
+	$(".calendar-view").show();
+
+	// Hide daya and month buttons
+	$('#calendarTasksButtons').addClass("hide");
 	
 	var url = getParamsNew();
 	
@@ -380,15 +406,8 @@ function bindDropdownEvents()
 	// Click events to agents dropdown of Owner's list and Criteria's list
 	$("ul#new-owner-tasks li a,ul#new-type-tasks .new-type-task").on("click", function(e)
 	{        
-		e.preventDefault();			
-				
-		// Hide list view and show column view with loading img
-		hideListViewAndShowLoading();		
-		
-		// Hide dropdown
-		if($(".type-task-button").hasClass("open"))
-			$(".type-task-button").removeClass("open");
-		
+		e.preventDefault();
+
 		// Show selected name
 		var name = $(this).html(), id = $(this).attr("href");
 		
@@ -400,6 +419,23 @@ function bindDropdownEvents()
 			$(this).closest("ul").data("selected_item", id);
 		
 		$(this).closest(".btn-group").find(".selected_name").text(name);
+
+		var criteria = getCriteria();
+
+		if(criteria && criteria == "CALENDAR" && !$(this).hasClass("calendar-view"))
+		{
+			fullCalTasks.fullCalendar( 'refetchEvents' );
+			// Hide list view and show column view with loading img
+			addDetailsInCookie(this);
+			return; 
+		}			
+				
+		// Hide list view and show column view with loading img
+		hideListViewAndShowLoading();		
+		
+		// Hide dropdown
+		if($(".type-task-button").hasClass("open"))
+			$(".type-task-button").removeClass("open");
 
 		// Empty collection
 		if(TASKS_LIST_COLLECTION != null)
@@ -427,8 +463,8 @@ function applyDetailsFromGroupView()
 {
 	console.log("In applyDetailsFromGroupView");
 	
-	var task_criteria_forgroupview = readCookie("task_criteria_forgroupview");
-	var task_owner_forgroupview = readCookie("task_owner_forgroupview");
+	var task_criteria_forgroupview = _agile_get_prefs("task_criteria_forgroupview");
+	var task_owner_forgroupview = _agile_get_prefs("task_owner_forgroupview");
 
 	console.log(task_criteria_forgroupview + " " + task_owner_forgroupview);
 			
@@ -442,6 +478,9 @@ function applyDetailsFromGroupView()
 	
 	// Display list view
 	$(".list-view").show();
+
+	// Display calendar view
+	$(".calendar-view").show();
 	
 	var ownerType = $('#new-owner-tasks').data("selected_item");
 	
@@ -518,11 +557,47 @@ function addTasklListDetails(addTaskElement)
 	{		
 		var epochTime = getNewDueDate($(addTaskElement).attr("heading"));
 		var startDate = getDateInFormatFromEpoc(epochTime);
-		$("#taskForm").find("input.date").val(startDate).datepicker('update');		
+		$("#taskForm").find("input.date").val(startDate);
+		// .datepicker('update');		
 	}
 		break;		
 	case "PRIORITY":
 	{$("#priority_type", $("#taskForm")).val($(addTaskElement).attr("heading"));}
 		break;	
 	}	
+}
+
+/**
+ * Display task in calendar view with selected filter. 
+ */
+function displayCalendarView()
+{
+	// Hide calendar view
+	$(".calendar-view").hide();
+
+	// Display group view
+	$(".group-view").show();
+	
+	// Hide group by
+	$(".do-onclick-nothing").hide();
+
+	// Display group view
+	$(".list-view").show();
+
+	$('#new-task-list-based-condition').hide();
+	$('#task-list-based-condition').hide();
+	$('#task-calendar-based-condition').removeClass("hide");
+	$('#calendarTasksButtons').removeClass("hide");
+
+	var calendarView = (!_agile_get_prefs('taskCalendarDefaultView_'+CURRENT_DOMAIN_USER.id)) ? 'month' : _agile_get_prefs('taskCalendarDefaultView_'+CURRENT_DOMAIN_USER.id);
+
+	$('#'+calendarView,$('#calendarTasksButtons')).addClass('bg-light');
+
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
+	{
+		$('#task-calendar-based-condition').html("");
+		getCalendarView();
+		initilizeTasksCalendarViewListeners();
+	});
+
 }

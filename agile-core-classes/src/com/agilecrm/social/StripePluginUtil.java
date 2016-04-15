@@ -13,6 +13,12 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.util.StringUtils2;
 import com.agilecrm.widgets.Widget;
 import com.google.gson.Gson;
+import com.stripe.Stripe;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
@@ -51,8 +57,7 @@ public class StripePluginUtil {
 		}
 
 		// Un comment the apiKey and customerId, to test in local or beta.
-		//apiKey = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
-		//customerId = "cus_5M6BkObcMEbP5C";
+		//apiKey = "sk_test_Bxuat63XsCfeDiktFUjg0VHG";		
 
 		/*
 		 * Retrieves Stripe customer based on Stripe customer ID and Stripe
@@ -96,5 +101,38 @@ public class StripePluginUtil {
 		System.out.println("Stripe customer info : " + customer_info);
 		return customer_info;
 
+	}
+
+	public static void addCredit(Widget widget, String customerId, int credit)
+			throws Exception {
+
+		// Un comment the apiKey and customerId, to test in local or beta.
+		String APIKEY = widget.getProperty("access_token");
+
+		//APIKEY = "sk_test_Bxuat63XsCfeDiktFUjg0VHG";		
+		
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setApiKey(APIKEY);
+		builder.setStripeVersion("2012-09-24");
+		RequestOptions options = builder.build();
+
+		try {
+			Stripe.apiKey = APIKEY;
+			Customer customer = Customer.retrieve(customerId.trim(), options);
+			Integer balance = customer.getAccountBalance();
+
+			System.out.println(StripeUtil.getJSONFromCustomer(customer));
+
+			balance -= credit;
+
+			Map<String, Object> updateParams = new HashMap<String, Object>();
+			updateParams.put("account_balance", balance);
+			customer.update(updateParams);
+
+		} catch (AuthenticationException | InvalidRequestException
+				| APIConnectionException | CardException | APIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

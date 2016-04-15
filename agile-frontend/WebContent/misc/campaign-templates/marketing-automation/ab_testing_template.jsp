@@ -285,6 +285,7 @@
                            "options": {
                                "*No": "no",
                                "Yes": "yes",
+                               "Yes & Push (Email only)": "yes_and_push_email_only",
                                "Yes & Push": "yes_and_push"
                            },
                            "fieldType": "select",
@@ -1271,6 +1272,7 @@
                            "options": {
                                "*No": "no",
                                "Yes": "yes",
+                               "Yes & Push (Email only)": "yes_and_push_email_only",
                                "Yes & Push": "yes_and_push"
                            },
                            "fieldType": "select",

@@ -23,12 +23,24 @@ function showShopifyClient(shop, contact_id)
 				// If data is not defined return
 				if (data)
 				{
-					var name = agile_crm_get_contact_property("first_name") + " " + agile_crm_get_contact_property("last_name");
+					var name ="";
+					var fristName = agile_crm_get_contact_property("first_name");
+					var lastName = agile_crm_get_contact_property("last_name");
+
+					if(fristName){
+						name += fristName;
+					}
+
+					if(lastName){
+						name += lastName;
+					}
+
 					var d = data;
 					console.log("total spent " + d[0].customer.total_spent);
 					data.unshift({ "name" : name,"id":d[0].customer.id, "shop" : shop, "total_spent" : d[0].customer.total_spent, "currency" : d[0].currency });
 					console.log("customer info " + name);
-					console.log("final data " + data);
+					console.log("final data ");
+					console.log(data);
 					getTemplate('shopify-profile', data, undefined, function(template_ui){
 				 		if(!template_ui)
 				    		return;
@@ -162,7 +174,7 @@ function startShopifyWidget(contact_id){
         $("#widgets").off("click", '.order');
 		$("#widgets").on("click", '.order', function(e){
 			e.preventDefault();
-			var orderId = $(this).prop('value');
+			var orderId = $(this).attr('value');
 			console.log("order id is " + orderId);
 			// checking for data existence in div
 			/*

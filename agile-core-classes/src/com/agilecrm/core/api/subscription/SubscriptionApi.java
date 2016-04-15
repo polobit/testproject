@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.subscription;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -17,20 +18,32 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.json.JSONObject;
+
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.subscription.limits.plan.FreePlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
+import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -110,6 +123,13 @@ public class SubscriptionApi {
 
 				return subscribe;
 			}
+			
+			//If uesr is not admin throw exception
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 
 			/*
 			 * If card_details are null and plan in not null then update plan
@@ -161,7 +181,11 @@ public class SubscriptionApi {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Subscription changePlan(Plan plan, HttpServletRequest request) {
 		try {
-
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 			Subscription subscribe = Subscription.updatePlan(plan);
 
 			BillingRestriction restriction = BillingRestrictionUtil
@@ -196,6 +220,11 @@ public class SubscriptionApi {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Subscription addEmailPlan(Plan plan) {
 		try {
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (!user.is_admin)
+			{
+				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
+			}
 			// Return updated subscription object
 			return SubscriptionUtil.createEmailSubscription(plan);
 		} catch (PlanRestrictedException e) {
@@ -346,6 +375,66 @@ public class SubscriptionApi {
 	}
 	
 	/**
+	 * Cancels subscription from gateway but never delete {@link Subscription}
+	 * entity
+	 */
+	@Path("/cancel/email")
+	@GET
+	public void cancelEmailSubscription() {
+		try {
+			Subscription subscription = SubscriptionUtil.getSubscription();
+			subscription.cancelEmailSubscription();
+			System.out.println("Cancelled Email Subscription");
+			SubscriptionUtil.deleteEmailSubscription();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
+	 * Cancels trial from gateway
+	 */
+	@Path("/cancel/trial")
+	@GET
+	public String cancelTrial() {
+		try {
+			JSONObject json = new JSONObject();
+			int webrulecount = WebRuleUtil.getCount();
+			int contactcount = ContactUtil.getCount();
+			int compaigncount = WorkflowUtil.getCount();
+			int triggerscount = TriggerUtil.getCount();
+			int userscount = DomainUserUtil.count();
+			FreePlanLimits limits = new FreePlanLimits();
+			if(webrulecount > limits.getWebRuleLimit() || contactcount > limits.getContactLimit() || compaigncount > limits.getWorkflowLimit() || triggerscount > limits.getTriggersLimit() || userscount > 2)
+			{
+				json.put("is_success", false);
+				json.put("webrulecount", webrulecount);
+				json.put("contactcount", contactcount);
+				json.put("compaigncount", compaigncount);
+				json.put("triggerscount", triggerscount);
+				json.put("userscount", userscount);
+				json.put("webrulelimit", limits.getWebRuleLimit());
+				json.put("contactlimit", limits.getContactLimit());
+				json.put("compaignlimit", limits.getWorkflowLimit());
+				json.put("triggerslimit", limits.getTriggersLimit());
+				json.put("userslimit", 2);
+				System.out.println("Cancelling free trial failed::"+json.toString());
+			}else{
+				json.put("is_success", true);
+				cancelSubscription();
+				System.out.println("Cancelling free trial success::");
+			}
+			return json.toString();	
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
 	 * get the plan restrictions
 	 */
 	@Path("/planRestrictions")
@@ -355,29 +444,109 @@ public class SubscriptionApi {
 	public String planRestrictions(Plan plan) {
 		try {
 			Subscription subscription = SubscriptionUtil.getSubscription();
+			String restrictionsJSONString = null;
+			JSONObject json =  new JSONObject();
 			if (subscription.plan != null && subscription.plan.plan_type == PlanType.FREE) {
 				int count = DomainUserUtil.count();
 				System.out.println("existing users cout in free plan " + count);
 				if (plan.quantity < count) {
-					JSONObject json =  new JSONObject();
 					json.put("is_more_users", true);
 					json.put("count", count);
+					return json.toString();
+				}else{
+					json.put("is_allowed_plan", true);
 					return json.toString();
 				}
 			}else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)) {
 				System.out.println("plan upgrade not possible");
 				Map<String, Map<String, Integer>> restrictions = BillingRestrictionUtil.getInstanceTemporary(plan).getRestrictions();
-				String restrictionsJSONString = new Gson().toJson(restrictions);
-				return restrictionsJSONString;
+				restrictionsJSONString = new Gson().toJson(restrictions);
 			}
-			Map<String, Boolean> restrictions = new HashMap<String, Boolean>();
-			restrictions.put("is_allowed_plan", true);
-			String restrictionsJSONString = new Gson().toJson(restrictions);
-			return restrictionsJSONString;
+			Invoice invoice = subscription.getUpcomingInvoice(plan);
+			if(restrictionsJSONString != null){
+				json.put("restrictions", restrictionsJSONString);
+				json.put("nextPaymentAttempt", invoice.getNextPaymentAttempt());
+				return json.toString();
+			}
+			String invoiceJSONString = new Gson().toJson(invoice);
+			return invoiceJSONString;
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
+		}
+	}
+	
+	/**
+	 * get the plan restrictions
+	 */
+	@Path("/agileTags")
+	@GET
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String getAgileTags(@QueryParam("email") String email) {
+		String oldNameSpace = NamespaceManager.get();
+		try {
+			NamespaceManager.set("our");
+			Contact contact = ContactUtil.searchContactByEmail(email);
+			JSONObject json =  new JSONObject();
+			if(contact != null)
+			{
+				LinkedHashSet<String> tagsList = contact.tags;
+				System.out.println("Tags in our domain::: "+tagsList.toArray());
+				json.put("tags", tagsList.toArray());
+			}
+			return json.toString();
+		}finally{
+			NamespaceManager.set(oldNameSpace);
+		}
+	}
+	
+	// Life time emails purchase 
+	@Path("/purchaseEmailCredits")
+	@POST
+	public void purchaseEmailCredits(@QueryParam("quantity") Integer quantity)
+	{
+		Subscription subscription = SubscriptionUtil.getSubscription();
+		try {
+			subscription.purchaseEmailCredits(quantity);
+			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+			restriction.incrementEmailCreditsCount(quantity*1000);
+			restriction.save();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
+	 * Pause or resume subscriptions by adding trial
+	 * @param period in months
+	 * as {@link Integer} 
+	 */
+	@Path("/pauseOrResumeSubscriptions")
+	@POST
+	public void pauseOrResumeSubscription(@QueryParam("period") Integer period)
+	{
+		try{
+			Subscription subscription = SubscriptionUtil.getSubscription();
+			Long trialEnd = 0L;
+			if(period == 0){
+				subscription.addTrial(trialEnd);
+				System.out.println("Added trial to::"+trialEnd);
+			}
+			else{
+				trialEnd = System.currentTimeMillis() / 1000 + period * 2592000;
+				subscription.addTrial(trialEnd);
+				subscription.status = Subscription.BillingStatus.BILLING_PAUSED;
+				System.out.println("Added trial to::"+trialEnd+" and set subscription status to ACCOUNT_PAUSED");
+				subscription.save();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+				    .build());
 		}
 	}
 

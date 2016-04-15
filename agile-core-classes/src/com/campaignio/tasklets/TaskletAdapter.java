@@ -2,13 +2,17 @@ package com.campaignio.tasklets;
 
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
+import com.campaignio.reports.DateUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 
 /**
@@ -141,6 +145,9 @@ public class TaskletAdapter implements Tasklet
      */
     public static String getStringValue(JSONObject nodeJSON, JSONObject subscriberJSON, JSONObject data, String keyName) throws Exception
     {
+       //adding current date merge field
+    	addCurrentDate(subscriberJSON);
+           	
 	Object returnValue = getValue(nodeJSON, subscriberJSON, data, keyName);
 	if (returnValue == null)
 	    return null;
@@ -288,5 +295,39 @@ public class TaskletAdapter implements Tasklet
 
 	// Add Log
 	LogUtil.addLogToSQL(campaignId, subscriberId, message, logType);
+    }
+    
+    /**
+     * Add a current date (dd MMM yyyy) as a merge field in subscriberJSON
+     * 
+     * @
+     * @param subscriberJSON
+     *            Contact details.
+     * @throws Exception
+     */
+    private static void addCurrentDate(JSONObject subscriberJSON) throws JSONException{
+    	try
+    	{
+	    	// Adding Current date as a merge field
+	    	String timezone=null;
+	    	JSONObject json=null;
+	    	
+	    	if(subscriberJSON.has("data"))
+	    		json=(JSONObject)subscriberJSON.get("data");
+	    
+	    	if(json.has("timezone"))
+	    	     timezone=json.getString("timezone");
+	    
+	    	//Getting timezone from database
+	    	if(StringUtils.isBlank(timezone))
+	    		  timezone=AccountPrefsUtil.getTimeZone();
+	    	
+	    	//adding current date in subscriberJSON
+	        json.put("current_date", DateUtil.getDateInGivenFormat(System.currentTimeMillis(),"dd MMM yyyy", timezone));
+    	}
+    	catch(Exception e)
+    	{
+    		System.err.println(e);
+    	}
     }
 }

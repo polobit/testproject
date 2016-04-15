@@ -6,47 +6,47 @@
        
             <h3 class="pull-left font-thin h3">Email Reports</h3>
             <a href="#report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  Add Report</a>
-       		<div class="clearfix">
-		</div>
+            <div class="clearfix">
+        </div>
    
 </div>
 </div>
 </div>
 <div class="wrapper-md">
 <div class="row">
-		 <div id="slate">
+         <div id="slate">
          </div>
         {{#if this.length}}
-		<div class="col-md-9 col-sm-9">
-		<div class="panel panel-default">
-		<div class="panel-heading">Email Reports List</div>
+        <div class="col-md-9 col-sm-9">
+        <div class="panel panel-default">
+        <div class="panel-heading">Email Reports List</div>
        <div class="table-responsive">
         <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Duration</th>
-					<th>Fields</th>
+                    <th>Fields</th>
                 </tr>
             </thead>
             <tbody id="report-model-list" route="report-edit/">
             </tbody>
         </table>
        </div>
-		</div>
-		</div>
-		{{/if}}
+        </div>
+        </div>
+        {{/if}}
     <div class="col-md-3 col-sm-3 pull-right p-none">
-		<div class="data-block">
+        <div class="data-block">
         <div class="wrapper-xs " id="addview">
             <h4 class="m-t-none h4 m-b-sm">
                 What are Email Reports?
             </h4>
           
             <p>Customize your reports based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline. Use the information to improve lead nurturing and customer retention strategies.
-			</p>
+            </p>
         </div>
-		</div>
+        </div>
     </div>
 </div>
 </div>
@@ -54,23 +54,23 @@
 </script>
 
 <script id="report-model-template" type="text/html">
-	<td data="{{id}}" class="data c-p"><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
-	<td>
-		<div class="table-resp">
-    		{{ucfirst duration}}
-		</div>
-	</td>
-	<td><div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
-	<td>
-		<div class="table-resp">
-			<a href="#report-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">Show Results</a> 			
-		</div>
-	</td>
-	<td>
-		<div class="table-resp">
-	 		<a  data={{id}} class="text-info" id="reports-email-now" >Send Now</a>
-		</div>
-	</td>
+    <td data="{{id}}" class="data c-p"><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
+    <td>
+        <div class="table-resp">
+            {{ucfirst duration}}
+        </div>
+    </td>
+    <td><div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
+    <td>
+        <div class="table-resp">
+            <a href="#report-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">Show Results</a>             
+        </div>
+    </td>
+    <td>
+        <div class="table-resp">
+            <a  data={{id}} class="text-info" id="reports-email-now" >Send Now</a>
+        </div>
+    </td>
 <br />
 </script>
 
@@ -79,30 +79,57 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-    	<h3 class="pull-left font-thin h3">Reports</h3>
+        <h3 class="pull-left font-thin h3">Reports</h3>
 
-		<div class="pull-right">
-			<a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block">Configure Dashlet Reports</a>
-			
-   		</div>
+        <div class="pull-right">
+            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block" onclick="Agile_GA_Event_Tracker.track_event('Configure Dashlet Reports')">Configure Dashlet Reports</a>
+            
+        </div>
     </div>
 </div>
 </div>
 <div class="wrapper-md p-t-none">
-<div class="row">
-    <div class="col-md-12">
-       
-            <h4 class="m-t-md">Email</h4>
-       
-	</div>
-	
-</div>
 
-<div id="general" class="row">
 
+<div id="reports-tab-container">
+               <div class="tab-container">
+       <ul class="nav nav-tabs" id="subTab">
+                                            {{#hasMenuScope 'DEALS'}}
+                                            <li role="presentation" data-tab="6" id="dealstab">
+                                                <a href="#deals-tab" role="tab" data-toggle="tab">Deals</a>
+                                            </li>
+                                            {{/hasMenuScope}}
+                                             <li role="presentation" data-tab="5" id="callstab">
+                                                <a href="#calls-tab"   role="tab" data-toggle="tab" >Calls</a>
+                                            </li>
+                                            {{#hasMenuScope 'ACTIVITY'}}
+                                             <li role="presentation" data-tab="4">
+                                                <a href="#activities-tab"  role="tab" data-toggle="tab" >Activities</a>
+                                            </li>
+                                            {{/hasMenuScope}}
+                                              <li role="presentation" data-tab="2">
+                                                <a href="#graph-tab"  role="tab" data-toggle="tab">Growth Graphs</a>
+                                            </li>
+                                            <li role="presentation"  data-tab="1">
+                                                <a href="#email-tab" role="tab"  data-toggle="tab">Reports via Email</a>
+                                            </li>
+                                          
+                                             <li role="presentation" data-tab="3">
+                                                <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
+                                            </li>
+                                             <li role="presentation" data-tab="3" style="display: none;">
+                                                <a href="#helpdesk-tab" role="tab" data-toggle="tab">Help Desk</a>
+                                            </li>
+
+</ul>
+
+
+<div class="tab-content wrapper-md-panel" style="display:block">
+<div class="tab-pane" id="email-tab">
+   <div class="row"> 
 <!-- Contact reports -->
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
+    <div class="panel wrapper text-center b-a">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -117,7 +144,7 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#contact-reports">Go</a>
+            <a class="btn btn-sm btn-default" href="#contact-reports" onclick="Agile_GA_Event_Tracker.track_event('Contact Reports')">Go</a>
         </div>
     </div>
 </div>
@@ -126,7 +153,7 @@
 <!-- Activity reports -->
 {{#hasMenuScope 'ACTIVITY'}}
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
+    <div class="panel wrapper text-center b-a">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -143,14 +170,14 @@
             <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
         </div>
         <!-- Add button -->
-			{{#hasMenuScope 'ACTIVITY'}}
-            	<div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade">Go</a>
+            {{#hasMenuScope 'ACTIVITY'}}
+                <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade" onclick="Agile_GA_Event_Tracker.track_event('Activity Reports')">Go</a>
                 </div>
                 
-			{{else}}
-				<span class="btn btn-default btn-sm disabled" >Go</span>
-			{{/hasMenuScope}}
+            {{else}}
+                <span class="btn btn-default btn-sm disabled" >Go</span>
+            {{/hasMenuScope}}
             {{else}}
             <!-- Description -->
             <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
@@ -169,23 +196,13 @@
 </div>
 {{/hasMenuScope}}
 </div>
+    </div>
 
 
+<div class="tab-pane" id="graph-tab">
 <div class="row">
-    <div class="col-md-12">
-       
-           <h4 class="m-t-md">Graphs</h4>
-      
-	</div>
-	
-</div>
-
-<div id="general" class="row">
-
-
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+ <div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Growth-graph.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -196,17 +213,17 @@
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          	Visually see how your leads are growing over time. Compare channels for essential insights.
+            Visually see how your leads are growing over time. Compare channels for essential insights.
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/growth">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/growth" onclick="Agile_GA_Event_Tracker.track_event('Growth Graphs')">Go</a>
         </div>
     </div>
 </div>
 <!-- Funnel reports -->
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/funnel-graph.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -221,13 +238,13 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/funnel">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/funnel" onclick="Agile_GA_Event_Tracker.track_event('Funnel Graphs')">Go</a>
         </div>
     </div>
 </div>
 <!-- cohorts reports -->
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/ratio.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -242,28 +259,18 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/cohorts">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-charts/cohorts" onclick="Agile_GA_Event_Tracker.track_event('Ratio Reports')">Go</a>
         </div>
     </div>
+</div>   
 </div>
 </div>
 
-
-
+<div class="tab-pane" id="campaign-tab">
 <div class="row">
-    <div class="col-md-12">
-       
-            <h4 class="m-t-md">Campaigns</h4>
-       
-	</div>
-	
-</div>
-
-<div id="general" class="row">
-
 <!-- Performance Stats -->
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Daily-reports.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -279,7 +286,7 @@
         <!-- Add button -->
        
         <div >
-			<a id="campaign_id" class="btn btn-sm btn-default" href="#">Go</a>
+            <a id="campaign_id" class="btn btn-sm btn-default" href="#" onclick="Agile_GA_Event_Tracker.track_event('Campaign Stats')">Go</a>
 
         </div>
     </div>
@@ -289,7 +296,7 @@
 <!-- Comparison -->
 
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Campaign-stats.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -300,32 +307,21 @@
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          	See how your campaigns fare against each other.
+            See how your campaigns fare against each other.
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats">Go</a>
+            <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats" onclick="Agile_GA_Event_Tracker.track_event('Compare Campaigns')">Go</a>
         </div>
     </div>
 </div>
 </div>
-
-{{#hasMenuScope 'ACTIVITY'}}
-<div class="row">
-    <div class="col-md-12">
-        
-          <h4 class="m-t-md">Activities</h4>
-      
-	</div>
-	
 </div>
 
-
-<!-- User Activities -->
-
-<div id="general" class="row">
+<div class="tab-pane" id="activities-tab">
+<div class="row">
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/user-activities.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -344,7 +340,7 @@
         <!-- Add button -->
           
                 <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                      <a class="btn btn-sm btn-default" href="#activities">Go</a>
+                      <a class="btn btn-sm btn-default" href="#activities" onclick="Agile_GA_Event_Tracker.track_event('User Activities')">Go</a>
                 </div>
             {{else}}
             <!-- Description -->
@@ -366,7 +362,7 @@
 <!-- Contact Activities -->
 
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/contact.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -381,30 +377,16 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#contact-activities">Go</a>
+            <a class="btn btn-sm btn-default" href="#contact-activities" onclick="Agile_GA_Event_Tracker.track_event('Contact Activities')">Go</a>
         </div>
     </div>
 </div>
 </div>
-{{/hasMenuScope}}
-
-
-
-<div class="row">
-    <div class="col-md-12">
-        
-          <h4 class="m-t-md">Calls</h4>
-      
-	</div>
-	
 </div>
-
-
-<!-- User Activities -->
-
-<div id="general" class="row">
+<div class="tab-pane" id="calls-tab">
+<div class="row">
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Calls-By-User.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -420,7 +402,7 @@
         </div>
         <!-- Add button -->
 
-     <div><a class="btn btn-sm btn-default" href="#report-calls/total-calls">Go</a></div>
+     <div><a class="btn btn-sm btn-default" href="#report-calls/total-calls" onclick="Agile_GA_Event_Tracker.track_event('Calls by User')">Go</a></div>
                  
             
              <div class="clearfix"></div>
@@ -429,7 +411,7 @@
 </div>
 
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/averageofcall.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -444,14 +426,14 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/average-calls">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-calls/average-calls" onclick="Agile_GA_Event_Tracker.track_event('Average call duration')">Go</a>
         </div>
     </div>
 </div>
 
 
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/user-activities-call.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -462,17 +444,17 @@
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="See a full call log of all users.">
-          Generate ​timelines of calls by user.
+          Generate timelines of calls by user.
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" id="call-activity-link">Go</a>
+            <a class="btn btn-sm btn-default" id="call-activity-link" onclick="Agile_GA_Event_Tracker.track_event('Call Logs')">Go</a>
         </div>
     </div>
 </div>
 
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Call-Outcomes.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -487,56 +469,41 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/pie-graph">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-calls/pie-graph" onclick="Agile_GA_Event_Tracker.track_event('Call Outcomes')">Go</a>
         </div>
     </div>
 </div>
-</div>
 
-<div class="row">
-    <div class="col-md-12">
-        
-          <h4 class="m-t-md">User Reports</h4>
-      
-	</div>
-	
-</div>
-
-<!-- User Reports -->
-<div id="general" class="row">
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Call_Report_Time.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
-                <i class="icon-graph icon-3x"></i>
+                <i class="icon-bar-chart  icon-3x"></i>
             </div>
-            <b>User Reports</b>
+            <b>Call Report-Time Based</b>
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-        Analyze sales performance by user.
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Generate a bar graph with calls based on time.">
+          Generate a bar graph with calls based on time.
         </div>
         <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#user-reports">Go</a>
+        <div >
+            <a class="btn btn-sm btn-default" href="#report-calls/timebased" onclick="Agile_GA_Event_Tracker.track_event('Call Report-Time Based')">Go</a>
         </div>
     </div>
 </div>
+
+
+
 </div>
-{{#hasMenuScope 'DEALS'}}
+</div>
+
+<div class="tab-pane" id="deals-tab">
 <div class="row">
-    <div class="col-md-12">
-        
-          <h4 class="m-t-md">Deals</h4>
-      
-	</div>
-	
-</div>
-<div id="general" class="row">
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Incoming-Deals.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -551,13 +518,13 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#report-deals">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-deals" onclick="Agile_GA_Event_Tracker.track_event('Incoming Deals')">Go</a>
         </div>
     </div>
 </div>
 
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Lost-Deal-Analysis.png'></img>" data-trigger="hover">
            <!-- Icon and Title -->
         <div>
             <div>
@@ -573,13 +540,13 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#report-lossReason">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-lossReason" onclick="Agile_GA_Event_Tracker.track_event('Lost Deal Analysis' )">Go</a>
         </div>
     </div>
 </div>
 
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
+    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Revenue.png'></img>" data-trigger="hover">
            <!-- Icon and Title -->
         <div>
             <div>
@@ -594,12 +561,12 @@
         </div>
         <!-- Add button -->
         <div >
-            <a class="btn btn-sm btn-default" href="#reports-wonDeals">Go</a>
+            <a class="btn btn-sm btn-default" href="#reports-wonDeals" onclick="Agile_GA_Event_Tracker.track_event('Revenue by Source')">Go</a>
         </div>
     </div>
  </div>
 <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Sales-forecast.png'></img>" data-trigger="hover">
         <!-- Icon and Title -->
         <div>
             <div>
@@ -614,15 +581,198 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#report-sales">Go</a>
+            <a class="btn btn-sm btn-default" href="#report-sales" onclick="Agile_GA_Event_Tracker.track_event('Salesforecast')">Go</a>
         </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/User-reports.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>User Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+        Analyze sales performance by user.
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#user-reports" onclick="Agile_GA_Event_Tracker.track_event('User Reports' )">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Rep_Performance.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>Rep Performance</b><span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+        </div>
+        <br />
+        <!-- Description -->
+        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+         Know the performance by each user.
+         <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+        </div>
+        <!-- Add button -->
+        <div  style="display:inline;">
+            <a class="btn btn-sm btn-default" href="#rep-reports" onclick="Agile_GA_Event_Tracker.track_event('Rep Performance' )">Go</a>
+        </div>
+
+            {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+             Know the performance by each user.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+             </div>
+        <!-- Add button -->
+            <div >
+                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
+                </div>
+                 
+            {{/isAllowedInCurrentPlan}}
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Comparison_Report.png'></img>" data-trigger="hover">
+        <!-- Icon and Title -->
+        <div>
+            <div>
+                <i class="icon-graph icon-3x"></i>
+            </div>
+            <b>Comparison Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+        Compare the pipeline stages for each user.
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#report-comparison" onclick="Agile_GA_Event_Tracker.track_event('Comparision Reports' )">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+<div class="tab-pane" id="helpdesk-tab">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/new-tickets.png' width='400px' height='212px'></img>" data-trigger="hover">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="icon-tasks icon-3x"></i>
+                    </div>
+                    <b>Tickets</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View new and closed tickets report for each day, week & month.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/tickets">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/sla-report.png' width='400px' height='212px'></img>" data-trigger="hover">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="fa fa-check-square-o fa-3x"></i>
+                    </div>
+                    <b>SLA Report</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets closed in < 2 hrs, between 2-6 hrs, between 6-12 hrs etc.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/sla-report">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" data-placement="left" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/status-report.png' width='400px' height='212px'></img>" data-trigger="hover">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="fa fa-star fa-3x"></i>
+                    </div>
+                    <b>Ticket Priority & Status Reports</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets priority and status reports over the date ranges.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/priority-report">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" data-placement="left" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/first-response-time.png' width='400px' height='212px'></img>" data-trigger="hover">
+                <!-- Icon and Title -->
+                <div>
+                    <div>
+                        <i class="icon-clock icon-3x"></i>
+                    </div>
+                    <b>First Response Time</b>
+                </div>
+                <br />
+                <!-- Description -->
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View first response time over the date ranges.
+                </div>
+                <!-- Add button -->
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/avg-first-resp-time">Go</a>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel wrapper text-center b-a">
+                <div>
+                    <div>
+                        <i class="fa fa-th-large fa-3x"></i>
+                    </div>
+                    <b>Ticket status</b>
+                </div>
+                <br />
+                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+                    View tickets status chart
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-default" href="#ticket-report/status-report">Go</a>
+                </div>
+            </div>
+        </div> -->
     </div>
 </div>
 
 </div>
 
 </div>
-{{/hasMenuScope}}
+</div>
 </div>
 </div>
 </script>

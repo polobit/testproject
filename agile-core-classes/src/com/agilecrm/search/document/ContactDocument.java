@@ -188,7 +188,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		doc.addField(Field.newBuilder().setName("field_labels")
 				.setText(StringUtils.join(fields.keySet(), " ")));
 
-		DomainUser user = contact.getOwner();
+		DomainUser user = contact.getContactOwner();
 
 		// Add owner to document
 		if (user != null)

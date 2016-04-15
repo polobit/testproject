@@ -165,10 +165,10 @@ public class TwilioWidgetsAPI
 	 *            {@link String} widget id to get {@link Widget} preferences
 	 * @return {@link String} form of {@link JSONArray} of call logs
 	 */
-	@Path("call/logs/{widget-id}/{to}")
+	@Path("call/logs/{widget-id}/{to}/{direction}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId, @PathParam("to") String to)
+	public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId, @PathParam("to") String to, @PathParam("direction") String dir)
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
@@ -176,7 +176,7 @@ public class TwilioWidgetsAPI
 			try
 			{
 				// Calls TwilioUtil method to retrieve call logs for the "to" number
-				return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to).toString();
+				return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to, dir).toString();
 			}catch (Exception e)
 			{
 			    throw ExceptionUtil.catchWebException(e);
@@ -417,6 +417,44 @@ public class TwilioWidgetsAPI
 	}
 
 	/**
+	 * Saving call info and history on the basis of id.
+	 * 
+	 * @author Prakash
+	 * @created 31-Dec-2015
+	 * @return String
+	 */
+	@Path("savecallactivityById")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String saveCallActivityById(@FormParam("id") Long id,@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+	    
+	    	if (null != id && !(StringUtils.isBlank(phone))){
+	    		Contact contact = ContactUtil.getContact(id);
+	    		if(null == contact){
+	    			return "";
+	    		}
+	    		if (direction.equalsIgnoreCase("outbound-dial"))
+	    		{
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
+
+	    		    // Trigger for outbound
+	    		    CallTriggerUtil.executeTriggerForCall(contact, Call.SERVICE_TWILIO, Call.OUTBOUND, status, duration);
+	    		}
+
+	    		if (direction.equalsIgnoreCase("inbound"))
+	    		{
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
+
+	    		    // Trigger for inbound
+	    		    CallTriggerUtil.executeTriggerForCall(contact,  Call.SERVICE_TWILIO, Call.INBOUND, status, duration);
+	    		}
+	    	}
+		return "";
+	}
+
+	
+	/**
 	 * Twillio auto notes saving after call ends.
 	 * @author Purushotham
 	 * @created 28-Nov-2014
@@ -428,11 +466,17 @@ public class TwilioWidgetsAPI
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String autoSaveNote(@FormParam("subject") String subject, @FormParam("message") String message,
-			@FormParam("contactid") String contactid)
+			@FormParam("contactid") String contactid,@FormParam("phone") String phone,@FormParam("callType") String callType,@FormParam("status") String status, @FormParam("duration") String duration)
 	{
 		Long contactId = Long.parseLong(contactid);
 		Note note = new Note(subject, message);
 		note.addRelatedContacts(contactId.toString());
+		if(null != phone || null != callType || null != status || null != duration){
+			note.phone = phone;
+			note.callType = callType;
+			note.status = status.toLowerCase();
+			note.duration = Long.parseLong(duration);
+		}
 		note.save();
 		return "";
 	}
@@ -468,11 +512,11 @@ public class TwilioWidgetsAPI
 	 *            {@link String} widget id to get {@link Widget} preferences
 	 * @return {@link String} form of {@link JSONArray} of call logs
 	 */
-	@Path("call/nextlogs/{widget-id}/{to}/{page}/{pageToken}")
+	@Path("call/nextlogs/{widget-id}/{to}/{page}/{pageToken}/{direction}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getCallLogsByPage(@PathParam("widget-id") Long widgetId, @PathParam("to") String to,
-			@PathParam("page") String page, @PathParam("pageToken") String pageToken)
+			@PathParam("page") String page, @PathParam("pageToken") String pageToken, @PathParam("direction") String direction)
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
@@ -480,7 +524,7 @@ public class TwilioWidgetsAPI
 			try
 			{
 				// Calls TwilioUtil method to retrieve call logs for the "to" number
-				return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken).toString();
+				return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken, direction).toString();
 			}catch (Exception e)
 			{
 			    throw ExceptionUtil.catchWebException(e);
