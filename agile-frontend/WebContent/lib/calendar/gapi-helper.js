@@ -122,3 +122,12 @@ gapi_helper.watcher = setInterval(function() {
         gapi_helper.onScriptLoad();
     }
 }, 500);
+
+
+function gapi_helper_prototype()
+{
+    this.start = new Date();
+    this.listeners = {};
+}
+
+gapi_helper_prototype.prototype = gapi_helper;

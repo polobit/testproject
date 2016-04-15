@@ -477,7 +477,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 			}
 
 
-			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=26', function()
 					{
 				setupGC(function()
 						{
@@ -618,7 +618,7 @@ function renderGoogleEvents(events,fc_event,el)
 			if(fc_event.allDay==true){
 				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 				fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+				var a=((fc_event.end-fc_event.start)/(60*60*24*1000));
 				if(a==1)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
@@ -652,7 +652,7 @@ function renderGoogleEvents(events,fc_event,el)
 			} 
 			else
 			{
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+				var a=((fc_event.end-fc_event.start)/(60*60*24*1000));
 
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
