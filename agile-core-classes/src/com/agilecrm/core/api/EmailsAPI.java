@@ -44,6 +44,7 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>EmailsAPI</code> is the API class for Emails. It handles sending email
@@ -258,6 +259,11 @@ public class EmailsAPI
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
+	String domain = NamespaceManager.get();
+	
+	//if Emil Gateway is SendGrid or Null
+	if(emailGateway==null || emailGateway.equals(EmailGateway.EMAIL_API.SEND_GRID))
+	              return  SendGridSubUser.getSendgridStats(domain, emailGateway);
 	// If not Mandrill, return 
 	if(emailGateway != null && !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
 		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
@@ -267,8 +273,6 @@ public class EmailsAPI
 	// Get emailGateway api-key
 	if (emailGateway != null)
 	    apiKey = emailGateway.api_key;
-	
-	String domain = NamespaceManager.get();
 
 	// Returns mandrill subaccount info if created, otherwise error json.
 	String info = MandrillSubAccounts.getSubAccountInfo(domain, apiKey);

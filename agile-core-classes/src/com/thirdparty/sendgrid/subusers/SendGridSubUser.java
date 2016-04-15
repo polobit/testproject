@@ -3,6 +3,7 @@ package com.thirdparty.sendgrid.subusers;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +11,15 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
@@ -30,6 +36,17 @@ public class SendGridSubUser extends SendGridLib
 
 	public final static String AGILE_SUB_USER_NAME_TOKEN = ".agilecrm";
 	public static String AGILE_SUB_USER_PWD_TOKEN = "@127";
+	
+	//Stats Attributes
+	
+	final static String EMAIL_SENT = "processed";
+	final static String HARD_BOUNCE = "bounces";
+	final static String SOFT_BOUNCE = "deferred";
+	final static String SPAM_REPORT = "spam_reports";
+	final static String REJECTED = "invalid_emails";
+	
+	// 01-MARCH-2016
+	final static long SEND_GRID_TIMESTAMP=1456805583000L;
 	
 	public SendGridSubUser(String username, String password)
 	{
@@ -158,7 +175,7 @@ public class SendGridSubUser extends SendGridLib
 		throw new IllegalArgumentException("Domain " + domain + " is not valid.");
 	}
 	
-	public static String getSubUserStatistics(String domain, EmailGateway gateway)
+	public static String getSubUserStatistics(String domain, EmailGateway gateway, SendGridStats statsData)
 	{
 		String response = null, queryString = "", url = "https://api.sendgrid.com/v3/stats";
 		
@@ -188,24 +205,169 @@ public class SendGridSubUser extends SendGridLib
 
 			queryString += "start_date"
 					+ "="
-					+ URLEncoder.encode(DateUtil.getDateInGivenFormat(timestamp - (30 * 24 * 60 * 60 * 1000l), "YYYY-MM-dd", null), "UTF-8")
-					+ "&"
+					+ URLEncoder.encode(DateUtil.getDateInGivenFormat(statsData.getStartTime(), "YYYY-MM-dd", null), "UTF-8")
+					/*+ "&"
 					+ "end_date"
 					+ "="
 					+ URLEncoder.encode(DateUtil.getDateInGivenFormat(timestamp, "YYYY-MM-dd", null)
-							, "UTF-8")
-					+"&"+ "aggregated_by" + "=" + URLEncoder.encode("month", "UTF-8");
-			
+							, "UTF-8")*/
+					+"&"+ "aggregated_by" + "=" + URLEncoder.encode(statsData.getDuration(), "UTF-8");
+			System.out.println("Send query : "+queryString);
 			response = HTTPUtil.accessURLUsingAuthentication(url + "?" + queryString, username, password,
 					"GET", null, false, "application/json", "application/json");
 		}
-		catch (Exception e)
-		{
-			// TODO: handle exception
-			e.printStackTrace();
-			System.out.println("Exception occured...." + e.getMessage());
-		}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("Exception occured...." + e.getMessage());
+			}
+		
 		
 		return response;
 	}
+	
+	/**
+	 * This method is used for fetching sendgrid daily, weekly, monthly and overall stats count
+	 * 
+	 * @param timestamp
+	 * @return string
+	 * 
+	 */
+	public static String getSendgridStats(String domain, EmailGateway gateway)
+	{
+		long  domainCreatedTimestamps=DomainUserUtil.getCurrentDomainUser().getCreatedTime()*1000l;
+						
+		JSONArray  statsJSON=new JSONArray();
+			
+		SendGridStats stats=new SendGridStats();
+		stats.setDuration("day");
+		
+		if(domainCreatedTimestamps > SEND_GRID_TIMESTAMP)
+				stats.setStartTime(SEND_GRID_TIMESTAMP);
+		else
+			stats.setStartTime(domainCreatedTimestamps);
+				
+		//Fetching all sttats count of sendgrid to the domain
+		try
+		  {
+			statsJSON=new JSONArray(getSubUserStatistics(domain, gateway,stats ));
+		
+		  }
+		catch (Exception e)
+		{
+				e.printStackTrace();
+				System.out.println("Exception occured while getting all stats of Sendgrid...." + e.getMessage());
+			}
+		return getSendgridStatsCount(statsJSON).toString();
+	}
+	
+	/**
+	 * This method will fetch count of email sent from JSONArray
+	 * 
+	 * @param JSONArry
+	 * 				- allstats
+	 * @return jsonObject
+	 * 					-count of all stats
+	 */
+	private static JSONObject getSendgridStatsCount(JSONArray allStats)
+	{
+		int statsCount=allStats.length();
+		int dailyEmailSent=0;
+		int weeklyEmailSent=0;
+		int monthlyEmailSent=0;
+		int allEmailSent=0;
+		int hardBounce=0;
+		int softBounce=0;
+		int spamReported=0;
+		int rejected=0;
+		
+		Calendar cal = Calendar.getInstance();
+		
+		String today=DateUtil.getDateInGivenFormat(System.currentTimeMillis(), "YYYY-MM-dd",AccountPrefsUtil.getTimeZone());
+		
+		JSONObject allStatsJSON=new JSONObject();	
+		
+		try
+		{
+			for(int index=statsCount-1; index>=0; index--)
+			   {
+				  JSONObject tempJSON=allStats.getJSONObject(index);      
+				  
+				  if(tempJSON.has("stats"))
+				  {
+				    	   allEmailSent += tempJSON.getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT); 
+				    	   
+				    	   if(index == statsCount-1 && today.equals(tempJSON.getString("date")))
+				    		   dailyEmailSent += tempJSON.getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT);
+				    		  
+				    	   if(index >= statsCount- cal.get(Calendar.DAY_OF_WEEK))
+				    		   weeklyEmailSent += tempJSON.getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT); 
+				    	   
+				    	   if(index >= statsCount- cal.get(Calendar.DAY_OF_MONTH))
+				    		   monthlyEmailSent += tempJSON.getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT);
+				    	   
+				    	   if(index >= statsCount - 30)
+				    	   {
+				    		   hardBounce += tempJSON.getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(HARD_BOUNCE);
+				    		   softBounce += tempJSON.getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(SOFT_BOUNCE);
+				    		   spamReported += tempJSON.getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(SPAM_REPORT);
+				    		   rejected += tempJSON.getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(REJECTED);
+				    	   }
+				  }
+			   }
+			allStatsJSON.put("hardBounce", hardBounce);
+			allStatsJSON.put("SoftBounce", softBounce);
+			allStatsJSON.put("rejected", rejected);
+			allStatsJSON.put("spamReported", spamReported);
+			allStatsJSON.put("dailyEmailSent", dailyEmailSent);
+			allStatsJSON.put("weeklyEmailSent", weeklyEmailSent);
+			allStatsJSON.put("monthlyEmailSent", monthlyEmailSent);
+			allStatsJSON.put("allEmailSent", allEmailSent);
+
+			allStatsJSON.put("_agile_email_gateway", "SEND_GRID");	
+			
+		}
+		catch (Exception e)
+		{
+				e.printStackTrace();
+				System.out.println("Exception occured while getting all stats of Sendgrid...." + e.getMessage());
+		}
+		return allStatsJSON;
+	}
+	
+	/**
+	 * This clas is used for getting stats report of Sendgrid domain users
+	 * 
+	 * @author Prashannjeet
+	 *
+	 */
+	public static class SendGridStats
+	{
+		long startTime=0;
+		String duration="daily";
+		
+	    public void setStartTime(long startTime)
+	    {
+	    	this.startTime=startTime;
+	    }
+	    
+	    public long getStartTime()
+	    {
+	    	return startTime;
+	    }
+	    public void setDuration(String duration)
+	    {
+	    	this.duration=duration;
+	    }
+	    
+	    public String getDuration()
+	    {
+	    	return duration;
+	    }
+		
+		
+	}
+
 }
+	
+
