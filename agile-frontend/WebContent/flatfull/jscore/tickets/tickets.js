@@ -1308,6 +1308,9 @@ var Tickets = {
         var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
 		var date = new Date();
 		
+		if(Math.floor(currentTicketJSON.due_time/1000) == Math.floor(timeInMilli/1000))   
+			return;
+		
 		if(timeInMilli < date.getTime()){
 
 			var dueDate = null;
@@ -1337,11 +1340,7 @@ var Tickets = {
 
         	return;
 		}
-
-       
-        if(currentTicketJSON.due_time == timeInMilli)   
-			return;
-			
+	
 		var due_date_present = currentTicketJSON.due_time ? true : false;
 
 		var url = "/core/api/tickets/" + Current_Ticket_ID + "/activity/change-due-date";
