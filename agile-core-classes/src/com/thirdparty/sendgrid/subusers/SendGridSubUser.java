@@ -244,7 +244,7 @@ public class SendGridSubUser extends SendGridLib
 		SendGridStats stats=new SendGridStats();
 		stats.setDuration("day");
 		
-		if(domainCreatedTimestamps > SEND_GRID_TIMESTAMP)
+		if(domainCreatedTimestamps < SEND_GRID_TIMESTAMP)
 				stats.setStartTime(SEND_GRID_TIMESTAMP);
 		else
 			stats.setStartTime(domainCreatedTimestamps);
