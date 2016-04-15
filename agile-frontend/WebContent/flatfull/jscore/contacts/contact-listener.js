@@ -60,19 +60,23 @@ $(function(){
 	});
 function contactListener(el)
 {
-	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseenter','tr > td:not(":first-child"), tr > td > div > div:not(.contact-type-image), tr > td > div > div:not(.company-type-image)');
-		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseenter','tr > td:not(":first-child"), tr > td > div > div:not(.contact-type-image), tr > td > div > div:not(.company-type-image)',function(e){
+	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseenter','tr > td:not(":first-child")');
+		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseenter','tr > td:not(":first-child")',function(e){
 			//e.stopPropagation();
 				var left=e.pageX;
 				left=left-100;
 				var top=0;
             var that=$(this).parent();
+            if($(this).hasClass("contact-type-custom-field-td") || $(this).hasClass("company-type-custom-field-td") || $(this).hasClass("contact-type-image") || $(this).hasClass("company-type-image"))
+            {
+            	return;
+            }
              popoverEnter(that,left,top,true);
 
 		
 });
-		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseleave','tr > td:not(":first-child"), tr > td > div > div:not(.contact-type-image), tr > td > div > div:not(.company-type-image)');
-	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseleave','tr > td:not(":first-child"), tr > td > div > div:not(.contact-type-image), tr > td > div > div:not(.company-type-image)',function(){
+		$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').off('mouseleave','tr > td:not(":first-child")');
+	$('#contacts-custom-view-model-list , #contacts-custom-view-table-model-list').on('mouseleave','tr > td:not(":first-child")',function(){
 		var that=$(this).parent();
 		popout(that);
 		
@@ -460,7 +464,7 @@ function contact_list_starify(el,listView) {
     	var contact_model  =  App_Contacts.contact_popover;
     	
     	// If contact update is not allowed then start rating does not allow user to change it
-    	if(App_Contacts.contact_popover.get('owner') && !canEditContact(App_Contacts.contact_popover.get('owner').id))
+    	if(App_Contacts.contact_popover && App_Contacts.contact_popover.get('owner') && !canEditContact(App_Contacts.contact_popover.get('owner').id))
     	{
     			$('#star', el).raty({
     			 'readOnly': true,
