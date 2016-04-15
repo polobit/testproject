@@ -134,6 +134,7 @@ public class PortletUtil {
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 			allPortlets.add(new Portlet("Account Details",PortletType.ACCOUNT));
+			allPortlets.add(new Portlet("Webstat Visits",PortletType.WEBSTATS));
 			
 			//setIsAddedStatus(allPortlets);
 		} catch (Exception e) {

@@ -331,6 +331,7 @@ var portlet_utility = {
 			"Incoming Deals" : "portlets-incoming-deals",
 			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
 			"Average Deviation" : "portlets-Tasks-Deviation",
+			"Webstat Visits" : "portlets-webstat-visits",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -1852,6 +1853,19 @@ var portlet_utility = {
 					.attr("selected", "selected");
 						break;
 		}
+
+		case "Webstat Visits": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsWebstatVisitsSettingsModal");
+			elData = $('#portletsWebstatVisitsSettingsModal');
+			$("#duration", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;
+		}
+
 		}
 		if (base_model.get('name') == "Pending Deals"
 				|| base_model.get('name') == "Deals By Milestone"

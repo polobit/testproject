@@ -5818,6 +5818,8 @@ $(function()
 			portlet_name = "Campaign Status";
 		else if(p_name=='Average Deviation')
 			portlet_name = "Tasks Completion Time Deviation";
+		else if(p_name == 'Webstat Visits')
+			portlet_name = "Webstat Visits";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5874,6 +5876,8 @@ $(function()
 			icon_name = 'icon-flag';
 		else if (p_name == 'Lost Deal Analysis')
 			icon_name = 'icon-pie-chart';
+		else if(p_name == 'Webstat Visits')
+			icon_name = 'icon-user';
 		return icon_name;
 	});
 	
@@ -6659,6 +6663,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
 	else if(p_name == 'Average Deviation')
 		description = 'A quick view of deviation in tasks completion times.'
+	else if (p_name== 'Webstat Visits')
+		description = 'Webstat visits testing description.';
 	return description;
 			});
 

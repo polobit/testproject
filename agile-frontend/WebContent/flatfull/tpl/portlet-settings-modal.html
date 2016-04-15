@@ -1188,3 +1188,35 @@
 </div>
 </div>
 </div>
+
+<div id="portletsWebstatVisitsSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">WebstatVisits Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsWebstatVisitsSettingsForm" name="portletsWebstatVisitsSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="today">Today</option>
+						<option value="yesterday">Yesterday</option>
+						<option value="last-week">Last Week</option>
+						<option value="last-month">Last Month</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>
