@@ -247,7 +247,7 @@ var ReportsRouter = Backbone.Router
 							var value = report.toJSON();
 							if (value)
 							{
-								$('#campaign-select', el).find('option[value=' + value.campaign_id + ']').attr('selected', 'selected');
+								$('#campaign-select', el).find('option[value=' + value.campaignId + ']').attr('selected', 'selected');
 							}
 						}, optionsTemplate, false, el);
 

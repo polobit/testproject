@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-12">
        
-            <h3 class="pull-left font-thin h3">Email Reports</h3>
+            <h3 class="pull-left font-thin h3">Campaign Reports</h3>
             <a href="#campaign-report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  Add Report</a>
             <div class="clearfix">
         </div>
@@ -14,19 +14,19 @@
 </div>
 <div class="wrapper-md">
 <div class="row">
-         <div id="slate">
+         <div id="slate" class="col-md-9 col-sm-9">
          </div>
         {{#if this.length}}
         <div class="col-md-9 col-sm-9">
         <div class="panel panel-default">
-        <div class="panel-heading">Email Reports List</div>
+        <div class="panel-heading">Campaign Reports List</div>
        <div class="table-responsive">
         <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Duration</th>
-                    <th>Fields</th>
+                    <th>Campaigns</th>
                 </tr>
             </thead>
             <tbody id="report-campaign-model-list" route="campaign-report-edit/">
@@ -40,7 +40,7 @@
         <div class="data-block">
         <div class="wrapper-xs " id="addview">
             <h4 class="m-t-none h4 m-b-sm">
-                What are Email Reports?
+                What are Campaign Reports?
             </h4>
           
             <p>Customize your reports based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline. Use the information to improve lead nurturing and customer retention strategies.
