@@ -24,6 +24,7 @@ import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.campaignio.reports.DateUtil;
+import com.google.gson.JsonObject;
 import com.thirdparty.sendgrid.lib.SendGridLib;
 
 public class SendGridSubUser extends SendGridLib
@@ -44,6 +45,7 @@ public class SendGridSubUser extends SendGridLib
 	final static String SOFT_BOUNCE = "deferred";
 	final static String SPAM_REPORT = "spam_reports";
 	final static String REJECTED = "invalid_emails";
+	final static String REPUTATION = "reputation";
 	
 	// 01-MARCH-2016
 	final static long SEND_GRID_TIMESTAMP=1456805583000L;
@@ -251,14 +253,21 @@ public class SendGridSubUser extends SendGridLib
 		try
 		  {
 			statsJSON=new JSONArray(getSubUserStatistics(domain, gateway,stats ));
+			//getting reputation
+			JSONArray reputation=new JSONArray(getSendGridUserReputation(domain, gateway));
+			
+			JSONObject data=getSendgridStatsCount(statsJSON);
+					   data.put("id",domain);
+					   data.put(REPUTATION, reputation.getJSONObject(0).getInt(REPUTATION));
 		
+			return data.toString();
 		  }
 		catch (Exception e)
 		{
 				e.printStackTrace();
 				System.out.println("Exception occured while getting all stats of Sendgrid...." + e.getMessage());
-			}
-		return getSendgridStatsCount(statsJSON).toString();
+		}
+		return null;
 	}
 	
 	/**
@@ -315,6 +324,7 @@ public class SendGridSubUser extends SendGridLib
 				    	   }
 				  }
 			   }
+			
 			allStatsJSON.put("hardBounce", hardBounce);
 			allStatsJSON.put("softBounce", softBounce);
 			allStatsJSON.put("rejected", rejected);
@@ -323,7 +333,6 @@ public class SendGridSubUser extends SendGridLib
 			allStatsJSON.put("weeklyEmailSent", weeklyEmailSent);
 			allStatsJSON.put("monthlyEmailSent", monthlyEmailSent);
 			allStatsJSON.put("allEmailSent", allEmailSent);
-
 			allStatsJSON.put("_agile_email_gateway", "SEND_GRID");	
 			
 		}
@@ -335,6 +344,52 @@ public class SendGridSubUser extends SendGridLib
 		return allStatsJSON;
 	}
 	
+	/**
+	 * Reputation of domain users on the basis of hardbounce, spam and block
+	 * 
+	 * @param domain
+	 * @param gateway
+	 * @return Double
+	 */
+	public static String getSendGridUserReputation(String domain, EmailGateway gateway)
+	{
+			String response = null, queryString = "", url = "https://api.sendgrid.com/v3/user/account";
+		try
+		{
+			if (StringUtils.isBlank(domain))
+				return null;
+			
+			String username = null, password = null;
+			
+			if (gateway != null)
+			{
+				username = gateway.api_user;
+				password = gateway.api_key;
+			}
+			
+			if(username == null || password == null)
+			{
+				username = Globals.SENDGRID_API_USER_NAME;
+				password = Globals.SENDGRID_API_KEY;
+				
+				queryString = "usernames" + "=" + URLEncoder.encode(getAgileSubUserName(domain), "UTF-8");
+				url = "https://api.sendgrid.com/v3/subusers/reputations";
+			}
+			response = HTTPUtil.accessURLUsingAuthentication(url + "?" + queryString, username, password,
+					"GET", null, false, "application/json", "application/json");
+		}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("Exception occured while getting sendgrid reputation...." + e.getMessage());
+			}
+		return response;
+	}
+	
+	public static void main(String asd[]) throws JSONException{
+		JSONArray reputation=new JSONArray(getSendGridUserReputation("free", null));
+		System.out.println("Response "+reputation.getJSONObject(0).getString("reputation"));
+	}
 	/**
 	 * This clas is used for getting stats report of Sendgrid domain users
 	 * 
