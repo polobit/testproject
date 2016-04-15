@@ -1112,6 +1112,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		var _that = this;
 		App_Contacts.contactDateFields = CONTACTS_DATE_FIELDS;
 
+		App_Contacts.contactContactTypeFields = CONTACTS_CONTACT_TYPE_FIELDS;
+		App_Contacts.contactCompanyTypeFields = CONTACTS_COMPANY_TYPE_FIELDS;
+
 		if(!App_Contacts.contactDateFields){
 				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
@@ -1119,7 +1122,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					
 					// Defines appendItem for custom view
 					_that.contact_custom_view.appendItem = function(base_model){
-						contactTableView(base_model,App_Contacts.contactDateFields,this);
+						contactTableView(base_model,App_Contacts.contactDateFields,this,App_Contacts.contactContactTypeFields,App_Contacts.contactCompanyTypeFields);
 					};
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
@@ -1131,7 +1134,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 				// Defines appendItem for custom view
 				_that.contact_custom_view.appendItem = function(base_model){
-					contactTableView(base_model,App_Contacts.contactDateFields,this);
+					contactTableView(base_model,App_Contacts.contactDateFields,this,App_Contacts.contactContactTypeFields,App_Contacts.contactCompanyTypeFields);
 				};
 				// Fetch collection
 				_that.contact_custom_view.collection.fetch();
