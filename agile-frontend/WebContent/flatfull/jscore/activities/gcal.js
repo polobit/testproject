@@ -29,7 +29,7 @@ function loadUserEventsfromGoogle(start, end, callback){
 
 function isDefined(x)
 {
-	 return typeof b !== "undefined"
+	 return typeof x !== "undefined"
 }
 
 var isSet1  =false;
@@ -98,7 +98,7 @@ function agile_transform_options(sourceOptions, start, end)
 
 function _load_gapi(callback)
 {
-	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=26', function()
+	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27', function()
 		{
 			setupGC(callback);
 		});
@@ -111,9 +111,14 @@ function setupGC(callback)
 {
 	var helper = new gapi_helper_prototype();
 
+
+
 	// Configure Calendar
 	helper.configure({ scopes : 'https://www.googleapis.com/auth/calendar', services : { calendar : 'v3' } });
 
+	/*if((gapi_helper.listeners.calendarLoaded))
+		callback();
+	else*/
 	helper.when('calendarLoaded', callback);
 }
 

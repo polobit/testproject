@@ -472,18 +472,20 @@ function loadingGoogleEvents(el,startTime,endTime){
 		if (response)
 		{
 			if(typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar)) 
-			{googledata(el,response,startTime,endTime);
+			{
+				googledata(el,response,startTime,endTime);
 			return;
 			}
 
 
-			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=26', function()
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27', function()
 					{
 				setupGC(function()
-						{
-
-					googledata(el,response,startTime,endTime);
-					return;
+					{
+					
+								googledata(el,response,startTime,endTime);
+								return;
+						
 						});
 					});
 		}
