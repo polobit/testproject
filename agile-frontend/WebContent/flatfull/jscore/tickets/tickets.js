@@ -1304,42 +1304,43 @@ var Tickets = {
 	},
 
 	updateDueDate : function(timeInMilli, el, callback ){
-          
-		var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
-		var dueDate = new Date();
-
-		if(currentTicketJSON.due_time)
-		   dueDate = new Date(currentTicketJSON.due_time);
-		
+        
+        var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
 		var date = new Date();
 		
 		if(timeInMilli < date.getTime()){
 
-				getTemplate("ticket-sla-error", {}, undefined, function(template_ui){
+			var dueDate = null;
 
-					if(!template_ui)
-				  		return;
+			if(currentTicketJSON.due_time)
+			   dueDate = new Date(currentTicketJSON.due_time);
 
-				  	$('#ticket_change_sla', el).datepicker( "hide" );
+			getTemplate("ticket-sla-error", {}, undefined, function(template_ui){
+
+				if(!template_ui)
+			  		return;
+
+			  	$('#ticket_change_sla', el).datepicker( "hide" );
 
 
-				  	if(dueDate){
-				  		$('#ticket_change_sla').val(new Date(dueDate).format('mm/dd/yyyy'));
-				        $('.ticket_change_slatime').val(new Date(dueDate).format('HH:MM'));
-                     }
-				  	else{
-				  		$('#ticket_change_sla').val('');
-                        $('.ticket_change_slatime').val('');
-				  	 }
-				  	$('#ticketsModal').html($(template_ui)).modal('show');
-				});
-            return;   
-				
-			}
+			  	if(dueDate){
+			  		$('#ticket_change_sla').val(new Date(dueDate).format('mm/dd/yyyy'));
+			        $('.ticket_change_slatime').val(new Date(dueDate).format('HH:MM'));
+                }
+			  	else{
+			  		$('#ticket_change_sla').val('');
+                    $('.ticket_change_slatime').val('');
+			  	}
+
+			  	$('#ticketsModal').html($(template_ui)).modal('show');
+			});
+
+        	return;
+		}
 
        
         if(currentTicketJSON.due_time == timeInMilli)   
-				return;
+			return;
 			
 		var due_date_present = currentTicketJSON.due_time ? true : false;
 
@@ -1397,20 +1398,42 @@ var Tickets = {
 			}).on('changeDate', function(ev)
 			{
 				//to get the time value 
-				var selected_hours = $('.ticket_change_slatime', el).val(); 
-                var selected_date = $('#ticket_change_sla', el).val();
+				var selected_date = $('#ticket_change_sla', el).val();
                 var selected_date_epoch_time = Date.parse(selected_date).getTime();
 				
+				var selected_hours = $('.ticket_change_slatime', el).val(); 
+
 				if(selected_hours){
 					var selected_time = selected_hours.split(':');
-                	var hours = parseInt(selected_time[0]);
-                	var minutes = parseInt(selected_time[1]);                 			
-					selected_date_epoch_time = Date.parse(selected_date).getTime() + (hours*3600*1000) + (minutes *60* 1000);                  
-				}
+
+					if(!selected_time[0] && !selected_time[1])
+					{
+						//Add 86399000 milli secs to convert due date to end of day
+						selected_date_epoch_time += 86399000
+					}
+					else{
+
+						var hours = parseInt(selected_time[0]);
+	                	var minutes = parseInt(selected_time[1]);
+
+						selected_date_epoch_time = Date.parse(selected_date).getTime() + 
+													(hours * 3600 * 1000) + (minutes * 60 * 1000);                  
+					}
+                }else{
+                	
+                	//Add 86399000 milli secs to convert due date to end of day
+					selected_date_epoch_time += 86399000
+                }
+				
 				//Show alert if selected date is less than today start time
 				Tickets.updateDueDate(selected_date_epoch_time,el, function(){
 					$('#ticket_change_sla', el).datepicker("hide");
 					$('#ticket_change_sla', el).blur();
+
+					var date = new Date(selected_date_epoch_time);
+
+					//Set time in time picker
+					$('.ticket_change_slatime', el).timepicker('setTime', date.format('HH:MM'));
 				});
 			});
 		});
@@ -1418,16 +1441,19 @@ var Tickets = {
 		//Initializing click event on due date button
 	  	$(el).on('click','.choose-due-date', function(event){
          
-         var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
+         	var currentTicketJSON = App_Ticket_Module.ticketView.model.toJSON();
 
 	  		if(currentTicketJSON.status == "CLOSED")
 	  			return;
 	  		
 	  		console.log('Ticket status: ' + currentTicketJSON.status);
 
-	  		var selected_hours = $('.ticket_change_slatime', el).val(); 
-            var value = $(this).data('value'), current_date = new Date();
+	  		var value = $(this).data('value'), current_date = new Date();
             
+            current_date.setHours(0);
+            current_date.setMinutes(0);
+            current_date.setSeconds(0);
+
 	  		switch(value){
 	  			case 'tomorrow':
 	  				current_date.setDate(current_date.getDate() + 1);
@@ -1443,25 +1469,41 @@ var Tickets = {
 	  				break;
 	  		}
 
-            current_date.setHours(00);
-            current_date.setMinutes(00);
-	  		//Set selected date in input field
-	  		currentDate = current_date.getTime();
+            //Get the epoch time
+	  		var new_due_date = current_date.getTime();
 
-	  		if(selected_hours){
-		  		var selected_time = selected_hours.split(':');
-	            var hours = parseInt(selected_time[0]);
-	            var minutes = parseInt(selected_time[1]); 
-	            
-		  		 currentDate = current_date.getTime()+ (hours*3600*1000) + (minutes *60* 1000);
-		  	}
+            var selected_hours = $('.ticket_change_slatime', el).val(); 
 
-	  		$('#ticket_change_sla', el).val(new Date(currentDate).format('mm/dd/yyyy'));
-            $('.ticket_change_slatime').val(new Date(currentDate).format('H:M')); 
-	  		
-	  		Tickets.updateDueDate(currentDate);
-			
-	  	});
+            if(selected_hours){
+				var selected_time = selected_hours.split(':');
+
+				if(!selected_time[0] && !selected_time[1])
+				{
+					//Add 86399000 milli secs to convert due date to end of day
+					new_due_date += 86399000
+				}
+				else{
+
+					var hours = parseInt(selected_time[0]);
+                	var minutes = parseInt(selected_time[1]);
+
+					new_due_date = Date.parse(current_date).getTime() + 
+												(hours * 3600 * 1000) + (minutes * 60 * 1000);                  
+				}
+            }else{
+            	
+            	//Add 86399000 milli secs to convert due date to end of day
+				new_due_date += 86399000
+            }
+
+            //Set date
+	  		$('#ticket_change_sla', el).val(new Date(new_due_date).format(CURRENT_USER_PREFS.dateFormat));
+            
+            //Set hours and minutes
+	        $('.ticket_change_slatime', el).timepicker('setTime', new Date(new_due_date).format('HH:MM'));
+
+	  		Tickets.updateDueDate(new_due_date);
+		});
 	},
 
 	// removeTicketsFromCollection: function(ticketIDCSV){
@@ -1745,41 +1787,64 @@ var Tickets = {
 			$(e.target).closest('li').remove();
 		});
 	},
+
 	initializeTicketSLAinHours : function(el){
 
 		var TicketJSON = App_Ticket_Module.ticketView.model.toJSON();
 		var dueDate = TicketJSON.due_time; 
-        var hours;
-	    var minutes;
+        var hours, minutes;
 		
-		if(dueDate){
-			hours = new Date(dueDate).getHours();
-	    	minutes = new Date(dueDate).getMinutes();
-        }
-        $('.ticket_change_slatime',el).timepicker({defaultTime:hours+":"+minutes,showMeridian : false });
-        $('.ticket_change_slatime',el).timepicker().on('hide.timepicker', function(e) {
-		
-		var TicketJSON = App_Ticket_Module.ticketView.model.toJSON();
- 		var dueDate = TicketJSON.due_time;
-	    var dueDateModifi = new Date(dueDate);
-	    console.log(dueDate);
-		
-		if(!dueDate){
-	    	 dueDateModifi = new Date();	
-	         $('#ticket_change_sla',el).val(dueDateModifi.format('mm/dd/yyyy'));
-	    }
-		
-		var due_date;
-		dueDateModifi.setHours(00);
-		dueDateModifi.setMinutes(00);
-		due_date = dueDateModifi.getTime() + (e.time.hours*3600*1000) + (e.time.minutes *60* 1000);
-        Tickets.updateDueDate(due_date,el);
-    
-	    });
-		
-    }
+		//Initializing timepicker with default date
+        $('.ticket_change_slatime', el).timepicker({showMeridian: false, defaultTime: false});
 
-	
+        if(dueDate){
+
+        	var date = new Date(dueDate);
+
+	        //set time
+	        $('.ticket_change_slatime', el).timepicker('setTime', date.format('HH:MM'));
+	    }
+
+        //Binding change event on time picker
+        $('.ticket_change_slatime',el).timepicker().on('hide.timepicker', function(e) {
+			
+			console.log(e.time)
+
+			var TicketJSON = App_Ticket_Module.ticketView.model.toJSON();
+
+	 		var dueDate = TicketJSON.due_time;
+	 		console.log(dueDate);
+
+			if(e.time.hours == 0 && e.time.minutes == 0 && !dueDate){
+
+				$('.ticket_change_slatime',el).val('');
+				return;
+			}
+
+			var currentDate = new Date();
+
+		   	if(dueDate){
+		    	currentDate = new Date(dueDate);	
+		        //$('#ticket_change_sla',el).val(dueDateModifi.format('mm/dd/yyyy'));
+		    }
+			
+			currentDate.setHours(0);
+			currentDate.setMinutes(0);
+			currentDate.setSeconds(0);
+
+			var due_date = currentDate.getTime() + (e.time.hours * 3600 * 1000) 
+							+ (e.time.minutes * 60 * 1000);
+
+	        Tickets.updateDueDate(due_date, el, function(){
+
+	        	//Set date in date picker field
+	        	$('#ticket_change_sla', el).val(new Date(due_date).format(CURRENT_USER_PREFS.dateFormat));
+	        	
+	        	//Set hours and minutes
+	        	$('.ticket_change_slatime', el).timepicker('setTime', new Date(due_date).format('HH:MM'));
+	        });
+    	});	
+    }
 };
 
 // fdue_dateu;nction tickets_typeahead(data){

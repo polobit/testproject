@@ -282,12 +282,14 @@ var Tickets_Rest={
 	 	var json = {};
 
 	 	Tickets.updateModel(url, json, function(model){
-    		$('#ticket_change_sla').val(''); 
-    		//$('.ticket_change_slatime').val('');
+
+    		$('#ticket_change_sla').val('');
+    		$('.ticket_change_slatime').timepicker('setTime', '');
+
     		$(".remove-date").css("display", "none");
 
-	 		App_Ticket_Module.ticketView.model.set({due_time:''},{silent:true});
-	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
+	 		App_Ticket_Module.ticketView.model.set({due_time:''}, {silent:true});
+	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {due_time:''});
 
 	 		Ticket_Utils.showNoty('information', "Due date has been removed",'bottomRight', 5000);
 
