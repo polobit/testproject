@@ -21,6 +21,7 @@ import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -773,6 +774,33 @@ public class DomainUserUtil
 
 	    NamespaceManager.set(oldnamespace);
 	}
+    }
+    
+    /**
+     * Updates the login domain user restricted scopes, if domain user contains DELETE_CONTACTS
+     * 
+     * @return
+     */
+    public static void setNewUpdateContactACLs(DomainUser currenrDomainUser)
+    {
+    	try 
+    	{
+			if(currenrDomainUser != null && currenrDomainUser.restricted_scopes != null && currenrDomainUser.restricted_scopes.contains(UserAccessScopes.DELETE_CONTACTS))
+			{
+				HashSet<UserAccessScopes> userAccessScopes = currenrDomainUser.restricted_scopes;
+				//Update contacts is splitting into edit and delete contacts, so removing the existed and adding new scopes
+				userAccessScopes.remove(UserAccessScopes.DELETE_CONTACTS);
+				userAccessScopes.add(UserAccessScopes.EDIT_CONTACT);
+				userAccessScopes.add(UserAccessScopes.DELETE_CONTACT);
+				currenrDomainUser.restricted_scopes = userAccessScopes;
+				currenrDomainUser.save();
+			}
+		} 
+    	catch (Exception e) 
+    	{
+			System.err.println("Exception occured while updating new acls to contacts..." + e.getMessage());
+			e.printStackTrace();
+		}
     }
     
 

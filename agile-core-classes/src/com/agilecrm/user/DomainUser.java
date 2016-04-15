@@ -931,6 +931,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public void loadScopes()
 	{
 		List<UserAccessScopes> defaultScopes = UserAccessScopes.customValues();
+		
+		if(restricted_scopes != null && restricted_scopes.contains(UserAccessScopes.DELETE_CONTACTS))
+		{
+			restricted_scopes.remove(UserAccessScopes.DELETE_CONTACTS);
+			restricted_scopes.add(UserAccessScopes.EDIT_CONTACT);
+			restricted_scopes.add(UserAccessScopes.DELETE_CONTACT);
+		}
 
 		if (restricted_scopes != null)
 			defaultScopes.removeAll(restricted_scopes);
