@@ -356,8 +356,11 @@ public class DealsAPI
 	{
 	    e.printStackTrace();
 	}
-
+	Opportunity oldDeal = OpportunityUtil.getOpportunity(opportunity.id);
+	Opportunity oppr = new Opportunity();
+	oppr.updateDealTagsEntity(oldDeal, opportunity);
 	opportunity.save();
+	
 	return opportunity;
     }
 

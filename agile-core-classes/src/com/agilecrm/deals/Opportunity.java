@@ -769,58 +769,25 @@ public class Opportunity extends Cursor implements Serializable
 	return tags;
     }
    
-    private void updateTagsEntity(Opportunity oldDeal, Opportunity updatedDeal)
+    public  void updateDealTagsEntity(Opportunity oldDeal, Opportunity updatedDeal)
     {
 
 	try
 	{
-	    // If tags are not empty, considering they are simple tags and adds
-	    // them
-	    // to tagsWithTime
-	    if (!tags.isEmpty())
-	    {
-		for (String tag : tags)
-		{
-
-		    Tag tagObject = new Tag(tag);
-		    if (!tagsWithTime.contains(tagObject) && oldDeal != null
-			    && oldDeal.tagsWithTime.contains(tagObject))
-		    {
-			tagsWithTime.add(oldDeal.tagsWithTime.get(oldDeal.tagsWithTime.indexOf(tagObject)));
-		    }
-		    else if (!tagsWithTime.contains(tagObject))
-		    {
-			TagUtil.validateTag(tag);
-			tagsWithTime.add(tagObject);
-		    }
+		List <Tag> oldtags = new ArrayList<Tag>(oldDeal.tagsWithTime);
+		List <Tag> newtags = new ArrayList<Tag>(updatedDeal.tagsWithTime);
+		if(oldtags != null && newtags != null){
+			for(Tag tag : newtags){
+				if(!oldtags.contains(tag)){
+					tag.createdTime = System.currentTimeMillis();
+				}
+			}
 		}
-	    }
-
-	    List<Tag> newTags = new ArrayList<Tag>();
-	    for (Tag tag : tagsWithTime)
-	    {
-		// Check if it is null, it can be null tag is created using
-		// developers api
-		if (tag.createdTime == null || tag.createdTime == 0L)
-		{
-		    tag.createdTime = System.currentTimeMillis();
-		    newTags.add(tag);
+		else	if(oldtags == null && newtags != null){
+			for (Tag newtag : newtags){
+				newtag.createdTime = System.currentTimeMillis();
+			}
 		}
-	    }
-
-	    LinkedHashSet<String> oldTags = null;
-
-	    if (oldDeal != null)
-		oldTags = oldDeal.getDealTags();
-
-	    tags = getDealTags();
-
-	    if (tags.equals(oldTags))
-		return;
-
-	    System.out.println("Tag entity need to update...." + bulkActionTracker);
-
-	    TagUtil.runUpdateDeferedTask(newTags, bulkActionTracker);
 	}
 	catch (WebApplicationException e)
 	{
@@ -988,13 +955,6 @@ public class Opportunity extends Cursor implements Serializable
 	// Setting note_ids from api calls
 	setRelatedNotes();
 	
-	for (Tag tag :tagsWithTime){
-		tag.createdTime = System.currentTimeMillis();
-	}
-	for (Tag tag :tagsWithTime){
-		tags.add(tag.tag);
-	}
-
     }
 
     @XmlElement(name = "note_ids")
