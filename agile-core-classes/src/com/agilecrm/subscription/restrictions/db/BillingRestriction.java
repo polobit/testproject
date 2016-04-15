@@ -557,16 +557,18 @@ public class BillingRestriction
     //
     public void renewalCedits(Integer quantity){
     	Subscription subscription = SubscriptionUtil.getSubscription();
-		try {
-			RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity);
-			// Add to queue
-			Queue queue = QueueFactory.getQueue(AgileQueues.CREDITS_AUTO_RENEWAL_QUEUE);
-			queue.add(TaskOptions.Builder.withTaskName(subscription.last_credit_id).payload(task));
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("Task already created with domain: "+subscription.last_credit_id);
-			e.printStackTrace();
-		}
-		
+    	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    	if(restriction.email_credits_count <= restriction.autoRenewalPoint){	
+			try {
+				RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity);
+				// Add to queue
+				Queue queue = QueueFactory.getQueue(AgileQueues.CREDITS_AUTO_RENEWAL_QUEUE);
+				queue.add(TaskOptions.Builder.withTaskName(subscription.last_credit_id).payload(task));
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("Task already created with domain: "+subscription.last_credit_id);
+				e.printStackTrace();
+			}
+    	}
 	}
 }
