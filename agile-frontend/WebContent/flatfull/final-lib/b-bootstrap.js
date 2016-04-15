@@ -800,13 +800,22 @@ if (typeof jQuery === 'undefined') {
     //if (!/(38|40|27|32)/.test(e.which) || /textarea|i/.test(e.target.tagName)) return
 
     var $this = $(this)
-
-    e.preventDefault()
+    if(!(/(13)/.test(e.which)) || $(e.target).attr("href") == "#"){
+       e.preventDefault()
+    }
     e.stopPropagation()
 
     if ($this.is('.disabled, :disabled')) return
 
     var $parent  = getParent($this)
+    if(/(13)/.test(e.which)){
+       var desc = ' li:not(.divider):visible a'
+       var $items = $parent.find('[role="menu"]' + desc + ', [role="listbox"]' + desc)
+       var index = $items.index(e.target)
+       $items.eq(index).click();
+       return;
+    }
+
     var isActive = $parent.hasClass('open')
 
     if ((!isActive && e.which != 27) || (isActive && e.which == 27)) {
@@ -814,31 +823,32 @@ if (typeof jQuery === 'undefined') {
       return $this.trigger('click')
     }
       
-      var key = String.fromCharCode(e.which);
-      var it = "";
-      var fl = 0;
-      $("li", $parent.children()).each(function(idx, item) {
-          if ($(item).text().trim().substr(0, 1).toLowerCase() == key.toLowerCase()) {
-              if ($(item).hasClass("active")) {
-                  fl = 1;
-                  
-              } else {
+    var key = String.fromCharCode(e.which);
+    var it = "";
+    var fl = 0;
+    $("li", $parent.children()).each(function(idx, item) {
+        if ($(item).text().trim().substr(0, 1).toLowerCase() == key.toLowerCase()) {
+            if ($(item).hasClass("active")) {
+                fl = 1;
+                
+            } else {
 
-                  if (it == "") {
-                      it = item;
-                  }
-                  if (fl == 1) {
-                      it = item;
-                      return false;
-                  }
-                  
-              }
-          }
+                if (it == "") {
+                    it = item;
+                }
+                if (fl == 1) {
+                    it = item;
+                    return false;
+                }
+                
+            }
+        }
+   
+   });
+   $("li", $parent).removeClass("active");
+   $(it, $parent).addClass("active");
+   $(it, $parent).find("a").trigger('focus');
      
-     });
-     $("li", $parent).removeClass("active");
-     $(it, $parent).addClass("active");
-
     var desc = ' li:not(.divider):visible a'
     var $items = $parent.find('[role="menu"]' + desc + ', [role="listbox"]' + desc)
 
@@ -849,7 +859,6 @@ if (typeof jQuery === 'undefined') {
     if (e.which == 38 && index > 0)                 index--                        // up
     if (e.which == 40 && index < $items.length - 1) index++                        // down
     if (!~index)                                      index = 0
-
     $items.eq(index).trigger('focus')}
   }
 

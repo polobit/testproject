@@ -172,7 +172,7 @@ function setNewDealFilters(data){
 	{
 		filters_ui += "<li class='divider'></li>";
 	}
-	var template = '<li><a class="deal-filter" id="{{id}}">{{name}}</a></li>';  
+	var template = '<li><a href="javascript:void(0)" class="deal-filter" id="{{id}}">{{name}}</a></li>';  
 	$.each(filters_list,function(index, filter){
 		filters_ui += Handlebars.compile(template)({id : filter.id, name : filter.name});
 	});
