@@ -134,5 +134,5 @@ cron:
 
 - description: Expired Sessions Cleanup
   url: /_ah/sessioncleanup?clear
-  schedule: every 5 mins
+  schedule: every 1 mins
 
