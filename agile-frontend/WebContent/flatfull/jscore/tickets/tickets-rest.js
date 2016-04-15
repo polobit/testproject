@@ -285,7 +285,7 @@ var Tickets_Rest={
     		$('#ticket_change_sla').val(''); 
     		//$('.ticket_change_slatime').val('');
     		$(".remove-date").css("display", "none");
-
+            console.log("due-date removed");
 	 		App_Ticket_Module.ticketView.model.set({due_time:''},{silent:true});
 	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
 

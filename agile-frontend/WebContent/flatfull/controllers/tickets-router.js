@@ -259,6 +259,7 @@
 					Tickets.fillAssigneeAndGroup(el);
 
 					//Initializing date picker on due date fields
+					
 					Tickets.initializeTicketSLA(el);
 					Tickets.initializeTicketSLAinHours(el);
 

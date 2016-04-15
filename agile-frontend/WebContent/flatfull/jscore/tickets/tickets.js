@@ -1762,7 +1762,6 @@ var Tickets = {
 		var TicketJSON = App_Ticket_Module.ticketView.model.toJSON();
  		var dueDate = TicketJSON.due_time;
 	    var dueDateModifi = new Date(dueDate);
-	    console.log(dueDate);
 		
 		if(!dueDate){
 	    	 dueDateModifi = new Date();	
@@ -1770,6 +1769,7 @@ var Tickets = {
 	    }
 		
 		var due_date;
+		console.log(due_date);
 		dueDateModifi.setHours(00);
 		dueDateModifi.setMinutes(00);
 		due_date = dueDateModifi.getTime() + (e.time.hours*3600*1000) + (e.time.minutes *60* 1000);

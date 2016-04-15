@@ -116,7 +116,6 @@
                     <input type="text" style="width:70%;float:left"class="form-control text-xs" id="ticket_change_sla" placeholder="Select Date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
                     
                     <input type="text" style="width:30%;float:right" class="form-control text-xs ticket_change_slatime" placeholder="Time" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
-
                    
                     <div class="col-md-12 p-n">
                       <div class="col-md-3 p-n">
