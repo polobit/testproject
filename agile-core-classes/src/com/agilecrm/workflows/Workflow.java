@@ -203,7 +203,7 @@ public class Workflow extends Cursor {
 	public void save() throws WebApplicationException {
 
 		// Verifies for duplicate workflow name before save
-		checkForDuplicateName();
+		checkPreconditionsBeforeSave();
 
 		try {
 			dao.put(this);
@@ -241,7 +241,7 @@ public class Workflow extends Cursor {
 	 * 
 	 * @throws Exception
 	 */
-	private void checkForDuplicateName() throws WebApplicationException {
+	private void checkPreconditionsBeforeSave() throws WebApplicationException {
 		// New workflow
 		if (id == null) {
 			if (WorkflowUtil.getCampaignNameCount(name) > 0)

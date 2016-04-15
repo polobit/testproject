@@ -61,6 +61,12 @@ public class WorkflowUtil
 			return null;
 		}
 	}
+	
+	// returns all workflows count
+	public static int getCount()
+	{
+		return Workflow.dao.count();
+	}
 
 	/**
 	 * Returns all workflows as a collection list.
@@ -68,11 +74,11 @@ public class WorkflowUtil
 	 * @return list of all workflows.
 	 */
 	public static List<Workflow> getAllWorkflows()
-	{
+	{	Long userId = DomainUserUtil.getCurentUserId();
 		Map map = new HashMap();
 		
-		Long userId = DomainUserUtil.getCurentUserId();
-		if(userId != null){
+		if(userId != null)
+		{
 			Set set = new HashSet();
 			set.add(1L);
 			set.add(userId);
@@ -80,16 +86,9 @@ public class WorkflowUtil
 			map.put("access_level in", set);
 		}
 		
-		return dao.listByPropertyAndOrder(map, "name");
-		
+		return dao.fetchAllByOrder("name", map);
 	}
-
-	// returns all workflows count
-	public static int getCount()
-	{
-		return Workflow.dao.count();
-	}
-
+	
 	/**
 	 * Returns list of workflows based on page size.
 	 * 
