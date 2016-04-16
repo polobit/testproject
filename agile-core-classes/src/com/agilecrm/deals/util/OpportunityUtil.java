@@ -1339,22 +1339,20 @@ public class OpportunityUtil
 			&& checkJsonString(json, fieldName +"_start"))
 		{
 		    long closeDateStart = Long.parseLong(json.getString(fieldName + "_start"));
-		    long closeDateEnd = closeDateStart + (24*60*60*1000);
-		    searchMap.put(fieldName+" >= ", closeDateStart);
-		    searchMap.put(fieldName+" < ", closeDateEnd);
+		    searchMap.put("close_date	" , closeDateStart);
 		    
 		}
 		else if (json.getString(fieldName + "_filter").equalsIgnoreCase("after")
 				&& checkJsonString(json, fieldName +"_start"))
 			{
 			    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-			    searchMap.put(fieldName+" > ", closeDate);
+			    searchMap.put("close_date	 >", closeDate);
 			}
 		else if (json.getString(fieldName + "_filter").equalsIgnoreCase("before")
 				&& checkJsonString(json, fieldName +"_start"))
 			{
 			    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-			    searchMap.put(fieldName+" < ", closeDate);
+			    searchMap.put("close_date	 < ", closeDate);
 			}
 		else
 		{ 
@@ -1362,12 +1360,12 @@ public class OpportunityUtil
 			    if (checkJsonString(json, fieldName + "_start"))
 			    {
 				long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-				searchMap.put(fieldName + " >= ", closeDate);
+				searchMap.put("close_date	 >= ", closeDate);
 			    }
 			    if (checkJsonString(json, fieldName + "_end"))
 			    {
-				long closeDate = Long.parseLong(json.getString(fieldName + "_end"))+(24*60*60*1000);
-				searchMap.put(fieldName + " < ", closeDate);
+				long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
+				searchMap.put("close_date < ", closeDate);
 			    }
 			}
 		}
