@@ -402,10 +402,10 @@ public class Tickets extends Cursor implements Serializable
 			this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 			this.groupID = group_id;
 			this.labels_keys_list = labelsKeysList;
-			this.status = status;
-			this.type = type;
-			this.priority = priority;
-			this.source = source;
+			this.status = (status == null) ? Status.OPEN : status;
+			this.type = (type == null) ? Type.PROBLEM : type;
+			this.priority = (priority == null) ? Priority.LOW : priority;
+			this.source = (source == null) ? Source.EMAIL : source;	
 			this.created_by = createdBy;
 
 			// Adding 1 min extra time make its creation time greater than

@@ -18,7 +18,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.agilecrm.Globals;
-import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
@@ -36,7 +35,6 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
-import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
@@ -44,7 +42,6 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import com.thirdparty.mandrill.Mandrill;
 
 /**
  * 
@@ -212,7 +209,10 @@ public class TicketNotesUtil
 		System.out.println("notesArray: " + notesArray);
 
 		String html = prepareHTML(group, json);
-
+		
+		System.out.println("HTML:");
+		System.out.println(html);
+		
 		String fromAddress = group.group_email;
 
 		fromAddress = StringUtils.isNotBlank(group.send_as) ? group.send_as : fromAddress;

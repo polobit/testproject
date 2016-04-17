@@ -36,6 +36,12 @@ public class TicketsBackup implements Serializable
 	 * Stores epoch time when ticket is created
 	 */
 	public Long created_time = null;
+	
+	
+	public TicketsBackup()
+	{
+		super();
+	}
 
 	/**
 	 * Initialize DataAccessObject.
