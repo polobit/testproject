@@ -35,8 +35,8 @@ var timer = undefined;
             "container" : 'body'
             });
 								$(that).popover('show');
-								
-						$('.popover').addClass("contact_popover ");
+						 $('.popover-content').html(template_ui);		
+						
 						$('.popover').addClass("contact_popover fadeInLeft  animated");
 						attachEvents(that,App_Contacts.contact_popover);
 						contact_list_starify('.popover',undefined);
