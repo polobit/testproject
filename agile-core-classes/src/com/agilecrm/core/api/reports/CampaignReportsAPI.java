@@ -69,6 +69,7 @@ public class CampaignReportsAPI
     while(iterator.hasNext()){
     	Reports report = iterator.next();
     	if(report.report_type == Reports.ReportType.Campaign){
+    		report.fields_set.add(WorkflowUtil.getCampaignName(report.campaignId));
     		newReports.add(report);
     	}
     }   

@@ -26,7 +26,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Duration</th>
-                    <th>Campaigns</th>
+                    <th>Campaign Name</th>
                 </tr>
             </thead>
             <tbody id="report-campaign-model-list" route="campaign-report-edit/">
@@ -60,7 +60,8 @@
             {{ucfirst duration}}
         </div>
     </td>
-    <td><div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
+    <td>
+        <div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
     <td>
         <div class="table-resp">
             <a href="#report-campaign-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">Show Results</a>             
