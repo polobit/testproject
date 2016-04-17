@@ -42,7 +42,7 @@ public class Notify extends TaskletAdapter
 
 	    // Get Owner
 	    Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
-	    DomainUser contactOwner = contact.getOwner();
+	    DomainUser contactOwner = contact.getContactOwner();
 
 	    Long givenOwnerId = AgileTaskletUtil.getOwnerId(ownerId, contactOwner == null ? null : contactOwner.id);
 

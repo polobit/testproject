@@ -135,7 +135,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    for (int i = 0; i < taskList.size(); ++i)
 	    {
 		Map<String, Object> currentTask = taskListMap.get(i);
-		List<Contact> contactList = taskList.get(i).getContacts();
+		List<Contact> contactList = taskList.get(i).relatedContacts();
 		List<Map<String, Object>> contactListMap = new ArrayList<Map<String, Object>>();
 
 		// for each Contact add ContactField in ContactField.name

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <dispatch-entries>
+    <dispatch>
+      <!-- Default module serves the typical web resources and all static resources. -->
+      <url>*/favicon.ico</url>
+      <module>default</module>
+  </dispatch>
+  <dispatch>
+      <url>*/bulk-actions/*</url>
+      <module>agile-normal-bulk</module>
+  </dispatch>
+  <dispatch>
+      <url>*/calendar/*</url>
+      <module>agile-calendar</module>
+  </dispatch>
+  <dispatch>
+      <url>*/appointment/*</url>
+      <module>agile-calendar</module>
+  </dispatch>
+  <dispatch>
+      <url>*/web-calendar-event/*</url>
+      <module>agile-calendar</module>
+  </dispatch>
+  <dispatch>
+      <url>*/ticket-module/backend/*</url>
+      <module>agile-ticket-module</module>
+  </dispatch>
+</dispatch-entries>

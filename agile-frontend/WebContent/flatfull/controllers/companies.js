@@ -241,6 +241,9 @@ var CompaniesRouter = Backbone.Router
 		var _that = this;
 		App_Companies.companyDateFields = COMPANY_DATE_FIELDS;
 
+		App_Companies.companyContactTypeFields = COMPANIES_CONTACT_TYPE_FIELDS;
+		App_Companies.companyCompanyTypeFields = COMPANIES_COMPANY_TYPE_FIELDS;
+
 		if(!App_Companies.companyDateFields){
 			$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=COMPANY", function(customDatefields)
 				{
@@ -248,7 +251,7 @@ var CompaniesRouter = Backbone.Router
 
 					// Defines appendItem for custom view
 					_that.companiesListView.appendItem = function(base_model){
-						contactTableView(base_model,customDatefields,this);
+						contactTableView(base_model,customDatefields,this,App_Companies.companyContactTypeFields,App_Companies.companyCompanyTypeFields);
 					};
 			
 					// Fetch collection
@@ -258,7 +261,7 @@ var CompaniesRouter = Backbone.Router
 		} else {
 			// Defines appendItem for custom view
 			_that.companiesListView.appendItem = function(base_model){
-				contactTableView(base_model,App_Companies.companyDateFields,this);
+				contactTableView(base_model,App_Companies.companyDateFields,this,App_Companies.companyContactTypeFields,App_Companies.companyCompanyTypeFields);
 			};
 	
 			// Fetch collection
@@ -272,9 +275,10 @@ var CompaniesRouter = Backbone.Router
 		}
 		else
 		{
-			$('#content').find('.contacts-div').html(this.companiesListView.el);
+			$('#content').find('.contacts-inner-div').html(this.companiesListView.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
+			$('#bulk-action-btns > button').addClass("disabled");
 			COMPANIES_HARD_RELOAD = true;
 		}
 
@@ -292,7 +296,8 @@ var CompaniesRouter = Backbone.Router
 	 * 
 	 */
 	companyDetails : function(id, company){
-
+		
+		insidePopover=false;
 		// For getting custom fields
 		if (App_Companies.customFieldsList == null || App_Companies.customFieldsList == undefined)
 		{
@@ -339,7 +344,9 @@ var CompaniesRouter = Backbone.Router
 				}, error : function(data, response)
 				{
 					if (response && response.status == '403')
-						$("#content").html("You do not have permission to view this Company.");
+
+						$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> Sorry, you do not have permission to view this Company.</h4><div class='text'style='opacity:0.6'>Please contact your admin or account owner to enable this option.</div></div></div></div>");
+
 				} });
 
 				return;
@@ -379,7 +386,7 @@ var CompaniesRouter = Backbone.Router
 
 				company_util.starify(el);
 				company_util.show_map(el);
-				// fill_owners(el, contact.toJSON());
+				// fill_owners(eidl, contact.toJSON());
 				// loadWidgets(el, contact.toJSON());
 
 			} });

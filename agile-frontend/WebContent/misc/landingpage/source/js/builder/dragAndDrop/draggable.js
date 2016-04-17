@@ -62,6 +62,8 @@ dnd.factory('draggable', ['$rootScope', 'undoManager', 'iframeScroller', functio
 				$('#frame-overlay').removeClass('hidden');
 				$rootScope.frameBody.addClass('dragging');
 
+				window.parent.$("#elementsBuilderMenuItem").click();
+
 				//create new undo command
 				this.command = undoManager.add('insertNode', {
 		       		node: $rootScope.selected.node,

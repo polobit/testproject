@@ -217,7 +217,7 @@ function show_success_message_after_save_button(message, el)
 	 * option is not set for view
 	 *
 	 */
-	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px" class="text-success"><i>'+message+'</i></p></small></div>');
+	$save_info = $('<div style="display:inline-block"><p style="color:#B94A48; font-size:14px" class="text-success"><i>'+message+'</i></p></small></div>');
 	$(".form-actions", el).append($save_info);
 	$save_info.show().delay(3000).hide(1);	
 		

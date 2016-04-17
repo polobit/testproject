@@ -42,7 +42,7 @@ public class LandingPageServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		response.setContentType("text/html");
+		response.setContentType("text/html; charset=UTF-8");
     	PrintWriter out = response.getWriter();
     	String oldNameSpace = NamespaceManager.get();
     	
@@ -72,10 +72,13 @@ public class LandingPageServlet extends HttpServlet {
 					analyticsCode = String.format(analyticsCode, apiKey.js_api_key);
 				}					
 				
+				if(landingPage.elements_css != null){
+					fullXHtml = fullXHtml.replace("</head>", "<style id=\"elements-css\">"+landingPage.elements_css+"</style></head>");	
+				}
 				fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
 				fullXHtml = fullXHtml.replace("</body>", formSubmitCode+"<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
 				
-				out.print(fullXHtml);
+				out.write(fullXHtml);
 				
 		} catch (Exception e) {
 			out.print("<h1>"+e.getMessage()+"</h1>");

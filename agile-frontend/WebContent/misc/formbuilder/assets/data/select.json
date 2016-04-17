@@ -5,7 +5,7 @@
       "id": {
         "label": "ID",
         "type": "input",
-        "value": "selectbasic"
+        "value": "agilefield"
       },
       "label": {
         "label": "Label Text",
@@ -80,7 +80,7 @@
       "id": {
         "label": "ID",
         "type": "input",
-        "value": "selectmultiple"
+        "value": "agilefield"
       },
       "label": {
         "label": "Label Text",

@@ -111,8 +111,24 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    }
 		    if (newCustomersList != null)
 			customers.addAll(newCustomersList);
-		    if (updatedCustomersList != null)
-			customers.addAll(updatedCustomersList);
+		    if (updatedCustomersList != null){
+		    	for (int i = 0; i < updatedCustomersList.size(); i++)
+				{
+		    		if(customers!=null && customers.size()!=0){
+		    		for (int j = 0; j < customers.size(); j++)
+		    		{
+		    			if(customers.get(j).get("id").equals(updatedCustomersList.get(i).get("id")))
+		    				break;
+		    			else
+		    				customers.add(updatedCustomersList.get(i));
+		    		}
+		    		}
+		    		else
+		    			customers.add(updatedCustomersList.get(i));
+				}
+		    	//customers.addAll(updatedCustomersList);
+		    }
+			
 
 		    if (newCustomersList != null && newCustomersList.size() == 0 && updatedCustomersList != null
 			    && updatedCustomersList.size() == 0)

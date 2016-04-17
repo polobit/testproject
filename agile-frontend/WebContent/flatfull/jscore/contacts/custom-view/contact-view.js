@@ -16,17 +16,20 @@
  * @param base_model
  */
 var CURRENT_VIEW_OBJECT;
-var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Starred","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
+var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Star Value","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
 
 
 var ifFromRender=false;
-function contactTableView(base_model,customDatefields,view) {
+function contactTableView(base_model,customDatefields,view,customContactfields,customCompanyfields) {
 	
 	var templateKey = 'contacts-custom-view-model';
 	var gridViewEl = _agile_get_prefs("agile_contact_view");
 	if (gridViewEl) {
 		templateKey = 'contacts-grid';
 	}
+
+	// if(agile_is_mobile_browser())
+
 
 	// Creates list view for
 	var itemView = new Base_List_View({
@@ -50,61 +53,150 @@ function contactTableView(base_model,customDatefields,view) {
 	var el = itemView.el;
 
 	if (!gridViewEl || window.location.hash=="#companies") {
-	
-		// Clears the template, because all the fields are appended, has to be reset
-		// for each contact
-		// $('#contacts-custom-view-model-template').empty();
-		
-		// Iterates through, each field name and appends the field according to
-		// order of the fields
-		if(isFromRender!=true)
-			$(el).html($(el).find('td').first());
-		$.each(fields, function(index, field_name) {
-			if(field_name.indexOf("CUSTOM_") != -1)
-			{
-				field_name = field_name.split("CUSTOM_")[1]; 			
-				var property = getProperty(contact.properties, field_name);
-				var json = {};
-				if(!property)
-				{
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+
+		if(agile_is_mobile_browser()){
+
+			getTemplate('contacts-custom-view-basic_info-mobile', contact, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						$(el).append($(template_ui));
 					}, null);
-					return;
-				}
-				if(isDateCustomField(customDatefields,property)){
-					console.log('got true');
-					json = property;
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$(el).append($(template_ui));
-					}, null);
-				}
-				else
-				{
-					json = property;
-					json.id = contact.id;
-					getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$(el).append($(template_ui));
-					}, null);
+
+		}else {
+				// Clears the template, because all the fields are appended, has to be reset
+				// for each contact
+				// $('#contacts-custom-view-model-template').empty();
+				
+				// Iterates through, each field name and appends the field according to
+				// order of the fields
+				if(isFromRender!=true)
+					$(el).html($(el).find('td').first());
+				$.each(fields, function(index, field_name) {
+					if(field_name.indexOf("CUSTOM_") != -1)
+					{
+						field_name = field_name.split("CUSTOM_")[1]; 			
+						var property = getProperty(contact.properties, field_name);
+						var json = {};
+						if(!property)
+						{
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+							return;
+						}
+						if(isDateCustomField(customDatefields,property)){
+							console.log('got true');
+							json = property;
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+						}
+						else if(isContactTypeCustomField(customContactfields,property)){
+							var contactIdsJSON = JSON.parse(property.value);
+							var referenceContactIds = "";
+							$.each(contactIdsJSON, function(index, val){
+								referenceContactIds += val+",";
+							});
+							App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+							getTemplate('contacts-custom-view-custom-contact', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui).attr("contact_id", contact.id));
+							}, null);
+							App_Contacts.referenceContactsCollection.collection.fetch({
+								success : function(data){
+									if (data && data.length > 0)
+									{
+										getTemplate('contacts-custom-view-custom-contact', data.toJSON(), undefined, function(template_ui){
+											if(!template_ui)
+												  return;
+											$(el).find("td[contact_id="+contact.id+"]").html($(template_ui).html());
+											var ellipsis_required = false;
+											$(el).find("td[contact_id="+contact.id+"]").find(".contact-type-image").each(function(index, val){
+												if(index > 3)
+												{
+													ellipsis_required = true;
+													$(this).remove();
+												}
+											});
+											if(ellipsis_required)
+											{
+												$(el).find("td[contact_id="+contact.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
+											}
+										}, null);
+									}
+									hideTransitionBar();
+								}
+							});
+						}
+						else if(isCompanyTypeCustomField(customCompanyfields,property)){
+							var contactIdsJSON = JSON.parse(property.value);
+							var referenceContactIds = "";
+							$.each(contactIdsJSON, function(index, val){
+								referenceContactIds += val+",";
+							});
+							App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+							getTemplate('contacts-custom-view-custom-company', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui).attr("company_id", contact.id));
+							}, null);
+							App_Contacts.referenceContactsCollection.collection.fetch({
+								success : function(data){
+									if (data && data.length > 0)
+									{
+										getTemplate('contacts-custom-view-custom-company', data.toJSON(), undefined, function(template_ui){
+											if(!template_ui)
+												  return;
+											$(el).find("td[company_id="+contact.id+"]").html($(template_ui).html());
+											var ellipsis_required = false;
+											$(el).find("td[company_id="+contact.id+"]").find(".company-type-image").each(function(index, val){
+												if(index > 3)
+												{
+													ellipsis_required = true;
+													$(this).remove();
+												}
+											});
+											if(ellipsis_required)
+											{
+												$(el).find("td[company_id="+contact.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
+											}
+										}, null);
+									}
+									hideTransitionBar();
+								}
+							});
+						}
+						else
+						{
+							json = property;
+							json.id = contact.id;
+							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+							
+						}
+						return;
+					}
 					
-				}
-				return;
-			}
-			
-			getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$(el).append($(template_ui));
-			}, null);
-		});
+					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(el).append($(template_ui));
+					}, null);
+				});
+
+		}
+	
+		
 
 	} else  {
 		getTemplate('contacts-grid-model', contact, undefined, function(template_ui){
@@ -584,3 +676,21 @@ $(function() {
 
 });
 
+// Check whether the given fields list has the property name.
+function isContactTypeCustomField(customContactfields,property){
+	var count = 0;
+	$.each(customContactfields,function(index,field){
+		if(field.field_label==property.name)
+			count++;
+	});
+	return count>0;
+}
+// Check whether the given fields list has the property name.
+function isCompanyTypeCustomField(customCompanyfields,property){
+	var count = 0;
+	$.each(customCompanyfields,function(index,field){
+		if(field.field_label==property.name)
+			count++;
+	});
+	return count>0;
+}

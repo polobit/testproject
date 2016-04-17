@@ -17,7 +17,7 @@ var ReportsRouter = Backbone.Router
 
 
 			/**
-			 * Shows reports categories
+			 * Shows reports categories 
 			 */
 			reports : function()
 			{

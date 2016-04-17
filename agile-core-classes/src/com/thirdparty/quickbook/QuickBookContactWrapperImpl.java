@@ -221,6 +221,13 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 		JSONObject alternativePhone = (JSONObject) customer.get("AlternatePhone");
 		fields.add(new ContactField(Contact.PHONE, alternativePhone.get("FreeFormNumber").toString(), "other"));
 	    }
+	    
+	    String syncid = null;
+    	if (customer.has("Id"))
+    	{
+    		syncid = customer.get("Id").toString();
+    	}
+    		fields.add(new ContactField(Contact.QUICKBOOK_SYNC, syncid.toString(), "home"));
 
 	}
 	catch (JSONException e)

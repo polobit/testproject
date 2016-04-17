@@ -9,6 +9,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.google.appengine.api.search.ScoredDocument;
 
 /**
@@ -27,7 +28,7 @@ public interface QueryInterface
 	public static enum Type
 	{
 		CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(
-				Case.class), DOCUMENT(Document.class);
+				Case.class), DOCUMENT(Document.class), TICKETS(Tickets.class);;
 
 		private Class clazz;
 

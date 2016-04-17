@@ -57,6 +57,26 @@ function workflow_alerts(title, message , template, callback){
 	}, null);
 }
 
+function workflow_spam_alerts(reason, score , template, callback){
+	
+	var JSONValues = {};
+	JSONValues["title"] = "Spam Result";
+	JSONValues["score"] = score;
+	JSONValues["reason"]=reason;
+	
+	getTemplate(template, JSONValues, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+			
+		var $modal = $(template_ui);
+		$modal.modal('show');	
+
+		if(callback && typeof (callback) === "function")
+			callback($modal);
+
+	}, null);
+}
+
 function send_verify_email(el)
 {
 	// On Enter Key

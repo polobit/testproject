@@ -18,7 +18,7 @@
  */
 function sort_tables(table) {
 	
-	head.js(LIB_PATH + "lib/jquery.tablesorter.min.js", function() {
+	// head.js(LIB_PATH + "lib/jquery.tablesorter.min.js", function() {
 
 	    // add parser through the tablesorter addParser method to sort tasks based on priority
 	    $.tablesorter.addParser({ 
@@ -105,7 +105,7 @@ function sort_tables(table) {
 	    
     	basic_table_sort(table);
 
-	});
+	// });
 }
 
 function basic_table_sort(table)

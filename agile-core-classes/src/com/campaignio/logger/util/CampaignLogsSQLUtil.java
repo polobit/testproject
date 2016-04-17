@@ -10,9 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.util.GoogleSQLUtil;
+import com.agilecrm.util.HTTPUtil;
+import com.analytics.util.AnalyticsUtil;
 import com.campaignio.wrapper.CampaignLogWrapper;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -26,7 +29,7 @@ import com.google.appengine.api.utils.SystemProperty;
  */
 public class CampaignLogsSQLUtil
 {
-
+    
     /**
      * Inserts obtained fields into campaign logs table.
      * 
@@ -57,9 +60,9 @@ public class CampaignLogsSQLUtil
 		+ ",NOW()"
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(message) + "," + GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
-
+	
 	System.out.println("Insert Query to CampaignLogs: " + insertToLogs);
-
+	
 	try
 	{
 	    GoogleSQL.executeNonQuery(insertToLogs);
@@ -69,7 +72,7 @@ public class CampaignLogsSQLUtil
 	    e.printStackTrace();
 	}
     }
-
+    
     /**
      * Returns logs with respect to campaign-id or subscriber-id.
      * 
@@ -99,7 +102,7 @@ public class CampaignLogsSQLUtil
 		    + " ORDER BY log_time DESC"
 		    + GoogleSQLUtil.appendLimitToQuery(offset, limit);
 	}
-
+	
 	try
 	{
 	    return GoogleSQL.getJSONQuery(logs);
@@ -110,7 +113,7 @@ public class CampaignLogsSQLUtil
 	    return null;
 	}
     }
-
+    
     /**
      * Deletes logs with respect to campaign.
      * 
@@ -132,7 +135,7 @@ public class CampaignLogsSQLUtil
 	    e.printStackTrace();
 	}
     }
-
+    
     /**
      * Deletes logs with respect to campaign, subscriber and logtype.
      * 
@@ -149,10 +152,10 @@ public class CampaignLogsSQLUtil
     {
 	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE"
 		+ getWhereConditionOfLogs(campaignId, subscriberId, domain);
-
+	
 	if (!StringUtils.isEmpty(logType))
 	    deleteCampaignLogs += "AND log_type=" + GoogleSQLUtil.encodeSQLColumnValue(logType);
-
+	
 	try
 	{
 	    GoogleSQL.executeNonQuery(deleteCampaignLogs);
@@ -162,7 +165,7 @@ public class CampaignLogsSQLUtil
 	    e.printStackTrace();
 	}
     }
-
+    
     /**
      * Returns where clause for campaign logs query.
      * 
@@ -177,29 +180,29 @@ public class CampaignLogsSQLUtil
     private static String getWhereConditionOfLogs(String campaignId, String subscriberId, String domain)
     {
 	String condition = null;
-
+	
 	if (!StringUtils.isEmpty(campaignId))
 	{
 	    condition = " campaign_id = " + GoogleSQLUtil.encodeSQLColumnValue(campaignId);
-
+	    
 	    // If both are not null
 	    if (!StringUtils.isEmpty(subscriberId))
 		return condition += " AND " + " subscriber_id = " + GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
 			+ " AND " + GoogleSQLUtil.appendDomainToQuery(domain);
 	}
-
+	
 	if (!StringUtils.isEmpty(subscriberId))
 	    condition = " subscriber_id = " + GoogleSQLUtil.encodeSQLColumnValue(subscriberId);
-
+	
 	// if both campaignId and subscriberId are null
 	if (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId))
 	    return GoogleSQLUtil.appendDomainToQuery(domain);
-
+	
 	condition += " AND " + GoogleSQLUtil.appendDomainToQuery(domain);
-
+	
 	return condition;
     }
-
+    
     /**
      * Deletes logs based on domain from SQL.
      * 
@@ -209,7 +212,7 @@ public class CampaignLogsSQLUtil
     public static void deleteLogsBasedOnDomain(String namespace)
     {
 	String deleteLogs = "DELETE FROM campaign_logs WHERE" + GoogleSQLUtil.appendDomainToQuery(namespace);
-
+	
 	try
 	{
 	    GoogleSQL.executeNonQuery(deleteLogs);
@@ -219,7 +222,7 @@ public class CampaignLogsSQLUtil
 	    e.printStackTrace();
 	}
     }
-
+    
     /**
      * Appends filter type to logs query
      * 
@@ -232,10 +235,10 @@ public class CampaignLogsSQLUtil
 	// If logFilterType is empty
 	if (StringUtils.isBlank(logFilterType))
 	    return "";
-
+	
 	return " AND log_type=" + GoogleSQLUtil.encodeSQLColumnValue(logFilterType);
     }
-
+    
     /**
      * Returns count of rows w.r.t log type
      * 
@@ -256,13 +259,13 @@ public class CampaignLogsSQLUtil
 		+ GoogleSQLUtil.encodeSQLColumnValue(campaignId) + " AND subscriber_id = "
 		+ GoogleSQLUtil.encodeSQLColumnValue(subscriberId) + " AND log_type="
 		+ GoogleSQLUtil.encodeSQLColumnValue(logType);
-
+	
 	int count = 0;
-
+	
 	System.out.println("Count Query of logs by logtype: " + logsCountQuery);
-
+	
 	ResultSet rs = GoogleSQL.executeQuery(logsCountQuery);
-
+	
 	try
 	{
 	    if (rs.next())
@@ -280,10 +283,10 @@ public class CampaignLogsSQLUtil
 	    // Closes the Connection and ResultSet Objects
 	    GoogleSQL.closeResultSet(rs);
 	}
-
+	
 	return count;
     }
-
+    
     /**
      * 
      * @param log_type
@@ -295,55 +298,32 @@ public class CampaignLogsSQLUtil
     {
 	String logs = null;
 	String domain = NamespaceManager.get();
-
+	JSONArray contactActivities = null;
 	if (log_type == null || ("All_Activities").equals(log_type))
-	{
-
-	    String pageViewAliasTable = " ( SELECT url,ip,stats_time,email,"
-		    + "NULL AS campaign_id,NULL AS subscriber_id ,NULL AS campaign_name,NULL AS log_time,NULL AS log_type, NULL AS message, UNIX_TIMESTAMP(stats_time) AS time"
-		    + " FROM page_views AS pageViewAlias WHERE DOMAIN = '" + domain
-		    + "' AND URL !='' AND EMAIL != '' ORDER BY stats_time DESC LIMIT "
-		    + (Integer.parseInt(cursor) == 0 ? "20" : Integer.parseInt(cursor) + 20) + ") ";
-
-	    String campaignLogAliasTable = " ( SELECT NULL AS url,NULL AS ip,NULL AS stats_time,NULL AS email,"
-		    + "campaign_id,subscriber_id,campaign_name,log_time,log_type,message,UNIX_TIMESTAMP(log_time) AS time "
-		    + "FROM campaign_logs AS campaignLogsAlias WHERE DOMAIN = '"
-		    + domain
-		    + "' AND (log_type='EMAIL_OPENED' OR log_type='CLICK' OR log_type='UNSUBSCRIBED') ORDER BY log_time DESC LIMIT "
-		    + (Integer.parseInt(cursor) == 0 ? "20" : Integer.parseInt(cursor) + 20) + ") ";
-
-	    logs = "SELECT url, ip, stats_time, email, campaign_id, subscriber_id, campaign_name, log_time, log_type, message, time"
-		    + " from( "
-		    + pageViewAliasTable
-		    + " UNION ALL "
-		    + campaignLogAliasTable
-		    + " ) as ContactLogAlias ORDER BY TIME DESC LIMIT " + page_size + " OFFSET " + cursor;
-	}
-
-	else if (("PAGE_VIEWS").equals(log_type.toUpperCase()))
-	    logs = "SELECT url, ip, stats_time, email, UNIX_TIMESTAMP(stats_time) AS time FROM page_views "
-		    + "WHERE email != '' AND url != '' AND domain = '" + domain + "' ORDER BY stats_time DESC LIMIT "
-		    + page_size + "  OFFSET " + cursor;
-
+	    contactActivities = getAllContactActivitiesByPage(domain, cursor, page_size);
+	else if(("PAGE_VIEWS").equals(log_type.toUpperCase()))
+	    contactActivities = getAllPageViews(domain, cursor, page_size);
 	else
+	{
 	    logs = "SELECT campaign_id, subscriber_id, campaign_name, log_time, log_type,message, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs "
-		    + " USE INDEX(domain_logtype_logtime_index) WHERE domain = '"
-		    + domain
-		    + "' AND log_type = '"
-		    + log_type.toUpperCase() + "' ORDER BY time DESC LIMIT " + page_size + " OFFSET " + cursor;
-	// change
-	try
-	{
-
-	    return GoogleSQL.getJSONQuery(logs);
+			+ " USE INDEX(domain_logtype_logtime_index) WHERE domain = '"
+			+ domain
+			+ "' AND log_type = '"
+			+ log_type.toUpperCase() + "' ORDER BY time DESC LIMIT " + page_size + " OFFSET " + cursor;
+	    try
+	    {
+		contactActivities = GoogleSQL.getJSONQuery(logs);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+		System.out.println("Exception occured while fetching campiagn activities " + e.getMessage());
+		return null;
+	    }
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
+	return contactActivities;
     }
-
+    
     /**
      * Returns logs with respect to both campaign and subscriber.
      * 
@@ -359,26 +339,26 @@ public class CampaignLogsSQLUtil
 	    String limit, String logType)
     {
 	String domain = NamespaceManager.get();
-
+	
 	// For localhost
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 	    domain = "localhost";
-
+	
 	if (StringUtils.isEmpty(domain))
 	    return null;
-
+	
 	// To know SQL process time
 	long startTime = System.currentTimeMillis();
-
+	
 	// get SQL logs
 	JSONArray logs = CampaignLogsSQLUtil.getLogs(campaignId, subscriberId, domain, offset, limit, logType);
-
+	
 	long processTime = System.currentTimeMillis() - startTime;
 	System.out.println("Process time for getting logs is " + processTime + "ms");
-
+	
 	if (logs == null)
 	    return null;
-
+	
 	try
 	{
 	    // to attach contact and campaign-name to each log.
@@ -399,7 +379,7 @@ public class CampaignLogsSQLUtil
 	    return null;
 	}
     }
-
+    
     /**
      * Takes list of string arrays and create a batch request and persists in
      * DB. It returns number of succefull insertions
@@ -418,7 +398,7 @@ public class CampaignLogsSQLUtil
 	    statement = GoogleSQL.getPreparedStatement(insertToLogs);
 	    conn = statement.getConnection();
 	    conn.setAutoCommit(false);
-
+	    
 	    Long start_time = System.currentTimeMillis();
 	    for (Object[] log : listOfLogs)
 	    {
@@ -426,17 +406,17 @@ public class CampaignLogsSQLUtil
 		{
 		    statement.setObject(i, log[i - 1]);
 		}
-
+		
 		statement.addBatch();
-
+		
 	    }
-
+	    
 	    System.out.println("time taken to add batch requests : " + (System.currentTimeMillis() - start_time));
-
+	    
 	    start_time = System.currentTimeMillis();
 	    resultFlags = statement.executeBatch();
 	    System.out.println("time taken to add batch  completed: " + (System.currentTimeMillis() - start_time));
-
+	    
 	}
 	catch (SQLException e)
 	{
@@ -445,7 +425,7 @@ public class CampaignLogsSQLUtil
 	}
 	finally
 	{
-
+	    
 	    try
 	    {
 		conn.commit();
@@ -459,9 +439,107 @@ public class CampaignLogsSQLUtil
 		e.printStackTrace();
 	    }
 	}
-
+	
 	return resultFlags;
-
+	
     }
-
+    
+    /**
+     * Fetches Contact Activities (Both Page Views and Campaign Logs) Fetches
+     * page by page. Uses Offset and Limit.
+     * 
+     * @param domain
+     * @param cursor
+     * @param page_size
+     * @return
+     */
+    private static JSONArray getAllContactActivitiesByPage(String domain, String cursor, String page_size)
+    {
+	JSONArray contactActivities = null;
+	try
+	{
+	    JSONArray campaignLogs = null;
+	    JSONArray webStats = null;
+	    
+	    String campaignLogAliasTable = "SELECT NULL AS url,NULL AS ip,NULL AS stats_time,NULL AS email,"
+		    + "campaign_id,subscriber_id,campaign_name,log_time,log_type,message,UNIX_TIMESTAMP(log_time) AS time "
+		    + "FROM campaign_logs AS campaignLogsAlias WHERE DOMAIN = '"
+		    + domain
+		    + "' AND (log_type='EMAIL_OPENED' OR log_type='CLICK' OR log_type='UNSUBSCRIBED') ORDER BY log_time DESC"
+		    + GoogleSQLUtil.appendLimitToQuery(cursor, page_size);
+	    
+	    try
+	    {
+		campaignLogs = GoogleSQL.getJSONQuery(campaignLogAliasTable);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Exception occured while fetching campaign logs " + e.getMessage());
+	    }
+	    
+	    try
+	    {
+		String url = AnalyticsUtil.getStatsUrlForContactsPageViews(cursor, page_size, domain);
+		String webStatsString = HTTPUtil.accessURL(url);
+		if (StringUtils.isNotBlank(webStatsString))
+		{
+		    try
+		    {
+			webStats = new JSONArray(webStatsString);
+		    }
+		    catch (JSONException e)
+		    {
+			System.out
+				.println("Exception while parsing activities web stats json string " + e.getMessage());
+		    }
+		}
+		contactActivities = AnalyticsUtil.getMergedJSONArray(webStats, campaignLogs);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Exception occured while fetching web stats " + e.getMessage());
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception while fetching contact activites by page " + e.getMessage());
+	}
+	return contactActivities;
+    }
+    
+    /**
+     * Fetches page views of contacts of current domain . Latest (by time) page
+     * views will come first. Fetches page by page. Uses Offset and Limit.
+     * 
+     * @param domain
+     * @param cursor
+     * @param page_size
+     * @return
+     */
+    private static JSONArray getAllPageViews(String domain, String cursor, String page_size)
+    {
+	JSONArray contactActivities = null;
+	try
+	{
+	    String url = AnalyticsUtil.getStatsUrlForAllPageViews(cursor, page_size, domain);
+	    String webStatsString = HTTPUtil.accessURL(url);
+	    if (StringUtils.isNotBlank(webStatsString))
+	    {
+		try
+		{
+		    contactActivities = new JSONArray(webStatsString);
+		}
+		catch (JSONException e)
+		{
+		    System.out.println("Exception while parsing web stats json string " + e.getMessage());
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception while fetching contact activites by page " + e.getMessage());
+	}
+	return contactActivities;
+    }
+    
 }

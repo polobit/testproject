@@ -3,20 +3,32 @@
 var Nagger_Noty;
 function showUpgradeNoty()
 {
-
-	// Returns if account if paid account
-	if(!_billing_restriction.currentLimits.freePlan)
-		return;
-	
-	// If route is subscribe, it will remove existing noty and returns. If there is not existy nagger noty, it will just return
-	if(Current_Route == "subscribe" || Current_Route == "subscribe-plan" || Current_Route == "purchase-plan")
-	{
-		if(Nagger_Noty)
-			$.noty.close(Nagger_Noty);
+	if(!_billing_restriction.currentLimits.freePlan || agile_is_mobile_browser()){
+		$(".free-user-alert-message").hide();
 		return;
 	}
+	if(Current_Route == "subscribe" || Current_Route == "subscribe-plan" || Current_Route == "purchase-plan")
+	{
+		$(".free-user-alert-message").hide();
+	}else{
+		$(".free-user-alert-message").show();
+	}
+
+	// Returns if account if paid account
+	/*if(!_billing_restriction.currentLimits.freePlan || agile_is_mobile_browser())
+		return;
 	
-	// If Noty is present already, then noty is initiated again
+	if(Current_Route == "subscribe" || Current_Route == "subscribe-plan" || Current_Route == "purchase-plan")
+	{
+		return;
+	}
+	getTemplate("free-user-alert", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#alert-message").html(template_ui).show();
+		}, null);*/
+	
+	/*// If Noty is present already, then noty is initiated again
 	if(Nagger_Noty && $("#" +Nagger_Noty).length > 0)
 		return;
 	
@@ -27,7 +39,7 @@ function showUpgradeNoty()
 			Backbone.history.navigate('subscribe', {
 				 trigger : true
 				 });
-		});
+		});*/
 }
 
 var CONTACTS_HARD_RELOAD = false;
@@ -185,9 +197,7 @@ function get_random_message() {
 	else
 		trail_expiry_message = "Your trial will expire in "+getPendingdaysIntrail()+" days";*/
 	
-	
-	var messages = ["You are using FREE limited version of Agile CRM. <span> Upgrade Now </span> "];
-
+	var	messages = ["You are using FREE limited version of Agile CRM. <span> Upgrade Now </span> "];
 	var random = Math.floor((Math.random() * messages.length));
 	// console.log(random + messages[random]);
 

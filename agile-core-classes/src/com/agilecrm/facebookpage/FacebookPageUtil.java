@@ -167,7 +167,7 @@ public class FacebookPageUtil
 	{
 	    connection = URL.openConnection();
 	    BufferedReader in;
-	    in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	    in = new BufferedReader(new InputStreamReader(connection.getInputStream(),"UTF-8"));
 	    String inputLine;
 	    b = new StringBuffer();
 	    while ((inputLine = in.readLine()) != null)

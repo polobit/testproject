@@ -1,6 +1,7 @@
 package com.agilecrm.account;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
@@ -9,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AliasDomain;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -87,6 +90,20 @@ public class AccountPrefs implements Serializable
 	public Plan getPlan()
 	{
 		return SubscriptionUtil.getSubscription().plan;
+	}
+	
+	/**
+	 * Returns alias names if exists, otherwise null.
+	 * 
+	 * @return List<String>.
+	 */
+	@XmlElement(name = "aliase")
+	public List<String> getAliasNames()
+	{
+		AliasDomain aliasDomain = AliasDomainUtil.getAliasDomain();
+		if(aliasDomain == null)
+			return null;
+		return aliasDomain.getAlias();
 	}
 
 	/**

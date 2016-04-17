@@ -16,8 +16,10 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AllDomainStats;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.EmailTemplatesUtil;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 
 /**
  * <code>EmailTemplatesPrefsAPI</code> includes REST calls to interact with
@@ -68,6 +70,10 @@ public class EmailTemplatesPrefsAPI
 	public EmailTemplates createEmailTemplate(EmailTemplates email)
 	{
 		email.save();
+		
+		//Increase count of Campaign for AllDomainstats report in database
+		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.EMAIL_TEMPLATE_COUNT);
+		
 		return email;
 	}
 

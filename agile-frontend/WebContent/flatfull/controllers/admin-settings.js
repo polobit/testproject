@@ -54,6 +54,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Webhook */
 	"webhook" : "webhookSettings",
 
+	"change-domain" : "changeDomain"
+
 
 	},
 
@@ -186,13 +188,19 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 
 			that.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
-			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
+				$('i').tooltip();
+
+				
+
+
 
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".last-login-time", el).timeago();
 				});
+				
 			} });
 			that.usersListView.collection.fetch();
 
@@ -236,6 +244,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 				// Binds action
 				bindAdminChangeAction(el, view.model.toJSON());
+				setTimeout(function(){
+				$('a[href="#sales-previlages"]').tab("show");
+				},100)
+				
+					
+				
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
@@ -319,7 +333,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			 * Creates a Model for users edit, navigates back to 'user' window on
 			 * save success
 			 */
-			var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", saveCallback : function(response)
+			var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", change : false, saveCallback : function(response)
 			{
 
 				update_contact_in_our_domain(userEmail, response, function(){
@@ -351,8 +365,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 				bindAdminChangeAction(el, view.model.toJSON());
 				setTimeout(function(){
-					//$('#deals-privilege', el).trigger('change');
+					$('#deals-privilege', el).trigger('change');
 					$('#calendar-privilege', el).trigger('change');
+					$('a[href="#sales-previlages"]',el).tab('show');
+					$('a[href="#sales-previlages"]',el).trigger('click');
 				},500);
 			}, saveAuth : function(el){
 				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
@@ -1141,6 +1157,78 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('.settings-deal-goal').parent().removeClass('b-b-none');
 
 		}, "#milestone-listner");
+	},
+
+	changeDomain : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+			var view = new Base_Model_View({ url : '/core/api/alias', template : "admin-settings-domain-alias", postRenderCallback : function(el){},
+			prePersist : function(model){
+				var aliasJSON = [];
+				$.each($("#alias_domain").find('input[name="alias"]'), function(index, data) {
+					aliasJSON.push(($(data).val().toLowerCase()));
+				});
+			    model.set({ 
+			       'alias' : aliasJSON
+			      }, 
+			      { 
+			       silent : true 
+			      });
+			   }, saveAuth : function(el){
+			   	var form_id = $("#alias", el).closest('form').attr("id");
+				if (!isValidForm('#' + form_id))
+				{
+					return false;
+				}
+				if(getDomainFromURL() != $("#alias", el).val())
+				{
+					$("#saveAliasAuthentication", el).html(getTemplate("conform-domain-change-model",{}));
+					$("#saveAliasAuthentication", el).modal("show");
+					return true;
+				}
+				else{
+					return false;
+				}
+			}, saveCallback : function(response){
+				console.log("saveCallback");
+				
+				var domain = getDomainFromURL();
+				if(domain == null)
+					window.location.href = "/login";
+				if(domain != response.alias[0]){
+					showNotyPopUp("information", "Your domain name has been updated successfully. Logging out...", "top");
+					setTimeout(function()
+					{
+						window.location.href = window.location.protocol + "//" + response.alias[0] + ".agilecrm.com/login" + window.location.hash;
+					}, 5000);
+				}
+			},errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top");
+			} });
+
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.account-prefs-tab').addClass('select');
+			$(".active").removeClass("active");
+
+		}, "#content");
+
+		
+		
 	}
 
 });
@@ -1158,4 +1246,48 @@ function initQuota(callback)
        						}).datepicker("setDate", new Date());
 
 				callback();
+}
+
+function toggle_admin_user_bulk_actions_delete(clicked_ele, isBulk, isCampaign)
+{
+	$("#bulk-action-btns button").addClass("disabled");
+	if ($(clicked_ele).is(':checked'))
+	{
+		$("#bulk-action-btns button").removeClass("disabled");
+
+	}
+	else
+	{
+		if (isBulk)
+		{
+			$("#bulk-action-btns button").addClass("disabled");
+
+			return;
+		}
+
+		var check_count = 0
+		$.each($('.tbody_check'), function(index, element)
+		{
+			if ($(element).is(':checked'))
+			{
+				check_count++;
+				return false;
+			}
+			// return;
+		});
+
+		if (check_count == 0)
+		{
+			$("#bulk-action-btns button").addClass("disabled");
+		}
+	}
+}
+
+function getDomainFromURL(){
+	var temp = window.location.host.split("-dot");
+	if(temp.length == 1)
+		temp = window.location.host.split(".");
+	if(temp.length == 1)
+		return "my";
+	return temp[0];
 }

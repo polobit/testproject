@@ -1,20 +1,52 @@
-<div id="portletStreamModal" class="modal fade h-auto" tabindex="-1" role="dialog" aria-labelledby="portletStreamModalLabel" aria-hidden="true">
+<script id="portletStreamModalInfo-template" type="text/html">
   <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">x</button>
-			<h3 class="modal-title" id="portletStreamModalLabel"><i class="icon-plus-sign"></i> Add Dashlet</h3>			
+			<h3 class="modal-title" id="portletStreamModalLabel"><i class="icon-plus-sign">
+</i> Add Dashlet </h3>			
 		</div>
 		<div class="modal-body overflow-auto">
+			<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
 			<form id="portletStreamDetail" name="portletStreamDetail" class="form-horizontal">
 				<fieldset>
-					<div id="portletstreamDetails">
-					</div>         					   			  
+				<div class="control-group form-group">
+				<label class="control-label col-sm-2">Pages<span class="field_req">*</span></label>
+					<div class="controls col-sm-10">
+					<span class="m-xs block">
+						<a href="#" id="route-select-all" class="text-info">Select all</a> |
+						<a href="#" id="route-select-none" class="text-info">Select none</a>
+					</span>
+					<select id="route-list" name="route-list" class="required form-control" multiple="multiple">
+						<option value="DashBoard">Dashboard</option>
+						<option value="Deals">Deals</option>
+						<option value="Tasks">Tasks</option>
+						<option value="Contacts">Contacts</option>
+						<option value="Events">Events</option>
+					</select>
+				</div> 
+				</div>       					   			  
 				</fieldset>
 			</form>		   	
 		</div>
 		<div class="modal-footer">
+		{{#isAdmin}}
+				<div class="btn-group  m-l-n-lg">
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all">Add for all users</a></li>    									
+  									</ul>
+								</div>
+					{{else}}
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet">Add</a></div>
+					  {{/isAdmin}}
+			
 		</div>
 	</div>
   </div>
-</div>
+</script>

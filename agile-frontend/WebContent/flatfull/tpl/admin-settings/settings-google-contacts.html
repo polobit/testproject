@@ -156,11 +156,7 @@
 
       <div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm ml_5">Cancel</a>
-{{#if inProgress}}
-			<div class="btn btn-primary btn-sm save-contact-prefs inline-block" id="google-import-prefs-save" disabled>Syncing</div>
-	{{else}}
-<div class="btn btn-sm btn-primary save-contact-prefs inline-block" id="google-import-prefs-save">Sync</div>
-{{/if}}		
+<div class="btn btn-sm btn-primary save-contact-prefs inline-block" id="google-import-prefs-save">Sync</div>	
 
 	 </div>
 	{{/if}}
@@ -192,8 +188,8 @@
     {{#if id}}
 <form id="stripe-prefs-form" class="m-b">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
-	
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}}</div></div>
+			<br>
           
              	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
@@ -215,11 +211,7 @@
 
 			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs">Sync</button>
-{{/if}}
 
        	  	</div>
 
@@ -299,11 +291,11 @@
 	
            {{#if id}}
               <div>
-                   Shop : <span>{{othersParams}}</span>
+                   Shop: <span>{{othersParams}}</span>
                 
-                       <div class="text-center"><a class="delete" href="#"  id="shopify-import-prefs-delete" >Change</a></div>
+                      
 					</div>
-                 
+                 <br>
              	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
            				<div class="controls">
@@ -324,11 +316,7 @@
 
 			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary ml_5" id="shopify-setting" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary ml_5" id="shopify-setting">Sync</button>
-{{/if}}
 
        	  	</div>
 
@@ -420,7 +408,7 @@
     {{#if id}}
 <form id="quickbook-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}}</div> </div>
 	
           <br>
              	<div class="control-group form-group">
@@ -443,11 +431,7 @@
 
 			<div class="form-actions m-t-md text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs">Sync</button>
-{{/if}}
 
        	  	</div>
 
@@ -541,7 +525,7 @@
     {{#if id}}
 <form id="xero-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked: <div class="text-ellipsis" title={{userName}}>{{userName}} </div></div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
@@ -564,11 +548,7 @@
 
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary" id="xero_sync_prefs" style="display:inline-block;" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary" id="xero_sync_prefs" style="display:inline-block;">Sync</button>
-{{/if}}
 
            		<a href="#sync" class="btn btn-default btn-sm ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
@@ -588,20 +568,22 @@
 	type="text/html">
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
-<div class="panel wrapper" >
-<span class="label label-danger pull-right m-b">Beta</span>
+<div class="panel panel-default">
+<div class="panel-heading">
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}"  /></center>
+</div>
+<div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
-		Setup contacts sync with your Freshbooks account.
+		Setup contacts sync with your FreshBooks account.
 	</div>
 {{/unless}} 
 
     {{#if id}}
 <form id="freshbooks-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div><span>Account Linked </span>  <span>{{othersParams}}.freshbooks.com <span><a href="#" class="delete">Change</a></span></span></div>
-	
+          <div>Account Linked:  <div>{{othersParams}}.freshbooks.com </div></div>
+			<br>
           
              	<div class="control-group form-group">
 					<label class="control-label">Frequency</label> 
@@ -621,13 +603,9 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
+			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
-{{#if inProgress}}
-			<button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs" disabled="disabled">Syncing</button>
-{{else}}
 <button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs">Sync</button>
-{{/if}}
        	  	</div>
 
 
@@ -646,8 +624,8 @@
 
 <div class='input-group'>
 	<span class="input-group-addon">https://</span>
-	  <input type="url" id="freshbooks_url" class="input-medium form-control" placeholder="Freshbooks domain name" value="" id="freshbooks_url">
-    <span class="input-group-addon">.freshbooks.com</span>
+	  <input type="url" id="freshbooks_url" class="input-medium form-control" placeholder="FreshBooks domain name" value="" id="freshbooks_url">
+    <span class="input-group-addon">.freshBooks.com</span>
 
                 </div>  
 <div id="domainerror" class="hide text-danger">Enter Domain Name</div>
@@ -664,6 +642,7 @@
 	    </form>
 </div>
 {{/if}}
+</div>
 
 </div>
 </div>
@@ -681,8 +660,8 @@
 	    </center>
 	 </div>
 	 <div class="panel-body">
-	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" rel="tooltip" title="Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.">
-			Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" rel="tooltip" title="Sync Clients from FreshBooks as Contacts in Agile CRM along with purchase history.">
+			Sync Clients from FreshBooks as Contacts in Agile CRM along with purchase history.
 		</div>
     	<div class="text-center">
 			{{#if id}}
@@ -707,16 +686,15 @@
 <script id="admin-settings-import-freshbooks-contacts-form-template"
 	type="text/html">
 <div class="row">
-<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="col-md-6 col-sm-6 col-xs-12">
 <div class="panel panel-default" >
 <div class="panel-heading">
-<span class="label label-danger pull-right m-b">Beta</span>
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
-		Setup contacts sync with your Freshbooks account.
+		Setup contacts sync with your FreshBooks account.
 	</div>
 {{/unless}}
 
@@ -730,8 +708,8 @@
 
 <div class='input-group'>
 	<span class="input-group-addon">https://</span>
-	  <input type="url" id="freshbooks_url" class="input-medium form-control"  placeholder="Freshbooks domain name" value="" id="freshbooks_url">
-    <span class="input-group-addon">.freshbooks.com</span>
+	  <input type="url" id="freshbooks_url" class="input-medium form-control"  placeholder="FreshBooks domain name" value="" id="freshbooks_url">
+    <span class="input-group-addon">.freshBooks.com</span>
 
                 </div>  
 <div id="domainerror" class="hide text-danger">Enter Domain Name</div>

@@ -9,7 +9,7 @@ var agile_contact_sort_configuration = [
 	buildProperty("Score", "lead_score"),
 
 	// Star value
-	buildProperty("Starred", "star_value", "-star_value"),
+	buildProperty("Star Value", "star_value", "-star_value"),
 
 
 	// First name
@@ -56,7 +56,9 @@ var agile_company_sort_configuration = [
 	buildProperty("Star Value", "star_value"),
 
 	// Name
-	buildProperty("Name", "name")
+	buildProperty("Name", "name"),
+	//Score
+	buildProperty("Score", "lead_score")
 ];
 
 var sort_company_configuration = {

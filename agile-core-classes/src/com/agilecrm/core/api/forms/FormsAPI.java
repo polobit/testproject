@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AllDomainStats;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 
@@ -74,8 +76,11 @@ public class FormsAPI
 	    }
 	    else if (savedForm == null)
 	    {
-		form = new Form();
-		saveForm = true;
+			form = new Form();
+			saveForm = true;
+			
+			//Increase count of Campaign for AllDomainstats report in database
+			AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.FORM_COUNT);
 	    }
 
 	    if (saveForm)

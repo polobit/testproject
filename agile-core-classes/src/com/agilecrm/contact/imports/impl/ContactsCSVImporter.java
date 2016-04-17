@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.imports.CSVImporter;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
+import com.agilecrm.contact.upload.blob.status.specifications.StatusProcessor;
+import com.agilecrm.contact.upload.blob.status.specifications.factory.ImportFactory;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.CSVUtil;
@@ -18,9 +21,9 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
     private static final long serialVersionUID = 1L;
 
     public ContactsCSVImporter(String domain, BlobKey blobKey, Long domainUseId, String entityMapper,
-	    Class<Contact> contactClass, int currentEntityCount)
+	    Class<Contact> contactClass, int currentEntityCount, ImportStatusDAO importDAO)
     {
-	super(domain, blobKey, domainUseId, entityMapper, contactClass, currentEntityCount);
+	super(domain, blobKey, domainUseId, entityMapper, contactClass, currentEntityCount, importDAO);
 	// TODO Auto-generated constructor stub
     }
 
@@ -35,9 +38,26 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
 	    // There is limiation on count in remote API (max count
 	    // it gives is 1000)
 	    restriction.contacts_count = currentEntityCount;
+	    try
+	    {
+		Class.forName("com.agilecrm.imports.factory.ImportStatusProcessorFactoryGCE");
+	    }
+	    catch (ClassNotFoundException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 
-	    new CSVUtil(restriction, getUserAccessControl()).createContactsFromCSV(getInputStream(), getMapperEntity(),
-		    String.valueOf(domainUserId));
+	    CSVUtil csvUtil = new CSVUtil(restriction, getUserAccessControl(), importDAO);
+	    csvUtil.setStatusSender(ImportFactory.getImportStatusSender());
+	    StatusProcessor<String> statusProcessor = (StatusProcessor<String>) ImportFactory.getStatusProcessor();
+
+	    System.out.println(statusProcessor);
+	    statusProcessor.setTaskQueue("contact-import-queue");
+	    csvUtil.setStatusProcessor(statusProcessor);
+
+	    csvUtil.createContactsFromCSV(getInputStream(), getMapperEntity(), String.valueOf(domainUserId));
+
 	}
 	catch (PlanRestrictedException e)
 	{

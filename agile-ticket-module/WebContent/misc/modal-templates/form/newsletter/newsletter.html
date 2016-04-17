@@ -1,0 +1,180 @@
+<html lang="en">
+   <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <title>Popup</title>
+      <link href="https://fonts.googleapis.com/css?family=Bree+Serif:400,700" rel="stylesheet" type="text/css" />
+      <style>
+         body {
+         background: #333;
+         width: 700px;
+         height: 475px;
+         }
+         #popup {
+         background: #fff;
+         box-shadow: inset 3px 4px 250px #d4d4d4;
+         color: #8e8e8e!important;
+         font: 24px/28px Helvetica, Arial, sans-serif!important;
+         letter-spacing: 0;
+         position: fixed;
+         width: 700px;
+         }
+         #popup-top {
+         height: 11px;
+         position: absolute;
+         left: 0;
+         right: 0;
+         top: 0;
+         }
+         #popup-top > div {
+         height: 11px;
+         float: left;
+         width: 25%;
+         }
+         #popup-top-red { background: #ef3e36; }
+         #popup-top-green { background: #abb92e; }
+         #popup-top-orange { background: #f57826; }
+         #popup-top-blue { background: #17b4e9; }
+         #popup-body {
+         padding: 60px 40px;
+         text-align: center;
+         }
+         #popup-content p  {
+         margin: 0 0 15px;
+         }
+         #popup-content p big  {
+         color: #484848;
+         font-family: 'Bree Serif', sans-serif!important;
+         font-size: 50px!important;
+         }
+         #popup-content p small  {
+         font-family: Helvetica Nueue, Helvetica, Arial, Times, sans-serif!important;
+         font-size: 20px!important;
+         font-style: italic;
+         line-height: 24px!important;
+         }
+         #popup-content  a {
+         color: #78ac06!important;
+         }
+         #popup-form {
+         background: #dadada;
+         margin: 60px -40px 0 290px;
+         padding: 20px 20px 5px;
+         position: relative;
+         }
+         #popup-form input.text {
+         border: 1px solid #ccc;
+         color: #333!important;
+         font-weight: 100;
+         font-size: 16px!important;
+         line-height: 24px!important;
+         margin: 0;
+         outline: 0;
+         padding: 10px 6px;
+         width: 330px;
+         }
+         #popup-form input.text.text-error {
+         border-color: #c00;
+         color: #c00!important;
+         }
+         #popup-form input.text:focus {
+         border-color: #999;
+         }
+         #popup-form  :focus::-webkit-input-placeholder {
+         color: transparent;
+         }
+         #popup-form  :focus::-moz-placeholder {
+         color: transparent;
+         }
+         #popup-form  :focus:-moz-placeholder {
+         color: transparent;
+         }
+         #popup-form input.button {
+         background: #78ac06;
+         border: 0;
+         color: #fff!important;
+         cursor: pointer;
+         font-family: 'Bree Serif', sans-serif!important;
+         font-size: 18px;
+         line-height: 22px;
+         outline: 0;
+         padding: 15px;
+         width: 330px;
+         }
+         #popup-form input.button:active {
+         position: relative;
+         top: 2px;
+         }
+         #popup-form-image {
+         background: url('https://s3.amazonaws.com/PopupTemplates/form/newsletter/images/form-image.png');
+         height: 245px;
+         position: absolute;
+         left: -310px;
+         top: 0;
+         width: 280px;
+         }
+         #popup-form-arrow {
+         background: url('https://s3.amazonaws.com/PopupTemplates/form/newsletter/images/form-arrow.png');
+         height: 56px;
+         position: absolute;
+         left: -40px;
+         top: -40px;
+         width: 49px;
+         }
+         #popup-content-copyright {
+         font-size: 18px!important;
+         font-style: italic;
+         line-height: 22px!important;
+         position: absolute;
+         right: 20px;
+         bottom: 20px;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="popup">
+         <div id="popup-top">
+            <div id="popup-top-red"></div>
+            <div id="popup-top-green"></div>
+            <div id="popup-top-orange"></div>
+            <div id="popup-top-blue"></div>
+         </div>
+         <div id="popup-body">
+            <div id="popup-content">
+               <p><big>ADD smart popups today</big></p>
+               <p><em>Convert Your Abandoning Visitors into Revenue</em></p>
+               <form id="popup-form">
+                  <p><input type="text" class="text" agile-field="first_name" name="name" placeholder="Enter Your Name" /></p>
+                  <p><input type="text" class="text" agile-field="email" name="email" placeholder="Enter Your Email" /></p>
+                  <p><input type="submit" class="button" value="I want to upgrade FREE" />
+                  <div id="popup-form-arrow"></div>
+                  <div id="popup-form-image"></div>
+               </form>
+            </div>
+         </div>
+      </div>
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
+	  <script type="text/javascript">
+	  window.parent._agile_load_fields();
+	  jQuery.validator.setDefaults({
+	      debug: true,
+	      success: 'valid'
+	  });
+	  $('#popup-form').validate({
+	      rules: {
+	          name: 'required',
+	          email: {
+	              required: true,
+	              email: true
+	          }
+	      },
+	      submitHandler: function (form) {
+	          window.parent._agile_save_form(true, window.parent._agile.set_email(document.getElementsByName('email')[0].value));
+	          form.submit()
+	      }
+	  })
+	  </script>
+   </body>
+</html>

@@ -7,10 +7,13 @@ import java.util.List;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.session.SessionManager;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 /**
  * Actions that are performed before contact is saved
@@ -36,8 +39,7 @@ public class ContactSavePreprocessor
 	{
 	    oldContact = getOldContact();
 	}
-
-    }
+}
 
     private void updateUpdatedTime()
     {
@@ -68,8 +70,17 @@ public class ContactSavePreprocessor
 	if (saveArgs == null || saveArgs.length < 2)
 	{
 	    validateTags();
+	    
 	}
-
+		if(newContact.id == null){
+			System.out.println("zzzz" + newContact.getContactPropertiesList("email"));
+			List<ContactField> emailList = newContact.getContactPropertiesList("email");
+			for(ContactField email : emailList)
+			{
+				if(email!= null && !StringUtils.isBlank(email.value))
+					email.value = email.value.trim();
+			}		
+		}
 	checkDuplicate(oldContact);
 
 	updateUpdatedTime();
@@ -90,8 +101,7 @@ public class ContactSavePreprocessor
 	    return;
 	}
 
-	if (newContact.id != null)
-	    ContactUtil.isDuplicateContact(newContact, oldContact, true);
+	ContactUtil.isDuplicateContact(newContact, oldContact, true);
     }
 
     private void persistOldCreatedTime()

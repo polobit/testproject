@@ -2,7 +2,10 @@
 <div class="agile-group<% if(required) {%> required-control<% } %>">
   <label class="agile-label" for="<%= id %>"><%= label %></label>
   <div class="<%= inputsize %> agile-field">
-	<input id="<%= id %>" name="<%if(agilefield){%><%= agilefield %><%}else{%><%= id %><%}%>" type="<%if(agilefield&&agilefield=='email'){%><%=agilefield%><%}else{%>text<%}%>" placeholder="<%= placeholder %>" class="<%= inputheight %>" <% if(required) {%> required <% } %> />
+	<input id="<%= id %>" name="<%if(agilefield){%><%= agilefield %><%}else{%><%= id %><%}%>" type="<%if(agilefield&&agilefield=='email'){%><%=agilefield%><%}
+			else if(agilefield&&agilefield=='website'){%><%='url'%><%}
+			else{%>text<%}%>" 
+	placeholder="<%= placeholder %>" class="<%= inputheight %>" <% if(required) {%> required <% } %> />
   </div>
   <div class="agile-custom-clear"></div>
 </div>

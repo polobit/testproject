@@ -50,6 +50,7 @@ function renderActivityView(params)
 			includeTimeAgo(el);
 			initializeActivitiesListner(el);
 			initializeEventListners(el);
+			contactListener(el);
 		}, appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);
@@ -185,6 +186,11 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		return params;
 	}
 	else if (entitytype == 'CALL')
+	{
+		params += ("&entity_type=" + entitytype);
+		return params;
+	}
+	else if (entitytype == 'TICKET')
 	{
 		params += ("&entity_type=" + entitytype);
 		return params;

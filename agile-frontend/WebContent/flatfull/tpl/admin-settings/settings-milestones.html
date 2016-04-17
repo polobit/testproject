@@ -137,7 +137,7 @@
 			<input type="hidden" name="entity_type" value="DEAL_LOST_REASON" />
 			<a class="btn btn-default btn-addon btn-sm add_lost_reason m-t-n-xxs" data-toggle="modal" id="add_lost_reason" href="#">Add</a>
 			<span id="lost_reason_name_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-			<span id="lost_reason_chars_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+			<span id="lost_reason_chars_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Loss reason name should start with an alphabet and can not contain special characters other than underscore, space and hyphen.</span>
 			<span id="lost_reason_existed_error" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
 		</div>
 	</form>
@@ -161,7 +161,6 @@
 		<input type="hidden" name="entity_type" value="{{entity_type}}" />
 		<input type="hidden" name="created_time" value="{{created_time}}" />
 		<span id="lost_reason_name_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-		<span id="lost_reason_chars_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
 		<span id="lost_reason_existed_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
 	</div>
 	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
@@ -172,6 +171,7 @@
 			<i title="Delete Reason" class="icon-trash"></i>
 		</a>
 	</div>
+	<span id="lost_reason_chars_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline pull-left" style="display:none;">Loss reason name should start with an alphabet and can not contain special characters other than underscore, space and hyphen.</span>
 	</form>
 </td>
 </script>
@@ -185,7 +185,7 @@
 			<input type="hidden" name="entity_type" value="DEAL_SOURCE" />
 			<a class="btn btn-default btn-addon btn-sm add_deal_source m-t-n-xxs" data-toggle="modal" id="add_deal_source" href="#">Add</a>
 			<span id="deal_source_name_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-			<span id="deal_source_chars_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
+			<span id="deal_source_chars_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source name should start with an alphabet and can not contain special characters other than underscore, space and hyphen.</span>
 			<span id="deal_source_existed_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
 		</div>
 	</form>
@@ -209,7 +209,6 @@
 		<input type="hidden" name="entity_type" value="{{entity_type}}" />
 		<input type="hidden" name="created_time" value="{{created_time}}" />
 		<span id="deal_source_name_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
-		<span id="deal_source_chars_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hyphen.</span>
 		<span id="deal_source_existed_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
 	</div>
 	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
@@ -223,6 +222,7 @@
 			<i title="Drag Source" class="icon-move"></i>
 		</a>
 	</div>
+	<span id="deal_source_chars_error_{{id}}" for="deal_source_name" generated="true" class="help-inline pull-left" style="display:none;">Source name should start with an alphabet and can not contain special characters other than underscore, space and hyphen.</span>
 	<input type="hidden" name="order" value="{{order}}" />
 	</form>
 </td>

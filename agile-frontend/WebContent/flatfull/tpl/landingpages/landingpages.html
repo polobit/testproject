@@ -9,9 +9,11 @@
 			<div class="pull-right">
 				<div class="btn-group right pos-rlt pull-right">
             		<a href="#landing-page-templates" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> Add Landing Page</a>
-				</div>
-            	
+				</div> 	
 			</div>
+            <div class="m-r-sm pull-right">
+                <a href="#form-builder-templates" class="btn btn-default btn-sm btn-addon">Form</a>
+            </div>
 			<div class="clearfix"></div>
         
     </div>
@@ -37,6 +39,16 @@
                 </div>
             </div>
         </div>
+        <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/vrxV_52QQTc?rel=0&amp;" frameborder="0" style="
+                width: 58%;
+                position: absolute;
+                left: 37%;
+                top: 15%;
+                margin: -75px 0 0 -135px;
+                height: 304px;
+                " allowfullscreen=""></iframe>
+            </div>
 {{/unless}}
 {{#if this.length}}
         <div class="panel panel-default">
@@ -70,6 +82,16 @@
             Landing page is your lead magnet - a web page created to gather leads online. Create a landing page in Agile and link it from your website, email messages or online ads. Add a Form to your landing page to gather visitor details, create Contacts in Agile automatically and nature them using Campaigns.
             </p>
             <br>
+            {{#if this.length}}
+            <p>
+
+<a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+<img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+</a>
+</p>
+
+        <br>
+        {{/if}}
         
     </div>
 </div>

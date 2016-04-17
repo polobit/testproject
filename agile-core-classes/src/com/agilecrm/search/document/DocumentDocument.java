@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.agilecrm.document.Document;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
@@ -34,7 +35,7 @@ public class DocumentDocument extends com.agilecrm.search.document.Document impl
 
 	doc.addField(Field.newBuilder().setName("type").setText(Type.DOCUMENT.toString()));
 
-	DomainUser documentOwner = null;
+	DomainUserPartial documentOwner = null;
 
 	try
 	{

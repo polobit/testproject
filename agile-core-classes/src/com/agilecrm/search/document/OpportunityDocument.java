@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
@@ -47,13 +48,24 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 	// Add custom fields to index
 	addCustomFieldsToIndex(opportunity.custom_data, SCOPE.DEAL, doc);
+	
+	String tokens = SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields));
+	
+	StringBuffer search_tokens = new StringBuffer(tokens);
+	
+	if(opportunity.name != null)
+	{
+		//We are adding deal name to search tokens without spaces to search deal with full name
+		search_tokens.append(" ");
+		search_tokens.append(opportunity.name.replaceAll(" ", ""));
+	}
 
 	doc.addField(Field.newBuilder().setName("search_tokens")
-		.setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
+		.setText(search_tokens.toString()));
 
 	doc.addField(Field.newBuilder().setName("type").setText(Type.OPPORTUNITY.toString()));
 
-	DomainUser opportunityOwner = null;
+	DomainUserPartial opportunityOwner = null;
 
 	try
 	{
@@ -68,6 +80,9 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	// Sets owner of the opportunity
 	if (opportunityOwner != null)
 	    doc.addField(Field.newBuilder().setName("owner_id").setText(opportunity.id.toString()));
+	
+	doc.setId(opportunity.id.toString()).build();
+	
 	return doc;
     }
 

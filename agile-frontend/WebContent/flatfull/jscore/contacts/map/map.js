@@ -22,6 +22,8 @@ function show_map(el) {
 	try
 	{
 		address = JSON.parse(address);
+		if(!address)
+			return;
 	}
 	catch (err)
 	{

@@ -11,14 +11,15 @@
 <%
     // Get Catalog
     String[] EMAIL_CATALOG = {"json/nodes/email/addons/send_email.jsp","json/nodes/email/addons/ab.js", "json/nodes/email/addons/clicked.js","json/nodes/email/addons/opened.js","json/nodes/email/addons/replied.js"};
-  	String[] UTILITIES_CATALOG = {"json/nodes/common/addons/wait.js","json/nodes/common/addons/wait_till.jsp","json/nodes/crm/addons/has_deal.js","json/nodes/common/addons/check_tags.js", "json/nodes/crm/addons/transfer.jsp","json/nodes/common/addons/time.js","json/nodes/developers/addons/condition.js","json/nodes/crm/addons/notify.js","json/nodes/crm/addons/check_campaign.js", "json/nodes/crm/addons/has_event.js"};
+  	String[] UTILITIES_CATALOG = {"json/nodes/common/addons/wait.js","json/nodes/common/addons/wait_till.jsp","json/nodes/crm/addons/has_deal.js","json/nodes/common/addons/check_tags.js", "json/nodes/crm/addons/transfer.jsp","json/nodes/common/addons/time.js","json/nodes/developers/addons/new_condition.js","json/nodes/crm/addons/notify.js","json/nodes/crm/addons/check_campaign.js", "json/nodes/crm/addons/has_event.js","json/nodes/crm/addons/update_deal.js"};
     String[] MOBILE_CATALOG = { "json/nodes/sms/addons/sendmessage.js", "json/nodes/email/addons/clicked.js"};
 		   /* ,"json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
-    String[] DEVELOPERS_CATALOG = { "json/nodes/developers/addons/jsonio.js", "json/nodes/developers/addons/condition.js","json/nodes/developers/addons/set_property.js"};
-    String[] CRM_CATALOG = {"json/nodes/crm/addons/tags.js",  "json/nodes/crm/addons/set_owner.jsp","json/nodes/developers/addons/set_property.js", "json/nodes/common/addons/score.js","json/nodes/crm/addons/adddeal.jsp","json/nodes/crm/addons/addtask.jsp","json/nodes/crm/addons/addnote.js","json/nodes/common/addons/add_case.js","json/nodes/common/addons/change_deal_milestone.js","json/nodes/common/addons/close_case.js","json/nodes/common/addons/Unsubscribe.js","json/nodes/crm/addons/close_task.js", "json/nodes/crm/addons/add_event.js"};
+    String[] DEVELOPERS_CATALOG = { "json/nodes/developers/addons/jsonio.js", "json/nodes/developers/addons/new_condition.js","json/nodes/developers/addons/set_property.js"};
+    String[] CRM_CATALOG = {"json/nodes/crm/addons/tags.js",  "json/nodes/crm/addons/set_owner.jsp","json/nodes/developers/addons/set_property.js", "json/nodes/common/addons/score.js","json/nodes/crm/addons/adddeal.jsp","json/nodes/crm/addons/addtask.jsp","json/nodes/crm/addons/addnote.js","json/nodes/common/addons/add_case.js","json/nodes/common/addons/change_deal_milestone.js","json/nodes/common/addons/close_case.js","json/nodes/common/addons/Unsubscribe.js","json/nodes/crm/addons/close_task.js", "json/nodes/crm/addons/add_event.js", "json/nodes/crm/addons/territory.js"};
     String[] SOCIAL_CATALOG = {"json/nodes/social/addons/tweet.js"};
     String[] WEB_CATALOG = {"json/nodes/common/addons/url.js"};
-
+    String[] SERVICE_CATALOG = {"json/nodes/ticket/addons/status.js", "json/nodes/ticket/addons/priority.js","json/nodes/ticket/addons/type.js", "json/nodes/ticket/addons/email_user.js", "json/nodes/ticket/addons/email_group.js", "json/nodes/ticket/addons/assignee.js", "json/nodes/ticket/addons/labels.js", "json/nodes/ticket/addons/set_sla.js",  "json/nodes/ticket/addons/condition.js"};
+    
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();
 
@@ -68,7 +69,10 @@
 	    target = UTILITIES_CATALOG;
     else if (type.equalsIgnoreCase("developers"))
 	    target = DEVELOPERS_CATALOG;
-
+	
+    else if (type.equalsIgnoreCase("service"))
+	    target = SERVICE_CATALOG;
+	
     String contents = "";
     InputStream is = null;
     
@@ -78,8 +82,11 @@
     
     for (String path : target)
     {
-        // Read each path locally from context
-        File f = new File(application.getRealPath("/")+ "/" + path);
+    	
+    	String hostName = request.getServerName();
+	
+    	// Read each path locally from context
+        File f = new File(application.getRealPath("/") + "/" + path);
 		is = new FileInputStream(f);
 		    
 		contents = IOUtils.toString(is, "UTF-8");

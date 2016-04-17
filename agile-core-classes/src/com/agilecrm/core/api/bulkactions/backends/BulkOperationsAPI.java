@@ -47,6 +47,8 @@ import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
 import com.agilecrm.contact.sync.SyncFrequency;
+import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -434,11 +436,20 @@ public class BulkOperationsAPI
 	    }
 
 	}
+	if(idsFetcher.getCompanyCount()>0)
+	{
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.COMPANY_ADD_TAGS, Arrays.asList(tagsArray)
+				.toString(), String.valueOf(idsFetcher.getTotalCount()));
+
+			ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "companies", "");
+	}
+	if(idsFetcher.getContactCount()>0){
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
 		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "contacts", "");
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -505,11 +516,21 @@ public class BulkOperationsAPI
 	    }
 
 	}
+	
+	if(idsFetcher.getCompanyCount()>0)
+	{
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.COMPANY_REMOVE_TAGS, Arrays.asList(tagsArray)
+				.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
+			ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "companies", "");
+	}
+	
+	if(idsFetcher.getContactCount()>0){
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
 		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "contacts", "");
+	}
 
     }
 
@@ -533,10 +554,12 @@ public class BulkOperationsAPI
 	System.out.println(key);
 
 	DomainUser domainUser = null;
+	// Creates domain user key, which is set as a contact owner
+	Key<DomainUser> ownerKey = null;
 	try
 	{
 	    // Creates domain user key, which is set as a contact owner
-	    Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+	    ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
 	    System.out.println("setting domain user for key : " + ownerKey);
 
@@ -581,9 +604,13 @@ public class BulkOperationsAPI
 		// accessControl).createContactsFromCSV(blobStream, contact,
 		// ownerId);
 
+		ImportStatusDAO dao = new ImportStatusDAO(NamespaceManager.get(), ImportType.CONTACTS);
+
+		dao.createNewImportStatus(ownerKey, 0, key);
+
 		CSVImporter<Contact> importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey,
 			Long.parseLong(ownerId), new ObjectMapper().writeValueAsString(contact), Contact.class,
-			currentEntityCount);
+			currentEntityCount, dao);
 
 		PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
 
@@ -596,7 +623,9 @@ public class BulkOperationsAPI
 	    }
 	    else if (type.equalsIgnoreCase("companies"))
 	    {
-		new CSVUtil(restrictions, accessControl).createCompaniesFromCSV(blobStream, contact, ownerId, type);
+		ImportStatusDAO dao = new ImportStatusDAO(NamespaceManager.get(), ImportType.COMPANIES);
+		new CSVUtil(restrictions, accessControl, dao)
+			.createCompaniesFromCSV(blobStream, contact, ownerId, type);
 	    }
 
 	    ContactUtil.eraseContactsCountCache();
@@ -654,7 +683,9 @@ public class BulkOperationsAPI
 	    LinkedHashMap<String, Object> dealMap = (LinkedHashMap<String, Object>) deal;
 	    ArrayList<LinkedHashMap<String, String>> props = (ArrayList<LinkedHashMap<String, String>>) dealMap
 		    .get("properties");
-	    new CSVUtil(restrictions, accessControl).createDealsFromCSV(blobStream, props, ownerId);
+
+	    ImportStatusDAO importStatusDAO = new ImportStatusDAO(NamespaceManager.get(), ImportType.DEALS);
+	    new CSVUtil(restrictions, accessControl, importStatusDAO).createDealsFromCSV(blobStream, props, ownerId);
 
 	}
 	catch (IOException e)
