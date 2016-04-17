@@ -242,6 +242,9 @@ var CompaniesRouter = Backbone.Router
 		var _that = this;
 		App_Companies.companyDateFields = COMPANY_DATE_FIELDS;
 
+		App_Companies.companyContactTypeFields = COMPANIES_CONTACT_TYPE_FIELDS;
+		App_Companies.companyCompanyTypeFields = COMPANIES_COMPANY_TYPE_FIELDS;
+
 		if(!App_Companies.companyDateFields){
 			$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=COMPANY", function(customDatefields)
 				{
@@ -249,7 +252,7 @@ var CompaniesRouter = Backbone.Router
 
 					// Defines appendItem for custom view
 					_that.companiesListView.appendItem = function(base_model){
-						contactTableView(base_model,customDatefields,this);
+						contactTableView(base_model,customDatefields,this,App_Companies.companyContactTypeFields,App_Companies.companyCompanyTypeFields);
 					};
 			
 					// Fetch collection
@@ -260,7 +263,7 @@ var CompaniesRouter = Backbone.Router
 		} else {
 			// Defines appendItem for custom view
 			_that.companiesListView.appendItem = function(base_model){
-				contactTableView(base_model,App_Companies.companyDateFields,this);
+				contactTableView(base_model,App_Companies.companyDateFields,this,App_Companies.companyContactTypeFields,App_Companies.companyCompanyTypeFields);
 			};
 	
 			// Fetch collection

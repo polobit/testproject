@@ -1759,7 +1759,7 @@ public class ContactsAPI
 
 	return contact.getTagsList();
     }
-
+    
     @Path("delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -1788,5 +1788,22 @@ public class ContactsAPI
 	// Add to queue
 	Queue queue = QueueFactory.getQueue(AgileQueues.BULK_ACTION_QUEUE);
 	queue.addAsync(TaskOptions.Builder.withPayload(task));
+    }
+
+    @Path("/deleteContactImage")
+    @PUT
+	public void deleteContactImage(@QueryParam("id") Long id) 
+    {  
+    	Contact contact = ContactUtil.getContact(id);
+    	if(contact != null){
+    	List<ContactField> properties = contact.properties;
+    	System.out.println(properties.size());
+    	for(int i=0 ; i <properties.size(); i++){
+    		System.out.println(properties.get(i).name);
+    		if(properties.get(i).name.equalsIgnoreCase("image"))
+    			properties.remove(i);
+    	}
+    	contact.save();
+    }
     }
 }

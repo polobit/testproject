@@ -131,7 +131,7 @@
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:15em;">
-    		<a class="text-cap">{{getPropertyValue properties "email"}}</a>
+    		<a class="">{{getPropertyValue properties "email"}}</a>
         </div>
 	</td>
 </script>
@@ -248,6 +248,30 @@
 	</td>
 </script>
 
+<script id ="contacts-custom-view-custom-contact-template" type="text/html">
+	<td class='data contact-type-custom-field-td' data='{{id}}'>
+		<div class="table-resp" style="width:15em;">
+       		{{#each this}}
+				<div id="{{id}}" class="thumb-sm agile-img m-r-sm contact-type-image">
+					<img class="img-inital r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+				</div>
+   			{{/each}}
+   		</div>
+	</td>
+</script>
+
+<script id ="contacts-custom-view-custom-company-template" type="text/html">
+	<td class='data company-type-custom-field-td' data='{{id}}'>
+		<div class="table-resp" style="width:15em;">
+       		{{#each this}}
+				<div id="{{id}}" class="thumb-sm agile-img m-r-sm company-type-image">
+					<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
+				</div>
+   			{{/each}}
+   		</div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
@@ -315,8 +339,15 @@
 									<ul class="inline-block list-none m-n p-n">
 										<li style="height: 9px"><i class="icon-sort-up c-p" id="add-score"
 											style="height: 10px;"></i></li>
+                      {{#if_contact_type "PERSON"}}
 										<li><i class="icon-sort-down c-p" id="minus-score"
 											style="height: 10px;"></i></li>
+                     {{/if_contact_type}}
+             {{#if_contact_type "COMPANY"}}
+                      <li><i class="icon-sort-down c-p" id=" company-minus-score"
+                      style="height: 10px;"></i></li>
+                      {{/if_contact_type}}
+
 									</ul>
 								</span>
 							{{/canEditContact}}

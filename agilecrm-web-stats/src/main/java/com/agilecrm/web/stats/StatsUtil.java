@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -92,6 +93,50 @@ public class StatsUtil
 	
 	Long timeAfterLog = System.currentTimeMillis();
 	System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog - timeBeforeLog));
+	
+	// Show notification with url
+	if (StringUtils.isNotBlank(email) && !StringUtils.equals(email, "null"))
+	{
+	    JSONObject json = new JSONObject();
+	    try
+	    {
+		// If not null or empty - remove query params from urls
+		if (!StringUtils.isEmpty(url))
+		    url = StringUtils.split(url, '?')[0];
+		json.put("custom_value", url);
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+	    }
+	    timeBeforeLog = System.currentTimeMillis();
+	    System.out.println("Before log " + timeBeforeLog);
+	    
+	    sendNotification(domain, "IS_BROWSING", email, json);
+	    
+	    timeAfterLog = System.currentTimeMillis();
+	    System.out.println("After log " + timeAfterLog + " Diff " + (timeAfterLog - timeBeforeLog));
+	}
+	
+    }
+    
+    /**
+     * This method responsible for sending pubnub message when contact browsing
+     * our customer web site. We will show this message as noty message when
+     * customer browsing his agilecrm domain.
+     * 
+     * @param domain
+     * @param type
+     * @param email
+     * @param customValue
+     */
+    public static void sendNotification(String domain, String type, String email, JSONObject customValue)
+    {
+	JSONObject json = new JSONObject();
+	json.put("custom_value", customValue.get("custom_value"));
+	json.put("type", type);
+	json.put("email", email);
+	PubNub.pubNubPush(domain, json);
     }
     
     /**
@@ -107,21 +152,21 @@ public class StatsUtil
     {
 	String ipAddress = null;
 	
-	String forwardedIpsStr = req.getHeader("X-Forwarded-For");
+	/*
+	 * String forwardedIpsStr = req.getHeader("X-Forwarded-For");
+	 * 
+	 * // Check if forwardedIps not empty if
+	 * (!StringUtils.isEmpty(forwardedIpsStr)) { // 'x-forwarded-for' header
+	 * may return multiple IP addresses in // the format:
+	 * "client IP, proxy 1 IP, proxy 2 IP" so take the // the first one
+	 * String[] forwardedIps = forwardedIpsStr.split(","); ipAddress =
+	 * forwardedIps[0]; }
+	 * 
+	 * // If ipAddress is empty, get remote address if
+	 * (StringUtils.isEmpty(ipAddress)) ipAddress = req.getRemoteAddr();
+	 */
 	
-	// Check if forwardedIps not empty
-	if (!StringUtils.isEmpty(forwardedIpsStr))
-	{
-	    // 'x-forwarded-for' header may return multiple IP addresses in
-	    // the format: "client IP, proxy 1 IP, proxy 2 IP" so take the
-	    // the first one
-	    String[] forwardedIps = forwardedIpsStr.split(",");
-	    ipAddress = forwardedIps[0];
-	}
-	
-	// If ipAddress is empty, get remote address
-	if (StringUtils.isEmpty(ipAddress))
-	    ipAddress = req.getRemoteAddr();
+	ipAddress = req.getRemoteAddr();
 	
 	return ipAddress;
     }

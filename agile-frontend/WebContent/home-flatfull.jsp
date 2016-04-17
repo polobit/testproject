@@ -310,6 +310,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
+   <li id="segmentationmenu">
+    <a  href="#segments">
+       <i class="icon-large icon-screenshot"></i>
+      <span>Segments</span>  
+    </a>
+  </li>
   <li id="landing-pages-menu">
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
@@ -327,7 +333,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <i class="icon-bar-chart icon-white"></i>
       <span>Reports</span>
     </a>
-  </li>
+  </li>  
+  
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
@@ -612,9 +619,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-
-
-   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -625,7 +630,10 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
-console.time("startbackbone");
+
+try{console.time("startbackbone");}catch(e){}
+
+var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
@@ -677,6 +685,16 @@ var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(dom
 var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;
 // Get Contact Date Fields
 var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE")))%>;
+
+// Get Contact contact type custom fields
+var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "CONTACT")))%>;
+// Get Contact company type custom fields
+var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "COMPANY")))%>;
+
+// Get Company contact type custom fields
+var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "CONTACT")))%>;
+// Get Company company type custom fields
+var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "COMPANY")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
@@ -747,12 +765,12 @@ head.ready(["core"], function(){
 function load_globalize()
 {
 
-  if (typeof Globalize != "function") {
+  /*if (typeof Globalize != "function") {
     setTimeout(function() {
       load_globalize();
-    }, 500);
+    }, 100);
     return;
-  }
+  } */
 
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");
@@ -769,13 +787,19 @@ function showVideoForRegisteredUser(){
     {     
        $("#dashboard_video").modal("show");
        var $frame = $("#dashboard_video iframe");
-      $frame.attr("src", $frame.attr("data-source"));
-    }       
+       $frame.attr("src", $frame.attr("data-source"));
+       
+    } 
     
     localStorage.setItem(domainuser_video_cookie,true);
     
 }
-
+function closeVideo(){
+   $('#dashboard_video').on("click", ".close", function () {
+       $('#dashboard_video').modal("hide");
+        $('#dashboard_video iframe').removeAttr("src");
+    });
+}
 </script>
 
 
@@ -790,23 +814,30 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 
  <!--video on dashboard -->
  <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" id="dashboard-video" >
+       <div class="modal-dialog" id="dashboard-video" >
         <div class="modal-content">
         <div class="modal-header">
-          <button class="close" data-dismiss="modal">&times;</button>
+          <button class="close" onClick="closeVideo()">&times;</button>
           <h3 id="myModalLabel">Welcome to Agile CRM</h3>
           <small>Here is a short video which explains the steps to get started with Agile. We recommend you watch it.</small>
         </div>      
         <div class="modal-body">
               <div class="embed-responsive embed-responsive-16by9">
                       <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
-              </div>                     
+              </div> 
+
+              
         </div>
                
+        <div class="modal-footer">
+                 <a href="http://salescal.agilecrm.com/" target="_blank" class="btn btn-primary" id="schedule_demo" onclick="Agile_GA_Event_Tracker.track_event('Demo from Getting Started Video');">Schedule a Demo</a>
+        </div>                     
+                                 
+        </div>
+          
         
         </div>
-        </div>
-  </div>
+</div>
 
 </body>
 </html>

@@ -417,6 +417,7 @@ function set_up_portlets(el, portlets_el){
     if($(window).width()<768 && gridster!=undefined){
 		gridster.disable();
 		gridster.disable_resize();
+		 $(".gridster-portlets").css("height", "auto");
 	}
 	else if(gridster!=undefined){
 		gridster.enable();
@@ -548,18 +549,20 @@ function googledataforEvents(p_el,response,startTime,endTime)
 					request.execute(function(resp)
 					{
 						console.log(resp);
-						for (var i = 0; i < resp.items.length; i++)
-						{
-							var fc_event = google2fcEvent(resp.items[i]);
-							fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
-							fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
-							if (isNaN(fc_event.endEpoch))
+						if(resp.items){
+							for (var i = 0; i < resp.items.length; i++)
 							{
-								fc_event.endEpoch = new Date(fc_event.google.end.date).getTime()/1000;
-							}
-							console.log(fc_event);
-							events.push(fc_event);
+								var fc_event = google2fcEvent(resp.items[i]);
+								fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
+								fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
+								if (isNaN(fc_event.endEpoch))
+								{
+									fc_event.endEpoch = new Date(fc_event.google.end.date).getTime()/1000;
+								}
+								console.log(fc_event);
+								events.push(fc_event);
 
+							}
 						}
 						App_Portlets.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "portlets-google-events", individual_tag_name : 'tr',
 							sort_collection : true, sortKey : 'start', descending : false, 

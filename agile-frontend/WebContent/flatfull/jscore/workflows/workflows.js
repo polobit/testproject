@@ -176,6 +176,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // Disables save button to prevent multiple save on click event issues
         disable_save_button($(targetEl));
 
+        track_with_save_success_model($(targetEl));
                 
         var workflowJSON = {};
 
@@ -216,21 +217,17 @@ var Workflow_Model_Events = Base_Model_View.extend({
                  var status = $('#disable-switch').bootstrapSwitch('status');
                 if (is_disabled && status) {
                         disabled.attr("data", true);
-                        disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
-                        disabled.find('div').text("Enable Campaign");
                         $('#designer-tour').addClass("blur").removeClass("anti-blur");
-                        window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
-                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                        window.frames[1].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
                         show_campaign_save(e,"Campaign has been disabled successfully.","red");
                     } else {
                         disabled.attr("data", false);
-                        disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
-                        disabled.find('div').text("Disable Campaign"); 
                         $('#designer-tour').addClass("anti-blur").removeClass("blur");
-                        window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
-                        window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
+                        window.frames[1].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
+                        window.frames[1].$('#toolbartabs').removeClass("disable-iframe");
                        // $('#designer-tour').css("pointer-events","none");
-                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
+                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
                         show_campaign_save(e,"Campaign has been enabled successfully.");
                     }
                 }
@@ -490,6 +487,10 @@ function fill_logs_slate(id, type)
 		    	"title": "No emails sent yet",
 				"image": updateImageS3Path("/img/clipboard.png")
 		    },
+            "EMAIL_SENDING_SKIPPED": {
+                "title": "No emails skipped yet",
+                "image": updateImageS3Path("/img/clipboard.png")
+            },
 		    "EMAIL_OPENED": {
 		    	"title": "No emails opened in this campaign",
 				"image": updateImageS3Path("/img/clipboard.png")

@@ -68,7 +68,42 @@ var portlet_graph_data_utility = {
 							portlet_utility.addWidgetToGridster(base_model);
 						});
 	},
+/**
+	 * To fetch Cmpaign contacts stats portlet data to render as pie graph
+	 */
+	campaignStatsGraphData : function(base_model, selector, url) {
+		var campaignStatusList = [];
+		var campaignValuesList = [];
 
+		var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
+		var topPos = 50 * sizey;
+		if (sizey == 2 || sizey == 3)
+			topPos += 50;
+		$('#' + selector)
+				.html(
+						"<div class='text-center v-middle opa-half' style='margin-top:"
+								+ topPos
+								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		this
+				.fetchPortletsGraphData(
+						url,
+						function(data) {
+							if (data.status == 403) {
+								$('#' + selector)
+										.html(
+												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+								return;
+							}
+							campaignStatusList = data["campaignStatusList"];
+							campaignValuesList = data["campaignValuesList"];
+
+							portlet_graph_utility.campaignStatsPieGraph(
+									selector, campaignStatusList,
+									campaignValuesList);
+
+							portlet_utility.addWidgetToGridster(base_model);
+						});
+	},
 	/**
 	 * To fetch closers per person portlet data to render as bar graph
 	 */

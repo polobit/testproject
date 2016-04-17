@@ -638,6 +638,7 @@ Sent email to {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{
 
 {{#if_equals "BULK_ACTION" activity_type}}
 
+{{#if_equals "contacts" label}}	
 {{#if_equals "ADD_TAG" custom1}}
 Added  tag to {{custom3}} Contacts<br/>
 <small class="activities_second_line m-t-none text-sm">
@@ -651,6 +652,24 @@ Removed tag from {{custom3}} Contacts<br/>
 <small class="activities_second_line m-t-none text-sm">
 <i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
 </small>
+{{/if_equals}}
+
+{{else}}
+
+{{#if_equals "ADD_TAG" custom1}}
+Added  tag to {{custom3}} Companies<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added.
+</small>
+{{/if_equals}}
+
+
+{{#if_equals "REMOVE_TAG" custom1}}
+Removed tag from {{custom3}} Companies<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
+</small>
+{{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "ASIGN_WORKFLOW" custom1}}
@@ -907,7 +926,9 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{#if_equals "TICKET_CREATED" activity_type}}
 			New <a href="#ticket/{{entity_id}}" >ticket#{{entity_id}}</a> created<br/>
 			<small class="activities_second_line m-t-none text-sm">
-				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted {{user_name}}{{/if}}
+				{{#if this.entityObject}}  
+			   <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a>	  			
+{{else}}Ticket deleted {{user_name}}{{/if}}
 			</small>
 		{{/if_equals}}
 		{{#if_equals "TICKET_DELETED" activity_type}}
@@ -1001,9 +1022,8 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{/if_equals}}
 		{{#if_equals "TICKET_ASSIGNEE_REPLIED" activity_type}}
 			{{user_name}} replied to <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a><br/>
-			<small class="activities_second_line m-t-none text-sm">
-				{{replace_br_with_space custom1}}
-			</small>  
+			<small class="activities_second_line m-t-none text-sm"> 
+			   <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a></small>	  			
 		{{/if_equals}}
 		{{#if_equals "TICKET_REQUESTER_REPLIED" activity_type}}
 			{{#if related_contact_ids}}
@@ -1015,15 +1035,14 @@ Deleted  {{custom1}} Campaigns<br/>
 					{{/toLinkTrigger}}
 				{{/stringToJSON}}
 			{{/if}} replied to <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a><br/>
-			<small class="activities_second_line m-t-none text-sm">
-				{{replace_br_with_space custom1}}
-			</small>  
+			<small class="activities_second_line m-t-none text-sm">  
+			    <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a></small>	  			
+  
 		{{/if_equals}}
 		{{#if_equals "TICKET_PRIVATE_NOTES_ADD" activity_type}}
 			{{user_name}} added private notes to <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a>
-			<br/><small class="activities_second_line m-t-none text-sm">
-				{{replace_br_with_space custom2}}
-			</small>  
+			<br/><small class="activities_second_line m-t-none text-sm"> 
+			    <a href="" class="ticket-activity-notes" data-id="{{id}}">{{this.entityObject.subject}}</a></small>	  			
 		{{/if_equals}}
 		{{#if_equals "TICKET_MARKED_FAVORITE" activity_type}}
 			{{#if user_name}}
@@ -1240,8 +1259,8 @@ Deleted  {{custom1}} Campaigns<br/>
               </span>
             </div>
             <div class="btn-group m-r pull-right" role="group">
-                <a href="#activities" class="btn btn-default btn-sm bg-light">User Activities</a> 
-                <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">Contact Activities</a>
+                <a href="#activities" class="btn btn-default btn-sm bg-light" onclick="Agile_GA_Event_Tracker.track_event('User Activities')">User Activities</a> 
+                <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')" onclick="Agile_GA_Event_Tracker.track_event('Contact Activities')">Contact Activities</a>
             </div>
             
           

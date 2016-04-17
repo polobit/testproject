@@ -2,7 +2,6 @@ package com.agilecrm.ticket.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class TicketFiltersUtil
 		searchMap.put("owner_key", domainUserKey);
 		searchMap.put("is_default_filter", true);
 
-		List<TicketFilters>  filters = TicketFilters.dao.listByProperty(searchMap);
+		List<TicketFilters> filters = TicketFilters.dao.listByProperty(searchMap);
 
 		if (filters.size() == 0)
 			saveDefaultFilters();
@@ -115,6 +114,13 @@ public class TicketFiltersUtil
 				case "assignee_id":
 				case "group_id":
 				{
+					if (LHS.equalsIgnoreCase("assignee_id")  && RHS.equalsIgnoreCase("0")) {
+						
+						Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+					   
+						RHS = domainUserKey.getId() + "";
+					}
+					
 					if (operator != null && operator.contains("not"))
 						query.append("NOT " + LHS + "=" + RHS);
 					else
@@ -228,7 +234,8 @@ public class TicketFiltersUtil
 	 * Default filters
 	 */
 	public static void saveDefaultFilters()
-	{
+	{ 
+		//for New Tickets filter
 		TicketFilters newTickets = new TicketFilters();
 
 		List<SearchRule> conditions = new ArrayList<SearchRule>();
@@ -246,7 +253,8 @@ public class TicketFiltersUtil
 		newTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 		TicketFilters.dao.put(newTickets);
-
+        
+		//for All Tickets filter
 		TicketFilters allTickets = new TicketFilters();
 
 		conditions = new ArrayList<SearchRule>();
@@ -283,5 +291,22 @@ public class TicketFiltersUtil
 		allTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 		TicketFilters.dao.put(allTickets);
+	    
+		//for My Tickets filter
+		TicketFilters myTickets = new TicketFilters();
+		
+		conditions = new ArrayList<SearchRule>();
+		searchRule = new SearchRule();
+		searchRule.LHS = "assignee_id";
+		searchRule.CONDITION = RuleCondition.EQUALS;
+		searchRule.RHS = "0";
+		conditions.add(searchRule);
+
+		myTickets.name = "My Tickets";
+		myTickets.is_default_filter = true;
+		myTickets.conditions = conditions;
+		myTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
+
+		TicketFilters.dao.put(myTickets);
 	}
 }

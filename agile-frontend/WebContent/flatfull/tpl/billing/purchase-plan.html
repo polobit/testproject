@@ -237,7 +237,7 @@ Months
 <div class="row">
             <div class="col-sm-offset-3 col-sm-9">
 
-<a href="#" type="submit" id="updatecard" data-loading-text="Proceeding..." class="save btn btn-sm btn-primary" >
+<a href="#" type="submit" id="updatecard" data-loading-text="Proceeding..." class="save btn btn-sm btn-primary" onclick="Agile_GA_Event_Tracker.track_event('Pay Now')">
 {{#check_plan "FREE"}}
 {{#is_not_allowed_trial}}
 Pay Now

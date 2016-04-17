@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
@@ -89,7 +90,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 						continue;
 					}
 					NamespaceManager.set(agileDomain);
-					Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+					Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 					System.out.println("owner is " + owner);
 					if (owner == null)
 					{
@@ -149,21 +150,25 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		return;
 	}
 
-	public JSONObject getSenderNames(String fromName, String fromEmail) throws JSONException
+	public JSONObject getSenderNames(String fromName, String fromEmail, boolean isNewContact) throws JSONException
 	{
 		JSONObject from = new JSONObject();
-		if (!(StringUtils.isBlank(fromName) || StringUtils.equals(fromName, "null")))
+		
+		if(isNewContact)	
 		{
-			if (StringUtils.contains(fromName, " "))
+			if (!(StringUtils.isBlank(fromName) || StringUtils.equals(fromName, "null")))
 			{
-				from.put(Contact.FIRST_NAME, fromName.split(" ")[0]);
-				from.put(Contact.LAST_NAME, fromName.split(" ")[1]);
+				if (StringUtils.contains(fromName, " "))
+				{
+					from.put(Contact.FIRST_NAME, fromName.split(" ")[0]);
+					from.put(Contact.LAST_NAME, fromName.split(" ")[1]);
+				}
+				else
+					from.put(Contact.FIRST_NAME, fromName);
 			}
 			else
-				from.put(Contact.FIRST_NAME, fromName);
+				from.put(Contact.FIRST_NAME, fromEmail.split("@")[0]);
 		}
-		else
-			from.put(Contact.FIRST_NAME, fromEmail.split("@")[0]);
 		return from;
 	}
 
@@ -187,7 +192,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, fromEmail, null));
 		try
 		{
-			JSONObject from = getSenderNames(fromName, fromEmail);
+			JSONObject from = getSenderNames(fromName, fromEmail, isNewContact);
 			if (from.has(Contact.FIRST_NAME))
 				contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, from
 						.getString(Contact.FIRST_NAME), null));
@@ -308,7 +313,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			String messageSubject = message.getString("subject");
 			System.out.println("forwarding confirmation email with subject " + messageSubject);
 
-			DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
+			DomainUser user = APIKeyUtil.getDomainUserRelatedToAPIKey(apiKey);
 			EmailUtil.sendEmailUsingAPI("noreply@agilecrm.com", "Agile CRM", user.email, null, null, messageSubject,
 					null, getMessageContent("html", message), getMessageContent("text", message), null, null);
 		}

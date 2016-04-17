@@ -162,9 +162,11 @@
 	 **/
 	ticketDetailsByFilter : function(filter_id, ticket_id){
 
-		Ticket_Filter_ID = filter_id;
+		loadServiceLibrary(function(){
+			Ticket_Filter_ID = filter_id;
 
-		App_Ticket_Module.ticketDetails(ticket_id);
+			App_Ticket_Module.ticketDetails(ticket_id);
+		});
 	},
 
 	/**
@@ -248,7 +250,7 @@
 					Ticket_Utils.enableTooltips(el);
 
 					//Showing ticket labels as selected labels
-					Ticket_Labels.showSelectedLabels(data.labels, $(el));
+					Ticket_Labels.showSelectedLabels(data.labels, $(el), true);
 
 					//Load RHS side bar widgets
 					Tickets.loadWidgets(App_Ticket_Module.ticketView.el);

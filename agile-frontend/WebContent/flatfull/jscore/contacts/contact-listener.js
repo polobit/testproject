@@ -18,6 +18,7 @@ $(function(){
 				url :  '/core/api/contacts/' + contact_id,
 				dataType : 'json',
 				success : function(data) {
+					if(data!=undefined){
 					App_Contacts.contact_popover=new Backbone.Model(data);
 		 		getTemplate("contacts-custom-view-popover", data, undefined, function(template_ui){
 						if(!template_ui)
@@ -34,19 +35,12 @@ $(function(){
 								$(that).popover('show');
 								
 						$('.popover').addClass("contact_popover fadeInLeft animated");
-							/*var top;
-							if (window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 400)
-       	  top = $(that).offset().top + 20 + 'px';
-       	else if(window.innerHeight - $(that).offset().top + $(window).scrollTop()>= 200 &&  window.innerHeight - $(that).offset().top + $(window).scrollTop()<400)
-       	top = $(that).offset().top + 30 - $('.popover').height()/2+ 'px';
-        else
-         top = $(that).offset().top-$('.popover').height() + 'px';
-     $('.popover').css('top',top);
-       $('.popover').css('left',left+10+'px');*/
+
 
 						contact_list_starify('.popover',undefined);
 						
 					});
+		 	}
 		 		//that.find('.data').attr('data');
 		 	}
 		 	});
@@ -73,6 +67,10 @@ function contactListener(el)
 				left=left-100;
 				var top=0;
             var that=$(this).parent();
+            if($(this).hasClass("contact-type-custom-field-td") || $(this).hasClass("company-type-custom-field-td") || $(this).hasClass("contact-type-image") || $(this).hasClass("company-type-image"))
+            {
+            	return;
+            }
              popoverEnter(that,left,top,true);
 
 		
@@ -229,8 +227,54 @@ $('.popover').on('click', '#minus-score', function(e){
 	    // Convert string type to int
 	    var sub_score = parseInt($('#lead-score').text());
 		
-		if(sub_score <= 0)
-			return;
+		//if(sub_score <= 0)
+		//	return;
+		
+		sub_score = sub_score - 1;
+		
+		// Changes score in UI
+		$('#lead-score').text(sub_score);
+		 $('#lead-score').attr('title',sub_score);
+		
+       if(listView!=undefined) 
+       	temp_model=Contact_collection.set('lead_score', sub_score);
+       else{
+       temp_model= Contact_collection.set('lead_score', sub_score,{silent:true});
+       temp_model.trigger('popoverChange');
+   }
+		var contact_model =  temp_model.toJSON();
+
+	    
+	  /* // Refreshing the view ({silent: true} not working)
+	    contact_model.url = 'core/api/contacts';
+	    contact_model.set('lead_score', add_score, {silent: true});
+	
+	    */// Save model
+	   //contact_model.save();
+	    
+		var new_model = new Backbone.Model();
+		new_model.url = 'core/api/contacts';
+		new_model.save(contact_model,{
+			success: function(model){
+			}
+		});
+		          
+	});
+$('.popover').off('click', '#company-minus-score')
+$('.popover').on('click', '#company-minus-score', function(e){
+	    e.preventDefault();
+	    var that=$(this);
+	     var temp_model;
+	    // Convert string type to int
+	    var sub_score = parseInt($('#lead-score').text());
+
+	    if (sub_score <= 0) {
+            return
+        }
+
+		
+		//if(sub_score <= 0)
+		//	return;
 		
 		sub_score = sub_score - 1;
 		
@@ -466,7 +510,7 @@ function contact_list_starify(el,listView) {
     	var contact_model  =  App_Contacts.contact_popover;
     	
     	// If contact update is not allowed then start rating does not allow user to change it
-    	if(App_Contacts.contact_popover.get('owner') && !canEditContact(App_Contacts.contact_popover.get('owner').id))
+    	if(App_Contacts.contact_popover && App_Contacts.contact_popover.get('owner') && !canEditContact(App_Contacts.contact_popover.get('owner').id))
     	{
     			$('#star', el).raty({
     			 'readOnly': true,

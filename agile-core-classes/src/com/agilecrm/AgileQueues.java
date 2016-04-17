@@ -69,5 +69,8 @@ public class AgileQueues
 
 	//Ticketing queue
 	public static final String TICKET_BULK_ACTIONS_QUEUE = "ticket-bulk-actions";
+	
+	//Deals update to textsearch queue
+	public static final String DEALS_SCHEMA_CHANGE_QUEUE = "deals-schema-change-queue";
 
 }

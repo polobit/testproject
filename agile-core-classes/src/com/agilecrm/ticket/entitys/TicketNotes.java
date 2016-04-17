@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -111,17 +110,17 @@ public class TicketNotes
 	 */
 	public String html_text = "";
 
-	/**
-	 * Stores original notes content in plain text format
-	 */
-	@JsonIgnore
-	public String original_plain_text = "";
-
-	/**
-	 * Stores original notes content in html text format
-	 */
-	@JsonIgnore
-	public String original_html_text = "";
+	// /**
+	// * Stores original notes content in plain text format
+	// */
+	// @JsonIgnore
+	// public String original_plain_text = "";
+	//
+	// /**
+	// * Stores original notes content in html text format
+	// */
+	// @JsonIgnore
+	// public String original_html_text = "";
 
 	/**
 	 * Stores mime object
@@ -175,9 +174,24 @@ public class TicketNotes
 		super();
 	}
 
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param group_id
+	 * @param assignee_id
+	 * @param created_by
+	 * @param requester_name
+	 * @param requester_email
+	 * @param original_plain_text
+	 * @param original_html_text
+	 * @param note_type
+	 * @param attachments_list
+	 * @param mimeObject
+	 * @param isNewTicket
+	 */
 	public TicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by, String requester_name,
 			String requester_email, String original_plain_text, String original_html_text, NOTE_TYPE note_type,
-			List<TicketDocuments> attachments_list, String mimeObject)
+			List<TicketDocuments> attachments_list, String mimeObject, boolean isNewTicket)
 	{
 		super();
 
@@ -192,8 +206,8 @@ public class TicketNotes
 		this.created_by = created_by;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;
-		this.original_plain_text = original_plain_text;
-		this.original_html_text = original_html_text;
+		// this.original_plain_text = original_plain_text;
+		// this.original_html_text = original_html_text;
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
 
@@ -201,8 +215,15 @@ public class TicketNotes
 		// status changed activity next
 		this.created_time = (Calendar.getInstance().getTimeInMillis() - 60000);
 
-		this.plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text);
-		this.html_text = TicketNotesUtil.removedQuotedRepliesFromHTMLText(original_html_text);
+		// If not new ticket then remove quoted texts in both contents
+		if (!isNewTicket)
+		{
+			original_plain_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_plain_text).trim();
+			original_html_text = TicketNotesUtil.removedQuotedRepliesFromPlainText(original_html_text).trim();
+		}
+
+		this.plain_text = original_plain_text;
+		this.html_text = original_html_text;
 
 		this.mime_object = mimeObject;
 	}
@@ -211,20 +232,23 @@ public class TicketNotes
 	{
 		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(this);
 
+		System.out.println("Notes created with key: " + key);
+
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticket_key.getId());
-
-			// Updating last notes key to ticket entity
-			ticket.last_notes_key = key;
-			ticket = ticket.putEntity();
+			boolean isPublicNotes = (note_type == NOTE_TYPE.PUBLIC);
 
 			// If ticket created from agile dashboard then no need to send this
 			// ticket to end user
-			if (ticket.user_replies_count == 1)
-				return this;
+			if (ticket.user_replies_count == 1 && isPublicNotes)
+			{
+				// Updating last notes key to ticket entity
+				ticket.last_notes_key = key;
+				ticket = ticket.putEntity();
 
-			boolean isPublicNotes = (note_type == NOTE_TYPE.PUBLIC);
+				return this;
+			}
 
 			ActivityType activityType = (isPublicNotes) ? ((created_by == CREATED_BY.AGENT) ? ActivityType.TICKET_ASSIGNEE_REPLIED
 					: ActivityType.TICKET_REQUESTER_REPLIED)
@@ -233,6 +257,10 @@ public class TicketNotes
 			// Sending reply to requester if and only if notes type is public
 			if (isPublicNotes)
 			{
+				// Updating last notes key to ticket entity
+				ticket.last_notes_key = key;
+				ticket = ticket.putEntity();
+
 				if (created_by == CREATED_BY.AGENT)
 					// Send email thread to user
 					TicketNotesUtil.sendReplyToRequester(ticket);
@@ -288,5 +316,6 @@ public class TicketNotes
 	/**
 	 * Initialize partial DataAccessObject
 	 */
-	public static PartialDAO<TicketNotesPartial> partialDAO = new PartialDAO<TicketNotesPartial>(TicketNotesPartial.class);
+	public static PartialDAO<TicketNotesPartial> partialDAO = new PartialDAO<TicketNotesPartial>(
+			TicketNotesPartial.class);
 }

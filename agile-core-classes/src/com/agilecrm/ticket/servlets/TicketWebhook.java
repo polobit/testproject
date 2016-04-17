@@ -28,8 +28,6 @@ import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketLabels;
@@ -43,6 +41,7 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
@@ -136,7 +135,7 @@ public class TicketWebhook extends HttpServlet
 			 * Replacing helptor.com text with space so that we'll get a string
 			 * of namespace and group ID separated by delimeter '+'
 			 */
-			String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX, "").split("\\+");
+			String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX_MAIN, "").split("\\+");
 
 			if (toAddressArray.length < 2)
 				return;
@@ -226,7 +225,7 @@ public class TicketWebhook extends HttpServlet
 
 					// Creating dom object from HTML to replace image src with
 					// storage URL
-					
+
 					StrBuilder sb = new StrBuilder(htmlText);
 					sb.replaceAll("3D", "").replaceAll("\"\"", "");
 
@@ -305,7 +304,7 @@ public class TicketWebhook extends HttpServlet
 
 				// BulkActionNotifications.publishNotification("New ticket #" +
 				// ticket.id + " received");
-				BulkActionNotifications.publishconfirmation(BulkAction.NEW_TICKET_RECEIVED, ticket.id + "");
+				TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + "received");
 			}
 			else
 			{
@@ -336,14 +335,14 @@ public class TicketWebhook extends HttpServlet
 				ticket.contactID = contact.id;
 
 				ticket.updateTicketAndSave(ccEmails, lastReplieText, LAST_UPDATED_BY.REQUESTER, currentTime,
-						currentTime, null, attachmentExists, false);
+						currentTime, null, attachmentExists, false, true);
 
 				// Sending user replied notification
 				// BulkActionNotifications.publishNotification(ticket.requester_name
 				// + " replied to ticket#" + ticket.id);
 
-				BulkActionNotifications.publishconfirmation(BulkAction.REQUESTER_REPLIED_TO_TICKET,
-						ticket.requester_name, ticket.id + "");
+				TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name + " replied to ticket# "
+						+ ticket.id);
 
 				// Execute note created by customer trigger
 				TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
@@ -351,7 +350,7 @@ public class TicketWebhook extends HttpServlet
 
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, groupID, ticket.assigneeID, CREATED_BY.REQUESTER, fromName,
-					fromEmail, plainText, htmlText, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString());
+					fromEmail, plainText, htmlText, NOTE_TYPE.PUBLIC, documentsList, msgJSON.toString(), isNewTicket);
 			notes.save();
 
 			NamespaceManager.set(oldNamespace);
@@ -553,7 +552,6 @@ public class TicketWebhook extends HttpServlet
 	public static void main(String[] args)
 	{
 		String htmlText = "<div dir='ltr'>csdacdsavds<img alt=3D\"Inline image 1\" src=3D\"cid:ii_153a2=\nfbdf128bc83\" height=3D\"147\" width=3D\"440\"><br clear=3D\"all\"><div><br>-- <br=\n><div class=3D\"gmail_signature\"><div dir=3D\"ltr\"><div>--<br>Thanks &amp; Re=\ngards<br>Sasi Krishna Jolla<br><img src=3D\"https://www.clickdesk.com/assets=\n/images/clickdesk-live-chat-logo.png\" height=3D\"56\" width=3D\"200\"><br></div=\n></div></div>\n</div></div>";
-
 
 		StrBuilder sb = new StrBuilder(htmlText);
 		sb.replaceAll("3D", "").replaceAll("\"\"", "");

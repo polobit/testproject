@@ -17,7 +17,6 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
-
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
 		if(amount == 0){
@@ -813,6 +812,21 @@ $(function()
 	});
 
 
+	Handlebars.registerHelper('decodeString', function(data){
+		return data;
+	});
+
+	/**
+	 * Helper function to return date string from epoch time
+	 */
+	Handlebars.registerHelper('uservoicedate', function(date)
+	{
+		if(date){
+			var newDate = new Date(date);
+			newDate = (newDate.getMonth() + 1) + '/' + newDate.getDate() + '/' +  newDate.getFullYear() + " "+ newDate.getHours()+":"+newDate.getMinutes()+":"+newDate.getSeconds();
+			return newDate;
+		}
+	});
 
 	// Helper function to return date in user selected format in  preferences.
 
@@ -3578,10 +3592,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('lead_score', function(value)
 	{
-		if (this.lead_score > 0)
+		//if (this.lead_score > 0)
 			return this.lead_score;
-		else
-			return "";
+		//else
+		//	return "";
 	});
 
 	/**
@@ -5814,6 +5828,8 @@ $(function()
 			portlet_name = "Activity Overview";
 		else if(p_name=='Campaign stats')
 			portlet_name = "Campaign Stats";
+		else if(p_name=='Campaign graph')
+			portlet_name = "Campaign Status";
 		else if(p_name=='Average Deviation')
 			portlet_name = "Tasks Completion Time Deviation";
 		else
@@ -5866,6 +5882,8 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Campaign stats')
 			icon_name = 'icon-sitemap';
+		else if (p_name == 'Campaign graph')
+			icon_name = 'icon-pie-chart';
 		else if (p_name == 'Deal Goals')
 			icon_name = 'icon-flag';
 		else if (p_name == 'Lost Deal Analysis')
@@ -6007,7 +6025,11 @@ $(function()
 		text = text.replace('priority', 'Priority');
 		// update category
 		text = text.replace('title', 'Title');
-
+		// Update task description
+		text = text.replace('task description' , 'Description'); 
+		// Update Deal description
+		text = text.replace('description' , 'Description');
+		
 		return text;
 
 	});
@@ -6641,6 +6663,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A mini calendar with an overview of your agenda for the day.'
 	else if (p_name == 'Campaign stats')
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
+	else if (p_name == 'Campaign graph')
+		description = 'A pie chart of active, completed and removed subscribers of Campaigns'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
 	else if(p_name == 'Incoming Deals')
@@ -7139,6 +7163,30 @@ Handlebars.registerHelper('is_IE_browser', function(options) {
 	     return (isIEBrowser() ? options.fn(this) : options.inverse(this));
 });
 
+
+Handlebars.registerHelper('brainTreeStatus', function(value) {
+	/**
+	 * Braintree transaction status.
+	 */
+	var BRAINTREE_STATUS = {
+		AUTHORIZED : "Authorized",
+		VOIDED : "Voided",
+		SUBMITTED_FOR_SETTLEMENT : "Submitted For Settlement",
+		SETTLED : "Settled",
+		AUTHORIZATION_EXPIRED : "Authorization Expired",
+		AUTHORIZING : "Authorizing",
+		SETTLEMENT_PENDING : "Settlement Pending",
+		SETTLEMENT_CONFIRMED : "Settlement Confirmed",
+		SETTLEMENT_DECLINED : "Settlement Declined",
+		FAILED : "Failed",
+		GATEWAY_REJECTED : "Gateway Rejected",
+		PROCESSOR_DECLINED : "Processor Declined",
+		SETTLING : "Settling"
+	};
+	
+	return BRAINTREE_STATUS[value];
+});
+
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
   
@@ -7164,5 +7212,31 @@ Handlebars.registerHelper('multiple_Property_Element_List', function(name, prope
 
 Handlebars.registerHelper('getAliasFromArry', function(array, options) {
 	return array[0];
+});
+
+// Helper function to return date in user selected format in  preferences.
+Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
+{
+
+	if (!date)
+		return;
+	var dateString = new Date(date);
+	if(dateString == "Invalid Date")
+		return getDateInFormatFromEpoc(date);
+	else
+		return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+	
+});
+
+Handlebars.registerHelper('getSuggestionName', function(suggestionId){
+		if(suggestionId){
+			return uservoiceOBJ.suggestions[suggestionId];
+		}		
+});
+
+Handlebars.registerHelper('removeSpecialCharacter',function(value){
+          var value = value.replace(/[^\w\s]/gi, '-');
+          return value;
+
 });
 

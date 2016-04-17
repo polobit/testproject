@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -311,7 +312,8 @@ public class DealTriggerUtil
 
 		try
 		{
-			isDefault = opportunity.getPipeline().isDefault;
+			
+			isDefault =  OpportunityUtil.getOpportunityPipeline(opportunity).isDefault;
 			trackAndMilestone = opportunity.getPipeline_id() + "_" + opportunity.milestone;
 
 			for (Trigger trigger : triggers)

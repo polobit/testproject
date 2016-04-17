@@ -476,10 +476,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 							
 							$(this).attr('disabled', 'disabled');
 							var input = {};
-							var filterJSON = JSON.stringify($.parseJSON(_agile_get_prefs('deal-filters')));
-							if (!_agile_get_prefs("agile_deal_view"))
-								filterJSON.pipeline_id = _agile_get_prefs('agile_deal_track');
-							input.filter = filterJSON;
+							input.filter = getDealFilters();
 							 // Shows message
 						    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
 						    $(this).parent('.modal-footer').find('.deals-export-csv-message').append($save_info);
@@ -800,7 +797,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
-	$('#opportunity-listners').off('mouseenter', '#opportunities-model-list > tr');
+	/*$('#opportunity-listners').off('mouseenter', '#opportunities-model-list > tr');
 	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
         var data = $(this).find('.data').attr('data');
 
@@ -821,10 +818,10 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	        	"container": 'body'
 	        });
 
-			/**
+			*
 	         * Checks for last 'tr' and change placement of popover to 'top' inorder
 	         * to prevent scrolling on last row of list
-	         **/
+	         *
 	       $('#opportunities-model-list > tr:last').popover({
 	        	"rel" : "popover",
 	        	"trigger" : "hover",
@@ -839,14 +836,14 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 
 		}, null);
      });
-	
+	*/
     /**
      * On mouse out on the row hides the popover.
      **/
-    $('#opportunity-listners').off('mouseleave', '#opportunities-model-list > tr');
+   /* $('#opportunity-listners').off('mouseleave', '#opportunities-model-list > tr');
 	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
     	 $(this).popover('hide');
-    });
+    });*/
 	
     /**
      * On click on the row hides the popover.
@@ -870,6 +867,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
     	e.preventDefault();
     	_agile_delete_prefs('deal-milestone-view');
+    	_agile_delete_prefs("agile_deal_view");
     	App_Deals.deals();
     });
 	
@@ -877,6 +875,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	$('#opportunity-listners').on('click', '#deal-milestone-compact', function(e) {
     	e.preventDefault();
     	_agile_set_prefs('deal-milestone-view','compact');
+    	_agile_delete_prefs("agile_deal_view");
     	App_Deals.deals();
     });
 	
@@ -884,6 +883,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	$('#opportunity-listners').on('click', '#deal-milestone-fit', function(e) {
     	e.preventDefault();
     	_agile_set_prefs('deal-milestone-view','fit');
+    	_agile_delete_prefs("agile_deal_view");
     	App_Deals.deals();
     });
 
