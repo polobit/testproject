@@ -3187,18 +3187,20 @@ table.hide-head-checkbox th label.i-checks {
 	display: none;
 }
 
-/*#reports-tab-container .nav-tabs>li{
+#reports-tab-container .nav-tabs>li{
 	float: none!important;
 }
 
 .reports_tab_content{
-	 min-width: 420px;
+	 //min-width: 420px;
     left: 200px;
     top: 0px;
     position: absolute;
     z-index: 1000;
-    background-color: #dee5e7!important;
-   
+  	 box-shadow: 0px 5px 10px rgba(0,0,0,.2);
+    border-radius: 6px!important;
+   	border-top-width : 1px!important;
+   	border: 1px solid rgba(0,0,0,.2)!important;
 
 }
 
@@ -3209,5 +3211,5 @@ table.hide-head-checkbox th label.i-checks {
 
 .sub-nav-tab li
 {
-	margin-left : 25px;
-}*/
+	margin-left : 15px;
+}
