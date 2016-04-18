@@ -1290,3 +1290,55 @@ $(function(){
     }
     );
 });
+
+/**
+ * Check whether there are any updates in the displaying contact.
+ * If there are any updates, show the refresh contact button.
+ */
+function checkCompanyUpdated(){
+	var contact_model  =  App_Companies.companyDetailView.model;
+	
+	var contact_id = contact_model.id;
+	var updated_time = contact_model.attributes.updated_time;
+
+		queueGetRequest("contact_queue" + contact_id, "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
+		{
+			// If true show refresh contact button.
+			if (data == 'true')
+			{
+				// Download
+				var contact_details_model = Backbone.Model.extend({ 
+					url : function(){
+							return '/core/api/contacts/' + contact_id;
+					}
+				});
+                
+				var model = new contact_details_model();
+				model.id = id;
+				model.fetch({ success : function(data){
+					
+					var old_updated_time = contact_model.attributes.updated_time;
+					
+					var new_updated_time = model.attributes.updated_time;
+					
+					// Update Model
+					if(old_updated_time != new_updated_time)
+					{
+						App_Companies.companyDetailView.model.set(model);
+//						$('#refresh_contact').hide();
+					}
+
+				    }
+				});
+				
+				$('#refresh_contact').show();
+			}
+				
+			
+			
+		}, function error(data)
+		{
+			// Error message is shown
+			
+		});
+}
