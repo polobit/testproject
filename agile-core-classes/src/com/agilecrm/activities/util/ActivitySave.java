@@ -1234,4 +1234,47 @@ public class ActivitySave
     		
     	}
     }
+    public static void createOwnerChangeActivity(DomainUser domainuser)
+    {
+    	Activity activity = new Activity();
+		activity.entity_type = EntityType.USER;
+		activity.entity_id = domainuser.id;
+    	if(domainuser.id != null)
+    	{
+    		DomainUser old_user = DomainUserUtil.getDomainUser(domainuser.id);
+    		if(!(domainuser.is_admin == old_user.is_admin) )
+    		{
+    			
+    			activity.activity_type = activity.activity_type.User_Admin_Change ;
+    			activity.custom1 = domainuser.name ;
+    			activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    			activity.custom4 = String.valueOf(domainuser.is_admin);
+    			activity.save();
+    			activity.id =null;
+    						
+    		}
+    		if(!(domainuser.is_account_owner == old_user.is_account_owner) )
+    		{
+    			activity.activity_type = activity.activity_type.User_Owner_Change ;
+    			activity.custom1 = domainuser.name ;
+    			activity.custom2 = old_user.name ;
+    			activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    			activity.custom4 = String.valueOf(domainuser.is_admin);
+    			activity.save();
+    			activity.id =null;
+    		}
+    		if(!(domainuser.is_disabled == old_user.is_disabled) )
+    		{
+    			activity.activity_type = activity.activity_type.User_Disabled ;
+    			activity.custom1 = domainuser.name ;
+    			activity.custom2 = domainuser.name ;
+    			activity.custom4 = String.valueOf(domainuser.is_admin);
+    			activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    			activity.save();
+    			activity.id =null;
+    		}
+    		
+    		
+    	}
+    }
 }

@@ -225,6 +225,7 @@ public class UsersAPI
 			{
 				domainUser.setInfo("Ip_Address", request.getRemoteAddr()) ;
 				ActivitySave.createUserEditActivity(domainUser);
+				ActivitySave.createOwnerChangeActivity(domainUser);
 			}
 			catch(Exception e)
 			{
