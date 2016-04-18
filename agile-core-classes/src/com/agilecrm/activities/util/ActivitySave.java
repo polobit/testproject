@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
+import com.agilecrm.LoginServlet;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
@@ -1174,31 +1175,63 @@ public class ActivitySave
 				activity.activity_type = activity.activity_type.User_Name_Change;
 				activity.custom1 = old_user.name;
 				activity.custom2 = domainuser.name;
+				activity.custom4 = domainuser.name;
+				activity.custom3 = activity.custom3 = (String) domainuser.getInfo("Ip_Address");
 				activity.save();
 				activity.id =null;
 			}
 			
-			System.out.println(!domainuser.email.equals(old_user.email)+"email");
-			 if(!domainuser.email.equals(old_user.email))
+			
+			if(!domainuser.email.equals(old_user.email))
 			{
 				activity.activity_type = activity.activity_type.User_Email_Change;
 				activity.custom1 = old_user.email;
 				activity.custom2 = domainuser.email;
+				activity.custom4 = domainuser.name;
+				activity.custom3 = activity.custom3 = (String) domainuser.getInfo("Ip_Address");
 				activity.save();
 				activity.id = null;
 			}
 		
 			
-			 if(!domainuser.scopes.equals(old_user.scopes))
+			 if(!(domainuser.newMenuScopes.equals(old_user.newMenuScopes)) || !(domainuser.newscopes.equals(old_user.newscopes)) )
 			 {
 				 activity.activity_type = activity.activity_type.User_Permissions_Change;
+				 activity.custom2 = domainuser.name;
+				 activity.custom4 = domainuser.name;
+				 activity.custom3 = activity.custom3 = (String) domainuser.getInfo("Ip_Address");
 				 activity.save();
 			 }
-			 
-			
-			
+	
     	}
 		
    
 }
+    
+    public static void  createNewUserActivity(DomainUser domainuser)
+    {
+    	if(domainuser.id != null)
+    	{
+    		Activity activity = new Activity();
+    		activity.entity_type = EntityType.USER;
+    		activity.activity_type = activity.activity_type.User_Created;
+    		activity.custom1 = domainuser.name;
+    		activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    		activity.save();
+    		
+    	}
+    }
+    public static void createDeleteUserActivity(DomainUser domainuser)
+    {
+    	if(domainuser.id != null)
+    	{
+    		Activity activity = new Activity();
+    		activity.entity_type = EntityType.USER;
+    		activity.activity_type = activity.activity_type.User_Deleted;
+    		activity.custom1 = domainuser.name;
+    		activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    		activity.save();
+    		
+    	}
+    }
 }

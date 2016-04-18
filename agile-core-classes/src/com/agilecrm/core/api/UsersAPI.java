@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -16,6 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -32,6 +35,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.ReferenceUtil;
+import com.amazonaws.Request;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -146,12 +150,13 @@ public class UsersAPI
 	 */
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public DomainUser createDomainUser(DomainUser domainUser)
+	public DomainUser createDomainUser(DomainUser domainUser,@Context HttpServletRequest request)
 	{
 
 		try
 		{
 			DomainUser owner = null;
+			domainUser.setInfo("Ip_Address", request.getRemoteAddr()) ;
 			if (domainUser.is_account_owner == true)
 			{
 				if (domainUser.is_admin == false)
@@ -168,6 +173,7 @@ public class UsersAPI
 				owner.is_account_owner = false;
 				owner.save();
 			}
+			ActivitySave.createNewUserActivity(domainUser);
 			return domainUser;
 		}
 		catch (Exception e)
@@ -196,7 +202,7 @@ public class UsersAPI
 	 */
 	@PUT
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public DomainUser updateDomainUser(DomainUser domainUser)
+	public DomainUser updateDomainUser(DomainUser domainUser,@Context HttpServletRequest request)
 	{
 		try
 		{
@@ -217,6 +223,7 @@ public class UsersAPI
 			}
 			try
 			{
+				domainUser.setInfo("Ip_Address", request.getRemoteAddr()) ;
 				ActivitySave.createUserEditActivity(domainUser);
 			}
 			catch(Exception e)
@@ -277,6 +284,9 @@ public class UsersAPI
 		AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
 
 		domainUser.delete();
+		
+		
+		
 	}
 
 	/**
@@ -296,8 +306,9 @@ public class UsersAPI
 		for (int i = 0; i < usersJSONArray.length(); i++)
 		{
 			DomainUser domainuser = DomainUserUtil.getDomainUser(Long.parseLong(usersJSONArray.getString(i)));
-
+			ActivitySave.createDeleteUserActivity(domainuser);
 			deleteDomainUser(domainuser);
+			
 		}
 	}
 

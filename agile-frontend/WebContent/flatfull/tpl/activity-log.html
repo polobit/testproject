@@ -546,21 +546,49 @@ Rescheduled Event '{{../label}}'<br/>
 
 <!-- end event condition-->
 <!-- start of user condition -->
-{{#if_equals "User_Email_Change" activity_type}}
-User Email Changed from {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom2}}
-<div class="activities_second_line m-t-none"><small>
-<i class=""></i> {{#unless entityObject}} User Email Changed.{{/unless}} User Email {{#if this.entityObject}}{{/if}} changed . 
+{{#if_equals "User_Created" activity_type}}
+ {{user_name}}
+    created a new user {{#if this.entityObject}}<a href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} {{custom1}}
+    <div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}} from IP {{custom3}} 
 </small></div>
 {{/if_equals}}
+
 
 {{#if_equals "User_Name_Change" activity_type}}
-User Name Changed from  {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom2}}
+{{user_name}} updated the username from {{custom1}}{{#if this.entityObject}}
+<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} to {{custom2}}
 <div class="activities_second_line m-t-none"><small>
-<i class=""></i> {{#unless entityObject}} User Name Changed.{{/unless}} User Name {{#if this.entityObject}}{{/if}} changed . 
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}} from IP {{custom3}} 
+</small></div>
+{{/if_equals}} 
+
+
+{{#if_equals "User_Email_Change" activity_type}}
+{{user_name}} updated email ID from {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} to {{custom2}}
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}} from IP {{custom3}}
 </small></div>
 {{/if_equals}}
 
-<!--  end of user condition --><!-- start of contact condition-->
+{{#if_equals "User_Deleted" activity_type}}
+{{user_name}}  deleted the user {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} 
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}} from IP {{custom3}}
+</small></div>
+{{/if_equals}}
+
+
+
+{{#if_equals "User_Permissions_Change" activity_type}}
+{{user_name}} modified the permissions for {{custom4}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} 
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}} from IP {{custom3}}
+</small></div>
+{{/if_equals}}
+
+<!--  end of user condition -->
+<!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
 
 {{#if_equals "CONTACT_CREATE" activity_type}}

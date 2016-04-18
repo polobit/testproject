@@ -4707,7 +4707,7 @@ $(function()
 		var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost",
 			"DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
 			"DEAL_ARCHIVE" : "Deal Archived", "DEAL_RESTORE" : "Deal Restored",
-			"User_Email_Changed" : "User email","User_Name_Changed" :"User Email Changed"
+			"User_Email_Changed" : "User email","User_Name_Changed" :"User Name Changed","User_Created" : "New User Created","User_Deleted" : "User Deleted","User_Permissions_Change" : "User Permissions Changed",
 
 			"NOTE_ADD" : "Note Added", "TASK_ADD" : "Task Created", "TASK_EDIT" : "Task Updated", "TASK_PROGRESS_CHANGE" : "Progress Changed",
 			"TASK_OWNER_CHANGE" : "Owner Changed", "TASK_STATUS_CHANGE" : "Status Changed", "TASK_COMPLETED" : "Task Completed",
