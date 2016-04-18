@@ -68,8 +68,8 @@ public class LogUtil
 		PullQueueUtil.addToPullQueue(AgileQueues.CAMPAIGN_LOG_QUEUE, logDeferredTask, domain+"_"+campaignId);
 
 		// Insert to SQL
-		CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
-				subscriberId, message, logType);
+		//CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
+				//subscriberId, message, logType);
 
 		long processTime = System.currentTimeMillis() - startTime;
 		System.out.println("Process time for adding log is " + processTime + "ms");
