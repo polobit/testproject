@@ -11,6 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.POST;
+import javax.ws.rs.QueryParam;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -26,12 +28,21 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.agilecrm.util.email.AppengineMail;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.utils.SystemProperty;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * <code>LoginServlet</code> class checks or validates the user who is
@@ -52,16 +63,24 @@ import com.google.appengine.api.utils.SystemProperty;
 public class LoginServlet extends HttpServlet {
 	public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
 	public static String RETURN_PATH_SESSION_HASH = "return_hash";
+	
 	// FingerPrint verification
 	public static String SESSION_FINGERPRINT_VAL = "agile_fingerprint";
 	public static String SESSION_FINGERPRINT_OTP = "agile_otp";
 	public static String SESSION_FINGERPRINT_VALID = "agile_fingerprint_valid";
 	public static String SESSION_IPACCESS_VALID = "agile_ip_valid";
+	public static String SESSION_OTP_RESEND_VALID = "agile_otp_info";
+	
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		if(request.getParameter("resendotp")!=null){
+			resendVerficationCode(request);
+			return;
+		}
 		doGet(request, response);
+		
 	}
 
 	/**
@@ -287,21 +306,18 @@ public class LoginServlet extends HttpServlet {
 			request.getSession().setAttribute(SESSION_IPACCESS_VALID, isValidIP);
 			if(!isValid || !isValidIP ){
 				
-				Long generatedOTP = System.currentTimeMillis()/100000;
-			
-				System.out.println("generatedOTP "+generatedOTP);
-				//domainUser.generatedOTP = generatedOTP + "";
-				Map<String,String> data = getInformationToSend(request, generatedOTP);
-				// Simulate template
-				String template = SendMail.ALLOW_IP_ACCESS;
-				String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
-				if(!isValid){
-					template = SendMail.OTP_EMAIL_TO_USER;
-					subject =  "New sign-in from "+request.getParameter("browser_Name")+"on "+request.getParameter("browser_os"); 
-				}
-				System.out.println(domainUser);
-				SendMail.sendMail(domainUser.email, subject, template, data);
+				// Generate one finger print
+				String generatedOTP = System.currentTimeMillis()/100000 + "";
 				request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
+				
+				System.out.println("generatedOTP "+generatedOTP);
+				
+				// Set info in session for future usage 
+				setUserBrowserInfoInSession(request, domainUser);
+				
+				// Send Sendgrid Email
+				sendOTPEmail(request, isValid, false, domainUser.email);
+				
 			}
 		}
 
@@ -332,31 +348,71 @@ public class LoginServlet extends HttpServlet {
 		response.sendRedirect("/");
 
 	}
-	public Map<String, String > getInformationToSend(HttpServletRequest request,Long generatedOTP)throws Exception{
-		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(request.getParameter("email"));
+	public Map<String, String > setUserBrowserInfoInSession(HttpServletRequest request, DomainUser domainUser)throws Exception {
+		
+		// Create info
 		Map<String, String> data = new HashMap<String, String>();
-		String otp = generatedOTP.toString();
-		data.put("generatedOTP", otp);
+		data.put("generatedOTP", (String) request.getSession().getAttribute(SESSION_FINGERPRINT_OTP));
 		data.put("browser_os", request.getParameter("browser_os"));
 		data.put("browser_name", request.getParameter("browser_Name"));
 		data.put("browser_version",request.getParameter("browser_version"));
-		data.put("owner_pic", domainUser.getOwnerPic());
 		data.put("email", domainUser.email);
 		data.put("domain", domainUser.domain);
 		data.put("IP_Address", request.getRemoteAddr());
 		data.put("city",request.getHeader("X-AppEngine-City"));
-		/*data.put("country",request.getHeader("X-AppEngine-Country"));
-		data.put("region", request.getHeader("X-AppEngine-Region"));*/
+		
 		System.out.println("data "+data);
+		
+		// Set data in session to resend OTP if required
+		request.getSession().setAttribute(SESSION_OTP_RESEND_VALID, data);
 		return data;
 	}
 
+	public void resendVerficationCode(HttpServletRequest request){
+		
+		String email = ((UserInfo)request.getSession().getAttribute(
+				SessionManager.AUTH_SESSION_COOKIE_NAME)).getEmail();
+		
+		Boolean isValid = (Boolean) request.getSession().getAttribute(SESSION_FINGERPRINT_VALID);
+		
+		sendOTPEmail(request, isValid, true, email);
+		
+	}
+	
 	private void handleMulipleLogin(HttpServletResponse response)
 			throws Exception {
 		// response.sendRedirect("error/multiple-login.jsp");
 		throw new Exception("multi-login");
 
 	}
+
+	private void sendOTPEmail(HttpServletRequest request,  boolean optEmail, boolean resend, String email) {
+
+		try {
+			
+			Map data = (HashMap)request.getSession().getAttribute(SESSION_OTP_RESEND_VALID);
+			 
+			// Simulate template
+			String template = SendMail.ALLOW_IP_ACCESS;
+			String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
+			if(!optEmail){
+				template = SendMail.OTP_EMAIL_TO_USER;
+				subject =  "New sign-in from " + data.get("browser_Name") + "on " + data.get("browser_os"); 
+			}
+			
+			if(resend)
+				AppengineMail.sendMail(email, subject, template, data);
+			else 
+				SendMail.sendMail(email, subject, template, data);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 
 	private void updateEntityStats() {
 		AccountLimitsRemainderDeferredTask stats = new AccountLimitsRemainderDeferredTask(

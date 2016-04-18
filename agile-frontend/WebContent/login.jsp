@@ -14,13 +14,6 @@ we use setAttribute() to store the username and to autofill if he want to resubm
 */
 //flatfull path
 String flatfull_path="/flatfull";
-boolean ipcheck = IpAccessUtil.isValidIpOpenPanel(request);
-if(ipcheck==true){
-	//response.sendRedirect("/login");
-}	
-else{
-	
-}
 	
 
 
@@ -389,7 +382,7 @@ if(isSafari && isWin)
 		$(function(){
 			new Fingerprint2().get(function(result, components){
 					$("#finger_print").val(result);
-		  			var componentArray = JSON.stringify(components);
+		  			console.log(result);
 
 				});
 		});

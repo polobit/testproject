@@ -209,13 +209,19 @@ position: fixed;width: 100%;top: 0px;
                          <div class="list-group-item">
                          	<input class="hide" id="ip_validation" name="ip_validation"></input>
                          <input type="hidden"  name="current_div" id="current_div"/>
-                                <input id="finger_print_otp" placeholder="Enter OTP" type="text" name="finger_print_otp" class="input-xlarge required form-control no-border" />
+                                <input id="finger_print_otp" placeholder="Enter verification code" type="text" name="finger_print_otp" class="input-xlarge required form-control no-border" />
                          </div>
 
            			</div>
            			 
            			 <input type='submit' value="Send" class='btn btn-lg btn-primary btn-block'>
-           			
+           				
+           				<div class="text-center text-white m-t m-b">
+							<small>Resend </small> 
+							<a title="Verification code" id= "resend_otp" class='text-white' href='#'>verification code</a>
+
+						</div>
+
 					</fieldset>
 				</form>
 			
@@ -252,6 +258,16 @@ position: fixed;width: 100%;top: 0px;
 			 $(this).closest('div').fadeOut('slow', function() {
 			   });
 		});
+
+		$("#resend_otp").click(function() {
+	        $.ajax({
+	            type : "POST",
+	            url : "/login?resendotp=resendotp",
+	            success : function(data) {
+	               
+	            }
+	        });
+	    }); 
 
 
 			

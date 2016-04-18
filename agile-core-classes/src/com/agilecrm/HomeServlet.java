@@ -283,7 +283,7 @@ public class HomeServlet extends HttpServlet
 			}
 	    	
 	    	if(StringUtils.isBlank(otp) || !(Long.parseLong(otp) == generatedOTP)){
-	    		throw new Exception("Invalid OTP");
+	    		throw new Exception(" Please enter valid verification code");
 	    	} 
 	    	
 	    	request.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
