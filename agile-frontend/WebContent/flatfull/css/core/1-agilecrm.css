@@ -3537,3 +3537,6 @@ text-align:left;
     padding-top: 15px;
     padding-bottom: 15px;
 }
+.c-na{
+	cursor: not-allowed;
+}

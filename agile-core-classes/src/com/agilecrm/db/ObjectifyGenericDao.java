@@ -60,6 +60,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.OnlineCalendarPrefs;
+import com.agilecrm.user.Referer;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
@@ -231,6 +232,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//All Domain Stats report for Agile Management
 	ObjectifyService.register(AllDomainStats.class);
+	ObjectifyService.register(Referer.class);
 
     }
 

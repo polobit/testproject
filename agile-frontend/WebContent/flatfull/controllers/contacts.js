@@ -8,6 +8,7 @@
 CONTACTS_HARD_RELOAD = true;
 
 var import_tab_Id;
+var REFER_DATA;
 
 var ContactsRouter = Backbone.Router.extend({
 
@@ -1226,22 +1227,31 @@ var ContactsRouter = Backbone.Router.extend({
 	refer : function()
 	{
 		load_facebook_lib_for_referrals();
-		getTemplate("refer-modal", {}, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('#referModal').html($(template_ui));
-			getTemplate("refer-modal-body", {}, undefined, function(template_ui1){
-				if(!template_ui1)
-					  return;
-				$('#referModal').find(".modal-body").html($(template_ui1));
-				$('#referModal').modal("show");
-			}, null);
-		}, null);
+		$.ajax({
+			url : 'core/api/refer',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data){
+				REFER_DATA = data;
+				getTemplate("refer-modal", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#referModal').html($(template_ui));
+					getTemplate("refer-modal-body", data, undefined, function(template_ui1){
+						if(!template_ui1)
+							  return;
+						$('#referModal').find(".modal-body").html($(template_ui1));
+						$('#referModal').modal("show");
+					}, null);
+				}, null);
+			}
+		});
+
 	},
 
 	referFriends : function()
 	{
-		var subject = "Referral request";
+		var subject = "I am using Agile CRM and I really love it! Try it now.";
 		var body = "Hi,<br><br>I am using Agile CRM and I really love it!<br><br>It is a combination of important features like email marketing, call campaign, online scheduling, landing pages, Web rules and many others. This service is true value for money!<br><br>What to try it? Let's start by signing up with below link:<br>http://www.agilecrm.com/?utm_source=affiliates&utm_medium=web&utm_campaign="+CURRENT_DOMAIN_USER.domain+"<br><br>Best Regards";
 		sendMail(undefined,subject,body,undefined,undefined,this);
 	}

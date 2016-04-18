@@ -1,3 +1,11 @@
+<%@page import="com.agilecrm.user.Referer.ReferTypes"%>
+<%@page import="com.agilecrm.user.Referer.ReferTypes"%>
+<%@page import="com.agilecrm.user.Referer.ReferTypes"%>
+<%@page import="com.agilecrm.user.Referer.ReferTypes"%>
+<%@page import="com.agilecrm.user.util.ReferUtil"%>
+<%@page import="com.agilecrm.user.Referer"%>
+<%@page import="com.agilecrm.user.DomainUser"%>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -60,13 +68,22 @@ if(referralObj != null){
 	referralType = (String) referralObj;
 	System.out.println("referral_type is:: "+referralType);
 	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+	Referer referer = ReferUtil.getReferrer();
 	if(referralType.equals("tweet")){
-		twitter.updateStatus("Try @agilecrm for an out-of-the-box #marketingautomation and #salesautomation solutions experience. http://bit.ly/1Sqkb4F   #CRM");
-		restriction.incrementEmailCreditsCount(2000);
+		twitter.updateStatus("Try @agilecrm. I am using Agile CRM and really love it. An all-in-one CRM which enables you sell like the Fortune 500!");
+		if(!referer.usedReferTypes.contains(ReferTypes.twitter_tweet)){
+			restriction.incrementEmailCreditsCount(500);
+			referer.usedReferTypes.add(ReferTypes.twitter_tweet);
+			referer.save();
+		}
 	}else if(referralType.equals("follow")){
-		User user1 = twitter.createFriendship("msreddy1993");
+		User user1 = twitter.createFriendship("agilecrm");
 		twitter.createFriendship(user1.getId());
-		restriction.incrementEmailCreditsCount(750);
+		if(!referer.usedReferTypes.contains(ReferTypes.twitter_follow)){
+			restriction.incrementEmailCreditsCount(500);
+			referer.usedReferTypes.add(ReferTypes.twitter_follow);
+			referer.save();
+		}
 	}
 	restriction.save();
 }
