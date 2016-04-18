@@ -25,6 +25,7 @@ import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.campaignio.reports.DateUtil;
 import com.thirdparty.sendgrid.lib.SendGridLib;
+import com.thirdparty.sendgrid.webhook.util.SendGridWebhookUtil;
 
 public class SendGridSubUser extends SendGridLib
 {
@@ -54,6 +55,11 @@ public class SendGridSubUser extends SendGridLib
 		this.setEndpoint("/v3/subusers");
 	}
 	
+	/**
+	 * @param subUser
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
 	public String createSubUser(SubUser subUser) throws UnsupportedEncodingException
 	{
     	HttpClientUtil.URLBuilder urlBuilder = new HttpClientUtil.URLBuilder(super.url + super.endpoint);
@@ -69,6 +75,19 @@ public class SendGridSubUser extends SendGridLib
     	System.out.println("Response " + response);
     	
     	return response;
+	}
+	
+	/**
+	 * @param subUser
+	 * @return
+	 */
+	public String addWebhookURL(SubUser subUser)
+	{
+		String webhookResponse = SendGridWebhookUtil.addWebhook(subUser.getName(), subUser.getPassword());
+		
+		System.out.println("SendGrid Webhook response after creating subUser is " + webhookResponse);
+		
+		return webhookResponse;
 	}
 	
 	public HttpEntity buildBody(SubUser subUser) throws UnsupportedEncodingException

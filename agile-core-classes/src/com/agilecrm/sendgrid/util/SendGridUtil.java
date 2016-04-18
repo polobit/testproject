@@ -335,6 +335,10 @@ public class SendGridUtil
         	System.out.println("SubUser is " + subUser.toString());
 			String response = sendgrid.createSubUser(subUser);
 			
+			// Adds Webhook Handler
+			if(!StringUtils.containsIgnoreCase(response, "errors"))
+				sendgrid.addWebhookURL(subUser);
+			
 			System.out.println("Response for subuser creation - " + response);
 		}
 		catch (UnsupportedEncodingException e)
