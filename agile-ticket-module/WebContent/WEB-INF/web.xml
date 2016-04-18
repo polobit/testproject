@@ -244,6 +244,14 @@
 	<url-pattern>/ticket-module/backend/slacron</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>TicketStats</servlet-name>
+	<servlet-class>com.agilecrm.ticket.servlets.TicketsStatsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>TicketStats</servlet-name>
+	<url-pattern>/ticket-module/backend/ticket_stats</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>TicketModuleWakeupServlet</servlet-name>
 	<servlet-class>com.agilecrm.ticket.servlets.TicketModuleWakeupServlet</servlet-class>
   </servlet>

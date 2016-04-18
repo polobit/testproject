@@ -29,12 +29,12 @@ public class Territory extends TaskletAdapter
     	
     	try
     	{
-    		JSONArray states = nodeJSON.getJSONArray("States");
-    		int totalBranches = states.length();
+//    		JSONArray states = nodeJSON.getJSONArray("States");
+//    		int totalBranches = states.length();
     		
     		JSONArray zonesArray = new JSONArray(zones);
     		
-    		Map<String, Boolean> zonesMap = new LinkedHashMap<String, Boolean>(); 
+    		Map<String, Boolean> zonesMap = new LinkedHashMap<String, Boolean>(); // Map with branches as Keys and comparison result like true/false as Value
     		Map<String, String> zonesComparators = new HashMap<String, String>();
     		
     		String inZoneComparator = null;
@@ -42,25 +42,30 @@ public class Territory extends TaskletAdapter
     		 // Iterate through json array having key-value pairs
 		    for (int i = 0, len = zonesArray.length(); i < len; i++)
 		    {
-				JSONObject zone = zonesArray.getJSONObject(i); 
+				JSONObject zone = zonesArray.getJSONObject(i); // Each condition within a zone
 				
 				String branch = zone.getString(DYNAMIC_GRID);
 				
 				// If 'NoMatch' continue
 				if(NO_MATCH.equalsIgnoreCase(branch))
 				{
-					totalBranches = totalBranches - 1;
+//					totalBranches = totalBranches - 1;
 					continue;
 				}
 				
+				// For every new branch, update zonesComparators. Note: Initial Territory nodes consists of AND/OR conditions
 				if(!zonesMap.containsKey(branch))
+				{
+					// For New Territory nodes, IN_ZONE_COMPARE is removed, so by default OR
+					if(!zone.has(IN_ZONE_COMPARE))
+						zone.put(IN_ZONE_COMPARE, "or");
+					
 					zonesComparators.put(branch, zone.getString(IN_ZONE_COMPARE));
+				}
 				
-				String comparator = zone.getString(NewCondition.COMPARATOR); 
+				String comparator = zone.getString(NewCondition.COMPARATOR); // equals, not equals, contains and in
 				String locationType = zone.getString(LOCATION_TYPE); 
 				String locationValue =  zone.getString(LOCATION_VALUE);
-				
-				inZoneComparator = (zonesComparators.get(branch) == null) ? zone.getString(IN_ZONE_COMPARE) : zonesComparators.get(branch);
 				
 				System.out.println("Zone " + branch + " " + "locationType: " + locationType + " locationValue: " + locationValue + " Comparator: " + comparator);
 				
@@ -68,12 +73,15 @@ public class Territory extends TaskletAdapter
 				
 				Boolean flag = zonesMap.get(branch);
 				
+				// For first time
 				if(flag == null)
 				{
 					zonesMap.put(branch, expr);
 					flag = expr;
 				}
 					
+				inZoneComparator = (zonesComparators.get(branch) == null) ? zone.getString(IN_ZONE_COMPARE) : zonesComparators.get(branch);
+				
 				if(flag != null && inZoneComparator != null)
 				{
 					if(inZoneComparator.equalsIgnoreCase("and")){

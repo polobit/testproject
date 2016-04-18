@@ -310,6 +310,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
+   <li id="segmentationmenu">
+    <a  href="#segments">
+       <i class="icon-large icon-screenshot"></i>
+      <span>Segments</span>  
+    </a>
+  </li>
   <li id="landing-pages-menu">
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
@@ -327,7 +333,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <i class="icon-bar-chart icon-white"></i>
       <span>Reports</span>
     </a>
-  </li>
+  </li>  
+  
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
@@ -612,9 +619,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-
-
-   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -627,6 +632,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <script>
 
 try{console.time("startbackbone");}catch(e){}
+
+var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
@@ -678,6 +685,16 @@ var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(dom
 var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;
 // Get Contact Date Fields
 var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE")))%>;
+
+// Get Contact contact type custom fields
+var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "CONTACT")))%>;
+// Get Contact company type custom fields
+var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "COMPANY")))%>;
+
+// Get Company contact type custom fields
+var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "CONTACT")))%>;
+// Get Company company type custom fields
+var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "COMPANY")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;

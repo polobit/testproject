@@ -54,7 +54,7 @@ var portlet_graph_utility = {
 																	+ '<td class="p-n"><b>'
 																	+ milestoneNumbersList[this.point.x]
 																	+ '</b></td></tr>'
-																	+ '<tr><td class="p-n">Total Value: </td>'
+																	+ '<tr><td style="padding-right:1px">Total Value:'+' '+'</td>'
 																	+ '<td class="p-n"><b>'
 																	+ portlet_utility
 																			.getPortletsCurrencySymbol()
@@ -359,7 +359,7 @@ var portlet_graph_utility = {
 													}
 												},
 												tooltip : {
-													pointFormat : '<span>{series.name}:<b>'
+													pointFormat : '<span>{series.name}: <b>'
 															+ currency
 															+ '{point.y:,.0f}</b></span>',
 													shared : true,
@@ -1294,7 +1294,7 @@ var portlet_graph_utility = {
 																+ this.series.color
 																+ '>'
 																+ this.series.name
-																+ '</font> : '
+																+ '</font>: '
 																+ portlet_utility
 																		.getPortletsCurrencySymbol()
 																+ ''

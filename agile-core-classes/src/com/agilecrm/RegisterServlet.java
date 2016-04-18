@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.EventReminder;
 import com.agilecrm.contact.Contact;
@@ -360,11 +361,11 @@ public class RegisterServlet extends HttpServlet
 	    String version = VersioningUtil.getAppVersion(request);
 	    if (!StringUtils.isEmpty(version))
 	    {
-		key = APIKey.getDomainUserKeyRelatedToAPIKey("fdpa0sc7i1putehsp8ajh81efh");
+		key = APIKeyUtil.getDomainUserKeyRelatedToAPIKey("fdpa0sc7i1putehsp8ajh81efh");
 	    }
 	    else
 	    {
-		key = APIKey.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
+		key = APIKeyUtil.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
 	    }
 
 	    Tag signupTag = new Tag(RegistrationGlobals.SIGN_UP_TAG);

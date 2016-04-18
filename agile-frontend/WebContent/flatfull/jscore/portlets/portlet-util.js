@@ -1268,6 +1268,16 @@ var portlet_utility = {
 			setPortletContentHeight(base_model);
 			break;
 		}
+		case "Webstat Visits": {
+			var url = '/core/api/portlets/webstat-visits?start-date='
+					+ '1458153000'
+					+ '&campaign_type='
+					+'All';
+			portlet_graph_data_utility.webstatVisitsGraphData(base_model,
+					selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
 		}
 	},
 

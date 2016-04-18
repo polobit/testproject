@@ -29,6 +29,11 @@ var CONTENT_JSON = {
 		//"modal_id" : "personModal",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"filter_results_segments" : {
+		"title" : "There are no contacts for the selected filter. Try refining the filters and the date range.",
+		"route" : "#",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	"filter_results_companies" : {
 		"title" : "No companies matching this criteria.",
 		//"learn_more" : "click here to learn more",
@@ -259,6 +264,15 @@ function getContactPadcontentKey(url)
 		return "filter_results";
 	
 	return "contacts";
+		
+}
+
+function getSegmentPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	return "filter_results_segments";
 		
 }
 

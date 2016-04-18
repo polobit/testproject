@@ -46,8 +46,14 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues, editRowInde
 	open: function(event, ui) {
 		$(this).css({'max-height': 500, 'overflow-y': 'auto'}); 
 
+        if(uiFieldDefinition.name == "and_key_grid" || uiFieldDefinition.name == "or_key_grid" )
+        {
+        condition_popup_handler($popup,jsonValues);
+        }
+
         // event handlers for zones
-        zones_popup_handler($popup, editRowIndex);
+        if(uiFieldDefinition.name == NODES_CONSTANTS.TERRITORIES)
+            zones_popup_handler($popup, editRowIndex, jsonValues);
 
 	},
 	modal: true,
@@ -55,6 +61,10 @@ function constructGridPopup(uiFieldDefinition, callback, jsonValues, editRowInde
 	show: 'slide',	
 	buttons: buttons	
     	});    
+}
+
+function condition_popup_handler(popup,jsonValues){
+	popup.find('select#condition_merge').val(jsonValues[1].value).attr('selected', 'selected')
 }
 
 
@@ -439,54 +449,91 @@ function hide_zone_comparator($table)
      var trArr = $table.find('tr');
 
     var cacheKeys = {};
-    for(var i=0; i< trArr.length; i++){
+    try
+    {
+        for(var i=0; i< trArr.length; i++){
 
-        // Skip headers
-        if($(trArr[i]).find('td').length == 0)
-            continue;
+            // Skip headers
+            if($(trArr[i]).find('td').length == 0)
+                continue;
 
-        var txt = $(trArr[i]).find('td').eq(1).text();
-        var $last_td = $(trArr[i]).find('td:last');
+            var txt = $(trArr[i]).find('td').eq(1).text();
+            var $last_td = $(trArr[i]).find('td').eq(5);
 
-        if(!cacheKeys[txt])
-        {
-            cacheKeys[txt] = true;
+            if(!cacheKeys[txt])
+            {
+                cacheKeys[txt] = true;
+                
+                if($last_td.find('input').length > 0)
+                    $last_td.html($last_td.find('input').attr('comparator'));
+
+                continue;
+            }
+
+            if(txt == 'Nomatch')
+                continue;
+
             
-            if($last_td.find('input').length > 0)
-                $last_td.html($last_td.find('input').attr('comparator'));
-
-            continue;
+            var zone_comparator = $last_td.text();
+            $last_td.html("<input type='text' style='display:none;' comparator=\""+zone_comparator+"\" value =\""+zone_comparator+"\">");
         }
-
-        if(txt == 'Nomatch')
-            continue;
-
+    }
+    catch(err)
+    {
         
-        var zone_comparator = $last_td.text();
-        $last_td.html("<input type='text' style='display:none;' comparator=\""+zone_comparator+"\" value =\""+zone_comparator+"\">");
     }
 }
 
 function get_zones($table)
 {
     var zones = {};
-   $table.find("tbody tr").each(function (rowIndex, eachTR) {
 
-            var zone = $(eachTR).find('td').eq(1).text();
+   try
+   {
+        $table.find("tbody tr").each(function (rowIndex, eachTR) {
 
-            if(!zones[zone])
-            {
-                var condition = $(eachTR).find('td:last').text();
+                var zone = $(eachTR).find('td').eq(1).text();
 
-                zones[zone]=condition;
-            }
-   });
+                if(!zones[zone])
+                {
+                    var condition = $(eachTR).find('td').eq(5).text();
+
+                    zones[zone]=condition;
+                }
+       });
+    }
+   catch(err)
+   {
+
+   }
 
    return zones;
 }
 
-function zones_popup_handler($popup, edit_row_index){
+function zones_popup_handler($popup, edit_row_index, jsonValues){
     
+   try
+   {
+        var value = jsonValues[1].value;
+
+        if(value)
+        {
+            if(value != '{{location.country}}' && value != '{{location.state}}' && value != '{{location.city}}')
+                value = 'CUSTOM_FIELD';
+
+            // Make merge fields value selected
+            $popup.find('[name="undefined"]').val(value).attr('selected', 'selected');
+
+            // For New Territory node, Zone comparator is removed
+            if($popup.find('[name="in_zone_compare"]').length == 0)
+                return;
+        }
+   }
+   catch(err)
+   {
+        console.log("Error occured in zones popup handler" + err);
+   }
+
     var $zone_comparator = $popup.find('[name="in_zone_compare"]');
     var options = $zone_comparator.find('option');
 

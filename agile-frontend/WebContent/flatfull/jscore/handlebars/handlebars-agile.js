@@ -309,6 +309,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("emailbuilder.js");
 	}
+	if (templateName.indexOf("segmentation") == 0)
+	{
+		template_relative_urls.push("segmentation.js");
+	}
 	if (templateName.indexOf("ticket") == 0)
 	{
 		template_relative_urls.push("tickets.js");
@@ -328,6 +332,10 @@ function getTemplateUrls(templateName)
 	if(templateName.indexOf("formbuilder") == 0)
 	{
 		template_relative_urls.push("formbuilder.js")
+	}
+	if (templateName.indexOf("uservoice") == 0)
+	{
+		template_relative_urls.push("uservoice.js");
 	}
 	return template_relative_urls;
 }

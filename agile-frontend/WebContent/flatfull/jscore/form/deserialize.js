@@ -703,7 +703,7 @@ function deserializeLhsFilters(element, data)
 		var RHS_NEW_ELEMENT = $(currentElemnt).find('.' + CONDITION).find('#RHS_NEW').children();
 		if ($(RHS_ELEMENT).hasClass("date"))
 		{
-			RHS_VALUE = getLocalTimeFromGMTMilliseconds(RHS_VALUE);
+			RHS_VALUE = getLocalTimeFromGMTMillisecondsforDynamicFilters(RHS_VALUE);
 
 			$(RHS_ELEMENT).val(getDateInFormatFromEpoc(RHS_VALUE));
 			$(RHS_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_VALUE));
@@ -716,7 +716,7 @@ function deserializeLhsFilters(element, data)
 		{
 			if ($(RHS_NEW_ELEMENT).hasClass("date"))
 			{
-				RHS_NEW_VALUE = getLocalTimeFromGMTMilliseconds(RHS_NEW_VALUE);
+				RHS_NEW_VALUE = getLocalTimeFromGMTMillisecondsforDynamicFilters(RHS_NEW_VALUE);
 
 				$(RHS_NEW_ELEMENT).val(getDateInFormatFromEpoc(RHS_NEW_VALUE));
 				$(RHS_NEW_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_NEW_VALUE));
