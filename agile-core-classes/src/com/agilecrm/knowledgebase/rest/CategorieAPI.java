@@ -18,7 +18,7 @@ import com.agilecrm.knowledgebase.util.CategorieUtil;
  * @author Sasi
  * 
  */
-@Path("/api/helpcenter/categorie")
+@Path("/api/knowledgebase/categorie")
 public class CategorieAPI
 {
 	@GET

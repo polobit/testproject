@@ -46,16 +46,16 @@ pageEncoding="UTF-8"%>
 
 
 <%
-DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+  DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+  
+  // Download the template the user likes
+  String template = "default";
 
-// Download the template the user likes
-String template = "default";
+  boolean is_fluid = false;
 
-boolean is_fluid = false;
+  String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
-String _AGILE_VERSION = SystemProperty.applicationVersion.get();
-
-String _VERSION_ID = VersioningUtil.getVersion();
+  String _VERSION_ID = VersioningUtil.getVersion();
 %>
 
 <%
@@ -81,22 +81,8 @@ String _VERSION_ID = VersioningUtil.getVersion();
   }
 %>
 
-<!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
-<!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
-<!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
-
-<!--<link rel="stylesheet" type="text/css" href="flatfull/css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>-->
-
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
 <link rel="stylesheet" type="text/css" href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSION%>"></link>
-<style>
-.clickdesk_bubble {
-  display: none !important;
-}
-
-</style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -130,9 +116,7 @@ function isIE() {
 
 <div class="app-content" id="agilecrm-container" style="margin-left: 0px;">
 	<!-- <div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>-->
-	<div id="content" class="app-content-body">
-		
-	</div>
+	<div id="content" class="app-content-body"></div>
 </div>
 <div id="push"></div>
 
@@ -207,7 +191,6 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 
 head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
-        showVideoForRegisteredUser();
 });
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
@@ -276,59 +259,6 @@ function load_globalize()
   en = Globalize("en");
 
 }
-
-function showVideoForRegisteredUser(){
-    console.log("Ref = " + document.referrer);
-
-    if(!document.referrer || document.referrer.indexOf("register") == -1)
-         return;
-    var domainuser_video_cookie = CURRENT_DOMAIN_USER.domain+'_video_cookie';
-    if(!localStorage.getItem(domainuser_video_cookie))
-    {     
-       $("#dashboard_video").modal("show");
-       var $frame = $("#dashboard_video iframe");
-       $frame.attr("src", $frame.attr("data-source"));
-       
-    } 
-    
-    localStorage.setItem(domainuser_video_cookie,true);
-    
-}
-function closeVideo(){
-   $('#dashboard_video').on("click", ".close", function () {
-       $('#dashboard_video').modal("hide");
-        $('#dashboard_video iframe').removeAttr("src");
-    });
-}
 </script>
-
-
- <!--video on dashboard -->
- <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
-       <div class="modal-dialog" id="dashboard-video" >
-        <div class="modal-content">
-        <div class="modal-header">
-          <button class="close" onClick="closeVideo()">&times;</button>
-          <h3 id="myModalLabel">Welcome to Agile CRM</h3>
-          <small>Here is a short video which explains the steps to get started with Agile. We recommend you watch it.</small>
-        </div>      
-        <div class="modal-body">
-              <div class="embed-responsive embed-responsive-16by9">
-                      <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
-              </div> 
-
-              
-        </div>
-               
-        <div class="modal-footer">
-                 <a href="http://salescal.agilecrm.com/" target="_blank" class="btn btn-primary" id="schedule_demo" onclick="Agile_GA_Event_Tracker.track_event('Demo from Getting Started Video');">Schedule a Demo</a>
-        </div>                     
-                                 
-        </div>
-          
-        
-        </div>
-</div>
-
 </body>
 </html>

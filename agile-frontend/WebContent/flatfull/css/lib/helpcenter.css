@@ -78,8 +78,9 @@ body,input,button,select,textarea {
 	font-size: 20px;
 	line-height: 1.4em;
 	border-radius: 0 8px 8px 0 !important;
-	padding: 15px 50px;
+	padding: 19px 50px;
 	margin-left: -5px;
+	vertical-align: top;
 }
 
 /* /.Search box */

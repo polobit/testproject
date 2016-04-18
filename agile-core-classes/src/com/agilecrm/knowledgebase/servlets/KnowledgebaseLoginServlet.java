@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.Globals;
 import com.agilecrm.session.KnowledgebaseManager;
@@ -16,17 +17,11 @@ import com.agilecrm.session.KnowledgebaseUserInfo;
 import com.agilecrm.session.KnowledgebaseUserInfo.Role;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
-import com.agilecrm.util.RegisterUtil;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
@@ -66,6 +61,7 @@ public class KnowledgebaseLoginServlet extends HttpServlet
 	{
 		// Delete Login Session
 		request.getSession().removeAttribute(KnowledgebaseManager.AUTH_SESSION_COOKIE_NAME);
+		request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Check if this subdomain even exists or alias exist
 		if (DomainUserUtil.count() == 0)
@@ -96,54 +92,23 @@ public class KnowledgebaseLoginServlet extends HttpServlet
 					loginAgile(request, response);
 				}
 
-				// Updates account stats
-				updateEntityStats();
-
 				return;
 			}
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 
 			// Send to Login Page
-			request.getRequestDispatcher("login.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
+			request.getRequestDispatcher("/helpcenter/login.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
 					response);
 
 			return;
 		}
 
 		// Return to Login Page
-		request.getRequestDispatcher("login.jsp").forward(request, response);
+		request.getRequestDispatcher("/helpcenter/login.jsp").forward(request, response);
 
-	}
-
-	/**
-	 * When user wants to login using openid, Forwards them to openid for
-	 * authentication
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws Exception
-	 */
-	void loginOAuth(HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
-		// Get server type
-		String server = request.getParameter("server");
-
-		// Get OAuth URL
-		String url = RegisterUtil.getOauthURL(server);
-
-		if (url == null)
-			throw new Exception("OAuth Server not found for " + server + " - try again");
-
-		// Forward to OpenID Authenticaiton which will set the cookie and then
-		// forward it to /
-		if (server.equals("google"))
-			response.sendRedirect("/oauth?hd=" + server);
-		else
-			response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
-		return;
 	}
 
 	/**
@@ -267,14 +232,4 @@ public class KnowledgebaseLoginServlet extends HttpServlet
 		throw new Exception("multi-login");
 
 	}
-
-	private void updateEntityStats()
-	{
-		AccountLimitsRemainderDeferredTask stats = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
-
-		// Add to queue
-		Queue queue = QueueFactory.getQueue("account-stats-update-queue");
-		queue.addAsync(TaskOptions.Builder.withPayload(stats));
-	}
-
 }
