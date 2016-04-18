@@ -1129,5 +1129,30 @@
 		<servlet-name>OpportunitySchemaChange</servlet-name>
 		<url-pattern>/backend/cron/opportunity-schema-change</url-pattern>
 	</servlet-mapping>
-  
+  	
+  	<!-- HelpCenter -->
+	<servlet>
+		<servlet-name>HelpCenter</servlet-name>
+		<jsp-file>/helpcenter.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HelpCenter</servlet-name>
+		<url-pattern>/helpcenter</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Help Center Panel REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/knowledgebase</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Help Center Panel REST Service</servlet-name>
+		<url-pattern>/knowledgebase/*</url-pattern>
+	</servlet-mapping>
+	<!-- End of HelpCenter -->
 </web-app>
