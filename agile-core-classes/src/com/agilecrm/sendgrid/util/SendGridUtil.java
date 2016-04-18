@@ -74,6 +74,9 @@ public class SendGridUtil
 	    JSONObject credentials = getSendGridCredentials(firstSendGridDefferedTask.domain, emailSender.emailGateway);
 	    String apiUser = credentials.getString("api_user"), apiKey = credentials.getString("api_key");
 	    
+	    System.out.println("Domain is " + firstSendGridDefferedTask.domain + " EmailGateway " + emailSender.emailGateway + " apiUser " 
+	    		+ apiUser + " ApiKey " + apiKey);
+	    
 	    // Email fields lists
 	    JSONArray toArray = new JSONArray();
 	    JSONArray subjectArray = new JSONArray();
@@ -163,6 +166,8 @@ public class SendGridUtil
 			SendGridSubVars.HTML.getString(), SendGridSubVars.TEXT.getString(),
 			getSMTPJSON(tempArray.getJSONObject(i), firstSendGridDefferedTask).toString());
 
+			System.out.println("POST Data in SendGridUtil \n" + postData);
+		
 			try
 			{
 				String response = HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL,
@@ -175,6 +180,8 @@ public class SendGridUtil
 			}
 			catch(RetryException rex)
 			{
+				System.out.println("Creating SubUser..." + apiUser);
+				
 				// Create SubUser
 				SendGridUtil.createSendGridSubUser(StringUtils.remove(apiUser, SendGridSubUser.AGILE_SUB_USER_NAME_TOKEN));
 	        	
