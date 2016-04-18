@@ -131,41 +131,7 @@ function isIE() {
 <div class="app-content" id="agilecrm-container" style="margin-left: 0px;">
 	<!-- <div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>-->
 	<div id="content" class="app-content-body">
-		<!-- Search box -->
-	
-			<div class="search-box">
-                <h1>Have a question?</h1>
-                <h3>you have any question you can enter what you are looking for!</h3>
-				<form id="article_search_form" name="article_search_form" class="" method="get" action="">	
-					<div class="input-append">
-  						<input id="hc_query" name="hc_query" type="text" placeholder="Search">
-  						<input name="commit" type="submit" value="Search" class="btn btn-primary">
-					</div>
-				</form>	
-			</div>
-
-		<!-- /Search box -->
-		 <div class="container">
-			<div class="row">
-		       <div class="col-md-8" id="content_wrapper"">
 		
-				<!-- Categories  -->
-				<div class="row">
-					<div class="col-md-8">
-						<div class="category-header">
-							<a href="#category-add" class="btn btn-primary pull-right">Add Category</a>
-							<h2>Categories</h2>
-						</div>
-		                <div class="section-end"></div>
-					</div>
-				</div>
-		
-		       <div id="hc_categories" class="hc-categories"></div>
-				<!-- /Categories -->
-		
-				</div>
-			</div>
-		  </div>
 	</div>
 </div>
 <div id="push"></div>
@@ -247,7 +213,7 @@ head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, funct
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "helpcenter.js" + "?_=" + _AGILE_VERSION);	
 
 var en;
 
@@ -262,8 +228,7 @@ head.ready(function() {
 if(!HANDLEBARS_PRECOMPILATION){
     head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
     {
-        downloadTemplate("tpl.js");
-        downloadTemplate("contact-view.js");
+        downloadTemplate("helpcenter.js");
     });
 }
  
@@ -272,6 +237,7 @@ $('body').css('background-image', 'none');
 
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'helpcenter-all-min.js' + "?_=" + _AGILE_VERSION});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
