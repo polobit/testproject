@@ -105,6 +105,9 @@ public class LogUtil
 	for (LogDeferredTask logDeferredTask : tasks)
 	{
 	    String campaignName = null;
+	    String oldNamespace = NamespaceManager.get();
+	    try{	    
+	    NamespaceManager.set(logDeferredTask.domain);
 	    if (StringUtils.isEmpty(logDeferredTask.campaignId))
 	    {
 		continue;
@@ -125,6 +128,10 @@ public class LogUtil
 	    		logDeferredTask.logType };
 
 	    queryList.add(newLog);
+	    }
+	    finally{
+	    	NamespaceManager.set(oldNamespace);
+	    }
 	}
 	
 	if (queryList.size() > 0)
