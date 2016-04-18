@@ -1130,6 +1130,18 @@
 		<url-pattern>/backend/cron/opportunity-schema-change</url-pattern>
 	</servlet-mapping>
   	
+  	<!--  Helpcenter filter -->
+  	<filter>
+		<filter-name>HelpcenterFilter</filter-name>
+		<filter-class>com.agilecrm.filter.KnowledgebaseAuthFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>HelpcenterFilter</filter-name>
+		<url-pattern>/helpcenter/*</url-pattern>
+	</filter-mapping>
+  	<!-- Helpcenter filter -->
+  	
   	<!-- HelpCenter -->
 	<servlet>
 		<servlet-name>HelpCenter</servlet-name>

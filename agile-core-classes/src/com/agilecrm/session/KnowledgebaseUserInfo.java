@@ -40,35 +40,35 @@ public class KnowledgebaseUserInfo implements Serializable
 	{
 	}
 
-	public KnowledgebaseUserInfo(String claimedId, String email, String name)
+	public KnowledgebaseUserInfo(String claimedId, String email, String name, Role role)
 	{
 		this.claimedId = claimedId;
 		this.email = email;
 		this.name = name;
+		this.role = role;
 
 		// Lower case
 		if (this.email != null)
 			this.email.toLowerCase();
 
-		// Get Domain User for this email and store the id
-		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-		
-		if (domainUser != null)
-		{
-			setDomainId(domainUser.id);
-
-			try
-			{
-				UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
-				
-				BillingRestrictionUtil.setPlan(userInfo, domainUser.domain);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-
+//		// Get Domain User for this email and store the id
+//		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+//		
+//		if (domainUser != null)
+//		{
+//			setDomainId(domainUser.id);
+//
+//			try
+//			{
+//				UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
+//				
+//				BillingRestrictionUtil.setPlan(userInfo, domainUser.domain);
+//			}
+//			catch (Exception e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	// For Twilio IO

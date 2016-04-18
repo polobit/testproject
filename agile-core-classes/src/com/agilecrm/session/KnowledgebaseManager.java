@@ -54,6 +54,7 @@ public class KnowledgebaseManager
 	{
 		// Fetch UserInfo from the session attribute
 		KnowledgebaseUserInfo userInfo = (KnowledgebaseUserInfo) request.getSession().getAttribute(AUTH_SESSION_COOKIE_NAME);
+		
 		if (userInfo == null)
 			throw new ServletException("Request null");
 

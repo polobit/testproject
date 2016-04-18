@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.session.KnowledgebaseUserInfo.Role"%>
+<%@page import="com.agilecrm.session.KnowledgebaseUserInfo"%>
+<%@page import="com.agilecrm.session.KnowledgebaseManager"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
@@ -46,7 +49,20 @@ pageEncoding="UTF-8"%>
 
 
 <%
-  DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+  KnowledgebaseUserInfo kuserInfo = KnowledgebaseManager.get();
+  
+  //Get current user prefs
+  UserPrefs currentUserPrefs = null;
+  DomainUser domainUser = null;
+  ObjectMapper mapper = new ObjectMapper();
+  
+  if(kuserInfo != null){
+	  
+	  if(!(kuserInfo.role == Role.CUSTOMER)){
+		  currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
+	  	  domainUser =  DomainUserUtil.getCurrentDomainUser();
+	  }
+  }
   
   // Download the template the user likes
   String template = "default";
@@ -186,6 +202,12 @@ var LOCAL_SERVER = <%=debug%>;
 var IS_FLUID = <%=is_fluid %>
 
 var CLICKDESK_CODE_LOADED = false;
+
+//Get current user prefs json
+var CURRENT_USER_PREFS = <%=SafeHtmlUtil.sanitize(UserPrefsUtil.getMapperString(currentUserPrefs))%>;
+
+//Get current domain user json
+var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
 
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
