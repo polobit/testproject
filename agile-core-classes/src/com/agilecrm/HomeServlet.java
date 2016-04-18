@@ -303,6 +303,9 @@ public class HomeServlet extends HttpServlet
 	    	
 	    	doGet(request, response);
     	}
+    	catch(NumberFormatException e){
+    		request.getRequestDispatcher("fingerprintAuthentication.jsp?error=" + "Please enter valid verification code").forward(request, response);
+    	}
     	catch(Exception e){
     		e.printStackTrace();
     		System.out.println(ExceptionUtils.getFullStackTrace(e));
