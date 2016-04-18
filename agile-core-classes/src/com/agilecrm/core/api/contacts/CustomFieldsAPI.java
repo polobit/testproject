@@ -20,10 +20,16 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.deferred.UpdateContactsDeferredTask;
 import com.agilecrm.contact.exception.DuplicateCustomFieldException;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>CustomFieldsAPI</code> includes REST calls to interact with
@@ -440,4 +446,29 @@ public class CustomFieldsAPI
     		return null;
     	}
     }
+    /**
+     * Gets all custom fields order by position
+     * 
+     * @return List of custom fields
+     */
+    @Path("/syncappdata")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public String syncAppData(@QueryParam("domain") String domain){
+    	String domainName = NamespaceManager.get();
+    	System.out.println(domainName);
+    	System.out.println(domain);
+    	if( domainName != null  && domainName.equals(domain)){
+    		
+    			UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domain);
+    			// Add to queue
+    			Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
+    			queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
+    			return "success";
+    	
+    	}
+    	return "fail";
+    	
+    }
+    
 }

@@ -59,8 +59,18 @@ var account_stats_integrations = {
 				console.log("error");
 				console.log(response);
 			}
-		});
+			});
 
+	},
+
+	loadSyncTab : function(el) {
+	
+				getTemplate("sync-stats-new", {} , undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$(el).find('#sync-stats-new').html($(template_ui));	
+				}, $(el).find('#sync-stats-new'));				
+		
 	}
 };
 
@@ -80,4 +90,34 @@ $('#email-stats-listners a[href="#sms-stats-new"]').on('click', function(e) {
 	$(el).find('#sms-stats-new').html(LOADING_ON_CURSOR);
 	account_stats_integrations.loadSMSStats(el);
 });
+$('#email-stats-listners a[href="#sync-stats-new"]').on('click', function(e) {
+	e.preventDefault();
+	$(el).find('#sync-stats-new').html(LOADING_ON_CURSOR);
+	account_stats_integrations.loadSyncTab(el);
+});
+}
+function syncAppData(){
+	 if (confirm("Are you sure to Update?") == true) {
+	 	var domain = CURRENT_DOMAIN_USER.domain ; 
+	 	$.ajax({
+			url : 'core/api/custom-fields/syncappdata?domain='+domain,
+			type : 'GET',
+			success : function(data) {
+				console.log(data);
+				if(data == "success"){
+					alert("Done");
+				//	$('#sync-app-data').find('.sync-app-con').addClass("disabled");
+                  }
+                  else{
+                  	alert("Sorry you are not "+domain);
+                //  	$('#sync-app-data').find('.sync-app-con').addClass("disabled");
+
+                  }
+			},
+			error : function(response) {
+				console.log("error");
+				console.log(response);
+			}
+			});
+    }
 }
