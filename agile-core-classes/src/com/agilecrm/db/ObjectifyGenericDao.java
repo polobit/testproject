@@ -328,6 +328,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	return key;
     }
+    
+    /**
+     * Stores an entity in database
+     * 
+     * @param entity
+     * @return Key of the saved entity
+     */
+    public Key<T> put(T entity, boolean force)
+    {
+    	return ofy().put(entity);
+    }
+
 
     /**
      * Stores multiple entities of same type

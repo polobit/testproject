@@ -223,6 +223,35 @@ public class Workflow extends Cursor {
 			}
 		}
 	}
+	
+	/**
+	 * Saves the workflow object. But before saving, verifies for duplicate
+	 * names. If given name already exists, it throws exception. Same name
+	 * causes confusion while assigning campaign.
+	 */
+	public void save(boolean force) throws WebApplicationException {
+
+		// Verifies for duplicate workflow name before save
+		checkPreconditionsBeforeSave();
+
+		try {
+			dao.put(this, true);
+		} catch (ApiProxy.RequestTooLargeException e) {
+			try {
+				JSONObject obj = new JSONObject();
+				obj.put("title", "Campaign Alert");
+				obj.put("message", "TBD - too large exception");
+
+				throw new WebApplicationException(
+						Response.status(Status.BAD_REQUEST)
+								.entity("Unable to save the campaign as it exceeds the limit of 1MB. Please consider splitting into multiple campaigns using the 'Transfer' property.")
+								.build());
+			} catch (JSONException e1) {
+				System.out.println("Exception while saving a Workflow"
+						+ e.getMessage());
+			}
+		}
+	}
 
 	/**
 	 * Removes the workflow object.
