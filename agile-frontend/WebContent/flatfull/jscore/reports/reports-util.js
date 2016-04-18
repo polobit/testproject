@@ -720,6 +720,7 @@ getRepPerformanceLog : function(url) {
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
 				var reportsTab = _agile_get_prefs("reports_tab");
+				$('.sub-nav-tab',$('#reports-tab-container a[href="#'+reportsTab+'"]').parent()).show();
 				$('#reports-tab-container a[href="#'+reportsTab+'"]').parent().addClass('report-selected');
 				/*var reportsTab = _agile_get_prefs("reports_tab");
 				if(!reportsTab || reportsTab == null) {

@@ -147,19 +147,19 @@ function initializeReportsListeners(){
 			.on(
 					"click",'#reports-tab-container>div>ul>li',function(e){
 
-						 var collapse = $("i",'#reports-tab-container>div>ul>li>a');
-        				collapse.removeClass("fa-minus").addClass("fa-plus");
+						/* var collapse = $("i",'#reports-tab-container>div>ul>li>a');
+        				collapse.removeClass("fa-minus").addClass("fa-plus");*/
 						var flag=$(this).find('.sub-nav-tab').is(":visible");
 						if($('.reports_tab_content').is(":visible"))
 							$('.reports_tab_content').hide();
 						$('.sub-nav-tab').hide();
 						if(flag){
-							$("i", this).first().removeClass("fa-minus").addClass("fa-plus");
+							//$("i", this).first().removeClass("fa-minus").addClass("fa-plus");
 							$(this).find('.sub-nav-tab').hide();
 						}
 							
 						else{
-							$("i", this).first().removeClass("fa-plus").addClass("fa-minus");
+							//$("i", this).first().removeClass("fa-plus").addClass("fa-minus");
 							$(this).find('.sub-nav-tab').show();
 						}
 						//$('.reports_tab_content').show();

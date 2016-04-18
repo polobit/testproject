@@ -3714,7 +3714,7 @@ opacity: .3;
 }
 
 .reports_tab_content{
-	 //min-width: 420px;
+	 padding : 10px!important;
     left: 200px;
     top: 0px;
     position: absolute;
