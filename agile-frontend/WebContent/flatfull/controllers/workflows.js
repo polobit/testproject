@@ -60,7 +60,7 @@ var WorkflowsRouter = Backbone.Router
 
 
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
-					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
+					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 10, postRenderCallback : function(el)
 					{
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{

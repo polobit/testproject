@@ -722,7 +722,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			query.startCursor(Cursor.fromWebSafeString(cursor));
 		else {
 			page_index_for_cursor = Integer.parseInt(cursor.replace("agile_cursor_", "").split("-")[0]);
-			query.limit(max);
+			// query.limit(max);
 			query.offset(page_index_for_cursor * max);
 		}
 		
