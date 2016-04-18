@@ -67,6 +67,10 @@ function contactListener(el)
 				left=left-100;
 				var top=0;
             var that=$(this).parent();
+            if($(this).hasClass("contact-type-custom-field-td") || $(this).hasClass("company-type-custom-field-td") || $(this).hasClass("contact-type-image") || $(this).hasClass("company-type-image"))
+            {
+            	return;
+            }
              popoverEnter(that,left,top,true);
 
 		
@@ -460,7 +464,7 @@ function contact_list_starify(el,listView) {
     	var contact_model  =  App_Contacts.contact_popover;
     	
     	// If contact update is not allowed then start rating does not allow user to change it
-    	if(App_Contacts.contact_popover.get('owner') && !canEditContact(App_Contacts.contact_popover.get('owner').id))
+    	if(App_Contacts.contact_popover && App_Contacts.contact_popover.get('owner') && !canEditContact(App_Contacts.contact_popover.get('owner').id))
     	{
     			$('#star', el).raty({
     			 'readOnly': true,

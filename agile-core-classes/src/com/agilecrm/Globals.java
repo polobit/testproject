@@ -167,7 +167,8 @@ public class Globals
     public static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-118f8482-92c3-11e2-9b69-12313f022c90";
 
     // MANDRILL MAIL API
-    public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
+    //public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
+    public static final String MANDRIL_API_KEY_VALUE = "RSn1Y3FmVLr59WKZqlKDGQ";
     public static final String MANDRILL_TEST_API_KEY_VALUE = "MRiwkducZGEbXrLW1LC5oQ";
 
     // Mandrill API Key for FREE
@@ -214,7 +215,8 @@ public class Globals
 	//	public static final String PAYPAL_SECRET_ID = "EGyp6P-kmdaDsoNUK2F2nYs5-RifRg3nhPJkmzai-TRqpRmTpj3lm4NG6pw_B08IJSdpv5pfGfWQF1Bb";
 	public static final String GRAVATAR_SECURE_DEFAULT_IMAGE_URL = "https://clickdesk.agilecrm.com/flatfull/images/flatfull/user-default.jpg";
 	// Inbound email address suffix
-	public static final String INBOUND_EMAIL_SUFFIX = "@helptor.com";
+	public static final String INBOUND_EMAIL_SUFFIX_MAIN = "@helptor.com";
+	public static final String INBOUND_EMAIL_SUFFIX_SANDBOX = "@crm.io";
 	
 	// Gravatar image URL
 	public static final String GRAVATAR_SECURE_IMAGE_URL = "https://secure.gravatar.com/avatar/"; 

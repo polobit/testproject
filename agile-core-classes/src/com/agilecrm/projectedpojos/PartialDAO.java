@@ -39,6 +39,7 @@ public class PartialDAO<T extends ProjectionEntityParse> {
 			add("id");
 			add("properties");
 			add("domain");
+			add("calendar_url");
 			
 			/**Ticket related fields to ignore**/
 			add("ticket_notes_assinee");

@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -37,7 +38,7 @@ public class CallNotification extends HttpServlet
 	    res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: API Key is missing");
 	    return;
 	}
-	if (!APIKey.isPresent(apiKey))
+	if (!APIKeyUtil.isPresent(apiKey))
 	{
 	    res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Invalid API Key");
 	    return;

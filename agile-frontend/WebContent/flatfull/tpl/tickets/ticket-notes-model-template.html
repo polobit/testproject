@@ -13,7 +13,8 @@
 		 			_data-name="{{getInitials requester_name}}">
 		 	{{/ticket_contact_exists}}
 	    {{else}}
-	 		<img src="{{domain_user.pic}}" class="r-5x" alt="{{domain_user.name}}">
+	    	<img src="{{domain_user.pic}}" class="r-5x" alt="{{domain_user.name}}">
+	 		<!-- <img src="{{#if domain_user}} {{domain_user.pic}} {{else}} flatfull/images/flatfull/user-default.jpg{{/if}}" class="r-5x" alt="{{domain_user.name}}"> -->
 	 	{{/if_equals}}
 	</span>
 
@@ -49,7 +50,7 @@
 	   	{{/if_equals}}
 	  </span>
 
-	  <div class="block m-t-xxs word-break-full {{#if plain_text}}plain-text-comment{{/if}}">
+	  <div class="block m-t-xxs word-break-all {{#if plain_text}}plain-text-comment{{/if}}">
 
 	  {{#if plain_text}}
 
@@ -100,7 +101,7 @@
 
 	  </span>
 
-	  <div class="block p-sm m-t-xxs bg-lightyellow b-a-lightyellow word-break-full {{#if plain_text}}plain-text-comment{{/if}}">
+	  <div class="block p-sm m-t-xxs bg-lightyellow b-a-lightyellow word-break-all {{#if plain_text}}plain-text-comment{{/if}}">
 	  
 	  	{{#if plain_text}}
 

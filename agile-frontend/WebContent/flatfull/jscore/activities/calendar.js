@@ -1,3 +1,4 @@
+var popover_call;
 /**
  * 
  * Describes the given object is an array or not
@@ -370,17 +371,22 @@ function showCalendar(users)
 									return;
 								}
 								if(event.id!=undefined){
-								accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
+								popover_call=
+								$.ajax({ 
+									url : "/core/api/events/contacts-related?id="+event.id, 
+									dataType : 'json',
+									success : function(data){
 											console.log(data);
 											that.data("data_fetched",data);
 											event.contacts=data;
 												calendar_Popover(event,calendarView,that,popover_min_width,that_event,leftorright,pullupornot,popoverElement,reletedContacts,meeting_type)
-											
+									}		
 							});
 						}
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
+							popover_call.abort();
 							$(this).parent().find('.fc-overlayw').hide();
 							$(this).parent().find('.fc-overlayw').remove();
 							$(this).find(".ui-resizable-handle").hide();
@@ -781,6 +787,8 @@ function setUpStarRating(value){
 }
 
 function calendar_Popover(event,calendarView,that,popover_min_width,that_event,leftorright,pullupornot,popoverElement,reletedContacts,meeting_type){
+									$('.fc-overlayw').hide();
+								$('.fc-overlayw').remove();
 									if (calendarView == "month")
 									{
 										console.log("month");
