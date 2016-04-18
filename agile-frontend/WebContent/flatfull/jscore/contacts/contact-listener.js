@@ -266,7 +266,7 @@ $('.popover').on('click', '#company-minus-score', function(e){
 	    var that=$(this);
 	     var temp_model;
 	    // Convert string type to int
-	    var sub_score = parseInt($('#lead-score').text());
+	    var sub_score = parseInt($('#lead-score',$(this).parents('#score')).text());
 
 	    if (sub_score <= 0) {
             return
@@ -279,8 +279,8 @@ $('.popover').on('click', '#company-minus-score', function(e){
 		sub_score = sub_score - 1;
 		
 		// Changes score in UI
-		$('#lead-score').text(sub_score);
-		 $('#lead-score').attr('title',sub_score);
+		$('#lead-score',$(this).parents('#score')).text(sub_score);
+		 $('#lead-score',$(this).parents('#score')).attr('title',sub_score);
 		
        if(listView!=undefined) 
        	temp_model=Contact_collection.set('lead_score', sub_score);
