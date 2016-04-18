@@ -354,7 +354,7 @@ e.preventDefault();
 		var that=$(this);
 	    // Add Tags
 
-		var new_tags = get_new_tags('addTags');
+		var new_tags = get_new_tags('addTagsOnPopover');
 		if(new_tags)new_tags=new_tags.trim();
 		
 		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
