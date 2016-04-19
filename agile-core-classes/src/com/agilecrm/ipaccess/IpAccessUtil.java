@@ -2,6 +2,8 @@ package com.agilecrm.ipaccess;
 
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,7 @@ import com.itextpdf.text.log.SysoCounter;
 public class IpAccessUtil {
 
 	public static ObjectifyGenericDao<IpAccess> dao = new ObjectifyGenericDao<IpAccess>(IpAccess.class);
+	private static final String IP_PATTERN = "[a-zA-Z0-9\\-\\:\\%\\?\\&\\=_./#]*";
 
 	/**
 	 * 
@@ -70,25 +73,38 @@ public class IpAccessUtil {
 		// Checks the condition is userIp present in the list or not
 		Set<String> iplist = ipAccess.ipList;
 		for (String ip : iplist) {
-			
-		 	if (StringUtils.contains(ip, "*")) {
-		 		
-				if (StringUtils.equals(ip, "*"))
-				    return true;
-				else{
-					ip = ip.replace("*", "");
-					ip=ip.replace(".", "");
-					}
-		    }
-		 	System.out.println(userIp.trim());
-		 	System.out.println(ip.trim());
-		 	System.out.println(StringUtils.indexOf(userIp.trim(), ip.trim()));
-		    if (StringUtils.indexOf(userIp.trim(), ip.trim()) != -1)
-		    	return true;
-			
+			System.out.println("ip "+ip);
+			if(isValidIPWithRegex(ip, userIp))
+				  return true;
 		}
 		
 		return false;
 	}
+	
+	static boolean isValidIPWithRegex(String matcher, String ipToCheck){
+		System.out.println(StringUtils.isNotBlank(matcher));
+		System.out.println(StringUtils.isNotBlank(ipToCheck));
+		if(!StringUtils.isNotBlank(matcher) || !StringUtils.isNotBlank(ipToCheck))
+			  return false;
+		
+		matcher = matcher.trim();
+		ipToCheck = ipToCheck.trim();
+		
+		if (StringUtils.equals(ipToCheck, "*"))
+			   return true;
+		
+		if(StringUtils.indexOf(matcher, "*") == -1)
+			   return matcher.equals(ipToCheck);
+		
+		System.out.println("Check with regex");
+		String matcher_pattern = matcher.replace("*", IP_PATTERN);
+		
+	    Pattern pattern = Pattern.compile(matcher_pattern);
+	    Matcher matcherIns = pattern.matcher(ipToCheck);
+	    
+		return matcherIns.matches();
+		
+	}
+	
 	
 }

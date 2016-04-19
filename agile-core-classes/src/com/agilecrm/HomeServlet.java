@@ -290,9 +290,9 @@ public class HomeServlet extends HttpServlet
 	    	request.getSession().setAttribute(LoginServlet.SESSION_IPACCESS_VALID, true);
 	    	//Boolean sessionIP = (Boolean) request.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
 	    	// Add current ip to Ip List
-	    	Boolean ip_validation = (Boolean)request.getSession().getAttribute("ip_validation");
-	    	System.out.println("ip_validation "+ip_validation);
-	    	if(StringUtils.isNotBlank(ipValid) )
+	    	/*Boolean ip_validation = (Boolean)request.getSession().getAttribute("ip_validation");
+	    	System.out.println("ip_validation "+ip_validation);*/
+	    	if(StringUtils.isNotBlank(ipValid) || !((Boolean)request.getSession().getAttribute("ip_validation")))
 	    	{
 	    		IpAccess ipList =  IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
 	    		if(ipList != null && ipList.ipList != null){
