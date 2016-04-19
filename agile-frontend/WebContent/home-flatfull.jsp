@@ -686,6 +686,16 @@ var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(Cu
 // Get Contact Date Fields
 var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE")))%>;
 
+// Get Contact contact type custom fields
+var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "CONTACT")))%>;
+// Get Contact company type custom fields
+var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "COMPANY")))%>;
+
+// Get Company contact type custom fields
+var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "CONTACT")))%>;
+// Get Company company type custom fields
+var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "COMPANY")))%>;
+
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
 
