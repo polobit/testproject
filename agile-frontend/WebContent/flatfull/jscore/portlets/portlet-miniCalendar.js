@@ -675,7 +675,7 @@ function renderGoogleEvents(events,fc_event,el)
 			} 
 			else
 			{
-				var a=((fc_event.end-fc_event.start)/(60*60*24*1000));
+				var a=((fc_event.end-fc_event.startDate)/(60*60*24*1000));
 
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
@@ -817,7 +817,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 			} 
 			else
 			{
-				var a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24))
+				var a=Math.round((fc_event.end-fc_event.startDate)/(60*60*1000*24))
 
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
