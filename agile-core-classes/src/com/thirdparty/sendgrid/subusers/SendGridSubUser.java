@@ -92,6 +92,42 @@ public class SendGridSubUser extends SendGridLib
 		return webhookResponse;
 	}
 	
+	public String associateAgileWhiteLabel(SubUser subUser)
+	{
+		String DEFAULT_WHITELABEL_ID = "455116";
+		String url = "https://api.sendgrid.com/v3/whitelabel/domains/"+DEFAULT_WHITELABEL_ID+"/subuser";
+		
+		
+		HttpClientUtil.URLBuilder urlBuilder = new HttpClientUtil.URLBuilder(url);
+    	urlBuilder.setMethod("POST");
+    	
+    	Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Authorization", "Basic " + Base64Encoder.encode(super.username + ":" + super.password));
+    	headers.put("Content-Type", "application/json");
+    	urlBuilder.setHeaders(headers);
+    	
+    	String response = null;
+    	try
+		{
+    		JSONObject requestJSON = new JSONObject();
+			requestJSON.put("username", subUser.getName());
+    	
+			response = HttpClientUtil.accessURLUsingHttpClient(urlBuilder, new StringEntity(requestJSON.toString()));
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return response;
+		
+	}
+	
 	public HttpEntity buildBody(SubUser subUser) throws UnsupportedEncodingException
 	{
 		JSONObject json = new JSONObject();
