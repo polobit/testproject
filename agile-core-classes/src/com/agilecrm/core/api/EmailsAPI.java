@@ -260,7 +260,6 @@ public class EmailsAPI
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
 	String domain = NamespaceManager.get();
-	System.out.println("By default Email Getway : "+  emailGateway.email_api);
 	
 	//if Emil Gateway is SendGrid or Null
 	if(emailGateway==null || emailGateway.email_api.equals(EmailGateway.EMAIL_API.SEND_GRID))
