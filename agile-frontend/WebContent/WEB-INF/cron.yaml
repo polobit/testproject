@@ -18,36 +18,6 @@ cron:
   schedule: every friday 23:40 
   target: agile-normal-bulk
 
-- description: daily reports
-  url: /backend/cron/campaignReports?duration=DAILY
-  schedule: every day 23:40
-  target: agile-normal-bulk
-  
-- description: Monthly reports
-  url: /backend/cron/campaignReports?duration=MONTHLY
-  schedule: 1st friday of month 23:50
-  target: agile-normal-bulk
-  
-- description: Weekly reports
-  url: /backend/cron/campaignReports?duration=WEEKLY
-  schedule: every friday 23:50 
-  target: agile-normal-bulk
-  
-- description: daily activity reports
-  url: /backend/cron/activity-reports?duration=DAILY
-  schedule: every day 23:20
-  target: agile-normal-bulk
-  
-- description: Monthly activity reports
-  url: /backend/cron/activity-reports?duration=MONTHLY
-  schedule: 1 of month 00:00
-  target: agile-normal-bulk
-  
-- description: Weekly activity reports
-  url: /backend/cron/activity-reports?duration=WEEKLY
-  schedule: every friday 23:50
-  target: agile-normal-bulk
-
 - description: daily triggers
   url: /backend/cron/triggers?period=DAILY
   schedule: every day 01:00

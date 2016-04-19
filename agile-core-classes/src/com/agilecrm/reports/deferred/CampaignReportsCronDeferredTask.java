@@ -84,18 +84,21 @@ public class CampaignReportsCronDeferredTask implements DeferredTask
     // reports and sends report
     for (Reports report : reports)
     {
-	Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
+    if(report.report_type == Reports.ReportType.Campaign)
+	    {
+    	Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
 	        report.activity_weekday, report.activity_day, report.report_timezone, duration);
-	try
-	{
-	    CampaignReportDeferredTaskCreation.createCampaignDeferredTask(domain, report.id, time,
-		    report.report_timezone);
-	}
-	catch (IOException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+    	try
+    	{
+    		CampaignReportDeferredTaskCreation.createCampaignDeferredTask(domain, report.id, time,
+    				report.report_timezone);
+    	}
+    	catch (IOException e)
+    	{
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
+	    }
     }
 	}
     	finally

@@ -76,6 +76,8 @@ public class ReportsDeferredTask implements DeferredTask
 	    // reports and sends report
 	    for (Reports report : reports)
 	    {
+	    if(report.report_type != Reports.ReportType.Campaign)
+	    {
 		Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
 		        report.activity_weekday, report.activity_day, report.report_timezone, duration);
 		try
@@ -88,6 +90,7 @@ public class ReportsDeferredTask implements DeferredTask
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
+	    }
 	    }
 	}
 	finally

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.agilecrm.reports.deferred.ActivityReportsDeferredTask;
+import com.agilecrm.reports.deferred.CampaignReportsCronDeferredTask;
 import com.agilecrm.reports.deferred.ReportsDeferredTask;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -44,14 +46,26 @@ public class ReportServlet extends HttpServlet
 	Set<String> domains = NamespaceUtil.getAllNamespaces();
 
 	for (String namespace : domains)
-	{
-	    // Created a deferred task for report generation
+		{
+	    // Created a deferred task for contact report generation
 	    ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(namespace, duration);
 
 	    // Add to queue
 	    Queue queue = QueueFactory.getQueue("reports-queue");
 	    queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
-	}
+	    
+	    // Created a deferred task for campaign report generation
+	 	CampaignReportsCronDeferredTask campaignReportsDeferredTask = new CampaignReportsCronDeferredTask(namespace, duration);
+
+	 	// Add to queue
+	 	queue.add(TaskOptions.Builder.withPayload(campaignReportsDeferredTask));
+	 	
+	 	// Created a deferred task for activity report generation
+	    ActivityReportsDeferredTask activityReportsDeferredTask = new ActivityReportsDeferredTask(namespace, duration);
+
+	    // Add to queue
+	    queue.add(TaskOptions.Builder.withPayload(activityReportsDeferredTask));
+		}
     }
 
 }
