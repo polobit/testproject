@@ -1,6 +1,5 @@
 package com.agilecrm.user.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -16,25 +15,19 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
-import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
-import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.cache.CachingDatastoreServiceFactory;
 
 /**
  * <code>DomainUserUtil</code> is utility class used to process data of
@@ -805,4 +798,22 @@ public class DomainUserUtil
 	}
     }
 
+	public static boolean checkValidNumber(String to)
+	{
+
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+		try
+		{
+			PhoneNumber toPhoneNumber = phoneUtil.parse(to, null);
+			if (phoneUtil.isValidNumber(toPhoneNumber))
+				return true;
+		}
+		catch (NumberParseException e)
+		{
+			System.out.println("Inside domain user phone validation");
+			System.err.println("NumberParseException was thrown: " + e.toString());
+		}
+		return false;
+	}
+	
 }
