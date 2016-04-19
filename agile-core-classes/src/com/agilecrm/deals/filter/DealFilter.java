@@ -201,48 +201,5 @@ public class DealFilter {
 	    // Saves domain user key
 	    if (filter_owner_id != null)
 	    	owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(filter_owner_id));
-	    if(close_date_value != null ){
-	    	int value = (int) (close_date_value-1);
-	    	if((close_date_filter).equalsIgnoreCase("last")){
-	    		//today
-	 		   	Calendar date = new GregorianCalendar();
-	 		   // reset hour, minutes, seconds and millis
-	 		   date.add(Calendar.DAY_OF_MONTH, -value);
-	 		   date.set(Calendar.HOUR_OF_DAY, 0);
-	 		   date.set(Calendar.MINUTE, 0);
-	 		   date.set(Calendar.SECOND, 0);
-	 		   date.set(Calendar.MILLISECOND, 0);
-	 		   close_date_start = date.getTimeInMillis()  / 1000;
-	 		   
-	 		 	Calendar date1 = new GregorianCalendar();
-		 		   // reset hour, minutes, seconds and millis
-	 		 	date1.set(Calendar.HOUR_OF_DAY, 23);
-	 		 	date1.set(Calendar.MINUTE, 59);
-	 		 	date1.set(Calendar.SECOND, 59);
-	 		 	date1.set(Calendar.MILLISECOND, 59);
-	 		 	close_date_end = date1.getTimeInMillis()  / 1000;
-	 		  
-	    	  }
-	    	else if((close_date_filter).equalsIgnoreCase("next")){
-	    		//today
-	 		   	Calendar date = new GregorianCalendar();
-	 		   // reset hour, minutes, seconds and millis
-	 		   date.set(Calendar.HOUR_OF_DAY, 0);
-	 		   date.set(Calendar.MINUTE, 0);
-	 		   date.set(Calendar.SECOND, 0);
-	 		   date.set(Calendar.MILLISECOND, 0);
-	 		   close_date_start = date.getTimeInMillis()  / 1000;
-	 		   
-	 		 	Calendar date1 = new GregorianCalendar();
-		 		   // reset hour, minutes, seconds and millis
-	 		 	date1.add(Calendar.DAY_OF_MONTH, value);
-	 		 	date1.set(Calendar.HOUR_OF_DAY, 23);
-	 		 	date1.set(Calendar.MINUTE, 59);
-	 		 	date1.set(Calendar.SECOND, 59);
-	 		 	date1.set(Calendar.MILLISECOND, 59);
-	 		 	close_date_end = date1.getTimeInMillis()  / 1000;
-	 		  
-	    	  }
-	     }
     }
 }

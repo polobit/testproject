@@ -1199,12 +1199,15 @@ public class OpportunityUtil
 			    if (checkJsonString(filterJson, fieldName + "_start"))
 			    {
 				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_start"));
-				 query.addFilter(fieldName,FilterOperator.GREATER_THAN,closeDate );
+				if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("next"))
+					query.addFilter(fieldName,FilterOperator.GREATER_THAN,closeDate );
+				else
+					query.addFilter(fieldName,FilterOperator.GREATER_THAN_OR_EQUAL,closeDate );
 			    }
 			    if (checkJsonString(filterJson, fieldName + "_end"))
 			    {
 				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_end"));
-				 query.addFilter(fieldName,FilterOperator.LESS_THAN,closeDate );
+				 query.addFilter(fieldName,FilterOperator.LESS_THAN_OR_EQUAL,closeDate );
 			    }
 			}
 			}
@@ -1360,17 +1363,18 @@ public class OpportunityUtil
 			    if (checkJsonString(json, fieldName + "_start"))
 			    {
 				long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-				searchMap.put("close_date	 >= ", closeDate);
+				if( json.getString(fieldName + "_filter").equalsIgnoreCase("next"))
+					searchMap.put("close_date	 > ", closeDate);
+				else
+					searchMap.put("close_date	 >= ", closeDate);
 			    }
 			    if (checkJsonString(json, fieldName + "_end"))
 			    {
 				long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
-				searchMap.put("close_date < ", closeDate);
+				searchMap.put("close_date <= ", closeDate);
 			    }
 			}
 		}
-		
-		
 	   }
 	}
 	catch (NumberFormatException e)

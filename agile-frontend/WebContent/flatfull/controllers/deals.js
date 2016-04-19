@@ -187,6 +187,21 @@ var DealsRouter = Backbone.Router.extend({
 		$('#content').html("<div id='opportunity-listners'></div>");
 		var deals_filter = new Base_Model_View({ url : '/core/api/deal/filters', template : "filter-deals", isNew : "true", window : "deal-filters",
 			prePersist : function(model){
+				var condition = model.attributes.close_date_filter ; 
+				if(condition == "LAST" || condition == "NEXT"){
+					var condays = model.attributes.close_date_value ;
+					var date = new Date();
+					var eDateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+					if(condition == "LAST"){
+						model.attributes.close_date_end = eDateStart.getTime() / 1000 ;
+						model.attributes.close_date_start =(eDateStart.getTime() - (condays*24 * 60 * 60 * 1000)) / 1000 ;
+
+					}
+					else if(condition == "NEXT"){
+						model.attributes.close_date_start = eDateStart.getTime() / 1000 ;
+						model.attributes.close_date_end = (eDateStart.getTime() + (condays*24 * 60 * 60 * 1000)) / 1000 ;
+					}
+				} 
 				model.set({ 
 						//	'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
 						//	'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
@@ -278,6 +293,21 @@ var DealsRouter = Backbone.Router.extend({
 		var deal_filter_json = deal_filter.toJSON();
 		var dealFilter = new Base_Model_View({ url : 'core/api/deal/filters', model : deal_filter, template : "filter-deals",
 			window : 'deal-filters', prePersist : function(model){
+				var condition = model.attributes.close_date_filter ; 
+				if(condition == "LAST" || condition == "NEXT"){
+					var condays = model.attributes.close_date_value ;
+					var date = new Date();
+					var eDateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+					if(condition == "LAST"){
+						model.attributes.close_date_end = eDateStart.getTime() / 1000 ;
+						model.attributes.close_date_start =(eDateStart.getTime() + (condays*24 * 60 * 60 * 1000)) / 1000 ;
+
+					}
+					else if(condition == "NEXT"){
+						model.attributes.close_date_start = eDateStart.getTime() / 1000 ;
+						model.attributes.close_date_end = (eDateStart.getTime() - (condays*24 * 60 * 60 * 1000)) / 1000 ;
+					}
+				} 
 				model.set({ 
 							'pipeline_id' : $('#filter_pipeline', $("#dealsFilterForm")).val(), 
 							'milestone' : $('#milestone', $("#dealsFilterForm")).val(),
