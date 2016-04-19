@@ -224,5 +224,9 @@ public class AppengineSearch<T>
     {
 	return query.advancedSearchCount(rules);
     }
-
+    
+    public void addAsync(T entity)
+    {
+	builder.addAsync(entity);
+    }
 }

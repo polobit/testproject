@@ -103,4 +103,11 @@ public class CaseDocument extends com.agilecrm.search.document.Document implemen
 
     }
 
+	@Override
+	public void addAsync(Object entity)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }
