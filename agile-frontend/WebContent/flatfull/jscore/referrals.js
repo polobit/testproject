@@ -7,19 +7,23 @@ $(function() {
 		switch(data){
 			case "write_blog":
 				$("#referModal").find(".modal-body").html(getTemplate('refer-blog', {}));
+				Agile_GA_Event_Tracker.track_event("Write a blog (Ref)");
 				return;
 			case "refer_friends":
 				$("#referModal").modal("hide");
+				Agile_GA_Event_Tracker.track_event("Refer Friends (Ref)");
 				window.location = "#refer-friends";
 				return;
 			case "share_on_fb":
 				if($.inArray("facebook_share", REFER_DATA.usedReferTypes) != -1)
 					return;
+				Agile_GA_Event_Tracker.track_event("Share on Facebook (Ref)");
 				shareOnFacebook();
 				return;
 			case "follow_on_twitter":
 				if($.inArray("twitter_follow", REFER_DATA.usedReferTypes) != -1)
 					return;
+				Agile_GA_Event_Tracker.track_event("Follow on Twitter (Ref)");
 				var newwindow = window.open('cd_twitter.jsp?referral_type=follow','twitter','height=700,width=700,location=1');
 				if (window.focus)
 				{
@@ -29,6 +33,7 @@ $(function() {
 			case "tweet_about_us":
 				if($.inArray("twitter_tweet", REFER_DATA.usedReferTypes) != -1)
 					return;
+				Agile_GA_Event_Tracker.track_event("Tweet about us (Ref)");
 				$("#referModal").find(".modal-body").html(getTemplate('refer-tweet', {}));
 				return;
 			default:
@@ -51,7 +56,6 @@ $(function() {
 		
 		var json = serializeForm("blogmailForm");
 
-		json.from = REFER_DATA.email;
 		var $that = $(this)
 		// Replace \r\n with <br> tags as email is sent as text/html
 		json.body = json.body.replace(/\r\n/g,"<br/>");
@@ -224,11 +228,11 @@ function trackReferrals(type){
 function sendReferralTrackMail(type, callback)
 {
 	var json = {};
-	json.from=REFER_DATA.email;
+	json.from=CURRENT_DOMAIN_USER.email;
 	json.to = "narmada@agilecrm.com";
 	json.cc = "venkat@agilecrm.com";
 	json.bcc = "mogulla@agilecrm.com";
 	json.subject = "Referrals feature used";	
-	json.body = "Username: "+REFER_DATA.email+"<br>Domain: "+REFER_DATA.domain+"<br>Type: "+type;
+	json.body = "Username: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain+"<br>Type: "+type;
 	sendEmail(json);
 }

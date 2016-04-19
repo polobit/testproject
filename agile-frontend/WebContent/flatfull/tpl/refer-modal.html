@@ -101,7 +101,10 @@
 	<div class="">
 		<p>Please enter the URL to your blog post about Agile CRM here. Once validated, the email quota will be automatically updated in your account.</p>
   		<form id="blogmailForm" class="form-horizontal">
-  		<input type="hidden" name="to" value="mogulla@agilecrm.com">
+  		<input type="hidden" name="from" value="{{get_current_domain_email}}">
+  		<input type="hidden" name="to" value="narmada@agilecrm.com">
+  		<input type="hidden" name="cc" value="venkat@agilecrm.com">
+  		<input type="hidden" name="bcc" value="mogulla@agilecrm.com">
   		<input type="hidden" name="subject" value="Blog post Request for adding emails">
 			<div class="form-group">
 				<label class="col-sm-1 control-label">URL<span class="field_req">*</span></label>

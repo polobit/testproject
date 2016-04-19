@@ -1226,6 +1226,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 	refer : function()
 	{
+		Agile_GA_Event_Tracker.track_event("Refer");
 		load_facebook_lib_for_referrals();
 		$.ajax({
 			url : 'core/api/refer',
