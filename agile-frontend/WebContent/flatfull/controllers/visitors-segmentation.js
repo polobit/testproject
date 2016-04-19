@@ -6,8 +6,7 @@ var VisitorsSegmentationRouter = Backbone.Router
         routes: {
 
             /* Webstats */
-            "segments": "visitorssegmentation"
-
+            "segments": "visitorssegmentation"         
         },
 
         visitorssegmentation: function(time_range, is_lhs_filter,view_data)
@@ -27,7 +26,10 @@ var VisitorsSegmentationRouter = Backbone.Router
 
             // Default url for contacts route
             var url = 'core/api/web-stats/filter/dynamic-filter';
-
+            if (filter_id=_agile_get_prefs("visitor_filter"))
+            {           
+            url = "core/api/web-stats/query/list/" + filter_id;
+            }
             
             if (_agile_get_prefs('dynamic_visitors_filter')) {
 
@@ -105,6 +107,10 @@ var VisitorsSegmentationRouter = Backbone.Router
 
                                 }
 
+                                if(url.includes('query/list')){
+                                    setupSegmentFilterList(el,url.substr(30))
+                                }else
+                                 setupSegmentFilterList(el);
                             }
                         });
 
@@ -130,7 +136,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                     });
 
         }
-
+   
     });
 
 

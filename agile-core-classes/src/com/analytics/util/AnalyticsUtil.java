@@ -281,22 +281,28 @@ public class AnalyticsUtil
 	    String postDataBytes = postData.toString();
 	    
 	    String mergedStats = HTTPUtil.accessURLUsingPost(statsServerUrl, postDataBytes);
-	    JSONArray contactEmailsJsonArray = new JSONArray(mergedStats);
 	    List<String> emails = new ArrayList<String>();
-	    for (int i = 0; i < contactEmailsJsonArray.length() - 1; i++)
+	    if (StringUtils.isNotBlank(mergedStats))
 	    {
-		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
-		emails.add(contactEmail.get("email").toString());
-	    }
-	    try
-	    {
-		JSONObject emailCountObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length() - 1);
-		String emailCountString = emailCountObject.get("total_rows_count").toString();
-		emails.add(emailCountString);
-	    }
-	    catch (Exception e)
-	    {
-		System.out.println("exception occured while fetching segmented email count " + e.getMessage());
+        	  JSONArray contactEmailsJsonArray = new JSONArray(mergedStats);
+        	  if (contactEmailsJsonArray.length() > 0)
+        	  {
+                	    for (int i = 0; i < contactEmailsJsonArray.length() - 1; i++)
+                	    {
+                		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
+                		emails.add(contactEmail.get("email").toString());
+                	    }
+                	    try
+                	    {
+                		JSONObject emailCountObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length() - 1);
+                		String emailCountString = emailCountObject.get("total_rows_count").toString();
+                		emails.add(emailCountString);
+                	    }
+                	    catch (Exception e)
+                	    {
+                		System.out.println("exception occured while fetching segmented email count " + e.getMessage());
+                	    }
+        	   }
 	    }
 	    return emails;
 	}

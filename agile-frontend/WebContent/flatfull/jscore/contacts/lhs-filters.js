@@ -190,7 +190,7 @@ function submitLhsFilter()
 		COMPANIES_HARD_RELOAD=true;
 		App_Companies.companies(undefined, undefined, undefined, true);
 	} else if(contact_type == 'VISITOR') {
-
+		_agile_delete_prefs('visitor_filter');
 		_agile_delete_prefs('dynamic_visitors_filter');
 		if (formData != null && formData.rules.length > 0)
 			_agile_set_prefs('dynamic_visitors_filter', JSON.stringify(formData));
@@ -287,6 +287,7 @@ $('#' + container_id).on('click', '#clear-lhs-segmentation-filters', function(e)
 	e.preventDefault();
 	_agile_delete_prefs('dynamic_visitors_filter');
 	_agile_delete_prefs('duration');
+	_agile_delete_prefs('visitor_filter');
 	VISITORS_HARD_RELOAD=true;
 	 App_VisitorsSegmentation.visitorssegmentation();
 });
@@ -670,6 +671,44 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
     				}
     				App_Contacts.contacts();
     	   });
+
+    $('#' + container_id).on('click', '#save-segment-filter', function(e)
+            {
+                e.preventDefault();
+                var segmentView = new Base_Model_View({
+                template : "segment-save-filter-modal",
+                url : '/core/api/web-stats/filters',
+                postRenderCallback: function(
+                                el, collection) {
+                    togglePopUpFields("segmentsModal");
+                    changeFilterName("segmentsModal");             
+
+                 },
+
+                saveCallback: function(model){
+
+                    $('#segmentsModal').modal('hide');
+                    App_VisitorsSegmentation.visitorssegmentation();            
+                    $('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
+                },
+                prePersist : function(model)
+                {
+                    var json = {};
+                    /*json=JSON.parse(_agile_get_prefs("dynamic_visitors_filter"));*/
+                    json.segmentConditions=_agile_get_prefs("dynamic_visitors_filter").toString();
+                    var formJSON = model.toJSON();
+
+                    if(formJSON['save-type'] == 'replace')
+                        json.id = $('[name="filter-collection"]').val();
+
+                    model.set(json, { silent : true });
+                }                       
+                            
+            });         
+
+            $('#segmentsModal').html(segmentView.render().el).modal('show');
+            
+        });
 
 }
 /**

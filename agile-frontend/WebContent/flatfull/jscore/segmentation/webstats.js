@@ -122,3 +122,98 @@ function deserializeRhsFilters(data) {
         start.toString('MMMM d, yyyy') + " - " + end.toString('MMMM d, yyyy'));
     
 }
+function  togglePopUpFields(modal){
+
+    $('#'+ modal).off("click", ".new-segment");
+    $('#'+ modal).on('click', '.new-segment', function(e)
+        {
+            e.preventDefault();
+            $("div.update-segment-name").toggle();
+            $("div.choose-segment-filter").toggle();
+            $('#save-new-type').prop('checked', true);
+        }); 
+    $('#'+ modal).off("click", ".replace-segment");
+     $('#'+ modal).on('click', '.replace-segment', function(e)
+        {   
+            e.preventDefault();
+            $("div.update-segment-name").toggle();
+            $("div.choose-segment-filter").toggle();
+            $('#save-replace-type').prop('checked', true);
+        });     
+   
+}
+function  changeFilterName(modal){
+
+    
+    $('#'+ modal).on('change', '#saveSegmentFilterForm .choose-segment-filter select', function(e)
+    {
+        e.preventDefault();
+        var selectedFilterName = $('[name="filter-collection"] option:selected').text()
+
+        $('input[name="name"]', $('form#saveSegmentFilterForm')).val(selectedFilterName);
+    });
+}
+
+function  addEventFilter(filter_id){
+    $('#' + filter_id).off('click', '.visitor-filter' );
+    $('#' + filter_id).on('click', '.visitor-filter' ,function(e)
+    {
+
+        e.preventDefault();
+        var targetEl = $(e.currentTarget);
+
+        _agile_delete_prefs('dynamic_visitors_filter');
+
+        var filter_id = $(targetEl).attr('id');
+        
+        // Saves Filter in cookie
+        _agile_set_prefs('visitor_filter', filter_id);
+
+        VISITORS_HARD_RELOAD=true;
+        App_VisitorsSegmentation.visitorssegmentation();
+        return;
+       
+    });    
+ 
+}
+var segmentFilterList
+function setupSegmentFilterList(cel,id)
+{
+    var filter_name;
+        segmentFilterList = new Base_Collection_View(
+            {
+                url : '/core/api/web-stats/filters',
+                sort_collection : false,
+                restKey : "SegmentFilter",
+                templateKey : "segment-filter-list",
+                individual_tag_name : 'li',
+                no_transition_bar : true,
+                postRenderCallback : function(el, collection)
+                {
+                    for(var i=0;i<collection.models.length;i++){
+                    filter_name=collection.models[i].attributes.name;
+                     el.find('.filter-dropdown').append(Handlebars.compile('{{name}}')({name : filter_name}));
+                    }   
+
+                    addEventFilter("filters-tour-step"); 
+                    if(id){
+                        var filter_name=collection.get(id).attributes.name;
+
+                        if($("#filters-tour-step").find("#segment-filter").text()!=filter_name){                        
+                            deserializeLhsFilters($('#lhs-contact-filter-form'), collection.get(id).attributes.segmentConditions);      
+                            var addFilterName='<span class="segment-filter-name">'+filter_name +'</span>';
+                            $('#filters-tour-step').find('#segment-filter').append(addFilterName);
+                        }
+                    } 
+                    else
+                       $('#filters-tour-step').find('#segment-filter').find('.segment-filter-name').remove();
+                } });
+
+            // Fetchs filters
+            segmentFilterList.collection.fetch();
+        
+            // Shows in contacts list
+            $('#filter-list', cel).html(segmentFilterList.render().el);
+
+}                
+   

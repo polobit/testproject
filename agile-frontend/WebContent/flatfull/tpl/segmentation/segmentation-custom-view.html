@@ -1,3 +1,4 @@
+
 <script id="segmentation-custom-view-collection-template" type="text/html">
 {{#is_mobile}}
 <!-- Newly Added -->
@@ -39,25 +40,22 @@
    <div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
       <div class="btn-toolbar m-l-none pos-rlt">
          <div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
-            <div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);">Contacts
-               <span 
-                     style="position: absolute;left: 69px;" > <img
-                     border="0" src="{{getS3ImagePath '/img/help.png'}}"
-                     style="height: 6px; position: absolute; top: 4px;" rel="popover"
-                     data-placement="right"
-                     data-title:" data-content=" Slice and Dice your Contacts on their web visits"
-                     id="element" data-trigger="hover" />
+         <div class="">
+            <h3 class="inline-block m-n text-black font-thin">Visitors
+               <span style=" color: grey; position: absolute;left: 69px;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px; position: absolute; top: 4px; left:2px" rel="popover" data-placement="right" data-title:" data-content=" Slice and Dice your Contacts on their web visits" id="element" data-trigger="hover"">
                </span>
-               <span id="visitors-count" class="m-l-xs">{{contacts_count}}</span>
-               <a id="segmentation-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-               <i id="icon-filter" class="fa fa-bars icon-white"></i>
+               <span id="visitors-count" class="m-l-xs">{{contacts_count}}</span>               
+               <a id="segmentation-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+                     <i id="icon-filter" class="fa fa-bars icon-white"></i>
                </a>
-               <small><span class="label label-sm bg-danger m-l-xs" style="position: relative;
+            </h3>            
+            <small><span class="label label-sm bg-danger m-l-xs" style="position: relative;
                   top: -3px;">Beta</span>
-               </small>
-            </div>
+            </small>   
+         </div>
          </div>
          <div class="pull-right">
+            <div class="btn-group pull-left m-r-xs" id="filter-list"></div>
             <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
                <span class="inline-block" style="padding: 3px 10px;">
                <i class="icon-calendar icon-large m-r-xs"></i>
@@ -231,7 +229,20 @@
       {{setupRating star_value}}
    </ul>
    {{/if}}
-</td>
+</td>  
   
-  
+</script>
+
+<script id="segment-filter-list-collection-template" type="text/html">
+<div class="btn-group"  id="filters-tour-step">
+   <button class="btn btn-default btn-sm "><i class="icon-filter" id="segment-filter" style="margin-right:3px"></i></button>
+   <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+   <span class="caret"></span>
+   </button>
+   <ul id = "segment-filter-list-model-list" class="pull-right dropdown-menu">
+   </ul>
+</div>
+</script>
+<script id="segment-filter-list-model-template" type="text/html">
+<a id='{{id}}' class="visitor-filter" data={{name}}  href="#segment-filter/{{id}}">{{name}}</a>
 </script>
