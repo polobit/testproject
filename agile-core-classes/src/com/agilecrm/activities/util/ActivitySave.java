@@ -1259,7 +1259,7 @@ public class ActivitySave
     			activity.custom1 = domainuser.name ;
     			activity.custom2 = old_user.name ;
     			activity.custom3 = (String) domainuser.getInfo("Ip_Address");
-    			activity.custom4 = String.valueOf(domainuser.is_admin);
+    			activity.custom4 = String.valueOf(domainuser.is_account_owner);
     			activity.save();
     			activity.id =null;
     		}
@@ -1268,7 +1268,7 @@ public class ActivitySave
     			activity.activity_type = activity.activity_type.User_Disabled ;
     			activity.custom1 = domainuser.name ;
     			activity.custom2 = domainuser.name ;
-    			activity.custom4 = String.valueOf(domainuser.is_admin);
+    			activity.custom4 = String.valueOf(domainuser.is_disabled);
     			activity.custom3 = (String) domainuser.getInfo("Ip_Address");
     			activity.save();
     			activity.id =null;
