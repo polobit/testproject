@@ -3537,6 +3537,14 @@ text-align:left;
     padding-top: 15px;
     padding-bottom: 15px;
 }
+#referModal ul li:hover {
+	background-color: #f8f8f8;
+}
+#referModal .refer-checked{
+	color: #27c24c;
+	top: 10px;
+	right: -25px;
+}
 .c-na{
 	cursor: not-allowed;
 }

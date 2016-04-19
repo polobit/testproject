@@ -34,7 +34,10 @@ public class Referer
     
     @NotSaved(IfDefault.class)
 	public Set<Referer.ReferTypes> usedReferTypes= new HashSet<Referer.ReferTypes>();
-
+    
+    @NotSaved(IfDefault.class)
+	public Set<String> referedDomains = new HashSet<String>();
+    
     public Referer()
     {
 

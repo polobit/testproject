@@ -13,9 +13,13 @@ $(function() {
 				window.location = "#refer-friends";
 				return;
 			case "share_on_fb":
+				if($.inArray("facebook_share", REFER_DATA.usedReferTypes) != -1)
+					return;
 				shareOnFacebook();
 				return;
 			case "follow_on_twitter":
+				if($.inArray("twitter_follow", REFER_DATA.usedReferTypes) != -1)
+					return;
 				var newwindow = window.open('cd_twitter.jsp?referral_type=follow','twitter','height=700,width=700,location=1');
 				if (window.focus)
 				{
@@ -23,6 +27,8 @@ $(function() {
 				}
 				return;
 			case "tweet_about_us":
+				if($.inArray("twitter_tweet", REFER_DATA.usedReferTypes) != -1)
+					return;
 				$("#referModal").find(".modal-body").html(getTemplate('refer-tweet', {}));
 				return;
 			default:
@@ -45,7 +51,7 @@ $(function() {
 		
 		var json = serializeForm("blogmailForm");
 
-		json.from = CURRENT_DOMAIN_USER.email;
+		json.from = REFER_DATA.email;
 		var $that = $(this)
 		// Replace \r\n with <br> tags as email is sent as text/html
 		json.body = json.body.replace(/\r\n/g,"<br/>");
@@ -85,7 +91,7 @@ $(function() {
 
 	$("#referModal").on('click', '#go_to_referrals', function(e){
 		e.preventDefault();
-		$("#referModal").find(".modal-body").html(getTemplate('refer-modal-body', {}));
+		$("#referModal").find(".modal-body").html(getTemplate('refer-modal-body', REFER_DATA));
 	});
 });
 
@@ -140,22 +146,21 @@ function openFacebookModal() {
 			return;
 		}
 
-		toggle_show_with_coupon_container();
 		
 		// Send success info to server to send email
 		trackReferrals("facebook");
 		alert("Success");
-		addEmails(750);
+		addRefeferCredits("facebook");
 	});
 
 }
 
-function addEmails(quantity) {
+function addRefeferCredits(type) {
 
-	console.log('Adding '+quantity+' emails');
-	$.ajax({url:'core/api/subscription/em?q='+quantity,
+	$.ajax({url:'core/api/refer/share_on_fb',
 			type:'POST',
 			success:function(data){
+				REFER_DATA.usedReferTypes.push("facebook_share");
 				console.log("Emails added");
 			},error: function(){
 				console.log("Error occured");
@@ -187,35 +192,38 @@ function load_facebook_lib_for_referrals() {
 }
 
 function trackReferrals(type){
-	$("#referModal").find(".modal-body").html(getTemplate('refer-modal-body', {}));
+	$("#referModal").find(".modal-body").html(getTemplate('refer-modal-body', REFER_DATA));
 	if(type == undefined)
 		return;
 	switch(type){
 			case "facebook":
 				showNotyPopUp("information", "Your submission is successful, thank you.", "top");
 				sendReferralTrackMail("Shared on facebook");
+				REFER_DATA.usedReferTypes.push("facebook_share");
 				return;
 			case "follow":
 				showNotyPopUp("information", "You are following Agile CRM on Twitter. Congratulations!", "top");
 				sendReferralTrackMail("Following on twitter");
+				REFER_DATA.usedReferTypes.push("twitter_follow");
 				return;
 			case "tweet":
 				showNotyPopUp("information", "Your tweet has been posted successfully.", "top");
 				sendReferralTrackMail("Tweet");
+				REFER_DATA.usedReferTypes.push("twitter_tweet");
 				return;
 			default:
 				return;
 		}
-	//Agile_GA_Event_Tracker.track_event("refer_"+type,CURRENT_DOMAIN_USER.domain)
+	//Agile_GA_Event_Tracker.track_event("refer_"+type,REFER_DATA.domain)
 }
 function sendReferralTrackMail(type, callback)
 {
 	var json = {};
-	json.from=CURRENT_DOMAIN_USER.email;
+	json.from=REFER_DATA.email;
 	json.to = "narmada@agilecrm.com";
 	json.cc = "venkat@agilecrm.com";
 	json.bcc = "mogulla@agilecrm.com";
 	json.subject = "Referrals feature used";	
-	json.body = "Username: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain+"<br>Type: "+type;
+	json.body = "Username: "+REFER_DATA.email+"<br>Domain: "+REFER_DATA.domain+"<br>Type: "+type;
 	sendEmail(json);
 }

@@ -28,10 +28,14 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.Referer;
 import com.agilecrm.user.RegisterVerificationServlet;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.ReferUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -522,7 +526,9 @@ public class RegisterServlet extends HttpServlet
 	if (domainUser != null && reference_domain != null)
 	{
 	    ReferenceUtil.updateReferralCount(reference_domain);
+	    setReferenceInfo(reference_domain, domainUser.domain);
 	}
+	
 
 	try
 	{
@@ -534,6 +540,26 @@ public class RegisterServlet extends HttpServlet
 	}
 	userInfo.setDomainId(domainUser.id);
 	return domainUser;
+    }
+    
+    public void setReferenceInfo(String reference_domain, String registered_domain){
+    	String oldNamespace = NamespaceManager.get();
+    	NamespaceManager.set(reference_domain);
+    	try{
+    		Referer referer = ReferUtil.getReferrer();
+    		++referer.referral_count;
+    		referer.referedDomains.add(registered_domain);
+    		referer.save();
+    		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    		restriction.incrementEmailCreditsCount(500);
+    		restriction.save();
+    		
+    	}catch(Exception e){
+    		System.out.println(ExceptionUtils.getMessage(e));
+    		e.printStackTrace();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
     }
 
     /**
