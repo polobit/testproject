@@ -6,6 +6,7 @@
 //json Object for collecting events
 var jso=[];
 var mini_fullCal;
+var mini_popover_call;
 
 /**
  * initialises full calendar functionality in a mini calendar
@@ -338,7 +339,10 @@ function minicalendar(el)
 									return;
 								}
 		            			if(event.id!=undefined){
-		            			accessUrlUsingAjax("/core/api/events/contacts-related?id="+event.id,function(data){
+		            			mini_popover_call=$.ajax({ 
+									url : "/core/api/events/contacts-related?id="+event.id, 
+									dataType : 'json',
+									success : function(data){
 											console.log(data);
 											event.contacts=data;
 											that.data("data_fetched",data);
@@ -391,11 +395,12 @@ function minicalendar(el)
 		            		  
 		            		}
 		            		   overlay.show();
-		            		});
+		            		} });
 							}
 		            	   },
 		            	   eventMouseout : function(event, jsEvent, view)
 		            	   {
+		            	   	mini_popover_call.abort();
 		            		   el.parent().css('z-index',2);
 		            		   $(this).find('.fc-overlay').hide();
 		            		   $(this).find('.fc-overlay').remove();
@@ -569,7 +574,7 @@ function googledata(el,response,startTime,endTime)
 			$('#calendar_container',el).fullCalendar('addEventSource', functions["event_mini_google" + $(el).attr('id')]);
 			events_clone = [];
 			//**Add the google Events in the list of events in events_show div **/
-			var len = $(".events_show").find('.list').find('li').length;
+			var len = $(".events_show",el).find('.list').find('li').length;
 			var date = new Date();
 			$.each(events,function(index,ev){
 				var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
@@ -660,7 +665,7 @@ function renderGoogleEvents(events,fc_event,el)
 			} 
 			else
 			{
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+				var a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24))
 
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
@@ -710,7 +715,7 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 			}		
 
 			//**Add the google Events in the list of events in events_show div **/
-		var len = $(".events_show").find('.list').find('li').length;
+		var len = $(".events_show",el).find('.list').find('li').length;
 		var date = new Date();
 		$.each(officeEvents,function(index,ev){
 			var todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
@@ -768,7 +773,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 			if(fc_event.allDay == true){
 				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 				fc_event.end = new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+				var a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24))
 				if(a == 1)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
@@ -802,7 +807,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 			} 
 			else
 			{
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+				var a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24))
 
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
