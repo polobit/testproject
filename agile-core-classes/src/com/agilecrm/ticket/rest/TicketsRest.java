@@ -151,9 +151,12 @@ public class TicketsRest
 
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
-			List<SearchRule> customFilters = new ObjectMapper().readValue(customFiltersString,
-					TypeFactory.collectionType(List.class, SearchRule.class));
-
+			List<SearchRule> customFilters = new ArrayList<>();
+			
+			if(StringUtils.isNotBlank(customFiltersString))
+				customFilters = new ObjectMapper().readValue(customFiltersString,
+						TypeFactory.collectionType(List.class, SearchRule.class));
+				
 			String queryString = (customFilters == null || customFilters.size() == 0) ? TicketFiltersUtil
 					.getQueryFromConditions(filter.conditions) : TicketFiltersUtil
 					.getQueryFromConditions(customFilters);
