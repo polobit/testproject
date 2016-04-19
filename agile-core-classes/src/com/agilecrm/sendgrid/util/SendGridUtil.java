@@ -273,10 +273,27 @@ public class SendGridUtil
     public static void sendWithoutMerging(MailDeferredTask sendGridDeferred, String apiUser, String apiKey)
     {
 
+    	// Send Unique arguments in SMTP Header JSON
+    	JSONObject SMTPJSON = new JSONObject();
+    	
+    	try
+		{
+			SMTPJSON.put(
+					UNIQUE_ARGUMENTS,
+					new JSONObject().put("domain", sendGridDeferred.domain).put("subject", sendGridDeferred.subject)
+						.put("campaign_id", sendGridDeferred.campaignId));
+			SMTPJSON.put(FILTERS, getFilterJSON());
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while building SMTP JSON..." + e.getMessage());
+		}
+    	
 	SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName,
 		EmailUtil.getEmail(sendGridDeferred.to), EmailUtil.getEmail(sendGridDeferred.cc),
 		EmailUtil.getEmail(sendGridDeferred.bcc), sendGridDeferred.subject, sendGridDeferred.replyTo,
-		sendGridDeferred.html, sendGridDeferred.text, null);
+		sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString());
     }
 
     /**
