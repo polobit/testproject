@@ -698,8 +698,12 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
                     json.segmentConditions=_agile_get_prefs("dynamic_visitors_filter").toString();
                     var formJSON = model.toJSON();
 
-                    if(formJSON['save-type'] == 'replace')
+                    if(formJSON['save-type'] == 'replace'){
                         json.id = $('[name="filter-collection"]').val();
+                        if(model.attributes.name == '')
+                        	model.attributes.name=$('[name="filter-collection"]').find('option:selected').text();
+
+                    }
 
                     model.set(json, { silent : true });
                 }                       
