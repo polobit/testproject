@@ -2,6 +2,7 @@ package com.agilecrm.knowledgebase.entity;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
@@ -9,6 +10,7 @@ import javax.persistence.PrePersist;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
@@ -69,11 +71,24 @@ public class Categorie implements Serializable
 	public Long updated_by = null;
 
 	/**
+	 * Util attribute
+	 */
+	@NotSaved
+	public List<Section> sections = null;
+
+	/**
 	 * Default constructor
 	 */
 	public Categorie()
 	{
 
+	}
+
+	public Categorie(String name, String description)
+	{
+		super();
+		this.name = name;
+		this.description = description;
 	}
 
 	/**
@@ -116,5 +131,6 @@ public class Categorie implements Serializable
 		if (updated_by_key != null)
 			updated_by = updated_by_key.getId();
 
+		sections = SectionUtil.getSectionByCategorie(id);
 	}
 }

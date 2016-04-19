@@ -9,6 +9,7 @@ import javax.persistence.PrePersist;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.knowledgebase.util.ArticleUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
@@ -85,17 +86,36 @@ public class Section implements Serializable
 	{
 		ADMIN, AGENTS, CUSTOMER
 	};
-	
-	//Default access
+
+	/**
+	 * Util attribute
+	 */
+	@NotSaved
+	public int articles_count = 0;
+
+	// Default access
 	public Visible_To visible_to = Visible_To.CUSTOMER;
-	
-	
+
 	/**
 	 * Default constructor
 	 */
 	public Section()
 	{
 
+	}
+
+	public Section(String name, String description, Key<Categorie> categorie_key, Visible_To visible_to)
+	{
+		super();
+		this.name = name;
+		this.description = description;
+		this.categorie_key = categorie_key;
+		this.visible_to = visible_to;
+	}
+
+	public Key<Section> save()
+	{
+		return dao.put(this);
 	}
 
 	/**
@@ -136,5 +156,6 @@ public class Section implements Serializable
 		if (categorie_key != null)
 			categorie_id = categorie_key.getId();
 
+		articles_count = ArticleUtil.getCount(categorie_id, id);
 	}
 }

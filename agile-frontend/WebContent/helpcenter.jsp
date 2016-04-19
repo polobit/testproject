@@ -218,7 +218,7 @@ head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, funct
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "helpcenter.js" + "?_=" + _AGILE_VERSION);	
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "helpcenter-tpl.js" + "?_=" + _AGILE_VERSION);	
 
 var en;
 
@@ -233,7 +233,7 @@ head.ready(function() {
 if(!HANDLEBARS_PRECOMPILATION){
     head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
     {
-        downloadTemplate("helpcenter.js");
+        downloadTemplate("helpcenter-tpl.js");
     });
 }
  

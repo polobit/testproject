@@ -19,10 +19,22 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 	 		$('#content').html($(template_ui));
 
-	 		//hideTransitionBar();
-	 	});
+	 		//Initializing base collection with groups URL
+			App_Helpcenter.categoriesCollection = new Base_Collection_View({
+				url : '/core/api/knowledgebase/categorie',
+				templateKey : "helpcenter-categories",
+				individual_tag_name : 'div',
+				postRenderCallback : function(el, collection) {
 
-		console.log('Hi....')
+				}
+			});
+
+			//Fetching groups collections
+			App_Helpcenter.categoriesCollection.collection.fetch();
+
+			//Rendering template
+			$('#categories').html(App_Helpcenter.categoriesCollection.el);
+	 	});
 	},
 
 	categoryAdd: function(){

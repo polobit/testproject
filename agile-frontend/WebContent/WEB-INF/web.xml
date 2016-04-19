@@ -1162,7 +1162,7 @@
 		<url-pattern>/helpcenter/login</url-pattern>
 	</servlet-mapping>
 	
-	<servlet>
+	<!-- <servlet>
 		<servlet-name>HelpCenterRegister</servlet-name>
 		<servlet-class>com.livily.helpcenter.servlets.RegisterServlet</servlet-class>
 	</servlet>
@@ -1178,7 +1178,7 @@
 	<servlet-mapping>
 		<servlet-name>HelpCenterLogout</servlet-name>
 		<url-pattern>/helpcenter/logout</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>  -->
 	
 	<servlet>
 		<servlet-name>Help Center Panel REST Service</servlet-name>
