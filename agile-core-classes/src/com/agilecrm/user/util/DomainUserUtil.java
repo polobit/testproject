@@ -705,18 +705,20 @@ public class DomainUserUtil
     }
     
     /** Check whether fingerprint present or not in list*/
-    public static  boolean isValidFingerPrint(HttpServletRequest request){
-		
-		// Gets the fingerprints
-		DomainUser fingerprints = DomainUserUtil.getDomainOwner(NamespaceManager.get()); 		
-		//Checks the wheather fingerprintlist is null or not  
-		if(fingerprints == null || fingerprints.finger_prints == null || fingerprints.finger_prints.size() == 0)
+    public static  boolean isValidFingerPrint(DomainUser domainUser, HttpServletRequest request){
+    	
+    	// Get actual finger prints
+    	Set<String> finger_prints = domainUser.finger_prints;
+    	
+		// Checks the wheather fingerprintlist is null or not  
+		if(finger_prints == null || finger_prints.size() == 0)
 			 return true;
 		
 		// Gets the userfingerprint from request
-		String userfingerprint = request.getParameter("finger_print");
+		String user_finger_print = request.getParameter("finger_print");
+		
 		// Checks the condition is userfingerprint present in the list or not
-		return fingerprints.finger_prints.contains(userfingerprint);
+		return finger_prints.contains(user_finger_print);
 	}
     
 

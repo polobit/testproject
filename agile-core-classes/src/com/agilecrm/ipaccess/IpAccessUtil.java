@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -67,8 +69,18 @@ public class IpAccessUtil {
 		// Checks the condition is userIp present in the list or not
 		Set<String> iplist = ipAccess.ipList;
 		for (String ip : iplist) {
-			if(ip.trim().equalsIgnoreCase(userIp))
-				  return true;
+			
+		 	if (StringUtils.contains(ip, "*")) {
+		 		
+				if (StringUtils.equals(ip, "*"))
+				    return true;
+				else
+					ip = ip.replace("*", "");
+		    }
+		 	
+		    if (StringUtils.indexOf(userIp, ip) != -1)
+		    	return true;
+			
 		}
 		
 		return false;

@@ -183,15 +183,15 @@ public class HomeServlet extends HttpServlet
     }
     
     /**
-     * Saves finger println in domain user before request is forwarded to
+     * Saves finger print in domain user before request is forwarded to
      * dashboard (home.jsp)
      */
-    private void setFingerPrint(HttpServletRequest req)
+    private void saveFingerPrint(HttpServletRequest req)
     {
 	try
 	{
-	    String userFingerPrint = req.getParameter("finger_print");  	
-	    System.out.println(userFingerPrint);
+	    String userFingerPrint = (String) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VAL); 
+	    System.out.println("userFingerprint "+userFingerPrint);
 	    if(StringUtils.isBlank(userFingerPrint))
 	    	return;
 		    
@@ -255,7 +255,7 @@ public class HomeServlet extends HttpServlet
     	    setAccountTimezone(req);
     	    
     	    // Save user finger print
-    	    setFingerPrint(req);
+    	    saveFingerPrint(req);
 
     	    String old_ui = req.getParameter("old");
     	     
@@ -290,6 +290,7 @@ public class HomeServlet extends HttpServlet
 	    	request.getSession().setAttribute(LoginServlet.SESSION_IPACCESS_VALID, true);
 	    	//Boolean sessionIP = (Boolean) request.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
 	    	// Add current ip to Ip List
+	    	
 	    	if(StringUtils.isNotBlank(ipValid) )
 	    	{
 	    		IpAccess ipList =  IpAccessUtil.getIPListByDomainName(NamespaceManager.get());

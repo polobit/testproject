@@ -293,10 +293,11 @@ public class LoginServlet extends HttpServlet {
         // Set FingerPrint to check in /home
 		request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
 		System.out.println("fingerprint " + request.getSession().getAttribute(SESSION_FINGERPRINT_VAL) );
+		
 		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
 		{
 			// Validate fingerprint value
-			boolean isValid = DomainUserUtil.isValidFingerPrint(request);
+			boolean isValid = DomainUserUtil.isValidFingerPrint(domainUser, request);
 			System.out.println(isValid);
 			
 			request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
@@ -307,7 +308,7 @@ public class LoginServlet extends HttpServlet {
 			if(!isValid || !isValidIP ){
 				
 				// Generate one finger print
-				String generatedOTP = System.currentTimeMillis()/100000 + "";
+				Long generatedOTP = System.currentTimeMillis()/100000;
 				request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
 				
 				System.out.println("generatedOTP "+generatedOTP);
@@ -352,7 +353,7 @@ public class LoginServlet extends HttpServlet {
 		
 		// Create info
 		Map<String, String> data = new HashMap<String, String>();
-		data.put("generatedOTP", (String) request.getSession().getAttribute(SESSION_FINGERPRINT_OTP));
+		data.put("generatedOTP", (request.getSession().getAttribute(SESSION_FINGERPRINT_OTP)).toString());
 		data.put("browser_os", request.getParameter("browser_os"));
 		data.put("browser_name", request.getParameter("browser_Name"));
 		data.put("browser_version",request.getParameter("browser_version"));
