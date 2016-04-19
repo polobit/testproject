@@ -2,6 +2,8 @@ package com.agilecrm.landingpages;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,6 +55,7 @@ public class LandingPageServlet extends HttpServlet {
 				throw new Exception("No landing page found.");
 				
 				String fullXHtml = landingPage.html;
+				fullXHtml = getResponsiveMediaIFrame(fullXHtml);
 				
 				String domainHost = "http://localhost:8888";
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
@@ -86,5 +89,18 @@ public class LandingPageServlet extends HttpServlet {
 			NamespaceManager.set(oldNameSpace);
 		}
 		
+	}
+	
+	private String getResponsiveMediaIFrame(String fullHtml) {
+		
+		String responsiveMediaIFrame = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class=\"embed-responsive-item\" src=\"%s\"></iframe></div>";
+		Pattern p = Pattern.compile("<img[^>]*data-src=[\"]*([\\w\\s-.:\\/,]+)[\"]*[^>]*>",Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(fullHtml);
+		
+		while(m.find()){
+			fullHtml = fullHtml.replaceAll(m.group(0), String.format(responsiveMediaIFrame, m.group(1)));
+		}
+		
+		return fullHtml;
 	}
 }
