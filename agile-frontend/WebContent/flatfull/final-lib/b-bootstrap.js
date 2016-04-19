@@ -797,7 +797,7 @@ if (typeof jQuery === 'undefined') {
   }
 
   Dropdown.prototype.keydown = function (e) {
-    //if (!/(38|40|27|32)/.test(e.which) || /textarea|i/.test(e.target.tagName)) return
+    if (!/(38|40|27|32)/.test(e.which) || /textarea|i/.test(e.target.tagName)) return
 
     var $this = $(this)
     if(!(/(13)/.test(e.which)) || $(e.target).attr("href") == "#" || $(e.target).attr("href") == "#companyModal" || $(e.target).attr("href").indexOf("javascript") != -1){
@@ -806,7 +806,7 @@ if (typeof jQuery === 'undefined') {
     e.stopPropagation()
 
     if ($this.is('.disabled, :disabled')) return
-
+    
     var $parent  = getParent($this)
     if(/(13)/.test(e.which)){
        var desc = ' li:not(.divider):visible a'
@@ -848,7 +848,8 @@ if (typeof jQuery === 'undefined') {
    $("li", $parent).removeClass("active");
    $(it, $parent).addClass("active");
    $(it, $parent).find("a").trigger('focus');
-     
+  
+
     var desc = ' li:not(.divider):visible a'
     var $items = $parent.find('[role="menu"]' + desc + ', [role="listbox"]' + desc)
 
