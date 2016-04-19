@@ -79,6 +79,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	public String email;
 
+	/**
+	 * Phone number of user
+	 */
+	@NotSaved(IfDefault.class)
+	public String phone = null;
+	
 	/** The Reference tracking object represents referercount and referece key */
 
 	@Embedded
@@ -149,6 +155,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	@NotSaved(IfDefault.class)
 	public String name = null;
+
+	
 
 	/**
 	 * Assigns its value to password attribute
@@ -580,6 +588,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				throw new Exception("Domain is empty. Please login again & try.");
 			}
 
+		if(this.phone != null){
+			if(!DomainUserUtil.checkValidNumber(this.phone)){
+				throw new Exception("Phone number is not valid. Please enter a valid number and try again.");
+			}
+		}
+		
+		
+		
 		// Sends email, if the user is new
 		if (this.id == null)
 		{
