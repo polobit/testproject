@@ -16,7 +16,7 @@
   <instance-class>F4</instance-class>
   <automatic-scaling>
     <max-idle-instances>2</max-idle-instances>
-    <min-pending-latency>90ms</min-pending-latency>
+    <min-pending-latency>60ms</min-pending-latency>
   </automatic-scaling>
 
 	<!-- Error pages configuration <static-error-handlers> <handler file="error/overquota.html" 
