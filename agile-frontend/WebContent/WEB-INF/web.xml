@@ -1161,7 +1161,25 @@
 		<servlet-name>HelpCenterLogin</servlet-name>
 		<url-pattern>/helpcenter/login</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HelpCenterRegister</servlet-name>
+		<servlet-class>com.livily.helpcenter.servlets.RegisterServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HelpCenterRegister</servlet-name>
+		<url-pattern>/helpcenter/register</url-pattern>
+	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>HelpCenterLogout</servlet-name>
+		<servlet-class>com.livily.helpcenter.servlets.LogoutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HelpCenterLogout</servlet-name>
+		<url-pattern>/helpcenter/logout</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>Help Center Panel REST Service</servlet-name>
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
