@@ -22,7 +22,7 @@ public class SendCampaignReportDeferredTask implements DeferredTask{
     {
 	try
 	{
-	    ReportsUtil.sendCampaignReport(reportid);
+	    ReportsUtil.sendCampaignReport(reportid,false);
 	}
 	catch (Exception e)
 	{

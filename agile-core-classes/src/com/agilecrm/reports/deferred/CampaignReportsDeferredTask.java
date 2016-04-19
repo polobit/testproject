@@ -22,10 +22,12 @@ public class CampaignReportsDeferredTask implements DeferredTask
 {
     // Report ID
     private Long report_id;
+    private Boolean sendNow;
 
-    public CampaignReportsDeferredTask(Long report_id)
+    public CampaignReportsDeferredTask(Long report_id, Boolean sendNow)
     {
 	this.report_id = report_id;
+	this.sendNow=sendNow;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class CampaignReportsDeferredTask implements DeferredTask
 	try
 	{
 	    // Generates report and sends to user
-	    ReportsUtil.sendCampaignReportsToUsers(reports);
+	    ReportsUtil.sendCampaignReportsToUsers(reports, sendNow);
 	}
 	catch (JSONException e)
 	{

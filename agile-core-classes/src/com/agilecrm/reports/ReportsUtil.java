@@ -160,8 +160,8 @@ public class ReportsUtil {
 	 * @param reportsList
 	 * @throws JSONException
 	 */
-	public static void sendCampaignReportsToUsers(List<Reports> reportsList)
-			throws JSONException {
+	public static void sendCampaignReportsToUsers(List<Reports> reportsList,
+			Boolean sendNow) throws JSONException {
 		for (Reports report : reportsList) {
 			// Each report is sent to email address which is saved in report. If
 			// email in sendTo in empty, report is not processed further
@@ -171,7 +171,8 @@ public class ReportsUtil {
 			try {
 				// Call process filters to get reports for one domain, and add
 				// domain details
-				Map<String, Object> results = processCampaignReports(report);
+				Map<String, Object> results = processCampaignReports(report,
+						sendNow);
 
 				if (results == null)
 					results = new HashMap<String, Object>();
@@ -221,7 +222,8 @@ public class ReportsUtil {
 		}
 	}
 
-	public static Map<String, Object> processCampaignReports(Reports report) {
+	public static Map<String, Object> processCampaignReports(Reports report,
+			Boolean sendNow) {
 		Map<String, Object> statsJSON = new HashMap<String, Object>();
 
 		JSONArray jsonArray = new JSONArray();
@@ -230,11 +232,11 @@ public class ReportsUtil {
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String endDate = sdf.format(dt);
-		String timeZone = getTimeZoneOffSet(TimeZone.getTimeZone(report.report_timezone));
-		
+		String timeZone = getTimeZoneOffSet(TimeZone
+				.getTimeZone(report.report_timezone));
+
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new DateUtil().toMidnight().getTime());
-		
 
 		int emailsClicked = 0;
 		int emailsOpened = 0;
@@ -247,39 +249,49 @@ public class ReportsUtil {
 
 		JSONArray campaignEmailsJSONArray = new JSONArray();
 
-		if (report.duration == Reports.Duration.DAILY) {
-			cal.add(Calendar.DATE, -1);
-			Date startDateTime = cal.getTime();
-			String startDate = sdf.format(startDateTime);
-			cal.set(Calendar.HOUR,23);
-			cal.set(Calendar.MINUTE,59);
-			cal.set(Calendar.SECOND,59);
-			endDate = sdf.format(cal.getTime());
-			
-			campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId,startDate, endDate, timeZone);
-		} 
-		else if (report.duration == Reports.Duration.WEEKLY) {
-			cal.set(Calendar.DAY_OF_WEEK,2);
-			String startDate=sdf.format(cal.getTime());
-			cal.add(Calendar.DATE,6);
-			cal.set(Calendar.HOUR,23);
-			cal.set(Calendar.MINUTE,59);
-			cal.set(Calendar.SECOND,59);
-			endDate = sdf.format(cal.getTime());
-			campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId,startDate, endDate, timeZone);
-		} 
-		else if (report.duration == Reports.Duration.MONTHLY) {
-			cal.add(Calendar.MONTH, -1);
-			cal.set(Calendar.DAY_OF_MONTH,1);
-			String startDate=sdf.format(cal.getTime());
-			cal.set(Calendar.DATE,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-			cal.set(Calendar.HOUR,23);
-			cal.set(Calendar.MINUTE,59);
-			cal.set(Calendar.SECOND,59);
-			endDate = sdf.format(cal.getTime());
-			campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId,startDate, endDate, timeZone);
-		}
+		if (sendNow)
+			campaignEmailsJSONArray = getCampaignStats(report);
+		else {
 
+			if (report.duration == Reports.Duration.DAILY) {
+				cal.add(Calendar.DATE, -1);
+				Date startDateTime = cal.getTime();
+				String startDate = sdf.format(startDateTime);
+				cal.set(Calendar.HOUR, 23);
+				cal.set(Calendar.MINUTE, 59);
+				cal.set(Calendar.SECOND, 59);
+				endDate = sdf.format(cal.getTime());
+
+				campaignEmailsJSONArray = PortletUtil
+						.getCountByLogTypesforPortlets(report.campaignId,
+								startDate, endDate, timeZone);
+			} else if (report.duration == Reports.Duration.WEEKLY) {
+				cal.set(Calendar.DAY_OF_WEEK, 2);
+				cal.add(Calendar.DAY_OF_MONTH, -7);
+				String startDate = sdf.format(cal.getTime());
+				cal.add(Calendar.DATE, 6);
+				cal.set(Calendar.HOUR, 23);
+				cal.set(Calendar.MINUTE, 59);
+				cal.set(Calendar.SECOND, 59);
+				endDate = sdf.format(cal.getTime());
+				campaignEmailsJSONArray = PortletUtil
+						.getCountByLogTypesforPortlets(report.campaignId,
+								startDate, endDate, timeZone);
+			} else if (report.duration == Reports.Duration.MONTHLY) {
+				cal.add(Calendar.MONTH, -1);
+				cal.set(Calendar.DAY_OF_MONTH, 1);
+				String startDate = sdf.format(cal.getTime());
+				cal.set(Calendar.DATE,
+						cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+				cal.set(Calendar.HOUR, 23);
+				cal.set(Calendar.MINUTE, 59);
+				cal.set(Calendar.SECOND, 59);
+				endDate = sdf.format(cal.getTime());
+				campaignEmailsJSONArray = PortletUtil
+						.getCountByLogTypesforPortlets(report.campaignId,
+								startDate, endDate, timeZone);
+			}
+		}
 		try {
 			if (campaignEmailsJSONArray != null
 					&& campaignEmailsJSONArray.length() > 0) {
@@ -599,9 +611,9 @@ public class ReportsUtil {
 	 * 
 	 * @param report_id
 	 */
-	public static void sendCampaignReport(Long report_id) {
+	public static void sendCampaignReport(Long report_id, Boolean sendNow) {
 		CampaignReportsDeferredTask campaignReportsDeferredTask = new CampaignReportsDeferredTask(
-				report_id);
+				report_id, sendNow);
 
 		Queue queue = QueueFactory.getDefaultQueue();
 
@@ -1108,40 +1120,19 @@ public class ReportsUtil {
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String endDate = sdf.format(dt);
-		String timeZone = getTimeZoneOffSet(TimeZone.getTimeZone(report.report_timezone));
-		
+		String timeZone = getTimeZoneOffSet(TimeZone
+				.getTimeZone(report.report_timezone));
+
 		Calendar startCal = Calendar.getInstance();
 		startCal.setTime(new DateUtil().toMidnight().getTime());
 
-		Calendar cal = Calendar.getInstance();	
-		cal.set(Calendar.HOUR,23);
-		cal.set(Calendar.MINUTE,59);
-		cal.set(Calendar.SECOND,59);
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
 
 		JSONObject statsJSON = new JSONObject();
-		JSONArray campaignEmailsJSONArray = new JSONArray();
-
-		if (report.duration == Reports.Duration.DAILY) {
-			String startDate = sdf.format(startCal.getTime());
-			endDate = sdf.format(cal.getTime());
-			campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId,startDate, endDate, timeZone);
-		} 
-		else if (report.duration == Reports.Duration.WEEKLY) {
-			startCal.set(Calendar.DAY_OF_WEEK, 2);
-			String startDate = sdf.format(startCal.getTime());			
-			endDate = sdf.format(cal.getTime());
-			
-			campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId,startDate, endDate, timeZone);
-		} 
-		else if (report.duration == Reports.Duration.MONTHLY) {
-			startCal.set(Calendar.DAY_OF_MONTH, 1);
-			String startDate = sdf.format(startCal.getTime());			
-			endDate = sdf.format(cal.getTime());
-			
-			campaignEmailsJSONArray = PortletUtil.getCountByLogTypesforPortlets(report.campaignId,startDate, endDate, timeZone);
-		}
-
-		System.out.println("Campaign stats are : " + campaignEmailsJSONArray);
+		JSONArray campaignEmailsJSONArray = getCampaignStats(report);
 
 		try {
 			if (campaignEmailsJSONArray != null
@@ -1260,6 +1251,57 @@ public class ReportsUtil {
 			return "-" + offSet;
 		}
 		return "-" + offSet;
+
+	}
+
+	/**
+	 * This method is return campaign stats of email
+	 * 
+	 * @param report
+	 * @return jsonarry
+	 */
+	private static JSONArray getCampaignStats(Reports report) {
+
+		Date dt = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String endDate = sdf.format(dt);
+		String timeZone = getTimeZoneOffSet(TimeZone
+				.getTimeZone(report.report_timezone));
+
+		Calendar startCal = Calendar.getInstance();
+		startCal.setTime(new DateUtil().toMidnight().getTime());
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR, 11);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		JSONArray campaignEmailsJSONArray = new JSONArray();
+
+		if (report.duration == Reports.Duration.DAILY) {
+			String startDate = sdf.format(startCal.getTime());
+			endDate = sdf.format(cal.getTime());
+			campaignEmailsJSONArray = PortletUtil
+					.getCountByLogTypesforPortlets(report.campaignId,
+							startDate, endDate, timeZone);
+		} else if (report.duration == Reports.Duration.WEEKLY) {
+			startCal.set(Calendar.DAY_OF_WEEK, 2);
+			String startDate = sdf.format(startCal.getTime());
+			endDate = sdf.format(cal.getTime());
+
+			campaignEmailsJSONArray = PortletUtil
+					.getCountByLogTypesforPortlets(report.campaignId,
+							startDate, endDate, timeZone);
+		} else if (report.duration == Reports.Duration.MONTHLY) {
+			startCal.set(Calendar.DAY_OF_MONTH, 1);
+			String startDate = sdf.format(startCal.getTime());
+			endDate = sdf.format(cal.getTime());
+
+			campaignEmailsJSONArray = PortletUtil
+					.getCountByLogTypesforPortlets(report.campaignId,
+							startDate, endDate, timeZone);
+		}
+
+		System.out.println("Campaign stats are : " + campaignEmailsJSONArray);
+		return campaignEmailsJSONArray;
 
 	}
 

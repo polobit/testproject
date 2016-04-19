@@ -175,7 +175,8 @@ public class CampaignReportsAPI
 	{
 	    try
 	    {
-		ReportsUtil.sendCampaignReport(Long.valueOf(reportId));
+	    	//true param for send now stats
+		ReportsUtil.sendCampaignReport(Long.valueOf(reportId), true);
 	    }
 	    catch (Exception e)
 	    {
