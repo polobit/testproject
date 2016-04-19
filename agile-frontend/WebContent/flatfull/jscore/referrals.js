@@ -56,7 +56,8 @@ $(function() {
 		
 		var json = serializeForm("blogmailForm");
 
-		var $that = $(this)
+		var $that = $(this);
+		json.body = "Username: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain+"<br>Blog URL: "+json.body;
 		// Replace \r\n with <br> tags as email is sent as text/html
 		json.body = json.body.replace(/\r\n/g,"<br/>");
         
@@ -229,9 +230,9 @@ function sendReferralTrackMail(type, callback)
 {
 	var json = {};
 	json.from=CURRENT_DOMAIN_USER.email;
-	json.to = "narmada@agilecrm.com";
-	json.cc = "venkat@agilecrm.com";
-	json.bcc = "mogulla@agilecrm.com";
+	json.to = "venkat@agilecrm.com";
+	json.cc = "mogulla@agilecrm.com";
+	json.bcc = "narmada@agilecrm.com";
 	json.subject = "Referrals feature used";	
 	json.body = "Username: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain+"<br>Type: "+type;
 	sendEmail(json);
