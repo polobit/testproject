@@ -20,10 +20,12 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.db.util.GoogleSQLUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.util.HTTPUtil;
 import com.analytics.Analytics;
+import com.analytics.VisitorFilter;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -419,6 +421,18 @@ public class AnalyticsUtil
 	    }
 	}
 	return result;
+    }
+    /**
+     * 
+     * @param currentDomainUserId
+     * @return List of filters created by current domain user
+     */
+    public static List<VisitorFilter> getAllSegmentFilters(Key<DomainUser> domainUserKey)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("owner_key", domainUserKey);
+	
+	return VisitorFilter.dao.listByProperty(searchMap);
     }
     
 }
