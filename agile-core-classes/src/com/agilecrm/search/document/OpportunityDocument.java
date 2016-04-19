@@ -135,4 +135,11 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 	return Opportunity.dao.fetchAllByKeys(opportunity_keys);
     }
+
+	@Override
+	public void addAsync(Object entity)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

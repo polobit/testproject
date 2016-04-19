@@ -3708,3 +3708,13 @@ opacity: .3;
 #lhs_filters_segmentation #lhs-filters-header i{
 	top : 3px;
 }
+.dash_tabview .nav-tabs{
+   border-color: none;
+  border-bottom: none;
+}
+.dash_tabview .tab-content{
+   border-color: none;
+  border: none !important;
+}
+.dash_tabview .nav-tabs li a{ border-bottom: none;}
+.dash_tabview .nav-tabs li.active a{ border-left: none;}

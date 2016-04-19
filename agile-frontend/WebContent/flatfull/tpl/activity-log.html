@@ -545,6 +545,117 @@ Rescheduled Event '{{../label}}'<br/>
 
 
 <!-- end event condition-->
+<!-- start of user condition -->
+
+
+{{#if_equals "User_Created" activity_type}}
+ {{user_name}}
+    created a New User {{#if this.entityObject}}<a href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} {{custom1}}
+    <div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}} 
+</small></div>
+{{/if_equals}}
+
+
+{{#if_equals "User_Name_Change" activity_type}}
+{{user_name}} updated the Username from {{custom1}}{{#if this.entityObject}}
+<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} to {{custom2}}
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}} 
+</small></div>
+{{/if_equals}} 
+
+
+{{#if_equals "User_Email_Change" activity_type}}
+{{user_name}} updated Email ID from {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} to {{custom2}}
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}} {{custom3}}
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "User_Deleted" activity_type}}
+{{user_name}}  deleted the user {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} 
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}}
+</small></div>
+{{/if_equals}}
+
+
+
+{{#if_equals "User_Permissions_Change" activity_type}}
+{{user_name}} modified the Permissions for {{custom4}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} 
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}}
+</small></div>
+{{/if_equals}}
+
+
+
+<!-- user Admin Change -->
+{{#if_equals "User_Admin_Change" activity_type}}
+{{#if_equals "true" custom4}}
+ {{user_name}} enabled Administrator Permissions for {{custom1}} 
+ <div class="activities_second_line m-t-none">
+<small class="activities_second_line m-t-none text-sm">   
+<i class=""></i> {{custom3}}. 
+</small>
+</div>
+{{else}}
+{{user_name}}  disabled Administrator Permissions for {{custom1}} 
+<div >
+<small class="activities_second_line m-t-none text-sm">   
+<i class="icon-white"></i> {{custom3}}. 
+</small></div>
+{{/if_equals}}
+{{else}}
+{{/if_equals}}
+
+<!-- end of the User AdminChange -->
+
+
+<!-- User Disable change  -->
+
+{{#if_equals "User_Disabled" activity_type}}
+{{#if_equals "true" custom4}}
+{{user_name}} disabled  the User {{custom1}}  
+<div class="activities_second_line m-t-none">
+<small class="activities_second_line m-t-none text-sm">   
+<i class=""></i> {{custom3}}. 
+</small>
+</div>
+{{else}}
+{{user_name}}  enabled the User {{custom1}}
+<div class="activities_second_line m-t-none">
+<small class="activities_second_line m-t-none text-sm">   
+<i class="icon-white"></i> {{custom3}}. 
+</small></div>
+{{/if_equals}}
+{{else}}
+{{/if_equals}}
+
+<!--  end of user disable condition -->
+
+<!-- user owner change -->
+{{#if_equals "User_Owner_Change" activity_type}}
+{{#if_equals "true" custom4}}
+{{user_name}} enabled owner permissions for {{custom1}}  
+<div class="activities_second_line m-t-none">
+<small class="activities_second_line m-t-none text-sm">   
+<i class=""></i> {{custom3}}. 
+</small>
+</div>
+{{else}}
+{{user_name}} disabled owner permissions for {{custom1}}
+<small class="activities_second_line m-t-none text-sm">   
+<i class="icon-white"></i> {{custom3}}. 
+</small>
+{{/if_equals}}
+{{else}}
+{{/if_equals}}
+
+<!-- end of user owner change -->
+
+
 
 <!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
