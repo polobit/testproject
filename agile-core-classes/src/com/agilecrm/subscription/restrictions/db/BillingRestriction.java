@@ -161,8 +161,7 @@ public class BillingRestriction
   	@NotSaved(IfDefault.class)
   	public Boolean isAutoRenewalEnabled = false;
   	
-  	@NotSaved
-  	public boolean canChangeLastCreditId = false;
+  	public Long lastAutoRechargeTime = 0L;
 
     public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(
 	    BillingRestriction.class);
@@ -442,6 +441,11 @@ public class BillingRestriction
 	// Updating backup count from that of DB entity
 	this.one_time_emails_backup = one_time_emails_count;
 	this.email_credits_backup = email_credits_count;
+	
+	if(this.lastAutoRechargeTime < restriction.lastAutoRechargeTime){
+		this.lastAutoRechargeTime = restriction.lastAutoRechargeTime;
+		this.last_credit_id = restriction.last_credit_id;
+	}
 
     }
 
@@ -556,17 +560,16 @@ public class BillingRestriction
     
     //
     public void renewalCedits(Integer quantity){
-    	Subscription subscription = SubscriptionUtil.getSubscription();
     	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
     	if(restriction.email_credits_count <= restriction.autoRenewalPoint){	
 			try {
 				RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity);
 				// Add to queue
 				Queue queue = QueueFactory.getQueue(AgileQueues.CREDITS_AUTO_RENEWAL_QUEUE);
-				queue.add(TaskOptions.Builder.withTaskName(subscription.last_credit_id).payload(task));
+				queue.add(TaskOptions.Builder.withTaskName(restriction.last_credit_id).payload(task));
 			} catch (Exception e) {
 				// TODO: handle exception
-				System.out.println("Task already created with domain: "+subscription.last_credit_id);
+				System.out.println("Task already created with domain: "+restriction.last_credit_id);
 				e.printStackTrace();
 			}
     	}
