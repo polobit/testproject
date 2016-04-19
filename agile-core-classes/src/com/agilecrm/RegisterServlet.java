@@ -552,17 +552,21 @@ public class RegisterServlet extends HttpServlet
     }
     
     public void setReferenceInfo(String reference_domain, String registered_domain){
+    	System.out.println("Referer process started");
     	String oldNamespace = NamespaceManager.get();
     	NamespaceManager.set(reference_domain);
     	try{
+    		System.out.println("refer_domain: "+reference_domain+" Namespace :"+NamespaceManager.get());
     		Referer referer = ReferUtil.getReferrer();
     		++referer.referral_count;
+    		System.out.println("referral_count"+referer.referral_count);
     		referer.referedDomains.add(registered_domain);
     		referer.save();
     		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    		System.out.println("adding email credits");
     		restriction.incrementEmailCreditsCount(500);
     		restriction.save();
-    		
+    		System.out.println("Referer process ended");
     	}catch(Exception e){
     		System.out.println(ExceptionUtils.getMessage(e));
     		e.printStackTrace();
