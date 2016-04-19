@@ -260,9 +260,10 @@ public class EmailsAPI
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
 	String domain = NamespaceManager.get();
+	System.out.println("By default Email Getway : "+  emailGateway.email_api);
 	
 	//if Emil Gateway is SendGrid or Null
-	if(emailGateway==null || emailGateway.equals(EmailGateway.EMAIL_API.SEND_GRID))
+	if(emailGateway==null || emailGateway.email_api.equals(EmailGateway.EMAIL_API.SEND_GRID))
 	              return  SendGridSubUser.getSendgridStats(domain, emailGateway);
 	// If not Mandrill, return 
 	if(emailGateway != null && !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
