@@ -22,5 +22,5 @@ cat flatfull/tpl/landingpages/*.html > tpl/min/flatfull/landingpages.js
 cat flatfull/tpl/tickets/*.html > tpl/min/flatfull/tickets.js
 cat flatfull/tpl/emailbuilder/*.html > tpl/min/flatfull/emailbuilder.js
 cat flatfull/tpl/segmentation/*.html > tpl/min/flatfull/segmentation.js
-cat ../WebContent/helpcenter/tpl/*.html > tpl/min/flatfull/helpcenter.js
+cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
 cd ../util

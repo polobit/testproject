@@ -7,7 +7,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 		/* Home routes */
 		"" : "categories",
 		"categories":"categories",
-
+        "category-add":"categoryAdd",
 		"sections" : "sections"
 	},
 	categories: function(){
@@ -23,5 +23,30 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 	});
 
 		console.log('Hi....')
-	}	
+	},
+
+	categoryAdd: function(){
+
+		getTemplate("add-catogery", {}, undefined, function(template_ui){
+
+				    if(!template_ui)
+		 				return;
+
+	 				$('#content').html($(template_ui));
+
+				    var addCatogeryView = new Base_Model_View({
+		 				isNew : true, 
+		 				url : '/core/api/knowledgebase/categorie',
+		 				template : "add-catogery",
+		 				window : "categories",
+		                saveCallback : function(){
+	 				},
+
+					
+					});
+
+	 			$('#content').html(addCatogeryView.render().el);    
+
+       });
+	}
 });
