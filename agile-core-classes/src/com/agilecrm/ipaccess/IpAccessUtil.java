@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.itextpdf.text.log.SysoCounter;
 
 /**
  * 
@@ -74,11 +75,15 @@ public class IpAccessUtil {
 		 		
 				if (StringUtils.equals(ip, "*"))
 				    return true;
-				else
+				else{
 					ip = ip.replace("*", "");
+					ip=ip.replace(".", "");
+					}
 		    }
-		 	
-		    if (StringUtils.indexOf(userIp, ip) != -1)
+		 	System.out.println(userIp.trim());
+		 	System.out.println(ip.trim());
+		 	System.out.println(StringUtils.indexOf(userIp.trim(), ip.trim()));
+		    if (StringUtils.indexOf(userIp.trim(), ip.trim()) != -1)
 		    	return true;
 			
 		}

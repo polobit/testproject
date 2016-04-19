@@ -245,7 +245,7 @@ public class HomeServlet extends HttpServlet
     		
     		if(!sessionFingerPrint.booleanValue() || !sessionIP.booleanValue()){
     			
-    			req.setAttribute("ip_validation", sessionIP.booleanValue());
+    			req.getSession().setAttribute("ip_validation", sessionIP.booleanValue());
     			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
     			return;
     		}
@@ -290,7 +290,8 @@ public class HomeServlet extends HttpServlet
 	    	request.getSession().setAttribute(LoginServlet.SESSION_IPACCESS_VALID, true);
 	    	//Boolean sessionIP = (Boolean) request.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
 	    	// Add current ip to Ip List
-	    	
+	    	Boolean ip_validation = (Boolean)request.getSession().getAttribute("ip_validation");
+	    	System.out.println("ip_validation "+ip_validation);
 	    	if(StringUtils.isNotBlank(ipValid) )
 	    	{
 	    		IpAccess ipList =  IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
