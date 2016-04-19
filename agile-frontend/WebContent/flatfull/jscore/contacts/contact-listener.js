@@ -38,7 +38,7 @@ var timer = undefined;
 						 $('.popover-content').html(template_ui);		
 						
 						$('.popover').addClass("contact_popover fadeInLeft  animated");
-						addTagsTypeaheadLhs($('#addTagsForm-popover').find('#addTags'));
+						addTagsTypeaheadLhs($('#addTagsForm-popover').find('#addTagsOnPopover'));
 						attachEvents(that,App_Contacts.contact_popover);
 						contact_list_starify('.popover',undefined);
 						
@@ -315,7 +315,7 @@ e.preventDefault();
 		var that=$(this);
 	    // Add Tags
 
-		var new_tags = get_new_tags('addTags');
+		var new_tags = get_new_tags('addTagsOnPopover');
 		if(new_tags)new_tags=new_tags.trim();
 		
 		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
