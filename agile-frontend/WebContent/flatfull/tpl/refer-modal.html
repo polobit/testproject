@@ -23,7 +23,7 @@
 	      <div class="pull-right" style="padding:15px 39px;">
 	        <div class="text-lg m-t-xs text-center pos-rlt" style="opacity: .785;">
 	        	500
-	        	{{#containsScope "twitter_follow" usedReferTypes}}<i class="icon icon-check pos-abs refer-checked"></i>{{/containsScope}}
+	        	<i class="icon icon-check pos-abs refer-checked {{#containsScope 'twitter_follow' usedReferTypes}}{{else}}hide{{/containsScope}}"></i>
 	        </div>
 			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
 	      </div>
@@ -40,7 +40,7 @@
 	      <div class="pull-right" style="padding:15px 39px;">
 	        <div class="text-lg m-t-xs text-center pos-rlt" style="opacity: .785;">
 	        	500
-	        	{{#containsScope "twitter_tweet" usedReferTypes}}<i class="icon icon-check pos-abs refer-checked"></i>{{/containsScope}}
+	        	<i class="icon icon-check pos-abs refer-checked {{#containsScope 'twitter_tweet' usedReferTypes}}{{else}}hide{{/containsScope}}"></i>
 	        </div>
 			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
 	      </div>
@@ -57,7 +57,7 @@
 	      <div class="pull-right" style="padding:15px 39px;">
 	        <div class="text-lg m-t-xs text-center pos-rlt" style="opacity: .785;">
 	        	500
-	        	{{#containsScope "facebook_share" usedReferTypes}}<i class="icon icon-check pos-abs refer-checked"></i>{{/containsScope}}
+	        	<i class="icon icon-check pos-abs refer-checked {{#containsScope 'facebook_share' usedReferTypes}}{{else}}hide{{/containsScope}}"></i>
 	        </div>
 			<div class="text-xs text-muted"  style="letter-spacing: 0.75px;">Emails</div> 
 	      </div>

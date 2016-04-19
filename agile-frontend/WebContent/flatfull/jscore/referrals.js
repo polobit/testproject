@@ -149,7 +149,6 @@ function openFacebookModal() {
 		
 		// Send success info to server to send email
 		trackReferrals("facebook");
-		alert("Success");
 		addRefeferCredits("facebook");
 	});
 
@@ -198,16 +197,22 @@ function trackReferrals(type){
 	switch(type){
 			case "facebook":
 				showNotyPopUp("information", "Your submission is successful, thank you.", "top");
+				$("#share_on_fb").css("cursor", "not-allowed");
+				$("#share_on_fb .refer-checked").removeClass("hide");
 				sendReferralTrackMail("Shared on facebook");
 				REFER_DATA.usedReferTypes.push("facebook_share");
 				return;
 			case "follow":
 				showNotyPopUp("information", "You are following Agile CRM on Twitter. Congratulations!", "top");
+				$("#follow_on_twitter").css("cursor", "not-allowed");
+				$("#follow_on_twitter .refer-checked").removeClass("hide");
 				sendReferralTrackMail("Following on twitter");
 				REFER_DATA.usedReferTypes.push("twitter_follow");
 				return;
 			case "tweet":
 				showNotyPopUp("information", "Your tweet has been posted successfully.", "top");
+				$("#tweet_about_us").css("cursor", "not-allowed");
+				$("#tweet_about_us .refer-checked").removeClass("hide");
 				sendReferralTrackMail("Tweet");
 				REFER_DATA.usedReferTypes.push("twitter_tweet");
 				return;

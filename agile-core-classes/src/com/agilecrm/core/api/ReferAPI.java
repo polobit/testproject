@@ -28,7 +28,7 @@ public class ReferAPI {
     @POST
     public void shareOnFB(){
     	Referer referer = ReferUtil.getReferrer();
-    	if(referer.usedReferTypes.contains(ReferTypes.facebook_share)){
+    	if(!referer.usedReferTypes.contains(ReferTypes.facebook_share)){
     		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
     		restriction.incrementEmailCreditsCount(500);
     		restriction.save();
