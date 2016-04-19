@@ -15,16 +15,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.campaignio.reports.DateUtil;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.gson.JsonObject;
+import com.thirdparty.sendgrid.deferred.SendGridSubAccountDeferred;
 import com.thirdparty.sendgrid.lib.SendGridLib;
 import com.thirdparty.sendgrid.webhook.util.SendGridWebhookUtil;
 
@@ -482,9 +488,25 @@ public class SendGridSubUser extends SendGridLib
 	    {
 	    	return duration;
 	    }
+	}
+	
+	/**
+	 * Add SendGrid sub account creation task in Deferred queue
+	 * @param domainUser
+	 */
+	public static void createSubAccountInSendGrid(DomainUser domainUser)
+	{
+		if(domainUser==null)
+			return;
+		System.out.println("Sendgrid Subaccount creation task added in a queue");
+		Queue queue = QueueFactory.getQueue(AgileQueues.ACCOUNT_STATS_UPDATE_QUEUE);
 		
+		SendGridSubAccountDeferred task = new SendGridSubAccountDeferred(domainUser);
+		queue.add(TaskOptions.Builder.withPayload(task));
 		
 	}
+	
+	
 
 }
 	

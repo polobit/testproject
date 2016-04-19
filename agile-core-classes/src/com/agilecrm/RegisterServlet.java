@@ -40,6 +40,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>RegisterServlet</code> class registers the user account in agile crm.
@@ -228,10 +229,10 @@ public class RegisterServlet extends HttpServlet
 	EventReminder.getEventReminder(domainUser.domain, null);
 	
 	// Create subaccount in Mandrill after registration
-	MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	//MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
 	
 	// Creates subUser in SendGrid after registration
-	SendGridUtil.createSendGridSubUser(domainUser);
+	SendGridSubUser.createSubAccountInSendGrid(domainUser);
 	
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
