@@ -1,3 +1,13 @@
+<%@page import="com.agilecrm.user.Referer.ReferTypes"%>
+<%@page import="com.agilecrm.user.Referer.ReferTypes"%>
+<%@page import="com.agilecrm.user.Referer.ReferTypes"%>
+<%@page import="com.agilecrm.user.Referer.ReferTypes"%>
+<%@page import="com.agilecrm.user.util.ReferUtil"%>
+<%@page import="com.agilecrm.user.Referer"%>
+<%@page import="com.agilecrm.user.DomainUser"%>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+<%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
+<%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="twitter4j.auth.AccessToken"%>
 <%@page import="twitter4j.TwitterFactory"%>
@@ -17,7 +27,7 @@ if(StringUtils.isNotBlank(deniedParam)){
 }
 	
 //Get Access Token
-Token accessToken = null; Twitter twitter = null; User user = null;
+Token accessToken = null; Twitter twitter = null; User user = null; String referralType = null;
 
 try{
 
@@ -52,6 +62,31 @@ twitter.setOAuthAccessToken(accessToken2);
 	    
 //Fetches User from Twitter
 user = twitter.showUser(twitter.getId());
+
+Object referralObj = request.getSession().getAttribute("referral_type");
+if(referralObj != null){
+	referralType = (String) referralObj;
+	System.out.println("referral_type is:: "+referralType);
+	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+	Referer referer = ReferUtil.getReferrer();
+	if(referralType.equals("tweet")){
+		twitter.updateStatus("Try @agilecrm. I am using Agile CRM and really love it. An all-in-one CRM which enables you sell like the Fortune 500!");
+		if(!referer.usedReferTypes.contains(ReferTypes.twitter_tweet)){
+			restriction.incrementEmailCreditsCount(500);
+			referer.usedReferTypes.add(ReferTypes.twitter_tweet);
+			referer.save();
+		}
+	}else if(referralType.equals("follow")){
+		User user1 = twitter.createFriendship("agilecrm");
+		twitter.createFriendship(user1.getId());
+		if(!referer.usedReferTypes.contains(ReferTypes.twitter_follow)){
+			restriction.incrementEmailCreditsCount(500);
+			referer.usedReferTypes.add(ReferTypes.twitter_follow);
+			referer.save();
+		}
+	}
+	restriction.save();
+}
 }catch(Exception e){
 	   System.out.println(accessToken);
 	   System.out.println("Some error occured : " + e.getMessage());
@@ -73,14 +108,17 @@ user = twitter.showUser(twitter.getId());
 
 $(function()
 {	
+	var referral_type = "<%=referralType%>";
  	var token = "<%=accessToken.getToken()%>";
 	var tokenSecret = "<%=accessToken.getSecret()%>";
 	var account = "<%=twitter.getScreenName()%>";
 	
 	// Fetches profile image url
 	var profileImgUrl = "<%=user.getOriginalProfileImageURLHttps()%>";
-		
-	window.opener.popupTwitterCallback(token, tokenSecret, account, profileImgUrl);
+	if(referral_type != null && referral_type != "null")
+		window.opener.trackReferrals(referral_type); 
+	else
+		window.opener.popupTwitterCallback(token, tokenSecret, account, profileImgUrl);
 	window.close();
 });
 

@@ -620,6 +620,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
+
     <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
   <!-- Include bootstrap modal divs-->
@@ -838,7 +839,12 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
           
         
         </div>
+<<<<<<< HEAD
 </div>
 
+=======
+  </div>
+<div id="fb-root"></div>
+>>>>>>> referrals
 </body>
 </html>

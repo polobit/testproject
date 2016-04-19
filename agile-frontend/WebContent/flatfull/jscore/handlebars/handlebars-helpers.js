@@ -1358,6 +1358,12 @@ $(function()
 		return CURRENT_DOMAIN_USER.email;
 	});
 
+	Handlebars.registerHelper('get_current_domain_name', function()
+	{
+		var name =  CURRENT_DOMAIN_USER.name;
+		return name.charAt(0).toUpperCase() + name.slice(1);
+	});
+
 	
 	/*
 	 * To add comma in between the elements.
