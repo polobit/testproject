@@ -18,6 +18,7 @@ import com.agilecrm.file.readers.DocumentFileInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.Queue;
@@ -374,7 +375,15 @@ public class SendGrid
     	
     	// To
     	for(String emailString: EmailUtil.getStringTokenArray(to, ","))
-    		email.addTo(EmailUtil.getEmail(emailString), EmailUtil.getEmailName(emailString));
+    	{
+    		String toName = EmailUtil.getEmailName(emailString);
+    		
+    		// If To Name is blank
+    		if(StringUtils.isBlank(toName))
+    			toName = MergeFieldsUtil.getFirstUpperCaseChar(emailString.split("@")[0]);
+    		
+    		email.addTo(EmailUtil.getEmail(emailString), toName);
+    	}
     	
     	// CC
     	if (!StringUtils.isEmpty(cc))
@@ -399,9 +408,15 @@ public class SendGrid
     		email.setSmtpJsonString(SMTPHeaderJSON);
     	
     	if (documentIds != null && documentIds.size() > 0)
+    	{
     		sendDocumentAsMailAttachment(apiUser, apiKey, email, documentIds.get(0));
+    		return "Added to Document Queue.";
+    	}
 	    else if (blobKeys != null && blobKeys.size() > 0)
+	    {
 	    	sendBlobAsMailAttachment(apiUser, apiKey, email, blobKeys.get(0));
+	    	return "Added to Blob Queue";
+	    }
 	    else if (attachmentData != null && attachmentData.length > 0)
 	    {
 	    	String fileName = getFileName(attachmentData);

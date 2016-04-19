@@ -3,7 +3,6 @@ package com.thirdparty.sendgrid.webhook.util;
 import java.net.URLEncoder;
 
 import org.apache.commons.lang.StringUtils;
-
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.sendgrid.SendGrid;
@@ -55,7 +54,7 @@ public class SendGridWebhookUtil
 				webhookURL = "https://agilecrmbeta.appspot.com/backend/sendgridwebhook";
 
 			String queryString = "";
-
+			
 			queryString = SendGrid.SENDGRID_API_PARAM_API_USER + "=" + URLEncoder.encode(apiUser, "UTF-8") + "&"
 					+ SendGrid.SENDGRID_API_PARAM_API_KEY + "=" + URLEncoder.encode(password, "UTF-8") + "&"
 					+ SENDGRID_EVENT_NAME + "=" + URLEncoder.encode(SENDGRID_EVENT_NOTIFY, "UTF-8") + "&"
@@ -72,9 +71,14 @@ public class SendGridWebhookUtil
 					;
 
 			response = HTTPUtil.accessURLUsingPost(SENDGRID_WEBHOOK_URL, queryString);
-
 			System.out.println("Response for adding webhook: " + response);
-
+			
+			if(!StringUtils.contains(response, "errors"))
+			{
+				response = HTTPUtil.accessURLUsingPost("https://api.sendgrid.com/api/filter.activate.json", "api_user=" + URLEncoder.encode(apiUser, "UTF-8") + "&api_key=" + URLEncoder.encode(password, "UTF-8") + "&name=eventnotify");
+				
+				System.out.println("Response for activating webhook: " + response);
+			}
 		}
 		catch (Exception e)
 		{
