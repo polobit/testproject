@@ -404,7 +404,9 @@
           {{#property_is_exists "url" properties}}
           <div class="b-b b-light p-b-xs">
           <div class="pull-left"><i class="fa fa-globe text-sm v-middle"></i></div>
+          <div class="text-ellipsis">
           <a class="m-l-sm" title="{{getPropertyValue properties "url"}}" href="{{getPropertyValue properties "url"}}" target="_blank">{{getPropertyValue properties "url"}}</a> 
+          </div>
          </div>
           
           {{/property_is_exists}}
