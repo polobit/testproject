@@ -42,7 +42,9 @@
                                         <option value="DEAL_IS_DELETED">Deal is deleted</option>
                                         <option value="DEAL_MILESTONE_IS_CHANGED">Deal milestone is changed</option>
 										<optgroup label="Timer">
+										{{#if _IS_FREE_PLAN}}
 										<option value="RUNS_HOURLY">Hourly</option>
+										{{/if}}
 										<option value="RUNS_DAILY">Daily</option>
                                         <option value="RUNS_WEEKLY">Weekly</option>
                                         <option value="RUNS_MONTHLY">Monthly</option>
@@ -481,8 +483,8 @@
 <!-- Start of tab-pane - timer -->
 <div class="tab-pane" role="tab-panel" id="timer">
 
-
 <div id="general" class="row">
+{{#if _IS_FREE_PLAN}}
 			<div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="panel wrapper text-center b-a">
                     <!-- Icon and Title -->
@@ -502,6 +504,8 @@
                     </div>
                 </div>
             </div>
+{{/if}}
+
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="panel wrapper text-center b-a">
                     <!-- Icon and Title -->
