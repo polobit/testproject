@@ -30,7 +30,7 @@ public class TicketsBackup implements Serializable
 	@Id
 	public Long id;
 
-	public String ticketData = "";
+	public String ticket_data = "";
 
 	/**
 	 * Stores epoch time when ticket is created
@@ -60,7 +60,7 @@ public class TicketsBackup implements Serializable
 	public TicketsBackup(String ticketData)
 	{
 		super();
-		this.ticketData = ticketData;
+		this.ticket_data = ticketData;
 	}
 
 	public Key<TicketsBackup> save()

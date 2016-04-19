@@ -114,7 +114,7 @@ public class SendgridInboundParser extends HttpServlet
 		try
 		{
 			Key<TicketsBackup> backupKey = null;
-			
+
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
 			System.out.println("isMultipart: " + isMultipart);
@@ -126,10 +126,10 @@ public class SendgridInboundParser extends HttpServlet
 				if (isMultipart)
 				{
 					JSONObject json = getJSONFromMIME(request);
-					
-					//Adding record to tickets backup db
+
+					// Adding record to tickets backup db
 					backupKey = new TicketsBackup(json.toString()).save();
-					
+
 					String envelope = json.getString("envelope");
 
 					System.out.println("Envelope:" + envelope);
@@ -145,9 +145,18 @@ public class SendgridInboundParser extends HttpServlet
 					String inboundSuffix = TicketGroupUtil.getInboundSuffix();
 
 					String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
-
+					
+					System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
+					
 					if (toAddressArray.length < 2)
-						return;
+					{
+						toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
+						
+						System.out.println("toAddressArray with underscore delimeter: " + Arrays.toString(toAddressArray));
+						
+						if (toAddressArray.length < 2)
+							return;
+					}
 
 					String namespace = toAddressArray[0];
 					System.out.println("namespace: " + namespace);
@@ -257,9 +266,9 @@ public class SendgridInboundParser extends HttpServlet
 					Tickets ticket = null;
 
 					String[] nameEmail = getNameAndEmail(json);
-					
+
 					System.out.println("Name & email fetched: " + Arrays.toString(nameEmail));
-					
+
 					// boolean isNewTicket = isNewTicket(toAddressArray);
 					String ticketID = extractTicketIDFromHtml(htmlText);
 
@@ -326,8 +335,8 @@ public class SendgridInboundParser extends HttpServlet
 
 					System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime)
 							+ "ms");
-					
-					//Removing backup if everything is ok
+
+					// Removing backup if everything is ok
 					TicketsBackup.delete(backupKey);
 				}
 			}
@@ -418,7 +427,8 @@ public class SendgridInboundParser extends HttpServlet
 		String name = "", from = "";
 		try
 		{
-			from = json.getString("from"); name = from;
+			from = json.getString("from");
+			name = from;
 
 			int delimeterIndex = from.indexOf("<");
 
