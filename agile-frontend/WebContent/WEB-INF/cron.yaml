@@ -136,3 +136,8 @@ cron:
 - description: Ticket stats report
   url: /ticket-module/backend/ticket_stats
   schedule: every day 03:00
+
+- description: Expired Sessions Cleanup
+  url: /_ah/sessioncleanup?clear
+  schedule: every 1 mins
+
