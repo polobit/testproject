@@ -31,7 +31,8 @@ var PortletsRouter = Backbone.Router
 							individual_tag_name : 'div',
 
 							postRenderCallback : function(el) {
-
+								$('#dashlet-tabs-content a[href="#contacts_dashlet"]').tab('show');
+								
 								// Hide activity/Deals/tasks tab if no deals
 								// portlets are there
 								// (Previliges not allowing to show)

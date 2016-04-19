@@ -1183,7 +1183,7 @@ function initializeEditor() {
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
         toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | merge_fields",
         setup: function (editor) {
-            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+            editor.addButton('merge_fields', { type : 'menubutton', text : 'Merge Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
 
             // editor.addButton('calltoaction', {
             //     text : 'Add Button',

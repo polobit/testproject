@@ -4,14 +4,19 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
@@ -713,9 +718,27 @@ public class QueryDocument<T> implements QueryInterface
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
 	    agileCursor.count = availableResults.intValue();
 	}
-
+	if(entities.size() == 10 ){
+		Set<String> set = new HashSet<String>(); 
+		int count = 0;
+		for(Object m : entities){
+			if(m instanceof Contact);
+				Contact contact = (Contact) m;
+				set.add(contact.contact_company_id);
+				count = count+1;
+		}
+		if(count == 10 && set.size()==1){
+			String id = set.iterator().next().toString();
+			Contact contact = ContactUtil.getContact(Long.parseLong(id));
+			if(contact != null){
+				entities.remove(9);
+				entities.add(contact);
+			}
+		}
+	}
 	return entities;
     }
+    
 
     /**
      * Iterates though contact documents in and fetch respective entities from
