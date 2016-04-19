@@ -145,15 +145,16 @@ public class SendgridInboundParser extends HttpServlet
 					String inboundSuffix = TicketGroupUtil.getInboundSuffix();
 
 					String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
-					
+
 					System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
-					
+
 					if (toAddressArray.length < 2)
 					{
 						toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
-						
-						System.out.println("toAddressArray with underscore delimeter: " + Arrays.toString(toAddressArray));
-						
+
+						System.out.println("toAddressArray with underscore delimeter: "
+								+ Arrays.toString(toAddressArray));
+
 						if (toAddressArray.length < 2)
 							return;
 					}
@@ -194,8 +195,29 @@ public class SendgridInboundParser extends HttpServlet
 					}
 					catch (Exception e)
 					{
-						System.out.println("Invalid groupID: " + groupID);
-						return;
+						boolean idFound = false;
+
+						String tempGroupID = toAddressArray[1];
+
+						List<TicketGroups> allGroups = TicketGroups.ticketGroupsDao.fetchAll();
+
+						for (TicketGroups tempTicketGroup : allGroups)
+						{
+							String groupEmail = tempTicketGroup.group_email.toLowerCase();
+
+							if (groupEmail.contains(tempGroupID.toLowerCase()))
+							{
+								ticketGroup = tempTicketGroup;
+								idFound = true;
+								break;
+							}
+						}
+
+						if (!idFound)
+						{
+							System.out.println("Invalid groupID: " + groupID);
+							return;
+						}
 					}
 
 					List<String> ccEmails = getCCEmails(json);
