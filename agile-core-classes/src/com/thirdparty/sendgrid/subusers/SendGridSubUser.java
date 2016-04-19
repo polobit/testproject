@@ -272,12 +272,20 @@ public class SendGridSubUser extends SendGridLib
 		try
 		  {
 			statsJSON=new JSONArray(getSubUserStatistics(domain, gateway,stats ));
-			//getting reputation
-			JSONArray reputation=new JSONArray(getSendGridUserReputation(domain, gateway));
-			
+			//getting reputation			
 			JSONObject data=getSendgridStatsCount(statsJSON);
 					   data.put("id",domain);
-					   data.put(REPUTATION, reputation.getJSONObject(0).getInt(REPUTATION));
+					   
+					   if(gateway==null)
+					   {
+					    JSONArray reputation=new JSONArray(getSendGridUserReputation(domain, gateway));	
+					    data.put(REPUTATION, reputation.getJSONObject(0).getInt(REPUTATION));
+					   }
+					   else
+					   {
+						   JSONObject reputation=new JSONObject(getSendGridUserReputation(domain, gateway));	
+						   data.put(REPUTATION, reputation.getInt(REPUTATION));
+					   }
 		
 			return data.toString();
 		  }
