@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
@@ -64,7 +65,7 @@ public class SendGridInboundWebhook extends HttpServlet
 			
 			NamespaceManager.set(agileDomain);
 			
-			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+			Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 			System.out.println("owner is " + owner);
 			
 			if (owner == null)
