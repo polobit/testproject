@@ -223,8 +223,8 @@ public class SendGrid
 	    String SMTPHeaderJSON, String... attachmentData) throws UnsupportedEncodingException
     {
 	// Query string
-	String queryString = SENDGRID_API_PARAM_API_USER + "=" + apiUser + "&" + SENDGRID_API_PARAM_API_KEY + "="
-	        + apiKey + "&" + SENDGRID_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject, "UTF-8") + "&"
+	String queryString = SENDGRID_API_PARAM_API_USER + "=" + URLEncoder.encode(apiUser, "UTF-8") + "&" + SENDGRID_API_PARAM_API_KEY + "="
+	        + URLEncoder.encode(apiKey, "UTF-8") + "&" + SENDGRID_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject, "UTF-8") + "&"
 	        + SENDGRID_API_PARAM_FROM + "=" + URLEncoder.encode(fromEmail, "UTF-8") + "&"
 	        + SENDGRID_API_PARAM_FROM_NAME + "=" + URLEncoder.encode(fromName, "UTF-8");
 
