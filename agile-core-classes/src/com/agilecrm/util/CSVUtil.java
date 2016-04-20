@@ -753,7 +753,7 @@ public class CSVUtil
 
 	    tempContact.properties = new ArrayList<ContactField>();
 	    String companyName = null;
-
+	    boolean canSave = true;
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
@@ -800,6 +800,7 @@ public class CSVUtil
 			}
 			else
 			{
+			    canSave = false;
 			    isInvalid = true;
 			    break;
 			}
@@ -896,6 +897,11 @@ public class CSVUtil
 	    else
 	    {
 		++nameMissing;
+		continue;
+	    }
+
+	    if (!canSave)
+	    {
 		continue;
 	    }
 
