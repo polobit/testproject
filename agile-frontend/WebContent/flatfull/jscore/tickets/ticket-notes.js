@@ -413,7 +413,7 @@ var Tickets_Notes = {
 
 		var params  = 'width=550';
 		params += ', height=' + (screen.height-200);
-		params += ', top=0, left=0';
+		params += ', scrollbars=yes, top=0, left=0';
 
 		type = (!type) ? "html" : type;
 
