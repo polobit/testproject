@@ -1708,4 +1708,111 @@ setupCharts(function(){
 						});
 	},
 
+	/**
+	 * To display contacts count by Visitors portlet as pie graph
+	 */
+	webstatVisitsPieGraph : function(selector, knownContacts,
+			anonymous) {
+		var series = [];
+							series.push([ "Known Contacts",
+									knownContacts]);
+							series.push([ "Anonymous Contacts", anonymous ]);
+
+
+		setupCharts(function(){
+								$('#' + selector)
+										.highcharts(
+												{
+													chart : {
+														type : 'pie',
+														marginRight : 20
+													},
+													colors : [ '#55BF3B',
+															'#23b7e5',
+															'#ff0000',
+															'#27c24c',
+															'#f05050',
+															"#aaeeee",
+															"#ff0066",
+															"#eeaaee",
+															"#7266ba",
+															"#DF5353",
+															"#7798BF",
+															"#aaeeee" ],
+													title : {
+														text : ''
+													},
+													tooltip : {
+														formatter : function() {
+															return '<table>'
+																	+ '<tr> <td class="p-n">'
+																	+ '<b>'
+																	+ (this.point.name)
+																	+ '</b></td></tr>'
+																	+ '<tr><td class="p-n">Total Count: '
+																	+ '<b> '
+																	+ (this.point.y)
+																	+ '</b></td></tr>'
+																	+ '</table>';
+														},
+														shared : true,
+														useHTML : true,
+														borderWidth : 1,
+														backgroundColor : '#313030',
+														shadow : false,
+														borderColor : '#000',
+														borderRadius : 3,
+														style : {
+															color : '#EFEFEF'
+														}
+													},
+													plotOptions : {
+														series : {
+															borderWidth : 0
+														},
+														pie : {
+															borderWidth : 0,
+															innerSize : '35%',
+															size:'45%',
+															dataLabels : {
+																enabled : true,
+																useHTML : true,
+																/*
+																 * connectorWidth:
+																 * 0,
+																 */
+																softConnector : true,
+																formatter : function() {
+																	return '<div class="text-center"><span style="color:'
+																			+ this.point.color
+																			+ '"><b>'
+																			+ this.point.name
+																			+ '</b></span><br/>'
+																			+ '<span style="color:'
+																			+ this.point.color
+																			+ '"><b>'
+																			+ Math
+																					.round(this.point.percentage)
+																			+ '%</b></span></div>';
+																},
+																/*
+																 * format: '<b>{point.name}</b>:
+																 * {point.percentage:.1f}',
+																 */
+																distance : 30,
+																x : 2,
+																y : -10
+															},
+															showInLegend : false
+														}
+													},
+													series : [ {
+														name : 'Visits',
+														data : series
+													} ],
+																									});
+						});
+	},
+
+
 };

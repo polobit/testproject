@@ -5833,7 +5833,7 @@ $(function()
 		else if(p_name=='Average Deviation')
 			portlet_name = "Tasks Completion Time Deviation";
 		else if(p_name == 'Webstat Visits')
-			portlet_name = "Webstat Visits";
+			portlet_name = "Visitors";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5891,7 +5891,7 @@ $(function()
 		else if (p_name == 'Lost Deal Analysis')
 			icon_name = 'icon-pie-chart';
 		else if(p_name == 'Webstat Visits')
-			icon_name = 'icon-user';
+			icon_name = 'icon-globe';
 		return icon_name;
 	});
 	
@@ -6678,7 +6678,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	else if(p_name == 'Average Deviation')
 		description = 'A quick view of deviation in tasks completion times.'
 	else if (p_name== 'Webstat Visits')
-		description = 'Webstat visits testing description.';
+		description = 'A pie chart of Known Visitors and Anonymous Visitors on your Website.';
 	return description;
 			});
 

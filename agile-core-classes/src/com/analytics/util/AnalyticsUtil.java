@@ -44,6 +44,7 @@ import com.googlecode.objectify.ObjectifyService;
 public class AnalyticsUtil
 {
     public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
+    public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
     
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
     
@@ -413,6 +414,26 @@ public class AnalyticsUtil
 	    }
 	}
 	return result;
+    }
+    /**
+     * Returns url for the mysql server database
+     * 
+     * @param domain
+     * 
+     * @param startDate
+     *              -epoch Time
+     * @param endDate
+     *            -epoch Time
+     * @return
+     *        -url for mysql database
+     */       
+    
+    public static String getStatsUrlForVisitsCount(String domain, String startDate, String endDate, String timeZone)
+    {
+    	String url = null;
+    	String hostUrl = STATS_SERVER_URL+"/reports?domain=our&psd="+STATS_SEREVR_HTTP_REQUEST_PWD;
+    	url = hostUrl + "&action=VISITS_COUNT&start_date="+startDate+"&end_date="+endDate+"&time_zone="+timeZone;
+    	return url;
     }
     
 }

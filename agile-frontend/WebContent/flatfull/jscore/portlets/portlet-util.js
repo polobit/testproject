@@ -1269,10 +1269,10 @@ var portlet_utility = {
 			break;
 		}
 		case "Webstat Visits": {
-			var url = '/core/api/portlets/webstat-visits?start-date='
-					+ '1458153000'
-					+ '&campaign_type='
-					+'All';
+			var url = '/core/api/web-stats/reports?start_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
+					+ '&end_time='
+					+portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000;
 			portlet_graph_data_utility.webstatVisitsGraphData(base_model,
 					selector, url);
 			setPortletContentHeight(base_model);
@@ -1868,9 +1868,8 @@ var portlet_utility = {
 			that.addPortletSettingsModalContent(base_model,
 					"portletsWebstatVisitsSettingsModal");
 			elData = $('#portletsWebstatVisitsSettingsModal');
-			$("#duration", elData)
-					.find(
-							'option[value='
+			$("#duration", elData).find(
+				               'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 			break;
