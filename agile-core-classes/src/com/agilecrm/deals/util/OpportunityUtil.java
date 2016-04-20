@@ -52,6 +52,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -1113,7 +1114,7 @@ public class OpportunityUtil
 
     
     // Total value count using projection query
-    public static Double getTotalValueOfDeals(org.json.JSONObject filterJson)
+    public static Double getTotalValueOfDeals(org.json.JSONObject filterJson) throws JSONException
     {
     com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query("Opportunity");
     DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
@@ -1122,6 +1123,7 @@ public class OpportunityUtil
 	double start_value = 0d;
 	double end_value = 0d;
 	String sortField = "close_date";
+	String fieldval = filterJson.getString("field");
 	try
 	{
 		
@@ -1245,6 +1247,7 @@ public class OpportunityUtil
     		 query.addFilter("pipeline", FilterOperator.EQUAL, KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId()));
     		 
 		      System.out.println("hello n try block "+filterJson.getLong("pipeline_id"));
+		      query.addSort(fieldval , SortDirection.ASCENDING);
 		      List<Entity> deals = dataStore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 		      System.out.println("deals size in projection query = "+deals.size());
 		      if (checkJsonString(filterJson, "value_filter")

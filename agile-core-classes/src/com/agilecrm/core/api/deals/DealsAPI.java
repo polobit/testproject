@@ -190,7 +190,6 @@ public class DealsAPI
      double totalValue = 0.0d;
     JSONObject obj = new JSONObject();
     System.out.println(count);
-    obj.put("id", "100");
 	if (filters != null)
 	{
 	    System.out.println(filters);
@@ -199,6 +198,8 @@ public class DealsAPI
 			org.json.JSONObject json = new org.json.JSONObject(filters);
 			if (milestone != null)
 				json.put("milestone", milestone);
+			if(fieldName != null)
+				json.put("field", fieldName);
 			System.out.println(json.toString());			
 			totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
 			obj.put("total", totalValue);	
