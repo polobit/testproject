@@ -25,84 +25,87 @@ import com.google.appengine.api.search.ScoredDocument;
  */
 public interface QueryInterface
 {
-	public static enum Type
+    public static enum Type
+    {
+	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(
+		Case.class), DOCUMENT(Document.class), TICKETS(Tickets.class);
+	;
+
+	private Class clazz;
+
+	Type(Class clazz)
 	{
-		CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(
-				Case.class), DOCUMENT(Document.class), TICKETS(Tickets.class);;
-
-		private Class clazz;
-
-		Type(Class clazz)
-		{
-			this.clazz = clazz;
-		}
-
-		public Class getClazz()
-		{
-			return clazz;
-		}
+	    this.clazz = clazz;
 	}
 
-	/**
-	 * Declaration of simple search method, takes keyword as an argument and
-	 * searches based on keyword and returns entities
-	 * 
-	 * @param keyword
-	 *            {@link String} searches based in th keyword
-	 * @return {@link Collection} of entities returned after querying
-	 */
-	public Collection<?> simpleSearch(String keyword, Integer count, String cursor);
+	public Class getClazz()
+	{
+	    return clazz;
+	}
+    }
 
-	/**
-	 * 
-	 * @param keyword
-	 * @param count
-	 * @param cursor
-	 * @param type
-	 * @return
-	 */
-	public Collection<?> simpleSearchWithType(String keyword, Integer count, String cursor, String type);
+    /**
+     * Declaration of simple search method, takes keyword as an argument and
+     * searches based on keyword and returns entities
+     * 
+     * @param keyword
+     *            {@link String} searches based in th keyword
+     * @return {@link Collection} of entities returned after querying
+     */
+    public Collection<?> simpleSearch(String keyword, Integer count, String cursor);
 
-	/**
-	 * It declares advancedSearch based on the list of search Rules, should
-	 * build queries base on searchRule which includes condition of the query
-	 * 
-	 * @param rule
-	 *            {@link List} of {@link SearchRule}
-	 * @return {@link Collection} of entities
-	 */
-	public Collection<?> advancedSearch(List<SearchRule> rule);
+    /**
+     * 
+     * @param keyword
+     * @param count
+     * @param cursor
+     * @param type
+     * @return
+     */
+    public Collection<?> simpleSearchWithType(String keyword, Integer count, String cursor, String type);
 
-	/**
-	 * It is similar to advanced search but queries based on page limit and
-	 * cursor the cursor sent
-	 * 
-	 * @param rule
-	 * @param count
-	 * @param cursor
-	 * @return
-	 */
-	Collection<?> advancedSearch(List<SearchRule> rules, Integer count, String cursor, String orderBy);
+    /**
+     * It declares advancedSearch based on the list of search Rules, should
+     * build queries base on searchRule which includes condition of the query
+     * 
+     * @param rule
+     *            {@link List} of {@link SearchRule}
+     * @return {@link Collection} of entities
+     */
+    public Collection<?> advancedSearch(List<SearchRule> rule);
 
-	/**
-	 * Returns the number of results for the advanced search based on the list
-	 * of search rules
-	 * 
-	 * @param rule
-	 * @param count
-	 * @param cursor
-	 * @return
-	 */
-	int advancedSearchCount(List<SearchRule> rules);
+    /**
+     * It is similar to advanced search but queries based on page limit and
+     * cursor the cursor sent
+     * 
+     * @param rule
+     * @param count
+     * @param cursor
+     * @return
+     */
+    Collection<?> advancedSearch(List<SearchRule> rules, Integer count, String cursor, String orderBy);
 
-	public Long getCount(List<SearchRule> rules);
+    /**
+     * Returns the number of results for the advanced search based on the list
+     * of search rules
+     * 
+     * @param rule
+     * @param count
+     * @param cursor
+     * @return
+     */
+    int advancedSearchCount(List<SearchRule> rules);
 
-	public Collection<?> processQuery(String query, Integer page, String cursor);
+    public Long getCount(List<SearchRule> rules);
 
-	Collection<?> advancedSearch(SearchFilter filter);
+    public Collection<?> processQuery(String query, Integer page, String cursor);
 
-	Collection<?> advancedSearch(SearchFilter filter, Integer count, String cursor, String orderBy);
+    Collection<?> advancedSearch(SearchFilter filter);
 
-	List<ScoredDocument> advancedSearchOnlyIds(SearchFilter filter, Integer count, String cursor, String orderBy);
+    Collection<?> advancedSearch(SearchFilter filter, Integer count, String cursor, String orderBy);
+
+    List<ScoredDocument> advancedSearchOnlyIds(SearchFilter filter, Integer count, String cursor, String orderBy);
+
+    Collection<?> simpleSearchWithTypeAndQuery(String query, Integer count, String cursor, String type);
 
 }

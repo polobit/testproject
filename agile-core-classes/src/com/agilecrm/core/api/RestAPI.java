@@ -120,7 +120,8 @@ public class RestAPI
 
 			    // Search contact if email is present else return
 			    // null
-			    Contact contact1 = ContactUtil.searchContactByEmail(obj1.getString("email"));
+			    Contact contact1 = ContactUtil.searchContactByEmailZapier(obj1.getString("email")
+				    .toLowerCase());
 
 			    // Iterate data by keys ignore email key value pair
 			    Iterator<?> keys1 = obj1.keys();
@@ -271,7 +272,7 @@ public class RestAPI
 		return null;
 
 	    // Search contact if email is present else return null
-	    Contact contact = ContactUtil.searchContactByEmail(obj.getString("email").toLowerCase());
+	    Contact contact = ContactUtil.searchContactByEmailZapier(obj.getString("email").toLowerCase());
 
 	    if (contact == null)
 	    {
@@ -323,7 +324,7 @@ public class RestAPI
 			    int count = 0;
 
 			    if (obj1.has("email"))
-				count = ContactUtil.searchContactCountByEmail(obj1.getString("email"));
+				count = ContactUtil.searchContactCountByEmail(obj1.getString("email").toLowerCase());
 
 			    System.out.println("contacts available" + count);
 			    if (count != 0)
@@ -496,7 +497,7 @@ public class RestAPI
 	    return object.toString();
 	}
 
-	Contact contact = ContactUtil.searchContactByEmail(email);
+	Contact contact = ContactUtil.searchContactByEmailZapier(email.toLowerCase());
 	if (contact == null)
 	{
 	    object.put("error", "No contact found with email address \'" + email + "\'");
