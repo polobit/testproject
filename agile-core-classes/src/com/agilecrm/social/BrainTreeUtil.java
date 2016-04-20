@@ -1,5 +1,6 @@
 package com.agilecrm.social;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 import org.json.JSONArray;
@@ -17,7 +18,7 @@ public class BrainTreeUtil {
 	Environment SANDBOX = Environment.SANDBOX;
 
 	public BrainTreeUtil(String merchantId, String publicKey, String privateKey) {
-		gateway = new BraintreeGateway(SANDBOX, merchantId, publicKey,
+		gateway = new BraintreeGateway(PRODUCTION, merchantId, publicKey,
 				privateKey);
 	}
 
@@ -46,6 +47,33 @@ public class BrainTreeUtil {
 
 			jArray.put(jObj);
 		}
+
 		return jArray;
+	}
+
+	public void getTransactionByID(String id) {
+		TransactionSearchRequest searchRequest = new TransactionSearchRequest()
+				.amount().greaterThanOrEqualTo(new BigDecimal("15.00"));
+		ResourceCollection<Transaction> collection = gateway.transaction()
+				.search(searchRequest);
+
+		JSONArray jArray = new JSONArray();
+		System.out.println("size : " + collection.getMaximumSize());
+		for (Transaction transaction : collection) {
+			System.out.println("----------------------------");
+			System.out.println(transaction.getCustomer().getEmail());
+			System.out.println(transaction.getCustomer().getId());
+			System.out.println(transaction.getAmount());
+
+		}
+	}
+
+	public static void main(String args[]) {
+		String merchantId = "wd9pbyzvswvbdc8j";
+		String publicKey = "57cc7rydfqkfjvny";
+		String privateKey = "88febbbe7ccec03d5856b36647de0098";
+		BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
+				privateKey);
+		bUtil.getTransactionByID("abc");
 	}
 }
