@@ -144,7 +144,7 @@ public class SearchAPI
 				if(m instanceof Contact);
 					Contact contact = (Contact) m;
 					set.add(contact.contact_company_id);
-					count = count+1;
+					searchCount = searchCount+1;
 			}
 			if(searchCount == 10 && set.size()==1){
 				if(set.iterator().next() != null){

@@ -154,11 +154,12 @@ public class AppengineSearch<T>
 				}
 			}
 			if (set.size() == 1){
+				if(set.iterator().next() != null){
 				String id = set.iterator().next().toString();
 				Contact contact = ContactUtil.getContact(Long.parseLong(id));
 				queryList.remove(9);
 				queryList.add(0, contact);
-									
+				}									
 			}
 		}
 		return queryList;
