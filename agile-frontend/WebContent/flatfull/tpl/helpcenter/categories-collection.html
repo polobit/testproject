@@ -1,0 +1,76 @@
+<script id="helpcenter-categories-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+   <div class="wrapper-md lter bg-light b-b">
+      <div class="row">
+         <div class="col-sm-12 col-md-12">
+            <h3 class="pull-left font-thin h3">Helpcenter <small><span class="label label-sm bg-danger">Beta</span></small></h3>
+            <div class="pull-right">
+               <div class="btn-group right pos-rlt pull-right">
+                  <a class="btn btn-default" href="#helpcenter/add-categorie">New Categorie</a>
+                  <button class="btn btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#helpcenter/add-section">New Section</a></li>
+                    <li><a href="#helpcenter/add-article">New Article</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+         </div>
+      </div>
+   </div>
+   <div class="wrapper-md">
+      <div class="row">
+         <div class="col-md-9 col-sm-9">
+            {{#unless this.length}}
+                <div class="alert bg-white">
+                   <div class="slate-content  p-md">
+                      <div class="box-left pull-left m-r-md">
+                         <img alt="Clipboard" src="/img/clipboard.png" />
+                      </div>
+                      <div class="box-right pull-left">
+                         <h4 class="m-t-none">There are no landing pages.</h4>
+                         <div class="text">
+                            You can add Landing Pages by clicking the button below or the one on the right side of the page.
+                         </div>
+                         <a href="#landing-page-templates" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  Add Landing Page</a>
+                      </div>
+                      <div class="clearfix">
+                      </div>
+                   </div>
+                </div>
+                <div class="embed-responsive embed-responsive-16by9">
+                   <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/vrxV_52QQTc?rel=0&amp;" frameborder="0" style="
+                      width: 58%;
+                      position: absolute;
+                      left: 37%;
+                      top: 15%;
+                      margin: -75px 0 0 -135px;
+                      height: 304px;
+                      " allowfullscreen=""></iframe>
+                </div>
+            {{/unless}}
+            {{#if this.length}}
+                <div class="row" id="helpcenter-categories-model-list"></div>
+            {{/if}}
+         </div>
+         <div class="col-md-3 col-sm-3" id="learn-workflows">
+            <h4 class="m-t-none h4 m-b-sm">
+               What is Helpcenter?
+            </h4>
+            <p>
+               Helpcenter content yet to prepare!.....
+            </p>
+            <br>
+            {{#if this.length}}
+            <p>
+               <a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+               <img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+               </a>
+            </p>
+            <br>
+            {{/if}}
+         </div>
+      </div>
+   </div>
+</div>
+</script>
