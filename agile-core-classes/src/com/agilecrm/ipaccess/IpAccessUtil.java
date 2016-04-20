@@ -81,7 +81,7 @@ public class IpAccessUtil {
 		return false;
 	}
 	
-	static boolean isValidIPWithRegex(String matcher, String ipToCheck){
+	public static boolean isValidIPWithRegex(String matcher, String ipToCheck){
 		System.out.println(StringUtils.isNotBlank(matcher));
 		System.out.println(StringUtils.isNotBlank(ipToCheck));
 		if(!StringUtils.isNotBlank(matcher) || !StringUtils.isNotBlank(ipToCheck))

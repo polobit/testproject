@@ -294,6 +294,17 @@ public class LoginServlet extends HttpServlet {
 		request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
 		System.out.println("fingerprint " + request.getSession().getAttribute(SESSION_FINGERPRINT_VAL) );
 		
+		UserFingerPrintInfo infofingerprint = new UserFingerPrintInfo();
+		
+		infofingerprint.validateUserFingerPrint(domainUser, request);
+		
+		
+		boolean isvalid = infofingerprint.isValidFingerPrint;
+		boolean isvalidip = infofingerprint.isValidIP;
+		
+		System.out.println("fingerprint "+isvalid);
+		System.out.println("ip "+isvalidip);
+		
 		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
 		{
 			// Validate fingerprint value
@@ -303,7 +314,7 @@ public class LoginServlet extends HttpServlet {
 			request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
 			
 			boolean isValidIP = IpAccessUtil.isValidIpOpenPanel(request);
-			System.out.println("validip"+isValidIP);
+			System.out.println("validip "+isValidIP);
 			request.getSession().setAttribute(SESSION_IPACCESS_VALID, isValidIP);
 			if(!isValid || !isValidIP ){
 				
