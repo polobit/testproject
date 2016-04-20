@@ -208,7 +208,12 @@ var portlet_utility = {
 		else if (portlet_type == "TASKSANDEVENTS" && p_name == "Average Deviation") {
 			json['duration'] = "1-day";
 		}
+		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
+			json['activity_type'] = "ALL";
+			json['duration'] = "this-quarter";
+		}	
 		return json;
+	
 	},
 
 	/**
@@ -708,8 +713,25 @@ var portlet_utility = {
 			break;
 		}
 		case "User Activities": {
+			var options="?";
+			if(base_model.get('settings').activity_type == undefined)
+					options+='&entity_type=ALL';
+				else
+				options+='&entity_type='+base_model.get('settings').activity_type;
+			if(base_model.get('settings').duration == undefined){
+				start_date_str="this-quarter-start";
+				end_date_str="this-quarter-end";
+				base_model.get('settings').duration='this-quarter';
+			}
+			if (base_model.get('settings').owner != undefined
+					&& base_model.get('settings').owner != "") 
+				options+='&user_id='+base_model.get('settings').owner;
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
-				url : '/core/api/portlets/customer-activity',
+				url : '/core/api/portlets/customer-activity'+options
+				+ '&start_time='
+				+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&end_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str),
 				sortKey : 'time',
 				descending : true,
 				templateKey : "portlets-activities-list-log",
@@ -739,7 +761,8 @@ var portlet_utility = {
 			break;
 		}
 		case "Campaign stats": {
-			var emailsSentCount, emailsOpenedCount, emailsClickedCount, emailsUnsubscribed, that = portlet_ele;
+			var emailsSentCount, emailsOpenedCount, emailsClickedCount, emailsUnsubscribed,
+			emailsSpamCount, emailsSkippedCount, emailsHardBounceCount, emailsSoftBounceCount, that = portlet_ele;
 			var url = '/core/api/portlets/campaign-stats?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -766,43 +789,62 @@ var portlet_utility = {
 								emailsOpenedCount = data["emailopened"];
 								emailsClickedCount = data["emailclicked"];
 								emailsUnsubscribed = data["emailunsubscribed"];
-								if (emailsSentCount == 0) {
-									that.find('#emails-sent').css('width',
-											'100%').css('height', '100%');
-									that
-											.find('#emails-sent')
-											.html(
-													'<div class="portlet-error-message">No Email activity</div>');
-								} else {
+								emailsSpamCount = data["emailSpam"];
+								emailsSkippedCount = data["emailSkipped"];
+								emailsHardBounceCount = data["hardBounce"];
+								emailsSoftBounceCount = data["softBounce"];
+				
 									that
 											.find('#emails-opened')
 											.css('display', 'block')
 											.addClass(
-													'pull-left p-xs b-b b-light w-half');
+													'pull-left p-xs b-b b-r b-light w-half');
 									that
 											.find('#emails-clicked')
 											.css('display', 'block')
 											.addClass(
-													'pull-left p-xs b-r b-light w-half');
+													'pull-left p-xs b-b b-light w-half');
+
+									that.find('#emails-hard-bounce').css('display', 'block').addClass('pull-left p-xs b-r b-light w-half');
+
+									that.find('#emails-soft-bounce').css('display', 'block').addClass('pull-left p-xs b-r b-light w-half');
+
 									that.find('#emails-unsubscribed').css(
 											'display', 'block').addClass(
-											'pull-left p-xs w-half');
+											'pull-left p-xs b-r b-light w-half');
 									that
 											.find('#emails-sent')
 											.addClass(
-													'pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+													'pull-left p-xs b-r b-b b-light w-half overflow-hidden');
 
 									that
 											.find('#emails-sent-count')
 											.text(
 													portlet_utility
 															.getNumberWithCommasForPortlets(emailsSentCount));
-									that.find('#emails-sent-label').text(
+											that.find('#emails-sent-label').text(
 											"Emails sent");
+
+									that.find('#emails-skipped')
+											.addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+
+									that.find('#emails-skipped-count')
+											.text(portlet_utility.getNumberWithCommasForPortlets(emailsSkippedCount));
+
+									that.find('#emails-skipped-label').text("Skipped");
+
+									that.find('#emails-spam')
+											.addClass('pull-left p-xs b-r b-light w-half overflow-hidden');
+
+									that.find('#emails-spam-count')
+											.text(portlet_utility.getNumberWithCommasForPortlets(emailsSpamCount));
+
+									that.find('#emails-spam-label').text("Spam");
+
 									that
 											.find('#emails-opened')
 											.html(
-													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'
+													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:#08C;">'
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsOpenedCount)
 															+ '</div></div>');
@@ -813,14 +855,25 @@ var portlet_utility = {
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsClickedCount)
 															+ '</div></div>');
+
+									that.find('#emails-hard-bounce')
+											.html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Hard Bounced</div><div class="text-count text-center" style="color:#009688;">'
+															+ portlet_utility
+																	.getNumberWithCommasForPortlets(emailsHardBounceCount)
+															+ '</div></div>');
+
+									that.find('#emails-soft-bounce')
+											.html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Soft Bounced</div><div class="text-count text-center" style="color:#9C27B0;">'
+															+ portlet_utility
+																	.getNumberWithCommasForPortlets(emailsSoftBounceCount)
+															+ '</div></div>');
 									that
 											.find('#emails-unsubscribed')
 											.html(
-													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'
+													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(205,15,0);">'
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsUnsubscribed)
-															+ '</div>');
-								}
+															+ '</div></div>');
 
 								portlet_utility.addWidgetToGridster(base_model);
 							});
@@ -1864,6 +1917,16 @@ var portlet_utility = {
 						break;
 		}
 
+		case "User Activities" : {
+			that.addPortletSettingsModalContent(base_model,"portletsUserActivitiesSettingsModal");
+			elData = $("#portletsUserActivitiesSettingsModal");
+			portlet_utility.setOwners("owner-user-activities", base_model, elData);
+			$("#duration-user-activities", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+		}
 		case "Webstat Visits": {
 			that.addPortletSettingsModalContent(base_model,
 					"portletsWebstatVisitsSettingsModal");
@@ -1874,7 +1937,6 @@ var portlet_utility = {
 					.attr("selected", "selected");
 			break;
 		}
-
 		}
 		if (base_model.get('name') == "Pending Deals"
 				|| base_model.get('name') == "Deals By Milestone"
