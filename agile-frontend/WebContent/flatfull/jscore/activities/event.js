@@ -494,8 +494,8 @@ $(function()
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-
-		$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+		var d= new Date();
+		$('.new-task-timepicker').timepicker({ defaultTime : (d.getHours()+3).toString(), showMeridian : false });
 		$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
 		{
 			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
