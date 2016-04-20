@@ -16,11 +16,11 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 public class SendGridSubAccountDeferred implements DeferredTask
 {
 	private static final long serialVersionUID = 1L;
-	DomainUser domainUser=null;
+	String domain=null;
 	
-	public SendGridSubAccountDeferred(DomainUser domainUser)
+	public SendGridSubAccountDeferred(String domain)
 	{
-		this.domainUser = domainUser;
+		this.domain = domain;
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class SendGridSubAccountDeferred implements DeferredTask
 	{
 		try
 		{
-			SendGridUtil.createSendGridSubUser(domainUser);
+			SendGridUtil.createSendGridSubUser(domain);
 		}
 		catch (Exception e)
 		{

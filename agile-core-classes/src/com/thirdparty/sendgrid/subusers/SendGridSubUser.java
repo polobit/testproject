@@ -494,14 +494,14 @@ public class SendGridSubUser extends SendGridLib
 	 * Add SendGrid sub account creation task in Deferred queue
 	 * @param domainUser
 	 */
-	public static void createSubAccountInSendGrid(DomainUser domainUser)
+	public static void createSubAccountInSendGrid(String domain)
 	{
-		if(domainUser==null)
+		if(domain==null)
 			return;
 		System.out.println("Sendgrid Subaccount creation task added in a queue");
 		Queue queue = QueueFactory.getQueue(AgileQueues.ACCOUNT_STATS_UPDATE_QUEUE);
 		
-		SendGridSubAccountDeferred task = new SendGridSubAccountDeferred(domainUser);
+		SendGridSubAccountDeferred task = new SendGridSubAccountDeferred(domain);
 		queue.add(TaskOptions.Builder.withPayload(task));
 		
 	}

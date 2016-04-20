@@ -232,7 +232,7 @@ public class RegisterServlet extends HttpServlet
 	//MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
 	
 	// Creates subUser in SendGrid after registration
-	SendGridSubUser.createSubAccountInSendGrid(domainUser);
+	SendGridSubUser.createSubAccountInSendGrid(domainUser.domain);
 	
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
