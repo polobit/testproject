@@ -3,7 +3,7 @@
 			<div class="show_screeshot"  
 						id="{{remove_spaces name}}">
 			<div class="panel wrapper b-a text-center">
-				<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
+				<div class="text-base"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
 					<b>{{get_portlet_name name}}</b>
 					</div><br>
 				<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
@@ -55,53 +55,59 @@
 <div class="bg-light lter b-b wrapper-md">
 <h3 class="m-n font-thin h3">Dashlets </h3>
 </div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Contacts</h4>
-		<div id="contacts" class="row"></div><br/>
+
+
+<div class="tab-container wrapper-md dash_tabview">
+	<div class="tabs" id="dashlet-tabs-content">
+	<div class="tab-container m-b-none">
+  	<ul class="nav nav-tabs ">
+
+        <li class="p-none active">
+        <a  href="#contacts_dashlet" data-toggle="tab" >Contacts</a></li>
+        <li class="p-none">
+        <a   href="#deals_dashlet" data-toggle= "tab">Deals</a></li>
+        <li class="p-none">
+        <a   href="#calendar_dashlet" data-toggle= "tab">Calendar</a></li>
+        <li class="p-none">
+        <a   href="#activity_dashlet" data-toggle= "tab">Activity</a></li>
+        <li class="p-none">
+        <a   href="#rss_dashlet" data-toggle="tab"> RSS Feed</a></li>
+        <li class="p-none">
+        <a   href="#account_Info_dashlet" data-toggle= "tab">Account Info</a></li>
+
+   </ul>
+   </div>
+   </div>
+
+
+<div class="tab-content wrapper-md panel">
+	<div class="tab-pane active" id="contacts_dashlet">
+				<div id="contacts" class="row"></div><br/>
+			
 	</div>
-    </div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Deals</h4>
-		<div id="deals" class="row"></div><br/>
-    </div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Calendar</h4>
-		<div id="taksAndEvents" class="row"></div><br/>
+	
+	
+	<div class="tab-pane" id="deals_dashlet">
+					<div id="deals" class="row"></div><br/>
+			    
 	</div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Activity</h4>
-		<div id="userActivity" class="row"></div><br/>
+	<div class="tab-pane" id="calendar_dashlet">
+			
+					<div id="taksAndEvents" class="row"></div><br/>
+				
 	</div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">RSS Feed</h4>
-		<div id="rssFeed" class="row"></div><br/>
+	<div class="tab-pane" id="activity_dashlet" style="height:510px;">
+					<div id="userActivity" class="row"></div><br/>
+				
 	</div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Account Info</h4>
-		<div id="accountInfo" class="row"></div><br/>
+	<div class="tab-pane" id="rss_dashlet">
+					<div id="rssFeed" class="row"></div><br/>
 	</div>
+
+	<div class="tab-pane" id="account_Info_dashlet">
+					<div id="accountInfo" class="row"></div><br/>	
+	</div>
+
 </div>
 </div>
 <div class="wrapper-md p-t-none">

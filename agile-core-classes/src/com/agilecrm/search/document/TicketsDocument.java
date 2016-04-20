@@ -449,4 +449,11 @@ public class TicketsDocument implements BuilderInterface
 			ExceptionUtils.getFullStackTrace(e);
 		}
 	}
+
+	@Override
+	public void addAsync(Object entity)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

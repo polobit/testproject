@@ -3,6 +3,7 @@ package com.agilecrm.web.stats;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -118,6 +119,11 @@ public class StatsSQLUtil
 	    String searchEmail = req.getParameter("search_email");
 	    if (StringUtils.isNotBlank(searchEmail))
 	    {
+		String[] emailsArray = searchEmail.split(",");
+		Set<String> emails = new HashSet<String>();
+		for(String email : emailsArray)
+		    emails.add(email);
+		searchEmail = getEmails(emails);
 		result = StatsSQLUtil.getAnalyticsGroupedBySessions(domain, searchEmail);
 		if (result != null)
 		    StatsUtil.sendResponse(req, res, result.toString());
@@ -197,7 +203,7 @@ public class StatsSQLUtil
 	String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_visits p1";
 	
 	// Gets UNIQUE session ids based on Email from database
-	String sessions = "(SELECT DISTINCT guid FROM page_visits WHERE email IN ('" + email + "') AND domain = "
+	String sessions = "(SELECT DISTINCT guid FROM page_visits WHERE email IN (" + email + ") AND domain = "
 		+ StatsGoogleSQLUtil.encodeSQLColumnValue(domain) + ") p2";
 	
 	String joinQuery = q1 + " INNER JOIN " + sessions + " ON p1.guid=p2.guid AND p1.domain = "

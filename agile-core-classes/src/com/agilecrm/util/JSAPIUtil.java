@@ -1,15 +1,20 @@
 package com.agilecrm.util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.ContactField.FieldType;
+import com.agilecrm.contact.js.JSContact;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -97,6 +102,61 @@ public class JSAPIUtil
     	return true;
     
     return false;
+    }
+    
+    public static boolean isRequestFromSecurityLevelDomain()
+    {
+    String domain = NamespaceManager.get();
+    List<String> whiteList = new ArrayList<String>();
+    whiteList.add("retest");
+    whiteList.add("daparthi");
+    whiteList.add("pjb98341");
+    whiteList.add("fenopix");
+    whiteList.add("twoprimes");
+    // whiteList.add("our");
+    
+    if(!StringUtils.isEmpty(domain) && whiteList.contains(domain))
+    	return true;
+    
+    return false;
+    }
+    
+    public static String limitPropertiesInContactForJSAPI(Contact contact) throws Exception
+    {
+		if(contact == null)
+			  return null;
+		
+		ObjectMapper mapper = new ObjectMapper();
+	    String contactStr =  mapper.writeValueAsString(contact);
+	    
+        if(!JSAPIUtil.isRequestFromSecurityLevelDomain())
+        	  return contactStr;
+        
+    	JSContact jsContact = mapper.readValue(contactStr, JSContact.class);
+    	
+		List<String> propertyNames = new ArrayList<String>(); 
+		propertyNames.add("first_name");
+		propertyNames.add("last_name");
+		propertyNames.add("email");
+		propertyNames.add("name");
+		
+		List<ContactField> fields = jsContact.properties;
+		List<ContactField> limitedFields = new ArrayList();
+		for (Iterator<ContactField> iterator = fields.iterator(); iterator.hasNext(); ) {
+			ContactField contactField = iterator.next();
+			
+			String fieldName = contactField.name.toLowerCase();
+			if(contactField.type == FieldType.CUSTOM || (contactField.type == FieldType.SYSTEM && !propertyNames.contains(fieldName))){
+				continue;
+			}
+			
+			limitedFields.add(contactField);
+		}
+		
+		jsContact.properties = limitedFields;
+		
+		return mapper.writeValueAsString(jsContact);
+		
     }
     
 }

@@ -709,7 +709,7 @@ public class ContactsAPI
 	    return null;
 	}
 
-	Contact contact = ContactUtil.searchContactByEmail(email);
+	Contact contact = ContactUtil.searchContactByEmailZapier(email);
 	if (contact == null)
 	{
 	    object.put("error", "No contact found with email address \'" + email + "\'");
@@ -1182,7 +1182,7 @@ public class ContactsAPI
      * merge duplicated contacts and related items such as
      * notes,document,events,task,deals and documents
      * 
-     * @param Contact
+     * @param JSContact
      *            contact and duplication contact ids
      * @return Single Contact
      */
@@ -1759,7 +1759,7 @@ public class ContactsAPI
 
 	return contact.getTagsList();
     }
-    
+
     @Path("delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -1792,18 +1792,20 @@ public class ContactsAPI
 
     @Path("/deleteContactImage")
     @PUT
-	public void deleteContactImage(@QueryParam("id") Long id) 
-    {  
-    	Contact contact = ContactUtil.getContact(id);
-    	if(contact != null){
-    	List<ContactField> properties = contact.properties;
-    	System.out.println(properties.size());
-    	for(int i=0 ; i <properties.size(); i++){
-    		System.out.println(properties.get(i).name);
-    		if(properties.get(i).name.equalsIgnoreCase("image"))
-    			properties.remove(i);
-    	}
-    	contact.save();
-    }
+    public void deleteContactImage(@QueryParam("id") Long id)
+    {
+	Contact contact = ContactUtil.getContact(id);
+	if (contact != null)
+	{
+	    List<ContactField> properties = contact.properties;
+	    System.out.println(properties.size());
+	    for (int i = 0; i < properties.size(); i++)
+	    {
+		System.out.println(properties.get(i).name);
+		if (properties.get(i).name.equalsIgnoreCase("image"))
+		    properties.remove(i);
+	    }
+	    contact.save();
+	}
     }
 }
