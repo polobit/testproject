@@ -786,10 +786,13 @@ public class CSVUtil
 		{
 		    // Multiple tags are supported. Multiple tags are added
 		    // split at , or ;
+
 		    String[] tagsArray = csvValues[j].split("[,;]+");
 		    boolean isInvalid = false;
+		    System.out.println("number of tags : " + tagsArray.length);
 		    for (String tag : tagsArray)
 		    {
+			System.out.println("New tag : " + tag);
 			tag = tag.trim();
 			if (TagValidator.getInstance().validate(tag))
 			{
