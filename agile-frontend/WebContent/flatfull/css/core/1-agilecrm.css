@@ -973,7 +973,6 @@ li.deal-color.GREY:after { background: grey;}
 
 .milestone-main {
   white-space: nowrap;
-  overflow: auto;
   width: 100%;
   
   border:1px solid #dee5e7;
@@ -3139,6 +3138,9 @@ table.hide-head-checkbox th label.i-checks {
 
 .conversion_track::-webkit-scrollbar-thumb {
  background: #bebebe;
+ -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
 }
 .conversion_track::-webkit-scrollbar {
  width: 5px;
