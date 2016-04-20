@@ -195,6 +195,10 @@ public class SendgridInboundParser extends HttpServlet
 					}
 					catch (Exception e)
 					{
+						// We are generating group forwarding email addresses
+						// which are case sensitive.
+						// So verifying if lowered case group id exists in
+						// ticket groups.
 						boolean idFound = false;
 
 						String tempGroupID = toAddressArray[1];

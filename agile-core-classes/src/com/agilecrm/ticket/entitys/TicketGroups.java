@@ -158,7 +158,7 @@ public class TicketGroups
 		if(email_template_key != null)
 			template_id = email_template_key.getId();
 		
-		group_email = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(id)
+		group_email = NamespaceManager.get() + "_" + TicketGroupUtil.getShortGroupID(id)
 				+ TicketGroupUtil.getInboundSuffix();
 	}
 
