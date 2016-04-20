@@ -166,7 +166,7 @@ public class SendGridUtil
 			SendGridSubVars.HTML.getString(), SendGridSubVars.TEXT.getString(),
 			getSMTPJSON(tempArray.getJSONObject(i), firstSendGridDefferedTask).toString());
 
-			System.out.println("POST Data in SendGridUtil \n" + postData);
+//			System.out.println("POST Data in SendGridUtil \n" + postData);
 		
 			try
 			{
