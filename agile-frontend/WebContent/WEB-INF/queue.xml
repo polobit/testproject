@@ -54,8 +54,9 @@
   </queue>
   <queue>
     <name>mandrill-queue</name>
-    <rate>10/s</rate>
-    <max-concurrent-requests>20</max-concurrent-requests>
+    <rate>40/s</rate>
+    <bucket-size>50</bucket-size>
+    <max-concurrent-requests>50</max-concurrent-requests>
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
@@ -106,8 +107,9 @@
   </queue>
      <queue>
     <name>account-stats-update-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
+    <rate>5/s</rate> 
+    <bucket-size>40</bucket-size>
+    <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>

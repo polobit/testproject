@@ -2609,33 +2609,40 @@ $(function()
 	{
 		var type = "bg-light dk text-tiny";
 		var reputation = "Unknown";
+		var badge="";
 
 		if (value > 1 && value < 40)
 		{
 			type = "label-danger text-tiny";
 			reputation = "Poor";
+			badge="red;";
 		}
 		else if (value >= 40 && value < 75)
 		{
-			type = "bg-light text-tiny";
+			type = "label-warning text-tiny";
 			reputation = "Ok";
+			badge="yellow";
 		}
 		else if (value >= 75 && value < 90)
 		{
-			type = "label-success text-tiny";
+			type = "label-primary text-tiny";
 			reputation = "Good";
+			badge="blue";
 		}
 		else if (value >= 90)
 		{
 			type = "label-success text-tiny";
 			reputation = "Excellent";
+			badge="green"
 		}
 
-		return "<span style='position: relative;' class='label " + type
+		return "<span style='font-weight: bold;font-size: 12px;position: relative;' class='label " + type
 
-		+ "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+		+ "'>" + reputation + " <span style='margin: 0px -2px 0px 5px; padding:1px 5px 1px 5px ; background-color:white; color:"+ badge +"' class='badge " 
+		+ type + "'>" + value + " %</span> </span>";
 
 	});
+
 
 	/**
 	 * Returns id from hash. It returns id from hash iff id exists at last.
@@ -4761,7 +4768,7 @@ $(function()
 	 */
 	Handlebars
 			.registerHelper(
-					'get_subaccount_reputation',
+					'get_subaccount_reputation_duplicate',
 					function(value)
 					{
 						var type = "bg-light dk text-tiny";

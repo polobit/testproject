@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.Mandrill;
+import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.sendgrid.lib.SendGridLib;
 
 /**
  * <code>SendMail</code> is the base class to send email using different
@@ -260,9 +262,11 @@ public class SendMail
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
 
+	    SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, args);
+
 	    // Send Email
-	    Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
-		    null, args);
+	    // Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
+	    // 	null, args);
 
 	    NamespaceManager.set(oldNamespace);
 	}
