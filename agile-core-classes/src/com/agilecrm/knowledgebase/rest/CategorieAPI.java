@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.util.CategorieUtil;
@@ -40,6 +41,9 @@ public class CategorieAPI
 		catch (Exception e)
 		{
 			System.out.println("exception occured while creating workflow creation activity");
+
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
 		}
 
 		return categorie;

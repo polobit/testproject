@@ -7,11 +7,17 @@
 	    	</h4>
 	    </div>
 	    <div class="panel-body">
-	    	<ul>
-		        {{#sections}}
-		        	<li><a href="#helpcenter/section/{{id}}">{{name}} ({{articles_count}})</a></li>
-		        {{/sections}}
-		    </ul>
+	    	{{#if sections}}
+		    	<ul>
+			        {{#sections}}
+			        	<li><a href="#helpcenter/section/{{id}}">{{name}} ({{articles_count}})</a></li>
+			        
+			        {{/sections}}
+			    </ul>
+		    {{else}}
+	            No Sections Avialable
+		    {{/if}}
+		        
 	    </div>
    	</div>
 </div>
