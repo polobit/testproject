@@ -385,6 +385,18 @@
 		<servlet-name>SendGrid Webhook</servlet-name>
 		<url-pattern>/backend/sendgridwebhook/*</url-pattern>
 	</servlet-mapping>
+	
+	 <!-- SendGrid Inbound -->
+	 <servlet>
+		<servlet-name>SendGridInboundWebhook</servlet-name>
+		<servlet-class>com.thirdparty.sendgrid.webhook.SendGridInboundWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SendGridInboundWebhook</servlet-name>
+		<url-pattern>/sendgrid/inbound/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>TwilioServlet</servlet-name>
 		<servlet-class>com.agilecrm.plugin.oauth.TwilioServlet</servlet-class>
