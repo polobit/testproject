@@ -3759,3 +3759,9 @@ opacity: .3;
 {
   padding-right: 20px;
 }
+/*div.addField div.controls:not(.hide):first-child{
+  margin-top: 5px; 
+}*/
+div.addField div.controls div:first-child{
+  padding-bottom: 1px;
+}
