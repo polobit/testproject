@@ -298,12 +298,13 @@ public class LoginServlet extends HttpServlet {
 		
 		infofingerprint.validateUserFingerPrint(domainUser, request);
 		
-		
 		boolean isvalid = infofingerprint.isValidFingerPrint;
 		boolean isvalidip = infofingerprint.isValidIP;
 		
 		System.out.println("fingerprint "+isvalid);
 		System.out.println("ip "+isvalidip);
+		 
+		request.getSession().getAttribute(UserFingerPrintInfo.FINGER_PRINT_SESSION_NAME);
 		
 		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
 		{

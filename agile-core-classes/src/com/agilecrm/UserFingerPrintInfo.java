@@ -26,6 +26,9 @@ public class UserFingerPrintInfo implements Serializable{
 	//IP validataion
 	public boolean isValidIP = true;
 	
+	//Generated verification code
+	public String verificationCode = null;
+	
 	public UserFingerPrintInfo(){}
 	
 	/**
@@ -48,16 +51,16 @@ public class UserFingerPrintInfo implements Serializable{
     	Set<String> finger_prints = domainUser.finger_prints;
     	
 		// Checks the wheather fingerprintlist is null or not  
-		if(finger_prints == null || finger_prints.size() == 0)
+		if(finger_prints == null || finger_prints.size() == 0||finger_prints.contains(userfingerprint))
 			 isValidFingerPrint = true;
 		
 		// Gets the userfingerprint from request
 		//String user_finger_print = (String) request.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VAL);
 		
 		// Checks the condition is userfingerprint present in the list or not
-		if(finger_prints.contains(userfingerprint)){
+		/*if(finger_prints.contains(userfingerprint)){
 			isValidFingerPrint = true;
-		}
+		}*/
 		else{
 			isValidFingerPrint = false;
 		}
@@ -67,11 +70,13 @@ public class UserFingerPrintInfo implements Serializable{
 		
 		//Checks the wheather iplist is null or not  
 		if(ipAccess == null || ipAccess.ipList == null || ipAccess.ipList.size() == 0)
-			 isValidIP= true;
+			return;	
+		
+		else
+		{
 		
 		// Gets the userIp from request
 		String userIp = request.getRemoteAddr();
-		
 		// Checks the condition is userIp present in the list or not
 		Set<String> iplist = ipAccess.ipList;
 		for (String ip : iplist) {
@@ -80,7 +85,7 @@ public class UserFingerPrintInfo implements Serializable{
 				isValidIP= true;
 		}
 		isValidIP = false;
-		
+		}
 		// Resave
 		set(request);
 	}
