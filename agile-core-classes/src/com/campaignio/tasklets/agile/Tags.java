@@ -3,14 +3,18 @@ package com.campaignio.tasklets.agile;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.mandrill.util.deferred.LogDeferredTask;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>Tags</code> represents tags node in a workflow. Tags class is used to
@@ -74,8 +78,10 @@ public class Tags extends TaskletAdapter
 		if (type.equals(ADD))
 		{
 		    addTags(contact, tagsArray, campaignID);
+		    
 		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 			    "Tags added - " + tags, LogType.TAGS.toString());
+		    
 
 		}
 

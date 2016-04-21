@@ -229,7 +229,7 @@ public class CronUtil
 		
 		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
 		int count = query.count();
-		query = query.chunkSize(50);
+		query = query.chunkSize(500);
 		QueryResultIterator<Cron> iterator = query.iterator();
 		
 		
@@ -368,8 +368,12 @@ public class CronUtil
 					customData.toString());
 
 			// If bulk crons wake up from Wait, add to pull queue
-			if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
-				PullQueueUtil.addToPullQueue(totalCronJobsCount >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
+			if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT)){
+				//PullQueueUtil.addToPullQueue(totalCronJobsCount >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
+				Queue queue = QueueFactory.getQueue(AgileQueues.TIMEOUT_PUSH_QUEUE);
+				queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));	
+			}
+				
 			else
 			{
 				// Interruptted crons like Click, Open
