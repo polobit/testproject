@@ -89,6 +89,7 @@
   </div>
   </div>
 
+
   <div class="new-collection-deal-list"></div>
 
 </div>
@@ -447,8 +448,8 @@
 <script id="opportunities-collection-template" type="text/html">
 
 <div class="{{#is_mobile}} {{else}} wrapper-md {{/is_mobile}}">
-<div >
-    <div>
+<div class="row">
+    <div class="col-md-9 {{#is_mobile}} w-full {{/is_mobile}}">
         <div id="slate">
         </div>
         {{#if this.length}}
