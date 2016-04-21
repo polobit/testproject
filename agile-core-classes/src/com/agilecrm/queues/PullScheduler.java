@@ -39,7 +39,7 @@ public class PullScheduler
     /**
      * Pull Queue attributes
      */
-    public static int DEFAULT_LEASE_PERIOD = 3600;
+    public static int DEFAULT_LEASE_PERIOD = 900;
     public static int DEFAULT_COUNT_LIMIT = 200;
 
     /**
@@ -93,7 +93,7 @@ public class PullScheduler
 		|| StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
 		|| StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE)
 		|| StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE))
-	    return 3600;
+	    return 900;
 
 	return DEFAULT_LEASE_PERIOD;
     }
