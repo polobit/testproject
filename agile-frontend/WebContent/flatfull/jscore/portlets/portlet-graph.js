@@ -1723,7 +1723,7 @@ setupCharts(function(){
 			if (known == 0 && anonymous == 0) {
 								$('#' + selector)
 										.html(
-												'<div class="portlet-error-message">No Visitors Found</div>');
+												'<div class="portlet-error-message">No Visits Found</div>');
 								return;
 							}
 								$('#' + selector)
