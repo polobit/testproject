@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
@@ -95,7 +96,7 @@ public class MustacheUtil
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    return null;
 	}
     }

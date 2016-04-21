@@ -52,6 +52,8 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.agilecrm.ticket.entitys.TicketsBackup;
+import com.agilecrm.ticket.servlets.SendgridInboundParser;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
@@ -151,8 +153,11 @@ public class TicketsRest
 
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
-			List<SearchRule> customFilters = new ObjectMapper().readValue(customFiltersString,
-					TypeFactory.collectionType(List.class, SearchRule.class));
+			List<SearchRule> customFilters = new ArrayList<>();
+
+			if (StringUtils.isNotBlank(customFiltersString))
+				customFilters = new ObjectMapper().readValue(customFiltersString,
+						TypeFactory.collectionType(List.class, SearchRule.class));
 
 			String queryString = (customFilters == null || customFilters.size() == 0) ? TicketFiltersUtil
 					.getQueryFromConditions(filter.conditions) : TicketFiltersUtil
@@ -847,6 +852,37 @@ public class TicketsRest
 	}
 
 	/**
+	 * Creates ticket by fetching its json from backup table
+	 * 
+	 * @return
+	 * @throws JSONException
+	 */
+	@GET
+	@Path("/create-ticket-with-id")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void createTicketFromBackup(@QueryParam("id") Long id) throws JSONException
+	{
+		try
+		{
+			if (id == null)
+				throw new Exception("Id is missing.");
+
+			JSONObject json = new TicketsBackup().getData(id);
+
+			new SendgridInboundParser().saveTicket(json);
+			
+			//Deleting record from backup table
+			TicketsBackup.delete(new Key<TicketsBackup>(TicketsBackup.class, id));
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
 	 * 
 	 * @return
 	 * @throws JSONException
@@ -914,7 +950,7 @@ public class TicketsRest
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Gets list of users of a domain
 	 * 
@@ -928,9 +964,9 @@ public class TicketsRest
 		try
 		{
 			TicketStats stats = TicketStats.ticketStatsdao.getByProperty("created_time", 1460399400l);
-			
+
 			JSONObject json = new JSONObject(stats.toString());
-			
+
 			return json.toString();
 		}
 		catch (Exception e)

@@ -20,10 +20,11 @@
 					<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret deals-view-caret"></span>
 					</a>
-					<ul class="dropdown-menu pull-right">
+					<ul class="dropdown-menu pull-right" role="menu">
 						<li><a href="#deal-rc-0" class="deals-list-view">List View</a></li>
 						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
-							<ul class="dropdown-menu" style="min-width:130px">
+
+							<ul class="dropdown-menu" style="min-width:130px" role="menu">
 								<li><a href="#deal-rc-1" id="deal-milestone-regular">Relaxed</a></li>
 								<li><a href="#deal-rc-2" id="deal-milestone-compact">Compact</a></li>
 								<li><a href="#deal-rc-3" id="deal-milestone-fit">Fit</a></li>
@@ -38,14 +39,15 @@
 						<span class="caret"></span>
 					</a>
 					{{#hasScope "MANAGE_DEALS"}}
-					<ul class="dropdown-menu pull-right">
+
+					<ul class="dropdown-menu pull-right" role="menu">
 						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import from CSV</a></li>
 						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export as CSV</a></li>
 						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">Add Dashlet</a></li>
 					</ul>
 
 					{{else}}
-					<ul class="dropdown-menu pull-right">
+					<ul class="dropdown-menu pull-right" role="menu">
 					<li><a href="#add-dashlet">Add Dashlet</a></li>
 					</ul>
 					{{/hasScope}}
@@ -315,7 +317,7 @@
 		<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
     {{/if_contact_type}}
 	{{#if_contact_type "COMPANY"}}
-     	<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>
+     	<a class="text-info popover_contact" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>
     {{/if_contact_type}}
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">
@@ -324,7 +326,7 @@
 	<button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
     	<span class="caret"></span>
   	</button>
-	<ul id = "opportunity-track-list-model-list" class="pull-right dropdown-menu">
+	<ul id = "opportunity-track-list-model-list" class="pull-right dropdown-menu" role="menu">
 	</ul>
 </div>
 </script>

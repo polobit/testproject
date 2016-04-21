@@ -23,9 +23,9 @@ import org.json.JSONException;
 import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.deferred.CompanyDeleteDeferredTask;
 import com.agilecrm.contact.deferred.ContactPostDeleteTask;
 import com.agilecrm.contact.email.ContactEmail;
@@ -41,7 +41,6 @@ import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -1902,7 +1901,8 @@ public class ContactUtil
 	{
 	    contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, names[0], null));
 
-	    contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, name.replace(names[0], "").trim(), null));
+	    contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, name.replace(names[0], "").trim(),
+		    null));
 	}
 	else
 	{
@@ -1914,11 +1914,11 @@ public class ContactUtil
 
 	try
 	{
-		Tag tagObject = new Tag("helpdesk");
+	    Tag tagObject = new Tag("helpdesk");
 
 	    contact.tagsWithTime.add(tagObject);
 	    contact.save();
-	    
+
 	    ActivitySave.createTagAddActivity(contact);
 	}
 	catch (Exception e)
@@ -1978,5 +1978,33 @@ public class ContactUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    /**
+     * Gets a contact based on its email
+     * 
+     * @param email
+     *            email value to get a contact
+     * @return {@Contact} related to an email
+     */
+    public static Contact searchContactByEmailZapier(String email)
+    {
+	if (StringUtils.isBlank(email))
+	    return null;
+	List<Contact> contacts = null;
+	try
+	{
+
+	    contacts = new ArrayList<>(new AppengineSearch<Contact>(Contact.class).getSimpleSearchResultsWithQuery(
+		    "email : " + email, Integer.parseInt("5"), null, Contact.Type.PERSON.toString()));
+
+	    return contacts.get(0);
+
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
     }
 }

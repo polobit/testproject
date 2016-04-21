@@ -88,6 +88,16 @@ function isValidForm(form) {
 		return /^[^a-zA-Z]+$/.test(value);
 	}," Please enter a valid phone number.");
 	
+	// Phone number validation
+	jQuery.validator.addMethod("allow-char-phone", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
+		return /^((\+)(\d)+)$/.test(value);
+	},"Please enter valid phone number (+xxxxxxxxxx)");
+	
 	jQuery.validator.addMethod("multi-tags", function(value, element){
 		
 		var	tag_input = $(element).val()

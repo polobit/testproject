@@ -1,18 +1,27 @@
 package com.campaignio.logger.util;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 
+import com.agilecrm.AgileQueues;
+import com.agilecrm.db.GoogleSQL;
+import com.agilecrm.mandrill.util.deferred.LogDeferredTask;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.campaignio.logger.Log;
 import com.campaignio.logger.Log.LogType;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.wrapper.LogWrapper;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.TaskHandle;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
@@ -51,13 +60,88 @@ public class LogUtil
 
 		// To know SQL process time
 		long startTime = System.currentTimeMillis();
+		
+		LogDeferredTask  logDeferredTask= new LogDeferredTask(campaignId, subscriberId, message
+	    		, logType,domain);
+		
+		// Add to pull queue with from email as Tag
+		PullQueueUtil.addToPullQueue(AgileQueues.CAMPAIGN_LOG_QUEUE, logDeferredTask, domain+"_"+campaignId);
 
 		// Insert to SQL
-		CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
-				subscriberId, message, logType);
+		//CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
+				//subscriberId, message, logType);
 
 		long processTime = System.currentTimeMillis() - startTime;
 		System.out.println("Process time for adding log is " + processTime + "ms");
+	}
+	
+	public static void sendCampaignLogs(List<TaskHandle> tasks)
+    {
+    	
+		addCampaignLogs(convertTaskHandlestoMailDeferredTasks(tasks));
+    }
+
+    public static List<LogDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
+    {
+	List<LogDeferredTask> logDeferredTasks = new ArrayList<LogDeferredTask>();
+	for (TaskHandle handle : tasks)
+	{
+	    try
+	    {
+	    	logDeferredTasks.add((LogDeferredTask) SerializationUtils.deserialize(handle.getPayload()));
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+	return logDeferredTasks;
+    }
+	public static void addCampaignLogs(List<LogDeferredTask> tasks)
+    {
+	Map<String, String> campaignNameMap = new HashMap<String, String>();
+	List<Object[]> queryList = new ArrayList<Object[]>();
+	for (LogDeferredTask logDeferredTask : tasks)
+	{
+	    String campaignName = null;
+	    String oldNamespace = NamespaceManager.get();
+	    try{	    
+	    NamespaceManager.set(logDeferredTask.domain);
+	    if (StringUtils.isEmpty(logDeferredTask.campaignId))
+	    {
+		continue;
+	    }
+
+	    if (!campaignNameMap.containsKey(logDeferredTask.campaignId + "-" + logDeferredTask.domain))
+	    {
+		campaignName = WorkflowUtil.getCampaignName(logDeferredTask.campaignId);
+		campaignNameMap.put(logDeferredTask.campaignId + "-" + logDeferredTask.domain, campaignName);
+	    }
+	    else
+	    {
+		campaignName = campaignNameMap.get(logDeferredTask.campaignId + "-" + logDeferredTask.domain);
+	    }
+
+	    Object[] newLog = new Object[] { logDeferredTask.domain, logDeferredTask.campaignId, campaignName,
+	    		logDeferredTask.subscriberId, GoogleSQL.getFutureDate(), logDeferredTask.message,
+	    		logDeferredTask.logType };
+
+	    queryList.add(newLog);
+	    }
+	    finally{
+	    	NamespaceManager.set(oldNamespace);
+	    }
+	}
+	
+	if (queryList.size() > 0)
+	{
+	    Long start_time = System.currentTimeMillis();
+	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
+	    System.out.println("Logs size : " + queryList.size());
+	}
+
 	}
 
 	/**

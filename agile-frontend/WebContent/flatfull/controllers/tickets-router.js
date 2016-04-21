@@ -258,8 +258,9 @@
 					//Initializing Assignee dropdown with groups and assignees
 					Tickets.fillAssigneeAndGroup(el);
 
-					//Initializing date picker on due date field
+					//Initializing date picker on due date fields
 					Tickets.initializeTicketSLA(el);
+					Tickets.initializeTicketSLAinHours(el);
 
 					// Fill next, Prev navigation
 					Tickets.ticket_detail_view_navigation(id, el)
@@ -285,6 +286,7 @@
 
 					// Get previous ticket 
 					Tickets.showPreviousTicketCount(data.requester_email, el);	
+					
 				}
 			});
 
@@ -316,6 +318,9 @@
 	 			App_Ticket_Module.groupsCollection = new Base_Collection_View({
 	 				url : '/core/api/tickets/groups',
 	 				templateKey : "ticket-groups",
+	 				sort_collection : true,
+	 				descending : true,
+	 				sortKey : 'updated_time',
 	 				individual_tag_name : 'tr',
 	 				postRenderCallback : function(el, collection) {
 
@@ -373,6 +378,12 @@
 
 	 					//Fetches domain users collection and shows them in add group form
 	 					App_Ticket_Module.renderUsersCollection($('#users-collection', el));
+
+	 					var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+	 					//Fetching all email templates
+						fillSelect('template_id', '/core/api/email/templates', '', 
+							function(collection){}, optionTemplate, false, el);
 	 				}
 	 			});
 
@@ -423,6 +434,17 @@
 	 						for(var i=0; i < agents_keys.length; i++)
 	 							$("input[data='"+ agents_keys[i] +"']").attr('checked', 'checked');
 
+	 						var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+		 					//Fetching all email templates and selecting chosen template
+							fillSelect('template_id', '/core/api/email/templates', '', 
+								function(){
+
+									if(data.template_id)
+										$('#template_id option[value=' + data.template_id + ']', el).attr('selected','selected');
+								
+								}, optionTemplate, false, el);
+
 	 						//Initializing copy to clipboard button
 	 						loadZeroclipboard2(function()
 	 						{	
@@ -454,7 +476,8 @@
 	 				url : 'core/api/tickets/labels', 
 	 				templateKey : "ticket-label", 
 	 				individual_tag_name : 'tr',
-	 				sort_collection : true, 
+	 				sort_collection : true,
+	 				descending : true,
 	 				sortKey : 'updated_time'
 	 			});
 
@@ -548,6 +571,9 @@
 	 				url : '/core/api/tickets/filters',
 	 				templateKey : "ticket-filters",
 	 				individual_tag_name : 'tr',
+	 				sort_collection : true, 
+	 				sortKey : 'updated_time',
+	 				descending : true,
 	 				slateKey : "no-ticket-filters"
 	 			});
 
@@ -648,6 +674,9 @@
 						url : '/core/api/tickets/canned-messages',
 						templateKey : "ticket-canned-response",
 						individual_tag_name : 'tr',
+						sort_collection : true, 
+	 					sortKey : 'updated_time',
+	 					descending : true,
 						slateKey : "no-groups"
 					});
 

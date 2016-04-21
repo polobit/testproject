@@ -3,6 +3,8 @@ $(function(){
 window.onhashchange = function (e) {
 	
 	$('.daterangepicker').hide();
+	$('.contact_popover').remove();
+	$('.contact_popover').hide();
 }
 });
 /**

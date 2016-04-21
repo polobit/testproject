@@ -8,6 +8,7 @@
 CONTACTS_HARD_RELOAD = true;
 
 var import_tab_Id;
+var REFER_DATA;
 
 var ContactsRouter = Backbone.Router.extend({
 
@@ -61,7 +62,11 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with only mobile number */
 			"contacts/call-lead/:mob" : "addMobLead",
 			
-			"call-contacts" : "callcontacts"
+			"call-contacts" : "callcontacts",
+
+		/* Referrals */
+		"refer" : "refer",
+		"refer-friends" : "referFriends"
 	},
 	
 	initialize : function()
@@ -1112,6 +1117,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		var _that = this;
 		App_Contacts.contactDateFields = CONTACTS_DATE_FIELDS;
 
+		App_Contacts.contactContactTypeFields = CONTACTS_CONTACT_TYPE_FIELDS;
+		App_Contacts.contactCompanyTypeFields = CONTACTS_COMPANY_TYPE_FIELDS;
+
 		if(!App_Contacts.contactDateFields){
 				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
@@ -1119,7 +1127,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					
 					// Defines appendItem for custom view
 					_that.contact_custom_view.appendItem = function(base_model){
-						contactTableView(base_model,App_Contacts.contactDateFields,this);
+						contactTableView(base_model,App_Contacts.contactDateFields,this,App_Contacts.contactContactTypeFields,App_Contacts.contactCompanyTypeFields);
 					};
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
@@ -1131,7 +1139,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 				// Defines appendItem for custom view
 				_that.contact_custom_view.appendItem = function(base_model){
-					contactTableView(base_model,App_Contacts.contactDateFields,this);
+					contactTableView(base_model,App_Contacts.contactDateFields,this,App_Contacts.contactContactTypeFields,App_Contacts.contactCompanyTypeFields);
 				};
 				// Fetch collection
 				_that.contact_custom_view.collection.fetch();
@@ -1253,6 +1261,39 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
+	},
+
+	refer : function()
+	{
+		Agile_GA_Event_Tracker.track_event("Refer");
+		load_facebook_lib_for_referrals();
+		$.ajax({
+			url : 'core/api/refer',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data){
+				REFER_DATA = data;
+				getTemplate("refer-modal", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#referModal').html($(template_ui));
+					getTemplate("refer-modal-body", data, undefined, function(template_ui1){
+						if(!template_ui1)
+							  return;
+						$('#referModal').find(".modal-body").html($(template_ui1));
+						$('#referModal').modal("show");
+					}, null);
+				}, null);
+			}
+		});
+
+	},
+
+	referFriends : function()
+	{
+		var subject = "I am using Agile CRM and I really love it! Try it now.";
+		var body = "Hi,<br><br>I am using Agile CRM and I really love it!<br><br>It is a combination of important features like email marketing, call campaign, online scheduling, landing pages, Web rules and many others. This service is true value for money!<br><br>What to try it? Let's start by signing up with below link:<br>http://www.agilecrm.com/pricing?utm_source=affiliates&utm_medium=web&utm_campaign="+CURRENT_DOMAIN_USER.domain+"<br><br>Best Regards";
+		sendMail(undefined,subject,body,undefined,undefined,this);
 	}
 		
 	});

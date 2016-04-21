@@ -30,7 +30,7 @@ public class TicketGroupsPartial extends ProjectionEntityParse
 	{
 		id = entity.getKey().getId();
 		group_name = (String) getPropertyValue(entity, "group_name");
-		group_email = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(id)
+		group_email = NamespaceManager.get() + "_" + TicketGroupUtil.getShortGroupID(id)
 				+ TicketGroupUtil.getInboundSuffix();
 
 		return this;

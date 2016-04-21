@@ -24,7 +24,8 @@ public interface BuilderInterface
      *            {@link Object}
      */
     public void add(Object entity);
-
+    
+    public void addAsync(Object entity);
     /**
      * Declares edit functionality on an entity in search
      * 
