@@ -718,7 +718,8 @@ $(function()
 						return html;
 					});
 
-	// To show milestones as sortable list
+	// To show milestones as sortable list.
+	// if no deals in the milestone show all the options else show only delete and drag options.
 	Handlebars
 			.registerHelper(
 					'milestone_ul',
@@ -758,7 +759,7 @@ $(function()
 								}
 						    }
 						    else{
-						    	for ( var i in milestones)
+						    	for (var i in milestones)
 							 	{
 								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
 								if(milestones[i] == data.won_milestone){
