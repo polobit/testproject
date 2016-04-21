@@ -372,6 +372,32 @@ public class ContactUtil
 
     }
 
+    /**
+     * Gets a contact based on its email
+     * 
+     * @param email
+     *            email value to get a contact
+     * @return {@Contact} related to an email
+     */
+    public static Contact searchContactByTypeAndEmail(String email,String type){
+    
+		if (StringUtils.isBlank(email)){
+		    return null;
+		}
+
+		Query<Contact> q = dao.ofy().query(Contact.class);
+		q.filter("properties.name", Contact.EMAIL);
+		q.filter("type", type);
+		q.filter("properties.value", email.toLowerCase());
+
+		try{
+		    return dao.get(q.getKey());
+		}catch (Exception e){
+		    return null;
+		}
+
+    }
+
     
     
     public static Contact searchContactByCompanyName(String companyName)

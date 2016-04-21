@@ -150,8 +150,9 @@ public class ContactEmailUtil
 			body = EmailUtil.appendTrackingImage(body, null, contactEmailWrapper.getTrackerId());
 
 			// Get contactId for link tracking
-			for(String email: toEmailSet)
-				contact = ContactUtil.searchContactByEmail(EmailUtil.getEmail(email));
+			for(String email: toEmailSet){
+				contact = ContactUtil.searchContactByTypeAndEmail(EmailUtil.getEmail(email), contactEmailWrapper.getContact_type());
+			}				
 			
 			if (contact != null)
 				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, contactEmailWrapper.getTrackerId(), contactEmailWrapper.getPush_param().toString());
@@ -187,8 +188,9 @@ public class ContactEmailUtil
 				String email = EmailUtil.getEmail(toEmail);
 
 				// Get contact based on email.
-				contact = ContactUtil.searchContactByEmail(email);
-				contact = ContactUtil.searchCompanyByEmail(email);
+				//contact = ContactUtil.searchContactByEmail(email);
+				//contact = ContactUtil.searchCompanyByEmail(email);
+				contact = ContactUtil.searchContactByTypeAndEmail(EmailUtil.getEmail(email), contactEmailWrapper.getContact_type());
 
 				// Saves email with contact-id
 				if (contact != null)
