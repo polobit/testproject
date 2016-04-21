@@ -200,7 +200,15 @@ function initializeTasksListeners(){
 		applyDetailsFromGroupView();
 	});	
 
-	
+	$('#tasks-list-template').on('click', '.tasks-list-image', function(event)
+			{
+				event.preventDefault();
+				// Change UI and input field
+				var url = event.target.getAttribute('url');			
+				routeToPage(url);
+				event.stopPropagation();
+				
+			});	
 }
 
 $("body").on("change", '.status', function()
