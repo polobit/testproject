@@ -3709,7 +3709,7 @@ opacity: .3;
 	top : 3px;
 }
 
-.visitor-filter button{
+#segment-filter-list-model-list .segment-lilist button{
 
     float: right;
     background: transparent;
@@ -3722,4 +3722,14 @@ opacity: .3;
 }
 #segmentsModal #duplicate-name , #segmentsModal #error-message{
   color: #f05050;
+}
+
+li .segment-lilist{
+	  display: block;
+	  padding: 5px 15px;
+}
+
+li .segment-lilist:hover {
+	background-color:#EEE;
+	cursor: pointer;
 }

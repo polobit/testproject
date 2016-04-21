@@ -193,10 +193,16 @@ function  addModalEvent(modal,collection){
     $('#'+ modal).on('keyup', '.update-segment-name input' , function(e)
     {
          e.preventDefault();
-         if($("#segmentsModal .save").hasClass("disabled"))
-            $('#segmentsModal .save').removeClass('disabled');
-         if(!$('#segmentsModal #duplicate-name').hasClass("disabled"))
+        
+        if(!$('#segmentsModal #error-message').hasClass("hide")){
+            $('#segmentsModal .save').addClass('disabled');
+            return;
+        }
+            
+        if(!$('#segmentsModal #duplicate-name').hasClass("hide")){
             $('#segmentsModal #duplicate-name').addClass('hide');
+            $('#segmentsModal .save').removeClass('disabled');
+        }
         
         return;          
        
@@ -205,7 +211,7 @@ function  addModalEvent(modal,collection){
 }
 function  addEventFilter(filter_id){
     
-    $('#' + filter_id).on('click', '.visitor-filter ' ,function(e)
+    $('#' + filter_id).on('click', '.segment-lilist' ,function(e)
     {
        
         if(e.target.nodeName=="BUTTON"){
@@ -249,7 +255,7 @@ function  addEventFilter(filter_id){
         });
         return;
                
-    });       
+    });  
  
 }
 
