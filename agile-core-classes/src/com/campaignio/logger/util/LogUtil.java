@@ -61,15 +61,15 @@ public class LogUtil
 		// To know SQL process time
 		long startTime = System.currentTimeMillis();
 		
-		LogDeferredTask  logDeferredTask= new LogDeferredTask(campaignId, subscriberId, message
-	    		, logType,domain);
+		//LogDeferredTask  logDeferredTask= new LogDeferredTask(campaignId, subscriberId, message
+	    	//	, logType,domain);
 		
 		// Add to pull queue with from email as Tag
-		PullQueueUtil.addToPullQueue(AgileQueues.CAMPAIGN_LOG_QUEUE, logDeferredTask, domain+"_"+campaignId);
+		//PullQueueUtil.addToPullQueue(AgileQueues.CAMPAIGN_LOG_QUEUE, logDeferredTask, domain+"_"+campaignId);
 
 		// Insert to SQL
-		//CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
-				//subscriberId, message, logType);
+		CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
+				subscriberId, message, logType);
 
 		long processTime = System.currentTimeMillis() - startTime;
 		System.out.println("Process time for adding log is " + processTime + "ms");
