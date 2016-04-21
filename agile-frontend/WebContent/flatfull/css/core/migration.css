@@ -1545,6 +1545,7 @@ color: #98a6ad;
 .app-details-width {
   width:299px;
 }
+.table thead tr th{vertical-align: top;}
 }
 
 @media (max-width:767px){
@@ -1570,6 +1571,9 @@ color: #98a6ad;
 .activity_time {
   position: static;
 }
+.company-details-mobile-view {
+  width: 97.0vw;
+  }
 }
 
 /* ending hack for new ui contact details big tag will come down  */
@@ -1635,16 +1639,6 @@ a#email-reply{
 }
 
 @media all and (max-width: 767px) {
-.company-details-mobile-view {
-  width: 97.0vw;
-  }
-
-.details-mobile-view {
-  width: 100%;
-}
-}
-
-@media all and (max-width: 767px) {
 .custom-animated.custom-fadeInUp > .bg-light .pull-left,.custom-animated.custom-fadeInUp > 
 
 .bg-light .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wrapper-md .pull-left,.bg-
@@ -1660,7 +1654,6 @@ light.lter.b-b.wrapper-md .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wra
   .wrapper-md .h3 {
   text-align: center;
   }
-
 .custom-animated.custom-fadeInUp > .bg-light .row {
   text-align: center;
 }
@@ -1984,12 +1977,11 @@ width: 1%!important;
   display: none;
 }
 
-#contacts-custom-view-model-list tr td:first-child, #opportunities-model-list tr td:first-child,
+#opportunities-model-list tr td:first-child,
  #companies-custom-view-model-list tr td:first-child, #companies-custom-view-model-list tr td:nth-child(n+3){
   
   display: none;
 }
-.deal_custom_replace{ display: none !important;}
 .deals-name{ width: 18em;}
 #event-time-1{
   width: 100% !important;
@@ -2008,6 +2000,11 @@ width: 1%!important;
   width: 100% !important;
 }
 
+.social-video{ width: 100% !important;}
+#socialsuite-tabs-content .social-app-content { padding-bottom: 0px ;}
+.emailTemplates .namethead { padding: 8px 15px 8px 5px;}
+.dealsTabListCenter { background: inherit;}
+
 }
 
 @media all and (min-width: 768px) {
@@ -2022,9 +2019,9 @@ width: 1%!important;
 }
 
 @media all and (orientation:portrait) and (max-width: 768px) { 
-    .contact-list-mobile {
+   /* .contact-list-mobile {
       float: left;
-    }
+    }*/
 }
 
 @media all and (orientation:landscape) and (max-width: 768px) { 
@@ -2253,14 +2250,65 @@ color:#484848!important;
 }
 
  /* Safari 6.1+ (9.0 is the latest version of Safari at this time) */
-
 @media screen and (min-color-index:0) and (-webkit-min-device-pixel-ratio:0) { @media
 {
     .safari_only {margin-top: 0px !important;}
 }}
-
  /* Safari 6.1+ (9.0 is the latest version of Safari at this time) */
 
+.social-video{ width: 50%; margin: 0px auto;}
+.social-video .embed-responsive-item{ max-height: 368px;}
+.emailTemplates tr th:first-child{ width: 2% !important;}
+.min-h-auto{ min-height: auto !important;}
+.prefs-view{ display: inline !important;}
+.dealEditDropdown{ left: inherit; right: 8px; top: 20px;}
+
+@media all and (min-width: 768px) and (max-width: 1100px) { 
+
+  #activities-listners .custom-animated.custom-fadeInUp > .bg-light .pull-left, #activities-listners .custom-animated.custom-fadeInUp > 
+  .bg-light .pull-right:not(.dropdown-menu), #activities-listners .bg-light.lter.b-b.wrapper-md .pull-left, #activities-listners .bg-light.lter.b-b.wrapper-md 
+  .pull-right:not(.dropdown-menu), #activities-listners .bg-light.lter.b-b.wrapper-md .right {
+  float: none!important;
+  text-align: center;
+  margin-bottom: 7px!important;
+  }
+
+}
+@media all and (min-width: 768px) and (max-width: 1024px) { 
+
+  .navbar-nav li a{ padding-left: 10px; padding-right: 10px;}
+  #opportunities-model-list tr td:first-child,
+  #companies-custom-view-model-list tr td:first-child{
+
+  display: none;
+  }
+  #workflows-listener-container .pull-left.font-thin.h3 small{ font-size: 55%;}
+  #landingpages-model-list tr td:first-child{ vertical-align: top !important;}
+  .contDetails{ display: table;}
+  .contDetails .col, .companyDetails .col, .taskListDetails .col, .dealDetailList .col{ display:block; height: auto;}
+  .contRightWidgets{ width: auto;}
+  .tabListCenter{ margin-left: 15px; margin-right: 15px;}
+  .stars-m-l{ margin-left: 60%;}
+  .taskDetailsCol{ width: 100%; text-align: center;}
+  .min-h-auto{ min-height: auto !important;}
+}
+
+
+@media (max-width: 1024px){
+.deal_custom_replace{ display: none !important;}
+.details-mobile-view, .company-details-mobile-view {
+  width: 100%;
+}
+.companytabListCenter, .dealsTabListCenter{ margin-left: 15px; margin-right: 15px;}
+.companyDetails .vbox{ min-height: auto;}
+.taskTabListCenter{ margin-left: 15px; margin-right: 15px; margin-top: 15px;}
+.taskDetailsCol{ border-right: none;}
+}
+
+@media (max-width: 420px){
+.companytabListCenter .nav li a{ padding: 10px 4px !important;}
+.taskTabListCenter .nav li a{ padding-left: 12px; padding-right: 12px;}
+}
 
 .moreDetailsTab{ margin: 14px auto 0;} 
 .moreDetailsTab .panel-body{ padding: 15px;}
@@ -2283,9 +2331,8 @@ color:#484848!important;
 .mobile-contact-filter-list .dropdown-menu{ left: 0;}
 .mobile-contact-filter-list .dropdown-menu li{ padding: 0 !important; border-bottom: none;}
 .mobile-contact-filter-list .dropdown-menu li a{ padding: 8px 15px;}
-
-
-
+#lhs-contact-filter-form #lhs-filters-header{ display: block;}
+.contactTableHeadName thead tr th{ display: none;}
 
 
 
