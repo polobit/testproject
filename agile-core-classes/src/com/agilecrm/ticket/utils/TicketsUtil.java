@@ -387,7 +387,7 @@ public class TicketsUtil
 		{
 			try
 			{
-				String emailHTML = MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT,
+				String emailHTML = MustacheUtil.templatize(SendMail.TICKET_FORWARD + SendMail.TEMPLATE_HTML_EXT,
 						new JSONObject().put("content", content));
 
 				TicketNotesUtil.sendEmail(email, ticket.subject, agentName, fromAddress, ticket.cc_emails, emailHTML);

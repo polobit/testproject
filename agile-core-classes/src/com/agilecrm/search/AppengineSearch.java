@@ -3,6 +3,7 @@ package com.agilecrm.search;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -145,29 +146,26 @@ public class AppengineSearch<T>
     public Collection getSimpleSearchResultsWithCompany(String keyword, Integer count, String cursor, String type)
     {
 	System.out.println("simple search with company");
-	if (StringUtils.isEmpty(type))
-	{
-	    List<Contact> queryList = (List<Contact>) query.simpleSearch(keyword, count, cursor);
-	    System.out.println(queryList.size());
-	    if (queryList.size() == 10)
-	    {
-		Set<String> set = new HashSet<String>();
-		for (Contact temp : queryList)
-		{
-		    if (temp.type.name().equals("PERSON"))
-		    {
-			set.add(temp.contact_company_id);
-		    }
-		}
-		if (set.size() == 1)
-		{
-		    String id = set.iterator().next().toString();
-		    Contact contact = ContactUtil.getContact(Long.parseLong(id));
-		    queryList.remove(9);
-		    queryList.add(0, contact);
+	if (StringUtils.isEmpty(type)){
+		List<Contact> queryList  = (List<Contact>) query.simpleSearch(keyword, count, cursor);
+		System.out.println( queryList.size());
+		if(queryList.size() == count){
+			Set<String> set = new HashSet<String>();
+			for (Contact  temp : queryList) {
+				if(temp.type.name().equals("PERSON")){
+					set.add(temp.contact_company_id);
+				}
+			}
+			Iterator iterator = set.iterator();
+			if (set.size() == 1 && iterator.hasNext())
+			{
+			    String id = iterator.next().toString();
+			    Contact contact = ContactUtil.getContact(Long.parseLong(id));
+			    queryList.remove(9);
+			    queryList.add(0, contact);
 
+			}
 		}
-	    }
 	    return queryList;
 	}
 	return query.simpleSearchWithType(keyword, count, cursor, type);

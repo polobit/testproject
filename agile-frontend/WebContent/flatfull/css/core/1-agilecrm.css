@@ -3714,6 +3714,7 @@ opacity: .3;
 }
 .dash_tabview .nav-tabs li a{ border-bottom: none;}
 
+
 @media (min-width: 767px) {
 #referModal .modal-dialog{
 	width:62%;
@@ -3749,4 +3750,12 @@ opacity: .3;
 }
 .c-na{
 	cursor: not-allowed;
+}
+
+.company_input{
+ padding-right:37px;
+}
+.company_Edit_Fields
+{
+  padding-right: 20px;
 }

@@ -119,7 +119,7 @@
 	         {{/if_equals}}
 	         {{#if_equals activity_type 'SET_DUE_DATE'}}
 		         <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
-		          Due date set to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+		          Due date set to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 		     {{/if_equals}}
 		     {{#if_equals activity_type 'DUE_DATE_REMOVED'}}
 		         <!--<span class="first-letter-cap inline-block">{{domainUser.name}}</span>-->
@@ -150,7 +150,7 @@
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'DUE_DATE_CHANGED'}}
-	            <span class="first-letter-cap inline-block">{{user.name}}</span>  Changed due date to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+	            <span class="first-letter-cap inline-block">{{user.name}}</span>  Changed due date to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 	      		</span>
 	        {{/if_equals}}
 	    </div>
