@@ -1720,6 +1720,12 @@ setupCharts(function(){
 
 
 		setupCharts(function(){
+			if (knownContacts == 0 && anonymous == 0) {
+								$('#' + selector)
+										.html(
+												'<div class="portlet-error-message">No Visitors Found</div>');
+								return;
+							}
 								$('#' + selector)
 										.highcharts(
 												{
