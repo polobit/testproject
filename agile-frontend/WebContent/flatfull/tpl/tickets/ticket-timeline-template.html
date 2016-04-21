@@ -127,7 +127,7 @@
 						    {{/if_equals}}
 
 						    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
-			                    Status changed from <span class="first-letter-cap inline-block">{{custom1}}</span> to <span class="first-letter-cap inline-block">{{custom2}}</span>
+			                    Status changed from {{uc_first custom1}} to {{uc_first custom2}}
 			                {{/if_equals}}
 
 			                {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
