@@ -797,12 +797,14 @@ if (typeof jQuery === 'undefined') {
   }
 
   Dropdown.prototype.keydown = function (e) {
-    if (!/(38|40|27|32)/.test(e.which) || /textarea|i/.test(e.target.tagName)) return
+    // if (!/(38|40|27|32)/.test(e.which) || /textarea|i/.test(e.target.tagName)) return
 
     var $this = $(this)
     if(!(/(13)/.test(e.which)) || $(e.target).attr("href") == "#" || $(e.target).attr("href") == "#companyModal" || $(e.target).attr("href").indexOf("javascript") != -1){
-       e.preventDefault()
+       	if(!/input|i/.test(e.target.tagName.toLowerCase()))
+       	e.preventDefault()
     }
+    
     e.stopPropagation()
 
     if ($this.is('.disabled, :disabled')) return
@@ -822,6 +824,18 @@ if (typeof jQuery === 'undefined') {
       if (e.which == 27) $parent.find(toggle).trigger('focus')
       return $this.trigger('click')
     }
+
+    var desc = ' li:not(.divider):visible a'
+    var $items = $parent.find('[role="menu"]' + desc + ', [role="listbox"]' + desc)
+
+    if (!$items.length) return
+    if (/(38|40|27|32)/.test(e.which)){
+    var index = $items.index(e.target)
+
+    if (e.which == 38 && index > 0)                 index--                        // up
+    if (e.which == 40 && index < $items.length - 1) index++                        // down
+    if (!~index)                                      index = 0
+    $items.eq(index).trigger('focus')}
       
     var key = String.fromCharCode(e.which);
     var it = "";
@@ -849,18 +863,6 @@ if (typeof jQuery === 'undefined') {
    $(it, $parent).addClass("active");
    $(it, $parent).find("a").trigger('focus');
   
-
-    var desc = ' li:not(.divider):visible a'
-    var $items = $parent.find('[role="menu"]' + desc + ', [role="listbox"]' + desc)
-
-    if (!$items.length) return
-    if (/(38|40|27|32)/.test(e.which)){
-    var index = $items.index(e.target)
-
-    if (e.which == 38 && index > 0)                 index--                        // up
-    if (e.which == 40 && index < $items.length - 1) index++                        // down
-    if (!~index)                                      index = 0
-    $items.eq(index).trigger('focus')}
   }
 
   function clearMenus(e) {
