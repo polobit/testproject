@@ -9,8 +9,9 @@ var HelpcenterRouter = Backbone.Router.extend({
 		"helpcenter/categories":"categories",
         "helpcenter/add-categorie":"categorieAdd",
 	   	"helpcenter/sections" : "sections",
-	    "helpcenter/add-section" : "sectionAdd"
-	},
+	    "helpcenter/add-section" : "sectionAdd",
+        "helpcenter/add-article" : "articleAdd"
+    },
 	categories: function(){
 
 		App_Helpcenter_Module.loadhelpdeskTemplate(function(callback){
@@ -73,6 +74,45 @@ var HelpcenterRouter = Backbone.Router.extend({
  						             optionsTemplate, true);
 
 			        }
+			    });
+
+				$('#helpcenter-content').html(addsectionView.render().el);    
+	        });
+		});
+
+  },
+  articleAdd: function(){
+  	setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
+  	App_Helpcenter_Module.loadhelpdeskTemplate(function(callback){
+		getTemplate("helpcenter-add-article", {}, undefined, function(template_ui){
+			
+			    if(!template_ui)
+	 				return;
+
+					$('#helpcenter-content').html($(template_ui));
+
+			    var addsectionView = new Base_Model_View({
+	 				isNew : true, 
+	 				url : '/core/api/knowledgebase/article',
+	 				template : "helpcenter-add-article",
+	 				window : "#helpcenter/categories",
+			        
+                    prePersist : function(model){
+						var json = {};
+						var catogery_id = $("#catogery option:selected").data('catogery-id');
+						json = {"categorie_id" : catogery_id };
+						model.set(json, { silent : true });
+				    },
+
+			        postRenderCallback : function(el){
+					fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+    
+			 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
+
+					},'', true);
+
+			        }
+			        
 			    });
 
 				$('#helpcenter-content').html(addsectionView.render().el);    
