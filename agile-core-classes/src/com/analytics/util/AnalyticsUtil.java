@@ -29,6 +29,7 @@ import com.analytics.VisitorFilter;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -433,6 +434,12 @@ public class AnalyticsUtil
 	searchMap.put("owner_key", domainUserKey);
 	
 	return VisitorFilter.dao.listByProperty(searchMap);
+    }
+    
+    
+    public static void deleteSegmentFilter(long id) 
+    {
+	VisitorFilter.dao.ofy().delete(VisitorFilter.class, id);
     }
     
 }

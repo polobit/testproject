@@ -155,10 +155,14 @@ function  changeFilterName(modal){
 }
 
 function  addEventFilter(filter_id){
-    $('#' + filter_id).off('click', '.visitor-filter' );
-    $('#' + filter_id).on('click', '.visitor-filter' ,function(e)
+    
+    $('#' + filter_id).on('click', '.visitor-filter ' ,function(e)
     {
-
+       
+        if(e.target.nodeName=="BUTTON"){
+            setupSegmentFilterList("");
+            return;
+        }
         e.preventDefault();
         var targetEl = $(e.currentTarget);
 
@@ -173,9 +177,33 @@ function  addEventFilter(filter_id){
         App_VisitorsSegmentation.visitorssegmentation();
         return;
        
-    });    
+    });      
+
+    $('#' + filter_id).on('mouseenter','li', function(e){
+        $(this).find('#remove-segment-filter').removeClass('hide')
+    });
+
+    $('#' + filter_id).on('mouseleave','li', function(e){
+        $(this).find('#remove-segment-filter').addClass('hide');
+    });
+    $('#' + filter_id).on('click', '#remove-segment-filter' ,function(e)
+    {   
+
+        e.preventDefault();
+        var remove_id=$(this).attr('data');
+        _agile_delete_prefs('dynamic_visitors_filter');
+        $.ajax({
+            url: '/core/api/web-stats/filters?Id='+remove_id,
+            type: 'DELETE',
+            contentType : "application/json"
+            
+        });
+        return;
+               
+    });       
  
 }
+
 var segmentFilterList
 function setupSegmentFilterList(cel,id)
 {
@@ -190,20 +218,18 @@ function setupSegmentFilterList(cel,id)
                 no_transition_bar : true,
                 postRenderCallback : function(el, collection)
                 {
-                    for(var i=0;i<collection.models.length;i++){
-                    filter_name=collection.models[i].attributes.name;
-                     el.find('.filter-dropdown').append(Handlebars.compile('{{name}}')({name : filter_name}));
-                    }   
-
-                    addEventFilter("filters-tour-step"); 
+                    addEventFilter("segment-filter-list-model-list"); 
                     if(id){
                         var filter_name=collection.get(id).attributes.name;
 
-                        if($("#filters-tour-step").find("#segment-filter").text()!=filter_name){                        
+                        if(_agile_get_prefs('visitor_filter')){                        
                             deserializeLhsFilters($('#lhs-contact-filter-form'), collection.get(id).attributes.segmentConditions);      
-                            var addFilterName='<span class="segment-filter-name">'+filter_name +'</span>';
-                            $('#filters-tour-step').find('#segment-filter').append(addFilterName);
-                        }
+                        }else
+                        _agile_set_prefs('visitor_filter',id);                       
+
+                        var addFilterName='<span class="segment-filter-name" style= "padding-left:3px;">'+filter_name +'</span>';
+                        $('#filters-tour-step').find('#segment-filter').append(addFilterName);
+
                     } 
                     else
                        $('#filters-tour-step').find('#segment-filter').find('.segment-filter-name').remove();

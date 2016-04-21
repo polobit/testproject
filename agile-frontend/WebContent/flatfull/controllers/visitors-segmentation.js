@@ -9,7 +9,7 @@ var VisitorsSegmentationRouter = Backbone.Router
             "segments": "visitorssegmentation"         
         },
 
-        visitorssegmentation: function(time_range, is_lhs_filter,view_data)
+        visitorssegmentation: function(time_range, is_lhs_filter,view_data,filter_id)
              {
 
             var postData;
@@ -26,7 +26,7 @@ var VisitorsSegmentationRouter = Backbone.Router
 
             // Default url for contacts route
             var url = 'core/api/web-stats/filter/dynamic-filter';
-            if (filter_id=_agile_get_prefs("visitor_filter"))
+            if (filter_id||(filter_id=_agile_get_prefs("visitor_filter")))
             {           
             url = "core/api/web-stats/query/list/" + filter_id;
             }
@@ -124,8 +124,7 @@ var VisitorsSegmentationRouter = Backbone.Router
 
                         } else {
                             $('#content')
- 					          .find('.visitors-div')
-
+                              .find('.visitors-div')
                                 .html(
                                     web_scope.webstatsListView.el);
                             VISITORS_HARD_RELOAD = true;

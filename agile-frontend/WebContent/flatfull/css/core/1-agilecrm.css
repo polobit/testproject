@@ -3708,3 +3708,15 @@ opacity: .3;
 #lhs_filters_segmentation #lhs-filters-header i{
 	top : 3px;
 }
+
+.visitor-filter button{
+
+    float: right;
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    line-height: .8;
+    color: red;
+    font-weight: bold;
+    opacity: .7;
+}

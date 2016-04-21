@@ -688,13 +688,19 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
                 saveCallback: function(model){
 
                     $('#segmentsModal').modal('hide');
-                    App_VisitorsSegmentation.visitorssegmentation();            
+                    _agile_delete_prefs('dynamic_visitors_filter');
+                    _agile_set_prefs('visitor_filter',model.id);
+                     var addFilterName='<span class="segment-filter-name" style= "padding-left:3px;">'+model.name +'</span>';
+                     $('#filters-tour-step').find('#segment-filter').append(addFilterName);
+                    //App_VisitorsSegmentation.visitorssegmentation(undefined,undefined,undefined,model.id);            
                     $('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
                 },
                 prePersist : function(model)
                 {
                     var json = {};
-                    /*json=JSON.parse(_agile_get_prefs("dynamic_visitors_filter"));*/
+                    if(!_agile_get_prefs("dynamic_visitors_filter")){
+                    	$('#error-message').removeClass('hide')
+                    }
                     json.segmentConditions=_agile_get_prefs("dynamic_visitors_filter").toString();
                     var formJSON = model.toJSON();
 
