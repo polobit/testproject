@@ -79,7 +79,7 @@ var LandingPageRouter = Backbone.Router.extend({
 
 	loadSelectedTemplate : function(defaultTemplateId) {
 		$('#content').html("<div id='landingpages-listeners'></div>");
-        initializeLandingPageListeners(defaultTemplateId);
+        initializeLandingPageListeners();
 
         var data = {
             "templateId" : defaultTemplateId,
@@ -97,6 +97,7 @@ var LandingPageRouter = Backbone.Router.extend({
 
 	},
 
+    //remove pageId from here
     loadSavedLandingPage : function(pageId) {
         $('#content').html("<div id='landingpages-listeners'></div>");
         initializeLandingPageListeners(pageId);
