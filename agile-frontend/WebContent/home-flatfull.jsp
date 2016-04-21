@@ -345,7 +345,6 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="tickets">
     <a  href="#tickets">
       <i class="icon icon-ticket"></i>
-      <b class="badge bg-danger pull-right">Beta</b>
       <span>Help Desk</span>
     </a>
   </li>            
