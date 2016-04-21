@@ -525,6 +525,7 @@ function init_cal(el){
  */
 function googledata(el,response,startTime,endTime)
 {
+	try{
 	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 	var current_date = new Date();
@@ -549,12 +550,12 @@ function googledata(el,response,startTime,endTime)
 				{
 					var fc_event = google2fcEvent(resp.items[j]);
 					
-					var utcTime = new Date(fc_event.start).toUTCString();
+					/*var utcTime = new Date(fc_event.start).toUTCString();
 					var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
   					fc_event.start = tz.format();
   					utcTime = new Date(fc_event.end).toUTCString();
 					tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
-  					fc_event.end = tz.format();
+  					fc_event.end = tz.format();*/
 
 					renderGoogleEvents(events,fc_event,el);
 				}
@@ -628,6 +629,15 @@ function googledata(el,response,startTime,endTime)
 		});
 	});
 }
+	catch(e){
+		if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
+		{
+			var date=new Date();
+			$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+		}
+}
+
+}
 
 /** Rendering the events to the mini Calendar
 ** Also all day events are broken into each day event to show on every day
@@ -636,12 +646,19 @@ function renderGoogleEvents(events,fc_event,el)
 {
 	fc_event.startDate=new Date(fc_event.start);
 			fc_event.end=new Date(fc_event.end);
+
+		
+
 			fc_event.color='#3a3f51';
 			fc_event.backgroundColor='#3a3f51';
 			if(fc_event.allDay==true){
 				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 				fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
-				var a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24))
+				var a;
+				if(fc_event.start.getMonth()<fc_event.end.getMonth())
+				a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24));
+			   else
+			   	a=(fc_event.end.getMonth()-fc_event.start.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
 				if(a==1)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
@@ -675,8 +692,13 @@ function renderGoogleEvents(events,fc_event,el)
 			} 
 			else
 			{
-				var a=((fc_event.end-fc_event.startDate)/(60*60*24*1000));
-
+				
+			var a;
+				if(fc_event.startDate.getMonth()<fc_event.end.getMonth())
+				a=Math.round((fc_event.end-fc_event.startDate)/(60*60*1000*24));
+			   else
+			   	a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+				
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
 					fc_event.end=fc_event.end.getTime()/1000;
