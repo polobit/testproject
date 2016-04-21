@@ -1204,8 +1204,9 @@ Deleted  {{custom1}} Campaigns<br/>
             </div>
 
 
+            <div class="pull-left" style=" margin-bottom:0px !important;">
             <div id="activities_date_range" style="line-height:20px;" 
-            class="btn-group pull-left activity-date-filter c-p m-t-none">
+            class="btn-group pull-right activity-date-filter c-p m-t-none">
             <span class="inline-block" style="padding: 3px 10px;">
                <i class="icon-calendar icon-large m-r-xs"></i>
                 <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
@@ -1214,13 +1215,14 @@ Deleted  {{custom1}} Campaigns<br/>
                 <span class="caret  inline-block p-t-xs"></span>
               </span>
             </div>
+            </div>
 
             <div class="btn-group pull-left activity-log-button c-p m-r-sm">
                 <div class="btn btn-default btn-sm selected_name" id="selectedusername">All Users</div>
                 <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu" id="user-select"></ul>
+                <ul class="dropdown-menu  pull-right" id="user-select"></ul>
             </div>
 
 		<div class="btn-group pull-left type-task-button c-p">
@@ -1228,7 +1230,7 @@ Deleted  {{custom1}} Campaigns<br/>
                 <a class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu" id="entity_type">
+                <ul class="dropdown-menu pull-right" id="entity_type">
 					 <li><a href="">All Activities</a></li>
                      <li><a href="CALL">Calls</a></li>
                     <li><a href="CAMPAIGN">Campaigns</a></li>  
