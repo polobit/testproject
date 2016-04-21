@@ -602,15 +602,21 @@ function googledata(el,response,startTime,endTime)
 			{	
 				var event_list='<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>';
 				if(len!=0){
+					var flag_added= false;
 					$(el).find('.list').find('small').each(function( index ) 
 							{
 							if(ev.start.format('HH:MM')<$(this).text())
 							{
 								$(this).parents('li').before(event_list);
+								flag_added=true;
 								return false;
 
 							}
+
 							});
+								if(!flag_added)
+								$(el).find('.list').append(event_list);
+
 								}
 					else
 						$(el).find('.list').append(event_list);
@@ -764,13 +770,17 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 			{	
 				var event_list = '<li class="p-t-xs p-r-xs" style="color:'+ ev.color +'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>';
 				if(len != 0){
+					var flag_added=false;
 					$(el).find('.list').find('small').each(function( index ){
 						if(ev.start.format('HH:MM') < $(this).text()){
 							$(this).parents('li').before(event_list);
+							flag_added=true;
 							return false;
 						}
 
 					});
+					if(!flag_added)
+								$(el).find('.list').append(event_list);
 				} else{
 					$(el).find('.list').append(event_list);
 				}
