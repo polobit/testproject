@@ -5847,7 +5847,7 @@ $(function()
 		else if(p_name=='Average Deviation')
 			portlet_name = "Tasks Completion Time Deviation";
 		else if(p_name == 'Webstat Visits')
-			portlet_name = "Visitors";
+			portlet_name = "Visits";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -6692,7 +6692,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	else if(p_name == 'Average Deviation')
 		description = 'A quick view of deviation in tasks completion times.'
 	else if (p_name== 'Webstat Visits')
-		description = 'A pie chart of Known Visitors and Anonymous Visitors on your Website.';
+		description = 'A pie chart of Known and Unknown Visits on your website.';
 	return description;
 			});
 

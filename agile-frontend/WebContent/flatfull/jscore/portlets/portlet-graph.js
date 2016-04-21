@@ -1711,16 +1711,16 @@ setupCharts(function(){
 	/**
 	 * To display contacts count by Visitors portlet as pie graph
 	 */
-	webstatVisitsPieGraph : function(selector, knownContacts,
+	webstatVisitsPieGraph : function(selector, known,
 			anonymous) {
 		var series = [];
-							series.push([ "Known Contacts",
-									knownContacts]);
-							series.push([ "Anonymous Contacts", anonymous ]);
-
+							series.push([ "Known",
+									known]);
+							series.push([ "Unknown", anonymous ]);
+        var totalVisits = known+anonymous;
 
 		setupCharts(function(){
-			if (knownContacts == 0 && anonymous == 0) {
+			if (known == 0 && anonymous == 0) {
 								$('#' + selector)
 										.html(
 												'<div class="portlet-error-message">No Visitors Found</div>');
@@ -1752,12 +1752,12 @@ setupCharts(function(){
 														formatter : function() {
 															return '<table>'
 																	+ '<tr> <td class="p-n">'
-																	+ '<b>'
 																	+ (this.point.name)
+																	+ ' Visits:<b> '+(this.point.y)
 																	+ '</b></td></tr>'
-																	+ '<tr><td class="p-n">Total Count: '
+																	+ '<tr><td class="p-n">Total Visits: '
 																	+ '<b> '
-																	+ (this.point.y)
+																	+ totalVisits
 																	+ '</b></td></tr>'
 																	+ '</table>';
 														},
