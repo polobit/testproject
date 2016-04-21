@@ -680,8 +680,7 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
                 url : '/core/api/web-stats/filters',
                 postRenderCallback: function(
                                 el, collection) {
-                    togglePopUpFields("segmentsModal");
-                    changeFilterName("segmentsModal");             
+                   addModalEvent("segmentsModal",collection);           
 
                  },
 
@@ -698,9 +697,6 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
                 prePersist : function(model)
                 {
                     var json = {};
-                    if(!_agile_get_prefs("dynamic_visitors_filter")){
-                    	$('#error-message').removeClass('hide')
-                    }
                     json.segmentConditions=_agile_get_prefs("dynamic_visitors_filter").toString();
                     var formJSON = model.toJSON();
 

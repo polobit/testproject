@@ -3720,3 +3720,6 @@ opacity: .3;
     font-weight: bold;
     opacity: .7;
 }
+#segmentsModal #duplicate-name , #segmentsModal #error-message{
+  color: #f05050;
+}

@@ -122,38 +122,87 @@ function deserializeRhsFilters(data) {
         start.toString('MMMM d, yyyy') + " - " + end.toString('MMMM d, yyyy'));
     
 }
-function  togglePopUpFields(modal){
+function  addModalEvent(modal,collection){
 
     $('#'+ modal).off("click", ".new-segment");
-    $('#'+ modal).on('click', '.new-segment', function(e)
+    $('#'+ modal).on('click', '.new-segment',{ filter_list : collection }, function(e)
         {
             e.preventDefault();
+
             $("div.update-segment-name").toggle();
             $("div.choose-segment-filter").toggle();
             $('#save-new-type').prop('checked', true);
-        }); 
+            if(!$('#segmentsModal #error-message').hasClass("hide"))
+                return;
+             var filter_list=e.data.filter_list;
+             var current_filter=$('.update-segment-name input').val();
+             if(!current_filter || current_filter) 
+             $.each(filter_list, function( key) {
+                if(filter_list[key].name==current_filter){
+                    $('#segmentsModal #duplicate-name').removeClass('hide');
+                    $('#segmentsModal .save').addClass('disabled');
+                    return;
+                }
+            });
+    }); 
     $('#'+ modal).off("click", ".replace-segment");
-     $('#'+ modal).on('click', '.replace-segment', function(e)
+    $('#'+ modal).on('click', '.replace-segment', function(e)
         {   
             e.preventDefault();
+            if(!$('#segmentsModal #duplicate-name').hasClass("hide")){
+                $('#segmentsModal #duplicate-name').addClass('hide');
+                $('#segmentsModal .save').removeClass('disabled');
+            }
+            if(!$('#segmentsModal #error-message').hasClass("hide"))
+                $('#segmentsModal .save').addClass('disabled');
             $("div.update-segment-name").toggle();
             $("div.choose-segment-filter").toggle();
             $('#save-replace-type').prop('checked', true);
-        });     
-   
-}
-function  changeFilterName(modal){
 
-    
+        }); 
+
     $('#'+ modal).on('change', '#saveSegmentFilterForm .choose-segment-filter select', function(e)
     {
         e.preventDefault();
         var selectedFilterName = $('[name="filter-collection"] option:selected').text()
 
         $('input[name="name"]', $('form#saveSegmentFilterForm')).val(selectedFilterName);
-    });
-}
+    }); 
+   
+    $('#'+ modal).on('blur', '.update-segment-name input' ,{ filter_list : collection }, function(e)
+    {
+         e.preventDefault();
+         if(!_agile_get_prefs("dynamic_visitors_filter")){
+            $('#segmentsModal #error-message').removeClass('hide');
+            $('#segmentsModal .save').addClass('disabled');
+            return;           
+        }
+         var filter_list=e.data.filter_list;
+         var current_filter=$(this).val();
+         $.each(filter_list, function( key) {
+            //console.log( key + ": " + filter_list[key].name );
+            if(filter_list[key].name==current_filter){
+                $('#segmentsModal #duplicate-name').removeClass('hide');
+                $('#segmentsModal .save').addClass('disabled');
+                return;
+            }
+        });
+       
+    }); 
 
+    $('#'+ modal).on('keyup', '.update-segment-name input' , function(e)
+    {
+         e.preventDefault();
+         if($("#segmentsModal .save").hasClass("disabled"))
+            $('#segmentsModal .save').removeClass('disabled');
+         if(!$('#segmentsModal #duplicate-name').hasClass("disabled"))
+            $('#segmentsModal #duplicate-name').addClass('hide');
+        
+        return;          
+       
+    });  
+   
+}
 function  addEventFilter(filter_id){
     
     $('#' + filter_id).on('click', '.visitor-filter ' ,function(e)
