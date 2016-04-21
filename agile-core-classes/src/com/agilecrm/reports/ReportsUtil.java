@@ -246,6 +246,7 @@ public class ReportsUtil {
 		int softBounce = 0;
 		int emailsSkipped = 0;
 		int emailsSpam = 0;
+		String duration="";
 
 		JSONArray campaignEmailsJSONArray = new JSONArray();
 
@@ -355,6 +356,12 @@ public class ReportsUtil {
 								.getJSONObject(i).getString("count"));
 						continue;
 					}
+					if (campaignEmailsJSONArray.getJSONObject(i)
+							.getString("log_type").equals("durationBetween")) {
+						duration = campaignEmailsJSONArray
+								.getJSONObject(i).getString("duration");
+						continue;
+					}
 				} // End of for loop
 			} // End of if statement
 
@@ -366,6 +373,7 @@ public class ReportsUtil {
 			statsJSON.put("emailSkipped", emailsSkipped);
 			statsJSON.put("hardBounce", hardBounce);
 			statsJSON.put("softBounce", softBounce);
+			statsJSON.put("durationBetween",duration);
 
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
@@ -1199,9 +1207,9 @@ public class ReportsUtil {
 						continue;
 					}
 					if (campaignEmailsJSONArray.getJSONObject(i)
-							.getString("log_type").equals("durtion")) {
+							.getString("log_type").equals("durationBetween")) {
 						duration = campaignEmailsJSONArray
-								.getJSONObject(i).getString("durationBetween");
+								.getJSONObject(i).getString("duration");
 						continue;
 					}
 				} // End of for loop
@@ -1316,9 +1324,9 @@ public class ReportsUtil {
 		try {
 			data.put("log_type", "durationBetween");
 			if(report.duration==Reports.Duration.DAILY)
-				data.put("durationBetween", sdate);
+				data.put("duration", sdate);
 			else				
-			    data.put("durationBetween", sdate+" To "+edate);
+			    data.put("duration", sdate+" To "+edate);
 			
 			campaignEmailsJSONArray.put(data);
 		} catch (JSONException e) {
