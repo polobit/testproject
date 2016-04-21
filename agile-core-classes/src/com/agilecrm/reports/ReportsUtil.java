@@ -1,6 +1,7 @@
 package com.agilecrm.reports;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -237,6 +238,8 @@ public class ReportsUtil {
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new DateUtil().toMidnight().getTime());
+		
+		String startDate="";
 
 		int emailsClicked = 0;
 		int emailsOpened = 0;
@@ -257,7 +260,7 @@ public class ReportsUtil {
 			if (report.duration == Reports.Duration.DAILY) {
 				cal.add(Calendar.DATE, -1);
 				Date startDateTime = cal.getTime();
-				String startDate = sdf.format(startDateTime);
+			    startDate = sdf.format(startDateTime);
 				cal.set(Calendar.HOUR, 23);
 				cal.set(Calendar.MINUTE, 59);
 				cal.set(Calendar.SECOND, 59);
@@ -269,7 +272,7 @@ public class ReportsUtil {
 			} else if (report.duration == Reports.Duration.WEEKLY) {
 				cal.set(Calendar.DAY_OF_WEEK, 2);
 				cal.add(Calendar.DAY_OF_MONTH, -7);
-				String startDate = sdf.format(cal.getTime());
+				startDate = sdf.format(cal.getTime());
 				cal.add(Calendar.DATE, 6);
 				cal.set(Calendar.HOUR, 23);
 				cal.set(Calendar.MINUTE, 59);
@@ -281,7 +284,7 @@ public class ReportsUtil {
 			} else if (report.duration == Reports.Duration.MONTHLY) {
 				cal.add(Calendar.MONTH, -1);
 				cal.set(Calendar.DAY_OF_MONTH, 1);
-				String startDate = sdf.format(cal.getTime());
+				startDate = sdf.format(cal.getTime());
 				cal.set(Calendar.DATE,
 						cal.getActualMaximum(Calendar.DAY_OF_MONTH));
 				cal.set(Calendar.HOUR, 23);
@@ -292,6 +295,23 @@ public class ReportsUtil {
 						.getCountByLogTypesforPortlets(report.campaignId,
 								startDate, endDate, timeZone);
 			}
+
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			Date date;
+			try
+			{
+					date = sdf.parse(startDate);
+					startDate = df.format(date);
+					date = sdf.parse(endDate);
+					endDate = df.format(date);
+			} catch (ParseException e) {
+				System.out.println("Campaign report date format is invalid..");
+				e.printStackTrace();
+			}
+			if(report.duration==Reports.Duration.DAILY)
+				statsJSON.put("duration", startDate);
+			else				
+			    statsJSON.put("duration", startDate+" To "+endDate);
 		}
 		try {
 			if (campaignEmailsJSONArray != null
@@ -378,7 +398,7 @@ public class ReportsUtil {
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
 			else
-				statsJSON.put("campaign_name", "Campaign Name : "
+				statsJSON.put("campaign_name", "<b>Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 			statsJSON.put("report_name", report.name);
 			statsJSON.put("domain", NamespaceManager.get());
@@ -1228,7 +1248,7 @@ public class ReportsUtil {
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
 			else
-				statsJSON.put("campaign_name", "Campaign Name : "
+				statsJSON.put("campaign_name", "<b>Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 
 			statsJSON.put("report_name", report.name);
@@ -1333,9 +1353,6 @@ public class ReportsUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	
-
 		System.out.println("Campaign stats are : " + campaignEmailsJSONArray);
 		return campaignEmailsJSONArray;
 
