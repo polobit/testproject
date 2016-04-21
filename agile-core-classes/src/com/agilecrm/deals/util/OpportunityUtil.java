@@ -1247,7 +1247,8 @@ public class OpportunityUtil
     		 query.addFilter("pipeline", FilterOperator.EQUAL, KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId()));
     		 
 		      System.out.println("hello n try block "+filterJson.getLong("pipeline_id"));
-		      query.addSort(fieldval , SortDirection.ASCENDING);
+		      System.out.println(sortField);
+		      query.addSort(sortField , SortDirection.ASCENDING);
 		      List<Entity> deals = dataStore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 		      System.out.println("deals size in projection query = "+deals.size());
 		      if (checkJsonString(filterJson, "value_filter")
