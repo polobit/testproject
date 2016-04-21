@@ -579,4 +579,10 @@ Handlebars.registerHelper('gravatarurl', function(items, width)
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
+
+Handlebars.registerHelper('uc_first', function(text, options)
+{
+	return ucfirst(text);
+});
+
 /** End of ticketing handlebars* */

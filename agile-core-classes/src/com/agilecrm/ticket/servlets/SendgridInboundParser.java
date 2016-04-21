@@ -121,8 +121,6 @@ public class SendgridInboundParser extends HttpServlet
 
 			try
 			{
-				Long currentTime = Calendar.getInstance().getTimeInMillis();
-
 				if (isMultipart)
 				{
 					JSONObject json = getJSONFromMIME(request);
@@ -130,233 +128,7 @@ public class SendgridInboundParser extends HttpServlet
 					// Adding record to tickets backup db
 					backupKey = new TicketsBackup(json.toString()).save();
 
-					String envelope = json.getString("envelope");
-
-					System.out.println("Envelope:" + envelope);
-
-					JSONObject enveloperJSON = new JSONObject(envelope);
-					String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
-
-					/**
-					 * Replacing email suffix with space so that we'll get a
-					 * string of namespace and group ID separated by delimeter
-					 * '+'
-					 */
-					String inboundSuffix = TicketGroupUtil.getInboundSuffix();
-
-					String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
-
-					System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
-
-					if (toAddressArray.length < 2)
-					{
-						toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
-
-						System.out.println("toAddressArray with underscore delimeter: "
-								+ Arrays.toString(toAddressArray));
-
-						if (toAddressArray.length < 2)
-							return;
-					}
-
-					String namespace = toAddressArray[0];
-					System.out.println("namespace: " + namespace);
-
-					/**
-					 * Verifying for valid domain or not
-					 */
-					if (DomainUserUtil.count(namespace) <= 0)
-					{
-						System.out.println("Invalid domain: " + namespace);
-						return;
-					}
-
-					String oldNamespace = NamespaceManager.get();
-
-					// Setting namespace
-					NamespaceManager.set(namespace);
-
-					/**
-					 * GroupID is converted with Base62. So to get original
-					 * GroupID converting back to decimal with Base62.
-					 */
-					Long groupID = TicketGroupUtil.getLongGroupID(toAddressArray[1]);
-
-					System.out.println("groupID: " + groupID);
-
-					TicketGroups ticketGroup = null;
-
-					/**
-					 * Verifying for valid Group or not
-					 */
-					try
-					{
-						ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
-					}
-					catch (Exception e)
-					{
-						boolean idFound = false;
-
-						String tempGroupID = toAddressArray[1];
-
-						List<TicketGroups> allGroups = TicketGroups.ticketGroupsDao.fetchAll();
-
-						for (TicketGroups tempTicketGroup : allGroups)
-						{
-							String groupEmail = tempTicketGroup.group_email.toLowerCase();
-
-							if (groupEmail.contains(tempGroupID.toLowerCase()))
-							{
-								ticketGroup = tempTicketGroup;
-								idFound = true;
-								break;
-							}
-						}
-
-						if (!idFound)
-						{
-							System.out.println("Invalid groupID: " + groupID);
-							return;
-						}
-					}
-
-					List<String> ccEmails = getCCEmails(json);
-
-					String plainText = "", htmlText = "";
-
-					if (json.has("text"))
-						plainText = json.getString("text");
-
-					if (json.has("html"))
-						htmlText = json.getString("html");
-
-					boolean attachmentExists = false;
-
-					if (json.has("attachments"))
-						attachmentExists = json.getInt("attachments") > 0 ? true : false;
-
-					List<TicketDocuments> documentsList = (attachmentExists) ? getAttachmentsList(json)
-							: (new ArrayList<TicketDocuments>());
-
-					try
-					{
-						// Creating jsoup object to remove inline image tags
-						Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
-
-						/**
-						 * Iterating through each attachment and removing inline
-						 * image text and tags fron plain text content and html
-						 * content
-						 */
-						for (TicketDocuments ticketDocument : documentsList)
-						{
-							String fileContentType = ticketDocument.extension;
-
-							boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
-
-							if (!isImage)
-								continue;
-
-							Elements elements = doc.getElementsByAttributeValue("src", "cid:" + ticketDocument.name);
-
-							if (elements == null || elements.size() == 0)
-								continue;
-
-							for (Element element : elements)
-							{
-								plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
-
-								try
-								{
-									element.remove();
-								}
-								catch (Exception e)
-								{
-									System.out.println(ExceptionUtils.getFullStackTrace(e));
-								}
-							}
-						}
-
-						if (documentsList != null && documentsList.size() > 0)
-							htmlText = doc.body().html();
-					}
-					catch (Exception e)
-					{
-						System.out.println(ExceptionUtils.getFullStackTrace(e));
-					}
-
-					Tickets ticket = null;
-
-					String[] nameEmail = getNameAndEmail(json);
-
-					System.out.println("Name & email fetched: " + Arrays.toString(nameEmail));
-
-					// boolean isNewTicket = isNewTicket(toAddressArray);
-					String ticketID = extractTicketIDFromHtml(htmlText);
-
-					boolean isNewTicket = StringUtils.isBlank(ticketID) ? true : false;
-
-					if (isNewTicket)
-					{
-						// Creating new Ticket in Ticket table
-						ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1],
-								json.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW,
-								Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, json.getString("sender_ip"),
-								new ArrayList<Key<TicketLabels>>());
-
-						TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
-					}
-					else
-					{
-						try
-						{
-							ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
-						}
-						catch (Exception e)
-						{
-							System.out.println(ExceptionUtils.getFullStackTrace(e));
-						}
-
-						// Check if ticket exists
-						if (ticket == null)
-						{
-							System.out.println("Invalid ticketID or ticket has been deleted: " + toAddressArray[2]);
-							return;
-						}
-
-						String lastRepliedText = TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText);
-
-						// Checking if contact existing or not
-						Contact contact = ticket.getTicketRelatedContact();
-
-						ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
-						ticket.contactID = contact.id;
-
-						ticket.updateTicketAndSave(ccEmails, lastRepliedText, LAST_UPDATED_BY.REQUESTER, currentTime,
-								currentTime, null, attachmentExists, false, true);
-
-						// Sending user replied notification
-						TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name
-								+ " replied to ticket #" + ticket.id);
-
-						// Execute note created by customer trigger
-						TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
-					}
-
-					// Creating new Notes in TicketNotes table
-					TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID,
-							CREATED_BY.REQUESTER, nameEmail[0], nameEmail[1], plainText, htmlText, NOTE_TYPE.PUBLIC,
-							documentsList, json.toString(), isNewTicket);
-
-					notes.save();
-
-					// Updating ticket count DB. Async job.
-					TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
-
-					NamespaceManager.set(oldNamespace);
-
-					System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime)
-							+ "ms");
+					saveTicket(json);
 
 					// Removing backup if everything is ok
 					TicketsBackup.delete(backupKey);
@@ -371,6 +143,245 @@ public class SendgridInboundParser extends HttpServlet
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
+	}
+
+	/**
+	 * 
+	 * @param json
+	 * @param key
+	 * @throws Exception
+	 */
+	public void saveTicket(JSONObject json) throws Exception
+	{
+		Long currentTime = Calendar.getInstance().getTimeInMillis();
+
+		String envelope = json.getString("envelope");
+
+		System.out.println("Envelope:" + envelope);
+
+		JSONObject enveloperJSON = new JSONObject(envelope);
+		String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
+
+		/**
+		 * Replacing email suffix with space so that we'll get a string of
+		 * namespace and group ID separated by delimeter '+'
+		 */
+		String inboundSuffix = TicketGroupUtil.getInboundSuffix();
+
+		String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
+
+		System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
+
+		if (toAddressArray.length < 2)
+		{
+			toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
+
+			System.out.println("toAddressArray with plus delimeter: " + Arrays.toString(toAddressArray));
+
+			if (toAddressArray.length < 2)
+				return;
+		}
+
+		String namespace = toAddressArray[0];
+		System.out.println("namespace: " + namespace);
+
+		/**
+		 * Verifying for valid domain or not
+		 */
+		if (DomainUserUtil.count(namespace) <= 0)
+		{
+			System.out.println("Invalid domain: " + namespace);
+			return;
+		}
+
+		String oldNamespace = NamespaceManager.get();
+
+		// Setting namespace
+		NamespaceManager.set(namespace);
+
+		/**
+		 * GroupID is converted with Base62. So to get original GroupID
+		 * converting back to decimal with Base62.
+		 */
+		Long groupID = TicketGroupUtil.getLongGroupID(toAddressArray[1]);
+
+		System.out.println("groupID: " + groupID);
+
+		TicketGroups ticketGroup = null;
+
+		/**
+		 * Verifying for valid Group or not
+		 */
+		try
+		{
+			ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
+		}
+		catch (Exception e)
+		{
+			// We are generating group forwarding email addresses
+			// which are case sensitive.
+			// So verifying if lowered case group id exists in
+			// ticket groups.
+			boolean idFound = false;
+
+			String tempGroupID = toAddressArray[1];
+
+			List<TicketGroups> allGroups = TicketGroups.ticketGroupsDao.fetchAll();
+
+			for (TicketGroups tempTicketGroup : allGroups)
+			{
+				String groupEmail = tempTicketGroup.group_email.toLowerCase();
+
+				if (groupEmail.contains(tempGroupID.toLowerCase()))
+				{
+					ticketGroup = tempTicketGroup;
+					idFound = true;
+					break;
+				}
+			}
+
+			if (!idFound)
+			{
+				System.out.println("Invalid groupID: " + groupID);
+				return;
+			}
+		}
+
+		List<String> ccEmails = getCCEmails(json);
+
+		String plainText = "", htmlText = "";
+
+		if (json.has("text"))
+			plainText = json.getString("text");
+
+		if (json.has("html"))
+			htmlText = json.getString("html");
+
+		boolean attachmentExists = false;
+
+		if (json.has("attachments"))
+			attachmentExists = json.getInt("attachments") > 0 ? true : false;
+
+		List<TicketDocuments> documentsList = (attachmentExists) ? getAttachmentsList(json)
+				: (new ArrayList<TicketDocuments>());
+
+		try
+		{
+			// Creating jsoup object to remove inline image tags
+			Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
+
+			/**
+			 * Iterating through each attachment and removing inline image text
+			 * and tags fron plain text content and html content
+			 */
+			for (TicketDocuments ticketDocument : documentsList)
+			{
+				String fileContentType = ticketDocument.extension;
+
+				boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
+
+				if (!isImage)
+					continue;
+
+				Elements elements = doc.getElementsByAttributeValue("src", "cid:" + ticketDocument.name);
+
+				if (elements == null || elements.size() == 0)
+					continue;
+
+				for (Element element : elements)
+				{
+					plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
+
+					try
+					{
+						element.remove();
+					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
+				}
+			}
+
+			if (documentsList != null && documentsList.size() > 0)
+				htmlText = doc.body().html();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		Tickets ticket = null;
+
+		String[] nameEmail = getNameAndEmail(json);
+
+		System.out.println("Name & email fetched: " + Arrays.toString(nameEmail));
+
+		// boolean isNewTicket = isNewTicket(toAddressArray);
+		String ticketID = extractTicketIDFromHtml(htmlText);
+
+		boolean isNewTicket = StringUtils.isBlank(ticketID) ? true : false;
+
+		if (isNewTicket)
+		{
+			// Creating new Ticket in Ticket table
+			ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1], json.getString("subject"), ccEmails,
+					plainText, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
+					attachmentExists, json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
+
+			TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
+		}
+		else
+		{
+			try
+			{
+				ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
+			}
+			catch (Exception e)
+			{
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+
+			// Check if ticket exists
+			if (ticket == null)
+			{
+				System.out.println("Invalid ticketID or ticket has been deleted: " + toAddressArray[2]);
+				return;
+			}
+
+			String lastRepliedText = TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText);
+
+			// Checking if contact existing or not
+			Contact contact = ticket.getTicketRelatedContact();
+
+			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
+			ticket.contactID = contact.id;
+
+			ticket.updateTicketAndSave(ccEmails, lastRepliedText, LAST_UPDATED_BY.REQUESTER, currentTime, currentTime,
+					null, attachmentExists, false, true);
+
+			// Sending user replied notification
+			TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name + " replied to ticket #"
+					+ ticket.id);
+
+			// Execute note created by customer trigger
+			TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
+		}
+
+		// Creating new Notes in TicketNotes table
+		TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID, CREATED_BY.REQUESTER,
+				nameEmail[0], nameEmail[1], plainText, htmlText, NOTE_TYPE.PUBLIC, documentsList, json.toString(),
+				isNewTicket);
+
+		notes.save();
+
+		// Updating ticket count DB. Async job.
+		TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
+
+		NamespaceManager.set(oldNamespace);
+
+		System.out.println("Successfully created ticket...");
+		System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime) + "ms");
 	}
 
 	/**
