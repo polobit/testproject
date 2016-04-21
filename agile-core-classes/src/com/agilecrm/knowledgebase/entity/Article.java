@@ -139,7 +139,12 @@ public class Article implements Serializable
 
 		updated_by_key = key;
 	}
-
+	
+	public Key<Article> save()
+	{
+		return dao.put(this);
+	}
+	
 	@javax.persistence.PostLoad
 	private void postLoad()
 	{

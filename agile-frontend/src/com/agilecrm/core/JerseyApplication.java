@@ -134,6 +134,7 @@ public class JerseyApplication extends Application
 	//Knowledgebase rest classes
 	s.add(com.agilecrm.knowledgebase.rest.CategorieAPI.class);
 	s.add(com.agilecrm.knowledgebase.rest.SectionAPI.class);
+	s.add(com.agilecrm.knowledgebase.rest.ArticleAPI.class);
 	
 	s.add(com.agilecrm.core.api.widgets.UservoiceWidgetAPI.class);
 
