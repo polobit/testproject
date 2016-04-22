@@ -478,7 +478,6 @@ public class EmailsAPI
 	}
     }
 
-    
     @Path("agile-cemails")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
