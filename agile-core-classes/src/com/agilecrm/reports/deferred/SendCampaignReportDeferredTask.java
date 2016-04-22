@@ -5,6 +5,10 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 
 public class SendCampaignReportDeferredTask implements DeferredTask{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 786543567889L;
 	String domain = null;
     Long time = null;
     Long reportid = null;

@@ -76,7 +76,7 @@ public class ReportsDeferredTask implements DeferredTask
 	    // reports and sends report
 	    for (Reports report : reports)
 	    {
-	    if(report.report_type != Reports.ReportType.Campaign)
+	    if(report.report_type != Reports.ReportType.Campaign && report.report_type != Reports.ReportType.Opportunity)
 	    {
 		Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
 		        report.activity_weekday, report.activity_day, report.report_timezone, duration);
