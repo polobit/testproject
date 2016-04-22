@@ -4640,29 +4640,12 @@ $(function()
 	 */
 	Handlebars.registerHelper('contact_model', function(options)
 	{
-
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
-
-			// To show Active Campaigns list immediately after campaign
-			// assigned.
-			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
-			{
-				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
-
-				// fetches updated contact json
-				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
-					dataType : 'json' }).responseText;
-
-				// Updates Contact Detail model
-				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
-
-				return options.fn(JSON.parse(contact_json));
-			}
-
 			// if simply Campaigns tab clicked, use current collection
 			return options.fn(App_Contacts.contactDetailView.model.toJSON());
 		}
+
 	});
 	
 
