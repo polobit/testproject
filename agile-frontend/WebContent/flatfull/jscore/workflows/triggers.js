@@ -634,4 +634,29 @@ function initializeTriggerListEventListners(id,trigger_type)
 
 	});
 }
- 
+
+var _AGILE_API_KEY = "";
+
+function setGlobalAPIKey(callback)
+{
+	if( _AGILE_API_KEY && _AGILE_API_KEY != '' )	return;
+	
+    $.ajax({ 
+    	type : 'GET', 
+        url : '/core/api/api-key', 
+        dataType : 'json',
+        success : function(resp) {
+            if( resp )
+            {
+                console.log("Setting API KEY: " + resp.api_key);
+                _AGILE_API_KEY = resp.api_key;
+				
+				if( callback && typeof(callback) === 'function' )
+				{
+					callback();
+				}
+            }
+        }
+    });
+}
+  
