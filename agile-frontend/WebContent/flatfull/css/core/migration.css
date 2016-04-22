@@ -2237,7 +2237,6 @@ display: block!important;
   .tabListCenter{ margin-left: 15px; margin-right: 15px;}
   .stars-m-l{ margin-left: 60%;}
   .taskDetailsCol{ width: 100%; text-align: center;}
-  .min-h-auto{ min-height: auto !important;}
 }
 
 
@@ -2249,7 +2248,7 @@ display: block!important;
 .companytabListCenter, .dealsTabListCenter{ margin-left: 15px; margin-right: 15px;}
 .companyDetails .vbox{ min-height: auto;}
 .taskTabListCenter{ margin-left: 15px; margin-right: 15px; margin-top: 15px;}
-.taskDetailsCol{ border-right: none;}
+.contDetails .col, .companyDetails .col, .taskListDetails .col, .dealDetailList .col, .taskDetailsCol{ border-right: none;}
 }
 
 @media (max-width: 420px){
@@ -2258,7 +2257,55 @@ display: block!important;
 }
 
 
+/*custom css code*/
 
+.prefs-mobile-view .vbox {
+    min-height: auto;
+  }
+
+.icons-space-m li a{
+  padding: 10px 14px;
+}
+
+.Api_code span .lit {
+
+color:#484848!important;
+
+}
+.addField i {
+  color:#838D93;
+}
+.social-video{ width: 50%; margin: 0px auto;}
+.social-video .embed-responsive-item{ max-height: 368px;}
+.emailTemplates tr th:first-child{ width: 2% !important;}
+.min-h-auto{ min-height: auto !important;}
+.prefs-view{ display: inline !important;}
+.dealEditDropdown{ left: inherit; right: 4px; top: 20px;}
+
+.moreDetailsTab{ margin: 14px auto 0;} 
+.moreDetailsTab .panel-body{ padding: 15px;}
+.moreDetailsTab ul li{ padding:3px 7px !important; border: 1px solid #e7ecee;}
+#contact-detail-owner li{ border: 0px; padding: 0px !important;}
+.addInput{ height: 25px; padding: 2px 7px;}
+
+#addDescriptionInfo, #taskDescriptionInfo, .eventDescriptionInfo{ display: none;}
+.text-black {
+  color: #000;
+}
+#addDescriptionLink:hover, #addDescriptionLink:focus, #taskDescriptionLink:hover, #taskDescriptionLink:focus,
+#eventDescriptionLink:hover, #eventDescriptionLink:focus{color:#19a9d5;} 
+
+.mobile_lhs_filters_conatiner #lhs_filters_conatiner .panel-body, .savedFlitersMain .panel-body
+{ padding: 8px 15px; min-height: 35px;}
+.savedFlitersMain #lhs-filters-header i{ top: 3px;}
+.mobile-contact-filter-list .dropdown-menu{ left: 0;}
+.mobile-contact-filter-list .dropdown-menu li{ padding: 0 !important; border-bottom: none;}
+.mobile-contact-filter-list .dropdown-menu li a{ padding: 8px 15px;}
+
+#lhs-contact-filter-form #lhs-filters-header{ display: block;}
+.contactTableHeadName thead tr th{ display: none;}
+
+/*end custom css code*/
 
 
 
