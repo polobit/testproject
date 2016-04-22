@@ -371,7 +371,7 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			var widget_el = getTemplate("widget-settings", model);
 			$('#prefs-tabs-content').html(widget_el);
 
-			if(selector == "Braintree"){
+			if(widgetName == "Braintree"){
 				// Retrieve all custom from Agile account
 				$.get("/core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data){
 					// Include 'stripe_field_name' to stripe_widget_prefs and save
@@ -391,9 +391,7 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
-
 		});
-
 	});
 }
 

@@ -22,14 +22,13 @@
 					</div>
 				</div>	
 				<div class="control-group form-group">
-					<label class="control-label">Current custom field</label>
-			  		<div class="controls" id="contactTypeAhead">
+					<label class="control-label">Custom fields</label>
+			  		<div class="controls">
 			    		<select name="braintree_custom_field" id="braintree_custom_field" class="required col-md-10 form-control w-full m-b-sm">
 			      			<option class="default-select" value="">-Select-</option>	
-			      			<option class="default-email" value="">Email</option>
+			      			<option value="email">Email</option>
 			      			{{#each this.custom_fields}}
-								<option value="{{field_label}}">{{field_label}} 
-								</option>
+								<option value="{{field_label}}">{{field_label}} </option>
 							{{/each}}			      
 			    		</select>
 			  		</div>
