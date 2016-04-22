@@ -21,6 +21,18 @@
 						</input>
 					</div>
 				</div>	
+				<div class="control-group form-group">
+					<label class="control-label">Current custom field</label>
+			  		<div class="controls" id="contactTypeAhead">
+			    		<select name="braintree_custom_field" id="braintree_custom_field" class="required col-md-10 form-control w-full m-b-sm">
+			      			<option class="default-select" value="">-Select-</option>	
+			      			{{#each this.custom_fields}}
+								<option value="{{field_label}}">{{field_label}} 
+								</option>
+							{{/each}}			      
+			    		</select>
+			  		</div>
+				</div>
 				<div class="text-center">		
 				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
 				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>

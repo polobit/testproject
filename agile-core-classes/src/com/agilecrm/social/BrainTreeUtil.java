@@ -1,6 +1,5 @@
 package com.agilecrm.social;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 
 import org.json.JSONArray;
@@ -31,6 +30,7 @@ public class BrainTreeUtil {
 		ResourceCollection<Transaction> collection = gateway.transaction()
 				.search(request);
 		jArray = new JSONArray();
+
 		for (Transaction transaction : collection) {
 			JSONObject jObj = null;
 
@@ -51,29 +51,40 @@ public class BrainTreeUtil {
 		return jArray;
 	}
 
-	public void getTransactionByID(String id) {
-		TransactionSearchRequest searchRequest = new TransactionSearchRequest()
-				.amount().greaterThanOrEqualTo(new BigDecimal("15.00"));
-		ResourceCollection<Transaction> collection = gateway.transaction()
-				.search(searchRequest);
+	public JSONArray getTransactionByID(String userID) throws Exception {
+		JSONArray resultArray = null;
+		if (userID != null) {
 
-		JSONArray jArray = new JSONArray();
-		System.out.println("size : " + collection.getMaximumSize());
-		for (Transaction transaction : collection) {
-			System.out.println("----------------------------");
-			System.out.println(transaction.getCustomer().getEmail());
-			System.out.println(transaction.getCustomer().getId());
-			System.out.println(transaction.getAmount());
+			TransactionSearchRequest search = new TransactionSearchRequest()
+					.customerId().is(userID);
+			ResourceCollection<Transaction> collection = gateway.transaction()
+					.search(search);
+			resultArray = new JSONArray();
+			for (Transaction transaction : collection) {
+				JSONObject jObj = null;
+				jObj = new JSONObject();
+				jObj.put("id", transaction.getId());
+				jObj.put("purchaseId", transaction.getPurchaseOrderNumber());
+				jObj.put("amount", transaction.getAmount());
+				jObj.put("orderId", transaction.getOrderId());
+				jObj.put("status", transaction.getStatus());
+				jObj.put("taxAmount", transaction.getTaxAmount());
 
+				Calendar calendar = transaction.getCreatedAt();
+				jObj.put("createdDate", calendar.getTimeInMillis());
+				resultArray.put(jObj);
+			}
 		}
+		System.out.println(resultArray.toString());
+		return resultArray;
 	}
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 		String merchantId = "wd9pbyzvswvbdc8j";
 		String publicKey = "57cc7rydfqkfjvny";
 		String privateKey = "88febbbe7ccec03d5856b36647de0098";
 		BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
 				privateKey);
-		bUtil.getTransactionByID("abc");
+		bUtil.getTransactionByID("340729");
 	}
 }
