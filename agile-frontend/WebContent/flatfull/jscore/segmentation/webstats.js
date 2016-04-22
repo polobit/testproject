@@ -279,8 +279,10 @@ function setupSegmentFilterList(cel,id)
 
                         if(_agile_get_prefs('visitor_filter')){                        
                             deserializeLhsFilters($('#lhs-contact-filter-form'), collection.get(id).attributes.segmentConditions);      
-                        }else
-                        _agile_set_prefs('visitor_filter',id);                       
+                        }else{
+                         _agile_delete_prefs('dynamic_visitors_filter');
+                         _agile_set_prefs('visitor_filter',id);
+                        }                     
 
                         var addFilterName='<span class="segment-filter-name" style= "padding-left:3px;">'+filter_name +'</span>';
                         $('#filters-tour-step').find('#segment-filter').append(addFilterName);
