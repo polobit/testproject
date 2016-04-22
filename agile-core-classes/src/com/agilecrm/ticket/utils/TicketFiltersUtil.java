@@ -241,18 +241,18 @@ public class TicketFiltersUtil
 		List<SearchRule> conditions = new ArrayList<SearchRule>();
 
 		SearchRule searchRule = new SearchRule();
-
 		searchRule.LHS = "status";
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.NEW);
 		conditions.add(searchRule);
 		
+		searchRule = new SearchRule();
 		searchRule.LHS = "status";
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.OPEN);
 		conditions.add(searchRule);
 
-		newTickets.name = "New and Open Tickets";
+		newTickets.name = "New and open";
 		newTickets.is_default_filter = true;
 		newTickets.conditions = conditions;
 		newTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
