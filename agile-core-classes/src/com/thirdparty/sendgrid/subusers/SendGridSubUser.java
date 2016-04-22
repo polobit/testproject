@@ -455,10 +455,6 @@ public class SendGridSubUser extends SendGridLib
 		return response;
 	}
 	
-	public static void main(String asd[]) throws JSONException{
-		JSONArray reputation=new JSONArray(getSendGridUserReputation("free", null));
-		System.out.println("Response "+reputation.getJSONObject(0).getString("reputation"));
-	}
 	/**
 	 * This clas is used for getting stats report of Sendgrid domain users
 	 * 
@@ -488,6 +484,34 @@ public class SendGridSubUser extends SendGridLib
 	    {
 	    	return duration;
 	    }
+	}
+	
+	/**
+	 * It will delete subuser from Sendgrid account
+	 * @param subUser
+	 * @param domain
+	 * @return
+	 */
+	
+	public static String deleteSubAccountFromSendGrid(String domain)
+	{
+		String response = null, queryString = SendGridSubUser.getAgileSubUserName(domain), url = "https://api.sendgrid.com/v3/subusers/";
+		try
+		{
+			if (StringUtils.isBlank(domain))
+				return null;
+			
+			String username = Globals.SENDGRID_API_USER_NAME, password = Globals.SENDGRID_API_KEY;
+			
+			response = HTTPUtil.accessURLUsingAuthentication(url + queryString, username, password,
+					"DELETE", null, false, "application/json", "application/json");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception occured while deleting sendgrid subuser...." + e.getMessage());
+		}
+		return response;
 	}
 	
 	/**
