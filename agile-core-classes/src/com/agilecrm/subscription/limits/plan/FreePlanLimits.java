@@ -63,6 +63,7 @@ public class FreePlanLimits extends PlanLimits
 	defaultWidget = false;
 	
 	onlineAppointment= false;
-
+	
+	checkTicketSLA = false;
     }
 }
