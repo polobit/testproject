@@ -6,7 +6,7 @@ var VisitorsSegmentationRouter = Backbone.Router
         routes: {
 
             /* Webstats */
-            "segments": "visitorssegmentation"         
+            "visitors": "visitorssegmentation"         
         },
 
         visitorssegmentation: function(time_range, is_lhs_filter,view_data,filter_id)

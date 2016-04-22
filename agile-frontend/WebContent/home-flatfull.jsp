@@ -311,7 +311,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
    <li id="segmentationmenu">
-    <a  href="#segments">
+    <a  href="#visitors">
        <i class="icon-large icon-screenshot"></i>
       <span>Segments</span>  
     </a>
@@ -619,7 +619,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
+    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
