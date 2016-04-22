@@ -868,8 +868,19 @@ public class TicketsRest
 				throw new Exception("Id is missing.");
 
 			JSONObject json = new TicketsBackup().getData(id);
+			
+			String envelope = json.getString("envelope");
 
-			new SendgridInboundParser().saveTicket(json);
+			System.out.println("Envelope:" + envelope);
+
+			JSONObject enveloperJSON = new JSONObject(envelope);
+			String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
+
+			SendgridInboundParser parser = new SendgridInboundParser();
+			
+			String[] toAddressArray = parser.getNamespaceAndGroup(toAddress);
+			
+			parser.saveTicket(json, toAddressArray);
 			
 			//Deleting record from backup table
 			TicketsBackup.delete(new Key<TicketsBackup>(TicketsBackup.class, id));
