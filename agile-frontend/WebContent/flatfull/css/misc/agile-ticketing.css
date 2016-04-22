@@ -541,3 +541,7 @@ form#new-ticket ul.chosen-choices {
 .word-break-all{
   word-break: break-all;
 }
+
+.font-weight-bold{
+  font-weight: bold;
+} 

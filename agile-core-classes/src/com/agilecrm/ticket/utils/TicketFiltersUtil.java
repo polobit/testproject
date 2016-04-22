@@ -235,7 +235,7 @@ public class TicketFiltersUtil
 	 */
 	public static void saveDefaultFilters()
 	{ 
-		//for New Tickets filter
+		//For New and Open tickets filter
 		TicketFilters newTickets = new TicketFilters();
 
 		List<SearchRule> conditions = new ArrayList<SearchRule>();
@@ -246,15 +246,20 @@ public class TicketFiltersUtil
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.NEW);
 		conditions.add(searchRule);
+		
+		searchRule.LHS = "status";
+		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
+		searchRule.RHS = String.valueOf(Status.OPEN);
+		conditions.add(searchRule);
 
-		newTickets.name = "New Tickets";
+		newTickets.name = "New and Open Tickets";
 		newTickets.is_default_filter = true;
 		newTickets.conditions = conditions;
 		newTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 		TicketFilters.dao.put(newTickets);
         
-		//for All Tickets filter
+		//For All tickets filter
 		TicketFilters allTickets = new TicketFilters();
 
 		conditions = new ArrayList<SearchRule>();
@@ -292,7 +297,7 @@ public class TicketFiltersUtil
 
 		TicketFilters.dao.put(allTickets);
 	    
-		//for My Tickets filter
+		//For My tickets filter
 		TicketFilters myTickets = new TicketFilters();
 		
 		conditions = new ArrayList<SearchRule>();
