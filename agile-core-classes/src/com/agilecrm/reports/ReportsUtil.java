@@ -1113,6 +1113,7 @@ public class ReportsUtil {
 		int softBounce = 0;
 		int emailsSkipped = 0;
 		int emailsSpam = 0;
+		String duration="";
 
 		// Fetches report based on report id
 		Reports report = ReportsUtil.getReport(Long.parseLong(report_id));
@@ -1197,6 +1198,12 @@ public class ReportsUtil {
 								.getJSONObject(i).getString("count"));
 						continue;
 					}
+					if (campaignEmailsJSONArray.getJSONObject(i)
+							.getString("log_type").equals("durtion")) {
+						duration = campaignEmailsJSONArray
+								.getJSONObject(i).getString("durationBetween");
+						continue;
+					}
 				} // End of for loop
 			} // End of if statement
 
@@ -1208,6 +1215,7 @@ public class ReportsUtil {
 			statsJSON.put("emailSkipped", emailsSkipped);
 			statsJSON.put("hardBounce", hardBounce);
 			statsJSON.put("softBounce", softBounce);
+			statsJSON.put("durationBetween",duration);
 
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
@@ -1271,7 +1279,7 @@ public class ReportsUtil {
 		Calendar startCal = Calendar.getInstance();
 		startCal.setTime(new DateUtil().toMidnight().getTime());
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR, 11);
+		cal.set(Calendar.HOUR, 23);
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.SECOND, 59);
 		JSONArray campaignEmailsJSONArray = new JSONArray();
@@ -1299,6 +1307,26 @@ public class ReportsUtil {
 					.getCountByLogTypesforPortlets(report.campaignId,
 							startDate, endDate, timeZone);
 		}
+		
+		//for showing duration in template
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		String sdate=df.format(startCal.getTime());
+		String edate=df.format(cal.getTime());
+		JSONObject data=new JSONObject();
+		try {
+			data.put("log_type", "durationBetween");
+			if(report.duration==Reports.Duration.DAILY)
+				data.put("durationBetween", sdate);
+			else				
+			    data.put("durationBetween", sdate+" To "+edate);
+			
+			campaignEmailsJSONArray.put(data);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
 
 		System.out.println("Campaign stats are : " + campaignEmailsJSONArray);
 		return campaignEmailsJSONArray;
