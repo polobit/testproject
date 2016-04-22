@@ -1,17 +1,25 @@
 package com.agilecrm.knowledgebase.rest;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
+import com.agilecrm.knowledgebase.util.ArticleUtil;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
 /**
@@ -22,6 +30,22 @@ import com.googlecode.objectify.Key;
 @Path("/api/knowledgebase/section")
 public class SectionAPI
 {
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Section getSection(@QueryParam("id") Long id)
+	{
+		try
+		{
+			return Section.dao.get(id);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -48,5 +72,4 @@ public class SectionAPI
 
 		return section;
 	}
-
 }

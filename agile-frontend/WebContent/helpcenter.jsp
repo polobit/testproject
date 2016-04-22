@@ -125,7 +125,7 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
-<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed">
+<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed" style="background-color: white;">
 
 <!-- Including header(Navigation Bar) page -->
 <%@ include file="/helpcenter/header.html"%>

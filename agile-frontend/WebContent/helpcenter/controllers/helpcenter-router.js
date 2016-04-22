@@ -7,19 +7,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 		/* Home routes */
 		"" : "categories",
 		"categories":"categories",
-        "category-add":"categoryAdd",
-		"sections" : "sections"
+		"section/:id" : "sectionArticles",
+		"categorie/:categorie_id/section/:section_id/articles" : "sectionArticles"
 	},
 	categories: function(){
 
-		getTemplate("home", {}, undefined, function(template_ui){
+		App_Helpcenter.renderHomeTemplate(function(){
 
-	 		if(!template_ui)
-	 			return;
-
-	 		$('#content').html($(template_ui));
-
-	 		//Initializing base collection with groups URL
+			//Initializing base collection with groups URL
 			App_Helpcenter.categoriesCollection = new Base_Collection_View({
 				url : '/core/api/knowledgebase/categorie',
 				templateKey : "helpcenter-categories",
@@ -33,32 +28,55 @@ var HelpcenterRouter = Backbone.Router.extend({
 			App_Helpcenter.categoriesCollection.collection.fetch();
 
 			//Rendering template
-			$('#categories').html(App_Helpcenter.categoriesCollection.el);
+			$('#helpcenter-container').html(App_Helpcenter.categoriesCollection.el);
+		});
+	},
+
+	sectionArticles: function(categorie_id, section_id){
+
+		App_Helpcenter.renderHomeTemplate(function(){
+			var sectionView = new Base_Model_View({
+				isNew : false,
+				template : "section",
+				url : "/core/api/knowledgebase/section?id=" + section_id,
+		        postRenderCallback: function(){
+
+		        	//Initializing base collection with groups URL
+					App_Helpcenter.articlesCollection = new Base_Collection_View({
+						url : '/core/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
+						templateKey : "helpcenter-articles",
+						individual_tag_name : 'div'
+					});
+
+					//Fetching groups collections
+					App_Helpcenter.articlesCollection.collection.fetch();
+
+					//Rendering template
+					$('#articles-collection').html(App_Helpcenter.articlesCollection.el);
+		        }
+			});
+
+	 		$('#helpcenter-container').html(sectionView.render().el);
 	 	});
 	},
 
-	categoryAdd: function(){
+	renderHomeTemplate: function(callback){
 
-		getTemplate("add-catogery", {}, undefined, function(template_ui){
+		if($('#helpcenter-container').length)
+		{
+			callback();
+			return;
+		}
 
-				    if(!template_ui)
-		 				return;
+		getTemplate("home", {}, undefined, function(template_ui){
 
-	 				$('#content').html($(template_ui));
+	 		if(!template_ui)
+	 			return;
 
-				    var addCatogeryView = new Base_Model_View({
-		 				isNew : true, 
-		 				url : '/core/api/knowledgebase/categorie',
-		 				template : "add-catogery",
-		 				window : "categories",
-		                saveCallback : function(){
-	 				},
+	 		$('#content').html($(template_ui));
 
-					
-					});
-
-	 			$('#content').html(addCatogeryView.render().el);    
-
-       });
+	 		if(callback)
+	 			callback();
+	 	});
 	}
 });

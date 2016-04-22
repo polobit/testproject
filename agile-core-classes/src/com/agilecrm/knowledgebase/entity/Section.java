@@ -131,7 +131,7 @@ public class Section implements Serializable
 	{
 		Long currentTime = Calendar.getInstance().getTimeInMillis();
 
-		if (currentTime == null)
+		if (created_time == null)
 			created_time = currentTime;
 
 		updated_time = currentTime;
