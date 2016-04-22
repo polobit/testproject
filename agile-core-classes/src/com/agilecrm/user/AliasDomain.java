@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.util.AliasDomainUtil;
+import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.Cached;
 
@@ -66,6 +68,13 @@ public class AliasDomain {
 		try
 		{
 			dao.put(this);
+			
+			try {
+				// Reset name
+	    		CacheUtil.setCache(AliasDomainUtil.CACHED_ALIAS_KEY + this.domain, this.alias.get(0));
+			} catch (Exception e) {
+			}
+    		
 		}finally{
 			NamespaceManager.set(oldNamespace);
 		}

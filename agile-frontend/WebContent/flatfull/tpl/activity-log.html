@@ -545,6 +545,117 @@ Rescheduled Event '{{../label}}'<br/>
 
 
 <!-- end event condition-->
+<!-- start of user condition -->
+
+
+{{#if_equals "User_Created" activity_type}}
+ {{user_name}}
+    created a New User {{#if this.entityObject}}<a href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} {{custom1}}
+    <div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}} 
+</small></div>
+{{/if_equals}}
+
+
+{{#if_equals "User_Name_Change" activity_type}}
+{{user_name}} updated the Username from {{custom1}}{{#if this.entityObject}}
+<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} to {{custom2}}
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}} 
+</small></div>
+{{/if_equals}} 
+
+
+{{#if_equals "User_Email_Change" activity_type}}
+{{user_name}} updated Email ID from {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} to {{custom2}}
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}} {{custom3}}
+</small></div>
+{{/if_equals}}
+
+{{#if_equals "User_Deleted" activity_type}}
+{{user_name}}  deleted the user {{custom1}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} 
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}}
+</small></div>
+{{/if_equals}}
+
+
+
+{{#if_equals "User_Permissions_Change" activity_type}}
+{{user_name}} modified the Permissions for {{custom4}}{{#if this.entityObject}}<a  href="#User/{{entity_id}}" >{{label}}</a>{{else}}{{/if}} 
+<div class="activities_second_line m-t-none"><small>
+<i class=""></i> {{#unless entityObject}} {{/unless}}  {{#if this.entityObject}}{{/if}}  {{custom3}}
+</small></div>
+{{/if_equals}}
+
+
+
+<!-- user Admin Change -->
+{{#if_equals "User_Admin_Change" activity_type}}
+{{#if_equals "true" custom4}}
+ {{user_name}} enabled Administrator Permissions for {{custom1}} 
+ <div class="activities_second_line m-t-none">
+<small class="activities_second_line m-t-none text-sm">   
+<i class=""></i> {{custom3}}. 
+</small>
+</div>
+{{else}}
+{{user_name}}  disabled Administrator Permissions for {{custom1}} 
+<div >
+<small class="activities_second_line m-t-none text-sm">   
+<i class="icon-white"></i> {{custom3}}. 
+</small></div>
+{{/if_equals}}
+{{else}}
+{{/if_equals}}
+
+<!-- end of the User AdminChange -->
+
+
+<!-- User Disable change  -->
+
+{{#if_equals "User_Disabled" activity_type}}
+{{#if_equals "true" custom4}}
+{{user_name}} disabled  the User {{custom1}}  
+<div class="activities_second_line m-t-none">
+<small class="activities_second_line m-t-none text-sm">   
+<i class=""></i> {{custom3}}. 
+</small>
+</div>
+{{else}}
+{{user_name}}  enabled the User {{custom1}}
+<div class="activities_second_line m-t-none">
+<small class="activities_second_line m-t-none text-sm">   
+<i class="icon-white"></i> {{custom3}}. 
+</small></div>
+{{/if_equals}}
+{{else}}
+{{/if_equals}}
+
+<!--  end of user disable condition -->
+
+<!-- user owner change -->
+{{#if_equals "User_Owner_Change" activity_type}}
+{{#if_equals "true" custom4}}
+{{user_name}} enabled owner permissions for {{custom1}}  
+<div class="activities_second_line m-t-none">
+<small class="activities_second_line m-t-none text-sm">   
+<i class=""></i> {{custom3}}. 
+</small>
+</div>
+{{else}}
+{{user_name}} disabled owner permissions for {{custom1}}
+<small class="activities_second_line m-t-none text-sm">   
+<i class="icon-white"></i> {{custom3}}. 
+</small>
+{{/if_equals}}
+{{else}}
+{{/if_equals}}
+
+<!-- end of user owner change -->
+
+
 
 <!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
@@ -1135,9 +1246,9 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{/if_equals}}
 		{{#if_equals "SET_DUE_DATE" activity_type}}
 			{{#if user_name}}
-				{{user_name}} set <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> due date to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+				{{user_name}} set <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> due date to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 			{{else}}
-				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been set to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been set to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
 				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
@@ -1145,9 +1256,9 @@ Deleted  {{custom1}} Campaigns<br/>
 		{{/if_equals}}
 		{{#if_equals "DUE_DATE_CHANGED" activity_type}}
 			{{#if user_name}}
-				{{user_name}} changed <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> due date to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+				{{user_name}} changed <a href="#ticket/{{entity_id}}">ticket#{{entity_id}}</a> due date to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 			{{else}}
-				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been changed to {{epochToHumanDate "mmm dd, yyyy" custom2}}
+				<a href="#ticket/{{entity_id}}">Ticket#{{entity_id}}</a> due date has been changed to {{epochToHumanDate "mmm dd, yyyy HH:MM" custom2}}
 			{{/if}}
 			<br/><small class="activities_second_line m-t-none text-sm">
 				{{#if this.entityObject}}{{this.entityObject.subject}}{{else}}Ticket deleted{{/if}}
@@ -1217,16 +1328,44 @@ Deleted  {{custom1}} Campaigns<br/>
             <h3 class="activity-heading font-thin h3  pull-left"><span>User Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h3>
             
 		<div class="pull-right" id="activity-log-header-div">
-		<div class="btn-group pull-right type-task-button c-p">
-                <div class="btn btn-default btn-sm selected_name" id="selectedentity_type">All Activities</div>
-                <a class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
+		<div class="btn-group pull-left" role="group">
+                <a href="#activities" class="btn btn-default btn-sm bg-light">User Activities</a> 
+                <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">Contact Activities</a>
+            </div>
+
+
+            <div class="pull-left" style=" margin-bottom:0px !important;">
+            <div id="activities_date_range" style="line-height:20px;" 
+            class="btn-group pull-right activity-date-filter c-p m-t-none">
+            <span class="inline-block" style="padding: 3px 10px;">
+               <i class="icon-calendar icon-large m-r-xs"></i>
+                <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
+             </span>
+             <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
+                <span class="caret  inline-block p-t-xs"></span>
+              </span>
+            </div>
+            </div>
+
+            <div class="btn-group pull-left activity-log-button c-p m-r-sm">
+                <div class="btn btn-default btn-sm selected_name" id="selectedusername">All Users</div>
+                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" id="entity_type">
+                </button>
+                <ul class="dropdown-menu  pull-right" id="user-select" role="menu"></ul>
+            </div>
+
+		<div class="btn-group pull-left type-task-button c-p">
+                <div class="btn btn-default btn-sm selected_name" id="selectedentity_type">All Activities</div>
+                <button class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right" id="entity_type" role="menu">
 					 <li><a href="">All Activities</a></li>
                      <li><a href="CALL">Calls</a></li>
                     <li><a href="CAMPAIGN">Campaigns</a></li>  
                      <li><a href="CONTACT">Contacts</a></li>
+                     
                      
 					{{#hasMenuScope 'DEALS'}}
                      	<li><a href="DEAL">Deals</a></li>
@@ -1237,35 +1376,11 @@ Deleted  {{custom1}} Campaigns<br/>
 					 <li><a href="EVENT">Events</a></li>
 					 <li><a href="TASK">Tasks</a></li>
 					 <li><a href="TICKET">Ticket</a></li>
-					
+					<li><a href="USER">Users</a></li>
 					                    
                 </ul>
             </div>            
-		<div class="btn-group pull-right activity-log-button c-p m-r">
-                <div class="btn btn-default btn-sm selected_name" id="selectedusername">All Users</div>
-                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
-                <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" id="user-select"></ul>
-            </div>
 
-            <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
-            <span class="inline-block" style="padding: 3px 10px;">
-               <i class="icon-calendar icon-large m-r-xs"></i>
-                <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
-             </span>
-             <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
-                <span class="caret  inline-block p-t-xs"></span>
-              </span>
-            </div>
-            <div class="btn-group m-r pull-right" role="group">
-                <a href="#activities" class="btn btn-default btn-sm bg-light" onclick="Agile_GA_Event_Tracker.track_event('User Activities')">User Activities</a> 
-                <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')" onclick="Agile_GA_Event_Tracker.track_event('Contact Activities')">Contact Activities</a>
-            </div>
-            
-          
-
-            
         </div>
         
         <div class="clearfix"></div>

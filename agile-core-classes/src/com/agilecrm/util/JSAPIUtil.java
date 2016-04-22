@@ -113,6 +113,8 @@ public class JSAPIUtil
     whiteList.add("pjb98341");
     whiteList.add("fenopix");
     whiteList.add("twoprimes");
+    whiteList.add("docmosis");
+    // whiteList.add("our");
     
     if(!StringUtils.isEmpty(domain) && whiteList.contains(domain))
     	return true;
@@ -144,7 +146,8 @@ public class JSAPIUtil
 		for (Iterator<ContactField> iterator = fields.iterator(); iterator.hasNext(); ) {
 			ContactField contactField = iterator.next();
 			
-			if(contactField.type == FieldType.SYSTEM && !propertyNames.contains(contactField.name.toLowerCase())){
+			String fieldName = contactField.name.toLowerCase();
+			if(contactField.type == FieldType.CUSTOM || (contactField.type == FieldType.SYSTEM && !propertyNames.contains(fieldName))){
 				continue;
 			}
 			

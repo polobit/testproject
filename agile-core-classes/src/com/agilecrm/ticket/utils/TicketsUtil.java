@@ -33,6 +33,7 @@ import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -386,8 +387,10 @@ public class TicketsUtil
 		{
 			try
 			{
-				TicketNotesUtil.sendEmail(email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
-						SendMail.TICKET_FORWARD, new JSONObject().put("content", content));
+				String emailHTML = MustacheUtil.templatize(SendMail.TICKET_FORWARD + SendMail.TEMPLATE_HTML_EXT,
+						new JSONObject().put("content", content));
+
+				TicketNotesUtil.sendEmail(email, ticket.subject, agentName, fromAddress, ticket.cc_emails, emailHTML);
 
 			}
 			catch (Exception e)
