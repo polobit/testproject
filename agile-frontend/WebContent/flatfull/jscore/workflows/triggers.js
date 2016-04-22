@@ -639,7 +639,12 @@ var _AGILE_API_KEY = "";
 
 function setGlobalAPIKey(callback)
 {
-	if( _AGILE_API_KEY && _AGILE_API_KEY != '' )	return;
+	if( _AGILE_API_KEY && _AGILE_API_KEY != '' )
+	{
+		//If key is set, call the function directly.
+		if( callback && typeof(callback) === 'function')	callback();
+		return;
+	}
 	
     $.ajax({ 
     	type : 'GET', 
