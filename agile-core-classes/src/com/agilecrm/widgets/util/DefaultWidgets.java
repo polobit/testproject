@@ -89,6 +89,11 @@ public class DefaultWidgets {
 				"/widgets/facebook.js", "/widgets/facebook.png",
 				"/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
+				"Uservoice",
+				"UserVoice is a powerful tool that helps build better products and support integrating easy-to-use feedback and ideas from customers.",
+				"/widgets/uservoice.js", "/widgets/Uservoice_lg_logo.png",
+				"/widgets/UserVoice_md_logo.png", null, WidgetType.SUPPORT));
+		widgets.add(new Widget(
 				"Shopify",
 				"Shopify is a powerful ecommerce solution that includes everything you need to create an online store.",
 				"/widgets/shopify.js", "/widgets/shopify.png",

@@ -139,6 +139,7 @@ function deserializeForm(data, form)
 								});
 							}
 
+
 							/*
 							 * Deserialize tags, tags are represented by list
 							 * elements prepended the respective input field. If
@@ -270,6 +271,20 @@ function deserializeForm(data, form)
 							 * Deserialize multiple checkboxes.
 							 */
 							else if (fel.hasClass('multiple-checkbox'))
+							{
+
+								/*
+								 * Iterates through options of the select and
+								 * call multiSelect function to select the
+								 * option
+								 */
+								for (var i = 0; i < el.length; i++)
+								{
+									$('input:checkbox[value="' + el[i] + '"]', fel).attr("checked", "checked");
+								}
+							}
+
+							else if (fel.hasClass('multiple-checkbox-adminprefs'))
 							{
 
 								/*
@@ -416,9 +431,9 @@ function deserializeChainedElement(data, rule_element)
 			// Fills date in to fields and initialize datepicker on the field
 			if ($(input_element).hasClass('date'))
 			{
-				value = getLocalTimeFromGMTMilliseconds(value);
+			//	value = getLocalTimeFromGMTMilliseconds(value);
 
-				$(input_element).val(getDateInFormatFromEpoc(value));
+				$(input_element).val(getDateInFormatFromEpocForContactFilters(value));
 
 
 				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
@@ -426,6 +441,17 @@ function deserializeChainedElement(data, rule_element)
 
 				$(input_element).datepicker('update');
 
+				return;
+			}
+			if (($(input_element).closest('td').siblings('td.lhs-block').find('option:selected').attr("field_type") == "CONTACT" || $(input_element).closest('td').siblings('td.lhs-block').find('option:selected').attr("field_type") == "COMPANY") && value != "Contact" && value != "Company")
+			{
+				var referenceContactModel = Backbone.Model.extend({ url : '/core/api/contacts/references?references='+value });
+				var model = new referenceContactModel();
+				model.fetch({
+					success : function(data){
+						$(input_element).val(getPropertyValue(data.get(0).properties, "first_name"));
+					}
+				});
 				return;
 			}
 			$(input_element).val(value);
@@ -600,10 +626,48 @@ function deserializeLhsFilters(element, data)
 		var fieldName = LHS.replace(/ +/g, '_');
 		fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
 		var currentElemnt = $(element).find('#' + fieldName + '_div');
+		$('.custom_contact').each(function(){
+			if ($(this).attr("name") == LHS)
+			{
+				var that = this;
+				var referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+RHS_VALUE, sort_collection : false });
+
+				referenceContactsCollection.collection.fetch({
+					success : function(data){
+						var name = "";
+						if(getPropertyValue(data.get(RHS_VALUE).get("properties"), "first_name")){
+							name += getPropertyValue(data.get(RHS_VALUE).get("properties"), "first_name");
+						}
+						if(getPropertyValue(data.get(RHS_VALUE).get("properties"), "last_name")){
+							name += " "+getPropertyValue(data.get(RHS_VALUE).get("properties"), "last_name");
+						}
+						$(that).parent().find("input").val(name);
+						$(that).parent().find("input").attr("data", RHS_VALUE);
+						hideTransitionBar();
+					}
+				});
+			}
+		});
+		$('.custom_company').each(function(){
+			if ($(this).attr("name") == LHS)
+			{
+				var that = this;
+				var referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+RHS_VALUE, sort_collection : false });
+
+				referenceContactsCollection.collection.fetch({
+					success : function(data){
+						$(that).parent().find("input").val(getPropertyValue(data.get(RHS_VALUE).get("properties"), "name"));
+						$(that).parent().find("input").attr("data", RHS_VALUE);
+						hideTransitionBar();
+					}
+				});
+			}
+		});
 		if (LHS == 'tags' || LHS == 'campaign_status')
 		{
 			$('#' + LHS + '_div').parent().find('a').addClass('bold-text');
 			$('#' + LHS + '_div').removeClass('hide');
+			$('#' + LHS + '_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			if ((tagsConditionsCount == 0 && LHS == 'tags') || (campaignConditionsCount == 0 && LHS == 'campaign_status'))
 			{
 				currentElemnt = $('#' + LHS + '-lhs-filter-table').find("div.lhs-contact-filter-row:last")
@@ -639,7 +703,7 @@ function deserializeLhsFilters(element, data)
 		var RHS_NEW_ELEMENT = $(currentElemnt).find('.' + CONDITION).find('#RHS_NEW').children();
 		if ($(RHS_ELEMENT).hasClass("date"))
 		{
-			RHS_VALUE = getLocalTimeFromGMTMilliseconds(RHS_VALUE);
+			RHS_VALUE = getLocalTimeFromGMTMillisecondsforDynamicFilters(RHS_VALUE);
 
 			$(RHS_ELEMENT).val(getDateInFormatFromEpoc(RHS_VALUE));
 			$(RHS_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_VALUE));
@@ -652,7 +716,7 @@ function deserializeLhsFilters(element, data)
 		{
 			if ($(RHS_NEW_ELEMENT).hasClass("date"))
 			{
-				RHS_NEW_VALUE = getLocalTimeFromGMTMilliseconds(RHS_NEW_VALUE);
+				RHS_NEW_VALUE = getLocalTimeFromGMTMillisecondsforDynamicFilters(RHS_NEW_VALUE);
 
 				$(RHS_NEW_ELEMENT).val(getDateInFormatFromEpoc(RHS_NEW_VALUE));
 				$(RHS_NEW_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_NEW_VALUE));
@@ -664,4 +728,98 @@ function deserializeLhsFilters(element, data)
 		}
 
 	});
+	if(json_object.or_rules)
+	{
+		$('.custom_contacts').each(function(){
+			var referenceContactIds = "";
+			var referenceContactIdsArray = [];
+			var that = this;
+			$.each(json_object.or_rules, function(index, filter){
+				var LHS = filter.LHS;
+				var CONDITION = filter.CONDITION;
+				var RHS_VALUE = filter.RHS;
+				var RHS_NEW_VALUE = filter.RHS_NEW;
+				var fieldName = LHS.replace(/ +/g, '_');
+				fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
+				var currentElemnt = $(element).find('#' + fieldName + '_div');
+				if($(that).attr("name") == LHS)
+				{
+					referenceContactIds += filter.RHS + ",";
+					referenceContactIdsArray.push(filter.RHS);
+
+					$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+					$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
+					$(currentElemnt).removeClass('hide');
+					$(currentElemnt).find('[name="CONDITION"]').val("IN");
+					$(currentElemnt).find('[name="CONDITION"]').trigger('change');
+					$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+				}
+			});
+			if(referenceContactIds)
+			{
+				var referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+
+				referenceContactsCollection.collection.fetch({
+					success : function(data){
+						$.each(referenceContactIdsArray, function(index){
+							var contactId = referenceContactIdsArray[index];
+							var name = "";
+							if (getPropertyValue(data.get(contactId).get("properties"), "first_name")){
+								name = getPropertyValue(data.get(contactId).get("properties"), "first_name");
+							}
+							if (getPropertyValue(data.get(contactId).get("properties"), "last_name")){
+								name += " "+getPropertyValue(data.get(contactId).get("properties"), "last_name");
+							}
+ 							$(that).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+data.get(contactId).id+'"><a href="#contact/'+data.get(contactId).id+'" class="text-white v-middle">'+name+'</a><a class="close m-l-xs" id="remove_contact_in_lhs">×</a></li>');
+						});
+						hideTransitionBar();
+					}
+				});
+			}
+			
+		});
+
+		$('.custom_companies').each(function(){
+			var referenceContactIds = "";
+			var referenceContactIdsArray = [];
+			var that = this;
+			$.each(json_object.or_rules, function(index, filter){
+				var LHS = filter.LHS;
+				var CONDITION = filter.CONDITION;
+				var RHS_VALUE = filter.RHS;
+				var RHS_NEW_VALUE = filter.RHS_NEW;
+				var fieldName = LHS.replace(/ +/g, '_');
+				fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
+				var currentElemnt = $(element).find('#' + fieldName + '_div');
+				if($(that).attr("name") == LHS)
+				{
+					referenceContactIds += filter.RHS + ",";
+					referenceContactIdsArray.push(filter.RHS);
+
+					$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+					$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
+					$(currentElemnt).removeClass('hide');
+					$(currentElemnt).find('[name="CONDITION"]').val("IN");
+					$(currentElemnt).find('[name="CONDITION"]').trigger('change');
+					$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+				}
+			});
+			if(referenceContactIds)
+			{
+				var referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+
+				referenceContactsCollection.collection.fetch({
+					success : function(data){
+						$.each(referenceContactIdsArray, function(index){
+							var contactId = referenceContactIdsArray[index];
+ 							$(that).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+data.get(contactId).id+'"><a href="#company/'+data.get(contactId).id+'" class="text-white v-middle">'+getPropertyValue(data.get(contactId).get("properties"), "name")+'</a><a class="close m-l-xs" id="remove_contact_in_lhs">×</a></li>');
+						});
+						hideTransitionBar();
+					}
+				});
+			}
+			
+		});
+	}
+	
 }

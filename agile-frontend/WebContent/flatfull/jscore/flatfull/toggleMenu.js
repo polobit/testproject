@@ -44,9 +44,26 @@ $(document).ready(function(){
 
 
 
-
+//addDescriptionInfo();
 	
+ $("#addDescriptionLink").click(function(e){
+ e.preventDefault();
+ $(this).hide();
+   $("#addDescriptionInfo").toggle();
+   });
 
+ $("#activityTaskModal").on("click", "#taskDescriptionLink", function(e){
+ e.preventDefault();
+ $(this).hide();
+   $("#taskDescriptionInfo").toggle();
+   });
+
+$("#activityModal").on("click", "#eventDescriptionLink", function(e){
+ e.preventDefault();
+ $(this).hide();
+   $(".eventDescriptionInfo").toggle();
+   });
+//addDescriptionInfo();
 	
 	
 
@@ -255,6 +272,7 @@ $(document).ready(function(){
     			   }); 
 
    });
+
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){

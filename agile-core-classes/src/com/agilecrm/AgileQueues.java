@@ -12,16 +12,20 @@ public class AgileQueues
 
     // Campaign Push Queue
     public static final String CAMPAIGN_QUEUE = "campaign-queue";
+    public static final String CAMPAIGN_LOG_QUEUE = "campaign-log-pull-queue";
     public static final String BULK_CAMPAIGN_QUEUE = "bulk-campaign-queue";
     public static final String NORMAL_CAMPAIGN_QUEUE = "normal-campaign-queue";
     public static final String UPDATE_WORKFLOWS_QUEUE = "update-workflows-queue";
 
     // Cron Push Queue
     public static final String CRON_QUEUE = "cron-queue";
+    public static final String MANDRILL_QUEUE = "mandrill-queue";
     public static final String CRON_INTERRUPT_QUEUE = "cron-interrupt-queue";
 
     public static final String ACCOUNT_STATS_UPDATE_QUEUE = "account-stats-update-queue";
     public static final String CONTACTS_DELETE_QUEUE = "contacts-delete-queue";
+    public static final String CONTACTS_POST_DELETE_QUEUE = "contacts-post-delete-queue";
+
     public static final String OWNER_CHANGE_QUEUE = "owner-change-queue";
     public static final String CAMPAIGN_SUBSCRIBE_QUEUE = "campaign-subscribe-queue";
     public static final String BULK_TAGS_QUEUE = "bulk-tags-queue";
@@ -45,7 +49,13 @@ public class AgileQueues
     // Campaign pull queues
     public static final String BULK_CAMPAIGN_PULL_QUEUE = "bulk-campaign-pull-queue";
     public static final String NORMAL_CAMPAIGN_PULL_QUEUE = "normal-campaign-pull-queue";
-
+    
+    // Campaign push queues
+    public static final String NORMAL_CAMPAIGN_PUSH_QUEUE = "normal-campaign-push-queue";
+    
+    //Wakeup or interrupt push queues
+    public static final String TIMEOUT_PUSH_QUEUE = "timeout-push-queue";
+    
     // Email pull queues
     public static final String BULK_EMAIL_PULL_QUEUE = "bulk-email-pull-queue";
     public static final String NORMAL_EMAIL_PULL_QUEUE = "normal-email-pull-queue";
@@ -63,4 +73,11 @@ public class AgileQueues
 
     // Contacts and Deal push queue
     public static final String WEBHOOKS_REGISTER_ADD_QUEUE = "webhooks-register-add-queue";
+
+	//Ticketing queue
+	public static final String TICKET_BULK_ACTIONS_QUEUE = "ticket-bulk-actions";
+	
+	//Deals update to textsearch queue
+	public static final String DEALS_SCHEMA_CHANGE_QUEUE = "deals-schema-change-queue";
+
 }

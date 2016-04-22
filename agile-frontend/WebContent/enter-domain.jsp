@@ -40,6 +40,9 @@ if(redirectTo  != null)
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 body {
 

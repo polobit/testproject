@@ -1,7 +1,10 @@
 package com.agilecrm.core.api.search;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -51,7 +54,7 @@ public class SearchAPI
 	// condition is to use this call in the API calls.
 	if (StringUtils.isEmpty(count))
 	    count = "10";
-	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
+	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResultsWithCompany(keyword, Integer.parseInt(count),
 		cursor, type);
     }
 
@@ -84,8 +87,31 @@ public class SearchAPI
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
 
-	if (StringUtils.isEmpty(type))
-	    return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+	if (StringUtils.isEmpty(type)){
+		List<Object> searchResult =  (List<Object>)new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+		if(searchResult.size() == Integer.parseInt(count) ){
+			Set<String> set = new HashSet<String>(); 
+			int searchCount = 0;
+			for(Object m : searchResult){
+				if(m instanceof Contact);
+					Contact contact = (Contact) m;
+					set.add(contact.contact_company_id);
+					searchCount = searchCount+1;
+			}
+			if(searchCount == Integer.parseInt(count) && set.size()==1){
+				Iterator iterator = set.iterator();
+				if(iterator.hasNext()){
+					String id = iterator.next().toString();
+					Contact contact = ContactUtil.getContact(Long.parseLong(id));
+					if(contact != null){
+						searchResult.remove(9);
+						searchResult.add(contact);
+					}
+				}
+			}
+		}
+		return searchResult;
+		}
 
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
 		cursor, type);
@@ -110,9 +136,30 @@ public class SearchAPI
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
 
-	if (StringUtils.isEmpty(type))
-	    return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
-
+	if (StringUtils.isEmpty(type)){
+		List<Object> searchResult =  (List<Object>)new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+		if(searchResult.size() == Integer.parseInt(count) ){
+			Set<String> set = new HashSet<String>(); 
+			int searchCount = 0;
+			for(Object m : searchResult){
+				if(m instanceof Contact);
+					Contact contact = (Contact) m;
+					set.add(contact.contact_company_id);
+					searchCount = searchCount+1;
+			}
+			if(searchCount == Integer.parseInt(count) && set.size()==1){
+				Iterator iterator = set.iterator();
+				if(iterator.hasNext()){
+					String id = iterator.next().toString();
+					Contact contact = ContactUtil.getContact(Long.parseLong(id));
+					if(contact != null){
+						searchResult.remove(9);
+						searchResult.add(contact);
+					}
+				}
+			}
+		}
+	}
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
 		cursor, type);
     }

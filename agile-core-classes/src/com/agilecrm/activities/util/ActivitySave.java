@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
+import com.agilecrm.LoginServlet;
+import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
@@ -22,6 +24,8 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
 
@@ -41,7 +45,7 @@ public class ActivitySave
     public static void createDealAddActivity(Opportunity opportunity) throws JSONException
     {
 
-	List<Contact> contacts = opportunity.getContacts();
+	List<ContactPartial> contacts = opportunity.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -85,6 +89,7 @@ public class ActivitySave
 	Object expectedvalue[] = deals.get("expected_value");
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
+	Object description[] = deals.get("description");
 	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
 
@@ -109,9 +114,9 @@ public class ActivitySave
 			    milestone[0].toString(), milestone[1].toString(), milestone[2].toString(), jsn);
 	    }
 
-	    if (name != null || expectedvalue != null || probablity != null || close_date != null)
+	    if (name != null || expectedvalue != null || probablity != null || close_date != null || description != null)
 	    {
-		List changed_data = getChangedData(name, expectedvalue, probablity, close_date);
+		List changed_data = getChangedData(name, expectedvalue, probablity, close_date,description);
 
 		ActivityUtil.createDealActivity(ActivityType.DEAL_EDIT, opportunity, changed_data.get(1).toString(),
 		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
@@ -128,7 +133,7 @@ public class ActivitySave
      */
     public static void createDealDeleteActivity(Opportunity opr) throws JSONException
     {
-	List<Contact> contacts = opr.getContacts();
+	List<ContactPartial> contacts = opr.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -148,7 +153,7 @@ public class ActivitySave
     public static void createEventAddActivity(Event event) throws JSONException
     {
 
-	List<Contact> contacts = event.getContacts();
+	List<ContactPartial> contacts = event.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -203,7 +208,7 @@ public class ActivitySave
      */
     public static void createEventDeleteActivity(Event event) throws JSONException
     {
-	List<Contact> contacts = event.getContacts();
+	List<ContactPartial> contacts = event.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -222,7 +227,7 @@ public class ActivitySave
 
     public static void createTaskAddActivity(Task task) throws JSONException
     {
-	List<Contact> contacts = task.getContacts();
+	List<ContactPartial> contacts = task.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -254,11 +259,12 @@ public class ActivitySave
 	Object subject[] = tasks.get("subject");
 	Object task_type[] = tasks.get("task_type");
 	Object owner_name[] = tasks.get("Task_owner");
+	Object task_description[] = tasks.get("task_description");
 
 	JSONObject js = new JSONObject(new Gson().toJson(task));
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contacts"));
 	System.out.println(due + "  " + priority + "  " + status + "  " + progress + "  " + subject + " " + task_type
-	        + "  " + owner_name);
+	        + "  " + owner_name+""+task_description);
 	if (tasks.size() > 0)
 	{
 
@@ -296,9 +302,9 @@ public class ActivitySave
 		        owner_name[1].toString(), owner_name[2].toString(), jsn);
 	    }
 
-	    if (due != null || priority != null || subject != null || task_type != null)
+	    if (due != null || priority != null || subject != null || task_type != null  || task_description != null)
 	    {
-		List changed_data = getChangedData(due, priority, subject, task_type);
+		List changed_data = getChangedData(due, priority, subject, task_type,task_description);
 
 		ActivityUtil.createTaskActivity(ActivityType.TASK_EDIT, task, changed_data.get(1).toString(),
 		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
@@ -316,7 +322,7 @@ public class ActivitySave
     public static void createTaskDeleteActivity(Task task) throws JSONException
     {
 
-	List<Contact> contacts = task.getContacts();
+	List<ContactPartial> contacts = task.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
@@ -770,6 +776,58 @@ public class ActivitySave
 	list.add(changedfields);
 	return list;
     }
+    
+    public static List getChangedData(Object[] name, Object[] expectedvalue, Object[] probablity, Object[] title,Object[] task_description)
+    {
+
+	List<Object> olddata = new ArrayList<Object>();
+
+	List<Object> list = new ArrayList<>();
+	List<Object> newdata = new ArrayList<Object>();
+	List<Object> changedfields = new ArrayList<Object>();
+	if (name != null)
+	    if (name[0] != null)
+	    {
+		olddata.add(name[1]);
+		newdata.add(name[0]);
+		changedfields.add(name[2]);
+	    }
+
+	if (expectedvalue != null)
+	    if (expectedvalue[0] != null)
+	    {
+		olddata.add(expectedvalue[1]);
+		newdata.add(expectedvalue[0]);
+		changedfields.add(expectedvalue[2]);
+	    }
+	if (probablity != null)
+	    if (probablity[0] != null)
+	    {
+		olddata.add(probablity[1]);
+		newdata.add(probablity[0]);
+		changedfields.add(probablity[2]);
+	    }
+
+	if (title != null)
+	    if (title[0] != null)
+	    {
+		olddata.add(title[1]);
+		newdata.add(title[0]);
+		changedfields.add(title[2]);
+	    }
+	if (task_description != null)
+	    if (task_description[0] != null)
+	    {
+		olddata.add(task_description[1]);
+		newdata.add(task_description[0]);
+		changedfields.add(task_description[2]);
+	    }
+
+	list.add(olddata);
+	list.add(newdata);
+	list.add(changedfields);
+	return list;
+    }
 
     /**
      * used to fetch the the contacts which are removed from related to field.
@@ -1100,4 +1158,123 @@ public class ActivitySave
 	return Jsoup.parse(html).text();
     }
 
+    /*
+     * creates user activity when user edit
+     */
+    public static void  createUserEditActivity(DomainUser domainuser)
+    {
+    	Activity activity = new Activity();
+    	activity.entity_type = EntityType.USER;
+    	activity.entity_id = domainuser.id;
+    	if(domainuser.id != null)
+		{
+			DomainUser old_user = DomainUserUtil.getDomainUser(domainuser.id);
+			System.out.println(!domainuser.name.equals(old_user.name)+"name");
+			if(!domainuser.name.equals(old_user.name) )
+			{
+				activity.activity_type = activity.activity_type.User_Name_Change;
+				activity.custom1 = old_user.name;
+				activity.custom2 = domainuser.name;
+				activity.custom4 = domainuser.name;
+				activity.custom3 = activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+				activity.save();
+				activity.id =null;
+			}
+			
+			
+			if(!domainuser.email.equals(old_user.email))
+			{
+				activity.activity_type = activity.activity_type.User_Email_Change;
+				activity.custom1 = old_user.email;
+				activity.custom2 = domainuser.email;
+				activity.custom4 = domainuser.name;
+				activity.custom3 = activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+				activity.save();
+				activity.id = null;
+			}
+		
+			
+			 if(!(domainuser.newMenuScopes.equals(old_user.newMenuScopes)) || !(domainuser.newscopes.equals(old_user.newscopes)) )
+			 {
+				 activity.activity_type = activity.activity_type.User_Permissions_Change;
+				 activity.custom2 = domainuser.name;
+				 activity.custom4 = domainuser.name;
+				 activity.custom3 = activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+				 activity.save();
+			 }
+	
+    	}
+		
+   
+}
+    
+    public static void  createNewUserActivity(DomainUser domainuser)
+    {
+    	if(domainuser.id != null)
+    	{
+    		Activity activity = new Activity();
+    		activity.entity_type = EntityType.USER;
+    		activity.activity_type = activity.activity_type.User_Created;
+    		activity.custom1 = domainuser.name;
+    		activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    		activity.save();
+    		
+    	}
+    }
+    public static void createDeleteUserActivity(DomainUser domainuser)
+    {
+    	if(domainuser.id != null)
+    	{
+    		Activity activity = new Activity();
+    		activity.entity_type = EntityType.USER;
+    		activity.activity_type = activity.activity_type.User_Deleted;
+    		activity.custom1 = domainuser.name;
+    		activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    		activity.save();
+    		
+    	}
+    }
+    public static void createOwnerChangeActivity(DomainUser domainuser)
+    {
+    	Activity activity = new Activity();
+		activity.entity_type = EntityType.USER;
+		activity.entity_id = domainuser.id;
+    	if(domainuser.id != null)
+    	{
+    		DomainUser old_user = DomainUserUtil.getDomainUser(domainuser.id);
+    		if(!(domainuser.is_admin == old_user.is_admin) )
+    		{
+    			
+    			activity.activity_type = activity.activity_type.User_Admin_Change ;
+    			activity.custom1 = domainuser.name ;
+    			activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    			activity.custom4 = String.valueOf(domainuser.is_admin);
+    			activity.save();
+    			activity.id =null;
+    						
+    		}
+    		if(!(domainuser.is_account_owner == old_user.is_account_owner) )
+    		{
+    			activity.activity_type = activity.activity_type.User_Owner_Change ;
+    			activity.custom1 = domainuser.name ;
+    			activity.custom2 = old_user.name ;
+    			activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    			activity.custom4 = String.valueOf(domainuser.is_account_owner);
+    			activity.save();
+    			activity.id =null;
+    		}
+    		if(!(domainuser.is_disabled == old_user.is_disabled) )
+    		{
+    			activity.activity_type = activity.activity_type.User_Disabled ;
+    			activity.custom1 = domainuser.name ;
+    			activity.custom2 = domainuser.name ;
+    			activity.custom4 = String.valueOf(domainuser.is_disabled);
+    			activity.custom3 = (String) domainuser.getInfo("Ip_Address");
+    			activity.save();
+    			activity.id =null;
+    		}
+    		
+    		
+    	}
+    }
 }

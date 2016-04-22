@@ -26,11 +26,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
+import com.agilecrm.contact.js.JSContact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
@@ -44,6 +46,7 @@ import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.GeoLocationUtil;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
@@ -104,10 +107,10 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
 	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(contact);
+	    	return JSAPIUtil.generateContactMissingError();
+	    
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    
 	}
 	catch (Exception e)
 	{
@@ -138,7 +141,7 @@ public class JSAPI
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
     public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds,
-	    @QueryParam("id") String apiKey)
+	    @QueryParam("id") String apiKey, @Context HttpServletRequest request)
     {
 	try
 	{
@@ -158,6 +161,17 @@ public class JSAPI
 	    {
 		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
 	    }
+
+	    String address = contact.getContactFieldValue(Contact.ADDRESS);
+	    System.out.println("Address = " + address);
+	    if (StringUtils.isBlank(address))
+	    {
+		System.out.println("Adding location");
+
+		org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+		contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+	    }
+
 	    // Sets owner key to contact before saving
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 
@@ -174,7 +188,9 @@ public class JSAPI
 	    }
 	    if (StringUtils.isNotBlank(campaignIds))
 		JSAPIUtil.subscribeCampaigns(campaignIds, contact);
-	    return mapper.writeValueAsString(contact);
+	    
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (PlanRestrictedException e)
 	{
@@ -185,6 +201,11 @@ public class JSAPI
 	    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
 	}
 	catch (IOException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return null;
@@ -375,7 +396,8 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
 	    }
 
-	    return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
 
 	}
 	catch (JsonGenerationException e)
@@ -389,6 +411,11 @@ public class JSAPI
 	    return e.getMessage();
 	}
 	catch (IOException e)
+	{
+	    e.printStackTrace();
+	    return e.getMessage();
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return e.getMessage();
@@ -432,7 +459,8 @@ public class JSAPI
 
 	    contact.removeTags(tagsArray);
 
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 
 	}
 	catch (Exception e)
@@ -468,7 +496,8 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    contact.addScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
@@ -508,7 +537,8 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    contact.subtractScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
@@ -597,7 +627,8 @@ public class JSAPI
 	    properties.add(field);
 	    contact.properties = properties;
 	    contact.save();
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (JSONException e)
 	{
@@ -612,6 +643,10 @@ public class JSAPI
 	    return null;
 	}
 	catch (IOException e)
+	{
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    return null;
 	}
@@ -698,6 +733,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -768,6 +806,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -804,6 +845,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -976,6 +1020,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Milestone milestone = MilestoneUtil.getMilestones();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(milestone);
@@ -1022,6 +1069,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    Milestone milestone = null;
 	    if (pipelineId != null && pipelineId > 0)
 		milestone = MilestoneUtil.getMilestone(pipelineId);
@@ -1077,7 +1127,8 @@ public class JSAPI
 		    contact.addProperty(field);
 		}
 	    }
-	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    // Set owner not required : customer issu
+	    // contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 
 	    // To set company again, if company updated this is mandatory.
 	    contact.contact_company_id = null;
@@ -1096,7 +1147,8 @@ public class JSAPI
 	    else
 		contact.save();
 
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (JsonGenerationException e)
 	{
@@ -1114,6 +1166,11 @@ public class JSAPI
 	    return null;
 	}
 	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return null;
@@ -1171,7 +1228,8 @@ public class JSAPI
 	    {
 		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
 	    }
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
@@ -1405,6 +1463,9 @@ public class JSAPI
     {
 	try
 	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(DomainUserUtil.getUsers());
 	}

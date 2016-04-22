@@ -55,12 +55,12 @@ $(function()
 Handlebars.registerHelper( "checkSpamMessage", function ( score ){
     if (score > 5 )
     {
-        return "Your Email Template Needs Rework";
+        return "Your email template needs 'Rework'";
     }
     else if(score < 1)
     {
-        return "Your Email Template Looks Good Score";
+        return "Your email template looks 'Good Score'";
     }
-     return "Your Email Template Looks Ok";
+     return "Your email template looks 'OK'";
  });
 });

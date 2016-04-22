@@ -136,13 +136,13 @@
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
 										{{#if device_type}}
-											<img src="{{getS3ImagePath 'img/web-stats/devices/{{device_type}}.png'}}" title="{{device_type}}">
+											<img src="{{getS3ImagePath ''}}img/web-stats/devices/{{device_type}}.png" title="{{device_type}}">
 									    {{/if}}
 										{{#if os}}
-											<img src="{{getS3ImagePath 'img/web-stats/os/{{normalize_os os}}.png'}}" title="{{os}}">
+											<img src="{{getS3ImagePath ''}}img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
 										{{/if}}
 										{{#if browser_name}}
-                                        	<img src="{{getS3ImagePath 'img/web-stats/browsers/{{browser_name}}.png'}}" title="{{browser_name}}">
+                                        	<img src="{{getS3ImagePath ''}}img/web-stats/browsers/{{browser_name}}.png" title="{{browser_name}}">
 										{{/if}}
                                         {{/stringToJSON}}
 									{{/if}}
@@ -187,6 +187,20 @@
             <div class="body">
                  <div class="text-xs">{{name}}</div>
                 <div class="text-xs">{{body}}</div>
+            </div>
+        {{/if_entity}}
+        {{#if_entity "tickets"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="text-md text-cap">  
+                <div class="contact-job-title text-base custom-color">
+                    <i class="fa fa-ticket text-muted text-muted p-r-xs" title="Ticket Created">
+                    </i> Ticket#{{id}} created
+                </div>
+            </div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text-xs ">{{subject}}</div>
+                <div class="text-xs ">{{first_notes_text}}</div>
             </div>
         {{/if_entity}}
 	<a href="#" class="open-close"></a>
@@ -426,7 +440,7 @@
                 <div class="text-xs text-ellipsis" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{message}} {{/if_email_sent}}
+                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
                         <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{message}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                     </div>   
             {{/if}}        
@@ -451,7 +465,11 @@
         	    			<i class="icon-folder-open-alt text-muted p-r-xs" title="Email Opened"></i>
         				{{/if_equals}}
 					{{/if}}
+				{{#if subject}}
 					{{subject}}
+				{{else}}
+					no subject
+				{{/if}}
 				</div>
 			</div>
              <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" date_secs}}</div><div class="clearfix"></div>
@@ -495,13 +513,13 @@
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
 										{{#if device_type}}
-											<img src="{{getS3ImagePath 'img/web-stats/devices/{{device_type}}.png'}}" title="{{device_type}}">
+											<img src="{{getS3ImagePath ''}}img/web-stats/devices/{{device_type}}.png" title="{{device_type}}">
 										{{/if}}
 										{{#if os}}
-											<img src="{{getS3ImagePath 'img/web-stats/os/{{normalize_os os}}.png'}}" title="{{os}}">
+											<img src="{{getS3ImagePath ''}}img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
 										{{/if}}
 										{{#if browser_name}}
-                                        <img src="{{getS3ImagePath 'img/web-stats/browsers/{{browser_name}}.png'}}" title="{{browser_name}}">
+                                        <img src="{{getS3ImagePath ''}}img/web-stats/browsers/{{browser_name}}.png" title="{{browser_name}}">
 										{{/if}}
                                         {{/stringToJSON}}
 									{{/if}}
@@ -558,6 +576,24 @@
             <div class="body">
                  <div class="text-xs ">{{name}}</div>
                 <div class="text-xs ">{{body}}</div>
+            </div>
+        {{/if_entity}}
+        {{#if_entity "tickets"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="text-md text-cap">  
+                <div class="contact-job-title text-base custom-color" style="max-width: initial;">
+                    <i class="fa fa-ticket text-muted text-muted p-r-xs" title="Ticket Created">
+                    </i> Ticket#{{id}} created
+                    <div class="pull-right" style="font-size:11px;margin-top: 3px; text-transform: initial;">
+                        <i class="fa fa-clock-o m-r-xs"></i> {{epochToHumanDate "hh:MM tt" created_time}}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                 <div class="text-xs ">{{subject}}</div>
+                <div class="text-xs ">{{{convert_to_html plain_text}}}</div>
             </div>
         {{/if_entity}}
 	<!-- <a href="#" class="open-close"></a> -->

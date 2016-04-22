@@ -110,11 +110,11 @@ function checkContactUpdated(){
  * to change the owner of a contact 
  */
 function fill_owners(el, data, callback){
-	var optionsTemplate = "<li><a class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
+	var optionsTemplate = "<li><a href='javascript:void(0)' class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
 	if(company_util.isCompany())
-		optionsTemplate = "<li><a class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
+		optionsTemplate = "<li><a href='javascript:void(0)' class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
 	
-    fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', callback, optionsTemplate, true); 
+    fillSelect('contact-detail-owner','/core/api/users/partial', 'domainUsers', callback, optionsTemplate, true); 
 }
 
 /**
@@ -234,6 +234,15 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #enable_map_view' : 'onEnableMapView',
     	'click #add' : 'onAddScore',
     	'click #minus' : 'onRemoveScore',
+    	'click #lead-score' : 'onGetScorebox',
+    	'focusout #scorebox' : 'getScore',
+	   	'keyup  #scorebox' : 'scoreValEnter',
+	   	'click #lead-cscore' : 'onCompanyGetScorebox',
+	   	'focusout #cscorebox' : 'getCompanyScore',
+	   	'keyup  #cscorebox' : 'enterCompanyScore',
+    	'click #cadd' : 'onCaddScore',
+    	'click #cminus' :'onCremoveScore',
+
     	
     	
     	'click .email-subject' : 'onEmailSubjectClick',
@@ -764,7 +773,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 	    
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
-       
+       $("#lead-score").attr("title",add_score);
 	    App_Contacts.contactDetailView.model.set({'lead_score': add_score}, {silent: true});
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 	    
@@ -784,7 +793,83 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		});
 		          
 	},
+		/**
+	 * Getting the Score Input after pressing the Enter
+	 */  
+scoreValEnter: function(e){
+	    e.preventDefault();
+	   if(e.keyCode == 13){
+	   		this.updateScoreValue();
+	   }
 	
+	},
+// On Clicking the score Score Input field appears
+onGetScorebox:  function(e){
+	    e.preventDefault();
+	   //$('[data-toggle="tooltip"]').tooltip();
+	   $("#scorebox").removeClass("hide");
+	   $("#lead-score").addClass("hide");
+	   $("#scorebox").val($("#lead-score").text());
+	   $("#scorebox").focus();
+	}, 
+
+// on Mouse click Getting the Input field
+getScore:  function(e){
+		e.preventDefault();
+		this.updateScoreValue();
+	
+	},
+
+enterCompanyScore: function(e){
+	    e.preventDefault();
+	   if(e.keyCode == 13){
+	   		this.updateCompanyScoreValue();
+	   }	
+	},
+
+	onCompanyGetScorebox:  function(e){
+	    e.preventDefault();
+	   //$('[data-toggle="tooltip"]').tooltip();
+	   $("#cscorebox").removeClass("hide");
+	   $("#lead-cscore").addClass("hide");
+	   $("#cscorebox").val($("#lead-cscore").text());
+	   $("#cscorebox").focus();
+	}, 
+
+	getCompanyScore:  function(e){
+		e.preventDefault();
+		this.updateCompanyScoreValue();
+	},
+
+	onCaddScore :  function(e){
+	     e.preventDefault();
+	    
+	     // Convert string type to int
+	     var add_score = parseInt($('#lead-cscore').text());
+	    
+	     add_score = add_score + 1;
+	    
+	     // Changes score in UI
+	     $('#lead-cscore').text(add_score);
+       
+	    App_Companies.companyDetailView.model.set({'lead_score': add_score}, {silent: true});
+	 	var contact_model =  App_Companies.companyDetailView.model.toJSON();
+	    
+	   /* // Refreshing the view ({silent: true} not working)
+	     contact_model.url = 'core/api/contacts';
+	     contact_model.set('lead_score', add_score, {silent: true});
+	
+	     // Save model
+	    contact_model.save();*/
+	    
+	 	var new_model = new Backbone.Model();
+	 	new_model.url = 'core/api/contacts';
+	 	new_model.save(contact_model,{
+	 		success: function(model){
+
+	 		}
+	 	});		          
+	 },
 	   
 	/**
 	 * Subtracts score of a contact (both in UI and back end)
@@ -798,26 +883,52 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		// Converts string type to Int
 		var sub_score = parseInt($('#lead-score').text());
 		
-		if(sub_score <= 0)
-			return;
-		
+		//if(sub_score <= 0)
+		//	return;		
 		sub_score = sub_score - 1;
 		
 		// Changes score in UI
 		$('#lead-score').text(sub_score);
-		
+		$("#lead-score").attr("title",sub_score);
 		// Changes lead_score of the contact and save it.
 		App_Contacts.contactDetailView.model.set({'lead_score': sub_score}, {silent: true});
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
-		
+
 		var new_model = new Backbone.Model();
 		new_model.url = 'core/api/contacts';
 		new_model.save(contact_model,{
 			success: function(model){
-
 			}
 		});
 	},
+
+		onCremoveScore :  function(e){
+		 	e.preventDefault();
+			
+		 	// Converts string type to Int
+		 	var sub_score = parseInt($('#lead-cscore').text());
+			
+		 	if(sub_score <= 0)
+		 		return;
+			
+		 	sub_score = sub_score - 1;
+			
+		 	// Changes score in UI
+		 	 $('#lead-cscore').text(sub_score);
+			
+		 // Changes lead_score of the contact and save it.
+		 App_Companies.companyDetailView.model.set({'lead_score': sub_score}, {silent: true});
+		var contact_model =  App_Companies.companyDetailView.model.toJSON();
+			
+		 var new_model = new Backbone.Model();
+		new_model.url = 'core/api/contacts';
+		new_model.save(contact_model,{
+		 	success: function(model){
+
+		 		}
+		 	});
+		 },
+
 
 
     addTask : function(e){
@@ -1093,6 +1204,75 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
        			}
         });
 	},
+updateScoreValue :function(){
+		var scoreboxval = parseInt($("#scorebox").val());
+		var decemialcheck=$("#scorebox").val();
+		//var txt=$("#scorebox").text();
+		//var partxt=parseInt($("#scorebox").text());
+		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
+		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
+		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
+		if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val()==""){ 
+			if($("#scorebox").val()==""){scoreboxval=0;
+			}					
+			App_Contacts.contactDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
+			var contact_model =  App_Contacts.contactDetailView.model.toJSON();			
+			var new_model = new Backbone.Model();
+			new_model.url = 'core/api/contacts';
+			new_model.save(contact_model,{
+			success: function(model){
+					}
+				});							
+		}
+		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
+			alert("Please enter a valid number.");
+			scoreboxval=prvs;
+		}
+		else{
+			if(scoreboxval== prvs){
+			scoreboxval=prvs;
+			}
+		}
+		$('#lead-score').attr("data-original-title", scoreboxval);
+		$('#lead-score').text(scoreboxval).removeClass("hide");
+	   	$("#scorebox").addClass("hide").val(scoreboxval);
+	   	$("#lead-score").attr("title",scoreboxval);
+	},
+
+	updateCompanyScoreValue :function(){
+		var scoreboxval = parseInt($("#cscorebox").val());
+		var decemialcheck=$("#cscorebox").val();
+		//var txt=$("#scorebox").text();
+		//var partxt=parseInt($("#scorebox").text());
+		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
+		var contact_model =  App_Companies.companyDetailView.model.toJSON();
+		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
+		if ((scoreboxval != prvs && (!isNaN(scoreboxval)) && (scoreboxval>=0))|| $("#cscorebox").val()==""){ 
+			if($("#cscorebox").val()==""){scoreboxval=0;
+			}					
+			App_Companies.companyDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
+			var contact_model =  App_Companies.companyDetailView.model.toJSON();			
+			var new_model = new Backbone.Model();
+			new_model.url = 'core/api/contacts';
+			new_model.save(contact_model,{
+			success: function(model){
+					}
+				});							
+		}
+		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
+			alert("Please enter a valid number.");
+			scoreboxval=prvs;
+		}
+		else{
+			if(scoreboxval== prvs){
+				scoreboxval=prvs;
+			}
+		}
+		$('#lead-cscore').attr("data-original-title", scoreboxval);
+		$('#lead-cscore').text(scoreboxval).removeClass("hide");
+	   	$("#cscorebox").addClass("hide").val(scoreboxval);
+	   	$("#lead-cscore").attr("title",scoreboxval);
+	}
 });
 
 $(function(){
@@ -1110,3 +1290,55 @@ $(function(){
     }
     );
 });
+
+/**
+ * Check whether there are any updates in the displaying contact.
+ * If there are any updates, show the refresh contact button.
+ */
+function checkCompanyUpdated(){
+	var contact_model  =  App_Companies.companyDetailView.model;
+	
+	var contact_id = contact_model.id;
+	var updated_time = contact_model.attributes.updated_time;
+
+		queueGetRequest("contact_queue" + contact_id, "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
+		{
+			// If true show refresh contact button.
+			if (data == 'true')
+			{
+				// Download
+				var contact_details_model = Backbone.Model.extend({ 
+					url : function(){
+							return '/core/api/contacts/' + contact_id;
+					}
+				});
+                
+				var model = new contact_details_model();
+				model.id = id;
+				model.fetch({ success : function(data){
+					
+					var old_updated_time = contact_model.attributes.updated_time;
+					
+					var new_updated_time = model.attributes.updated_time;
+					
+					// Update Model
+					if(old_updated_time != new_updated_time)
+					{
+						App_Companies.companyDetailView.model.set(model);
+//						$('#refresh_contact').hide();
+					}
+
+				    }
+				});
+				
+				$('#refresh_contact').show();
+			}
+				
+			
+			
+		}, function error(data)
+		{
+			// Error message is shown
+			
+		});
+}

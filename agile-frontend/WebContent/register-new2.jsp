@@ -35,9 +35,13 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <meta name="description" content="">
 <meta name="author" content="">
 
+<!-- Include ios meta tags -->
+<%@ include file="ios-native-app-meta-tags.jsp"%>
+
 <style>
 body {
 	background: #7266ba;
+	background-size: cover;
 }
 
 /*hack for phone number plugin*/
@@ -165,7 +169,8 @@ position:fixed!important;
 
 
 </style>
- 
+
+<!-- <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script> -->
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 
@@ -210,7 +215,7 @@ if(isSafari && isWin)
 </div>
 <div class="wrapper-md">
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3 col-sm-offset-3 col-sm-6 col-xs-12">
+		<div class="col-lg-6 col-lg-offset-3 col-sm-offset-1 col-sm-10 col-xs-12">
 	<form class="form-horizontal" method="post" onsubmit="return isValid(this);">
 <div class="panel panel-default">
 <div class="panel-heading text-center"> It's time to configure your account </div>
@@ -370,10 +375,12 @@ $(document).ready(function(){
 			});
 	
 });
+
 function preload_dashlet_libs(){ 
 	
-	setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
+	setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
 }
+
 </script>
 
 </body>

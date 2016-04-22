@@ -65,8 +65,8 @@
 <div class="activity block pos-rlt">
 	
 	<div class="activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
-		{{#if ownerPic}}
-			<img class="user-img r r-2x" alt="" src="{{ownerPic}}" >
+		{{#if owner.pic}}
+			<img class="user-img r r-2x" alt="" src="{{owner.pic}}" >
 		{{else}}
 			<img class="user-img r r-2x"  src="{{defaultGravatarurl 40}}">
 		{{/if}}
@@ -105,10 +105,10 @@
 		{{#each contacts}}
            	{{#if id}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "name"}}</a>,
         				{{/if_contact_type}}
            		
            	{{/if}}

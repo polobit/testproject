@@ -156,7 +156,7 @@ angular.module('builder').controller('BuilderController', ['$scope', '$rootScope
 
         $rootScope.$broadcast('element.reselected', $scope.selected.node);
 
-        panels.open('inspector');
+        //panels.open('inspector');
 
         setTimeout(function(){
             $scope.selecting = false;

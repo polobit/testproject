@@ -8994,6 +8994,11 @@ display:flex;
 {
 	width:80%;
 }
+
+.w-xx-half
+{
+	width: 85%;
+}
 .w-full {
   width: 100%;
 }
@@ -10251,7 +10256,7 @@ left:0;
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li > a
 {
 	width:60px;
-	height:50px;
+	height:45px;
 	overflow:hidden;
 }
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li > a  i
@@ -10625,6 +10630,13 @@ top:117px;
 }
 
 .deals-by-milestone-portlet-body .highcharts-tooltip span {
+    background-color: #313030;
+    opacity: 1;
+    z-index: 9999!important;
+    padding: 8px;
+    border-radius: 5px
+}
+.campaigns-graph-portlet-body .highcharts-tooltip span {
     background-color: #313030;
     opacity: 1;
     z-index: 9999!important;

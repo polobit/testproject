@@ -7,7 +7,20 @@
  * @returns
  */
 function isValidForm(form) {
-	
+
+    jQuery.validator.addMethod("choosen-select-input", function(value, element){
+
+
+    		if(!$('#bulk-labels').length)
+    			return true;
+    		
+        	var label_value=$("#bulk-labels .chosen-select").val();
+
+           	if(label_value)
+            	return true;			
+			
+			return false;
+		}," This field is required.");
 
 	// Credit card validation to check card is valid for next 3 months
 	jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
@@ -75,6 +88,16 @@ function isValidForm(form) {
 		return /^[^a-zA-Z]+$/.test(value);
 	}," Please enter a valid phone number.");
 	
+	// Phone number validation
+	jQuery.validator.addMethod("allow-char-phone", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
+		return /^((\+)(\d)+)$/.test(value);
+	},"Please enter valid phone number (+xxxxxxxxxx)");
+	
 	jQuery.validator.addMethod("multi-tags", function(value, element){
 		
 		var	tag_input = $(element).val()
@@ -111,6 +134,25 @@ function isValidForm(form) {
 		
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
+
+	//Positive Number validation
+	jQuery.validator.addMethod("positive_number", function(value, element){
+		
+		if(value=="")
+			return true;
+
+		if(isNaN(value))
+		{
+			return false;
+		}
+		if(!isNaN(value) && parseFloat(value) >= 0)
+		{
+			return true;
+		}
+
+	}," Please enter a value greater than or equal to 0.");
+
+
 	
 	jQuery.validator.addMethod("multi-select", function(value, element){
 		var counter = 0;
@@ -169,6 +211,7 @@ function isValidForm(form) {
 		
 	}," Please enter a valid date.");
 
+    
 	jQuery.validator.addMethod("field_length", function(value, element){
 		if(value=="")
 			return true;
@@ -181,27 +224,38 @@ function isValidForm(form) {
 		return true;
 	}, function(params, element) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
-		}
+		}	
 	);
 
-	//Positive Number validation
-	jQuery.validator.addMethod("positive_number", function(value, element){
-		
-		if(value=="")
-			return true;
 
-		if(isNaN(value))
+	// domain name validation
+	jQuery.validator.addMethod("domain_format", function(value, element){
+		
+		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
+	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
+    
+    jQuery.validator.addMethod("tickets_group_name", function(value, element){
+
+		return /^[a-zA-Z0-9._]*$/.test(value);
+	},"Please use only letters (a-z & A-Z), numbers, '.' and '_'.");
+
+
+	//Image keyword validation for custom fields
+	jQuery.validator.addMethod("custom_field_keyword", function(value, element){
+		
+		if(value=="image")
 		{
 			return false;
 		}
-		if(!isNaN(value) && parseFloat(value) >= 0)
+		else
 		{
 			return true;
 		}
 
-	}," Please enter a value greater than or equal to 0.");
+	},"<b>image</b> is a keyword in the system and it can't be added as a custom field.");
 
 	$(form).validate({
+		ignoreTitle: true,
 		rules : {
 			atleastThreeMonths : true,
 			multipleEmails: true,
@@ -229,10 +283,14 @@ function isValidForm(form) {
 		errorPlacement: function(error, element) {
     		if (element.hasClass('checkedMultiSelect')) {
      			 error.appendTo($(element).parent());
-    			} else {
+    			} 
+    		else if(element.hasClass("choosen-select-input")){
+                 error.appendTo($("#bulk-labels .chosen-container"));
+              }
+    			else {
       				error.insertAfter(element);
-    			}
-  }
+    			}    
+         }
 	});
 
 	// Return valid of invalid, to stop from saving the data
@@ -271,4 +329,13 @@ function isAlphaNumeric(subdomain) {
 		return false;
     }
   return true;
+}
+
+function isValidContactCustomField(id) {
+    var name = $('#' + id).attr("name");
+    if($('ul[name="'+name+'"]').find("li").length == 0) {
+    	return false;
+    }else {
+    	return true;
+    }
 }

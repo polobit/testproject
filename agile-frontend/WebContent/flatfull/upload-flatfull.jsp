@@ -83,6 +83,11 @@ function isValid(){
         rules: {
         		file:{required:true,accept:"png|jpg|jpeg|gif"}
                },
+         messages: {
+              file: {
+                accept: "Please select a valid image file and try again",
+              },
+               },
         submitHandler:function(form)
                       {   
         	              form.submit();

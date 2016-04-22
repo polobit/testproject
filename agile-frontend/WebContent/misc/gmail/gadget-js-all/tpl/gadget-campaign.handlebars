@@ -1,13 +1,13 @@
 <!--  Add to Campaign Form -->
 	<div class="gadget-campaign" row-fluid">
-        <form class="gadget-campaign-form form-horizontal" name="gadget_campaign_form" method="post" style="margin:0px;">
+        <form class="gadget-campaign-form form-horizontal" name="gadget_campaign_form" method="post">
             <fieldset style="margin:0px;">
 				<input type="hidden" name="email" value='{{email}}' />
                 
 				<div class="control-group" style="margin:0px; padding-top:6px;">       
                     <label class="control-label" for="campaign-select">Select campaign<span class="field_req">*</span></label>
                     <div class="controls">
-                        <select name="id" id="campaign-select" class="required" style="width:210px;">
+                        <select name="id" id="campaign-select" class="required" style="width:265px;">
 							<option value="">Select..</option>
 							{{#if this.length}}
 								{{#each this}}

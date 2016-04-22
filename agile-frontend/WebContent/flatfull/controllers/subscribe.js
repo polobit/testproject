@@ -611,7 +611,7 @@ var SubscribeRouter = Backbone.Router
 						return;
 
 					// Sort invoice
-					invoice = new BaseCollection(invoice, { sortKey : "created", descending : true }).toJSON();
+					invoice = new BaseCollection(invoice, { sortKey : "date", descending : true }).toJSON();
 //					var object = JSON.parse(JSON.stringify(invoice[0]));
 					// Send data to a template
 					getTemplate('latest-invoice', invoice[0] , undefined, function(template_ui)
@@ -642,7 +642,7 @@ var SubscribeRouter = Backbone.Router
 				}
 
 				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices" + "?page_size=20", templateKey : "invoice",
-					window : 'subscribe', individual_tag_name : 'tr', sortKey : 'created', descending : true });
+					window : 'subscribe', individual_tag_name : 'tr', sortKey : 'date', descending : true });
 
 				// Fetches the invoice payments
 				this.invoice.collection.fetch();
@@ -724,7 +724,7 @@ function getMaxEmailsLimit()
 }
 function canSendEmails(emails_to_send)
 {
-	var pending = getPendingEmails();
+	var pending = getPendingEmails() + getEmailCreditsCount();
 	if (pending >= emails_to_send)
 		return true;
 
@@ -783,4 +783,14 @@ function getEmailsNextRenewalTime()
 		return new Date((last_renewal_time+2592000)*1000).format("mmm dd, yyyy");
 	}
 
+}
+
+function getEmailCreditsCount()
+{
+	var count = _billing_restriction.email_credits_count;
+
+	if (count == undefined)
+		count = 0;
+
+	return count;
 }

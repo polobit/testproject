@@ -18,7 +18,8 @@
             "name": "type",
             "id": "type",
             "title": "Select the operation type.",
-            "options": {"Add":"add",
+            "options": {"Set":"set",
+                        "Add":"add",
 				        "Subtract":"subtract"    
 			          },
 			"fieldType": "select",
@@ -33,7 +34,7 @@
 			"fieldType": "input",
             "type": "number"
             },{
-            "label": "You can increase or decrease the Lead Score using this option.<br/><br/>For example, if the user opened your email, add a score of 5 and on clicking a link add 10.",
+            "label": "You can set, increase or decrease the Lead Score using this option.<br/><br/>For example, if the user opened your email, add a score of 5 and on clicking a link add 10.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

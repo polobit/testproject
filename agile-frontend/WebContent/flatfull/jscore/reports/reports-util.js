@@ -5,7 +5,7 @@ var report_utility = {
 load_activities : function(el)
 {
 	// Fills owner select element
-	fillSelect("users-list", '/core/api/users', 'domainUser', function()
+	fillSelect("users-list", '/core/api/users/partial', 'domainUser', function()
 	{
 		loadActivityReportLibs(function()
 		{

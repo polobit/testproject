@@ -57,7 +57,7 @@ public class Analytics
     /**
      * Referred URL.
      */
-    public String ref;
+    public String ref_url;
 
     /**
      * UserAgent String retrieved from request header.

@@ -281,6 +281,16 @@ function initializeTaskDetailListeners(){
 	});
 
 	/**
+	 * task note delete
+	 */
+	$('#task_tab_detail .activity-delete').off();
+	$('#task_tab_detail').on('click', '.activity-delete', function(e) 
+	{
+		e.preventDefault();
+		Contact_Details_Tab_Actions.deleteActivity(e);
+	});
+
+	/**
  * task note validate
  */
 /**
@@ -434,6 +444,8 @@ function update_task(value)
 		showNoteOnForm("updateTaskForm", value.notes);
 
 	});
+	deserializeForm(value, $("#updateTaskForm"));
+	$('.update-task-timepicker').val(fillTimePicker(value.due));
 
 	
 }
@@ -444,7 +456,7 @@ function update_task(value)
  */
 function fill_task_owners(el, data, callback)
 {
-	var optionsTemplate = "<li><a class='task-owner-list' data='{{id}}'>{{name}}</a></li>";
+	var optionsTemplate = "<li><a href='javascript:void(0);' class='task-owner-list' data='{{id}}'>{{name}}</a></li>";
 	fillSelect('task-detail-owner', '/core/api/users', 'domainUsers', callback, optionsTemplate, true);
 }
 

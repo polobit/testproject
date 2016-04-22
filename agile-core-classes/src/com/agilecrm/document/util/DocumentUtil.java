@@ -83,7 +83,7 @@ public class DocumentUtil
     public List<Contact> getContacts(Long id)
     {
 	Document document = getDocument(id);
-	return document.getContacts();
+	return Contact.dao.fetchAllByKeys(document.relatedContactKeys());
     }
 
     /**
@@ -96,7 +96,7 @@ public class DocumentUtil
     public List<Opportunity> getDeals(Long id)
     {
 	Document document = getDocument(id);
-	return document.getDeals();
+	return Opportunity.dao.fetchAllByKeys(document.relatedDealKeys());
     }
     
     //returns all documents count 

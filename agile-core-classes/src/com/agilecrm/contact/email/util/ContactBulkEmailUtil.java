@@ -42,8 +42,9 @@ public class ContactBulkEmailUtil
 			String body = emailData.getString("message");
 			String signature = emailData.getString("signature");
 			boolean trackClicks = emailData.getBoolean("track_clicks");
-			String pushParam = emailData.getString("push_param");
-
+			String pushParam = "";
+			if(emailData.has("push_param"))
+			       pushParam = emailData.getString("push_param");
 			if (contactList == null)
 				return 0;
 

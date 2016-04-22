@@ -75,7 +75,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 			        forced_root_block : false,
 					extended_valid_elements : "*[*]", setup : function(editor)
 					{
-						editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
+						editor.addButton('merge_fields', { type : 'menubutton', text : 'Merge Fields', icon : false, menu : set_up_merge_fields(editor) });
 					}
 					});
 				
@@ -255,48 +255,60 @@ function set_up_merge_fields(editor)
 		contact_json = get_contact_json_for_merge_fields();
 
 	// Iterates over merge fields and builds merge fields menu
-	$.each(get_merge_fields(), function(key, value)
-	{
+	//$.each(get_merge_fields(), function(key, value)
+	$.each(get_merge_field_objs(), function(key, value)
+	{	
+		var main_menu_item = {};
+		main_menu_item["text"] = key;
 
-		var menu_item = {};
+		var sub_menu = [];
 
-		menu_item["text"] = key;
-		menu_item["onclick"] = function()
+		$.each(value, function(key, value)
 		{
+			var menu_item = {};
 
-			// Insert value without compiling
-			if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1)
+			menu_item["text"] = key;
+			menu_item["onclick"] = function()
 			{
-				editor.insertContent(value);
-			}
-			else
-			{
-				var template = Handlebars.compile(value);
-				var compiled_template;
 
-				try
+				// Insert value without compiling
+				if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 || Current_Route.indexOf('emailbuilder') != -1)
 				{
-					compiled_template = template(contact_json);
+					editor.insertContent(value);
 				}
-				catch(err)
+				else
 				{
-					console.log("error.....");
+					var template = Handlebars.compile(value);
+					var compiled_template;
+
+					try
+					{
+						compiled_template = template(contact_json);
+					}
+					catch(err)
+					{
+						console.log("error.....");
+						
+						// Handlebars need [] if json keys have spaces
+						value = '{{['+key+']}}';
+						
+						template = Handlebars.compile(value);
+						compiled_template = template(contact_json);
+					}
 					
-					// Handlebars need [] if json keys have spaces
-					value = '{{['+key+']}}';
-					
-					template = Handlebars.compile(value);
-					compiled_template = template(contact_json);
+					editor.insertContent(compiled_template + '');
 				}
-				
-				editor.insertContent(compiled_template + '');
-			}
-		};
+			};
 
-		menu.push(menu_item);
+			sub_menu.push(menu_item);
+		});
 
+		main_menu_item['menu'] = sub_menu;
+
+		menu.push(main_menu_item);
 	});
-
+	
+	console.log(menu);
 	return menu;
 }
 
@@ -347,6 +359,61 @@ function get_merge_fields(callback)
 
 
 
+}
+
+/**
+ * Returns json object containing merge field object like contact, custom & ticket if exists.
+ * 
+ */
+function get_merge_field_objs()
+{
+	
+	var contact_merge_fields = {
+		"First Name": "{{first_name}}",
+		"Last Name": "{{last_name}}",
+		"Score": "{{score}}",
+		"Email": "{{email}}",
+		"Company": "{{company}}",
+		"Title": "{{title}}",
+		"Address": "{{location.address}}",
+		"City": "{{location.city}}",
+		"State":"{{location.state}}",
+		"Country":"{{location.country}}",
+		"Owner Name":"{{owner.name}}",
+		"Owner Email":"{{owner.email}}", 
+		"Calendar URL":"{{owner.calendar_url}}"
+	}
+	
+	// Get Custom Fields in template format
+	var custom_fields = get_custom_merge_fields();
+
+	var json = {Contact: contact_merge_fields};
+
+	if(custom_fields && !$.isEmptyObject(custom_fields))
+		json['Custom'] = custom_fields;
+
+	//Return json if path isn't email-template
+	if(Current_Route.indexOf('emailbuilder-add') == -1 && 
+		Current_Route.indexOf('email-template-add') == -1 &&
+		Current_Route.indexOf('emailbuilder/') == -1)
+		return json;
+
+	var ticket_merge_fields = {
+		"Ticket ID": "{{ticket_id}}",
+		"Subject": "{{subject}}",
+		"Requester Name": "{{requester_name}}",
+		"Requester Email": "{{requester_email}}",
+		"Priority": "{{priority}}",
+		"Status": "{{status}}",
+		"Ticket Comments": "{{{ticket_comments}}}",
+		"Footer": "{{{ticket_footer}}}",
+		"Group": "{{group_name}}",
+		"Assignee": "{{agent_name}}"
+	};
+
+	json['Ticket'] = ticket_merge_fields
+
+	return json;
 }
 
 /**

@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.EventReminder;
 import com.agilecrm.contact.Contact;
@@ -25,13 +26,18 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.Referer;
 import com.agilecrm.user.RegisterVerificationServlet;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.ReferUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -39,6 +45,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>RegisterServlet</code> class registers the user account in agile crm.
@@ -195,11 +202,19 @@ public class RegisterServlet extends HttpServlet
 
 	// Get Name
 	String name = request.getParameter("name");
+	
+	System.out.println("email = " + email);
+	System.out.println("name = " + name);
+	System.out.println("password = " + password);
 
 	String timezone = request.getParameter("account_timezone");
 
 	if (name != null)
 	    name = name.trim();
+	
+	// Redirect to first page if name and password is empty (This is added newly from website users)
+	if(StringUtils.isBlank(name) && StringUtils.isBlank(password))
+		throw new Exception("");
 
 	// Get reference code
 
@@ -219,7 +234,10 @@ public class RegisterServlet extends HttpServlet
 	EventReminder.getEventReminder(domainUser.domain, null);
 	
 	// Create subaccount in Mandrill after registration
-	MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	//MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	
+	// Creates subUser in SendGrid after registration
+	SendGridSubUser.createSubAccountInSendGrid(domainUser.domain);
 	
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
@@ -237,7 +255,9 @@ public class RegisterServlet extends HttpServlet
 	}
 
 	String redirectionURL = VersioningUtil.getURL(domainUser.domain, request);
-	redirectionURL+= "#subscribe";
+	String planValue = request.getParameter(RegistrationGlobals.PLAN_TYPE);
+	if(!planValue.equals("Free"))
+		redirectionURL+= "#subscribe";
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);
     }
@@ -350,11 +370,11 @@ public class RegisterServlet extends HttpServlet
 	    String version = VersioningUtil.getAppVersion(request);
 	    if (!StringUtils.isEmpty(version))
 	    {
-		key = APIKey.getDomainUserKeyRelatedToAPIKey("fdpa0sc7i1putehsp8ajh81efh");
+		key = APIKeyUtil.getDomainUserKeyRelatedToAPIKey("fdpa0sc7i1putehsp8ajh81efh");
 	    }
 	    else
 	    {
-		key = APIKey.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
+		key = APIKeyUtil.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
 	    }
 
 	    Tag signupTag = new Tag(RegistrationGlobals.SIGN_UP_TAG);
@@ -520,7 +540,9 @@ public class RegisterServlet extends HttpServlet
 	if (domainUser != null && reference_domain != null)
 	{
 	    ReferenceUtil.updateReferralCount(reference_domain);
+	    setReferenceInfo(reference_domain, domainUser.domain);
 	}
+	
 
 	try
 	{
@@ -532,6 +554,30 @@ public class RegisterServlet extends HttpServlet
 	}
 	userInfo.setDomainId(domainUser.id);
 	return domainUser;
+    }
+    
+    public void setReferenceInfo(String reference_domain, String registered_domain){
+    	System.out.println("Referer process started");
+    	String oldNamespace = NamespaceManager.get();
+    	NamespaceManager.set(reference_domain);
+    	try{
+    		System.out.println("refer_domain: "+reference_domain+" Namespace :"+NamespaceManager.get());
+    		Referer referer = ReferUtil.getReferrer();
+    		++referer.referral_count;
+    		System.out.println("referral_count"+referer.referral_count);
+    		referer.referedDomains.add(registered_domain);
+    		referer.save();
+    		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    		System.out.println("adding email credits");
+    		restriction.incrementEmailCreditsCount(500);
+    		restriction.save();
+    		System.out.println("Referer process ended");
+    	}catch(Exception e){
+    		System.out.println(ExceptionUtils.getMessage(e));
+    		e.printStackTrace();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
     }
 
     /**

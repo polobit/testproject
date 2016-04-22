@@ -200,7 +200,15 @@ function initializeTasksListeners(){
 		applyDetailsFromGroupView();
 	});	
 
-	
+	$('#tasks-list-template').on('click', '.tasks-list-image', function(event)
+			{
+				event.preventDefault();
+				// Change UI and input field
+				var url = event.target.getAttribute('url');			
+				routeToPage(url);
+				event.stopPropagation();
+				
+			});	
 }
 
 $("body").on("change", '.status', function()
@@ -290,7 +298,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 	}
 	var startarray = (json.task_ending_time).split(":");
 	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
-
+	
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask

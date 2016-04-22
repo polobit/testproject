@@ -39,9 +39,10 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     	'click .filter' : 'filterResults',
     	'click .default_filter' : 'defaultFilterResults',
     	// 'click #companies-filter' : 'companyFilterResults',
-    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag'
+    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
 
     	//'click .contact-actions-delete-mobile' : 'onContactDelete'
+    	'click .contact-type-image, .company-type-image' : 'navigateToProperContact'
     	
     },
 
@@ -281,6 +282,19 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " contacts</a>";
 		}
 		$('body').find('#bulk-select').html(html);
+    },
+
+    navigateToProperContact : function(e){
+    	e.stopPropagation();
+		var currentObjId = $(e.currentTarget).attr("id");
+		if($(e.currentTarget).hasClass("contact-type-image"))
+		{
+			Backbone.history.navigate("contact/" + currentObjId, { trigger : true });
+		}
+		else
+		{
+			Backbone.history.navigate("company/" + currentObjId, { trigger : true });
+		}
     } 
 
    
@@ -385,17 +399,16 @@ var contacts_bulk_actions = {
 		if (!canSendEmails(count))
 		{
 			continueAction = false;
-			var pendingEmails = getPendingEmails();
-
+			var pendingEmails = getPendingEmails() + getEmailCreditsCount();
 			var yes = "Yes";
 			var no = "No"
 
 			var message = "";
-			var upgrade_link = ' You may <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">purchase more emails </a> if this does not suffice your bulk action.';
-			var title = "Low on emails"
+			var upgrade_link = ' You may <a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">purchase </a>more emails if this does not suffice your bulk action.';
+			var title = "Low on Emails"
 			if (pendingEmails <= 0)
 			{
-				title = "Low on emails";
+				title = "Low on Emails";
 				yes = "";
 				no = "Ok"
 				message = "You have used up all emails in your quota. " + upgrade_link;
@@ -576,20 +589,21 @@ var contacts_bulk_actions = {
 
 							if (!canSendEmails(count))
 							{
-								var pendingEmails = getPendingEmails();
+								var pendingEmails = getPendingEmails() + getEmailCreditsCount();
 
 								var yes = "Yes";
 								var no = "No"
 
 								var message = "";
-								var upgrade_link = 'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgrade your email subscription.</a>';
-								var title = "Not enough emails left"
+								var upgrade_link = 'Please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> upgrade</a> your email subscription.';
+								var emialErrormsg = '<div>To continue sending emails from your account, please<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> purchase</a>  more.</div>';
+								var title = "Not Enough Emails Left"
 								if (pendingEmails <= 0)
 								{
-									title = "Emails limit";
+									title = "Emails Limit";
 									yes = "";
 									no = "Ok"
-									message = "You have used up all emails in your quota. " + upgrade_link;
+									message = "<div>Sorry, your emails quota has been utilized.</div> " + emialErrormsg;
 								}
 								else
 									message = "You have only " + pendingEmails + " emails remaining as per your quota. " + upgrade_link + " Continuing with this operation may not send the email to some contacts. <br/><br/>" + "Do you want to proceed?";
@@ -682,6 +696,7 @@ var contacts_bulk_actions = {
 											// hide bulk actions button.
 											$('body').find('#bulk-actions').css('display', 'none');
 											$('body').find('#bulk-select').css('display', 'none');
+											$('body').find('#bulk-action-btns button').addClass("disabled");
 											$('table#contacts-table').find('.thead_check').removeAttr('checked');
 											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
 											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
@@ -829,7 +844,7 @@ function show_bulk_owner_change_page()
 		$("body").off('fill_owners').on("fill_owners", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-			fillSelect('ownerBulkSelect', '/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate);
+			fillSelect('ownerBulkSelect', '/core/api/users/partial', 'domainUsers', 'no-callback ', optionsTemplate);
 		});
 
 		// Navigate to show form
@@ -939,7 +954,14 @@ function show_bulk_owner_change_page()
 
 		// var tags = get_tags('tagsBulkForm');
 
+		 if (company_util.isCompany()) {
+        Backbone.history.navigate("company-bulk-tags", {
+            trigger: true
+        })
+    } else {
+
 		Backbone.history.navigate("bulk-tags", { trigger : true });
+	}
 
 		setup_tags_typeahead();
 
@@ -1039,8 +1061,14 @@ function show_bulk_owner_change_page()
 		var id_array = get_contacts_bulk_ids();
 
 		// var tags = get_tags('tagsBulkForm');
+		 if (company_util.isCompany()) {
+        Backbone.history.navigate("company-bulk-tags-remove", {
+            trigger: true
+        })
+    } else {
 
 		Backbone.history.navigate("bulk-tags-remove", { trigger : true });
+	}
 
 		setup_tags_typeahead();
 
@@ -1204,7 +1232,7 @@ function show_bulk_owner_change_page()
 
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			if (form_json.from_email != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
+			if (form_json.from != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
 			{
 				form_json.from_name = "";
 			}
@@ -1291,7 +1319,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	$('body').find('#bulk-select').css('display', 'none')
 	if ($(clicked_ele).is(':checked'))
 	{
-		$('body').find('#bulk-actions').css('display', 'inline-block');
+		<!--$('body').find('#bulk-actions').css('display', 'inline-block');-->
 
 
 		var resultCount = 0;
@@ -1299,7 +1327,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		var limitValue = 10000;		
 
 		if(company_util.isCompany()){
-
+			$("#bulk-action-btns button").removeClass("disabled");
 			resultCount = App_Companies.companiesListView.collection.length;
 			appCount = total_available_contacts;
 
@@ -1319,7 +1347,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 				$('#bulk-select').css("display","block");
 			}
 		}else{
-
+			$("#bulk-action-btns button").removeClass("disabled");
 			resultCount = App_Contacts.contactsListView.collection.length;
 			appCount = total_available_contacts;
 
@@ -1345,7 +1373,10 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	{
 		if (isBulk)
 		{
-			$('#bulk-actions').css('display', 'none');
+			if(company_util.isCompany())
+				$("#bulk-action-btns button").addClass("disabled");
+			else
+				$("#bulk-action-btns button").addClass("disabled");
 			return;
 		}
 
@@ -1362,7 +1393,8 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 		if (check_count == 0)
 		{
-			$('#bulk-actions').css('display', 'none');
+			
+				$("#bulk-action-btns button").addClass("disabled");
 		}
 	}
 }

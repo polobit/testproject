@@ -17,7 +17,6 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
-
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
 		if(amount == 0){
@@ -283,7 +282,7 @@ $(function()
 	 * @returns image link
 	 * 
 	 */
-	Handlebars.registerHelper('gravatarurl', function(items, width)
+	Handlebars.registerHelper('gravatarurl', function(items, width,type)
 	{
 
 		if (items == undefined)
@@ -299,6 +298,7 @@ $(function()
 		var backup_image = "&d=404\" ";
 		// backup_image="";
 		var initials = '';
+
 		try
 		{
 			// if(!isIE())
@@ -325,6 +325,7 @@ $(function()
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
+
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width)
 	{
@@ -811,6 +812,21 @@ $(function()
 	});
 
 
+	Handlebars.registerHelper('decodeString', function(data){
+		return data;
+	});
+
+	/**
+	 * Helper function to return date string from epoch time
+	 */
+	Handlebars.registerHelper('uservoicedate', function(date)
+	{
+		if(date){
+			var newDate = new Date(date);
+			newDate = (newDate.getMonth() + 1) + '/' + newDate.getDate() + '/' +  newDate.getFullYear() + " "+ newDate.getHours()+":"+newDate.getMinutes()+":"+newDate.getSeconds();
+			return newDate;
+		}
+	});
 
 	// Helper function to return date in user selected format in  preferences.
 
@@ -883,6 +899,10 @@ $(function()
 	Handlebars.registerHelper('epochToTaskDate', function(date)
 	{
 
+		try{
+			date = parseInt(date);	
+		}catch(e){
+		}
 		var intMonth, intDay;
 
 		// Verifies whether date is in milliseconds, then
@@ -1304,11 +1324,15 @@ $(function()
 	{
 
         var value = getPropertyValue(properties, name);
+        if(!value)
+        {
+        	return options.inverse(this);
+        }
         try{
         	value = JSON.parse(value);
         }catch(e){}
 
-		if (Object.keys(value).length > 0)
+		if (value && Object.keys(value) && Object.keys(value).length > 0)
 			return options.fn(this);
 		
 		return options.inverse(this);
@@ -1332,6 +1356,12 @@ $(function()
 	Handlebars.registerHelper('get_current_domain_email', function()
 	{
 		return CURRENT_DOMAIN_USER.email;
+	});
+
+	Handlebars.registerHelper('get_current_domain_name', function()
+	{
+		var name =  CURRENT_DOMAIN_USER.name;
+		return name.charAt(0).toUpperCase() + name.slice(1);
 	});
 
 	
@@ -1411,10 +1441,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 								else
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 
 								if(address.address !== undefined)
 									el = el.concat(address.address+", ");
@@ -1655,8 +1685,7 @@ $(function()
 
 	Handlebars.registerHelper('safe_string', function(data)
 	{
-		console.log("data = " + data);
-		if (data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
+		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
 				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 		
 		data = data.replace(/\n/, "<br/>");
@@ -2580,33 +2609,40 @@ $(function()
 	{
 		var type = "bg-light dk text-tiny";
 		var reputation = "Unknown";
+		var badge="";
 
 		if (value > 1 && value < 40)
 		{
 			type = "label-danger text-tiny";
 			reputation = "Poor";
+			badge="red;";
 		}
 		else if (value >= 40 && value < 75)
 		{
-			type = "bg-light text-tiny";
+			type = "label-warning text-tiny";
 			reputation = "Ok";
+			badge="yellow";
 		}
 		else if (value >= 75 && value < 90)
 		{
-			type = "label-success text-tiny";
+			type = "label-primary text-tiny";
 			reputation = "Good";
+			badge="blue";
 		}
 		else if (value >= 90)
 		{
 			type = "label-success text-tiny";
 			reputation = "Excellent";
+			badge="green"
 		}
 
-		return "<span style='position: relative;' class='label " + type
+		return "<span style='font-weight: bold;font-size: 12px;position: relative;' class='label " + type
 
-		+ "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+		+ "'>" + reputation + " <span style='margin: 0px -2px 0px 5px; padding:1px 5px 1px 5px ; background-color:white; color:"+ badge +"' class='badge " 
+		+ type + "'>" + value + " %</span> </span>";
 
 	});
+
 
 	/**
 	 * Returns id from hash. It returns id from hash iff id exists at last.
@@ -3391,7 +3427,7 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/company-default-image1.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3406,7 +3442,7 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
-								error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path('img/company-default-image1.png')+"'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3418,7 +3454,7 @@ $(function()
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-								error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path("img/company-default-image1.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -3569,10 +3605,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('lead_score', function(value)
 	{
-		if (this.lead_score > 0)
+		//if (this.lead_score > 0)
 			return this.lead_score;
-		else
-			return "";
+		//else
+		//	return "";
 	});
 
 	/**
@@ -3710,12 +3746,34 @@ $(function()
 
 	});
 
+	Handlebars.registerHelper('is_property_custom_field', function(field_name, options)
+	{
+		if(field_name.indexOf("CUSTOM_") != -1)
+		        return options.fn(this);
+		else
+		return options.inverse(this);
+
+	});
+
+	Handlebars.registerHelper('is_property_custom_field_date_type', function(custom_fields, properties, field_name, options)
+	{
+		if(field_name){
+			field_name = field_name.split("CUSTOM_")[1]; 
+		}
+        var property = getProperty(properties, field_name);
+        
+        if(isDateCustomField(custom_fields,property))
+        	return options.fn(property);
+		else
+			return options.inverse(property);
+	});
+
 	Handlebars.registerHelper('is_link', function(value, options)
 	{
 
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
-		if (value.search(exp) != -1)
+		if (value && value.search(exp) != -1)
 			return options.fn(this);
 		else
 			return options.inverse(this);
@@ -4106,10 +4164,10 @@ $(function()
 		{
 			if (i < parseInt(value))
 			{
-				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-value-on.png")+'" alt="' + i + '"></li>');
 				continue;
 			}
-			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-value-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
 	});
@@ -4662,6 +4720,7 @@ $(function()
 		var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost",
 			"DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
 			"DEAL_ARCHIVE" : "Deal Archived", "DEAL_RESTORE" : "Deal Restored",
+			"User_Email_Changed" : "User email","User_Name_Changed" :"User Name Changed","User_Created" : "New User Created","User_Deleted" : "User Deleted","User_Permissions_Change" : "User Permissions Changed",
 
 			"NOTE_ADD" : "Note Added", "TASK_ADD" : "Task Created", "TASK_EDIT" : "Task Updated", "TASK_PROGRESS_CHANGE" : "Progress Changed",
 			"TASK_OWNER_CHANGE" : "Owner Changed", "TASK_STATUS_CHANGE" : "Status Changed", "TASK_COMPLETED" : "Task Completed",
@@ -4709,7 +4768,7 @@ $(function()
 	 */
 	Handlebars
 			.registerHelper(
-					'get_subaccount_reputation',
+					'get_subaccount_reputation_duplicate',
 					function(value)
 					{
 						var type = "bg-light dk text-tiny";
@@ -5266,6 +5325,11 @@ $(function()
 			return "-";
 	});
 
+	Handlebars.registerHelper('getEmailCreditsCount', function()
+	{
+		return getEmailCreditsCount();
+	});
+
 	// helper function to return agile bcc special email for inbound mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
@@ -5777,7 +5841,11 @@ $(function()
 		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
 		else if(p_name=='Campaign stats')
-			portlet_name = "Campaign Stats"
+			portlet_name = "Campaign Stats";
+		else if(p_name=='Campaign graph')
+			portlet_name = "Campaign Status";
+		else if(p_name=='Average Deviation')
+			portlet_name = "Tasks Completion Time Deviation";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5798,7 +5866,7 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Calls Per Person')
 			icon_name = 'icon-call-end';
-		else if (p_name == 'Pending Deals')
+		else if (p_name == 'Pending Deals' || p_name == 'Average Deviation')
 			icon_name = 'icon-clock';
 		else if (p_name == 'Deals By Milestone')
 			icon_name = 'icon-flag';
@@ -5828,6 +5896,8 @@ $(function()
 			icon_name = 'icon-graph';
 		else if (p_name == 'Campaign stats')
 			icon_name = 'icon-sitemap';
+		else if (p_name == 'Campaign graph')
+			icon_name = 'icon-pie-chart';
 		else if (p_name == 'Deal Goals')
 			icon_name = 'icon-flag';
 		else if (p_name == 'Lost Deal Analysis')
@@ -5969,7 +6039,11 @@ $(function()
 		text = text.replace('priority', 'Priority');
 		// update category
 		text = text.replace('title', 'Title');
-
+		// Update task description
+		text = text.replace('task description' , 'Description'); 
+		// Update Deal description
+		text = text.replace('description' , 'Description');
+		
 		return text;
 
 	});
@@ -6603,12 +6677,16 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A mini calendar with an overview of your agenda for the day.'
 	else if (p_name == 'Campaign stats')
 		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
+	else if (p_name == 'Campaign graph')
+		description = 'A pie chart of active, completed and removed subscribers of Campaigns'
 	else if(p_name == 'Deal Goals')
 		description = 'See how much sales target you have achieved.'
 	else if(p_name == 'Incoming Deals')
 		description = 'See how your deal sources are performing over time.'
 	else if(p_name == 'Lost Deal Analysis')
 		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
+	else if(p_name == 'Average Deviation')
+		description = 'A quick view of deviation in tasks completion times.'
 	return description;
 			});
 
@@ -6901,6 +6979,136 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 			return options.fn(this);
 	});
 
+	Handlebars.registerHelper('getContactTypeCustomFields', function(type, value, custom_field_name, options)
+	{
+		if (type != "CONTACT" && type != "COMPANY")
+		{
+			return value;
+		}
+		var contact_values = "";
+		var contact_values_json;
+		try {
+			contact_values_json = $.parseJSON(value);
+		}
+		catch(err) {
+
+		}
+		var referenceContactIds = "";
+		if (contact_values_json)
+		{
+			$.each(contact_values_json, function(index, value){
+				if(index != contact_values_json.length-1){
+					referenceContactIds += value + ",";
+				}else{
+					referenceContactIds += value;
+				}
+			});
+			App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+			App_Contacts.referenceContactsCollection.collection.fetch({
+				success : function(data){
+					if(data && data.length > 0)
+					{
+						if(type == "CONTACT")
+						{
+							$.each(contact_values_json, function(index, value){
+								var items = data.get(value).get("properties");
+								var width = 40;
+								var img_path = "";
+								if (items == undefined)
+									return;
+
+								// Checks if properties already has an image, to return it
+								var agent_image = getPropertyValue(items, "image");
+								if (agent_image){
+									img_path = agent_image;
+								}
+								else{
+									// Default image
+									var img = DEFAULT_GRAVATAR_url;
+									var backup_image = "&d=404\" ";
+									// backup_image="";
+									var initials = '';
+
+									try
+									{
+										// if(!isIE())
+										initials = text_gravatar_initials(items);
+									}
+									catch (e)
+									{
+										console.log(e);
+									}
+
+									if (initials.length == 0)
+										backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+
+									var data_name =  '';
+									// if(!isIE())
+										data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+									
+									var email = getPropertyValue(items, "email");
+									if (email)
+									{
+										img_path = new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
+									}
+
+									img_path = new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+								}
+								
+								var contact_name = getPropertyValue(data.get(value).get("properties"), "first_name");
+								var last_name = getPropertyValue(data.get(value).get("properties"), "last_name");
+								if(last_name)
+								{
+									contact_name += " "+last_name;
+								}
+								//contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#contact/"+value+"' class='text-white'>"+contact_name+"</a></li>";
+								contact_values += '<a href="#contact/'+value+'" class="activate-link thumb m-b-xs m-r-xs"><img  data-name="" src="'+img_path+'"  title="'+contact_name+'" /></a>';
+							});
+						}else if(type == "COMPANY")
+						{
+							$.each(contact_values_json, function(index, value){
+								var frame_size = "50";
+								var additional_style = "display:inline";
+								var full_size = parseInt(frame_size); // size
+								var size_diff = 4 + ((full_size - 32) / 2); // calculating
+								var properties = data.get(value).get("properties");
+								var img_path = "";
+								
+								var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+
+								var error_fxn = "";
+
+								for (var i = 0; i < properties.length; i++)
+								{
+									if (properties[i].name == "image")
+									{
+										default_return = "src='" + properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
+
+										error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
+
+										break;
+									}
+									if (properties[i].name == "url")
+									{
+										default_return = "src='https://www.google.com/s2/favicons?domain=" + properties[i].value + "' " + "style='width:" + full_size + "px; height=" + full_size + "px; padding:" + size_diff + "px; " + additional_style + " ;'";
+
+										error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+									}
+								}
+								img_path = new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
+								
+								//contact_values += "<li class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'><a href='#company/"+value+"' class='text-white'>"+getPropertyValue(data.get(value).get("properties"), "name")+"</a></li>";
+								contact_values += '<a href="#company/'+value+'" class="activate-link thumb m-b-xs m-r-xs"><img  '+img_path+' title="'+getPropertyValue(data.get(value).get("properties"), "name")+'"/></a>';
+							});
+						}
+						$('.custom-value[name="'+custom_field_name+'"]').html(contact_values);
+					}
+					hideTransitionBar();
+				}
+			});
+		}
+	});
+
 // the epoch time is in milisecond.
 // jquery uses isostring format to implement timeago function on date...
 Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) {
@@ -6995,6 +7203,7 @@ Handlebars.registerHelper('brainTreeStatus', function(value) {
 
 function agile_is_mobile_browser(){
    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  
  }
 
  function isIEBrowser(){
@@ -7007,7 +7216,6 @@ function agile_is_mobile_browser(){
 	return false;
  }
 
-
 Handlebars.registerHelper('multiple_Property_Element_List', function(name, properties,id, options)
 		{
 
@@ -7015,4 +7223,34 @@ Handlebars.registerHelper('multiple_Property_Element_List', function(name, prope
 			if (matching_properties_list.length > 0)
 				return options.fn(matching_properties_list);
 		});
+
+Handlebars.registerHelper('getAliasFromArry', function(array, options) {
+	return array[0];
+});
+
+// Helper function to return date in user selected format in  preferences.
+Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
+{
+
+	if (!date)
+		return;
+	var dateString = new Date(date);
+	if(dateString == "Invalid Date")
+		return getDateInFormatFromEpoc(date);
+	else
+		return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+	
+});
+
+Handlebars.registerHelper('getSuggestionName', function(suggestionId){
+		if(suggestionId){
+			return uservoiceOBJ.suggestions[suggestionId];
+		}		
+});
+
+Handlebars.registerHelper('removeSpecialCharacter',function(value){
+          var value = value.replace(/[^\w\s]/gi, '-');
+          return value;
+
+});
 

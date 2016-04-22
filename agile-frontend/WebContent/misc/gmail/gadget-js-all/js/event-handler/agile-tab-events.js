@@ -25,8 +25,13 @@ $(function()
 
 		$(".tab-waiting", el).show();
 		// ------ Get Notes. ------
-		_agile.get_notes({ success : function(Response)
-		{
+		// my code
+		    var str = agile_id.getURL();
+			var phpurl = str.split("/core/js/api");
+			var agile_url = phpurl[0] + "/core/php/api/contacts/get-notes?callback=?&id=" + agile_id.get()+"&email="+Email;
+			//var agile_url = agile_id.getURL() + "/users?callback=?&id=" + agile_id.get();
+			agile_json(agile_url, function(Response){
+				
 			// ------ Load Date formatter libraries. ------
 			head.js(LIB_PATH + 'lib/date-formatter.js', LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
@@ -39,11 +44,8 @@ $(function()
 				// ------ Apply date formatter on date/time field. ------
 				$("time", el).timeago();
 			});
-
-		}, error : function(Response)
-		{
-
-		} }, Email);
+			});
+		// end of my code
 	});
 
 	// ------------------------------------------------- Click event for tasks
@@ -61,8 +63,13 @@ $(function()
 
 		$(".tab-waiting", el).show();
 		// ------ Get Tasks. ------
-		_agile.get_tasks({ success : function(Response)
-		{
+		// my code
+		    var str = agile_id.getURL();
+			var phpurl = str.split("/core/js/api");
+			var agile_url = phpurl[0] + "/core/php/api/contacts/get-tasks?callback=?&id=" + agile_id.get()+"&email="+Email;
+			//var agile_url = agile_id.getURL() + "/users?callback=?&id=" + agile_id.get();
+			agile_json(agile_url, function(Response){
+				
 			$(".tab-waiting", el).hide();
 			// ------ Fill tasks list in tab. ------
 			$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', Response, 'no'));
@@ -70,11 +77,8 @@ $(function()
 			agile_gadget_adjust_height();
 			// ------ Apply date formatter on date/time field. ------
 			$("time", el).timeago();
-
-		}, error : function(Response)
-		{
-
-		} }, Email);
+			});
+		// end of my code
 	});
 
 	// ------------------------------------------------- Click event for deals
@@ -92,7 +96,15 @@ $(function()
 
 		$(".tab-waiting", el).show();
 		// ------ Get Deals. ------
-		_agile.get_deals({ success : function(Response)
+		// my code
+	    var str = agile_id.getURL();
+		var phpurl = str.split("/core/js/api");
+		var agile_url = phpurl[0] + "/core/php/api/contacts/get-deals?callback=?&id=" + agile_id.get()+"&email="+Email;
+		//var agile_url = agile_id.getURL() + "/users?callback=?&id=" + agile_id.get();
+		agile_json(agile_url, function(Response){
+			
+		// ------ Load Date formatter libraries. ------
+		head.js(LIB_PATH + 'lib/date-formatter.js', LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
 			$(".tab-waiting", el).hide();
 			// ------ Fill deals list in tab. ------
@@ -101,11 +113,9 @@ $(function()
 			agile_gadget_adjust_height();
 			// ------ Apply date formatter on date/time field. ------
 			$("time", el).timeago();
-
-		}, error : function(Response)
-		{
-
-		} }, Email);
+		});
+		});
+	  // end of my code
 	});
 
 	// ------------------------------------------------- Click event for
@@ -123,9 +133,18 @@ $(function()
 
 		$(".tab-waiting", el).show();
 		// ------ Get Campaigns. ------
-		_agile.get_campaign_logs({ success : function(Response)
-		{
-			$(".tab-waiting", el).hide();
+			
+		// my code
+		    var str = agile_id.getURL();
+			var phpurl = str.split("/core/js/api");
+			var agile_url = phpurl[0] + "/core/js/api/contacts/get-campaign-logs?callback=?&id=" + agile_id.get()+"&email="+Email;
+			//var agile_url = agile_id.getURL() + "/users?callback=?&id=" + agile_id.get();
+			agile_json(agile_url, function(Response){
+				
+			// ------ Load Date formatter libraries. ------
+			head.js(LIB_PATH + 'lib/date-formatter.js', LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$(".tab-waiting", el).hide();
 			var Lib_Json = {};
 			// ------ Set library path for campaign link, check for local
 			// host. ------
@@ -145,11 +164,9 @@ $(function()
 
 			// ------ Apply date formatter on date/time field. ------
 			$("time", el).timeago();
-
-		}, error : function(Response)
-		{
-
-		} }, Email);
+			});
+			});
+		// end of my code
 	});
 
 	// ------------------------------------------------- agile-tab-event.js

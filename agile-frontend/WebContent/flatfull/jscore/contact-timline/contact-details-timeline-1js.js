@@ -31,7 +31,7 @@ function update_entity_template(model)
 	getTemplate('timeline1', [model.toJSON()], undefined, function(template_ui){
  		if(!template_ui)
     		return;
-		$("#" + model.get("id"), $('#timeline', App_Contacts.contactDetailView.el)).html($(template_ui)); 
+		$("#" + model.get("id"), $('#timeline', App_Contacts.contactDetailView.el)).html($(template_ui).children()); 
 	}, "#" + model.get("id"), $('#timeline', App_Contacts.contactDetailView.el));
 
 }

@@ -1,0 +1,35 @@
+<div style="margin-bottom:20px">
+	<div>
+		 {{#contact_campaigns this "campaignStatus"}}
+		 {{!-- Shows Active and Done campaigns like tags --}}
+         {{#if this}} 
+         
+		 {{#if this.done}}
+         <div>
+           <h3 style="display: inline-block; margin-right:5px; margin-left:30px">Completed Campaigns: </h3> <ul class="tagsinput">
+                   {{#each this.done}}
+						<li class="tag" style="display:inline-block; background-color: gray; border-color: gray;" data="{{campaign_id}}"><span>
+						{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Done Campaign{{/if}}</span></li> 
+					{{/each}}
+                    </ul>
+         </div>
+         <br>
+         {{/if}}
+
+         {{#if this.active}}
+         <div>
+           <h3 id="contact-active-campaigns" style="display: inline-block; margin-right:5px; margin-left:30px; ">Active Campaigns: </h3> 
+           <ul class="tagsinput active-campaigns">
+                   {{#each this.active}}
+						<li class="tag" style="display:inline-block; background-color: gray; border-color: gray;" data="{{campaign_id}}"><span>{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Active Campaign{{/if}}
+						<a class="close remove-active-campaign" campaign_id="{{campaign_id}}" title="Remove from Campaign">&times</a> </span></li> 
+					{{/each}}
+                    </ul>
+         </div>
+         {{/if}}
+
+         {{/if}}
+         {{/contact_campaigns}}
+    </div>
+
+</div>

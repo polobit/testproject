@@ -29,6 +29,11 @@ var CONTENT_JSON = {
 		//"modal_id" : "personModal",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"filter_results_segments" : {
+		"title" : "There are no contacts for the selected filter. Try refining the filters and the date range.",
+		"route" : "#",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	"filter_results_companies" : {
 		"title" : "No companies matching this criteria.",
 		//"learn_more" : "click here to learn more",
@@ -103,6 +108,18 @@ var CONTENT_JSON = {
 		"route" : "#contact-view-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"no-tickets" : {
+		"title" : "You do not have any Tickets currently.",
+		"description" : "Tickets can be problem, incident, question or task escalated by your customers. Set up email forwarding to receive tickets.",
+		"button_text" : "Set up forwarding",
+		"route" : "#ticket-groups",
+		"image" : "/img/clipboard.png"
+	},
+	"no-ticket-filters" : {
+		"title" : "You do not have any Tickets Filters currently.",
+		"description" : "Tickets Filters are set of conditions to view Tickets which satisfies conditions.",
+		"image" : "/img/clipboard.png"
+	},
 	"dashboard" : {
 		"contacts" : {
 			"title" : "There is no recent activity",
@@ -127,7 +144,7 @@ var CONTENT_JSON = {
 		"title" : "You do not have any Email templates currently.",
 		"description" : "Personalize and customize email templates for every scenario in the sales cycle.",
 		"button_text" : "Add Email Template",
-		"route" : "#email-template-add",
+		"route" : "#emailbuilder-templates",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-activities" : {
@@ -250,6 +267,15 @@ function getContactPadcontentKey(url)
 		
 }
 
+function getSegmentPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	return "filter_results_segments";
+		
+}
+
 function getCompanyPadcontentKey(url)
 {
 	if(!url)
@@ -276,7 +302,9 @@ $(function() {
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")
 			show_deal();
-		else
+		else if(id == "personModal")
+			addContactBasedOnCustomfields();
+		else 
 			$("#" + id).modal('show');
 	});
 });

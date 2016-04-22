@@ -536,7 +536,7 @@ baseBuilderElements.push({
  	name: 'image',
  	nodes: ['img'],
  	frameworks: ['bootstrap'],
- 	html: '<img src="http://ironsummitmedia.github.io/startbootstrap-freelancer/img/profile.png" class="img-responsive">',
+ 	html: '<img src="https://s3.amazonaws.com/agilecrm/landing/public/img/profile.png" class="img-responsive">',
  	types: ['flow', 'phrasing', 'embedded', 'interactive', 'form-associated'],
  	validChildren: false,
  	category: 'media',

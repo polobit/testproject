@@ -197,6 +197,7 @@
 	}
 }
 
+/*
 #preview-frame {
 	width: 100%;
 	height: 100%;
@@ -204,6 +205,32 @@
     position: absolute;
     top: 0;
     left: 0;
+}
+*/
+
+#preview-frame {
+	width: 100%;
+	height: 100%;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+	&.full-width {
+		width: 100%;
+	}
+
+	&.xs-width {
+		width: @screen-xs;
+	}
+
+	&.sm-width {
+		width: @screen-sm;
+	}
+
+	&.md-width {
+		width: @screen-md;
+	}
 }
 
 #theme-loading {

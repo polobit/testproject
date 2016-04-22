@@ -29,6 +29,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.DealFilterIdsFetcher;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
@@ -90,7 +91,9 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
@@ -148,7 +151,9 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
@@ -207,7 +212,9 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
@@ -273,7 +280,9 @@ public class DealsBulkActionsAPI
 	    JSONObject formJSON = new JSONObject(form);
 	    System.out.println("------------" + formJSON.toString());
 
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    // Get Deal Milestone change triggers
@@ -358,7 +367,9 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 	    JSONArray dealIdsArray = new JSONArray();
 	    List<Opportunity> subList = new ArrayList<Opportunity>();

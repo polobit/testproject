@@ -32,7 +32,9 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
@@ -82,6 +84,11 @@ public class AdminPanelAPI
 	    }
 	    // Gets the users and update the password to the masked one
 	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
+	    if(users == null || users.isEmpty()){
+	    	String actualDomain = AliasDomainUtil.getDomainByAlias(domain);
+	        users = DomainUserUtil.getUsers(actualDomain);
+	    	
+	    }
 	    return users;
 	}
 	catch (Exception e)

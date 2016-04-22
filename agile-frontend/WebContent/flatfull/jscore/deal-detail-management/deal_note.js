@@ -1,26 +1,33 @@
-	
-		/**
-		 * "Hide" event of note modal to remove contacts appended to related to
-		 * field and validation errors
-		 */
-		$('#deal-note-modal').on('hidden.bs.modal', function()
-		{
-			// Removes appended contacts from related-to field
-			$("#dealnoteForm").find("li").remove();
 
-			// Remove value of input field
-			$("#from_task", "#dealnoteForm").val("");
-			$("#task_form", "#dealnoteForm").val("");
-			
-			// Removes validation error messages
-			remove_validation_errors('dealnoteModal');
-		});
+		function initilizeDealNotesListeners()
+		{
+			/**
+			 * "Hide" event of note modal to remove contacts appended to related to
+			 * field and validation errors
+			 */
+			$('#deal-note-modal').off('hidden.bs.modal');
+			$('#deal-note-modal').on('hidden.bs.modal', function()
+			{
+				// Removes appended contacts from related-to field
+				$("#dealnoteForm").find("li").remove();
+
+				// Remove value of input field
+				$("#from_task", "#dealnoteForm").val("");
+				$("#task_form", "#dealnoteForm").val("");
+
+				$("#subject", "#dealnoteForm").val("");
+				$("#description", "#dealnoteForm").val("");
+				
+				// Removes validation error messages
+				remove_validation_errors('dealnoteModal');
+			});
+		}
 
 
 	
 		function saveDealNote(form, modal, element, note)
 		{
-
+			initilizeDealNotesListeners();
 			console.log(note);
 			var noteModel = new Backbone.Model();
 			noteModel.url = 'core/api/opportunity/deals/notes';
@@ -48,6 +55,16 @@
 				
 			
 				
+			},
+			error : function(model, err)
+			{
+				enable_save_button($(element));
+				modal.find('span.error-status').html("<i style='color:#B94A48;'>"+err.responseText+"</i>");
+				setTimeout(function()
+				{
+					modal.find('span.error-status').html('');
+				}, 2000);
+				console.log('-----------------', err.responseText);
 			} });
 		}
 		
@@ -81,6 +98,16 @@
 				
 			
 				
+			},
+			error : function(model, err)
+			{
+				enable_save_button($(element));
+				modal.find('span.error-status').html("<i style='color:#B94A48;'>"+err.responseText+"</i>");
+				setTimeout(function()
+				{
+					modal.find('span.error-status').html('');
+				}, 2000);
+				console.log('-----------------', err.responseText);
 			} });
 		}
 

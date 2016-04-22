@@ -1,6 +1,8 @@
 package com.agilecrm.user;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -76,6 +78,12 @@ public class AgileUser
     public static AgileUser getCurrentAgileUser()
     {
 	// Gets user from Domain_id
+    	System.out.println("User Info : ");
+    	System.out.println(SessionManager.get().toString());
+    	
+    	System.out.println("Domain Info : ");
+    	System.out.println(SessionManager.get().getDomainId());
+    	
 	return getCurrentAgileUserFromDomainUser(SessionManager.get().getDomainId());
     }
 
@@ -89,6 +97,21 @@ public class AgileUser
     public static AgileUser getCurrentAgileUserFromDomainUser(Long domain_user_id)
     {
 	return dao.getByProperty("domain_user_id", domain_user_id);
+    }
+    
+    /**
+     * Gets agile user based on domain user id
+     * 
+     * @param domain_user_id
+     *            domain user id to get its associated agile user
+     * @return agile user corresponding to a domain user
+     */
+    public static Key<AgileUser> getCurrentAgileUserKeyFromDomainUser(Long domain_user_id)
+    {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("domain_user_id", domain_user_id);
+    
+	return dao.getKeyByProperty(map);
     }
 
     /**
