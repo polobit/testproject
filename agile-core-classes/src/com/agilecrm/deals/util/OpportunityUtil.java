@@ -3192,4 +3192,9 @@ public class OpportunityUtil
 	}
 	return null;
     }
+    public static int getDealsbyTags(String tag)
+    {
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("tagsWithTime.tag = ", tag).limit(2);
+	return dao.getCount(q);
+    }
 }

@@ -308,10 +308,10 @@ public class DealsAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Deal not saved properly.").build());
 	}
-	opportunity.save();
 	if(opportunity.tagsWithTime.size() > 0){
-		
+		opportunity.updateDealTagsEntity(opportunity);
 	}
+	opportunity.save();
 	try
 	{
 	    ActivitySave.createDealAddActivity(opportunity);
@@ -1338,5 +1338,21 @@ public class DealsAPI
 	
 	return dealsCountJSON;
     }
-
+    
+    @Path("/based/tags")
+    @GET
+    @Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON })
+    public String getDealsCountByTags(@QueryParam("tag") String tag){
+    	int dealCount = 0;
+    	if(tag != null && tag != ""){
+    		dealCount = OpportunityUtil.getDealsbyTags(tag);
+    	}
+    	if(dealCount > 0)
+    		return "success";
+    	return "fail";
+    }
 }
+
+
+
+

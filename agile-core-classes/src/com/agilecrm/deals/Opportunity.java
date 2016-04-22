@@ -783,9 +783,34 @@ public class Opportunity extends Cursor implements Serializable
 				}
 			}
 		}
-		else	if(oldtags == null && newtags != null){
+		else if(oldtags == null && newtags != null){
 			for (Tag newtag : newtags){
 				newtag.createdTime = System.currentTimeMillis();
+			}
+		}
+	}
+	catch (WebApplicationException e)
+	{
+	    System.out.println("Exception in tags - " + e.getResponse().getEntity());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity(e.getResponse().getEntity().toString()).build());
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
+	}
+    
+   }
+    public  void updateDealTagsEntity(Opportunity opportunity)
+    {
+
+	try
+	{
+		List <Tag> dealTags = new ArrayList<Tag>(opportunity.tagsWithTime);
+		if(dealTags != null){
+			for(Tag tag : dealTags){
+					tag.createdTime = System.currentTimeMillis();
 			}
 		}
 	}
