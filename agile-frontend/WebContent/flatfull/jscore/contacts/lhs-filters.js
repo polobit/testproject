@@ -398,7 +398,8 @@ $('#' + container_id).on('click', '#remove_contact_in_lhs', function(e)
 });
 
 $('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date,.filters-tags-typeahead,.typeahead_contacts)', function(e)
-{
+{   
+	if(!$('#lhs_filters_segmentation #error-message').hasClass("hide")){$('#lhs_filters_segmentation #error-message').addClass("hide");}
 	console.log("I am in blur " + $(this).val());
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -674,12 +675,17 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 
     $('#' + container_id).on('click', '#save-segment-filter', function(e)
             {
+            	if(!_agile_get_prefs("dynamic_visitors_filter") && !_agile_get_prefs("visitor_filter")){
+            		$('#error-message').removeClass('hide'); 
+            		return;
+            	}
                 e.preventDefault();
                 var segmentView = new Base_Model_View({
                 template : "segment-save-filter-modal",
                 url : '/core/api/web-stats/filters',
                 postRenderCallback: function(
                                 el, collection) {
+                   if(!collection[0]){ $("#saveSegmentFilterForm .choose-segment-filter").prop("disabled",true);}
                    addModalEvent("segmentsModal",collection);           
 
                  },

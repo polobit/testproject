@@ -128,12 +128,11 @@ function  addModalEvent(modal,collection){
     $('#'+ modal).on('click', '.new-segment',{ filter_list : collection }, function(e)
         {
             e.preventDefault();
-
+            if($('#save-new-type').prop('checked')==true)
+                return;
             $("div.update-segment-name").toggle();
             $("div.choose-segment-filter").toggle();
             $('#save-new-type').prop('checked', true);
-            if(!$('#segmentsModal #error-message').hasClass("hide"))
-                return;
              var filter_list=e.data.filter_list;
              var current_filter=$('.update-segment-name input').val();
              if(!current_filter || current_filter) 
@@ -149,12 +148,12 @@ function  addModalEvent(modal,collection){
     $('#'+ modal).on('click', '.replace-segment', function(e)
         {   
             e.preventDefault();
+            if(($('#save-replace-type').prop('checked') || $(".choose-segment-filter").prop("disabled"))==true)
+                return;
             if(!$('#segmentsModal #duplicate-name').hasClass("hide")){
                 $('#segmentsModal #duplicate-name').addClass('hide');
                 $('#segmentsModal .save').removeClass('disabled');
             }
-            if(!$('#segmentsModal #error-message').hasClass("hide"))
-                $('#segmentsModal .save').addClass('disabled');
             $("div.update-segment-name").toggle();
             $("div.choose-segment-filter").toggle();
             $('#save-replace-type').prop('checked', true);
@@ -172,11 +171,6 @@ function  addModalEvent(modal,collection){
     $('#'+ modal).on('blur', '.update-segment-name input' ,{ filter_list : collection }, function(e)
     {
          e.preventDefault();
-         if(!_agile_get_prefs("dynamic_visitors_filter")){
-            $('#segmentsModal #error-message').removeClass('hide');
-            $('#segmentsModal .save').addClass('disabled');
-            return;           
-        }
          var filter_list=e.data.filter_list;
          var current_filter=$(this).val();
          $.each(filter_list, function( key) {
@@ -193,12 +187,7 @@ function  addModalEvent(modal,collection){
     $('#'+ modal).on('keyup', '.update-segment-name input' , function(e)
     {
          e.preventDefault();
-        
-        if(!$('#segmentsModal #error-message').hasClass("hide")){
-            $('#segmentsModal .save').addClass('disabled');
-            return;
-        }
-            
+                   
         if(!$('#segmentsModal #duplicate-name').hasClass("hide")){
             $('#segmentsModal #duplicate-name').addClass('hide');
             $('#segmentsModal .save').removeClass('disabled');
@@ -272,7 +261,11 @@ function setupSegmentFilterList(cel,id)
                 individual_tag_name : 'li',
                 no_transition_bar : true,
                 postRenderCallback : function(el, collection)
-                {
+                {   
+                    if(collection.length==0)
+                        $('#filters-tour-step >button').addClass("disabled");
+                    else
+                        $('#filters-tour-step >button').removeClass("disabled");
                     addEventFilter("segment-filter-list-model-list"); 
                     if(id){
                         var filter_name=collection.get(id).attributes.name;

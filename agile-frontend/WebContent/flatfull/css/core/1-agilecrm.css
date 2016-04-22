@@ -3720,7 +3720,10 @@ opacity: .3;
     font-weight: bold;
     opacity: .7;
 }
-#segmentsModal #duplicate-name , #segmentsModal #error-message{
+#segmentsModal #duplicate-name {
+  color: #f05050;
+}
+#lhs_filters_segmentation #error-message{
   color: #f05050;
 }
 
