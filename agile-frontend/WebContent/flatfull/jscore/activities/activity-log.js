@@ -169,6 +169,11 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		params += ("&entity_type=" + entitytype);
 		return params;
 	}
+	else if (entitytype == 'USER')
+	{
+		params += ("&entity_type=" + entitytype);
+		return params;
+	}
 
 	else if (entitytype == 'EVENT')
 	{

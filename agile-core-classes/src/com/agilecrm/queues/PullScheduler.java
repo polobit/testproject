@@ -8,8 +8,10 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.mandrill.util.deferred.LogDeferredTask;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
+import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.InternalFailureException;
@@ -39,7 +41,7 @@ public class PullScheduler
     /**
      * Pull Queue attributes
      */
-    public static int DEFAULT_LEASE_PERIOD = 3600;
+    public static int DEFAULT_LEASE_PERIOD = 900;
     public static int DEFAULT_COUNT_LIMIT = 200;
 
     /**
@@ -93,7 +95,7 @@ public class PullScheduler
 		|| StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
 		|| StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE)
 		|| StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE))
-	    return 3600;
+	    return 900;
 
 	return DEFAULT_LEASE_PERIOD;
     }
@@ -230,6 +232,7 @@ public class PullScheduler
 		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
 		Boolean isMailDeferredTask = deferredTask instanceof MailDeferredTask;
+		Boolean isLogDeferredTask = deferredTask instanceof LogDeferredTask;
 		System.out.println("is instance of mail deferred task" + isMailDeferredTask);
 		if (isMailDeferredTask)
 		{
@@ -242,6 +245,21 @@ public class PullScheduler
 		    {
 			e.printStackTrace();
 			System.err.println("Exception occured while runnning mail deferred tasks..." + e.getMessage());
+		    }
+
+		    PullQueueUtil.deleteTasks(queueName, tasks);
+		    return;
+		}
+		else if(isLogDeferredTask){
+			try
+		    {
+			// System.out.println("Executing mandrill mail tasks...");
+			LogUtil.sendCampaignLogs(tasks);
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+			System.err.println("Exception occured while runnning campaign deferred tasks..." + e.getMessage());
 		    }
 
 		    PullQueueUtil.deleteTasks(queueName, tasks);

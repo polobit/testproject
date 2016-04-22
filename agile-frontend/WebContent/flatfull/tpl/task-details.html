@@ -1,15 +1,16 @@
 
 <script id="task-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing">
-<div class="hbox hbox-auto-xs  bg-light">
-<div class="col w-xl bg-light lter b-r text-center-mobile-view" >
+<div class="hbox hbox-auto-xs  bg-light taskListDetails">
+<div class="col w-xl bg-light lter b-r text-center-mobile-view taskDetailsCol" >
 <div class="vbox">
 <div class="row-row">
 <div id="task-detail-lhs" class="wrapper pos-rlt details-mobile-view">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis"
-                     style="max-width:200px;min-width:auto;vertical-align:bottom;">{{task_property type}}</span>                  
+                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span>
+                    <span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis"
+                     style="max-width:200px;min-width:auto;vertical-align:bottom; font-size:12px;">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
                    <span class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}</div>
@@ -83,8 +84,8 @@
         
         	{{#canEditContact taskOwner.id}}
         	<div class="btn-group v-middle" id="change-task-owner-ul" style="display: none">
-        		 <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
-        		 <ul id='task-detail-owner' class="dropdown-menu"></ul>
+        		 <button class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></button>
+        		 <ul id='task-detail-owner' class="dropdown-menu" role="menu"></ul>
         	</div> 
 			{{/canEditContact}}
        </div>
@@ -146,7 +147,7 @@
 </div>
 </div>
 
-<div class="col bg-white">
+<div class="col bg-white taskTabListCenter">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">
 		<div id="task-tab-container-header" class="tab-container">

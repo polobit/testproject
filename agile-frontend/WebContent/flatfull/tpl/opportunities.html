@@ -27,7 +27,7 @@
           <a class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" href="#">
             <span class="caret"></span>
           </a>
-          <ul class="dropdown-menu pull-right">
+          <ul class="dropdown-menu pull-right" role="menu">
               <li><a href="#deal-rc-0" class="deals-list-view" onclick="return false;">List View</a></li>
               
            <li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
@@ -48,7 +48,8 @@
             <span class="caret"></span>
           </a>
           {{#hasScope "MANAGE_DEALS"}}
-          <ul class="dropdown-menu pull-right">
+
+          <ul class="dropdown-menu pull-right" role="menu">
             <li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import from CSV</a></li>
             <li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export as CSV</a></li>
             <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">Add Dashlet</a></li>
@@ -56,7 +57,7 @@
           </ul>
 
           {{else}}
-          <ul class="dropdown-menu pull-right">
+          <ul class="dropdown-menu pull-right" role="menu">
           <li><a href="#add-dashlet">Add Dashlet</a></li>
           </ul>
           
@@ -87,6 +88,7 @@
     </div>
   </div>
   </div>
+
 
   <div class="new-collection-deal-list"></div>
 
@@ -446,8 +448,8 @@
 <script id="opportunities-collection-template" type="text/html">
 
 <div class="{{#is_mobile}} {{else}} wrapper-md {{/is_mobile}}">
-<div >
-    <div>
+<div class="row">
+    <div class="col-md-9 {{#is_mobile}} w-full {{/is_mobile}}">
         <div id="slate">
         </div>
         {{#if this.length}}
@@ -459,7 +461,7 @@
           <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
             <span class="caret"></span>
           </a>
-          <ul class="dropdown-menu" id="view-actions">
+          <ul class="dropdown-menu" id="view-actions" role="menu">
           {{#hasScope 'MANAGE_DEALS'}}
             <li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
           {{/hasScope}}

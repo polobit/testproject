@@ -254,7 +254,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <nav  class="navi clearfix">
             <ul class="nav">
-              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+              <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Sales</span>
               </li>
               
@@ -289,7 +289,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
   <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
    <li id="workflowsmenu">
@@ -338,11 +338,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
-  <li class="line dk m-t-none m-b-none" style="height: 1px; display: none;"></li>
-  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs" style="display: none;">
-    <span>Support</span>
+  <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span>Service</span>
   </li>
-  <li id="tickets" style="display: none;">
+  <li id="tickets">
     <a  href="#tickets">
       <i class="icon icon-ticket"></i>
       <span>Help Desk</span>
@@ -619,6 +619,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
+
     <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
   <!-- Include bootstrap modal divs-->
@@ -837,7 +838,7 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
           
         
         </div>
-</div>
-
+  </div>
+<div id="fb-root"></div>
 </body>
 </html>

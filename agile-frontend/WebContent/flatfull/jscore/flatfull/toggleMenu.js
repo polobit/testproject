@@ -273,6 +273,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
    });
 
+
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){
  	$.ajax({

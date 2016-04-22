@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.web.stats.StatsSQLUtil;
@@ -69,10 +70,14 @@ public class SegmentationServlet extends HttpServlet
 	}
 	if (StatsUtil.isValidRequest(params.get("psd")))
 	{
-	    
-	    JSONArray emails = StatsSQLUtil.getContactEmails(params.get("domain"), params.get("filter_json"),
-		    params.get("start_time"), params.get("end_time"), params.get("cursor"), params.get("page_size"));
-	    StatsUtil.sendResponse(req, res, emails.toString());
+	    String domain = params.get("domain");
+	    if (StringUtils.isNotBlank(domain) && !domain.equalsIgnoreCase("null"))
+	    {
+		JSONArray emails = StatsSQLUtil
+			.getContactEmails(domain, params.get("filter_json"), params.get("start_time"),
+				params.get("end_time"), params.get("cursor"), params.get("page_size"));
+		StatsUtil.sendResponse(req, res, emails.toString());
+	    }
 	}
     }
 }

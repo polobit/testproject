@@ -4,13 +4,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
@@ -713,7 +717,6 @@ public class QueryDocument<T> implements QueryInterface
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
 	    agileCursor.count = availableResults.intValue();
 	}
-
 	return entities;
     }
 
@@ -869,5 +872,22 @@ public class QueryDocument<T> implements QueryInterface
 	String query = QueryDocumentUtil.constructQuery(rules, "AND");
 	System.out.println("Query is : " + query);
 	return getCount(query);
+    }
+
+    /**
+     * Simple search based on key words with type as extra parameter, which is
+     * used to fetch a particular set of either Contact or list of companies.
+     * 
+     * @param keyword
+     * @param count
+     * @param cursor
+     * @param type
+     * @return
+     */
+    @Override
+    public Collection<T> simpleSearchWithTypeAndQuery(String query, Integer count, String cursor, String type)
+    {
+	query = SearchUtil.normalizeString(query);
+	return processQuery(query + " AND type:" + type, count, cursor);
     }
 }

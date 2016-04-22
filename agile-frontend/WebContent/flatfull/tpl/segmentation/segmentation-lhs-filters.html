@@ -9,15 +9,23 @@
                   <a  id="lhs-filters-header" 
                      class="c-p text-l-none text-l-none-hover" >
                   Page Viewed
+                  <span
+                     style="color: grey; vertical-align: text-top; margin-left: -3px"> <img
+                     border="0" src="{{getS3ImagePath '/img/help.png'}}"
+                     style="height: 6px; vertical-align: top" rel="popover"
+                     data-placement="right"
+                     data-title:" data-content="  A web page viewed on the website"
+                     id="element" data-trigger="hover" " />
+                  </span>
                   <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
                   <div class="controls m-t-xs hide" id="page_viewed_div">
                      <div class="lhs-contact-filter-row pos-rlt m-t-xs">
                         <input class="form-control" type="hidden" name="LHS" value="page_viewed" />
                         <select id="between_filter" class="form-control" name="CONDITION">
                            <option value="CONTAINS">Contains</option>
-                           <option value="DOES_NOT_CONTAIN">Does not Contain</option>
-                           <option value="IS_EQUAL_TO">Is Equal to</option>
-                           <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+                           <option value="DOES_NOT_CONTAIN">Does not contain</option>
+                           <option value="IS_EQUAL_TO">Is equal to</option>
+                           <option value="IS_NOT_EQUAL_TO">Is not equal to</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO CONTAINS DOES_NOT_CONTAIN condition_container m-t-xs">
                            <span id="RHS">
@@ -38,16 +46,24 @@
                <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
                   <a  id="lhs-filters-header" 
                      class="c-p text-l-none text-l-none-hover" >
-                  Referral  
+                  Referral 
+                  <span
+                     style="color: grey; vertical-align: text-top; margin-left: -3px"> <img
+                     border="0" src="{{getS3ImagePath '/img/help.png'}}"
+                     style="height: 6px; vertical-align: top" rel="popover"
+                     data-placement="right"
+                     data-title:" data-content="&nbsp;A link clicked on a page that led to  your &nbsp;  site "
+                     id="element" data-trigger="hover" " />
+                  </span> 
                   <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
                   <div class="controls hide m-t-xs" id="referred_from_div">
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" class="form-control" value="referred_from" />
                         <select id="between_filter" name="CONDITION" class="form-control" >
                            <option value="CONTAINS">Contains</option>
-                           <option value="DOES_NOT_CONTAIN">Does not Contain</option>
-                           <option value="IS_EQUAL_TO">Is Equal to</option>
-                           <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+                           <option value="DOES_NOT_CONTAIN">Does not contain</option>
+                           <option value="IS_EQUAL_TO">Is equal to</option>
+                           <option value="IS_NOT_EQUAL_TO">Is not equal to</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO  CONTAINS DOES_NOT_CONTAIN condition_container m-t-xs">
                            <span id="RHS">
@@ -68,15 +84,23 @@
                <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
                   <a  id="lhs-filters-header"  class="c-p text-l-none text-l-none-hover" >
                   Sessions
+                  <span
+                     style=" color: grey; vertical-align: text-top; margin-left: -3px"> <img
+                     border="0" src="{{getS3ImagePath '/img/help.png'}}"
+                     style="height: 6px; vertical-align: top" rel="popover"
+                     data-placement="right"
+                     data-title:" data-content=" Number of times website is visited "
+                     id="element" data-trigger="hover" " />
+                  </span> 
                   <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
                   <div class="controls hide m-t-xs" id="webstats_div">
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" class="form-control" value="webstats" />
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="IS_EQUAL_TO">Is Equal to</option>
-                           <option value="IS_GREATER_THAN">Is Greater than</option>
-                           <option value="IS_LESS_THAN">Is Less than</option>
-                           <option value="IN_BETWEEN">In Between</option>
+                           <option value="IS_GREATER_THAN">Is greater than</option>
+                           <option value="IS_LESS_THAN">Is less than</option>
+                           <option value="IN_BETWEEN">In between</option>
+                           <option value="IS_EQUAL_TO">Is equal to</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO  IS_GREATER_THAN_OR_EQUAL_TO IS_LESS_THAN_OR_EQUAL_TO IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
                            <span id="RHS">
@@ -112,8 +136,8 @@
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" value="ip_country" class="form-control"/>
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="IS_EQUAL_TO">Is Equal to</option>
-                           <option value="IS_NOT_EQUAL_TO">Is Not Equal to</option>
+                           <option value="IS_EQUAL_TO">Is equal to</option>
+                           <option value="IS_NOT_EQUAL_TO">Is not equal to</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO  condition_container  m-t-xs">
                            <span id="RHS">
@@ -391,9 +415,9 @@
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" value="ip_states" class="form-control"/>
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="IS_EQUAL_TO">Is Equal to</option>
-                           <option value="STARTS_WITH">Starts With</option>
-                           <option value="ENDS_WITH">Ends With</option>
+                           <option value="IS_EQUAL_TO">Is equal to</option>
+                           <option value="STARTS_WITH">Starts with</option>
+                           <option value="ENDS_WITH">Ends with</option>
                            <option value="CONTAINS">Contains</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO   STARTS_WITH  ENDS_WITH  CONTAINS DOES_NOT_CONTAIN condition_container  m-t-xs">
@@ -421,9 +445,9 @@
                      <div class="lhs-contact-filter-row pos-rlt">
                         <input type="hidden" name="LHS" value="ip_city" class="form-control"/>
                         <select id="between_filter" name="CONDITION" class="form-control" >
-                           <option value="IS_EQUAL_TO">Is Equal to</option>
-                           <option value="STARTS_WITH">Starts With</option>
-                           <option value="ENDS_WITH">Ends With</option>
+                           <option value="IS_EQUAL_TO">Is equal to</option>
+                           <option value="STARTS_WITH">Starts with</option>
+                           <option value="ENDS_WITH">Ends with</option>
                            <option value="CONTAINS">Contains</option>
                         </select>
                         <div class="IS_EQUAL_TO IS_NOT_EQUAL_TO   STARTS_WITH  ENDS_WITH  CONTAINS DOES_NOT_CONTAIN condition_container  m-t-xs">
@@ -438,13 +462,12 @@
                </div>
             </div>
          </div>
-         <div class="bg-light">
-            <span class="pull-left ">  
-            <a id="clear-lhs-segmentation-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear</a>
-            </span>
-            <div class="clearfix"></div>
-         </div>
       </div>
+      <div class="bg-light">
+      <span class="pull-left m-l-md">
+      <a id="clear-lhs-segmentation-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear</a>
+      </span>
+      <div class="clearfix"></div>
    </fieldset>
 </form>
 </script>

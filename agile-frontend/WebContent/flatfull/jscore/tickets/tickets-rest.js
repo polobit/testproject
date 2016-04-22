@@ -29,6 +29,7 @@ var Tickets_Rest={
 				{
 				    $(".ticket-addnote-close").removeAttr("disabled");
 				    $(".ticket-send-reply .btn").removeAttr("disabled");
+				    $('.ticket_change_slatime').removeAttr("disabled");
                 	$('#ticket_change_sla').removeAttr("disabled");                    	
                 	$(".close-current-ticket").removeAttr("disabled");
                 	if($('#ticket_change_sla').val() != "")
@@ -40,6 +41,7 @@ var Tickets_Rest={
 				    $(".ticket-addnote_close").attr("disabled","disabled"); 
 					$(".ticket-send-reply .btn").attr("disabled","disabled");
 					$('#ticket_change_sla').attr("disabled","disabled");
+					$('.ticket_change_slatime').attr("disabled","disabled");
 					$(".close-current-ticket").attr("disabled","disabled");
 					$(".ticket_status").val("CLOSED");
 
@@ -281,11 +283,13 @@ var Tickets_Rest={
 
 	 	Tickets.updateModel(url, json, function(model){
 
-    		$('#ticket_change_sla').val(''); 
+    		$('#ticket_change_sla').val('');
+    		$('.ticket_change_slatime').timepicker('setTime', '');
 
     		$(".remove-date").css("display", "none");
 
-	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID,{due_time:''});
+	 		App_Ticket_Module.ticketView.model.set({due_time:''}, {silent:true});
+	 		Tickets_Rest.updateDataInModelAndCollection(Current_Ticket_ID, {due_time:''});
 
 	 		Ticket_Utils.showNoty('information', "Due date has been removed",'bottomRight', 5000);
 

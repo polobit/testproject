@@ -1,7 +1,9 @@
 package com.agilecrm.search;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +42,8 @@ public class AppengineSearch<T>
 
 	try
 	{
-	    builder = (BuilderInterface) Class.forName("com.agilecrm.search.document." + type + "Document").newInstance();
+	    builder = (BuilderInterface) Class.forName("com.agilecrm.search.document." + type + "Document")
+		    .newInstance();
 
 	    index = builder.getIndex();
 	    query = new QueryDocument<T>(index, clazz);
@@ -85,7 +88,6 @@ public class AppengineSearch<T>
 	builder.delete(id);
     }
 
-    
     /**
      * It is similar to simple search, but it takes an extra parameter 'type'.
      * Type indicates type of the contact either PERSON or COMPANY
@@ -99,10 +101,10 @@ public class AppengineSearch<T>
     @SuppressWarnings("rawtypes")
     public Collection getSearchResults(String keyword, Integer count, String cursor)
     {
-	
+
 	return query.processQuery(keyword, count, cursor);
     }
-    
+
     /**
      * Initializes search on keword, send count an cursor to limit results
      * according to count
@@ -137,8 +139,9 @@ public class AppengineSearch<T>
 	    return query.simpleSearch(keyword, count, cursor);
 	return query.simpleSearchWithType(keyword, count, cursor, type);
     }
-    
-    //contact along with the company to search while adding the relation at the time of adding the deals
+
+    // contact along with the company to search while adding the relation at the
+    // time of adding the deals
     @SuppressWarnings("rawtypes")
     public Collection getSimpleSearchResultsWithCompany(String keyword, Integer count, String cursor, String type)
     {
@@ -146,27 +149,27 @@ public class AppengineSearch<T>
 	if (StringUtils.isEmpty(type)){
 		List<Contact> queryList  = (List<Contact>) query.simpleSearch(keyword, count, cursor);
 		System.out.println( queryList.size());
-		if(queryList.size() == 10){
+		if(queryList.size() == count){
 			Set<String> set = new HashSet<String>();
 			for (Contact  temp : queryList) {
 				if(temp.type.name().equals("PERSON")){
 					set.add(temp.contact_company_id);
 				}
 			}
-			if (set.size() == 1){
-				String id = set.iterator().next().toString();
-				Contact contact = ContactUtil.getContact(Long.parseLong(id));
-				queryList.remove(9);
-				queryList.add(0, contact);
-									
+			Iterator iterator = set.iterator();
+			if (set.size() == 1 && iterator.hasNext())
+			{
+			    String id = iterator.next().toString();
+			    Contact contact = ContactUtil.getContact(Long.parseLong(id));
+			    queryList.remove(9);
+			    queryList.add(0, contact);
+
 			}
 		}
-		return queryList;
+	    return queryList;
 	}
 	return query.simpleSearchWithType(keyword, count, cursor, type);
     }
-
-    
 
     /**
      * Calls advanced search method in query document. It queries based on set
@@ -196,8 +199,10 @@ public class AppengineSearch<T>
     {
 	return query.advancedSearch(rules, count, cursor, orderBy);
     }
-    
-    /**Get search results based on conditions given in the filter.
+
+    /**
+     * Get search results based on conditions given in the filter.
+     * 
      * @param filter
      * @param count
      * @param cursor
@@ -205,7 +210,8 @@ public class AppengineSearch<T>
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public Collection getAdvacnedSearchResultsForFilter(SearchFilter filter, Integer count, String cursor, String orderBy)
+    public Collection getAdvacnedSearchResultsForFilter(SearchFilter filter, Integer count, String cursor,
+	    String orderBy)
     {
 	return query.advancedSearch(filter, count, cursor, orderBy);
     }
@@ -225,4 +231,29 @@ public class AppengineSearch<T>
 	return query.advancedSearchCount(rules);
     }
 
+    public void addAsync(T entity)
+    {
+	builder.addAsync(entity);
+    }
+
+    /**
+     * It gives direct results without search tokens query. Its property based
+     * search with Documents.
+     * 
+     * @param queryString
+     *            - Should have the field_name : field_value
+     * @param count
+     * @param cursor
+     * @param type
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection getSimpleSearchResultsWithQuery(String queryString, Integer count, String cursor, String type)
+    {
+	System.out.println("simple search with type");
+	if (!StringUtils.isEmpty(type))
+	    return query.simpleSearchWithTypeAndQuery(queryString, count, cursor, type);
+
+	return new ArrayList();
+    }
 }

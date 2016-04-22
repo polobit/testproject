@@ -4,13 +4,13 @@
 	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
     	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
     	{{#is_mobile}}
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu">
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu" role="menu">
     	   	<li>
             	<a href="#contact-view-prefs">Add/Remove Columns</a>
         	</li>
     	</ul>
     	{{else}}
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
         	<!--<li>
             	<a href="#contacts" class="DefaultView">Default</a>
 				 a href="#contacts" class="GridView">Grid View</a 
@@ -26,10 +26,11 @@
 	</div>
 
     <div class="btn-group">
-        <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
-        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 
-		<ul class="dropdown-menu pull-right">
+        <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+
+		<ul class="dropdown-menu pull-right" role="menu">
 			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
             <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">Add Dashlet</a></li>
 		</ul>
@@ -59,7 +60,7 @@
 
 
 
-<ul id="contact-view-model-list" class="pull-right dropdown-menu">			
+<ul id="contact-view-model-list" class="pull-right dropdown-menu" role="menu">			
 			
         	<li>
             	<a href="#company-view-prefs">Add/Remove Columns</a>
@@ -67,7 +68,7 @@
     	</ul>
 
     	{{else}}
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
  	
 
         	<li>
@@ -79,9 +80,9 @@
 	</div>
     <div class="btn-group">
         <a href="#companyModal" class="btn btn-default btn-sm" data-toggle="modal"><i class="icon-plus-sign"></i> Add Company</a>
-        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 		
-<ul class="dropdown-menu pull-right">
+<ul class="dropdown-menu pull-right" role="menu">
 			<li><a href="#import">Import</a></li>
 			
 			
