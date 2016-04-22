@@ -43,6 +43,7 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.CustomFieldData;
@@ -1350,6 +1351,57 @@ public class DealsAPI
     	if(dealCount > 0)
     		return "success";
     	return "fail";
+    }
+    @Path("/deleteDealTag")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity deleteDealTag(@QueryParam("tag") String tag,@QueryParam("id") Long id)
+    {
+    	if(id != null && tag != null){
+    		Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+    		for(int i=0;i<opportunity.tagsWithTime.size();i++){
+    			if(opportunity.tagsWithTime.get(i).tag.equals(tag)){
+    				opportunity.tagsWithTime.remove(i);
+    			}
+    		}
+    		try
+    		{
+    		    ActivitySave.createDealEditActivity(opportunity);
+    		}
+    		catch (Exception e)
+    		{
+    		    e.printStackTrace();
+    		}
+    		opportunity.save();
+    		return opportunity;
+    	}
+    	return null;
+    }
+    @Path("/AddDealTag")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity AddDealTag(@QueryParam("tag") String tag,@QueryParam("id") Long id)
+    {
+    	if(id != null && tag != null){
+    		Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+    		Tag newTag = new Tag();
+    		newTag.tag = tag;
+    		opportunity.tagsWithTime.add(newTag);
+    		opportunity.updateDealTagsEntity(opportunity);
+    		try
+    		{
+    		    ActivitySave.createDealEditActivity(opportunity);
+    		}
+    		catch (Exception e)
+    		{
+    		    e.printStackTrace();
+    		}
+    		opportunity.save();
+    		return opportunity;
+    	}
+    	return null;
     }
 }
 

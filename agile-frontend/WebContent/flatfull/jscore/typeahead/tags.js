@@ -82,6 +82,7 @@ function setup_tags_typeahead(callback) {
     		if((this.$element).closest(".control-group").hasClass('save-tag')){
     			
     			var json = null;
+                var id =null;
                 var url = 'core/api/contacts';
     			if(callback!=undefined)
     			{ callback(tag);
@@ -90,7 +91,8 @@ function setup_tags_typeahead(callback) {
                 if(App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
                    
                     json =  App_Deal_Details.dealDetailView.model.toJSON();
-                    url = 'core/api/opportunity' ; 
+                    id = App_Deal_Details.dealDetailView.model.id;
+                    url = 'core/api/opportunity/AddDealTag?tag='+tag+'&id='+id; 
                 }
     			else if(company_util.isCompany())
     				json = App_Companies.companyDetailView.model.toJSON();
@@ -176,12 +178,15 @@ function setup_tags_typeahead(callback) {
     	if(e.which == 13 && !isTagsTypeaheadActive)
     		{
     			e.preventDefault();
+                var tag = $(this).val().trim();
                 var json = null;
+                var id = null;
                 var url = null;
                 if(App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
     			
     			     json = App_Deal_Details.dealDetailView.model.toJSON();
-                     url = 'core/api/opportunity' ;
+                     id = App_Deal_Details.dealDetailView.model.id;
+                     url = 'core/api/opportunity/AddDealTag?tag='+tag+'&id='+id;
                 }
                 else {
 
@@ -189,8 +194,6 @@ function setup_tags_typeahead(callback) {
                      url = 'core/api/contacts' ;
                 }
     	
-    			var tag = $(this).val().trim();
-    			
     			if(!tag || tag.length<=0 || (/^\s*$/).test(tag))
     			{
     				return;

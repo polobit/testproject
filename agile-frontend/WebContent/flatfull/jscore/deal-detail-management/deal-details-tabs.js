@@ -72,20 +72,14 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	var targetEl = $(e.currentTarget);
 
 		var tag = $(targetEl).attr("tag");
-		removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
-		console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
-		
+	   	var id = App_Deal_Details.dealDetailView.model.id;
      	var json = App_Deal_Details.dealDetailView.model.toJSON();
-     	
-     	// Returns contact with deleted tag value
-     	json = delete_contact_tag(json, tag);
-     	var that = targetEl;
+       	var that = targetEl;
      	
      	// Unbinds click so user cannot select delete again
      	$(targetEl).unbind("click");
-     	
-        var deal = new Backbone.Model();
-        deal.url = 'core/api/opportunity';
+     	var deal = new Backbone.Model();
+		deal.url = 'core/api/opportunity/deleteDealTag?tag='+tag+'&id='+id;
         deal.save(json, {
        		success: function(data)
        			{ 	      		
@@ -97,7 +91,6 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	       			App_Deal_Details.dealDetailView.render(true);
 	       		}
         });
-	
     },
      /**
 	 * "click" event of add button of tags form in contact detail view
@@ -124,6 +117,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		
 		if(new_tags) {
 			var json = App_Deal_Details.dealDetailView.model.toJSON();
+			var id = App_Deal_Details.dealDetailView.model.id;
 	    		
 	    	
 	    	// Reset form
@@ -142,7 +136,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	   			
 		    	// Save the contact with added tags
 		    	var contact = new Backbone.Model();
-		        contact.url = 'core/api/opportunity';
+		        contact.url = 'core/api/opportunity/AddDealTag?tag='+new_tags+'&id='+id;
 		        contact.save(json,{
 		       		success: function(data){
 		       			
