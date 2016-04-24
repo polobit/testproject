@@ -1095,6 +1095,15 @@ public class OpportunityUtil
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
+	    
+	    //Add tag for the filter also
+	    if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+		{
+		    String tagCondition = filterJson.getString("dealTagCondition");
+		    String tagValue = filterJson.getString("dealTagName");
+		    if( tagCondition.equals("is"))
+		    	searchMap.put("tagsWithTime.tag", tagValue);
+		}
 
 	    /*
 	     * Map<String, Object> customFilters =
@@ -1231,6 +1240,14 @@ public class OpportunityUtil
     		 KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId());
     		 query.addFilter("pipeline", FilterOperator.EQUAL, KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId()));
     		 
+    		 if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+    			{
+    			    String tagCondition = filterJson.getString("dealTagCondition");
+    			    String tagValue = filterJson.getString("dealTagName");
+    			    if( tagCondition.equals("is"))
+    			    	query.addFilter("tagsWithTime.tag",FilterOperator.EQUAL,tagValue);
+    			}
+
 		      System.out.println("hello n try block "+filterJson.getLong("pipeline_id"));
 		      List<Entity> deals = dataStore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 		      System.out.println("deals size in projection query = "+deals.size());
@@ -3093,6 +3110,13 @@ public class OpportunityUtil
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
+	    if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+	  		{
+	  		    String tagCondition = filterJson.getString("dealTagCondition");
+	  		    String tagValue = filterJson.getString("dealTagName");
+	  		    if( tagCondition.equals("is"))
+	  		    	searchMap.put("tagsWithTime.tag", tagValue);
+	  		}
 
 	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
 	}

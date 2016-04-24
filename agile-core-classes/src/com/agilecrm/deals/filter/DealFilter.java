@@ -74,6 +74,13 @@ public class DealFilter {
      */
     public Long created_time = 0L;
     
+    //deal tag filter added 
+    @NotSaved(IfDefault.class)
+    public String dealTagCondition = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dealTagName = null;
+    
     // Dao
     public static ObjectifyGenericDao<DealFilter> dao = new ObjectifyGenericDao<DealFilter>(DealFilter.class);
     
