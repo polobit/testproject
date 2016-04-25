@@ -65,6 +65,8 @@ public class ProPlanLimits extends PlanLimits
 		 * Milestones
 		 */
 		addTracks = true;
+		
+		checkTicketSLA = true;
 	}
 
 }

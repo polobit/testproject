@@ -23,7 +23,7 @@
                "dynamicValue": "id",
                "appendToDynamicName": "group_name",
                "options": {
-            	   "Ticket Assignee Group": "{{ticket.groupID}}"
+            	   "Ticket Group": "{{ticket.groupID}}"
 			    },
                "fieldType": "dynamicselect",
                "type": "select"

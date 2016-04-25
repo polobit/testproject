@@ -9,11 +9,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * <code>HTTPUtil</code> is a utility class used to access data from remote
@@ -65,6 +70,48 @@ public class HTTPUtil
 	}
 	return null;
     }
+    
+    public static String accessURLWithHeaders(String url,HashMap<String,String> hashmapKeyValues)
+    {
+	try
+	{
+	    URL yahoo = new URL(url);
+	    URLConnection conn = yahoo.openConnection();
+
+	    // Set Connection Timeout as Google AppEngine has 5 secs timeout
+	    conn.setConnectTimeout(600000);
+	    conn.setReadTimeout(600000);
+	    
+	    Set<String> keys = hashmapKeyValues.keySet();
+	    Iterator<String> iterator = keys.iterator();
+	    
+	    while(iterator.hasNext())
+	    {
+		// Construct headers
+	    String key = iterator.next();
+		conn.addRequestProperty(key,hashmapKeyValues.get(key));
+	    }
+
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+	    String output = "";
+	    String inputLine;
+	    while ((inputLine = reader.readLine()) != null)
+	    {
+		output += inputLine;
+	    }
+	    reader.close();
+
+	    return output;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println(e.getMessage());
+	}
+	return null;
+    }
+
 
     /**
      * Connects to the remote object based on the given url and reads the
@@ -173,6 +220,73 @@ public class HTTPUtil
 
 	return output;
     }
+    
+    /**
+     * Connects to the remote object to write (post) the given data and reads
+     * the response of it to return
+     * 
+     * @param postURL
+     * @param data
+     * @param hashmapKeyValues
+     * @return response of the remote object
+     * @throws Exception
+     */
+    public static String accessURLWithHeaderUsingPost(String postURL, String data,HashMap<String,String> hashmapKeyValues) throws Exception
+    {
+	// Send data
+	URL url = new URL(postURL);
+	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	conn.setDoOutput(true);
+
+	// Set Connection Timeout as Google AppEngine has 5 secs timeout
+	conn.setConnectTimeout(600000);
+	conn.setReadTimeout(600000);
+	
+	Set<String> keys = hashmapKeyValues.keySet();
+    Iterator<String> iterator = keys.iterator();
+    
+    while(iterator.hasNext())
+    {
+	// Construct headers
+    String key = iterator.next();
+	conn.addRequestProperty(key,hashmapKeyValues.get(key));
+    }
+
+	
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+	if (data != null)
+	{
+	    wr.write(data);
+	    wr.flush();
+	}
+
+	InputStream is = null;
+	
+    try
+    {
+    	is = conn.getInputStream();
+    }
+    catch(IOException ie)
+    {
+    	System.err.println("IOException occured, getting error stream.");
+    	is = conn.getErrorStream();
+    }
+	
+	// Get the response
+	BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+	String output = "";
+	String inputLine;
+	while ((inputLine = reader.readLine()) != null)
+	{
+	    output += inputLine;
+	}
+
+	wr.close();
+	reader.close();
+
+	return output;
+    }
+
 
     /**
      * Opens a HTTP connection and process request based on given method type
