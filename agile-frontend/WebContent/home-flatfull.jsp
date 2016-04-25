@@ -313,7 +313,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-large icon-screenshot"></i>
-      <span>Segments</span>  
+      <span>Visitors</span>  
     </a>
   </li>
   <li id="landing-pages-menu">

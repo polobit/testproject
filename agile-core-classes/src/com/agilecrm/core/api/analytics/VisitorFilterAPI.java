@@ -108,7 +108,7 @@ public class VisitorFilterAPI
     
     @Path("/query/list/{filter_id}")
     @POST
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON + ";charset=utf-8" , MediaType.APPLICATION_XML })
     public String getQueryResultsList(@PathParam("filter_id") String id, @FormParam("page_size") String countString,
 	    @FormParam("cursor") String cursorString, @FormParam("start_time") Long startTime,
 	    @FormParam("end_time") Long endTime, @FormParam("timeZone") String timeZone)

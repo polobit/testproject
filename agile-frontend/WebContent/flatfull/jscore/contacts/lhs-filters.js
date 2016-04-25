@@ -685,8 +685,14 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
                 url : '/core/api/web-stats/filters',
                 postRenderCallback: function(
                                 el, collection) {
-                   if(!collection[0]){ $("#saveSegmentFilterForm .choose-segment-filter").prop("disabled",true);}
-                   addModalEvent("segmentsModal",collection);           
+                  
+                   addModalEvent("segmentsModal",collection);
+                    if(!collection[0]){ 
+                   	$("#saveSegmentFilterForm .choose-segment-filter").prop("disabled",true);
+               		$("#saveSegmentFilterForm .replace-segment label").css('cursor','default');
+               		$("#saveSegmentFilterForm .replace-segment label").css('color','grey');
+
+               		}           
 
                  },
 
@@ -699,7 +705,8 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
                 prePersist : function(model)
                 {
                     var json = {};
-                    json.segmentConditions=_agile_get_prefs("dynamic_visitors_filter").toString();
+                    if(_agile_get_prefs("dynamic_visitors_filter"))
+                    	json.segmentConditions=_agile_get_prefs("dynamic_visitors_filter").toString();
                     var formJSON = model.toJSON();
 
                     if(formJSON['save-type'] == 'replace'){

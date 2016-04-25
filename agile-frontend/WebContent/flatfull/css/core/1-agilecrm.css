@@ -3709,7 +3709,7 @@ opacity: .3;
 	top : 3px;
 }
 
-#segment-filter-list-model-list .segment-lilist button{
+#segment-filter-list-model-list .segment-lilist .remove-segment-filter{
 
     float: right;
     background: transparent;
@@ -3730,6 +3730,9 @@ opacity: .3;
 li .segment-lilist{
 	  display: block;
 	  padding: 5px 15px;
+}
+li .visitor-filter{
+   width: 80%;
 }
 
 li .segment-lilist:hover {

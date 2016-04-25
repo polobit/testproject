@@ -159,6 +159,12 @@ function  addModalEvent(modal,collection){
             $('#save-replace-type').prop('checked', true);
 
         }); 
+    $('#'+ modal).on('click', '.save', function(e)
+        {   
+           e.preventDefault();
+           disable_save_button($('#segmentsModal .save'));
+
+        }); 
 
     $('#'+ modal).on('change', '#saveSegmentFilterForm .choose-segment-filter select', function(e)
     {
@@ -264,22 +270,23 @@ function setupSegmentFilterList(cel,id)
                 {   
                     if(collection.length==0)
                         $('#filters-tour-step >button').addClass("disabled");
+
                     else
                         $('#filters-tour-step >button').removeClass("disabled");
                     addEventFilter("segment-filter-list-model-list"); 
                     if(id){
                         var filter_name=collection.get(id).attributes.name;
 
-                        if(_agile_get_prefs('visitor_filter')){                        
+                        if(_agile_get_prefs('visitor_filter') && filter_name!= $('#filters-tour-step button i span').text()){                        
                             deserializeLhsFilters($('#lhs-contact-filter-form'), collection.get(id).attributes.segmentConditions);      
                         }else{
                          _agile_delete_prefs('dynamic_visitors_filter');
                          _agile_set_prefs('visitor_filter',id);
                         }                     
-
-                        var addFilterName='<span class="segment-filter-name" style= "padding-left:3px;">'+filter_name +'</span>';
-                        $('#filters-tour-step').find('#segment-filter').append(addFilterName);
-
+                        if(filter_name!= $('#filters-tour-step button i span').text()){
+                            var addFilterName='<span class="segment-filter-name" style= "padding-left:3px;">'+filter_name +'</span>';
+                            $('#filters-tour-step').find('#segment-filter').append(addFilterName);
+                        }
                     } 
                     else
                        $('#filters-tour-step').find('#segment-filter').find('.segment-filter-name').remove();
