@@ -1,32 +1,19 @@
-var ReferelRouter = Backbone.Router.extend({
 
-	routes : {
 
-	"referrals" : "referrelprogram",
-	"refer" : "refer",
-	"refer-friends" : "referFriends",
-	"users-refered" : "userrefered"
-	},
+Referals_HARD_RELOAD = true;
+var REFER_DATA;
 
-	referrelprogram : function()
+var ReferalsRouter = Backbone.Router.extend({		
+	/* Referrals */
+		"refer" : "refer",
+		"refer-friends" : "referFriends",
+		"users-refered" : "userrefered",
+},
+initialize : function()
 	{
-
-		head.js(LIB_PATH + '../lib/zeroclipboard/ZeroClipboard.js', function()
-		{
-			referelsview = new Base_Collection_View({ url : '/core/api/users/getreferedbyme?reference_domain=' + CURRENT_DOMAIN_USER.domain,
-				templateKey : "referrals", individual_tag_name : 'tr', postRenderCallback : function(el)
-				{
-
-					initZeroClipboard("url_clip_button", "referral_url");
-
-				} });
-
-			referelsview.collection.fetch();
-
-			$('#content').html(referelsview.render().el);
-		});
+		
 	},
-	refer : function()
+	 refer : function()
 	{
 		Agile_GA_Event_Tracker.track_event("Refer");
 		load_facebook_lib_for_referrals();
@@ -63,17 +50,11 @@ var ReferelRouter = Backbone.Router.extend({
 	 * Fetches all the Users refered by the current domain user and show the plan 
 	 * the new users subscribed to and dispaly the time when they had created
 	 */
-	userrefered : function(el)
+	userrefered : function()
 	{
 		console.log("userrefered");
-		var Subscribers = new Base_Collection_View({ url :'core/api/refer/refered_domains',  templateKey : "refer-users",postRenderCallback :function(el){
-			console.log("Subscribers")
-		}
+		var Subscribers = new Base_Collection_View({ url :'/core/api/refer/refered_domains',  templateKey : "users-refered"
 			});
-		Subscribers.collection.fetch();
-		$("#referModal").hide();
 		$('#content').html(Subscribers.render().el);
-
 	}
-
-	 });
+	
