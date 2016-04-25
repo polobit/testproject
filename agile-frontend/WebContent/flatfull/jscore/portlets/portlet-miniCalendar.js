@@ -611,10 +611,11 @@ function googledata(el,response,startTime,endTime)
 								return false;
 
 							}
+							if(index==len-1)
+		            			  $(this).parents('.list').append(event_list) ;
 
 							});
-								if(index==len-1)
-		            			  $(this).parents('.list').append(event_list) ;
+								
 
 								}
 					else
@@ -774,10 +775,10 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 							$(this).parents('li').before(event_list);
 							return false;
 						}
-
-					});
-					if(index==len-1)
+						if(index==len-1)
 		            	$(this).parents('.list').append(event_list) ;
+					});
+					
 				} else{
 					$(el).find('.list').append(event_list);
 				}
