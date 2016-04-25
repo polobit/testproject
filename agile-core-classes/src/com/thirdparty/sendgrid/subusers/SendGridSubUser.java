@@ -505,6 +505,7 @@ public class SendGridSubUser extends SendGridLib
 			
 			response = HTTPUtil.accessURLUsingAuthentication(url + queryString, username, password,
 					"DELETE", null, false, "application/json", "application/json");
+			System.out.println("Subuser account deleted successfully from SendGrid :"+domain);
 		}
 		catch (Exception e)
 		{
@@ -514,6 +515,9 @@ public class SendGridSubUser extends SendGridLib
 		return response;
 	}
 	
+	public static void main(String adf[]){
+		deleteSubAccountFromSendGrid("prashannjeet");
+	}
 	/**
 	 * Add SendGrid sub account creation task in Deferred queue
 	 * @param domainUser

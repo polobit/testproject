@@ -300,7 +300,6 @@ public class TicketNotesUtil
 
 		mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
 
-		System.out.println("mailJSON: " + mailJSON);
 		long start_time = System.currentTimeMillis();
 
 		response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL,
