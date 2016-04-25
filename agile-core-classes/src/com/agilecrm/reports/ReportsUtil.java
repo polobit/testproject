@@ -230,11 +230,11 @@ public class ReportsUtil {
 		JSONArray jsonArray = new JSONArray();
 
 		// Fetches report based on report id
+		String timeZone = getTimeZoneOffSet(TimeZone
+				.getTimeZone(report.report_timezone));
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String endDate = sdf.format(dt);
-		String timeZone = getTimeZoneOffSet(TimeZone
-				.getTimeZone(report.report_timezone));
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new DateUtil().toMidnight().getTime());
@@ -296,14 +296,13 @@ public class ReportsUtil {
 								startDate, endDate, timeZone);
 			}
 
-			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 			Date date;
 			try
 			{
 					date = sdf.parse(startDate);
-					startDate = df.format(date);
+					startDate = DateUtil.getCalendarString(date.getTime(),"dd/MM/yyyy", timeZone);
 					date = sdf.parse(endDate);
-					endDate = df.format(date);
+					endDate = DateUtil.getCalendarString(date.getTime(),"dd/MM/yyyy", timeZone);
 			} catch (ParseException e) {
 				System.out.println("Campaign report date format is invalid..");
 				e.printStackTrace();
@@ -1337,9 +1336,8 @@ public class ReportsUtil {
 		}
 		
 		//for showing duration in template
-		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		String sdate=df.format(startCal.getTime());
-		String edate=df.format(cal.getTime());
+		String sdate=DateUtil.getCalendarString(startCal.getTimeInMillis(),"dd/MM/yyyy", timeZone);
+		String edate=DateUtil.getCalendarString(cal.getTimeInMillis(),"dd/MM/yyyy", timeZone);
 		JSONObject data=new JSONObject();
 		try {
 			data.put("log_type", "durationBetween");
@@ -1357,5 +1355,5 @@ public class ReportsUtil {
 		return campaignEmailsJSONArray;
 
 	}
-
+	
 }
