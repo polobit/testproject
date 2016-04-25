@@ -136,10 +136,10 @@ public class SendgridInboundParser extends HttpServlet
 
 					if (toAddressArray.length < 2)
 						return;
-					
+
 					// Adding record to tickets backup db
 					backupKey = new TicketsBackup(json.toString(), toAddressArray[0]).save();
-					
+
 					saveTicket(json, toAddressArray);
 
 					// Removing backup if everything is ok
@@ -158,6 +158,7 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Converts the json object into ticket object and saves to db.
 	 * 
 	 * @param json
 	 * @param key
@@ -436,9 +437,11 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Reads the from name and email address from posted data.
 	 * 
 	 * @param json
-	 * @return
+	 * @return string array containing name at first index and from address at
+	 *         second index.
 	 */
 	private String[] getNameAndEmail(JSONObject json)
 	{
@@ -473,8 +476,10 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Splits to address into array of namespace and groupid.
 	 * 
-	 * @return
+	 * @return a string array containing namespace at first index and group id
+	 *         in second index.
 	 */
 	public String[] getNamespaceAndGroup(String toAddress)
 	{
@@ -490,6 +495,8 @@ public class SendgridInboundParser extends HttpServlet
 
 		if (toAddressArray.length < 2)
 		{
+			// Earlier we have provided forwarding email's with plus delimeter.
+			// This is fall-back code to handle those addresses.
 			toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
 
 			System.out.println("toAddressArray with plus delimeter: " + Arrays.toString(toAddressArray));
@@ -593,15 +600,7 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
-	 * If received ticket is reply to existing ticket then email address will be
-	 * in the form of namespace+groupid+ticketid@helptor.com
-	 */
-	// public static boolean isNewTicket(String[] toAddressArray)
-	// {
-	// return (toAddressArray.length == 3) ? false : true;
-	// }
-
-	/**
+	 * Returns ticket ID from HTML content
 	 * 
 	 * @param htmlContent
 	 * @return ticketID
@@ -662,10 +661,5 @@ public class SendgridInboundParser extends HttpServlet
 		System.out.println("Added saved document....");
 
 		return service;
-	}
-
-	public static void main(String[] args) throws Exception
-	{
-		System.out.println("reply\r\ntest..\r\n\r\n".trim());
 	}
 }

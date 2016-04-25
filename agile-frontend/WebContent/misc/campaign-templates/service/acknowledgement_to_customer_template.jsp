@@ -38,8 +38,8 @@
                 "name": "Email User",
                 "thumbnail": "json/nodes/images/ticket/email-user.png",
                 "icon": "json/nodes/icons/ticket/email-user.png",
-                "info": "Check if a link in the email is clicked within a specified duration.",
-                "help": "Check if a link in the email is clicked within a specified duration.",
+                "info": "Send an email to requester or assignee.",
+                "help": "Send an email to requester or assignee.",
                 "author": "John",
                 "company": "mantra",
                 "language": "en",
@@ -88,7 +88,7 @@
                         "type": "text"
                     },
                     {
-                        "label": "Write label for email user",
+                        "label": "Send an email to requester or assignee.",
                         "category": "Help",
                         "fieldType": "label",
                         "type": "label"

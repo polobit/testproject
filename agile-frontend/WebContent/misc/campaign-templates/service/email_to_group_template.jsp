@@ -38,8 +38,8 @@
                 "name": "Email Group",
                 "thumbnail": "json/nodes/images/ticket/email-group.png",
                 "icon": "json/nodes/icons/ticket/email-group.png",
-                "info": "Check if a link in the email is clicked within a specified duration.",
-                "help": "Check if a link in the email is clicked within a specified duration.",
+                "info": "Send an email to assigned ticket group.",
+                "help": "Send an email to assigned ticket group.",
                 "author": "John",
                 "company": "mantra",
                 "language": "en",
@@ -87,7 +87,7 @@
                         "type": "text"
                     },
                     {
-                        "label": "Write label for email group",
+                        "label": "Send an email to assigned ticket group.",
                         "category": "Help",
                         "fieldType": "label",
                         "type": "label"
