@@ -71,5 +71,25 @@ public class DashboardUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * Gets the dashboard with name
+	 *  
+	 * @return {@link Dashboard}
+	 */
+	public static Dashboard getDashboardWithName(String name){
+		try {
+			if(name != null){
+				Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+				
+				return dao.ofy().query(Dashboard.class).filter("agileUser", userKey).filter("name", name.trim()).get();
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
 
 }

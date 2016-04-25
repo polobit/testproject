@@ -1068,8 +1068,11 @@ $('.show_screeshot').off('click touchstart').on(
 					//var routes=route.split(',');
 		var portlet_type = $(this).attr("portlet_type");
 				var p_name = $(this).attr("portlet_name");
+
+				var dashlet_JSON = {};
+				dashlet_JSON["name"] = p_name;
 				
-				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo'));
+				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo', dashlet_JSON));
 				
 
 					  
@@ -1261,11 +1264,11 @@ function clickfunction(that,url,forAll,route){
 							$('#zero-portlets').hide();
 						if ($('#no-portlets').is(':visible'))
 							$('#no-portlets').hide();
-						if(data.toJSON().name=='Mini Calendar' || data.toJSON().name=='Agenda'){
-						App_Portlets.navigate("dashboard", {
-							trigger : true
-						});
-					}
+						/*if(data.toJSON().name=='Mini Calendar' || data.toJSON().name=='Agenda'){
+							App_Portlets.navigate("dashboard", {
+								trigger : true
+							});
+						}*/
 					},
 					error : function(model, response) {
 						alert("Failed to add.");

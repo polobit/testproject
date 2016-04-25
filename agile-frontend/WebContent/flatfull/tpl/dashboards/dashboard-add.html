@@ -2,11 +2,11 @@
 <div class="bg-light lter b-b wrapper-md">
 	{{#if id}} 
 		<h3  class="formheading h3 font-thin m-n">Edit Dashboard
-			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="Use dashboards to give over-arching views of your data which are made up of dashlets. You can configure your preferred dashlets and show the dashboards based on configured dashlets." id="element" data-trigger="hover"></span>
+			<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="User-defined dashboards allow users to create multiple dashboards for various purposes. Each of the user-defined dashboards can have different combinations of dashlets. Some examples can be Sales Dashboard, Marketing Dashboard and so on." id="element" data-trigger="hover"></span>
 		</h3>
 	{{else}}
         <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> Add Dashboard
-        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="Use dashboards to give over-arching views of your data which are made up of dashlets. You can configure your preferred dashlets and show the dashboards based on configured dashlets." id="element" data-trigger="hover">
+        	<span style="vertical-align: text-top; margin-left: -3px"> <img border="0" src="/img/help.png" style="height: 6px;" rel="popover" data-placement="bottom" data-content="User-defined dashboards allow users to create multiple dashboards for various purposes. Each of the user-defined dashboards can have different combinations of dashlets. Some examples can be Sales Dashboard, Marketing Dashboard and so on." id="element" data-trigger="hover">
 			</span>
 		</h3>
      {{/if}}
@@ -32,7 +32,8 @@
 					<div class="row">
 						<div class="form-actions col-sm-offset-2 col-sm-10">
 							<a href="#dashboards" class="btn btn-sm btn-default">Cancel</a>
-							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="dashboardAdd">Save</a> 
+							<a href="#" type="submit" class="save btn btn-sm btn-primary" id="dashboardAdd">Save</a>
+							<span class="error-message inline-block"></span> 
 						</div>
 					</div>
 					{{#if id}}

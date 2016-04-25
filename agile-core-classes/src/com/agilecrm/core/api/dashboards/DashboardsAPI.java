@@ -81,8 +81,8 @@ public class DashboardsAPI {
 	public Dashboard updateDashboard(Dashboard dashboard) throws Exception{
 		
 		if(dashboard != null){
-			Dashboard dashboard2 = DashboardUtil.getDashboard(dashboard.id);
-			if(!dashboard.name.equals(dashboard2.name)){
+			Dashboard dashboard2 = DashboardUtil.getDashboardWithName(dashboard.name);
+			if(dashboard2 != null && dashboard2.id != null && !dashboard2.id.equals(dashboard.id) && dashboard.name != null && dashboard.name.trim().equals(dashboard2.name.trim())){
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Dashboard with this name already exists.").build());
 			}
 		}

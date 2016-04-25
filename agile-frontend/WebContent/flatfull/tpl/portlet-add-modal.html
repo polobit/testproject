@@ -20,10 +20,16 @@
 					</span>
 					<select id="route-list" name="route-list" class="required form-control" multiple="multiple">
 						<option value="DashBoard">Dashboard</option>
-						<option value="Deals">Deals</option>
-						<option value="Tasks">Tasks</option>
-						<option value="Contacts">Contacts</option>
-						<option value="Events">Events</option>
+						{{#if_equals name "Mini Calendar"}}
+						{{else}}
+							{{#if_equals name "Agenda"}}
+							{{else}}
+								<option value="Deals">Deals</option>
+								<option value="Tasks">Tasks</option>
+								<option value="Contacts">Contacts</option>
+								<option value="Events">Events</option>
+							{{/if_equals}}
+						{{/if_equals}}
 						<optgroup label="Custom Dashboards">
 							{{#getCurrentUserDashboards 'portlet'}}{{/getCurrentUserDashboards}}
 						</optgroup>

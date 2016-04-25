@@ -7119,15 +7119,26 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 				if(type == 'portlet')
 				{
 					var trim_name = this.name;
+					if(trim_name)
+					{
+						trim_name = trim_name.trim();
+					}
 					if(trim_name && trim_name.length > 15)
 					{
 						trim_name = trim_name.substring(0, 15)+"...";
 					}
-					options_el += "<option value="+this.id+" class='user-dashboard'>"+trim_name+"</option>";
+					if(this.name)
+					{
+						options_el += "<option value="+this.id+" class='user-dashboard' title="+this.name.trim()+">"+trim_name+"</option>";
+					}
 				}
 				else
 				{
 					var trim_name = this.name;
+					if(trim_name)
+					{
+						trim_name = trim_name.trim();
+					}
 					if(trim_name && trim_name.length > 30)
 					{
 						trim_name = trim_name.substring(0, 30)+"...";
@@ -7169,9 +7180,9 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 	Handlebars.registerHelper('getTruncatedDashboardName', function(dashboard_name)
 	{
-		if(dashboard_name && dashboard_name.length > 30)
+		if(dashboard_name && dashboard_name.trim().length > 30)
 		{
-			return dashboard_name.substring(0, 30)+"...";
+			return dashboard_name.trim().substring(0, 30)+"...";
 		}
 		return dashboard_name;
 	});

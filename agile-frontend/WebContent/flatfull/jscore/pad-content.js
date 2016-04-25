@@ -196,8 +196,8 @@ var CONTENT_JSON = {
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"dashboards" : {
-		"title" : "You do not have any dashboards currently.",
-		"description" : "Dashboards are used to configure different type of dashlets.",
+		"title" : "There are no user-defined dashboards.",
+		"description" : "User-defined dashboards allow users to configure multiple dashboards with different dashlets for various purposes.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Dashboard",
 		"route" : "#add-dashboard",

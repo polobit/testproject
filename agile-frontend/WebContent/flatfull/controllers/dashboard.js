@@ -98,6 +98,20 @@ var DashboardsRouter = Backbone.Router.extend({
 					});
 				}
 				that.navigate("dashboards", { trigger : true });
+			},
+			errorCallback : function(response)
+			{
+				if(that.dashboards_collection_view && dashboard_json) {
+					that.dashboards_collection_view.collection.get(id).set(new BaseModel(dashboard_json), { silent : true });
+				}
+				if(response && response.responseText)
+				{
+					$("span.error-message", $("#dashboardAddForm")).html('<small><p style="color:#B94A48; font-size:14px"><i>'+response.responseText+'</i></p></small>');
+				}
+				setTimeout(function(){
+					$("span.error-message", $("#dashboardAddForm")).html("");
+				},1000);
+
 			} });
 
 		$("#content").html(dashboard_view.render().el);
