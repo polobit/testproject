@@ -474,7 +474,7 @@ function loadGoogleEventsandRender()
 		{
 			_agile_set_prefs('google_event_token', response.access_token);
 
-			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25',
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27',
 					function()
 					{
 						setupGC(function()

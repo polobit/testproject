@@ -1,4 +1,5 @@
 <script id = "contacts-custom-view-basic_info-mobile-template" type="text/html">
+	<td class="hide"></td>
 	<td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}}>
     	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
     	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
@@ -31,6 +32,7 @@
 	</div>
 	</div>
 	</td>
+	<td><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
 </script>
 
 <script id = "contacts-custom-view-image-template" type="text/html">

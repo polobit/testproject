@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
@@ -290,10 +291,8 @@ public class SendGridUtil
 			System.err.println("Exception occured while building SMTP JSON..." + e.getMessage());
 		}
     	
-	SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName,
-		EmailUtil.getEmail(sendGridDeferred.to), EmailUtil.getEmail(sendGridDeferred.cc),
-		EmailUtil.getEmail(sendGridDeferred.bcc), sendGridDeferred.subject, sendGridDeferred.replyTo,
-		sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString());
+    	SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, EmailUtil.getEmail(sendGridDeferred.to), EmailUtil.getEmail(sendGridDeferred.cc), EmailUtil.getEmail(sendGridDeferred.bcc), 
+    			sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString(), null, null, new String[]{});
     }
 
     /**

@@ -77,6 +77,8 @@ public class PlanLimits
     protected Boolean activityReports = true;
 
     protected Boolean onlineAppointment = true;
+    
+    protected Boolean checkTicketSLA = false;
 
     public Boolean getEmailGateway()
     {
@@ -403,4 +405,7 @@ public class PlanLimits
     	return emailAccountsLimit;
     }
 
+    public Boolean checkTicketSLA(){
+    	return checkTicketSLA;
+    }
 }

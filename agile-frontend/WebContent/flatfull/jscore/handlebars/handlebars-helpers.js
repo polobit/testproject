@@ -2956,7 +2956,7 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
 		return options.inverse(this)
@@ -5012,6 +5012,7 @@ $(function()
 						}
 
 						console.log(keys);
+						keys.sort();
 						var html_temp = "";
 
 						for (var i = 0; i < keys.length; i++)
@@ -5136,7 +5137,7 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
 		return options.inverse(this)
@@ -5846,6 +5847,8 @@ $(function()
 			portlet_name = "Campaign Status";
 		else if(p_name=='Average Deviation')
 			portlet_name = "Tasks Completion Time Deviation";
+		else if(p_name == 'Webstat Visits')
+			portlet_name = "Visits";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5902,6 +5905,8 @@ $(function()
 			icon_name = 'icon-flag';
 		else if (p_name == 'Lost Deal Analysis')
 			icon_name = 'icon-pie-chart';
+		else if(p_name == 'Webstat Visits')
+			icon_name = 'icon-globe';
 		return icon_name;
 	});
 	
@@ -6687,6 +6692,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
 	else if(p_name == 'Average Deviation')
 		description = 'A quick view of deviation in tasks completion times.'
+	else if (p_name== 'Webstat Visits')
+		description = 'A pie chart of Known and Unknown Visits on your website.';
 	return description;
 			});
 
@@ -7254,3 +7261,10 @@ Handlebars.registerHelper('removeSpecialCharacter',function(value){
 
 });
 
+Handlebars.registerHelper('canDeleteContact', function(owner_id, options)
+{
+	if (hasScope('DELETE_CONTACT'))
+		return options.fn(this);
+
+	return options.inverse(this)
+});

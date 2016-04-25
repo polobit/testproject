@@ -311,13 +311,14 @@ function show_custom_fields_helper(custom_fields, properties){
 		if(field.scope == "CONTACT"){
 			label_style = "col-sm-3 word-break-all";
 			field_style = "col-sm-10";
-			div_col9_style = "col-sm-9";
+			div_col9_style = "col-sm-9 company_input";
 			div_col3_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "COMPANY"){
 			label_style = "control-label col-sm-3 word-break-all";
 			modal_label_style = "control-label col-sm-3 word-break-all"; 
 			modal_control_style = "col-sm-7";
+			div_col9_style = "company_input";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "DEAL"){

@@ -717,29 +717,6 @@ public class QueryDocument<T> implements QueryInterface
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
 	    agileCursor.count = availableResults.intValue();
 	}
-	if (entities.size() == 10)
-	{
-	    Set<String> set = new HashSet<String>();
-	    int count = 0;
-	    for (Object m : entities)
-	    {
-		if (m instanceof Contact)
-		    ;
-		Contact contact = (Contact) m;
-		set.add(contact.contact_company_id);
-		count = count + 1;
-	    }
-	    if (count == 10 && set.size() == 1)
-	    {
-		String id = set.iterator().next().toString();
-		Contact contact = ContactUtil.getContact(Long.parseLong(id));
-		if (contact != null)
-		{
-		    entities.remove(9);
-		    entities.add(contact);
-		}
-	    }
-	}
 	return entities;
     }
 

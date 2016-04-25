@@ -113,6 +113,7 @@ public class JSAPIUtil
     whiteList.add("pjb98341");
     whiteList.add("fenopix");
     whiteList.add("twoprimes");
+    whiteList.add("docmosis");
     // whiteList.add("our");
     
     if(!StringUtils.isEmpty(domain) && whiteList.contains(domain))

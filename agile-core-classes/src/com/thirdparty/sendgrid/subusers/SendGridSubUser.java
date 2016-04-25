@@ -43,7 +43,8 @@ public class SendGridSubUser extends SendGridLib
 	final String SUB_USER_IPS = "ips";
 
 	public final static String AGILE_SUB_USER_NAME_TOKEN = ".agilecrm";
-	public static String AGILE_SUB_USER_PWD_TOKEN = "@127";
+	public final static String AGILE_SUB_USER_PWD_TOKEN = "@127";
+	public final static String AGILE_SUB_USER_PWD_PREPEND = ".agile";
 	
 	//Stats Attributes
 	
@@ -230,10 +231,24 @@ public class SendGridSubUser extends SendGridLib
 		throw new IllegalArgumentException("Domain " + domain + " is not valid.");
 	}
 	
+	/**
+	 * SendGrid password should be 8 characters length. Related URL is 
+	 * https://sendgrid.com/docs/Classroom/Basics/Security/password.html
+	 * 
+	 * @param domain
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
 	public static String getAgileSubUserPwd(String domain) throws IllegalArgumentException
 	{
 		if(StringUtils.isNotBlank(domain))
+		{
+			if(domain.length() <= 3)
+				return domain +  AGILE_SUB_USER_PWD_PREPEND + AGILE_SUB_USER_PWD_TOKEN;
+			
 			return domain + AGILE_SUB_USER_PWD_TOKEN;
+		}
+		
 		
 		throw new IllegalArgumentException("Domain " + domain + " is not valid.");
 	}
@@ -455,10 +470,6 @@ public class SendGridSubUser extends SendGridLib
 		return response;
 	}
 	
-	public static void main(String asd[]) throws JSONException{
-		JSONArray reputation=new JSONArray(getSendGridUserReputation("free", null));
-		System.out.println("Response "+reputation.getJSONObject(0).getString("reputation"));
-	}
 	/**
 	 * This clas is used for getting stats report of Sendgrid domain users
 	 * 
@@ -505,6 +516,7 @@ public class SendGridSubUser extends SendGridLib
 		queue.add(TaskOptions.Builder.withPayload(task));
 		
 	}
+	
 	
 	
 

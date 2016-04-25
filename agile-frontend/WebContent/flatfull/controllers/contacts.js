@@ -979,7 +979,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 			//loadPortlets('Contacts',el);
 			if(agile_is_mobile_browser()) {
-			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+			// $('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 			}
 			
 
@@ -1100,7 +1100,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				if(agile_is_mobile_browser()) {
 				
 					var $nextEle = $('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
-					$('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
+					// $('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
 				}
 				
 
@@ -1108,7 +1108,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 			}, appendItemCallback: function(el){
 				if(agile_is_mobile_browser()) {
-					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					// $('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 				}
 			}, });
 

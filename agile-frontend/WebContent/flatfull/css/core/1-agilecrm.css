@@ -3708,16 +3708,12 @@ opacity: .3;
 #lhs_filters_segmentation #lhs-filters-header i{
 	top : 3px;
 }
-.dash_tabview .nav-tabs{
-   border-color: none;
-  border-bottom: none;
-}
 .dash_tabview .tab-content{
    border-color: none;
   border: none !important;
 }
 .dash_tabview .nav-tabs li a{ border-bottom: none;}
-.dash_tabview .nav-tabs li.active a{ border-left: none;}
+
 
 @media (min-width: 767px) {
 #referModal .modal-dialog{
@@ -3754,4 +3750,18 @@ opacity: .3;
 }
 .c-na{
 	cursor: not-allowed;
+}
+
+.company_input{
+ padding-right:37px;
+}
+.company_Edit_Fields
+{
+  padding-right: 20px;
+}
+/*div.addField div.controls:not(.hide):first-child{
+  margin-top: 5px; 
+}*/
+div.addField div.controls div:first-child{
+  padding-bottom: 1px;
 }

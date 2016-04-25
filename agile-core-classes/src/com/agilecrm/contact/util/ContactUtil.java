@@ -616,7 +616,7 @@ public class ContactUtil
 
 	try
 	{
-	    int count = dao.ofy().query(Contact.class).filter("properties.name", "name").filter("type", Type.COMPANY)
+	    int count = dao.ofy().query(Contact.class).filter("properties.name", "name_lower").filter("type", Type.COMPANY)
 		    .filter("properties.value", companyName.trim().toLowerCase()).count();
 	    if (count == 0)
 	    {
