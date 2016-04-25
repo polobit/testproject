@@ -753,7 +753,7 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 			}		
 
 			//**Add the google Events in the list of events in events_show div **/
-		var len = $(".events_show").find('.list').find('li').length;
+		var len = $(".events_show",el).find('.list').find('li').length;
 		var date = new Date();
 		$.each(officeEvents,function(index,ev){
 			var todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
