@@ -106,92 +106,91 @@ public class TicketFiltersUtil
 
 				switch (LHS)
 				{
-				case "status":
-				case "ticket_type":
-				case "priority":
-				case "source":
-				case "labels":
-				case "assignee_id":
-				case "group_id":
-				{
-					if (LHS.equalsIgnoreCase("assignee_id")  && RHS.equalsIgnoreCase("0")) {
-						
-						Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
-					   
-						RHS = domainUserKey.getId() + "";
+					case "status":
+					case "ticket_type":
+					case "priority":
+					case "source":
+					case "labels":
+					case "assignee_id":
+					case "group_id":
+					{
+						if (LHS.equalsIgnoreCase("assignee_id") && RHS.equalsIgnoreCase("0"))
+						{
+
+							Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+
+							RHS = domainUserKey.getId() + "";
+						}
+
+						if (operator != null && operator.contains("not"))
+							query.append("NOT " + LHS + "=" + RHS);
+						else
+							query.append(LHS + "=" + RHS);
+
+						break;
 					}
-					
-					if (operator != null && operator.contains("not"))
-						query.append("NOT " + LHS + "=" + RHS);
-					else
-						query.append(LHS + "=" + RHS);
+					case "ticket_spam":
+					{
+						query.append("is_spam=" + (operator.equalsIgnoreCase("TICKET_IS") ? true : false));
+						break;
+					}
+					case "ticket_favorite":
+					{
+						query.append("is_favorite=" + (operator.equalsIgnoreCase("TICKET_IS") ? true : false));
+						break;
+					}
+					case "ticket_last_updated_by":
+					{
+						query.append("last_updated_by="
+								+ (operator.equalsIgnoreCase("LAST_UPDATED_BY_AGENT") ? "AGENT" : "REQUESTER"));
+						break;
+					}
+					case "subject":
+					case "notes":
+					{
+						if (operator != null && operator.contains("not"))
+							query.append("NOT " + condition.LHS + "=(" + condition.RHS + ")");
+						else
+							query.append(LHS + "=" + RHS);
 
-					break;
-				}
-				case "ticket_spam":
-				{
-					query.append("is_spam="
-							+ (operator.equalsIgnoreCase("TICKET_IS") ? true : false));
-					break;
-				}					
-				case "ticket_favorite":
-				{
-					query.append("is_favorite="
-							+ (operator.equalsIgnoreCase("TICKET_IS") ? true : false));
-					break;
-				}
-				case "ticket_last_updated_by":
-				{
-					query.append("last_updated_by="
-							+ (operator.equalsIgnoreCase("LAST_UPDATED_BY_AGENT") ? "AGENT" : "REQUESTER"));
-					break;
-				}
-				case "subject":
-				case "notes":
-				{
-					if (operator != null && operator.contains("not"))
-						query.append("NOT " + condition.LHS + "=(" + condition.RHS + ")");
-					else
-						query.append(LHS + "=" + RHS);
+						break;
+					}
+					case "hrs_since_created":
+					case "hrs_since_opened":
+					case "hrs_since_closed":
+					case "hrs_since_assigned":
+					case "hrs_since_requester_update":
+					case "hrs_since_assignee_update":
+					case "hrs_since_due_date":
+					case "hrs_untill_due_date":
+					{
+						Calendar calendar = Calendar.getInstance();
+						calendar.set(Calendar.MINUTE, 0);
+						calendar.set(Calendar.SECOND, 0);
+						calendar.add(Calendar.HOUR, 1);
 
-					break;
+						Long currentEpoch = calendar.getTimeInMillis();
+
+						Long millis = Long.parseLong(RHS) * 60 * 60 * 1000;
+						Long rhsEpoch = (currentEpoch - millis) / 1000;
+
+						if (operator != null && operator.equalsIgnoreCase("IS_GREATER_THAN"))
+							query.append(fieldsMap.get(LHS) + "<=" + rhsEpoch);
+						else
+							query.append(fieldsMap.get(LHS) + ">=" + rhsEpoch + " AND " + fieldsMap.get(LHS) + "<="
+									+ currentEpoch / 1000);
+
+						break;
+					}
+					case "created_between":
+						query.append("created_time >=" + Long.parseLong(RHS) + " AND " + "created_time <="
+								+ Long.parseLong(condition.RHS_NEW));
+						break;
+					case "due_date":
+						query.append("due_date <=" + Long.parseLong(RHS) + " AND " + "due_date > 0");
+						break;
 				}
-				case "hrs_since_created":
-				case "hrs_since_opened":
-				case "hrs_since_closed":
-				case "hrs_since_assigned":
-				case "hrs_since_requester_update":
-				case "hrs_since_assignee_update":
-				case "hrs_since_due_date":
-				case "hrs_untill_due_date":
-				{
-					Calendar calendar = Calendar.getInstance();
-					calendar.set(Calendar.MINUTE, 0);
-					calendar.set(Calendar.SECOND, 0);
-					calendar.add(Calendar.HOUR, 1);
 
-					Long currentEpoch = calendar.getTimeInMillis();
-
-					Long millis = Long.parseLong(RHS) * 60 * 60 * 1000;
-					Long rhsEpoch = (currentEpoch - millis) / 1000;
-
-					if (operator != null && operator.equalsIgnoreCase("IS_GREATER_THAN"))
-						query.append(fieldsMap.get(LHS) + "<=" + rhsEpoch);
-					else
-						query.append(fieldsMap.get(LHS) + ">=" + rhsEpoch + " AND " + fieldsMap.get(LHS) + "<="
-								+ currentEpoch / 1000);
-
-					break;
-				}
-				case "created_between":
-					query.append("created_time >=" + Long.parseLong(RHS) + " AND " + "created_time <="
-							+ Long.parseLong(condition.RHS_NEW));
-					break;
-				case "due_date":
-					query.append("due_date <=" + Long.parseLong(RHS) + " AND " + "due_date > 0");
-					break;
-				}
-				
 				query.append(" OR ");
 			}
 
@@ -234,10 +233,8 @@ public class TicketFiltersUtil
 	 * Default filters
 	 */
 	public static void saveDefaultFilters()
-	{ 
-		//For New and Open tickets filter
-		TicketFilters newTickets = new TicketFilters();
-
+	{
+		// All tickets filter
 		List<SearchRule> conditions = new ArrayList<SearchRule>();
 
 		SearchRule searchRule = new SearchRule();
@@ -245,24 +242,53 @@ public class TicketFiltersUtil
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.NEW);
 		conditions.add(searchRule);
-		
+
 		searchRule = new SearchRule();
 		searchRule.LHS = "status";
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.OPEN);
 		conditions.add(searchRule);
 
-		newTickets.name = "New and open";
+		searchRule = new SearchRule();
+		searchRule.LHS = "status";
+		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
+		searchRule.RHS = String.valueOf(Status.PENDING);
+		conditions.add(searchRule);
+
+		searchRule = new SearchRule();
+		searchRule.LHS = "status";
+		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
+		searchRule.RHS = String.valueOf(Status.CLOSED);
+		conditions.add(searchRule);
+
+		TicketFilters allTickets = new TicketFilters();
+		allTickets.name = "All Tickets";
+		allTickets.is_default_filter = true;
+		allTickets.conditions = conditions;
+		allTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
+
+		TicketFilters.dao.put(allTickets);
+
+		// New tickets filter
+		conditions = new ArrayList<SearchRule>();
+		
+		searchRule = new SearchRule();
+		searchRule.LHS = "status";
+		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
+		searchRule.RHS = String.valueOf(Status.NEW);
+		conditions.add(searchRule);
+
+		TicketFilters newTickets = new TicketFilters();
+		newTickets.name = "New tickets";
 		newTickets.is_default_filter = true;
 		newTickets.conditions = conditions;
 		newTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 		TicketFilters.dao.put(newTickets);
-        
-		//For All tickets filter
-		TicketFilters allTickets = new TicketFilters();
 
+		// For New and Open tickets filter
 		conditions = new ArrayList<SearchRule>();
+
 		searchRule = new SearchRule();
 		searchRule.LHS = "status";
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
@@ -271,47 +297,16 @@ public class TicketFiltersUtil
 
 		searchRule = new SearchRule();
 		searchRule.LHS = "status";
-		searchRule.LHS = "status";
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.OPEN);
 		conditions.add(searchRule);
 
-		searchRule = new SearchRule();
-		searchRule.LHS = "status";
-		searchRule.LHS = "status";
-		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
-		searchRule.RHS = String.valueOf(Status.PENDING);
-		conditions.add(searchRule);
+		TicketFilters newOpenTickets = new TicketFilters();
+		newOpenTickets.name = "New and open tickets";
+		newOpenTickets.is_default_filter = true;
+		newOpenTickets.conditions = conditions;
+		newOpenTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
 
-		searchRule = new SearchRule();
-		searchRule.LHS = "status";
-		searchRule.LHS = "status";
-		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
-		searchRule.RHS = String.valueOf(Status.CLOSED);
-		conditions.add(searchRule);
-
-		allTickets.name = "All Tickets";
-		allTickets.is_default_filter = true;
-		allTickets.conditions = conditions;
-		allTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
-
-		TicketFilters.dao.put(allTickets);
-	    
-		//For My tickets filter
-		TicketFilters myTickets = new TicketFilters();
-		
-		conditions = new ArrayList<SearchRule>();
-		searchRule = new SearchRule();
-		searchRule.LHS = "assignee_id";
-		searchRule.CONDITION = RuleCondition.EQUALS;
-		searchRule.RHS = "0";
-		conditions.add(searchRule);
-
-		myTickets.name = "My Tickets";
-		myTickets.is_default_filter = true;
-		myTickets.conditions = conditions;
-		myTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
-
-		TicketFilters.dao.put(myTickets);
+		TicketFilters.dao.put(newOpenTickets);
 	}
 }
