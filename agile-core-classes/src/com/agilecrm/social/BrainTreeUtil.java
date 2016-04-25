@@ -80,11 +80,11 @@ public class BrainTreeUtil {
 	}
 
 	public static void main(String args[]) throws Exception {
-		String merchantId = "wd9pbyzvswvbdc8j";
-		String publicKey = "57cc7rydfqkfjvny";
-		String privateKey = "88febbbe7ccec03d5856b36647de0098";
-		BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
-				privateKey);
-		bUtil.getTransactionByID("340729");
+		// String merchantId = "wd9pbyzvswvbdc8j";
+		// String publicKey = "57cc7rydfqkfjvny";
+		// String privateKey = "88febbbe7ccec03d5856b36647de0098";
+		// BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
+		// privateKey);
+		// bUtil.getTransactionByID("340729");
 	}
 }
