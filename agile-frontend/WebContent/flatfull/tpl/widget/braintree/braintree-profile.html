@@ -22,7 +22,11 @@
 					</div>
 				</div>	
 				<div class="control-group form-group">
-					<label class="control-label">Custom fields</label>
+					<label class="control-label pull-left">Custom fields</label>
+					 {{#isAdmin}}
+						<a class="text-info pull-right" href="#custom-fields">create one</a>
+					 {{/isAdmin}}
+					<div class="clearfix"></div>
 			  		<div class="controls">
 			    		<select name="braintree_custom_field" id="braintree_custom_field" class="required col-md-10 form-control w-full m-b-sm">
 			      			<option class="default-select" value="">-Select-</option>	
@@ -47,13 +51,16 @@
 	{{#each transaction}}
 		<li class="list-group-item r-none b-l-none b-r-none" style="width:249px;">
 			<div class="clear">							
-				<a class="col-md-7 p-none text-left text-ellipsis c-p text-info" title="{{orderId}}" data-toggle="collapse" href="#collapse-{{id}}" >
+				<a class="col-md-7 p-none text-left text-ellipsis c-p text-info" title="{{orderId}}" data-toggle="collapse" 
+				href="#collapse-{{id}}">
 					Order ID: #{{orderId}}
 				</a>
 				<div class="col-md-5 p-none text-right">$ {{amount}}</div>	
 				<div class="clearfix"></div>	
 				<div class="pull-left">Status</div>
-				<div class="pull-right text-ellipsis text-right" style="width: 165px;" title="{{brainTreeStatus status}}">{{brainTreeStatus status}}</div>
+				<div class="pull-right text-ellipsis text-right" style="width: 165px;" title="{{brainTreeStatus status}}">
+					{{brainTreeStatus status}}
+				</div>
 				<div class="clearfix"></div>	
 			</div>		
 			<div class="clearfix"></div>					
