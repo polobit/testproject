@@ -2956,7 +2956,7 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
 		return options.inverse(this)
@@ -5136,7 +5136,7 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
 		return options.inverse(this)
@@ -7254,3 +7254,10 @@ Handlebars.registerHelper('removeSpecialCharacter',function(value){
 
 });
 
+Handlebars.registerHelper('canDeleteContact', function(owner_id, options)
+{
+	if (hasScope('DELETE_CONTACT'))
+		return options.fn(this);
+
+	return options.inverse(this)
+});

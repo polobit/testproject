@@ -87,13 +87,14 @@
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
 											Merge Duplicates</a></li>
-											<li class='divider'></li>
 
-							
+							{{/canEditContact}}
+
+							{{#canDeleteContact owner.id}}
+									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
 											class="fa fa-trash"></i> Delete</a></li>
-								{{/canEditContact}}
-									
+							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
@@ -777,13 +778,14 @@ class="icon-plus"></i> <span >Add</span></a>
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
 											Merge Duplicates</a></li>
-											<li class='divider'></li>
 
-							
+							{{/canEditContact}}
+
+							{{#canDeleteContact owner.id}}
+									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
 											class="fa fa-trash"></i> Delete</a></li>
-								{{/canEditContact}}
-									
+							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
