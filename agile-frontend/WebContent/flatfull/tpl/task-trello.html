@@ -86,14 +86,21 @@
 </script>
 
 <script id="new-tasks-lists-model-template" type="text/html">
+    <div class="task-trello-list panel panel-default w-full m-r-none">
      <div class="list-header panel-heading" attr="{{heading}}" ownerID={{owner_id}}>
-<div class="pull-left text-ellipsis" style="width:80%;"> 
+<div class="pull-left text-ellipsis" style="width:60%;"> 
          <span class="m-r-xs">{{get_normal_name heading}}</span>
         <!-- <span id="task-count-{{heading}}-{{owner_id}}" class="badge bg-primary txt-mute"></span> -->
          
 </div>
+
+<div class="pull-left"> 
+        <span id="task-count-{{heading}}-{{owner_id}}" class="badge badge-empty pull-right  m-l-sm"></span> 
+</div>
          <div class="pull-right"><img id="task-list-loading-img-{{heading}}-{{owner_id}}"  src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}">
-<span id="task-count-{{heading}}-{{owner_id}}" class="badge badge-empty pull-right  m-l-sm"></span>
+<span class="list-bottom left add-task m-r-sm" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="fa fa-plus"></i>
+</a></span>
+<span class="inline-block transform-rotate"><a class="text-info" href="#"><i class="fa fa-expand"></i></a></span>
 </div>  
 <div class="clearfix"></div>               
      </div>     
@@ -105,7 +112,8 @@
         
      </div>  
      <div id="show_loader"></div>      
-     <div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> Add a task</a></div>     
+     <!--<div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> Add a task</a></div> -->   
+    </div>  
 </script>
 
 <script id="task-collection-template" type="text/html">
