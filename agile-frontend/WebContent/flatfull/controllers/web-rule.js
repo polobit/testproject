@@ -127,13 +127,10 @@ var WebreportsRouter = Backbone.Router.extend({
 
         $.getJSON("misc/modal-templates/webrule-templates.json", function(data) {
 
-            for (var i = 0; i < data.templates.length; i++) {
+            getTemplate("webrule-categories", null, undefined, function(ui){
+            	$("#webrule-listeners").append($(ui));
+            },"#webrule-listeners");
 
-            getTemplate("webrule-categories", data.templates[i], undefined, function(ui){
-                $("#webrule-listeners").append($(ui));
-            }, "#webrule-listeners");
-
-        }
             
             $(".web_fancybox").fancybox({
                     'autoDimensions': true,
