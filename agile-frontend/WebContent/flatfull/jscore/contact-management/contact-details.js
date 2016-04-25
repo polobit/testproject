@@ -705,6 +705,12 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
 						 	// Adds contact name to tags ul as li element
 							$('#added-tags-ul').append(template({name : new_tags}));
+							    $.each(data.get("tagsWithTime"), function(e, d) {
+        						if (d.tag == new_tags) {
+							            $('#added-tags-ul').find("li[data='"+new_tags+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+							        }
+    }
+    );
 		       			}
 		       			
 		       			console.log(new_tags);
@@ -1341,4 +1347,32 @@ function checkCompanyUpdated(){
 			// Error message is shown
 			
 		});
+}
+
+function epochToHumanDate(format,date)
+{
+	if (!format)
+			format = "mmm dd yyyy HH:MM:ss";
+
+		if (!date)
+			return;
+
+		if ((date / 100000000000) > 1)
+		{
+			console.log(new Date(parseInt(date)).format(format));
+			return new Date(parseInt(date)).format(format, 0);
+		}
+		// date form milliseconds
+		var d = "";
+		try
+		{
+			d= new Date(parseInt(date) * 1000).format(format);
+		}
+		catch (err)
+		{
+			console.log("Invalid date for custom field.");
+		}
+
+		return d
+
 }

@@ -133,7 +133,7 @@ cron:
 
 - description: Ticket SLA cron
   url: /ticket-module/backend/slacron
-  schedule: every 30 mins
+  schedule: every day 00:00
   target: agile-ticket-module
   
 - description: Ticket module wake up call 

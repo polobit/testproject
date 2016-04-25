@@ -87,13 +87,14 @@
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
 											Merge Duplicates</a></li>
-											<li class='divider'></li>
 
-							
+							{{/canEditContact}}
+
+							{{#canDeleteContact owner.id}}
+									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
 											class="fa fa-trash"></i> Delete</a></li>
-								{{/canEditContact}}
-									
+							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
@@ -349,13 +350,13 @@
 {{#if tagsWithTime.length}} 
 {{#canEditContact owner.id}}
 {{#each tagsWithTime}}
-<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}"><span><a
+<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
 {{/each}}
 {{else}}
 {{#each tagsWithTime}}
-<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
 {{/each}}
 {{/canEditContact}}
@@ -777,13 +778,14 @@ class="icon-plus"></i> <span >Add</span></a>
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
 											Merge Duplicates</a></li>
-											<li class='divider'></li>
 
-							
+							{{/canEditContact}}
+
+							{{#canDeleteContact owner.id}}
+									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
 											class="fa fa-trash"></i> Delete</a></li>
-								{{/canEditContact}}
-									
+							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
@@ -1035,13 +1037,13 @@ class="icon-plus"></i> <span >Add</span></a>
 							{{#if tagsWithTime.length}} 
 							 {{#canEditContact owner.id}}
 								{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
 									{{/each}}
 							 {{/canEditContact}}

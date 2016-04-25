@@ -658,9 +658,11 @@ var portlet_graph_utility = {
 						            events: {
 								   		load: function(){
 								   			console.log("load");
+								   			if(base_model!=undefined)
 								   			portlet_utility.toggle_chart_legends(this, base_model);
 								   		}, redraw : function(){
 								   			console.log("redraw");
+								   			if(base_model!=undefined)
 								   			portlet_utility.toggle_chart_legends(this, base_model);
 								   		}
 								   },
