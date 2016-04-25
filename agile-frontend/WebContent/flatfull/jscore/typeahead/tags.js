@@ -215,6 +215,11 @@ function setup_tags_typeahead(callback) {
 
                     // Adds contact name to tags ul as li element
                     $('#added-tags-ul').append(template({name : tag}));
+                     $.each(data.get("tagsWithTime"), function(e, d) {
+                                if (d.tag == tag) {
+                                        $('#added-tags-ul').find("li[data='"+tag+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+                                    }
+                                    } );
                     
         			},function(model,response){
         				console.log(response);
