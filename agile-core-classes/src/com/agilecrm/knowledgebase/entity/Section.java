@@ -95,7 +95,13 @@ public class Section implements Serializable
 
 	// Default access
 	public Visible_To visible_to = Visible_To.CUSTOMER;
-
+	
+	/**
+	 * Util attribute
+	 */
+	@NotSaved
+	public Categorie categorie = null;
+	
 	/**
 	 * Default constructor
 	 */

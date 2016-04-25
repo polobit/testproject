@@ -6,6 +6,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -15,11 +16,9 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
-import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
-import com.agilecrm.knowledgebase.util.ArticleUtil;
-import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.googlecode.objectify.Key;
 
 /**
@@ -36,7 +35,10 @@ public class SectionAPI
 	{
 		try
 		{
-			return Section.dao.get(id);
+			Section section = Section.dao.get(id);
+			section.categorie = Categorie.dao.get(section.categorie_key);
+			
+			return section;
 		}
 		catch (Exception e)
 		{
@@ -45,7 +47,24 @@ public class SectionAPI
 					.build());
 		}
 	}
-
+	
+	@GET
+	@Path("/categorie/{id}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Section> getSectionsByCategorie(@PathParam("id") Long categorieID)
+	{
+		try
+		{
+			return SectionUtil.getSectionByCategorie(categorieID);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

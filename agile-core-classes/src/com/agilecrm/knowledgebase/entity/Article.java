@@ -105,7 +105,19 @@ public class Article implements Serializable
 	 */
 	@NotSaved
 	public Long updated_by = null;
-
+	
+	/**
+	 * Util attribute
+	 */
+	@NotSaved
+	public Categorie categorie = null;
+	
+	/**
+	 * Util attribute
+	 */
+	@NotSaved
+	public Section section = null;
+	
 	/**
 	 * Default constructor
 	 */

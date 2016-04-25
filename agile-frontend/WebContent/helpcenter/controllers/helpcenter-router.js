@@ -8,7 +8,9 @@ var HelpcenterRouter = Backbone.Router.extend({
 		"" : "categories",
 		"categories":"categories",
 		"section/:id" : "sectionArticles",
-		"categorie/:categorie_id/section/:section_id/articles" : "sectionArticles"
+		"categorie/:categorie_id" : "categorieSections",
+		"categorie/:categorie_id/section/:section_id" : "sectionArticles",
+		"categorie/:categorie_id/section/:section_id/article/:article_id" : "viewArticle",
 	},
 	categories: function(){
 
@@ -21,6 +23,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				postRenderCallback : function(el, collection) {
 
+					Helpcenter_Util.setBreadcrumbPath();
 				}
 			});
 
@@ -32,14 +35,48 @@ var HelpcenterRouter = Backbone.Router.extend({
 		});
 	},
 
+	categorieSections: function(categorie_id){
+
+		App_Helpcenter.renderHomeTemplate(function(){
+
+			var categorieView = new Base_Model_View({
+				isNew : false,
+				template : "categorie",
+				url : "/core/api/knowledgebase/categorie/" + categorie_id,
+		        postRenderCallback: function(el, data){
+
+		        	Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
+
+		        	//Initializing base collection with groups URL
+					App_Helpcenter.sectionsCollection = new Base_Collection_View({
+						url : '/core/api/knowledgebase/section/categorie/' + categorie_id,
+						templateKey : "helpcenter-sections",
+						individual_tag_name : 'div'
+					});
+
+					//Fetching groups collections
+					App_Helpcenter.sectionsCollection.collection.fetch();
+
+					//Rendering template
+					$('#sections-collection', el).html(App_Helpcenter.sectionsCollection.el);
+		        }
+			});
+
+	 		$('#helpcenter-container').html(categorieView.render().el);
+	 	});
+	},
+
 	sectionArticles: function(categorie_id, section_id){
 
 		App_Helpcenter.renderHomeTemplate(function(){
+
 			var sectionView = new Base_Model_View({
 				isNew : false,
 				template : "section",
 				url : "/core/api/knowledgebase/section?id=" + section_id,
-		        postRenderCallback: function(){
+		        postRenderCallback: function(el, data){
+
+		        	Helpcenter_Util.setBreadcrumbPath('section-articles-breadcrumb', data);
 
 		        	//Initializing base collection with groups URL
 					App_Helpcenter.articlesCollection = new Base_Collection_View({
@@ -57,6 +94,24 @@ var HelpcenterRouter = Backbone.Router.extend({
 			});
 
 	 		$('#helpcenter-container').html(sectionView.render().el);
+	 	});
+	},
+
+	viewArticle:function(categorie_id, section_id, article_id){
+
+		App_Helpcenter.renderHomeTemplate(function(){
+
+			var articleView = new Base_Model_View({
+				isNew : false,
+				template : "article",
+				url : "/core/api/knowledgebase/article/" + article_id,
+		        postRenderCallback: function(el, data){
+
+		        	Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
+				}
+			});
+
+	 		$('#helpcenter-container').html(articleView.render().el);
 	 	});
 	},
 

@@ -1185,23 +1185,28 @@
 		<url-pattern>/helpcenter/login</url-pattern>
 	</servlet-mapping>
 	
-	<!-- <servlet>
+	<servlet-mapping>
+		<servlet-name>HelpCenter</servlet-name>
+		<url-pattern>/helpcenter</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>HelpCenterRegister</servlet-name>
-		<servlet-class>com.livily.helpcenter.servlets.RegisterServlet</servlet-class>
+		<servlet-class>com.agilecrm.knowledgebase.servlets.KnowledgebaseRegister</servlet-class>
 	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>HelpCenterRegister</servlet-name>
 		<url-pattern>/helpcenter/register</url-pattern>
 	</servlet-mapping>
-
+	
 	<servlet>
-		<servlet-name>HelpCenterLogout</servlet-name>
-		<servlet-class>com.livily.helpcenter.servlets.LogoutServlet</servlet-class>
+		<servlet-name>HelpcenterVerifyEmail</servlet-name>
+		<jsp-file>/helpcenter/helpcenter_verify_from_email.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>HelpCenterLogout</servlet-name>
-		<url-pattern>/helpcenter/logout</url-pattern>
-	</servlet-mapping>  -->
+		<servlet-name>HelpcenterVerifyEmail</servlet-name>
+		<url-pattern>/helpcenter/verify_email</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>Help Center Panel REST Service</servlet-name>

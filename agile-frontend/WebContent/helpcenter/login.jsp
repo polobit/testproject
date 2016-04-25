@@ -269,12 +269,10 @@ if(isSafari && isWin)
 				<div class="wrapper text-center tags-color text-white tags-color">
       				<strong>Sign in using your registered account</strong>
    				</div>
-				<form name='agile' id="agile" method='post' action="/helpcenter/login" onsubmit="return isValid();">
+				<form name='agile' id="agile" method='post' action="/helpcenter/login">
 					
 					<!-- <h3><small>Sign in using your registered account</small></h3> -->
-					<input type='hidden' name='newui' value="true">
 					<input type='hidden' name='type' value='agile'></input>
-					<input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 					<div class="list-group list-group-sm">
 						
 						<div class="list-group-item">
@@ -285,46 +283,28 @@ if(isSafari && isWin)
 						<div class="list-group-item">
 					    	<input class="input-xlarge required field form-control no-border" required maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 						</div>
-						<div class="list-group-item">
-					    	<select class="form-control no-border required" name="role">
-					    		<option value="ADMIN">Admin</option>
-					    		<option value="DOMAIN_USER">Agent</option>
-					    		<option value="CUSTOMER">Customer</option>
-					    	</select>
-						</div>
-
-						 
 						<div class="block">
 							<input class="hide" id="location_hash" name="location_hash"></input>
 						</div>
 						
 						</div>
-							<label class="checkbox" style="display:none;">
-							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
-							</label>
-							<input type='submit' value="Sign In" class='btn btn-lg btn-primary btn-block'>
-							 
-						
-					
-					
-				
-
-		<div 		
+						<label class="checkbox" style="display:none;">
+						    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
+						</label>
+						<input type='submit' value="Sign In" class='btn btn-lg btn-primary btn-block'>
+					<div 		
 		
-		<%
-  			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
-		id="mobile"
-	<% }else {  %> <%}%> >
-	<div class="text-center tags-color text-white m-t m-b" >
-		<small>Login with</small> 
-		<a title="Login with Google" data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
-		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
-		<small>Do not have an account?</small> <a href="/register" class="tags-color text-white">Sign Up</a><br/>
-		<small>Forgot</small> <a href="/forgot-password" class="tags-color text-white">Password? </a><a href="/forgot-domain" class="tags-color text-white">Domain?</a>
-		</div>
-	</div>
-		
-		</form>
+					<%
+			  			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+					id="mobile"
+				<% }else {  %> <%}%> >
+				<div class="text-center tags-color text-white m-t m-b" >
+					<small>Do not have an account?</small> <a href="/helpcenter/register" class="tags-color text-white">Sign Up</a><br/>
+					<small>Forgot</small> <a href="/helpcenter/forgot-password" class="tags-color text-white">Password? </a><a href="/forgot-domain" class="tags-color text-white">Domain?</a>
+					</div>
+				</div>
+					
+					</form>
 		</div>
 		</div>
 		</div>
@@ -343,31 +323,17 @@ if(isSafari && isWin)
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
-
-
 			var login_hash = window.location.hash;
 
 			// Sets location hash in hidden fields
 			if(login_hash)
 				$("#location_hash").val(login_hash);
-        /*var newImg = new Image;
-        newImg.onload = function() {
         
-        $("body").css("background-image","url('"+this.src+"')");
-       
-        }*/
-
-      //  newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
-
-        // agile-login-page-high.png
         	preload_login_pages();
-			// Pre load dashlet files when don is active
-			preload_dashlet_libs();
-
+			
 			$('#account_timezone').val(jstz.determine().name());
 			$('.openid_large_btn').click(function(e)
 			{
-				
 				// Gets Data Google/Yahoo and submits to LoginServlet
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
@@ -375,24 +341,14 @@ if(isSafari && isWin)
 
 				e.preventDefault();
 			});
+
 			$('body').on('click', '.close', function(e){
 				 e.preventDefault();
 				 $(this).closest('div').fadeOut('slow', function() {
 				   });
 				 });
-
-
-			// $('input, textarea').placeholder();
-			
 		});
 		
-		// Validates the form fields
-		function isValid()
-		{
-			// $("#agile").validate();
-			// return $("#agile").valid();
-		}
-
 		function preload_dashlet_libs(){ 
 
 			if ($.active > 0) {
@@ -402,7 +358,7 @@ if(isSafari && isWin)
 				return;
 			}
 
-			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>');
+			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>');
 		}
 
 		function preload_login_pages(){
@@ -413,40 +369,10 @@ if(isSafari && isWin)
 				    class: 'hide',
 				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-high.jpg',
 				}).appendTo('body');
-
-				/*$('<img/>', {
-				    class: 'hide',
-				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-low.jpg',
-				}).appendTo('body');*/
-
 			}
 		}
 	</script>
-	<!-- Clicky code -->
- 	<script src="//static.getclicky.com/js" type="text/javascript"></script>
-	<script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script> 
-	
-	<!-- Google analytics code -->
-	<script>
-	   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	
-	  ga('create', 'UA-44894190-1', 'auto');
-	  ga('send', 'pageview'); 
-	
 
-	</script>
-
-	<!-- Surey page code-->
-	<script type="text/javascript" src="https://our.agilecrm.com/stats/min/agile-min.js">
-   </script>
-   <script type="text/javascript" >
-     _agile.set_account('jo22gpvhr34r2mccjaekgsm7oh', 'our');
-     _agile_set_whitelist('b3Vy');
-     _agile.track_page_view();
-     _agile_execute_web_rules();
    </script>
 	
 </body>

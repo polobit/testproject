@@ -9,16 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.session.KnowledgebaseManager;
 import com.agilecrm.session.KnowledgebaseUserInfo;
-import com.agilecrm.session.SessionManager;
-import com.agilecrm.session.UserInfo;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.VersioningUtil;
-import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>AgileAuthFilter</code> is a Servlet Filter on HTTP request with urls:
@@ -55,7 +48,6 @@ public class KnowledgebaseAuthFilter implements Filter
 		KnowledgebaseManager.set((KnowledgebaseUserInfo) null);
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 		// Check if UserInfo is already there
 		KnowledgebaseUserInfo userInfo = (KnowledgebaseUserInfo) httpRequest.getSession().getAttribute(
@@ -65,48 +57,6 @@ public class KnowledgebaseAuthFilter implements Filter
 		{
 			// Add this in session manager
 			KnowledgebaseManager.set((HttpServletRequest) request);
-			
-			// Add this in session manager
-			SessionManager.set((HttpServletRequest) request);
-			
-			// Check if userinfo is valid for this namespace
-			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-
-			// Get Namespace
-			String domain = NamespaceManager.get();
-
-			// Send to register
-			if (domainUser == null)
-			{
-				((HttpServletRequest) request).getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-
-				// Remove user info from session, redirect to auth-failed.jsp.
-				SessionManager.set((UserInfo) null);
-				httpResponse.sendRedirect("error/auth-failed.jsp");
-			}
-
-			// Check if the domain of the user is same as namespace. Otherwise,
-			// Redirect
-			if (domainUser != null && domainUser.domain != null && domain != null
-					&& !domain.equalsIgnoreCase(domainUser.domain))
-			{
-				// Probably forward to the domain again he registered
-				System.out.println("Forwarding to actual domain " + domainUser.domain);
-
-				// Remove from Current Session
-				((HttpServletRequest) request).getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-
-				System.out.println(VersioningUtil.getLoginUrl(domainUser.domain, request));
-				httpResponse.sendRedirect(VersioningUtil.getLoginUrl(domainUser.domain, request));
-				return;
-			}
-
-			// If the user is disabled
-			if (domainUser != null && domainUser.is_disabled)
-			{
-				httpRequest.getRequestDispatcher("/error/user-disabled.jsp").include(request, response);
-				return;
-			}
 		}
 
 		chain.doFilter(request, response);

@@ -141,6 +141,10 @@ public class SendMail
    	public static final String TICKET_COMMENTS = "ticket_comments";
    	public static final String TICKET_FOOTER = "ticket_footer";
    	
+   	//Helpcenter
+   	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
+   	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
+   	
     /**
      * From Name of email.
      */

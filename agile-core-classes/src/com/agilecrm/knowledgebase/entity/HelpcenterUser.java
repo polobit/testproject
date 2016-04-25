@@ -7,13 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.Key;
 
 /**
  * 
  * @author Sasi
  * 
  */
-public class HelpcenterUsers implements Serializable
+public class HelpcenterUser implements Serializable
 {
 	/**
 	 * 
@@ -33,6 +34,11 @@ public class HelpcenterUsers implements Serializable
 	 * Email of the user
 	 */
 	public String email = null;
+	
+	/**
+	 * Email of the user
+	 */
+	public String password = null;
 
 	public Long created_time = null;
 
@@ -43,16 +49,26 @@ public class HelpcenterUsers implements Serializable
 	/**
 	 * Default constructor
 	 */
-	public HelpcenterUsers()
+	public HelpcenterUser()
 	{
 
 	}
 
+	
+	public HelpcenterUser(String name, String email, String password)
+	{
+		super();
+		this.name = name;
+		this.email = email;
+		this.password = password;
+	}
+
+
 	/**
 	 * Initialize DataAccessObject.
 	 */
-	public static ObjectifyGenericDao<HelpcenterUsers> dao = new ObjectifyGenericDao<HelpcenterUsers>(
-			HelpcenterUsers.class);
+	public static ObjectifyGenericDao<HelpcenterUser> dao = new ObjectifyGenericDao<HelpcenterUser>(
+			HelpcenterUser.class);
 
 	/**
 	 * Sets entity id if it is null.
@@ -62,9 +78,14 @@ public class HelpcenterUsers implements Serializable
 	{
 		Long currentTime = Calendar.getInstance().getTimeInMillis();
 
-		if (currentTime == null)
+		if (created_time == null)
 			created_time = currentTime;
 
 		updated_time = currentTime;
+	}
+	
+	public Key<HelpcenterUser> save()
+	{
+		return dao.put(this);
 	}
 }
