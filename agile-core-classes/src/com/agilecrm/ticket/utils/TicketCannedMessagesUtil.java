@@ -28,13 +28,13 @@ public class TicketCannedMessagesUtil
 	public static List<TicketCannedMessages> createDefault()
 	{
 		TicketCannedMessages cannedMessageOne = new TicketCannedMessages();
-		cannedMessageOne.title = "Hi!..How are you?";
-		cannedMessageOne.message = "Hi!..\r\nThanks for reaching out.\r\n";
+		cannedMessageOne.title = "Header Greeting";
+		cannedMessageOne.message = "Dear {{requester_name}},\r\nThanks for reaching out.\r\n";
 		cannedMessageOne.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 		TicketCannedMessages cannedMessageTwo = new TicketCannedMessages();
-		cannedMessageTwo.title = "Bye!..";
-		cannedMessageTwo.message = "Feel free to reply if you have any questions.";
+		cannedMessageTwo.title = "Footer Greeting";
+		cannedMessageTwo.message = "I'm hoping that I was able to answer your queries, {{requester_name}}. Please feel free to get back to us if you still have any questions.";
 		cannedMessageTwo.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 		TicketCannedMessages.dao.put(cannedMessageOne);

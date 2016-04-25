@@ -27,4 +27,12 @@
 		<servlet-name>SegmentationServlet</servlet-name>
 		<url-pattern>/visitors</url-pattern>
 	</servlet-mapping>
+	<servlet>
+	      <servlet-name>ReportsServlet</servlet-name>
+	      <servlet-class>com.agilecrm.web.stats.ReportsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	       <servlet-name>ReportsServlet</servlet-name>
+	       <url-pattern>/reports</url-pattern>
+	</servlet-mapping>
 </web-app>

@@ -38,45 +38,20 @@ $(function(){
 		});
 		if(checked){
 			
-			if(!canRunBulkOperations())
+			if(!hasScope('DELETE_CONTACT'))
 			{
 				showModalConfirmation("Bulk Delete", 
-						"You may not have permission to delete some of the contacts selected. Proceeding with this operation will delete only the contacts that you are permitted to delete.<br/><br/> Do you want to proceed?", 
+						"You do not have permission to delete contacts.", 
 						function (){
-					
-					// Customize the bulk delete operations
-					if(!customize_bulk_delete(id_array, data_array))
-						return;
-					
-					
-					$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
-					
-					var url = $(table).attr('url');
-					if(SELECT_ALL == true)
-					{
-						if($(table).attr('id') == "contacts-table" || $(table).attr('id') == "companies" ) {
-							var dynamic_filter = getDynamicFilters();
-							if(dynamic_filter == null) {								
-								url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
-							}
-						}
-					}
-					
-					// For Active Subscribers table
-					if(SUBSCRIBERS_SELECT_ALL == true){	
-						if($(table).attr('id') == "active-campaign")
-							url = url + "&filter=all-active-subscribers";
-					}
-					
-					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+							return;
 						}, 
 						function(){
-							
 							return;
 						},
 						function() {
 							
-						});
+						},
+						"Cancel", "");
 			}
 			else
 			{

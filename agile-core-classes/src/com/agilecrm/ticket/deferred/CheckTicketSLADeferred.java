@@ -5,6 +5,8 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
@@ -47,8 +49,14 @@ public class CheckTicketSLADeferred implements DeferredTask
 
 			NamespaceManager.set(namespace);
 
+			// Execute ticket SLA only for pro plan users
+			Subscription subscription = SubscriptionUtil.getSubscription();
+
+			if (!subscription.planLimits.checkTicketSLA())
+				return;
+
 			Set<Key<Tickets>> keys = TicketsUtil.getOverdueTickets();
-			
+
 			System.out.println("Namespace: " + namespace);
 			System.out.println("Ticket keys found: " + keys);
 
@@ -76,7 +84,7 @@ public class CheckTicketSLADeferred implements DeferredTask
 					}
 				}));
 			}
-			
+
 			System.out.println("Successfully trigger initiated for all tickets.");
 		}
 		catch (Exception e)

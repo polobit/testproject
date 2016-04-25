@@ -26,6 +26,10 @@ $('#app-aside-folded').on('click', function(e) {
 	}
 	
 	//contactInnerTabsInvoke();
+
+	$('.highcharts-container').each(function(chart) {
+		$(this).parent().highcharts().reflow();
+	});
 	
     
 	});

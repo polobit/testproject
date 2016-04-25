@@ -62,6 +62,7 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -167,9 +168,13 @@ public class JSAPI
 	    if (StringUtils.isBlank(address))
 	    {
 		System.out.println("Adding location");
+		String domain = NamespaceManager.get();
+		System.out.println("create contact domain"+domain);
+	    if(!StringUtils.isEmpty(domain) && !domain.equalsIgnoreCase("carusopianos")){
+	    	org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+			contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
+	    }
 
-		org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
-		contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
 	    }
 
 	    // Sets owner key to contact before saving

@@ -25,10 +25,10 @@
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
-<div class="pos-abs pos-r-0 pos-t-0">
+<div class="pos-abs pos-r-0 m-t-sm isotope-item">
 <div>
  
-								<a class="dropdown-toggle" data-toggle="dropdown"><span style="opacity:0.8;margin-top:91px;"class="caret text-lg"></span></a>
+								<button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
 								<ul class="dropdown-menu pull-right">
 <li> <a href="#company-edit"><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
@@ -193,14 +193,14 @@
 							{{#if tagsWithTime.length}} 
 							 {{#canEditContact owner.id}}
 								{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
-											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
+											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}" >{{this.tag}}</a></span></li> 
 									{{/each}}
 							 {{/canEditContact}}
 							{{/if}}
@@ -431,11 +431,11 @@
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
-<div class="pos-abs pos-r-0 pos-t-0">
+<div class="pos-abs pos-r-0 m-t-sm isotope-item">
 <div>
- 
-								<button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span style="margin-top:91px;"class="caret text-lg"></span></button>
-								<ul class="dropdown-menu pull-right" role="menu">
+								<button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
+
+								<ul class="dropdown-menu pull-right"  role="menu">
 <li> <a href="#company-edit"><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-case"><i
@@ -588,13 +588,13 @@
 							{{#if tagsWithTime.length}} 
 							 {{#canEditContact owner.id}}
 								{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
 									{{/each}}
 							 {{/canEditContact}}
