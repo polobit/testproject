@@ -1,0 +1,39 @@
+<script id="helpcenter-section-template" type="text/html">
+<div class="wrapper" style="padding-left: 20px;">
+<table class="txt-small full-width" style="background-color: inherit;">
+      <tr>
+        <div class="text-ellipsis">
+           <div class="text-ellipsis pull-left text-sm" style="color: #697073;max-width: 20em;">
+              <td style="width:50%">
+       	        <h3 class="m-n  m-b-sm">{{name}}</h3>                   
+              </td>
+            </div>
+	      </div>  
+      <td>
+	        <div class="btn-group">
+			  <button class="btn bg-transparent" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+			  <ul class="dropdown-menu">
+			    <li><a href="#categorie/{{categorie_id}}/section/{{id}}/edit-section">Edit</a></li>
+			    <li><a href="#helpcenter" class="delete">Delete</a></li>
+			    <li><a href="#categorie/{{categorie_id}}/section/{{id}}/add-article">Add Article</a></li>
+			  </ul>
+			</div>      
+        </td>
+      </tr>
+      <tr>
+      	<td>
+	    	<small class="text-muted m-b-sm">
+	  			created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
+			</small>
+      	</td>
+	  </tr>
+      <tr>
+      	<td><span>{{description}}</span>
+		</td>
+      </tr>
+</table>
+          
+</div>    
+<hr style="border-color: #DADDDE; margin-top: 10px; margin-bottom: 10px;"/>              
+<div id="articles-collection"></div>
+</script>
