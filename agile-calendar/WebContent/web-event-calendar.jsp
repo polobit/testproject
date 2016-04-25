@@ -298,7 +298,7 @@ ObjectMapper mapper = new ObjectMapper();
 				 String domain_user_id=pro_pic.get(4); 
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
-		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
+		   <div style="display: inline-block;width: 160px;margin-right: 5px;">
 		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title="<%=pr_name%>"/>
 		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
 		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%=workHours %></span>
