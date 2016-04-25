@@ -665,3 +665,23 @@ function setGlobalAPIKey(callback)
     });
 }
   
+function getFormNameForTrigger(formID, callback)
+{
+	if( !formID )	return false;
+
+	if( !callback || !(typeof(callback) === 'function'))	return false;
+	
+	$.ajax({
+		type : "GET",
+		url : '/core/api/forms/form?formId=' + formID,
+		dataType : 'json',
+		success : function(response) {
+			callback(response.formName);
+		}
+	});
+}
+
+function getFormNameCellIDForFormSubmitTriggers(formID)
+{
+	return formID + "_formNameField";
+}

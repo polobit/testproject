@@ -6115,13 +6115,10 @@ $(function()
 
 	Handlebars.registerHelper('getFormNameFromId', function(id)
 	{
-		var url = '/core/api/forms/form?formId=' + id;
-		var form = $.ajax({ type : 'GET', url : url, async : false, dataType : 'json' }).responseText;
-		if(!form)
-			return new Handlebars.SafeString("?");
-		form = JSON.parse(form);
-		var formName = form.formName;
-		return new Handlebars.SafeString(formName);
+		//Create a temporary place holder and later, fetch the name asynchronously and render it.
+		//Check the postRenderCallback for triggerCollectionView in controllers/workflows.js for more details
+		var html = "<div id='" + getFormNameCellIDForFormSubmitTriggers(id) + "'></div>";
+		return new Handlebars.SafeString(html);
 	});
 
 	/**

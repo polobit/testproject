@@ -489,10 +489,28 @@ var WorkflowsRouter = Backbone.Router
 			triggers : function()
 			{
 				this.triggersCollectionView = new Base_Collection_View({
+						url : '/core/api/triggers', 
+						restKey : "triggers", 
+						templateKey : "triggers", 
+						individual_tag_name : 'tr', 
+						postRenderCallback : function(el, collection) {
+							// If there are form submit triggers, fetch their name and update UI.
+							// Iterate over the models in the collection
+							$.each(collection.models, function(index, model) {
+								var modelJSON = model.toJSON();
+								if( modelJSON.type == 'FORM_SUBMIT' && modelJSON.trigger_form_event && modelJSON.trigger_form_event != '' )
+								{
+									getFormNameForTrigger(modelJSON.trigger_form_event, function(formName) {
+										//Replace content in the table cell for the form name
+										$('#' + getFormNameCellIDForFormSubmitTriggers(modelJSON.trigger_form_event))
+												.parent()
+												.html(formName);
+									});
+								}
+							});
+						} 
+					});
 
-				url : '/core/api/triggers', restKey : "triggers", templateKey : "triggers", individual_tag_name : 'tr', postRenderCallback : function()
-				{
-				} });
 
 				this.triggersCollectionView.collection.fetch();
 
