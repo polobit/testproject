@@ -21,12 +21,7 @@
 						</input>
 					</div>
 				</div>	
-				<div class="control-group form-group">
-					<label class="control-label pull-left">Custom fields</label>
-					 {{#isAdmin}}
-						<a class="text-info pull-right" href="#custom-fields">create one</a>
-					 {{/isAdmin}}
-					<div class="clearfix"></div>
+				<div class="control-group form-group">					
 			  		<div class="controls">
 			    		<select name="braintree_custom_field" id="braintree_custom_field" class="required col-md-10 form-control w-full m-b-sm">
 			      			<option class="default-select" value="">-Select-</option>	
@@ -37,6 +32,16 @@
 			    		</select>
 			  		</div>
 				</div>
+				<p class="text-sm">
+					Note: Braintree ID stored as custom text field can also be used to fetch data. 
+					Please 
+					{{#isAdmin}}
+						<a class="text-info" href="#custom-fields">create one</a>
+					{{else}}
+						create one
+					{{/isAdmin}}
+					 if necessary.
+				</p>
 				<div class="text-center">		
 				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
 				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
