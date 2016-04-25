@@ -159,15 +159,16 @@ public class PortletUtil {
 			route= Portlet.PortletRoute.DashBoard.toString();
 		}
 
-		if(route.equals(Portlet.PortletRoute.DashBoard)){
+		if(route.equals(Portlet.PortletRoute.DashBoard.toString())){
 		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
 		//If user first time login after portlets code deploy, we add some portlets by default
 		//in DB and one null portlet also
 		if(portlets!=null && portlets.size()>0){
 			for(Portlet portlet : portlets){
-				if(portlet.portlet_route==null)
+				if(portlet.portlet_route==null){
 					portlet.portlet_route=Portlet.PortletRoute.DashBoard.toString();
-				portlet.save();
+					portlet.save();
+				}	
 			}
 		}
 		}
