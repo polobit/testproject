@@ -177,9 +177,15 @@
                                     </div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
-                                <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                <input type="checkbox" name="temp" value="EDIT_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Update All Contacts  <br/>
-                                    <div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small>
+                                    <div style="margin-left:6px;"><small>  Update contacts owned by other users</small>
+                                    </div>
+                            </label>
+                            <label class="i-checks i-checks-sm checkbox">
+                                <input type="checkbox" name="temp" value="DELETE_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Delete All Contacts  <br/>
+                                    <div style="margin-left:6px;"><small>  Delete own contacts and other user contacts</small>
                                     </div>
                             </label>
                             <div>
@@ -245,9 +251,14 @@
                                             <div style="margin-left:6px;"><small> View contacts owned by other users </small></div>
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp" value="DELETE_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            <input type="checkbox" name="temp" value="EDIT_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                             Update All Contacts  <br/>
-                                            <div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
+                                            <div style="margin-left:6px;"><small>  Update contacts owned by other users</small></div>
+                                       </label>
+                                       <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="DELETE_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            Delete All Contacts  <br/>
+                                            <div style="margin-left:6px;"><small>  Delete own contacts and other user contacts</small></div>
                                        </label>
                                      <div>
                                       <div class="pull-left" style="width:40%;">
@@ -307,9 +318,14 @@
                                     <div style="margin-left:6px;"><small> View contacts owned by other users </small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    <input type="checkbox" name="temp" value="EDIT_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Update All Contacts  <br/>
-                                        <div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
+                                        <div style="margin-left:6px;"><small>  Update contacts owned by other users</small></div>
+                                </label>
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="DELETE_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Delete All Contacts  <br/>
+                                        <div style="margin-left:6px;"><small>  Delete own contacts and other user contacts</small></div>
                                 </label>
                                 <div>
                                     <div class="pull-left" style="width:40%;">
