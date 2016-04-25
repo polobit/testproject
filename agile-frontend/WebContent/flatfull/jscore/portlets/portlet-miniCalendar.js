@@ -813,7 +813,12 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 			if(fc_event.allDay == true){
 				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 				fc_event.end = new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
-				var a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24))
+					var a;    			
+    			if(fc_event.start.getMonth()<fc_event.end.getMonth()){
+    				a = Math.round((fc_event.end-fc_event.start)/(60*60*1000*24));
+      			}else{
+       				a = (fc_event.end.getMonth()-fc_event.start.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+				}
 				if(a == 1)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
@@ -847,7 +852,12 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 			} 
 			else
 			{
-				var a=Math.round((fc_event.end-fc_event.startDate)/(60*60*1000*24))
+				var a;
+    			if(fc_event.startDate.getMonth()<fc_event.end.getMonth()){
+    				a = Math.round((fc_event.end-fc_event.startDate)/(60*60*1000*24));
+      			}else {
+       				a = (fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+       			}
 
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
