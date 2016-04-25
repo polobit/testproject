@@ -8,7 +8,7 @@
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
-                        <input type="text" name="id" class="hide" value={{id}} >
+                        <input type="text" name="id" class="hide" value="{{id}}"/>
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
@@ -56,7 +56,7 @@
                                     <select id="template_id" name="template_id" class="form-control">
                                     </select>
                                 </div>
-                                <i class="icon-info-sign"></i><span class="text-muted"> Email template subject will not be considered when sending replies</span>
+                                <!--<i class="icon-info-sign"></i><span class="text-muted"> Email template subject will not be considered when sending replies</span>-->
                             </div>
                         </div>
                         <div class="row">

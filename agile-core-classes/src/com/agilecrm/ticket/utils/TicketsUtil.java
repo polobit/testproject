@@ -732,9 +732,9 @@ public class TicketsUtil
 				// Logging ticket assignee changed activity
 				ActivityUtil.createTicketActivity(ActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
 						oldAssigneeID + "", ((domainUser != null) ? domainUser.name : ""), "assigneeID", set_user_key);
-
-				TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
 			}
+			
+			TicketTriggerUtil.executeTriggerForAssigneeChanged(ticket);
 		}
 
 		System.out.println("completed changeGroupAndAssignee execution");

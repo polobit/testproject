@@ -125,10 +125,22 @@ public class SendgridInboundParser extends HttpServlet
 				{
 					JSONObject json = getJSONFromMIME(request);
 
-					// Adding record to tickets backup db
-					backupKey = new TicketsBackup(json.toString()).save();
+					String envelope = json.getString("envelope");
 
-					saveTicket(json);
+					System.out.println("Envelope:" + envelope);
+
+					JSONObject enveloperJSON = new JSONObject(envelope);
+					String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
+
+					String[] toAddressArray = getNamespaceAndGroup(toAddress);
+
+					if (toAddressArray.length < 2)
+						return;
+
+					// Adding record to tickets backup db
+					backupKey = new TicketsBackup(json.toString(), toAddressArray[0]).save();
+
+					saveTicket(json, toAddressArray);
 
 					// Removing backup if everything is ok
 					TicketsBackup.delete(backupKey);
@@ -146,41 +158,15 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Converts the json object into ticket object and saves to db.
 	 * 
 	 * @param json
 	 * @param key
 	 * @throws Exception
 	 */
-	public void saveTicket(JSONObject json) throws Exception
+	public void saveTicket(JSONObject json, String[] toAddressArray) throws Exception
 	{
 		Long currentTime = Calendar.getInstance().getTimeInMillis();
-
-		String envelope = json.getString("envelope");
-
-		System.out.println("Envelope:" + envelope);
-
-		JSONObject enveloperJSON = new JSONObject(envelope);
-		String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
-
-		/**
-		 * Replacing email suffix with space so that we'll get a string of
-		 * namespace and group ID separated by delimeter '+'
-		 */
-		String inboundSuffix = TicketGroupUtil.getInboundSuffix();
-
-		String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
-
-		System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
-
-		if (toAddressArray.length < 2)
-		{
-			toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
-
-			System.out.println("toAddressArray with plus delimeter: " + Arrays.toString(toAddressArray));
-
-			if (toAddressArray.length < 2)
-				return;
-		}
 
 		String namespace = toAddressArray[0];
 		System.out.println("namespace: " + namespace);
@@ -221,7 +207,7 @@ public class SendgridInboundParser extends HttpServlet
 			// We are generating group forwarding email addresses
 			// which are case sensitive.
 			// So verifying if lowered case group id exists in
-			// ticket groups.
+			// to address.
 			boolean idFound = false;
 
 			String tempGroupID = toAddressArray[1];
@@ -451,9 +437,11 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Reads the from name and email address from posted data.
 	 * 
 	 * @param json
-	 * @return
+	 * @return string array containing name at first index and from address at
+	 *         second index.
 	 */
 	private String[] getNameAndEmail(JSONObject json)
 	{
@@ -485,6 +473,39 @@ public class SendgridInboundParser extends HttpServlet
 		}
 
 		return new String[] { name, from };
+	}
+
+	/**
+	 * Splits to address into array of namespace and groupid.
+	 * 
+	 * @return a string array containing namespace at first index and group id
+	 *         in second index.
+	 */
+	public String[] getNamespaceAndGroup(String toAddress)
+	{
+		/**
+		 * Replacing email suffix with space so that we'll get a string of
+		 * namespace and group ID separated by delimeter '+'
+		 */
+		String inboundSuffix = TicketGroupUtil.getInboundSuffix();
+
+		String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
+
+		System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
+
+		if (toAddressArray.length < 2)
+		{
+			// Earlier we have provided forwarding email's with plus delimeter.
+			// This is fall-back code to handle those addresses.
+			toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
+
+			System.out.println("toAddressArray with plus delimeter: " + Arrays.toString(toAddressArray));
+
+			if (toAddressArray.length < 2)
+				return new String[0];
+		}
+
+		return toAddressArray;
 	}
 
 	/**
@@ -579,15 +600,7 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
-	 * If received ticket is reply to existing ticket then email address will be
-	 * in the form of namespace+groupid+ticketid@helptor.com
-	 */
-	// public static boolean isNewTicket(String[] toAddressArray)
-	// {
-	// return (toAddressArray.length == 3) ? false : true;
-	// }
-
-	/**
+	 * Returns ticket ID from HTML content
 	 * 
 	 * @param htmlContent
 	 * @return ticketID
@@ -648,10 +661,5 @@ public class SendgridInboundParser extends HttpServlet
 		System.out.println("Added saved document....");
 
 		return service;
-	}
-
-	public static void main(String[] args) throws Exception
-	{
-		System.out.println("reply\r\ntest..\r\n\r\n".trim());
 	}
 }
