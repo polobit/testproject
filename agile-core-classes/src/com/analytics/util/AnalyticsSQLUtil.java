@@ -399,4 +399,29 @@ public class AnalyticsSQLUtil
 	return resultArray;
     }
     
+    /**
+     * Returns the number of webstat visits count from the database 
+     * 
+     * @param url
+     * 
+     * @return
+     */
+    public static String getVisitsCountFromStatServer(String url)
+    {
+    	 String visits = null;
+    	try
+    	{
+    	   visits = HTTPUtil.accessURL(url);
+    	    System.out.println("Visits count is..........."+visits);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    System.out.println(e.getMessage());
+    	    return null;
+    	}
+    	return visits;
+    }
+    
+    
 }
