@@ -40,6 +40,7 @@ public class CampaignReportsDeferredTask implements DeferredTask
 
 	try
 	{
+		System.out.println("Entered inside CampaignReportsDeferredTask run method");
 	    // Generates report and sends to user
 	    ReportsUtil.sendCampaignReportsToUsers(reports, sendNow);
 	}

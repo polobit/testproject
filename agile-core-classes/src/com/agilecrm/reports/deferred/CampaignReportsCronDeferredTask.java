@@ -86,6 +86,7 @@ public class CampaignReportsCronDeferredTask implements DeferredTask
     {
     if(report.report_type == Reports.ReportType.Campaign)
 	    {
+    	System.out.println("Entered inside CampaignReportsCronDeferredTask run method");
     	Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
 	        report.activity_weekday, report.activity_day, report.report_timezone, duration);
     	try
