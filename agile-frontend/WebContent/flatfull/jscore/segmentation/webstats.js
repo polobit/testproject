@@ -217,6 +217,7 @@ function  addEventFilter(filter_id){
         var targetEl = $(e.currentTarget);
 
         _agile_delete_prefs('dynamic_visitors_filter');
+        _agile_delete_prefs("visitor_repeat_filter");
 
         var filter_id = $(targetEl).attr('id');
         
@@ -265,7 +266,6 @@ function setupSegmentFilterList(cel,id)
                 restKey : "SegmentFilter",
                 templateKey : "segment-filter-list",
                 individual_tag_name : 'li',
-                no_transition_bar : true,
                 postRenderCallback : function(el, collection)
                 {   
                     if(collection.length==0)
@@ -278,11 +278,15 @@ function setupSegmentFilterList(cel,id)
                         var filter_name=collection.get(id).attributes.name;
 
                         if(_agile_get_prefs('visitor_filter') && filter_name!= $('#filters-tour-step button i span').text()){                        
-                            deserializeLhsFilters($('#lhs-contact-filter-form'), collection.get(id).attributes.segmentConditions);      
+                            if(!_agile_get_prefs("visitor_repeat_filter"))
+                               deserializeLhsFilters($('#lhs-contact-filter-form'), collection.get(id).attributes.segmentConditions);      
+                            else
+                                _agile_set_prefs('visitor_filter',id);
                         }else{
                          _agile_delete_prefs('dynamic_visitors_filter');
                          _agile_set_prefs('visitor_filter',id);
-                        }                     
+                        } 
+
                         if(filter_name!= $('#filters-tour-step button i span').text()){
                             var addFilterName='<span class="segment-filter-name" style= "padding-left:3px;">'+filter_name +'</span>';
                             $('#filters-tour-step').find('#segment-filter').append(addFilterName);

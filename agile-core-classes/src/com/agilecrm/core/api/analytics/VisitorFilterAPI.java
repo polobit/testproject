@@ -61,11 +61,17 @@ public class VisitorFilterAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public VisitorFilter createFilter(VisitorFilter newFilter)
     {
+	VisitorFilter filter=new VisitorFilter();
 	try
-	{
+	{   
+	   if( newFilter.filter_id!=0l && newFilter.segmentConditions==null ){
+	      	filter = VisitorFilter.getSegmentFilter(newFilter.filter_id);
+	      	newFilter.segmentConditions=filter.segmentConditions;
+	   }
 	    if (newFilter.segmentConditions.length() == 0)
 		throw new Exception("Atleast one condition is required.");
-	    
+	  
+	       
 	    newFilter.setOwner_key(DomainUserUtil.getCurentUserKey());
 	       
 	    VisitorFilter.dao.put(newFilter);

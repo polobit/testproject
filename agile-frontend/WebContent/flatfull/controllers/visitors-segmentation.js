@@ -20,7 +20,9 @@ var VisitorsSegmentationRouter = Backbone.Router
             if (VISITORS_HARD_RELOAD == true) {
                 this.webstatsListView = undefined;
                 VISITORS_HARD_RELOAD = false;
+                _agile_delete_prefs("visitor_repeat_filter");
             }
+
            
             var template_key = "segmentation-custom-view";
 

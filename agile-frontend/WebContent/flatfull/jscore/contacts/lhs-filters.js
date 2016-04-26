@@ -288,6 +288,7 @@ $('#' + container_id).on('click', '#clear-lhs-segmentation-filters', function(e)
 	_agile_delete_prefs('dynamic_visitors_filter');
 	_agile_delete_prefs('duration');
 	_agile_delete_prefs('visitor_filter');
+	_agile_delete_prefs("visitor_repeat_filter");
 	VISITORS_HARD_RELOAD=true;
 	 App_VisitorsSegmentation.visitorssegmentation();
 });
@@ -707,6 +708,10 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
                     var json = {};
                     if(_agile_get_prefs("dynamic_visitors_filter"))
                     	json.segmentConditions=_agile_get_prefs("dynamic_visitors_filter").toString();
+                    else if(_agile_get_prefs("visitor_filter")){
+                    	json.filter_id=_agile_get_prefs("visitor_filter");
+                    	_agile_set_prefs("visitor_repeat_filter",true);
+                    }
                     var formJSON = model.toJSON();
 
                     if(formJSON['save-type'] == 'replace'){

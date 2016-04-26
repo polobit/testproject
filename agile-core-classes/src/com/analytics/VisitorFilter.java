@@ -19,6 +19,8 @@ public class VisitorFilter
     
     @Id
     public Long	   id;
+    
+    public Long	   filter_id=0l;
     /**
      * Stores segment filter name
      */
