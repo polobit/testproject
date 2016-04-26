@@ -271,7 +271,7 @@ public class SendGrid
 		JSONObject SMTPJSON=new JSONObject();
     	try 
     	  {
-			subjectJSON.put(SENDGRID_API_PARAM_SUBJECT, "Batman and Deadpool");
+			subjectJSON.put(SENDGRID_API_PARAM_SUBJECT,subject );
 			SMTPJSON.put(SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
 			
 			queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPJSON.toString(), "UTF-8");
@@ -523,15 +523,4 @@ public class SendGrid
 		}
 	
     }
-    
-    public static void main (String asd[]) throws JSONException{
-    	
-    	String str=null;
-    	JSONObject subjectJSON=new JSONObject();
-    	subjectJSON.put("SUBJECT", "Batman and Deadpool");
-    	JSONObject obj=new JSONObject();
-    	obj.put("unique_args", subjectJSON);
-    	System.out.println(obj.toString());
-    	sendMail(null, null, "prashannjeet@agilecrm.com", "hi", "prashannjeet@yahoo.com", null, null, "Hi dear", null, "hello", "Good morning", obj.toString());
-    }
-}
+  }
