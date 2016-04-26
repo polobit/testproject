@@ -19,7 +19,7 @@ public class CampaignReportDeferredTaskCreation {
 		        time, reportid, timezone);
 		Queue queue = QueueFactory.getQueue("reports-queue");
 		TaskOptions options = TaskOptions.Builder.withPayload(send_campaign_report_deferred_task);
-		options.etaMillis(time * 1000);
+		//options.etaMillis(time * 1000);
 		queue.add(options);
 	    }
 }
