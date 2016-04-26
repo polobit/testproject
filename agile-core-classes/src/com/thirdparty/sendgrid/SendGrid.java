@@ -279,13 +279,20 @@ public class SendGrid
 	String multipleTo = "";
 
 	Iterator<String> itr = emails.iterator();
+	String  toName = null;
 
 	// Adds multiple - to[]="email1" & to[]="email2"
 	while (itr.hasNext())
 	{
 		String emailString = itr.next();
-				
-	    multipleTo += param + "=" + URLEncoder.encode(EmailUtil.getEmail(emailString), "UTF-8") + "&" + paramName + "=" + URLEncoder.encode(EmailUtil.getEmailName(emailString), "UTF-8");
+		
+		toName = EmailUtil.getEmailName(emailString);
+		
+		// If toName is empty, get Name from email
+		if(StringUtils.isBlank(toName))
+			toName = MergeFieldsUtil.getFirstUpperCaseChar(emailString.split("@")[0]);
+		
+	    multipleTo += param + "=" + URLEncoder.encode(EmailUtil.getEmail(emailString), "UTF-8") + "&" + paramName + "=" + URLEncoder.encode(toName, "UTF-8");
 
 	    // appends '&' except for last one.
 	    if (itr.hasNext())
