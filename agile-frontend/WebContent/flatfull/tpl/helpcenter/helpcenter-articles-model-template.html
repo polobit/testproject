@@ -1,26 +1,19 @@
 <script id="helpcenter-articles-model-template" type="text/html">
-<div class="wrapper" style="padding-left: 20px;">
-	<table class="txt-small full-width" style="background-color: inherit;">
-      <tr>
-        <div class="text-ellipsis">
-           <div class="text-ellipsis pull-left text-sm" style="color: #697073;max-width: 20em;">
-              <td style="width:50%">
-       	        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-			           <a class="h4" href="#categorie/{{categorie_id}}/section/{{section_id}}/article/{{id}}">
-				          {{title}}
-			           </a>                  
-                </td>
-           </div>  
-        </div> 
-      </tr>
-      <tr>
-      	<td>
-           <small class="text-muted text-xs">
-          	    created time {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
-			     </small>
-      	</td>
-	  </tr>
-  </table>  
-</div>
-<hr style="border-color: #DADDDE; margin-top: 0px; margin-bottom: 0px;"/>
+          <tr>
+              <td style="padding-top: 15px;padding-left:15px">
+         	       <div class="text-ellipsis pull-left text-sm" style="max-width: 20em; padding-left:15px">
+                     <i class="fa fa-chevron-right" aria-hidden="true"></i>
+    		                <a  href="#categorie/{{categorie_id}}/section/{{section_id}}/article/{{id}}">
+    			               {{title}}
+    		                </a>                  
+                   </div>
+              </td>
+          </tr>
+          <tr>
+          	<td style="padding-bottom: 15px; padding-left:40px;">
+               <small class="text-muted text-xs">
+              	    created time {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
+    			     </small>
+          	</td>
+    	  </tr>
 </script>

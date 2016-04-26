@@ -227,7 +227,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 					App_Helpcenter_Module.articlesCollection = new Base_Collection_View({
 						url : '/core/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
 						templateKey : "helpcenter-articles",
-						individual_tag_name : 'div'
+						individual_tag_name : 'tbody'
 					});
 
 					//Fetching groups collections
