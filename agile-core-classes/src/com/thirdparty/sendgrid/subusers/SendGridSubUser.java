@@ -409,6 +409,7 @@ public class SendGridSubUser extends SendGridLib
 		{
 				e.printStackTrace();
 				System.out.println("Exception occured while getting all stats of Sendgrid...." + e.getMessage());
+				return null;
 		}
 		return allStatsJSON;
 	}
@@ -451,6 +452,7 @@ public class SendGridSubUser extends SendGridLib
 			{
 				e.printStackTrace();
 				System.out.println("Exception occured while getting sendgrid reputation...." + e.getMessage());
+				return null;
 			}
 		return response;
 	}
@@ -511,6 +513,7 @@ public class SendGridSubUser extends SendGridLib
 		{
 			e.printStackTrace();
 			System.out.println("Exception occured while deleting sendgrid subuser...." + e.getMessage());
+			return null;
 		}
 		return response;
 	}

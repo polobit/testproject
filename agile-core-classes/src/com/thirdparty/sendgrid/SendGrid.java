@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.document.Document;
@@ -24,6 +26,7 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.sun.org.apache.xml.internal.serializer.ToSAXHandler;
 import com.thirdparty.mandrill.MandrillSendDeferredTask;
 import com.thirdparty.sendgrid.deferred.SendGridAttachmentDeferredTask;
 import com.thirdparty.sendgrid.lib.SendGridLib;
@@ -124,7 +127,12 @@ public class SendGrid
      * SMTP Header
      */
     public static final String SENDGRID_API_PARAM_X_SMTPAPI = "x-smtpapi";
-
+    
+    /**
+     * SMTP Unique Arguments
+     */
+    public static final String SENDGRID_API_PARAM_UNIQUE_ARGUMENTS = "unique_args";
+    
     /**
      * Post Param file attachment
      */
@@ -252,10 +260,26 @@ public class SendGrid
 	// HTML body
 	if (html != null)
 	    queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "=" + URLEncoder.encode(html, "UTF-8");
-
+	
 	// Add SMTP Header
 	if (SMTPHeaderJSON != null)
 	    queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPHeaderJSON, "UTF-8");
+	
+	else
+	 {
+		JSONObject subjectJSON=new JSONObject();
+		JSONObject SMTPJSON=new JSONObject();
+    	try 
+    	  {
+			subjectJSON.put(SENDGRID_API_PARAM_SUBJECT, "Batman and Deadpool");
+			SMTPJSON.put(SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
+			
+			queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPJSON.toString(), "UTF-8");
+		 } 
+    	catch (JSONException e) {
+			System.out.println("Error ocurred while creating SMTPJSON...."+e.getMessage());
+		}	
+	 }
 
 	if (attachmentData != null && attachmentData.length != 0)
 	    queryString += "&" + getAttachmentQueryString(attachmentData);
@@ -498,5 +522,16 @@ public class SendGrid
 			e.printStackTrace();
 		}
 	
+    }
+    
+    public static void main (String asd[]) throws JSONException{
+    	
+    	String str=null;
+    	JSONObject subjectJSON=new JSONObject();
+    	subjectJSON.put("SUBJECT", "Batman and Deadpool");
+    	JSONObject obj=new JSONObject();
+    	obj.put("unique_args", subjectJSON);
+    	System.out.println(obj.toString());
+    	sendMail(null, null, "prashannjeet@agilecrm.com", "hi", "prashannjeet@yahoo.com", null, null, "Hi dear", null, "hello", "Good morning", obj.toString());
     }
 }
