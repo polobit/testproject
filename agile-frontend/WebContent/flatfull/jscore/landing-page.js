@@ -80,11 +80,12 @@ function initializeLandingPageListeners(pageId) {
 		   e.preventDefault();
 		   	 
             var id={"id":pageId};
-            if (isValidForm('#landingPageBuilderForm') && pageId !== undefined) {
-
+            if (isValidForm('#landingPageBuilderForm') && pageId !== undefined && readData("landingpages-save-popup")!=="true") {
+ 
 		    getTemplate("landingpages-save-popup-modal",id, undefined, function(ui){
 		   	// var id={"id":pageId};
            $("#landingPagesSavePopup").html(ui).modal("show");
+           $("#popup-msg").fadeOut(8000);
        
        
       });
