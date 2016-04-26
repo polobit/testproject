@@ -258,6 +258,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	});
 
 	$("#referrals_link").on("click", function(e){
+		e.preventDefault();
 		Agile_GA_Event_Tracker.track_event("Refer");
 		load_facebook_lib_for_referrals();
 		$.ajax({
