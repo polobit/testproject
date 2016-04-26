@@ -50,7 +50,7 @@ public class WorkflowUtil
 		try
 		{
 			Workflow worflow =  dao.get(id);
-			if(worflow.access_level == 1L || worflow.access_level == DomainUserUtil.getCurentUserId())
+			if(worflow.access_level == 1L || worflow.access_level.equals(DomainUserUtil.getCurentUserId()))
 					return worflow;
 			
 			throw new Exception("This Workflow is not related to yours.");
