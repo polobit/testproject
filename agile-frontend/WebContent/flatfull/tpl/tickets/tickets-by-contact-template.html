@@ -1,0 +1,56 @@
+<script id="tickets-by-contacts-collection-template" type="text/html">
+{{#unless this.length}}
+    <div class="wrapper p-t-none">
+        <div class="slate-content mobile-pad-content">
+            <div class="box-left pull-left m-r-md">
+                <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
+            </div>
+            <div class="box-right pull-left">
+                <h4 class="m-t-none">No tickets found.</h4>
+                <!--<div class="text">
+                    You can save specific information about task as a Note.
+                </div>
+                <a href="#new-task-modal" data-toggle="modal" class="m-r-none btn btn-default btn-sm blue btn-slate-action task-add-note m-t-xs m-t-none"><i class="icon-plus-sign"></i>  Add Ticket</a>-->
+            </div>
+			<div class="clearfix"></div>
+        </div>
+    </div>
+ {{/unless}}
+
+{{#if this.length}}
+	<ul id="tickets-by-contacts-model-list" class="ativity-block-ul list-group list-group-lg m-b-none"></ul>
+{{/if}}
+</script>
+<script id="tickets-by-contacts-model-template" type="text/html">
+<div  class="activity block pos-rlt">
+	<div class="activity-block-owner activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
+		{{#if contact.properties}}
+        	<img class="user-img r r-2x" src="{{gravatarurl contact.properties 34}}" onerror="image_error(this);"/>
+      	{{else}}
+        	<img class="user-img r r-2x"  src="{{getGravatarFromEmail requester_email 40}}" 
+        		onerror="image_error(this);" _data-name="{{getInitials requester_name}}"/>
+      	{{/if}}
+	</div>
+	<div class="pull-left rightThumbView pos-rlt">
+		<div class="pull-left contact-title-dynamic text-ellipsis">	
+			<a class="text-md text-cap custom-color" href="#ticket/{{id}}" target="_blank">
+				{{subject}}, &nbsp;#{{id}}
+			</a>
+		</div>
+		<div class="pull-right">
+			<small class="edit-hover  text-muted"> 
+				<i class="fa fa-clock-o m-r-xs"></i>
+				<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+			</small>
+		</div>
+		<div class="clearfix"></div>
+		<div class="contact-desc-dynamic">
+			{{#if last_ticket_notes}}
+		    	{{replace_br_with_space last_ticket_notes.plain_text}}
+		    {{else}}
+		    	{{replace_br_with_space last_reply_text}}
+		    {{/if}}
+		</div>
+	</div>
+</div>
+</script>
