@@ -95,7 +95,9 @@
 	      </div>      
 	    </li>
 	 </ul>
-	 <a href="#users-refered" >Users Refered</a>
+	 <div class="text-right p-l-lg p-r-lg">
+	 <a href="#referrals" class="text-info" style="font-size:11px;">Referrals</a>
+	 </div>
 </script>
 
 <script id="refer-blog-template" type="text/html">
@@ -146,53 +148,74 @@
 
 <!-- Users Refered template -->
 <script id="refer-users-collection-template" type="text/html">
-
-<div class="panel panel-default">
- <div class="panel-heading">
+<div class="bg-light lter b-b wrapper-md">
  <h3 class="inline-block m-n text-black font-thin">Users Refered</h3>
 	<div class="clearfix"></div>
  </div>
+<div class="tab-content wrapper-md">
+<div class="panel panel-default">
 <div class="row">
 <div class="col-md-12 col-sm-12">
             <div class=" table-responsive"> 
             <table class="table table-striped  agile-table panel table-layout-mob-view" url="core/api/refered_domains">
                 <thead>
                     <tr>
-					 <th style="width:20%" >Username</th>
-						<th style="width:20%" >UserEmail</th>
-                        <th style="width:20%" >Created On</th>
-                        <th style="width:20%" >
-             					Subscription type</th>
+					 <th style="width:25%;padding-left:25px;" >UserName</th>
+						<th style="width:25%" >User ID</th>
+                        <th style="width:25%" >Plan</th>
+                        <th style="width:25%" >
+             				Created On	</th>
                     </tr>
                  </thead>
-                 <tbody id='refer-users-model' route='/'>
+                 <tbody id='refer-users-model-list' route='/'>
                  </tbody>
             </table>
             </div>
     </div>
 </div>
 </div>
+</div>
 </script>
 <script id="refer-users-model-template" type="text/html">
-    <td class='data'>
+    <td class='data'style="cursor:default;">
     <div class="table-resp">
     
-	<div class="agile-thumb agile-thumb-view">
-		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 101px);">{{user.Username}}</a>
+	<div class="" style="margin-right: 10px;margin-left: 25px;padding-right: 78%;font-size:16px;">
+		<span>{{user.name}}</span>
 <div class="clearfix"></div>
-		<div class="text-xs">{{user.email}}</div>
+		<div class="text-xs"></div>
 	</div>
 	</div>
 	</td>
 	<td class='data'>
     <div class="table-resp">
+    
 	<div class="agile-thumb agile-thumb-view">
-		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 101px);">{{user.created_time}}</a>
+		<span class="m-r-sm custom-link pull-left text-ellipsis w-auto" >{{user.email}}</span>
 <div class="clearfix"></div>
-		<div class="text-xs">{{plan.subscription_type}}</div>
+		<div class="text-xs"></div>
 	</div>
 	</div>
 	</td>
+	<td class='data' style="cursor:default;">
+    <div class="table-resp">
+	<div class="agile-thumb agile-thumb-view">
+		<span class="m-r-sm custom-link pull-left  w-auto" style="max-width:calc(100% - 101px);">{{referedUsersPlan plan}}</span>
+<div class="clearfix"></div>
+		<div class="text-xs"></div>
+	</div>
+	</div>
+	</td>
+	<td class='data' style="cursor:default;">
+    <div class="table-resp">
+	<div class="agile-thumb agile-thumb-view">
+		<span class="last-login-time"  >{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" user.createdTime}}</span>
+<div class="clearfix"></div>
+		<div class="text-xs"></div>
+	</div>
+	</div>
+	</td>
+	
 </script>
 
 

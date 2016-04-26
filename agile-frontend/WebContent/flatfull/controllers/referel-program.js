@@ -5,7 +5,7 @@ var ReferelRouter = Backbone.Router.extend({
 	"referrals" : "referrelprogram",
 	"refer" : "refer",
 	"refer-friends" : "referFriends",
-	"users-refered" : "userrefered"
+	"referrals" : "Referrals"
 	},
 
 	referrelprogram : function()
@@ -63,15 +63,15 @@ var ReferelRouter = Backbone.Router.extend({
 	 * Fetches all the Users refered by the current domain user and show the plan 
 	 * the new users subscribed to and dispaly the time when they had created
 	 */
-	userrefered : function(el)
+	Referrals : function(el)
 	{
 		console.log("userrefered");
-		var Subscribers = new Base_Collection_View({ url :'core/api/refer/refered_domains',  templateKey : "refer-users",postRenderCallback :function(el){
+		var Subscribers = new Base_Collection_View({ url :'core/api/refer/refered_domains',  templateKey : "refer-users",individual_tag_name : "tr",postRenderCallback :function(el){
 			console.log("Subscribers")
 		}
 			});
 		Subscribers.collection.fetch();
-		$("#referModal").hide();
+		
 		$('#content').html(Subscribers.render().el);
 
 	}
