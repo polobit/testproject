@@ -64,8 +64,6 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			"call-contacts" : "callcontacts",
 
-		/* Referrals */
-		"refer" : "refer",
 		"refer-friends" : "referFriends"
 	},
 	
@@ -1260,32 +1258,6 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		}, "#content"); 
 
 
-
-	},
-
-	refer : function()
-	{
-		Agile_GA_Event_Tracker.track_event("Refer");
-		load_facebook_lib_for_referrals();
-		$.ajax({
-			url : 'core/api/refer',
-			type : 'GET',
-			dataType : 'json',
-			success : function(data){
-				REFER_DATA = data;
-				getTemplate("refer-modal", {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$('#referModal').html($(template_ui));
-					getTemplate("refer-modal-body", data, undefined, function(template_ui1){
-						if(!template_ui1)
-							  return;
-						$('#referModal').find(".modal-body").html($(template_ui1));
-						$('#referModal').modal("show");
-					}, null);
-				}, null);
-			}
-		});
 
 	},
 

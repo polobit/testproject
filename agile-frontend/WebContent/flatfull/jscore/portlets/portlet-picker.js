@@ -26,7 +26,8 @@ function organize_portlets(base_model) {
 		"TASKSANDEVENTS" : "taksAndEvents",
 		"USERACTIVITY" : "userActivity",
 		"RSS" : "rssFeed",
-		"ACCOUNT" : "accountInfo"
+		"ACCOUNT" : "accountInfo",
+		"WEBSTATS" : "webstats"
 	};
 
 	// Append Item View
