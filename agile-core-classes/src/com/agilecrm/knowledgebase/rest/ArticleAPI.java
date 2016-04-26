@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -141,4 +142,37 @@ public class ArticleAPI
 
 		return article;
 	}
+	/**
+	 * 
+	 * @param article,id
+	 * @return
+	 * @throws WebApplicationException
+	 */
+	@PUT
+	@Path("/{id}")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Article updateArticle(Article article) throws WebApplicationException
+	{
+		try
+		{
+			Key<Section> section_key = new Key<Section>(Section.class, article.section_id);
+			article.section_key = section_key;
+
+			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, article.categorie_id);
+			article.categorie_key = categorie_key;
+
+			article.save();
+		}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while creating workflow creation activity");
+
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return article;
+	}
+
 }
