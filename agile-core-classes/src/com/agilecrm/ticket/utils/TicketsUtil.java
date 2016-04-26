@@ -819,7 +819,7 @@ public class TicketsUtil
 	 * @throws EntityNotFoundException
 	 * @throws JSONException
 	 */
-	public static void sendEmailToGroup(Long group_id, String subject, String body) throws Exception
+	public static void sendEmailToGroup(Long group_id, String subject, String body, String from_name, String from_address) throws Exception
 	{
 		System.out.println("Send email to ticket group....");
 
@@ -867,7 +867,7 @@ public class TicketsUtil
 		System.out.println("users found...." + users.size());
 
 		for (DomainUser user : users)
-			sendEmailToUser(user.email, subject, body);
+			sendEmailToUser(user.email, subject, body, from_name, from_address);
 	}
 
 	/**
@@ -878,7 +878,7 @@ public class TicketsUtil
 	 * @param body
 	 * @throws JSONException
 	 */
-	public static void sendEmailToUser(String email, String subject, String body) throws Exception
+	public static void sendEmailToUser(String email, String subject, String body, String from_name, String from_address) throws Exception
 	{
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(subject) || StringUtils.isBlank(body))
 			throw new Exception("Required parameters missing");
@@ -887,9 +887,9 @@ public class TicketsUtil
 
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("body", body);
-
-		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data);
-
+		
+		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_name, from_address);
+		
 		System.out.println("Sent email to: " + email);
 	}
 
