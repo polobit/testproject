@@ -4,15 +4,18 @@
     	<div class="col-md-10">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			Add Catogery
+        			{{#if id}}Edit{{else}}Add{{/if}} Catogery
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+                    {{#if id}}
+                        <input type="text" name="id" class="hide" value="{{id}}"/>
+                    {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
                             <label class="control-label col-md-3" for="name">Name <span class="field_req">*</span></label> 
                             <div class="col-md-5">
                                 <div class="controls">
-                                    <input type="text" name="name" id="name"  placeholder="Name" class="required form-control" maxlength="60">
+                                    <input type="text" name="name" id="name" value="{{name}}" placeholder="Name" class="required form-control" maxlength="60">
                                 </div>
                             </div>
                         </div>
@@ -20,7 +23,7 @@
                             <label class="control-label col-md-3" for="description">Description <span class="field_req">*</span></label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
-                                    <textarea id="description" class="form-control required" name="description" style="min-height: 100px;"></textarea>
+                                    <textarea id="description" class="form-control required" name="description" style="min-height: 100px;">{{description}}</textarea>
                                 </div>
                             </div>
                         </div>

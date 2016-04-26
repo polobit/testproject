@@ -31,4 +31,14 @@ public class SectionUtil
 
 		gettingStarted.save();
 	}
+	/**
+	 * Deletes Section from DB, text search and its related notes. 
+	 * @param id
+	 * @throws Exception
+	 */
+	public static void delete(Long id) throws Exception
+	{
+		// Deleting section
+		Section.dao.deleteKey(new Key<Section>(Section.class, id));
+	}
 }

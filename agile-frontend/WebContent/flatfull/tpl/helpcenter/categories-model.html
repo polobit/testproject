@@ -3,19 +3,29 @@
    	<div class="panel panel-default widget-add pos-rlt">
 	    <div class="panel-heading">
 	    	<h4 class="font-thin m-t-none m-b-none">
-	    		<i class="fa fa-cube" aria-hidden="true"></i> {{name}}
-	    	</h4>
+	    		<i class="fa fa-cube" aria-hidden="true"></i> {{name}} 
+	    	</h4>                 
+	   		<div class="btn-group  right pos-rlt pull-right">
+                  <button class="btn bg-transparent" style="margin-top: -26px;"data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#categorie/{{id}}/edit-categorie">Edit</a></li>
+                    <li><a href="#helpcenter/delete-categorie" class="delete">Delete</a></li>
+                  </ul>
+               </div>     	 
 	    </div>
 	    <div class="panel-body">
 	    	{{#if sections}}
 		    	<ul>
 			        {{#sections}}
-			        	<li><a href="#helpcenter/section/{{id}}">{{name}} ({{articles_count}})</a></li>
+			        	<li><a href="#categorie/{{../id}}/section/{{id}}/articles">{{name}} ({{articles_count}})</a></li>
 			        
 			        {{/sections}}
 			    </ul>
 		    {{else}}
-	            No Sections Avialable
+	            No Sections Avialable <a class="link-color pull-right text-xs" href="#categorie/{{id}}/add-section">
+                        Add Section
+                      </a>
+
 		    {{/if}}
 		        
 	    </div>
