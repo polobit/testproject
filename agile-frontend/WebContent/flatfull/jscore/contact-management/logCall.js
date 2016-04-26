@@ -239,6 +239,8 @@ $(function()
 		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
 		$('#phoneLogForm #saveActivity').val("true");
 		$("#logCallModal").modal('show');
+		var el = $("#phoneLogForm");
+		agile_type_ahead("call_related_to", el, contacts_typeahead);
 
 
 	});
