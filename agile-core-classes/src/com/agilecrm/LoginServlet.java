@@ -63,14 +63,6 @@ import javax.mail.internet.MimeMessage;
 public class LoginServlet extends HttpServlet {
 	public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
 	public static String RETURN_PATH_SESSION_HASH = "return_hash";
-	
-	// FingerPrint verification
-	public static String SESSION_FINGERPRINT_VAL = "agile_fingerprint";
-	public static String SESSION_FINGERPRINT_OTP = "agile_otp";
-	public static String SESSION_FINGERPRINT_VALID = "agile_fingerprint_valid";
-	public static String SESSION_IPACCESS_VALID = "agile_ip_valid";
-	public static String SESSION_OTP_RESEND_VALID = "agile_otp_info";
-	
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -101,6 +93,9 @@ public class LoginServlet extends HttpServlet {
 		request.getSession().removeAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME);
 
+		// Delete Login Session
+		request.getSession().removeAttribute(
+				UserFingerPrintInfo.FINGER_PRINT_SESSION_NAME);
 
 		// Check if this subdomain even exists or alias exist
 
@@ -119,17 +114,6 @@ public class LoginServlet extends HttpServlet {
 
 		// Check the type of authentication
 		try {
-
-			// Check ip with allowed ones
-			/*if(!IpAccessUtil.isValidIpOpenPanel(request))
-			{
-				AllowAccessMailServlet.accessMail(request);
-				throw new Exception(
-						
-						"The IP address you have provided is not authorized to access this account.");
-				
-			}*/
-			
 						
 			if (!StringUtils.isEmpty(multipleLogin)) {
 				handleMulipleLogin(response);
@@ -223,8 +207,6 @@ public class LoginServlet extends HttpServlet {
 
 		// Hash to redirect after login
 		String hash = request.getParameter("location_hash");
-		
-		String finger_print = request.getParameter("finger_print");
 
 		if (!StringUtils.isEmpty(hash))
 			request.getSession().setAttribute(RETURN_PATH_SESSION_HASH, hash);
@@ -290,46 +272,23 @@ public class LoginServlet extends HttpServlet {
 
 		request.getSession().setAttribute("account_timezone", timezone);	
 		
-        // Set FingerPrint to check in /home
-		request.getSession().setAttribute(SESSION_FINGERPRINT_VAL, finger_print);
-		System.out.println("fingerprint " + request.getSession().getAttribute(SESSION_FINGERPRINT_VAL) );
-		
-		UserFingerPrintInfo infofingerprint = new UserFingerPrintInfo();
-		
-		infofingerprint.validateUserFingerPrint(domainUser, request);
-		
-		boolean isvalid = infofingerprint.isValidFingerPrint;
-		boolean isvalidip = infofingerprint.isValidIP;
-		
-		System.out.println("fingerprint "+isvalid);
-		System.out.println("ip "+isvalidip);
-		 
-		request.getSession().getAttribute(UserFingerPrintInfo.FINGER_PRINT_SESSION_NAME);
-		
 		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
 		{
-			// Validate fingerprint value
-			boolean isValid = DomainUserUtil.isValidFingerPrint(domainUser, request);
-			System.out.println(isValid);
+			// Validate User finger print
+			UserFingerPrintInfo browser_auth = new UserFingerPrintInfo();
+			browser_auth.validateUserFingerPrint(domainUser, request);
 			
-			request.getSession().setAttribute(SESSION_FINGERPRINT_VALID, isValid);
-			
-			boolean isValidIP = IpAccessUtil.isValidIpOpenPanel(request);
-			System.out.println("validip "+isValidIP);
-			request.getSession().setAttribute(SESSION_IPACCESS_VALID, isValidIP);
-			if(!isValid || !isValidIP ){
+			// Send email with code
+			if(!browser_auth.valid_finger_print || !browser_auth.valid_ip ){
 				
 				// Generate one finger print
-				Long generatedOTP = System.currentTimeMillis()/100000;
-				request.getSession().setAttribute(SESSION_FINGERPRINT_OTP, generatedOTP);
-				
-				System.out.println("generatedOTP "+generatedOTP);
-				
+				browser_auth.generateOAuthToken(request);
+
 				// Set info in session for future usage 
-				setUserBrowserInfoInSession(request, domainUser);
+				browser_auth.addUserBrowserInfo(request, domainUser);
 				
 				// Send Sendgrid Email
-				sendOTPEmail(request, isValid, false, domainUser.email);
+				sendOTPEmail(request, domainUser.email, false);
 				
 			}
 		}
@@ -361,34 +320,15 @@ public class LoginServlet extends HttpServlet {
 		response.sendRedirect("/");
 
 	}
-	public Map<String, String > setUserBrowserInfoInSession(HttpServletRequest request, DomainUser domainUser)throws Exception {
-		
-		// Create info
-		Map<String, String> data = new HashMap<String, String>();
-		data.put("generatedOTP", (request.getSession().getAttribute(SESSION_FINGERPRINT_OTP)).toString());
-		data.put("browser_os", request.getParameter("browser_os"));
-		data.put("browser_name", request.getParameter("browser_Name"));
-		data.put("browser_version",request.getParameter("browser_version"));
-		data.put("email", domainUser.email);
-		data.put("domain", domainUser.domain);
-		data.put("IP_Address", request.getRemoteAddr());
-		data.put("city",request.getHeader("X-AppEngine-City"));
-		
-		System.out.println("data "+data);
-		
-		// Set data in session to resend OTP if required
-		request.getSession().setAttribute(SESSION_OTP_RESEND_VALID, data);
-		return data;
-	}
-
+	
+	
 	public void resendVerficationCode(HttpServletRequest request){
 		
+		UserFingerPrintInfo validFingerPrint = new UserFingerPrintInfo();
 		String email = ((UserInfo)request.getSession().getAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME)).getEmail();
 		
-		Boolean isValid = (Boolean) request.getSession().getAttribute(SESSION_FINGERPRINT_VALID);
-		
-		sendOTPEmail(request, isValid, true, email);
+		sendOTPEmail(request, email, true);
 		
 	}
 	
@@ -399,16 +339,16 @@ public class LoginServlet extends HttpServlet {
 
 	}
 
-	private void sendOTPEmail(HttpServletRequest request,  boolean optEmail, boolean resend, String email) {
+	private void sendOTPEmail(HttpServletRequest request, String email, boolean resend) {
 
 		try {
-			
-			Map data = (HashMap)request.getSession().getAttribute(SESSION_OTP_RESEND_VALID);
+			UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(request);
+			Map data = info.info;
 			 
 			// Simulate template
 			String template = SendMail.ALLOW_IP_ACCESS;
 			String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
-			if(!optEmail){
+			if(!info.valid_finger_print){
 				template = SendMail.OTP_EMAIL_TO_USER;
 				subject =  "New sign-in from " + data.get("browser_Name") + "on " + data.get("browser_os"); 
 			}

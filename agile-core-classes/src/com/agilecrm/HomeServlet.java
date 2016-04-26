@@ -190,9 +190,8 @@ public class HomeServlet extends HttpServlet
     {
 	try
 	{
-	    String userFingerPrint = (String) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VAL); 
-	    System.out.println("userFingerprint "+userFingerPrint);
-	    if(StringUtils.isBlank(userFingerPrint))
+		UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(req);
+	    if(StringUtils.isBlank(info.finger_print))
 	    	return;
 		    
 	    // Gets current domain user and saves current fingerprint 
@@ -201,7 +200,7 @@ public class HomeServlet extends HttpServlet
 	    if(domainUser.finger_prints == null)
 	    	domainUser.finger_prints = new HashSet();
 	    
-	    domainUser.finger_prints.add(userFingerPrint);
+	    domainUser.finger_prints.add(info.finger_print);
 	    domainUser.save();
 	}
 	catch (Exception e)
@@ -234,18 +233,8 @@ public class HomeServlet extends HttpServlet
     	// domain user and forwards request to home.jsp
     	if (!isNewUser())
     	{
-    		Boolean sessionFingerPrint = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VALID);
-    		Boolean sessionIP = (Boolean) req.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
-    		if(sessionFingerPrint == null || sessionIP == null){
-    			req.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
-    			req.getSession().setAttribute(LoginServlet.SESSION_IPACCESS_VALID, true);
-    			doGet(req, resp);
-    			return;
-    		}
-    		
-    		if(!sessionFingerPrint.booleanValue() || !sessionIP.booleanValue()){
-    			
-    			req.getSession().setAttribute("ip_validation", sessionIP.booleanValue());
+    		UserFingerPrintInfo browser_auth = UserFingerPrintInfo.getUserAuthCodeInfo(req);
+    		if(!browser_auth.valid_finger_print || !browser_auth.valid_ip){
     			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
     			return;
     		}
@@ -272,36 +261,31 @@ public class HomeServlet extends HttpServlet
     {
     	try 
     	{
+    		// Get code from user
 	    	String otp = request.getParameter("finger_print_otp");
-	    	String ipValid = request.getRemoteAddr();
-	    	Long generatedOTP = 0L;
-	    	
-	    	try {
-	    		generatedOTP = (Long) request.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_OTP);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	    	
-	    	if(StringUtils.isBlank(otp) || !(Long.parseLong(otp) == generatedOTP)){
+	    	System.out.println("user otp "+otp);
+	    	// Validate exiting one
+	    	UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(request);
+	    	System.out.println("genearated otp = "+info.verification_code);
+	    	if(StringUtils.isBlank(otp) || !info.verification_code.equalsIgnoreCase(otp)){
 	    		throw new Exception(" Please enter valid verification code");
 	    	} 
 	    	
-	    	request.getSession().setAttribute(LoginServlet.SESSION_FINGERPRINT_VALID, true);
-	    	request.getSession().setAttribute(LoginServlet.SESSION_IPACCESS_VALID, true);
-	    	//Boolean sessionIP = (Boolean) request.getSession().getAttribute(LoginServlet.SESSION_IPACCESS_VALID);
-	    	// Add current ip to Ip List
-	    	/*Boolean ip_validation = (Boolean)request.getSession().getAttribute("ip_validation");
-	    	System.out.println("ip_validation "+ip_validation);*/
-	    	if(StringUtils.isNotBlank(ipValid) || !((Boolean)request.getSession().getAttribute("ip_validation")))
+	    	if(!info.valid_ip)
 	    	{
 	    		IpAccess ipList =  IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
 	    		if(ipList != null && ipList.ipList != null){
 	    			ipList.ipList.add(request.getRemoteAddr());
 	    			ipList.save();
 	    			System.out.println(ipList);
-	    			
 	    		}
+	    		
+	    		
 	    	}
+	    	// Add to info
+    		info.valid_ip = true;
+    		info.valid_finger_print = true;
+    		info.set(request);
 	    	
 	    	doGet(request, response);
     	}

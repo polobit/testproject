@@ -1,33 +1,39 @@
 package com.agilecrm;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
-
-import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.user.DomainUser;
-import com.google.appengine.api.NamespaceManager;
 
 public class UserFingerPrintInfo implements Serializable{
 	
-	 /**
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Represents name of the session attribute
      */
     public static final String FINGER_PRINT_SESSION_NAME = "fingerprint";
 	
-	//Fingerprint
-	public String fingerprint = null;
+	// Fingerprint
+	public String finger_print = null;
 	
-	//Fingerprint validation
-	public boolean isValidFingerPrint = true;
+	// Fingerprint validation
+	public boolean valid_finger_print = true;
 	
-	//IP validataion
-	public boolean isValidIP = true;
+	// IP validataion
+	public boolean valid_ip = true;
 	
-	//Generated verification code
-	public String verificationCode = null;
+	// Generated verification code
+	public String verification_code = null;
+	
+	// Browser info
+	Map<String, String> info = new HashMap<String, String>();
 	
 	public UserFingerPrintInfo(){}
 	
@@ -43,77 +49,65 @@ public class UserFingerPrintInfo implements Serializable{
 	public void validateUserFingerPrint(DomainUser domainUser, HttpServletRequest request){
 		
 		this.set(request);
-		//Get Fingerprint
-		String userfingerprint = request.getParameter("finger_print");
-		System.out.println(userfingerprint);
-		// Check null and proceed check with existing ones
+		
+		// Get Fingerprint
+		String browserFingerPrint = request.getParameter("finger_print");
+		System.out.println("Browser FP = " + browserFingerPrint);
+		
 		// Get actual finger prints
     	Set<String> finger_prints = domainUser.finger_prints;
     	
-		// Checks the wheather fingerprintlist is null or not  
-		if(finger_prints == null || finger_prints.size() == 0||finger_prints.contains(userfingerprint))
-			 isValidFingerPrint = true;
+    	// Check null and proceed check with existing ones 
+		if(finger_prints != null && finger_prints.size() > 0 && !finger_prints.contains(browserFingerPrint))
+			 valid_finger_print = false;
 		
-		// Gets the userfingerprint from request
-		//String user_finger_print = (String) request.getSession().getAttribute(LoginServlet.SESSION_FINGERPRINT_VAL);
-		
-		// Checks the condition is userfingerprint present in the list or not
-		/*if(finger_prints.contains(userfingerprint)){
-			isValidFingerPrint = true;
-		}*/
-		else{
-			isValidFingerPrint = false;
-		}
+		finger_print = browserFingerPrint;
 		
 		// IP Validation from request scope
-		IpAccess ipAccess = IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
+		valid_ip = IpAccessUtil.isValidIpOpenPanel(request);
 		
-		//Checks the wheather iplist is null or not  
-		if(ipAccess == null || ipAccess.ipList == null || ipAccess.ipList.size() == 0)
-			return;	
+		// Resave
+		set(request);
 		
-		else
-		{
+	}
+	
+	public void generateOAuthToken(HttpServletRequest request){
+		this.verification_code = System.currentTimeMillis()/100000 + "";
 		
-		// Gets the userIp from request
-		String userIp = request.getRemoteAddr();
-		// Checks the condition is userIp present in the list or not
-		Set<String> iplist = ipAccess.ipList;
-		for (String ip : iplist) {
-			System.out.println("ip "+ip);
-			if(IpAccessUtil.isValidIPWithRegex(ip, userIp))
-				isValidIP= true;
-		}
-		isValidIP = false;
-		}
+		System.out.println("verification_code = " + verification_code);
 		// Resave
 		set(request);
 	}
+	
+	public void addUserBrowserInfo(HttpServletRequest request, DomainUser domainUser)throws Exception {
 		
-
-	public String getFingerprint() {
-		return fingerprint;
+		// Create info
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("generatedOTP", this.verification_code);
+		data.put("browser_os", request.getParameter("browser_os"));
+		data.put("browser_name", request.getParameter("browser_Name"));
+		data.put("browser_version",request.getParameter("browser_version"));
+		data.put("email", domainUser.email);
+		data.put("domain", domainUser.domain);
+		data.put("IP_Address", request.getRemoteAddr());
+		data.put("city",request.getHeader("X-AppEngine-City"));	
+		System.out.println("data "+data);
+		
+		// Add to this ref
+		this.info = data;
+		
+		// Resave
+		set(request);
 	}
 
-	public void setFingerprint(String fingerprint) {
-		this.fingerprint = fingerprint;
+	public static UserFingerPrintInfo getUserAuthCodeInfo(HttpServletRequest request){
+		UserFingerPrintInfo info =  (UserFingerPrintInfo) request.getSession().getAttribute(FINGER_PRINT_SESSION_NAME);
+		if(info == null){
+			info = new UserFingerPrintInfo();
+			info.set(request);
+		}
+		
+		return info;
 	}
-	
-	public boolean isValidFingerPrint() {
-		return isValidFingerPrint;
-	}
-
-	public void setValidFingerPrint(boolean isValidFingerPrint) {
-		this.isValidFingerPrint = isValidFingerPrint;
-	}
-
-	public boolean isValidIP() {
-		return isValidIP;
-	}
-
-	public void setValidIP(boolean isValidIP) {
-		this.isValidIP = isValidIP;
-	}
-	
 
 }
