@@ -16,6 +16,12 @@ import com.googlecode.objectify.Key;
  */
 public class ArticleUtil
 {
+	/**
+	 * 
+	 * @param categorieID
+	 * @param sectionID
+	 * @return
+	 */
 	public static List<Article> getArticles(Long categorieID, Long sectionID)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -29,6 +35,17 @@ public class ArticleUtil
 		return Article.dao.listByProperty(map);
 	}
 
+	public static void searchArticles(String searchTerm)
+	{
+
+	}
+
+	/**
+	 * 
+	 * @param categorieID
+	 * @param sectionID
+	 * @return
+	 */
 	public static int getCount(final Long categorieID, final Long sectionID)
 	{
 		Map<String, Object> map = new HashMap<String, Object>()

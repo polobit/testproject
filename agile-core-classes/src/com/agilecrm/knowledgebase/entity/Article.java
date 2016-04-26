@@ -11,7 +11,10 @@ import javax.persistence.PrePersist;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
+import com.agilecrm.search.document.HelpcenterArticleDocument;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -23,7 +26,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  * @author Sasi
  * 
  */
-public class Article implements Serializable
+public class Article extends Cursor implements Serializable
 {
 	/**
 	 * 
@@ -43,6 +46,12 @@ public class Article implements Serializable
 	 * Stores category description
 	 */
 	public String content = null;
+	
+	/**
+	 * Stores category description
+	 */
+	@NotSaved
+	public String plain_content = null;
 
 	public Long created_time = null;
 
@@ -105,25 +114,31 @@ public class Article implements Serializable
 	 */
 	@NotSaved
 	public Long updated_by = null;
-	
+
 	/**
 	 * Util attribute
 	 */
 	@NotSaved
 	public Categorie categorie = null;
-	
+
 	/**
 	 * Util attribute
 	 */
 	@NotSaved
 	public Section section = null;
-	
+
+	/**
+	 * Util attribute
+	 */
+	@NotSaved
+	public DomainUserPartial domainUser = null;
+
 	/**
 	 * Default constructor
 	 */
 	public Article()
 	{
-		
+
 	}
 
 	/**
@@ -151,12 +166,21 @@ public class Article implements Serializable
 
 		updated_by_key = key;
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 */
 	public Key<Article> save()
 	{
-		return dao.put(this);
+		Key<Article> articleKey = dao.put(this);
+
+		// Adding article to text search
+		new HelpcenterArticleDocument().add(this);
+
+		return articleKey;
 	}
-	
+
 	@javax.persistence.PostLoad
 	private void postLoad()
 	{
@@ -171,5 +195,17 @@ public class Article implements Serializable
 
 		if (section_key != null)
 			section_id = section_key.getId();
+
+		if (created_by == null)
+		{
+			try
+			{
+				domainUser = DomainUserUtil.getPartialDomainUser(created_by);
+			}
+			catch (Exception e)
+			{
+
+			}
+		}
 	}
 }

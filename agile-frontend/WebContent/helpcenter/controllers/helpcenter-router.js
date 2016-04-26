@@ -11,6 +11,9 @@ var HelpcenterRouter = Backbone.Router.extend({
 		"categorie/:categorie_id" : "categorieSections",
 		"categorie/:categorie_id/section/:section_id" : "sectionArticles",
 		"categorie/:categorie_id/section/:section_id/article/:article_id" : "viewArticle",
+
+		/*Search articles*/
+		"search-article/:search_term" : "searchArticle",
 	},
 	categories: function(){
 
@@ -133,5 +136,28 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 		if(callback)
 	 			callback();
 	 	});
+	},
+
+	searchArticle: function(search_term){
+
+		App_Helpcenter.renderHomeTemplate(function(){
+
+			//Initializing base collection with groups URL
+			App_Helpcenter.articlesCollection = new Base_Collection_View({
+				url : '/core/api/knowledgebase/article/search/' + search_term,
+				templateKey : "helpcenter-search-articles",
+				individual_tag_name : 'div',
+				postRenderCallback : function(el, collection) {
+
+					Helpcenter_Util.setBreadcrumbPath();
+				}
+			});
+
+			//Fetching groups collections
+			App_Helpcenter.articlesCollection.collection.fetch();
+
+			//Rendering template
+			$('#helpcenter-container').html(App_Helpcenter.articlesCollection.el);
+		});
 	}
 });
