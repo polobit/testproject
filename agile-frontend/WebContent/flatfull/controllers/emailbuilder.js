@@ -36,7 +36,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
 
 	loadSelectedTemplate : function(defaultTemplateId) {
 		$('#content').html("<div id='emailbuilder-listeners'></div>");
-        initializeEmailBuilderListeners(templateId);
+        initializeEmailBuilderListeners();
 
         var data = {
             "templateId" : defaultTemplateId,
