@@ -41,6 +41,8 @@ public class CampaignReportServlet extends HttpServlet
 
 	for (String namespace : domains)
 	{
+		
+		System.out.println("Adding campaign report deferred task to queue");
 	    // Created a deferred task for report generation
 		CampaignReportsCronDeferredTask campaignReportsDeferredTask = new CampaignReportsCronDeferredTask(namespace, duration);
 
