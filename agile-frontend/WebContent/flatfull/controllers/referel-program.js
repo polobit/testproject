@@ -3,9 +3,8 @@ var ReferelRouter = Backbone.Router.extend({
 	routes : {
 
 	"referrals" : "referrelprogram",
-	"refer" : "refer",
 	"refer-friends" : "referFriends",
-	"referrals" : "Referrals"
+	"referral" : "Referrals"
 	},
 
 	referrelprogram : function()
@@ -65,7 +64,7 @@ var ReferelRouter = Backbone.Router.extend({
 	 */
 	Referrals : function(el)
 	{
-		console.log("userrefered");
+		
 		var Subscribers = new Base_Collection_View({ url :'core/api/refer/refered_domains',  templateKey : "refer-users",individual_tag_name : "tr",postRenderCallback :function(el){
 			console.log("Subscribers")
 		}
