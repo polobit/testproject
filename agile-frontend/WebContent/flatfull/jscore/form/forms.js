@@ -7,27 +7,50 @@ var Form_Collection_Events = Base_Collection_View.extend({
 	},
 
 	codePublish : function(e){
+		
+		$("#modal-backdrop").hide();
 		e.preventDefault();
 
 		//full source code
 		var $codeShareModalEl = $("#codeShareModal");
-		$codeShareModalEl.html(getTemplate("formbuilder-codeshare")).modal("show");
-	 	var currentModel = App_Forms.formsListView.collection.get($(e.target).data("formid"));
-	 	$codeShareModalEl.find("#fullsourceArea").text(currentModel.get("formHtml"));
 
-	 	//permanent link
-	 	var link = window.location.protocol + "//" +window.location.host+ "/form.jsp?id"+"=" +$(e.target).data("formid");
-	 	$codeShareModalEl.find("#linkArea").text(link);
+		getTemplate("formbuilder-codeshare",{}, undefined, function(ui){
+			$codeShareModalEl.html(ui).modal("show");
+		 	
+		 	var currentModel = App_Forms.formsListView.collection.get($(e.target).data("formid"));
+		 	$codeShareModalEl.find("#fullsourceArea").text(currentModel.get("formHtml"));
 
-	 	//iframe code
-	 	var iframe =  "<iframe width=\"560\" height=\"454\" src=\""+link+"\" frameborder=\"0\" </iframe>";
-	 	$codeShareModalEl.find("#iframeArea").text(iframe);
+		 	//permanent link
+		 	var link = window.location.protocol + "//" +window.location.host+ "/form.jsp?id"+"=" +$(e.target).data("formid");
+		 	$codeShareModalEl.find("#linkArea").text(link);
 
-	 	//embed code
-	 	var embed = "<div id=\""+window.location.host+"-"+$(e.target).data("formid")+"\">Fill out my <a href=\""+link+"\">online form</a>.</div>";
-	 	embed  = embed + "<script>load_agile_form(\""+window.location.host+"-"+$(e.target).data("formid")+"\");</script>";
-		$codeShareModalEl.find("#embedCodeArea").text(embed);
+		 	//iframe code
+		 	var iframe =  "<iframe style=\"position:absolute\" width=\"100%\" height=\"100%\" src=\""+link+"\" frameborder=\"0\" </iframe>";
+		 	$codeShareModalEl.find("#iframeArea").text(iframe);
+
+		 	//embed code
+		 	var embed = "<div id=\""+window.location.host+"_"+$(e.currentTarget).data("formid")+"\" class=\"agile_crm_form_embed\"><span style=\"display:none\">Fill out my <a href=\""+link+"\">online form</a></span></div>";
+			$codeShareModalEl.find("#embedCodeArea").text(embed);
+		});
 	},
-
 });
 
+$('body').on('mouseenter','#forms-model-list tr', function(e){
+         $(this).find('#formcode_manager').removeClass('hide');
+    });
+
+$('body').on('mouseleave','#forms-model-list tr', function(e){
+         $(this).find('#formcode_manager').addClass('hide');
+    });
+
+$('#codeShareModal').on('focus','.form-control',function(){
+	var $this = $(this);
+    $this.select();
+
+    // Work around Chrome's little problem
+    $this.mouseup(function() {
+        // Prevent further mouseup intervention
+        $this.unbind("mouseup");
+        return false;
+    });
+});

@@ -44,9 +44,6 @@ public class SendGridWebhookUtil
 
 		String response = null;
 
-		try
-		{
-
 			String webhookURL = "https://agile-crm-cloud.appspot.com/backend/sendgridwebhook";
 
 			// If Application is beta, add beta url
@@ -54,8 +51,9 @@ public class SendGridWebhookUtil
 				webhookURL = "https://agilecrmbeta.appspot.com/backend/sendgridwebhook";
 
 			String queryString = "";
-			
-			queryString = SendGrid.SENDGRID_API_PARAM_API_USER + "=" + URLEncoder.encode(apiUser, "UTF-8") + "&"
+			try
+			 {
+			   queryString = SendGrid.SENDGRID_API_PARAM_API_USER + "=" + URLEncoder.encode(apiUser, "UTF-8") + "&"
 					+ SendGrid.SENDGRID_API_PARAM_API_KEY + "=" + URLEncoder.encode(password, "UTF-8") + "&"
 					+ SENDGRID_EVENT_NAME + "=" + URLEncoder.encode(SENDGRID_EVENT_NOTIFY, "UTF-8") + "&"
 					+ SENDGRID_EVENT_PROCESSED + "=" + URLEncoder.encode("0", "UTF-8") + "&" 
@@ -69,21 +67,39 @@ public class SendGridWebhookUtil
 					+ SENDGRID_EVENT_URL + "=" + URLEncoder.encode(webhookURL, "UTF-8") + "&" 
 					+ SENDGRID_VERSION + "=" + SENDGRID_VERSION_NUMBER;
 					;
-
-			response = HTTPUtil.accessURLUsingPost(SENDGRID_WEBHOOK_URL, queryString);
-			System.out.println("Response for adding webhook: " + response);
-			
-			if(!StringUtils.contains(response, "errors"))
-			{
-				response = HTTPUtil.accessURLUsingPost("https://api.sendgrid.com/api/filter.activate.json", "api_user=" + URLEncoder.encode(apiUser, "UTF-8") + "&api_key=" + URLEncoder.encode(password, "UTF-8") + "&name=eventnotify");
+				response = HTTPUtil.accessURLUsingPost(SENDGRID_WEBHOOK_URL, queryString);
+				System.out.println("Response for adding webhook: " + response);
 				
-				System.out.println("Response for activating webhook: " + response);
-			}
-		}
+				if(!StringUtils.contains(response, "errors"))
+				{
+					response = HTTPUtil.accessURLUsingPost("https://api.sendgrid.com/api/filter.activate.json", "api_user=" + URLEncoder.encode(apiUser, "UTF-8") + "&api_key=" + URLEncoder.encode(password, "UTF-8") + "&name=eventnotify");
+					
+					System.out.println("Response for activating webhook in first attampt: " + response);
+				}
+		   }
 		catch (Exception e)
 		{
-			System.err.println("Exception occured while adding Agile webhook..." + e.getMessage());
+			System.err.println("Exception occured while adding Agile webhook in first attampt..." + e.getMessage());
 			e.printStackTrace();
+			
+			try
+			{
+				Thread.sleep(3000L);
+				response = HTTPUtil.accessURLUsingPost(SENDGRID_WEBHOOK_URL, queryString);
+				System.out.println("Response for adding webhook: " + response);
+				
+				if(!StringUtils.contains(response, "errors"))
+				{
+					response = HTTPUtil.accessURLUsingPost("https://api.sendgrid.com/api/filter.activate.json", "api_user=" + URLEncoder.encode(apiUser, "UTF-8") + "&api_key=" + URLEncoder.encode(password, "UTF-8") + "&name=eventnotify");
+					
+					System.out.println("Response for activating webhook in Second attampt: " + response);
+				}
+			}
+			catch (Exception ex)
+			{
+				System.err.println("Exception occured while adding Agile webhook in second attampt..." + ex.getMessage());
+				ex.printStackTrace();
+			}
 		}
 
 		return response;

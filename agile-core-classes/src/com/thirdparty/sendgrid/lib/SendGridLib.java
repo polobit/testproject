@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.HttpClientUtil;
 import com.thirdparty.mandrill.exception.RetryException;
+import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
@@ -179,13 +181,16 @@ public class SendGridLib {
         String tmpString = "{}";
         
         if(StringUtils.isNotBlank(email.getSmtpJsonString()))
-        	tmpString = email.getSmtpJsonString();
+        	   tmpString = email.getSmtpJsonString();
         else
     	{
     		if(email.smtpapi != null)
     			tmpString = email.smtpapi.jsonString();
     	}
         
+        //add subject in SMTPHeaders
+         tmpString=getSMTPHeadersSubject(tmpString, email.subject);
+         
         if (!tmpString.equals("{}"))
             builder.addTextBody(PARAM_XSMTPAPI, tmpString, ContentType.create(TEXT_PLAIN, UTF_8));
 
@@ -248,7 +253,28 @@ public class SendGridLib {
 	        	
         	return response;
     }
-
+    
+    /**
+     * 
+     * @param subject
+     * @return subject jsonobject
+     */
+   public static String getSMTPHeadersSubject(String SMTPHeaderJSON, String subject){
+	 try 
+	   {
+		JSONObject subjectJSON=new JSONObject();
+		subjectJSON.put(PARAM_SUBJECT, subject);
+		
+		JSONObject SMTPJSON=new JSONObject(SMTPHeaderJSON);
+		SMTPJSON.put(SendGrid.SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
+		System.out.println("nnnnnnnnnnnnnnnnnn"+SMTPJSON.toString());
+		return SMTPJSON.toString();
+		 } 
+   	catch (JSONException e) {
+			System.out.println("Error ocurred while creating SMTPJSON...."+e.getMessage());
+		}	
+	return null;
+ }
     public static class Email implements Serializable {
         /**
 		 * 
@@ -597,7 +623,6 @@ public class SendGridLib {
 			
 			return json.toString();
 		}
-        
     }
 
     public static class Response {
@@ -623,4 +648,5 @@ public class SendGridLib {
             return this.message;
         }
     }
+    
 }
