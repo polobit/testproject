@@ -7145,6 +7145,94 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getCurrentUserDashboards', function(type, options)
+	{
+		var options_el = "";
+		if(CURRENT_USER_DASHBOARDS)
+		{
+			CURRENT_USER_DASHBOARDS.sort(function(a,b){return a.name.trim() < b.name.trim() ? -1 : a.name.trim() > b.name.trim() ? 1 : 0;});
+			var is_active_added = false;
+			var selected_li_id = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(selected_li_id == this.id)
+				{
+					is_active_added = true;
+				}
+			});
+
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(type == 'portlet')
+				{
+					var trim_name = this.name;
+					if(trim_name)
+					{
+						trim_name = trim_name.trim();
+					}
+					if(trim_name && trim_name.length > 15)
+					{
+						trim_name = trim_name.substring(0, 15)+"...";
+					}
+					if(this.name)
+					{
+						options_el += "<option value="+this.id+" class='user-dashboard' title='"+this.name.trim()+"'>"+trim_name+"</option>";
+					}
+				}
+				else
+				{
+					var trim_name = this.name;
+					if(trim_name)
+					{
+						trim_name = trim_name.trim();
+					}
+					if(trim_name && trim_name.length > 30)
+					{
+						trim_name = trim_name.substring(0, 30)+"...";
+					}
+					if(index == 0 && (!selected_li_id || !is_active_added))
+					{
+						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+					}
+					else if(index == 0)
+					{
+						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+					}
+					if(selected_li_id == this.id)
+					{
+						options_el += "<li class='active'><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+					}
+					else
+					{
+						options_el += "<li><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+					}
+
+					if(index == CURRENT_USER_DASHBOARDS.length-1)
+					{
+						options_el += "<li class='divider'></li>";
+						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+					}
+					
+				}
+
+			});
+			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
+			{
+				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+			}
+		}
+
+		return options_el;
+	});
+
+	Handlebars.registerHelper('getTruncatedDashboardName', function(dashboard_name)
+	{
+		if(dashboard_name && dashboard_name.trim().length > 30)
+		{
+			return dashboard_name.trim().substring(0, 30)+"...";
+		}
+		return dashboard_name;
+	});
+
 	Handlebars.registerHelper('is_acl_allowed', function(options)
 	{
 		if(_plan_restrictions.is_ACL_allowed[0]() || checkForSpecialUsers())
