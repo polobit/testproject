@@ -48,8 +48,8 @@ public class TicketSLAServlet extends HttpServlet
 
 				try
 				{
-					if (StringUtils.isEmpty(namespace))
-						return;
+					if (StringUtils.isBlank(namespace))
+						continue;
 
 					NamespaceManager.set(namespace);
 
