@@ -55,6 +55,7 @@ initialize : function()
 		console.log("userrefered");
 		var Subscribers = new Base_Collection_View({ url :'/core/api/refer/refered_domains',  templateKey : "users-refered"
 			});
+		$("#referModal").hide();
 		$('#content').html(Subscribers.render().el);
 	}
 	
