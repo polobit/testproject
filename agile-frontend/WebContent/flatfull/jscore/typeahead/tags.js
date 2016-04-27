@@ -155,6 +155,9 @@ function setup_tags_typeahead(callback) {
     			});
     	        return;
     		}
+            else if($(this.$element).closest(".control-group").hasClass("deal-filter-tag"))
+                    $(this.$element).closest(".control-group").find("#dealTagName").val(tag);
+
 
     		// To store existing tags in form.
     		var tags_temp = [];

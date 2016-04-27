@@ -11,7 +11,7 @@ var DealsRouter = Backbone.Router.extend({
 	"deal-rc-0" : "dealsRightClick","deal-rc-1" : "dealsRightClick","deal-rc-2" : "dealsRightClick","deal-rc-3" : "dealsRightClick",
 	"deal-filters" : "dealFilters", 
 	"deal-filter-add" : "dealFilterAdd",
-	"deal-filter-edit/:id" : "dealFilterEdit",
+	"deal-filter-edit/:id" : "dealFilterEdit","filter/:tag" : "deals" ,
 	"deal-filter/:id" : "dealFilter"},
 
 	/**
@@ -21,7 +21,11 @@ var DealsRouter = Backbone.Router.extend({
 	 * fetches Milestones pie-chart and Details graph if deals exist.
 	 */
 	deals : function()
-	{
+	{	
+		var dealTag = null ;
+		if(window.location.hash.indexOf("filter")==1){
+       		dealTag = window.location.hash.substr(window.location.hash.lastIndexOf("/")+1);
+  		}	
 		pipeline_id = 0;
 		if (_agile_get_prefs("agile_deal_track"))
 			pipeline_id = _agile_get_prefs("agile_deal_track");
@@ -82,8 +86,18 @@ var DealsRouter = Backbone.Router.extend({
 				
 				var query = ''
 				if (_agile_get_prefs('deal-filters'))
-				{
-					query = '&filters=' + encodeURIComponent(getDealFilters());
+				{	
+					if(dealTag != null){
+						var dealFilter = getDealFilters();
+						var dealFilters = JSON.parse(dealFilter);
+						dealFilters["dealTagCondition"] = "is";
+						dealFilters["dealTagName"] = dealTag ;
+						var filterString = JSON.stringify(dealFilters);
+						$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n"><li class="inline-block tag btn btn-xs btn-primary" data="MYHOME"><span>'+dealTag+'<a href="#deals" class="deals-list-view close m-l-xs pull-right">×</a></span></li></ul>');
+						query = '&filters=' + encodeURIComponent(filterString); 
+					}
+					else
+						query = '&filters=' + encodeURIComponent(getDealFilters());
 				}
 				// Fetches deals as list
 				that.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query,
@@ -265,6 +279,7 @@ var DealsRouter = Backbone.Router.extend({
 				$('input[name=name]').trigger('focus');
 			} });
 		$("#opportunity-listners").html(deals_filter.render().el);
+		setup_tags_typeahead();
 	},
 
 	/**
@@ -383,6 +398,7 @@ var DealsRouter = Backbone.Router.extend({
 			} });
 
 		$("#opportunity-listners").html(dealFilter.render().el);
+		setup_tags_typeahead();
 
 	},
 

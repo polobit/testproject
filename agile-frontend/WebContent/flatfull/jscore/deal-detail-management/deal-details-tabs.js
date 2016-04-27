@@ -51,7 +51,18 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		'click #add-tags' : 'onAddDealTag',	
 		'click .remove-tags' : 'onRemoveDealTag',
 		'click #deal-add-tags' : 'onAddDealTags',
+		'click .deals-tag-view' : 'dealTagView',
     	
+    },
+    dealTagView : function(e){
+
+    	e.preventDefault();
+		
+		// Creates the cookie
+		_agile_set_prefs("agile_deal_view", "list_view");
+		var dealTag = $('.deals-tag-view').text();
+		// Loads the deals
+		App_Deals.deals(dealTag);
     },
       /**
 	 * Shows a form to add tags with typeahead option

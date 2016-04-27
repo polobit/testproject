@@ -1055,8 +1055,6 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
-		sortField = "expected_value";
-
 		if (checkJsonString(filterJson, "value_start"))
 		{
 		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
@@ -1102,8 +1100,8 @@ public class OpportunityUtil
 		    String tagCondition = filterJson.getString("dealTagCondition");
 		    String tagValue = filterJson.getString("dealTagName");
 		    if( tagCondition.equals("is"))
-		    	searchMap.put("tagsWithTime.tag", tagValue);
-		}
+		    	searchMap.put("tagsWithTime.tag = ", tagValue);
+		    }
 
 	    /*
 	     * Map<String, Object> customFilters =
@@ -1111,10 +1109,13 @@ public class OpportunityUtil
 	     * if (customFilters != null) searchMap.putAll(customFilters);
 	     */
 
-	    if (count != 0)
-		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
+	    if (count != 0){
+	    	List<Opportunity> dealList = new ArrayList<Opportunity>(dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField));
+	    	return dealList;
+	    }
 
-	    return dao.listByProperty(searchMap);
+	     List<Opportunity> dealList = new ArrayList<Opportunity>(dao.listByProperty(searchMap));
+	     return dealList;
 	}
 	catch (JSONException e)
 	{
@@ -1246,7 +1247,7 @@ public class OpportunityUtil
     			    String tagValue = filterJson.getString("dealTagName");
     			    if( tagCondition.equals("is"))
     			    	query.addFilter("tagsWithTime.tag",FilterOperator.EQUAL,tagValue);
-    			}
+    				}
 
 		      System.out.println("hello n try block "+filterJson.getLong("pipeline_id"));
 		      List<Entity> deals = dataStore.prepare(query).asList(FetchOptions.Builder.withDefaults());
@@ -3116,7 +3117,7 @@ public class OpportunityUtil
 	  		    String tagValue = filterJson.getString("dealTagName");
 	  		    if( tagCondition.equals("is"))
 	  		    	searchMap.put("tagsWithTime.tag", tagValue);
-	  		}
+	  		    }
 
 	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
 	}
