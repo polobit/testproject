@@ -1,46 +1,31 @@
 <script id="helpcenter-article-template" type="text/html">
-<div class="wrapper" style="padding-left: 20px;">
-	<table class="txt-small full-width" style="background-color: inherit;">
-      <tr>
-        <td style="width:20%">
-        	<div class="text-ellipsis">
-           		<div class="text-ellipsis pull-left text-sm" style="color: #697073;max-width: 20em;">
-       	        	<h3 class="m-n  m-b-sm">{{title}}</h3>                   
-            	</div>
-	      	</div>   
-      	</td>
-      	<td>
-	     <div class="btn-group">
-			  <button class="btn bg-transparent" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-			  	<ul class="dropdown-menu">
-			    <li><a href="#categorie/{{categorie_id}}/section/{{section_id}}/article/{{id}}/edit-article">Edit</a></li>
-			    <li><a href="#helpcenter" class="delete">Delete</a></li>
-			  </ul>
-			</div>      
-        </td>
-      </tr>
-	</table>
-</div>
-
-<hr style="border-color: #DADDDE; margin-top: 10px; margin-bottom: 10px;"/>
-<div class="wrapper" style="padding-left: 20px;">
-	<table class="txt-small full-width" style="background-color: inherit;">
-	  <tr>
-	    <td style="width:100%">
-	    	<div class="text-ellipsis">
-	       		<div class="text-ellipsis pull-left text-sm" style="color: #697073;max-width: 85em;">
-	   	        	<h4 class="m-n  m-b-sm">{{{content}}}</h3>                   
-	        	</div>
-	      	</div>   
-	  	</td>
-	  	</tr>
-	  <tr>
-	  	<td>
-	    	<small class="text-muted m-b-sm">
-			created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
-			</small>
-	    </td>
-	  </tr>
-	</table>
-</div>
+<div class="col-md-9">
+      <div class="wrapper">
+          <div class="panel panel-default">
+              <div class="panel-heading h4"> {{title}}
+                <div class="pull-right">
+                  <div class="btn-group right pos-rlt pull-right">
+                    <a class="btn btn-default btn-sm" style="margin-top:-4px" href="#categorie/{{categorie_id}}/section/{{section_id}}/article/{{id}}/edit-article">Edit</a>
+                      <button class="btn btn-sm btn-default"  style="margin-top:-4px" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                          <li><a href="#helpcenter" class="delete">Delete</a></li>
+                        </ul>
+                  </div>
+                </div>
+              </div>                     
+			<div class="panel-body">	
+	 	       <div class="text-ellipsis" >
+                        <a  href="#categorie/{{categorie_id}}/section/{{section_id}}/article/{{id}}">
+			               {{{content}}}
+		                </a>                  
+               </div> 
+               <div>
+               <small class="text-muted text-xs">
+              		created time {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
+    		   </small>
+    		   </div>
+	        </div>  	
+		 </div>
+ 	</div>
+</div> 
 </script>
