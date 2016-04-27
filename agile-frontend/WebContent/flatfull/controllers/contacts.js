@@ -588,7 +588,19 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-
+			$(el).on('click',function(el){
+				var newId = el.target.id;
+				if(newId == "contact_name")
+					return ;
+				if(newId == "contactName")
+					return ;
+				if(newId == 'Contact-input-firstname' || newId == 'Contact-input-lastname')
+					return;
+				
+					inlineNameChange(el,newId);
+				
+			});
+		
 			//mobile tabs
 			 $('.content-tabs').tabCollapse(); 
 
@@ -644,7 +656,9 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-call",el).removeClass("c-progress");
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
-			} });
+			} 
+			
+		});
 
 		var el = this.contactDetailView.render(true).el;
 		$(el).find('.content-tabs').tabCollapse(); 
