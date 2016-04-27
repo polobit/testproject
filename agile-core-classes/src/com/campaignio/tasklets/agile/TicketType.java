@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.ticket.entitys.Tickets;
@@ -52,7 +53,7 @@ public class TicketType extends TaskletAdapter
 				TicketsUtil.changeTicketType(ticketJSON.getLong("id"), Tickets.Type.valueOf(ticketType), true);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-						"Ticket(" + ticketJSON.getString("id") + ") type changed  - " + ticketType,
+						"Ticket(" + ticketJSON.getString("id") + ") type changed  - " + StringUtils.capitalize(ticketType.toLowerCase()),
 						LogType.TICKET_TYPE.toString());
 			}
 
