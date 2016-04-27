@@ -3334,6 +3334,7 @@ background: none!important;
   color: black !important;
   opacity: 0.9;
 }
+
 #removeBtn:hover
 {
   color: black !important;
@@ -3782,3 +3783,50 @@ opacity: .3;
 div.addField div.controls div:first-child{
   padding-bottom: 1px;
 }
+
+.xedit{
+	font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 4px 10px;
+    height:26px;
+
+}
+
+.error-inputfield
+{
+ border:1px solid red;
+}
+
+
+#segment-filter-list-model-list .segment-lilist .remove-segment-filter{
+
+    float: right;
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    line-height: .8;
+    font-weight: bold;
+    opacity: .7;
+}
+#segmentsModal #duplicate-name {
+  color: #f05050;
+}
+#lhs_filters_segmentation #error-message{
+  color: #f05050;
+}
+
+li .segment-lilist{
+	  display: block;
+	  padding: 5px 15px;
+}
+li .visitor-filter{
+   width: 80%;
+}
+
+li .segment-lilist:hover {
+	background-color:#EEE;
+	cursor: pointer;
+}
+
+

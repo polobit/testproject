@@ -87,6 +87,7 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.templates.WorkflowTemplate;
 import com.agilecrm.workflows.triggers.Trigger;
+import com.analytics.VisitorFilter;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log;
 import com.campaignio.twitter.TwitterJobQueue;
@@ -263,6 +264,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//For deals update in textsearch
 	ObjectifyService.register(OpportunitySchemaUpdateStats.class);
+	ObjectifyService.register(VisitorFilter.class);
 
     }
 

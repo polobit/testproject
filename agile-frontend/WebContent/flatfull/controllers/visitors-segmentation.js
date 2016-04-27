@@ -6,11 +6,10 @@ var VisitorsSegmentationRouter = Backbone.Router
         routes: {
 
             /* Webstats */
-            "segments": "visitorssegmentation"
-
+            "visitors": "visitorssegmentation"         
         },
 
-        visitorssegmentation: function(time_range, is_lhs_filter,view_data)
+        visitorssegmentation: function(time_range, is_lhs_filter,view_data,filter_id)
              {
 
             var postData;
@@ -20,14 +19,18 @@ var VisitorsSegmentationRouter = Backbone.Router
 
             if (VISITORS_HARD_RELOAD == true) {
                 this.webstatsListView = undefined;
-                VISITORS_HARD_RELOAD = false;
+                VISITORS_HARD_RELOAD = false;                
             }
+            _agile_delete_prefs("visitor_repeat_filter");
            
             var template_key = "segmentation-custom-view";
 
             // Default url for contacts route
             var url = 'core/api/web-stats/filter/dynamic-filter';
-
+            if (filter_id||(filter_id=_agile_get_prefs("visitor_filter")))
+            {           
+            url = "core/api/web-stats/query/list/" + filter_id;
+            }
             
             if (_agile_get_prefs('dynamic_visitors_filter')) {
 
@@ -105,6 +108,10 @@ var VisitorsSegmentationRouter = Backbone.Router
 
                                 }
 
+                                if(url.includes('query/list')){
+                                    setupSegmentFilterList(el,url.substr(30))
+                                }else
+                                 setupSegmentFilterList(el);
                             }
                         });
 
@@ -118,8 +125,7 @@ var VisitorsSegmentationRouter = Backbone.Router
 
                         } else {
                             $('#content')
- 					          .find('.visitors-div')
-
+                              .find('.visitors-div')
                                 .html(
                                     web_scope.webstatsListView.el);
                             VISITORS_HARD_RELOAD = true;
@@ -130,7 +136,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                     });
 
         }
-
+   
     });
 
 
