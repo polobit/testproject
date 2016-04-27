@@ -3334,6 +3334,7 @@ background: none!important;
   color: black !important;
   opacity: 0.9;
 }
+
 #removeBtn:hover
 {
   color: black !important;
@@ -3781,4 +3782,17 @@ opacity: .3;
 }*/
 div.addField div.controls div:first-child{
   padding-bottom: 1px;
+}
+.xedit{
+	font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 4px 10px;
+    height:26px;
+
+}
+
+.error-inputfield
+{
+ border:1px solid red;
 }
