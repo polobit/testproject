@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.ticket.entitys.Tickets;
@@ -52,7 +53,7 @@ public class TicketStatus extends TaskletAdapter
 				TicketsUtil.changeStatus(ticketJSON.getLong("id"), Tickets.Status.valueOf(status), true);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-						"Ticket(" + ticketJSON.getString("id") + ") status changed  - " + status,
+						"Ticket(" + ticketJSON.getString("id") + ") status changed  - " + StringUtils.capitalize(status),
 						LogType.TICKET_STATUS.toString());
 
 			}
