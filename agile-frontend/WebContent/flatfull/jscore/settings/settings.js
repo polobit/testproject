@@ -488,7 +488,7 @@ function loadip_access_events()
 				$(".newip").val($("#iplist").val());
 				form.trigger("reset");
 				$('.newip').closest('form').find('.save').trigger("click");
-				$("#ipaccess-modal").modal('hide');
+				$("#ipaccess-modal").html(getTemplate('add-new-ip', {})).modal('hide');
 			});
 	});
 

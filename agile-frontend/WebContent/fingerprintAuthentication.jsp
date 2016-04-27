@@ -241,6 +241,55 @@ position: fixed;width: 100%;top: 0px;
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js"></script>
 	
 	<script type="text/javascript">
+
+		var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';
+
+		//showNotyPopUp
+		function showNotyPopUp(type, message, position, timeout, clickCallback) {
+			if(type != 'null' && message !=  'null'){
+				// for top position
+				if(position == "top")
+					head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+					+ 'lib/noty/layouts/top.js', LIB_PATH
+					+ 'lib/noty/themes/default.js', function(){
+						notySetup(type, message, position, timeout, clickCallback)
+					});
+			}
+		}
+		function notySetup(type, message, position, noty_timeout, clickCallback) {
+		
+		    // close all other noty before showing current
+		    $.noty.closeAll()
+
+			var n = noty({
+				text : message,
+				layout : position,
+				type : type,
+				animation : {
+					open : {
+						height : 'toggle'
+					},
+					close : {
+						height : 'toggle'
+					},
+					easing : 'swing',
+					speed : 500
+					// opening & closing animation speed
+				},
+				
+				timeout : noty_timeout != undefined ? (noty_timeout == "none" ? undefined : noty_timeout) : 20000, // delay for closing event. Set false for sticky
+								// notifications
+						
+			});
+		    
+		    if(clickCallback && typeof clickCallback == "function" && n.options.id)
+		    {
+		    	Nagger_Noty = n.options.id;
+		    	$("#" + n.options.id).on('click', function(e){
+		    		clickCallback();
+		    	})
+		    }
+		}	
 		$(document).ready(function()
 		{
         var newImg = new Image;
@@ -264,7 +313,7 @@ position: fixed;width: 100%;top: 0px;
 	            type : "POST",
 	            url : "/login?resendotp=resendotp",
 	            success : function(data) {
-	               
+	               showNotyPopUp("information", "Send verification code to your mail id", "top", 1000);
 	            }
 	        });
 	    }); 

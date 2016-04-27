@@ -350,7 +350,7 @@ public class LoginServlet extends HttpServlet {
 			String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
 			if(!info.valid_finger_print){
 				template = SendMail.OTP_EMAIL_TO_USER;
-				subject =  "New sign-in from " + data.get("browser_Name") + "on " + data.get("browser_os"); 
+				subject =  "New sign-in from " + data.get("browser_name") + " on " + data.get("browser_os"); 
 			}
 			
 			if(resend)
