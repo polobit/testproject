@@ -52,6 +52,8 @@ function save_widget_prefs(pluginName, prefs, callback) {
 	
 	var msgType = "success";
 	var displayName = pluginName;
+	if(displayName=="TwilioIO")
+		displayName="Twilio";
 	var msg = displayName+" widget saved successfully";	
 
 	/*
