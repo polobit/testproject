@@ -34,7 +34,7 @@
 	<div class="pull-left rightThumbView pos-rlt">
 		<div class="pull-left contact-title-dynamic text-ellipsis">	
 			<a class="text-md text-cap custom-color" href="#ticket/{{id}}" target="_blank">
-				{{subject}}, &nbsp;#{{id}}
+				#{{id}}, {{subject}}
 			</a>
 		</div>
 		<div class="pull-right">
@@ -44,7 +44,7 @@
 			</small>
 		</div>
 		<div class="clearfix"></div>
-		<div class="contact-desc-dynamic">
+		<div class="notes-max-lines">
 			{{#if last_ticket_notes}}
 		    	{{replace_br_with_space last_ticket_notes.plain_text}}
 		    {{else}}
@@ -52,5 +52,6 @@
 		    {{/if}}
 		</div>
 	</div>
+	<div class="clearfix"></div>
 </div>
 </script>

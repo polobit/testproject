@@ -1,5 +1,7 @@
 package com.agilecrm.ticket.deferred;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,6 +17,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.common.collect.Iterables;
 import com.googlecode.objectify.Key;
 
 /**
@@ -52,16 +55,27 @@ public class CheckTicketSLADeferred implements DeferredTask
 			// Execute ticket SLA only for pro plan users
 			Subscription subscription = SubscriptionUtil.getSubscription();
 
+			System.out.println("Pro plan: " + subscription.planLimits.checkTicketSLA());
+
 			if (!subscription.planLimits.checkTicketSLA())
 				return;
 
 			Set<Key<Tickets>> keys = TicketsUtil.getOverdueTickets();
 
 			System.out.println("Namespace: " + namespace);
-			System.out.println("Ticket keys found: " + keys);
+			System.out.println("Ticket keys size: " + keys.size());
+			//System.out.println("Ticket keys found: " + keys);
 
-			for (final Key<Tickets> key : keys)
+			final Iterable<List<Key<Tickets>>> lists = Iterables.partition(keys, 25);
+
+			System.out.println("lists is null: " + (lists == null));
+
+			for (Iterator<List<Key<Tickets>>> iter = lists.iterator(); iter.hasNext();)
 			{
+				final List<Key<Tickets>> sublist = iter.next();
+
+				System.out.println("sublist keys size: " + sublist.size());
+
 				Queue queue = QueueFactory.getQueue("ticket-bulk-actions");
 				queue.add(TaskOptions.Builder.withPayload(new DeferredTask()
 				{
@@ -75,7 +89,11 @@ public class CheckTicketSLADeferred implements DeferredTask
 					{
 						try
 						{
-							TicketTriggerUtil.executeTriggerForSLAReachedTicket(TicketsUtil.getTicketByID(key.getId()));
+							for (Key<Tickets> key : sublist)
+							{
+								TicketTriggerUtil.executeTriggerForSLAReachedTicket(TicketsUtil.getTicketByID(key
+										.getId()));
+							}
 						}
 						catch (Exception e)
 						{
