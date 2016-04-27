@@ -10,6 +10,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 /**
  * <code>TicketStatus</code> represents
@@ -48,14 +49,14 @@ public class TicketStatus extends TaskletAdapter
 
 			JSONObject ticketJSON = data.getJSONObject(TICKET);
            
-			System.out.println(StringUtils.capitalize(status));
+			System.out.println("status changed to through campaign: "+StringUtils.capitalize(status.toLowerCase()));
             
 			if (ticketJSON != null)
 			{
 				TicketsUtil.changeStatus(ticketJSON.getLong("id"), Tickets.Status.valueOf(status), true);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-						"Ticket(" + ticketJSON.getString("id") + ") status changed  - " + StringUtils.capitalize(status),
+						"Ticket(" + ticketJSON.getString("id") + ") status changed  - " + StringUtils.capitalize(status.toLowerCase()),
 						LogType.TICKET_STATUS.toString());
 
 			}
@@ -70,4 +71,5 @@ public class TicketStatus extends TaskletAdapter
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 	}
+	
 }

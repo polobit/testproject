@@ -53,7 +53,7 @@ public class TicketType extends TaskletAdapter
 				TicketsUtil.changeTicketType(ticketJSON.getLong("id"), Tickets.Type.valueOf(ticketType), true);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-						"Ticket(" + ticketJSON.getString("id") + ") type changed  - " + StringUtils.capitalize(ticketType),
+						"Ticket(" + ticketJSON.getString("id") + ") type changed  - " + StringUtils.capitalize(ticketType.toLowerCase()),
 						LogType.TICKET_TYPE.toString());
 			}
 
