@@ -62,9 +62,9 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with only mobile number */
 			"contacts/call-lead/:mob" : "addMobLead",
 			
-			"call-contacts" : "callcontacts",
 
-		"refer-friends" : "referFriends"
+			"call-contacts" : "callcontacts"
+
 	},
 	
 	initialize : function()
@@ -1293,16 +1293,10 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
-	},
-
-	referFriends : function()
-	{
-		var subject = "I am using Agile CRM and I really love it! Try it now.";
-		var body = "Hi,<br><br>I am using Agile CRM and I really love it!<br><br>It is a combination of important features like email marketing, call campaign, online scheduling, landing pages, Web rules and many others. This service is true value for money!<br><br>What to try it? Let's start by signing up with below link:<br>http://www.agilecrm.com/pricing?utm_source=affiliates&utm_medium=web&utm_campaign="+CURRENT_DOMAIN_USER.domain+"<br><br>Best Regards";
-		sendMail(undefined,subject,body,undefined,undefined,this);
-	}
-		
+	}	
 	});
+
+
 
 function getAndUpdateCollectionCount(type, el, countFetchURL){
 

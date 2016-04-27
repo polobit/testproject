@@ -848,6 +848,8 @@ $(function()
 		
 	});
 
+
+
 	// Helper function to return current date in preferences page.
 
 	Handlebars.registerHelper('currentDateInFormat', function(format)
@@ -2573,7 +2575,20 @@ $(function()
 		return name;
 
 	});
-
+	/** put the users according to the plan
+	*/
+	Handlebars.registerHelper('referedUsersPlan', function(plan)
+	{
+		var plantype = [];
+		plantype =  plan.plan_type.split("_");
+		var temp = plantype[0].toLowerCase();
+		var temp1 = plantype[1].toLowerCase();
+		if(plantype.length == 1)
+		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1);
+		else
+		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+		return string;
+	});
 	/**
 	 * put user address location togather separated by comma.
 	 */

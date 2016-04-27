@@ -341,6 +341,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("dashboards.js");
 	}
+	if (templateName.indexOf("refer") == 0)
+	{
+		template_relative_urls.push("referals.js");
+	}
 	return template_relative_urls;
 }
 
