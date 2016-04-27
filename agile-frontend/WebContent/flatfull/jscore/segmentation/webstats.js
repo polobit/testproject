@@ -242,6 +242,7 @@ function  addEventFilter(filter_id){
 
         e.preventDefault();
         var remove_id=$(this).attr('data');
+        var remove_filter_name=$(this).attr("data-name");
         _agile_delete_prefs('dynamic_visitors_filter');
         $.ajax({
             url: '/core/api/web-stats/filters?Id='+remove_id,
@@ -249,6 +250,8 @@ function  addEventFilter(filter_id){
             contentType : "application/json"
             
         });
+        if($('#filters-tour-step i span').text()==remove_filter_name)
+            setupAnalyticsLhsFilters('');
         return;
                
     });  
