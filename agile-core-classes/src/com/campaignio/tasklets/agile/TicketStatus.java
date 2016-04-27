@@ -47,7 +47,9 @@ public class TicketStatus extends TaskletAdapter
 			String status = getStringValue(nodeJSON, subscriberJSON, data, STATUS);
 
 			JSONObject ticketJSON = data.getJSONObject(TICKET);
-
+           
+			System.out.println(StringUtils.capitalize(status));
+            
 			if (ticketJSON != null)
 			{
 				TicketsUtil.changeStatus(ticketJSON.getLong("id"), Tickets.Status.valueOf(status), true);
