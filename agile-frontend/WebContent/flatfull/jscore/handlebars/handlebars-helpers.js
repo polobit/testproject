@@ -3255,7 +3255,7 @@ $(function()
 				el = el.concat(html);
 				return;
 			}
-			el = el.concat(html + ",");
+			el = el.concat(html + ", ");
 		});
 		return new Handlebars.SafeString(el);
 	});
