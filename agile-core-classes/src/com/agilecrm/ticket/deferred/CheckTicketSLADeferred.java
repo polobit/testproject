@@ -50,22 +50,14 @@ public class CheckTicketSLADeferred implements DeferredTask
 			if (StringUtils.isEmpty(namespace))
 				return;
 
+			System.out.println("Namespace: " + namespace);
 			NamespaceManager.set(namespace);
-
-			// Execute ticket SLA only for pro plan users
-			Subscription subscription = SubscriptionUtil.getSubscription();
-
-			System.out.println("Pro plan: " + subscription.planLimits.checkTicketSLA());
-
-			if (!subscription.planLimits.checkTicketSLA())
-				return;
 
 			Set<Key<Tickets>> keys = TicketsUtil.getOverdueTickets();
 
-			System.out.println("Namespace: " + namespace);
 			System.out.println("Ticket keys size: " + keys.size());
-			//System.out.println("Ticket keys found: " + keys);
 
+			//Splitting total keys in sub lists with each list of size 25
 			final Iterable<List<Key<Tickets>>> lists = Iterables.partition(keys, 25);
 
 			System.out.println("lists is null: " + (lists == null));
