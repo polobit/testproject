@@ -112,13 +112,7 @@ function agile_crm_get_contact_properties_list(propertyName)
 function agile_crm_update_contact(propertyName, value, callback)
 {
 	// Gets current contact model from the contactDetailView object
-	var contact_model = null;
-	
-	if(company_util.isCompany()){
-		contact_model = App_Companies.companyDetailView.model;
-	} else {
-		contact_model = App_Contacts.contactDetailView.model;
-	}
+	var contact_model = agile_crm_get_contact_model();
 
 	// Reads properties fied from the contact
 	var properties = contact_model.toJSON()['properties'];
@@ -159,6 +153,40 @@ function agile_crm_update_contact(propertyName, value, callback)
 	if (callback && typeof (callback) == "function")
 	callback();
 	} }, { silent : true });
+}
+
+
+
+function agile_crm_get_contact_model(){
+	
+	if(company_util.isCompany()){
+		return App_Companies.companyDetailView.model;
+	} else {
+		return App_Contacts.contactDetailView.model;
+	}
+}
+
+function agile_crm_is_model_property_changed(propertyName, value){
+    var changed = true;
+
+  	var contact_model = agile_crm_get_contact_model();
+
+  	// Reads properties fied from the contact
+	var properties = contact_model.toJSON()['properties'];
+
+	/*
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and if match is found, updates
+	 * the value of it with the given value
+	 */
+	$.each(properties, function(index, property)
+	{
+		if (property.name == propertyName && property.value == value)
+			   changed = false;
+	});
+
+	return changed;
+
 }
 
 

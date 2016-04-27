@@ -1,0 +1,44 @@
+<!-- New (Activity) Modal views -->
+<script type="text/html" id="formbuilder-codeshare-template">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title">&nbsp;Code Manager</h3><br>
+    <div class="tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#link" data-toggle="tab">Permanent Link</a></li>
+        <li role="presentation"><a href="#iframe" data-toggle="tab">Iframe Code</a></li>
+        <li role="presentation"><a href="#embed"  data-toggle="tab">Embed Code</a></li>
+        <li role="presentation"><a href="#fullsource" data-toggle="tab">Full Source Code</a></li>
+    </ul>
+    </div>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div  class="tab-pane active" id="link">
+        <h6><strong>Note: </strong> Permanent link is used ...</h6>
+        <textarea id="linkArea" class="form-control"></textarea> 
+    </div>
+    <div class="tab-pane" id="iframe">
+    <h6><strong>Note: </strong> Iframe Code is used ...</h6>
+        <textarea id="iframeArea" class="form-control"></textarea> 
+    </div>
+    <div class="tab-pane" id="embed">
+        <h6><strong>Note: </strong>You need to include your <a target="_blank" href="#analytics-code" class="text-primary" id="agile_analytics_code">analytics code</a> in the web page for the form to work.</h6>
+        <textarea id="embedCodeArea" rows="4" class="form-control"></textarea>
+    </div>
+    <div class="tab-pane" id="fullsource" >
+        <h6><strong>Note: </strong>You need to include your <a target="_blank" href="#analytics-code" class="text-primary" id="agile_analytics_code">analytics code</a> in the web page for the form to work.</h6>
+        <textarea id="fullsourceArea" rows="20" class="form-control"></textarea> 
+    </div>
+  </div>
+    </div>
+    <div class="modal-footer">
+        <span class="error-status text-danger"></span>
+        <a class="btn btn-primary" data-dismiss="modal">Close</a>
+    </div>
+</div>
+</div>
+</script>
+<!-- End of Modal views -->

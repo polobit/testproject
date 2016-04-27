@@ -105,6 +105,86 @@ function checkContactUpdated(){
 		});
 }
 
+   function inlineCompanyNameChange(el){
+    
+    console.log("inlineCompanyNameChange");
+    var companyInlineName = $("#company-inline-input").val();
+      companyname = companyInlineName.trim();
+    console.log(companyname);
+    if(!companyname)
+    {
+      $("#company-inline-input").addClass("error-inputfield");
+      return;
+     }
+     companyname=companyname.trim();
+     if(agile_crm_is_model_property_changed("name", companyname)){
+       // Update first name
+      agile_crm_update_contact("name", companyname);
+          
+         }
+         /* toggle fields*/
+          $("#company-inline-input").addClass("hidden");
+          $("#company-name-text").text(companyname).removeClass("hidden");
+          $("#company-name-text").addClass("text-capitalize ");
+          $("#company-inline-input").removeClass("error-inputfield");
+
+  }
+
+  function inlineNameChange(e,data){
+
+      
+           // Get actual name
+          var first = $("#Contact-input-firstname").val();
+          var last  = $("#Contact-input-lastname").val();
+          firstName =first.trim();
+          lastName =last.trim();
+          if(!firstName)
+          {
+            $("#Contact-input-firstname").addClass("error-inputfield");
+            return;
+          }
+          /*if(!lastName)
+          {
+            $("#Contact-input-lastname").addClass("error-inputfield");
+            return;
+          }*/
+          if(agile_crm_is_model_property_changed("first_name", firstName)){
+        // Update first name
+              agile_crm_update_contact("first_name", firstName, function()
+              {
+              $("#Contact-input").addClass("hidden");
+              $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+              $("#contactName").addClass("text-capitalize ");
+              $("#Contact-input-firstname" ).removeClass("error-inputfield");
+              $("#Contact-input-lastname" ).removeClass("error-inputfield");  
+              return;
+              });
+              // Toggle fields
+          }
+
+          if(agile_crm_is_model_property_changed("last_name", lastName)){
+               // Update last name
+               agile_crm_update_contact("last_name", lastName,function(){
+                $("#Contact-input").addClass("hidden");
+              $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+              $("#contactName").addClass("text-capitalize ");
+              $("#Contact-input-firstname").removeClass("error-inputfield");
+              $("#Contact-input-lastname").removeClass("error-inputfield");
+              return ;
+               });
+               // Toggle fields
+          }
+
+          // Toggle fields
+          $("#Contact-input").addClass("hidden");
+          $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
+          $("#contactName").addClass("text-capitalize ");
+          $("#Contact-input-firstname").removeClass("error-inputfield");
+          $("#Contact-input-lastname").removeClass("error-inputfield"); 
+    }
+
+
+
 /**
  * Shows all the domain users names as ul drop down list 
  * to change the owner of a contact 
@@ -286,6 +366,12 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contacts-inner-tabs #next' : 'tabViewNext',
     	'click #contacts-inner-tabs #prev' : 'tabViewPrev',
 
+    	/** Inliner edits input fields **/
+    	'click #contactName'  : 'togglehiddenfield',
+      'keydown #Contact-input-firstname' : 'contactNameChange',
+      'keydown  #Contact-input-lastname' : 'contactNameChange',
+    	'blur #Contact-input' : 'contact_inline_edit' ,       /** End of inliner edits **/
+
     	/** Company events **/
     	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
     	'click #contactDetailsTab a[href="#company-deals"]' : 'listCompanyDeals',
@@ -297,11 +383,61 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #company-actions-delete' : 'companyDelete',
     	'click .company-owner-list' : 'companyOwnerList',
     	'click .remove-company-tags' : 'removeCmpanyTags',
-
     	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
+
+		/** inliner edits input fields**/
+		'click #company-name-text '  : 'toggleinline_company',
+		'blur #company-Input input ' : 'companyInlineEdit',
+    'keydown #company-inline-input' : 'companyNameChange'  
     },
+    
+    
+   
+  /*xedit enter key press event listening and calling the name name chanage method*/  
+  contact_inline_edit :function(e){
+    console.log("harsha");
+  },
+  contactNameChange : function(e)
+  {
+    if(e.keyCode == 13)
+      inlineNameChange(e);
+  },
+
+/*
+show and hide the input for editing the contact name and saving that
+*/
+	togglehiddenfield :function(e)
+	{	
+		
+		$("#contactName").toggleClass("hidden");
+		$("#Contact-input").toggleClass("hidden");
+    console.log(this);
+		if(!$("#Contact-input").hasClass("hidden"))
+		{
+			$("#Contact-input-lastname").focus();	
+		}
+
+	},
 
 
+  companyNameChange : function(e)
+  {
+    if(e.keyCode == 13)
+     inlineCompanyNameChange(e);
+  },
+	/*
+	show and hide the input for editing the company name and save that
+	*/
+	toggleinline_company :function(e){
+		$("#company-inline-input").toggleClass("hidden");
+		$("#company-name-text").toggleClass("hidden");
+		if(!$("#company-inline-input").hasClass("hidden"))
+			$("#company-inline-input").focus();
+	},
+  companyInlineEdit : function (e){
+    inlineCompanyNameChange(e);
+  },
+	
 	contactActionsGridDelete: function(e){
 		
 		e.preventDefault();
@@ -1065,6 +1201,7 @@ enterCompanyScore: function(e){
 		contact_details_documentandtasks_actions.add_selected_document(e);
 
 	},
+
 
 	tabViewNext :  function(e){
 	  console.log("next clicked");
