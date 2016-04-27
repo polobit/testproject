@@ -12,7 +12,7 @@
 				</div> 	
 			</div>
             <div class="m-r-sm pull-right">
-                <a href="#forms" class="btn btn-default btn-sm btn-addon">Forms</a>
+                <a href="#form-builder-templates" class="btn btn-default btn-sm btn-addon">Add Form</a>
             </div>
 			<div class="clearfix"></div>
         
@@ -29,9 +29,9 @@
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">You do not have any Landing Pages currently.</h4>
+                    <h4 class="m-t-none">There are no landing pages.</h4>
                     <div class="text">
-                        Landing page is a web page created to gather leads online.
+                        You can add Landing Pages by clicking the button below or the one on the right side of the page.
                     </div>
                     <a href="#landing-page-templates" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  Add Landing Page</a>
                 </div>
@@ -121,4 +121,39 @@
 <time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 {{/if}}
 </td>
+</script>
+<!-- creating an template for the adding an popup on save button!-->
+
+<script id="landingpages-save-popup-modal-template" type="text/html">
+   
+        <div class="modal-dialog" style="width:350px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">x</button>
+                    <h3 class="modal-title">
+                        <h6 id="popup-msg" style="margin:5px"><span style="color: green;">Landing page saved successfully</span></h6>
+                        <i class="glyphicon glyphicon-arrow-right"></i> <strong>Next Action {{title}} </strong> Publish the Landing Page </h3>
+                </div> 
+                <div class="modal-body">
+                
+                    <form id="landingpage-save-popup-form" style="margin-left:108px;/* margin-left:18px; */" style="margin-left: -11px;" >
+                        <fieldset>            
+                                   <div class="radio col-sm-6" style="margin-top:11px;" >
+                                    <a href="#landing-page-settings/{{id}}" class="stop-propagation" onclick="hideLandingPopup();">
+                                       <i class="icon-cloud-upload icon-5x" style="margin-left: -12px;"></i><br>Publish</a>
+                                     </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="checkbox col-sm-8" style="margin-top:4px; margin-bottom:4px;">
+                       <label class="pull-left" onclick="hideLandingpagePopup();" style="margin-left:-43px;margin-left:2px;"><input type="checkbox" id="landingpages-save-popup" value="false">Don't show me again</label>
+                
+                        </div>
+                    <div class="col-sm-3" style="margin-left:27px;">  
+                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">Close</button>
+                    </div>
+                </div>  
+            </div>
+        </div>
 </script>
