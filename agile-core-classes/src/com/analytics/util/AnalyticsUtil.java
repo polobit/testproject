@@ -435,5 +435,19 @@ public class AnalyticsUtil
     	url = hostUrl + "&action=VISITS_COUNT&start_date="+startDate+"&end_date="+endDate+"&time_zone="+timeZone;
     	return url;
     }
+
+    public static List<VisitorFilter> getAllSegmentFilters(Key<DomainUser> domainUserKey)
+    {
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("owner_key", domainUserKey);
+		
+		return VisitorFilter.dao.listByProperty(searchMap);
+    }
+    
+    
+    public static void deleteSegmentFilter(long id) 
+    {
+		VisitorFilter.dao.ofy().delete(VisitorFilter.class, id);
+    }
     
 }
