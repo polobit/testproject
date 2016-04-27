@@ -96,7 +96,7 @@
 	    </li>
 	 </ul>
 	 <div class="text-right p-l-lg p-r-lg">
-	 <a href="#referrals" class="text-info" style="font-size:11px;">Referrals</a>
+	 <a href="#referrals" class="text-info" style="font-size:11px;"id="refered_users">Referrals</a>
 	 </div>
 </script>
 
@@ -149,22 +149,22 @@
 <!-- Users Refered template -->
 <script id="refer-users-collection-template" type="text/html">
 {{#unless this.length}}
+<div style="padding-left: 20px;padding-right: 20px;margin-top: 20px;">
 		<div class="alert bg-white ">
-            <div class="slate-content p-md">
+            <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png">
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="text-lg" style="opacity:0.8;">No one has referred Yet</h4>
                     <div class="text-base" style="opacity:0.5">
-						 <div class="m-t-sm p-xs p-l text-ellipsis" style="background-color: #f6f6f6;">
+						 <div class="m-t-sm p-xs p-l text-ellipsis">
 							Refer:<a href="http://www.agilecrm.com/pricing?utm_source=affiliates&amp;utm_medium=web&amp;utm_campaign={{get_current_domain}}" class="text-xs" target="_blank"> http://www.agilecrm.com/pricing?utm_source=affiliates&amp;utm_medium=web&amp;utm_campaign={{get_current_domain}}</a></div>
                     </div>
-                    <a href="#" class="cases-add btn btn-default btn-sm blue m-t-xs"><i class="icon-plus-sign"></i>  Add Case</a>
-                </div>
 				<div class="clearfix">
 				</div>
             </div>
+        </div>
         </div>
 		{{/unless}}
 {{#if this.length}}

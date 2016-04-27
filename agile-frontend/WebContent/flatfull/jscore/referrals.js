@@ -1,5 +1,5 @@
 $(function() {
-
+	
 	$("#referModal").on("click", 'ul li', function(e) {
 		var data = $(this).attr("id");
 		if(data == undefined)
@@ -80,6 +80,7 @@ $(function() {
 				showNotyPopUp("warning", data.responseText, "top");
 			}
 			});
+
 	});
 
 	$("#referModal").on('click', '#refer_by_tweet', function(e){
@@ -98,6 +99,11 @@ $(function() {
 		e.preventDefault();
 		$("#referModal").find(".modal-body").html(getTemplate('refer-modal-body', REFER_DATA));
 	});
+
+	$("#referModal").on('click', '#refered_users', function(e){
+		$("#referModal").modal('hide');
+	});
+
 });
 
 function shareOnFacebook(){
