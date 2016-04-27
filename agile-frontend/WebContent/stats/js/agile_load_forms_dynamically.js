@@ -4,7 +4,7 @@ function loadAgileCRMForm(id){
 	var formId = id[id.length-1];
     console.log("domain is :"+agileDomain);
 	var script = document.createElement('script');
-    script.src = window.location.protocol+'//localhost:8888/core/api/forms/form/js/'+formId;
+    script.src = window.location.protocol+'//'+agileDomain+'/core/api/forms/form/js/'+formId;
     document.body.appendChild(script);      
 }
 
