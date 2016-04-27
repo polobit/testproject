@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.cursor.Cursor;
@@ -46,7 +47,7 @@ public class Article extends Cursor implements Serializable
 	 * Stores category description
 	 */
 	public String content = null;
-	
+
 	/**
 	 * Stores category description
 	 */
@@ -185,7 +186,20 @@ public class Article extends Cursor implements Serializable
 	private void postLoad()
 	{
 		if (created_by_key != null)
+		{
 			created_by = created_by_key.getId();
+
+	        System.out.println("created_by : "+ created_by);
+			
+			try
+			{
+				domainUser = DomainUserUtil.getPartialDomainUser(created_by);
+			}
+			catch (Exception e)
+			{
+                System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		}
 
 		if (updated_by_key != null)
 			updated_by = updated_by_key.getId();
@@ -196,16 +210,5 @@ public class Article extends Cursor implements Serializable
 		if (section_key != null)
 			section_id = section_key.getId();
 
-		if (created_by == null)
-		{
-			try
-			{
-				domainUser = DomainUserUtil.getPartialDomainUser(created_by);
-			}
-			catch (Exception e)
-			{
-
-			}
-		}
 	}
 }
