@@ -7104,7 +7104,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		var options_el = "";
 		if(CURRENT_USER_DASHBOARDS)
 		{
-			CURRENT_USER_DASHBOARDS.sort(function(a,b){return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;});
+			CURRENT_USER_DASHBOARDS.sort(function(a,b){return a.name.trim() < b.name.trim() ? -1 : a.name.trim() > b.name.trim() ? 1 : 0;});
 			var is_active_added = false;
 			var selected_li_id = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 
@@ -7129,7 +7129,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(this.name)
 					{
-						options_el += "<option value="+this.id+" class='user-dashboard' title="+this.name.trim()+">"+trim_name+"</option>";
+						options_el += "<option value="+this.id+" class='user-dashboard' title='"+this.name.trim()+"'>"+trim_name+"</option>";
 					}
 				}
 				else
@@ -7153,11 +7153,11 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(selected_li_id == this.id)
 					{
-						options_el += "<li class='active'><a id="+this.id+" class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+						options_el += "<li class='active'><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
 					}
 					else
 					{
-						options_el += "<li><a id="+this.id+" class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+						options_el += "<li><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
 					}
 
 					if(index == CURRENT_USER_DASHBOARDS.length-1)

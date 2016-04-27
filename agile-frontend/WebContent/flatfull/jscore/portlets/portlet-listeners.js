@@ -951,14 +951,18 @@ $('.portlet_body')
 		    }
 		    $('#dashboard-name').text($(this).text());
 		    $('#dashboard-name').attr("data-value", id);
+		    $('#dashboard-name').attr("title", $(this).attr("title"));
 		    $.each(CURRENT_USER_DASHBOARDS, function(index, value){
 		    	if(id == this.id){
 		    		$('#dashboard-desc').text(this.description);
+		    		$('#dashboard-desc').attr("title", this.description);
 		    	}
 		    });
 		    if(id == "Dashboard")
 		    {
 		    	$('#dashboard-desc').text("Welcome to Agile CRM");
+		    	$('#dashboard-desc').attr("title", "");
+		    	$('#dashboard-name').attr("title", "");
 		    }
 	    }
 	});
