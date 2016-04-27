@@ -250,8 +250,10 @@ function  addEventFilter(filter_id){
             contentType : "application/json"
             
         });
-        if($('#filters-tour-step i span').text()==remove_filter_name)
+        if($('#filters-tour-step i span').text()==remove_filter_name){
             setupAnalyticsLhsFilters('');
+            _agile_delete_prefs('visitor_filter');
+        }
         return;
                
     });  
