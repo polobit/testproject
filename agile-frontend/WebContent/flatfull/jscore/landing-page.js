@@ -75,8 +75,9 @@ function initializeLandingPageListeners(pageId) {
     	document.getElementById('landingPageBuilder').contentWindow.$("#preview-closer").addClass("hidden");
 	});
 	//creating an function for the  save
-		
-	$('#landingpages-listeners').on('click','.saveLandingPageButtonText',function(e){
+    
+      
+	 $('#landingpages-listeners').on('click','.saveLandingPageButton',function(e){
 		   e.preventDefault();
 		   	 
             var id={"id":pageId};
@@ -91,6 +92,13 @@ function initializeLandingPageListeners(pageId) {
       });
     }//if() block closing 
    });
+	
+
+
+     
+
+
+		
     
 	$('#landingpages-listeners').on('click', '#builderPageOptionsLink', function (e) {
 		e.preventDefault();
