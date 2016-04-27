@@ -508,8 +508,10 @@ public class CSVUtil
 		    }
 		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
 		    {
-			tempContact.properties.add(new ContactField(Contact.COMPANY, csvValues[j].trim().toLowerCase(),
+		    	String companyName = csvValues[j].trim();
+			tempContact.properties.add(new ContactField(Contact.COMPANY, companyName,
 				null));
+			tempContact.properties.add(new ContactField("name_lower", companyName.toLowerCase(), null));
 		    }
 
 		    tempContact.properties.add(field);
@@ -850,9 +852,10 @@ public class CSVUtil
 
 		if (field.name.equalsIgnoreCase(Contact.NAME))
 		{
-		    companyName = field.value = csvValues[j];
+		    companyName = field.value = csvValues[j].trim();
 		    // added company in new field in lower case
-		    tempContact.properties.add(new ContactField("company", companyName.trim().toLowerCase(), null));
+		    tempContact.properties.add(new ContactField("company", companyName, null));
+		    tempContact.properties.add(new ContactField("name_lower", companyName.toLowerCase(), null));
 		}
 		else
 		{
