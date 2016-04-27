@@ -888,7 +888,7 @@ public class TicketsUtil
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("body", body);
 		
-		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_name, from_address);
+		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_address, from_name);
 		
 		System.out.println("Sent email to: " + email);
 	}
