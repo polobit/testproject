@@ -55,7 +55,7 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 	getActivityObject(data, function(resp) {
 			console.log(resp);
 
-			getTemplate("infoModal", JSON.parse(resp), undefined, function(template_ui){
+			getTemplate("infoModal", resp, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				var emailinfo = $(template_ui);
