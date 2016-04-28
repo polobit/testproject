@@ -26,6 +26,7 @@ public class SendCampaignReportDeferredTask implements DeferredTask{
     {
 	try
 	{
+		System.out.println("Entered inside SendCampaignReportDeferredTask run method");
 	    ReportsUtil.sendCampaignReport(reportid,false);
 	}
 	catch (Exception e)

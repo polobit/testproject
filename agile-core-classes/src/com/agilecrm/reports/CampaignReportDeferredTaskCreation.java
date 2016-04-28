@@ -15,6 +15,7 @@ public class CampaignReportDeferredTaskCreation {
 	    {
 		System.out.println("Time in create createDeferredTask ============ " + time);
 		// Start a task queue for each domain
+		System.out.println("Entered inside CampaignReportDeferredTaskCreation ");
 		SendCampaignReportDeferredTask send_campaign_report_deferred_task = new SendCampaignReportDeferredTask(domain,
 		        time, reportid, timezone);
 		Queue queue = QueueFactory.getQueue("reports-queue");

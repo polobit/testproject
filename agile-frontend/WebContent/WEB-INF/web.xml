@@ -282,7 +282,7 @@
 		<servlet-name>Reports</servlet-name>
 		<url-pattern>/backend/cron/reports/*</url-pattern>
 	</servlet-mapping>
-	<!--
+	
 	<servlet>
 		<servlet-name>CampaignReports</servlet-name>
 		<servlet-class>com.agilecrm.reports.CampaignReportServlet</servlet-class>
@@ -292,7 +292,7 @@
 		<servlet-name>CampaignReports</servlet-name>
 		<url-pattern>/backend/cron/campaignReports/*</url-pattern>
 	</servlet-mapping>
-	-->
+	
 	<servlet>
 		<servlet-name>Triggers</servlet-name>
 		<servlet-class>com.agilecrm.workflows.triggers.TriggerServlet</servlet-class>
