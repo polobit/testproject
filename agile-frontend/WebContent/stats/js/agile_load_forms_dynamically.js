@@ -4,7 +4,7 @@ function loadAgileCRMForm(id){
 	var formId = id[id.length-1];
     console.log("domain is :"+agileDomain);
 	var script = document.createElement('script');
-    script.src = window.location.protocol+'//'+agileDomain+'/core/api/forms/form/js/'+formId;
+    script.src = window.location.protocol+'//'+agileDomain+'-dot-23-4-dot-agile-crm-cloud.appspot.com/core/api/forms/form/js/'+formId;
     document.body.appendChild(script);      
 }
 
