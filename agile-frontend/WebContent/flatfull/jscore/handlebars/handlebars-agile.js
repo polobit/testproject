@@ -422,6 +422,7 @@ function getPropertyValue(items, name)
 			items[i].value=items[i].value.trim();
 			return items[i].value;
 		}
+		}
 }
 
 
