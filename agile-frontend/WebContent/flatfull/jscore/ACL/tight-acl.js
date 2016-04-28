@@ -82,6 +82,13 @@
 			tight_acl.REPORTS_PER = true;
 			App_ACL.notAllowed(obj);
 		}
+		if(Current_Route.indexOf('tickets') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('HELPDESK') > -1))
+		{
+			obj.entity = 'Help Desk';
+			tight_acl.REPORTS_PER = true;
+			obj.ERR_CONTAINER = ".ticket-settings";
+			App_ACL.notAllowed(obj);
+		}
 	}
 	
 	/*
