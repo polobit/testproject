@@ -855,7 +855,6 @@ public class CSVUtil
 		    companyName = field.value = csvValues[j].trim();
 		    // added company in new field in lower case
 		    tempContact.properties.add(new ContactField("company", companyName, null));
-		    tempContact.properties.add(new ContactField("name_lower", companyName.toLowerCase(), null));
 		}
 		else
 		{

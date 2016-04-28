@@ -1133,6 +1133,7 @@ public class Contact extends Cursor
 			Contact newCompany = new Contact();
 			newCompany.properties = new ArrayList<ContactField>();
 			newCompany.properties.add(new ContactField(Contact.NAME, contactField.value, null));
+			newCompany.name = StringUtils.lowerCase(contactField.value);
 			newCompany.type = Type.COMPANY;
 
 			/*
