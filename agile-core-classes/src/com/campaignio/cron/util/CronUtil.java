@@ -228,41 +228,49 @@ public class CronUtil
 		CronUtil cronUtil = new CronUtil();
 		
 		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
+		query = query.chunkSize(1000);
+		
+		long countStart = System.currentTimeMillis();
 		int count = query.count();
-		query = query.chunkSize(500);
+		System.out.println("Crons count "+ count + " and took query time in millis " + (System.currentTimeMillis() - countStart));
+		
 		QueryResultIterator<Cron> iterator = query.iterator();
 		
+		// To delete all crons at once
+		List<Key<Cron>> cronsKeyList = new ArrayList<Key<Cron>>();
 		
-			while (iterator.hasNext())
+		while (iterator.hasNext())
+		{
+			try
 			{
-				try
-				{
-					long start = System.currentTimeMillis();
-					Cron cron = iterator.next();
-					dao.delete(cron);
+				long start = System.currentTimeMillis();
 				
-					// Skips if duplicate cron got from Datastore in the same query
-					if(cronUtil.isCronExists(cron))
-						continue;
+				Cron cron = iterator.next();
 				
-					// Temporary list
-					List<Cron> cronList = new ArrayList<Cron>();
-					cronList.add(cron);
-
-					// Run cron job
-					executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null, count);
-					long end = System.currentTimeMillis();
-					System.out.println("Took : " + ((end - start)) + " milli seconds to process one cron record in queue");
-				}
-				catch(DatastoreTimeoutException e){
-					e.printStackTrace();
-					System.out.println("Data store time out exception occured while iterating the query result"+e.getMessage());
-				}
+				// Skips if duplicate cron got from Datastore in the same query
+				if(cronUtil.isCronExists(cron))
+					continue;
+			
+				// Run cron job
+				executeTasklets(cron, Cron.CRON_TYPE_TIME_OUT, null, count);
 				
+				// Add to list to delete
+				cronsKeyList.add(new Key<Cron>(Cron.class, cron.id));
+				
+				System.out.println("Took " + ((System.currentTimeMillis() - start)) + " milli seconds to process one cron record in queue");
 			}
-		
+			catch(DatastoreTimeoutException e){
+				e.printStackTrace();
+				System.out.println("Data store time out exception occured while iterating the query result "+e.getMessage());
+			}
+			
+		}
+			
 		// clears cacheMap
 		cronUtil.cacheMap.clear();
+		
+		// Delete Cron keys
+		dao.deleteKeys(cronsKeyList);
 		
 		NamespaceManager.set(oldNamespace);
 	}
@@ -336,6 +344,14 @@ public class CronUtil
 		}
 	}
 
+	public static void executeTasklets(Cron cron, String wakeupOrInterrupt, JSONObject customData,
+			int totalCronJobsCount)
+	{
+		List<Cron> cronList = new ArrayList<Cron>();
+		cronList.add(cron);
+		
+		executeTasklets(cronList, wakeupOrInterrupt, customData, totalCronJobsCount);
+	}
 	/**
 	 * Executes tasklets based upon wakeup or timeout using deferred task.
 	 * 
