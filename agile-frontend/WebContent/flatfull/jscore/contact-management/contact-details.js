@@ -180,7 +180,7 @@ function checkContactUpdated(){
               $("#Contact-input-firstname").removeClass("error-inputfield");
               $("#Contact-input-lastname").removeClass("error-inputfield");
               return ;
-               },mode_id);
+               });
                // Toggle fields
           }
 
