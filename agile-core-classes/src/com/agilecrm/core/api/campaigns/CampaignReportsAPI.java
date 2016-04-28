@@ -42,7 +42,7 @@ public class CampaignReportsAPI
      */
     @Path("/stats")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON + ";charset=utf-8" , MediaType.APPLICATION_XML })
     public String getAllCampaignStats() throws Exception
     {
 	try
