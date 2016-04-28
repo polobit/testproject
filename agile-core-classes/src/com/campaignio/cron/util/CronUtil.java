@@ -8,14 +8,16 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.queues.util.PullQueueUtil;
+import com.agilecrm.util.CacheUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
 import com.campaignio.tasklets.agile.Wait;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreTimeoutException;
 import com.google.appengine.api.datastore.QueryResultIterator;
@@ -38,11 +40,18 @@ public class CronUtil
 {
 	
 	private Map<String, Boolean> cacheMap = new HashMap<String, Boolean>();
+	private long startTime = 0l;
+	
 	/**
 	 * Dao of Cron class.
 	 */
 	private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(Cron.class);
 
+	CronUtil()
+	{
+		startTime = System.currentTimeMillis();
+	}
+	
 	/**
 	 * Creates a new Cron object and enqueue task in cron.
 	 * 
@@ -224,38 +233,49 @@ public class CronUtil
 		// Get all sessions with last_messg_rcvd_time
 		Long milliSeconds = System.currentTimeMillis();
 		System.out.println(milliSeconds + " " + NamespaceManager.get());
-
+		
 		CronUtil cronUtil = new CronUtil();
 		
-		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
-		query = query.chunkSize(1000);
+		while(cronUtil.doContinue())
+			cronUtil.fetchAndExecute(milliSeconds, 100);
+			
+		NamespaceManager.set(oldNamespace);
+	}
+
+	/**
+	 * Fetches crons from Datastore and executes
+	 * 
+	 * @param milliSeconds - Current time to check with timeout tasks
+	 * @param limit - Number of tasks to be fetched
+	 */
+	public void fetchAndExecute(Long milliSeconds, int limit)
+	{
+		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds).order("timeout");
 		
-		long countStart = System.currentTimeMillis();
+		// Add limit to query
+		if(limit > 0)
+			query.limit(limit);
+		
 		int count = query.count();
-		System.out.println("Crons count "+ count + " and took query time in millis " + (System.currentTimeMillis() - countStart));
+		System.out.println("Crons count obtained is " + count);
+
+		// Delete crons immediately to make unavailable to other processes
+		List<Cron> crons = query.list();
+		dao.deleteAll(crons);
 		
-		QueryResultIterator<Cron> iterator = query.iterator();
-		
-		// To delete all crons at once
-		List<Key<Cron>> cronsKeyList = new ArrayList<Key<Cron>>();
-		
-		while (iterator.hasNext())
+		// Iterates each cron and adds to Queue
+		for(Cron cron: crons)
 		{
 			try
 			{
 				long start = System.currentTimeMillis();
 				
-				Cron cron = iterator.next();
-				
-				// Skips if duplicate cron got from Datastore in the same query
-				if(cronUtil.isCronExists(cron))
+				// Skips if duplicate cron
+				if(isCronExists(cron))
 					continue;
 			
 				// Run cron job
 				executeTasklets(cron, Cron.CRON_TYPE_TIME_OUT, null, count);
-				
-				// Add to list to delete
-				cronsKeyList.add(new Key<Cron>(Cron.class, cron.id));
 				
 				System.out.println("Took " + ((System.currentTimeMillis() - start)) + " milli seconds to process one cron record in queue");
 			}
@@ -263,16 +283,7 @@ public class CronUtil
 				e.printStackTrace();
 				System.out.println("Data store time out exception occured while iterating the query result "+e.getMessage());
 			}
-			
 		}
-			
-		// clears cacheMap
-		cronUtil.cacheMap.clear();
-		
-		// Delete Cron keys
-		dao.deleteKeys(cronsKeyList);
-		
-		NamespaceManager.set(oldNamespace);
 	}
 
 	/**
@@ -387,7 +398,7 @@ public class CronUtil
 			if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT)){
 				//PullQueueUtil.addToPullQueue(totalCronJobsCount >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
 				Queue queue = QueueFactory.getQueue(AgileQueues.TIMEOUT_PUSH_QUEUE);
-				queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));	
+				queue.addAsync(TaskOptions.Builder.withPayload(cronDeferredTask));	
 			}
 				
 			else
@@ -504,17 +515,54 @@ public class CronUtil
 	 */
 	private boolean isCronExists(Cron cron)
 	{
+		String nodeId = null;
+		
+		try
+		{
+			JSONObject nodeJSON = new JSONObject(cron.node_json_string);
+			nodeId = AgileTaskletUtil.getId(nodeJSON);
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		// Key that identifies duplicate crons
 		String key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id + "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
 		
-		if(cacheMap.containsKey(key))
+		// Add node Id 
+		if(StringUtils.isNotEmpty(nodeId))
+			key +=  "_" + nodeId;
+		
+		if(CacheUtil.getCache(key) != null)
 		{
 			System.err.print("Duplicate cron exists..." + key);
 			return true;
 		}
 		
-		cacheMap.put(key, true);
+		//cacheMap.put(key, true);
 		
+		// Sets in Memcache for 2 mins
+		CacheUtil.setCache(key, true, 5 * 60 * 1000);
+		
+		return false;
+	}
+	
+	/**
+	 * Checks whether it reached max time or not
+	 * 
+	 * @return boolean
+	 */
+	private boolean doContinue()
+	{
+		Long time = System.currentTimeMillis() - startTime;
+
+	    System.out.println("Time left in cron " + time);
+
+	    if ((System.currentTimeMillis() - startTime) <= (8 * 60 * 1000))
+	    	return true;
+	    
 		return false;
 	}
 }
