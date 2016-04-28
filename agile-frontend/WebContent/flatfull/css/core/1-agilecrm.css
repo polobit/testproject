@@ -3229,6 +3229,16 @@ table.hide-head-checkbox th label.i-checks {
 	left:26px;
 	font-size: 18px;
 }
+
+#contactscorebox{
+  text-align:center;
+  padding-bottom: 0;padding-left: 0px;
+  padding-right: 0px;padding-top: 0px;
+  border-top-width: 1px;     
+  height: auto;  
+  font-size: 18px;
+  }
+
 .well{
 
 	background: none!important;
