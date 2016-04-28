@@ -230,17 +230,6 @@ function showCalendar(users)
 												owners.push(CURRENT_AGILE_USER.id);
 										});
 
-										if (owners && owners.length > 0)
-										{
-											$.each(owners, function(index, value)
-											{
-
-												if (index >= 1)
-													agile_event_owners += ",";
-												agile_event_owners += value;
-											});
-										}
-											
 										var typelength = type_of_cal.length;										
 										if(typelength > 0){
 											//Google
@@ -287,14 +276,13 @@ function showCalendar(users)
 									_agile_set_prefs('fullcalendar_start_end_time', JSON.stringify(start_end_array));
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
-									
-
-									eventsURL += '&owner_id=' + agile_event_owners;
-									console.log('-----------------', eventsURL);
-									//callback([]);
-									return eventsURL
-
-								//		return true;
+									if (owners && owners.length > 0)
+									{
+										$.each(owners, function(index, value)
+										{
+											addEventsToCalendar(eventsURL + '&owner_id=' + value);
+										});
+									}
 
 								},
 								dataType: 'agile-events'
