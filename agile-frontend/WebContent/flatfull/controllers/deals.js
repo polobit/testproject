@@ -25,6 +25,7 @@ var DealsRouter = Backbone.Router.extend({
 		var dealTag = null ;
 		if(window.location.hash.indexOf("filter")==1){
        		dealTag = window.location.hash.substr(window.location.hash.lastIndexOf("/")+1);
+       		_agile_set_prefs("agile_deal_view", "list_view");
   		}	
 		pipeline_id = 0;
 		if (_agile_get_prefs("agile_deal_track"))
