@@ -11,6 +11,28 @@
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketEmailUser",
     "category": "Tickets",
     "ui": [
+            {
+              "label": "From (Name):",
+              "category": "Info",
+              "name": "from_name",
+              "id": "from_name",
+              "title": "Enter your name.",
+              "required": "required",
+              "fieldType": "input",
+              "type": "text"
+            },
+            {
+              "label": "From (Email)",
+              "category": "Info",
+              "name": "from_address",
+              "id": "from_address",
+              "value": "",
+              "required": "required",
+              "title": "Enter from email address",
+              "fieldType": "input",
+              "type": "email"
+            },
+            
            {
                "label": "Email User",
                "required": "Yes",
@@ -48,7 +70,7 @@
                "title": "Write Email",
                "fieldType": "textarea",
                "cols": "75",
-               "rows": "13",
+               "rows": "7",
                "type": "text"
            },
            {

@@ -26,6 +26,9 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="com.agilecrm.dashboards.Dashboard"%>
+<%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
+<%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -124,6 +127,7 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
 
+List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
 %>
 
 
@@ -343,9 +347,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <span>Service</span>
   </li>
   <li id="tickets">
-    <a  href="#tickets">
+    <a href="#tickets">
       <i class="icon icon-ticket"></i>
-      <span>Help Desk</span>
+      <span style="padding-top: 9%;">Help Desk</span>
     </a>
   </li>            
   </ul>
@@ -681,6 +685,9 @@ var ACCOUNT_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(accountPr
 
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
+
+// Get current user dashboards
+var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
 
 // Get Contact Date Fields
 var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;

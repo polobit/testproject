@@ -10,6 +10,10 @@ var ACLRestriction = Backbone.Router.extend({
 				if(!template_ui)
 					  return;
 				$('#content').html($(template_ui));	
+
+				if(obj.ERR_CONTAINER)
+			 		$(obj.ERR_CONTAINER).html($(template_ui));
+
 			}, "#content");
 
 		}

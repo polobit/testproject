@@ -62,9 +62,9 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with only mobile number */
 			"contacts/call-lead/:mob" : "addMobLead",
 			
-			"call-contacts" : "callcontacts",
 
-		"refer-friends" : "referFriends"
+			"call-contacts" : "callcontacts"
+
 	},
 	
 	initialize : function()
@@ -93,7 +93,27 @@ var ContactsRouter = Backbone.Router.extend({
             return;
 		}
 
-		getTemplate('portlets', {}, undefined, function(template_ui){
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+
+		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
+
+		var dashboardJSON = {};
+		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(dashboard_name != "DashBoard" && value.id == dashboard_name) {
+					dashboardJSON["id"] = value.id;
+					dashboardJSON["name"] = value.name;
+					dashboardJSON["description"] = value.description;
+				}
+			});
+		}
+
+		if(!dashboardJSON["id"])
+		{
+			dashboard_name = "DashBoard";
+		}
+
+		getTemplate('portlets', dashboardJSON, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 
@@ -106,7 +126,7 @@ var ContactsRouter = Backbone.Router.extend({
 					$("#chrome-extension-button").removeClass('hide');
 				}
 
-				loadPortlets('DashBoard',el);
+				loadPortlets(dashboard_name,el);
 
 		}, "#content");
 
@@ -1273,16 +1293,10 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
-	},
-
-	referFriends : function()
-	{
-		var subject = "I am using Agile CRM and I really love it! Try it now.";
-		var body = "Hi,<br><br>I am using Agile CRM and I really love it!<br><br>It is a combination of important features like email marketing, call campaign, online scheduling, landing pages, Web rules and many others. This service is true value for money!<br><br>What to try it? Let's start by signing up with below link:<br>http://www.agilecrm.com/pricing?utm_source=affiliates&utm_medium=web&utm_campaign="+CURRENT_DOMAIN_USER.domain+"<br><br>Best Regards";
-		sendMail(undefined,subject,body,undefined,undefined,this);
-	}
-		
+	}	
 	});
+
+
 
 function getAndUpdateCollectionCount(type, el, countFetchURL){
 

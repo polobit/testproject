@@ -150,8 +150,12 @@ function checkContactUpdated(){
           }*/
           if(agile_crm_is_model_property_changed("first_name", firstName)){
         // Update first name
-              agile_crm_update_contact("first_name", firstName, function()
+              var model_id = App_Contacts.contactDetailView.model.toJSON().id;
+              agile_crm_update_contact("first_name", firstName, function(contact_model)
               {
+               if(model_id != contact_model.id)
+                return;
+
               $("#Contact-input").addClass("hidden");
               $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
               $("#contactName").addClass("text-capitalize ");
@@ -164,14 +168,19 @@ function checkContactUpdated(){
 
           if(agile_crm_is_model_property_changed("last_name", lastName)){
                // Update last name
-               agile_crm_update_contact("last_name", lastName,function(){
+               agile_crm_update_contact("last_name", lastName,function(contact_model){
+                
+                if(model_id != contact_model.id)
+                return;
+
+
                 $("#Contact-input").addClass("hidden");
               $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
               $("#contactName").addClass("text-capitalize ");
               $("#Contact-input-firstname").removeClass("error-inputfield");
               $("#Contact-input-lastname").removeClass("error-inputfield");
               return ;
-               });
+               },mode_id);
                // Toggle fields
           }
 
@@ -338,6 +347,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contactDetailsTab a[href="#mail"]' : 'openMails',
     	'click #contactDetailsTab a[href="#stats"]' : 'openWebStats',
     	'click #contactDetailsTab a[href="#campaigns"]' : 'openCampaigns',
+    	'click #contactDetailsTab a[href="#tickets"]' : 'openTickets',
     	'click .agile-emails' : 'openEmails',
     	'click #email-reply' : 'repltToEmails',
     	'click .activity-delete' : 'deleteActivity',
@@ -577,6 +587,18 @@ show and hide the input for editing the contact name and saving that
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("campaigns");
 		contact_details_tab.load_campaigns();
+	},
+
+	/**
+	 * Fetches all the logs of the campaigns that the contact is subscribed to
+	 * and shows them in a table. Also shows a campaigns drop down list to
+	 * subscribe the contact to the selected campaign.
+	 */
+	openTickets : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("tickets");
+		contact_details_tab.load_tickets();
 	},
 
 

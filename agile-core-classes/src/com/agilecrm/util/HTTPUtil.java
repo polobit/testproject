@@ -422,7 +422,6 @@ public class HTTPUtil
 	}
 	reader.close();
 
-	System.out.println("output" + output);
 	return output;
     }
 

@@ -48,6 +48,27 @@
                 "category": "Tickets",
                 "ui": [
                     {
+                      "label": "From (Name):",
+                      "category": "Info",
+                      "name": "from_name",
+                      "id": "from_name",
+                      "title": "Enter your name.",
+                      "required": "required",
+                      "fieldType": "input",
+                      "type": "text"
+                    },
+                    {
+                      "label": "From (Email)",
+                      "category": "Info",
+                      "name": "from_address",
+                      "id": "from_address",
+                      "value": "",
+                      "required": "required",
+                      "title": "Enter from email address",
+                      "fieldType": "input",
+                      "type": "email"
+                    },
+                    {
                         "label": "Email User",
                         "required": "Yes",
                         "category": "Info",
@@ -84,7 +105,7 @@
                         "title": "Write Email",
                         "fieldType": "textarea",
                         "cols": "75",
-                        "rows": "13",
+                        "rows": "7",
                         "type": "text"
                     },
                     {
@@ -103,6 +124,14 @@
                 {
                     "name": "nodename",
                     "value": "Email User"
+                },
+                {
+                    "name": "from_name",
+                    "value": "Agile CRM"
+                },
+                {
+                    "name": "from_address",
+                    "value": "noreply@agilecrm.com"
                 },
                 {
                     "name": "email-user",

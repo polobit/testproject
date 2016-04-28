@@ -310,6 +310,11 @@ var contact_details_tab = {
 			});	
 
 	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
+		},
+		load_tickets: function(){
+			loadServiceLibrary(function(){
+				Tickets_Rest.loadTicketsByContactId(App_Contacts.contactDetailView.model.id);
+			});
 		}
 };
 /**

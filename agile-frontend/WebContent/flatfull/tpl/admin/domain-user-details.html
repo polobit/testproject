@@ -169,10 +169,10 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 
 <script id="email-stats-template" type="text/html">
 <div>
-					This Hour:{{numberWithCommas sent_hourly}}<br/>
-				This Week:{{numberWithCommas sent_weekly}}<br/>
-					This Month:{{numberWithCommas sent_monthly}}<br/>
-					Overall :{{numberWithCommas sent_total}}<br/>
+					Today:{{numberWithCommas dailyEmailSent}}<br/>
+				    This Week:{{numberWithCommas weeklyEmailSent}}<br/>
+					This Month:{{numberWithCommas monthlyEmailSent}}<br/>
+					Overall :{{numberWithCommas allEmailSent}}<br/>
 	</div>		
 
 </script>
@@ -190,42 +190,42 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
     </thead>
     <tbody>
         <tr>
-            <td>campaigns_count</td>
+            <td>Campaigns Count</td>
             <td >{{compaign_count}}</td>
         </tr>
       
  <tr>
-            <td>webrules_count</td>
+            <td>Webrules Count</td>
             <td>{{webrule_count}}</td>
         </tr>
         <tr>
-            <td>emails_count</td>
+            <td>Emails Count</td>
             <td id="emailcount" ></td>
         </tr>
 
         <tr>
-            <td>Web-stats_count</td>
+            <td>Web-stats Count</td>
             <td >{{webstats_count}}</td>
         </tr>
  <tr>
-            <td>Contacts_count</td>
+            <td>Contacts Count</td>
             <td >{{contact_count}}</td>
         </tr>
 
  <tr>
-            <td>deals_count</td>
+            <td>Deals Count</td>
             <td >{{deals_count}}</td>
         </tr>
  <tr>
-            <td>documents_count</td>
+            <td>Documents Count</td>
             <td >{{docs_count}}</td>
         </tr>
  <tr>
-            <td>events_count</td>
+            <td>Events Count</td>
             <td >{{events_count}}</td>
         </tr>
  <tr>
-            <td>triggers_count</td>
+            <td>Triggers Count</td>
             <td >{{triggers_count}}</td>
         </tr>
 
