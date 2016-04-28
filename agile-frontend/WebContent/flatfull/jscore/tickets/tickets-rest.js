@@ -307,5 +307,30 @@ var Tickets_Rest={
 
 		//Update data in model
 		model.set(data, {silent: true});
+	},
+
+	loadTicketsByContactId : function(id){
+
+		$('div.tab-content', App_Contacts.contactDetailView.el).find('div.active').removeClass('active');
+		$('#tickets', App_Contacts.contactDetailView.el).addClass('active');
+
+		var ticketsCollection = new Base_Collection_View({ 
+			url : '/core/api/tickets/contact/' + id, 
+			templateKey : "tickets-by-contacts",
+			individual_tag_name : 'li', 
+			sortKey : "created_time", 
+			descending : true, 
+			postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$(".note-created-time", el).timeago();
+				})
+			} 
+		});
+
+		ticketsCollection.collection.fetch();
+
+		$('#tickets', App_Contacts.contactDetailView.el).html(ticketsCollection.el);
 	}
 };

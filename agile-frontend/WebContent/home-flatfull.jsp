@@ -347,9 +347,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <span>Service</span>
   </li>
   <li id="tickets">
-    <a  href="#tickets">
+    <a href="#tickets">
       <i class="icon icon-ticket"></i>
-      <span>Help Desk</span>
+      <span style="padding-top: 9%;">Help Desk</span>
     </a>
   </li>            
   </ul>

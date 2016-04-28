@@ -347,6 +347,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contactDetailsTab a[href="#mail"]' : 'openMails',
     	'click #contactDetailsTab a[href="#stats"]' : 'openWebStats',
     	'click #contactDetailsTab a[href="#campaigns"]' : 'openCampaigns',
+    	'click #contactDetailsTab a[href="#tickets"]' : 'openTickets',
     	'click .agile-emails' : 'openEmails',
     	'click #email-reply' : 'repltToEmails',
     	'click .activity-delete' : 'deleteActivity',
@@ -586,6 +587,18 @@ show and hide the input for editing the contact name and saving that
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("campaigns");
 		contact_details_tab.load_campaigns();
+	},
+
+	/**
+	 * Fetches all the logs of the campaigns that the contact is subscribed to
+	 * and shows them in a table. Also shows a campaigns drop down list to
+	 * subscribe the contact to the selected campaign.
+	 */
+	openTickets : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("tickets");
+		contact_details_tab.load_tickets();
 	},
 
 
