@@ -134,6 +134,8 @@ function agile_crm_update_contact(propertyName, value, callback)
 		}
 	});
 
+
+
 	// If flag is false, given property is new then new field is created
 	if (!flag)
 		properties.push({ "name" : propertyName, "value" : value, "type" : "CUSTOM" });
@@ -151,7 +153,7 @@ function agile_crm_update_contact(propertyName, value, callback)
 	contact_model.set(model.toJSON(), { silent: true });
 
 	if (callback && typeof (callback) == "function")
-	callback();
+	callback(model.toJSON());
 	} }, { silent : true });
 }
 

@@ -26,7 +26,6 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
-import com.sun.org.apache.xml.internal.serializer.ToSAXHandler;
 import com.thirdparty.mandrill.MandrillSendDeferredTask;
 import com.thirdparty.sendgrid.deferred.SendGridAttachmentDeferredTask;
 import com.thirdparty.sendgrid.lib.SendGridLib;
