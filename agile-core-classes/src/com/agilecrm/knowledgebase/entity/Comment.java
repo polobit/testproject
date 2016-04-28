@@ -115,6 +115,11 @@ public class Comment implements Serializable
 		}
 	}
 
+	public Key<Comment> save()
+	{
+		return dao.put(this);
+	}
+
 	@javax.persistence.PostLoad
 	private void postLoad()
 	{
