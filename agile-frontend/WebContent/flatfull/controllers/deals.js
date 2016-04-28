@@ -88,12 +88,12 @@ var DealsRouter = Backbone.Router.extend({
 				if (_agile_get_prefs('deal-filters'))
 				{	
 					if(dealTag != null){
-						var dealFilter = getDealFilters();
+						var dealFilter = "{}";
 						var dealFilters = JSON.parse(dealFilter);
 						dealFilters["dealTagCondition"] = "is";
 						dealFilters["dealTagName"] = dealTag ;
 						var filterString = JSON.stringify(dealFilters);
-						$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n"><li class="inline-block tag btn btn-xs btn-primary" data="MYHOME"><span>'+dealTag+'<a href="#deals" class="deals-list-view close m-l-xs pull-right">×</a></span></li></ul>');
+						$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n"><li class="inline-block tag btn btn-xs btn-primary" data="MYHOME"><span>'+dealTag+'<a href="#deals" class="anchor close m-l-xs pull-right">×</a></span></li></ul>');
 						query = '&filters=' + encodeURIComponent(filterString); 
 					}
 					else
