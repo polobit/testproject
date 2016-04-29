@@ -1011,6 +1011,7 @@ function initializeAddPortletsListeners() {
 							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis-new.png"),
 							"AverageDeviation" :  updateImageS3Path("flatfull/img/dashboard_images/Average_deviation.png"),
                             "WebstatVisits" : updateImageS3Path("flatfull/img/dashboard_images/Webstat-Visits.png"),
+							"Referralurlstats" : updateImageS3Path("flatfull/img/dashboard_images/refferalurl-stats.png"),
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",

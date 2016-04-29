@@ -211,6 +211,9 @@ var portlet_utility = {
 		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
 			json['activity_type'] = "ALL";
 			json['duration'] = "this-quarter";
+		}
+		else if (portlet_type == "USERACTIVITY" && p_name == "Refferalurl stats") {
+			json['duration'] = "yesterday";
 		}	
 		return json;
 	
@@ -337,6 +340,7 @@ var portlet_utility = {
 			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
 			"Average Deviation" : "portlets-Tasks-Deviation",
 			"Webstat Visits" : "portlets-webstat-visits",
+			"Refferalurl stats" : "portlets-refferalurl-stats-report",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -1331,6 +1335,42 @@ var portlet_utility = {
 			setPortletContentHeight(base_model);
 			break;
 		}
+		case "Refferalurl stats": {
+			var ref_url,count;
+			var url = '/core/api/web-stats/refurl-stats?start_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
+					+ '&end_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000
+					+ '&time_zone=' + (new Date().getTimezoneOffset());
+			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
+				if(data.length==0){
+						$('.refferalurl-stats-portlet-body').html('<div class="portlet-error-message">No Refferal URL Found</div>');
+								return;
+					}
+				var span;
+				$.each( data, function(e) {					
+					var width;
+					if(e==0)
+						width=75;
+					else
+						width=(data[e].count/data[0].count)*100;
+					if(e!=0 && width >75){
+						width=100-width;
+						width=75-width;
+					}
+
+					span = $("<div style='margin: 0px 20px -21px 15px;'/>");
+					span.append("<a href='#' data-toggle='popover' class='text-ellipsis' title="+ data[e].ref_url +" style='font-size: 13px; position: absolute;width: 75%;'>" + data[e].ref_url.substring(0,data[e].ref_url.lastIndexOf('/')+1) + "</a>");
+		            span.append("<div  style='margin-left: 8.4cm;width: 15%;'>" + data[e].count + "</div>");
+		            span.append("<div class='bar' style='width: "+width+"%; margin: 1px;height: .5rem; background: #237fa0;'></div>");
+		            span.append("<br/>");
+		            $('.refferalurl-stats-portlet-body').append(span);
+				});
+			});
+			
+			setPortletContentHeight(base_model);
+			break;
+		}
 		}
 	},
 
@@ -1936,6 +1976,15 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 			break;
+		}
+		case "Refferalurl stats": {
+			that.addPortletSettingsModalContent(base_model,"portletsRefferalurlStatsSettingsModal");
+			$("#duration", elData).find(
+				               'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;		
+			
 		}
 		}
 		if (base_model.get('name') == "Pending Deals"
