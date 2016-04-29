@@ -8,7 +8,7 @@
 <div id="task-detail-lhs" class="wrapper pos-rlt details-mobile-view">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span>
+                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block text-ellipsis" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span>
                     <span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis"
                      style="max-width:200px;min-width:auto;vertical-align:bottom; font-size:12px;">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}

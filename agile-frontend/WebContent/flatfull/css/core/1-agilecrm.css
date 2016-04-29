@@ -2121,7 +2121,7 @@ li.error {
 .noty_contact_details{margin-top: 10px;display:table-row;}
 
 .white-space-normal {
-  white-space : normal important;
+  white-space : normal !important;
 }
 .fc_border_height{
   min-height: 20px;
@@ -2196,7 +2196,7 @@ li.error {
   margin-left: 6px;
   padding: 32px 7px 40px;*/
   position: relative;
-  width:280px;
+  /*width:280px;*/
   vertical-align: top;
   display: inline-block;
   margin-right:10px;
@@ -2481,7 +2481,7 @@ float:right;
 @-moz-document url-prefix() {
    .task-content-view
 {
-  width:81%;
+  /*width:81%;*/
 }
 }
 

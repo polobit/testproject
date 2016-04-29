@@ -65,7 +65,7 @@
 	margin-left: 6px;
 	padding: 32px 7px 40px;*/
 	position: relative;
-	width:280px;
+	/*width:280px;*/
 	vertical-align: top;
 	display: inline-block;
 	margin-right:10px;
@@ -353,7 +353,7 @@ float:right;
 @-moz-document url-prefix() {
    .task-content-view
 {
-	width:81%;
+	/*width:81%;*/
 }
 }
 

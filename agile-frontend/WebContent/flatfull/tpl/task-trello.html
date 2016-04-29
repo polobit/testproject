@@ -69,7 +69,7 @@
 	</div>
 	</div>
 
-<div class="wrapper-md">
+<div class="wrapper-md p-b-none">
 	<div id="new-task-list-based-condition"> 
   		<img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
 	</div>
@@ -80,27 +80,29 @@
 </script>
 
 <script id="new-tasks-lists-collection-template" type="text/html"> 
- <div id="new-tasks-lists-model-list" class="list-area">
+ <div id="new-tasks-lists-model-list" class="list-area p-b-none">
 
  </div>
 </script>
 
 <script id="new-tasks-lists-model-template" type="text/html">
-    <div class="task-trello-list panel panel-default w-full m-r-none">
+    <div class="panel panel-default w-full m-r-none m-b-none">
      <div class="list-header panel-heading" attr="{{heading}}" ownerID={{owner_id}}>
-<div class="pull-left text-ellipsis" style="width:60%;"> 
+<div class="pull-left" style="margin-top:-2px;"> 
+        <span id="task-count-{{heading}}-{{owner_id}}" class="label bg-dark m-r-xs"></span> 
+</div>
+<div class="pull-left text-ellipsis" style="width:62%;"> 
          <span class="m-r-xs">{{get_normal_name heading}}</span>
         <!-- <span id="task-count-{{heading}}-{{owner_id}}" class="badge bg-primary txt-mute"></span> -->
          
 </div>
 
-<div class="pull-left"> 
-        <span id="task-count-{{heading}}-{{owner_id}}" class="badge badge-empty pull-right  m-l-sm"></span> 
-</div>
+
          <div class="pull-right"><img id="task-list-loading-img-{{heading}}-{{owner_id}}"  src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}">
-<span class="list-bottom left add-task m-r-sm" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="fa fa-plus"></i>
+<span class="list-bottom left add-task m-r-sm" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#">
+<i class="icon-plus text-xs"></i>
 </a></span>
-<span class="inline-block transform-rotate"><a class="text-info" href="#"><i class="fa fa-expand"></i></a></span>
+<span class="inline-block transform-rotate"><a class="text-info" href="#"><i class="fa fa-expand text-xs"></i></a></span>
 </div>  
 <div class="clearfix"></div>               
      </div>     
@@ -136,16 +138,16 @@
 
   <div class="task-body">    
     <div class="task-left">  
-<div class="new-task-owner  thumb-xxs avatar">     
+<div class="new-task-owner  thumb-xxs avatar taskavatarimg">     
          {{#if taskOwner.pic}}
-        	<img src="{{taskOwner.pic}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
+        	<img src="{{taskOwner.pic}}" class="thumb-xxs r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
 	     {{else}}
-			<img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x" title="{{taskOwner.name}}"/>
+			<img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
 	     {{/if}}
       </div> 
       </div>
 <div class="pull-left task-content-view">
-<div class="pull-left" style="width:68%">
+<div class="pull-left" style="width:80%">
       {{#if is_complete}}
          {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
       {{else}}
@@ -156,11 +158,17 @@
          {{/if_equals}}       
       {{/if}}      
 </div>
-<div class="task-right text-ellipsis" style="width:30%">
-      <label class="label bg-light dk text-tiny" title="Category">{{get_normal_name type}}</label>
+
+  <div class="text-right text-ellipsis">
+      <b class="badge bg-primary pull-right" style="font-size:11px; padding:2px 4px;" data-toggle="tooltip" data-placement="top" data-container="body" title="High" >H</b>
   </div>
+
+  <!--<div class="task-right text-ellipsis" style="width:30%">
+      <label class="label bg-light dk text-tiny" title="Category">{{get_normal_name type}}</label>
+  </div>-->
+
     <div class="clearfix"></div>
-      {{#if contacts}}  
+      <!--{{#if contacts}}  
          <div class="task-related-to task-related-contacts" title="Related To">
         	{{#each contacts}}
             {{#if_contact_type "PERSON"}}
@@ -172,9 +180,32 @@
             {{#if @last}} {{else}},{{/if}}
           {{/each}}
 		 </div>
-      {{/if}}
+      {{/if}}-->
+
+      <!-- <div class="pull-left w-full text-ellipsis text-muted">
+     <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time></div> -->
+
+     <div class="pull-left w-full text-ellipsis text-muted m-t-n-xs">
+      <time class="new-task-due-time time-ago" >26/04/2016 <span class="m-l-sm">20:30 PM</span></time></div>
+
 </div>
 <div class="clearfix"></div>
+
+{{#if contacts}}  
+         <div class="task-related-to task-related-contacts" title="Related To">
+          {{#each contacts}}
+            {{#if_contact_type "PERSON"}}
+              <a href="#contact/{{id}}" class="activate-link text-sm text-muted popover_contact text-cap" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+            {{/if_contact_type}}
+        {{#if_contact_type "COMPANY"}}
+              <a href="#company/{{id}}" class="activate-link text-sm text-muted text-cap popover_contact" data="{{id}}">{{getPropertyValue properties "name"}}</a>
+            {{/if_contact_type}}
+            {{#if @last}} {{else}},{{/if}}
+          {{/each}}
+     </div>
+      {{/if}}
+
+
       {{#if_equals status "IN_PROGRESS"}}
        <!-- <label class="label bg-light dk text-tiny progress-label" title="Progress">{{progress}}%</label> -->
 <div class="task-circle">
@@ -187,21 +218,28 @@
     </div>
 </div>
 {{/if_equals}}
+
+<p class="word-break-all white-space-normal text-xs m-t-xs m-b-none">There are a few easy ways to quickly get started with Bootstrap, each one appealing to a different skill level and use case.</p>
+
 <div class="clearfix"></div>
     </div> <!--task-body--> 
 
     
 <div class="clearfix"></div>
  
-   <div class="new-task-footer">
-<div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
+   <div class="new-task-footer m-t-xs">
+<!--<div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
      <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
-</div>    
+</div>-->  
+<div class="pull-left text-ellipsis" style="width:58%;">
+      <label class="label bg-light dk text-tiny m-r-xs" title="Category" data-toggle="tooltip" data-placement="bottom" data-container="body">{{get_normal_name type}}</label>
+      <label class="label bg-light dk text-tiny" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Yet to Start">Yet to Start</label>
+  </div>  
 <div class="pull-right"> 
  <div class="task-actions">
-           <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+          <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
            {{#if notes}} 
              <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="Notes"></i>
              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
@@ -216,6 +254,7 @@
 </div>
 <div class="clearfix"></div>
    </div> <!--task-footer-->
+
 </div>
 </script>
 

@@ -4,7 +4,7 @@ function displaySettings()
 	// Creates normal time.
 	displayTimeAgo($(".task-trello-list"));
 
-	$(".listed-task").parent().addClass("task-striped");
+	$(".listed-task").parent().addClass("task-striped m-sm bg-white-only");
 
 	// Get selected criteria
 	var criteria = getCriteria();
@@ -333,7 +333,7 @@ function adjustHeightOfTaskListAndScroll()
 	var bodyheight = $(window).height();
 
 	$("#new-task-list-based-condition").height(bodyheight - 155);
-	$(".list-tasks").css('max-height', bodyheight - 245);
+	$(".list-tasks").css('max-height', bodyheight - 198);
 }
 
 /**

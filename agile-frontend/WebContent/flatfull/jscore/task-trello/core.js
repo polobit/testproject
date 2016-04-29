@@ -122,13 +122,14 @@ function initTaskListCollection()
 function taskAppend(base_model)
 {
 	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "new-tasks-lists-model", tagName : 'div',
-		className : "col-md-3 p-n pull-none inline-block", id : base_model.get("heading") });
+		className : "task-trello-list col-md-3 p-n pull-none inline-block m-r-none min-h-auto-xl", id : base_model.get("heading") });
 
 	// Render model in main collection
 	var el = tasksListModel.render().el;
 
 	// Append model from main collection in UI
 	$('#new-tasks-lists-model-list', this.el).append(el);
+
 	taskFetch(base_model);
 }
 
@@ -153,6 +154,9 @@ function taskFetch(base_model)
 		page_size : 20,
 		postRenderCallback : function(el)
 		{
+			// Add tooltip info
+			$('[data-toggle="tooltip"]', el).tooltip();
+
 			var flag = false;
 
 			if (base_model.has("owner_id"))

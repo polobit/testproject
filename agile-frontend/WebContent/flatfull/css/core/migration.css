@@ -1402,7 +1402,9 @@ border-left:none;
 }
 
 /* media queries for contact details left , right icons auto hide show */
-
+@media (min-width:1100px){
+.min-h-auto-xl{ min-height: 490px;}
+}
 @media (min-width:1340px){
 .app-aside-dock #contacts-inner-tabs #prev,.app-aside-dock #contacts-inner-tabs #next {
 display:none;
@@ -2334,9 +2336,7 @@ color:#484848!important;
 #lhs-contact-filter-form #lhs-filters-header{ display: block;}
 .contactTableHeadName thead tr th{ display: none;}
 .transform-rotate{ transform: rotate(45deg);}
-
-
-
+.taskavatarimg img{ border-radius: 4px;}
 
 
 
