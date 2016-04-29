@@ -366,18 +366,6 @@ public class EmailGatewayUtil
     {
 	try
 	{
-		System.out.println("emailGateway: " + emailGateway);
-		System.out.println("emailGateway.email_api: " + emailGateway.email_api);
-		System.out.println("EMAIL_API.SES: " + EMAIL_API.SES);
-		
-		System.out.println("EMAIL_API.SES: " + EMAIL_API.SES);
-		System.out.println("EMAIL_API.SES: " + EMAIL_API.SES);
-		
-		System.out.println(emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api))
-	    		&& ((documentIds != null && documentIds.size() != 0) 
-	    		|| (blobKeys != null && blobKeys.size() != 0)) 
-	    		|| (EMAIL_API.SES.equals(emailGateway.email_api) && attachments!=null && attachments.length !=0));
-		
 	    // If no gateway setup, sends email through Agile's default
 	    if (emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api))
 	    		&& ((documentIds != null && documentIds.size() != 0) 
