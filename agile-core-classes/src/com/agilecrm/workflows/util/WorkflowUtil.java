@@ -62,6 +62,26 @@ public class WorkflowUtil
 		}
 	}
 	
+	/**
+	 * Locates workflow based on id.
+	 * 
+	 * @param id
+	 *            Workflow id.
+	 * @return workflow object with that id if exists, otherwise null.
+	 */
+	public static Workflow getWorkflow(Long id, boolean force)
+	{
+		try
+		{
+			return dao.get(id);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	// returns all workflows count
 	public static int getCount()
 	{
@@ -73,20 +93,42 @@ public class WorkflowUtil
 	 * 
 	 * @return list of all workflows.
 	 */
-	public static List<Workflow> getAllWorkflows()
-	{	Long userId = DomainUserUtil.getCurentUserId();
+	public static List<Workflow> getAccountWorkflows(boolean allUsers)
+	{
 		Map map = new HashMap();
-		
-		if(userId != null)
-		{
-			Set set = new HashSet();
-			set.add(1L);
-			set.add(userId);
-			
-			map.put("access_level in", set);
+		if(!allUsers){
+			Long userId = DomainUserUtil.getCurentUserId();
+			if(userId != null)
+			{
+				Set set = new HashSet();
+				set.add(1L);
+				set.add(userId);
+				
+				map.put("access_level in", set);
+			}
 		}
 		
 		return dao.fetchAllByOrder("name", map);
+	}
+	
+	/**
+	 * Returns all workflows as a collection list.
+	 * 
+	 * @return list of all workflows.
+	 */
+	public static List<Workflow> getAllWorkflows()
+	{
+		return getAccountWorkflows(false);
+	}
+	
+	/**
+	 * Returns all workflows as a collection list.
+	 * 
+	 * @return list of all workflows.
+	 */
+	public static List<Workflow> getAllWorkflows(boolean allUsers)
+	{
+		return getAccountWorkflows(allUsers);
 	}
 	
 	/**

@@ -75,12 +75,13 @@ public class WorkflowsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Workflow> getWorkflows(@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
+			@QueryParam("cursor") String cursor, @QueryParam("all_users") String all_users) {
 		if (count != null) {
 			return WorkflowUtil
 					.getAllWorkflows(Integer.parseInt(count), cursor);
 		}
-		return WorkflowUtil.getAllWorkflows();
+		
+		return WorkflowUtil.getAllWorkflows(all_users != null);
 	}
 
 	/**

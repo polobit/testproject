@@ -206,10 +206,12 @@ public class Trigger
 	@XmlElement(name = "campaign")
 	public String getCampaign() throws Exception
 	{
+		System.out.println("getCampaign call");
 		if (campaign_id == null)
 			return " ";
-
-		this.workflow = WorkflowUtil.getWorkflow(campaign_id);
+		
+		if(this.workflow == null)
+			this.workflow = WorkflowUtil.getWorkflow(campaign_id, true);
 
 		if (this.workflow != null)
 			return this.workflow.name;
