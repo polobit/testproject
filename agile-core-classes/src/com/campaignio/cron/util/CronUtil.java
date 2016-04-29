@@ -18,6 +18,7 @@ import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
 import com.campaignio.tasklets.agile.Wait;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreTimeoutException;
 import com.google.appengine.api.datastore.QueryResultIterator;
@@ -332,17 +333,10 @@ public class CronUtil
 				// If duplicate cron obtained, skip
 				if(cronUtil.isCronExists(cron))
 					continue;
-				
-				// Temporary list
-				List<Cron> cronList = new ArrayList<Cron>();
-				cronList.add(cron);
 
 				// Execute in another tasklet
-				executeTasklets(cronList, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
+				executeTasklets(cron, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
 			}
-
-			// Clears map
-			cronUtil.cacheMap.clear();
 		}
 		catch(Exception e)
 		{
@@ -515,12 +509,19 @@ public class CronUtil
 	 */
 	private boolean isCronExists(Cron cron)
 	{
-		String nodeId = null;
+		String nodeId = null, hopCount = null;
 		
 		try
 		{
 			JSONObject nodeJSON = new JSONObject(cron.node_json_string);
 			nodeId = AgileTaskletUtil.getId(nodeJSON);
+			
+			JSONObject dataJSON = new JSONObject(cron.data_string);
+			
+			// Get Hop count.
+			if(dataJSON.has(TaskletUtil.HOPS_COUNT))
+				hopCount = dataJSON.getString(TaskletUtil.HOPS_COUNT);
+			
 		}
 		catch (JSONException e)
 		{
@@ -529,11 +530,17 @@ public class CronUtil
 		}
 		
 		// Key that identifies duplicate crons
-		String key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id + "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
+		String key = cron.namespace + "_"+ cron.campaign_id + "_" + cron.subscriber_id;
 		
 		// Add node Id 
 		if(StringUtils.isNotEmpty(nodeId))
 			key +=  "_" + nodeId;
+		
+		// Add hop count that separates node
+		if(StringUtils.isNotEmpty(hopCount))
+			key += "_" + hopCount;
+		
+		key += "_" + cron.custom1 + "_" + cron.custom2 + "_" + cron.custom3;
 		
 		if(CacheUtil.getCache(key) != null)
 		{
