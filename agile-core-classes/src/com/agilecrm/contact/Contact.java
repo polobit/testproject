@@ -1253,6 +1253,10 @@ public class Contact extends Cursor
 	if (this.type == Contact.Type.COMPANY)
 	{
 		this.entity_type = "company_entity";
+		if(this.name==null){
+			if(getContactField(NAME)!=null)
+			this.name=getContactField(NAME).value;
+		}
 	}
     }
 
