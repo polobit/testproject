@@ -409,6 +409,9 @@ function deserializeChainedSelect(form, el, el_self)
 
 function deserializeChainedElement(data, rule_element)
 {
+	if(data.CONDITION == "NOT_DEFINED"){
+		data.CONDITION = "NEVER" ;
+	}
 	$(rule_element).removeClass('hide');
 	// hide campaign status filter.
 	/*

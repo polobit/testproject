@@ -249,6 +249,10 @@ function serializeChainedElement(element)
 	    var newdate = (json_object.nested_rhs + (24 * 60 * 60 * 1000) - 1);
        json_object.nested_rhs = newdate;
 	}
+	if(json_object.CONDITION == "NEVER") {
+		json_object.CONDITION = "NOT_DEFINED" ;
+	}
+
 	return json_object;
 }
 
