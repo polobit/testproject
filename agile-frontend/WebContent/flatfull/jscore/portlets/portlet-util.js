@@ -1926,6 +1926,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					break;
 		}
 		case "Webstat Visits": {
 			that.addPortletSettingsModalContent(base_model,
