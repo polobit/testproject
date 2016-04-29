@@ -150,8 +150,12 @@ function checkContactUpdated(){
           }*/
           if(agile_crm_is_model_property_changed("first_name", firstName)){
         // Update first name
-              agile_crm_update_contact("first_name", firstName, function()
+              var model_id = App_Contacts.contactDetailView.model.toJSON().id;
+              agile_crm_update_contact("first_name", firstName, function(contact_model)
               {
+               if(model_id != contact_model.id)
+                return;
+
               $("#Contact-input").addClass("hidden");
               $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
               $("#contactName").addClass("text-capitalize ");
@@ -164,7 +168,12 @@ function checkContactUpdated(){
 
           if(agile_crm_is_model_property_changed("last_name", lastName)){
                // Update last name
-               agile_crm_update_contact("last_name", lastName,function(){
+               agile_crm_update_contact("last_name", lastName,function(contact_model){
+                
+                if(model_id != contact_model.id)
+                return;
+
+
                 $("#Contact-input").addClass("hidden");
               $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
               $("#contactName").addClass("text-capitalize ");

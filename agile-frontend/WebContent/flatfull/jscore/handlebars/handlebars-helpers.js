@@ -2582,11 +2582,14 @@ $(function()
 		var plantype = [];
 		plantype =  plan.plan_type.split("_");
 		var temp = plantype[0].toLowerCase();
-		var temp1 = plantype[1].toLowerCase();
+		
 		if(plantype.length == 1)
 		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1);
-		else
-		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+		else{
+			var temp1 = plantype[1].toLowerCase();
+			var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+		}
+		
 		return string;
 	});
 	/**
