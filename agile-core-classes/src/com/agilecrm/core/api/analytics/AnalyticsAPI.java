@@ -164,7 +164,7 @@ public class AnalyticsAPI
     @Path("/refurl-stats")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getVisitsCount(@QueryParam("start_time") String startTime, @QueryParam("end_time") 
+    public String getRefferalUrlCount(@QueryParam("start_time") String startTime, @QueryParam("end_time") 
             String endTime, @QueryParam("time_zone") String timeZone)
     {
         
