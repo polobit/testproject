@@ -7,8 +7,16 @@
 	<small class="text-muted m-b-sm pull-right">
 		{{domainUser.name}}, created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
 	</small><br/>
+	<hr style="border-color: #DADDDE; margin-top: 10px; margin-bottom: 10px;"/>
+	<h4 class="m-n font-thin h4 text-black m-b-sm">Comments</h4>
+	<div class="comments-collection">
+		{{#is_user_logged_in}}
+		{{else}}
+			<div class="text-black text-center m-t-md">Please <a href="/helpcenter/login">login</a> to leave comments</div>
+		{{/is_user_logged_in}}
+	</div>
 </div>
 <div class="col-md-4">
-
+	
 </div>
 </script>

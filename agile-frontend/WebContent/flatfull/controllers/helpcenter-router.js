@@ -94,6 +94,16 @@ var HelpcenterRouter = Backbone.Router.extend({
 						var json = {};
 						var catogery_id = $("#catogery option:selected").data('catogery-id');
 						json = {"categorie_id" : catogery_id };
+
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+
+							json.plain_content = plain_content;
+						}
+						catch(err){}
+						
 						model.set(json, { silent : true });
 				    },
 

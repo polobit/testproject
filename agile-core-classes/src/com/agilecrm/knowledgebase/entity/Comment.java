@@ -9,6 +9,9 @@ import javax.persistence.PrePersist;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.knowledgebase.util.HelpcenterUserUtil;
+import com.agilecrm.session.KnowledgebaseManager;
+import com.agilecrm.session.KnowledgebaseUserInfo;
 import com.agilecrm.session.KnowledgebaseUserInfo.Role;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -40,30 +43,6 @@ public class Comment implements Serializable
 	 * Stores Categorie key
 	 */
 	@JsonIgnore
-	public Key<Categorie> categorie_key = null;
-
-	/**
-	 * Util attribute
-	 */
-	@NotSaved
-	public Long categorie_id = null;
-
-	/**
-	 * Stores Categorie key
-	 */
-	@JsonIgnore
-	public Key<Section> section_key = null;
-
-	/**
-	 * Util attribute
-	 */
-	@NotSaved
-	public Long section_id = null;
-
-	/**
-	 * Stores Categorie key
-	 */
-	@JsonIgnore
 	public Key<Article> article_key = null;
 
 	/**
@@ -83,13 +62,19 @@ public class Comment implements Serializable
 	 * Stores user key
 	 */
 	@JsonIgnore
-	public Key<DomainUser> created_by_key = null;
+	public Key<HelpcenterUser> created_by_key = null;
 
 	/**
 	 * Util attribute
 	 */
 	@NotSaved
 	public Long created_by = null;
+
+	/**
+	 * Util attribute
+	 */
+	@NotSaved
+	public HelpcenterUser hc_user = null;
 
 	/**
 	 * Initialize DataAccessObject.
@@ -104,15 +89,12 @@ public class Comment implements Serializable
 	{
 		Long currentTime = Calendar.getInstance().getTimeInMillis();
 
-		if (currentTime == null)
+		if (created_time == null)
 			created_time = currentTime;
 
 		updated_time = currentTime;
 
-		if (!(role == Role.CUSTOMER))
-		{
-			created_by_key = DomainUserUtil.getCurentUserKey();
-		}
+		created_by_key = new Key<HelpcenterUser>(HelpcenterUser.class, KnowledgebaseManager.get().getUserId());
 	}
 
 	public Key<Comment> save()
@@ -124,13 +106,18 @@ public class Comment implements Serializable
 	private void postLoad()
 	{
 		if (created_by_key != null)
+		{
 			created_by = created_by_key.getId();
 
-		if (categorie_key != null)
-			categorie_id = categorie_key.getId();
-
-		if (section_key != null)
-			section_id = section_key.getId();
+			try
+			{
+				hc_user = HelpcenterUserUtil.getUser(created_by);
+			}
+			catch (Exception e)
+			{
+				// TODO: handle exception
+			}
+		}
 
 		if (article_key != null)
 			article_id = article_key.getId();

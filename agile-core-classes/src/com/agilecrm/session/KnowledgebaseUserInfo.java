@@ -34,14 +34,15 @@ public class KnowledgebaseUserInfo implements Serializable
 	/**
 	 * Domain user id logged in
 	 */
-	private Long domainId = 0L;
+	private Long userId = 0L;
 
 	public KnowledgebaseUserInfo()
 	{
 	}
 
-	public KnowledgebaseUserInfo(String claimedId, String email, String name, Role role)
+	public KnowledgebaseUserInfo(String claimedId, String email, String name, Role role, Long userId)
 	{
+		this.userId = userId;
 		this.claimedId = claimedId;
 		this.email = email;
 		this.name = name;
@@ -69,29 +70,6 @@ public class KnowledgebaseUserInfo implements Serializable
 //				e.printStackTrace();
 //			}
 //		}
-	}
-
-	// For Twilio IO
-	public KnowledgebaseUserInfo(DomainUser domainUser)
-	{
-		if (domainUser != null)
-		{
-			setDomainId(domainUser.id);
-
-			this.email = domainUser.email;
-			this.name = domainUser.name;
-
-			try
-			{
-				UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
-				
-				BillingRestrictionUtil.setPlan(userInfo, domainUser.domain);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
 	}
 
 	/**
@@ -126,7 +104,7 @@ public class KnowledgebaseUserInfo implements Serializable
 
 	public String toString()
 	{
-		return name + " (" + email + ") DomainId " + domainId;
+		return name + " (" + email + ") DomainId " + userId;
 	}
 
 	/**
@@ -134,9 +112,9 @@ public class KnowledgebaseUserInfo implements Serializable
 	 * 
 	 * @param domainId
 	 */
-	public void setDomainId(Long domainId)
+	public void setUserId(Long userId)
 	{
-		this.domainId = domainId;
+		this.userId = userId;
 	}
 
 	/**
@@ -144,8 +122,8 @@ public class KnowledgebaseUserInfo implements Serializable
 	 * 
 	 * @return {@link Long} domain user id
 	 */
-	public Long getDomainId()
+	public Long getUserId()
 	{
-		return domainId;
+		return userId;
 	}
 }

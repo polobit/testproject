@@ -229,6 +229,20 @@
 		<servlet-name>Jersey Developers REST Service</servlet-name>
 		<url-pattern>/dev/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Jersey Helpcenter REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/helpcenterapi</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Jersey Helpcenter REST Service</servlet-name>
+		<url-pattern>/helpcenterapi/*</url-pattern>
+	</servlet-mapping>
 
 
 

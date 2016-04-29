@@ -149,7 +149,7 @@ public class KnowledgebaseLoginServlet extends HttpServlet
 					"You haven't verified your email address yet. Just now we have sent an verification email. Please verify to login.");
 		}
 
-		KnowledgebaseUserInfo userInfo = new KnowledgebaseUserInfo("agilecrm.com", email, user.name, Role.CUSTOMER);
+		KnowledgebaseUserInfo userInfo = new KnowledgebaseUserInfo("agilecrm.com", email, user.name, Role.CUSTOMER, user.id);
 		request.getSession().setAttribute(KnowledgebaseManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
 		KnowledgebaseManager.set(userInfo);

@@ -1,3 +1,16 @@
+
+var CONTENT_JSON = {
+	"articles" : {
+		"title" : "You do not have any contacts currently.",
+		"description" : "Contacts are your customers or prospects that you interact with using Agile.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Contacts",
+		"route" : "#",
+		"modal_id" : "personModal",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	}
+};
+
 var Helpcenter_Util = {
 
 	setBreadcrumbPath: function(template_name, data){
@@ -9,6 +22,14 @@ var Helpcenter_Util = {
 		}
 
 		$('#breadcrumb').html(getTemplate(template_name, data));
+	},
+
+	searchArticles: function(){
+
+		if(!$('#hc_query').val())
+			return;
+
+		App_Helpcenter.searchArticle($('#hc_query').val());
 	}
 };
 
@@ -70,4 +91,38 @@ function updateImageS3Path(imageUrl){
 		S3_STATIC_IMAGE_PATH = "//doxhze3l6s7v9.cloudfront.net/beta/static/";
 
 	return (S3_STATIC_IMAGE_PATH + imageUrl);
+}
+
+function fill_slate(id, el, key) {
+	
+	var route_path = key;
+	
+	if(!route_path)
+	{
+		route_path = window.location.hash.split("#")[1];
+	}
+
+	// If content for current route is available in the CONTENT_JSON, slate
+	// template is made with the content related to current route
+	if (CONTENT_JSON[route_path]){
+
+		var template_name = "", json = {};
+
+		if((route_path == "contacts") && readCookie('company_filter')){
+			template_name = "empty-collection-model";
+			json = CONTENT_JSON["companies"];
+		} 	
+		else if((route_path == "filter_results") && company_util.isCompany()){
+			template_name = "empty-collection-model";
+			json = CONTENT_JSON["filter_results_companies"];
+		}
+			
+		else{
+			template_name = "empty-collection-model";
+			json = CONTENT_JSON[route_path];
+		}
+		
+		
+		
+	}
 }

@@ -15,3 +15,11 @@ Handlebars.registerHelper('epochToHumanDate', function(format, date)
 	
 	return new Date(parseInt(date) * 1000).format(format);
 });
+
+Handlebars.registerHelper('is_user_logged_in', function(options){
+
+	if(IS_USER_LOGGED_IN)
+		return options.fn(this);
+
+	return options.inverse(this);
+});

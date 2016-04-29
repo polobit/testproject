@@ -21,7 +21,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 			//Initializing base collection with groups URL
 			App_Helpcenter.categoriesCollection = new Base_Collection_View({
-				url : '/core/api/knowledgebase/categorie',
+				url : '/helpcenterapi/api/knowledgebase/categorie',
 				templateKey : "helpcenter-categories",
 				individual_tag_name : 'div',
 				postRenderCallback : function(el, collection) {
@@ -45,14 +45,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 			var categorieView = new Base_Model_View({
 				isNew : false,
 				template : "categorie",
-				url : "/core/api/knowledgebase/categorie/" + categorie_id,
+				url : "/helpcenterapi/api/knowledgebase/categorie/" + categorie_id,
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 
 		        	//Initializing base collection with groups URL
 					App_Helpcenter.sectionsCollection = new Base_Collection_View({
-						url : '/core/api/knowledgebase/section/categorie/' + categorie_id,
+						url : '/helpcenterapi/api/knowledgebase/section/categorie/' + categorie_id,
 						templateKey : "helpcenter-sections",
 						individual_tag_name : 'div'
 					});
@@ -76,14 +76,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 			var sectionView = new Base_Model_View({
 				isNew : false,
 				template : "section",
-				url : "/core/api/knowledgebase/section?id=" + section_id,
+				url : "/helpcenterapi/api/knowledgebase/section?id=" + section_id,
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('section-articles-breadcrumb', data);
 
 		        	//Initializing base collection with groups URL
 					App_Helpcenter.articlesCollection = new Base_Collection_View({
-						url : '/core/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
+						url : '/helpcenterapi/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
 						templateKey : "helpcenter-articles",
 						individual_tag_name : 'div'
 					});
@@ -107,7 +107,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 			var articleView = new Base_Model_View({
 				isNew : false,
 				template : "article",
-				url : "/core/api/knowledgebase/article/" + article_id,
+				url : "/helpcenterapi/api/knowledgebase/article/" + article_id,
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
@@ -144,9 +144,10 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 			//Initializing base collection with groups URL
 			App_Helpcenter.articlesCollection = new Base_Collection_View({
-				url : '/core/api/knowledgebase/article/search/' + search_term,
+				url : '/helpcenterapi/api/knowledgebase/article/search/' + search_term,
 				templateKey : "helpcenter-search-articles",
 				individual_tag_name : 'div',
+				slateKey : 'articles',
 				postRenderCallback : function(el, collection) {
 
 					Helpcenter_Util.setBreadcrumbPath();

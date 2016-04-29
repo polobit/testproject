@@ -56,6 +56,7 @@ pageEncoding="UTF-8"%>
   DomainUser domainUser = null;
   ObjectMapper mapper = new ObjectMapper();
   
+  //Not using these prefs
   if(kuserInfo != null){
 	  
 	  if(!(kuserInfo.role == Role.CUSTOMER)){
@@ -72,6 +73,8 @@ pageEncoding="UTF-8"%>
   String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
   String _VERSION_ID = VersioningUtil.getVersion();
+
+  boolean is_user_loggedin = (kuserInfo != null);
 %>
 
 <%
@@ -208,6 +211,8 @@ var CURRENT_USER_PREFS = <%=SafeHtmlUtil.sanitize(UserPrefsUtil.getMapperString(
 
 //Get current domain user json
 var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
+
+var IS_USER_LOGGED_IN = <%=is_user_loggedin %>;
 
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
