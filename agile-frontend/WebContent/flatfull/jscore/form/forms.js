@@ -25,7 +25,7 @@ var Form_Collection_Events = Base_Collection_View.extend({
 		 	$codeShareModalEl.find("#linkArea").text(link);
 
 		 	//iframe code
-		 	var iframe =  "<iframe style=\"position:absolute\" width=\"100%\" height=\"100%\" src=\""+link+"\" frameborder=\"0\" </iframe>";
+		 	var iframe =  "<iframe width=\"100%\" height=\"100%\" src=\""+link+"\" frameborder=\"0\"></iframe>";
 		 	$codeShareModalEl.find("#iframeArea").text(iframe);
 
 		 	//embed code
