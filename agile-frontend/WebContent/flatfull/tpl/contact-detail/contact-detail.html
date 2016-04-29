@@ -87,13 +87,14 @@
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
 											Merge Duplicates</a></li>
-											<li class='divider'></li>
 
-							
+							{{/canEditContact}}
+
+							{{#canDeleteContact owner.id}}
+									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
 											class="fa fa-trash"></i> Delete</a></li>
-								{{/canEditContact}}
-									
+							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
@@ -349,13 +350,13 @@
 {{#if tagsWithTime.length}} 
 {{#canEditContact owner.id}}
 {{#each tagsWithTime}}
-<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}"><span><a
+<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
 {{/each}}
 {{else}}
 {{#each tagsWithTime}}
-<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
 {{/each}}
 {{/canEditContact}}
@@ -777,13 +778,14 @@ class="icon-plus"></i> <span >Add</span></a>
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
 											Merge Duplicates</a></li>
-											<li class='divider'></li>
 
-							
+							{{/canEditContact}}
+
+							{{#canDeleteContact owner.id}}
+									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
 											class="fa fa-trash"></i> Delete</a></li>
-								{{/canEditContact}}
-									
+							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
@@ -793,22 +795,25 @@ class="icon-plus"></i> <span >Add</span></a>
 								</ul>
 							</div>
                             </div>  
-					
-						<div class="w-full  m-t-xs  h3 font-thin hidden text-capitalize custom-color p-r-sm" style="padding-bottom:1px;" id="Contact-input">
-						<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs pull-left inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties
+					<div class="w-full  m-t-xs  h3 font-thin hidden text-capitalize custom-color p-r-sm" style="padding-bottom:1px;height:28px;" id="Contact-input">
+							<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties
 										"first_name"}} '>
-							<input type="text"id="Contact-input-lastname" class="m-l-xs m-n pull-left inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
+							<input type="text"id="Contact-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
 										"last_name"}}">
-							</div>
-					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:5px;" id ="contactName">
+					</div>
+					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:5px; height:28px;" id ="contactName">
 
-								<span class="text-capitalize " id="contact_name">{{getPropertyValue properties "first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
+								<span class="text-capitalize " id="contact_name">{{getPropertyValue properties
+										"first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
+
 
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
-								</div>
+						</div>
+						
 							<div class=" m-b-xs text-cap" style="padding-right:5px;">	
 
 						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
+
 
 									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
 								{{else}}
@@ -1035,13 +1040,13 @@ class="icon-plus"></i> <span >Add</span></a>
 							{{#if tagsWithTime.length}} 
 							 {{#canEditContact owner.id}}
 								{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
 									{{/each}}
 							 {{/canEditContact}}
@@ -1387,7 +1392,7 @@ class="icon-plus"></i> <span >Add</span></a>
 
 
 <div class="col bg-white tabListCenter">
- <div class="vbox" style="display:block">
+ <div class="vbox" style="display:inline-block">
   <div class="row-row" style="display:block">
   <div>
   <div>	
@@ -1456,7 +1461,7 @@ class="icon-plus"></i> <span >Add</span></a>
 					</div>
 
 					<div class="m-auto">
-						<div id="timeline" style="float:left;">
+						<div id="timeline" style="float:left; z-index:1;">
 							<div id="line-container">
 								<div id="line"></div>
 							</div>
@@ -1506,3 +1511,4 @@ class="icon-plus"></i> <span >Add</span></a>
  					</div>
  					</div>
 </script>
+

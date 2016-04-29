@@ -115,6 +115,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.widgets.GoogleWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.BrainTreeWidgetAPI.class);
 	s.add(com.agilecrm.core.api.deals.GoalsAPI.class);
+	s.add(com.agilecrm.core.api.dashboards.DashboardsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.PaypalWidgetApi.class);
 	s.add(com.agilecrm.webhooks.triggers.util.AgileWebhookAPI.class);
 	
@@ -133,6 +134,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.ticket.rest.TicketReportsRest.class);
 	
 	s.add(com.agilecrm.core.api.widgets.UservoiceWidgetAPI.class);
+	s.add(com.agilecrm.core.api.analytics.VisitorFilterAPI.class);
 
 	return s;
     }

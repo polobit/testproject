@@ -33,6 +33,11 @@ cron:
   schedule: every friday 23:50
   target: agile-normal-bulk
 
+- description: Hourly triggers
+  url: /backend/cron/triggers?period=HOURLY
+  schedule: every 1 hours
+  target: agile-normal-bulk
+
 - description: daily triggers
   url: /backend/cron/triggers?period=DAILY
   schedule: every day 01:00

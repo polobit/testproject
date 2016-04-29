@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.document.Document;
@@ -124,7 +126,12 @@ public class SendGrid
      * SMTP Header
      */
     public static final String SENDGRID_API_PARAM_X_SMTPAPI = "x-smtpapi";
-
+    
+    /**
+     * SMTP Unique Arguments
+     */
+    public static final String SENDGRID_API_PARAM_UNIQUE_ARGUMENTS = "unique_args";
+    
     /**
      * Post Param file attachment
      */
@@ -252,10 +259,26 @@ public class SendGrid
 	// HTML body
 	if (html != null)
 	    queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "=" + URLEncoder.encode(html, "UTF-8");
-
+	
 	// Add SMTP Header
 	if (SMTPHeaderJSON != null)
 	    queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPHeaderJSON, "UTF-8");
+	
+	else
+	 {
+		JSONObject subjectJSON=new JSONObject();
+		JSONObject SMTPJSON=new JSONObject();
+    	try 
+    	  {
+			subjectJSON.put(SENDGRID_API_PARAM_SUBJECT,subject );
+			SMTPJSON.put(SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
+			
+			queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPJSON.toString(), "UTF-8");
+		 } 
+    	catch (JSONException e) {
+			System.out.println("Error ocurred while creating SMTPJSON...."+e.getMessage());
+		}	
+	 }
 
 	if (attachmentData != null && attachmentData.length != 0)
 	    queryString += "&" + getAttachmentQueryString(attachmentData);
@@ -279,13 +302,20 @@ public class SendGrid
 	String multipleTo = "";
 
 	Iterator<String> itr = emails.iterator();
+	String  toName = null;
 
 	// Adds multiple - to[]="email1" & to[]="email2"
 	while (itr.hasNext())
 	{
 		String emailString = itr.next();
-				
-	    multipleTo += param + "=" + URLEncoder.encode(EmailUtil.getEmail(emailString), "UTF-8") + "&" + paramName + "=" + URLEncoder.encode(EmailUtil.getEmailName(emailString), "UTF-8");
+		
+		toName = EmailUtil.getEmailName(emailString);
+		
+		// If toName is empty, get Name from email
+		if(StringUtils.isBlank(toName))
+			toName = MergeFieldsUtil.getFirstUpperCaseChar(emailString.split("@")[0]);
+		
+	    multipleTo += param + "=" + URLEncoder.encode(EmailUtil.getEmail(emailString), "UTF-8") + "&" + paramName + "=" + URLEncoder.encode(toName, "UTF-8");
 
 	    // appends '&' except for last one.
 	    if (itr.hasNext())
@@ -499,4 +529,4 @@ public class SendGrid
 		}
 	
     }
-}
+  }

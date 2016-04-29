@@ -9,12 +9,14 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +25,7 @@ import com.agilecrm.AllDomainStats;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
+import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/forms")
 public class FormsAPI
@@ -119,5 +122,33 @@ public class FormsAPI
 	catch (JSONException e)
 	{
 	}
+    }
+    
+    /**
+     * 
+     * @param formId
+     * @return
+     */
+ 	@Path("form/js/{formId}")
+    @GET
+    @Produces("application/x-javascript;charset=UTF-8;")
+    public String getForm(@PathParam("formId") Long formId,@QueryParam("callback") String callback)
+    {	
+	try 
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		Form form = FormUtil.getFormById(formId);
+		String formStr = mapper.writeValueAsString(form);
+		if(callback != null && !callback.isEmpty()){
+			return callback+"("+formStr+",'"+NamespaceManager.get()+"_"+form.id+"');";
+		} else {
+			return "showAgileCRMForm("+formStr+",'"+NamespaceManager.get()+"_"+form.id+"');";
+		}
+	} 
+	catch(Exception e){
+		e.printStackTrace();
+		return null;
+	}
+	
     }
 }

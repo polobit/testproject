@@ -17,11 +17,11 @@ import com.agilecrm.widgets.util.WidgetUtil;
 @Path("/api/widgets/btree")
 public class BrainTreeWidgetAPI {
 
-	@Path("get/{widget-id}/{email}")
+	@Path("get/{widget-id}/{keyID}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getTicketsFromZendesk(@PathParam("widget-id") Long widgetId,
-			@PathParam("email") String email) {
+			@PathParam("keyID") String keyID) {
 		try {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
@@ -31,10 +31,16 @@ public class BrainTreeWidgetAPI {
 				String merchantId = prefsObj.getString("merchant_id");
 				String publicKey = prefsObj.getString("public_key");
 				String privateKey = prefsObj.getString("private_key");
+				String key = prefsObj.getString("braintree_custom_field");
 
 				BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
 						privateKey);
-				JSONArray resultObj = bUtil.getTransactions(email);
+				JSONArray resultObj = null;
+				if (key == null || key.equals("email")) {
+					resultObj = bUtil.getTransactions(keyID);
+				} else {
+					resultObj = bUtil.getTransactionByID(keyID);
+				}
 				return resultObj.toString();
 			}
 		} catch (Exception e) {

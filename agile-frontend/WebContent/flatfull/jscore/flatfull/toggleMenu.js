@@ -26,6 +26,10 @@ $('#app-aside-folded').on('click', function(e) {
 	}
 	
 	//contactInnerTabsInvoke();
+
+	$('.highcharts-container').each(function(chart) {
+		$(this).parent().highcharts().reflow();
+	});
 	
     
 	});
@@ -252,6 +256,33 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		addContactBasedOnCustomfields();
 		
 	});
+
+	$("#referrals_link").on("click", function(e){
+		e.preventDefault();
+		Agile_GA_Event_Tracker.track_event("Refer");
+		load_facebook_lib_for_referrals();
+		$.ajax({
+			url : 'core/api/refer',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data){
+				REFER_DATA = data;
+				getTemplate("refer-modal", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#referModal').html($(template_ui));
+					getTemplate("refer-modal-body", data, undefined, function(template_ui1){
+						if(!template_ui1)
+							  return;
+						$('#referModal').find(".modal-body").html($(template_ui1));
+						$('#referModal').modal("show");
+					}, null);
+				}, null);
+			}
+		});
+		
+	});
+
     $('body').on('click', function (e) {
 	    $('.popover').each(function () {
 	        //the 'is' for buttons that trigger popups

@@ -200,6 +200,14 @@ var CONTENT_JSON = {
 		"route" : "#deal-filter-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"dashboards" : {
+		"title" : "There are no user-defined dashboards.",
+		"description" : "User-defined dashboards allow users to configure multiple dashboards with different dashlets for various purposes.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Dashboard",
+		"route" : "#add-dashboard",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	/*"web-rules" : {/All_Activities
 		
 		"title" : "Engage visitors on website",

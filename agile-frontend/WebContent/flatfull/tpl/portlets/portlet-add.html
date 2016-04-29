@@ -11,7 +11,7 @@
 					<!--<img class="show_screeshot v-top question-tag" id="{{remove_spaces name}}"
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"/>-->
 				</div>
-				{{#if_equals "Mini Calendar" name}}
+				<!-- {{#if_equals "Mini Calendar" name}}
 					{{#isAdmin}}
 				<div class="btn-group  m-l-n-lg">
   									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
@@ -45,7 +45,8 @@
 					  {{else}}
 				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
 				{{/if_equals}}
-				{{/if_equals}}
+				{{/if_equals}} -->
+				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
 				
 		</div> 
 		</div>
@@ -74,6 +75,8 @@
         <a   href="#rss_dashlet" data-toggle="tab"> RSS Feed</a></li>
         <li class="p-none">
         <a   href="#account_Info_dashlet" data-toggle= "tab">Account Info</a></li>
+        <li class="p-none">
+        <a  href="#webstats_dashlet" data-toggle= "tab">Visitors</a></li>
 
    </ul>
    </div>
@@ -106,6 +109,9 @@
 
 	<div class="tab-pane" id="account_Info_dashlet">
 					<div id="accountInfo" class="row"></div><br/>	
+	</div>
+	<div class="tab-pane" id="webstats_dashlet">
+					<div id="webstats" class="row"></div><br/>	
 	</div>
 
 </div>
