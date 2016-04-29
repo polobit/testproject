@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.util.CacheUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
@@ -21,7 +22,6 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreTimeoutException;
-import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -387,12 +387,12 @@ public class CronUtil
 			CronDeferredTask cronDeferredTask = new CronDeferredTask(cron.namespace, cron.campaign_id,
 					cron.data_string, cron.subscriber_json_string, cron.node_json_string, wakeupOrInterrupt,
 					customData.toString());
-
-			// If bulk crons wake up from Wait, add to pull queue
+			
+			// If bulk crons wake up from Wait, add to pull queue. CronDeferredTask might exceed 100KB. Note: Push Queue task is limited to 100KB. Pull Queue task is upto 1 MB
 			if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT)){
-				//PullQueueUtil.addToPullQueue(totalCronJobsCount >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
-				Queue queue = QueueFactory.getQueue(AgileQueues.TIMEOUT_PUSH_QUEUE);
-				queue.addAsync(TaskOptions.Builder.withPayload(cronDeferredTask));	
+				PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
+//				Queue queue = QueueFactory.getQueue(AgileQueues.TIMEOUT_PUSH_QUEUE);
+//				queue.addAsync(TaskOptions.Builder.withPayload(cronDeferredTask));	
 			}
 				
 			else
