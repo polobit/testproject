@@ -86,6 +86,7 @@ var Ticket_Filters = {
 			sortKey:"updated_time",
 			descending: true,
 			customLoader: true,
+			preserveAcrossRoutes: true,
 			customLoaderTemplate: 'ticket-filters-loader',
 			templateKey : "ticket-filters-list",
 			individual_tag_name : 'li',
