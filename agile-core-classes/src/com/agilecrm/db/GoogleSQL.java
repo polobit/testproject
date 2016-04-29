@@ -480,20 +480,22 @@ public class GoogleSQL
 	return cpds.getConnection();
     }
     
+    private static ComboPooledDataSource cpds2 = null;
+    
     private static Connection getNewInstanceConnection() throws PropertyVetoException, SQLException
     {
 	if (SystemProperty.environment.value() != null
 		&& SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
 	{
-	    return getGoogleSQLConnection();
+	    return getNewInstanceGoogleSQLConnection();
 	}
 
 	// String url =
 	// "jdbc:mysql://173.194.84.175:3306/stats?user=root&password=mysql123";
 	String url = "jdbc:mysql://173.194.110.53:3306/stats2?user=root&password=agileRocks$";
 
-	if (cpds != null)
-	    return cpds.getConnection();
+	if (cpds2 != null)
+	    return cpds2.getConnection();
 
 	Properties property = new Properties(System.getProperties());
 	property.put("com.mchange.v2.log.MLog", "log4j");
@@ -502,27 +504,27 @@ public class GoogleSQL
 	// property.put("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL",
 	// "OFF");
 	System.setProperties(property);
-	cpds = new ComboPooledDataSource();
-	cpds.setDataSourceName("stats");
-	cpds.setDriverClass("com.mysql.jdbc.Driver"); // loads the jdbc driver
+	cpds2 = new ComboPooledDataSource();
+	cpds2.setDataSourceName("stats2");
+	cpds2.setDriverClass("com.mysql.jdbc.Driver"); // loads the jdbc driver
 	// cpds.setJdbcUrl("jdbc:mysql://localhost:3306/stats?user=root&password=mysql123");
 	// jdbc:mysql://localhost:3306/stats?user=root&password=mysql123
-	cpds.setJdbcUrl(url);
+	cpds2.setJdbcUrl(url);
 	// cpds.setUser("root");
 	// cpds.setPassword("mysql123");
 
-	cpds.setProperties(property);
+	cpds2.setProperties(property);
 
 	// the settings below are optional -- c3p0 can work with defaults
-	cpds.setMinPoolSize(2);
-	cpds.setAcquireIncrement(2);
-	cpds.setMaxPoolSize(10);
-	cpds.setMaxIdleTime(1200000); // In milli-seconds
-	System.out.println(cpds.getMaxIdleTime());
-	System.out.println(cpds.getMaxStatementsPerConnection());
-	System.out.println(cpds.getMaxIdleTime());
+	cpds2.setMinPoolSize(2);
+	cpds2.setAcquireIncrement(2);
+	cpds2.setMaxPoolSize(10);
+	cpds2.setMaxIdleTime(1200000); // In milli-seconds
+	System.out.println(cpds2.getMaxIdleTime());
+	System.out.println(cpds2.getMaxStatementsPerConnection());
+	System.out.println(cpds2.getMaxIdleTime());
 
-	return cpds.getConnection();
+	return cpds2.getConnection();
     }
 
     public static String getFutureDate()
