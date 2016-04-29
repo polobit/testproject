@@ -14,7 +14,52 @@ $(function(){
 	//Upload company image
 	$("body").on('click', ".upload_pic", function(e){
 		e.preventDefault();
-		uploadImage("contact-container");
+		if(Current_Route && Current_Route.indexOf("contact/") == 0 && App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		{
+			var contact_owner = App_Contacts.contactDetailView.model.get("owner");
+			if(contact_owner && contact_owner.id != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
+			{
+				showModalConfirmation("Contact Update", 
+						"You do not have permission to update contacts.", 
+						function (){
+							return;
+						}, 
+						function(){
+							return;
+						},
+						function() {
+							
+						},
+						"Cancel", "");
+			}
+			else
+			{
+				uploadImage("contact-container");
+			}
+		}
+		if(Current_Route && Current_Route.indexOf("company/") == 0 && App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		{
+			var company_owner = App_Companies.companyDetailView.model.get("owner");
+			if(company_owner && company_owner.id != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
+			{
+				showModalConfirmation("Company Update", 
+						"You do not have permission to update companies.", 
+						function (){
+							return;
+						}, 
+						function(){
+							return;
+						},
+						function() {
+							
+						},
+						"Cancel", "");
+			}
+			else
+			{
+				uploadImage("contact-container");
+			}
+		}
 	});
 	
 	//Upload personal prefs

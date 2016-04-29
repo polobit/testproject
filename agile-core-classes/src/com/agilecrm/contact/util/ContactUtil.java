@@ -2007,4 +2007,32 @@ public class ContactUtil
 	}
 
     }
+    
+    /**
+     * Gets a contact based on its email
+     * 
+     * @param email
+     *            email value to get a contact
+     * @return {@Contact} related to an email
+     */
+    public static List<Contact> searchContactsByEmailList(List<String> emails)
+    {
+	if (emails == null)
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("properties.name", Contact.EMAIL);
+	q.filter("type", Type.PERSON);
+	q.filter("properties.value in", emails);
+
+	try
+	{
+	    return dao.fetchAll(q);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
 }

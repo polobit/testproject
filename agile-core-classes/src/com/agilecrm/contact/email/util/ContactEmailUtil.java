@@ -18,13 +18,9 @@ import org.jsoup.nodes.Document;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
-import com.agilecrm.contact.email.util.ContactGmailUtil;
-import com.agilecrm.contact.email.util.ContactImapUtil;
-import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
-import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
 import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
@@ -34,6 +30,8 @@ import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
@@ -237,7 +235,7 @@ public class ContactEmailUtil
 
 	public static void buildContactEmailAndSend(ContactEmailWrapper contactEmail) throws Exception
 	{
-		
+		checkAndModifyToCcAndBccEmails(contactEmail);
 	    saveContactEmailAndSend(contactEmail);
 	}
 	
@@ -874,5 +872,121 @@ public class ContactEmailUtil
 		emailFetchUrls.add(agileEmailsUrl);
 		return emailFetchUrls;
 	    }
+	
+	/**
+	* Check for contact update permissions to send emails
+	* 
+	* @param {@Link ContactEmailWrapper} - contactEmailWrapper
+	* 
+	*/
+	public static void checkAndModifyToCcAndBccEmails(ContactEmailWrapper contactEmailWrapper)
+	{
+		String to = contactEmailWrapper.getTo(), cc = contactEmailWrapper.getCc(), bcc = contactEmailWrapper.getBcc();
+		
+		StringBuffer toEmails = new StringBuffer();
+		StringBuffer ccEmails = new StringBuffer();
+		StringBuffer bccEmails = new StringBuffer();
+		
+		Set<String> toEmailsSet = getToEmailSet(to);
+	    
+	    List<String> toEmailsList = new ArrayList<String>();
+	    
+	    for(String str : toEmailsSet)
+	    {
+	    	String email = EmailUtil.getEmail(str);
+	    	if(email != null)
+	    	{
+	    		toEmailsList.add(email);
+	    	}
+	    }
+	    
+	    List<Contact> toEmailContacts = ContactUtil.searchContactsByEmailList(toEmailsList);
+	    
+	    if(toEmailContacts != null && toEmailContacts.size() > 0)
+	    {
+	    	for(Contact con : toEmailContacts)
+	    	{
+	    		try 
+	    		{
+	    			UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, true);
+		    		toEmails.append(con.getContactFieldValue(Contact.EMAIL));
+		    		toEmails.append(",");
+				} 
+	    		catch (Exception e) 
+	    		{
+					e.printStackTrace();
+				}
+	    		
+	    	}
+	    }
+	    
+	    Set<String> ccEmailsSet = getToEmailSet(cc);
+	    
+	    List<String> ccEmailsList = new ArrayList<String>();
+	    
+	    for(String str : ccEmailsSet)
+	    {
+	    	String email = EmailUtil.getEmail(str);
+	    	if(email != null)
+	    	{
+	    		ccEmailsList.add(email);
+	    	}
+	    }
+	    
+	    List<Contact> ccEmailContacts = ContactUtil.searchContactsByEmailList(ccEmailsList);
+	    
+	    if(ccEmailContacts != null && ccEmailContacts.size() > 0)
+	    {
+	    	for(Contact con : ccEmailContacts)
+	    	{
+	    		try 
+	    		{
+	    			UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, true);
+	    			ccEmails.append(con.getContactFieldValue(Contact.EMAIL));
+		    		ccEmails.append(",");
+				} 
+	    		catch (Exception e) 
+	    		{
+					e.printStackTrace();
+				}
+	    	}
+	    }
+	    
+	    Set<String> bccEmailsSet = getToEmailSet(bcc);
+	    
+	    List<String> bccEmailsList = new ArrayList<String>();
+	    
+	    for(String str : bccEmailsSet)
+	    {
+	    	String email = EmailUtil.getEmail(str);
+	    	if(email != null)
+	    	{
+	    		bccEmailsList.add(email);
+	    	}
+	    }
+	    
+	    List<Contact> bccEmailContacts = ContactUtil.searchContactsByEmailList(bccEmailsList);
+	    
+	    if(bccEmailContacts != null && bccEmailContacts.size() > 0)
+	    {
+	    	for(Contact con : bccEmailContacts)
+	    	{
+	    		try 
+	    		{
+	    			UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, true);
+	    			bccEmails.append(con.getContactFieldValue(Contact.EMAIL));
+		    		bccEmails.append(",");
+				} 
+	    		catch (Exception e) 
+	    		{
+					e.printStackTrace();
+				}
+	    	}
+	    }
+	    
+	    contactEmailWrapper.setTo(toEmails.toString());
+	    contactEmailWrapper.setCc(ccEmails.toString());
+	    contactEmailWrapper.setBcc(bccEmails.toString());
+	}
 
 }

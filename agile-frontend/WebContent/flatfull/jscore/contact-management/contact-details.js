@@ -518,6 +518,28 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     // Change owner of the contact
     onChangeOwner : function(e){
          e.preventDefault();
+         	var contact_owner = $(e.currentTarget).attr("data");
+         	var error_msg = "You do not have permission to update contacts.";
+         	if(Current_Route && Current_Route.indexOf("company/") == 0)
+         	{
+         		error_msg = "You do not have permission to update companies.";
+         	}
+			if(contact_owner != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
+			{
+				showModalConfirmation("Contact Update", 
+						error_msg, 
+						function (){
+							return;
+						}, 
+						function(){
+							return;
+						},
+						function() {
+							
+						},
+						"Cancel", "");
+				return;
+			}
          fill_owners(undefined, undefined, function(){
 
 	    	$('#contact-owner').css('display', 'none');
