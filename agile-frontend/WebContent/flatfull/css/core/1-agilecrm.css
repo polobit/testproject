@@ -3257,7 +3257,7 @@ table.hide-head-checkbox th label.i-checks {
 
 /* account block model */
 #user-blocked-modal .panel-body{
-  padding: 60px 30px 60px 30px;
+  padding: 60px 30px 0px 30px;
   background-color: #edb25b;
   color: white;
 }
