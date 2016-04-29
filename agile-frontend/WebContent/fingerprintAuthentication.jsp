@@ -191,7 +191,10 @@ position: fixed;width: 100%;top: 0px;
 	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
-  			<div class="container w-xxl w-auto-xs view">
+			<div class="wrapper text-center alert alert-success" >
+      			Please enter the verification code sent to your email ID to access the account.
+   			</div>
+  			<div class="container w-xxl w-auto-xs view" style="top:44px;">
 				
 					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
@@ -199,17 +202,17 @@ position: fixed;width: 100%;top: 0px;
 				
 				<div>
 				
-			<!-- 	<div class="clearfix"></div> -->
-				<div class="wrapper text-center text-white">
-      				<strong>We have sent the verification code to your registered email ID, please authenticate your account for access.</strong>
-   				</div>
+			<!-- 	<div class="clearfix"></div> 
+				<div class="wrapper text-center" >
+      				<strong>Please enter the verification code sent to your email ID to access the account.</strong>
+   				</div>-->
    				<form id="fingerprintForm" name="fingerprintForm" method="post" action="/" class="form-horizontal" onsubmit="return isValid();">
 					<fieldset>
 					<div class="list-group list-group-sm">
                          <div class="list-group-item">
                          	<input class="hide" id="ip_validation" name="ip_validation"></input>
                          <input type="hidden"  name="current_div" id="current_div"/>
-                                <input id="finger_print_otp" placeholder="Enter verification code" type="text" name="finger_print_otp" class="input-xlarge required form-control no-border" />
+                                <input id="finger_print_otp" placeholder="Enter Verification Code" type="text" name="finger_print_otp" class="input-xlarge required form-control no-border" />
                          </div>
 
            			</div>
@@ -217,8 +220,8 @@ position: fixed;width: 100%;top: 0px;
            			 <input type='submit' value="Send" class='btn btn-lg btn-primary btn-block'>
            				
            				<div class="text-center text-white m-t m-b">
-							<small>Resend </small> 
-							<a title="Verification code" id= "resend_otp" class='text-white' href='#'>verification code</a>
+							<!--<small>Resend </small> -->
+							<a title="Verification code" id= "resend_otp" class='text-info' href='#'>Resend Verfication Code</a>
 
 						</div>
 
@@ -313,7 +316,7 @@ position: fixed;width: 100%;top: 0px;
 	            type : "POST",
 	            url : "/login?resendotp=resendotp",
 	            success : function(data) {
-	               showNotyPopUp("information", "Send verification code to your mail id", "top", 1000);
+	               showNotyPopUp("information", "We have re-sent the verification code to your registered email. Please enter the code below to get access.", "top", 1000);
 	            }
 	        });
 	    }); 

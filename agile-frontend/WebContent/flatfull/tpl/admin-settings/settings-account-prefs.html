@@ -91,86 +91,88 @@
 
 
 <script id="admin-settings-ip-prefs-template" type="text/html">
-<div id="ip_access" class="col-sm-9 panel " >
-    <!--<div class="panel-heading">Ip</div>-->
-    
-    <div class=" table-responsive" >
-    <form id="access-ip" class="form-horizontal" >
+<div id="ip_access" class="col-sm-9 panel ">
+    {{#unless ipList.length}} {{else}}
+    <div class="panel-heading">
+            <div class="pull-right">
+        <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> Add IP</a>
+            </div>
+    <div class="clearfix"></div>
+    </div>
+    {{/unless}}
+  
+    <div class="panel-body">
+    <form id="access-ip" class="form-horizontal">
         <fieldset>
             {{#if id}}
                 <input name="id"  class="form-control" type="hidden" value="{{id}}" />
             {{/if}}
             <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
             
-            <table class="table table-striped showCheckboxes  no-sorting panel agile-table noDelete" >
+            <table class="table table-hover table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
+                <colgroup><col width="50%"><col width="4%"></colgroup>
                 <thead>
                 {{#unless ipList.length}} {{else}}
-                    <tr>
-                        <th style="width:5%;"><label class="i-checks i-checks-sm" style="margin-bottom:1px;"><input class="thead_check" type="checkbox"/><i></i></label></th>
-                        <th>IP Address</th>              
+                <tr>
+                <th>IP Address</th> 
+                <th></th>                
                     </tr>
                     {{/unless}}
                 </thead>
                 <tbody id="blocked_panel_ips_list" class="multiple-input" name="ipList">
                    {{#each ipList}}
-                    <tr data="{{this}}" >
-                        <td class="v-middle checkbox" style="cursor:default;">
-                        <label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value="" name=""><i></i></label>
-                        </td>
+                    <tr data="{{this}}" style="display: table-row;">
                         <td>
                             <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
-                            <input class="form-control" type="hidden" value="{{this}}" />
+                            <input class="form-control ip_edit" type="hidden" value="{{this}}" />
                         </td>
-                       
+                        <td class="b-r-none">
+                            <div class="m-b-n-xs" style="visibility: hidden;">
+                                <a class="upsert-ip c-p m-l-sm text-l-none text-xs hover-show"data-toggle="modal" role="button" data-position="{{@index}}">
+                                        <i title="Edit" class="icon icon-edit"></i>
+                                </a>
+                                <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-xs" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
+                            </div>
+                        </td>
                     </tr>
                     {{/each}}
                     <tr data="{{this}}" style="display:none;" >
-                        <td></td>
                         <td>
-                        
                         <div class="show_field" style="visibility:hidden;">
-                        <input type="text" id="ipList"  style="width:250px;display:inline-block;" class="form-control input-sm ipValidation newip" placeholder="New IP Address">
+                        <input type="text" id="ipList"  style="width:250px;display:inline-block;" class="form-control input-sm ipValidation newip required" placeholder="New IP Address">
                         <a href="#" type="submit"  class="save  btn btn-sm btn-primary " >Add</a>
                         </div>
                         </td>
                         
                     </tr>
-                    
-                    
-                    
                 </tbody>
-            </table>
-            {{#unless ipList.length}}
-
-                    
+            </table>  
+             {{#unless ipList.length}}
                      <div class="m-l-sm" id="slate">
                      <div class="alert bg-white ">
                      <div class="slate-content p-md">
-                    <div class="box-left pull-left m-r-md">
-                        <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
-                    </div>
-                <div class="box-right pull-left">
+                        <div class="box-left pull-left m-r-md">
+                            <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
+                        </div>
+                        <div class="box-right pull-left">
 
-                <h4 class="m-t-none">You have not added an IP address.</h4>
-                <div class="text">Access will be provided to added IP addresses only!</div>
-                
-                <a href="#"  class="modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs" role="button" id="newip-add" ><i class="icon-plus-sign"></i> Add IP Address</a>
-                </div>
-                </div>
-            <div class="clearfix"></div>
-            </div></div>
-       {{/unless}}
+                        <h4 class="m-t-none">You have not added any IP address to provide access to.</h4>
+                        <div class="text">Access will be provided to added IP addresses only!</div>
+                        
+                        <a href="#"  class="upsert-ip modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs" role="button" id="newip-add" ><i class="icon-plus-sign"></i> Add IP Address</a>
+                        </div>
+                        </div>
+                    <div class="clearfix"></div>
+                    </div></div>
+            {{/unless}}
             {{#unless ipList.length}} {{else}}
             <footer class="panel-footer">
-             <a href="#" class="blocked-panel-ip-delete btn btn-danger btn-sm delete" data-toggle="modal" role="button"  > Delete</a>
-            <a href="#" class="btn btn-sm btn-primary " data-toggle="modal" role="button" id="newip-add" > Add</a>
-        </footer>  
-        {{/unless}}
-           
+             <!--<a href="#" class="blocked-panel-ip-delete btn btn-danger btn-sm " data-toggle="modal" role="button" > Delete</a>-->
+            <!--<a href="#" class="btn btn-sm btn-primary " data-toggle="modal" role="button" id="newip-add" > Add</a>-->
+            </footer>  
+            {{/unless}}
         </fieldset>
     </form>
-    </div>
-
 </div>
-
+</div>
 </script>

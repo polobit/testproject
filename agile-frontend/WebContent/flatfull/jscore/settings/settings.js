@@ -433,65 +433,74 @@ $(function(){
 
 function loadip_access_events()
 {
-	//To delete IP
 	$(".blocked-panel-ip-delete").on('click', function(e) {
-        e.preventDefault();
-
-		var data_array = [];
-		var checked = false;
-
-		var tableEle = $(this).closest("form").find(".multiple-input");
-		$.each($(tableEle).find('input[type="checkbox"]'), function(index, data) {
-			if($(data).is(":checked")){
-				$(data).closest('tr').on("mouseenter", false);
-				data_array.push($(data).closest("tr").attr("data"));
-				checked = true;
-			}
-				
-		});
-
-		if(!checked){
-			// Show error
+         e.preventDefault();
+         var formId = $(this).closest('form');
+ 
+         var ip = $(this).closest("tr").find('input').val();
+         var id = $(this).closest("form").find('input[name="id"]').val();
+         var $that = $(this);
+         if(!window.confirm("Are you sure want to delete?"))
 			return;
-		}
 
-		$.ajax({ url : 'core/api/allowedips/delete_ip?iplist='+JSON.stringify(data_array),
-			type : 'DELETE',
-			success : function()
-		  	{
-		  		// Refresh container
-		  		App_Admin_Settings.ipaccess();
-
-		  	},error : function(response)
-			{
-				console.log(response);
-				// Show error
-			}
-
-		});
-    });
+         $.ajax({ url : 'core/api/allowedips/delete_ip?id='+id+'&ip='+ip,
+		 			type : 'DELETE',
+		 		success : function()
+		 		{
+		 			$that.closest("tr").remove(); 
+		 
+		 		},error : function(response)
+	 			{
+	 
+	 				console.log(response);
+	 			}
+		 
+ 		});
+          
+     });
 
 	//To add new ip to allow access
+    $(".upsert-ip").on('click',function(e){
+    	var obj = {};
+    	if(element_has_attr($(this), "data-position")){
+    		obj.position = $(this).attr("data-position");
+    		obj.ip = $(this).closest("tr").find("input").val();
+    	}
 
-    $("#newip-add").on('click',function(e){
-		//$("#ipaccess-modal").modal('show');
-		$("#ipaccess-modal").html(getTemplate('add-new-ip', {})).modal('show');
-			$("#ip-add").on('click',function(e){
-				if(!$("#iplist").val().length>0)
-					return;
-				
-				var form = $(this).closest("form");
-				if (!isValidForm(form)) {
-					return;
-				}
+		$("#ipaccess-modal").html(getTemplate('add-new-ip', obj)).modal('show');
+		$("#ip-add").on('click',function(e){
+			
+			var form = $(this).closest("form");
+			if (!isValidForm(form)) {
+				return;
+			}
+            
+            // Get ip new value
+            var userEnteredIp = $("#iplist").val();
 
-				$(".newip").val($("#iplist").val());
-				form.trigger("reset");
-				$('.newip').closest('form').find('.save').trigger("click");
-				$("#ipaccess-modal").html(getTemplate('add-new-ip', {})).modal('hide');
-			});
+            // Set add/edit field value
+            if(element_has_attr($(this), "data-position")){
+				 var trIndex = $(this).attr("data-position");
+				 $(".iptable tbody tr").eq(trIndex).find("input").val(userEnteredIp);
+			}else {
+				$(".newip").val(userEnteredIp);	
+			}            
+
+			form.trigger("reset");
+			$('.newip').closest('form').find('.save').trigger("click");
+			$("#ipaccess-modal").html(getTemplate('add-new-ip', {})).modal('hide');
+		});
 	});
 
+
+}
+
+function element_has_attr(ele, attr_name){
+	var attr = $(ele).attr(attr_name);
+
+	// For some browsers, `attr` is undefined; for others,
+	// `attr` is false.  Check for both.
+	return (typeof attr !== typeof undefined && attr !== false);
 }
 
 	

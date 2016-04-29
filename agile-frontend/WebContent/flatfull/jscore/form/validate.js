@@ -96,7 +96,10 @@ function isValidForm(form) {
 		if(this.optional(element))
 			return true;
 
-		return is_valid_ip(value);
+		if(!value)
+			 return false;
+			
+		return is_valid_ip(value.trim());
 	
 	}," Please enter a valid IP Address.");
 

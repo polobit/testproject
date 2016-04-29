@@ -59,7 +59,7 @@ public class IpAccessAPI {
 	}
 	
 	// To delete IP's
-	@Path("/delete_ip")
+	/*@Path("/delete_ip")
 	@DELETE
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void deleteIPAccess( @QueryParam("iplist") String iplist){
@@ -82,6 +82,16 @@ public class IpAccessAPI {
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 				    .entity(e.getMessage()).build());
 		}
+	}*/
+	
+	@Path("/delete_ip")
+	@DELETE
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public void deleteIPAccess(@QueryParam("id") Long id, @QueryParam("ip") String ip){
+	 		IpAccess ipAccess = IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
+	 		ipAccess.ipList.remove(ip);
+	 		ipAccess.save();
 	}
+	  
 
 }
