@@ -93,22 +93,33 @@ public class WorkflowUtil
 	 * 
 	 * @return list of all workflows.
 	 */
-	public static List<Workflow> getAccountWorkflows(boolean allUsers)
+	public static List<Workflow> getAccountWorkflows(Long allowCampaign)
 	{
 		Map map = new HashMap();
-		if(!allUsers){
-			Long userId = DomainUserUtil.getCurentUserId();
-			if(userId != null)
-			{
-				Set set = new HashSet();
-				set.add(1L);
-				set.add(userId);
-				
-				map.put("access_level in", set);
-			}
+		Long userId = DomainUserUtil.getCurentUserId();
+		if(userId != null)
+		{
+			Set set = new HashSet();
+			set.add(1L);
+			set.add(userId);
+			
+			map.put("access_level in", set);
 		}
 		
-		return dao.fetchAllByOrder("name", map);
+		List<Workflow> list = dao.fetchAllByOrder("name", map);
+		if(allowCampaign == null)
+			  return list;
+		
+		boolean idPresent = false;
+		for(Workflow workflow : list){
+			  if(workflow.id.equals(allowCampaign))
+				  idPresent = true;
+		}
+		
+		if(!idPresent)
+			list.add(WorkflowUtil.getWorkflow(allowCampaign, true));
+		
+		return list;
 	}
 	
 	/**
@@ -118,7 +129,7 @@ public class WorkflowUtil
 	 */
 	public static List<Workflow> getAllWorkflows()
 	{
-		return getAccountWorkflows(false);
+		return getAccountWorkflows(null);
 	}
 	
 	/**
@@ -126,9 +137,9 @@ public class WorkflowUtil
 	 * 
 	 * @return list of all workflows.
 	 */
-	public static List<Workflow> getAllWorkflows(boolean allUsers)
+	public static List<Workflow> getAllWorkflows(Long allowCampaign)
 	{
-		return getAccountWorkflows(allUsers);
+		return getAccountWorkflows(allowCampaign);
 	}
 	
 	/**
