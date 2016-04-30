@@ -238,7 +238,7 @@ public class CronUtil
 		CronUtil cronUtil = new CronUtil();
 		
 		while(cronUtil.doContinue())
-			cronUtil.fetchAndExecute(milliSeconds, 100);
+			cronUtil.fetchAndExecute(100);
 			
 		NamespaceManager.set(oldNamespace);
 	}
@@ -249,17 +249,15 @@ public class CronUtil
 	 * @param milliSeconds - Current time to check with timeout tasks
 	 * @param limit - Number of tasks to be fetched
 	 */
-	public void fetchAndExecute(Long milliSeconds, int limit)
+	public void fetchAndExecute(int limit)
 	{
-		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds).order("timeout");
+		
+		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", System.currentTimeMillis()).order("timeout");
 		
 		// Add limit to query
 		if(limit > 0)
 			query.limit(limit);
 		
-		int count = query.count();
-		System.out.println("Crons count obtained is " + count);
-
 		// Delete crons immediately to make unavailable to other processes
 		List<Cron> crons = query.list();
 		dao.deleteAll(crons);
@@ -276,7 +274,7 @@ public class CronUtil
 					continue;
 			
 				// Run cron job
-				executeTasklets(cron, Cron.CRON_TYPE_TIME_OUT, null, count);
+				executeTasklets(cron, Cron.CRON_TYPE_TIME_OUT, null);
 				
 				System.out.println("Took " + ((System.currentTimeMillis() - start)) + " milli seconds to process one cron record in queue");
 			}
@@ -335,7 +333,7 @@ public class CronUtil
 					continue;
 
 				// Execute in another tasklet
-				executeTasklets(cron, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
+				executeTasklets(cron, Cron.CRON_TYPE_INTERRUPT, interruptData);
 			}
 		}
 		catch(Exception e)
@@ -349,13 +347,12 @@ public class CronUtil
 		}
 	}
 
-	public static void executeTasklets(Cron cron, String wakeupOrInterrupt, JSONObject customData,
-			int totalCronJobsCount)
+	public static void executeTasklets(Cron cron, String wakeupOrInterrupt, JSONObject customData)
 	{
 		List<Cron> cronList = new ArrayList<Cron>();
 		cronList.add(cron);
 		
-		executeTasklets(cronList, wakeupOrInterrupt, customData, totalCronJobsCount);
+		executeTasklets(cronList, wakeupOrInterrupt, customData);
 	}
 	/**
 	 * Executes tasklets based upon wakeup or timeout using deferred task.
@@ -369,8 +366,7 @@ public class CronUtil
 	 * @param totalCronJobsCount
 	 *            - Total matched cron jobs count to direct respective Queue
 	 */
-	public static void executeTasklets(List<Cron> cronJobs, String wakeupOrInterrupt, JSONObject customData,
-			int totalCronJobsCount)
+	public static void executeTasklets(List<Cron> cronJobs, String wakeupOrInterrupt, JSONObject customData)
 	{
 		System.out.println("Jobs dequeued - " + wakeupOrInterrupt + " [" + cronJobs.size() + "]" + cronJobs);
 
