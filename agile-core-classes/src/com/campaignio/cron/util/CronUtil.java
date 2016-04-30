@@ -232,13 +232,23 @@ public class CronUtil
 		NamespaceManager.set("");
 
 		// Get all sessions with last_messg_rcvd_time
-		Long milliSeconds = System.currentTimeMillis();
-		System.out.println(milliSeconds + " " + NamespaceManager.get());
+		//Long milliSeconds = System.currentTimeMillis();
+		//System.out.println(milliSeconds + " " + NamespaceManager.get());
 		
 		CronUtil cronUtil = new CronUtil();
 		
-		while(cronUtil.doContinue())
-			cronUtil.fetchAndExecute(100);
+		while(cronUtil.doContinue()){
+			try
+			{
+				cronUtil.fetchAndExecute(100);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				System.err.println("Exception occured - " + e.getMessage() + " Exiting loop");
+				break;
+			}
+		}
 			
 		NamespaceManager.set(oldNamespace);
 	}
@@ -249,10 +259,11 @@ public class CronUtil
 	 * @param milliSeconds - Current time to check with timeout tasks
 	 * @param limit - Number of tasks to be fetched
 	 */
-	public void fetchAndExecute(int limit)
+	public void fetchAndExecute(int limit) throws Exception
 	{
+		long timeout = System.currentTimeMillis();
 		
-		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", System.currentTimeMillis()).order("timeout");
+		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", timeout).order("timeout");
 		
 		// Add limit to query
 		if(limit > 0)
@@ -260,6 +271,10 @@ public class CronUtil
 		
 		// Delete crons immediately to make unavailable to other processes
 		List<Cron> crons = query.list();
+		
+		if(crons == null || crons.isEmpty())
+			throw new Exception("No expired cron exists with timeout " + timeout);
+			
 		dao.deleteAll(crons);
 		
 		// Iterates each cron and adds to Queue
