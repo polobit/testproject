@@ -270,9 +270,9 @@ public class ReportsUtil {
 				e.printStackTrace();
 			}
 			if(report.duration==Reports.Duration.DAILY)
-				statsJSON.put("duration", startDate);
+				duration=startDate;
 			else				
-			    statsJSON.put("duration", startDate+" To "+endDate);
+			    duration=startDate+" To "+endDate;
 		}
 		try {
 			if (campaignEmailsJSONArray != null
