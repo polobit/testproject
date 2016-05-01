@@ -81,7 +81,7 @@
                         "appendToDynamicName": "name",
                         "options": {
                             "(requester)": "{{ticket.requester_email}}",
-                            "Ticket Assignee User": "{{ticket.assigneeID}}"
+                            "Ticket Assignee User": "{{ticket.assignee.email}}"
                         },
                         "fieldType": "dynamicselect",
                         "type": "select"

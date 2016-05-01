@@ -369,9 +369,9 @@ public class CronUtil
 
 			// If bulk crons wake up from Wait, add to pull queue
 			if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT)){
-				//PullQueueUtil.addToPullQueue(totalCronJobsCount >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
-				Queue queue = QueueFactory.getQueue(AgileQueues.TIMEOUT_PUSH_QUEUE);
-				queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));	
+				PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
+//				Queue queue = QueueFactory.getQueue(AgileQueues.TIMEOUT_PUSH_QUEUE);
+//				queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));	
 			}
 				
 			else

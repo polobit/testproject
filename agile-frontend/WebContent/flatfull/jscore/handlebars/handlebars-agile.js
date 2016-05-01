@@ -419,7 +419,8 @@ function getPropertyValue(items, name)
 	for (var i = 0, l = items.length; i < l; i++)
 	{
 		if (items[i].name == name){
-			items[i].value=items[i].value.trim();
+			if(items[i].value!=null)
+			 items[i].value=items[i].value.trim();
 			return items[i].value;
 		}
 		}
