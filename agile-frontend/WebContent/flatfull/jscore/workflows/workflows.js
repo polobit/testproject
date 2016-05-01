@@ -19,6 +19,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         'change #unsubscribe-action': 'unsubscribeCampaignOptionSelect',
         'change #disable-workflow':'saveCampaignClick',
         'change .emailSelect,click .emailSelect' : 'fillDetails',
+        'click #campaign_access_level': 'accessLevelChange',
     },
 
     fillDetails : function(e)
@@ -185,7 +186,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(targetEl).attr('id') === 'duplicate-workflow-top' || $(targetEl).attr('id') === 'duplicate-workflow-bottom') 
         {
-            create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, access_permission);   
+            create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, undefined, access_permission);   
 
         }
         // Update workflow
@@ -295,6 +296,20 @@ var Workflow_Model_Events = Base_Model_View.extend({
         });
  
     },
+
+    accessLevelChange : function(e){
+        console.log("change");
+        var level = $("#access_level").val();
+        if(level == "1"){
+            level = CURRENT_DOMAIN_USER.id;
+        } else {
+            level = "1";
+        }
+
+        $("#access_level", this.el).val(level);
+        change_access_level(level, this.el);
+
+    }
 
 });
 
@@ -693,4 +708,11 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
 
 
 function initializeWorkflowsListeners() {}
+
+function change_access_level(level, el){
+    if(level == "1")
+        $("#campaign_access_level span", el).text('Make it Private');
+    else 
+        $("#campaign_access_level span", el).text('Make it Public');
+}
 
