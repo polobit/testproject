@@ -232,7 +232,7 @@ public class ReportsUtil {
 						.getCountByLogTypesforPortlets(report.campaignId,
 								startDate, endDate, timeZone);
 			} else if (report.duration == Reports.Duration.WEEKLY) {
-				cal.set(Calendar.DAY_OF_WEEK, -2);
+				cal.set(Calendar.DAY_OF_WEEK, -1);
 				cal.add(Calendar.DAY_OF_MONTH, -7);
 				startDate = sdf.format(cal.getTime());
 				cal.add(Calendar.DATE, 6);
@@ -337,7 +337,7 @@ public class ReportsUtil {
 								.getJSONObject(i).getString("count"));
 						continue;
 					}
-					if (campaignEmailsJSONArray.getJSONObject(i)
+					if (sendNow && campaignEmailsJSONArray.getJSONObject(i)
 							.getString("log_type").equals("durationBetween")) {
 						duration = campaignEmailsJSONArray
 								.getJSONObject(i).getString("duration");
@@ -1255,7 +1255,8 @@ public class ReportsUtil {
 					.getCountByLogTypesforPortlets(report.campaignId,
 							startDate, endDate, timeZone);
 		} else if (report.duration == Reports.Duration.WEEKLY) {
-			startCal.set(Calendar.DAY_OF_WEEK, -2);
+			startCal.set(Calendar.DAY_OF_WEEK,-1);
+			startCal.add(Calendar.DAY_OF_MONTH, -7);
 			String startDate = sdf.format(startCal.getTime());
 			endDate = sdf.format(cal.getTime());
 
@@ -1292,12 +1293,12 @@ public class ReportsUtil {
 		return campaignEmailsJSONArray;
 
 	}
-	/*
-	public static void main(String asd[]){
+	
+	/*public static void main(String asd[]){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new DateUtil().toMidnight().getTime());
-		cal.set(Calendar.DAY_OF_WEEK, -2);
+		cal.set(Calendar.DAY_OF_WEEK, -1);
 		cal.add(Calendar.DAY_OF_MONTH, -7);
 		String startDate = sdf.format(cal.getTime());
 		cal.add(Calendar.DATE, 6);
@@ -1305,7 +1306,7 @@ public class ReportsUtil {
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.SECOND, 59);
 		String endDate = sdf.format(cal.getTime());
-		System.out.println(GoogleSQLUtil.convertMinutesToTime(getTimeZoneOffSet(TimeZone.getTimeZone("Pacific/Niue")))+" "+startDate+endDate);
+		System.out.println(GoogleSQLUtil.convertMinutesToTime(getTimeZoneOffSet(TimeZone.getTimeZone("Asia/Kolkata")))+" "+startDate+endDate);
 		
 	}*/
 	
