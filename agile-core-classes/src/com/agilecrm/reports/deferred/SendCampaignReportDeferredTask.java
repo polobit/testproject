@@ -24,16 +24,16 @@ public class SendCampaignReportDeferredTask implements DeferredTask{
 
     public void run()
     {
-	try
-	{
-		System.out.println("Entered inside SendCampaignReportDeferredTask run method");
-	    ReportsUtil.sendCampaignReport(reportid,false);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.out.println("exception occured while sending contacts report mail " + domain);
-	}
+		try
+		{
+			//sending a campaign report via email
+		    ReportsUtil.sendCampaignReport(reportid,false);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.out.println("exception occured while sending contacts report mail " + domain);
+		}
     }
 
 }

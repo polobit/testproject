@@ -28,19 +28,13 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
-import com.agilecrm.activities.util.EventUtil;
-import com.agilecrm.activities.util.TaskUtil;
-import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
-import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.db.util.GoogleSQLUtil;
-import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
@@ -62,9 +56,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.email.SendMail;
-import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
@@ -161,77 +153,47 @@ public class ReportsUtil {
 	 * @param reportsList
 	 * @throws JSONException
 	 */
-	public static void sendCampaignReportsToUsers(List<Reports> reportsList,
-			Boolean sendNow) throws JSONException {
-		for (Reports report : reportsList) {
+	public static void sendCampaignReportsToUsers(List<Reports> reportsList, Boolean sendNow) throws JSONException {
+		for (Reports report : reportsList)
+		{
 			// Each report is sent to email address which is saved in report. If
 			// email in sendTo in empty, report is not processed further
 			if (StringUtils.isEmpty(report.sendTo))
 				return;
 
 			try {
-				// Call process filters to get reports for one domain, and add
-				// domain details
-				Map<String, Object> results = processCampaignReports(report,
-						sendNow);
-
-				if (results == null)
-					results = new HashMap<String, Object>();
-
-				// Report heading. It holds the field values chosen in the
-				// report
-				LinkedHashSet<String> reportHeadings = new LinkedHashSet<String>();
-
-				// Iterates through each filter and customizes (Replace
-				// underscore
-				// with space, and capitalize the first letter in the heading )
-				// the
-				// field heading.
-				for (String field : report.fields_set) {
-					// Splits fields at properties.
-					String fields[] = field.split("properties_");
-					if (fields.length > 1) {
-						// Replaces underscore with space
-						field = fields[1].replace("_", " ");
-					}
-
-					// Split fields at "custom_", and replaces underscore with
-					// space.
-					String customFields[] = field.split("custom_");
-					if (customFields.length > 1) {
-						field = customFields[1].replace("_", " ");
-					}
-
-					String heading = field.substring(0, 1).toUpperCase()
-							+ field.substring(1);
-					reportHeadings.add(heading);
-				}
-
-				Map<String, LinkedHashSet<String>> fieldsList = new LinkedHashMap<String, LinkedHashSet<String>>();
-				fieldsList.put("fields", reportHeadings);
-				results.put("duration",
-						WordUtils.capitalizeFully((report.duration.toString())));
-
-				// Send reports email
-				SendMail.sendMail(report.sendTo, report.name + " - "
-						+ SendMail.REPORTS_SUBJECT, SendMail.CAMPAIGN_REPORTS,
-						new Object[] { results, fieldsList });
-			} catch (Exception e) {
-				System.out.println("Exception occured in sending email report:"
-						+ e.getMessage());
+					// Call process filters to get reports for one domain, and add domain details
+					Map<String, Object> results = processCampaignReports(report,
+							sendNow);
+	
+					if (results == null)
+						results = new HashMap<String, Object>();
+					
+					results.put("duration",	WordUtils.capitalizeFully((report.duration.toString())));
+	
+					// Send reports email
+					SendMail.sendMail(report.sendTo, report.name + " - "+ SendMail.REPORTS_SUBJECT, SendMail.CAMPAIGN_REPORTS,new Object[] { results, results});
+			} 
+			catch (Exception e) 
+			{
+				System.out.println("Exception occured in sending campaign email report:"	+ e.getMessage());
 			}
 		}
 	}
-
-	public static Map<String, Object> processCampaignReports(Reports report,
-			Boolean sendNow) {
+/**
+ * This method is used to create json for campaign report stats
+ * for rendring the campaign report template
+ * 
+ * @param report
+ * @param sendNow
+ * @return
+ *       
+ */
+	public static Map<String, Object> processCampaignReports(Reports report,Boolean sendNow)
+	{
 		Map<String, Object> statsJSON = new HashMap<String, Object>();
-
-		JSONArray jsonArray = new JSONArray();
-
-		// Fetches report based on report id
-		String timeZone = getTimeZoneOffSet(TimeZone
-				.getTimeZone(report.report_timezone));
+		
+		String timeZone = getTimeZoneOffSet(TimeZone.getTimeZone(report.report_timezone));
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String endDate = sdf.format(dt);
@@ -270,7 +232,7 @@ public class ReportsUtil {
 						.getCountByLogTypesforPortlets(report.campaignId,
 								startDate, endDate, timeZone);
 			} else if (report.duration == Reports.Duration.WEEKLY) {
-				cal.set(Calendar.DAY_OF_WEEK, 2);
+				cal.set(Calendar.DAY_OF_WEEK, -2);
 				cal.add(Calendar.DAY_OF_MONTH, -7);
 				startDate = sdf.format(cal.getTime());
 				cal.add(Calendar.DATE, 6);
@@ -639,14 +601,10 @@ public class ReportsUtil {
 	 * @param report_id
 	 */
 	public static void sendCampaignReport(Long report_id, Boolean sendNow) {
-		CampaignReportsDeferredTask campaignReportsDeferredTask = new CampaignReportsDeferredTask(
-				report_id, sendNow);
+		CampaignReportsDeferredTask campaignReportsDeferredTask = new CampaignReportsDeferredTask(report_id, sendNow);
 
 		Queue queue = QueueFactory.getDefaultQueue();
-
-		// Add to queue
-		queue.addAsync(TaskOptions.Builder
-				.withPayload(campaignReportsDeferredTask));
+		queue.addAsync(TaskOptions.Builder.withPayload(campaignReportsDeferredTask));
 	}
 
 	/**
@@ -1145,20 +1103,6 @@ public class ReportsUtil {
 		// Fetches report based on report id
 		Reports report = ReportsUtil.getReport(Long.parseLong(report_id));
 
-		Date dt = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String endDate = sdf.format(dt);
-		String timeZone = getTimeZoneOffSet(TimeZone
-				.getTimeZone(report.report_timezone));
-
-		Calendar startCal = Calendar.getInstance();
-		startCal.setTime(new DateUtil().toMidnight().getTime());
-
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR, 23);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-
 		JSONObject statsJSON = new JSONObject();
 		JSONArray campaignEmailsJSONArray = getCampaignStats(report);
 
@@ -1227,8 +1171,7 @@ public class ReportsUtil {
 					}
 					if (campaignEmailsJSONArray.getJSONObject(i)
 							.getString("log_type").equals("durationBetween")) {
-						duration = campaignEmailsJSONArray
-								.getJSONObject(i).getString("duration");
+						duration = campaignEmailsJSONArray.getJSONObject(i).getString("duration");
 						continue;
 					}
 				} // End of for loop
@@ -1251,8 +1194,7 @@ public class ReportsUtil {
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 
 			statsJSON.put("report_name", report.name);
-			statsJSON.put("duration",
-					WordUtils.capitalizeFully((report.duration.toString())));
+			statsJSON.put("duration",WordUtils.capitalizeFully((report.duration.toString())));
 
 			return statsJSON.toString();
 		} catch (Exception e) {
@@ -1277,16 +1219,11 @@ public class ReportsUtil {
 	}
 
 	public static String getTimeZoneOffSet(TimeZone timeZone) {
-		String offSet = String.valueOf(timeZone.getRawOffset() / 60000);
-		if (offSet.charAt(0) == '-') {
-			offSet = offSet.split("-")[1];
-			return "+" + offSet;
-		} else if (offSet.charAt(0) == '+') {
-			offSet = offSet.split("+")[1];
-			return "-" + offSet;
-		}
-		return "-" + offSet;
-
+		long timeZoneOffSetValue=timeZone.getRawOffset() / 60000;
+		timeZoneOffSetValue = timeZoneOffSetValue* -1;
+		String offSet = String.valueOf(timeZoneOffSetValue);
+		return offSet;
+		
 	}
 
 	/**
@@ -1318,7 +1255,7 @@ public class ReportsUtil {
 					.getCountByLogTypesforPortlets(report.campaignId,
 							startDate, endDate, timeZone);
 		} else if (report.duration == Reports.Duration.WEEKLY) {
-			startCal.set(Calendar.DAY_OF_WEEK, 2);
+			startCal.set(Calendar.DAY_OF_WEEK, -2);
 			String startDate = sdf.format(startCal.getTime());
 			endDate = sdf.format(cal.getTime());
 
@@ -1355,5 +1292,21 @@ public class ReportsUtil {
 		return campaignEmailsJSONArray;
 
 	}
+	/*
+	public static void main(String asd[]){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new DateUtil().toMidnight().getTime());
+		cal.set(Calendar.DAY_OF_WEEK, -2);
+		cal.add(Calendar.DAY_OF_MONTH, -7);
+		String startDate = sdf.format(cal.getTime());
+		cal.add(Calendar.DATE, 6);
+		cal.set(Calendar.HOUR, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		String endDate = sdf.format(cal.getTime());
+		System.out.println(GoogleSQLUtil.convertMinutesToTime(getTimeZoneOffSet(TimeZone.getTimeZone("Pacific/Niue")))+" "+startDate+endDate);
+		
+	}*/
 	
 }

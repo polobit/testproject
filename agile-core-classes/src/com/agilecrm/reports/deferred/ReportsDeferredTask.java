@@ -27,75 +27,68 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  * 
  */
 @SuppressWarnings("serial")
-public class ReportsDeferredTask implements DeferredTask
-{
-    /**
-     * Domain of the account
-     */
-    private String domain;
+public class ReportsDeferredTask implements DeferredTask {
+	/**
+	 * Domain of the account
+	 */
+	private String domain;
 
-    private Long domain_id;
+	private Long domain_id;
 
-    /**
-     * Duration of report
-     */
-    private String duration;
+	/**
+	 * Duration of report
+	 */
+	private String duration;
 
-    public ReportsDeferredTask(String domain, String duration)
-    {
-	this.domain = domain;
-	this.duration = duration;
-    }
-
-    public ReportsDeferredTask(Long domain_id, String duration)
-    {
-	this.domain_id = domain_id;
-	this.duration = duration;
-    }
-
-    @Override
-    public void run()
-    {
-	if (domain == null && domain_id != null)
-	{
-	    DomainUser user = DomainUserUtil.getDomainUser(domain_id);
-
-	    domain = user != null ? user.domain : null;
-
-	    if (StringUtils.isEmpty(domain))
-		return;
+	public ReportsDeferredTask(String domain, String duration) {
+		this.domain = domain;
+		this.duration = duration;
 	}
 
-	String oldNamespace = NamespaceManager.get();
+	public ReportsDeferredTask(Long domain_id, String duration) {
+		this.domain_id = domain_id;
+		this.duration = duration;
+	}
 
-	NamespaceManager.set(domain);
-	try
-	{
-	    List<Reports> reports = ReportsUtil.getAllReportsByDuration(duration);
-	    // Util function fetches reports based on duration, generates
-	    // reports and sends report
-	    for (Reports report : reports)
-	    {
-	    if(report.report_type != Reports.ReportType.Campaign && report.report_type != Reports.ReportType.Opportunity)
-	    {
-		Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
-		        report.activity_weekday, report.activity_day, report.report_timezone, duration);
-		try
-		{
-		    ContactReportDeferredTaskCreation.createContactDeferredTask(domain, report.id, time,
-			    report.report_timezone);
+	@Override
+	public void run() {
+		if (domain == null && domain_id != null) {
+			DomainUser user = DomainUserUtil.getDomainUser(domain_id);
+
+			domain = user != null ? user.domain : null;
+
+			if (StringUtils.isEmpty(domain))
+				return;
 		}
-		catch (IOException e)
-		{
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
+
+		String oldNamespace = NamespaceManager.get();
+
+		NamespaceManager.set(domain);
+		try {
+			List<Reports> reports = ReportsUtil
+					.getAllReportsByDuration(duration);
+			// Util function fetches reports based on duration, generates
+			// reports and sends report
+			for (Reports report : reports) {
+				if (report.report_type != Reports.ReportType.Contact) {
+					Long time = ActivityReportsUtil
+							.getTimeForSettingEtaForReports(
+									report.activity_time,
+									report.activity_weekday,
+									report.activity_day,
+									report.report_timezone, duration);
+					try {
+						ContactReportDeferredTaskCreation
+								.createContactDeferredTask(domain, report.id,
+										time, report.report_timezone);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		} finally {
+			NamespaceManager.set(oldNamespace);
 		}
-	    }
-	    }
 	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-    }
 }

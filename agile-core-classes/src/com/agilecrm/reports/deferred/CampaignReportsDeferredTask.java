@@ -20,33 +20,35 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  */
 public class CampaignReportsDeferredTask implements DeferredTask
 {
-    // Report ID
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// Report ID
     private Long report_id;
     private Boolean sendNow;
 
     public CampaignReportsDeferredTask(Long report_id, Boolean sendNow)
     {
-	this.report_id = report_id;
-	this.sendNow=sendNow;
+		this.report_id = report_id;
+		this.sendNow=sendNow;
     }
 
     @Override
     public void run()
     {
-	// Fetches report adds to list. It is added into list as there is
-	// utility function in ReportsUtil used for generating list of reports.
-	List<Reports> reports = new ArrayList<Reports>();
-	reports.add(ReportsUtil.getReport(report_id));
-
-	try
-	{
-		System.out.println("Entered inside CampaignReportsDeferredTask run method");
-	    // Generates report and sends to user
-	    ReportsUtil.sendCampaignReportsToUsers(reports, sendNow);
-	}
-	catch (JSONException e)
-	{
-	    e.printStackTrace();
-	}
+		// Fetches report adds to list. It is added into list as there is
+		// utility function in ReportsUtil used for generating list of reports.
+		List<Reports> reports = new ArrayList<Reports>();
+		reports.add(ReportsUtil.getReport(report_id));
+		try
+		  {
+			// Generates report and sends to user
+		    ReportsUtil.sendCampaignReportsToUsers(reports, sendNow);
+		  }
+		catch (JSONException e)
+		  {
+		    e.printStackTrace();
+		  }
     }
 }

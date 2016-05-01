@@ -82,25 +82,24 @@ public class CampaignReportsCronDeferredTask implements DeferredTask
 
  // Util function fetches reports based on duration, generates
     // reports and sends report
-    for (Reports report : reports)
-    {
-    if(report.report_type == Reports.ReportType.Campaign)
+	    for (Reports report : reports)
 	    {
-    	System.out.println("Entered inside CampaignReportsCronDeferredTask run method");
-    	Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
-	        report.activity_weekday, report.activity_day, report.report_timezone, duration);
-    	try
-    	{
-    		CampaignReportDeferredTaskCreation.createCampaignDeferredTask(domain, report.id, time,
-    				report.report_timezone);
-    	}
-    	catch (IOException e)
-    	{
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    	}
+		    if(report.report_type == Reports.ReportType.Campaign)
+			  {
+		    	
+		    	Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
+			        report.activity_weekday, report.activity_day, report.report_timezone, duration);
+		    	try
+		    	{
+		    		CampaignReportDeferredTaskCreation.createCampaignDeferredTask(domain, report.id, time, report.report_timezone);
+		    	}
+		    	catch (IOException e)
+		    	{
+		    		System.out.println("Error occured while adding campaign report vial email in DefferedTask");
+		    		e.printStackTrace();
+		    	}
+			  }
 	    }
-    }
 	}
     	finally
     	{
