@@ -152,7 +152,17 @@ function initializeTasksListeners(){
 		$(this).find(".task-actions").css("display", "none");
 		$(this).find(".task-note-action").show();
 	});
+	
+	$('#tasks-list-template').on('mouseenter', 'tr', function(e)
+	{
+		$(this).find("#task-list-actions").removeClass("hidden");
+	});
 
+	// Hide task actions
+	$('#tasks-list-template').on('mouseleave', 'tr', function(e)
+	{
+		$(this).find("#task-list-actions").addClass("hidden");
+	});
 	/*
 	 * Task Action: Delete task from UI as well as DB. Need to do this manually
 	 * because nested collection can not perform default functions.
@@ -161,27 +171,35 @@ function initializeTasksListeners(){
 	{
 		if (!confirm("Are you sure you want to delete?"))
 			return;
-
-		// Delete Task.
-		deleteTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
+		if(!getTaskListId(this) && $(this).parent().attr('data')){
+			deleteTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
+		}
+		else
+			deleteTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
 
 	// Task Action: Mark task complete, make changes in DB.
 	$('#tasks-list-template').on('click', '.is-task-complete', function(event)
 	{
 		event.preventDefault();
-
-		// make task completed.
-		completeTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
+		if(!confirm("Are you sure to complete this task ?"))
+			return;
+		if(!getTaskListId(this)  && $(this).parent().attr('data')){
+			completeTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
+		}
+		else
+			completeTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
 
 	// Task Action: Open Task Edit Modal and display details in it.
 	$('#tasks-list-template').on('click', '.edit-task', function(event)
 	{
 		event.preventDefault();
-
-		// Show and Fill details in Task Edit modal
-		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
+		if(!getTaskListId(this)  && $(this).parent().attr('data')){
+			editTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
+		}
+		else
+			editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
 	
 	
@@ -209,6 +227,18 @@ function initializeTasksListeners(){
 				event.stopPropagation();
 				
 			});	
+	$('#tasks-list-template').on('click', '.view-task-details', function()
+	{
+		event.preventDefault();
+		var route = $(this).parents('.agile-edit-row').attr('route');
+		var data = $(this).siblings(".data").attr('data');
+		if (data){
+			Backbone.history.navigate(route + data, {
+				trigger : true
+			});
+		} 
+
+	});	
 }
 
 $("body").on("change", '.status', function()
@@ -218,7 +248,6 @@ $("body").on("change", '.status', function()
 		// Change status UI and input field
 		changeStatus($(this).val(), $(this).closest("form"));
 	});	
-
 
 /**
  * Highlights the task portion of activity modal (Shows task form and hides

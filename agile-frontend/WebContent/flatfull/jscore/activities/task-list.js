@@ -77,7 +77,6 @@ function updateData(params) {
 
 	// Renders data to tasks list page.
 	$('#task-list-based-condition').html(this.App_Calendar.allTasksListView.render().el);
-
 }
 
 /**
