@@ -21,10 +21,10 @@
                "url": "/core/api/tickets/groups",
                "dynamicName": "email",
                "dynamicValue": "id",
-               "appendToDynamicName": "group_name",
                "options": {
             	   "Ticket Assignee Group": "{{ticket.groupID}}"
 			    },
+               "appendToDynamicName": "group_name", 
                "fieldType": "dynamicselect",
                "type": "select"
            },
