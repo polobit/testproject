@@ -295,7 +295,7 @@ public class BulkOperationsAPI
 		    "naresh@agilecrm.com",
 		    "prashannjeet@agilecrm.com",
 		    null,
-		    "Campaign Initiated in " + NamespaceManager.get(),
+		    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
 		    null,
 		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
 			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
