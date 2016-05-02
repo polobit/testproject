@@ -15,6 +15,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -86,7 +87,11 @@ public class TriggersAPI
 		trigger.save();
 		return trigger;
 	} catch (Exception e) {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		String message = e.getMessage();
+		if(StringUtils.isNotBlank(message) && message.contains(":"))
+			message = message.split(":")[1];
+		
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(message)
 				.build());
 	}
     }
