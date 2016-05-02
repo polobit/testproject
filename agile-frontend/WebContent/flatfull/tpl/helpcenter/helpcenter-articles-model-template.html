@@ -1,19 +1,24 @@
-<script id="helpcenter-articles-model-template" type="text/html">
-          <tr>
-              <td style="padding-top: 15px;padding-left:15px">
-         	       <div class="text-ellipsis pull-left text-sm" style="max-width: 20em; padding-left:15px">
-                     <i class="fa fa-chevron-right" aria-hidden="true"></i>
-    		                <a  href="#categorie/{{categorie_id}}/section/{{section_id}}/article/{{id}}">
-    			               {{title}}
-    		                </a>                  
-                   </div>
-              </td>
-          </tr>
-          <tr>
-          	<td style="padding-bottom: 15px; padding-left:40px;">
-               <small class="text-muted text-xs">
-              	    created time {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
-    			     </small>
-          	</td>
-    	  </tr>
+<script id="helpcenter-articles-model-template" type="text/html">        
+  <td>
+     <div class="text-ellipsis" style="max-width: 20em;">
+          <a  href="#categorie/{{categorie_id}}/section/{{section_id}}/article/{{id}}">
+           {{title}}
+          </a>                  
+     </div>
+  </td>
+  <td>
+    <div class="text-ellipsis">
+       {{domainUser.name}}
+    </div>   
+  </td>  
+	<td>
+    <div class="text-ellipsis">
+       {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
+    </div>   
+  </td>  
+  <td class="articlestatus {{id}}" data-id="{{id}}">
+    <label class="i-switch m-t-xs m-r">
+    <input type="checkbox" id="animations" {{#if is_article_published}}checked="checked" data-original-title="Save article as Draft"{{else}} {{/if}}class="{{id}} left article_status" name="animations"  data-toggle="tooltip" data-container="body" data-placement="bottom"  rel="status">
+    <i></i>   
+  </td> 
 </script>

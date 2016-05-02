@@ -6,12 +6,18 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 		/* Home routes */
 		"helpcenter" : "categories",
+
+		/* Show add edit categorie */
 		"helpcenter/categories":"categories",
         "helpcenter/add-categorie":"categorieAdd",
 	   	"categorie/:id/edit-categorie":"categorieEdit",
+	   	
+	   	/* Show add edit section */
 	   	"helpcenter/sections" : "sections",
 	    "helpcenter/add-section" : "sectionAdd",
 	    "categorie/:categorie_id/section/:section_id/edit-section":"sectionEdit",
+        
+        /* Show add edit article */
         "helpcenter/add-article" : "articleAdd",
         "categorie/:id/add-section" : "addSectionfromCategorie",
         "categorie/:categorie_id/section/:section_id/articles" : "sectionArticles",
@@ -22,6 +28,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	categories: function(){
 
 		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
+			
 			//Initializing base collection with groups URL
 			App_Helpcenter_Module.categoriesCollection = new Base_Collection_View({
 				url : '/core/api/knowledgebase/categorie',
@@ -43,21 +50,19 @@ var HelpcenterRouter = Backbone.Router.extend({
 	categorieAdd: function(){
 		
 		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
-		
-			
-			    var addCatogeryView = new Base_Model_View({
-	 				isNew : true, 
-	 			 	url : '/core/api/knowledgebase/categorie',
-	 				template : "helpcenter-add-catogery",
-	 				window : "#helpcenter/categories",
-			    });
+					
+		    var addCatogeryView = new Base_Model_View({
+					isNew : true, 
+				 	url : '/core/api/knowledgebase/categorie',
+					template : "helpcenter-add-catogery",
+					window : "#helpcenter/categories",
+		    });
 
-				$('#helpcenter-content').html(addCatogeryView.render().el);    
-	  
+			$('#helpcenter-content').html(addCatogeryView.render().el);    
 		});
   },
  
-  sectionAdd:function(){
+  	sectionAdd:function(){
 		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
 			
 			    var addsectionView = new Base_Model_View({
@@ -123,7 +128,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 		});
 
   },
-  addArticlefromSection: function(section_id){
+  addArticlefromSection: function(category_id,section_id){
   
   	setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
   
@@ -143,8 +148,9 @@ var HelpcenterRouter = Backbone.Router.extend({
 				    },
 
 			        postRenderCallback : function(el){
-					fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
-			 	 		getTemplate("helpcenter-section-category", collection.toJSON(), undefined, function(template_ui){
+					
+						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+			 	 			getTemplate("helpcenter-section-category", collection.toJSON(), undefined, function(template_ui){
 
 								
 								if(!template_ui)
@@ -225,7 +231,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 
   sectionArticles: function(categorie_id,section_id){
 		  
-		  App_Helpcenter_Module.loadhelpcenterTemplate(function(){
+		App_Helpcenter_Module.loadhelpcenterTemplate(function(){
 			
 			var sectionView = new Base_Model_View({
 				isNew : false,
@@ -237,7 +243,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 					App_Helpcenter_Module.articlesCollection = new Base_Collection_View({
 						url : '/core/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
 						templateKey : "helpcenter-articles",
-						individual_tag_name : 'tbody'
+						individual_tag_name : 'tr',
+						postRenderCallback: function(el){
+                          
+					      Helcenter_Events.initializeStatuscheckbox(el);
+					    	
+					    	$('[data-toggle="tooltip"]', el).tooltip();
+					     
+					    }
 					});
 
 					//Fetching groups collections
@@ -254,7 +267,8 @@ var HelpcenterRouter = Backbone.Router.extend({
   },
 
   sectionEdit: function(category_id,section_id){ 	
-  App_Helpcenter_Module.loadhelpcenterTemplate(function(){
+  		
+  		App_Helpcenter_Module.loadhelpcenterTemplate(function(){
 			
 			var sectionView = new Base_Model_View({
 				isNew : false,
@@ -275,20 +289,21 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 	});			
   },
   showArticles: function(category_id,section_id,article_id){
-  		App_Helpcenter_Module.loadhelpcenterTemplate(function(){
+  		
+	App_Helpcenter_Module.loadhelpcenterTemplate(function(){
 
-			var articleView = new Base_Model_View({
-				isNew : false,
-				template : "helpcenter-article",
-				url : "/core/api/knowledgebase/article/" + article_id,
-		        postRenderCallback: function(el, data){
+		var articleView = new Base_Model_View({
+			isNew : false,
+			template : "helpcenter-article",
+			url : "/core/api/knowledgebase/article/" + article_id,
+	        postRenderCallback: function(el, data){
 
-		        	//Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
-				}
-			});
+	        	//Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
+			}
+		});
 
-	 		$('#helpcenter-content').html(articleView.render().el);
-	 	});
+ 		$('#helpcenter-content').html(articleView.render().el);
+ 	});
   },
   editArticle : function(categorie_id,section_id,article_id){
     

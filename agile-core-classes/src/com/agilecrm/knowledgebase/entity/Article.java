@@ -174,8 +174,12 @@ public class Article extends Cursor implements Serializable
 	 */
 	public Key<Article> save()
 	{
+		String plain_text = this.plain_content;
+		
 		Key<Article> articleKey = dao.put(this);
-
+        
+		this.plain_content =  plain_text;
+		
 		// Adding article to text search
 		new HelpcenterArticleDocument().add(this);
 
@@ -211,4 +215,17 @@ public class Article extends Cursor implements Serializable
 			section_id = section_key.getId();
 
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", plain_content=" + plain_content
+				+ ", created_time=" + created_time + ", updated_time=" + updated_time + ", categorie_key="
+				+ categorie_key + ", categorie_id=" + categorie_id + ", section_key=" + section_key + ", section_id="
+				+ section_id + ", is_article_published=" + is_article_published + ", comments_disabled="
+				+ comments_disabled + ", attachments_list=" + attachments_list + ", created_by_key=" + created_by_key
+				+ ", created_by=" + created_by + ", updated_by_key=" + updated_by_key + ", updated_by=" + updated_by
+				+ ", categorie=" + categorie + ", section=" + section + ", domainUser=" + domainUser + "]";
+	}
+
 }

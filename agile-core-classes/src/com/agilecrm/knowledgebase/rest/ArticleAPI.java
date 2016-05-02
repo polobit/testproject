@@ -174,5 +174,39 @@ public class ArticleAPI
 
 		return article;
 	}
+	
+	/**
+	 * 
+	 * @param article,id
+	 * @return
+	 * @throws WebApplicationException
+	 */
+	@PUT
+	@Path("/update-status/{id}")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Article updateArticleStatus(Article article) throws WebApplicationException
+	{
+		try
+		{
+			if(article.id == null)
+				throw new Exception("Required params missing.");
+			
+			Article dbArticle = Article.dao.get(article.id);
+
+			dbArticle.is_article_published = article.is_article_published;
+			
+			dbArticle.save();
+		}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while creating workflow creation activity");
+
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return article;
+	}
 
 }

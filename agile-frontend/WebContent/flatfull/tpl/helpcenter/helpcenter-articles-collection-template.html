@@ -1,11 +1,21 @@
 <script id="helpcenter-articles-collection-template" type="text/html">
 	{{#unless this.length}}
 		<div class="text-ellipsis" style="padding-left:20px">
-           <div class="text-ellipsis pull-left text-sm" style="max-width: 20em;">
+           <div class="text-ellipsis pull-left" style="max-width: 20em;">
              No articles found.
 		   </div>	
 		</div>		
 	{{else}}
+	<table class="table table-striped   table-layout-mob-view">
+      <thead>
+			<tr>
+				<th>Title</th>
+				<th>Created By</th>
+				<th>Created On</th>
+				<th>Status</th>
+			</tr>			  
+        </thead>  
 		<tbody id="helpcenter-articles-model-list"></tbody>
+	</table>
 	{{/unless}}
 </script>
