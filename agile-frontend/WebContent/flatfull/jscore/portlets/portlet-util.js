@@ -212,7 +212,7 @@ var portlet_utility = {
 			json['activity_type'] = "ALL";
 			json['duration'] = "this-quarter";
 		}
-		else if (portlet_type == "USERACTIVITY" && p_name == "Refferalurl stats") {
+		else if (portlet_type == "USERACTIVITY" && p_name == "Referralurl stats") {
 			json['duration'] = "yesterday";
 		}	
 		return json;
@@ -340,7 +340,7 @@ var portlet_utility = {
 			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
 			"Average Deviation" : "portlets-Tasks-Deviation",
 			"Webstat Visits" : "portlets-webstat-visits",
-			"Refferalurl stats" : "portlets-refferalurl-stats-report",
+			"Referralurl stats" : "portlets-Referralurl-stats-report",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -1335,7 +1335,7 @@ var portlet_utility = {
 			setPortletContentHeight(base_model);
 			break;
 		}
-		case "Refferalurl stats": {
+		case "Referralurl stats": {
 			var ref_url,count;
 			var url = '/core/api/web-stats/refurl-stats?start_time='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
@@ -1344,7 +1344,7 @@ var portlet_utility = {
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
 				if(data.length==0){
-						$('.refferalurl-stats-portlet-body').html('<div class="portlet-error-message">No Refferal URL Found</div>');
+						$('.referralurl-stats-portlet-body').html('<div class="portlet-error-message">No Refferal URL Found</div>');
 								return;
 					}
 				var span;
@@ -1359,12 +1359,12 @@ var portlet_utility = {
 						width=75-width;
 					}
 
-					span = $("<div style='margin: 0px 20px -21px 15px;'/>");
-					span.append("<a href='#' data-toggle='popover' class='text-ellipsis' title="+ data[e].ref_url +" style='font-size: 13px; position: absolute;width: 75%;'>" + data[e].ref_url.substring(0,data[e].ref_url.lastIndexOf('/')+1) + "</a>");
+					span = $("<div style='margin: 0px 20px -21px 15px; padding-bottom: 2px;'/>");
+					span.append("<a href='#' data-toggle='popover' class='text-ellipsis' title="+ data[e].ref_url +" style='font-size: 14px; position: absolute;width: 75%;'>" + data[e].ref_url.substring(0,data[e].ref_url.lastIndexOf('/')+1) + "</a>");
 		            span.append("<div  style='margin-left: 8.4cm;width: 15%;'>" + data[e].count + "</div>");
-		            span.append("<div class='bar' style='width: "+width+"%; margin: 1px;height: .5rem; background: #237fa0;'></div>");
+		            span.append("<div class='bar' style='width: "+width+"%; margin: 1px;height: .6rem; background: #237fa0;'></div>");
 		            span.append("<br/>");
-		            $('.refferalurl-stats-portlet-body').append(span);
+		            $('.referralurl-stats-portlet-body').append(span);
 				});
 			});
 			
@@ -1977,8 +1977,8 @@ var portlet_utility = {
 					.attr("selected", "selected");
 			break;
 		}
-		case "Refferalurl stats": {
-			that.addPortletSettingsModalContent(base_model,"portletsRefferalurlStatsSettingsModal");
+		case "Referralurl stats": {
+			that.addPortletSettingsModalContent(base_model,"portletsReferralurlStatsSettingsModal");
 			$("#duration", elData).find(
 				               'option[value='
 									+ base_model.get("settings").duration + ']')

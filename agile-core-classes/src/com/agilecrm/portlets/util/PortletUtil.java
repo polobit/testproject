@@ -130,7 +130,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign graph",PortletType.USERACTIVITY));
-				allPortlets.add(new Portlet("Refferalurl stats",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Referralurl stats",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));

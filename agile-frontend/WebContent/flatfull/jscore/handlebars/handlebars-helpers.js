@@ -5868,8 +5868,8 @@ $(function()
 			portlet_name = "Tasks Completion Time Deviation";
 		else if(p_name == 'Webstat Visits')
 			portlet_name = "Visits";
-		else if(p_name=='Refferalurl stats')
- 			portlet_name = "Refferalurl Stats";
+		else if(p_name=='Referralurl stats')
+ 			portlet_name = "Referralurl Stats";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5928,7 +5928,7 @@ $(function()
 			icon_name = 'icon-pie-chart';
 		else if(p_name == 'Webstat Visits')
 			icon_name = 'icon-globe';
-		else if (p_name == 'Refferalurl stats')
+		else if (p_name == 'Referralurl stats')
 			icon_name = 'icon-pie-chart';
 		return icon_name;
 	});
@@ -6717,7 +6717,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A quick view of deviation in tasks completion times.'
 	else if (p_name== 'Webstat Visits')
 		description = 'A pie chart of Known and Unknown Visits on your website.';
-	else if(p_name == 'Refferalurl stats')
+	else if(p_name == 'Referralurl stats')
 		description = 'A quick view of latest visited reffral url.'
 	return description;
 			});
