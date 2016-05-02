@@ -101,7 +101,7 @@
     </div>
     {{/unless}}
   
-    <div class="panel-body">
+   
     <form id="access-ip" class="form-horizontal">
         <fieldset>
             {{#if id}}
@@ -121,14 +121,14 @@
                 </thead>
                 <tbody id="blocked_panel_ips_list" class="multiple-input" name="ipList">
                    {{#each ipList}}
-                    <tr data="{{this}}" style="display: table-row;">
+                    <tr data="{{this}}" >
                         <td>
                             <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
                             <input class="form-control ip_edit" type="hidden" value="{{this}}" />
                         </td>
-                        <td class="b-r-none">
-                            <div class="m-b-n-xs" style="visibility: hidden;">
-                                <a class="upsert-ip c-p m-l-sm text-l-none text-xs hover-show"data-toggle="modal" role="button" data-position="{{@index}}">
+                        <td class="b-r-none" style="width:8%;">
+                            <div class="m-b-n-xs pull-left" style="visibility: hidden;">
+                                <a class="upsert-ip c-p m-l-sm text-l-none text-xs hover-show" data-toggle="modal" role="button" style="margin-left:27px;" data-position="{{@index}}">
                                         <i title="Edit" class="icon icon-edit"></i>
                                 </a>
                                 <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-xs" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
@@ -173,6 +173,6 @@
             {{/unless}}
         </fieldset>
     </form>
-</div>
+
 </div>
 </script>

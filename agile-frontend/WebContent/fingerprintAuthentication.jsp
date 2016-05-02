@@ -316,7 +316,7 @@ position: fixed;width: 100%;top: 0px;
 	            type : "POST",
 	            url : "/login?resendotp=resendotp",
 	            success : function(data) {
-	               showNotyPopUp("information", "We have re-sent the verification code to your registered email. Please enter the code below to get access.", "top", 1000);
+	               showNotyPopUp("information", "We have re-sent the verification code to your registered email. Please enter the code below to get access.", "top", 2000);
 	            }
 	        });
 	    }); 
