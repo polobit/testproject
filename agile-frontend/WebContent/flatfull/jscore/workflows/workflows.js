@@ -237,6 +237,14 @@ var Workflow_Model_Events = Base_Model_View.extend({
                     }
                 }
 
+                // Show success message of access level property
+                if($(targetEl).attr('id') === 'campaign_access_level'){
+                    if(access_permission == "1")
+                        show_campaign_save(e,"Campaign has been saved as Public successfully.");
+                    else 
+                        show_campaign_save(e,"Campaign has been saved as Private successfully.");
+                }
+
                 // Boolean data used on clicking on Done
                 if(trigger_data && trigger_data["navigate"])
                 {
@@ -299,7 +307,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
 
     accessLevelChange : function(e){
         console.log("change");
-        var level = $("#access_level").val();
+        var level = $("#access_level", this.el).val();
         if(level == "1"){
             level = CURRENT_DOMAIN_USER.id;
         } else {
@@ -307,6 +315,13 @@ var Workflow_Model_Events = Base_Model_View.extend({
         }
 
         $("#access_level", this.el).val(level);
+
+        // Resave if it is not a new campaign
+        if(App_Workflows.workflow_model && App_Workflows.workflow_model.get("id")){
+            this.saveCampaignClick(e);
+        }
+
+        // Change ui text
         change_access_level(level, this.el);
 
     }
