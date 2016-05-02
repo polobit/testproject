@@ -194,7 +194,7 @@ var DealsRouter = Backbone.Router.extend({
 					var eDateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 					if(condition == "LAST"){
 						model.attributes.close_date_end = eDateStart.getTime() / 1000 ;
-						model.attributes.close_date_start =(eDateStart.getTime() - (condays*24 * 60 * 60 * 1000)) / 1000 ;
+						model.attributes.close_date_start =(eDateStart.getTime() - ((condays-1)*24 * 60 * 60 * 1000)) / 1000 ;
 
 					}
 					else if(condition == "NEXT"){
