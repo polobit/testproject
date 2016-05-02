@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -178,17 +179,21 @@ public class WorkflowsAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Workflow updateWorkflow(Workflow workflow) throws Exception {
-		workflow.save();
-
 		try {
-			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
-					workflow, null);
+			workflow.save();
+			
+			try {
+				ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
+						workflow, null);
+			} catch (Exception e) {
+				System.out
+						.println("exception occured while creating workflow creation activity");
+			}
+			return workflow;
 		} catch (Exception e) {
-			System.out
-					.println("exception occured while creating workflow creation activity");
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
 		}
-
-		return workflow;
 	}
 
 	/**
