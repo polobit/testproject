@@ -156,7 +156,7 @@ var Tickets_Rest={
 			else
 			{
 				$(e.target).removeClass("btn-danger").addClass("btn-default");
-                message="Ticket un marked as unspam";
+                message="Ticket marked as unspam";
                 spam_value=false;
             }
 
