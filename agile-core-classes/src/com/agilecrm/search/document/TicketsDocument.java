@@ -304,7 +304,7 @@ public class TicketsDocument implements BuilderInterface
 		}
 
 		sortExpressionBuilder.setExpression(sortField);
-		sortExpressionBuilder.setDefaultValueNumeric(0d);
+		//sortExpressionBuilder.setDefaultValueNumeric(0d);
 
 		SortOptions sortOptions = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build()).build();
 

@@ -43,6 +43,7 @@
                 "Status": "{{ticket.status}}",
                 "Priority": "{{ticket.priority}}",
                 "Ticket Type": "{{ticket.type}}",
+                "Ticket Group": "{{ticket.group.group_name}}",
                 "Subject": "{{ticket.subject}}",
                 "Last Updated By": "{{ticket.last_updated_by}}"
             },

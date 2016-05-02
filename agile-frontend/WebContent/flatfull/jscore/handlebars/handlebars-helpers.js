@@ -848,6 +848,8 @@ $(function()
 		
 	});
 
+
+
 	// Helper function to return current date in preferences page.
 
 	Handlebars.registerHelper('currentDateInFormat', function(format)
@@ -2573,7 +2575,23 @@ $(function()
 		return name;
 
 	});
-
+	/** put the users according to the plan
+	*/
+	Handlebars.registerHelper('referedUsersPlan', function(plan)
+	{
+		var plantype = [];
+		plantype =  plan.plan_type.split("_");
+		var temp = plantype[0].toLowerCase();
+		
+		if(plantype.length == 1)
+		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1);
+		else{
+			var temp1 = plantype[1].toLowerCase();
+			var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+		}
+		
+		return string;
+	});
 	/**
 	 * put user address location togather separated by comma.
 	 */
@@ -2956,7 +2974,7 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
 		return options.inverse(this)
@@ -3268,7 +3286,7 @@ $(function()
 				el = el.concat(html);
 				return;
 			}
-			el = el.concat(html + ", ");
+			el = el.concat(html + ",");
 		});
 		return new Handlebars.SafeString(el);
 	});
@@ -3285,6 +3303,7 @@ $(function()
 			if (key <= 3)
 			{
 				var html = getTemplate("related-to-contacts", value);
+				html=html.trim();
 				if (--count == 0 || key == 3)
 				{
 					el = el.concat(html);
@@ -5012,6 +5031,7 @@ $(function()
 						}
 
 						console.log(keys);
+						keys.sort();
 						var html_temp = "";
 
 						for (var i = 0; i < keys.length; i++)
@@ -5136,7 +5156,7 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
 		return options.inverse(this)
@@ -5846,6 +5866,8 @@ $(function()
 			portlet_name = "Campaign Status";
 		else if(p_name=='Average Deviation')
 			portlet_name = "Tasks Completion Time Deviation";
+		else if(p_name == 'Webstat Visits')
+			portlet_name = "Visits";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5902,6 +5924,8 @@ $(function()
 			icon_name = 'icon-flag';
 		else if (p_name == 'Lost Deal Analysis')
 			icon_name = 'icon-pie-chart';
+		else if(p_name == 'Webstat Visits')
+			icon_name = 'icon-globe';
 		return icon_name;
 	});
 	
@@ -6687,6 +6711,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
 	else if(p_name == 'Average Deviation')
 		description = 'A quick view of deviation in tasks completion times.'
+	else if (p_name== 'Webstat Visits')
+		description = 'A pie chart of Known and Unknown Visits on your website.';
 	return description;
 			});
 
@@ -7137,6 +7163,94 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getCurrentUserDashboards', function(type, options)
+	{
+		var options_el = "";
+		if(CURRENT_USER_DASHBOARDS)
+		{
+			CURRENT_USER_DASHBOARDS.sort(function(a,b){return a.name.trim() < b.name.trim() ? -1 : a.name.trim() > b.name.trim() ? 1 : 0;});
+			var is_active_added = false;
+			var selected_li_id = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(selected_li_id == this.id)
+				{
+					is_active_added = true;
+				}
+			});
+
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(type == 'portlet')
+				{
+					var trim_name = this.name;
+					if(trim_name)
+					{
+						trim_name = trim_name.trim();
+					}
+					if(trim_name && trim_name.length > 15)
+					{
+						trim_name = trim_name.substring(0, 15)+"...";
+					}
+					if(this.name)
+					{
+						options_el += "<option value="+this.id+" class='user-dashboard' title='"+this.name.trim()+"'>"+trim_name+"</option>";
+					}
+				}
+				else
+				{
+					var trim_name = this.name;
+					if(trim_name)
+					{
+						trim_name = trim_name.trim();
+					}
+					if(trim_name && trim_name.length > 30)
+					{
+						trim_name = trim_name.substring(0, 30)+"...";
+					}
+					if(index == 0 && (!selected_li_id || !is_active_added))
+					{
+						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+					}
+					else if(index == 0)
+					{
+						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+					}
+					if(selected_li_id == this.id)
+					{
+						options_el += "<li class='active'><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+					}
+					else
+					{
+						options_el += "<li><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+					}
+
+					if(index == CURRENT_USER_DASHBOARDS.length-1)
+					{
+						options_el += "<li class='divider'></li>";
+						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+					}
+					
+				}
+
+			});
+			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
+			{
+				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+			}
+		}
+
+		return options_el;
+	});
+
+	Handlebars.registerHelper('getTruncatedDashboardName', function(dashboard_name)
+	{
+		if(dashboard_name && dashboard_name.trim().length > 30)
+		{
+			return dashboard_name.trim().substring(0, 30)+"...";
+		}
+		return dashboard_name;
+	});
+
 	Handlebars.registerHelper('is_acl_allowed', function(options)
 	{
 		if(_plan_restrictions.is_ACL_allowed[0]() || checkForSpecialUsers())
@@ -7254,3 +7368,10 @@ Handlebars.registerHelper('removeSpecialCharacter',function(value){
 
 });
 
+Handlebars.registerHelper('canDeleteContact', function(owner_id, options)
+{
+	if (hasScope('DELETE_CONTACT'))
+		return options.fn(this);
+
+	return options.inverse(this)
+});

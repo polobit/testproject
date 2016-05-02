@@ -33,7 +33,9 @@ public class TicketsBackup implements Serializable
 	// Key
 	@Id
 	public Long id;
-
+	
+	public String namespace = "";
+	
 	public String ticket_data = "";
 
 	/**
@@ -60,9 +62,10 @@ public class TicketsBackup implements Serializable
 		this.created_time = Calendar.getInstance().getTimeInMillis();
 	}
 
-	public TicketsBackup(String ticketData)
+	public TicketsBackup(String ticketData, String namespace)
 	{
 		super();
+		this.namespace = namespace;
 		this.ticket_data = ticketData;
 	}
 

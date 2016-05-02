@@ -4,7 +4,7 @@ var ACLRestriction = Backbone.Router.extend({
 		/* Deals/Opportunity */
 		"not-allowed" : "notAllowed",
 		},	
-		notAllowed : function(obj){
+		notAllowed : function(obj){ 	
 			$('#content').html(getTemplate("not-allowed", obj));
 		}
 });

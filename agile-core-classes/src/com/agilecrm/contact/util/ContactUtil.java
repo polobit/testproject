@@ -1453,7 +1453,7 @@ public class ContactUtil
 	UserAccessControl control = UserAccessControl.getAccessControl(
 		UserAccessControl.AccessControlClasses.Contact.toString(), null, null);
 
-	if (control.hasScope(UserAccessScopes.DELETE_CONTACTS) || control.hasScope(UserAccessScopes.UPDATE_CONTACT))
+	if (control.hasScope(UserAccessScopes.DELETE_CONTACTS) || control.hasScope(UserAccessScopes.UPDATE_CONTACT) || control.hasScope(UserAccessScopes.EDIT_CONTACT))
 	    return;
 
 	Iterator<Contact> i = contacts.iterator();

@@ -10,10 +10,11 @@
 <div class="row-row">
 <div  id="deal-detail-actions-dropdown" class="wrapper">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
-<div class="p-t-none pos-rlt">
-  <div class="panel panel-default m-b">
-    <div class="panel-body">
-<div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
+
+<div class="inline-block w-full"><input type="text" class="col-md-10 hidden xedit" value="{{name}}"id="inline-input"></input>
+<span class="h3 font-thin custom-color m-b-xs"id="deals-inline" >
+{{#if name}}{{name}}{{/if}}</span></div>
+
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
@@ -54,10 +55,10 @@
  
 {{else}}         
 
-<div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown dealEditDropdown">
+<div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown dealEditDropdown opa-full">
                 
                 
-                <a class=" dropdown-toggle" data-toggle="dropdown"><span class="caret text-lg"></span></a>
+                <button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
                 <ul class="dropdown-menu pull-right deals-edit">
        <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-pencil-square" style="margin-right:2px;"></i> Edit</a></li>
                                     <li class="divider"></li>
@@ -258,7 +259,9 @@
 <div class="p-t-none pos-rlt">
   <div class="panel panel-default m-b">
     <div class="panel-body">
-<div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
+<div class="inline-block w-full "><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
+<span class="h3 font-thin custom-color text-ellipsis m-b-xs"id="deals-inline" >
+{{#if name}}{{name}}{{/if}}</span></div>
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
@@ -309,10 +312,11 @@
 
 
 {{else}}                       
-<div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown dealEditDropdown">
+<div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown dealEditDropdown opa-full">
                 
                 
-                <a class=" dropdown-toggle" data-toggle="dropdown"><span class="caret text-lg"></span></a>
+                <button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
+
                 <ul class="dropdown-menu pull-right deals-edit">
        <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-pencil-square" style="margin-right:2px;"></i> Edit</a></li>
                                     <li class="divider"></li>

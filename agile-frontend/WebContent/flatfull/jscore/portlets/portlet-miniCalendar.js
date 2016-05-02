@@ -473,25 +473,27 @@ function loadingGoogleEvents(el,startTime,endTime){
 					var date=new Date();
 					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 				}
-			},5000);
+			},7000);
 			_agile_delete_prefs('current_date_calendar');
 		}
 		console.log(response);
 		if (response)
 		{
 			if(typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar)) 
-			{googledata(el,response,startTime,endTime);
+			{
+				googledata(el,response,startTime,endTime);
 			return;
 			}
 
 
-			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27', function()
 					{
 				setupGC(function()
-						{
-
-					googledata(el,response,startTime,endTime);
-					return;
+					{
+					
+								googledata(el,response,startTime,endTime);
+								return;
+						
 						});
 					});
 		}
@@ -523,6 +525,7 @@ function init_cal(el){
  */
 function googledata(el,response,startTime,endTime)
 {
+	try{
 	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 	var current_date = new Date();
@@ -534,7 +537,8 @@ function googledata(el,response,startTime,endTime)
 	// Retrieve the events from primary
 	var request = gapi.client.calendar.events
 	.list({ 'calendarId' : 'primary', maxResults : 1000, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
-	request.execute(function(resp){
+	request.execute(function(resp)
+			{
 
 		head.js('flatfull/lib/web-calendar-event/moment.min.js', function(){
 		head.js('flatfull/lib/web-calendar-event/moment-timezone-with-data.js',function() {
@@ -542,22 +546,13 @@ function googledata(el,response,startTime,endTime)
 			var events = new Array();
 			console.log(resp);
 			if(resp.items){
-				for (var j = 0; j < resp.items.length; j++)
-				{
+				for (var j = 0; j < resp.items.length; j++){
 					var fc_event = google2fcEvent(resp.items[j]);
-					
-					var utcTime = new Date(fc_event.start).toUTCString();
-					var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
-  					fc_event.start = tz.format();
-  					utcTime = new Date(fc_event.end).toUTCString();
-					tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
-  					fc_event.end = tz.format();
-
 					renderGoogleEvents(events,fc_event,el);
 				}
 			}
 
-			console.log($("#calendar_container", el).fullCalendar("getView").visStart);
+		console.log($("#calendar_container", el).fullCalendar("getView").visStart);
 
 		$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_google" + $(el).attr('id')]);
 			var events_clone = events.slice(0);
@@ -573,34 +568,45 @@ function googledata(el,response,startTime,endTime)
 
 			$('#calendar_container',el).fullCalendar('addEventSource', functions["event_mini_google" + $(el).attr('id')]);
 			events_clone = [];
+
 			//**Add the google Events in the list of events in events_show div **/
-			var len = $(".events_show",el).find('.list').find('li').length;
+			var len = $(".events_show", el).find('.list').find('li').length;
 			var date = new Date();
 			$.each(events,function(index,ev){
-				var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
-				var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+			 	if($(el).find('.portlet-calendar-error-message').length!=0){
+				   $(el).find('.portlet-calendar-error-message').css('display','none');
+				   $(el).find('.minical-portlet-event-add').css('display','none');
+			    }
+			var todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
+			var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 
-				if(_agile_get_prefs('current_date_calendar')!=null)
-				{
-					var cookie_date=new Date(_agile_get_prefs('current_date_calendar'));
-					todayDate=cookie_date;
-					endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
+			if(_agile_get_prefs('current_date_calendar')!=null)
+			{
+				var cookie_date=new Date(_agile_get_prefs('current_date_calendar'));
+				todayDate=cookie_date;
+				endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
 
-				}
-				if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) 
-				{	
-					var event_list='<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>';
-					if(len!=0){
-						$(el).find('.list').find('small').each(function( index ) 
-								{
+			}
+			if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) 
+			{	
+				var event_list='<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>';
+				if(len!=0){
+					
+					$(el).find('.list').find('small').each(function( index ) 
+							{
 							if(ev.start.format('HH:MM')<$(this).text())
 							{
 								$(this).parents('li').before(event_list);
 								return false;
-							}
 
-								});
-					}
+							}
+							if(index==len-1)
+		            			  $(this).parents('.list').append(event_list) ;
+
+							});
+								
+
+								}
 					else
 						$(el).find('.list').append(event_list);
 				}
@@ -613,10 +619,19 @@ function googledata(el,response,startTime,endTime)
 				{
 					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 				}
-			},5000);
+			},7000);
 		});
 		});
 	});
+}
+	catch(e){
+		if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
+		{
+			var date=new Date();
+			$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+		}
+}
+
 }
 
 /** Rendering the events to the mini Calendar
@@ -624,14 +639,24 @@ function googledata(el,response,startTime,endTime)
 */
 function renderGoogleEvents(events,fc_event,el)
 {
-	fc_event.startDate=new Date(fc_event.start);
+			fc_event.startDate=new Date(fc_event.start);
 			fc_event.end=new Date(fc_event.end);
+
 			fc_event.color='#3a3f51';
 			fc_event.backgroundColor='#3a3f51';
 			if(fc_event.allDay==true){
+				fc_event.startDate=new Date(fc_event.start);
+   				fc_event.end=new Date(fc_event.end);
 				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 				fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
-				var a=Math.round((fc_event.end-fc_event.start)/(60*60*1000*24))
+
+				var a;    			
+    			if(fc_event.start.getMonth()<fc_event.end.getMonth()){
+    				a = Math.round((fc_event.end-fc_event.start)/(60*60*1000*24));
+      			}else{
+       				a = (fc_event.end.getMonth()-fc_event.start.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+				}
+
 				if(a==1)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
@@ -665,7 +690,28 @@ function renderGoogleEvents(events,fc_event,el)
 			} 
 			else
 			{
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+				console.log("Start : "+fc_event.start);
+				var utcTime = new Date(fc_event.start).toUTCString();
+				var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+				var changedDate	= tz.format('YYYY-MM-DD HH:mm:ss');
+				fc_event.startDate = new Date(changedDate);
+
+				console.log("Start Modified : "+ changedDate);
+
+				console.log("End : "+fc_event.end);
+				utcTime = new Date(fc_event.end).toUTCString();
+				tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+				changedDate	= tz.format('YYYY-MM-DD HH:mm:ss');
+				fc_event.end = new Date(changedDate);
+				console.log("End Modified : "+ fc_event.end);
+
+				var a;
+    			if(fc_event.startDate.getMonth()<fc_event.end.getMonth()){
+    				a = Math.round((fc_event.end-fc_event.startDate)/(60*60*1000*24));
+      			}else {
+       				a = (fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+       			}
+
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
 					fc_event.end=fc_event.end.getTime()/1000;
@@ -714,7 +760,8 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 			}		
 
 			//**Add the google Events in the list of events in events_show div **/
-		var len = $(".events_show",el).find('.list').find('li').length;
+		var len = $(".events_show", el).find('.list').find('li').length;
+
 		var date = new Date();
 		$.each(officeEvents,function(index,ev){
 			var todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
@@ -736,8 +783,10 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 							$(this).parents('li').before(event_list);
 							return false;
 						}
-
+						if(index==len-1)
+		            	$(this).parents('.list').append(event_list) ;
 					});
+					
 				} else{
 					$(el).find('.list').append(event_list);
 				}
@@ -750,7 +799,7 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 			{
 				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 			}
-		},5000);				
+		},7000);				
 		}else{			
 			console.log("Error occurred while fetching office records.");
 		}
@@ -772,7 +821,14 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 			if(fc_event.allDay == true){
 				fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 				fc_event.end = new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+
+				var a;    			
+    			if(fc_event.start.getMonth()<fc_event.end.getMonth()){
+    				a = Math.round((fc_event.end-fc_event.start)/(60*60*1000*24));
+      			}else{
+       				a = (fc_event.end.getMonth()-fc_event.start.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+				}
+
 				if(a == 1)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
@@ -806,7 +862,13 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 			} 
 			else
 			{
-				var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+				var a;
+    			if(fc_event.startDate.getMonth()<fc_event.end.getMonth()){
+    				a = Math.round((fc_event.end-fc_event.startDate)/(60*60*1000*24));
+      			}else {
+       				a = (fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+       			}
+
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
 					fc_event.end=fc_event.end.getTime()/1000;

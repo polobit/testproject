@@ -187,7 +187,7 @@ public class ContactFilterIdsResultFetcher
 		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules, getDomainUser());
 
 	if (hasScope(UserAccessScopes.VIEW_CONTACTS)
-		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS)))
+		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.EDIT_CONTACT)))
 	{
 	    if (domainUserId == null)
 		return;
@@ -203,7 +203,7 @@ public class ContactFilterIdsResultFetcher
 
     private void modifyDAOCondition()
     {
-	if (!hasScope(UserAccessScopes.UPDATE_CONTACT) && !hasScope(UserAccessScopes.DELETE_CONTACTS))
+	if (!hasScope(UserAccessScopes.UPDATE_CONTACT) && (!hasScope(UserAccessScopes.DELETE_CONTACTS) || !hasScope(UserAccessScopes.EDIT_CONTACT)))
 	{
 	    if (domainUserId == null)
 		return;

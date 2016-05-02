@@ -38,6 +38,7 @@ public class DomainUserPartial extends ProjectionEntityParse{
 		name = (String) getPropertyValue(entity, "name");
 		email = (String) getPropertyValue(entity, "email");
 		pic = (String) getPropertyValue(entity, "pic");
+		schedule_id = (String) getPropertyValue(entity, "schedule_id");
 		
 		domain = (String) getPropertyValue(entity, "domain");
 		

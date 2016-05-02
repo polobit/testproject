@@ -32,7 +32,9 @@ public enum NavbarConstants
     
     ACTIVITY("Activities", "#activities", "icon-cogs", "activitiesmenu"),
 
-    REPORT("Reports", "#reports", "icon-bar-chart", "reportsmenu");
+    REPORT("Reports", "#reports", "icon-bar-chart", "reportsmenu"),
+	
+	HELPDESK("Help Desk", "#tickets", "icon-ticket", "tickets");
 
     public String heading = null;
     public String href = null;

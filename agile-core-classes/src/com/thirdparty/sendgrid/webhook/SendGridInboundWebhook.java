@@ -49,10 +49,7 @@ public class SendGridInboundWebhook extends HttpServlet
 				System.err.println("SendGrid mailjson is null");
 				return;
 			}
-			
-			
-			System.out.println("MailJSON is " + mailJSON.toString());
-			
+						
 			MandrillWebhookTriggerInbound mwt = new MandrillWebhookTriggerInbound();
 			
 			String agileEmail = getAgileEmail(mailJSON);

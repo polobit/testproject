@@ -837,9 +837,9 @@ tbody a.no-style-a {
 }
 /* Handle */
 #opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb, #opportunities-by-paging-model-list  ::-webkit-scrollbar-thumb {
-/* -webkit-border-radius: 10px;
+ -webkit-border-radius: 10px;
  border-radius: 10px;
- -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
+/* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
  background: #bebebe;
  
 }
@@ -973,7 +973,6 @@ li.deal-color.GREY:after { background: grey;}
 
 .milestone-main {
   white-space: nowrap;
-  overflow: auto;
   width: 100%;
   
   border:1px solid #dee5e7;
@@ -3139,6 +3138,9 @@ table.hide-head-checkbox th label.i-checks {
 
 .conversion_track::-webkit-scrollbar-thumb {
  background: #bebebe;
+ -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
 }
 .conversion_track::-webkit-scrollbar {
  width: 5px;
@@ -3228,8 +3230,22 @@ table.hide-head-checkbox th label.i-checks {
 	font-size: 18px;
 }
 .well{
-  background: none!important;
-   border:none!important;
+
+	background: none!important;
+	 border:none!important;	  
+}
+.inlineditor{
+	font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+}
+
+.error-inputfield
+{
+border:1px solid red !important;
+background: none!important;
+
     
 }
 
@@ -3318,6 +3334,7 @@ table.hide-head-checkbox th label.i-checks {
   color: black !important;
   opacity: 0.9;
 }
+
 #removeBtn:hover
 {
   color: black !important;
@@ -3542,6 +3559,7 @@ text-align:left;
 #send-cancellation #cancel_subscription_modal{
   width: 70%;
   margin: 0px auto;
+
 }
 #send-cancellation #account_cancel_options .wrapper{
   border: 1px solid #ccc;
@@ -3721,7 +3739,7 @@ opacity: .3;
 }
 }
 #referModal ul{
-	padding: 20px 30px 20px 30px;
+	padding: 20px 30px 0px 30px;
 }
 #referModal .referrals-body{
 	padding: 20px 30px 0px 30px;
@@ -3765,3 +3783,50 @@ opacity: .3;
 div.addField div.controls div:first-child{
   padding-bottom: 1px;
 }
+
+.xedit{
+	font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 4px 10px;
+    height:26px;
+
+}
+
+.error-inputfield
+{
+ border:1px solid red;
+}
+
+
+#segment-filter-list-model-list .segment-lilist .remove-segment-filter{
+
+    float: right;
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    line-height: .8;
+    font-weight: bold;
+    opacity: .7;
+}
+#segmentsModal #duplicate-name {
+  color: #f05050;
+}
+#lhs_filters_segmentation #error-message{
+  color: #f05050;
+}
+
+li .segment-lilist{
+	  display: block;
+	  padding: 5px 15px;
+}
+li .visitor-filter{
+   width: 80%;
+}
+
+li .segment-lilist:hover {
+	background-color:#EEE;
+	cursor: pointer;
+}
+
+
