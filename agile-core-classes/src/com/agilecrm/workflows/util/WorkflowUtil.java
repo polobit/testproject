@@ -50,11 +50,7 @@ public class WorkflowUtil
 	{
 		try
 		{
-			Workflow worflow =  dao.get(id);
-			if(worflow.access_level == 1L || worflow.access_level.equals(DomainUserUtil.getCurentUserId()))
-					return worflow;
-			
-			throw new Exception("This Workflow is not related to yours.");
+			return dao.get(id);
 		}
 		catch (Exception e)
 		{
@@ -71,11 +67,19 @@ public class WorkflowUtil
 	 *            Workflow id.
 	 * @return workflow object with that id if exists, otherwise null.
 	 */
-	public static Workflow getWorkflow(Long id, boolean force)
+	public static Workflow getWorkflow(Long id, boolean user_campaign_only)
 	{
 		try
 		{
-			return dao.get(id);
+			Workflow worflow = getWorkflow(id);
+			if(!user_campaign_only)
+				return worflow;
+			
+			if(worflow.access_level == 1L || worflow.access_level.equals(DomainUserUtil.getCurentUserId()))
+				return worflow;
+		
+			throw new Exception("This Workflow is not related to yours.");
+		
 		}
 		catch (Exception e)
 		{
@@ -119,7 +123,7 @@ public class WorkflowUtil
 		}
 		
 		if(!idPresent)
-			list.add(WorkflowUtil.getWorkflow(allowCampaign, true));
+			list.add(WorkflowUtil.getWorkflow(allowCampaign));
 		
 		return list;
 	}

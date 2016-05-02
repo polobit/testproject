@@ -96,9 +96,13 @@ public class WorkflowsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Workflow getWorkflow(@PathParam("workflow-id") String workflowId) {
-		Workflow workflow = WorkflowUtil
-				.getWorkflow(Long.parseLong(workflowId));
-		return workflow;
+		try {
+			return  WorkflowUtil
+					.getWorkflow(Long.parseLong(workflowId), true);
+		} catch (Exception e) {
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
 	}
 
 	/**

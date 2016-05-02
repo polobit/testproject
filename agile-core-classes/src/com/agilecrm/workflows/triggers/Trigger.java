@@ -217,7 +217,7 @@ public class Trigger
 			return " ";
 		
 		if(this.workflow == null)
-			this.workflow = WorkflowUtil.getWorkflow(campaign_id, true);
+			this.workflow = WorkflowUtil.getWorkflow(campaign_id);
 
 		if (this.workflow != null)
 			return this.workflow.name;
@@ -270,7 +270,7 @@ public class Trigger
 		if(campaignId != null && campaignId.equals(campaign_id))
 			return;
 		
-		Workflow workflow = WorkflowUtil.getWorkflow(campaignId, true);
+		Workflow workflow = WorkflowUtil.getWorkflow(campaignId);
 		if(workflow == null)
 			 return;
 		
