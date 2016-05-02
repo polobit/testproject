@@ -588,7 +588,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				throw new Exception("Domain is empty. Please login again & try.");
 			}
 
-		if(this.phone != null){
+		if(this.phone != null &&  !StringUtils.isEmpty(this.phone) ){
 			if(!DomainUserUtil.checkValidNumber(this.phone)){
 				throw new Exception("Phone number is not valid. Please enter a valid number and try again.");
 			}
