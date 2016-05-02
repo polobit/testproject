@@ -1344,7 +1344,7 @@ var portlet_utility = {
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
 				if(data.length==0){
-						$('.referralurl-stats-portlet-body').html('<div class="portlet-error-message">No Refferal URL Found</div>');
+						$('.referralurl-stats-portlet-body').html('<div class="portlet-error-message">No Referral URL Found</div>');
 								return;
 					}
 				var span;
@@ -1359,10 +1359,10 @@ var portlet_utility = {
 						width=75-width;
 					}
 
-					span = $("<div style='margin: 0px 20px -21px 15px; padding-bottom: 2px;'/>");
-					span.append("<a href='#' data-toggle='popover' class='text-ellipsis' title="+ data[e].ref_url +" style='font-size: 14px; position: absolute;width: 75%;'>" + data[e].ref_url.substring(0,data[e].ref_url.lastIndexOf('/')+1) + "</a>");
-		            span.append("<div  style='margin-left: 8.4cm;width: 15%;'>" + data[e].count + "</div>");
-		            span.append("<div class='bar' style='width: "+width+"%; margin: 1px;height: .6rem; background: #237fa0;'></div>");
+					span = $("<div style='margin: 0px 20px -21px 15px; padding-bottom: 1px;'/>");
+					span.append("<a data-toggle='popover' class='text-ellipsis' title="+ data[e].ref_url +" style='font-size: 14px; position: absolute;width: 75%;'>" + data[e].ref_url.substring(data[e].ref_url.indexOf('/')+2,data[e].ref_url.lastIndexOf('/')) + "</a>");
+		            span.append("<div  style='margin-left: 90%;width: 15%;'>" + data[e].count + "</div>");
+		            span.append("<div class='bar' style='width: "+width+"%; margin: 1px;height: .8rem; background: #03A9F4;'></div>");
 		            span.append("<br/>");
 		            $('.referralurl-stats-portlet-body').append(span);
 				});
@@ -1979,6 +1979,7 @@ var portlet_utility = {
 		}
 		case "Referralurl stats": {
 			that.addPortletSettingsModalContent(base_model,"portletsReferralurlStatsSettingsModal");
+			elData = $('#portletsReferralurlStatsSettingsModal');
 			$("#duration", elData).find(
 				               'option[value='
 									+ base_model.get("settings").duration + ']')
