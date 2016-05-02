@@ -30,7 +30,6 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>PortletsAPI</code> includes REST calls to interact with
@@ -64,7 +63,7 @@ public class PortletsAPI {
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Portlet> getPortlets(@QueryParam("route") PortletRoute route)throws Exception{
+	public List<Portlet> getPortlets(@QueryParam("route") String route)throws Exception{
 		// Returns list of portlets saved by current user
 		return PortletUtil.getAddedPortletsForCurrentUser(route);
 	}

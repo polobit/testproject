@@ -336,6 +336,7 @@ var portlet_utility = {
 			"Incoming Deals" : "portlets-incoming-deals",
 			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
 			"Average Deviation" : "portlets-Tasks-Deviation",
+			"Webstat Visits" : "portlets-webstat-visits",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -1320,6 +1321,16 @@ var portlet_utility = {
 			setPortletContentHeight(base_model);
 			break;
 		}
+		case "Webstat Visits": {
+			var url = '/core/api/web-stats/reports?start_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
+					+ '&end_time='
+					+portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000;
+			portlet_graph_data_utility.webstatVisitsGraphData(base_model,
+					selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
 		}
 	},
 
@@ -1915,6 +1926,17 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					break;
+		}
+		case "Webstat Visits": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsWebstatVisitsSettingsModal");
+			elData = $('#portletsWebstatVisitsSettingsModal');
+			$("#duration", elData).find(
+				               'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;
 		}
 		}
 		if (base_model.get('name') == "Pending Deals"

@@ -1,7 +1,9 @@
 package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -42,9 +44,9 @@ import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
-import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.TicketWorkflow;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.CreatedBy;
@@ -647,6 +649,25 @@ public class TicketsRest
 					.build());
 		}
 	}
+	
+	@GET
+	@Path("/contact/{id}")
+	public List<Tickets> getTicketsByContactID(@PathParam("id") Long id)
+	{
+		try
+		{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("contact_key", new Key<Contact>(Contact.class, id));
+			
+			return Tickets.ticketsDao.listByProperty(map);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 
 	@GET
 	@Path("/{email}/count")
@@ -868,8 +889,19 @@ public class TicketsRest
 				throw new Exception("Id is missing.");
 
 			JSONObject json = new TicketsBackup().getData(id);
+			
+			String envelope = json.getString("envelope");
 
-			new SendgridInboundParser().saveTicket(json);
+			System.out.println("Envelope:" + envelope);
+
+			JSONObject enveloperJSON = new JSONObject(envelope);
+			String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
+
+			SendgridInboundParser parser = new SendgridInboundParser();
+			
+			String[] toAddressArray = parser.getNamespaceAndGroup(toAddress);
+			
+			parser.saveTicket(json, toAddressArray);
 			
 			//Deleting record from backup table
 			TicketsBackup.delete(new Key<TicketsBackup>(TicketsBackup.class, id));

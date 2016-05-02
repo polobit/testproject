@@ -133,8 +133,10 @@
         <a id="Sales_previlages" class="text-center  m-r-none"href="#sales-previlages" data-toggle="tab"style="border-left:0px" aria-expanded="true">Sales</a></li>
         <li class=" p-none">
 
-        <a class="text-center m-r-none"href="#marketing-previlages" data-toggle="tab"id="marketing_previlages">Marketing</a></li>
-
+        <a class="text-center m-r-none"href="#marketing-previlages" data-toggle="tab" id="marketing_previlages">Marketing</a></li>
+        <li class="p-none">
+        <a id="service_previlages" class="text-center  m-r-none" href="#service-previlages" data-toggle="tab">Service</a></li>
+        
     </ul>
     </div>
     <div class="tab-pane multiple-checkbox-adminprefs" name="newMenuScopes">
@@ -177,9 +179,15 @@
                                     </div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
-                                <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                <input type="checkbox" name="temp" value="EDIT_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Update All Contacts  <br/>
-                                    <div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small>
+                                    <div style="margin-left:6px;"><small>  Update contacts owned by other users</small>
+                                    </div>
+                            </label>
+                            <label class="i-checks i-checks-sm checkbox">
+                                <input type="checkbox" name="temp" value="DELETE_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Delete All Contacts  <br/>
+                                    <div style="margin-left:6px;"><small>  Delete own contacts and other user contacts</small>
                                     </div>
                             </label>
                             <div>
@@ -245,9 +253,14 @@
                                             <div style="margin-left:6px;"><small> View contacts owned by other users </small></div>
                                         </label>
                                         <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp" value="DELETE_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            <input type="checkbox" name="temp" value="EDIT_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                             Update All Contacts  <br/>
-                                            <div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
+                                            <div style="margin-left:6px;"><small>  Update contacts owned by other users</small></div>
+                                       </label>
+                                       <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="DELETE_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            Delete All Contacts  <br/>
+                                            <div style="margin-left:6px;"><small>  Delete own contacts and other user contacts</small></div>
                                        </label>
                                      <div>
                                       <div class="pull-left" style="width:40%;">
@@ -307,9 +320,14 @@
                                     <div style="margin-left:6px;"><small> View contacts owned by other users </small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    <input type="checkbox" name="temp" value="EDIT_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Update All Contacts  <br/>
-                                        <div style="margin-left:6px;"><small>  Edit and delete contacts owned by other users</small></div>
+                                        <div style="margin-left:6px;"><small>  Update contacts owned by other users</small></div>
+                                </label>
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp" value="DELETE_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Delete All Contacts  <br/>
+                                        <div style="margin-left:6px;"><small>  Delete own contacts and other user contacts</small></div>
                                 </label>
                                 <div>
                                     <div class="pull-left" style="width:40%;">
@@ -407,7 +425,7 @@
             </div>
             <div class="tab-pane active" id="marketing-previlages">
                 <div class="control-group form-group" style="margin-top:-22px">
-                    <div class="controls"
+                    <div class="controls">
                         <div class=""   style="padding-top:35px">
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox">
@@ -468,9 +486,30 @@
                     </div>
                 </div>  
             </div>
-                
 
-
+            <div class="tab-pane" id="service-previlages">
+                <div class="control-group form-group" style="margin-top:-22px">
+                    <div class="controls">
+                        <div class=""   style="padding-top:35px">
+                            {{#if id}}
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="HELPDESK" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Help Desk<br/>
+                                        <div style="margin-left:6px;"><small> Answer customer queries</small></div>
+                                        <div style="margin-left:6px;visibility: hidden;"><small> Import from CSV file, sync from Google Apps and other integrations</small></div>
+                                </label>
+                        {{else}} 
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="HELPDESK" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Help Desk<br/>
+                                        <div style="margin-left:6px;"><small> Answer customer queries</small></div>
+                                        <div style="margin-left:6px;visibility: hidden;"><small> Import from CSV file, sync from Google Apps and other integrations</small></div>
+                                </label>
+                        {{/if}}
+                        </div>
+                    </div>
+                </div>  
+            </div>
 
                       
           </div>

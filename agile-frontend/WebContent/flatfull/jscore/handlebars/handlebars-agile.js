@@ -337,6 +337,14 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("uservoice.js");
 	}
+    if (templateName.indexOf("dashboard") == 0)
+	{
+		template_relative_urls.push("dashboards.js");
+	}
+	if (templateName.indexOf("refer") == 0)
+	{
+		template_relative_urls.push("referals.js");
+	}
 	if (templateName.indexOf("helpcenter") == 0)
 	{
 		template_relative_urls.push("helpcenter.js");
@@ -415,9 +423,12 @@ function getPropertyValue(items, name)
 
 	for (var i = 0, l = items.length; i < l; i++)
 	{
-		if (items[i].name == name)
+		if (items[i].name == name){
+			if(items[i].value!=null)
+			 items[i].value=items[i].value.trim();
 			return items[i].value;
-	}
+		}
+		}
 }
 
 

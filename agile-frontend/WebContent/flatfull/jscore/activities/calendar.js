@@ -383,9 +383,14 @@ function showCalendar(users)
 									}		
 							});
 						}
+							else
+							{
+								calendar_Popover(event,calendarView,that,popover_min_width,that_event,leftorright,pullupornot,popoverElement,reletedContacts,meeting_type);
+							}
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
+							if(popover_call)
 							popover_call.abort();
 							$(this).parent().find('.fc-overlayw').hide();
 							$(this).parent().find('.fc-overlayw').remove();

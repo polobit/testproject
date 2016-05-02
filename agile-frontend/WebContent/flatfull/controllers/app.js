@@ -41,6 +41,7 @@ $(function()
 	App_Datasync = new DataSyncRouter();
 	App_Ticket_Module = new TicketsUtilRouter();
 	App_LandingPageRouter = new LandingPageRouter();
+	App_Dashboards = new DashboardsRouter();
 	App_EmailBuilderRouter = new EmailBuilderRouter();
 	App_VisitorsSegmentation=new VisitorsSegmentationRouter();
     App_Helpcenter_Module = new HelpcenterRouter();

@@ -58,5 +58,7 @@ public class StarterPlanLimits extends PlanLimits
 
 		widgets = 5;
 		defaultWidget = false;
+		
+		checkTicketSLA = false;
 	}
 }

@@ -564,6 +564,12 @@
 
 						 	// Adds contact name to tags ul as li element
 							$('#added-tags-ul').append(template({name : new_tags}));
+							$.each(data.get("tagsWithTime"), function(e, d) {
+        						if (d.tag == new_tags) {
+							            $('#added-tags-ul').find("li[data='"+new_tags+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+							        }
+								    }
+								    );
 
 		       			}
 		       			

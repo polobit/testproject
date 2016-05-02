@@ -51,6 +51,7 @@ import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Refund;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 @Path("/api/admin_panel")
 public class AdminPanelAPI
@@ -231,7 +232,7 @@ public class AdminPanelAPI
 	int triggerscount = TriggerUtil.getCount();
 	int webstats = AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domainname);
 
-	String emailinfo = MandrillSubAccounts.getSubAccountInfo(domainname, null);
+	String emailinfo = SendGridSubUser.getSendgridStats(domainname, null);
 
 	try
 	{

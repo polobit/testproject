@@ -25,20 +25,24 @@
         <tr>
           <td>
             <div class="text-ellipsis">
-              <div class="text-ellipsis pull-left text-sm" style="color: #697073;max-width: 20em;">{{#if subject}}{{subject}}{{else}}-{{/if}}</div>
+              <div class="text-ellipsis pull-left text-sm {{#if_equals status 'NEW'}}font-weight-bold{{/if_equals}}" style="color: #697073;max-width: 20em;">
+                {{#if subject}}{{subject}}{{else}}-{{/if}}
+              </div>
               <div class="pull-left text-sm">&nbsp;#{{id}}</div>
             </div>
           </td>
         </tr>
         <tr>
           <td>
-            <a class="custom-link subject-row text-ellipsis text-xs" style="color: #697073;">
-              {{#if contact.properties}}
-                {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
-              {{else}}
-                {{requester_name}}
-              {{/if}}
-            </a>
+            <div class="text-ellipsis" style="color: #697073;max-width: 20em;">
+              <a class="custom-link subject-row text-ellipsis text-xs" style="color: #697073;">
+                {{#if contact.properties}}
+                  {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
+                {{else}}
+                  {{requester_name}}
+                {{/if}}
+              </a>
+            </div>
           </td>
         </tr>
         <tr>
@@ -113,7 +117,7 @@
               <span class="text-muted">Last Comment</span>
               <hr class="m-t-xs m-b-xs">
             </div>
-            <div class="col-md-12 pad-all-sm">
+            <dioverflowv class="col-md-12 pad-all-sm" style="overflow:hidden;">
               <span class="v-middle txt-small">
                 <strong>
                   {{#if_equals last_updated_by 'AGENT'}}

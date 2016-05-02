@@ -10,8 +10,8 @@ function getTransactions(callback, contact_id){
 	 * "widget_queue" to retrieve tickets
 	 */
 
-	if(Email){
-		queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/btree/get/" + BRAINTREE_Plugin_Id + "/" + Email, "json", 
+	if(keyID){
+		queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/btree/get/" + BRAINTREE_Plugin_Id + "/" + keyID, "json", 
 			function success(data){
 
 			console.log("Brain tree success data ");
@@ -29,7 +29,7 @@ function getTransactions(callback, contact_id){
 			$('#Braintree').html('<div class="wrapper-sm">Please configure widget properly</div>');
 		});
 	}else{
-		$('#Braintree').html('<div class="wrapper-sm">Please provide email for this contact.</div>');
+		$('#Braintree').html('<div class="wrapper-sm">Please provide ' + braintree_customField + ' for this contact.</div>');
 	}
 }
 
@@ -81,18 +81,23 @@ function startBraintreeWidget(contact_id){
 	console.log(braintree_widget);
 
 	BRAINTREE_Plugin_Id = braintree_widget.id;
+	var braintree_widget_prefs = JSON.parse(braintree_widget.prefs);
+	braintree_customField = braintree_widget_prefs['braintree_custom_field'];
 
-	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
-	console.log('Email: ' + Email);
+	if(!braintree_customField || braintree_customField == "email"){
+		// Stores email of the contact as global variable
+		keyID = agile_crm_get_contact_property('email');
+		console.log('Email: ' + keyID);
+	}else{
+		keyID = agile_crm_get_contact_property(braintree_customField);
+	}
 
 	getTransactions(function(){
 		loadTransaction(0);
 	}, contact_id);
 
 	$("#widgets").off("click", "#braintree_trans_show_more");
-	$("#widgets").on("click", "#braintree_trans_show_more", function(e)
-	{
+	$("#widgets").on("click", "#braintree_trans_show_more", function(e){
 		e.preventDefault();
 		var offSet = transactionCount * 5;
 		loadTransaction(offSet);

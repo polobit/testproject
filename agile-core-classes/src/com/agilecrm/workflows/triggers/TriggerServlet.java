@@ -37,6 +37,7 @@ public class TriggerServlet extends HttpServlet
 		System.out.println("Period : " + period);
 		try
 		{
+			long startTime = System.currentTimeMillis();
 			for (String namespace : NamespaceUtil.getAllNamespaces())
 			{
 				String oldNamespace = NamespaceManager.get();
@@ -55,6 +56,7 @@ public class TriggerServlet extends HttpServlet
 					System.out.println("task added to queue");
 				}
 			}
+			System.out.println("Time taken to execute periodic-triggers:"+(System.currentTimeMillis() - startTime)+ " milliseconds");
 		}
 		catch (Exception e)
 		{

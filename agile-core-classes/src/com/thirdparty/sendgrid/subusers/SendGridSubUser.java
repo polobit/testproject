@@ -424,6 +424,7 @@ public class SendGridSubUser extends SendGridLib
 		{
 				e.printStackTrace();
 				System.out.println("Exception occured while getting all stats of Sendgrid...." + e.getMessage());
+				return null;
 		}
 		return allStatsJSON;
 	}
@@ -466,6 +467,7 @@ public class SendGridSubUser extends SendGridLib
 			{
 				e.printStackTrace();
 				System.out.println("Exception occured while getting sendgrid reputation...." + e.getMessage());
+				return null;
 			}
 		return response;
 	}
@@ -501,6 +503,39 @@ public class SendGridSubUser extends SendGridLib
 	    }
 	}
 	
+	/**
+	 * It will delete subuser from Sendgrid account
+	 * @param subUser
+	 * @param domain
+	 * @return
+	 */
+	
+	public static String deleteSubAccountFromSendGrid(String domain)
+	{
+		String response = null, queryString = SendGridSubUser.getAgileSubUserName(domain), url = "https://api.sendgrid.com/v3/subusers/";
+		try
+		{
+			if (StringUtils.isBlank(domain))
+				return null;
+			
+			String username = Globals.SENDGRID_API_USER_NAME, password = Globals.SENDGRID_API_KEY;
+			
+			response = HTTPUtil.accessURLUsingAuthentication(url + queryString, username, password,
+					"DELETE", null, false, "application/json", "application/json");
+			System.out.println("Subuser account deleted successfully from SendGrid :"+domain);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception occured while deleting sendgrid subuser...." + e.getMessage());
+			return null;
+		}
+		return response;
+	}
+	
+	public static void main(String adf[]){
+		deleteSubAccountFromSendGrid("prashannjeet");
+	}
 	/**
 	 * Add SendGrid sub account creation task in Deferred queue
 	 * @param domainUser

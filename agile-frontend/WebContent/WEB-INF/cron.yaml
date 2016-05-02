@@ -33,6 +33,11 @@ cron:
   schedule: every friday 23:50
   target: agile-normal-bulk
 
+- description: Hourly triggers
+  url: /backend/cron/triggers?period=HOURLY
+  schedule: every 1 hours
+  target: agile-normal-bulk
+
 - description: daily triggers
   url: /backend/cron/triggers?period=DAILY
   schedule: every day 01:00
@@ -133,7 +138,7 @@ cron:
 
 - description: Ticket SLA cron
   url: /ticket-module/backend/slacron
-  schedule: every day 00:00
+  schedule: every 30 mins
   target: agile-ticket-module
   
 - description: Ticket module wake up call 

@@ -1,5 +1,6 @@
 package com.agilecrm.util.email;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
@@ -277,6 +278,7 @@ public class SendMail
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    System.err.println("Exception occured in SendMail..." + e.getMessage());
 	}
     }

@@ -509,7 +509,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 			$('form#addTriggerForm').find('select#trigger-deal-milestone').closest('div.control-group').css('display', 'none');
 		}
 		
-		if(type !== 'RUNS_DAILY' || type !== 'RUNS_WEEKLY' || type !== 'RUNS_MONTHLY'){
+		if(type !== 'RUNS_HOURLY' || type !== 'RUNS_DAILY' || type !== 'RUNS_WEEKLY' || type !== 'RUNS_MONTHLY'){
 			$('form#addTriggerForm').find('select#contact-filter').closest('div.control-group').css('display', 'none');
 		}
 
@@ -572,7 +572,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 		}
 		
 		// Initialize tags typeahead
-		if (type == 'RUNS_DAILY' || type == 'RUNS_WEEKLY' || type == 'RUNS_MONTHLY')
+		if (type == 'RUNS_HOURLY' || type == 'RUNS_DAILY' || type == 'RUNS_WEEKLY' || type == 'RUNS_MONTHLY')
 		{	
 			populate_contact_filters_in_trigger($('form#addTriggerForm'), 'contact-filter');
 		}

@@ -1,8 +1,13 @@
-gapi_helper = {
+
+
+
+function gapi_helper_prototype()
+{
+  var gapi_helper = {
     start: new Date(),
     listeners: {},
     status: {}
-};
+    };
 
 // for logging elapsed times to console
 gapi_helper.time = function() {
@@ -13,7 +18,7 @@ gapi_helper.time = function() {
 // { clientId: "<id>", apiKey: "<key>", scopes: "https://www.googleapis.com/auth/calendar", 
 //   services: { calendar: 'v3' } }
 gapi_helper.configure = function(config) {
-	console.log(config);
+    console.log(config);
     console.log("gapi configured %s", gapi_helper.time());
     // TODO: confirm valid config
     gapi_helper.config = config;
@@ -27,7 +32,7 @@ gapi_helper.onScriptLoad = function() {
 };
 // this synonym is needed by the '?onload=' construction, which seems to choke on object notatation
 // use «script src="https://apis.google.com/js/client.js?onload=gapi_helper_onScriptLoad»
-gapi_helper_onScriptLoad = gapi_helper.onScriptLoad;
+//gapi_helper_onScriptLoad = gapi_helper.onScriptLoad;
 
 gapi_helper.init = function() {
     console.log("gapi_helper.init %s", gapi_helper.time());
@@ -50,8 +55,8 @@ gapi_helper.checkAuth = function() {
 };
 
 gapi_helper.handleAuthResult = function(authResult) {
-	console.log(authResult);
-	
+    console.log(authResult);
+    
     console.log("gapi_helper.handleAuthResult %s", gapi_helper.time());
     if (authResult && !authResult.error) {
         gapi_helper.fireEvent('authorized');
@@ -109,16 +114,23 @@ gapi_helper.fireEvent = function(eventName) {
     // trigger listeners
     var listeners = gapi_helper.listeners[eventName] || [];
     for (var i = 0; i < listeners.length; i++) {
-    	console.log(listeners[i]);
+        console.log(listeners[i]);
         listeners[i]();
     }
 };
 
-gapi_helper.watcher = setInterval(function() {
+var _that = this;
+
+
+gapi_helper_prototype.prototype.when = gapi_helper.when;
+gapi_helper_prototype.prototype.configure = gapi_helper.configure;
+this.watcher = setInterval(function() {
+
     var loaded = typeof gapi !== "undefined" && gapi.client;
     console.log("%s %s", loaded ? "gapi loaded" : "waiting", gapi_helper.time());
     if (loaded) {
-        clearTimeout(gapi_helper.watcher);
+        clearInterval(_that.watcher);
         gapi_helper.onScriptLoad();
     }
 }, 500);
+}

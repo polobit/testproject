@@ -37,6 +37,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
@@ -92,6 +93,7 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.templates.WorkflowTemplate;
 import com.agilecrm.workflows.triggers.Trigger;
+import com.analytics.VisitorFilter;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log;
 import com.campaignio.twitter.TwitterJobQueue;
@@ -256,6 +258,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(LandingPage.class);
 	ObjectifyService.register(LandingPageCNames.class);
 	ObjectifyService.register(Goals.class);
+	ObjectifyService.register(Dashboard.class);
 
 	ObjectifyService.register(Webhook.class);
 	
@@ -268,6 +271,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//For deals update in textsearch
 	ObjectifyService.register(OpportunitySchemaUpdateStats.class);
+	ObjectifyService.register(VisitorFilter.class);
 	
 	//Knowledgebase entities
 	ObjectifyService.register(Categorie.class);
@@ -275,6 +279,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Article.class);
 	ObjectifyService.register(Comment.class);
 	ObjectifyService.register(HelpcenterUser.class);
+
     }
 
     /**

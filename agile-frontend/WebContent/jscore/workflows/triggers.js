@@ -18,7 +18,7 @@ $(function()
 			$('form#addTriggerForm').find('select#trigger-deal-milestone').closest('div.control-group').css('display', 'none');
 		}
 		
-		if($(this).val() !== 'RUNS_DAILY' || $(this).val() !== 'RUNS_WEEKLY' || $(this).val() !== 'RUNS_MONTHLY'){
+		if($(this).val() !== 'RUNS_HOURLY' || $(this).val() !== 'RUNS_DAILY' || $(this).val() !== 'RUNS_WEEKLY' || $(this).val() !== 'RUNS_MONTHLY'){
 			$('form#addTriggerForm').find('select#contact-filter').closest('div.control-group').css('display', 'none');
 		}
 
@@ -81,7 +81,7 @@ $(function()
 		}
 		
 		// Initialize tags typeahead
-		if ($(this).val() == 'RUNS_DAILY' || $(this).val() == 'RUNS_WEEKLY' || $(this).val() == 'RUNS_MONTHLY')
+		if ($(this).val() == 'RUNS_HOURLY' || $(this).val() == 'RUNS_DAILY' || $(this).val() == 'RUNS_WEEKLY' || $(this).val() == 'RUNS_MONTHLY')
 		{	
 			populate_contact_filters_in_trigger($('form#addTriggerForm'), 'contact-filter');
 		}

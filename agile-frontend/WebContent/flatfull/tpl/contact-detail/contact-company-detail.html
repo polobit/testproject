@@ -25,10 +25,10 @@
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
-<div class="pos-abs pos-r-0 pos-t-0">
+<div class="pos-abs pos-r-0 m-t-sm isotope-item">
 <div>
  
-								<a class="dropdown-toggle" data-toggle="dropdown"><span style="opacity:0.8;margin-top:91px;"class="caret text-lg"></span></a>
+								<button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
 								<ul class="dropdown-menu pull-right">
 <li> <a href="#company-edit"><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
@@ -51,13 +51,15 @@
 					
 							<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-right:5px; text-transform: capitalize;">
 
-								<div id="company-Input"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
-								<div class="text-ellipsis"id="company-name-text">{{getPropertyValue properties "name"}}</div></div>
+								<div id="company-Input" style="height:30px;"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
+								<div class="text-ellipsis"id="company-name-text" style="height:28px;">{{getPropertyValue properties "name"}}</div></div>
 								<div class="clearfix"></div>
 								{{#if_propertyName "url"}}</br>
 
-									<a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
+								
 
+
+									<a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
 								{{/if_propertyName}}
 								
 								<div class=" text-center m-b-xs text-muted  text-ellipsis" style="font-size:13px;">
@@ -193,14 +195,14 @@
 							{{#if tagsWithTime.length}} 
 							 {{#canEditContact owner.id}}
 								{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
-											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
+											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}" >{{this.tag}}</a></span></li> 
 									{{/each}}
 							 {{/canEditContact}}
 							{{/if}}
@@ -431,11 +433,11 @@
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
-<div class="pos-abs pos-r-0 pos-t-0">
+<div class="pos-abs pos-r-0 m-t-sm isotope-item">
 <div>
- 
-								<button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span style="margin-top:91px;"class="caret text-lg"></span></button>
-								<ul class="dropdown-menu pull-right" role="menu">
+								<button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
+
+								<ul class="dropdown-menu pull-right"  role="menu">
 <li> <a href="#company-edit"><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-case"><i
@@ -588,13 +590,13 @@
 							{{#if tagsWithTime.length}} 
 							 {{#canEditContact owner.id}}
 								{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
 									{{/each}}
 							 {{/canEditContact}}
