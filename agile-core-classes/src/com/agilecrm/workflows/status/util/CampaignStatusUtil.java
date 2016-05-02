@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
@@ -14,6 +15,7 @@ import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -23,6 +25,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.modules.ModulesService;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -209,6 +212,31 @@ public class CampaignStatusUtil
 
 	public static boolean isActive(Contact contact, CampaignStatus currentcampaignStatus)
 	{
+		// Check if Background Thread
+		if("agile-normal-bulk".equalsIgnoreCase(VersioningUtil.getCurrentModuleName()))
+		{
+			try
+			{
+				int campaignStatusIndex = contact.campaignStatus.indexOf(currentcampaignStatus);
+				
+				System.out.println("Campaign Status index is " + campaignStatusIndex);
+				if(campaignStatusIndex != -1){
+					CampaignStatus status = contact.campaignStatus.get(campaignStatusIndex);
+					
+					if(System.currentTimeMillis()/1000 - status.start_time < 5 * 60)
+					{
+						System.err.println("Contact is active 5 mins ago. Skipping contact " + contact.id + " from campaign");
+						return true;
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				System.err.println("Exception occurred in isActive method " + e.getMessage());
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		}
+		
 		return contact.campaignStatus.contains(currentcampaignStatus);
 	}
 

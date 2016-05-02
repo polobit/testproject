@@ -244,7 +244,10 @@ public class BulkOperationsAPI
 	{
 	    // To avoid running same bulk action twice
 	    if (!StringUtils.isEmpty(tracker) && BulkActionLog.checkAndSaveNewEntity(tracker))
-		return;
+		{
+	    	System.err.println("Avoiding running same campaign twice..." + tracker);
+	    	return;
+		}
 	}
 	catch (Exception e)
 	{

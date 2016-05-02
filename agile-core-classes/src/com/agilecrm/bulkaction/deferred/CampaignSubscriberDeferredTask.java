@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -56,9 +57,17 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 
     protected void performAction()
     {
-	List<Contact> contacts = fetchContacts();
-
-	WorkflowSubscribeUtil.subscribeDeferred(contacts, campaignId);
+		try
+		{
+			List<Contact> contacts = fetchContacts();
+		
+			WorkflowSubscribeUtil.subscribeDeferred(contacts, campaignId);
+		}
+		catch(Exception ex)
+		{
+			System.err.println("Exception occured while assiging campaigns..." + ex.getMessage());
+			System.err.println(ExceptionUtils.getFullStackTrace(ex));
+		}
     }
 
     @Deprecated
