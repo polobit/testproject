@@ -199,6 +199,7 @@ public class ReportsUtil {
 		String endDate = sdf.format(dt);
 
 		Calendar cal = Calendar.getInstance();
+		cal.setTimeZone(TimeZone.getTimeZone(report.report_timezone));
 		cal.setTime(new DateUtil().toMidnight().getTime());
 		
 		String startDate="";
@@ -232,7 +233,7 @@ public class ReportsUtil {
 						.getCountByLogTypesforPortlets(report.campaignId,
 								startDate, endDate, timeZone);
 			} else if (report.duration == Reports.Duration.WEEKLY) {
-				cal.set(Calendar.DAY_OF_WEEK, -1);
+				cal.set(Calendar.DAY_OF_WEEK, -2);
 				cal.add(Calendar.DAY_OF_MONTH, -7);
 				startDate = sdf.format(cal.getTime());
 				cal.add(Calendar.DATE, 6);
@@ -257,14 +258,15 @@ public class ReportsUtil {
 						.getCountByLogTypesforPortlets(report.campaignId,
 								startDate, endDate, timeZone);
 			}
-
-			Date date;
+			/*Date date;
 			try
 			{
+
+				System.out.println("ddddddddddddd" +startDate+"  "+endDate);
 					date = sdf.parse(startDate);
-					startDate = DateUtil.getCalendarString(date.getTime(),"dd/MM/yyyy", timeZone);
+					startDate = DateUtil.getCalendarString(date.getTime(),"dd/MM/yyyy", report.report_timezone);
 					date = sdf.parse(endDate);
-					endDate = DateUtil.getCalendarString(date.getTime(),"dd/MM/yyyy", timeZone);
+					endDate = DateUtil.getCalendarString(date.getTime(),"dd/MM/yyyy", report.report_timezone);
 			} catch (ParseException e) {
 				System.out.println("Campaign report date format is invalid..");
 				e.printStackTrace();
@@ -272,7 +274,8 @@ public class ReportsUtil {
 			if(report.duration==Reports.Duration.DAILY)
 				duration=startDate;
 			else				
-			    duration=startDate+" To "+endDate;
+			    duration=startDate+" To "+endDate;*/
+			
 		}
 		try {
 			if (campaignEmailsJSONArray != null
@@ -364,6 +367,8 @@ public class ReportsUtil {
 			statsJSON.put("report_name", report.name);
 			statsJSON.put("domain", NamespaceManager.get());
 			statsJSON.put("email_status", getTotalEmailCredit());
+			
+			System.out.println("dddddddddddddddd "+statsJSON.toString());
 
 			return statsJSON;
 		} catch (Exception e) {
@@ -1169,11 +1174,11 @@ public class ReportsUtil {
 								.getJSONObject(i).getString("count"));
 						continue;
 					}
-					if (campaignEmailsJSONArray.getJSONObject(i)
+					/*if (campaignEmailsJSONArray.getJSONObject(i)
 							.getString("log_type").equals("durationBetween")) {
 						duration = campaignEmailsJSONArray.getJSONObject(i).getString("duration");
 						continue;
-					}
+					}*/
 				} // End of for loop
 			} // End of if statement
 
@@ -1185,7 +1190,7 @@ public class ReportsUtil {
 			statsJSON.put("emailSkipped", emailsSkipped);
 			statsJSON.put("hardBounce", hardBounce);
 			statsJSON.put("softBounce", softBounce);
-			statsJSON.put("durationBetween",duration);
+			//statsJSON.put("durationBetween",duration);
 
 			if (report.campaignId.equals("All"))
 				statsJSON.put("campaign_name", "All Campaigns");
@@ -1255,7 +1260,7 @@ public class ReportsUtil {
 					.getCountByLogTypesforPortlets(report.campaignId,
 							startDate, endDate, timeZone);
 		} else if (report.duration == Reports.Duration.WEEKLY) {
-			startCal.set(Calendar.DAY_OF_WEEK,-1);
+			startCal.set(Calendar.DAY_OF_WEEK,-2);
 			startCal.add(Calendar.DAY_OF_MONTH, -7);
 			String startDate = sdf.format(startCal.getTime());
 			endDate = sdf.format(cal.getTime());
@@ -1273,7 +1278,7 @@ public class ReportsUtil {
 							startDate, endDate, timeZone);
 		}
 		
-		//for showing duration in template
+		/*//for showing duration in template
 		String sdate=DateUtil.getCalendarString(startCal.getTimeInMillis(),"dd/MM/yyyy", timeZone);
 		String edate=DateUtil.getCalendarString(cal.getTimeInMillis(),"dd/MM/yyyy", timeZone);
 		JSONObject data=new JSONObject();
@@ -1288,7 +1293,7 @@ public class ReportsUtil {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		System.out.println("Campaign stats are : " + campaignEmailsJSONArray);
 		return campaignEmailsJSONArray;
 
