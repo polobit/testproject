@@ -43,7 +43,7 @@
                "dynamicName": "email",
                "dynamicValue": "id",
                "options": {
-            	   "Ticket Group": "{{ticket.groupID}}"
+            	   "Ticket Assignee Group": "{{ticket.groupID}}"
 			    },
                "appendToDynamicName": "group_name", 
                "fieldType": "dynamicselect",
