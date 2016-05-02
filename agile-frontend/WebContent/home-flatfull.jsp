@@ -794,10 +794,15 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
-head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
-        load_globalize();
-        showVideoForRegisteredUser();
-});
+head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _AGILE_VERSION,
+			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
+			"https://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js",
+			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _AGILE_VERSION, 
+			function(){
+		        load_globalize();
+		        showVideoForRegisteredUser();
+		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
