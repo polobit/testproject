@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -57,6 +58,7 @@ public class WorkflowUtil
 		}
 		catch (Exception e)
 		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 			return null;
 		}
