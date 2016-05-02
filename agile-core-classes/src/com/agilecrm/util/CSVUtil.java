@@ -511,7 +511,6 @@ public class CSVUtil
 		    	String companyName = csvValues[j].trim();
 			tempContact.properties.add(new ContactField(Contact.COMPANY, companyName,
 				null));
-			tempContact.properties.add(new ContactField("name_lower", companyName.toLowerCase(), null));
 		    }
 
 		    tempContact.properties.add(field);
