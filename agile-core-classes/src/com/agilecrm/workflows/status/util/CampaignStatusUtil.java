@@ -217,15 +217,20 @@ public class CampaignStatusUtil
 		{
 			try
 			{
-				int campaignStatusIndex = contact.campaignStatus.indexOf(currentcampaignStatus);
+				CampaignStatus tempCampaignStatus = currentcampaignStatus;
+				tempCampaignStatus.status = currentcampaignStatus.campaign_id + "-" + Status.DONE.toString();
+				
+				int campaignStatusIndex = contact.campaignStatus.indexOf(tempCampaignStatus);
 				
 				System.out.println("Campaign Status index is " + campaignStatusIndex);
+				
+				// Skip campaign again if executed within time
 				if(campaignStatusIndex != -1){
 					CampaignStatus status = contact.campaignStatus.get(campaignStatusIndex);
 					
-					if(System.currentTimeMillis()/1000 - status.start_time < 5 * 60)
+					if(System.currentTimeMillis()/1000 - status.start_time < 10 * 60)
 					{
-						System.err.println("Contact is active 5 mins ago. Skipping contact " + contact.id + " from campaign");
+						System.err.println("Contact is active 10 mins ago. Skipping contact " + contact.id + " from campaign.");
 						return true;
 					}
 				}
