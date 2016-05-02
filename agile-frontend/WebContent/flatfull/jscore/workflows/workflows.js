@@ -100,7 +100,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
      * so ids are separated by comma in click event.
      * 
      **/
-    saveCampaignClick: function(e, trigger_data){
+    saveCampaignClick: function(e, trigger_data, callback){
         e.preventDefault();
         var targetEl = $(e.currentTarget);
 
@@ -208,6 +208,9 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 enable_save_button($clicked_button);
                 
                 show_campaign_save(e);
+
+                if(callback)
+                    callback();
                 
                 try{
                 // Adds tag in our domain
@@ -315,10 +318,15 @@ var Workflow_Model_Events = Base_Model_View.extend({
         }
 
         $("#access_level", this.el).val(level);
+        var that = this;
 
         // Resave if it is not a new campaign
         if(App_Workflows.workflow_model && App_Workflows.workflow_model.get("id")){
-            this.saveCampaignClick(e);
+            this.saveCampaignClick(e, undefined, function(){
+                // Change ui text
+                change_access_level(level, that.el);
+            });
+            return;
         }
 
         // Change ui text
