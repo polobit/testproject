@@ -734,8 +734,8 @@ function initializeWorkflowsListeners() {}
 
 function change_access_level(level, el){
     if(level == "1")
-        $("#campaign_access_level span", el).text('Make it Private');
+        $("#campaign_access_level span", el).text('Private View');
     else 
-        $("#campaign_access_level span", el).text('Make it Public');
+        $("#campaign_access_level span", el).text('Public View');
 }
 
