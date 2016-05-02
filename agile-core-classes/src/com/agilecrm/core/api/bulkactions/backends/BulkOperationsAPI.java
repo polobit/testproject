@@ -293,12 +293,14 @@ public class BulkOperationsAPI
 		    "campaigns@agile.com",
 		    "Campaign Observer",
 		    "naresh@agilecrm.com",
-		    "bhasuri@invox.com",
+		    "prashannjeet@agilecrm.com",
 		    null,
 		    "Campaign Initiated in " + NamespaceManager.get(),
 		    null,
 		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
 			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
+			    + "<br><br>Dynamic Filter: " + dynamicFilter
+			    + "<br><br>User email: " + user.email
 			    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
 		    null);
 	}
