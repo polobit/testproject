@@ -276,7 +276,7 @@ public class Trigger
 		
 		if(workflow.access_level != null){
 			if(workflow.access_level != 1L && !workflow.access_level.equals(DomainUserUtil.getCurentUserId()))
-				 throw new Exception("Sorry, This trigger is assigned to campaign which is private access.");
+				 throw new Exception("Sorry, this trigger is already being used by another user for a private campaign.");
 		} 
 		
 	}
