@@ -243,9 +243,9 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 // Show success message of access level property
                 if($(targetEl).attr('id') === 'campaign_access_level'){
                     if(access_permission == "1")
-                        show_campaign_save(e,"Campaign has been saved as Public successfully.");
+                        show_campaign_save(e,"The Campaign is now Public.");
                     else 
-                        show_campaign_save(e,"Campaign has been saved as Private successfully.");
+                        show_campaign_save(e,"The Campaign is now Private.");
                 }
 
                 // Boolean data used on clicking on Done
