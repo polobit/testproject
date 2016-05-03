@@ -679,53 +679,26 @@ function initializeSendEmailListeners(){
 						// Is valid
 						if (!isValidForm($('#emailForm')))
 							return;
+						var that =$(this);
 
-						showModalConfirmation("Send Email", 
-							"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
-							function (){
-								// Disables send button and change text to Sending...
-								disable_send_button($(this));
-
-								// Navigates to previous page on sending email
-								$
-										.ajax({
-											type : 'POST',
-											data : JSON.stringify(json),
-											dataType: 'json',
-											contentType: "application/json",
-											url : 'core/api/emails/contact/send-email',
-											success : function()
-											{
-
-												// Enables Send Email button.
-												enable_send_button($('#sendEmail'));
-
-												window.history.back();
-
-											},
-											error : function(response)
-											{
-												enable_send_button($('#sendEmail'));
-
-												// Show cause of error in saving
-												$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
-
-												// Appends error info to form actions
-												// block.
-												$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
-
-												// Hides the error message after 3
-												// seconds
-												if (response.status != 406)
-													$save_info.show().delay(10000).hide(1);
-											} });
-							},
-							function(){
-								return;
-							},
-							function(){
-				
-							});
+						if(hasScope("EDIT_CONTACT"))
+						{
+							sendEmail(that);
+						}
+						else
+						{
+							showModalConfirmation("Send Email", 
+								"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
+								function (){
+									sendEmail(that);
+								},
+								function(){
+									return;
+								},
+								function(){
+					
+								});
+						}
 
 					});
 
@@ -774,4 +747,47 @@ $('#send-email-listener-container').on('click', '#cc-link, #bcc-link', function(
 		return;
 	});
 
+}
+
+/*
+ * Ajax call to send email
+ */
+function emailSend(ele)
+{
+	// Disables send button and change text to Sending...
+	disable_send_button(ele);
+
+	// Navigates to previous page on sending email
+	$.ajax({
+		type : 'POST',
+		data : JSON.stringify(json),
+		dataType: 'json',
+		contentType: "application/json",
+		url : 'core/api/emails/contact/send-email',
+		success : function()
+		{
+
+			// Enables Send Email button.
+			enable_send_button($('#sendEmail'));
+
+			window.history.back();
+
+		},
+		error : function(response)
+		{
+			enable_send_button($('#sendEmail'));
+
+			// Show cause of error in saving
+			$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+
+			// Appends error info to form actions
+			// block.
+			$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
+
+			// Hides the error message after 3
+			// seconds
+			if (response.status != 406)
+				$save_info.show().delay(10000).hide(1);
+		} 
+	});
 }
