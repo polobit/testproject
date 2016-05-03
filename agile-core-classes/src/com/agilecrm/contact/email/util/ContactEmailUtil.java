@@ -183,11 +183,14 @@ public class ContactEmailUtil
 			// When multiple emails separated by comma are given
 			for (String toEmail : toEmailSet)
 			{
+
 				// Returns email-id e.g., Naresh <naresh@agilecrm.com >
 				String email = EmailUtil.getEmail(toEmail);
 
 				// Get contact based on email.
 				contact = ContactUtil.searchContactByEmail(email);
+				
+				System.out.println("To Email is " + toEmail + " Email - *" + email + "* Contact is " + contact);
 
 				// Saves email with contact-id
 				if (contact != null)
@@ -871,6 +874,5 @@ public class ContactEmailUtil
 		emailFetchUrls.add(agileEmailsUrl);
 		return emailFetchUrls;
 	    }
-
 
 }

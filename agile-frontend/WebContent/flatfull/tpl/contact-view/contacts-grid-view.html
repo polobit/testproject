@@ -136,7 +136,7 @@
     	<div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
 	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);">Contacts<span id="contacts-count" class="m-l-xs">{{contacts_count}}</span>
-	    			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+	    			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters" onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
             			<i id="icon-filter" class="fa fa-bars icon-white"></i>
           			</a>
 	    		</div><br>
@@ -158,6 +158,15 @@
     </div>
     </div>
     </div>
+    <div class="route_Portlet b-b" style="display:none">
+	<div class="row">
+		<div class="col-md-12">
+			<div>
+				<div id="portlets">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	</div>
     <div class="contacts-div">
     <div id="bulk-action-btns" class="panel-heading no-shadow grid-checkboxes b-r {{#is_mobile}} {{else}} m-r-sm {{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);background-color: rgba(246,248,248,1);">
     					{{#if this.length}}

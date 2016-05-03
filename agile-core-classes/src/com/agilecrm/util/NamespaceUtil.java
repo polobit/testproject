@@ -17,6 +17,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entities;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 
 /**
@@ -42,7 +43,40 @@ public class NamespaceUtil
 		Set<String> namespaces = new HashSet<String>();
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-		FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+		FetchOptions options = FetchOptions.Builder.withChunkSize(150);
+
+		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
+
+		for (Entity e : ds.prepare(q).asIterable(options))
+		{
+			// A nonzero numeric id denotes the default namespace;
+			// see Namespace Queries, below
+			if (e.getKey().getId() != 0)
+			{
+				continue;
+			}
+			else
+			{
+				namespaces.add(e.getKey().getName());
+			}
+		}
+
+		System.out.println("Total domains : " + namespaces.size());
+		return namespaces;
+	}
+	
+	
+	/**
+	 * Gets all namespaces by iterating domain users
+	 * 
+	 * @return set of domains as namespaces
+	 */
+	public static Set<String> getAllNamespacesNew(int limit, int offset)
+	{
+		Set<String> namespaces = new HashSet<String>();
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+
+		FetchOptions options = FetchOptions.Builder.withChunkSize(500).limit(limit).offset(offset);
 
 		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
 

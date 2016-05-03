@@ -21,6 +21,7 @@ var deal_details_tab = {
 	            cursor : true,
 	            descending: true,
 	            postRenderCallback: function(el) {
+	            	contactListener();
 	            	
 	            }
 	        });

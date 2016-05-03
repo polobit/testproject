@@ -42,10 +42,16 @@ var DealDetailsRouter = Backbone.Router.extend({
 			}
 
 		} });
-
-		var ele = this.dealDetailView.render(true).el;
-		$("#deal-detail-page").html(getRandomLoadingImg());
-		$('#deal-detail-page').html(ele);
+		var that = this;
+		this.dealDetailView.model.fetch({success : function(data){
+			var ele = that.dealDetailView.render(true).el;
+			$("#deal-detail-page").html(getRandomLoadingImg());
+			$('#deal-detail-page').html(ele);
+		},error : function(data, response){
+			hideTransitionBar();
+			if(response && response.status == '403')
+				$('#deal-detail-page').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; '+response.responseText+'</strong></h2>');
+		} })
 
 	},
 
@@ -94,13 +100,35 @@ var DealDetailsRouter = Backbone.Router.extend({
 });
 
 
+
+function dealNameEdit(el)
+{
+	var json = App_Deal_Details.dealDetailView.model.toJSON();
+	json.name = el ;
+	var dealModel = new BaseModel();
+	dealModel.url = '/core/api/opportunity';
+	dealModel.save(json,{ success : function(model)
+	{
+	$("#deals-inline").text(el);
+	$("#inline-input").addClass("hidden");
+	$("#deals-inline").removeClass("hidden");
+	$("#inline-input").removeClass("error-inputfield");
+	App_Deal_Details.dealDetailView.model = dealModel;
+	}
+
+
+	});
+
+
+}
+
 /**
  * Shows all the domain users names as ul drop down list to change the owner of
  * a contact
  */
 function fill_deal_owners(el, data, callback)
 {
-	var optionsTemplate = "<li><a class='deal-owner-list' data='{{id}}'>{{name}}</a></li>";
+	var optionsTemplate = "<li><a href='javascript:void(0);' class='deal-owner-list' data='{{id}}'>{{name}}</a></li>";
 	fillSelect('deal-detail-owner', '/core/api/users', 'domainUsers', callback, optionsTemplate, true);
 }
 
@@ -262,6 +290,35 @@ function fill_relation_deal_task(el)
 	var deal_name = json.name;
 
 	var template = Handlebars.compile('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="{{id}}">{{name}}</li>');
+
+	var relatedContactsJOSN = json.contacts;
+	$.each(relatedContactsJOSN, function(index, relContact){
+		var rel_contact_exist = true;
+		// If tag already exists returns
+		$.each($('ul.tags', el).children('li'), function(index, tag)
+		{
+			if ($(tag).attr('data') == relContact.id)
+			{
+				rel_contact_exist = false;
+				return;
+			}
+		});
+
+		if(rel_contact_exist)
+		{
+			var tplJSON = {};
+			tplJSON.email_item = relContact.id;
+			if(relContact.type == 'PERSON'){
+				tplJSON.type_item = '#contact/';
+			}
+			else if(relContact.type == 'COMPANY'){
+				tplJSON.type_item = '#company/';
+			}
+			tplJSON.tag_item = relContact.id;
+			tplJSON.item = getContactName(relContact);
+			$('ul.tags', el).append(getTemplate("tag-item-li", tplJSON));
+		}
+	});
 
  	// Adds contact name to tags ul as li element
  	$('.deal_tags',el).html(template({name : deal_name, id : json.id}));

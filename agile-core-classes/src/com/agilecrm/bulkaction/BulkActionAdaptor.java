@@ -88,7 +88,7 @@ public abstract class BulkActionAdaptor implements DeferredTask
 
 	    UserAccessControl access = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null, user);
 
-	    if (contacts != null && !access.hasScope(UserAccessScopes.DELETE_CONTACTS))
+	    if (contacts != null && (!access.hasScope(UserAccessScopes.DELETE_CONTACTS) || !access.hasScope(UserAccessScopes.EDIT_CONTACT)))
 	    {
 		Iterator<Contact> contactIterator = contacts.iterator();
 		while (contactIterator.hasNext())

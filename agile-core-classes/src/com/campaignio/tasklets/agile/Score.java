@@ -28,6 +28,11 @@ public class Score extends TaskletAdapter
     /**
      * Add score
      */
+    public static String SET = "set";
+
+    /**
+     * Add score
+     */
     public static String ADD = "add";
 
     /**
@@ -70,12 +75,20 @@ public class Score extends TaskletAdapter
 		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score increased by " + value,
 			    LogType.SCORE.toString());
 		}
-		else
+		else if(type.equals(SUBTRACT))
 		{
 		    contact.subtractScore(Integer.parseInt(value));
 
 		    // Creates log when score is subtracted
 		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score decreased by " + value,
+			    LogType.SCORE.toString());
+		}
+		else
+		{	//Set score based on contacct
+		    contact.setScore(Integer.parseInt(value));
+
+		    // Creates log when score is set
+		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score set to " + value,
 			    LogType.SCORE.toString());
 
 		}

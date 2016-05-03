@@ -251,6 +251,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("xero.js");
 	}
+	else if (templateName.indexOf("braintree") == 0)
+	{
+		template_relative_urls.push("braintree.js");
+	}
 	else if (templateName.indexOf("quickbooks") == 0)
 	{
 		template_relative_urls.push("quickbooks.js");
@@ -305,6 +309,14 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("emailbuilder.js");
 	}
+	if (templateName.indexOf("segmentation") == 0)
+	{
+		template_relative_urls.push("segmentation.js");
+	}
+	if (templateName.indexOf("ticket") == 0)
+	{
+		template_relative_urls.push("tickets.js");
+	}
 	if (templateName.indexOf("billing-settings") == 0 || templateName.indexOf("creditcard-update") == 0)
 	{
 		template_relative_urls.push("settings.js");
@@ -316,6 +328,22 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("skype") == 0)
 	{
 		template_relative_urls.push("skype.js");
+	}
+	if(templateName.indexOf("formbuilder") == 0)
+	{
+		template_relative_urls.push("formbuilder.js")
+	}
+	if (templateName.indexOf("uservoice") == 0)
+	{
+		template_relative_urls.push("uservoice.js");
+	}
+	if (templateName.indexOf("dashboard") == 0)
+	{
+		template_relative_urls.push("dashboards.js");
+	}
+	if (templateName.indexOf("refer") == 0)
+	{
+		template_relative_urls.push("referals.js");
 	}
 	return template_relative_urls;
 }
@@ -390,9 +418,12 @@ function getPropertyValue(items, name)
 
 	for (var i = 0, l = items.length; i < l; i++)
 	{
-		if (items[i].name == name)
+		if (items[i].name == name){
+			if(items[i].value!=null)
+			 items[i].value=items[i].value.trim();
 			return items[i].value;
-	}
+		}
+		}
 }
 
 
@@ -1111,15 +1142,16 @@ function getDealCustomProperties(items)
 					{
 						if(allCustomFields[i].name==fields[j].name)
 						{
+							fields[j].is_date = true;
 							if(!fields[j].value)
 								return '';
-							if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
+							/*if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
 								fields[j].value = convertDateFromUKtoUS(fields[j].value);
 							var dateString = new Date(fields[j].value);
 							if(dateString == "Invalid Date")
 								fields[j].value = getDateInFormatFromEpoc(fields[j].value);
 							else
-								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);*/
 
 							finalFields.push(fields[j]);
 							break;

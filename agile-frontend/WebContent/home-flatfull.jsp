@@ -1,5 +1,12 @@
 <!DOCTYPE html>
+<%@page import="com.google.appengine.api.taskqueue.Queue"%>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
+<%@page import="com.google.appengine.api.NamespaceManager"%>
+<%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
+<%@page import="com.google.appengine.api.taskqueue.TaskOptions"%>
+<%@page import="com.google.appengine.api.taskqueue.QueueFactory"%>
+<%@page import="com.agilecrm.activities.util.TaskUtil"%>
 <%@page import="com.agilecrm.SafeHtmlUtil"%>
 <%@page import="com.agilecrm.contact.CustomFieldDef.SCOPE"%>
 <%@page import="com.agilecrm.contact.util.CustomFieldDefUtil"%>
@@ -20,6 +27,9 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="com.agilecrm.dashboards.Dashboard"%>
+<%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
+<%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -46,8 +56,18 @@ response.sendRedirect("/login");
 return;
 }
 
+
+
+
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+
 System.out.println("Domain user " + domainUser);
+
+DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
+// Add to queue
+Queue queue = QueueFactory.getDefaultQueue();
+queue.add(TaskOptions.Builder.withPayload(task));
+
 
 ObjectMapper mapper = new ObjectMapper();
 
@@ -110,6 +130,8 @@ if(is_free_plan && is_first_time_user)
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
+
+List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
 %>
 
 
@@ -142,10 +164,14 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
+
+<!--<link rel="stylesheet" type="text/css" href="flatfull/css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>-->
+
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -236,7 +262,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <nav  class="navi clearfix">
             <ul class="nav">
-              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+              <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Sales</span>
               </li>
               
@@ -270,8 +296,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
-  <li class="line dk"></li>
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
+    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
    <li id="workflowsmenu">
@@ -292,6 +318,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
+   <li id="segmentationmenu">
+    <a  href="#visitors">
+       <i class="icon-large icon-screenshot"></i>
+      <span>Visitors</span>  
+    </a>
+  </li>
   <li id="landing-pages-menu">
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
@@ -309,10 +341,21 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <i class="icon-bar-chart icon-white"></i>
       <span>Reports</span>
     </a>
-  </li>
+  </li>  
+  
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
+  <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span>Service</span>
+  </li>
+  <li id="tickets">
+    <a href="#tickets">
+      <i class="icon icon-ticket"></i>
+      <span style="padding-top: 9%;">Help Desk</span>
+    </a>
+  </li>            
   </ul>
 
 
@@ -585,8 +628,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
-
-   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
@@ -597,6 +639,10 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
+
+try{console.time("startbackbone");}catch(e){}
+
+var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
 var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
@@ -644,10 +690,23 @@ var ACCOUNT_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(accountPr
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
 
+// Get current user dashboards
+var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
+
 // Get Contact Date Fields
 var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;
 // Get Contact Date Fields
 var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE")))%>;
+
+// Get Contact contact type custom fields
+var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "CONTACT")))%>;
+// Get Contact company type custom fields
+var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "COMPANY")))%>;
+
+// Get Company contact type custom fields
+var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "CONTACT")))%>;
+// Get Company company type custom fields
+var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "COMPANY")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
@@ -657,39 +716,32 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 // Billing Restriction
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
-var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-//var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
-// head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'final-lib/min/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
-
-<!-- JQUery Core and UI CDN --> 
-<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-console.log("before dashboard load");
-head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
+head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
         showVideoForRegisteredUser();
+});
 
-})
-// , LIB_PATH + 'lib/backbone-route-filter.js'
+// head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
-else
-	head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION);
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
 
 var en;
-
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
 
 
+// head.ready('library', function() {
+
 head.ready(function() {
-	
+
 if(!HANDLEBARS_PRECOMPILATION){
-    downloadTemplate("tpl.js", function(){             
-    });
-    downloadTemplate("contact-view.js", function(){             
+    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
+    {
+        downloadTemplate("tpl.js");
+        downloadTemplate("contact-view.js");
     });
 }
  
@@ -697,31 +749,40 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
+
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
-	 $('[data-toggle="tooltip"]').tooltip();  
-   
+
    try{
-    //Code to display alerts of widgets.
-    showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+      $('[data-toggle="tooltip"]').tooltip();  
+      //Code to display alerts of widgets.
+      showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
    }catch(e){}
 	 
 	//Resting the variables.
-	<%  session.removeAttribute("widgetMsgType");
-	session.removeAttribute("widgetMsg"); %>
+	<% session.removeAttribute("widgetMsgType");
+	   session.removeAttribute("widgetMsg"); 
+  %>
 	
 	try{
       var sig = CURRENT_USER_PREFS.signature;
       sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-
       CURRENT_USER_PREFS.signature = sig;
 	}catch(e){}
+
 });
 
 });    
 function load_globalize()
 {
+
+  /*if (typeof Globalize != "function") {
+    setTimeout(function() {
+      load_globalize();
+    }, 100);
+    return;
+  } */
 
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");
@@ -738,13 +799,19 @@ function showVideoForRegisteredUser(){
     {     
        $("#dashboard_video").modal("show");
        var $frame = $("#dashboard_video iframe");
-      $frame.attr("src", $frame.attr("data-source"));
-    }       
+       $frame.attr("src", $frame.attr("data-source"));
+       
+    } 
     
     localStorage.setItem(domainuser_video_cookie,true);
     
 }
-
+function closeVideo(){
+   $('#dashboard_video').on("click", ".close", function () {
+       $('#dashboard_video').modal("hide");
+        $('#dashboard_video iframe').removeAttr("src");
+    });
+}
 </script>
 
 
@@ -759,23 +826,30 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 
  <!--video on dashboard -->
  <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" id="dashboard-video" >
+       <div class="modal-dialog" id="dashboard-video" >
         <div class="modal-content">
         <div class="modal-header">
-          <button class="close" data-dismiss="modal">&times;</button>
+          <button class="close" onClick="closeVideo()">&times;</button>
           <h3 id="myModalLabel">Welcome to Agile CRM</h3>
           <small>Here is a short video which explains the steps to get started with Agile. We recommend you watch it.</small>
         </div>      
         <div class="modal-body">
               <div class="embed-responsive embed-responsive-16by9">
                       <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
-              </div>                     
+              </div> 
+
+              
         </div>
                
+        <div class="modal-footer">
+                 <a href="http://salescal.agilecrm.com/" target="_blank" class="btn btn-primary" id="schedule_demo" onclick="Agile_GA_Event_Tracker.track_event('Demo from Getting Started Video');">Schedule a Demo</a>
+        </div>                     
+                                 
+        </div>
+          
         
         </div>
-        </div>
   </div>
-
+<div id="fb-root"></div>
 </body>
 </html>

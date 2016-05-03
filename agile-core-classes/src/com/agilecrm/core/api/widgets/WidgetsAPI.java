@@ -15,12 +15,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.social.BrainTreeUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -87,16 +90,19 @@ public class WidgetsAPI {
 	 * @param widget
 	 *            {@link Widget}
 	 * @return {@link Widget}
+	 * @throws JSONException
 	 */
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget createWidget(Widget widget) {
+	public Widget createWidget(Widget widget) throws Exception {
 		System.out.println("In widgets api create");
 		if (widget != null) {
+			WidgetsAPI.checkValidDetails(widget);
 			widget.save();
 			return widget;
 		}
+
 		return null;
 	}
 
@@ -149,8 +155,9 @@ public class WidgetsAPI {
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget updateWidget(Widget widget) {
+	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
+			WidgetsAPI.checkValidDetails(widget);
 			widget.save();
 			return widget;
 		}
@@ -353,6 +360,26 @@ public class WidgetsAPI {
 			widget.listOfUsers = widgetObj.getString("listOfUsers");
 			widget.save();
 
+		}
+	}
+
+	public static void checkValidDetails(Widget widget) throws Exception {
+		if (widget.name.equals("Braintree")) {
+			JSONObject prefsObj = new JSONObject(widget.prefs);
+			String merchantId = prefsObj.getString("merchant_id");
+			String publicKey = prefsObj.getString("public_key");
+			String privateKey = prefsObj.getString("private_key");
+			BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
+					privateKey);
+			JSONArray resultObj = bUtil.getTransactions("test@agilecrm.com");
+		}
+		if (widget.name.equals("Uservoice")) {
+			String prefs = widget.prefs;
+			JSONObject prefsObj = new JSONObject(prefs);
+			String API_KEY = prefsObj.getString("uv_api_key");
+			String API_SECRET = prefsObj.getString("uv_secert_key");
+			String domain = prefsObj.getString("uv_domain_name");
+			UservoiceAPI uv = new UservoiceAPI(domain, API_KEY, API_SECRET);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.campaignio.tasklets.agile;
 
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -50,6 +51,11 @@ public class JSONNode extends TaskletAdapter
      * Parameters given in grid as key-value pairs
      */
     public static String PARAMETERS = "rest_key_grid";
+    
+    /**
+     * Headers given in grid as key-value pairs
+     */
+    public static String HEADERS = "rest_headers_grid";
 
     /**
      * Branch success
@@ -78,6 +84,17 @@ public class JSONNode extends TaskletAdapter
 	String paramsJSONArrayString = getStringValue(nodeJSON, subscriberJSON, data, PARAMETERS);
 
 	JSONArray paramsJSONArray = new JSONArray(paramsJSONArrayString);
+	
+	// Headers
+	String headersJSONArrayString;
+	JSONArray headersJSONArray = new JSONArray();
+	try{
+	 headersJSONArrayString = getStringValue(nodeJSON, subscriberJSON, data, HEADERS);
+	 headersJSONArray = new JSONArray(headersJSONArrayString);
+	}catch(Exception e){
+		//To make compatible with old json io nodes
+		headersJSONArray = new JSONArray();
+	}
 
 	String httpParams = "";
 
@@ -103,9 +120,22 @@ public class JSONNode extends TaskletAdapter
 	    System.out.println(httpParams);
 
 	    String output;
+	    
+	    HashMap<String,String> hashmapKeyValues = new HashMap<String,String>();
+	    
+	    for (int i = 0; i < headersJSONArray.length(); i++)
+	    {
+		JSONObject headerJSON = headersJSONArray.getJSONObject(i);
+
+		String key = headerJSON.getString("rest_header_key");
+		String value = headerJSON.getString("rest_header_value");
+
+		// Construct headers
+		hashmapKeyValues.put(key, value);
+	    }
 
 	    String logMessage = "";
-
+	    
 	    if (methodType.equalsIgnoreCase(METHOD_TYPE_GET))
 	    {
 		if (url.contains("?"))
@@ -113,14 +143,14 @@ public class JSONNode extends TaskletAdapter
 		else
 		    url = url + "?" + httpParams;
 
-		output = HTTPUtil.accessURL(url);
+		output = HTTPUtil.accessURLWithHeaders(url,hashmapKeyValues);
 
 		logMessage = "GET: " + url + "<br>Status: SUCCESS";
 
 	    }
 	    else
 	    {
-		output = HTTPUtil.accessURLUsingPost(url, httpParams);
+		output = HTTPUtil.accessURLWithHeaderUsingPost(url, httpParams,hashmapKeyValues);
 		logMessage = "POST: " + url + " " + httpParams + "<br>Status: SUCCESS";
 	    }
 

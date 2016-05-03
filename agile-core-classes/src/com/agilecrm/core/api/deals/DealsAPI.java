@@ -2,10 +2,8 @@ package com.agilecrm.core.api.deals;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -50,10 +48,13 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
@@ -175,8 +176,7 @@ public class DealsAPI
 	return OpportunityUtil
 		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
     }
-    
-    
+
     @Path("/totalDealValue")
     @GET
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
@@ -186,24 +186,24 @@ public class DealsAPI
 	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
 	    @QueryParam("filters") String filters)
     {
-     double totalValue = 0.0d;
-    JSONObject obj = new JSONObject();
-    System.out.println(count);
-    obj.put("id", "100");
+	double totalValue = 0.0d;
+	JSONObject obj = new JSONObject();
+	System.out.println(count);
+	obj.put("id", "100");
 	if (filters != null)
 	{
 	    System.out.println(filters);
 	    try
 	    {
-			org.json.JSONObject json = new org.json.JSONObject(filters);
-			if (milestone != null)
-				json.put("milestone", milestone);
-			System.out.println(json.toString());			
-			totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
-			obj.put("total", totalValue);	
-			obj.put("milestone", milestone);
-			return obj;
-	     }	    
+		org.json.JSONObject json = new org.json.JSONObject(filters);
+		if (milestone != null)
+		    json.put("milestone", milestone);
+		System.out.println(json.toString());
+		totalValue = OpportunityUtil.getTotalValueOfDeals(json);
+		obj.put("total", totalValue);
+		obj.put("milestone", milestone);
+		return obj;
+	    }
 	    catch (JSONException e)
 	    {
 		// TODO Auto-generated catch block
@@ -227,6 +227,9 @@ public class DealsAPI
     public Opportunity getOpportunity(@PathParam("opportunity-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+
+	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.READ, true);
+
 	return opportunity;
     }
 
@@ -327,7 +330,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
-
+	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	// Some times milestone comes as null from client side, if it is null we
@@ -362,9 +365,10 @@ public class DealsAPI
     @Path("{opportunity-id}")
     @DELETE
     public void deleteOpportunity(@PathParam("opportunity-id") Long id)
-	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException
+	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException, Exception
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
 	if (opportunity != null)
 	{
 	    ActivitySave.createDealDeleteActivity(opportunity);
@@ -705,7 +709,7 @@ public class DealsAPI
     public List<Contact> getRelatedContacts(@PathParam("deal-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
-	return opportunity.getContacts();
+	return opportunity.relatedContacts();
     }
 
     /**
@@ -732,7 +736,7 @@ public class DealsAPI
 
 	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
 
-	    List<Contact> contacts = opportunity.getContacts();
+	    List<ContactPartial> contacts = opportunity.getContacts();
 	    JSONArray jsn = null;
 	    if (contacts != null && contacts.size() > 0)
 	    {
@@ -815,16 +819,23 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Opportunity saveDealUpdateNote(Note note)
     {
+	Opportunity opportunity = null;
 	String updatedOpportunityid = null;
 	List<String> deal_ids = note.deal_ids;
 	if (deal_ids != null && deal_ids.size() > 0)
 	{
 	    updatedOpportunityid = deal_ids.get(0);
 	}
-	note.save();
 	if (updatedOpportunityid != null)
-	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
-	return null;
+	{
+	    opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+	    UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
+	    opportunity.note_description = note.description;
+	    opportunity.note_subject = note.subject;
+	}
+	note.save();
+
+	return opportunity;
     }
 
     /**
@@ -1210,6 +1221,9 @@ public class DealsAPI
 	    if (key.equals("milestone"))
 		opportunity.milestone = obj.getString(key);
 
+	    if (key.equals("archived"))
+		opportunity.archived = obj.getBoolean(key);
+
 	    if (key.equals("contact_ids"))
 	    {
 
@@ -1265,6 +1279,61 @@ public class DealsAPI
 	    ReportsUtil.check(min * 1000, max * 1000);
 	}
 	return OpportunityUtil.getPipelineConversionData(ownerId, min, max, trackId).toString();
+    }
+
+    /**
+     * Returns count of opportunities.
+     * 
+     * @param ownerId
+     *            Owner of the deal.
+     * @param milestone
+     *            Deals Milestone.
+     * @param contactId
+     *            Id of the contact related to deal.
+     * @param fieldName
+     *            the name field to sort on.
+     * @param cursor
+     * @param count
+     *            page size.
+     * @return List of deals.
+     */
+    @Path("/based/count")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public JSONObject getOpportunitiesCountByFilter(@QueryParam("owner_id") String ownerId,
+	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
+	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
+	    @QueryParam("filters") String filters)
+    {
+	JSONObject dealsCountJSON = new JSONObject();
+	int dealsCount = 0;
+
+	if (filters != null)
+	{
+	    System.out.println(filters);
+	    try
+	    {
+		org.json.JSONObject json = new org.json.JSONObject(filters);
+		if (milestone != null)
+		    json.put("milestone", milestone);
+		System.out.println(json.toString());
+		dealsCount = OpportunityUtil.getOpportunitiesCountByFilter(json, 0, cursor);
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	else
+	{
+	    dealsCount = OpportunityUtil.getOpportunitiesCountByFilter(ownerId, milestone, contactId, fieldName, 0,
+		    cursor, pipelineId);
+	}
+
+	dealsCountJSON.put("count", dealsCount);
+
+	return dealsCountJSON;
     }
 
 }

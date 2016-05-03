@@ -133,7 +133,7 @@ function populateUsers(id, el ,value, key, callback) {
       * @param function - callback function
       * @param optionsTemplate- to fill options with users
       **/
-	fillSelect(id,'/core/api/users', 'domainUser', function fillOwner() {
+	fillSelect(id,'/core/api/users/partial', 'domainUser', function fillOwner() {
 		
 		if(value)
 		{

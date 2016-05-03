@@ -380,6 +380,8 @@ var Base_Model_View = Backbone.View
 									 */
 									success : function(model, response) 
 									{	
+										track_with_save_success_model($(targetEle));
+
 										// Removes disabled attribute of save button
 										enable_save_button($(targetEle));
 										
@@ -461,7 +463,7 @@ var Base_Model_View = Backbone.View
 										// Hides the error message after 3
 										// seconds
 										if(response.status != 406)
-											$save_info.show().delay(3000).hide(1);
+											$save_info.show().delay(5000).hide(1);
 									}
 								}, { silent : true });
 			},

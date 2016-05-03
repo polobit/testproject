@@ -335,6 +335,26 @@
 		<servlet-name>AccountLimitChecker</servlet-name>
 		<url-pattern>/backend/billing/restrictions</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.cron.DomainUserDbUpdateServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
+		<url-pattern>/backend/domainuserdbupdate</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AgileDbUpdateServlet</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.cron.AgileDbUpdateServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AgileDbUpdateServlet</servlet-name>
+		<url-pattern>/backend/agiledbupdate</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Stripe Webhook</servlet-name>
@@ -375,6 +395,18 @@
 		<servlet-name>SendGrid Webhook</servlet-name>
 		<url-pattern>/backend/sendgridwebhook/*</url-pattern>
 	</servlet-mapping>
+	
+	 <!-- SendGrid Inbound -->
+	 <servlet>
+		<servlet-name>SendGridInboundWebhook</servlet-name>
+		<servlet-class>com.thirdparty.sendgrid.webhook.SendGridInboundWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SendGridInboundWebhook</servlet-name>
+		<url-pattern>/sendgrid/inbound/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>TwilioServlet</servlet-name>
 		<servlet-class>com.agilecrm.plugin.oauth.TwilioServlet</servlet-class>
@@ -610,6 +642,7 @@
 	<security-constraint>
 		<web-resource-collection>
 			<url-pattern>admin.*</url-pattern>
+			<url-pattern>/_ah/sessioncleanup</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>
@@ -789,14 +822,14 @@
 		<url-pattern>/backend/cron/cron-pull/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- <servlet>
+	<servlet>
 		<servlet-name>BackendPullServlet</servlet-name>
 		<servlet-class>com.agilecrm.queues.backend.BackendPullServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>BackendPullServlet</servlet-name>
 		<url-pattern>/backend-pull</url-pattern>
-	</servlet-mapping> -->
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Unsubscribe</servlet-name>
@@ -965,6 +998,41 @@
 		<servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>TicketWebhook</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketWebhook</servlet-name>
+		<url-pattern>/ticket-module/backend/webhook</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>TicketSendgridWebhook</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.SendgridInboundParser</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketSendgridWebhook</servlet-name>
+		<url-pattern>/ticket-module/backend/sendgrid_hook</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>TicketOpenServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketOpenServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketOpenServlet</servlet-name>
+		<url-pattern>/ticket-module/backend/open</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketSLAServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<url-pattern>/backend/ticket/slacron</url-pattern>
+	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
@@ -1056,6 +1124,15 @@
         <servlet-name>TaskReminderUnitTest</servlet-name>
         <url-pattern>test/taskreminder/unit-test</url-pattern>
     </servlet-mapping>
+   <servlet>
+		<servlet-name>TicketsPdfServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketsPdfServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketsPdfServlet</servlet-name>
+		<url-pattern>/ticketsPdfServlet</url-pattern>
+	</servlet-mapping>
+	
     <servlet>
     
         <servlet-name>AllDomainStatsServlet</servlet-name>
@@ -1066,5 +1143,24 @@
         <servlet-name>AllDomainStatsServlet</servlet-name>
         <url-pattern>/backend/stats-report</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+		<servlet-name>OpportunitySchemaChange</servlet-name>
+		<servlet-class>com.agilecrm.OpportunitySchemaChangeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OpportunitySchemaChange</servlet-name>
+		<url-pattern>/backend/cron/opportunity-schema-change</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>_ah_sessioncleanup</servlet-name>
+		<servlet-class>com.google.apphosting.utils.servlet.SessionCleanupServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>_ah_sessioncleanup</servlet-name>
+		<url-pattern>/_ah/sessioncleanup</url-pattern>
+	</servlet-mapping>
   
 </web-app>

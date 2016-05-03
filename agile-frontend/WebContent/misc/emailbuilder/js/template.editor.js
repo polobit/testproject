@@ -267,27 +267,27 @@ function handleObjects() {
 
 
                         if (self.find('a.facebook').is(":visible")) {
-                            $('input.social-check :eq(0)').prop('checked', true);
+                            $('input.social-check[name=facebook]').prop('checked', true);
                         } else {
-                            $('input.social-check :eq(0)').prop('checked', false);
+                            $('input.social-check[name=facebook]').prop('checked', false);
                         }
 
                         if (self.find('a.twitter').is(":visible")) {
-                            $('input.social-check :eq(1)').prop('checked', true);
+                            $('input.social-check[name=twitter]').prop('checked', true);
                         } else {
-                            $('input.social-check :eq(1)').prop('checked', false);
+                            $('input.social-check[name=twitter]').prop('checked', false);
                         }
 
                         if (self.find('a.linkedin').is(":visible")) {
-                            $('input.social-check :eq(2)').prop('checked', true);
+                            $('input.social-check[name=linkedin]').prop('checked', true);
                         } else {
-                            $('input.social-check :eq(2)').prop('checked', false);
+                            $('input.social-check[name=linkedin]').prop('checked', false);
                         }
 
                         if (self.find('a.youtube').is(":visible")) {
-                            $('input.social-check :eq(3)').prop('checked', true);
+                            $('input.social-check[name=youtube]').prop('checked', true);
                         } else {
-                            $('input.social-check :eq(3)').prop('checked', false);
+                            $('input.social-check[name=youtube]').prop('checked', false);
                         }
 
 
@@ -835,13 +835,17 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
     $(document).on('change', '.social-check', function (e) {
         e.preventDefault();
-        var name = $(this).attr('name');
+        var $currentEl = $('#' + $('#path').val()).find($('#selector').val() + ' a.' + $(this).attr('name'));
+        var $imgEl = $currentEl.find("img");
         if ($(this).is(':checked')) {
-            $('#' + $('#path').val()).find($('#selector').val() + ' a.' + name).show();
+            $currentEl.show();
+            $imgEl.attr("width","35");
+            $imgEl.attr("height","35");
         } else {
-            $('#' + $('#path').val()).find($('#selector').val() + ' a.' + name).hide();
+            $currentEl.hide();
+            $imgEl.attr("width","0");
+            $imgEl.attr("height","0");
         }
-
     });
 
     /*settings functions*/
@@ -1177,9 +1181,11 @@ function initializeEditor() {
         plugins: "autolink lists link charmap code paste textcolor colorpicker paste",
         paste_as_text: true,
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
+        relative_urls : false,
+		convert_urls : false,
         toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | merge_fields",
         setup: function (editor) {
-            editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+            editor.addButton('merge_fields', { type : 'menubutton', text : 'Merge Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
 
             // editor.addButton('calltoaction', {
             //     text : 'Add Button',

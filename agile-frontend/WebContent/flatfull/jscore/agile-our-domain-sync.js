@@ -20,10 +20,13 @@ function our_domain_set_account() {
 	// If it is local server then add contacts to local domain instead of
 	// our domain
 	if (LOCAL_SERVER)
+		
 		_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
+		//_agile.set_account('p62u9mnp5dirj1na66ccjuiqr9', 'myapps'); // for testing purpose only.
 
 	else
 		_agile.set_account('fdpa0sc7i1putehsp8ajh81efh', 'our');
+		//_agile.set_account('slnfmib8k4ursofeeqqn1qilch', 'test55'); // for testing purpose only.
 
 	_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
@@ -298,11 +301,23 @@ function our_domain_sync() {
 			// set_profile_noty();
 			Agile_Contact = data;
 
+			
+			var phone = getProperty(Agile_Contact.properties, 'phone');
+			var update_phone = CURRENT_DOMAIN_USER["phone"];
+			if(update_phone){
+				if(!phone){
+					_agile.add_property(create_contact_custom_field("phone", update_phone, "SYSTEM","home"),
+							function(data) {
+								Agile_Contact = data;
+								_agile_contact = data;
+							});
+				}
+			}
+
 			// Adds signup tag, if it is not added previously.
 			// set_profile_noty();
 			add_custom_fields_to_our_domain();
 
-			;
 			initWebrules();
 
 		}, function(data) {
@@ -317,13 +332,18 @@ function our_domain_sync() {
 			// Creates a new contact and assigns it to global value
 			var email = CURRENT_DOMAIN_USER['email'];
 			var emailType = email.split("@")[1].split(".")[0];
-			if(emailType != "yopmail")
-			{
-				_agile.create_contact({
+			var param = {
 					"email" : CURRENT_DOMAIN_USER['email'],
 					"first_name" : first_name,
 					"last_name" : last_name
-				}, function(data) {
+					};
+			if(CURRENT_DOMAIN_USER['phone']){
+				param['phone'] = CURRENT_DOMAIN_USER['phone'];
+			}
+			
+			if(emailType != "yopmail")
+			{
+				_agile.create_contact(param, function(data) {
 					Agile_Contact = data;
 					// Shows noty
 					// set_profile_noty();
@@ -332,7 +352,6 @@ function our_domain_sync() {
 					initWebrules();
 				});
 			}
-
 		})
 		// Gets contact based on the the email of the user logged in
 
@@ -674,13 +693,18 @@ function update_contact_in_our_domain(user_email, response, callback){
 		return;
 	}
 
+	var phone = "";
+	if(response.phone){
+		phone = response.phone;
+	}
 	try{
 
 		if (CURRENT_DOMAIN_USER.email != user_email)
 		   _agile.set_email(user_email);
 
 		_agile.update_contact({
-		    "email": response.email
+		    "email": response.email,
+		    "phone":phone
 		}, {
 		    success: function (data) {
 		        console.log("success");

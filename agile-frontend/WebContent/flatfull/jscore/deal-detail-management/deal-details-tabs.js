@@ -8,6 +8,41 @@
  * @author jagadeesh
  */
 
+	/*
+    get actual name and update the name of the deal
+    */
+ function inlineDealNameChange(e){
+
+    	
+    	var dealName = $("#inline-input").val();
+    	var lastname = $("#deals-inline").text();
+    	name = dealName.trim();
+
+
+    	if(!name)
+    	{
+    		$("#inline-input").addClass("error-inputfield");
+          	 return;
+    	}
+
+    	if(lastname != name)
+    	{
+    		name = name.trim();
+
+    		dealNameEdit(name);
+    	}
+
+    	else
+    	{
+    		$("#inline-input").addClass("hidden");
+			$("#deals-inline").removeClass("hidden");
+			return;
+    	}
+
+    	
+
+    }
+
 var deal_tab_position_cookie_name = "deal_tab_position";
 var id;
 
@@ -47,8 +82,34 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	'click .deal-add-event' : 'dealAddEvent',
     	'click .event-edit-deal-tab' : 'dealEditEvent',
 		'click .deal-event-delete' : 'dealEditDelete', 
-		'click .activity-delete' : 'deleteActivity',  	
-    	
+		'click .activity-delete' : 'deleteActivity',
+		//agile-x-edit
+		'click #deals-inline' : 'dealInlineEdit', 	
+    	'blur #inline-input' : 'dealinlineedit',
+    	'keydown #inline-input' : 'dealNameChange'
+    },
+    dealinlineedit : function(e){
+    	inlineDealNameChange();
+    },
+
+    dealNameChange : function(e)
+    {
+    	if(e.keyCode == 13)
+    	inlineDealNameChange();
+    },
+
+    
+    
+
+    /*deals inline edit function
+    shows and hides the inline input for editing
+    */
+    dealInlineEdit : function(e){
+    	e.preventDefault();
+    	$("#deals-inline").toggleClass("hidden");
+    	$("#inline-input").toggleClass("hidden");
+    	if(!$("#inline-input").hasClass("hidden"))
+			$("#inline-input").focus();
     },
 
 	/**
@@ -134,8 +195,14 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		fill_deal_owners(undefined, undefined, function()
 		{
-
-			$('#deal-owner').css('display', 'none');
+			if(hasScope("MANAGE_DEALS") || $(this).attr("data") == CURRENT_DOMAIN_USER.id)
+			{
+				$('#deal-owner').css('display', 'none');
+			}
+			else
+			{
+				$("#deal_update_privileges_error_modal").modal("show");
+			}
 			$('#change-deal-owner-ul').css('display', 'inline-block');
 
 			if ($('#change-deal-owner-ul').css('display') == 'inline-block')
@@ -161,7 +228,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			Backbone.history.navigate("#deals", { trigger : true });
 		}, error : function(response)
 		{
-			alert("some exception occured please try again");
+			//alert("some exception occured please try again");
+			alert(response.responseText);
 		} });
 	},
 

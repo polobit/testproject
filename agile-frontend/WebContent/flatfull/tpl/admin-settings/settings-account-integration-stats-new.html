@@ -102,7 +102,38 @@
 		<div>
 		
 		{{#if_equals "SEND_GRID" _agile_email_gateway}}
-			<div class="text-md">SendGrid stats are shown <a class="text-info" style="color: #23b7e5 !important;" href="https://sendgrid.com/statistics" target="_blank">here</a></div><br/>
+			<div class="row">
+	        		<div class="col-md-6 b-light">
+	        		<div class="panel panel-default">
+	            		<div class="panel-heading">Emails Sent</div>
+	            	
+						<table class="table table-bordered table-hover">
+							<tbody>
+								<tr><td>Today</td><td>{{numberWithCommas dailyEmailSent}}</td></tr>
+								<tr><td>This Week</td><td>{{numberWithCommas weeklyEmailSent}}</td></tr>
+								<tr><td>This Month</td><td>{{numberWithCommas monthlyEmailSent}}</td></tr>
+								<tr><td>Overall</td><td>{{numberWithCommas allEmailSent}}</td></tr>
+							</tbody>
+						</table>
+					
+		        	</div>
+		        	</div>
+		        	<div class="col-md-6">
+		        	<div class="panel panel-default">
+		            	<div class="panel-heading">Bounces (Last 30 Days)</div>
+		            	
+						<table class="table table-bordered table-hover">
+							<tbody>
+								<tr><td>Hard Bounce</td><td>{{numberWithCommas hardBounce}}</td></tr>
+								<tr><td>Soft Bounce</td><td>{{numberWithCommas softBounce}}</td></tr>
+								<tr><td>Rejects</td><td>{{numberWithCommas rejected}}</td></tr>
+								<tr><td>Spam Complaints</td><td>{{numberWithCommas spamReported}}</td></tr>
+							</tbody>
+						</table>
+						
+		        	</div>
+		    	</div>
+		    	</div>
 		{{else}}
 			{{!--SES Stats--}}
 			{{#if_equals "SES" _agile_email_gateway}}

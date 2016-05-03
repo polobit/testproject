@@ -1,103 +1,97 @@
 <script id="calendar-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-        <div class="col-md-12">
-		
-    	 <h3 class="pull-left font-thin h3">Calendar <small></small></h3>
-    	 <a id="refrecal" class="text-md btn m-l-none bg-transparent refresh-tickets no-shadow p-t-xs p-l-xs" onclick="refreshcal()">
-		    <i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh" style="vertical-align: text-top;"></i>
-		 </a>     	
-        <div class="pull-right">
-        <!-- <div id="event-list-filters" class="btn-group inline-block m-r">
-					 <img class="loading_img p-r-xs thumb-xs"  src= "{{getS3ImagePath 'img/21-0.gif'}}"></img>
-				   </div> -->
-	      <!-- 	<div class="btn-group  inline-block m-r" id="">
-				<div class="btn btn-sm btn-default"><i class="icon-list"></i></div>
-				<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-					<span class="caret"></span>
-				</a>
-				<ul class="dropdown-menu pull-right">
-				  <li><a href="#" class="c_list">List</a></li>
-	   			  <li><a href="#" class="c_cal">Calendar</a></li>
-				</ul>
-			</div> -->
-<div class="inline-block m-r" id="calendarAgendaButtons">
-                	<button type="button" class="btn btn-sm btn-default" onclick="today()">Today</button>
-					<div class="btn-group m-l-xs">
-						<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
-						<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
-						<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
+	<div class="wrapper-md lter bg-light b-b">
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="pull-left font-thin h3">Calendar <small></small></h3>
+				<a id="refrecal" class="text-md btn m-l-none bg-transparent refresh-tickets no-shadow p-t-xs p-l-xs" onclick="refreshcal()">
+					<i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh" style="vertical-align: text-top;"></i>
+				</a>     	
+				<div class="pull-right">
+<!-- <div id="event-list-filters" class="btn-group inline-block m-r">
+<img class="loading_img p-r-xs thumb-xs"  src= "{{getS3ImagePath 'img/21-0.gif'}}"></img>
+</div> -->
+<!-- 	<div class="btn-group  inline-block m-r" id="">
+<div class="btn btn-sm btn-default"><i class="icon-list"></i></div>
+<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+<span class="caret"></span>
+</a>
+<ul class="dropdown-menu pull-right">
+<li><a href="#" class="c_list">List</a></li>
+<li><a href="#" class="c_cal">Calendar</a></li>
+</ul>
+</div> -->
+					<div class="inline-block m-r" id="calendarAgendaButtons">
+						<button type="button" class="btn btn-sm btn-default" onclick="today()">Today</button>
+						<div class="btn-group m-l-xs">
+							<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
+							<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
+							<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
+						</div>
 					</div>
+					<div class="btn-group  inline-block" id="add-event-div">
+						<div class="btn btn-sm btn-default add-event" data-toggle="modal"><i class="icon-plus-sign"></i> Add Event</div>
+						<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+							<span class="caret"></span>
+						</a>             
+						<ul class="dropdown-menu pull-right c-p">
+							<li><a data-toggle="modal" class="add-event">Add Event</a></li>
+							<li><a data-toggle="modal" class="add-task">Add Task</a></li>
+							<li><a href="#add-dashlet">Add Dashlet</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="clearfix"></div>
 			</div>
-			 <div class="btn-group  inline-block" id="add-event-div">
-				  
-	               <div class="btn btn-sm btn-default add-event" data-toggle="modal"><i class="icon-plus-sign"></i> Add Event</div>
-	               <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-	               <span class="caret"></span>
-	               </a>             
-	               <ul class="dropdown-menu pull-right c-p">
-	                   <li><a data-toggle="modal" class="add-event">Add Event</a></li>
-	                   <li><a data-toggle="modal" class="add-task">Add Task</a></li>
-	               </ul>
-	           </div>
 		</div>
-		<div class="clearfix"></div>
-		
-</div>
-</div>
-</div>
-<div class="wrapper-md">
-<div class="row">
-    <div class="col-md-2">
-    <div class="bg-transparent">
-		<div class="data-block todo-block">
-        	<div class="data-container">
-            	<div id="calendar-filters"></div><br/><br/><br/><br/>
-<div id="ical_appointment_links"><a  href="#scheduler-prefs"  id="show-schedule-url1"><i class="icon-time" style="margin-right:3px;"></i> Online Scheduling</a><br/>
-
-<br/><a  href="#icalModal" data-toggle="modal" id="subscribe-ical"><i class="icon-calendar" style="margin-right:4px;"></i>Subscribe to iCal</a>
-        	</div>
-		</div></div>
-
-</div>
-
-</div>
-
-    <div class="col-md-10">
-    <div class="bg-light lter">
-		<!--<div class="clearfix m-b" id="calendar-view-button" style="display:none;">
-			 <button type="button" tooltip="Double click on calendar day to create event" class="btn btn-sm btn-primary btn-addon add-event">
-				<i class="fa fa-plus"></i>Add
-			</button>
-			<div class="pull-right">
-			
-				<button type="button" class="btn btn-sm btn-default" onclick="today()">today</button>
-					<div class="btn-group m-l-xs">
-						<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
-						<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
-						<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
-					</div>
+	</div>
+	<div class="route_Portlet b-b" style="display:none">
+		<div class="row">
+			<div class="col-md-12">
+				<div>
+					<div id="portlets">&nbsp;</div>
+				</div>
 			</div>
-		</div> -->
-        <div id="calendar_event">
-           <ul class="nav nav-tabs" id="event_tab">
-            <li class="active"><a href="#agile" data-toggle="tab" >Agile Events</a></li>
-            <li><a href="#google" data-toggle="tab">Google Events</a></li>
-            </ul>
-        </div>
-           <div class="tab-content">
-           <div class="tab-pane active" id="agile"></div>
-          <div class="tab-pane" id="google"></div>
-          </div>
-          <div id="agile_event_list"><h2> Event List</h2>
-         <div  id="agile_event" style="margin-top: 6px;"></div>
-          </div>
+		</div>
+	</div>
+	<div class="wrapper-md">
+		<div class="row">
+			<div class="col-md-2">
+				<div class="bg-transparent">
+					<div class="data-block todo-block">
+						<div class="data-container">
+							<div id="calendar-filters"></div><br/><br/><br/><br/>
+							<div id="ical_appointment_links">
+								<a  href="#scheduler-prefs"  id="show-schedule-url1"><i class="icon-time" style="margin-right:3px;"></i> Online Scheduling</a>
+								<br />
+								<br />
+								<a  href="#icalModal" data-toggle="modal" id="subscribe-ical"><i class="icon-calendar" style="margin-right:4px;"></i>Subscribe to iCal</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-10">
+				<div class="bg-light lter">
+<!--<div class="clearfix m-b" id="calendar-view-button" style="display:none;">
+<button type="button" tooltip="Double click on calendar day to create event" class="btn btn-sm btn-primary btn-addon add-event">
+<i class="fa fa-plus"></i>Add
+</button>
+<div class="pull-right">
 
-    </div>
-	
+<button type="button" class="btn btn-sm btn-default" onclick="today()">today</button>
+<div class="btn-group m-l-xs">
+<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
+<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
+<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
 </div>
 </div>
+</div> -->
+					<div id="calendar_event"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 </script>
 
@@ -248,24 +242,43 @@
 	   {{#if event.contacts.length}}
 	   		<i class="icon-user text-muted m-r-xs"></i>
 	   {{/if}}
-	   {{#each event.contacts}}
-	       {{#if_equals this.entity_type "contact_entity"}}
-	             {{#if_equals this.type "COMPANY"}}
-	              		<a class="text-info" href="#company/{{this.id}}">
-	              			{{getPropertyValue this.properties "name"}}
-	              		</a>
-	              	{{else}}
-	              	    <a class="text-info" href="#contact/{{this.id}}">
-	              			{{getPropertyValue this.properties "first_name"}} {{getPropertyValue this.properties "first_name"}}
-	              		</a>
-	       		 {{/if_equals}}   
-	       	{{else}}
-	       	     <a class="text-info" href="#contact/{{this.id}}">
-	       	     	 {{getPropertyValue this.properties "name"}}
-	       	     </a> 
-	       {{/if_equals}}
-	       {{#if @last}} {{else}}, {{/if}}
-	   {{/each}}
+	   {{#if_equals event.contacts.length 1}}
+               {{#if_equals event.contacts.[0].type "COMPANY"}}
+               <a class="text-info" href="#company/{{event.contacts.id}}">
+                      {{getPropertyValue event.contacts.[0].properties "name"}}
+                    </a>
+
+                    {{#property_is_exists "url" event.contacts.[0].properties }}
+                    <div><i class="icon-envelope text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "url"}}</a></div>{{/property_is_exists}}
+                   {{#property_is_exists "phone" event.contacts.[0].properties }}
+                    <div><i class="icon-call-end text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "phone"}}</a></div>{{/property_is_exists}}
+                    <div class="m-l-md">{{setupRating event.contacts.[0].star_value}}</div>
+                    {{else}}
+                    	<a class="text-info" href="#contact/{{event.contacts.id}}">
+                      {{getPropertyValue event.contacts.[0].properties "first_name"}}
+                    </a>
+
+                     {{#property_is_exists "email" event.contacts.[0].properties }}
+                    <div><i class="icon-envelope text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "email"}}</a></div>{{/property_is_exists}}
+                    {{#property_is_exists "phone" event.contacts.[0].properties }}
+                    <div><i class="icon-call-end text-muted m-r-xs"></i><a>{{getPropertyValue event.contacts.[0].properties "phone"}}</a></div>{{/property_is_exists}}
+                    <div><i class="icon-trophy text-muted m-r-xs" style="height: 6px; vertical-align: middle;font-size:1em;"></i> <a>{{event.contacts.[0].lead_score}}</a></div>
+                    <div>{{setupRating event.contacts.[0].star_value}}</div>
+                   {{/if_equals}}
+     {{else}}
+     {{#each event.contacts}}
+               {{#if_equals this.type "COMPANY"}}
+                    <a class="text-info" href="#company/{{this.id}}">
+                      {{getPropertyValue this.properties "name"}}
+                    </a>
+                  {{else}}
+                      <a class="text-info" href="#contact/{{this.id}}">
+                      {{getPropertyValue this.properties "first_name"}} {{getPropertyValue this.properties "last_name"}}
+                    </a>
+             {{/if_equals}}   
+         {{#if @last}} {{else}}, {{/if}}
+     {{/each}}
+     {{/if_equals}}
 	{{/if}}
 </script>
 
@@ -297,7 +310,7 @@
 	       	<div class="line b-b b-light"></div>
 	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">
@@ -338,7 +351,7 @@
 			<div class="line b-b b-light"></div>
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">
@@ -379,7 +392,7 @@
 			<div class="line b-b b-light"></div>
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
-					<img class="r-2x" src="{{event.ownerPic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
 				</div>
 			</div>
 			<div class="text-ellipsis">
@@ -390,4 +403,27 @@
 		 	</div>
 		</div>
 	</div>											
+</script>
+
+<script id="calendar-mouseover-popover-miniCalendar-template" type="text/html">
+	<div class="fc-overlay {{leftorright}}" style="width:100%;">
+	    <div class="panel bg-white b-a pos-rlt p-sm">
+	       	<span class="arrow {{leftorright}} {{pullupornot}}"></span>
+	       	<div class="h4 font-thin m-b-sm">
+	       		<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}} </div>
+	       	</div>
+	       	<div class="line b-b b-light"></div>
+	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
+				<div class="pull-right" style="width:10%;">
+					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
+				</div>
+			</div>
+			<div class="text-ellipsis">
+		 	    {{get_template_type "calendar-popover-contacts"}}
+		 	</div>
+		 	<div class="text-ellipsis">
+		 	     {{get_template_type "calendar-popover-meeting-type"}}
+		 	</div>
+		</div>
+	</div>
 </script>								

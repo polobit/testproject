@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.RegisterUtil"%>
 <%@page import="com.agilecrm.user.RegisterVerificationServlet"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -5,9 +6,11 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page contentType="text/html; charset=UTF-8" %>
-<%
 
-	  if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+<%
+	
+
+	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
 	} 
@@ -49,11 +52,15 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
   if(registered_email != null)
   {
 	  try{
-		  // Validate Email
-		  new RegisterVerificationServlet().validateEmailIdWhileRegister(request, response);
-		  request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
-		  return;
-		    
+		  
+		  String name = request.getParameter("name");
+		  String password = request.getParameter("password");
+		  if(StringUtils.isNotBlank(name) && StringUtils.isNotBlank(password)) {
+			  // Validate Email
+			  new RegisterVerificationServlet().validateEmailIdWhileRegister(request, response);
+			  request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
+			  return; 
+		  }
 	  }
 	  catch(Exception e)
 	  {
@@ -119,6 +126,9 @@ if(isSafari && isWin)
 			if(cookie.getName().equals("registration_email"))
 				email = cookie.getValue();
 	}
+	
+	if(StringUtils.isNotBlank(registered_email))
+		  email = registered_email;
 %>
 
 <%

@@ -1,4 +1,5 @@
 <script id = "contacts-custom-view-basic_info-mobile-template" type="text/html">
+	<td class="hide"></td>
 	<td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}}>
     	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
     	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
@@ -31,6 +32,7 @@
 	</div>
 	</div>
 	</td>
+	<td><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
 </script>
 
 <script id = "contacts-custom-view-image-template" type="text/html">
@@ -131,7 +133,7 @@
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:15em;">
-    		<a class="text-cap">{{getPropertyValue properties "email"}}</a>
+    		<a class="">{{getPropertyValue properties "email"}}</a>
         </div>
 	</td>
 </script>
@@ -248,6 +250,30 @@
 	</td>
 </script>
 
+<script id ="contacts-custom-view-custom-contact-template" type="text/html">
+	<td class='data contact-type-custom-field-td' data='{{id}}'>
+		<div class="table-resp" style="width:15em;">
+       		{{#each this}}
+				<div id="{{id}}" class="thumb-sm agile-img m-r-sm contact-type-image">
+					<img class="img-inital r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+				</div>
+   			{{/each}}
+   		</div>
+	</td>
+</script>
+
+<script id ="contacts-custom-view-custom-company-template" type="text/html">
+	<td class='data company-type-custom-field-td' data='{{id}}'>
+		<div class="table-resp" style="width:15em;">
+       		{{#each this}}
+				<div id="{{id}}" class="thumb-sm agile-img m-r-sm company-type-image">
+					<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
+				</div>
+   			{{/each}}
+   		</div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
@@ -294,25 +320,36 @@
 <script id = "contacts-custom-view-popover-template" type="text/html">
        <div class="data panel-default" data={{id}} style="width:260px">
 	   
-       	<div class="text-cap panel-heading text-ellipsis"><div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}}</div>
-				 <div class="pull-left" style="width:80%"><div id='star' class="contact-star"></div></div>
+       	<div class="text-cap panel-heading text-ellipsis">
+         {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}}</div>{{/if_contact_type}}
+             {{#if_contact_type "COMPANY"}}
+             <div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "name"}}">{{getPropertyValue properties "name"}}
+            </div>{{/if_contact_type}}
+				 <div class="pull-left" style="width:75%"><div id='star' class="contact-star"></div></div>
         		<div>
 	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
 							<div  class="text-lg score-view">
-								<img src="{{getS3ImagePath '../../img/flame.png'}}" style="width:13px;"> 
-								<span class="inline-block v-middle">
-									{{#if lead_score}} <span id="lead-score">{{lead_score}}</span>&nbsp;
+							<i class="icon-trophy" style="height: 6px; vertical-align: middle;font-size:14px;"></i>
+								<div class="inline-block v-middle text-ellipsis text-center" style="width:2em">
+									{{#if lead_score}} <span title="{{lead_score}}" id="lead-score">{{lead_score}}</span>&nbsp;
 									{{else}} <span id="lead-score">0</span>&nbsp;
 									{{/if}}
-								</span>
+								</div>
 							{{#canEditContact owner.id}}
-								<span class="contact-score-control m-l-xs">
+								<span class="contact-score-control m-l-sm">
 									<ul class="inline-block list-none m-n p-n">
 										<li style="height: 9px"><i class="icon-sort-up c-p" id="add-score"
 											style="height: 10px;"></i></li>
+                      {{#if_contact_type "PERSON"}}
 										<li><i class="icon-sort-down c-p" id="minus-score"
 											style="height: 10px;"></i></li>
+                     {{/if_contact_type}}
+             {{#if_contact_type "COMPANY"}}
+                      <li><i class="icon-sort-down c-p" id="company-minus-score"
+                      style="height: 10px;"></i></li>
+                      {{/if_contact_type}}
+
 									</ul>
 								</span>
 							{{/canEditContact}}
@@ -347,6 +384,7 @@
 			{{/canEditContact}}
        </div>
        </div>
+       {{#if_contact_type "PERSON"}}
        		{{#property_is_exists "company" properties}}
        		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
@@ -362,13 +400,27 @@
      		{{/property_is_exists}}
        		
        		{{/property_is_exists}}
+          {{/if_contact_type}}
+
+          {{#if_contact_type "COMPANY"}}
+          {{#property_is_exists "url" properties}}
+          <div class="b-b b-light p-b-xs">
+          <div class="pull-left"><i class="fa fa-globe text-sm v-middle"></i></div>
+          <div class="text-ellipsis">
+          <a class="m-l-sm" title="{{getPropertyValue properties "url"}}" href="{{getPropertyValue properties "url"}}" target="_blank">{{getPropertyValue properties "url"}}</a> 
+          </div>
+         </div>
+          
+          {{/property_is_exists}}
+          {{/if_contact_type}}
+
        			{{#property_is_exists "phone" properties}}
         					<div class="b-b b-light p-b-xs">
         					<div class="pull-left"><i class="icon icon-call-end text-sm v-middle"></i></div>
         					{{#multiple_Property_Element_List "phone" properties id}}
         					{{#each this}}
        					<div class="text-ellipsis m-l-md" style="width:13em;">
-    		<span class="text-cap"title="{{value}}" >{{value}}</a>
+    		<span class="text-cap"title="{{value}}" >{{value}}</span>
         </div>
         {{/each}}
         {{/multiple_Property_Element_List}}
@@ -405,7 +457,7 @@
 						</div>
 						<div id="addTagsForm-popover" style="display: none;" class="m-b-none">
 							<div class="control-group save-tag m-b-none">
-								<input name="" type="text" id="addTags"
+								<input name="" type="text" id="addTagsOnPopover"
 									class="tags-typeahead ignore-comma-keydown form-control inline-block"
 									style="width: 60%" placeholder="Enter tag" />
 								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags-popover">Add</a></span>
@@ -421,4 +473,199 @@
 
 	   	    </div>
 	   	          </div>	
+</script>
+
+<script id="contacts-custom-view-properies-new-template" type="text/html">
+ {{#each fields_set}}
+     <td class='data' data='{{../id}}'>
+       {{#is_property_custom_field this}}
+            {{#is_property_custom_field_date_type ../../custom_fields ../../properties this}}
+      <div class="text-ellipsis" style="width:15em;">
+		<span>{{stringToHumanDateInFormat value}}</span>
+      </div>
+            {{else}}
+                 <div class="text-ellipsis" style="width:15em;">
+ <span>{{value}}</span>
+      </div>
+            {{/is_property_custom_field_date_type}}
+       {{else}}
+      {{#if_equals this "last_called"}}
+      <div class="text-ellipsis" style="width:15em;">
+   <span>{{epochToHumanDate "dd mmm yyyy" ../../../last_called}}</span>
+      </div>
+      {{/if_equals}}
+
+      {{#if_equals this "last_emailed"}}
+      <div class="text-ellipsis" style="width:15em;">
+   <span>{{epochToHumanDate "dd mmm yyyy" ../../../last_emailed}}</span>
+      </div>
+      {{/if_equals}}
+
+      {{#if_equals this "last_contacted"}}
+      <div class="text-ellipsis" style="width:15em;">
+      {{#if_equals ../../../last_contacted 0}}
+      
+  {{else}}
+  <span>{{epochToHumanDateInFormat  ../../../../last_contacted}}</span>
+  {{#if_equals ../../../last_contacted ../../../../last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
+  {{else}}
+  {{#if_equals ../../../../last_contacted ../../../../last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
+  {{else}}
+  {{#if_equals ../../../../last_contacted ../../../../last_called}}<i class="fa fa-phone text-muted m-l-xs"></i>{{/if_equals}}
+  {{/if_equals}}
+  {{/if_equals}}
+  {{/if_equals}} 
+      </div>
+      {{/if_equals}}
+
+      {{#if_equals this "lead_score"}}
+       <div style="width:15em;">
+ {{../../../lead_score}}
+      </div>
+      {{/if_equals}}
+
+      {{#if_equals this "star_value"}}
+      <ul class="m-n p-n list-none" style="width:15em;">
+{{setupRating ../../../star_value}}
+  </ul>
+      {{/if_equals}}
+
+      {{#if_equals this "owner"}}
+      <div class="text-ellipsis" style="width:15em;">
+  <a class="text-cap">{{../../../owner.name}}</a>
+   </div>
+      {{/if_equals}}
+
+      {{#if_equals this "lead_owner"}}
+      <div class="text-ellipsis" style="width:15em;">
+  <a class="text-cap">{{../../../owner.name}}</a>
+   </div>
+      {{/if_equals}}
+
+      {{#if_equals this "url"}}
+      <div class="text-ellipsis" style="width:15em;">
+<a href="{{getPropertyValue ../../../properties 'url'}}" class="text-cap">{{getPropertyValue ../../../properties "url"}}</a>
+  </div>
+      {{/if_equals}}
+      
+      {{#if_equals this "title"}}
+      <div class="text-ellipsis" style="width:15em;">
+<a class="text-cap">{{getPropertyValue ../../../properties "title"}}</a>
+   </div>
+      {{/if_equals}}
+
+      {{#if_equals this "image"}}
+      <div class="overflow-hidden thumb-sm" style="width:15em;">
+{{#if_equals ../../../type "COMPANY"}}
+<img class="img-inital r r-2x pull-left" {{getCompanyImage "40" "" ../../../../properties}}/></img>
+{{else}}
+<img class="img-inital r r-2x" data-name="{{dataNameAvatar ../../../../properties 40}}" src="{{gravatarurl ../../../../properties }}" />
+{{/if_equals}}
+   	</div>
+      {{/if_equals}}
+
+      {{#if_equals this "basic_info"}}
+      <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 110px);" {{else}} style="width:15em;" {{/is_mobile}}>
+   	<div class="agile-img m-r-sm {{#is_mobile}} thumb-55 {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
+       	{{#if_equals ../../../type "PERSON"}}
+       	<img class="img-inital r r-2x"  title="{{getPropertyValue ../../../../properties 'first_name'}} {{getPropertyValue ../../../../properties 'last_name'}}" data-name="{{dataNameAvatar ../../../../properties}}" src="{{gravatarurl ../../../../properties 40}}"/>
+       	{{/if_equals}}
+       
+{{#if_equals ../../../type "COMPANY"}}
+       	<img class="r r-2x" title="{{getPropertyValue ../../../../properties 'name'}}" {{getCompanyImage "40" "display:inline;" ../../../../properties}}/>
+       	{{/if_equals}}
+   	</div>
+ 	<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 65px);" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
+       	{{#if_equals ../../../type "PERSON"}}
+       	<a class="text-cap custom-link">{{getPropertyValue ../../../../properties "first_name"}}
+       	{{getPropertyValue ../../../../properties "last_name"}} </a>
+       	<div><small class="text-muted  block text-ellipsis">{{getPropertyValue ../../../../properties "email"}}</small></div>
+       	{{/if_equals}}
+       
+{{#if_equals ../../../type "COMPANY"}}
+       	<a class="text-cap">{{getPropertyValue ../../../../properties "name"}}</a>
+       	<div><small class="text-muted  block text-ellipsis">{{getPropertyValue ../../../../properties "url"}}</small></div>
+       	{{/if_equals}}
+       	{{#is_mobile}}
+       	<div>
+     	<a class="text-muted  block text-ellipsis text-xs text-cap">{{getPropertyValue ../../../../properties "company"}}</a>
+   	</div>
+   	{{/is_mobile}}
+</div>
+</div>
+      {{/if_equals}}
+
+
+      {{#if_equals this "name"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{#getPropertyValue ../../../properties "name"}}{{/getPropertyValue}}</>
+   	</div>
+      {{/if_equals}}
+
+      {{#if_equals this "first_name"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{#getPropertyValue ../../../properties "first_name"}}{{/getPropertyValue}}</>
+   	</div>
+      {{/if_equals}}
+
+      {{#if_equals this "last_name"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{#getPropertyValue ../../../properties "last_name"}}{{/getPropertyValue}}</>
+   	</div>
+      {{/if_equals}}
+
+
+{{#if_equals this "phone"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{getPropertyValue ../../../properties "phone"}}</>
+   	</div>
+      {{/if_equals}}
+
+      {{#if_equals this "address"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{#address_Template ../../../properties}}{{/address_Template}}</a>
+       </div>
+      {{/if_equals}}
+
+      {{#if_equals this "website"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{getPropertyValue ../../../properties "website"}}</a>
+       </div>
+      {{/if_equals}}
+
+{{#if_equals this "email"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{getPropertyValue ../../../properties "email"}}</a>
+       </div>
+      {{/if_equals}}
+
+      {{#if_equals this "company"}}
+      <div class="text-ellipsis" style="width:15em;">
+   	<a class="text-cap">{{getPropertyValue ../../../properties "company"}}</a>
+       </div>
+      {{/if_equals}}
+
+      {{#if_equals this "tags"}}
+     <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;">
+{{#each ../../../tags}}
+   	<span class="label bg-light dk text-tiny">{{this}}</span>
+{{/each}}
+ </div>
+      {{/if_equals}}
+
+      {{#if_equals this "created_time"}}
+     <div class="text-ellipsis" style="width:15em;">
+<a class="text-cap">{{epochToHumanDateInFormat  ../../../created_time}}</a>
+   </div>
+      {{/if_equals}}
+
+      {{#if_equals this "updated_time"}}
+     <div class="text-ellipsis" style="width:15em;">
+ {{epochToHumanDateInFormat  ../../../updated_time}}
+   </div>
+      {{/if_equals}}
+</td>
+ 	{{/is_property_custom_field}}
+
+ {{/each}}
 </script>

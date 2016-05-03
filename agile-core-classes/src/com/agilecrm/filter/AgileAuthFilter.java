@@ -17,6 +17,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -136,8 +137,14 @@ public class AgileAuthFilter implements Filter
 	    httpRequest.getRequestDispatcher("/error/user-disabled.jsp").include(request, response);
 	    return;
 	}
+	
+	//Updates the login domain user update contacts scope with edit contacts and delete contacts
+	if (domainUser != null && domainUser.restricted_scopes != null && domainUser.restricted_scopes.contains(UserAccessScopes.DELETE_CONTACTS))
+	{
+		DomainUserUtil.setNewUpdateContactACLs(domainUser);
+	}
 
-	chain.doFilter(request, response);
+	chain.doFilter(httpRequest, httpResponse);
 	return;
     }
 

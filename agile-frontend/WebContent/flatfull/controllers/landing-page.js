@@ -97,9 +97,10 @@ var LandingPageRouter = Backbone.Router.extend({
 
 	},
 
+    //remove pageId from here
     loadSavedLandingPage : function(pageId) {
         $('#content').html("<div id='landingpages-listeners'></div>");
-        initializeLandingPageListeners();
+        initializeLandingPageListeners(pageId);
 
         var data = {
             "templateId" : pageId,
@@ -120,7 +121,7 @@ var LandingPageRouter = Backbone.Router.extend({
     pageSettings : function(pageId) {
 
         $('#content').html("<div id='landingpages-listeners'></div>");
-        initializeLandingPageListeners();
+        initializeLandingPageListeners(pageId);
 
         $.getJSON("core/api/landingpages/custom-domain/"+pageId, function(data){
             data = data || {};

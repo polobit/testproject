@@ -15,6 +15,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 
 /**
@@ -66,7 +67,7 @@ public class DealCSVExport
 	    try
 	    {
 		if (deal.getPipeline_id() != 0)
-		    str[indexMap.get(PIPELINE)] = deal.getPipeline().name;
+		    str[indexMap.get(PIPELINE)] = OpportunityUtil.getOpportunityPipeline(deal).name;
 	    }
 	    catch (Exception e)
 	    {
@@ -91,7 +92,7 @@ public class DealCSVExport
 	    }
 
 	    String relatedTo = "";
-	    List<Contact> relatedContacts = deal.getContacts();
+	    List<Contact> relatedContacts = deal.relatedContacts();
 	    for (Contact contact : relatedContacts)
 	    {
 		relatedTo += getContactFieldValue("email", contact) + ",";

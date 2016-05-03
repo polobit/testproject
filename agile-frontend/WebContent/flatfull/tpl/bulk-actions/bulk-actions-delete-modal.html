@@ -1,0 +1,24 @@
+<script id="bulk-actions-delete-modal-template" type="text/html">
+<div id="bulk-delete-modal" class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title"><i class="fa fa-trash"></i> {{title}}</h3>
+		</div>
+		<div class="modal-body">
+			<form id='bulkDeleteForm' name="bulkDeleteForm" class="form-horizontal">
+				{{#if msg}}
+					{{msg}}
+				{{else}}	
+					Are you sure, you want to delete?
+				{{/if}}<br/><br/>
+			</form>	
+		</div>
+		<div class="modal-footer">
+			<a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+            <a href="javascript:void(0);" data-loading-text='Deleting...' class="btn btn-sm btn-primary bulk-delete">Delete</a>
+			&nbsp;&nbsp;<span id="msg"></span>
+		</div>
+	</div>
+</div>
+</script>	

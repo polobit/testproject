@@ -23,8 +23,8 @@ $(function(){
 
 		$(table).find('tr .tbody_check').each(function(index, element){
 			
-			// If element is checked store it's id in an array 
-			if($(element).is(':checked')){
+			// If element is checked store it's id in an array. !$(element).attr('disabled') included by Sasi to avoid disabled checkboxes
+			if($(element).is(':checked') && !$(element).attr('disabled')){
 				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
 				$(element).closest('tr').on("mouseenter", false);
 				index_array.push(index);
@@ -38,48 +38,48 @@ $(function(){
 		});
 		if(checked){
 			
-			if(!canRunBulkOperations())
+			if(!hasScope('DELETE_CONTACT'))
 			{
 				showModalConfirmation("Bulk Delete", 
-						"You may not have permission to delete some of the contacts selected. Proceeding with this operation will delete only the contacts that you are permitted to delete.<br/><br/> Do you want to proceed?", 
+						"You do not have permission to delete contacts.", 
 						function (){
-					
-					// Customize the bulk delete operations
-					if(!customize_bulk_delete(id_array, data_array))
-						return;
-					
-					
-					$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
-					
-					var url = $(table).attr('url');
-					if(SELECT_ALL == true)
-					{
-						if($(table).attr('id') == "contacts-table" || $(table).attr('id') == "companies" ) {
-							var dynamic_filter = getDynamicFilters();
-							if(dynamic_filter == null) {								
-								url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
-							}
-						}
-					}
-					
-					// For Active Subscribers table
-					if(SUBSCRIBERS_SELECT_ALL == true){	
-						if($(table).attr('id') == "active-campaign")
-							url = url + "&filter=all-active-subscribers";
-					}
-					
-					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+							return;
 						}, 
 						function(){
-							
 							return;
 						},
 						function() {
 							
-						});
+						},
+						"Cancel", "");
 			}
 			else
 			{
+				if($(table).hasClass('show-delete-modal')){
+
+					var json = {};
+					json.title = $(table).attr('data-bulk-delete-title');
+					json.msg = $(table).attr('data-bulk-delete-msg');
+
+					getTemplate("bulk-actions-delete-modal", json, undefined, function(template_ui){
+
+						if(!template_ui)
+							return;
+
+						$('#ticketsModal').html($(template_ui)).modal('show').on('shown.bs.modal', function(){
+
+							$('#ticketsModal').on('click', 'a.bulk-delete', function(e){
+
+								$('#ticketsModal').modal('hide');
+								$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+								bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
+							});
+						});				
+					});
+
+					return;
+				}
+
 				// customize delete confirmation message
 				if(!customize_delete_message(table))
 					return;
@@ -196,6 +196,111 @@ $(function(){
 	            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 				
 		});
+
+	$("body").on("click", "#deal-delete-checked", function(event){
+		event.preventDefault();
+		var id_array = [];
+		var index_array = [];
+		var data_array = [];
+		var checked = false;
+		var table = $('body').find('.showCheckboxes');
+		var dealsCount = 0;
+		$(table).find('tr .tbody_check').each(function(index, element){
+			
+			// If element is checked store it's id in an array 
+			if($(element).is(':checked')){
+				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
+				$(element).closest('tr').on("mouseenter", false);
+				index_array.push(index);
+				dealsCount++;
+				if(!$(element).closest('tr').hasClass("pseduo-row"))
+				{
+					id_array.push($(element).closest('tr').data().get('id'));
+					data_array.push($(element).closest('tr').data().toJSON());
+					checked = true;
+				}
+			}
+		});
+		if(checked){
+			
+			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			{
+				showModalConfirmation("Bulk Delete", 
+						"You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?", 
+						function (){
+					
+					// Customize the bulk delete operations
+					if(!customize_bulk_delete(id_array, data_array))
+						return;
+					
+					
+					//$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+					
+					var url = $(table).attr('url');
+					if(SELECT_ALL == true)
+					{
+						if($(table).attr('id') == "contacts-table" || $(table).attr('id') == "companies" ) {
+							var dynamic_filter = getDynamicFilters();
+							if(dynamic_filter == null) {								
+								url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+							}
+						}
+					}
+					
+					// For Active Subscribers table
+					if(SUBSCRIBERS_SELECT_ALL == true){	
+						if($(table).attr('id') == "active-campaign")
+							url = url + "&filter=all-active-subscribers";
+					}
+					
+					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+						}, 
+						function(){
+							
+							return;
+						},
+						function() {
+							
+						});
+			}
+			else
+			{
+				showModalConfirmation("Bulk Delete", 
+						"Delete "+dealsCount+" Deal(s)?", 
+						function (){
+							// Customize the bulk delete operations
+							if(!customize_bulk_delete(id_array, data_array))
+								return;
+							
+							
+							//$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+							
+							var url = $(table).attr('url');
+							if(SELECT_ALL && SELECT_ALL == true)
+							{
+								if($(table).attr('id') == "contacts-table" || $(table).attr('id') == "companies" ) {
+									var dynamic_filter = getDynamicFilters();
+									if(dynamic_filter == null) {								
+										url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+									}
+								}
+							}
+							
+							bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+						});
+			}
+						
+		}	
+		else
+		{
+			// if disabled return
+			if($(this).attr('disabled') === "disabled")
+				return;
+			
+			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+		}
+			
+	});
 	
 });
 
@@ -213,13 +318,11 @@ function customize_bulk_delete(id_array, data_array){
 	if(Current_Route == 'users'){
 		$.each(data_array, function(index, model){
 			if(model.is_admin){
-				console.log(id_array.indexOf(model.id));
-				id_array.splice((id_array.indexOf(model.id)+1), 1);
-
+				id_array.splice(id_array.indexOf(model.id), 1);
 			}	
 		});
 		if(id_array.length == 0){
-			$('body').find(".master-tag").html('<div class="alert alert-danger delete-adminuser"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user having <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
 			return false;
 		}
 	}
@@ -270,6 +373,28 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				});
 				
 			}
+
+			if(url=='core/api/dashboards/bulk')
+			{
+				if(App_Dashboards.dashboards_collection_view && App_Dashboards.dashboards_collection_view.collection)
+				{
+					$.each(id_array, function(index, id_val){
+						App_Dashboards.dashboards_collection_view.collection.remove(id_val);
+					});
+				}
+				if(CURRENT_USER_DASHBOARDS && CURRENT_USER_DASHBOARDS.length > 0)
+				{
+					$.each(id_array, function(index, id_val){
+						$.each(CURRENT_USER_DASHBOARDS, function(index1, val)
+						{
+							if(id_val == this.id)
+							{
+								CURRENT_USER_DASHBOARDS.splice(index1, 1);
+							}
+						});
+					});
+				}
+			}
 			
 			$(".bulk-delete-loading").remove();	
 			if(url=='core/api/users/bulk' && !_billing_restriction.currentLimits.freePlan)
@@ -284,7 +409,10 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			if(count >= 100 || count == 0)
 			{
 				if($(table).attr('id') == "contacts-table")
+				{
 					showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
+					CONTACTS_HARD_RELOAD = true;
+				}
 				if($(table).attr('id') == "companies"){
 					showNotyPopUp('information', "Your companies deletion will be processed shortly", "top", 5000);
 					COMPANIES_HARD_RELOAD = true;
@@ -319,6 +447,41 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			{}
 
 			$('.thead_check').attr("checked", false);
+			
+			switch(url){
+				case 'core/api/tickets/groups/bulk':{
+
+					if(id_array.length == App_Ticket_Module.groupsCollection.collection.length)
+						App_Ticket_Module.ticketGroups();
+					break;
+				}
+				case 'core/api/tickets/canned-messages/bulk':{
+					if(id_array.length == App_Ticket_Module.cannedResponseCollection.collection.length)
+						App_Ticket_Module.cannedResponses();
+					break;
+				}
+				case 'core/api/tickets/filters/bulk':{
+
+					  if(id_array.length == App_Ticket_Module.ticketFiltersList.collection.length)
+						App_Ticket_Module.ticketFilters();
+
+			    	  $.each(id_array, function(index, data){
+				      	App_Ticket_Module.ticketFiltersList.collection.remove(data);
+				      });
+
+				      if(id_array.indexOf(Ticket_Filter_ID) != -1){
+	                      var filterJSON = App_Ticket_Module.ticketFiltersList.collection.at(0).toJSON();
+			 			  Ticket_Filter_ID = filterJSON.id;
+			 		  }
+
+					break;
+				}
+				case 'core/api/tickets/labels/bulk':{
+					if(id_array.length == Ticket_Labels.labelsCollection.collection.length)
+						App_Ticket_Module.ticketLabels();
+					break;
+				}
+			}	
 			
 			// Show bulk operations only when thead check box is checked
 			toggle_contacts_bulk_actions_dropdown(undefined, true,$('.thead_check').parents('table').attr('id'));

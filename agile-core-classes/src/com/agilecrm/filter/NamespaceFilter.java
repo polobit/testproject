@@ -16,7 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
+
 import com.agilecrm.user.util.AliasDomainUtil;
+
+//import com.agilecrm.user.util.AliasDomainUtil;
+
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -79,6 +84,13 @@ public class NamespaceFilter implements Filter
 
 	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail"))
 	    return true;
+	
+	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/spi"))
+	    return true;
+
+	//Filter request for /_ah/sessioncleanup - Expired Session Cleanup Servlet
+	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/sessioncleanup"))
+	    return true;
 
 	// Read Subdomain
 	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
@@ -114,11 +126,20 @@ public class NamespaceFilter implements Filter
 	// If my or any special domain - support etc, choose subdomain
 	if (Arrays.asList(Globals.LOGIN_DOMAINS).contains(subdomain))
 	{
+		
 	    redirectToChooseDomain(request, response);
 	    return false;
 	}
 
-	subdomain = AliasDomainUtil.getActualDomain(subdomain);
+	try
+	{
+		subdomain = AliasDomainUtil.getActualDomain(subdomain);	
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+	}
+	
 	// Set the subdomain as name space
 	System.out.println("Setting the domain " + subdomain + " " + ((HttpServletRequest) request).getRequestURL());
 	NamespaceManager.set(subdomain);
@@ -197,18 +218,24 @@ public class NamespaceFilter implements Filter
     {
 	System.out.println(request.getServerName());
 
-	/*
-	 * DomainUser domainUser = new DomainUser(null, "yaswanth@invox.com",
-	 * "hungry", "password", true, true); try { domainUser.save(); } catch
-	 * (Exception e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); }
-	 */
+	
+	 /* DomainUser domainUser = new DomainUser(null, "govind@invox.com",
+	  "hungry", "password", true, true); try { domainUser.save(); } catch
+	  (Exception e) { // TODO Auto-generated catch block
+	  e.printStackTrace(); } */
 
 	/*
 	 * AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");
 	 * try { aliasDomain.save(); } catch (Exception e) { // TODO
 	 * Auto-generated catch block e.printStackTrace(); }
 	 */
+
+	/* DomainUser domainUser = new DomainUser(null, "yaswanth@invox.com", "hungry", "password", true, true); 
+	 try { domainUser.save(); } catch
+	  (Exception e) { // TODO Auto-generated catch block
+	  e.printStackTrace(); }*/
+	 
+
 
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
@@ -235,7 +262,17 @@ public class NamespaceFilter implements Filter
 
 	// Chain into the next request if not redirected
 	if (handled)
-	    chain.doFilter(request, response);
+		try
+		{
+
+	    	chain.doFilter(request, response);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			throw e;
+
+		}
     }
 
     @Override
@@ -250,25 +287,23 @@ public class NamespaceFilter implements Filter
 	// Nothing to do
     }
 
-    public boolean isRequestFromIEClient(ServletRequest request)
-    {
-	try
-	{
-	    HttpServletRequest req = (HttpServletRequest) request;
-	    String userAgent = req.getHeader("user-agent");
-	    if (userAgent == null)
-	    {
-		return false;
-	    }
-	    return userAgent.contains("MSIE");
+    public boolean isRequestFromIEClient(ServletRequest request){
+    	try {
+    		HttpServletRequest req = (HttpServletRequest) request;
+    		String userAgent = req.getHeader("user-agent");
+    		 if (userAgent == null)
+    		    {
+    			return false;
+    		    }
+    	    return userAgent.contains("MSIE");
+    	
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+    	
+    	return false;
 
-	}
-	catch (Exception e)
-	{
-	    // TODO: handle exception
-	    e.printStackTrace();
-	}
-
-	return false;
     }
+ 
 }

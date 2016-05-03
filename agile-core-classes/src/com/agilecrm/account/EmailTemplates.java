@@ -1,5 +1,8 @@
 package com.agilecrm.account;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -10,6 +13,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -93,6 +97,8 @@ public class EmailTemplates
 	 */
 	public Long created_time = 0L;
 	
+	public Set access_level = new HashSet();
+	
 	/**
 	 * Attached document id
 	 */
@@ -174,42 +180,6 @@ public class EmailTemplates
 	}
 
 	/**
-	 * Gets picture of owner who created email template. Owner picture is
-	 * retrieved from user prefs of domain user who created email template and
-	 * is used to display owner picture in email templates list.
-	 * 
-	 * @return picture of owner.
-	 * @throws Exception
-	 *             when agileuser doesn't exist with respect to owner key.
-	 */
-	@XmlElement(name = "ownerPic")
-	public String getOwnerPic() throws Exception
-	{
-		AgileUser agileuser = null;
-		UserPrefs userprefs = null;
-
-		try
-		{
-			// Get owner pic through agileuser prefs
-			if (owner != null)
-				agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner.getId());
-
-			if (agileuser != null)
-				userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-
-			if (userprefs != null)
-				return userprefs.pic;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-
-		}
-
-		return "";
-	}
-
-	/**
 	 * Gets domain user with respect to owner id if exists, otherwise null.
 	 * 
 	 * @return Domain user object.
@@ -217,14 +187,14 @@ public class EmailTemplates
 	 *             when Domain User not exists with respect to id.
 	 */
 	@XmlElement(name = "emailTemplateOwner")
-	public DomainUser getEmailTemplateOwner() throws Exception
+	public DomainUserPartial getEmailTemplateOwner() throws Exception
 	{
 		if (owner != null)
 		{
 			try
 			{
 				// Gets Domain User Object
-				return DomainUserUtil.getDomainUser(owner.getId());
+				return DomainUserUtil.getPartialDomainUser(owner.getId());
 			}
 			catch (Exception e)
 			{

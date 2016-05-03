@@ -1,6 +1,8 @@
 package com.agilecrm.user;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,6 +38,9 @@ public class AgileUser
      * Associate outer domain user Id
      */
     public Long domain_user_id;
+    
+    
+    private DomainUser domainUser;
 
     // Dao
     private static ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(AgileUser.class);
@@ -45,6 +50,7 @@ public class AgileUser
      */
     public AgileUser()
     {
+    	this.domainUser = null;
     }
 
     /**
@@ -96,6 +102,21 @@ public class AgileUser
     {
 	return dao.getByProperty("domain_user_id", domain_user_id);
     }
+    
+    /**
+     * Gets agile user based on domain user id
+     * 
+     * @param domain_user_id
+     *            domain user id to get its associated agile user
+     * @return agile user corresponding to a domain user
+     */
+    public static Key<AgileUser> getCurrentAgileUserKeyFromDomainUser(Long domain_user_id)
+    {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("domain_user_id", domain_user_id);
+    
+	return dao.getKeyByProperty(map);
+    }
 
     /**
      * Gets agile user based on agileuser id
@@ -117,7 +138,6 @@ public class AgileUser
 	}
 	catch (EntityNotFoundException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
 	}
@@ -130,7 +150,9 @@ public class AgileUser
      */
     public DomainUser getDomainUser()
     {
-	return DomainUserUtil.getDomainUser(domain_user_id);
+    	if( this.domainUser == null )	this.domainUser = DomainUserUtil.getDomainUser(domain_user_id);
+    	
+    	return this.domainUser;
     }
 
     /**

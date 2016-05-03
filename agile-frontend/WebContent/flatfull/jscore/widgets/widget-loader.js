@@ -77,7 +77,7 @@ function loadWidgets(el, contactObject, templateID)
 
 				$('#'+templateID, el).html(Widgets_View.render(true).el);
 				// Sets up widget
-				set_up_widgets(el, Widgets_View.el);
+				set_up_widgets(el, Widgets_View.el, contact.id);
 
 			}
 			widgetBindingsLoader();
@@ -211,6 +211,7 @@ function set_up_widgets(el, widgets_el)
 		$('#' + model.get('selector'), widgets_el).data('model', model);
 
 		var contact_id = WIDGET_LOADED_CONTACT.id;
+
 		/*
 		 * Checks if widget is minimized, if minimized script is not loaded
 		 */

@@ -568,19 +568,21 @@
 	type="text/html">
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
-<div class="panel wrapper" >
-<span class="label label-danger pull-right m-b">Beta</span>
+<div class="panel panel-default">
+<div class="panel-heading">
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}"  /></center>
+</div>
+<div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
-		Setup contacts sync with your Freshbooks account.
+		Setup contacts sync with your FreshBooks account.
 	</div>
 {{/unless}} 
 
     {{#if id}}
 <form id="freshbooks-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div><span>Account Linked </span>  <span>{{othersParams}}.freshbooks.com </span></div>
+          <div>Account Linked:  <div>{{othersParams}}.freshbooks.com </div></div>
 			<br>
           
              	<div class="control-group form-group">
@@ -601,7 +603,7 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
+			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
 <button class="btn btn-sm btn-primary ml_5" id="freshbooks_sync_prefs">Sync</button>
        	  	</div>
@@ -622,8 +624,8 @@
 
 <div class='input-group'>
 	<span class="input-group-addon">https://</span>
-	  <input type="url" id="freshbooks_url" class="input-medium form-control" placeholder="Freshbooks domain name" value="" id="freshbooks_url">
-    <span class="input-group-addon">.freshbooks.com</span>
+	  <input type="url" id="freshbooks_url" class="input-medium form-control" placeholder="FreshBooks domain name" value="" id="freshbooks_url">
+    <span class="input-group-addon">.freshBooks.com</span>
 
                 </div>  
 <div id="domainerror" class="hide text-danger">Enter Domain Name</div>
@@ -640,6 +642,7 @@
 	    </form>
 </div>
 {{/if}}
+</div>
 
 </div>
 </div>
@@ -657,8 +660,8 @@
 	    </center>
 	 </div>
 	 <div class="panel-body">
-	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" rel="tooltip" title="Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.">
-			Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" rel="tooltip" title="Sync Clients from FreshBooks as Contacts in Agile CRM along with purchase history.">
+			Sync Clients from FreshBooks as Contacts in Agile CRM along with purchase history.
 		</div>
     	<div class="text-center">
 			{{#if id}}
@@ -683,16 +686,15 @@
 <script id="admin-settings-import-freshbooks-contacts-form-template"
 	type="text/html">
 <div class="row">
-<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="col-md-6 col-sm-6 col-xs-12">
 <div class="panel panel-default" >
 <div class="panel-heading">
-<span class="label label-danger pull-right m-b">Beta</span>
 <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
-		Setup contacts sync with your Freshbooks account.
+		Setup contacts sync with your FreshBooks account.
 	</div>
 {{/unless}}
 
@@ -706,8 +708,8 @@
 
 <div class='input-group'>
 	<span class="input-group-addon">https://</span>
-	  <input type="url" id="freshbooks_url" class="input-medium form-control"  placeholder="Freshbooks domain name" value="" id="freshbooks_url">
-    <span class="input-group-addon">.freshbooks.com</span>
+	  <input type="url" id="freshbooks_url" class="input-medium form-control"  placeholder="FreshBooks domain name" value="" id="freshbooks_url">
+    <span class="input-group-addon">.freshBooks.com</span>
 
                 </div>  
 <div id="domainerror" class="hide text-danger">Enter Domain Name</div>

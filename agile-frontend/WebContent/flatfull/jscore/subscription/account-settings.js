@@ -101,10 +101,98 @@ $(function(){
 	$("#content #cancel-account-request").off("click");
 	$('#content').on('click', '#cancel-account-request', function(e) {
 			e.preventDefault();
+			load_clickdesk_code();
 			
 			// Shows cancellation modal
-			$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			//$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			$("#send-cancellation").html(getTemplate('cancel-subscription-request', {})).modal('show');	
 			
+	});
+
+	$("#send-cancellation #cancel-account-request-proceed").off("click");
+	$('#send-cancellation').on('click', '#cancel-account-request-proceed', function(e) {
+			e.preventDefault();
+			
+			// Shows cancellation modal
+			//$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			getTemplate("send-cancellation-request",{} , undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$("#send-cancellation .modal-dialog").html($(template_ui));
+			}, null);
+			
+	});
+
+	$("#send-cancellation #account_cancel_chat_btn").off("click");
+	$('#send-cancellation').on('click', '#account_cancel_chat_btn', function(e) {
+			e.preventDefault();
+			$(this).closest(".modal").modal("hide");
+			CLICKDESK_LIVECHAT.show();
+			cancellationFeatureUsedMail("Chat");
+	});
+
+	$("#send-cancellation #account_cancel_support_btn").off("click");
+	$('#send-cancellation').on('click', '#account_cancel_support_btn', function(e) {
+			cancellationFeatureUsedMail("Schedule a Demo");
+	});
+
+	$("#send-cancellation #account_pause_btn").off("click");
+	$('#send-cancellation').on('click', '#account_pause_btn', function(e) {
+		e.preventDefault();
+		var period = $("#pause_count").html();
+		$.ajax({
+				url : 'core/api/subscription/pauseOrResumeSubscriptions?period='+period,
+				type : 'POST',
+				success : function(){
+					cancellationFeatureUsedMail("Account Pause");
+					location.reload(true);
+				},
+				error : function(response){
+					showNotyPopUp("warning", response.responseText, "top");
+				}
+			});
+			
+	});
+
+	$("#send-cancellation #add").off("click");
+	$('#send-cancellation').on('click', '#add', function(e) {
+			e.preventDefault();
+			var value = $("#pause_count").html();
+			if(value < 3)
+				value++;
+			$("#pause_count").html(value);
+			if(value > 1)
+				$("#send-cancellation #month_id").html("months");
+	});
+	$("#send-cancellation #minus").off("click");
+	$('#send-cancellation').on('click', '#minus', function(e) {
+			e.preventDefault();
+			var value = $("#pause_count").html();
+			if(value > 1)
+				value--;
+			$("#send-cancellation #pause_count").html(value);
+			if(value == 1)
+				$("#send-cancellation #month_id").html("month");
+			
+	});
+	$('body').on('click', '#account_resume', function(e) {
+		e.preventDefault();
+		$(this).attr("disabled","disabled").text("Resuming");
+		$that = $(this);
+		$.ajax({
+			url : 'core/api/subscription/pauseOrResumeSubscriptions?period=0',
+			type : 'POST',
+			success : function(){
+				showNotyPopUp("information", "Welcome back! We are resuming services for your account, please wait for few seconds while we re-activate it.", "top",30000);
+				setTimeout(function(){
+					window.location.reload(true);
+				},30000);
+			},
+			error : function(response){
+				$that.text("Resume").removeAttr("disabled");
+				showNotyPopUp("warning", response.responseText, "top");
+			}
+		});
 	});
 
 });
@@ -214,4 +302,17 @@ $('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e
 $("#warning-deletion-feedback").on('hidden.bs.modal', function(){
 	ACCOUNT_DELETE_REASON_JSON = undefined;
 });
+
+function cancellationFeatureUsedMail(type){
+	if(!type)
+		return;
+	var json={};
+	json.from=CURRENT_DOMAIN_USER.email;
+	json.to="venkat@agilecrm.com";
+	json.cc="mogulla@agilecrm.com";
+	json.bcc="raja@agilecrm.com";
+	json.subject="Cancellation Process Feature Used";
+	json.body="Username: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain+"<br>Feature Used: "+type;
+	sendEmail(json);
+};
 				

@@ -82,6 +82,13 @@
 			tight_acl.REPORTS_PER = true;
 			App_ACL.notAllowed(obj);
 		}
+		if(Current_Route.indexOf('tickets') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('HELPDESK') > -1))
+		{
+			obj.entity = 'Help Desk';
+			tight_acl.REPORTS_PER = true;
+			obj.ERR_CONTAINER = ".ticket-settings";
+			App_ACL.notAllowed(obj);
+		}
 	}
 	
 	/*
@@ -177,9 +184,26 @@
 	};
 	
 	acl_util.initTagACL = function(el){
-		$('#new_tag_acl',el).off('change').on('change',function(){
+	$('#disable_new_tags').on('click',function(e){
+	if($('#disable_new_tags').text().trim() == 'Enable Access')
+	{
+		
+		$('#disable_new_tags').text("Disable Access");
+		
+		updateTagAcl(true);console.log(false);
+	}
+	else if($('#disable_new_tags').text().trim() == 'Disable Access')
+	{
+		$('#disable_new_tags').text("Enable Access");
+		
+		updateTagAcl(false);
+		//$('#disable_new_tags').attr("option","");
+
+	}  
+	});
+	/*	$('#new_tag_acl',el).off('change').on('change',function(){
 			updateTagAcl($(this).is(':checked'));
-		});
+		});*/
 		setTagACL(el);
 	}
 }(window.acl_util = window.acl_util || {}, $));

@@ -166,6 +166,7 @@ var CompaniesRouter = Backbone.Router
 			$('#content').html(el);
 
 			contactFiltersListeners("lhs_filters_conatiner");
+			contactListener();
 
 			$(".active").removeClass("active");
 			$("#companiesmenu").addClass("active");
@@ -199,7 +200,7 @@ var CompaniesRouter = Backbone.Router
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
 				//setup_tags(el);
-
+				contactListener();
 				company_list_view.init(el);
 
 				setUpCompanySortFilters(el);
@@ -241,6 +242,9 @@ var CompaniesRouter = Backbone.Router
 		var _that = this;
 		App_Companies.companyDateFields = COMPANY_DATE_FIELDS;
 
+		App_Companies.companyContactTypeFields = COMPANIES_CONTACT_TYPE_FIELDS;
+		App_Companies.companyCompanyTypeFields = COMPANIES_COMPANY_TYPE_FIELDS;
+
 		if(!App_Companies.companyDateFields){
 			$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=COMPANY", function(customDatefields)
 				{
@@ -248,17 +252,18 @@ var CompaniesRouter = Backbone.Router
 
 					// Defines appendItem for custom view
 					_that.companiesListView.appendItem = function(base_model){
-						contactTableView(base_model,customDatefields,this);
+						contactTableView(base_model,customDatefields,this,App_Companies.companyContactTypeFields,App_Companies.companyCompanyTypeFields);
 					};
 			
 					// Fetch collection
 					_that.companiesListView.collection.fetch();
+					contactListener();
 					
 				});
 		} else {
 			// Defines appendItem for custom view
 			_that.companiesListView.appendItem = function(base_model){
-				contactTableView(base_model,App_Companies.companyDateFields,this);
+				contactTableView(base_model,App_Companies.companyDateFields,this,App_Companies.companyContactTypeFields,App_Companies.companyCompanyTypeFields);
 			};
 	
 			// Fetch collection
@@ -269,6 +274,7 @@ var CompaniesRouter = Backbone.Router
 		if (!is_lhs_filter)
 		{
 			$('#content').html(this.companiesListView.el);
+			contactListener();
 		}
 		else
 		{
@@ -277,6 +283,7 @@ var CompaniesRouter = Backbone.Router
 			$('#bulk-select').css('display', 'none');
 			$('#bulk-action-btns > button').addClass("disabled");
 			COMPANIES_HARD_RELOAD = true;
+
 		}
 
 		$(".active").removeClass("active");
@@ -293,7 +300,8 @@ var CompaniesRouter = Backbone.Router
 	 * 
 	 */
 	companyDetails : function(id, company){
-
+		
+		insidePopover=false;
 		// For getting custom fields
 		if (App_Companies.customFieldsList == null || App_Companies.customFieldsList == undefined)
 		{
@@ -366,7 +374,7 @@ var CompaniesRouter = Backbone.Router
 		add_recent_view(company);
 
 		// If contact is of type company , go to company details page
-		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail", change : false,
+		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
 			postRenderCallback : function(el)
 			{
 				fill_company_related_contacts(id, 'company-contacts', el);
@@ -382,7 +390,7 @@ var CompaniesRouter = Backbone.Router
 
 				company_util.starify(el);
 				company_util.show_map(el);
-				// fill_owners(el, contact.toJSON());
+				// fill_owners(eidl, contact.toJSON());
 				// loadWidgets(el, contact.toJSON());
 
 			} });
@@ -391,6 +399,7 @@ var CompaniesRouter = Backbone.Router
 		$('#content').html(el);
 	//	fill_company_related_contacts(id, 'company-contacts');
 		// company_detail_tab.initEvents();
+		checkCompanyUpdated();
 		return;
 	},
 	

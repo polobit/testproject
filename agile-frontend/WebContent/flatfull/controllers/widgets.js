@@ -23,6 +23,8 @@ var WidgetsRouter = Backbone.Router
                 "HelpScout/:id" : "HelpScout",
                 "Zendesk" : "Zendesk",
                 "Zendesk/:id" : "Zendesk",
+                "Uservoice" : "Uservoice",
+                "Uservoice/:id" : "Uservoice",
                 // Calling widgets
                 "Sip" : "Sip",
                 "Sip/:id" : "Sip",
@@ -40,6 +42,8 @@ var WidgetsRouter = Backbone.Router
                 "FreshBooks/:id" : "FreshBooks",
                 "Stripe" : "Stripe",
                 "Stripe/:id" : "Stripe",
+                "Braintree" : "Braintree",
+                "Braintree/:id" : "Braintree",
                 "Xero" : "Xero",
                 "Xero/:id" : "Xero",
                 "QuickBooks" : "QuickBooks",
@@ -174,6 +178,13 @@ var WidgetsRouter = Backbone.Router
              */
             Zendesk : function(id) {
                 addConfigurableWidget(id, "Zendesk", "zendesk-login");
+            },
+            
+            /**
+             * Manages Uservoice widget
+             */            
+            Uservoice : function(id){
+                addConfigurableWidget(id, "Uservoice", "uservoice-login");
             },
 
             /**
@@ -330,6 +341,13 @@ var WidgetsRouter = Backbone.Router
                             "core/api/widgets/Stripe");
                 }
 
+            },
+
+            /**
+             * Manages Stripe widget
+             */
+            Braintree : function(id) {
+               addConfigurableWidget(id, "Braintree", "braintree-login");
             },
 
             /**

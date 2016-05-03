@@ -1,12 +1,8 @@
 package com.agilecrm.core.api;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -15,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -31,7 +26,6 @@ import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.account.VerifiedEmails.Verified;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.account.util.VerifiedEmailsUtil;
-import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.EmailSender;
@@ -40,20 +34,17 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.EmailPrefs;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.NamespaceUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>EmailsAPI</code> is the API class for Emails. It handles sending email
@@ -79,7 +70,7 @@ public class EmailsAPI
     @Path("send-email")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
+    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("cc") String cc, @QueryParam("bcc") String bcc,
 	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
     {
 	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null,null);
@@ -106,7 +97,8 @@ public class EmailsAPI
 	try
 	{
 	    
-	    if (MandrillUtil.isEmailContentSizeValid(contactEmail.getMessage(), contactEmail.getDocument_key()))
+	    // Compares documents size
+		if (MandrillUtil.isEmailContentSizeValid(contactEmail.getMessage(), contactEmail.getDocument_key()))
 	    {
 		// Saves Contact Email.
 //		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
@@ -141,7 +133,7 @@ public class EmailsAPI
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to,
+    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to, @FormParam("cc") String cc, @FormParam("bcc") String bcc,
 	    @FormParam("subject") String subject, @FormParam("body") String body) throws Exception
     {
 	String oldNamespace = NamespaceManager.get();
@@ -149,8 +141,9 @@ public class EmailsAPI
 	try
 	{
 	    // To avoid sending through subaccount
-	    NamespaceManager.set("");
-	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null,null);
+		//Mandrill.sendMail(false, fromEmail, fromEmail, to, cc, bcc, subject, fromEmail, body, null, null, null,null);
+	   
+	    EmailGatewayUtil.sendEmail(null, null, fromEmail, null, to, cc, bcc, subject, null, body, null, null, null, null, new String[]{});
 	}
 	catch (Exception e)
 	{
@@ -266,6 +259,11 @@ public class EmailsAPI
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
+	String domain = NamespaceManager.get();
+	
+	//if Emil Gateway is SendGrid or Null
+	if(emailGateway==null || emailGateway.email_api.equals(EmailGateway.EMAIL_API.SEND_GRID))
+	              return  SendGridSubUser.getSendgridStats(domain, emailGateway);
 	// If not Mandrill, return 
 	if(emailGateway != null && !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
 		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
@@ -275,8 +273,6 @@ public class EmailsAPI
 	// Get emailGateway api-key
 	if (emailGateway != null)
 	    apiKey = emailGateway.api_key;
-	
-	String domain = NamespaceManager.get();
 
 	// Returns mandrill subaccount info if created, otherwise error json.
 	String info = MandrillSubAccounts.getSubAccountInfo(domain, apiKey);

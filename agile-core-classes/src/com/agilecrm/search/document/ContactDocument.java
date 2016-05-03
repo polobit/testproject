@@ -79,6 +79,8 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 			
 	}
 	
+	
+	
 	public Builder buildDocument(Contact contact)
 	{
 
@@ -188,7 +190,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		doc.addField(Field.newBuilder().setName("field_labels")
 				.setText(StringUtils.join(fields.keySet(), " ")));
 
-		DomainUser user = contact.getOwner();
+		DomainUser user = contact.getContactOwner();
 
 		// Add owner to document
 		if (user != null)
@@ -341,4 +343,32 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	{
 		return ContactUtil.getContactsBulk(doc_ids);
 	}
+	
+	
+	@Override
+	public void addAsync(Object entity)
+	{
+		Contact contact = (Contact) entity;
+		Builder doc = buildDocument(contact);
+		
+		// Adds document to Index
+		addToIndexAsync(doc);   
+			
+	}
+	
+	public void addToIndexAsync(Builder... docs)
+	{
+		// Adds document to index
+		try
+		{
+			index.putAsync(docs);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
+	}
+
 }

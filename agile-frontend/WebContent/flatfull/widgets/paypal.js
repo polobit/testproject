@@ -15,7 +15,7 @@ function loadPaypalInvoices(offSet){
 				result.content = "No invoices found.";
 			}
 		}else{
-			result.content = "Email not found for this contact.";
+			result.content = "Please provide email for this contact.";
 		}
 
 		getTemplate('paypal-invoices', result, undefined, function(template_inv){						

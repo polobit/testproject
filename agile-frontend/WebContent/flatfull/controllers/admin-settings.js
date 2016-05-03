@@ -12,6 +12,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Account preferences */
 	"account-prefs" : "accountPrefs",
 
+	"account-ipaccess" : "ipaccess",
+
 	/* Users */
 	"users" : "users", "users-add" : "usersAdd", "user-edit/:id" : "userEdit",
 
@@ -110,25 +112,77 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
+		var that=this;
+		$('#content').html("<div id='account-pref'>&nbsp;</div>");
 		
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
-			$('#content').html($(template_ui));	
+			$('#account-pref').html($(template_ui));
+			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});	
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
 			} });
 
-			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			
+
+			$('#account-pref').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
+			$('#account-pref').find('#AdminPrefsTab .select').removeClass('select');
+			$('#account-pref').find('.account-prefs-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-account-prefs').addClass('active');
+			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+
+
+		}, "#account-pref");
+
+		$('.settings-account-prefs').addClass('active');
+		$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+		
+	},
+
+
+	ipaccess : function()
+	{
+
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		var that = this;
+		$('#content').html("<div id='account-pref'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+				
+			$('#account-pref').html($(template_ui));
+			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});
+			var view = new Base_Model_View({ url : '/core/api/allowedips', template : "admin-settings-ip-prefs",
+				postRenderCallback : function(el)
+				{
+					loadip_access_events();
+					
+				}, saveCallback : function(){
+				console.log("saveCallback");
+				showNotyPopUp("information", "Your IP Address has been updated successfully.", "top", 4000);
+				App_Admin_Settings.ipaccess();
+			},errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top");
+			}
+
+				 });
+			
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.account-prefs-tab').addClass('select');
 			$(".active").removeClass("active");
+			$('.settings-account-ips').addClass('active');
+			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			//$('.settings-account-ips').parent().removeClass('b-b-none');
 
-		}, "#content");
-
-		
-		
+		}, "#account-pref");
 	},
 
 	
@@ -188,18 +242,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 
 			that.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
-			individual_tag_name : "div", sortKey : "name", postRenderCallback : function(el)
+			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
 
-				getTemplate('adminsettings-newuser', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-
-					// Get template and fill it with chats data and append it to chats panel
-					$('#admin-settings-users-model-list').append($(template_ui));
-
-				}, null);
+				
 
 
 
@@ -251,6 +298,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 				// Binds action
 				bindAdminChangeAction(el, view.model.toJSON());
+				setTimeout(function(){
+				$('a[href="#sales-previlages"]').tab("show");
+				},100)
+				
+					
+				
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
@@ -334,7 +387,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			 * Creates a Model for users edit, navigates back to 'user' window on
 			 * save success
 			 */
-			var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", saveCallback : function(response)
+			var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", change : false, saveCallback : function(response)
 			{
 
 				update_contact_in_our_domain(userEmail, response, function(){
@@ -366,8 +419,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 				bindAdminChangeAction(el, view.model.toJSON());
 				setTimeout(function(){
-					//$('#deals-privilege', el).trigger('change');
+					$('#deals-privilege', el).trigger('change');
 					$('#calendar-privilege', el).trigger('change');
+					$('a[href="#sales-previlages"]',el).tab('show');
+					$('a[href="#sales-previlages"]',el).trigger('click');
 				},500);
 			}, saveAuth : function(el){
 				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
@@ -1175,14 +1230,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
-			var view = new Base_Model_View({ url : '/core/api/alias', template : "admin-settings-domain-alias", postRenderCallback : function(el)
-			{
-				if($("#alias_domain #alias").html() == "")
-					$("#alias_domain #alias").val(CURRENT_DOMAIN_USER.domain);
-			},prePersist : function(model){
+			var view = new Base_Model_View({ url : '/core/api/alias', template : "admin-settings-domain-alias", postRenderCallback : function(el){},
+			prePersist : function(model){
 				var aliasJSON = [];
 				$.each($("#alias_domain").find('input[name="alias"]'), function(index, data) {
-					aliasJSON.push(($(data).val()));
+					aliasJSON.push(($(data).val().toLowerCase()));
 				});
 			    model.set({ 
 			       'alias' : aliasJSON

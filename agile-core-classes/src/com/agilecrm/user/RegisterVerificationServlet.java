@@ -4,15 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
-
 import com.agilecrm.user.util.AliasDomainUtil;
+import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.analytics.servlets.AnalyticsServlet;
@@ -45,6 +43,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	IPlIST.add("49.206.56.84");
 	IPlIST.add("117.247.178.90");
 	IPlIST.add("183.83.0.113");
+	IPlIST.add("117.247.109.22");
     }
 
     /**
@@ -54,6 +53,7 @@ public class RegisterVerificationServlet extends HttpServlet
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
+    	
 	String domain = request.getParameter("domain");
 	String oauth = request.getParameter("oauth");
 	String email = request.getParameter("email");
@@ -73,6 +73,7 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	try
 	{
+		
 	    if (isTrottleLimitReached(userIp) && !IPlIST.contains(userIp))
 	    {
 		System.out.println("Throttle reached" + userIp);

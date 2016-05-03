@@ -244,8 +244,8 @@ public class SendEmail extends TaskletAdapter
     	if(StringUtils.isBlank(fromEmail))
     	{
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-    			    "Email failed since \'From\' address is invalid.",
-    			    LogType.EMAIL_SENDING_FAILED.toString());
+    			    "Email skipped since \'From\' address is invalid.",
+    			    LogType.EMAIL_SENDING_SKIPPED.toString());
 
     		// Execute Next One in Loop
     		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -257,8 +257,8 @@ public class SendEmail extends TaskletAdapter
     	if(StringUtils.isBlank(to))
     	{
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-    			    "Email failed since \'To\' address is invalid.",
-    			    LogType.EMAIL_SENDING_FAILED.toString());
+    			    "Email skipped since \'To\' address is invalid.",
+    			    LogType.EMAIL_SENDING_SKIPPED.toString());
 
     		// Execute Next One in Loop
     		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -635,14 +635,6 @@ public class SendEmail extends TaskletAdapter
 	// Update campaign emailed time
 	ContactUtil.updateCampaignEmailedTime(Long.parseLong(subscriberId), System.currentTimeMillis()/1000, to);
 	
-	// For domain "clickdeskengage" - use SendGrid API
-	if (StringUtils.equals(domain, Globals.CLICKDESK_ENGAGE_DOMAIN))
-	{
-	    SendGrid.sendMail(Globals.CLICKDESK_SENDGRID_API_USER_NAME, Globals.CLICKDESK_SENDGRID_API_KEY, fromEmail,
-		    fromName, to, cc, bcc, subject, replyTo, html, text, null);
-	    return;
-	}
-
 	// Send Email using email gateway
 	EmailGatewayUtil.sendBulkEmail(
 			Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE

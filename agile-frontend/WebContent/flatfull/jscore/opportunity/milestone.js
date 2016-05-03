@@ -121,14 +121,12 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 		},
 		error : function(model, response) {
 			$('ul.milestones').sortable("enable");
-			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly.")) {
+			if(response && (response.responseText == "Deal not saved properly." || response.responseText == "Deal not updated properly." || response && response.status == 403)) {
 				showModalConfirmation("Deals", response.responseText, function(element){
 					App_Deals.deals();	
 				},
 				"",
-				function(element){
-					App_Deals.deals();
-				}, "Ok", "");
+				"", "Cancel", "");
 			}
 		}
 	});
@@ -160,10 +158,23 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
         var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealchangevalue); 
         var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(dealchangevalue);
 
-   		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
-		$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+        if($('#'+newMilestone.replace(/ +/g, '')+'_count').text() != "1000+")
+        {
+        	if(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1 > 1000)
+        	{
+        		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+"+");
+        	}
+        	else
+        	{
+        		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
+        	}
+        }
+   		if($('#'+oldMilestone.replace(/ +/g, '')+'_count').text() != "1000+")
+   		{
+   			$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+   		}
 
-		$('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
+   		$('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(newdealvalue));
 		$('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(olddealvalue));
 		/* average of new deal total */
      	var avg_old_deal_size = 0;

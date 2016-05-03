@@ -12,6 +12,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -24,9 +26,13 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.contact.upload.blob.status.ImportStatus;
+import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreService;
@@ -142,11 +148,11 @@ public class UploadContactsAPI
 		Queue queue = QueueFactory.getQueue(AgileQueues.DEALS_UPLOAD_QUEUE);
 
 		TaskOptions taskOptions = TaskOptions.Builder
-		        .withUrl(
-		                "/core/api/bulk-actions/upload-deals/"
-		                        + String.valueOf(SessionManager.get().getDomainId() + "/"
-		                                + request.getParameter("key"))).payload(bytes)
-		        .header("Content-Type", request.getContentType()).method(Method.POST);
+			.withUrl(
+				"/core/api/bulk-actions/upload-deals/"
+					+ String.valueOf(SessionManager.get().getDomainId() + "/"
+						+ request.getParameter("key"))).payload(bytes)
+			.header("Content-Type", request.getContentType()).method(Method.POST);
 
 		// Task is added into queue
 		queue.addAsync(taskOptions);
@@ -157,12 +163,11 @@ public class UploadContactsAPI
 		Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_UPLOAD_QUEUE);
 
 		TaskOptions taskOptions = TaskOptions.Builder
-		        .withUrl(
-		                "/core/api/bulk-actions/upload/"
-		                        + String.valueOf(SessionManager.get().getDomainId() + "/"
-		                                + request.getParameter("key") + "/" + request.getParameter("type")))
-		        .payload(bytes).header("Content-Type", request.getContentType())
-		        .method(Method.POST);
+			.withUrl(
+				"/core/api/bulk-actions/upload/"
+					+ String.valueOf(SessionManager.get().getDomainId() + "/"
+						+ request.getParameter("key") + "/" + request.getParameter("type")))
+			.payload(bytes).header("Content-Type", request.getContentType()).method(Method.POST);
 
 		// Task is added into queue
 		queue.addAsync(taskOptions);
@@ -181,5 +186,19 @@ public class UploadContactsAPI
 	    e.printStackTrace();
 	}
 
+    }
+
+    @Path("/status/{type}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public ImportStatus getImportStatus(@PathParam("type") ImportType type)
+    {
+	String namespace = NamespaceManager.get();
+	ImportStatusDAO dao = new ImportStatusDAO(NamespaceManager.get(), type);
+
+	if (dao.checkRunningStatus())
+	    return dao.getImportStatus(namespace);
+
+	return (ImportStatus) null;
     }
 }
