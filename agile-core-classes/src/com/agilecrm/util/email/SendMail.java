@@ -133,7 +133,12 @@ public class SendMail
 	// For campaign sharing
 	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
 	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
-	
+
+	//For AllowAccessIP
+	public static final String ALLOW_IP_ACCESS = "allow_ip_access";
+	public static final String ALLOW_IP_ACCESS_SUBJECT = "Verify Your New IP Address for Uninterrupted Access";
+
+
 	// Ticket template names
    	public static final String TICKET_REPLY = "ticket_reply_email";
    	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
@@ -141,7 +146,10 @@ public class SendMail
    	public static final String TICKET_STATS = "ticket_stats";
    	public static final String TICKET_COMMENTS = "ticket_comments";
    	public static final String TICKET_FOOTER = "ticket_footer";
-   	
+
+   	//For browser Fingerprint
+   	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
+
     /**
      * From Name of email.
      */

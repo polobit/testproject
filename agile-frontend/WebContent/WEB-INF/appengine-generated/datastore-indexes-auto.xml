@@ -35,6 +35,11 @@
         <property name="type" direction="asc"/>
     </datastore-index>
     
+    <datastore-index kind="Workflow" ancestor="false" source="manual">
+        <property name="access_level" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+    
     <datastore-index kind="Opportunity" ancestor="false" source="manual">
         <property name="__key__" direction="asc"/>
         <property name="name" direction="asc"/>
