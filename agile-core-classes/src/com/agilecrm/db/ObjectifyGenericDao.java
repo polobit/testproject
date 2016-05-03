@@ -12,6 +12,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.AllDomainStats;
@@ -335,6 +336,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	return key;
     }
+    
+    /**
+     * Stores an entity in database
+     * 
+     * @param entity
+     * @return Key of the saved entity
+     */
+    public Key<T> put(T entity, boolean force)
+    {
+    	return ofy().put(entity);
+    }
+
 
     /**
      * Stores multiple entities of same type
@@ -697,7 +710,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	if (!StringUtils.isEmpty(orderBy))
 	    query.order(orderBy);
-
+	
 	return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
     }
 
@@ -708,14 +721,25 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// entities he had created
 	System.out.println("check read query");
 	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+	int page_index_for_cursor = 0;
 
-	if (cursor != null)
-	    query.startCursor(Cursor.fromWebSafeString(cursor));
+	if (cursor != null){
+		
+		if(!cursor.startsWith("agile_cursor_"))
+			query.startCursor(Cursor.fromWebSafeString(cursor));
+		else {
+			page_index_for_cursor = Integer.parseInt(cursor.replace("agile_cursor_", "").split("-")[0]);
+			// query.limit(max);
+			query.offset(page_index_for_cursor * max);
+		}
+		
+	}
+	    
 
 	int index = 0;
+	
 	String newCursor = null;
 	List<T> results = new ArrayList<T>();
-
 	QueryResultIterator<T> iterator = query.iterator();
 	while (iterator.hasNext())
 	{
@@ -754,7 +778,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
 				    agileCursor.count, 1 * 60 * 60 * 1000);
 		    }
-
+		    
 		}
 	    }
 
@@ -765,7 +789,19 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (iterator.hasNext())
 		{
 		    Cursor cursorDb = iterator.getCursor();
-		    newCursor = cursorDb.toWebSafeString();
+		    try {
+		    	 newCursor = cursorDb.toWebSafeString();
+			} catch (NullPointerException e) {
+				/**
+				 * GAE Query not support cursor with inequality filters in the query.
+				 */
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				page_index_for_cursor++;
+				
+				newCursor = "agile_cursor_" + page_index_for_cursor + "-" + max;
+				
+			}
+		   
 
 		    // Store the cursor in the last element
 		    if (result instanceof com.agilecrm.cursor.Cursor)

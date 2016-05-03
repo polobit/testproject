@@ -11,8 +11,11 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -63,7 +66,7 @@ public class TriggersAPI
 	trigger.save();
 	
 	//Increase count of Trigger for AllDomainstats report in database
-		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.TRIGGER_COUNT);
+	AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.TRIGGER_COUNT);
 	
 	return trigger;
     }
@@ -80,8 +83,17 @@ public class TriggersAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Trigger updateTrigger(Trigger trigger)
     {
-	trigger.save();
-	return trigger;
+	try {
+		trigger.save();
+		return trigger;
+	} catch (Exception e) {
+		String message = e.getMessage();
+		if(StringUtils.isNotBlank(message) && message.contains(":"))
+			message = message.split(":")[1];
+		
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(message)
+				.build());
+	}
     }
 
     /**
