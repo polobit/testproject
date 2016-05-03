@@ -68,10 +68,11 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 			String token = null;
 			try
 			{
-				token = VersioningUtil.getQueueHeaderValue("X-AppEngine-TaskName");
+				token = VersioningUtil.getQueueHeaderValue(VersioningUtil.APPENGINE_TASK_NAME);
+				String retryCount= VersioningUtil.getQueueHeaderValue(VersioningUtil.APPENGINE_TASK_RETRY_COUNT);
 				
 				// Add Started status to DB
-				CampaignLogsSQLUtil.insertCampaignAssignedStatus(namespace, campaignId.toString(), "STARTED", "Campaign Assigning started for " + contacts.size() + " contacts", token);
+				CampaignLogsSQLUtil.insertCampaignAssignedStatus(namespace, campaignId.toString(), "STARTED", "Campaign Assigning started for " + contacts.size() + " contacts. Task Retry count is " + retryCount , token);
 				
 				// If task gets retried, verifies whether same campaign run before within time span
 				if("agile-normal-bulk".equalsIgnoreCase(VersioningUtil.getCurrentModuleName()) && VersioningUtil.isTaskRetried())

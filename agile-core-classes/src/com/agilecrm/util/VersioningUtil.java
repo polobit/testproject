@@ -26,6 +26,7 @@ public class VersioningUtil
     private static final boolean IS_PRODUCTION_APP;
     
     public static final String APPENGINE_TASK_RETRY_COUNT = "X-AppEngine-TaskRetryCount";
+    public static final String APPENGINE_TASK_NAME = "X-AppEngine-TaskName";
 
     /**
      * Cloudfront paths
