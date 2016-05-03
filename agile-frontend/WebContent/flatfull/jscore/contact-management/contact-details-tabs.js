@@ -683,14 +683,14 @@ function initializeSendEmailListeners(){
 
 						if(hasScope("EDIT_CONTACT"))
 						{
-							sendEmail(that);
+							emailSend(that);
 						}
 						else
 						{
 							showModalConfirmation("Send Email", 
 								"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
 								function (){
-									sendEmail(that);
+									emailSend(that);
 								},
 								function(){
 									return;
