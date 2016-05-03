@@ -1337,6 +1337,13 @@ var portlet_utility = {
 		}
 		case "Referralurl stats": {
 			var ref_url,count;
+			selector='referralurl-stats-portlet-body';
+			var sizey = parseInt($('.' + selector).parent().attr("data-sizey"));
+			var topPos = 50 * sizey;
+			if (sizey == 2 || sizey == 3)
+				topPos += 50;
+			$('.'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+ topPos
+								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			var url = '/core/api/web-stats/refurl-stats?start_time='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
 					+ '&end_time='
@@ -1344,10 +1351,11 @@ var portlet_utility = {
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
 				if(data.length==0){
-						$('.referralurl-stats-portlet-body').html('<div class="portlet-error-message">No Referral URL Found</div>');
+						$('.'+selector).html('<div class="portlet-error-message">No Referral URL Found</div>');
 								return;
 					}
 				var span;
+				var element_list=$("<div style=' padding-bottom: 5px;'></div>");
 				$.each( data, function(e) {					
 					var width;
 					if(e==0)
@@ -1364,8 +1372,9 @@ var portlet_utility = {
 		            span.append("<div  style='margin-left: 90%;width: 15%;'>" + data[e].count + "</div>");
 		            span.append("<div class='bar' style='width: "+width+"%; margin: 1px;height: .8rem; background: #03A9F4;'></div>");
 		            span.append("<br/>");
-		            $('.referralurl-stats-portlet-body').append(span);
+		            element_list.append(span);
 				});
+				$('.'+selector).html(element_list);
 			});
 			
 			setPortletContentHeight(base_model);
