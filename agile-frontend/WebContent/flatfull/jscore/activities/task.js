@@ -207,9 +207,22 @@ function initializeTasksListeners(){
 				$(".compress .panel.panel-default.w-full").addClass("taskpanelheight");
 				$(".compress .text-info .text-xs").addClass("fa-expand");
 				$(".compress .text-info .text-xs").removeClass("fa-compress ");
+				$(".compress .text-info .text-xs").removeClass("pull-left");
 				$(".compress").addClass("taskautowidth");
+				$(".compress .icon-plus").addClass("pull-left");
 				$(".compress .text-info .text-xs").addClass("taskexpandbutton");
 				$(".compress .list-header.panel-heading").addClass("taskheading");
+				$(".compress .taskexpandbutton").removeClass("pull-right");
+				$(".compress .taskexpandbutton").addClass("text-center");
+				$(".compress .taskexpandbutton").addClass("m-t-sm");
+				$(".compress .transform-rotate").addClass("block");
+				$(".compress .transform-rotate").removeClass("inline-block");
+				
+
+				 
+ 
+
+ 
 			}
 		else
 		{
@@ -225,8 +238,16 @@ function initializeTasksListeners(){
 				$(".expand .text-info .text-xs").addClass("fa-compress");
 				$(".expand .text-info .text-xs").removeClass("fa-expand");
 				$(".expand").removeClass("taskautowidth");
-				$(".expand .text-info .text-xs").removeClass("taskexpandbutton");
+				$(".expand .text-info.text-xs").removeClass("taskexpandbutton");
 				$(".expand .list-header.panel-heading").removeClass("taskheading");
+				$(".expand .taskexpandbutton").addClass("pull-right");
+				$(".expand .taskexpandbutton").removeClass("text-center");
+				$(".expand .taskexpandbutton").removeClass("m-t-sm");
+				$(".expand .transform-rotate").addClass("inline-block");
+				$(".expand .transform-rotate").removeClass("block");
+				$(".compress .text-info .text-xs").addClass("pull-left");
+				
+
 		}
 		
 		taskAutoWidth();
