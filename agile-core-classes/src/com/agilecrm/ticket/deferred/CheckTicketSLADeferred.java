@@ -1,5 +1,6 @@
 package com.agilecrm.ticket.deferred;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -7,8 +8,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
-import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
@@ -64,10 +63,21 @@ public class CheckTicketSLADeferred implements DeferredTask
 
 			for (Iterator<List<Key<Tickets>>> iter = lists.iterator(); iter.hasNext();)
 			{
-				final List<Key<Tickets>> sublist = iter.next();
-
+				List<Key<Tickets>> sublist = iter.next();
+				
 				System.out.println("sublist keys size: " + sublist.size());
-
+				
+				List<Long> ticketIDList = new ArrayList<>();
+				
+				//Converting ticket Keys to ticket IDs as Key is not serializable to create new task with Keys list.
+				for(Key<Tickets> key : sublist)
+					ticketIDList.add(key.getId());
+				
+				//Using normal variable in annonymous class is not permitted to copying to final variable.
+				final List<Long> TICKET_ID_LIST = ticketIDList;
+				
+				System.out.println("TICKET_ID_LIST id size: " + TICKET_ID_LIST.size());
+				
 				Queue queue = QueueFactory.getQueue("ticket-bulk-actions");
 				queue.add(TaskOptions.Builder.withPayload(new DeferredTask()
 				{
@@ -81,10 +91,9 @@ public class CheckTicketSLADeferred implements DeferredTask
 					{
 						try
 						{
-							for (Key<Tickets> key : sublist)
+							for (Long ticketID : TICKET_ID_LIST)
 							{
-								TicketTriggerUtil.executeTriggerForSLAReachedTicket(TicketsUtil.getTicketByID(key
-										.getId()));
+								TicketTriggerUtil.executeTriggerForSLAReachedTicket(TicketsUtil.getTicketByID(ticketID));
 							}
 						}
 						catch (Exception e)

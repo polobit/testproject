@@ -151,12 +151,12 @@ var Tickets_Rest={
 			if(model.toJSON().is_spam)
 			{
 				$(e.target).addClass("btn-danger").removeClass("btn-default");
-			    message="Ticket marked as Spam"; 
+			    message="Ticket marked as spam"; 
 			}
 			else
 			{
 				$(e.target).removeClass("btn-danger").addClass("btn-default");
-                message="Ticket un marked as Spam";
+                message="Ticket marked as unspam";
                 spam_value=false;
             }
 
