@@ -77,7 +77,10 @@
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
 
-	    		<h3 class="inline-block m-n text-black font-thin">Companies<span id="contacts-count" class="m-l-xs">{{companies_count}}</span>
+	    		<h4 class="inline-block m-n">
+	    		Companies
+	    		<div class="inline-block" id="filter-list"></div>
+	    		<span id="contacts-count" class="m-l-xs">{{companies_count}}</span>
 
 	    			{{#is_mobile}}
 					{{else}}
@@ -90,14 +93,12 @@
 
 			 </div>
 		  </div>
-	    	<div class="pull-right">
-			<div  class="btn-group pull-left m-r-xs" id="contact-sorter"></div>
-			<div class="btn-group pull-left m-r-xs" id="filter-list"></div>
+	    	<div class="pull-right pos-abs" style="right: 0; top: 5px;"> 
 			
             <div id="view-list" class="pull-left btn-group"></div>
             </div>
 	    </div>
-	    
+	<div  class="btn-group m-r-xs m-t-n-sm" id="contact-sorter"></div>
 	</div>
 	<div class="contacts-div">
 

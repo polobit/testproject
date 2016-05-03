@@ -139,12 +139,15 @@
 	style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
-	    		<h3 class="inline-block m-n text-black font-thin">Contacts<span id="contacts-count" class="m-l-xs">{{contacts_count}}</span>
+	    		<h4 class="inline-block m-n">
+	    		Contacts
+	    		<div class="inline-block" id="filter-list"></div>
+	    		<span id="contacts-count" class="">{{contacts_count}}</span>
 	    			 
 	    			<a id="contacts-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters" onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
             			<i id="icon-filter" class="fa fa-bars icon-white"></i>
           			</a>
-	    		</h3>
+	    		</h4>
 	    		<br>
 				<div class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
     
@@ -152,11 +155,11 @@
 
 
 </div></div>
-	    	<div class="pull-right">
-	    	<div class="btn-group pull-left m-r-xs" id="contact-sorter"></div>
+	    	<div class="pull-right pos-abs" style="right: 0; top: 5px;">
+	    	
             <div class="btn-group pull-left m-r-xs" id="contacts-view-options" style="pointer-events: auto;"></div>
 
-			<div class="btn-group pull-left m-r-xs" id="filter-list"></div>
+			
 		
             <div id="view-list" class="pull-left btn-group"><div class="btn-group m-r-sm">
     	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
@@ -211,7 +214,7 @@
 	</div></div>
             </div>
 	    </div>
-	    
+	<div class="btn-group m-r-xs m-t-n-sm" id="contact-sorter"></div>
 	</div>
 	  <div class="route_Portlet b-b" style="display:none">
 	<div class="row">
