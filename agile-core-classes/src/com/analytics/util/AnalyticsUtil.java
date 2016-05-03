@@ -33,7 +33,7 @@ import com.googlecode.objectify.ObjectifyService;
 public class AnalyticsUtil
 {
     public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
-    public static final String STATS_SERVER_URL = "https://1-8-beta-dot-agilecrm-web-stats.appspot.com";
+   public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
     
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
     
