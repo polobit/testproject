@@ -956,11 +956,16 @@ public class ContactsAPI
     @POST
     public void UpdateViewedTime(@PathParam("id") String id) throws JSONException
     {
-	Contact contact = ContactUtil.getContact(Long.parseLong(id));
-
-	contact.viewed_time = System.currentTimeMillis();
-
-	contact.save();
+    	try{
+    		Contact contact = ContactUtil.getContact(Long.parseLong(id));
+    		if(null == contact){
+    			return;
+    		}
+    		contact.viewed_time = System.currentTimeMillis();
+    		contact.save();
+    	}catch(Exception e){
+    		System.out.println("error occured in viewed-at rest link " + e.getMessage());
+    	}
     }
 
     /**
