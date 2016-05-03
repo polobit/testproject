@@ -122,11 +122,27 @@ var HelpcenterRouter = Backbone.Router.extend({
 						url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
 						templateKey : "article-comments",
 						individual_tag_name : 'div',
-						postRenderCallback : function(el){
-							$(".clear",el).on("click",function(){
-                               $("#comment").val('').empty();
-							});
-						}
+							postRenderCallback : function(el){
+						
+							var commentsView = new Base_Model_View({
+							isNew : true,
+							template : "add-newcomments",
+							url : "/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
+                        
+                            postRenderCallback : function(el){  		    
+						
+								$(".clear",el).on("click",function(el){
+                               		$("#comment",el).val('').empty();
+							 	}); 
+							},
+							success : function(model){
+                              var commentsmodel = App_Helpcenter.commentsCollection.collection.get(id);
+							     commentsmodel.set(model);
+							}
+					    	});
+					    	$('#comments-add').html(commentsView.render().el);
+                        }
+					    
 					});
                     
                     //Fetching groups collections

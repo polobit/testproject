@@ -52,19 +52,24 @@ function hideTransitionBar()
 	}, 10);
 }
 function trigger_tinymce_save(){
-
+return;
 }
 function get_tags(){
-
+var values = [];
+return values;
 }
 function get_notes(){
-
+var values = [];
+return values;
 }
 function get_related_deals(){
-	
+var values = [];
+return values;
 }
 
-
+function track_with_save_success_model(){
+	return;
+}
 
 
 /**

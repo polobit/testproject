@@ -45,11 +45,12 @@ public class CommentAPI
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Comment createComment(Comment comment) throws WebApplicationException
+	public Comment createComment(Comment comment,@QueryParam("article_id") Long article_id) throws WebApplicationException
 	{
 		try
 		{
-			comment.article_key = new Key<Article>(Article.class, comment.article_id);
+			
+			comment.article_key = new Key<Article>(Article.class, article_id);
 
 			comment.save();
 		}
