@@ -175,8 +175,9 @@
 				                <i></i>                
 				          </label></span>
 				  		{{/if}}
-				      	
+				      	{{#hasRestrictedMenuScope 'ADD_NEW_TAG'}} {{else}}
 					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add Tags</button>
+					    {{/hasRestrictedMenuScope}}	
 					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Remove Tags</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
 					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add to Campaign</button>
@@ -185,9 +186,14 @@
 					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Send Email</button>
 					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Change Owner</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
+					    {{#hasRestrictedMenuScope "EXPORT_CONTACTS"}}
+					    {{else}}
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
+					    {{/hasRestrictedMenuScope}}
 					    {{/hasScope}}
+					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
 					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Delete</button>
+					    {{/hasRestrictedMenuScope}}
 				    </div>
       <div class="m-l-sm filter-criteria"></div>
       {{#unless this.length}}

@@ -267,19 +267,27 @@ if(currentUserPrefs.menuPosition.equals("top")){
               <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Sales</span>
               </li>
-              
+        
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
   <li id="contactsmenu">
     <a  href="#contacts">
       <i class="icon icon-user"></i>
       <span>Contacts</span>
     </a>
   </li>
+  <%
+      }
+  %>
+
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
       <span>Companies</span>
     </a>
   </li>
+
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
   %>
@@ -305,8 +313,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
       }
   %>
   <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
   %>
+  
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
@@ -314,15 +323,15 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
   <%
-      }
-  %>
+        }
+  %>  
 
   <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
    <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
    %>
    <li id="workflowsmenu">
     <a  href="#workflows">
@@ -334,7 +343,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         }
     %>
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
    %>
    <li id="socialsuitemenu">
     <a  href="#social">
@@ -346,7 +355,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
           }
     %>
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
     %>
    <li id="web-rules-menu">
     <a  href="#web-rules">
@@ -370,7 +379,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="activitiesmenu">
     <a  href="#activities">
@@ -382,7 +391,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
           }
     %>
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
   <li id="reportsmenu">
     <a  href="#reports">
@@ -401,12 +410,18 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>Service</span>
   </li>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>
   <li id="tickets">
     <a href="#tickets">
       <i class="icon icon-ticket"></i>
       <span style="padding-top: 9%;">Help Desk</span>
     </a>
-  </li>            
+  </li>
+  <%
+      }
+  %>             
   </ul>
 
 
