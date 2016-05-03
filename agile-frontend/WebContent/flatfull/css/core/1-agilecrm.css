@@ -3773,6 +3773,7 @@ div.addField div.controls div:first-child{
 }
 .taskpanelheight{
 height:75vh;
+overflow-y:hidden; 
 background-color: #f6f8f8;
 }
 .taskautowidth{
