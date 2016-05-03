@@ -85,7 +85,13 @@ var HelpcenterRouter = Backbone.Router.extend({
 					App_Helpcenter.articlesCollection = new Base_Collection_View({
 						url : '/helpcenterapi/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
 						templateKey : "helpcenter-articles",
-						individual_tag_name : 'div'
+						individual_tag_name : 'div',
+						postRenderCallback : function(el){
+							$('.clear',el).on('click', function(e){
+								e.preventdefault();
+                              ('#helpcenter-comments',el).val('');  
+							});
+						}
 					});
 
 					//Fetching groups collections
@@ -111,13 +117,30 @@ var HelpcenterRouter = Backbone.Router.extend({
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
+				    
+				    App_Helpcenter.commentsCollection = new Base_Collection_View({
+						url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
+						templateKey : "article-comments",
+						individual_tag_name : 'div',
+						postRenderCallback : function(el){
+							$(".clear",el).on("click",function(){
+                               $("#comment").val('').empty();
+							});
+						}
+					});
+                    
+                    //Fetching groups collections
+					App_Helpcenter.commentsCollection.collection.fetch();
+
+					//Rendering template
+					$('#comments-collection').html(App_Helpcenter.commentsCollection.el);  
+
 				}
 			});
 
 	 		$('#helpcenter-container').html(articleView.render().el);
 	 	});
 	},
-
 	renderHomeTemplate: function(callback){
 
 		if($('#helpcenter-container').length)

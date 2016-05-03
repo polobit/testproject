@@ -1,0 +1,18 @@
+<script id="article-comments-collection-template" type="text/html">
+<div id="article-comments-model-list"></div>
+<h4 class="m-n font-thin h4 text-black m-b-sm">Comments</h4>
+		{{#is_user_logged_in}}
+			<form id="userForm" name="userForm" method="post" action="" class="form-horizontal"> 
+			<div class="col-md-12 m-t-xs">
+	            <div class="controls">
+	                <textarea id="comment" class="form-control required" name="comment" style="min-height: 100px;"></textarea>	
+                    		<a class="btn btn-sm  clear btn-primary" name="clear" href="javascript:void(0);" style="margin-top:10px;float:right;margin-left:6px;">Clear</a></span>	
+                    		<button type="submit" class="save btn btn-sm btn-primary m-l-xs" style="margin-top:10px;float:right;" >Add</button>
+	            </div>
+	        </div>
+		    </form>
+		{{else}}
+			<div class="text-black text-center m-t-md">Please <a href="/helpcenter/login">login</a> to leave comments</div>
+		{{/is_user_logged_in}}
+	</div>
+</script>

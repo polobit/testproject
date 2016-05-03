@@ -51,6 +51,21 @@ function hideTransitionBar()
 			$('.butterbar').addClass('hide');
 	}, 10);
 }
+function trigger_tinymce_save(){
+
+}
+function get_tags(){
+
+}
+function get_notes(){
+
+}
+function get_related_deals(){
+	
+}
+
+
+
 
 /**
  * Loading spinner shown while loading

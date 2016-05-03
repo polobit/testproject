@@ -5,9 +5,7 @@ var Helcenter_Events = {
 
    		$(".article_status",el).off();	
    		$(".article_status",el).on("change" ,function(){
-              
-         $('[data-toggle="tooltip"]', el).tooltip();
-             //console.log("xyz"); 
+
             var msg = "Do you want to publish the article";
             var article_id = $(this,el).closest("td").data("id");   
             var flag = $( "."+article_id ).is(":checked");
