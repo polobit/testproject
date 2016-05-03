@@ -261,6 +261,9 @@ public class VersioningUtil
 	return CLOUDFRONT_STATIC_FILES_PATH;
     }
 
+    public static boolean isDevelopmentEnv(){
+    	return (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development);
+    }
     public static void main(String[] args)
     {
 	System.out.println(isBackgroundThread());

@@ -1,6 +1,8 @@
 package com.agilecrm.workflows;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -115,6 +117,9 @@ public class Workflow extends Cursor {
 
 	@Indexed
 	public boolean is_disabled = false;
+	
+	@Indexed
+	public Long access_level = 1L;  
 
 	/**
 	 * Initialize DataAccessObject.
@@ -198,10 +203,39 @@ public class Workflow extends Cursor {
 	public void save() throws WebApplicationException {
 
 		// Verifies for duplicate workflow name before save
-		checkForDuplicateName();
+		checkPreconditionsBeforeSave();
 
 		try {
 			dao.put(this);
+		} catch (ApiProxy.RequestTooLargeException e) {
+			try {
+				JSONObject obj = new JSONObject();
+				obj.put("title", "Campaign Alert");
+				obj.put("message", "TBD - too large exception");
+
+				throw new WebApplicationException(
+						Response.status(Status.BAD_REQUEST)
+								.entity("Unable to save the campaign as it exceeds the limit of 1MB. Please consider splitting into multiple campaigns using the 'Transfer' property.")
+								.build());
+			} catch (JSONException e1) {
+				System.out.println("Exception while saving a Workflow"
+						+ e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * Saves the workflow object. But before saving, verifies for duplicate
+	 * names. If given name already exists, it throws exception. Same name
+	 * causes confusion while assigning campaign.
+	 */
+	public void save(boolean force) throws WebApplicationException {
+
+		// Verifies for duplicate workflow name before save
+		checkPreconditionsBeforeSave();
+
+		try {
+			dao.put(this, true);
 		} catch (ApiProxy.RequestTooLargeException e) {
 			try {
 				JSONObject obj = new JSONObject();
@@ -236,7 +270,7 @@ public class Workflow extends Cursor {
 	 * 
 	 * @throws Exception
 	 */
-	private void checkForDuplicateName() throws WebApplicationException {
+	private void checkPreconditionsBeforeSave() throws WebApplicationException {
 		// New workflow
 		if (id == null) {
 			if (WorkflowUtil.getCampaignNameCount(name) > 0)
@@ -245,11 +279,14 @@ public class Workflow extends Cursor {
 								.entity("Please change the given name. Same kind of name already exists.")
 								.build());
 		}
-
+		
+		
+		Workflow oldWorkflow = null;
+		
 		// Old workflow
 		if (id != null) {
 			// to compare given name with existing ones.
-			Workflow oldWorkflow = WorkflowUtil.getWorkflow(id);
+			oldWorkflow = WorkflowUtil.getWorkflow(id);
 
 			// Verifies only when workflow name updated
 			if (!oldWorkflow.name.equals(name)) {
@@ -261,6 +298,8 @@ public class Workflow extends Cursor {
 									.build());
 			}
 		}
+		
+		setAccessLevel(oldWorkflow);
 	}
 
 	/**
@@ -300,6 +339,16 @@ public class Workflow extends Cursor {
 				|| StringUtils.equalsIgnoreCase(unsubscribe.unsubscribe_name,
 						"null"))
 			unsubscribe.unsubscribe_name = name;
+	}
+	
+	public void setAccessLevel(Workflow oldWorkflow){
+		if(access_level == null || access_level == 0L){
+			
+			if(oldWorkflow != null && oldWorkflow.access_level != null && oldWorkflow.access_level != 0L)
+				access_level = oldWorkflow.access_level;
+			else
+				access_level = 1L;
+		}
 	}
 
 	public String toString() {

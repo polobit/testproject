@@ -3541,6 +3541,7 @@ overflow-x:hidden;
 text-align:left;
 }
 
+
 .new-user
 {
   margin-left: 10px;
@@ -3664,6 +3665,7 @@ margin-left: 33px;
 #contact-container:hover .contact-image-view{
 opacity: .3;
 }
+
 #schedule_demo{
   margin-right: 214px;
 }
@@ -3739,7 +3741,7 @@ opacity: .3;
 }
 }
 #referModal ul{
-	padding: 20px 30px 20px 30px;
+	padding: 20px 30px 0px 30px;
 }
 #referModal .referrals-body{
 	padding: 20px 30px 0px 30px;
@@ -3829,4 +3831,29 @@ li .segment-lilist:hover {
 	cursor: pointer;
 }
 
+.twilio-sound:hover  .options-record-twilio
+{
+	display : block;
+}
+
+.delete_ip{
+	font-size: 11px;
+    margin-top: -2px;
+}
+#newip-modal-width{
+	margin-top:90px;
+	width:33%;
+}
+
+.allow_access_editicon{
+margin-left:27px;
+}
+
+.allow_access_panelheading{
+	background-color: #f6f8f8;
+    margin-top: 10px;
+    border-color: #edf1f2;
+    border: 1px solid #edf1f2;
+    border-bottom: none;
+}
 

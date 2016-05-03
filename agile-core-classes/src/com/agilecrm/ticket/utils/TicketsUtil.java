@@ -888,6 +888,12 @@ public class TicketsUtil
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("body", body);
 		
+		if(StringUtils.isBlank(from_name))
+			from_name = SendMail.AGILE_FROM_NAME;
+		
+		if(StringUtils.isBlank(from_address))
+			from_address = SendMail.AGILE_FROM_EMAIL;
+		
 		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_address, from_name);
 		
 		System.out.println("Sent email to: " + email);

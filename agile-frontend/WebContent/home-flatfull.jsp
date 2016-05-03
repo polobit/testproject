@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
@@ -54,6 +55,9 @@ if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 response.sendRedirect("/login");
 return;
 }
+
+
+
 
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
@@ -347,9 +351,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <span>Service</span>
   </li>
   <li id="tickets">
-    <a  href="#tickets">
+    <a href="#tickets">
       <i class="icon icon-ticket"></i>
-      <span>Help Desk</span>
+      <span style="padding-top: 9%;">Help Desk</span>
     </a>
   </li>            
   </ul>
@@ -688,6 +692,8 @@ var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(dom
 
 // Get current user dashboards
 var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
+// Get Current Agile User
+var CURRENT_AGILE_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(AgileUser.getCurrentAgileUser()))%>;
 
 // Get Contact Date Fields
 var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;

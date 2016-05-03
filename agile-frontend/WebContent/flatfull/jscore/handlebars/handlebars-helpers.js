@@ -2582,11 +2582,14 @@ $(function()
 		var plantype = [];
 		plantype =  plan.plan_type.split("_");
 		var temp = plantype[0].toLowerCase();
-		var temp1 = plantype[1].toLowerCase();
+		
 		if(plantype.length == 1)
 		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1);
-		else
-		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+		else{
+			var temp1 = plantype[1].toLowerCase();
+			var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+		}
+		
 		return string;
 	});
 	/**
@@ -5058,6 +5061,11 @@ $(function()
 		return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getAccountOwnerId', function(options)
+	{
+		return CURRENT_DOMAIN_USER.id;
+	});
+
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
 		if (canEditContact(owner_id))
@@ -5865,6 +5873,8 @@ $(function()
 			portlet_name = "Tasks Completion Time Deviation";
 		else if(p_name == 'Webstat Visits')
 			portlet_name = "Visits";
+		else if(p_name=='Referralurl stats')
+ 			portlet_name = "Referral URL Stats";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5899,7 +5909,7 @@ $(function()
 			icon_name = 'icon-user';
 		else if (p_name == 'Agenda' || p_name == 'Mini Calendar')
 			icon_name = "icon-calendar";
-		else if (p_name == 'Today Tasks' || p_name == 'Task Report')
+		else if (p_name == 'Today Tasks' || p_name == 'Task Report' || p_name == 'Referralurl stats')
 			icon_name = "icon-tasks";
 		else if (p_name == 'Agile CRM Blog')
 			icon_name = "icon-feed";
@@ -6710,6 +6720,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A quick view of deviation in tasks completion times.'
 	else if (p_name== 'Webstat Visits')
 		description = 'A pie chart of Known and Unknown Visits on your website.';
+	else if(p_name == 'Referralurl stats')
+		description = 'A quick view of Top 5 Referral URL’s for your website traffic.'
 	return description;
 			});
 

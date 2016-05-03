@@ -69,11 +69,11 @@
 
 <div class="control-group form-group">
 
-    					<label class="control-label col-md-3" for="phone">Phone <span class="field_req">*</span></label> 
+    					<label class="control-label col-md-3" for="phone">Phone</label> 
 
 <div class="col-md-9">                   		
 <div class="controls">
-    						<input type="text" id="cphone" class="allow-char-phone required form-control" name='phone' placeholder="Phone Number"/> 
+    						<input type="text" id="cphone" class="allow-char-phone form-control" name='phone' placeholder="Phone Number"/> 
     					</div>
     				</div>
     </div>
@@ -495,14 +495,15 @@
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="HELPDESK" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Help Desk<br/>
-                                        <div style="margin-left:6px;"><small> Help Desk Service</small></div>
+                                        <div style="margin-left:6px;"><small> Answer customer queries</small></div>
                                         <div style="margin-left:6px;visibility: hidden;"><small> Import from CSV file, sync from Google Apps and other integrations</small></div>
                                 </label>
                         {{else}} 
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="HELPDESK" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Help Desk<br/>
-                                        <div style="margin-left:6px;"><small> Help Desk Service</small></div>
+                                        <div style="margin-left:6px;"><small> Answer customer queries</small></div>
+                                        <div style="margin-left:6px;visibility: hidden;"><small> Import from CSV file, sync from Google Apps and other integrations</small></div>
                                 </label>
                         {{/if}}
                         </div>

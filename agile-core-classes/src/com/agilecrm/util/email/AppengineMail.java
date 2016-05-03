@@ -29,7 +29,7 @@ import com.agilecrm.util.JSONUtil;
  */
 public class AppengineMail
 {
-    public static final String FROM = "agilecrm@agile-crm-cloud.appspotmail.com";
+    public static final String FROM = "agilecrm@agilecrmbeta.appspotmail.com";
     public static final String FRIENDLY_NAME = "AgileCRM";
 
     public static boolean sendHTMLEmail(String to, String subject, String textBody, String htmlBody)

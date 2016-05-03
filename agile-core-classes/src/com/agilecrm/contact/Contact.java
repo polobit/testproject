@@ -1133,6 +1133,8 @@ public class Contact extends Cursor
 			Contact newCompany = new Contact();
 			newCompany.properties = new ArrayList<ContactField>();
 			newCompany.properties.add(new ContactField(Contact.NAME, contactField.value, null));
+			newCompany.properties.add(new ContactField("name_lower", contactField.value.toLowerCase(), null));			
+			newCompany.name = StringUtils.lowerCase(contactField.value);
 			newCompany.type = Type.COMPANY;
 
 			/*
@@ -1157,11 +1159,11 @@ public class Contact extends Cursor
 	}
 	if (this.type == Type.COMPANY)
 	{
-	    /*if (this.properties.size() > 0)
+	    if (this.properties.size() > 0)
 	    {
 		ContactField nameField = this.getContactFieldByName(Contact.NAME);
 		this.name = nameField != null ? StringUtils.lowerCase(nameField.value) : "";
-	    }*/
+	    }
 		
 	    // Company name lower case field used for duplicate check.
 	    ContactField nameLowerField = this.getContactFieldByName("name_lower");

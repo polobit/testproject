@@ -4,7 +4,7 @@ function loadAgileCRMForm(id){
 	var formId = id[id.length-1];
     console.log("domain is :"+agileDomain);
 	var script = document.createElement('script');
-    script.src = window.location.protocol+'//'+agileDomain+'/core/api/forms/form/js/'+formId;
+    script.src = window.location.protocol+'//'+agileDomain+'.agilecrm.com/core/api/forms/form/js/'+formId;
     document.body.appendChild(script);      
 }
 
@@ -22,7 +22,7 @@ function showAgileCRMForm(formJson,formHolderId) {
 
 window.addEventListener('load', function() { 
 	var element = document.getElementsByClassName("agile_crm_form_embed");
-    if( element != null) {
+    if(element.length != 0) {
       loadAgileCRMForm(element[0].getAttribute("id"));
       element[0].style.display = "";
     }

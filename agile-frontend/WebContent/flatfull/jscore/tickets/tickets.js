@@ -91,6 +91,7 @@ var Tickets = {
 				sort_collection: false,
 				templateKey : Tickets.isSingleRowView() ? 'ticket-single-row' : 'ticket',
 				customLoader: true,
+				preserveAcrossRoutes: true,
 				custom_scrollable_element: '.ticket-collection-container',
 				customLoaderTemplate: 'ticket-collection-loader',
 				individual_tag_name : 'tr',

@@ -297,6 +297,33 @@ $(function(){
 						}
 					});
 		});
+		
+		 $('body').off('click', '.play-twilio-record');
+		$("body").on("click", '.play-twilio-record', function(e)
+				{
+			//close all the opened audio file
+					var opened_audio_length = $(".audio-inside-sound:visible").length;
+					while(opened_audio_length > 0){
+						$($(".audio-inside-sound:visible")[0]).closest(".twilio-sound").find(".text-inside-sound").show()
+						$($(".audio-inside-sound:visible")[0]).find(".twilio_audio")[0].pause();
+						$($(".audio-inside-sound:visible")[0]).hide();
+						opened_audio_length = opened_audio_length-1;
+					}
+					var el = $(this).closest(".twilio-sound");
+					el.find(".audio-inside-sound").show();
+					el.find(".text-inside-sound").hide();
+					el.find(".twilio_audio")[0].play();
+					
+					
+				});
+		 $('body').off('click', '.close-twilio-record');
+		$("body").on("click", '.close-twilio-record', function(e)
+				{
+					var el = $(this).closest(".twilio-sound");
+					el.find(".twilio_audio")[0].pause();
+					el.find(".audio-inside-sound").hide();
+					el.find(".text-inside-sound").show();
+				});
 	
 });
 
@@ -373,6 +400,8 @@ function getGlobalToken()
 		console.log("Twilio IO error ");
 		console.log(data);
 	});
+	
+	
 }
 
 function getValidateAndVerfiedCallerId(acc_sid, auth_token, callback)
