@@ -164,7 +164,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					
 				}, saveCallback : function(){
 				console.log("saveCallback");
-				showNotyPopUp("information", "Your IP address has been added successfully.", "top", 1000);
+				showNotyPopUp("information", "Your IP Address has been updated successfully.", "top", 1000);
 				App_Admin_Settings.ipaccess();
 			},errorCallback : function(data){
 				showNotyPopUp("warning", data.responseText, "top");

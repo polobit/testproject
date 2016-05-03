@@ -3492,3 +3492,11 @@ text-align:left;
 .allow_access_editicon{
 margin-left:27px;
 }
+
+.allow_access_panelheading{
+	background-color: #f6f8f8;
+    margin-top: 10px;
+    border-color: #edf1f2;
+    border: 1px solid #edf1f2;
+    border-bottom: none;
+}

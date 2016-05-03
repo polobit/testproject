@@ -168,6 +168,19 @@ position: fixed;width: 100%;top: 0px;
     top: 0;
     bottom: 0;
 }
+.free-alert-msg{
+	text-align: center;
+    background: #f7f7d0!important;
+    border: 1px solid #e2e29c;
+    /* z-index: 1030; */
+    padding: 15px;
+    /* margin-top: 8px; */
+    border-radius: 2px;
+    position: absolute;
+    /* left: 40%; */
+    font-size: 13px;
+    width:100%;
+}
 
 </style>
 
@@ -191,7 +204,8 @@ position: fixed;width: 100%;top: 0px;
 	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
-			<div class="wrapper text-center alert alert-success" >
+			<div class="wrapper text-center alert free-alert-msg" >
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       			Please enter the verification code sent to your email ID to access the account.
    			</div>
   			<div class="container w-xxl w-auto-xs view" style="top:44px;">
@@ -219,7 +233,7 @@ position: fixed;width: 100%;top: 0px;
            			 
            			 <input type='submit' value="Send" class='btn btn-lg btn-primary btn-block'>
            				
-           				<div class="text-center text-white m-t m-b">
+           				<div class="text-center text-info m-t m-b">
 							<!--<small>Resend </small> -->
 							<a title="Verification code" id= "resend_otp" class='text-info' href='#'>Resend Verfication Code</a>
 
@@ -316,7 +330,7 @@ position: fixed;width: 100%;top: 0px;
 	            type : "POST",
 	            url : "/login?resendotp=resendotp",
 	            success : function(data) {
-	               showNotyPopUp("information", "We have re-sent the verification code to your registered email. Please enter the code below to get access.", "top", 2000);
+	               showNotyPopUp("information", "We have re-sent the verification code to your registered email. Please enter the code below to get access.", "top", 4000);
 	            }
 	        });
 	    }); 

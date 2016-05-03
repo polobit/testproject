@@ -93,12 +93,14 @@
 <script id="admin-settings-ip-prefs-template" type="text/html">
 <div id="ip_access" class="col-sm-9 panel ">
     {{#unless ipList.length}} {{else}}
-    <div class="panel-heading">
-            <div class="pull-right">
-        <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> Add IP</a>
-            </div>
+    <div class="panel-heading allow_access_panelheading">
+    <div class="pull-left  m-t-xs">Access</div>
+    <div class="pull-right">
+       <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> Add IP Address</a>
+    </div>
     <div class="clearfix"></div>
     </div>
+
     {{/unless}}
   
    
@@ -128,10 +130,10 @@
                         </td>
                         <td class="b-r-none" style="width:8%;">
                             <div class="m-b-n-xs pull-left" style="visibility: hidden;">
-                                <a class="upsert-ip c-p m-l-sm text-l-none text-xs hover-show" data-toggle="modal" role="button" style="margin-left:27px;" data-position="{{@index}}">
+                                <a class="upsert-ip c-p m-l-sm text-l-none text-sm hover-show" data-toggle="modal" role="button" style="margin-left:27px;" data-position="{{@index}}">
                                         <i title="Edit" class="icon icon-edit"></i>
                                 </a>
-                                <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-xs" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
+                                <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-sm" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
                             </div>
                         </td>
                     </tr>
