@@ -5869,7 +5869,7 @@ $(function()
 		else if(p_name == 'Webstat Visits')
 			portlet_name = "Visits";
 		else if(p_name=='Referralurl stats')
- 			portlet_name = "Referralurl Stats";
+ 			portlet_name = "Referral URL Stats";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5904,7 +5904,7 @@ $(function()
 			icon_name = 'icon-user';
 		else if (p_name == 'Agenda' || p_name == 'Mini Calendar')
 			icon_name = "icon-calendar";
-		else if (p_name == 'Today Tasks' || p_name == 'Task Report')
+		else if (p_name == 'Today Tasks' || p_name == 'Task Report' || p_name == 'Referralurl stats')
 			icon_name = "icon-tasks";
 		else if (p_name == 'Agile CRM Blog')
 			icon_name = "icon-feed";
@@ -5928,8 +5928,6 @@ $(function()
 			icon_name = 'icon-pie-chart';
 		else if(p_name == 'Webstat Visits')
 			icon_name = 'icon-globe';
-		else if (p_name == 'Referralurl stats')
-			icon_name = 'icon-pie-chart';
 		return icon_name;
 	});
 	
@@ -6718,7 +6716,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	else if (p_name== 'Webstat Visits')
 		description = 'A pie chart of Known and Unknown Visits on your website.';
 	else if(p_name == 'Referralurl stats')
-		description = 'A quick view of latest visited reffral url.'
+		description = 'A quick view of Top 5 Referral URL’s for your website traffic.'
 	return description;
 			});
 

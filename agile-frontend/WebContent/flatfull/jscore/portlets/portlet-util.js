@@ -1355,7 +1355,7 @@ var portlet_utility = {
 								return;
 					}
 				var span;
-				var element_list=$("<div style=' padding-bottom: 5px;'></div>");
+				var element_list=$("<div style=' padding-top: 2px;'></div>");
 				$.each( data, function(e) {					
 					var width;
 					if(e==0)
