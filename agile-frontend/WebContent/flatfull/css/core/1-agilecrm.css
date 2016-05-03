@@ -3772,7 +3772,7 @@ div.addField div.controls div:first-child{
     margin-top:20px;
 }
 .taskpanelheight{
-height:100vh;
+height:75vh;
 background-color: #f6f8f8;
 }
 .taskautowidth{
@@ -3782,5 +3782,5 @@ background-color: #f6f8f8;
   padding-top:20px;
 }
 .taskheading{
-  height:50px;
+  height:70px;
 }
