@@ -168,13 +168,9 @@ public class JSAPI
 	    if (StringUtils.isBlank(address))
 	    {
 		System.out.println("Adding location");
-		String domain = NamespaceManager.get();
-		System.out.println("create contact domain"+domain);
-	    if(!StringUtils.isEmpty(domain) && !domain.equalsIgnoreCase("carusopianos")){
-	    	org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
-			contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
-	    }
 
+		org.json.simple.JSONObject locJSON = GeoLocationUtil.getLocation(request);
+		contact.addProperty(new ContactField(Contact.ADDRESS, locJSON.toString(), null));
 	    }
 
 	    // Sets owner key to contact before saving
