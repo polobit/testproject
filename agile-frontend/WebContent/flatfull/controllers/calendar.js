@@ -140,8 +140,6 @@ tasks_new : function()
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();
 		loadPortlets('Tasks');
-		trigger_dropdown_select(".tasks-pending");
-		trigger_dropdown_select(".due-dropdown");
 	}, "#tasks-list-template");
 
 },
