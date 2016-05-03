@@ -132,6 +132,9 @@ public class SendMail
 	// For campaign sharing
 	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
 	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
+	//for formBuider
+	public static final String CONTACT_FORM_SUBMITTED_SUBJECT = " Form Submitted - ";
+	public static final String CONTACT_FORM_SUBMITTED ="contact_form_submitted";
 	
 	// Ticket template names
    	public static final String TICKET_REPLY = "ticket_reply_email";

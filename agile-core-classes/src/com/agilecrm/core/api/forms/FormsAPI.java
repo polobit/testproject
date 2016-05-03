@@ -55,7 +55,21 @@ public class FormsAPI
 	    JSONObject formJson = new JSONObject(formString);
 	    String name = formJson.getString("formName");
 	    String json = formJson.getString("formJson");
+	    boolean emailNotification=false;
+		
+		/*checking the condition for the when emailNotification is true
+		 * and user clicks on the submit button of the form  */
+		try{
+			JSONArray jsn=new JSONArray(json);
+			emailNotification=jsn.getJSONObject(0).getJSONObject("fields").getJSONObject("formemailnotification").getJSONArray("value").getJSONObject(0).getBoolean("selected");
+			emailNotification=emailNotification?false:true;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error occured while geeting email notification value... :"+e.getMessage());
+		}
 	    String html = null;
+	    
 	    if(formJson.has("formHtml"))
 	    {
 	    html = formJson.getString("formHtml");
@@ -91,6 +105,9 @@ public class FormsAPI
 		form.formName = name;
 		form.formJson = json;
 		form.formHtml = html;
+		//adding another for emailNotification
+		form.emailNotification=emailNotification;
+
 		form.save();
 		response.setStatus(HttpServletResponse.SC_OK);
 		return;

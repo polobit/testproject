@@ -23,6 +23,9 @@ public class Form
 
     @NotSaved(IfDefault.class)
     public String formJson = null;
+    
+    @NotSaved(IfDefault.class)
+    public boolean emailNotification = false;
 
     @NotSaved(IfDefault.class)
     public String formHtml= null;
@@ -52,4 +55,5 @@ public class Form
 	this.updated_time = System.currentTimeMillis() / 1000;
 	dao.put(this);
     }
+    
 }

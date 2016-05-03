@@ -63,6 +63,7 @@ import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
 import com.google.appengine.api.NamespaceManager;
+import com.thirdparty.sendgrid.SendGrid;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -1435,6 +1436,11 @@ public class JSAPI
 	    contact.formId = form.id;
 	    contact.save();
 
+	    /*Send a mail to owner when new contact created and when it clicked 
+	     * on submit button
+	     * */
+	       FormUtil.sendMailToContactOwner(contact,formName);
+	    
 	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
 	    for (Trigger trigger : triggers)
 	    {
