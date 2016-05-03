@@ -18,6 +18,7 @@ import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.google.appengine.api.NamespaceManager;
@@ -64,8 +65,14 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 		{
 			List<Contact> contacts = fetchContacts();
 			
+			String token = null;
 			try
 			{
+				token = VersioningUtil.getQueueHeaderValue("X-AppEngine-TaskName");
+				
+				// Add Started status to DB
+				CampaignLogsSQLUtil.insertCampaignAssignedStatus(namespace, campaignId.toString(), "STARTED", "Campaign Assigning started for " + contacts.size() + " contacts", token);
+				
 				// If task gets retried, verifies whether same campaign run before within time span
 				if("agile-normal-bulk".equalsIgnoreCase(VersioningUtil.getCurrentModuleName()) && VersioningUtil.isTaskRetried())
 				{
@@ -73,7 +80,10 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 					{
 						// If task retried, remove assigned contacts previously
 						if(CampaignStatusUtil.isContactAssignedAlready(contact, campaignId, null))
+						{
+							System.err.println("Removing duplicate assigned contact id " + contact.id);
 							contacts.remove(contact);
+						}
 					}
 				}
 			}
@@ -84,6 +94,9 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 			}
 			
 			WorkflowSubscribeUtil.subscribeDeferred(contacts, campaignId);
+			
+			// Add Complete status to DB
+			CampaignLogsSQLUtil.insertCampaignAssignedStatus(namespace, campaignId.toString(), "COMPLETED", "Campaign Assigning completed for " + contacts.size() + " contacts", token);
 		}
 		catch(Exception ex)
 		{
