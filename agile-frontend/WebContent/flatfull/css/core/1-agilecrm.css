@@ -3765,3 +3765,22 @@ opacity: .3;
 div.addField div.controls div:first-child{
   padding-bottom: 1px;
 }
+
+.taskautoadjust{
+  transform: rotate(-90deg);
+  font-size: 18px;
+    margin-top:20px;
+}
+.taskpanelheight{
+height:100vh;
+background-color: #f6f8f8;
+}
+.taskautowidth{
+  width:5% !important;
+}
+.taskexpandbutton{
+  padding-top:20px;
+}
+.taskheading{
+  height:50px;
+}

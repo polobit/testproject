@@ -183,6 +183,55 @@ function initializeTasksListeners(){
 		// Show and Fill details in Task Edit modal
 		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
+
+	/*
+	* expand-collapse for the task models
+	*/
+
+	$('#tasks-list-template').on("click", ".expandbutton", function(e)
+	{
+		
+		
+		var expaded = 0 ;
+		var collapsed = 0 ;
+		if($(this.closest(".task-trello-list")).hasClass("expand"))
+			{
+				$(this.closest(".task-trello-list")).addClass("compress");
+				$(this.closest(".task-trello-list")).removeClass("expand");
+				$(".compress .CollapsedPanel").removeClass("hide");
+				$(".compress .compressedHeading").css("transform","rotate(-90deg)");
+				$(".compress .CollapsedPanel").addClass("taskautoadjust");
+				$(".compress .text-ellipsis").addClass("hide");
+				$(".compress .icon-plus").addClass("hide"); 
+				$(".compress .task-striped").addClass("hide");
+				$(".compress .panel.panel-default.w-full").addClass("taskpanelheight");
+				$(".compress .text-info .text-xs").addClass("fa-compress");
+				$(".compress .text-info .text-xs").removeClass("fa-expand");
+				$(".compress").addClass("taskautowidth");
+				$(".compress .text-info .text-xs").addClass("taskexpandbutton");
+				$(".compress .list-header .panel-heading").addClass("taskheading");
+			}
+		else
+		{
+				$(this.closest(".task-trello-list")).addClass("expand");
+				$(this.closest(".task-trello-list")).removeClass("compress");
+				$(".expand .CollapsedPanel").addClass("hide");
+				$(".expand .compressedHeading").css("transform","rotate(0deg)");
+				$(".expand .text-ellipsis").removeClass("hide");
+				$(".expand .CollapsedPanel").removeClass("taskautoadjust");
+				$(".expand .task-striped").removeClass("hide");
+				$(".expand .icon-plus").removeClass("hide"); 
+				$(".expand .panel .panel-default .w-full").removeClass("taskpanelheight");
+				$(".expand .text-info .text-xs").addClass("fa-expand");
+				$(".expand .text-info .text-xs").removeClass("fa-compress");
+				$(".expand").removeClass("taskautowidth");
+				$(".expand .text-info .text-xs").removeClass("taskexpandbutton");
+				$(".expand .list-header .panel-heading").addClass("taskheading");
+		}
+		
+		taskAutoWidth();
+	});	
+
 	
 	
 
@@ -218,8 +267,29 @@ $("body").on("change", '.status', function()
 		// Change status UI and input field
 		changeStatus($(this).val(), $(this).closest("form"));
 	});	
+/*auto width for the task expand 
+*/
+function taskAutoWidth()
+{	
+	var expanded = 0;
+	var collapsed = 0;
+	var childrens = $('.task-trello-list');
+		for(var i = 0 ; i<childrens.length ;i++)
+		{
+			if($(childrens[i]).hasClass("expand"))
+			{
+				expanded++;
+			}
+			else
+			{
+				collapsed++;
+			}
+		}
+		/*var expandedWidth = (100-(collapsed*5))/expanded;
+		$(".expand").css("width" , expandedWidth.toString() +"%");*/
+		
 
-
+}
 /**
  * Highlights the task portion of activity modal (Shows task form and hides
  * event form, changes color and font-weight)

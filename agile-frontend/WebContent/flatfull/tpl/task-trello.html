@@ -81,15 +81,19 @@
 
 <script id="new-tasks-lists-collection-template" type="text/html"> 
  <div id="new-tasks-lists-model-list" class="list-area p-b-none">
+ 
 
  </div>
 </script>
 
-<script id="new-tasks-lists-model-template" type="text/html">
+<script id="new-tasks-lists-model-template" type="text/html"> 
     <div class="panel panel-default w-full m-r-none m-b-none">
-     <div class="list-header panel-heading" attr="{{heading}}" ownerID={{owner_id}}>
+
+        <div class="list-header panel-heading" attr="{{heading}}" ownerID={{owner_id}}>
 <div class="pull-left" style="margin-top:-2px;"> 
+<div class="compressedHeading">
         <span id="task-count-{{heading}}-{{owner_id}}" class="label bg-dark m-r-xs"></span> 
+        </div>
 </div>
 <div class="pull-left text-ellipsis" style="width:62%;"> 
          <span class="m-r-xs">{{get_normal_name heading}}</span>
@@ -102,7 +106,7 @@
 <span class="list-bottom left add-task m-r-sm" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#">
 <i class="icon-plus text-xs"></i>
 </a></span>
-<span class="inline-block transform-rotate"><a class="text-info" href="#"><i class="fa fa-expand text-xs"></i></a></span>
+<span class="inline-block transform-rotate"><a class="text-info expandbutton"><i class="fa fa-expand text-xs"></i></a></span>
 </div>  
 <div class="clearfix"></div>               
      </div>     
@@ -113,7 +117,8 @@
      {{/if}}
         
      </div>  
-     <div id="show_loader"></div>      
+     <div id="show_loader"></div>   
+     <div class="hide CollapsedPanel">{{get_normal_name heading}}</div>   
      <!--<div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> Add a task</a></div> -->   
     </div>  
 </script>

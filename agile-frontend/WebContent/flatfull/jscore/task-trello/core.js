@@ -109,9 +109,10 @@ function initTaskListCollection()
 			// Remove loding imgs
 			$('.loading-img', el).remove();
 			$('.loading', el).remove();
-
 			// Adjust Height Of Task List And Scroll as per window size
-			adjustHeightOfTaskListAndScroll();			
+			adjustHeightOfTaskListAndScroll();
+
+
 		} });
 
 	// Over write append function
@@ -122,7 +123,7 @@ function initTaskListCollection()
 function taskAppend(base_model)
 {
 	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "new-tasks-lists-model", tagName : 'div',
-		className : "task-trello-list col-md-3 p-n pull-none inline-block m-r-none min-h-auto-xl", id : base_model.get("heading") });
+		className : "task-trello-list col-md-3 expand p-n pull-none inline-block m-r-none min-h-auto-xl", id : base_model.get("heading")});
 
 	// Render model in main collection
 	var el = tasksListModel.render().el;
