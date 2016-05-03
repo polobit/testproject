@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -36,8 +37,9 @@ public class WorkflowAddAccessLevelDeferredTask implements DeferredTask {
 				return;
 			
 			NamespaceManager.set(domain);
+			ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
 			
-			List<Workflow> workflows = WorkflowUtil.getAllWorkflows();
+			List<Workflow> workflows = dao.fetchAll();
 			System.out.println("workflows = " + workflows.size());
 			
 			for (Workflow workflow : workflows) {
