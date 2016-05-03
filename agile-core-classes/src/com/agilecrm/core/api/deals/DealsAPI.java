@@ -1209,5 +1209,13 @@ public class DealsAPI
 	}
 	return OpportunityUtil.getPipelineConversionData(ownerId, min, max, trackId).toString();
     }
-
+    @Path("/numberOfDeals")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public String getDealsbyPipelineId(@QueryParam("id") Long pipeId){
+    	int  dealCount = OpportunityUtil.getDealsbyMilestone(pipeId);
+    	if(dealCount > 0)
+    		return "success";
+    	return "fail";
+    }
 }
