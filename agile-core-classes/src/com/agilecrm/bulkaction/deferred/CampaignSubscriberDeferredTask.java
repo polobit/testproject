@@ -12,6 +12,9 @@ import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.workflows.status.CampaignStatus;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -60,7 +63,26 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 		try
 		{
 			List<Contact> contacts = fetchContacts();
-		
+			
+			try
+			{
+				// If task gets retried, verifies whether same campaign run before within time span
+				if("agile-normal-bulk".equalsIgnoreCase(VersioningUtil.getCurrentModuleName()) && VersioningUtil.isTaskRetried())
+				{
+					for(Contact contact: contacts)
+					{
+						// If task retried, remove assigned contacts previously
+						if(CampaignStatusUtil.isContactAssignedAlready(contact, campaignId, null))
+							contacts.remove(contact);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				System.err.println("Exception occured while assiging campaigns..." + e.getMessage());
+				System.err.println(ExceptionUtils.getFullStackTrace(e));
+			}
+			
 			WorkflowSubscribeUtil.subscribeDeferred(contacts, campaignId);
 		}
 		catch(Exception ex)

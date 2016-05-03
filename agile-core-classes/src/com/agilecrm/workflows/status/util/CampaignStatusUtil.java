@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -26,6 +28,7 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.modules.ModulesService;
+import com.google.appengine.api.taskqueue.DeferredTaskContext;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -212,37 +215,51 @@ public class CampaignStatusUtil
 
 	public static boolean isActive(Contact contact, CampaignStatus currentcampaignStatus)
 	{
-		// Check if Background Thread
-		if("agile-normal-bulk".equalsIgnoreCase(VersioningUtil.getCurrentModuleName()))
+		return contact.campaignStatus.contains(currentcampaignStatus);
+	}
+	
+	/**
+	 * Verifies whether contact assigned within specified time
+	 * 
+	 * @param contact
+	 * @param workflowId
+	 * @param timeSpan - in Secs
+	 * 
+	 * @return
+	 */
+	public static boolean isContactAssignedAlready(Contact contact, Long workflowId, Long timeSpan)
+	{
+		try
 		{
-			try
-			{
-				CampaignStatus tempCampaignStatus = currentcampaignStatus;
-				tempCampaignStatus.status = currentcampaignStatus.campaign_id + "-" + Status.DONE.toString();
+			long TIME_SPAN = 60 * 60; // 1 hr
+			
+			if(timeSpan != null)
+				TIME_SPAN = timeSpan;
+			
+			CampaignStatus campaignStatus = new CampaignStatus(0l, 0l, workflowId.toString(), "", workflowId + "-" + Status.DONE);
 				
-				int campaignStatusIndex = contact.campaignStatus.indexOf(tempCampaignStatus);
+			int campaignStatusIndex = contact.campaignStatus.indexOf(campaignStatus);
 				
-				System.out.println("Campaign Status index is " + campaignStatusIndex);
+			System.out.println("Campaign Status index is " + campaignStatusIndex);
 				
-				// Skip campaign again if executed within time
-				if(campaignStatusIndex != -1){
-					CampaignStatus status = contact.campaignStatus.get(campaignStatusIndex);
-					
-					if(System.currentTimeMillis()/1000 - status.start_time < 10 * 60)
-					{
-						System.err.println("Contact is active 10 mins ago. Skipping contact " + contact.id + " from campaign.");
-						return true;
-					}
+			// Skip campaign again if executed within time
+			if(campaignStatusIndex != -1){
+				CampaignStatus status = contact.campaignStatus.get(campaignStatusIndex);
+				
+				if(System.currentTimeMillis()/1000 - status.start_time < TIME_SPAN)
+				{
+					System.err.println("Contact is active 60 mins ago. Skipping contact " + contact.id + " from campaign.");
+					return true;
 				}
 			}
-			catch (Exception e)
-			{
-				System.err.println("Exception occurred in isActive method " + e.getMessage());
-				System.out.println(ExceptionUtils.getFullStackTrace(e));
-			}
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occurred in isActive method..." + ExceptionUtils.getFullStackTrace(e));
+			e.printStackTrace();
 		}
 		
-		return contact.campaignStatus.contains(currentcampaignStatus);
+		return false;
 	}
 
 	/**
@@ -420,5 +437,4 @@ public class CampaignStatusUtil
 		for(Contact contact: contacts)
 			setEndCampaignStatus(contact, campaignId, campaignName, Status.REMOVED);
 	}
-
 }

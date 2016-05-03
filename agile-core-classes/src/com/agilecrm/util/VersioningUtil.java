@@ -24,6 +24,8 @@ public class VersioningUtil
 
     private static final boolean IS_LOCAL_DEVELOPMENT_SERVER;
     private static final boolean IS_PRODUCTION_APP;
+    
+    public static final String APPENGINE_TASK_RETRY_COUNT = "X-AppEngine-TaskRetryCount";
 
     /**
      * Cloudfront paths
@@ -259,6 +261,35 @@ public class VersioningUtil
     public static final String getStaticFilesBaseURL()
     {
 	return CLOUDFRONT_STATIC_FILES_PATH;
+    }
+    
+    public static HttpServletRequest getQueueRequest() throws Exception
+    {
+    	HttpServletRequest request = DeferredTaskContext.getCurrentRequest();
+    	
+    	System.out.println("Queue Request " + request);
+    	
+    	if(request == null)
+    		throw new Exception("Not a DeferredTask Request");
+    	
+    	return request;
+    }
+    
+    public static String getQueueHeaderValue(String headerName) throws Exception
+    {
+    	return getQueueRequest().getHeader(headerName);
+    }
+    
+    public static boolean isTaskRetried() throws Exception
+    {
+    	String 	retryCount = getQueueHeaderValue(VersioningUtil.APPENGINE_TASK_RETRY_COUNT);
+		
+		System.out.println("Task retry count is " + retryCount);
+		
+		if(!"0".equalsIgnoreCase(retryCount))
+			return true;
+		
+		return false;
     }
 
     public static void main(String[] args)
