@@ -3664,6 +3664,7 @@ margin-left: 33px;
 #contact-container:hover .contact-image-view{
 opacity: .3;
 }
+
 #schedule_demo{
   margin-right: 214px;
 }
@@ -3829,4 +3830,8 @@ li .segment-lilist:hover {
 	cursor: pointer;
 }
 
+.twilio-sound:hover  .options-record-twilio
+{
+	display : block;
+}
 
