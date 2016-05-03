@@ -40,6 +40,8 @@ public class AgileDbUpdateServlet extends HttpServlet
     	String limit = req.getParameter("limit");
     	String dbName = req.getParameter("db");
     	
+    	String domainName = req.getParameter("domain");
+    	
     	//Fetches all namespaces
       	Set<String> namespaces = new HashSet<String>();
       	
@@ -51,6 +53,11 @@ public class AgileDbUpdateServlet extends HttpServlet
         	int limitCount = Integer.parseInt(limit);
         	int offsetCount = pageCount * 1000;
         	namespaces = NamespaceUtil.getAllNamespacesNew(limitCount, offsetCount);	
+    	}
+    	
+    	if(StringUtils.isNotBlank(domainName)){
+    		namespaces = new HashSet();
+    		namespaces.add(domainName);
     	}
     	
       	// Iterates through each Namespace and initiates task for each namespace
