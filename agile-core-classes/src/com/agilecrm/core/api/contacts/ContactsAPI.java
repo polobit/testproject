@@ -421,6 +421,8 @@ public class ContactsAPI
 		    && !("agilecrm.com/dev").equals(user_info.getClaimedId())
 		    && !("agilecrm.com/php").equals(user_info.getClaimedId()))
 	    {
+	    //Checking for contact delete permission
+	    UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.DELETE, true);
 		try
 		{
 		    if (contact.type.toString().equals(("PERSON")))
