@@ -608,4 +608,32 @@ public class CampaignLogsSQLUtil
 	return contactActivities;
     }
     
+    public static void insertCampaignAssignedStatus(String domain, String campaignId, String status, String message, String token)
+    {
+    	String insertToLogs = "INSERT INTO campaign_assigned (domain, campaign_id, status, log_time, message, token) VALUES("
+    			+ GoogleSQLUtil.encodeSQLColumnValue(domain)
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(campaignId)
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(status)
+    			+ ",NOW(3)"
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(message) 
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(token) 
+    			+ ")";
+    		
+    		System.out.println("Insert Query to Campaigns Assigned: " + insertToLogs);
+    		
+    		try
+    		{
+    		   GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
+    		}
+    		catch (Exception e)
+    		{
+    		    System.out.println("Exception occured while adding campaign log " + e.getMessage());
+    		    e.printStackTrace();
+    		}
+    }
+    
 }
