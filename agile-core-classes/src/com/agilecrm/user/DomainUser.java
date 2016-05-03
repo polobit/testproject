@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -249,7 +250,30 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	@Embedded
 	public HelpdeskSettings helpdeskSettings = null;
+
+
+	/** Helpdesk settings */
 	
+
+	/** Browser Fingerprint */
+	public Set<String> finger_prints;
+	
+	@NotSaved(IfDefault.class)
+	public String generatedOTP;
+
+	/**Broswer Information*/
+	@NotSaved(IfDefault.class)
+	public String browser_os;
+	
+	@NotSaved(IfDefault.class)
+	public String browser_version;
+	
+	@NotSaved(IfDefault.class)
+	public String browser_name;
+	
+	@NotSaved(IfDefault.class)
+	public String owner_pic;
+
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
@@ -285,7 +309,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		this.name = name;
 		this.password = password;
 		this.is_admin = isAdmin;
-		this.is_account_owner = isAccountOwner;
+		this.is_account_owner = isAccountOwner;	
 	}
 
 	/**

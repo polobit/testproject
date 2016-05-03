@@ -3541,6 +3541,7 @@ overflow-x:hidden;
 text-align:left;
 }
 
+
 .new-user
 {
   margin-left: 10px;
@@ -3829,4 +3830,25 @@ li .segment-lilist:hover {
 	cursor: pointer;
 }
 
+
+.delete_ip{
+	font-size: 11px;
+    margin-top: -2px;
+}
+#newip-modal-width{
+	margin-top:90px;
+	width:33%;
+}
+
+.allow_access_editicon{
+margin-left:27px;
+}
+
+.allow_access_panelheading{
+	background-color: #f6f8f8;
+    margin-top: 10px;
+    border-color: #edf1f2;
+    border: 1px solid #edf1f2;
+    border-bottom: none;
+}
 
