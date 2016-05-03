@@ -2798,6 +2798,21 @@ $(function()
 		if (CURRENT_DOMAIN_USER.menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.menu_scopes) != -1)
 			return options.fn(this);
 
+		console.log("menuscope "+ options.fn(this));
+		return options.inverse(this);
+
+	});
+
+	/**
+	 * Helps to check the restricted permissions of the user based on the ACL.
+	 */
+	Handlebars.registerHelper("hasRestrictedMenuScope", function(scope_constant, options)
+	{
+		if (CURRENT_DOMAIN_USER.restricted_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_scopes) != -1){
+			console.log("restricted permissions = " +  options.fn(this));
+			return options.fn(this);
+		}
+		console.log("restricted permissions = " +  options.fn(this));
 		return options.inverse(this);
 	});
 

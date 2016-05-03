@@ -368,7 +368,7 @@
 									<li><a href="#companyModal"  data-toggle="modal"
 										id="company"> <div class="pull-left">Company</div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
 										<%
-										if(domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
+										if(domainUser.menu_scopes.contains(NavbarConstants.DEALS) &&          !domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
 									%>
 									<li><a href="#" class="font-bold deals-add"> <div class="pull-left">Deal</div><div class='pull-right shortcuts'>Shift + D</div><div class="clearfix"></div></a></li>
 									<%

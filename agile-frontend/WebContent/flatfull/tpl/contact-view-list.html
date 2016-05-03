@@ -24,7 +24,7 @@
     	{{/is_mobile}}
 
 	</div>
-
+   {{#hasRestrictedMenuScope 'CREATE_CONTACT'}} {{else}}
     <div class="btn-group">
 
         <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
@@ -46,7 +46,7 @@
 	</div>
 </div>
 	
-
+{{/hasRestrictedMenuScope}}
 			
 </script>
 
