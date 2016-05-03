@@ -1181,6 +1181,8 @@ function initializeEditor() {
         plugins: "autolink lists link charmap code paste textcolor colorpicker paste",
         paste_as_text: true,
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
+        relative_urls : false,
+		convert_urls : false,
         toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | merge_fields",
         setup: function (editor) {
             editor.addButton('merge_fields', { type : 'menubutton', text : 'Merge Fields', icon : false, menu : parent.set_up_merge_fields(editor) });

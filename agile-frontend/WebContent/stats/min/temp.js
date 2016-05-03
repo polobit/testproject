@@ -1053,10 +1053,7 @@ var _agile_synch_form_v4 = function()
 	if (agile_email)
 		_agile.set_email(agile_email);
        	 	
-	delete agile_contact._agile_form_name;
-	delete agile_contact._agile_domain;
-	delete agile_contact._agile_api;
-	delete agile_contact._agile_redirect_url;
+	agile_contact = deleteAgileHiddenFields(agile_contact);
 	
 	_agile.create_contact(agile_contact, { success : function(data)
 	{
@@ -1333,10 +1330,7 @@ var _agile_synch_form_v3 = function()
 	if (agile_email)
 		_agile.set_email(agile_email);
 	
-	delete agile_contact._agile_form_name;
-	delete agile_contact._agile_domain;
-	delete agile_contact._agile_api;
-	delete agile_contact._agile_redirect_url;
+	agile_contact = deleteAgileHiddenFields(agile_contact);
 	
 	_agile.create_contact(agile_contact, { success : function(data)
 	{
@@ -1796,32 +1790,35 @@ var agile_guid = {
 				agile_create_cookie(this.cookie_original_ref, original_referrer, 365 * 5);
 		} };
 
-agile_guid.init();
-
-
-window.addEventListener('load', 
-  function() { 
-    if(document.getElementById('agile-form')!=null){
-      utmHiddenField();
-    }    
-  }, false);
-
-
-function utmHiddenField(){  
-  
-  
-    for ( var i = 0, len= localStorage.length;i<len; ++i ) {
-
-      if(new RegExp("agile_").test(localStorage.key(i))){
-       var input = document.createElement("input");
-      input.setAttribute("type", "hidden");
-      input.setAttribute("name", "_"+localStorage.key(i));
-      input.setAttribute("value",localStorage.getItem(localStorage.key(i) ));
-      document.getElementById("agile-form").appendChild(input);
-      }
+agile_guid.init();function utmHiddenField() { 
+  var hiddenFieldsMarkUp = "";
+  for ( var i = 0, len= localStorage.length;i<len; ++i ) {
+    if(localStorage.key(i).indexOf("agile_utm_") != -1) {
+      hiddenFieldsMarkUp += '<input type="hidden" name="_'+localStorage.key(i)+'" value="'+localStorage.getItem(localStorage.key(i))+'">';
     }
-  
+  }
+
+  if(hiddenFieldsMarkUp) {
+    var el = document.createElement('div');
+    el.innerHTML = hiddenFieldsMarkUp;
+    document.getElementById("agile-form").appendChild(el);
+  }
 }
+
+function deleteAgileHiddenFields(agile_contact) {
+  for(var index in agile_contact) {
+    if(index.indexOf("_agile_") != -1) {
+      delete agile_contact[index];
+    }
+  }
+  return agile_contact;
+}
+
+window.addEventListener('load', function() { 
+    if(document.getElementById('agile-form') != null) {
+      utmHiddenField();
+    }
+}, false);
 
 /**
  * agile_id.js deals with object agile_id and its methods which are used to set,
@@ -1856,6 +1853,35 @@ var agile_id = {
 		{
 			return this.domain;
 		}};
+function loadAgileCRMForm(id){
+	id = id.split("_");
+	var agileDomain = id[0];
+	var formId = id[id.length-1];
+    console.log("domain is :"+agileDomain);
+	var script = document.createElement('script');
+    script.src = window.location.protocol+'//'+agileDomain+'.agilecrm.com/core/api/forms/form/js/'+formId;
+    document.body.appendChild(script);      
+}
+
+function showAgileCRMForm(formJson,formHolderId) {   
+	document.getElementById(formHolderId).innerHTML = formJson.formHtml;
+	var onloadScript = document.getElementById(formHolderId).getElementsByTagName("script");
+	console.log(onloadScript);
+    onloadScript = onloadScript[0].innerHTML;
+    console.log(onloadScript);
+	var script = document.createElement('script');
+    script.id = "agileCRMFormLoadScript";
+    script.text = onloadScript;
+    document.body.appendChild(script);
+}
+
+window.addEventListener('load', function() { 
+	var element = document.getElementsByClassName("agile_crm_form_embed");
+    if(element.length != 0) {
+      loadAgileCRMForm(element[0].getAttribute("id"));
+      element[0].style.display = "";
+    }
+},false);
 /**
  * agile_milestones.js deals with functions to get milestones
  * 
@@ -2426,11 +2452,12 @@ function agile_trackPageview(callback)
 	// Sets UTM params
 	agile_setUtmParams();	
 
-	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
+	// var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
+
 	var agile_url_new =  Track_Visitor_Server_URL + "/addstats?callback=?&" + params;
 
 	// Callback
-	agile_json(agile_url, callback);
+	// agile_json(agile_url, callback);
 
 	agile_json(agile_url_new);
 
@@ -2810,7 +2837,7 @@ function agile_webRules(callback)
 function _agile_execute_web_rules()
 {
 	// Download web rules and call _agile_webrules
-	_agile_require_js("https://s3.amazonaws.com/agilewebgrabbers/scripts/agile-webrules-min.js", function()
+	_agile_require_js("https://s3.amazonaws.com/agilewebgrabbers/v2/scripts/agile-webrules-min.js", function()
 	{
 		_agile_webrules();
 	});

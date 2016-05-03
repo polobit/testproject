@@ -58,6 +58,21 @@ public class APIKeyUtil
     }
     
     /**
+     * Checks whether JS api is related to this domain, used while verifying JsAPI
+     * request in JsAPiFilter
+     * 
+     * @param key
+     *            APIKey to be verified
+     * @return {@link Boolean} Returns true if APIKey exists in current domain
+     *         and vice-versa
+     */
+    public static Boolean isJSAPIKeyPresent(String key)
+    {
+	// Queries APIKey entities with the apikey parameter
+	return dao.ofy().query(APIKey.class).filter("js_api_key", key).count() > 0;	
+    }
+    
+    /**
      * Returns Domain User key with respect to api key.
      * 
      * @param apiKey
@@ -146,7 +161,11 @@ public class APIKeyUtil
     	if(StringUtils.isBlank(apiKey))
     		  return false;
     	
-    	return (getDataStore().prepare(validJSOrRestAPIKeyQuery(apiKey)).countEntities() > 0);
+    	if(isPresent(apiKey) || isJSAPIKeyPresent(apiKey))
+    		  return true;
+    	
+    	return false;
+    	// return (getDataStore().prepare(validJSOrRestAPIKeyQuery(apiKey)).countEntities() > 0);
     }
     
     /**
