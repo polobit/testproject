@@ -30,6 +30,8 @@ public class SendGridWebhook extends HttpServlet
 	public static final String SOFT_BOUNCE = "bounce";
 	public static final String SPAM_REPORT = "spam report";
 	public static final String DROPPED = "dropped";
+	public static final String TYPE = "type";
+	public static final String BLOCKED = "blocked";
 
 	public static final String EMAIL = "email";
 
@@ -155,11 +157,11 @@ public class SendGridWebhook extends HttpServlet
 			}
 				
 
-			// By default SOFT_BOUNCE
-			EmailBounceType type = EmailBounceType.SOFT_BOUNCE;
-
-			if (HARD_BOUNCE.equals(eventJSON.getString(EVENT)))
-			type = EmailBounceType.HARD_BOUNCE;
+			// By default HARD_BOUNCE
+			EmailBounceType type = EmailBounceType.HARD_BOUNCE;
+			
+			if (SOFT_BOUNCE.equals(eventJSON.getString(EVENT)) && ( eventJSON.has(TYPE) && eventJSON.getString(TYPE).equalsIgnoreCase(BLOCKED) ) )
+			type = EmailBounceType.SOFT_BOUNCE;
 
 			if (SPAM_REPORT.equals(eventJSON.getString(EVENT)))
 			type = EmailBounceType.SPAM;
