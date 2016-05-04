@@ -64,9 +64,12 @@ DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 System.out.println("Domain user " + domainUser);
 
 DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
+WorkflowAddAccessLevelDeferredTask workflowTask = new WorkflowAddAccessLevelDeferredTask(domainUser.domain);
+	
 // Add to queue
 Queue queue = QueueFactory.getDefaultQueue();
 queue.add(TaskOptions.Builder.withPayload(task));
+queue.add(TaskOptions.Builder.withPayload(workflowTask));
 
 
 ObjectMapper mapper = new ObjectMapper();
