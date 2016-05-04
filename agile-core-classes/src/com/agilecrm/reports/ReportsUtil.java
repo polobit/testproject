@@ -199,7 +199,6 @@ public class ReportsUtil {
 		String endDate = sdf.format(dt);
 
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone(report.report_timezone));
 		cal.setTime(new DateUtil().toMidnight().getTime());
 		
 		String startDate="";
@@ -367,8 +366,6 @@ public class ReportsUtil {
 			statsJSON.put("report_name", report.name);
 			statsJSON.put("domain", NamespaceManager.get());
 			statsJSON.put("email_status", getTotalEmailCredit());
-			
-			System.out.println("dddddddddddddddd "+statsJSON.toString());
 
 			return statsJSON;
 		} catch (Exception e) {
@@ -1298,21 +1295,5 @@ public class ReportsUtil {
 		return campaignEmailsJSONArray;
 
 	}
-	
-	/*public static void main(String asd[]){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new DateUtil().toMidnight().getTime());
-		cal.set(Calendar.DAY_OF_WEEK, -1);
-		cal.add(Calendar.DAY_OF_MONTH, -7);
-		String startDate = sdf.format(cal.getTime());
-		cal.add(Calendar.DATE, 6);
-		cal.set(Calendar.HOUR, 23);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		String endDate = sdf.format(cal.getTime());
-		System.out.println(GoogleSQLUtil.convertMinutesToTime(getTimeZoneOffSet(TimeZone.getTimeZone("Asia/Kolkata")))+" "+startDate+endDate);
-		
-	}*/
 	
 }

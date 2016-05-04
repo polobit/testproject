@@ -70,7 +70,7 @@ public class ReportsDeferredTask implements DeferredTask {
 			// Util function fetches reports based on duration, generates
 			// reports and sends report
 			for (Reports report : reports) {
-				if (report.report_type != Reports.ReportType.Contact) {
+				if (report.report_type == Reports.ReportType.Contact) {
 					Long time = ActivityReportsUtil
 							.getTimeForSettingEtaForReports(
 									report.activity_time,

@@ -191,7 +191,7 @@ var ReportsRouter = Backbone.Router
 						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
 							{
-								$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
+								//$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
 							}, optionsTemplate, false, el);
 						// Counter to set when script is loaded. Used to avoid
 						// flash in
@@ -259,7 +259,7 @@ var ReportsRouter = Backbone.Router
 
 							loadActivityReportLibs(function()
 							{
-								report_utility.edit_contacts(el, report);
+								report_utility.edit_contacts(el, report, true);
 							});
 	
 

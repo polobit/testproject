@@ -211,6 +211,7 @@ function deserialize_multiselect(data, el)
 		return;
 	$.each(data['fields_set'], function(index, field)
 	{
+	  if(flag !==true)
 		$('#multipleSelect', el).multiSelect('select', field);
 	});
 
