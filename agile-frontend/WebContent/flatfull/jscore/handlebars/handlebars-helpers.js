@@ -1746,6 +1746,11 @@ $(function()
 				return window.btoa(window.location.host.split(".")[0]);
 	});
 
+	Handlebars.registerHelper("getBase64ActualDomain", function()
+			{
+				return window.btoa(CURRENT_DOMAIN_USER.domain);
+	});
+
 	// Gets date in given range
 	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
 	{
