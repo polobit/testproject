@@ -87,10 +87,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 						templateKey : "helpcenter-articles",
 						individual_tag_name : 'div',
 						postRenderCallback : function(el){
-							$('.clear',el).on('click', function(e){
-								e.preventdefault();
-                              ('#helpcenter-comments',el).val('');  
-							});
 						}
 					});
 
@@ -131,13 +127,14 @@ var HelpcenterRouter = Backbone.Router.extend({
                         
                             postRenderCallback : function(el){  		    
 						
-								$(".clear",el).on("click",function(el){
+								$(".clear",el).on("click",function(el,e){
+                               		e.preventdefault;
                                		$("#comment",el).val('').empty();
 							 	}); 
 							},
-							success : function(model){
-                              var commentsmodel = App_Helpcenter.commentsCollection.collection.get(id);
-							     commentsmodel.set(model);
+							saveCallback : function(model){
+								console.log(model);
+                                App_Helpcenter.commentsCollection.collection.add(model);							  
 							}
 					    	});
 					    	$('#comments-add').html(commentsView.render().el);
