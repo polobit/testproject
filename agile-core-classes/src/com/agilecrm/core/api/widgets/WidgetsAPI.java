@@ -126,7 +126,7 @@ public class WidgetsAPI {
 				return null;
 			}
 
-			customWidget.save();
+			// customWidget.save();
 
 			Widget widget = new Widget();
 			widget.isForAll = customWidget.custom_isForAll;
@@ -175,7 +175,12 @@ public class WidgetsAPI {
 	public void deleteWidget(@QueryParam("widget_name") String widget_name) {
 		// Deletes widget based on name
 		Widget widget = WidgetUtil.getWidget(widget_name);
+
 		if (widget != null) {
+			try {
+				CustomWidget.deleteCustomWidget(widget_name);
+			} catch (Exception e) {
+			}
 			// default widgets are removed from database on deletion
 			widget.delete();
 		}
