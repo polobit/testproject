@@ -874,12 +874,16 @@ function setupContactFields(el){
 			$.ajax({
 					url : 'core/api/contact-view-prefs',
 					type : 'GET',
-					data : json,
-					success : function()
+					dataType : 'json',
+					success : function(data)
 						{
+							console.log("")
+						var cistomfields = $("#contact-static-fields");
+						deserializeForm(data, cistomfields);
+					}
+				});
 			
-			
-		});
+		
 		});
 
 
