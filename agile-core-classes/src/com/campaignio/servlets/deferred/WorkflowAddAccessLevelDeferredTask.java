@@ -43,6 +43,7 @@ public class WorkflowAddAccessLevelDeferredTask implements DeferredTask {
 			System.out.println("workflows = " + workflows.size());
 			
 			for (Workflow workflow : workflows) {
+				workflow.updated_time_update = false;
 				workflow.save(true);
 			}
 		} finally {
