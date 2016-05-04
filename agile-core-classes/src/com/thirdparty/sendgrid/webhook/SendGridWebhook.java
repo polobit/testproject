@@ -27,7 +27,7 @@ public class SendGridWebhook extends HttpServlet
 
 	public static final String EVENT = "event";
 	public static final String HARD_BOUNCE = "bounce";
-	public static final String SOFT_BOUNCE = "deferred";
+	public static final String SOFT_BOUNCE = "bounce";
 	public static final String SPAM_REPORT = "spam report";
 	public static final String DROPPED = "dropped";
 
