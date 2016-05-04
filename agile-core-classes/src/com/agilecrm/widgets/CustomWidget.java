@@ -35,9 +35,7 @@ public class CustomWidget extends Widget {
 				List<DomainUser> users = DomainUserUtil.getUsers(domain);
 				for (DomainUser domainUser : users) {
 					System.out.println("*** In For Loop " + domainUser.id);
-					// System.out.println("widiget data "+ this.name+ " "+
-					// AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id).id
-					// );
+					
 					AgileUser agileUsr = AgileUser
 							.getCurrentAgileUserFromDomainUser(domainUser.id);
 					if (agileUsr != null) {
