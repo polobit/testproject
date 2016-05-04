@@ -45,6 +45,7 @@ public class KnowledgebaseAuthFilter implements Filter
 		System.out.println("Helpcenter Auth Filter.......");
 
 		// Reset the thread local
+		System.out.println("Reset the thread local....");
 		KnowledgebaseManager.set((KnowledgebaseUserInfo) null);
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
@@ -52,10 +53,14 @@ public class KnowledgebaseAuthFilter implements Filter
 		// Check if UserInfo is already there
 		KnowledgebaseUserInfo userInfo = (KnowledgebaseUserInfo) httpRequest.getSession().getAttribute(
 				KnowledgebaseManager.AUTH_SESSION_COOKIE_NAME);
-
+		
+		System.out.print("userInfo from request scope..: ");
+		System.out.print(userInfo);
+		
 		if (userInfo != null)
 		{
 			// Add this in session manager
+			System.out.println("Userinfo not null so adding to thread local....");
 			KnowledgebaseManager.set((HttpServletRequest) request);
 		}
 

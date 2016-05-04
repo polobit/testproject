@@ -150,10 +150,19 @@ public class KnowledgebaseLoginServlet extends HttpServlet
 		}
 
 		KnowledgebaseUserInfo userInfo = new KnowledgebaseUserInfo("agilecrm.com", email, user.name, Role.CUSTOMER, user.id);
+
+		System.out.println("Creating user info object....");
+		System.out.println("userInfo: ");
+		System.out.println(userInfo);
+		
+		System.out.println("Setting user info in request session....");
 		request.getSession().setAttribute(KnowledgebaseManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-
+		
+		System.out.println("Setting user info in thread local....");
 		KnowledgebaseManager.set(userInfo);
-
+		
+		System.out.print("Redirecting to home page...");
+		
 		response.sendRedirect("/helpcenter");
 	}
 

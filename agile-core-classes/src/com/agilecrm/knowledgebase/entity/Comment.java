@@ -93,8 +93,13 @@ public class Comment implements Serializable
 			created_time = currentTime;
 
 		updated_time = currentTime;
-
-		created_by_key = new Key<HelpcenterUser>(HelpcenterUser.class, KnowledgebaseManager.get().getUserId());
+		
+		KnowledgebaseUserInfo userInfo = KnowledgebaseManager.get();
+		
+		System.out.println("userInfo: ");
+		System.out.println(userInfo);
+		
+		created_by_key = new Key<HelpcenterUser>(HelpcenterUser.class, userInfo.getUserId());
 	}
 
 	public Key<Comment> save()
