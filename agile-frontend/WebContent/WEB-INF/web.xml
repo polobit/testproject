@@ -1168,7 +1168,7 @@
 		<servlet-class>com.agilecrm.CompanyNameUpdateServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>OpportunitySchemaChange</servlet-name>
+		<servlet-name>CompanyNameUpdate</servlet-name>
 		<url-pattern>/backend/cron/comapny-name-update</url-pattern>
 	</servlet-mapping>
   
