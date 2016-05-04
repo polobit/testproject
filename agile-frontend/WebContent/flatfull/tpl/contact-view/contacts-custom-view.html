@@ -240,6 +240,12 @@
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
 					    {{/hasScope}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
+					    <div class="btn-group dropdown pull-right" style="padding-right: 10px;">
+							 <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns">
+                    		<i class="fa fa-navicon" style="position:absolute;"></i>
+                			</button>
+                			<div id="custom-field-area"></div>
+				        </div>
 					    
 				    </div>
 
@@ -323,3 +329,29 @@
 				</div>
             <!-- </div> -->
 </script>
+<script id="contact-custom-fields-template" type="text/html">
+			<ul class="pull-right dropdown-menu" id="contact-statis-fields" role="menu">
+	       		  <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="basic_info"><i></i>Basic info</li>
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="first_name"><i></i>First Name</li> 
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="last_name"><i></i>Last Name</li> 
+
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="company"><i></i>Company</li>
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="tags"><i></i>Tags</li> 
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="title"><i></i>Title</li>
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="phone"><i></i>Phone</li>
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="address"><i></i>Address</li>
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="website"><i></i>Website</li> 
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="created_time"><i></i>Created Date</li> 
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="updated_time"><i></i>Updated Date</li>
+	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="image"><i></i>Image</li> 
+	                    <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="star_value"><i></i>Star Value</li> 
+	                    <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="lead_score"><i></i>Lead Score</li>
+	                     <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="lead_owner"><i></i>Lead Owner</li>
+	                     <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="last_contacted"><i></i>Last Contacted</li> 
+	                     <li id="custom-fields-group" class="dropdown-header"></li>
+	      			</ul>
+</script>
+<script id="contact-custom-fields-append-template" type="text/html">
+ <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="'{{field_label}}'"><i></i>'{{field_label}}'</li>
+</script>
+
