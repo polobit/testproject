@@ -301,7 +301,7 @@ public class Workflow extends Cursor {
 									.build());
 			}
 		}
-		
+			
 		setAccessLevel(oldWorkflow);
 	}
 

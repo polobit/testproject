@@ -3,14 +3,12 @@ package com.campaignio.servlets.deferred;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.UserPrefs;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -44,8 +42,16 @@ public class WorkflowAddAccessLevelDeferredTask implements DeferredTask {
 			
 			for (Workflow workflow : workflows) {
 				workflow.updated_time_update = false;
-				workflow.save(true);
+				// workflow.save(true);
+				
+				List<Activity> activities = ActivityUtil.getActivititesBasedOnSelectedConditon(
+						ActivityType.CAMPAIGN.toString(), null, 2, null, null, null, workflow.id);
+				for (Activity activity : activities) {
+					System.out.println(workflow.name + " : " + activity.time);
+				}
+				dao.put(workflow, true);
 			}
+			
 		} finally {
 		}
 		
