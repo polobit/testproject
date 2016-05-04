@@ -187,21 +187,6 @@ var DealsRouter = Backbone.Router.extend({
 		$('#content').html("<div id='opportunity-listners'></div>");
 		var deals_filter = new Base_Model_View({ url : '/core/api/deal/filters', template : "filter-deals", isNew : "true", window : "deal-filters",
 			prePersist : function(model){
-				var condition = model.attributes.close_date_filter ; 
-				if(condition == "LAST" || condition == "NEXT"){
-					var condays = model.attributes.close_date_value ;
-					var date = new Date();
-					var eDateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-					if(condition == "LAST"){
-						model.attributes.close_date_end = eDateStart.getTime() / 1000 ;
-						model.attributes.close_date_start =(eDateStart.getTime() - ((condays-1)*24 * 60 * 60 * 1000)) / 1000 ;
-
-					}
-					else if(condition == "NEXT"){
-						model.attributes.close_date_start = eDateStart.getTime() / 1000 ;
-						model.attributes.close_date_end = (eDateStart.getTime() + (condays*24 * 60 * 60 * 1000)) / 1000 ;
-					}
-				} 
 				model.set({ 
 						//	'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
 						//	'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
@@ -249,31 +234,10 @@ var DealsRouter = Backbone.Router.extend({
 					}
 				});
 				$('input[name=name]').trigger('focus');
+				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
+				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
 			} });
-		$("#opportunity-listners").html(deals_filter.render().el);
-		$('#deal-cd-rhs .date').datepicker({ format : 'mm/dd/yyyy', });
-		$('#deal-cd-rhs-new .date').datepicker({ format : 'mm/dd/yyyy', });
-		$('#opportunity-listners').on('change', '#deal-cd-condition .deal-cd-value', function(e) {
-			if(this.value == "BETWEEN"){
-				$('#deal-cd-rhs').parent().removeClass("hide");
-				$('#deal-cd-rhs-new').parent().removeClass("hide");
-				if(!$('#cd-value').parent().hasClass("hide"));
-					$('#cd-value').parent().addClass("hide");
-			}
-			else if(this.value == "ON" || (this.value == "AFTER" || this.value == "BEFORE")){
-				$('#deal-cd-rhs').parent().removeClass("hide");
-				if(!$('#deal-cd-rhs-new').parent().hasClass("hide"))
-					$('#deal-cd-rhs-new').parent().addClass("hide");
-				if(!$('#cd-value').parent().hasClass("hide"))
-					$('#cd-value').parent().addClass("hide");
-			}else if(this.value == "LAST" || this.value == "NEXT" ){
-				$('#cd-value').parent().removeClass("hide");
-				if(!$('#deal-cd-rhs-new').parent().hasClass("hide"))
-					$('#deal-cd-rhs-new').parent().addClass("hide");
-				if(!$('#deal-cd-rhs').parent().hasClass("hide"))
-					$('#deal-cd-rhs').parent().addClass("hide");
-			}
-		});
+		$("#opportunity-listners").html(deals_filter.render().el);		
 	},
 
 	/**
@@ -292,22 +256,7 @@ var DealsRouter = Backbone.Router.extend({
 		var deal_filter = this.dealFiltersList.collection.get(id);
 		var deal_filter_json = deal_filter.toJSON();
 		var dealFilter = new Base_Model_View({ url : 'core/api/deal/filters', model : deal_filter, template : "filter-deals",
-			window : 'deal-filters', prePersist : function(model){
-				var condition = model.attributes.close_date_filter ; 
-				if(condition == "LAST" || condition == "NEXT"){
-					var condays = model.attributes.close_date_value ;
-					var date = new Date();
-					var eDateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-					if(condition == "LAST"){
-						model.attributes.close_date_end = eDateStart.getTime() / 1000 ;
-						model.attributes.close_date_start =(eDateStart.getTime() - (condays*24 * 60 * 60 * 1000)) / 1000 ;
-
-					}
-					else if(condition == "NEXT"){
-						model.attributes.close_date_start = eDateStart.getTime() / 1000 ;
-						model.attributes.close_date_end = (eDateStart.getTime() + (condays*24 * 60 * 60 * 1000)) / 1000 ;
-					}
-				} 
+			window : 'deal-filters', prePersist : function(model){ 
 				model.set({ 
 							'pipeline_id' : $('#filter_pipeline', $("#dealsFilterForm")).val(), 
 							'milestone' : $('#milestone', $("#dealsFilterForm")).val(),
@@ -407,51 +356,24 @@ var DealsRouter = Backbone.Router.extend({
 						
 					}
 				});
+				if(deal_filter_json.close_date_filter == "BETWEEN"){
+					$('#deal-cd-rhs', el).parent().removeClass("hide");
+					$('#deal-cd-rhs-new', el).parent().removeClass("hide");
+					$('#cd-value', el).parent().addClass("hide");
+				}else if(deal_filter_json.close_date_filter == "ON" || (deal_filter_json.close_date_filter == "AFTER" || deal_filter_json.close_date_filter == "BEFORE")){
+					$('#deal-cd-rhs', el).parent().removeClass("hide");
+					$('#deal-cd-rhs-new', el).parent().addClass("hide");
+						$('#cd-value', el).parent().addClass("hide");
+				}else if(deal_filter_json.close_date_filter == "LAST" || deal_filter_json.close_date_filter == "NEXT" ){
+					$('#cd-value', el).parent().removeClass("hide");
+						$('#deal-cd-rhs-new', el).parent().addClass("hide");
+						$('#deal-cd-rhs', el).parent().addClass("hide");
+				}
+				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
+				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
 			} });
 
 		$("#opportunity-listners").html(dealFilter.render().el);
-		if(deal_filter_json.close_date_filter == "BETWEEN"){
-			$('#deal-cd-rhs').parent().removeClass("hide");
-			$('#deal-cd-rhs-new').parent().removeClass("hide");
-			if(!$('#cd-value').parent().hasClass("hide"));
-				$('#cd-value').parent().addClass("hide");
-		}else if(deal_filter_json.close_date_filter == "ON" || (deal_filter_json.close_date_filter == "AFTER" || deal_filter_json.close_date_filter == "BEFORE")){
-			$('#deal-cd-rhs').parent().removeClass("hide");
-			if(!$('#deal-cd-rhs-new').parent().hasClass("hide"))
-				$('#deal-cd-rhs-new').parent().addClass("hide");
-			if(!$('#cd-value').parent().hasClass("hide"))
-				$('#cd-value').parent().addClass("hide");
-		}else if(deal_filter_json.close_date_filter == "LAST" || deal_filter_json.close_date_filter == "NEXT" ){
-			$('#cd-value').parent().removeClass("hide");
-			if(!$('#deal-cd-rhs-new').parent().hasClass("hide"))
-				$('#deal-cd-rhs-new').parent().addClass("hide");
-			if(!$('#deal-cd-rhs').parent().hasClass("hide"))
-				$('#deal-cd-rhs').parent().addClass("hide");
-		}
-		$('#deal-cd-rhs .date').datepicker({ format : 'mm/dd/yyyy', });
-		$('#deal-cd-rhs-new .date').datepicker({ format : 'mm/dd/yyyy', });
-		$('#opportunity-listners').on('change', '#deal-cd-condition .deal-cd-value', function(e) {
-			if(this.value == "BETWEEN"){
-				$('#deal-cd-rhs').parent().removeClass("hide");
-				$('#deal-cd-rhs-new').parent().removeClass("hide");
-				if(!$('#cd-value').parent().hasClass("hide"));
-					$('#cd-value').parent().addClass("hide");
-			}
-			else if(this.value == "ON" || (this.value == "AFTER" || this.value == "BEFORE")){
-				$('#deal-cd-rhs').parent().removeClass("hide");
-				if(!$('#deal-cd-rhs-new').parent().hasClass("hide"))
-					$('#deal-cd-rhs-new').parent().addClass("hide");
-				if(!$('#cd-value').parent().hasClass("hide"))
-					$('#cd-value').parent().addClass("hide");
-			}else if(this.value == "LAST" || this.value == "NEXT" ){
-				$('#cd-value').parent().removeClass("hide");
-				if(!$('#deal-cd-rhs-new').parent().hasClass("hide"))
-					$('#deal-cd-rhs-new').parent().addClass("hide");
-				if(!$('#deal-cd-rhs').parent().hasClass("hide"))
-					$('#deal-cd-rhs').parent().addClass("hide");
-			}
-		});
-
 	},
 
 	/**
