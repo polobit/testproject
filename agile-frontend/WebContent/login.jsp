@@ -360,7 +360,6 @@ if(isSafari && isWin)
         $("body").css("background-image","url('"+this.src+"')");
        
 
-
         }*/
 
 

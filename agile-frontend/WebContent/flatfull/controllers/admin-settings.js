@@ -210,6 +210,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				App_Admin_Settings.webhookSettings();
 				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
 			},
+			errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top");
+			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
 				App_Admin_Settings.webhookSettings();
