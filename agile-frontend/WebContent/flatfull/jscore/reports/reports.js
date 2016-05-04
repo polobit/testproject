@@ -203,7 +203,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 }
 
 
-function deserialize_multiselect(data, el)
+function deserialize_multiselect(data, el, flag)
 {
 	$("#reports-listerners-container").html(el);
 

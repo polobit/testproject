@@ -233,7 +233,7 @@ public class ReportsUtil {
 								startDate, endDate, timeZone);
 			} else if (report.duration == Reports.Duration.WEEKLY) {
 				cal.set(Calendar.DAY_OF_WEEK, -2);
-				cal.add(Calendar.DAY_OF_MONTH, -7);
+				cal.add(Calendar.DAY_OF_MONTH, -6);
 				startDate = sdf.format(cal.getTime());
 				cal.add(Calendar.DATE, 6);
 				cal.set(Calendar.HOUR, 23);
@@ -1245,6 +1245,7 @@ public class ReportsUtil {
 		Calendar startCal = Calendar.getInstance();
 		startCal.setTime(new DateUtil().toMidnight().getTime());
 		Calendar cal = Calendar.getInstance();
+		cal.setTime(new DateUtil().getTime());
 		cal.set(Calendar.HOUR, 23);
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.SECOND, 59);
@@ -1258,7 +1259,7 @@ public class ReportsUtil {
 							startDate, endDate, timeZone);
 		} else if (report.duration == Reports.Duration.WEEKLY) {
 			startCal.set(Calendar.DAY_OF_WEEK,-2);
-			startCal.add(Calendar.DAY_OF_MONTH, -7);
+			startCal.add(Calendar.DAY_OF_MONTH, -6);
 			String startDate = sdf.format(startCal.getTime());
 			endDate = sdf.format(cal.getTime());
 
