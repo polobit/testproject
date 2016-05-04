@@ -351,6 +351,7 @@ var ContactsRouter = Backbone.Router.extend({
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
 					loadPortlets('Contacts',cel);
+				
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
 						// Call to get Count 
@@ -964,7 +965,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			this.contact_custom_view = undefined;
 			CONTACTS_HARD_RELOAD = false;
 			view_data = undefined;
-			// App_Contacts.contactViewModel = undefined;
+			// ts.contactViewModel = undefined;
 		}
 
 		// If id is defined get the respective custom view object

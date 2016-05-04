@@ -242,9 +242,10 @@
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
 					    <div class="btn-group dropdown pull-right" style="padding-right: 10px;">
 							 <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns">
-                    		<i class="fa fa-navicon" style="position:absolute;"></i>
+                    		<i class="fa fa-navicon" ></i>
                 			</button>
-                			<div id="custom-field-area"></div>
+                			<ul class="pull-right dropdown-menu "  role="menu">
+                			<form id="contact-static-fields" class="form-group"></ul>
 				        </div>
 					    
 				    </div>
@@ -330,28 +331,63 @@
             <!-- </div> -->
 </script>
 <script id="contact-custom-fields-template" type="text/html">
-			<ul class="pull-right dropdown-menu" id="contact-statis-fields" role="menu">
-	       		  <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="basic_info"><i></i>Basic info</li>
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="first_name"><i></i>First Name</li> 
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="last_name"><i></i>Last Name</li> 
-
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="company"><i></i>Company</li>
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="tags"><i></i>Tags</li> 
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="title"><i></i>Title</li>
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="phone"><i></i>Phone</li>
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="address"><i></i>Address</li>
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="website"><i></i>Website</li> 
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="created_time"><i></i>Created Date</li> 
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="updated_time"><i></i>Updated Date</li>
-	                   <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="image"><i></i>Image</li> 
-	                    <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="star_value"><i></i>Star Value</li> 
-	                    <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="lead_score"><i></i>Lead Score</li>
-	                     <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="lead_owner"><i></i>Lead Owner</li>
-	                     <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="last_contacted"><i></i>Last Contacted</li> 
-	                     <li id="custom-fields-group" class="dropdown-header"></li>
+			
+	       		  <li>
+	       		  	<a href="javascript:void(0);" class="p-b-none">
+						<label class="i-checks i-checks-sm "><input name="basic_info" value="basic_info"type="checkbox" class="choose-column-chbx"><i></i></label>Basic info</a></li>
+	                  <li>
+	       		  		<a href="javascript:void(0);" class="p-b-none">
+							<label class="i-checks i-checks-sm "><input name="first_name" value = "first_name"type="checkbox" class="choose-column-chbx"><i></i></label>First Name</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="last_name" value = "last_name"type="checkbox" class="choose-column-chbx"><i></i></label>Last Name</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="company" value = "company"type="checkbox" class="choose-column-chbx"><i></i></label>Company</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input  name="tags" value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>Tags</a></li> 
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="title"value="title"type="checkbox" class="choose-column-chbx"><i></i></label>Title</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="phone" value = "phone"type="checkbox" class="choose-column-chbx"><i></i></label>Phone</a></li>
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="address"value ="address"type="checkbox" class="choose-column-chbx"><i></i></label>Address</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="website"value = "website"type="checkbox" class="choose-column-chbx"><i></i></label>Website</a></li> 
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="created_time"value = "created_time"type="checkbox" class="choose-column-chbx"><i></i></label>Created Date</a></li>
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="updated_time"value = "updated_time"type="checkbox" class="choose-column-chbx"><i></i></label>Updated Date</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="image"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="star_value"value = "star_value"type="checkbox" class="choose-column-chbx"><i></i></label>Star value</a></li> 
+	                     <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input  name="lead_score"value = "lead_score"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Score</a></li>
+	                      <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="lead_owner"value = "lead_owner"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Owner</a></li>
+	                     <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm "><input name="last_contacted" value = "last_contacted"type="checkbox" class="choose-column-chbx"><i></i></label>Last Contacted</a></li>
+	                     <div id="custom-fields-group"class=" p-l" ></div>
+	                     </form>
 	      			</ul>
 </script>
 <script id="contact-custom-fields-append-template" type="text/html">
- <li class="i-checks i-checks-sm m-b-none" style="visibility: visible;"><input type="checkbox" class="thead_check" value="'{{field_label}}'"><i></i>'{{field_label}}'</li>
+ <li>
+	<a href="javascript:void(0);" class="p-b-none">
+		<label class="i-checks i-checks-sm "><input name="{{field_label}}" value="{{field_label}}"type="checkbox" class="choose-column-chbx"><i></i></label>{{field_label}}</a></li>
+
 </script>
 

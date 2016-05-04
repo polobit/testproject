@@ -859,7 +859,7 @@ var contact_filters_util = {
 
 function setupContactFields(el){
 		// Update el with default dropdown
-		$('#custom-field-area', el).html(getTemplate("contact-custom-fields"));
+		$('#contact-static-fields', el).html(getTemplate("contact-custom-fields"));
 
 		get_custom_fields(function(data){
 		
@@ -867,9 +867,19 @@ function setupContactFields(el){
 		getTemplate("contact-custom-fields-append", data[i], undefined, function(template_ui){
      				if(!template_ui)
     					  return;
-    		$("#custom-fields-group",el).html(template_ui);
+    		$("#custom-fields-group",el).append(template_ui);
  		});
 	}
+
+			$.ajax({
+					url : 'core/api/contact-view-prefs',
+					type : 'GET',
+					data : json,
+					success : function()
+						{
+			
+			
+		});
 		});
 
 
