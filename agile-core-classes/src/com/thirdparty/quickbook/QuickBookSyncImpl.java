@@ -51,6 +51,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	int noOfPages = 1;
 	int total_customer = getTotalCustomer();
+	System.out.println("Total customer fetch in quickbook is " + total_customer);
 	if (total_customer == 0)
 	{
 	    sendNotification(prefs.type.getNotificationEmailSubject());
@@ -61,9 +62,11 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	{
 	    noOfPages = (int) Math.ceil(total_customer / MAX_RESULT);
 	}
-
+		System.out.println("Total number of pages for contact in quickbook is "+ noOfPages);
 	while (current_page <= noOfPages)
 	{
+		System.out.println("In quickbook Current page -- START_POSITION --" + current_page + "--" + START_POSITION);
+		
 	    JSONArray customers = getCustomers(START_POSITION, MAX_RESULT);
 	    try
 	    {
@@ -71,6 +74,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		{
 		    for (int i = 0; i < customers.length(); i++)
 		    {
+		    System.out.println("loop number running inside initsync method in quickbook is "  + i);	
 			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
 			addCustomerInvoiceNote(contact, customers.get(i));
 			printPaymentDetails(customers.get(i));
