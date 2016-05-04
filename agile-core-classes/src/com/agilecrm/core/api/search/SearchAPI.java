@@ -93,14 +93,15 @@ public class SearchAPI
 			Set<String> set = new HashSet<String>(); 
 			int searchCount = 0;
 			for(Object m : searchResult){
-				if(m instanceof Contact);
+				if(m instanceof Contact){
 					Contact contact = (Contact) m;
 					set.add(contact.contact_company_id);
 					searchCount = searchCount+1;
+				}
 			}
 			if(searchCount == Integer.parseInt(count) && set.size()==1){
 				Iterator iterator = set.iterator();
-				if(iterator.hasNext()){
+				if(iterator != null && iterator.hasNext()){
 					String id = iterator.next().toString();
 					Contact contact = ContactUtil.getContact(Long.parseLong(id));
 					if(contact != null){
