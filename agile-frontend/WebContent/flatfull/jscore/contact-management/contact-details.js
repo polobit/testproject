@@ -1371,13 +1371,13 @@ enterCompanyScore: function(e){
 	},
 updateScoreValue :function(){
 		var scoreboxval = parseInt($("#scorebox").val());
-		var decemialcheck=$("#scorebox").val();
+		var decimalcheck=$("#scorebox").val();
 		//var txt=$("#scorebox").text();
 		//var partxt=parseInt($("#scorebox").text());
 		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
-		if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val()==""){ 
+		if ((scoreboxval != prvs && (decimalcheck%1==0))|| $("#scorebox").val()==""){ 
 			if($("#scorebox").val()==""){scoreboxval=0;
 			}					
 			App_Contacts.contactDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
@@ -1389,7 +1389,7 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
+		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
 			alert("Please enter a valid number.");
 			scoreboxval=prvs;
 		}
@@ -1406,13 +1406,13 @@ updateScoreValue :function(){
 
 	updateCompanyScoreValue :function(){
 		var scoreboxval = parseInt($("#cscorebox").val());
-		var decemialcheck=$("#cscorebox").val();
+		var decimalcheck=$("#cscorebox").val();
 		//var txt=$("#scorebox").text();
 		//var partxt=parseInt($("#scorebox").text());
 		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
 		var contact_model =  App_Companies.companyDetailView.model.toJSON();
 		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
-		if ((scoreboxval != prvs && (!isNaN(scoreboxval)) && (scoreboxval>=0))|| $("#cscorebox").val()==""){ 
+		if ((scoreboxval != prvs && (decimalcheck%1==0) && (scoreboxval>=0))|| $("#cscorebox").val()==""){ 
 			if($("#cscorebox").val()==""){scoreboxval=0;
 			}					
 			App_Companies.companyDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
@@ -1424,7 +1424,7 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
+		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)){
 			alert("Please enter a valid number.");
 			scoreboxval=prvs;
 		}

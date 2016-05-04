@@ -520,11 +520,11 @@ $('.popover').on('click', '.contact-owner-list-popover', function(e){
 function contactPopupScoreValue()
 {
 
-	var scoreboxval = parseInt($("#contactscorebox").val());
-			var decemialcheck=$("#contactscorebox").val();
+	    var scoreboxval = parseInt($("#contactscorebox").val());
+		var decimalcheck=$("#contactscorebox").val();
 		var contact_model =  App_Contacts.contact_popover.toJSON();
 		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
-		if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#contactscorebox").val()==""){ 
+		if ((scoreboxval != prvs && (decimalcheck%1==0))|| $("#contactscorebox").val()==""){ 
 			if($("#contactscorebox").val()==""){scoreboxval=0;
 			}					
 			App_Contacts.contact_popover.set({'lead_score': scoreboxval}, {silent: true});
@@ -536,7 +536,7 @@ function contactPopupScoreValue()
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
+		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
 			alert("Please enter a valid number.");
 			scoreboxval=prvs;
 		}
