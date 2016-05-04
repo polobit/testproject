@@ -323,12 +323,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="landing-pages-menu">
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
-      <span style="padding-top: 9%;">Landing Pages</span>
+      <span>Landing Pages</span>
     </a>
   </li>
     <li id="activitiesmenu">
     <a  href="#activities">
-      <i class="icon-speech icon-white"></i>
+      <i class="icon-speedometer icon-white"></i>
       <span>Activities</span>
     </a>
   </li>
