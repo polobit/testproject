@@ -102,21 +102,14 @@
 	<div class="contacts-div">
 
 	 				<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm {{#is_mobile}} {{else}}  {{/is_mobile}}" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
-	 					{{#hasRestrictedMenuScope 'ADD_NEW_TAG'}} {{else}}
 	 					 <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Add Tags</button>
-	 					{{/hasRestrictedMenuScope}}	
 	 					  <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Remove Tags</button>	
 					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Send Email</button>	
 					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Change Owner</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
-					    {{#hasRestrictedMenuScope "EXPORT_CONTACTS"}}
-					    {{else}}
 					    <button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Export as CSV</button>
-					    {{/hasRestrictedMenuScope}}
-					    {{/hasScope}}
-					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
+					    {{/hasScope}}				    
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >Delete</button>
-					    {{/hasRestrictedMenuScope}}	
 				    </div>
 					
 
