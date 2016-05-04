@@ -196,8 +196,10 @@ function initializeTasksListeners(){
 		var collapsed = 0 ;
 		if($(this.closest(".task-trello-list")).hasClass("expand"))
 			{
-				$(this.closest(".task-trello-list")).addClass("compress");
-				$(this.closest(".task-trello-list")).removeClass("expand");
+				$(this).closest(".task-trello-list").addClass("compress");
+				$(this).closest(".task-trello-list").removeClass("expand");
+				$(".compress .transform-rotate").addClass("block");
+				$(this).closest(".compress .transform-rotate.block").addClass("p-l-xs");
 				$(".compress .CollapsedPanel").removeClass("hide");
 				$(".compress .compressedHeading").css("transform","rotate(-90deg)");
 				$(".compress .CollapsedPanel").addClass("taskautoadjust");
@@ -215,19 +217,16 @@ function initializeTasksListeners(){
 				$(".compress .taskexpandbutton").removeClass("pull-right");
 				$(".compress .taskexpandbutton").addClass("text-center");
 				$(".compress .taskexpandbutton").addClass("m-t-sm");
-				$(".compress .transform-rotate").addClass("block");
-				$(".compress .transform-rotate").removeClass("inline-block");
 				
-
-				 
- 
-
- 
+				$(".compress .transform-rotate").removeClass("inline-block");
+				$(".compress .icon-plus").addClass("m-t-xs");
 			}
 		else
 		{
-				$(this.closest(".task-trello-list")).addClass("expand");
-				$(this.closest(".task-trello-list")).removeClass("compress");
+				$(this).closest(".task-trello-list").addClass("expand");
+				$(this).closest(".task-trello-list").removeClass("compress");
+				$(".expand .transform-rotate").removeClass("block");
+				$(this).closest(".expand .transform-rotate.block").removeClass("p-l-xs");
 				$(".expand .CollapsedPanel").addClass("hide");
 				$(".expand .compressedHeading").css("transform","rotate(0deg)");
 				$(".expand .text-ellipsis").removeClass("hide");
@@ -244,9 +243,8 @@ function initializeTasksListeners(){
 				$(".expand .taskexpandbutton").removeClass("text-center");
 				$(".expand .taskexpandbutton").removeClass("m-t-sm");
 				$(".expand .transform-rotate").addClass("inline-block");
-				$(".expand .transform-rotate").removeClass("block");
-				$(".compress .text-info .text-xs").addClass("pull-left");
-				
+				$(".compress .icon-plus").removeClass("m-t-xs");
+				$(this).closest(".compress .text-info .text-xs").addClass("pull-left");
 
 		}
 		
