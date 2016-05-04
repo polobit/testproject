@@ -126,13 +126,12 @@ public class WidgetsAPI {
 				return null;
 			}
 
-			// customWidget.save();
-
 			Widget widget = new Widget();
 			widget.isForAll = customWidget.custom_isForAll;
 			widget.script = customWidget.script;
 			widget.logo_url = customWidget.logo_url;
 			widget.fav_ico_url = customWidget.fav_ico_url;
+			widget.mini_logo_url = customWidget.mini_logo_url;
 			widget.description = customWidget.description;
 			widget.name = customWidget.name;
 			widget.widget_type = customWidget.widget_type;
