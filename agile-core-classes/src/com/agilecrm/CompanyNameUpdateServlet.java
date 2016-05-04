@@ -11,8 +11,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
- * <code>OpportunitySchemaChangeServlet</code> process the 
- * migration operation from datastore to textsearch.
+ * <code>CompanyNameUpdateServlet</code> adds the company name to companies.
  * 
  * @author nidhi
  */
@@ -27,7 +26,7 @@ public class CompanyNameUpdateServlet extends HttpServlet
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	{
 		
-		System.out.println("Name updation in comapnies ");
+		System.out.println("Name updation in companies ");
 		String domain = req.getParameter("domain");
 		UpdateCompanyName updateCompanyName = new UpdateCompanyName(domain);
 

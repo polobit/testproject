@@ -14,10 +14,10 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
- * <code>DealsDeferredTask</code> add default pipelineId to all the deals in the
+ * <code>CompanyNameUpdateServlet</code> add name for the company if not added in the
  * namespace.
  * 
- * Task is initialized from {@link DealsDeferServlet}, which is called by cron
+ * Task is initialized from {@link CompanyNameUpdateServlet}, which is called by cron
  * with duration query parameter in URL
  * 
  * @author nidhi
@@ -38,44 +38,19 @@ public class UpdateCompanyName implements DeferredTask
     public void run()
     {
 	String oldNamespace = NamespaceManager.get();
-	int count = 0;
-	List<Contact> companies; 
+	
 	try
 	{
 		if (StringUtils.isNotEmpty(domain) && !domain.equals("all"))
 		{
-			 NamespaceManager.set(domain);
-			companies = ContactUtil.getAllCompaniesByOrder("name");
-			for (Contact company : companies)
-			{
-				if(company.name=="")
-					{
-					if(company.getContactField(Contact.NAME)!=null)
-    				{
-						company.name=StringUtils.lowerCase(company.getContactField(Contact.NAME).value);
-						company.save();
-    				}
-					}
-			}
+			saveCompanywithName(domain);
 		}
 		else if (StringUtils.isNotEmpty(domain) && domain.equals("all"))
 		{
 			Set<String> domains = NamespaceUtil.getAllNamespaces();
 			for (String namespace : domains)
 			{
-				 NamespaceManager.set(namespace);
-				 companies = ContactUtil.getAllCompaniesByOrder("name");
-					for (Contact company : companies)
-					{
-						if(company.name=="")
-							{
-							if(company.getContactField(Contact.NAME)!=null)
-		    				{
-								company.name=StringUtils.lowerCase(company.getContactField(Contact.NAME).value);
-								company.save();
-		    				}
-							}
-					}
+				saveCompanywithName(namespace);
 			}
 			
 		}
@@ -91,5 +66,23 @@ public class UpdateCompanyName implements DeferredTask
 	    System.out.println("finally block");
 	}
 
+    }
+    
+    public void saveCompanywithName(String namespace)
+    {
+    	List<Contact> companies; 
+    	 NamespaceManager.set(namespace);
+		 companies = ContactUtil.getAllCompaniesByOrder("name");
+			for (Contact company : companies)
+			{
+				if(company.name=="")
+					{
+					if(company.getContactField(Contact.NAME)!=null)
+    				{
+						company.name=StringUtils.lowerCase(company.getContactField(Contact.NAME).value);
+						company.save();
+    				}
+					}
+			}
     }
 }

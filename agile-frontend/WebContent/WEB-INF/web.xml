@@ -1169,7 +1169,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>CompanyNameUpdate</servlet-name>
-		<url-pattern>/backend/cron/comapny-name-update</url-pattern>
+		<url-pattern>/backend/cron/company-name-update</url-pattern>
 	</servlet-mapping>
   
 </web-app>
