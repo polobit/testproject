@@ -1196,7 +1196,7 @@ public class Contact extends Cursor
     @PostLoad
     private void postLoad()
     {
-    	if (this.type == Contact.Type.COMPANY)
+/*    	if (this.type == Contact.Type.COMPANY)
     	{
     		if(this.name==""){
     			if(getContactField(NAME)!=null)
@@ -1205,7 +1205,7 @@ public class Contact extends Cursor
     				save();
     				}
     		}
-    	}	
+    	}*/	
     
 	tags = getContactTags();
 
