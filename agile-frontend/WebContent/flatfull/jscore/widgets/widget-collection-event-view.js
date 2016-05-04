@@ -9,10 +9,19 @@ var Widget_Collection_Events = Base_Collection_View.extend({
    },
 });
 
-
 var Widget_Model_Events = Base_Model_View.extend({
 
-   events : {
+  options : {
+    saveCallback : function(e){            
+      var widgetType = $('#widget-settings').attr('widget-type');
+      if(widgetType == "CUSTOM"){        
+        showNotyPopUp("success" , "Custom widget saved successfully", "bottomRight");
+        window.location.href = "#add-widget";
+      }
+    }
+  },
+
+  events : {
       "click #stripe_url" : "stripeUrl",
    	  "click .save-agile-widget" : "saveWidgetPrefs",
    	  "click .connect_shopify" : "connectShopify",

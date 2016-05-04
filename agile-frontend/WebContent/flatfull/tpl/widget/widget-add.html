@@ -77,7 +77,7 @@
   							<i class="fa fa-users"></i>
   						</a>
   					{{/isAdmin}}
-  						<a class="btn btn-sm btn-default m-r-sm" href="#Custom-widget/{{id}}" widget-name="{{name}}">Edit</a>
+  						<a class="btn btn-sm btn-default m-r-sm" href="#Custom-widget/{{id}}" widget-name="{{name}}" widget-type="{{widget_type}}">Edit</a>
         				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>  
         			</div>
 					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
@@ -517,7 +517,7 @@
 			{{/if_equals}}
 			</div> 
 			<div class="panel-body">
-				<div  id="widget-settings" widget-name="{{name}}">
+				<div  id="widget-settings" widget-name="{{name}}" widget-type="{{widget_type}}">
 				</div>
 			</div>
 			</div>
@@ -555,9 +555,9 @@
 				</div></div>
 				<div class="control-group m-b-none"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Logo URL" value={{logo_url}} name="logo_url"></input></div></div>
 				<div class="control-group m-b-none"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Mini logo URL" value={{mini_logo_url}} name="mini_logo_url"></input></div></div>
-				<div class="form-actions p-t p-r-md p-b-none p-l-md m-t m-b-none">
-               		<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
+				<div class="form-actions p-t p-r-md p-b-none p-l-md m-t m-b-none">               		
                		<a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">Cancel</a>
+               		<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
              	</div>
 			 </fieldset>
 	    </form>
@@ -566,7 +566,7 @@
 </script>
 
 <script id="custom-widget-edit-template" type="text/html">
-<form id="clickdesk_login_form" name="clickdesk_login_form" method="post">
+<form id="customwidget_login_form" name="customwidget_login_form" method="post">
 	<fieldset>		
 		<label>Enter your custom widget details </label>						
 		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control"value="CUSTOM" name="widget_type"/>
@@ -580,7 +580,7 @@
 			</div>
 			<div class="control-group form-group">
 				<div class="controls">								
-					<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control"placeholder="description" name="description">
+					<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control"placeholder="Description" name="description">
 					</input>
 				</div>
 			</div>
@@ -627,7 +627,7 @@
 				</div>
 				<div class="control-group form-group">
 					<div class="controls">								
-						<input type="text" id="description" class="input-medium required widget_input_box form-control"placeholder="description" name="description">
+						<input type="text" id="description" class="input-medium required widget_input_box form-control"placeholder="Description" name="description">
 						</input>
 					</div>
 				</div>
@@ -667,9 +667,9 @@
 					</div>
 				</div>
 		{{/if}}
-		<div class="text-center">			
-			<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
+		<div class="text-center">						
             <a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">Cancel</a>
+            <a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
 		</div>
 	</fieldset>
 </form>
