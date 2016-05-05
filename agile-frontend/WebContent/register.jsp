@@ -2,7 +2,11 @@
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
+
 <%
+	
+
     //Check if it is being access directly and not through servlet
 			if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 				response.sendRedirect("/register");

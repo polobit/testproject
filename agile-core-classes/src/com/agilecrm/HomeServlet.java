@@ -1,6 +1,8 @@
 package com.agilecrm;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -9,11 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.ipaccess.IpAccess;
+import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -23,6 +28,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.Defaults;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>HomeServlet</code> handles request after login/new registration and
@@ -175,6 +181,33 @@ public class HomeServlet extends HttpServlet
 	    e.printStackTrace();
 	}
     }
+    
+    /**
+     * Saves finger print in domain user before request is forwarded to
+     * dashboard (home.jsp)
+     */
+    private void saveFingerPrint(HttpServletRequest req)
+    {
+	try
+	{
+		UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(req);
+	    if(StringUtils.isBlank(info.finger_print))
+	    	return;
+		    
+	    // Gets current domain user and saves current fingerprint 
+	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+	    
+	    if(domainUser.finger_prints == null)
+	    	domainUser.finger_prints = new HashSet();
+	    
+	    domainUser.finger_prints.add(info.finger_print);
+	    domainUser.save();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
 
     /**
      * Set last logged in time.<br/>
@@ -196,29 +229,77 @@ public class HomeServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
     {
 
-	// If user is not new, it calls method to set logged in time in current
-	// domain user and forwards request to home.jsp
-	if (!isNewUser())
-	{
-	    // Saves logged in time in domain user.
-	    setLoggedInTime(req);
-	    setAccountTimezone(req);
+    	// If user is not new, it calls method to set logged in time in current
+    	// domain user and forwards request to home.jsp
+    	if (!isNewUser())
+    	{
+    		UserFingerPrintInfo browser_auth = UserFingerPrintInfo.getUserAuthCodeInfo(req);
+    		if(!browser_auth.valid_finger_print || !browser_auth.valid_ip){
+    			req.getRequestDispatcher("fingerprintAuthentication.jsp").forward(req, resp);
+    			return;
+    		}
+    		
+    	    // Saves logged in time in domain user.
+    	    setLoggedInTime(req);
+    	    setAccountTimezone(req);
+    	    
+    	    // Save user finger print
+    	    saveFingerPrint(req);
 
-	    String old_ui = req.getParameter("old");
-	    if (old_ui != null)
-		req.getRequestDispatcher("home.jsp").forward(req, resp);
-	    else
-		req.getRequestDispatcher("home-flatfull.jsp").forward(req, resp);
+    	    String old_ui = req.getParameter("old");
+    	     
+    		req.getRequestDispatcher(old_ui != null ? "home.jsp" : "home-flatfull.jsp").forward(req, resp);
+    	    return;
+    	}
 
-	    return;
-	}
-
-	// If user is new user it will create new AgileUser and set cookie for
-	// initial page tour. It also calls to initialize defaults, if user is
-	// first user in the domain.
-	setUpAgileUser(req, resp);
+    	// If user is new user it will create new AgileUser and set cookie for
+    	// initial page tour. It also calls to initialize defaults, if user is
+    	// first user in the domain.
+    	setUpAgileUser(req, resp);
     }
-
+   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+    {
+    	try 
+    	{
+    		// Get code from user
+	    	String otp = request.getParameter("finger_print_otp");
+	    	System.out.println("user otp "+otp);
+	    	// Validate exiting one
+	    	UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(request);
+	    	System.out.println("genearated otp = "+info.verification_code);
+	    	if(StringUtils.isBlank(otp) || !info.verification_code.equalsIgnoreCase(otp)){
+	    		throw new Exception(" Please enter valid verification code.");
+	    	} 
+	    	
+	    	if(!info.valid_ip)
+	    	{
+	    		IpAccess ipList =  IpAccessUtil.getIPListByDomainName(NamespaceManager.get());
+	    		if(ipList != null && ipList.ipList != null){
+	    			ipList.ipList.add(request.getRemoteAddr());
+	    			ipList.save();
+	    			System.out.println(ipList);
+	    		}
+	    		
+	    		
+	    	}
+	    	// Add to info
+    		info.valid_ip = true;
+    		info.valid_finger_print = true;
+    		info.set(request);
+	    	
+	    	doGet(request, response);
+    	}
+    	catch(NumberFormatException e){
+    		request.getRequestDispatcher("fingerprintAuthentication.jsp?error=" + "Please enter valid verification code").forward(request, response);
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    		System.out.println(ExceptionUtils.getFullStackTrace(e));
+    		request.getRequestDispatcher("fingerprintAuthentication.jsp?error=" + e.getMessage()).forward(request, response);
+    	}
+    	
+    }
+  
     public static boolean isFirstTimeUser(HttpServletRequest req)
     {
 	Object object = req.getAttribute(FIRST_TIME_USER_ATTRIBUTE);
@@ -303,4 +384,5 @@ public class HomeServlet extends HttpServlet
 	}
 	return user;
     }
+    
 }

@@ -86,9 +86,15 @@ public class JSONNode extends TaskletAdapter
 	JSONArray paramsJSONArray = new JSONArray(paramsJSONArrayString);
 	
 	// Headers
-	String headersJSONArrayString = getStringValue(nodeJSON, subscriberJSON, data, HEADERS);
-
-	JSONArray headersJSONArray = new JSONArray(headersJSONArrayString);
+	String headersJSONArrayString;
+	JSONArray headersJSONArray = new JSONArray();
+	try{
+	 headersJSONArrayString = getStringValue(nodeJSON, subscriberJSON, data, HEADERS);
+	 headersJSONArray = new JSONArray(headersJSONArrayString);
+	}catch(Exception e){
+		//To make compatible with old json io nodes
+		headersJSONArray = new JSONArray();
+	}
 
 	String httpParams = "";
 

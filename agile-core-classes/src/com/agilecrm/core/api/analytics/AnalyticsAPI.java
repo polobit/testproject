@@ -158,5 +158,34 @@ public class AnalyticsAPI
     	return AnalyticsSQLUtil.getVisitsCountFromStatServer(url);
     	
     }
+    
+    /*Get latest refferal url based on duration*/
+
+    @Path("/refurl-stats")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getRefferalUrlCount(@QueryParam("start_time") String startTime, @QueryParam("end_time") 
+            String endTime, @QueryParam("time_zone") String timeZone)
+    {
+        
+        String domain = NamespaceManager.get();
+        String startTimeString = DateUtil.getMySQLNowDateFormat(Long.parseLong(startTime), timeZone);
+        String endTimeString = DateUtil.getMySQLNowDateFormat(Long.parseLong(endTime), timeZone);
+        String url;
+        String list = new String();
+        try
+        {
+            url = AnalyticsUtil.getUrlForRefferalurlCount(domain, startTimeString, endTimeString);
+            list= AnalyticsSQLUtil.getRefferalurls(url);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }       
+        return list.replace("count(sid)", "count");
+    }
+    
    
 }

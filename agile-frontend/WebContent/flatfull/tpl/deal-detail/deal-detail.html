@@ -11,8 +11,8 @@
 <div  id="deal-detail-actions-dropdown" class="wrapper">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
 
-<div class="inline-block w-full"><input type="text" class="col-md-10 hidden xedit" value="{{name}}"id="inline-input"></input>
-<span class="h3 font-thin custom-color m-b-xs"id="deals-inline" >
+<div class="inline-block w-full"><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
+<span class="h3 font-thin custom-color m-b-xs block" id="deals-inline" >
 {{#if name}}{{name}}{{/if}}</span></div>
 
 {{#if expected_value}}
@@ -260,7 +260,7 @@
   <div class="panel panel-default m-b">
     <div class="panel-body">
 <div class="inline-block w-full "><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
-<span class="h3 font-thin custom-color text-ellipsis m-b-xs"id="deals-inline" >
+<span class="h3 font-thin custom-color text-ellipsis m-b-xs block" id="deals-inline" >
 {{#if name}}{{name}}{{/if}}</span></div>
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>

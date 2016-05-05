@@ -1,7 +1,5 @@
 <script id="new-opportunity-header-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-
-
 <div class="wrapper-md bg-light lter b-b" id="deals-milestone-view-heading">
 <div class="row">
     <div class="col-md-12">
@@ -12,14 +10,12 @@
 			</div>
 			</h3>
 <div class="pull-right">
-			<div class="btn-group pull-left m-r-xs" id="deal-sorter">
-			</div>
             <div class="btn-group inline-block m-l-xs" id="deals-tracks">
 			</div>
 			<div id="deal-list-filters" class="btn-group inline-block m-l-xs">
 				
 			</div>
-			<div class="btn-group inline-block m-l-xs dropdown deal-view-dropdown" id="deals-view">
+			<div class="btn-group inline-block m-l-xs" id="deals-view">
 					<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
 					<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret deals-view-caret"></span>
@@ -36,17 +32,14 @@
 						</li>
 					</ul>
 			</div>
-
-			<div class="btn-group inline-block m-l-xs dropdown deal-action-dropdown" id="deals-action">
+			<div class="btn-group inline-block m-l-xs" id="deals-action">
 					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> Add Deal
 					</a>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
-
 					{{#hasScope "MANAGE_DEALS"}}
 
-					
 					<ul class="dropdown-menu pull-right" role="menu">
 						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import</a></li>
 						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export</a></li>
@@ -199,8 +192,8 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
-{{#if currency_conversion_value}}
-		<span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
+{{#if expected_value}}
+		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
 {{/if}}
 	</div>
 
@@ -260,12 +253,12 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
-{{#if currency_conversion_value}}
-		<span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
+{{#if expected_value}}
+		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
 {{/if}}
 
 		{{#if this.contacts}}
-			{{#if currency_conversion_value}}
+			{{#if expected_value}}
 				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
 			{{/if}}
 			{{#related_to_one contacts}}{{/related_to_one}}
@@ -332,11 +325,11 @@
 	<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}}{{#property_is_exists "last_name" properties}} {{getPropertyValue properties "last_name"}}{{/property_is_exists}}</a>
 	{{/if_contact_type}}
 	{{#if_contact_type "COMPANY"}}
-	<a class="text-info popover_contact" href="#company/{{id}}"  data="{{id}}">{{getPropertyValue properties "name"}}</a>
-	{{/if_contact_type}}
+     	<a class="text-info popover_contact" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>
+    {{/if_contact_type}}
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">
-<div class="btn-group dropdown pipeline-tour-dropdown"  id="pipeline-tour-step">
+<div class="btn-group"  id="pipeline-tour-step">
 	<button class="btn btn-sm btn-default filter-dropdown "><i class="icon-road m-r-xs"/></button>
 	<button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
     	<span class="caret"></span>
@@ -371,7 +364,7 @@
 
 <!-- popover on deal milestone -->
 
-<script id = "deal-detail-popover-template" type="text/html" >
+<script id = "deal-detail-popover-template" type="text/html" > 
        <div class="data panel-default" style="min-width:200px;max-width:280px;">
 	   
        	<div class="text-cap panel-heading text-ellipsis" style="padding:6px;"><div class="text-ellipsis inline-block" style="width:100%;" title="{{track}}"><strong>{{dealTrack}}</strong></div>
