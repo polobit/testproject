@@ -1,5 +1,6 @@
 package com.agilecrm.knowledgebase.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.googlecode.objectify.Key;
 
 /**
@@ -33,6 +35,30 @@ public class ArticleUtil
 			map.put("section_key", new Key<>(Section.class, sectionID));
 
 		return Article.dao.listByProperty(map);
+	}
+	
+	/**
+	 * Returns list of tickets to given list of ids
+	 * 
+	 * @param idsArray
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<Article> getArticlesByIDsList(List<Long> idsArray) throws Exception
+	{
+		if (idsArray == null || idsArray.size() == 0)
+			throw new Exception("Required parameters missing");
+
+		List<Key<Article>> articleKeys = new ArrayList<Key<Article>>();
+
+		for (Long id : idsArray)
+			articleKeys.add(new Key<Article>(Article.class, id));
+
+		List<Article> list = Article.dao.fetchAllByKeys(articleKeys);
+
+		System.out.println("articles " + list.size());
+
+		return list;
 	}
 
 	public static void searchArticles(String searchTerm)

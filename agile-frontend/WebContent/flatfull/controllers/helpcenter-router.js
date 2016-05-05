@@ -140,10 +140,20 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 				template : "helpcenter-add-article",
 	 				window : "#helpcenter/categories",
 			        
-                    prePersist : function(model){
+					prePersist : function(model){
 						var json = {};
 						var catogery_id = $("#catogery option:selected").data('catogery-id');
 						json = {"categorie_id" : catogery_id };
+
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+
+							json.plain_content = plain_content;
+						}
+						catch(err){}
+						
 						model.set(json, { silent : true });
 				    },
 
@@ -152,7 +162,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
 			 	 			getTemplate("helpcenter-section-category", collection.toJSON(), undefined, function(template_ui){
 
-								
+						
+
 								if(!template_ui)
 									return;
 				

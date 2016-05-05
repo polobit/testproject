@@ -10,13 +10,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.knowledgebase.entity.Article;
+import com.agilecrm.knowledgebase.util.ArticleUtil;
 import com.agilecrm.search.BuilderInterface;
-import com.agilecrm.ticket.entitys.TicketLabels;
-import com.agilecrm.ticket.entitys.Tickets;
-import com.agilecrm.ticket.entitys.Tickets.Status;
-import com.agilecrm.ticket.utils.TicketsUtil;
-import com.agilecrm.util.StringUtils2;
-import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.GetRequest;
@@ -28,9 +23,6 @@ import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SearchServiceFactory;
-import com.google.appengine.api.search.SortExpression;
-import com.google.appengine.api.search.SortExpression.SortDirection;
-import com.google.appengine.api.search.SortOptions;
 import com.googlecode.objectify.Key;
 
 /**
@@ -43,7 +35,7 @@ public class HelpcenterArticleDocument implements BuilderInterface
 	String indexName = "articles";
 
 	/**
-	 * Adds the Ticket entity to text search DB.
+	 * Adds the  entity to text search DB.
 	 * 
 	 */
 	@Override
@@ -51,7 +43,7 @@ public class HelpcenterArticleDocument implements BuilderInterface
 	{
 		try
 		{
-			System.out.println("Starting documenting ticket...");
+			System.out.println("Starting documenting article...");
 
 			Article article = (Article) entity;
 
@@ -80,7 +72,7 @@ public class HelpcenterArticleDocument implements BuilderInterface
 	{
 		try
 		{
-			add((Tickets) entity);
+			add((Article) entity);
 		}
 		catch (Exception e)
 		{
@@ -116,7 +108,7 @@ public class HelpcenterArticleDocument implements BuilderInterface
 	 */
 	public JSONObject searchDocuments(String queryString) throws Exception
 	{
-		List<Key<Tickets>> resultArticleIds = new ArrayList<Key<Tickets>>();
+		List<Key<Article>> resultArticleIds = new ArrayList<Key<Article>>();
 
 		System.out.println("searching Documents");
 
@@ -140,7 +132,7 @@ public class HelpcenterArticleDocument implements BuilderInterface
 
 		for (ScoredDocument document : results)
 		{
-			resultArticleIds.add(new Key<Tickets>(Tickets.class, Long.parseLong(document.getId())));
+			resultArticleIds.add(new Key<Article>(Article.class, Long.parseLong(document.getId())));
 
 			try
 			{
@@ -187,7 +179,7 @@ public class HelpcenterArticleDocument implements BuilderInterface
 		return getIndex().search(query).getResults();
 	}
 
-	public int getTicketsCount(String queryString)
+	public int getarticleCount(String queryString)
 	{
 		QueryOptions options = QueryOptions.newBuilder().setNumberFoundAccuracy(10000).setLimit(1).build();
 
@@ -211,14 +203,14 @@ public class HelpcenterArticleDocument implements BuilderInterface
 	{
 		try
 		{
-			return TicketsUtil.getTicketsByIDsList(doc_ids);
+			return ArticleUtil.getArticlesByIDsList(doc_ids);
 		}
 		catch (Exception e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
-		return new ArrayList<Tickets>();
+		return new ArrayList<Article>();
 	}
 
 	public void removeAllDocuments()
