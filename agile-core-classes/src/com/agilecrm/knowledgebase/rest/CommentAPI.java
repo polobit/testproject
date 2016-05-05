@@ -45,7 +45,7 @@ public class CommentAPI
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Comment createComment(Comment comment,@QueryParam("article_id") Long article_id) throws WebApplicationException
+	public List<Comment> createComment(Comment comment,@QueryParam("article_id") Long article_id) throws WebApplicationException
 	{
 		try
 		{
@@ -63,6 +63,6 @@ public class CommentAPI
 					.build());
 		}
 
-		return comment;
+		return CommentUtil.getCommentsByArticleID(article_id);
 	}
 }

@@ -127,9 +127,8 @@ var HelpcenterRouter = Backbone.Router.extend({
                         
                             postRenderCallback : function(el){  		    
 						
-								$(".clear",el).on("click",function(el,e){
-                               		e.preventdefault;
-                               		$("#comment",el).val('').empty();
+								$(".clear",el).on("click",function(){
+                               		$("#comment").val('').empty();
 							 	}); 
 							},
 							saveCallback : function(model){

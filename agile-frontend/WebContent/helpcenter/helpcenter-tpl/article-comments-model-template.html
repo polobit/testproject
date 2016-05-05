@@ -1,6 +1,13 @@
 <script id="article-comments-model-template" type="text/html">
+<div class="m-n font-thin h4 text-black m-b-sm">
+{{hc_user.name}}
+</div>
+<small class="text-muted m-b-sm ">
+{{hc_user.email}}<br/>
+ created on {{epochToHumanDate "ddd mmm dd, yyyy" hc_user.updated_time}}
+	</small><br/>
 <div class="m-n font-thin h5 text-black m-b-sm" style="padding-top:10px" data-id="{{id}}">
 {{comment}}
 </div>
-
+<hr style="border-color: #DADDDE; margin-top: 10px; margin-bottom: 10px;"/>
 </script>
