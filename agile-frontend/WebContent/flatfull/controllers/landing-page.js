@@ -119,11 +119,9 @@ var LandingPageRouter = Backbone.Router.extend({
     *for the autoSave of the landing page
     */
     var lpAutoSaveRec = setInterval(function(){
-            //if(Current_Route.indexOf("landing-page") != -1) {
+            if(Current_Route.indexOf("landing-page") != -1) {
                 saveLandingPageToDataStore(true,pageId);
-            //} else {
-              //  clearInterval(lpAutoSaveRec);
-            //}              
+            }               
         },5*60*1000);
     
     hideTransitionBar();
