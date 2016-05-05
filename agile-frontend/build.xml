@@ -69,9 +69,7 @@
             <arg value="deploy.sh"/>
         </exec> 
         <exec dir="util" executable="/bin/bash">
-        	<echo message="Generate hash: generating hash for all static files..." />
             <arg value="generate-hash.sh"/>
-        	<echo message="Generate hash: done" />
         </exec> 
         <exec dir="util" executable="/bin/bash">
             <arg value="./ec2-lib-sync.sh"/>

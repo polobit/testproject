@@ -6,6 +6,8 @@
 # To the extent possible don't give path to file directly here, rather give the path to
 # the nearest folder that is guaranteed to exist. If the file at the path specified is not present,
 # this command will not work
+echo "Generate hash: generating checksum for all static files"
+
 find ../WebContent/jscore/min/flatfull/ \
 ../WebContent/tpl/min/flatfull/ \
 ../WebContent/tpl/min/precompiled/ \
@@ -20,5 +22,8 @@ find ../WebContent/jscore/min/flatfull/ \
 > file-hash.json
 
 mv file-hash.json ../WebContent/.
+
+echo "Generate hash: done"
+
 
 
