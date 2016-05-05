@@ -231,7 +231,7 @@ public class CampaignStatusUtil
 	{
 		try
 		{
-			long TIME_SPAN = 60 * 60; // 1 hr
+			long TIME_SPAN = 3600; // 1 hr in secs
 			
 			if(timeSpan != null)
 				TIME_SPAN = timeSpan;
@@ -246,7 +246,11 @@ public class CampaignStatusUtil
 			if(campaignStatusIndex != -1){
 				CampaignStatus status = contact.campaignStatus.get(campaignStatusIndex);
 				
-				if(System.currentTimeMillis()/1000 - status.start_time < TIME_SPAN)
+				long currentTime = System.currentTimeMillis()/1000;
+				
+				System.out.println("Current Time " + currentTime + " and campaign start time " + status.start_time);
+				
+				if(currentTime - status.start_time < TIME_SPAN)
 				{
 					System.err.println("Contact is active 60 mins ago. Skipping contact " + contact.id + " from campaign.");
 					return true;
