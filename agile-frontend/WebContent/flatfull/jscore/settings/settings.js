@@ -431,5 +431,76 @@ $(function(){
 });
 
 
+function loadip_access_events()
+{
+	$(".blocked-panel-ip-delete").on('click', function(e) {
+         e.preventDefault();
+         var formId = $(this).closest('form');
+ 
+         var ip = $(this).closest("tr").find('input').val();
+         var id = $(this).closest("form").find('input[name="id"]').val();
+         var $that = $(this);
+         if(!window.confirm("Are you sure want to delete?"))
+			return;
+
+         $.ajax({ url : 'core/api/allowedips/delete_ip?id='+id+'&ip='+ip,
+		 			type : 'DELETE',
+		 		success : function()
+		 		{
+		 			$that.closest("tr").remove(); 
+		 
+		 		},error : function(response)
+	 			{
+	 
+	 				console.log(response);
+	 			}
+		 
+ 		});
+          
+     });
+
+	//To add new ip to allow access
+    $(".upsert-ip").on('click',function(e){
+    	var obj = {};
+    	if(element_has_attr($(this), "data-position")){
+    		obj.position = $(this).attr("data-position");
+    		obj.ip = $(this).closest("tr").find("input").val();
+    	}
+
+		$("#ipaccess-modal").html(getTemplate('add-new-ip', obj)).modal('show');
+		$("#ip-add").on('click',function(e){
+			
+			var form = $(this).closest("form");
+			if (!isValidForm(form)) {
+				return;
+			}
+            
+            // Get ip new value
+            var userEnteredIp = $("#iplist").val();
+
+            // Set add/edit field value
+            if(element_has_attr($(this), "data-position")){
+				 var trIndex = $(this).attr("data-position");
+				 $(".iptable tbody tr").eq(trIndex).find("input").val(userEnteredIp);
+			}else {
+				$(".newip").val(userEnteredIp);	
+			}            
+
+			form.trigger("reset");
+			$('.newip').closest('form').find('.save').trigger("click");
+			$("#ipaccess-modal").html(getTemplate('add-new-ip', {})).modal('hide');
+		});
+	});
+
+
+}
+
+function element_has_attr(ele, attr_name){
+	var attr = $(ele).attr(attr_name);
+
+	// For some browsers, `attr` is undefined; for others,
+	// `attr` is false.  Check for both.
+	return (typeof attr !== typeof undefined && attr !== false);
+}
 
 	

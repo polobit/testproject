@@ -145,7 +145,7 @@ public class AgileAuthFilter implements Filter
 		DomainUserUtil.setNewUpdateContactACLs(domainUser);
 	}
 
-	chain.doFilter(request, response);
+	chain.doFilter(httpRequest, httpResponse);
 	return;
     }
 

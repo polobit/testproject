@@ -5,6 +5,9 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import com.agilecrm.ipaccess.IpAccess;
+import com.agilecrm.ipaccess.IpAccessAPI;
+
 public class JerseyApplication extends Application
 {
     @Override
@@ -141,6 +144,7 @@ public class JerseyApplication extends Application
 	
 	s.add(com.agilecrm.core.api.widgets.UservoiceWidgetAPI.class);
 	s.add(com.agilecrm.core.api.analytics.VisitorFilterAPI.class);
+	s.add(IpAccessAPI.class);
 
 	return s;
     }

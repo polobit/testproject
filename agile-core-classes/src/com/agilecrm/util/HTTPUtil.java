@@ -83,13 +83,15 @@ public class HTTPUtil
 	    conn.setReadTimeout(600000);
 	    
 	    Set<String> keys = hashmapKeyValues.keySet();
-	    Iterator<String> iterator = keys.iterator();
-	    
-	    while(iterator.hasNext())
-	    {
-		// Construct headers
-	    String key = iterator.next();
-		conn.addRequestProperty(key,hashmapKeyValues.get(key));
+	    if(keys.size()>0){
+		    Iterator<String> iterator = keys.iterator();
+		    
+		    while(iterator.hasNext())
+		    {
+			// Construct headers
+		    String key = iterator.next();
+			conn.addRequestProperty(key,hashmapKeyValues.get(key));
+		    }
 	    }
 
 	    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
@@ -243,14 +245,16 @@ public class HTTPUtil
 	conn.setReadTimeout(600000);
 	
 	Set<String> keys = hashmapKeyValues.keySet();
-    Iterator<String> iterator = keys.iterator();
-    
-    while(iterator.hasNext())
-    {
-	// Construct headers
-    String key = iterator.next();
-	conn.addRequestProperty(key,hashmapKeyValues.get(key));
-    }
+	if(keys.size()>0){
+	    Iterator<String> iterator = keys.iterator();
+	    
+	    while(iterator.hasNext())
+	    {
+		// Construct headers
+	    String key = iterator.next();
+		conn.addRequestProperty(key,hashmapKeyValues.get(key));
+	    }
+	}
 
 	
 	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");

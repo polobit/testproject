@@ -175,3 +175,5 @@ $(document).ready(function(){
 
   setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
 });
+
+SUBSCRIBERS_SELECT_ALL = false;

@@ -359,6 +359,16 @@
 		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
 		<url-pattern>/backend/domainuserdbupdate</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AgileDbUpdateServlet</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.cron.AgileDbUpdateServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AgileDbUpdateServlet</servlet-name>
+		<url-pattern>/backend/agiledbupdate</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Stripe Webhook</servlet-name>

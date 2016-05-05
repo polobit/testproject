@@ -33,7 +33,7 @@ import com.googlecode.objectify.ObjectifyService;
 public class AnalyticsUtil
 {
     public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
-    public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
+   public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
     
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
     
@@ -438,5 +438,16 @@ public class AnalyticsUtil
     {
 		VisitorFilter.dao.ofy().delete(VisitorFilter.class, id);
     }
+
+     public static String getUrlForRefferalurlCount(String domain, String startDate, String endDate) throws UnsupportedEncodingException
+       {
+        	String url = null;
+        	//String hostUrl = getStatsServerUrl(domain);
+        	String hostUrl=STATS_SERVER_URL+"/reports?domain="+domain+"&psd="+STATS_SEREVR_HTTP_REQUEST_PWD;
+        	startDate=URLEncoder.encode(startDate, "UTF-8");
+        	endDate=URLEncoder.encode(endDate, "UTF-8");
+        	url = hostUrl + "&action=REFURL_COUNT&start_time="+startDate+"&end_time="+endDate;
+        	return url;
+        }
     
 }
