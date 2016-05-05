@@ -54,7 +54,6 @@ public class ActivityReportsDeferredTask implements DeferredTask
 	}
 
 	String oldNamespace = NamespaceManager.get();
-	System.out.println("Domain name is - " + domain);
 	NamespaceManager.set(domain);
 	try
 	{
@@ -63,18 +62,17 @@ public class ActivityReportsDeferredTask implements DeferredTask
 	    List<ActivityReports> reports = ActivityReportsUtil.getAllReportsByDuration(duration);
 	    for (ActivityReports report : reports)
 	    {
-		Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
-		        report.activity_weekday, report.activity_day, report.report_timezone, duration);
-		try
-		{
-		    ActivityReportDeferredTaskCreation.createDeferredTask(domain, report.id, time,
-			    report.report_timezone);
-		}
-		catch (IOException e)
-		{
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
+			Long time = ActivityReportsUtil.getTimeForSettingEtaForReports(report.activity_time,
+			        report.activity_weekday, report.activity_day, report.report_timezone, duration);
+			try
+			  {
+			    ActivityReportDeferredTaskCreation.createDeferredTask(domain, report.id, time, report.report_timezone);
+			   }
+			catch (IOException e)
+			  {
+				System.out.println("Exception occured while creating actvity report..");
+			    e.printStackTrace();
+			  }
 	    }
 	}
 	finally

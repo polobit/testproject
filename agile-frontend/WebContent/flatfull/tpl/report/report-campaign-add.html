@@ -1,155 +1,27 @@
-<script type="text/html" id="email-report-categories-template">
-<div class="row">
-    <div class="col-md-12">
-       
-            <h3 class="m-b m-t-sm p-b-xs b-b  b-light">Email Reports</h3>
-       
-	</div>
-</div>
-
-<div id="general" class="row">
-
-<!-- Contact reports -->
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="well text-center">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-user icon-4x"></i>
-            </div>
-            <b>Contact Reports</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-primary" href="#contact-reports">Go</a>
-        </div>
-    </div>
-</div>
-
-
-<!-- Activity reports -->
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="well text-center">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-cogs icon-4x"></i>
-            </div>
-            <b>Activity Reports</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          	Get a periodic  email digest of various activities by users in Agile.
-        </div>
-        <!-- Add button -->
-        <div>
-            <a cl
-ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
-        </div>
-    </div>
-</div>
-</div>
-</script>
-
-<script id="activity-report-collection-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-md-12">
-       
-            <h3 class="pull-left font-thin h3">Activity Reports</h3>
-            <a href="#activity-report-add" id="addActivityReport" class="btn btn-sm btn-default right btn-addon"><span><i class="icon-plus-sign" /></span>  Add Report</a>
-      		<div class="clearfix">
-    </div>
-</div>
-</div>
-</div>
-<div class="wrapper-md">
-<div class="row">
-		 <div id="slate" class="col-sm-9 col-md-9">
-         </div>
-        {{#if this.length}}
-        <div class="col-md-9 col-sm-9">
-		<div class="panel panel-default">
-		<div class="panel-heading">Activity Reports List</div>
-        <div class="table-responsive">
-        <table class="table table-bordered table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/activity-reports/bulk">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Frequency</th>
-					<th>Activity</th>
-					<th>Users</th>
-                </tr>
-            </thead>
-            <tbody id="activity-report-model-list" route="activity-report-edit/">
-            </tbody>
-        </table>
-		</div>
-        </div>
-        </div>
-		{{/if}}
-    <div class="col-md-3 col-sm-3 p-none">
-		<div class="data-block">
-        <div class="wrapper-xs" id="addview">
-            <h4 class="m-t-nne h4 m-b-sm">
-                What are Activity Reports?
-            </h4>
-           
-            <p> Get a periodic email digest of various activities by users in Agile. This includes activities on Deals, Tasks, Calendar Events and Emails sent.</p>
-        </div>
-		</div>
-    </div>
-</div>
-</div>
-</div>
-</script>
-
-<script id="activity-report-model-template" type="text/html">
-	<td data="{{id}}" class="data" style="cursor:pointer"><a>{{name}}</a></td>
-	<td>
-    	{{ucfirst frequency}}
-	</td>
-	<td><div style="text-transform:capitalize;">{{#if activity}}{{arrayToCamelcase activity}}{{/if}}</div></td>
-	<td>
-		{{namesFromObject usersList 'name'}}
-	</td>
-	<td>
-	 	<a  data={{id}} class="text-info" id="activity-reports-email-now" >Send Now</a>
-	</td>
-<br />
-</script>
-
-<script id="activity-reports-add-template" type="text/html">
+<script id="reports-campaign-add-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
        
-            <h3 class="pull-left font-thin h3">Activity Reports</h3>
+            <h3 class="pull-left font-thin h3">Campaign Reports</h3>
             
        
     </div>
 </div>
 </div>
+<div class="row">
 <div class="col-md-12">
 	<div class="wrapper-md">
-	<div class="panel panel-default">
-		<form id="activityReportsForm" class="form-horizontal">
-				<div name="rules" class="formsection chainedSelect">
+		<div class="panel panel-default">
+		<form id="reportsForm" class="form-horizontal">
+			<div name="rules" class="formsection chainedSelect">
  					{{#if id}} 
-                        <div class="panel-heading">Edit Activity Report</div>
+                       <div class="panel-heading">Edit Campaign Report</div>
                       {{else}}
-                        <div class="panel-heading"><i class="icon-plus-sign"></i> Add Activity Report</div>
+                        <div class="panel-heading"><i class="icon-plus-sign"></i> Add Campaign Report</div>
                     {{/if}}
-                <div class="panel-body">
+				<div class="panel-body">
 				<fieldset>
 					<div class="control-group form-group">
 						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
@@ -158,41 +30,15 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 						</div>
 					</div>
 
-			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Activity Type <span class="field_req">*</span></label>
-				<div class="controls col-sm-8">
-					<span class="m-xs block">
-						<a href="#" id="activity-type-list-select-all" class="text-info">Select all</a> |
-						<a href="#" id="activity-type-list-select-none" class="text-info">Select none</a>
-					</span>
-					<select id="activity-type-list" name="activity" class="required form-control" multiple="multiple">
-						{{#hasMenuScope 'DEALS'}}
-						<option value="DEAL">Deals</option>
-						{{/hasMenuScope}}
-						<option value="TASK">Task</option>
-						<option value="EVENT">Event</option>
-						<option value="EMAIL">Email</option>
-						<option value="NOTES">Notes</option>
-						{{#hasMenuScope 'DOCUMENT'}}
-						<option value="DOCUMENTS">Documents</option>
-						{{/hasMenuScope}}
-						<option value="CALL">Calls</option>
-					</select>
-				</div>
-			</div>
-
-			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Users <span class="field_req">*</span></label>
-				<div class="controls col-sm-8" >
-					<span class="m-xs block">
-						<a href="#" id="users-list-select-all" class="text-info">Select all</a> | 
-						<a href="#" id="users-list-select-none" class="text-info">Select none</a>
-					</span>
-					<select id="users-list" name="user_ids" class="required form-control" multiple="multiple">
-					</select>
-				</div>
-			</div>
-
+				<div class="control-group form-group">         
+                    
+                    <label class="control-label col-sm-2">Select campaign <span class="field_req">*</span></label>
+                    <div class="controls col-sm-8">
+                        <select class="campaign-select required form-control" name="campaignId" id='campaign-select'>
+                            <option value="">Select..</option>
+                        </select>
+                    </div>
+                </div>	
 			<div class="control-group form-group">
 				<label class="control-label col-sm-2">Send Report To<span
 					class="field_req">*</span></label>
@@ -201,27 +47,26 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Frequency<span
+				<label class="control-label col-sm-2">Duration<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
-					<select class="required form-control" name="frequency" id="frequency">
+					<select class="required form-control" name="duration" id="duration">
 					<option value="DAILY">Daily</option>
 						<option value="WEEKLY">Weekly</option>
 						<option value="MONTHLY">Monthly</option>
 					</select>
 				</div>
-			</div>	
-			<div class="control-group form-group">
-				<label class="control-label col-sm-2" ><a href="" id="activity_advanced" data-toggle="collapse" data-target="#activity-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;Advanced</a></label>
-						
+			</div>			
+<div class="control-group form-group">
+				<label class="control-label col-sm-2" ><a href="" id="report_advanced" data-toggle="collapse" data-target="#report-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;Advanced</a></label>
 			</div>
 			<div class="row">
-			<div class="collapse col-sm-12" id="activity-advanced-block">
+			<div class="collapse col-sm-12" id="report-advanced-block">
 
 <div class="control-group form-group">
 						<label class="control-label col-sm-2">Time Zone</label>
 						<div class="controls col-sm-8">
-							<select name="report_timezone" class="form-control" id="report_timezone">
+							<select name="report_timezone" id="report_timezone" class="form-control">
 					         <option value="Africa/Abidjan">
 									Africa/Abidjan</option>
 								<option value="Africa/Accra"> Africa/Accra</option>
@@ -1015,10 +860,10 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 							</select>
 						</div>
 					</div>
-            <div class="control-group form-group" id="activity_report_day" style="display:none;">
+            <div class="control-group form-group" id="contact_report_day" style="display:none;">
 				<label class="control-label col-sm-2">Day of Month</label>
 				<div class="controls col-sm-8">
-					<select name="activity_day" class="form-group"> 
+					<select name="activity_day" class="form-control"> 
                     <option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
@@ -1053,7 +898,7 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 				</select>
 				</div>
 			</div>
-            <div class="control-group form-group" id="activity_report_weekday" style="display:none;">
+            <div class="control-group form-group" id="contact_report_weekday" style="display:none;">
 				<label class="control-label col-sm-2">Day</label>
 				<div class="controls col-sm-8">
 					<select name="activity_weekday" class="form-control"> 
@@ -1063,114 +908,49 @@ ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
 						<option value="5">Thursday</option>
 						<option value="6">Friday</option>
 						<option value="7">Saturday</option>
-                       <option value="1">Sunday</option>
-						
+                        <option value="1">Sunday</option>						
                    </select>
 				</div>
 			</div>	
-			<div class="control-group form-group" id="activity_report_time">
+			<div class="control-group form-group" id="contact_report_time">
 				<label class="control-label col-sm-2">Time</label>
 				<div class="controls col-sm-8">
-					 <input type="text" name="activity_time" class="activity_time_timepicker form-control input-small " id="activity_time"  placeholder="time" />
+					 <input type="text" name="activity_time" class="report_time_timepicker input-small form-control" id="activity_time"  placeholder="time" />
 				</div>
 			</div>	
 			
 			
 			</div>			
-			{{#if id}} <input type="hidden" name="id" class="hide form-control" value="{{id}}" />
+
+			<input type="text" class="hide form-control" name="report_type" value="Contact" /></input>
+			{{#if id}} <input type="text" name="id" class="hide form-control" value="{{id}}" />
 			{{/if}}
-			</div>
-			<hr>
-			<div class="row">
-			<div class="col-sm-offset-2 col-sm-8">
+</div>
+<hr>
+
+<div class="row">
+<div class="col-sm-offset-2 col-sm-8">
 			<div class="form-actions">
-				<a href="#activity-reports" class="btn btn-sm btn-danger">Close</a>
-				<a href="#" type="submit" class="save btn btn-sm btn-primary"
-					id="filtersAdd">Save</a>
+				<a href="#campaign-reports" class="btn btn-sm btn-default">Close</a>
+				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a>
 			</div>
-			</div>
-			</div>
+</div>
+</div>
 			</fieldset>
 			</div>
+			</div>
 		</form>
+		</div>
 	</div>
-	</div>
+</div>
 </div>
 </div>
 </script>
 
+<Script id="custom-fields-options-template" type="text/html">
 
-
-<script id="campaign-report-via-email-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="m-n font-thin h3 pull-left">Campaign Report </small> </h1>
-             <div class="clearfix"></div> 
-        </div>
-    </div>
-</div>
-{{#if report_name }}
- <div style="padding:25px;">
-       <div style="background-color: #fff; font-family: Arial, sans-serif; padding: 5px">
-       
-           <div style="font-size: 14px; background-color: #fff; padding: 10px">
-           <table style="width: 100%; background-color: #fff;">
-                 <tbody>
-                   <tr style="font-weight: bold;color: #23B7E5;">
-                    <td valign="middle" height="32px" >{{report_name}}</td>
-                    <td valign="right" height="32px" style="text-align: right" >{{duration}} Report </td>
-                    </tr>
-                </tbody>
-              </table>
-            <span>{{{campaign_name}}}</span>
-
-            <table width="100%" cellpadding="5" cellspacing="0" style="margin-top: 20px; border: 2px solid #edf1f2;">
-            
-            <tbody>
-                         <tr style="text-align:center;">
-               <td style="border-right: 2px solid #edf1f2;">
-                    <div style="margin:15px">Emails Sent</div> 
-                <div   style="margin:15px; color:#23B7E5; font-size: 20px;"><strong>{{emailSent}}</strong></div>
-               </td>
-               <td style="border-right: 2px solid #edf1f2;">                   
-                    <div style="margin:15px">Emails Skipped</div> 
-                <div   style="margin:15px; color:#FAD733; font-size: 20px;"><strong>{{emailSkipped}}</strong></div>
-               </td>
-               <td style="border-right: 2px solid #edf1f2;">                   
-                    <div style="margin:15px">Emails Open</div> 
-                <div style="margin:15px; color:#08C; font-size: 20px;"><strong>{{emailOpened}}</strong></div>
-               </td>
-                <td>
-                    <div style="margin:15px">Emails Clicked</div> 
-                <div   style="margin:15px; color:rgb(18, 209, 18); font-size: 20px;"><strong>{{emailClicked}}</strong></div>
-               </td>
-             </tr>
-
-             <tr style="text-align:center;">
-               <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">
-                    <div style="margin:15px">Hard Bounce</div> 
-                <div   style="margin:15px; color:#009688; font-size: 20px;"><strong>{{hardBounce}}</strong></div>
-               </td>
-               <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">                
-                    <div style="margin:15px">Soft Bounce</div> 
-                <div   style="margin:15px; color:#9C27B0; font-size: 20px;"><strong>{{softBounce}}</strong></div>
-               </td>
-               <td style="border-right: 2px solid #edf1f2; border-top: 2px solid #edf1f2;">                
-                    <div style="margin:15px">Unsubscribe</div> 
-                <div   style="margin:15px; color:rgb(205,15,0); font-size: 20px;"><strong>{{emailUnsubscribed}}</strong></div>
-               </td>
-                <td style=" border-top: 2px solid #edf1f2;">
-                    <div style="margin:15px">Spam</div> 
-                <div   style="margin:15px; color:#FF4343; font-size: 20px;"><strong>{{emailSpam}}</strong></div>
-               </td>
-             </tr>
-            </tbody>
-             </table>
-            </div>
-        </div>
-    </div>{{else}}
-
-    <h1>No campaign report found...</h1>
-    {{/if}}
-</script>
+{{this.name}}
+{{#each this}}
+	<option value="custom_{{this.name}}">{{this.name}}</option>
+{{/each}} 
+</Script>

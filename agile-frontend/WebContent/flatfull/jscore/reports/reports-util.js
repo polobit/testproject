@@ -89,21 +89,21 @@ load_contacts : function(el)
 		chainFiltersForContact(el, undefined, function()
 		{
 			++count;
-			if (count > 1)
+			if (count > 1 )
 				$("#reports-listerners-container").html(el)
 		});
 	});
 },
 
 /** Editing the condition for an existing contacts email report* */
-edit_contacts : function(el, report)
+edit_contacts : function(el, report, flag)
 {
 	console.log(el);
 	console.log(report.toJSON());
 	$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
 	++count;
-	if (count > 1)
-		deserialize_multiselect(report.toJSON(), el);
+	if (count > 1 )
+		deserialize_multiselect(report.toJSON(), el, flag);
 
 	setTimeout(function()
 	{
