@@ -72,8 +72,11 @@ public class UserFingerPrintInfo implements Serializable{
 	}
 	
 	public void generateOAuthToken(HttpServletRequest request){
-		this.verification_code = (int)( Math.random() * 10000 ) + "";
-		
+		int randomNumber = (int)( Math.random() * 10000 );
+		if(randomNumber < 1000)
+			randomNumber = randomNumber*10;
+		this.verification_code = randomNumber+"";
+			
 		System.out.println("verification_code = " + verification_code);
 		// Resave
 		set(request);
