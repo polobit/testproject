@@ -72,8 +72,11 @@ public class UserFingerPrintInfo implements Serializable{
 	}
 	
 	public void generateOAuthToken(HttpServletRequest request){
-		this.verification_code = System.currentTimeMillis()/100000 + "";
-		
+		int randomNumber = (int)( Math.random() * 10000 );
+		if(randomNumber < 1000)
+			randomNumber = randomNumber*10;
+		this.verification_code = randomNumber+"";
+			
 		System.out.println("verification_code = " + verification_code);
 		// Resave
 		set(request);
@@ -90,6 +93,7 @@ public class UserFingerPrintInfo implements Serializable{
 		data.put("email", domainUser.email);
 		data.put("domain", domainUser.domain);
 		data.put("IP_Address", request.getRemoteAddr());
+		data.put("name",domainUser.name );
 		data.put("city",request.getHeader("X-AppEngine-City"));	
 		System.out.println("data "+data);
 		

@@ -221,7 +221,7 @@ public class JSAPI
      * @param email
      * @return
      */
-    @Path("contact/delete")
+   /* @Path("contact/delete")
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
     public String deleteContact(@QueryParam("email") String email)
@@ -243,7 +243,7 @@ public class JSAPI
 	    e.printStackTrace();
 	    return null;
 	}
-    }
+    }*/
 
     /**
      * Adds task. Takes email, task json and callback as query parameters, task

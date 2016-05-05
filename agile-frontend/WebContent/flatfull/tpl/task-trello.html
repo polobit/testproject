@@ -189,8 +189,8 @@
 <div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
      <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
 </div>    
-<div class="pull-right"> 
- <div class="task-actions">
+<div class="pull-right pos-rlt pos-t-xs"> 
+ <div class="task-actions text-sm">
            <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
@@ -200,7 +200,7 @@
            {{/if}}
       </div>
       {{#if notes}} 
-           <div class="task-note-action">
+           <div class="task-note-action text-sm">
              <i class="task-action icon icon-comment" data="{{id}}" title="Notes"></i>
              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
            </div>

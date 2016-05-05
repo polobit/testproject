@@ -2303,7 +2303,11 @@ color:#484848!important;
 .mobile-contact-filter-list .dropdown-menu li a{ padding: 8px 15px;}
 #lhs-contact-filter-form #lhs-filters-header{ display: block;}
 .contactTableHeadName thead tr th{ display: none;}
-
+.pos-t-1{ top: 1px;}
+.icons-text-sm .actions i, .icons-text-sm .actions span.icon-trash{ font-size: 13px;}
+.icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
+.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span{ padding-top: 10%;}
+.recent-list-text-color a{ color: #363f44 !important;}
 /*end custom css code*/
 
 
