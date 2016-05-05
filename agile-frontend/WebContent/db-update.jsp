@@ -28,7 +28,6 @@
 			if (activities.size() > 0)
 				workflow.updated_time = activities.get(0).time;
 		}
-		
 
 		dao.put(workflow, true);
 	}

@@ -23,38 +23,51 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 public class WorkflowAddAccessLevelDeferredTask implements DeferredTask {
 
 	public String domain;
-	public WorkflowAddAccessLevelDeferredTask(String domain){
-	  this.domain = domain;	
+
+	public WorkflowAddAccessLevelDeferredTask(String domain) {
+		this.domain = domain;
 	}
-	
+
 	public void run() {
-		
+
 		try {
-			
-			if(StringUtils.isBlank(domain))
+
+			if (StringUtils.isBlank(domain))
 				return;
-			
+
 			NamespaceManager.set(domain);
-			ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
 			
+			ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
 			List<Workflow> workflows = dao.fetchAll();
 			System.out.println("workflows = " + workflows.size());
-			
+
 			for (Workflow workflow : workflows) {
 				workflow.updated_time_update = false;
-				// workflow.save(true);
-				
+
 				List<Activity> activities = ActivityUtil.getActivititesBasedOnSelectedConditon(
-						ActivityType.CAMPAIGN.toString(), null, 2, null, null, null, workflow.id);
-				
-				if(activities.size() > 0)
-					workflow.updated_time = activities.get(0).time;
-				
-				dao.put(workflow, true);
+						ActivityType.CAMPAIGN.toString(), null, 5, null, null, null, workflow.id);
+
+				if (activities != null) {
+					System.out.println("activities = " + activities.size());
+					for (Activity activity : activities) {
+						System.out.println(workflow.name + " : " + activity.time);
+					}
+
+					if (activities.size() > 0) {
+						System.out.println("time = " + activities.get(0).time);
+						workflow.updated_time = activities.get(0).time;
+						System.out.println("time = " + workflow.updated_time);
+
+					} else {
+						workflow.updated_time = workflow.created_time;
+					}
+				}
+
+				workflow.save(true);
 			}
-			
+
 		} finally {
 		}
-		
+
 	}
 }
