@@ -58,6 +58,8 @@ public class WorkflowAddAccessLevelDeferredTask implements DeferredTask {
 						workflow.updated_time = activities.get(0).time;
 						System.out.println("time = " + workflow.updated_time);
 
+					} else {
+						workflow.updated_time = workflow.created_time;
 					}
 				}
 
