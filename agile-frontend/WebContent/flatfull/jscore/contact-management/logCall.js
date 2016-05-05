@@ -450,6 +450,7 @@ function showDynamicCallLogs(data)
 		$('#phoneLogForm #saveActivity').val("true");
 		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ data.contId +'">'+data.contact_name+'</li>');
 		$("#phoneLogForm").find("#description").focus();
+		agile_type_ahead("call_related_to",  $("#phoneLogForm", '#logCallModal'), contacts_typeahead);
 		
 		CallLogVariables.callActivitySaved = false;
 		CallLogVariables.id = data.contId;
