@@ -1,6 +1,6 @@
 
 <script id="recent-menu-model-template" type="text/html">
-<div class="wrapper-sm custom-color-star">
+<div class="wrapper-sm recent-list-text-color">
 <a data-id="{{id}}"  class="c-p custom-color">
 
 {{#if_equals entity_type "contact_entity"}}
@@ -17,7 +17,7 @@
         	{{#if_contact_type "PERSON"}}
         		<div class="text-cap">	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} 
-        		<div class="text-ellipsis">
+        		<div class="text-ellipsis text-lowercase">
         		<small>{{getPropertyValue properties "email"}}</small>
 				</div>
                 <div class="text-ellipsis">
