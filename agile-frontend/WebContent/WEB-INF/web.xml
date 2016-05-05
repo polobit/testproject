@@ -1162,5 +1162,14 @@
 		<servlet-name>_ah_sessioncleanup</servlet-name>
 		<url-pattern>/_ah/sessioncleanup</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>CompanyNameUpdate</servlet-name>
+		<servlet-class>com.agilecrm.CompanyNameUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CompanyNameUpdate</servlet-name>
+		<url-pattern>/backend/cron/company-name-update</url-pattern>
+	</servlet-mapping>
   
 </web-app>
