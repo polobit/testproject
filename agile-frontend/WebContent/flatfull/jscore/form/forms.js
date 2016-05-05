@@ -18,6 +18,8 @@ var Form_Collection_Events = Base_Collection_View.extend({
 			$codeShareModalEl.html(ui).modal("show");
 		 	
 		 	var currentModel = App_Forms.formsListView.collection.get($(e.currentTarget).data("formid"));
+		 	//addding form id in source code
+		 	currentModel.attributes.formHtml=currentModel.get("formHtml").replace("name=\"_agile_form_id\" value=\"\">", "name=\"_agile_form_id\" value=\""+currentModel.id+"\">");
 		 	$codeShareModalEl.find("#fullsourceArea").text(currentModel.get("formHtml"));
 
 		 	//permanent link
