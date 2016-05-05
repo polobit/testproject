@@ -56,7 +56,7 @@ public class FormUtil
     		try {
   
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("contactName", contact.first_name);
+			//map.put("contactName", contact.first_name);
 			map.put("contactEmail", contact.getContactFieldValue(contact.EMAIL));
 			map.put("formName", formName);
 			SendMail.sendMail(ownerEmailId, SendMail.CONTACT_FORM_SUBMITTED_SUBJECT+formName,
