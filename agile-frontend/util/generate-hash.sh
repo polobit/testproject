@@ -13,6 +13,7 @@ find ../WebContent/jscore/min/flatfull/ \
 ../WebContent/flatfull/css/min/ \
 ../WebContent/flatfull/lib/ \
 ../WebContent/flatfull/jscore/handlebars/ \
+../WebContent/stats/min/agile-min.js \
 -type f \
 | xargs md5sum \
 | awk -F " |/" 'BEGIN{printf "<script type=\x27text/javascript\x27/>_AGILE_FILE_HASH={"} NR > 1 {printf ","}  {printf "\x27" $NF "\x27" ":" "\x27" $1 "\x27"} END{print "};</script>"}' \
