@@ -310,7 +310,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
    <li id="socialsuitemenu">
     <a  href="#social">
-      <i class="icon icon-comments"></i>
+      <i class="icon-bubbles"></i>
       <span>Social</span>
     </a>
   </li>
@@ -334,7 +334,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
     <li id="activitiesmenu">
     <a  href="#activities">
-      <i class="icon-cogs icon-white"></i>
+      <i class="icon-speedometer icon-white"></i>
       <span>Activities</span>
     </a>
   </li>

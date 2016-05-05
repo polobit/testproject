@@ -91,55 +91,7 @@
     </div>
 </div>
 </div>
-<!-- Archive confirmation-->
-<div id="deal_archive_confirm_modal" class="modal fade" aria-hidden="true">
-	<div class="modal-dialog">
-    <div class="modal-content">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Archive Deal</h3>
-  </div>
-  <div class="modal-body">
-    <div id="deal-bulk-confirm">
-		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
-		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
-		Deals can be archived and will not be shown. You can view them later by selecting 'All' in the filter.  
-		<br/> Are you sure to archive this deal?
-	</div>
-  </div>
-  <div class="modal-footer">
-  	<span class="error-status text-danger"></span>
-	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">No</button>
-    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">Yes</a>
-  </div>
- </div>
-  </div>
-</div>
-
-<!-- Restore confirmation-->
-<div id="deal_restore_confirm_modal" class="modal fade" aria-hidden="true">
-	<div class="modal-dialog">
-    <div class="modal-content">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Restore Deal</h3>
-  </div>
-  <div class="modal-body">
-	<input id="restored-deal-id" name="id" type="hidden"/>
-	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
-    <div id="deal-bulk-confirm">
-		Restoring the Deal will make it active again. <br/> Restore this Deal?
-	</div>
-  </div>
-  <div class="modal-footer">
-  	<span class="error-status"></span>
-	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">No</button>
-    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">Yes</a>
-  </div>
-	</div>
-  </div>
-</div>
-</div>
+	
 </script>
 
 <script id="opportunities-by-paging-collection-template" type="text/html">
@@ -212,15 +164,15 @@
 		</small>
 	</div>
 <div class="pull-right">
-<span class="right deal-options" style="visibility:hidden;">
+<span class="right deal-options text-sm" style="visibility:hidden;">
 			{{#if_equals archived false}}
-			<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
+			<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-file-archive-o"></i> </a>
 			{{/if_equals}}
 			{{#if_equals archived true}}
 			<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
 			{{/if_equals}}
 			{{#if_equals archived false}}
-			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
+			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
             {{/if_equals}}
 			<a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
         </span>
@@ -300,17 +252,17 @@
 		</small>
 	</div>
 <div class="pull-right">
-<span class="pull-right deal-options vis-hide">
+<span class="pull-right deal-options vis-hide text-sm">
 			{{#if_equals archived false}}
-			<a title="Archive" class="deal-archive c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
+			<a title="Archive" class="deal-archive c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-file-archive-o"></i> </a>
 			{{/if_equals}}
 			{{#if_equals archived true}}
 			<a title="Restore" class="deal-restore c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
 			{{/if_equals}}
 			{{#if_equals archived false}}
-			<a title="Edit" class="deal-edit c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-pencil-square"></i> </a>
+			<a title="Edit" class="deal-edit c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
             {{/if_equals}}
-			<a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="fa fa-trash"></i></a>
+			<a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
         </span>
 </div>
 
@@ -396,3 +348,53 @@
 	   	          </div>	
 </script>
 <!--end popover on deal milestone-->
+
+<script id="archive-deal-template" type="text/html">
+<!-- Archive confirmation-->
+	<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Archive Deal</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm">
+		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
+		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
+		Deals can be archived and will not be shown. You can view them later by selecting 'All' in the filter.  
+		<br/> Are you sure to archive this deal?
+	</div>
+  </div>
+  <div class="modal-footer">
+  	<span class="error-status text-danger"></span>
+	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">No</button>
+    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">Yes</a>
+  </div>
+ </div>
+  </div>
+</script>
+
+<script id="restore-deal-template" type="text/html">
+<!-- Restore confirmation-->
+	<div class="modal-dialog">
+    <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Restore Deal</h3>
+  </div>
+  <div class="modal-body">
+	<input id="restored-deal-id" name="id" type="hidden"/>
+	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
+    <div id="deal-bulk-confirm">
+		Restoring the Deal will make it active again. <br/> Restore this Deal?
+	</div>
+  </div>
+  <div class="modal-footer">
+  	<span class="error-status"></span>
+	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">No</button>
+    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">Yes</a>
+  </div>
+	</div>
+  </div>
+</div>
+</script>

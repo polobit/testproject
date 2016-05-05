@@ -760,6 +760,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		var temp = {};
 		temp.id = $(this).closest('.data').attr('id');
 		temp.milestone = ($(this).closest('ul').attr("milestone")).trim();
+		$("#deal_archive_confirm_modal").html(getTemplate('archive-deal'));
 		$("#archived-deal-id", $("#deal_archive_confirm_modal")).val(temp.id);
 		$("#archived-deal-milestone", $("#deal_archive_confirm_modal")).val(temp.milestone);
 		$("#deal_archive_confirm_modal").modal('show');
@@ -776,6 +777,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		var temp = {};
 		temp.id = $(this).closest('.data').attr('id');
 		temp.milestone = ($(this).closest('ul').attr("milestone")).trim();
+		$("#deal_restore_confirm_modal").html(getTemplate('restore-deal'));
 		$("#restored-deal-id", $("#deal_restore_confirm_modal")).val(temp.id);
 		$("#restored-deal-milestone", $("#deal_restore_confirm_modal")).val(temp.milestone);
 		$("#deal_restore_confirm_modal").modal('show');
