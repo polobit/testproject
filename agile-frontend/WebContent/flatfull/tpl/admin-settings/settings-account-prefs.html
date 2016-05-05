@@ -1,15 +1,26 @@
+<script id="settings-account-tab-template" type="text/html">
+    <div class="tab-container m-b-none">
+           <ul class="nav nav-tabs b-b-none">
+            <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">Preferences</a></li>
+            <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">Security</a></li>
+           </ul>
+    </div>
+    <div class="tab-pane active" id="settings-account-tab-content">
+</script>
+
+
 
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 <script id="admin-settings-account-prefs-template" type="text/html">
-<div class="panel panel-default">
-	<div class="panel-heading">Preferences</div>
-	<div class="panel-body">
+<div class="col-sm-9 panel ">
+    <!--<div class="panel-heading">Preferences</div>-->
+    <div class="panel-body">
     <form id="accountPrefs" class="form-horizontal">
         <fieldset>
             <input name="id" class="form-control" type="hidden" value="{{id}}" />
             
             <div class="row">
-				<div class="col-md-7 col-xs-12">
+                <div class="col-md-7 col-xs-12">
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Plan</label> 
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
@@ -37,10 +48,11 @@
                             <input name="company_name" class="input-medium required form-control" type="text" value="{{company_name}}" />
                         </div>
                     </div>
+
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Domain</label>
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
-                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs">Add Alias</a>{{/unless}}                           
+                            {{get_current_domain}} {{#unless aliasNames}}<a href="#change-domain" class="text-info p-l-xs"><i class="icon-plus text-sm"></i> Add Alias</a>{{/unless}}                           
                         </div>
                     </div>
                     {{#if aliasNames}}
@@ -54,6 +66,7 @@
                     
 					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
 				</div>
+                    
                 <div class="col-md-offset-2 col-md-3 col-xs-offset-4 col-xs-8 hide">
                     <div >
                         <div id="upload-container" messg="User image has been uploaded">
@@ -63,7 +76,7 @@
                                     <img class="w-full" src="{{logo}}"  width="85" />
                                     {{else}}
                                     <img class="w-full" src="https://contactuswidget.appspot.com/images/pic.png"  width="85" />
-                                    {{/if}}													
+                                    {{/if}}                                                 
                                 </div>
                                 <p>
                                     <input type="hidden" class="form-control" id="upload_url" name="logo" />  
@@ -92,6 +105,7 @@
 </div>
 
 </script>
+
 
 <script id="admin-settings-domain-alias-template" type="text/html">
 <div id="alias_domain" class="panel panel-default">
@@ -156,4 +170,93 @@
             </div>
         </div>
     </div>
+
+</script>
+<script id="admin-settings-ip-prefs-template" type="text/html">
+<div id="ip_access" class="col-sm-9 panel ">
+    {{#unless ipList.length}} {{else}}
+    <div class="panel-heading allow_access_panelheading">
+    <div class="pull-left  m-t-xs">IP Address List</div>
+    <div class="pull-right">
+       <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> Add IP Address</a>
+    </div>
+    <div class="clearfix"></div>
+    </div>
+
+    {{/unless}}
+   
+    <form id="access-ip" class="form-horizontal">
+
+        <fieldset>
+            {{#if id}}
+                <input name="id"  class="form-control" type="hidden" value="{{id}}" />
+            {{/if}}
+            <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
+            
+            <table class="table table-hover table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
+                <colgroup><col width="50%"><col width="4%"></colgroup>
+                <thead>
+                {{#unless ipList.length}} {{else}}
+                <tr>
+                <th>IP Address</th> 
+                <th></th>                
+                    </tr>
+                    {{/unless}}
+                </thead>
+                <tbody id="blocked_panel_ips_list" class="multiple-input" name="ipList">
+                   {{#each ipList}}
+                    <tr data="{{this}}" >
+                        <td>
+                            <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
+                            <input class="form-control ip_edit" type="hidden" value="{{this}}" />
+                        </td>
+                        <td class="b-r-none" style="width:8%;">
+                            <div class="m-b-n-xs pull-left" style="visibility: hidden;">
+                                <a class="upsert-ip c-p m-l-sm text-l-none text-sm hover-show" data-toggle="modal" role="button" style="margin-left:27px;" data-position="{{@index}}">
+                                        <i title="Edit" class="icon icon-edit"></i>
+                                </a>
+                                <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-sm" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                    <tr data="{{this}}" style="display:none;" >
+                        <td>
+                        <div class="show_field" style="visibility:hidden;">
+                        <input type="text" id="ipList"  style="width:250px;display:inline-block;" class="form-control input-sm ipValidation newip required" placeholder="New IP Address">
+                        <a href="#" type="submit"  class="save  btn btn-sm btn-primary " >Add</a>
+                        </div>
+                        </td>
+                        
+                    </tr>
+                </tbody>
+            </table>  
+             {{#unless ipList.length}}
+                     <div class="m-l-sm" id="slate">
+                     <div class="alert bg-white ">
+                     <div class="slate-content p-md">
+                        <div class="box-left pull-left m-r-md">
+                            <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
+                        </div>
+                        <div class="box-right pull-left" style="position:relative;top:10px;">
+
+                        <h4 class="m-t-none">Agile takes security seriously.</h4>
+                        <div class="text">Add extra protection by restricting Agile to certain IP addresses.</div>
+                        
+                        <a href="#"  class="upsert-ip modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs" role="button" id="newip-add" ><i class="icon-plus-sign"></i> Add IP Address</a>
+                        </div>
+                        </div>
+                    <div class="clearfix"></div>
+                    </div></div>
+            {{/unless}}
+            {{#unless ipList.length}} {{else}}
+            <footer class="panel-footer">
+             <!--<a href="#" class="blocked-panel-ip-delete btn btn-danger btn-sm " data-toggle="modal" role="button" > Delete</a>-->
+            <!--<a href="#" class="btn btn-sm btn-primary " data-toggle="modal" role="button" id="newip-add" > Add</a>-->
+            </footer>  
+            {{/unless}}
+        </fieldset>
+    </form>
+
+</div>
 </script>

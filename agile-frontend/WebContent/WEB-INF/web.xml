@@ -261,6 +261,7 @@
 		<url-pattern>/meeting</url-pattern>
 	</servlet-mapping>
 
+	<!--
 	<servlet>
 		<servlet-name>ActivityReports</servlet-name>
 		<servlet-class>com.agilecrm.reports.ActivityReportServlet</servlet-class>
@@ -270,6 +271,7 @@
 		<servlet-name>ActivityReports</servlet-name>
 		<url-pattern>/backend/cron/activity-reports/*</url-pattern>
 	</servlet-mapping>
+	-->
 	
 	<servlet>
 		<servlet-name>Reports</servlet-name>
@@ -280,6 +282,17 @@
 		<servlet-name>Reports</servlet-name>
 		<url-pattern>/backend/cron/reports/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CampaignReports</servlet-name>
+		<servlet-class>com.agilecrm.reports.CampaignReportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CampaignReports</servlet-name>
+		<url-pattern>/backend/cron/campaignReports/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>Triggers</servlet-name>
 		<servlet-class>com.agilecrm.workflows.triggers.TriggerServlet</servlet-class>
@@ -344,6 +357,16 @@
 	<servlet-mapping>
 		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
 		<url-pattern>/backend/domainuserdbupdate</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AgileDbUpdateServlet</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.cron.AgileDbUpdateServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AgileDbUpdateServlet</servlet-name>
+		<url-pattern>/backend/agiledbupdate</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -1151,6 +1174,15 @@
 	<servlet-mapping>
 		<servlet-name>_ah_sessioncleanup</servlet-name>
 		<url-pattern>/_ah/sessioncleanup</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>CompanyNameUpdate</servlet-name>
+		<servlet-class>com.agilecrm.CompanyNameUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CompanyNameUpdate</servlet-name>
+		<url-pattern>/backend/cron/company-name-update</url-pattern>
 	</servlet-mapping>
   
 </web-app>

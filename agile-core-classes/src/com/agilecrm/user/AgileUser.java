@@ -38,6 +38,9 @@ public class AgileUser
      * Associate outer domain user Id
      */
     public Long domain_user_id;
+    
+    
+    private DomainUser domainUser;
 
     // Dao
     private static ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(AgileUser.class);
@@ -47,6 +50,7 @@ public class AgileUser
      */
     public AgileUser()
     {
+    	this.domainUser = null;
     }
 
     /**
@@ -134,7 +138,6 @@ public class AgileUser
 	}
 	catch (EntityNotFoundException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
 	}
@@ -147,7 +150,9 @@ public class AgileUser
      */
     public DomainUser getDomainUser()
     {
-	return DomainUserUtil.getDomainUser(domain_user_id);
+    	if( this.domainUser == null )	this.domainUser = DomainUserUtil.getDomainUser(domain_user_id);
+    	
+    	return this.domainUser;
     }
 
     /**

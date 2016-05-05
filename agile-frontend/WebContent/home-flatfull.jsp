@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+<%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
@@ -55,11 +57,15 @@ response.sendRedirect("/login");
 return;
 }
 
+
+
+
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 System.out.println("Domain user " + domainUser);
 
 DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
+
 // Add to queue
 Queue queue = QueueFactory.getDefaultQueue();
 queue.add(TaskOptions.Builder.withPayload(task));
@@ -304,7 +310,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
    <li id="socialsuitemenu">
     <a  href="#social">
-      <i class="icon icon-comments"></i>
+      <i class="icon-bubbles"></i>
       <span>Social</span>
     </a>
   </li>
@@ -328,7 +334,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
     <li id="activitiesmenu">
     <a  href="#activities">
-      <i class="icon-cogs icon-white"></i>
+      <i class="icon-speedometer icon-white"></i>
       <span>Activities</span>
     </a>
   </li>
@@ -688,6 +694,8 @@ var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(dom
 
 // Get current user dashboards
 var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
+// Get Current Agile User
+var CURRENT_AGILE_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(AgileUser.getCurrentAgileUser()))%>;
 
 // Get Contact Date Fields
 var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;

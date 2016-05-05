@@ -80,13 +80,13 @@
 		</div>
       
 		</div>
-		<div class="actions pull-right pos-abs pos-r-0 pos-b-0">
+		<div class="actions pull-right pos-abs pos-r-0 pos-b-0 icons-text-sm">
 			{{#if notes}}
              <a title="Notes" data="{{id}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit-contact-tab c-p text-l-none"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
               <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
 			{{/if}}
 			{{#hasMenuScope 'DEALS'}}
-			 <a title="Edit"  data="{{id}}" href="#" class="deal-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+			 <a title="Edit"  data="{{id}}" href="#" class="deal-edit-contact-tab c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
              <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/opportunity/delete"></span></a>
       		{{/hasMenuScope}}
 	</div>

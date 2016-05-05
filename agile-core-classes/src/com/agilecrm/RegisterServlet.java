@@ -27,6 +27,8 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
+import com.agilecrm.ipaccess.AllowAccessMailServlet;
+import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
@@ -95,6 +97,7 @@ public class RegisterServlet extends HttpServlet
 	// Type the type of registration for the user - oauth or agile
 	try
 	{
+		
 	    if (type != null)
 	    {
 		if (type.equalsIgnoreCase("oauth"))

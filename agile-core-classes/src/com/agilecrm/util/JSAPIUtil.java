@@ -114,6 +114,7 @@ public class JSAPIUtil
     whiteList.add("fenopix");
     whiteList.add("twoprimes");
     whiteList.add("docmosis");
+    whiteList.add("beam-dev");
     // whiteList.add("our");
     
     if(!StringUtils.isEmpty(domain) && whiteList.contains(domain))

@@ -1,3 +1,4 @@
+
 package com.agilecrm.web.stats;
 
 import java.io.IOException;
@@ -12,7 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 public class ReportsServlet extends HttpServlet
 {
 	public static enum ACTIONS{
-		VISITS_COUNT
+		
+		VISITS_COUNT,REFURL_COUNT
+
 	}
 
 	public void doGet(HttpServletRequest request,HttpServletResponse response)throws IOException
@@ -31,11 +34,19 @@ public class ReportsServlet extends HttpServlet
 			{
 			case VISITS_COUNT:
 			if(StatsUtil.isValidRequest(req.getParameter("psd")))
+
 				StatsSQLUtil.getVisitsCount(req, res, domain);
 			break;
+
+			case REFURL_COUNT:
+				if (StatsUtil.isValidRequest(req.getParameter("psd")))
+				    StatsSQLUtil.getRefferalUrlAndCountForDomain(req,res,domain);
+				break;
+			
 			default:
 			break;			
 			}
 		}
 	}
+
 }

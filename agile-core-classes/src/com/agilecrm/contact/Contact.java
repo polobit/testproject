@@ -1133,6 +1133,8 @@ public class Contact extends Cursor
 			Contact newCompany = new Contact();
 			newCompany.properties = new ArrayList<ContactField>();
 			newCompany.properties.add(new ContactField(Contact.NAME, contactField.value, null));
+			newCompany.properties.add(new ContactField("name_lower", contactField.value.toLowerCase(), null));			
+			newCompany.name = StringUtils.lowerCase(contactField.value);
 			newCompany.type = Type.COMPANY;
 
 			/*
@@ -1194,6 +1196,17 @@ public class Contact extends Cursor
     @PostLoad
     private void postLoad()
     {
+/*    	if (this.type == Contact.Type.COMPANY)
+    	{
+    		if(this.name==""){
+    			if(getContactField(NAME)!=null)
+    				{
+    				this.name=getContactField(NAME).value.toLowerCase();
+    				save();
+    				}
+    		}
+    	}*/	
+    
 	tags = getContactTags();
 
 	ContactField field = this.getContactField("image");

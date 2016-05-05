@@ -423,5 +423,20 @@ public class AnalyticsSQLUtil
     	return visits;
     }
     
+    public static String getRefferalurls(String url)
+    {
+		try
+		{
+		    String resultStr = HTTPUtil.accessURL(url);
+		   
+		    return resultStr;
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.out.println(e.getMessage());
+		    return null;
+		}
+    }
     
 }
