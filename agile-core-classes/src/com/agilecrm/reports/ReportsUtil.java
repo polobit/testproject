@@ -1275,23 +1275,6 @@ public class ReportsUtil {
 					.getCountByLogTypesforPortlets(report.campaignId,
 							startDate, endDate, timeZone);
 		}
-		
-		/*//for showing duration in template
-		String sdate=DateUtil.getCalendarString(startCal.getTimeInMillis(),"dd/MM/yyyy", timeZone);
-		String edate=DateUtil.getCalendarString(cal.getTimeInMillis(),"dd/MM/yyyy", timeZone);
-		JSONObject data=new JSONObject();
-		try {
-			data.put("log_type", "durationBetween");
-			if(report.duration==Reports.Duration.DAILY)
-				data.put("duration", sdate);
-			else				
-			    data.put("duration", sdate+" To "+edate);
-			
-			campaignEmailsJSONArray.put(data);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		System.out.println("Campaign stats are : " + campaignEmailsJSONArray);
 		return campaignEmailsJSONArray;
 
