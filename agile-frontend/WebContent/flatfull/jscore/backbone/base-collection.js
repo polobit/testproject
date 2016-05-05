@@ -507,6 +507,7 @@ var Base_Collection_View = Backbone.View
 
 				if (appendItemCallback && typeof (appendItemCallback) === "function")
 					appendItemCallback($(this.el));
+				$("#no_task").addClass("hide");
 
 				if ($('table', this.el).hasClass('onlySorting'))
 					return;

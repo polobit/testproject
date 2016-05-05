@@ -17,12 +17,23 @@ function setup_sortable_tasks()
 					revert : true,
 
 					start: function(e, ui){
-				        ui.placeholder.height(ui.item.height());
+						ui.placeholder.height(ui.item.height());
 				    },
 					
+					beforeStart : function(event, ui) {
+                          console.log("start");
+                          if($(ui).hasClass("ui-state-disabled"))
+							return false;
+
+					},
 					beforeStop : function(event, ui)
 					{
+
 						// If sender and receiver is same
+						if ($(ui.helper).hasClass('ui-state-disabled')){
+							return false;
+						}
+
 						if ($(ui.helper).closest('.task-trello-list').find('.list-header').attr('attr') === $(ui.placeholder).closest('.task-trello-list').find('.list-header').attr(
 								'attr'))
 						{
@@ -196,7 +207,12 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 
 		// Maintain changes in UI
 		displaySettings();
-
+		if(oldTask.count == 0){
+			$("#no_task").removeClass("hide");
+		}
+		else{
+			$("#no_task").addClass("hide");
+		}
 		// Get new task list
 		var modelNewTaskList = getTaskList(criteria, newTaskListId, newTaskListOwnerId);
 
@@ -205,11 +221,19 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 		getDueTasksCount(function(count){
 			var due_task_count= count;
 			if(due_task_count==0)
+			{
 				$(".navbar_due_tasks").css("display", "none");
+				$("#no_task").removeClass("hide");
+			}
+				
 			else
 				$(".navbar_due_tasks").css("display", "block");
 			if(due_task_count !=0)
+			{
 				$('#due_tasks_count').html(due_task_count);
+				$("#no_task").addClass("hide");
+			}
+				
 			else
 				$('#due_tasks_count').html("");
 

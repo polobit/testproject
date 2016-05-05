@@ -572,17 +572,20 @@ left:0;
 {
   padding:15px;
 }
-#task-model-list .task-striped:nth-child(odd),.social-striped:nth-child(odd),.RTuserlist-
+.social-striped:nth-child(odd),.RTuserlist-
 
 modal li:nth-child(odd),.milestones li:nth-child(odd)
 {
   background:#fff;
 }
-#task-model-list .task-striped:nth-child(even),.social-striped:nth-child
+#task-model-list .task-striped:nth-child(),.social-striped:nth-child
 
 (even),.RTuserlist-modal li:nth-child(even),.milestones li:nth-child(even)
 {
   background:rgb(250, 251, 252);
+}
+#task-model-list .task-striped{
+  background:#fff;
 }
 
 

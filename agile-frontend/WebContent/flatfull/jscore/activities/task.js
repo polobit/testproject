@@ -217,7 +217,7 @@ function initializeTasksListeners(){
 				$(".compress .taskexpandbutton").removeClass("pull-right");
 				$(".compress .taskexpandbutton").addClass("text-center");
 				$(".compress .taskexpandbutton").addClass("m-t-sm");
-				
+				$(".compress #no_task").addClass("hide");
 				$(".compress .transform-rotate").removeClass("inline-block");
 				$(".compress .icon-plus").addClass("m-t-xs");
 			}
@@ -244,6 +244,7 @@ function initializeTasksListeners(){
 				$(".expand .taskexpandbutton").removeClass("m-t-sm");
 				$(".expand .transform-rotate").addClass("inline-block");
 				$(".compress .icon-plus").removeClass("m-t-xs");
+				$(".expand #no_task").removeClass("hide");
 				$(this).closest(".compress .text-info .text-xs").addClass("pull-left");
 
 		}

@@ -6488,6 +6488,10 @@ $(function()
 		return new Handlebars.SafeString(city.charAt(0).toUpperCase() + city.slice(1)+", "+country);
 		
 	});
+	Handlebars.registerHelper('getFirstLetter',function(string){
+		return new Handlebars.SafeString(string.charAt(0).toUpperCase());
+		
+	});
 	
 	/**
 	 * Returns a default image url .
