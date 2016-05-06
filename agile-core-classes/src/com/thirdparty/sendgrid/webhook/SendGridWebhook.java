@@ -32,6 +32,7 @@ public class SendGridWebhook extends HttpServlet
 	public static final String DROPPED = "dropped";
 	public static final String TYPE = "type";
 	public static final String BLOCKED = "blocked";
+	public static final String INVALID = "invalid";
 
 	public static final String EMAIL = "email";
 
@@ -95,7 +96,8 @@ public class SendGridWebhook extends HttpServlet
 				if (StringUtils.equalsIgnoreCase(event, HARD_BOUNCE)
 						|| StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
 						|| StringUtils.equalsIgnoreCase(event, SPAM_REPORT)
-						|| StringUtils.equalsIgnoreCase(event, DROPPED))
+						|| StringUtils.equalsIgnoreCase(event, DROPPED)
+						|| StringUtils.equalsIgnoreCase(event, INVALID))
 				{
 					//setBounceStatusToContact(eventJSON);
 					
