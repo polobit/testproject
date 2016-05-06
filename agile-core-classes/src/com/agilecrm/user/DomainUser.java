@@ -219,6 +219,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	@NotSaved(IfDefault.class)
 	public String timezone = null;
+	
+	
+	/**
+	 * Parent Id for current domain user
+	 */
+	@NotSaved(IfDefault.class)
+	public Long  pid;
 
 	@NotSaved(IfDefault.class)
 	public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
@@ -565,10 +572,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			System.out.println("Domain empty - setting it to " + this.domain);
 		}
 
-		System.out.println("Creating or updating new user " + this);
-
 		// Check if user exists with this email
-
 		if (domainUser != null)
 		{
 			// If domain user exists, not allowing to create new user
@@ -592,6 +596,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			}
 
 			//sendPasswordChangedNotification(domainUser.encrypted_password);
+			
 		}
 		else if (id != null && !is_account_owner)
 		{
@@ -634,6 +639,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		try
 		{
+
 			// Assigning Random avatar
 			if (pic == null)
 				pic = new UserPrefs().chooseRandomAvatar();

@@ -332,6 +332,7 @@ function our_domain_sync() {
 			// Creates a new contact and assigns it to global value
 			var email = CURRENT_DOMAIN_USER['email'];
 			var emailType = email.split("@")[1].split(".")[0];
+
 			var param = {
 					"email" : CURRENT_DOMAIN_USER['email'],
 					"first_name" : first_name,
@@ -340,6 +341,13 @@ function our_domain_sync() {
 			if(CURRENT_DOMAIN_USER['phone']){
 				param['phone'] = CURRENT_DOMAIN_USER['phone'];
 			}
+			var parentId = CURRENT_DOMAIN_USER['pid'];
+			console.log("parentId= "+parentId);
+			$.ajax({ url : 'core/api/users/parentId?id=' + parentId, type : 'GET', dataType : 'json', success : function(data){
+						console.log("data = "+data);
+						add_created_user_info_as_note_to_createduser(data);
+			},
+			});
 			
 			if(emailType != "yopmail")
 			{
@@ -352,6 +360,7 @@ function our_domain_sync() {
 					initWebrules();
 				});
 			}
+
 		})
 		// Gets contact based on the the email of the user logged in
 
@@ -520,6 +529,23 @@ function add_created_user_info_as_note_to_owner(owner, callback) {
 			callback(data);
 
 	}, owner['email']);
+
+}
+
+/**
+ * adds user info as a note to created user  
+ */
+function add_created_user_info_as_note_to_createduser(userdata) {
+	var note = {};
+	note.subject = "User created by";
+	note.description =  " User Email -  "
+			+userdata['email'];
+	console.log(userdata['email']);
+	_agile.add_note(note, function(data) {
+		/*if (callback && typeof callback == "function")
+			callback(data);*/
+
+	}, CURRENT_DOMAIN_USER.email);
 
 }
 
