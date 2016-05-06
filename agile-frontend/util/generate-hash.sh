@@ -9,8 +9,7 @@
 echo "Generate hash: generating checksum for all static files"
 
 find ../WebContent/jscore/min/flatfull/ \
-../WebContent/tpl/min/flatfull/ \
-../WebContent/tpl/min/precompiled/ \
+../WebContent/tpl/min/precompiled/flatfull/ \
 ../WebContent/flatfull/final-lib/min/ \
 ../WebContent/flatfull/css/min/ \
 ../WebContent/flatfull/lib/ \
