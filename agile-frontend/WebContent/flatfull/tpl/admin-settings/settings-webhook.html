@@ -3,7 +3,9 @@
 	<!--<div class="panel-heading">Webhook URL </div>-->
 	<div class="panel-body">
     {{#is_acl_allowed}}
-           <form id="webhookPrefs" class="form-horizontal">
+            <div class="m-xs " style="font-size: 13px;position: relative;left: 138px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <a href="#subscribe-plan" class="c-p text-info">upgrade</a> to Enterprise plan to use this feature. </span>
+            </div>
+           <form id="webhookPrefs" class="form-horizontal" style="margin-top:15px;">
         <fieldset>
             {{#if id}}
             <input name="id" class="form-control" type="hidden" value="">

@@ -50,7 +50,7 @@ public class AgileWebhookAPI
 			Response.ok();
 		}
 		else{
-			throw new Exception("Please upgrade Enterprise plan");
+			throw new Exception("Please upgrade to Enterprise plan to use this feature.");
 		}
     	}
     	catch (Exception e) {
