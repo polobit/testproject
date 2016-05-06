@@ -878,8 +878,8 @@ function setupContactFields(el){
 					success : function(data)
 						{
 							console.log("")
-						var cistomfields = $("#contact-static-fields");
-						deserializeForm(data, cistomfields);
+						var customfields = $("#contact-static-fields");
+						deserializecontactsForm(data.fields_set, customfields);
 					}
 				});
 			
