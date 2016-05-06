@@ -217,8 +217,7 @@ function set_up_widgets(el, widgets_el)
 		 */
 		if (!model.get("is_minimized") && model.get("widget_type") != "CUSTOM")
 		{
-			if (widget_template_loaded_map[model.get('name').toLowerCase()])
-			{
+			if (widget_template_loaded_map[model.get('name').toLowerCase()]){
 				queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
 					try{
 						console.log("start" + model.get('name') + "Widget");
@@ -226,8 +225,7 @@ function set_up_widgets(el, widgets_el)
 					}catch(err){console.log(err);}
 					
 				}, undefined, 'true');
-			}
-			else
+			}else{
 				downloadTemplate(model.get('name').toLowerCase() + ".js", function()
 				{
 					widget_template_loaded_map[model.get('name').toLowerCase()] = true;
@@ -238,6 +236,7 @@ function set_up_widgets(el, widgets_el)
 						}catch(err){console.log(err);}						
 					}, undefined, 'true');
 				});
+			}
 		}
 
 		/*
@@ -245,14 +244,11 @@ function set_up_widgets(el, widgets_el)
 		 * store the script in script field of widget object, that is retrieved
 		 * and appended in the body
 		 */
-		if (model.get("widget_type") == "CUSTOM")
-		{
-
+		if (model.get("widget_type") == "CUSTOM"){
 			if ($('#' + model.get('selector') + '-container').length){
 				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
 					setup_custom_widget(model, widgets_el);
 				});
-
 				//setup_custom_widget(model, widgets_el)
 			}else {
 				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e){
