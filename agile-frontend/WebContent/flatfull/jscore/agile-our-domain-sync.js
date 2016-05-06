@@ -343,6 +343,9 @@ function our_domain_sync() {
 			}
 			var parentId = CURRENT_DOMAIN_USER['pid'];
 			console.log("parentId= "+parentId);
+			if(parentId == null )
+				return;
+			
 			$.ajax({ url : 'core/api/users/parentId?id=' + parentId, type : 'GET', dataType : 'json', success : function(data){
 						console.log("data = "+data);
 						add_created_user_info_as_note_to_createduser(data);
