@@ -1,7 +1,9 @@
 package com.agilecrm.core.api.reports;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -57,7 +59,16 @@ public class ReportsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Reports> getListOfReports()
     {
-	return ReportsUtil.fetchAllReports();
+    	List<Reports> reports =ReportsUtil.fetchAllReports();
+        List<Reports> newReports = new ArrayList<Reports>();
+        Iterator<Reports> iterator = reports.iterator();
+        while(iterator.hasNext()){
+        	Reports report = iterator.next();
+        	if(report.report_type != Reports.ReportType.Campaign){
+        		newReports.add(report);
+        	}
+        }   
+        return newReports;
     }
 
     /**

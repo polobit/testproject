@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -14,7 +15,7 @@ we use setAttribute() to store the username and to autofill if he want to resubm
 */
 //flatfull path
 String flatfull_path="/flatfull";
-
+	
 
 
 // Gets User Name
@@ -27,6 +28,9 @@ email = email.toLowerCase();
 request.setAttribute("agile_email", email);
 
 }
+//Gets the Ip 
+
+
 	
 // Checks if it is being access directly and not through servlet
 /* if(request.getAttribute("javax.servlet.forward.request_uri") == null)
@@ -103,6 +107,7 @@ String logo_url = accountPrefs.logo;
 
 // Bg Image
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
+
 
 %>
 <!DOCTYPE html>
@@ -290,7 +295,11 @@ if(isSafari && isWin)
 						<div class="block">
 							<input class="hide" id="location_hash" name="location_hash"></input>
 						</div>
-						
+						<input class="hide" id="finger_print" name="finger_print"></input>
+						<input class="hide" id="ip_validation" name="ip_validation"></input>
+						<input class="hide" id="browser_Name" name="browser_Name"></input>
+						<input class="hide" id="browser_version" name="browser_version"></input>
+						<input class="hide" id="browser_os" name="browser_os"></input>
 						</div>
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
@@ -332,6 +341,8 @@ if(isSafari && isWin)
 	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js"></script>
+
 	
 	<script type="text/javascript">
 		$(document).ready(function()
@@ -348,11 +359,13 @@ if(isSafari && isWin)
         
         $("body").css("background-image","url('"+this.src+"')");
        
+
+
         }*/
 
-      //  newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
 
-        // agile-login-page-high.png
+      	
+        	// agile-login-page-high.png
         	preload_login_pages();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
@@ -414,7 +427,155 @@ if(isSafari && isWin)
 
 			}
 		}
+		$(function(){
+			new Fingerprint2().get(function(result, components){
+					$("#finger_print").val(result);
+		  			console.log(result);
+
+				});
+		});
+		$(function(){
+			var BrowserDetect = {
+					init : function() {
+						this.browser = this.searchString(this.dataBrowser)
+								|| "An unknown browser";
+						this.version = this.searchVersion(navigator.userAgent)
+								|| this.searchVersion(navigator.appVersion)
+								|| this.searchMobileVersion(navigator.userAgent)
+								|| "An unknown version";
+						this.OS = this.searchString(this.dataOS) || "unknown";
+					},
+					searchString : function(data) {
+						for ( var i = 0; i < data.length; i++) {
+							var dataString = data[i].string;
+							var dataProp = data[i].prop;
+							var match = data[i].match;
+							this.versionSearchString = data[i].versionSearch
+									|| data[i].identity;
+
+							if (match && dataString.match(match))
+								return data[i].identity;
+
+							if (dataString) {
+								if (dataString.indexOf(data[i].subString) != -1)
+									return data[i].identity;
+							} else if (dataProp)
+								return data[i].identity;
+						}
+					},
+					searchMobileVersion : function(dataString) {
+
+						try {
+							match = dataString.match(/Mobile Safari\/([\d.]+)/);
+							if (match)
+								return parseFloat(match[1]);
+						} catch (e) {
+						}
+
+					},
+					searchVersion : function(dataString) {
+
+						var index = dataString.indexOf(this.versionSearchString);
+						if (index == -1)
+							return;
+						return parseFloat(dataString.substring(index
+								+ this.versionSearchString.length + 1));
+					},
+					dataBrowser : [ {
+						string : navigator.userAgent,
+						subString : "Chrome",
+						identity : "Chrome"
+					}, {
+						string : navigator.userAgent,
+						subString : "OmniWeb",
+						versionSearch : "OmniWeb/",
+						identity : "OmniWeb"
+					}, {
+						string : navigator.vendor,
+						subString : "Apple",
+						identity : "Safari",
+						versionSearch : "Version"
+					}, {
+						prop : window.opera,
+						identity : "Opera"
+					}, {
+						string : navigator.vendor,
+						subString : "iCab",
+						identity : "iCab"
+					}, {
+						string : navigator.vendor,
+						subString : "KDE",
+						identity : "Konqueror"
+					}, {
+						string : navigator.userAgent,
+						subString : "Firefox",
+						identity : "Firefox"
+					}, {
+						string : navigator.vendor,
+						subString : "Camino",
+						identity : "Camino"
+					}, { // for newer Netscapes (6+)
+						string : navigator.userAgent,
+						subString : "Netscape",
+						identity : "Netscape"
+					}, {
+						// For IE11
+						string : navigator.userAgent,
+						match : /Trident.*rv[ :]*11\./,
+						identity : "Explorer"
+					}, {
+						string : navigator.userAgent,
+						subString : "MSIE",
+						identity : "Explorer",
+					}, {
+						string : navigator.userAgent,
+						match : /Mobile Safari\/([\d.]+)/,
+						identity : "Mobile Safari",
+						versionSearch : "/AppleWebKit\/([\d.]+)/",
+					}, {
+						string : navigator.userAgent,
+						subString : "Gecko",
+						identity : "Mozilla",
+						versionSearch : "rv"
+					}, { // for older Netscapes (4-)
+						string : navigator.userAgent,
+						subString : "Mozilla",
+						identity : "Netscape",
+						versionSearch : "Mozilla"
+					} ],
+					dataOS : [ {
+						string : navigator.platform,
+						subString : "Win",
+						identity : "Windows"
+					}, {
+						string : navigator.platform,
+						subString : "Mac",
+						identity : "Mac"
+					}, {
+						string : navigator.userAgent,
+						match : /Android\s([0-9\.]*)/,
+						subString : "Android",
+						identity : "Android"
+					}, {
+						string : navigator.userAgent,
+						subString : "iPhone",
+						identity : "iPhone/iPod"
+					}, {
+						string : navigator.platform,
+						subString : "Linux",
+						identity : "Linux"
+					}
+
+					]
+
+				};
+				BrowserDetect.init();
+				$('#browser_os').val(BrowserDetect.OS);
+				$('#browser_Name').val(BrowserDetect.browser);
+				$('#browser_version').val(BrowserDetect.version);
+		});
 	</script>
+
 	<!-- Clicky code -->
  	<script src="//static.getclicky.com/js" type="text/javascript"></script>
 	<script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script> 

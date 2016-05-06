@@ -1746,6 +1746,11 @@ $(function()
 				return window.btoa(window.location.host.split(".")[0]);
 	});
 
+	Handlebars.registerHelper("getBase64ActualDomain", function()
+			{
+				return window.btoa(CURRENT_DOMAIN_USER.domain);
+	});
+
 	// Gets date in given range
 	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
 	{
@@ -3446,7 +3451,7 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						var default_return = "src='"+updateImageS3Path('img/company-default-image1.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/building.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3461,7 +3466,7 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
-								error_fxn = "this.src='"+updateImageS3Path('img/company-default-image1.png')+"'; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path('img/building.png')+"'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3473,7 +3478,7 @@ $(function()
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-								error_fxn = "this.src='"+updateImageS3Path("img/company-default-image1.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path("img/building.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -5061,6 +5066,11 @@ $(function()
 		return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getAccountOwnerId', function(options)
+	{
+		return CURRENT_DOMAIN_USER.id;
+	});
+
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
 		if (canEditContact(owner_id))
@@ -5868,6 +5878,8 @@ $(function()
 			portlet_name = "Tasks Completion Time Deviation";
 		else if(p_name == 'Webstat Visits')
 			portlet_name = "Visits";
+		else if(p_name=='Referralurl stats')
+ 			portlet_name = "Referral URL Stats";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5902,7 +5914,7 @@ $(function()
 			icon_name = 'icon-user';
 		else if (p_name == 'Agenda' || p_name == 'Mini Calendar')
 			icon_name = "icon-calendar";
-		else if (p_name == 'Today Tasks' || p_name == 'Task Report')
+		else if (p_name == 'Today Tasks' || p_name == 'Task Report' || p_name == 'Referralurl stats')
 			icon_name = "icon-tasks";
 		else if (p_name == 'Agile CRM Blog')
 			icon_name = "icon-feed";
@@ -6713,6 +6725,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'A quick view of deviation in tasks completion times.'
 	else if (p_name== 'Webstat Visits')
 		description = 'A pie chart of Known and Unknown Visits on your website.';
+	else if(p_name == 'Referralurl stats')
+		description = 'A quick view of Top 5 Referral URL’s for your website traffic.'
 	return description;
 			});
 

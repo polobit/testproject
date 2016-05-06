@@ -103,12 +103,12 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 </div>
                             </section>
                             <div id="elements-list">
-                                <div class="elements-box accordion-item" id="components">
-                                    <h3 class="accordion-heading">{{ 'components' | translate }} <i class="icon icon-down-open-1"></i></h3>
-                                    <div class="accordion-body"><ul class="list-unstyled"></ul></div>
-                                </div>
                                 <div class="elements-box accordion-item" id="layout">
                                     <h3 class="accordion-heading">{{ 'layout' | translate }} <i class="icon icon-down-open-1"></i></h3>
+                                    <div class="accordion-body"><ul class="list-unstyled"></ul></div>
+                                </div>
+                                <div class="elements-box accordion-item" id="components">
+                                    <h3 class="accordion-heading">{{ 'components' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
                                 <div class="elements-box accordion-item" id="media">

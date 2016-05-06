@@ -92,6 +92,14 @@ var CONTENT_JSON = {
 		"route" : "#activity-report-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"campaign-reports" : {
+		"title" : "You do not have any campaign reports currently.",
+		"description" : "Get a periodic  email digest of various campaign reports stats by users in Agile.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Report",
+		"route" : "#campaign-report-add",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	"contact-filters" : {
 		"title" : "You do not have any filters currently.",
 		"description" : "Filters are used to sort contacts with a specific criteria to find patterns.",

@@ -226,6 +226,11 @@ var WorkflowsRouter = Backbone.Router
 						$('#unsubscribe-action', el).val(unsubscribe.action);
 						
 						$('#unsubscribe-action', el).trigger('change');
+
+						var level = that.workflow_model.get("access_level");
+						$('#access_level', el).val(level);
+						change_access_level(level, el);
+
 						console.log($(el).html());
 						if(that.is_disabled)
 								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
@@ -813,7 +818,7 @@ var WorkflowsRouter = Backbone.Router
 								 * @param optionsTemplate-
 								 *            to fill options with workflows
 								 */
-								fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function fillCampaign()
+								fillSelect('email-tracking-campaign-id', '/core/api/workflows?allow_campaign=' + currentTrigger.toJSON().email_tracking_campaign_id, 'workflow', function fillCampaign()
 								{
 									$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
 
@@ -871,7 +876,7 @@ var WorkflowsRouter = Backbone.Router
 						 * @param optionsTemplate-
 						 *            to fill options with workflows
 						 */
-						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						fillSelect('campaign-select', '/core/api/workflows?allow_campaign=' + currentTrigger.toJSON().campaign_id, 'workflow', function fillCampaign()
 						{
 							var value = currentTrigger.toJSON();
 							if (value)

@@ -59,10 +59,10 @@
                                        <div class="clearfix"></div>
                                        <div>
                                         <code  id="api_track_code" class="prettyprint">
-   				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+   				&lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
    				&lt;/script&gt;
    				&lt;script type="text/javascript" &gt;
-   				 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+   				 _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
    				 _agile.track_page_view();
    				&lt;/script&gt;
    				</code>
@@ -74,10 +74,10 @@
                                        <div class="clearfix"></div>
                                        <div>
                                           <code  id="api_track_webrules_code" class="prettyprint">
-   				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+   				&lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
    				&lt;/script&gt;
    				&lt;script type="text/javascript" &gt;
-   				 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+   				 _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
    				 _agile.track_page_view();
    				 _agile_execute_web_rules();
    				&lt;/script&gt;
@@ -90,11 +90,11 @@
                                        <div class="clearfix"></div>
                                        <div>
                                           <code class="prettyprint" id="api_track_webrules_code">
-   			&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
+   			&lt;script type="text/javascript" src="https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js"&gt;
    			&lt;/script&gt;
    			&lt;script type="text/javascript" &gt;
-    			 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
-    			 _agile_set_whitelist('{{getBase64Domain}}');
+    			 _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
+    			 _agile_set_whitelist('{{getBase64ActualDomain}}');
     			 _agile.track_page_view();
     			 _agile_execute_web_rules();
    			&lt;/script&gt;
