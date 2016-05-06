@@ -122,6 +122,16 @@ function contactListener(el)
 		popout(that);
 		
 	});
+	$('#contacts-listener-container').off('click');
+	$("#contacts-listener-container").on('click',function(e){
+	if(!$(this.target).is('#contact-custom-coloumns'))
+	{
+		
+		var json = serializeForm("contact-static-fields");
+		
+	}
+
+});
 	$('#task-related-model-list').off('mouseenter','tr > td');
 		$('#task-related-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
@@ -172,6 +182,8 @@ function contactListener(el)
 		popout(that);
 		
 	});
+
+	$('#')
 
 	
 }
@@ -270,6 +282,7 @@ $('.popover').on('click', '#minus-score', function(e){
 		});
 		          
 	});
+
 $('.popover').off('click', '#company-minus-score')
 $('.popover').on('click', '#company-minus-score', function(e){
 	    e.preventDefault();
