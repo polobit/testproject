@@ -359,10 +359,10 @@ public class LoginServlet extends HttpServlet {
 				subject =  "New sign-in from " + data.get("browser_name") + " on " + data.get("browser_os"); 
 			}
 			
-			if(resend)
+			// if(resend)
 				AppengineMail.sendMail(email, subject, template, data);
-			else 
-				SendMail.sendMail(email, subject, template, data);
+			// else 
+				// SendMail.sendMail(email, subject, template, data);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
