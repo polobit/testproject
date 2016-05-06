@@ -249,8 +249,11 @@
 	    	<span title="{{event.description}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{event.description}}
 	    	</span>
 	    {{else}}
-	         <i class="icon-comment-alt text-muted m-r-xs"></i>
-	         <span title="{{event.description}}">{{event.description}}</span>
+	         <i class="icon-comment-alt text-muted m-r-xs pull-left"></i>
+	         <div  style="-webkit-line-clamp : 5; overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box; -webkit-box-orient:vertical;
+ " title="{{event.description}}">{{event.description}}</div>
 	    {{/if}}
 	{{/if}}
 </script>
@@ -310,10 +313,7 @@
 		 	<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
 		 	</div>
-		 	<div class=" " style="-webkit-line-clamp : 5; overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
- ">
+		 	<div class=" ">
 		 	     {{get_template_type "calendar-popover-meeting-type"}}
 		 	</div>
 		 </div>
@@ -336,10 +336,7 @@
 			<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
 		 	</div>
-		 	<div class=" " style="-webkit-line-clamp : 5; overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
- ">
+		 	<div class=" ">
 		 	     {{get_template_type "calendar-popover-meeting-type"}}
 		 	</div>
 		</div>
@@ -357,10 +354,7 @@
 			<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
 		 	</div>
-		 	<div class=" " style="-webkit-line-clamp : 5; overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
- ">
+		 	<div class=" ">
 		 	     {{get_template_type "calendar-popover-meeting-type"}}
 		 	</div>
 		</div>
@@ -383,10 +377,7 @@
 			<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
 		 	</div>
-		 	<div class=" " style="-webkit-line-clamp : 5; overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
- ">
+		 	<div class=" ">
 		 	     {{get_template_type "calendar-popover-meeting-type"}}
 		 	</div>
 		</div>
@@ -404,10 +395,7 @@
 			<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
 		 	</div>
-		 	<div class=" " style="-webkit-line-clamp : 5; overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
- ">
+		 	<div class=" ">
 		 	     {{get_template_type "calendar-popover-meeting-type"}}
 		 	</div>
 		</div>
@@ -430,10 +418,7 @@
 			<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
 		 	</div>
-		 	<div class=" " style="-webkit-line-clamp : 5; overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
- ">
+		 	<div class=" ">
 		 	     {{get_template_type "calendar-popover-meeting-type"}}
 		 	</div>
 		</div>
@@ -456,10 +441,7 @@
 			<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
 		 	</div>
-		 	<div class=" " style="-webkit-line-clamp : 5; overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
- " >
+		 	<div class=" " >
 		 	     {{get_template_type "calendar-popover-meeting-type"}}
 		 	</div>
 		</div>
