@@ -195,7 +195,7 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			if(selector!='calls-chart')
 				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
 			else
-				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'];
+				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF','#B72030'];
 			
 			colors = selected_colors || colors;
 			

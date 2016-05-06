@@ -776,6 +776,8 @@ public class PortletUtil {
 		List<Integer> incorrectReferralCallsCountList=new ArrayList<Integer>();
 		List<Integer> newOpportunityCallsCountList=new ArrayList<Integer>();
 		List<Integer> meetingScheduledCallsCountList=new ArrayList<Integer>();
+		List<Integer> queuedCallsCountList=new ArrayList<Integer>();
+		
 		
 		List<Integer> totalCallsCountList=new ArrayList<Integer>();
 		
@@ -817,14 +819,16 @@ public class PortletUtil {
 			int incorrectReferralCallsCount=0;
 			int newOpportunityCallsCount=0;
 			int meetingScheduledCallsCount=0;
+			int queuedCallsCount=0;
 			
 			int totalCallsCount=0;
 			
 			long callsDuration=0;
 			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-			try{
+			
 				for(Activity activity : callActivitiesList){
+					try{
 					if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
 						answeredCallsCount++;
 					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
@@ -847,14 +851,18 @@ public class PortletUtil {
 						newOpportunityCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
 						meetingScheduledCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
+						queuedCallsCount++;
+					totalCallsCount++;
 					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
 							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
 						callsDuration+=Long.valueOf(activity.custom4);
-					totalCallsCount++;
+					
 				}
-			}catch(Exception e){
+			catch(Exception e){
 				e.printStackTrace();
 			}
+				}
 			
 			answeredCallsCountList.add(answeredCallsCount);
 			busyCallsCountList.add(busyCallsCount);
@@ -867,6 +875,7 @@ public class PortletUtil {
 			incorrectReferralCallsCountList.add(incorrectReferralCallsCount);
 			newOpportunityCallsCountList.add(newOpportunityCallsCount);
 			meetingScheduledCallsCountList.add(meetingScheduledCallsCount);
+			queuedCallsCountList.add(queuedCallsCount);
 			
 			totalCallsCountList.add(totalCallsCount);
 			
@@ -897,6 +906,7 @@ public class PortletUtil {
 		callsPerPersonJSON.put("incorrectReferralCallsCountList",incorrectReferralCallsCountList);
 		callsPerPersonJSON.put("newOpportunityCallsCountList",newOpportunityCallsCountList);
 		callsPerPersonJSON.put("meetingScheduledCallsCountList",meetingScheduledCallsCountList);
+		callsPerPersonJSON.put("queuedCallsCountList",queuedCallsCountList);
 
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
@@ -1464,6 +1474,10 @@ public class PortletUtil {
 					cateList = new ArrayList<JSONObject>();
 					for(DomainUser domainUser : usersList){
 						JSONObject cateJson = new JSONObject();
+						//JSONObject cateJson_total = new JSONObject();
+						
+						
+						
 						cateJson.put("name", "Deals Won");
 						cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
 						cateJson.put("userName", domainUser.name);
