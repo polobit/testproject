@@ -1439,6 +1439,7 @@ public class JSAPI
 	    /*Send a mail to owner when new contact created and when it clicked 
 	     * on submit button
 	     * */
+	   // if(form.emailNotification)
 	       FormUtil.sendMailToContactOwner(contact,formName);
 	    
 	    List<Trigger> triggers = TriggerUtil.getAllTriggers();

@@ -63,6 +63,7 @@ public class FormsAPI
 			JSONArray jsn=new JSONArray(json);
 			emailNotification=jsn.getJSONObject(0).getJSONObject("fields").getJSONObject("formemailnotification").getJSONArray("value").getJSONObject(0).getBoolean("selected");
 			emailNotification=emailNotification?false:true;
+			
 		}
 		catch (Exception e)
 		{
@@ -107,8 +108,10 @@ public class FormsAPI
 		form.formHtml = html;
 		//adding another for emailNotification
 		form.emailNotification=emailNotification;
+		if(form.emailNotification)
 
 		form.save();
+		
 		response.setStatus(HttpServletResponse.SC_OK);
 		return;
 	    }

@@ -24,8 +24,7 @@ public class Form
     @NotSaved(IfDefault.class)
     public String formJson = null;
     
-    @NotSaved(IfDefault.class)
-    public boolean emailNotification = false;
+    public boolean emailNotification=true;
 
     @NotSaved(IfDefault.class)
     public String formHtml= null;
@@ -48,6 +47,14 @@ public class Form
     this.formName = name;
     this.formJson = json;
     this.formHtml = html;
+    }
+    
+    public Form(String name, String json, String html, boolean emailnotification)
+    {
+    this.formName = name;
+    this.formJson = json;
+    this.formHtml = html;
+    this.emailNotification=emailnotification;
     }
 
     public void save()
