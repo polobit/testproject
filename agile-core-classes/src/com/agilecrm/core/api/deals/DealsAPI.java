@@ -800,6 +800,7 @@ public class DealsAPI
 		opp.note_description = note.description;
 		opp.note_subject = note.subject;
 		opp.note_created_time = note.created_time;
+		opp.updated_time = System.currentTimeMillis() / 1000 ;
 		opp.save();
 	    }
 	}
@@ -827,17 +828,15 @@ public class DealsAPI
 	{
 	    updatedOpportunityid = deal_ids.get(0);
 	}
-	if (updatedOpportunityid != null)
-	{
-	    opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
-	    UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
-	    opportunity.note_description = note.description;
-	    opportunity.note_subject = note.subject;
-	}
 	note.save();
-
-	return opportunity;
+	if (updatedOpportunityid != null){
+		opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+		opportunity.save();
+	    return opportunity ; 
+	}
+	return null;
     }
+    
 
     /**
      * Call backends archive deals.
