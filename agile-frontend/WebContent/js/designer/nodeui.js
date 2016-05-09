@@ -202,8 +202,7 @@ function serializeNodeForm()
 
 
 // Save Node - serializes and constructs designer node
-function saveNode(e) {
-      
+function saveNode(e) {      
        console.log(e);
        var jsonValues = serializeNodeForm();
         
@@ -220,7 +219,6 @@ function saveNode(e) {
         
         // Get the node id and update the old node id
 		var nodeId = $("#nodeui").data('nodeId');
-	
 		// Check if node id is undefined or not 
 		if( nodeId == undefined || nodeId == null ) {
 			// Add designer at given location
@@ -264,6 +262,8 @@ function saveNode(e) {
 		 if(!checkWorkflowSize())
 				return;
 		   	
+
+		   	showNodeConnectPopup(nodeId);
         // close the dialog after the node is constructed			
         $("#nodeui").dialog('close');
        
@@ -469,4 +469,17 @@ function update_location_ports(nodeObject, jsonValues)
 		nodeObject.allignDynamicNode();
 		
 	});
+}
+
+//show popup -- how to connect one node to another node 
+
+function showNodeConnectPopup(nodeId){
+	var firstNode=$('#paintarea >div.contextMenuForNode').length;
+	window.parent.workflow_alerts("Message", "null", "show-connect-node-popup-modal", null);
+	
+	if(firstNode==2 && nodeId===undefined)
+	{
+		window.parent.workflow_alerts(null, null, "show-connect-node-popup-modal", null);
+	}
+
 }
