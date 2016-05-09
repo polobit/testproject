@@ -295,6 +295,20 @@ function getDealFilters()
 			}
 			
 			if(filterJSON){
+				if((filterJSON.close_date_filter == "LAST" || filterJSON.close_date_filter == "NEXT") && filterJSON.close_date_value ){
+					var condays = filterJSON.close_date_value ;
+					var date = new Date();
+					var eDateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+					if(filterJSON.close_date_filter == "LAST"){
+						filterJSON.close_date_end = eDateStart.getTime() / 1000 ;
+						filterJSON.close_date_start =(eDateStart.getTime() - ((condays-1)*24 * 60 * 60 * 1000)) / 1000 ;
+
+					}
+					else if(filterJSON.close_date_filter == "NEXT"){
+						filterJSON.close_date_start = eDateStart.getTime() / 1000 ;
+						filterJSON.close_date_end = (eDateStart.getTime() + (condays*24 * 60 * 60 * 1000)) / 1000 ;
+					}
+				}
 				filterJSON.filterOwner = {};
 			}
 		}
@@ -336,7 +350,22 @@ function getDealFilters()
 
 // Deal Listeners
 function initializeDealListners(el){
-	
+$('#opportunity-listners').on('change', '#deal-cd-condition .deal-cd-value', function(e) {
+			if(this.value == "BETWEEN"){
+				$('#deal-cd-rhs').parent().removeClass("hide");
+				$('#deal-cd-rhs-new').parent().removeClass("hide");
+				$('#cd-value').parent().addClass("hide");
+			}
+			else if(this.value == "ON" || (this.value == "AFTER" || this.value == "BEFORE")){
+				$('#deal-cd-rhs').parent().removeClass("hide");
+				$('#deal-cd-rhs-new').parent().addClass("hide");
+				$('#cd-value').parent().addClass("hide");
+			}else if(this.value == "LAST" || this.value == "NEXT" ){
+				$('#cd-value').parent().removeClass("hide");
+				$('#deal-cd-rhs-new').parent().addClass("hide");
+				$('#deal-cd-rhs').parent().addClass("hide");
+			}
+});
 $('#opportunity-listners').off('click', ".deals-list-view");
 $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		e.preventDefault();
@@ -894,10 +923,10 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		var that = $(this);
     	that.find('option').each(function(){
     		if($(this).val()==that.val()){
-    			$('.'+$(this).val()).removeClass('hide');
+    			$('.'+$(this).val(),$('#deal-value-filter')).removeClass('hide');
     		}else{
-    			$('.'+$(this).val()).addClass('hide');
-    			$('.'+$(this).val()).each(function(){
+    			$('.'+$(this).val(),$('#deal-value-filter')).addClass('hide');
+    			$('.'+$(this).val(),$('#deal-value-filter')).each(function(){
     				$(this).find('input').val("");
     			});
     		} 

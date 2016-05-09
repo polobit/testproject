@@ -225,6 +225,17 @@ var DealsRouter = Backbone.Router.extend({
 	{
 		$('#content').html("<div id='opportunity-listners'></div>");
 		var deals_filter = new Base_Model_View({ url : '/core/api/deal/filters', template : "filter-deals", isNew : "true", window : "deal-filters",
+			prePersist : function(model){
+				model.set({ 
+						//	'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
+						//	'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
+						}, 
+						{ 
+							silent : true 
+						}); 
+						console.log('before persist');
+
+			},
 			postRenderCallback : function(el)
 			{
 				initializeDealListners();
@@ -263,8 +274,10 @@ var DealsRouter = Backbone.Router.extend({
 					}
 				});
 				$('input[name=name]').trigger('focus');
+				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
+				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
 			} });
-		$("#opportunity-listners").html(deals_filter.render().el);
+		$("#opportunity-listners").html(deals_filter.render().el);		
 	},
 
 	/**
@@ -283,11 +296,13 @@ var DealsRouter = Backbone.Router.extend({
 		var deal_filter = this.dealFiltersList.collection.get(id);
 		var deal_filter_json = deal_filter.toJSON();
 		var dealFilter = new Base_Model_View({ url : 'core/api/deal/filters', model : deal_filter, template : "filter-deals",
-			window : 'deal-filters', prePersist : function(model){
+			window : 'deal-filters', prePersist : function(model){ 
 				model.set({ 
 							'pipeline_id' : $('#filter_pipeline', $("#dealsFilterForm")).val(), 
 							'milestone' : $('#milestone', $("#dealsFilterForm")).val(),
 							'owner_id' : $('#owners-list-filters', $("#dealsFilterForm")).val() 
+						//	'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
+						//	'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
 						}, 
 						{ 
 							silent : true 
@@ -319,9 +334,9 @@ var DealsRouter = Backbone.Router.extend({
 						hideTransitionBar();
 						$('#value_filter').find('option').each(function(){
 				    		if($(this).val()==$('#value_filter').val()){
-				    			$('.'+$(this).val()).removeClass('hide');
+				    			$('.'+$(this).val(),$('#deal-value-filter')).removeClass('hide');
 				    		}else{
-				    			$('.'+$(this).val()).addClass('hide');
+				    			$('.'+$(this).val(),$('#deal-value-filter')).addClass('hide');
 				    		} 
 				    	});
 					}
@@ -371,6 +386,7 @@ var DealsRouter = Backbone.Router.extend({
 									
 									$('#milestone', el).parent().find('img').hide();
 									hideTransitionBar();
+									 
 								} 
 							});
 						}
@@ -378,12 +394,27 @@ var DealsRouter = Backbone.Router.extend({
 						{
 							$('#milestone', el).html('<option value="">Any</option>');
 						}
+						
 					}
 				});
+				if(deal_filter_json.close_date_filter == "BETWEEN"){
+					$('#deal-cd-rhs', el).parent().removeClass("hide");
+					$('#deal-cd-rhs-new', el).parent().removeClass("hide");
+					$('#cd-value', el).parent().addClass("hide");
+				}else if(deal_filter_json.close_date_filter == "ON" || (deal_filter_json.close_date_filter == "AFTER" || deal_filter_json.close_date_filter == "BEFORE")){
+					$('#deal-cd-rhs', el).parent().removeClass("hide");
+					$('#deal-cd-rhs-new', el).parent().addClass("hide");
+						$('#cd-value', el).parent().addClass("hide");
+				}else if(deal_filter_json.close_date_filter == "LAST" || deal_filter_json.close_date_filter == "NEXT" ){
+					$('#cd-value', el).parent().removeClass("hide");
+						$('#deal-cd-rhs-new', el).parent().addClass("hide");
+						$('#deal-cd-rhs', el).parent().addClass("hide");
+				}
+				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
+				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
 			} });
 
 		$("#opportunity-listners").html(dealFilter.render().el);
-
 	},
 
 	/**
