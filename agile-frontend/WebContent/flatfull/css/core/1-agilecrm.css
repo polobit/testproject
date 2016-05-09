@@ -3783,3 +3783,7 @@ background-color: #f6f8f8;
 .taskheading{
   height:70px;
 }
+.taskbuttonposition
+{
+  margin-left:-3px;
+}

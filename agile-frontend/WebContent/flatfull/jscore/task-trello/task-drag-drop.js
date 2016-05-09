@@ -211,7 +211,7 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 			$("#no_task").removeClass("hide");
 		}
 		else{
-			$("#no_task").addClass("hide");
+			$("#no_task").remove();
 		}
 		// Get new task list
 		var modelNewTaskList = getTaskList(criteria, newTaskListId, newTaskListOwnerId);
@@ -223,7 +223,7 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 			if(due_task_count==0)
 			{
 				$(".navbar_due_tasks").css("display", "none");
-				$("#no_task").removeClass("hide");
+				
 			}
 				
 			else
@@ -231,7 +231,7 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 			if(due_task_count !=0)
 			{
 				$('#due_tasks_count').html(due_task_count);
-				$("#no_task").addClass("hide");
+				
 			}
 				
 			else

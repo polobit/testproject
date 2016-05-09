@@ -153,33 +153,48 @@
 					
 					<%
 				 	switch (Integer.parseInt(currentUserPrefs.theme)) {
+
 				 		case 1:  out.print("bg-white-only ");
+				 				
 				   				 break;
 				 		case 2:  out.print("bg-white-only ");
+				 				
 								 break;
 				 		case 3:  out.print("bg-white-only ");
+				 				
 								 break;
 				 		case 4:  out.print("bg-white-only ");
+				 				
 								 break;
 				 		case 5:  out.print("bg-white-only ");
+				 				
 								 break;
 				 		case 6:  out.print("bg-white-only ");
+				 				
 								 break;
 				 		case 7:  out.print("bg-black ");
+				 				
 								 break;
 				 		case 8:  out.print("bg-info dker ");
+				 				
 								 break;
 				 		case 9:  out.print("bg-primary ");
+				 				
 								 break;
 				 		case 10:  out.print("bg-info dk ");
+				 				
 								 break;
 				 		case 11:  out.print("bg-success ");
+				 				
 								 break;
 				 		case 12:  out.print("bg-danger dker ");
+				 				
 								 break;
 				 		case 13:  out.print("bg-white-only ");
+				 				
 								 break;
 				 		case 14:  out.print("bg-dark ");
+				 				
 								 break;
 				 		default:
 				        		break;
@@ -460,6 +475,45 @@
 							%>
 						</ul>
 					</div>
+					<script>
+				var THEME_COLOR = themecolor(<%=Integer.parseInt(currentUserPrefs.theme)%>);
+					function themecolor(value)
+					{
+			 			 switch (value) {
+			            case 1: return "bg-black ";
+			                      break;
+			            case 2: return "bg-white-only ";
+			                 break;
+			            case 3: return "bg-primary ";
+			                 break;
+			            case 4:  return "bg-info ";
+			                 break;
+			            case 5: return "bg-success ";
+			                 break;
+			            case 6:  return "bg-danger ";
+			                 break;
+			            case 7:  return "bg-black ";
+			                 break;
+			            case 8:return "bg-info dker ";
+			                 break;
+			            case 9:  return "bg-primary ";
+			                 break;
+			            case 10:  return "bg-info dker ";
+			                 break;
+			            case 11:  return "bg-success ";
+			                 break;
+			            case 12: return "bg-danger dker ";
+			                 break;
+			            case 13: return "bg-dark ";
+			                 break;
+			            case 14: return "bg-dark ";
+			                 break;
+			            default:
+			                    break;
+			         
+			          }
+			}
+</script>
 					</header>
 					<!--/.nav-collapse -->
 			
