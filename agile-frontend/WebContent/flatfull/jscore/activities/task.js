@@ -185,17 +185,20 @@ function initializeTasksListeners(){
 	});
 	$('#tasks-list-template').on('click', '#bulk-change-owner', function(event)
 	{
-		event.preventDefault();
+		var task_ids = getTaskIds();
+		console.log(task_ids);
 
 	});
 	$('#tasks-list-template').on('click', '#bulk-change-priority', function(event)
 	{
-		event.preventDefault();
+		var task_ids = getTaskIds();
+		console.log(task_ids);
 		
 	});
 	$('#tasks-list-template').on('click', '#bulk-change-status', function(event)
 	{
-		event.preventDefault();
+		var task_ids = getTaskIds();
+		console.log(task_ids);
 		
 	});
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
@@ -205,7 +208,7 @@ function initializeTasksListeners(){
 			{
 				if($(element).is(':checked')){
 					$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
-					return;
+					return false;
 				}
 				count = true;
 			});
@@ -855,4 +858,25 @@ function showTaskModal(forAddTask)
 			addTasklListDetails(forAddTask);
 		});
 	});
+}
+function getTaskIds(){
+	event.preventDefault();
+		var id_array = [];
+		var index_array = [];
+		var table = $('body').find('.showCheckboxes');
+
+		$(table).find('tr .tbody_check').each(function(index, element){
+			
+			// If element is checked store it's id in an array. !$(element).attr('disabled') included by Sasi to avoid disabled checkboxes
+			if($(element).is(':checked') && !$(element).attr('disabled')){
+				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
+				$(element).closest('tr').on("mouseenter", false);
+				index_array.push(index);
+				if(!$(element).closest('tr').hasClass("pseduo-row"))
+				{
+					id_array.push($(element).closest('tr').data().get('id'));
+				}
+			}
+		});
+		return id_array;
 }
