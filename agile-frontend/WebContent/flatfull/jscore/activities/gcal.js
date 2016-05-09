@@ -230,7 +230,9 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 					{
 						var fc_event = google2fcEvent(resp.items[i]);
 
+						
 						if (fc_event)
+						if(fc_event.allDay==false){	
 							var utcTime = new Date(fc_event.start).toUTCString();
 	    					var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
 	      					fc_event.start = tz.format();
@@ -238,7 +240,7 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 	      					utcTime = new Date(fc_event.end).toUTCString();
 	    					tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
 	      					fc_event.end = tz.format();
-	      					
+	      				}	
 							google_events.push(fc_event);
 						renderEventBasedOnOwner(fc_event);
 						//$('#calendar_event').fullCalendar('renderEvent', fc_event);		

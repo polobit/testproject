@@ -125,6 +125,11 @@ $(function()
 			return;
 		}
 
+		 if ($("#"+formName +" #logPhone_relatedto_tag").children().length == 0) {
+            $("#"+formName + " #log_relatedto_error").show().delay(5000).hide(1);
+            return
+        }
+
 		json['status'] = $("#"+formName +" #callStatus").attr("value");
 		
 		var h = json.hour;
@@ -205,7 +210,14 @@ $(function()
 			}
 			
 			$("#logCallModal").modal('show');
-			$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
+			agile_type_ahead("call_related_to", $("#phoneLogForm", '#logCallModal'), contacts_typeahead);
+			/*var contact_html="";
+			$.each(contacts,function(index,contact){
+				contact_html=contact_html.concat('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+getContactName(contact)+'</li>');
+	
+			});
+			$('#phoneLogForm #logPhone_relatedto_tag').html(contact_html);*/
+			//$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+getContactName(contact)+'</li>');
 		}catch(e){
 			$('#logCallModal').modal('hide');
 			console.log ("an error has occured")
@@ -239,6 +251,8 @@ $(function()
 		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
 		$('#phoneLogForm #saveActivity').val("true");
 		$("#logCallModal").modal('show');
+		var el = $("#phoneLogForm");
+		agile_type_ahead("call_related_to", el, contacts_typeahead);
 
 
 	});
@@ -436,6 +450,7 @@ function showDynamicCallLogs(data)
 		$('#phoneLogForm #saveActivity').val("true");
 		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ data.contId +'">'+data.contact_name+'</li>');
 		$("#phoneLogForm").find("#description").focus();
+		agile_type_ahead("call_related_to",  $("#phoneLogForm", '#logCallModal'), contacts_typeahead);
 		
 		CallLogVariables.callActivitySaved = false;
 		CallLogVariables.id = data.contId;
