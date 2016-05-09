@@ -375,6 +375,16 @@
 		<servlet-name>Mandrill Webhook</servlet-name>
 		<url-pattern>/backend/mandrillwebhook/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Mailgun Webhook</servlet-name>
+		<servlet-class>com.thirdparty.mailgun.webhook.MailgunWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Mailgun Webhook</servlet-name>
+		<url-pattern>/backend/mailgunwebhook/*</url-pattern>
+	</servlet-mapping>
 
     <servlet>
 		<servlet-name>SendGrid Webhook</servlet-name>
@@ -1152,5 +1162,4 @@
 		<servlet-name>_ah_sessioncleanup</servlet-name>
 		<url-pattern>/_ah/sessioncleanup</url-pattern>
 	</servlet-mapping>
-  
 </web-app>
