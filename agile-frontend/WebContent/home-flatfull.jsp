@@ -407,12 +407,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
   <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
-  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-    <span>Service</span>
-  </li>
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
   %>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span>Service</span>
+  </li>
+  
   <li id="tickets">
     <a href="#tickets">
       <i class="icon icon-ticket"></i>

@@ -240,7 +240,9 @@
 					    {{#hasScope "EXPORT_CONTACTS"}}
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
 					    {{/hasScope}}
+					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
+					     {{/hasRestrictedMenuScope}}
 				    </div>
 
 
