@@ -219,24 +219,34 @@ public class EventsAPI
     {
 
     Event oldEvent =EventUtil.getEvent(event.id);
-    if(oldEvent != null &&!(oldEvent.getDeal_ids()).isEmpty())
-   	{
-   		for(String oppr : oldEvent.getDeal_ids())
-   		{
-   			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
-   			opportuinty.save();
-   		}
-   	}
+    try {
+		if(oldEvent != null &&!(oldEvent.getDeal_ids()).isEmpty())
+		{
+			for(String oppr : oldEvent.getDeal_ids())
+			{
+				Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
+				opportuinty.save();
+			}
+		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
     UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.UPDATE, true);
     event.save();
     System.out.println(event.getDeal_ids());
-    if(event != null &&!(event.getDeal_ids()).isEmpty())
-	{
-		for(String oppr : event.getDeal_ids())
+    try {
+		if(event != null &&!(event.getDeal_ids()).isEmpty())
 		{
-			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
-			opportuinty.save();
+			for(String oppr : event.getDeal_ids())
+			{
+				Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
+				opportuinty.save();
+			}
 		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
 	}
 	try
 	{
@@ -265,16 +275,22 @@ public class EventsAPI
     {
 	JSONArray eventsJSONArray = new JSONArray(model_ids);
     if(eventsJSONArray!=null && eventsJSONArray.length()>0){
-		  for (int i = 0; i < eventsJSONArray.length(); i++) {
-			 String eventId =  (String) eventsJSONArray.get(i);
-			 Event event = EventUtil.getEvent(Long.parseLong(eventId));
-			 if(!event.getDeal_ids().isEmpty()){
-				 for(String dealId : event.getDeal_ids()){
-					 Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
-					 oppr.save();
+    	try {    		
+    		for(int i = 0; i < eventsJSONArray.length(); i++) {
+    			
+    			String eventId =  (String) eventsJSONArray.get(i);
+				Event event = EventUtil.getEvent(Long.parseLong(eventId));
+				if(!event.getDeal_ids().isEmpty()){
+					for(String dealId : event.getDeal_ids()){
+						Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
+						oppr.save();
+					 }
 				 }
-			 }
-         }
+    			}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
      }
 	ActivitySave.createLogForBulkDeletes(EntityType.EVENT, eventsJSONArray,
 		String.valueOf(eventsJSONArray.length()), "");

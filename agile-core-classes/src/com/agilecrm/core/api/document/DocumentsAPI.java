@@ -90,21 +90,21 @@ public class DocumentsAPI
 	{
 	    Document document = DocumentUtil.getDocument(id);
 	    if (document != null){
-	    	if(!(document.relatedDealKeys()).isEmpty())
+	    	try
 	    	{
-	    		for(Key<Opportunity> key : document.relatedDealKeys())
+	    		if(!(document.relatedDealKeys()).isEmpty())
 	    		{
-	    			try {
+	    			for(Key<Opportunity> key : document.relatedDealKeys()) {
 	    				Opportunity opp = Opportunity.dao.get(key);
 	    				opp.save();
-	    			} catch (EntityNotFoundException e) {
+	    			} 
+	    		}
+	    		}catch (Exception e) {
 	    				// TODO Auto-generated catch block
 	    				e.printStackTrace();
 	    			}
 	    		}
-	    	}
 	    	document.delete();
-	    }
 	}
 	catch (Exception e)
 	{
@@ -137,19 +137,18 @@ public class DocumentsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	if(!(document.relatedDealKeys()).isEmpty())
-	{
-		for(Key<Opportunity> key : document.relatedDealKeys())
+	try {
+		if(!(document.relatedDealKeys()).isEmpty())
 		{
-			try {
+			for(Key<Opportunity> key : document.relatedDealKeys())
+			{
 				Opportunity opp = Opportunity.dao.get(key);
-				opp.save();
-			} catch (EntityNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				opp.save();			
 			}
-			
 		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	return document;
     }
@@ -176,36 +175,34 @@ public class DocumentsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	if(oldDocument != null && !(oldDocument.relatedDealKeys()).isEmpty())
-	{
-		for(Key<Opportunity> key : oldDocument.relatedDealKeys())
+	try {
+		if(oldDocument != null && !(oldDocument.relatedDealKeys()).isEmpty())
 		{
-			try {
+			for(Key<Opportunity> key : oldDocument.relatedDealKeys())
+			{
 				Opportunity opp = Opportunity.dao.get(key);
 				opp.save();
-			} catch (EntityNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-			
 		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
 	}
 	if(document.network_type.equals("GOOGLE"))
 		document.size = 0L;
 	document.save();
-	if(!(document.relatedDealKeys()).isEmpty())
-	{
-		for(Key<Opportunity> key : document.relatedDealKeys())
+	try {
+		if(!(document.relatedDealKeys()).isEmpty())
 		{
-			try {
+			for(Key<Opportunity> key : document.relatedDealKeys())
+			{
 				Opportunity opp = Opportunity.dao.get(key);
-				opp.save();
-			} catch (EntityNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				opp.save();			
 			}
-			
 		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	return document;
     }
@@ -227,12 +224,17 @@ public class DocumentsAPI
 		  for (int i = 0; i < documentsJSONArray.length(); i++) {
 			 String eventId =  (String) documentsJSONArray.get(i);
 			 Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
-			 if(!doc.getDeal_ids().isEmpty()){
-				 for(String dealId : doc.getDeal_ids()){
-					 Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
-					 oppr.save();
+			 try {
+				if(!doc.getDeal_ids().isEmpty()){
+					 for(String dealId : doc.getDeal_ids()){
+						 Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
+						 oppr.save();
+					 }
 				 }
-			 }
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
          }
      }
 	ActivitySave.createLogForBulkDeletes(EntityType.DOCUMENT, documentsJSONArray,

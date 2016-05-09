@@ -193,13 +193,18 @@ public class TasksAPI
 		ActivitySave.createTaskDeleteActivity(task);
 		if (!task.getNotes(id).isEmpty())
 		    NoteUtil.deleteBulkNotes(task.getNotes(id));
-		if(!(task.relatedDeals()).isEmpty())
-    	{
-    		for(Opportunity oppr : task.relatedDeals())
-    		{
-    			oppr.save();
-    		}
-    	}
+		try {
+			if(!(task.relatedDeals()).isEmpty())
+			{
+				for(Opportunity oppr : task.relatedDeals())
+				{
+					oppr.save();
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		task.delete();
 	    }
 	}
@@ -225,18 +230,22 @@ public class TasksAPI
 	try
 	{
 	    ActivitySave.createTaskAddActivity(task);
-		if(!(task.relatedDeals()).isEmpty())
-    	{
-    		for(Opportunity oppr : task.relatedDeals())
-    		{
-    			oppr.save();
-    		}
-    	}
 	}
-
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	}
+	try {
+		if(!(task.relatedDeals()).isEmpty())
+		{
+			for(Opportunity oppr : task.relatedDeals())
+			{
+				oppr.save();
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	return TaskUtil.getTask(task.id);
     }
@@ -254,20 +263,30 @@ public class TasksAPI
     public Task updateTask(Task task)
     {
     	Task oldTask = TaskUtil.getTask(task.id);
-    	  if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())
-    		{
-    			for(Opportunity oppr : oldTask.relatedDeals())
-    			{
-    				oppr.save();
-    			}
-    		}
-    task.save();
-    if(!(task.relatedDeals()).isEmpty())
-	{
-		for(Opportunity oppr : task.relatedDeals())
-		{
-			oppr.save();
+    	  try {
+			if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())
+				{
+					for(Opportunity oppr : oldTask.relatedDeals())
+					{
+						oppr.save();
+					}
+				}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+    task.save();
+    try {
+		if(!(task.relatedDeals()).isEmpty())
+		{
+			for(Opportunity oppr : task.relatedDeals())
+			{
+				oppr.save();
+			}
+		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
 	}
 	try
 	{
@@ -294,18 +313,21 @@ public class TasksAPI
     public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
-	 if(tasksJSONArray!=null && tasksJSONArray.length()>0){
-		 
-		 for (int i = 0; i < tasksJSONArray.length(); i++) {
-			 String taskId =  (String) tasksJSONArray.get(i);
-			 Task task = TaskUtil.getTask(Long.parseLong(taskId));
-			 if(!task.relatedDeals().isEmpty()){
-				 for(Opportunity oppr : task.relatedDeals()){
-					 oppr.save();
+	 if(tasksJSONArray!=null && tasksJSONArray.length()>0){		 
+		 try {
+			for (int i = 0; i < tasksJSONArray.length(); i++) {
+				 String taskId =  (String) tasksJSONArray.get(i);
+				 Task task = TaskUtil.getTask(Long.parseLong(taskId));
+				 if(!task.relatedDeals().isEmpty()){
+					 for(Opportunity oppr : task.relatedDeals()){
+						 oppr.save();
+					 }
 				 }
-			 }
-        	
-         }
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
      }
 	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
 		"");
