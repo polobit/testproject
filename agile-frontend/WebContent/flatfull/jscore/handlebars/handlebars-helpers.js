@@ -7289,8 +7289,12 @@ function getLastDateOfSubscription(customer){
  			if(value.plan.id.indexOf("email") == -1){
  				if(value.trial_end && value.trialEnd != null)
  					date = value.trialEnd;
- 				else
+ 				else{
  					date = value.currentPeriodEnd;
+ 					var tempArray = value.plan.id.split("-");
+ 					if(tempArray.length > 0 && tempArray[1] == 24)
+ 						date = date+31557600;
+ 				}
  			}
  		});
  		return date;
