@@ -6576,6 +6576,18 @@ $(function()
 
 				return new Handlebars.SafeString(count_message);
 			});
+
+	Handlebars.registerHelper('getSubscriptionDate', function(customer, options){
+		if(!customer)
+			return 0;
+		var date = getLastDateOfSubscription(customer);
+		if(!date)
+			return 0;
+		var currentEpoch = Math.round(new Date().getTime()/1000);
+		if(date < currentEpoch)
+			return 0;
+		return date;
+	});
 	
 });
 
@@ -7389,3 +7401,24 @@ Handlebars.registerHelper('canDeleteContact', function(owner_id, options)
 
 	return options.inverse(this)
 });
+
+
+function getLastDateOfSubscription(customer){
+	if(customer.subscriptions && customer.subscriptions.data.length > 0){
+		var date;
+ 		$.each(customer.subscriptions.data, function(index, value){
+ 			if(value.plan.id.indexOf("email") == -1){
+ 				if(value.trial_end && value.trialEnd != null)
+ 					date = value.trialEnd;
+ 				else{
+ 					date = value.currentPeriodEnd;
+ 					var tempArray = value.plan.id.split("-");
+ 					if(tempArray.length > 0 && tempArray[1] == 24)
+ 						date = date+31557600;
+ 				}
+ 			}
+ 		});
+ 		return date;
+	}
+	return;
+}

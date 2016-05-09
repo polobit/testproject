@@ -371,7 +371,7 @@ Proceed to Pay
 	{{#is_trial_exist billingData}}
 	<a href="#"  id="cancel_free_trial" class="pull-right text-xs text-info p-r">Cancel your Trial</a>
 	{{else}}
-	<a href="#"  id="cancel-account-request" class="pull-right text-xs text-info p-r">Cancel Subscription</a>
+	<a href="#"  id="cancel-account-request" data="{{getSubscriptionDate billingData}}" class="pull-right text-xs text-info p-r">Cancel Subscription</a>
 	{{/is_trial_exist}}
 	{{/check_plan}}
 		 <!-- End of col-sm-offset-4 col-sm-8 -->
