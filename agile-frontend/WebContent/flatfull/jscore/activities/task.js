@@ -183,6 +183,53 @@ function initializeTasksListeners(){
 		// Show and Fill details in Task Edit modal
 		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
+	$('#tasks-list-template').on('click', '#bulk-change-owner', function(event)
+	{
+		event.preventDefault();
+
+	});
+	$('#tasks-list-template').on('click', '#bulk-change-priority', function(event)
+	{
+		event.preventDefault();
+		
+	});
+	$('#tasks-list-template').on('click', '#bulk-change-status', function(event)
+	{
+		event.preventDefault();
+		
+	});
+	$('#tasks-list-template').on('click', '.tbody_check', function(event)
+	{
+		var count = false;
+		$.each($('.tbody_check'), function(index, element)
+			{
+				if($(element).is(':checked')){
+					$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
+					return;
+				}
+				count = true;
+			});
+		if(count)
+			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
+	});
+	$('#tasks-list-template').on('click', '.thead_check', function(event)
+	{
+		if(this.checked){
+			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
+			$.each($('.tbody_check'), function(index, element)
+				{
+					$(element).attr('checked', "checked");
+				});
+		}
+		else{
+				$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
+			$.each($('.tbody_check'), function(index, element)
+				{
+					$(element).attr('checked', "unchecked");
+				});
+		}
+
+	});
 	
 	
 
