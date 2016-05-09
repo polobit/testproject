@@ -859,7 +859,7 @@ var contact_filters_util = {
 
 function setupContactFields(el){
 		// Update el with default dropdown
-		$('#contact-static-fields', el).html(getTemplate("contact-custom-fields"));
+		$('#contact-static-fields-group', el).html(getTemplate("contact-custom-fields"));
 
 		get_custom_fields(function(data){
 		
@@ -875,11 +875,13 @@ function setupContactFields(el){
 					url : 'core/api/contact-view-prefs',
 					type : 'GET',
 					dataType : 'json',
+					
 					success : function(data)
 						{
 							console.log("")
 						var customfields = $("#contact-static-fields");
 						deserializecontactsForm(data.fields_set, customfields);
+						console.log(data);
 					}
 				});
 			

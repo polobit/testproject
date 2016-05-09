@@ -1,6 +1,30 @@
 var timer = undefined;
 
   	$(function(){
+  	
+
+		$('body').on('click','.contactcoloumn',function(e){
+
+		
+			
+			var json = serializeForm("contact-static-fields");
+			console.log(json)
+			$.ajax({
+					url : 'core/api/contact-view-prefs',
+					type : 'PUT',
+					contentType : 'application/json',
+					dataType : 'json',
+					data :JSON.stringify(json),
+					success : function(data)
+						{
+							console.log("inside the success function" )
+							location.reload();
+						} 
+					});
+					
+			
+		});
+
 	$('body').off('mouseover','.popover_contact');
 		$('body').on('mouseover','.popover_contact',function(e){
 			//e.stopPropagation();
@@ -122,16 +146,7 @@ function contactListener(el)
 		popout(that);
 		
 	});
-	$('#contacts-listener-container').off('click');
-	$("#contacts-listener-container").on('click',function(e){
-	if(!$(this.target).is('#contact-custom-coloumns'))
-	{
-		
-		var json = serializeForm("contact-static-fields");
-		
-	}
-
-});
+	
 	$('#task-related-model-list').off('mouseenter','tr > td');
 		$('#task-related-model-list').on('mouseenter','tr > td',function(e){
 			var left=e.pageX;
