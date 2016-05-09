@@ -278,7 +278,7 @@ public class LoginServlet extends HttpServlet {
 
 		request.getSession().setAttribute("account_timezone", timezone);	
 		
-		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
+		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password) && domainUser.is_secure==true)
 		{
 			// Validate User finger print
 			UserFingerPrintInfo browser_auth = new UserFingerPrintInfo();
