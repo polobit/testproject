@@ -19,7 +19,9 @@ var CompaniesRouter = Backbone.Router
 		
 		"company-edit" : "editCompany",
 		
-		"company-view-prefs" : "companyViewPrefs"
+		"company-view-prefs" : "companyViewPrefs",
+
+		"duplicate-company/:id" : "duplicateCompany"
 	},
 	
 	/**
@@ -500,4 +502,51 @@ var CompaniesRouter = Backbone.Router
 				deserialize_contact(company, 'continue-company');
 		}, company.type);
 	},
+
+	duplicateCompany : function(company_id){
+
+		dup_contacts1_array.length = 0;
+		var max_contacts_count = 20;
+		var individual_tag_name = "tr";
+
+		// Default url for contacts route
+		this.contact_id = company_id;
+		var url = '/core/api/search/duplicate-contacts/' + company_id;
+		var collection_is_reverse = false;
+		template_key = "duplicate-contacts";
+
+		if (App_Contacts.contactDetailView === undefined){
+			Backbone.history.navigate("contact/" + company_id, { trigger : true });
+			return;
+		}
+
+		/*
+		 * cursor and page_size options are taken to activate
+		 * infiniScroll
+		 */
+		this.duplicateContactsListView = new Contacts_Events_Collection_View({ 
+			url : url, 
+			templateKey : template_key, 
+			individual_tag_name : 'tr', 
+			cursor : true,
+			page_size : 25, 
+			sort_collection : collection_is_reverse, 
+			slateKey : null, 
+			postRenderCallback : function(el){
+				// this.duplicateContactsListView.collection.forEach(function(model,
+				// index) {
+				// model.set('master_id',contact_id);
+				// });
+			} 
+		});
+
+		// Contacts are fetched when the app loads in the initialize
+		this.duplicateContactsListView.collection.fetch();
+
+		$('#content').html(this.duplicateContactsListView.render().el);
+
+		$(".active").removeClass("active");
+		$("#contactsmenu").addClass("active");
+
+	}
 });
