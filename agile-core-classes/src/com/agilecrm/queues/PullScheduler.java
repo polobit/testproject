@@ -238,7 +238,7 @@ public class PullScheduler
 		{
 		    try
 		    {
-			// System.out.println("Executing mandrill mail tasks...");
+			 System.out.println("Executing Maigun mail tasks...");
 			EmailGatewayUtil.sendMails(tasks);
 		    }
 		    catch (Exception e)

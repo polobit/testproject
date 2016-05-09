@@ -555,6 +555,7 @@ public class EmailGatewayUtil
 
 	    if (emailSender.canSend())
 	    {
+	    	System.out.println("Email Gateway for bulk mail Hi....."+ emailGateway.email_api );
 	    	// If No Gateway or SendGrid
 	    	if (emailGateway == null || emailGateway.email_api == EMAIL_API.SEND_GRID)
 			    SendGridUtil.sendSendGridMails(tasks, emailSender);
