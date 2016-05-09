@@ -1474,13 +1474,7 @@ public class PortletUtil {
 					cateList = new ArrayList<JSONObject>();
 					for(DomainUser domainUser : usersList){
 						JSONObject cateJson = new JSONObject();
-						//JSONObject cateJson_total = new JSONObject();
 						
-						int total_Calls=0;
-						List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-						if(callActivitiesList!=null)
-							total_Calls=callActivitiesList.size();
-						cateJson.put("total", total_Calls);
 						
 						cateJson.put("name", "Deals Won");
 						cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
