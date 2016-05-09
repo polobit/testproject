@@ -405,9 +405,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							if (criteria == "LIST")
 							{
 								if (isUpdate)
-									App_Calendar.allTasksListView.collection.remove(json);
-
-								App_Calendar.allTasksListView.collection.add(data);
+									App_Calendar.allTasksListView.collection.get(json).set(new BaseModel(data));
 								App_Calendar.allTasksListView.render(true);
 								return;
 							}

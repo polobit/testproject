@@ -233,8 +233,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 		if (modelTaskList && modelTaskList.length)
 			updateTask(true, data, taskJson);
 		else{
-			App_Calendar.allTasksListView.collection.remove(taskJson);
-			App_Calendar.allTasksListView.collection.add(data);
+			App_Calendar.allTasksListView.collection.get(taskJson).set(new BaseModel(data));
 			App_Calendar.allTasksListView.render(true);
 		}
 
