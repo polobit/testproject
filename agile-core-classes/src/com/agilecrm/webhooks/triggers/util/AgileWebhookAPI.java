@@ -42,9 +42,10 @@ public class AgileWebhookAPI
     try{
 		String domain = NamespaceManager.get();
 		Subscription sub=SubscriptionUtil.getSubscription();
-		if(sub.plan.getPlanName() == "ENTERPRISE" || sub.plan.getPlanName() == "PRO"){
+		System.out.println("plan name = "+ sub.plan.getPlanName());
+		if(sub.plan.getPlanName().equals("ENTERPRISE") || sub.plan.getPlanName().equals("PRO")){
 			webhook.domain = domain;
-	
+			
 			webhook.save();
 	
 			Response.ok();

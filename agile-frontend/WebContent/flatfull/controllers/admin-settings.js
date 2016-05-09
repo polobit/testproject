@@ -211,7 +211,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
 			},
 			errorCallback : function(data){
-				showNotyPopUp("warning", data.responseText, "top",1000);
+				showNotyPopUp("warning", data.responseText, "top",2000);
 			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
