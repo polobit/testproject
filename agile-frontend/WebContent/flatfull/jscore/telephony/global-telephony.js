@@ -566,3 +566,29 @@ function getPhoneWithSkypeInArray(items)
 	}
 	return va;
 }
+
+/**
+ * @ author - prakash - 15/6/15
+ * This method updates two fields of contact object - lastcalled and last contacted
+ * This method retrieves the current contact object and make the json call to server to save json time in server.
+ */
+function twilioIOSaveContactedTime(contactId)
+{
+	console.log ('in IOSaveContactedTime');
+	var id;
+	if(contactId){
+		id = contactId;
+	}else{
+		id = agile_crm_get_contact().id;
+	}
+	console.log('contact id = ' + id);
+	$.get("/core/api/widgets/twilio/save/time/?id=" + id , function(result)
+			{
+				console.log('processed In twilioIOSaveContactedTime');
+				console.log('Results : ' + result);
+				console.log('result = ' + result);
+			}).error(function(data)
+			{
+				console.log('Error - Results :' + data);
+			});
+}
