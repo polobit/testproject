@@ -91,7 +91,12 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 	else
 		$.ajax({ type : "DELETE", url :'core/api/tasks/'+taskId, async : false, dataType : 'json', success : function()
 			{
-				App_Calendar.allTasksListView.collection.remove(taskId);			
+				App_Calendar.allTasksListView.collection.remove(taskId);
+				var taskCount = App_Calendar.allTasksListView.collection.length;
+				$('#tasks-list-template').find('.tasks-count').empty();
+				if(taskCount){
+					$('#tasks-list-template').find('.tasks-count').text('('+taskCount+' Total)');
+				}
 			} 
 		});
 }

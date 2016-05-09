@@ -230,8 +230,13 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 				$('#due_tasks_count').html("");
 
 		});
-		
-		updateTask(true, data, taskJson);
+		if (modelTaskList && modelTaskList.length)
+			updateTask(true, data, taskJson);
+		else{
+			App_Calendar.allTasksListView.collection.remove(taskJson);
+			App_Calendar.allTasksListView.collection.add(data);
+			App_Calendar.allTasksListView.render(true);
+		}
 
 		// Maintain changes in UI
 		displaySettings();

@@ -173,6 +173,7 @@ function initializeTasksListeners(){
 			return;
 		if(!getTaskListId(this) && $(this).parent().attr('data')){
 			deleteTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
+			$(this).parentsUntil('tr').parent('tr').remove();
 		}
 		else
 			deleteTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
