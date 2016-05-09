@@ -108,7 +108,7 @@ public class FormsAPI
 		form.formHtml = html;
 		//adding another for emailNotification
 		form.emailNotification=emailNotification;
-		if(form.emailNotification)
+		//if(form.emailNotification)
 
 		form.save();
 		
