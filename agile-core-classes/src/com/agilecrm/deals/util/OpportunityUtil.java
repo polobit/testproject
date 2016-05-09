@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -374,6 +375,12 @@ public class OpportunityUtil
     {
 	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime)
 		.filter("close_date <= ", maxTime).filter("milestone", milestone).order("close_date");
+	return dao.getCount(q);
+    }
+    
+    public static int getDealsbyMilestone(Long pipelineId)
+    {
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("pipeline",  new Key<Milestone>(Milestone.class, pipelineId)).limit(2);
 	return dao.getCount(q);
     }
 
@@ -1853,7 +1860,27 @@ public class OpportunityUtil
 			    .filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
 		    ;
-		    List<Opportunity> list = dao.fetchAll(q);
+		    Query<Opportunity> timeChanged = dao.ofy().query(Opportunity.class)
+				    .filter("milestone", milestone.won_milestone).filter("milestone_changed_time >= ", minTime)
+				    .filter("milestone_changed_time <= ", maxTime).filter("archived", false)
+				    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("milestone_changed_time");
+			 ;
+		    List<Opportunity> listWonDate = dao.fetchAll(q);
+		    List<Opportunity> listTimeChanged = dao.fetchAll(timeChanged);
+		    Map <Long, Opportunity> map = new HashMap<Long,Opportunity>();
+		    for(Opportunity oppr: listWonDate){
+		        map.put(oppr.id , oppr);
+		    }
+		    for(Opportunity oppr2: listTimeChanged){
+		    	if(map.get(oppr2.id) == null)
+		    	       map.put(oppr2.id , oppr2);
+		    }
+
+		    List<Opportunity> list = new ArrayList<Opportunity>(map.values());   
+		   
+		    for(Opportunity opp : list) 
+	            System.out.println(opp.id);
+	         
 		    if (list != null)
 		    {
 			ownDealsList.addAll(list);
@@ -1865,7 +1892,25 @@ public class OpportunityUtil
 			    .filter("won_date >= ", minTime).filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
 		    ;
-		    List<Opportunity> list = dao.fetchAll(q);
+		    Query<Opportunity> timeChanged = dao.ofy().query(Opportunity.class)
+				    .filter("milestone", "Won").filter("milestone_changed_time >= ", minTime)
+				    .filter("milestone_changed_time <= ", maxTime).filter("archived", false)
+				    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
+			 ;
+		    List<Opportunity> listWonDate = dao.fetchAll(q);
+		    List<Opportunity> listTimeChanged = dao.fetchAll(timeChanged);
+		    Map <Long, Opportunity> map = new HashMap<Long,Opportunity>();
+		    for(Opportunity oppr: listWonDate){
+		        map.put(oppr.id , oppr);
+		    }
+		    for(Opportunity oppr2: listTimeChanged){
+		    	if(map.get(oppr2.id) == null)
+		    	       map.put(oppr2.id , oppr2);
+		    }
+
+		    List<Opportunity> list = new ArrayList<Opportunity>(map.values());  
+		    for(Opportunity opp : list) 
+	            System.out.println(opp.id);
 		    if (list != null)
 		    {
 			ownDealsList.addAll(list);

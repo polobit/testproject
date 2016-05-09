@@ -1,6 +1,7 @@
 package com.agilecrm.deals.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -11,6 +12,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>MilestoneUtil</code> is the utility class for milestones. It handles
@@ -90,7 +92,16 @@ public class MilestoneUtil
 	    milestone = new ArrayList<>();
 	    milestone.add(getDefaultMilestones());
 	}
-
+	for(Milestone temp : milestone ){
+	    Long mile = temp.id;
+        System.out.println("name of milestone "+mile);
+		int  dealCount = OpportunityUtil.getDealsbyMilestone(mile);
+		if(dealCount >0){
+				temp.deals_exist =true;
+				continue;
+	        
+		 }
+	}
 	return milestone;
     }
 

@@ -1335,5 +1335,13 @@ public class DealsAPI
 
 	return dealsCountJSON;
     }
-
+    @Path("/numberOfDeals")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public String getDealsbyPipelineId(@QueryParam("id") Long pipeId){
+    	int  dealCount = OpportunityUtil.getDealsbyMilestone(pipeId);
+    	if(dealCount > 0)
+    		return "success";
+    	return "fail";
+    }
 }
