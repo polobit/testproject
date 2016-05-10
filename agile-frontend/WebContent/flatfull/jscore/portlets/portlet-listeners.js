@@ -966,6 +966,21 @@ $('.portlet_body')
 		    }
 	    }
 	});
+		$('.portlet_body').on('mouseover','.calls_popover',function(e){
+			$(this).tooltip(
+								{
+									
+									"trigger" : "hover",
+									"placement" : "right",
+									"html" : "true",
+									//"content" : "hello",
+									"container" : "body"
+
+								});
+						/*$(this).popover('show');*/
+						$(this).tooltip('show');
+
+		});
 
 }
 

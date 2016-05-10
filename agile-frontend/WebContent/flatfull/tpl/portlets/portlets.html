@@ -437,7 +437,12 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
-						<div class="text-xlg calls_popover" title="" rel="popover" data-content="hello">{{numberWithCommasForActivities value}}/{{numberWithCommasForActivities total}}</div>
+						<div class="text-xlg calls_popover" title="" data-toggle="tooltip" data-content='<div><table>
+						        					<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">{{value}}</u></td></tr>
+					        		              
+					        		              <tr>
+					        		        	  <td style="padding:0"><u style="text-decoration:none;border-bottom:1px solid">{{total}}</u></td></tr>
+					        		        	  </table></div>'>{{numberWithCommasForActivities value}}/{{numberWithCommasForActivities total}}</div>
 					</div>
 				</div>
 			{{else}}
@@ -452,7 +457,12 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
-						<div class="text-xlg calls_popover" title="" rel="popover" data-content="hello">{{numberWithCommasForActivities value}}/{{numberWithCommasForActivities total}}</div>
+						<div class="text-xlg calls_popover" title="" data-toggle="tooltip" data-content='<div><table>
+						        					<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">{{value}}</u></td></tr>
+					        		              
+					        		              <tr>
+					        		        	  <td style="padding:0"><u style="text-decoration:none;border-bottom:1px solid">{{total}}</u></td></tr>
+					        		        	  </table></div>'>{{numberWithCommasForActivities value}}/{{numberWithCommasForActivities total}}</div>
 					</div>
 					</div>
 				</div>
