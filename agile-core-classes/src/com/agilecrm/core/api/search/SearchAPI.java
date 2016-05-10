@@ -224,7 +224,7 @@ public class SearchAPI
 			    Contact contact = ContactUtil.getContact(Long.valueOf(id));
 		
 			    // getting search query for finding duplicate contacts
-			    String query = QueryDocumentUtil.constructDuplicateContactsQuery(contact);
+			    String query = QueryDocumentUtil.constructDuplicateCompaniesQuery(contact);
 		
 			    int pageSize = Integer.parseInt(count) + 1;
 			    System.out.println(query);
