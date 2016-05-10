@@ -394,9 +394,14 @@ $(function(){
 			    	 {
 			    		 	// Delete mandrill webhook
 							$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
-								
 								console.log(data);
-								
+							});
+			    	 }
+			    	 else if(data.email_api === "MAILGUN")
+			    	 {
+			    		 	// Delete mailgun webhook
+							$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api+"&api_user="+data.api_user, function(data){
+								console.log(data);
 							});
 			    	 }
 			     }	

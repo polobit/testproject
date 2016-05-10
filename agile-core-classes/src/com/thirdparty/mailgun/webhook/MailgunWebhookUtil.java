@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.sun.jersey.api.client.Client;
@@ -21,6 +22,7 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import com.thirdparty.mailgun.MailgunNew;
+import com.thirdparty.mailgun.util.MailgunUtil;
 
 /**
  * <code>MailgunWebhookUtil</code> is the utility class for Mandrill Webhook to
@@ -162,7 +164,7 @@ public class MailgunWebhookUtil {
 	{
 		// Fetch all webhooks
 		JSONObject webhooks = getAllWebhooks(apiKey, domainName);
-System.out.println(webhooks.toString());
+			System.out.println(webhooks.toString());
 		try
 		{    
 			if(webhooks.has("webhooks"))
@@ -179,6 +181,7 @@ System.out.println(webhooks.toString());
 		{
 			System.err.println("Exception occured while checking Agile webhook..." + e.getMessage());
 			e.printStackTrace();
+			return null;
 		}
 
 		return null;
@@ -228,7 +231,7 @@ System.out.println(webhooks.toString());
 	
 	public static void main(String asd[]) throws IOException, JSONException
 	{
-	  //String jsonObject=deleteWebhook("key-ca81c2c2b8f1ee11722c082c6f7fb287", "sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org");
+	  System.out.println(MailgunUtil.checkMailgunAutorization("key-ca81c2c2b8f1ee11722c082c6f7fb287", "sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org"));
 		//java.net.URL rul=new java.net.URL("https://api.mailgun.net/v3/sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org/log");
 		//System.out.println(MailgunUtil.checkMailgunAutorization("key-ca81c2c2b8f1ee11722c082c6f7fb28", "sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org"));
 	}

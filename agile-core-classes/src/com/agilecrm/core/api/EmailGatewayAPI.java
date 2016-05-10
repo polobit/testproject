@@ -103,13 +103,15 @@ public class EmailGatewayAPI
     @Path("/delete-webhook")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String deleteAgileWebhook(@QueryParam("api_key") String apiKey, @QueryParam("type") String type)
+    public String deleteAgileWebhook(@QueryParam("api_key") String apiKey, @QueryParam("type") String type, @QueryParam("api_user") String apiUser)
     {
 	// Delete webhook
+    	
+    	
 	if (type.equals(EmailGateway.EMAIL_API.MANDRILL.toString()))
 	    return MandrillWebhookUtil.deleteWebhook(apiKey);
 	if(type.equals(EmailGateway.EMAIL_API.MAILGUN.toString()))
-		return MailgunWebhookUtil.addWebhook(apiKey, "agilecrm.com");
+		return MailgunWebhookUtil.deleteWebhook(apiKey, apiUser);
 
 	return null;
     }

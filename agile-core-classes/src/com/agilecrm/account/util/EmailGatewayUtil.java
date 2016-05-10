@@ -231,7 +231,6 @@ public class EmailGatewayUtil
 	catch (JSONException e)
 	{
 	    System.err.println("JSON Exception occurred while parsing response " + e.getMessage());
-	    e.printStackTrace();
 	}
 
 	// SendGrid Error
@@ -555,7 +554,6 @@ public class EmailGatewayUtil
 
 	    if (emailSender.canSend())
 	    {
-	    	System.out.println("Email Gateway for bulk mail Hi....."+ emailGateway.email_api );
 	    	// If No Gateway or SendGrid
 	    	if (emailGateway == null || emailGateway.email_api == EMAIL_API.SEND_GRID)
 			    SendGridUtil.sendSendGridMails(tasks, emailSender);
