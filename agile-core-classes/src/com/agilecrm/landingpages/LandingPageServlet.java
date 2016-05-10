@@ -56,6 +56,7 @@ public class LandingPageServlet extends HttpServlet {
 				
 				String fullXHtml = landingPage.html;
 				fullXHtml = getResponsiveMediaIFrame(fullXHtml);				
+				fullXHtml = getFormEmbedCode(fullXHtml,lpUtil.requestingDomain);
 				
 				String domainHost = "http://localhost:8888";
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
@@ -75,8 +76,6 @@ public class LandingPageServlet extends HttpServlet {
 				analyticsCode += " _agile.track_page_view();</script>";
 				
 				NamespaceManager.set(lpUtil.requestingDomain);
-				
-				fullXHtml = getFormEmbedCode(fullXHtml,lpUtil.requestingDomain);
 				
 				ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
 				APIKey apiKey = dao.ofy().query(APIKey.class).get();
@@ -117,13 +116,14 @@ public class LandingPageServlet extends HttpServlet {
 	private String getFormEmbedCode(String fullHtml, String domain) {
 		
 		String responsiveMediaIFrame = "<div id=\""+domain+"_%s\" class=\"agile_crm_form_embed\"></div>";
+		System.out.println(responsiveMediaIFrame);
 		Pattern p = Pattern.compile("<div id=\"(.*?)\" class=\"embed-container\"(?:[^>\"']|\"[^\"]*\"|'[^']*')*>(.*?)</div>",Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = p.matcher(fullHtml);
 		
 		while(m.find()){
 			fullHtml = fullHtml.replace(m.group(0), String.format(responsiveMediaIFrame, m.group(1)));
 		}
-		
+		System.out.println(fullHtml);
 		return fullHtml;
 	}
 	
