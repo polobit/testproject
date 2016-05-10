@@ -76,7 +76,7 @@ public class LandingPageServlet extends HttpServlet {
 				
 				NamespaceManager.set(lpUtil.requestingDomain);
 				
-				fullXHtml = getFormEmbedCode(fullXHtml);
+				fullXHtml = getFormEmbedCode(fullXHtml,lpUtil.requestingDomain);
 				
 				ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
 				APIKey apiKey = dao.ofy().query(APIKey.class).get();
@@ -114,9 +114,9 @@ public class LandingPageServlet extends HttpServlet {
 	}
 	
 	
-	private String getFormEmbedCode(String fullHtml) {
+	private String getFormEmbedCode(String fullHtml, String domain) {
 		
-		String responsiveMediaIFrame = "<div id=\""+NamespaceManager.get()+"_%s\" class=\"agile_crm_form_embed\"></div>";
+		String responsiveMediaIFrame = "<div id=\""+domain+"_%s\" class=\"agile_crm_form_embed\"></div>";
 		Pattern p = Pattern.compile("<div id=\"(.*?)\" class=\"embed-container\"(?:[^>\"']|\"[^\"]*\"|'[^']*')*>(.*?)</div>",Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = p.matcher(fullHtml);
 		
