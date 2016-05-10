@@ -130,6 +130,21 @@ var HelpcenterRouter = Backbone.Router.extend({
 								$(".clear",el).on("click",function(){
                                		$("#comment").val('').empty();
 							 	}); 
+
+							 	$(".remove-comment").on("click",function(e){
+							    	e.preventDefault();
+							    	var id = $(this).data("id");
+							    	 $.ajax({
+							            url: '/helpcenterapi/api/knowledgebase/comment?id='+id,
+							            type: 'DELETE',
+							            contentType : "application/json",
+							            success : function(response){
+							            	model=App_Helpcenter.commentsCollection.collection.get(id);
+							                model.destroy();     
+							            
+							            }  
+							        });
+								});
 							},
 							saveCallback : function(model){
 								console.log(model);

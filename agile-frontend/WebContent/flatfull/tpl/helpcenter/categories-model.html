@@ -6,10 +6,12 @@
 	    		<i class="fa fa-cube" aria-hidden="true"></i> {{name}} 
 	    	</h4>                 
 	   		<div class="btn-group  right pos-rlt pull-right">
-                  <button class="btn bg-transparent" style="margin-top: -26px;"data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+	   			  <button class="btn bg-transparent" style="margin-top: -26px;"data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                   <ul class="dropdown-menu">
-                    <li><a href="#categorie/{{id}}/edit-categorie">Edit</a></li>
-                    <li><a href="#helpcenter/delete-categorie" class="delete">Delete</a></li>
+                    <li><a href="#categorie/{{id}}/add-section">Add Section</a>
+                  </li>
+                    <li><a href="#categorie/{{id}}/edit-categorie">Edit Categorie</a></li>
+                    <li><a href="#helpcenter/delete-categorie" class="delete">Delete Categorie</a></li>
                   </ul>
                </div>     	 
 	    </div>
@@ -22,10 +24,7 @@
 			        {{/sections}}
 			    </ul>
 		    {{else}}
-	            No Sections Avialable <a class="link-color pull-right text-xs" href="#categorie/{{id}}/add-section">
-                        Add Section
-                      </a>
-
+	            No Sections Avialable
 		    {{/if}}
 		        
 	    </div>

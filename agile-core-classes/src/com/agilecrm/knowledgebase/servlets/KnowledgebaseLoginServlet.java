@@ -148,8 +148,14 @@ public class KnowledgebaseLoginServlet extends HttpServlet
 			throw new Exception(
 					"You haven't verified your email address yet. Just now we have sent an verification email. Please verify to login.");
 		}
-
-		KnowledgebaseUserInfo userInfo = new KnowledgebaseUserInfo("agilecrm.com", email, user.name, Role.CUSTOMER, user.id);
+		
+		Role role = Role.CUSTOMER;
+		
+		// Define a role
+		if(DomainUserUtil.getDomainUserFromEmail(email) != null)
+			role = Role.ADMIN;
+		
+		KnowledgebaseUserInfo userInfo = new KnowledgebaseUserInfo("agilecrm.com", email, user.name, role, user.id);
 
 		System.out.println("Creating user info object....");
 		System.out.println("userInfo: ");

@@ -22,4 +22,26 @@ Handlebars.registerHelper('is_user_logged_in', function(options){
 		return options.fn(this);
 
 	return options.inverse(this);
+}); 
+Handlebars.registerHelper('Commented_user', function(hc_user,options){
+     
+ 	if(hc_user.id == USERINFO.userId)    	
+		
+		return options.fn(this);
+	
+	return options.inverse(this);
 });
+Handlebars.registerHelper('Admin_Commented_user', function(hc_user,options){
+     
+ 	if(!USERINFO)
+ 		return options.inverse(this);
+
+ 	if(hc_user.id == USERINFO.userId || USERINFO.role == "ADMIN")    	
+		
+		return options.fn(this);
+	
+	return options.inverse(this);
+});
+
+
+

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.repackaged.org.codehaus.jackson.map.ObjectMapper;
 
 public class KnowledgebaseUserInfo implements Serializable
 {
@@ -104,7 +105,17 @@ public class KnowledgebaseUserInfo implements Serializable
 
 	public String toString()
 	{
-		return name + " (" + email + ") DomainId " + userId;
+	  try
+	  {
+	   return new ObjectMapper().writeValueAsString(this);
+	  }
+	  catch (Exception e)
+	  {
+	   e.printStackTrace();
+	  }
+
+	  return "{}";
+		
 	}
 
 	/**

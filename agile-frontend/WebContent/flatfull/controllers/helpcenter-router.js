@@ -22,7 +22,7 @@ var HelpcenterRouter = Backbone.Router.extend({
         "categorie/:id/add-section" : "addSectionfromCategorie",
         "categorie/:categorie_id/section/:section_id/articles" : "sectionArticles",
         "categorie/:categorie_id/section/:section_id/add-article" :  "addArticlefromSection",
-        "categorie/:categorie_id/section/:section_id/article/:article_id": "showArticles",
+        "categorie/:categorie_id/section/:section_id/article/:article_id": "showArticle",
         "categorie/:categorie_id/section/:section_id/article/:article_id/edit-article": "editArticle"       
     },
 	categories: function(){
@@ -261,7 +261,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 					    	
 					    	$('[data-toggle="tooltip"]', el).tooltip();
 					     
-					    }
+					    },
+					    
 					});
 
 					//Fetching groups collections
@@ -269,7 +270,10 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 					//Rendering template
 					$('#articles-collection').html(App_Helpcenter_Module.articlesCollection.el);
-		        }
+		        },
+		        deleteCallback : function(){
+							Backbone.history.navigate( "helpcenter/categories", { trigger : true });
+		   		}
 			});
 
 	 		$('#helpcenter-content').html(sectionView.render().el);
@@ -299,7 +303,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 		$('#helpcenter-content').html(sectionView.render().el);
 	 	});			
   },
-  showArticles: function(category_id,section_id,article_id){
+  showArticle: function(category_id,section_id,article_id){
   		
 	App_Helpcenter_Module.loadhelpcenterTemplate(function(){
 
@@ -307,10 +311,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 			isNew : false,
 			template : "helpcenter-article",
 			url : "/core/api/knowledgebase/article/" + article_id,
+	        no_reload_on_delete:false,
 	        postRenderCallback: function(el, data){
 
 	        	//Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
-			}
+			},
+			deleteCallback : function(){
+				Backbone.history.navigate( "helpcenter/categories", { trigger : true });
+		    }
 		});
 
  		$('#helpcenter-content').html(articleView.render().el);
@@ -318,10 +326,7 @@ var HelpcenterRouter = Backbone.Router.extend({
   },
   editArticle : function(categorie_id,section_id,article_id){
     
-	setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
-       
-
-  		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
+	    		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
 	
 			    var editarticleView = new Base_Model_View({
 	 				isNew : false, 
@@ -341,7 +346,10 @@ var HelpcenterRouter = Backbone.Router.extend({
     
 			 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
 
+
 					},'', true);
+					setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
+     
 
 			        }
 		    });    

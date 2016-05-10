@@ -86,4 +86,13 @@ public class ArticleUtil
 
 		return Article.dao.getCountByProperty(map);
 	}
+	/**
+	 * @param atricleID
+	 * @return
+	 */
+	public static void delete(Long id) throws Exception
+	{
+		// Deleting section
+		Article.dao.deleteKey(new Key<Article>(Article.class, id));
+	}
 }

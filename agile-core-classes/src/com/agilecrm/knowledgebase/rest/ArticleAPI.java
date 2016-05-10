@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -23,6 +24,7 @@ import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.ArticleUtil;
+import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
 import com.googlecode.objectify.Key;
 
@@ -207,6 +209,32 @@ public class ArticleAPI
 		}
 
 		return article;
+	}
+	
+	/**
+	 * Deletes Articles by IDs
+	 * 
+	 */
+	@Path("/{id}")
+	@DELETE 
+	public String deleteArticle(@PathParam("id") Long id)
+	{
+		try
+		{
+			if (id == null)
+				throw new Exception("Required parameter missing.");
+
+			ArticleUtil.delete(id);
+
+			return new JSONObject().put("status", "success").toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
 	}
 
 }

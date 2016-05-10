@@ -3,6 +3,7 @@ package com.agilecrm.knowledgebase.rest;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -12,9 +13,12 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONObject;
+
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Comment;
 import com.agilecrm.knowledgebase.util.CommentUtil;
+import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.googlecode.objectify.Key;
 
 /**
@@ -65,4 +69,29 @@ public class CommentAPI
 
 		return CommentUtil.getCommentsByArticleID(article_id);
 	}
+
+	@DELETE 
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deletecomment(@QueryParam("id") Long id)
+	{
+	    	
+		try
+		{
+			if (id == null)
+				throw new Exception("Required parameter missing.");
+
+						
+			CommentUtil.delete(id);
+
+			return new JSONObject().put("status", "success").toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+
 }

@@ -212,7 +212,9 @@ var CURRENT_USER_PREFS = <%=SafeHtmlUtil.sanitize(UserPrefsUtil.getMapperString(
 //Get current domain user json
 var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
 
-var IS_USER_LOGGED_IN = <%=is_user_loggedin %>;
+var IS_USER_LOGGED_IN = <%=is_user_loggedin %>
+;
+var USERINFO = JSON.parse('<%= kuserInfo%>');
 
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
