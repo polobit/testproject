@@ -55,9 +55,7 @@ public class LandingPageServlet extends HttpServlet {
 				throw new Exception("No landing page found.");
 				
 				String fullXHtml = landingPage.html;
-				fullXHtml = getResponsiveMediaIFrame(fullXHtml);
-				fullXHtml = getFormEmbedCode(fullXHtml);
-				
+				fullXHtml = getResponsiveMediaIFrame(fullXHtml);				
 				
 				String domainHost = "http://localhost:8888";
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
@@ -77,6 +75,8 @@ public class LandingPageServlet extends HttpServlet {
 				analyticsCode += " _agile.track_page_view();</script>";
 				
 				NamespaceManager.set(lpUtil.requestingDomain);
+				
+				fullXHtml = getFormEmbedCode(fullXHtml);
 				
 				ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
 				APIKey apiKey = dao.ofy().query(APIKey.class).get();
