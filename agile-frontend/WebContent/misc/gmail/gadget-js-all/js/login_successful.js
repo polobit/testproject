@@ -18,11 +18,11 @@ function agile_user_associated() {
 	//Contacts_Json[emails[0].email] = emails[0];
 	$.each(emails, function(index, value)
 	{
-		if(value.email != agile_get_prefs(PREFS_EMAIL))
+		//if(value.email != agile_get_prefs(PREFS_EMAIL))
 			Contacts_Json[value.email] = value;
 	});
 	
-	delete Contacts_Json[agile_get_prefs(PREFS_EMAIL)];
+	//delete Contacts_Json[agile_get_prefs(PREFS_EMAIL)];
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', Contacts_Json);
