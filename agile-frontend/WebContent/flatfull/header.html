@@ -375,7 +375,7 @@
 								data-toggle="dropdown" href="" onclick="Agile_GA_Event_Tracker.track_event('New Option in Nav Bar')">New <b class="caret"></b></a>
 								<ul class="dropdown-menu animated fadeInRight" role="menu">
 									 <%
-								      if(!domainUser.restricted_scopes.contains(UserAccessScopes.CREATE_CONTACT)){
+								      if(domainUser.restricted_scopes == null || !domainUser.restricted_scopes.contains(UserAccessScopes.CREATE_CONTACT)){
 								    %>
 									<li><a href="#personModal"  class="person" id="person">
 											<div class="pull-left">Contact</div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
