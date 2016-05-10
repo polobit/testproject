@@ -3857,3 +3857,16 @@ margin-left:27px;
     border-bottom: none;
 }
 
+.leaderboard_calls td{
+
+border-bottom:1px solid #eee;
+}
+
+.leaderboard_calls .tooltip-inner{
+  text-align:left!important;
+}
+
+.leaderboard_calls .tooltip-arrow
+{
+  display: none!important;
+}

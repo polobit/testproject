@@ -1475,15 +1475,72 @@ public class PortletUtil {
 					for(DomainUser domainUser : usersList){
 						JSONObject cateJson = new JSONObject();
 						//JSONObject cateJson_total = new JSONObject();
+						int answeredCallsCount=0;
+						int busyCallsCount=0;
+						int failedCallsCount=0;
+						int voiceMailCallsCount=0;
+						int missedCallsCount=0;
+						int inquiryCallsCount=0;
+						int interestCallsCount=0;
+						int noInterestCallsCount=0;
+						int incorrectReferralCallsCount=0;
+						int newOpportunityCallsCount=0;
+						int meetingScheduledCallsCount=0;
+						int queuedCallsCount=0;
 						
 						int total_Calls=0;
 						List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-						if(callActivitiesList!=null)
-							total_Calls=callActivitiesList.size();
-						cateJson.put("total", total_Calls);
 						
+							for(Activity activity : callActivitiesList){
+								try{
+								if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
+									answeredCallsCount++;
+								else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
+									busyCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+									failedCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
+									voiceMailCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
+									missedCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
+									inquiryCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
+									interestCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
+									noInterestCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
+									incorrectReferralCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
+									newOpportunityCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
+									meetingScheduledCallsCount++;
+								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
+									queuedCallsCount++;
+								total_Calls++;
+								
+								
+							}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+							}
+						cateJson.put("total", total_Calls);
+						cateJson.put("answered", answeredCallsCount);
+						cateJson.put("busy", busyCallsCount);
+						cateJson.put("missed", missedCallsCount);
+						cateJson.put("failed", failedCallsCount);
+						cateJson.put("voiceMail", voiceMailCallsCount);
+						cateJson.put("missed", missedCallsCount);
+						cateJson.put("inquiry", inquiryCallsCount);
+						cateJson.put("interest", interestCallsCount);
+						cateJson.put("noInterest", noInterestCallsCount);
+						cateJson.put("incorrectReferral", incorrectReferralCallsCount);
+						cateJson.put("newOpportunity", newOpportunityCallsCount);
+						cateJson.put("meetingScheduled", meetingScheduledCallsCount);
+						cateJson.put("queued", queuedCallsCount);
 						cateJson.put("name", "Deals Won");
-						cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
+						//cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
 						cateJson.put("userName", domainUser.name);
 						if(dUser.id.equals(domainUser.id))
 							cateJson.put("isDomainUser", true);
@@ -1504,7 +1561,7 @@ public class PortletUtil {
 						Collections.sort(cateList,new Comparator<JSONObject>(){
 							@Override  
 			                public int compare(JSONObject o1, JSONObject o2){
-								return Integer.valueOf(o2.getInt("value")).compareTo(Integer.valueOf(o1.getInt("value")));  
+								return Integer.valueOf(o2.getInt("answered")).compareTo(Integer.valueOf(o1.getInt("answered")));  
 			                }
 			            });
 					}

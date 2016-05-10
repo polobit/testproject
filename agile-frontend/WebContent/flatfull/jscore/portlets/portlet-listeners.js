@@ -966,21 +966,16 @@ $('.portlet_body')
 		    }
 	    }
 	});
-		$('.portlet_body').on('mouseover','.calls_popover',function(e){
-			$(this).tooltip(
+		
+			 $('.calls_popover').tooltip(
 								{
 									
-									"trigger" : "hover",
-									"placement" : "right",
 									"html" : "true",
-									//"content" : "hello",
-									"container" : "body"
+									"placement" : "right",
+									"container" : "body",
+									"template": '<div class="tooltip leaderboard_calls"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
 
 								});
-						/*$(this).popover('show');*/
-						$(this).tooltip('show');
-
-		});
 
 }
 
