@@ -84,7 +84,7 @@ public class AgileForm extends HttpServlet
 
 	    addNotesToContact(contact, owner, formJson);
 	    Form form =null;
-	    if(!agileFormId.isEmpty())
+	    if(!agileFormId.isEmpty()&& agileFormId.contains("[0-9]+"))
 		form = FormUtil.getFormById(Long.parseLong(agileFormId));
 	    else
 		form = FormUtil.getFormByName(agileFormName);
