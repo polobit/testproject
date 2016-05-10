@@ -40,6 +40,7 @@ function agile_validations(){
  						else {
  							document.getElementById("agile_span"+i).innerHTML = "Please enter a valid email.";
  							count++;
+ 							isValid = false;
  							continue;
  						}	
  					}
@@ -54,6 +55,7 @@ function agile_validations(){
  						else {
  							document.getElementById("agile_span"+i).innerHTML = "Please enter valid phone number (+xxxxxxxxxx)";
  							count++;
+ 							isValid = false;
  							continue;
  						}	
  					}
