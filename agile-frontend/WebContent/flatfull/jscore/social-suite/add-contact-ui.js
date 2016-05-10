@@ -1,6 +1,3 @@
-/*declaring an global variable for the using in its bosy and changeProperty method
-*because of that the error is coming in live 
-*/
 SOCIAL_SUITE_CONTACT = {};
 $(function()
 {
