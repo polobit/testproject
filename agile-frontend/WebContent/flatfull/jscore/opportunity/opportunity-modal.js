@@ -469,6 +469,7 @@ function updateDeal(ele, editFromMilestoneView)
 	});
 
 	// Enable the datepicker
+	$('#close_date', dealForm).datepicker("remove");
 	$('#close_date', dealForm).datepicker({
 		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
 	});
@@ -614,6 +615,7 @@ function show_deal()
 	populateDealSources(el, undefined);
 
 	// Enable the datepicker
+	$('#close_date', el).datepicker("remove");
 	$('#close_date', el).datepicker({
 		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
 	});
