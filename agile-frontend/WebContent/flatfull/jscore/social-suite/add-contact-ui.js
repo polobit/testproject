@@ -1,3 +1,6 @@
+/*declaring an global variable for the using in its bosy and changeProperty method
+*because of that the error is coming in live 
+*/
 SOCIAL_SUITE_CONTACT = {};
 $(function()
 {
@@ -82,7 +85,9 @@ $(function()
 	$('#personModal').on('shown.bs.modal', function(e)
 	{
 		changeProperty();
-		//adding this code for the getting the name and the twitter id
+		/*adding this code for the getting the name and the twitter id and picture 
+		*when new contact popup will open(pre-populated)
+		*/
 		var streamId = SOCIAL_SUITE_CONTACT["streamId"];
 		var tweetId = SOCIAL_SUITE_CONTACT["tweetId"];
 
@@ -109,7 +114,7 @@ $(function()
 		$("#fname", $('#personModal')).val(firstName);
 		$("#lname", $('#personModal')).val(lastName);
 		$("#job_title", $('#personModal')).attr("value", description);
-		//adding this  lines of code for the remove the error
+		//adding this  lines of code for the remove the error that is in live
 		$("#network_handle").addClass("socialsuite-network-handle");
 
 		//document.getElementById("network_handle").className = 'socialsuite-network-handle';
@@ -128,12 +133,18 @@ $(function()
 		if (pic != undefined && pic != null)
 		{
 			var el = $('<img class="imgholder thumbnail person-img" onload="changeProperty()" style="display: inline;"  src="' + pic + '"></img>');
-			//$('#pic').html(el).show();
+			$('#pic').html(el).show();
 			//adding the code for to appending picture into the textbox
-			$('#pic').addClass("imgholder thumbnail person-img")
-
+			//$('#pic').addClass("imgholder thumbnail person-img")
+            /*
+            *adding this line for the if any error will come to locate a picture and 
+            *it must show the error msg
+            */
 			$("#img").error(function()
 			{
+				/*
+				*due to error picture will not display
+				*/
 				$('#pic').css("display", "none");
 			});
 		}
