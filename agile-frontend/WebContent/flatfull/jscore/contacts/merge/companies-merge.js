@@ -1,0 +1,1 @@
+var dup_companies_array = [];

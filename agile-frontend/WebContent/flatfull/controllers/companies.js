@@ -505,18 +505,18 @@ var CompaniesRouter = Backbone.Router
 
 	duplicateCompany : function(company_id){
 
-		dup_contacts1_array.length = 0;
-		var max_contacts_count = 20;
+		dup_companies_array.length = 0;
+		var max_companies_count = 20;
 		var individual_tag_name = "tr";
 
 		// Default url for contacts route
 		this.contact_id = company_id;
-		var url = '/core/api/search/duplicate-contacts/' + company_id;
+		var url = '/core/api/search/duplicate-companies/' + company_id;
 		var collection_is_reverse = false;
-		template_key = "duplicate-contacts";
+		template_key = "duplicate-companies";
 
-		if (App_Contacts.contactDetailView === undefined){
-			Backbone.history.navigate("contact/" + company_id, { trigger : true });
+		if (this.companyDetailView === undefined){
+			Backbone.history.navigate("company/" + company_id, { trigger : true });
 			return;
 		}
 
@@ -524,7 +524,7 @@ var CompaniesRouter = Backbone.Router
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.duplicateContactsListView = new Contacts_Events_Collection_View({ 
+		this.duplicateCompanyListView = new Contacts_Events_Collection_View({ 
 			url : url, 
 			templateKey : template_key, 
 			individual_tag_name : 'tr', 
@@ -541,9 +541,9 @@ var CompaniesRouter = Backbone.Router
 		});
 
 		// Contacts are fetched when the app loads in the initialize
-		this.duplicateContactsListView.collection.fetch();
+		this.duplicateCompanyListView.collection.fetch();
 
-		$('#content').html(this.duplicateContactsListView.render().el);
+		$('#content').html(this.duplicateCompanyListView.render().el);
 
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
