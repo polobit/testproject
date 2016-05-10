@@ -92,11 +92,13 @@ public class CustomElementServlet extends HttpServlet
     	    
     	    for(Form form : forms) {    	    	
     	    	if(form.formHtml != null) {
-    	    		form.formHtml = form.formHtml.replace("<div class=\"agile-custom-clear\"></div>", "");
+//    	    		form.formHtml = form.formHtml.replace("<div class=\"agile-custom-clear\"></div>", "");
+//    	    		form.formHtml = form.formHtml.replace("class=\"form-view\" id=\"agile-form\"", "class=\"form-view clearfix\" id=\"agile-form\"");
+    	    		
         	    	JSONObject formElement = new JSONObject();
         	    	formElement.put("css", "");      	    	
     	    		formElement.put("config", String.format(formConfig, form.formName));
-    	    		formElement.put("html", form.formHtml);
+    	    		formElement.put("html", "<div id=\""+form.id+"\" class=\"embed-container\" style=\"min-height: 250px;\"><iframe src=\"../../form.jsp?id="+form.id+"\" frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\"></iframe></div>");
     	    		elementsJsonArray.put(formElement);
     	    	}
     	    }
