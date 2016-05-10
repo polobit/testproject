@@ -24,10 +24,22 @@
     	{{/is_mobile}}
 
 	</div>
-   {{#hasRestrictedMenuScope 'CREATE_CONTACT'}} {{else}}
+   {{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
+   <div class="btn-group">
+
+        <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> Add Contact</button>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+
+        <ul class="dropdown-menu pull-right" role="menu">
+        {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
+            <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
+        {{/hasRestrictedMenuScope}}
+            <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">Add Dashlet</a></li>
+        </ul>
+    {{else}}
     <div class="btn-group">
 
-        <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
+        <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon-plus-sign"></i> Add Contact</button>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 
 		<ul class="dropdown-menu pull-right" role="menu">
