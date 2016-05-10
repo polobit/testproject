@@ -5,14 +5,18 @@
 var DealsRouter = Backbone.Router.extend({
 
 	routes : {
-
-	/* Deals/Opportunity */
-	"deals" : "deals", "import-deals" : "importDeals",
-	"deal-rc-0" : "dealsRightClick","deal-rc-1" : "dealsRightClick","deal-rc-2" : "dealsRightClick","deal-rc-3" : "dealsRightClick",
-	"deal-filters" : "dealFilters", 
-	"deal-filter-add" : "dealFilterAdd",
-	"deal-filter-edit/:id" : "dealFilterEdit",
-	"deal-filter/:id" : "dealFilter"},
+		/* Deals/Opportunity */
+		"deals" : "deals", 
+		"import-deals" : "importDeals",
+		"deal-rc-0" : "dealsRightClick",
+		"deal-rc-1" : "dealsRightClick",
+		"deal-rc-2" : "dealsRightClick",
+		"deal-rc-3" : "dealsRightClick",
+		"deal-filters" : "dealFilters", 
+		"deal-filter-add" : "dealFilterAdd",
+		"deal-filter-edit/:id" : "dealFilterEdit",
+		"deal-filter/:id" : "dealFilter"
+	},
 
 	/**
 	 * Fetches all the opportunities as list and also as milestone lists.
@@ -25,15 +29,7 @@ var DealsRouter = Backbone.Router.extend({
 		pipeline_id = 0;
 		if (_agile_get_prefs("agile_deal_track"))
 			pipeline_id = _agile_get_prefs("agile_deal_track");
-		/*var deal_filters = _agile_get_prefs('deal-filters');
-		if(deal_filters)
-		{
-			var filtersJSON = $.parseJSON(deal_filters);
-			if(filtersJSON && filtersJSON.pipeline_id)
-			{
-				pipeline_id = filtersJSON.pipeline_id;
-			}
-		}*/
+		
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
 		
 		//fix for mobile view showing only list view 
@@ -53,17 +49,9 @@ var DealsRouter = Backbone.Router.extend({
 					  return;
 				$('#opportunity-listners').html($(template_ui));
 
-				// Add row-fluid if user prefs are set to fluid
-				if (IS_FLUID)
-				{
-					$('#opportunity-listners').find('div.row').removeClass('row').addClass('row');
-				}
-				pipeline_count = 0;
-				deal_fetching = false;
 				DEALS_LIST_COLLECTION = null;
 				setupDealsTracksList();
 				setupDealFilters();
-				//setupNewDealFilters();
 				initializeDealListners();
 				loadPortlets('Deals');
 				contactListener();
@@ -73,7 +61,7 @@ var DealsRouter = Backbone.Router.extend({
 		else
 		{
 			var that = this;
-			setupNewDealFilters(function(){
+			setupDealFilters(function(){
 				DEALS_LIST_COLLECTION = null;
 				getTemplate("opportunities-header-list", {}, undefined, function(template_ui){
 				if(!template_ui)
@@ -121,7 +109,7 @@ var DealsRouter = Backbone.Router.extend({
 						} });
 						deal_bulk_actions.init_dom(el);
 						setupDealsTracksList(cel);
-						setupDealFilters(cel);
+						//setupDealFilters(cel);
 						setNewDealFilters(App_Deals.deal_filters.collection);
 						initializeDealListners(el);
 						contactListener();
