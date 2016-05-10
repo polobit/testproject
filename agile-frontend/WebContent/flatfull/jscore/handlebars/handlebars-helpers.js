@@ -6492,7 +6492,7 @@ $(function()
 		
 	});
 	Handlebars.registerHelper('getFirstLetter',function(string){
-		return new Handlebars.SafeString(string.charAt(0).toUpperCase());
+		return new Handlebars.SafeString(string.charAt(0).toLowerCase());
 		
 	});
 	

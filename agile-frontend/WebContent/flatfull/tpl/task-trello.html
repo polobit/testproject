@@ -69,8 +69,8 @@
 	</div>
 	</div>
 
-<div class="wrapper-md p-b-none" style="overflow-y:hidden;">
-	<div id="new-task-list-based-condition"> 
+<div class="wrapper-md p-b-none">
+	<div id="new-task-list-based-condition"style="position:absolute;left:15px;right:15px;"> 
   		<img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
 	</div>
 	<div id="task-list-based-condition"></div>
@@ -213,7 +213,7 @@
      <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time></div> -->
 
      <div class="pull-left w-full text-ellipsis text-muted m-t-n-xs">
-      <time class="new-task-due-time time-ago" >{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time></div>
+      <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Due date & time">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time></div>
 
 </div>
 <div class="clearfix"></div>
@@ -258,7 +258,7 @@
        {{/if_equals}}
 {{/if_equals}}
       <label class="label bg-light dk text-tiny m-r-xs" title="Category" data-toggle="tooltip" data-placement="bottom" data-container="body">{{get_normal_name type}}</label>
-      <label class="label bg-light dk text-tiny" data-toggle="tooltip" data-placement="bottom" data-container="body" title="{{get_normal_name status}}">{{get_normal_name status}}</label>
+      <label class="label bg-light dk text-tiny" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Status">{{get_normal_name status}}</label>
       
   </div>  
   
