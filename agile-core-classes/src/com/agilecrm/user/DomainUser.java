@@ -282,7 +282,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public String owner_pic;
 	
 	@NotSaved(IfDefault.class)
-	public Boolean is_secure = false;
+	public Boolean is_secure = true;
 
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
