@@ -86,6 +86,7 @@ function agile_validations(){
 						spanTag.style.fontSize = "12px";
 						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
 						count++;    //if span created then we will increase by one
+						isValid = false;
 						continue;
  						}
 
@@ -105,6 +106,7 @@ function agile_validations(){
 							spanTag.style.fontSize = "12px";
 							inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
 							count++;    //if span created then we will increase by one
+							isValid = false;
 							continue;
  						}
 
