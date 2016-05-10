@@ -751,7 +751,9 @@ var SettingsRouter = Backbone.Router
 						$('#online-calendar a[href="#calendar-tab"]', el).tab('show');
 						//online_calendar_tabs.loadScheduleUrlTab("#online-cal-listners");
 
-						var onlineschedulingURL = "https://" + CURRENT_DOMAIN_USER.domain + ".agilecrm.com/calendar/" + view.model.get('schedule_id');
+						var currentDomain = getCurrentDomain();
+
+						var onlineschedulingURL = "https://" + currentDomain + ".agilecrm.com/calendar/" + view.model.get('schedule_id');
 
 						$("#scheduleurl").attr("href", onlineschedulingURL);
 						$("#scheduleurl").text(onlineschedulingURL);
@@ -914,3 +916,13 @@ var SettingsRouter = Backbone.Router
 			}
 
 		});
+
+
+function getCurrentDomain(options){
+	var url = window.location.host;
+	var exp = /(\.)/;
+	if (url.search(exp) >= 0){
+		return url.split(exp)[0];
+	}
+	return " ";
+}

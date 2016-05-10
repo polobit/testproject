@@ -166,6 +166,12 @@
 		$('#milestone-listner').on('click', '.milestone-won', function(e){
 		//$('.milestone-won').die().live('click',function(e){
 			e.preventDefault();
+			var pipeId = $(this).parents(".milestones-table").attr('data');
+			var response = $.ajax({ type : "GET", url :'core/api/opportunity/numberOfDeals?id='+pipeId, async : false, dataType : 'json' }).responseText;
+			if(response == "success"){
+				alert("'Won' milestone cannot be changed now as the track already has deals.");
+				return;
+			}
 			if(!$(this).hasClass('disabled'))
 				setWonMilestone($(this));
 		});
@@ -173,6 +179,12 @@
 		$('#milestone-listner').on('click', '.milestone-lost', function(e){
 		//$('.milestone-lost').die().live('click',function(e){
 			e.preventDefault();
+			var pipeId = $(this).parents(".milestones-table").attr('data');
+			var response = $.ajax({ type : "GET", url :'core/api/opportunity/numberOfDeals?id='+pipeId, async : false, dataType : 'json' }).responseText;
+			if(response == "success"){
+				alert("'Lost' milestone cannot be changed now as the track already has deals.");
+				return;
+			}
 			if(!$(this).hasClass('disabled'))
 				setLostMilestone($(this));
 		});

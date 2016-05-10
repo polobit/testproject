@@ -185,11 +185,14 @@
                           </div>
                     <div class="text-center text-lg">Still want to cancel?</div>
                     <div class="text-base text-muted m-b m-t-xs">By cancelling your subscription all your data and settings will be lost and never restore them back.</div>
-                    <div class="m-b">
+                    <div class="m-b-xs">
                     	<a href="#" id="cancel-account-request-proceed" class="btn btn-sm btn-default">Cancel My Subscription</a>
                         <a href="#" onClick="$('#send-cancellation').modal('hide');" class="btn btn-sm m-l-sm" style="background-color: #50c7a7;color:white;">Back to Dashboard</a>
-                        </div>
                     </div>
+                    {{#ifCond date "greaterthan" "0"}}
+                    <p class="text-sm">Please note that your subscription is valid till {{epochToHumanDate "dd mmm yyyy" date}}. Cancelling your account now will result in lapse of remaining usage period.</p>
+                    {{/ifCond}}
+                </div>
             </div>
         </div>
     </div>
