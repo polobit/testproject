@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.contacts;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -21,12 +22,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.deferred.UpdateContactsDeferredTask;
 import com.agilecrm.contact.exception.DuplicateCustomFieldException;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -456,15 +460,29 @@ public class CustomFieldsAPI
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
     public String syncAppData(@QueryParam("domain") String domain){
     	String domainName = NamespaceManager.get();
+    	String domainUser = DomainUserUtil.getCurrentDomainUser().domain;
     	System.out.println(domainName);
     	System.out.println(domain);
-    	if( domainName != null  && domainName.equals(domain)){
-    		
-    			UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domain);
-    			// Add to queue
-    			Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
-    			queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
-    			return "success";
+    	if( domainUser != null){
+    			try {
+    				ContactSchemaUpdateStats schema = ContactSchemaUpdateStats.get(domainUser);
+    				if(schema != null){
+    					Long updated_time = schema.updated_time ;
+    					Date update_date = new Date(updated_time);
+    					Date current_date = new Date();
+						if(update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear()){
+							UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domain);
+							// Add to queue
+							Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
+							queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
+							return "success";
+						}
+						return "limitReached" ;
+    				}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     	
     	}
     	return "fail";

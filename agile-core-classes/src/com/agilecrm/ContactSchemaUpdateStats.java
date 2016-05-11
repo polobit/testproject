@@ -34,6 +34,8 @@ public class ContactSchemaUpdateStats
 	public Integer total;
 	
 	public String failedIds;
+	
+	public Long updated_time = 0L;
 
 	
 	private static ObjectifyGenericDao<ContactSchemaUpdateStats> dao = new ObjectifyGenericDao<ContactSchemaUpdateStats>(
@@ -44,6 +46,7 @@ public class ContactSchemaUpdateStats
 	 */
 	public void save()
 	{
+		this.updated_time = System.currentTimeMillis() / 1000 ; 
 		dao.put(this);
 	}
 

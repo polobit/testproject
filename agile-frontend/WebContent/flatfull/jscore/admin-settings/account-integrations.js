@@ -106,12 +106,12 @@ function syncAppData(){
 				console.log(data);
 				if(data == "success"){
 					alert("Done");
-				//	$('#sync-app-data').find('.sync-app-con').addClass("disabled");
+                  }
+                  else if (data == "limitReached"){
+                  	alert("Limit for this month reached.Try on coming month.");
                   }
                   else{
-                  	alert("Sorry you are not "+domain);
-                //  	$('#sync-app-data').find('.sync-app-con').addClass("disabled");
-
+                  	alert("Sorry domain is not matching");
                   }
 			},
 			error : function(response) {
