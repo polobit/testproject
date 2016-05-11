@@ -101,7 +101,7 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL();
 }
 
-// Users can show their logo on login page. 
+// Users can show their company logo on login page. 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
@@ -243,8 +243,20 @@ if(isSafari && isWin)
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 				<%}%>
-				<div>
-				
+				<div style=" text-align: center;">
+					<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
+                       {
+                       %>
+                   <img class="company_logo" src="<%=logo_url%>" style="width:50px;height:40px;" ></img>
+                   <%
+                   }else{
+                   %>
+                  
+                   <img class="company_logo" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png" style="width:50px;height:40px;" ></img>
+                   <%
+               			}
+                   %>
+			
 				<form id='oauth' name='oauth' method='post'>
               <%--      <div><h3>Sign In
                    

@@ -20,7 +20,7 @@
             <input name="id" class="form-control" type="hidden" value="{{id}}" />
             
             <div class="row">
-                <div class="col-md-7 col-xs-12">
+                <div class="col-md-8 col-xs-12">
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Plan</label> 
                         <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
@@ -43,11 +43,33 @@
                         </div>
                     </div>
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">Company <span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4 col-xs-4">Company Name <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
                             <input name="company_name" class="input-medium required form-control" type="text" value="{{company_name}}" />
                         </div>
+
                     </div>
+
+                    <div class="control-group form-group">
+                    <label class="control-label col-sm-4 col-xs-4">Company Logo</label> 
+                    <div id="upload-container" class="controls col-sm-8 col-xs-8" messg="User image has been uploaded">     
+                                   <div class="imgholder company_logo form-whitelabel-image">
+                                            {{#if logo}}
+                                            <img  src="{{logo}}" height="60" width="120" />
+                                            {{else}}
+                                            <img  src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container"  height="60" width="120" />
+                                            {{/if}}                                            
+                                  </div>
+                                  <div class="company_logo_upload">
+                                     <input type="hidden" id="upload_url" name="logo" class="logo"  />  
+                                     <input  class="upload_s3 btn btn-default" type="button" id="account_prefs_image" value="Upload" />
+                                  </div>
+                       
+                    </div>                        
+                    </div>
+
+
+
 
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Domain</label>
@@ -67,30 +89,11 @@
 					 <input name="timezone" class="form-control" type="hidden" value="{{timezone}}" />
 				</div>
                     
-                <div class="col-md-offset-2 col-md-3 col-xs-offset-4 col-xs-8 hide">
-                    <div >
-                        <div id="upload-container" messg="User image has been uploaded">
-                            <div class="clearfix">
-                                <div class="imgholder thumb-wrapper thumb-lg">
-                                    {{#if logo}}
-                                    <img class="w-full" src="{{logo}}"  width="85" />
-                                    {{else}}
-                                    <img class="w-full" src="https://contactuswidget.appspot.com/images/pic.png"  width="85" />
-                                    {{/if}}                                                 
-                                </div>
-                                <p>
-                                    <input type="hidden" class="form-control" id="upload_url" name="logo" />  
-                                    <input class="upload_s3 btn btn-default btn-sm m-t-sm m-l-xs" type="button" id="account_prefs_image" value="Upload Logo" />
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="clearfix"></div>
 <div class="line ling-lg b-b"></div>
 <div class="row">
-<div class="col-md-7 col-xs-8">
+<div class="col-md-8 col-xs-8">
 <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
             
                 <a href="#" type="submit" class="save btn btn-sm btn-primary">Save Changes</a>

@@ -9,8 +9,6 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.Base64Encoder"%>
 <%@page import="com.agilecrm.util.NamespaceUtil"%>
-<%@page import="com.agilecrm.account.AccountPrefs" %>
-<%@page import="com.agilecrm.account.util.AccountPrefsUtil" %>
 
 <%
     		String campaignId = request.getParameter("cid");
@@ -57,6 +55,9 @@
 				out.println("You are successfully unsubscribed. Thank you.");
 				return;
 			}
+			// Users can show their company logo on login page. 
+			AccountPrefs accountPrefs2 = AccountPrefsUtil.getAccountPrefs();
+			String logo_url = accountPrefs2.logo;
 %>
 
 <html>
@@ -381,7 +382,19 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 
 <body>
 	<div class="wrapper rounded6" id="templateContainer">
-		<h1><%=company%></h1>
+		<!--<h1><%=company%></h1>-->
+			<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
+	            {
+	        %>
+           <img class="company_logo" src="<%=logo_url%>" style="width:50px;height:40px;" ></img>
+           <%
+           }else{
+           %>
+          
+           <img class="company_logo" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png" style="width:50px;height:40px;" ></img>
+           <%
+       			}
+            %>
 		<div id="templateBody" class="bodyContent rounded6">
 			<h2>Unsubscribe</h2>
 			<form id="unsubscribe-form" action="/confirmation" method="post" onsubmit="return isValid();" novalidate>
