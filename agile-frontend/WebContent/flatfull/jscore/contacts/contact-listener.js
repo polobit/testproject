@@ -4,9 +4,6 @@ var timer = undefined;
   	
 
 		$('body').on('click','.contactcoloumn',function(e){
-
-		
-			
 			var json = serializeForm("contact-static-fields");
 			console.log(json)
 			$.ajax({
@@ -17,13 +14,32 @@ var timer = undefined;
 					data :JSON.stringify(json),
 					success : function(data)
 						{
-							console.log("inside the success function" )
+							
 							location.reload();
 						} 
 					});
+
 					
 			
 		});
+
+
+			$('body').on('click','.companycoloumn',function(e){
+				var array = serializeForm('companies-static-fields');
+				console.log("harsha magic");
+				$.ajax({
+					url : 'core/api/contact-view-prefs/company',
+					type : 'PUT',
+					contentType : 'application/json',
+					dataType : 'json',
+					data :JSON.stringify(array),
+					success : function(data)
+						{
+							location.reload();
+							
+						} 
+					});
+			});
 
 	$('body').off('mouseover','.popover_contact');
 		$('body').on('mouseover','.popover_contact',function(e){

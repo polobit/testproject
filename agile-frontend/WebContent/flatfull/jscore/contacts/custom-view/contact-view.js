@@ -353,6 +353,45 @@ function setUpContactSortFilters(el)
 	
 }
 
+function setUpCompanyFields(el)
+{
+	var companyfields = [] ; 
+	$('#companies-static-fields-group', el).html(getTemplate("companies-custom-fields"));
+	$.ajax({ type : 'GET', url : '/core/api/custom-fields/', contentType : "application/json; charset=utf-8",
+				success : function(data)
+				{
+					console.log(data)
+					for(var i=0 ; i<data.length ;i++)
+					{
+						if(data[i].scope == 'COMPANY')
+						{
+						getTemplate("companies-custom-fields-append", data[i], undefined, function(template_ui){
+     							if(!template_ui)
+    					  		return;
+    						$("#custom-fields-group",el).append(template_ui);
+
+ 							});
+						}
+
+					}
+				}, dataType : 'json' });
+
+			$.ajax({
+					url : 'core/api/contact-view-prefs/company',
+					type : 'GET',
+					dataType : 'json',
+					
+					success : function(data)
+						{
+						var customfields = $("#companies-static-fields");
+						deserializecontactsForm(data.fields_set, customfields);
+						console.log(data);
+					}
+				});
+
+
+}
+
 function addCustomFieldToSearch(base_model, scope)
 {
 	var sort_view;

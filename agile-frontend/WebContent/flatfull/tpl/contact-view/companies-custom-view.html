@@ -112,6 +112,22 @@
 					    <button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Export as CSV</button>
 					    {{/hasScope}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >Delete</button>
+					    <div class="btn-group dropdown pull-right multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
+							 <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="companies_columns">
+                    		<i class="fa fa-navicon" ></i>
+                			</button>
+                			<ul class="pull-right dropdown-menu  p-l"  role="menu">
+                			
+                			
+                			<form id="companies-static-fields" class="">
+                			<div class="multiple-checkbox" name="fields_set" id="companies-static-fields-group">
+                			</div>
+                			</form>
+                			
+                			</ul>
+
+				        </div>
+					    
 					    
 				    </div>
 					
@@ -196,4 +212,59 @@
 
 
 </script>
+
+
+<script id="companies-custom-fields-template" type="text/html">
+			
+	       		  <li>
+	       		  	<a href="javascript:void(0);" class="p-b-none">
+						<label class="i-checks i-checks-sm companycoloumn "><input name="basic_info" value="basic_info"type="checkbox" class="choose-column-chbx"><i></i></label>Basic info</a></li>
+	                  <li>
+	       		  		<a href="javascript:void(0);" class="p-b-none">
+							<label class="i-checks i-checks-sm companycoloumn "><input name="name" value = "name"type="checkbox" class="choose-column-chbx"><i></i></label>Name</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="url" value = "url"type="checkbox" class="choose-column-chbx"><i></i></label>Url</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input  name="phone" value = "phone"type="checkbox" class="choose-column-chbx"><i></i></label>Phone</a></li> 
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="address"value="address"type="checkbox" class="choose-column-chbx"><i></i></label>Address</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="website" value = "website"type="checkbox" class="choose-column-chbx"><i></i></label>Website</a></li>
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="created_time"value ="created_time"type="checkbox" class="choose-column-chbx"><i></i></label>Created Date</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="updated_time"value = "updated_time"type="checkbox" class="choose-column-chbx"><i></i></label>Updated Date</a></li> 
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="image"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="star_value"value = "star_value"type="checkbox" class="choose-column-chbx"><i></i></label>Star Value</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="tags"value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>Tags</a></li>
+	               
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input  name="lead_score"value = "lead_score"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Score</a></li>
+	                      <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="owner"value = "owner"type="checkbox" class="choose-column-chbx"><i></i></label>Owner</a></li>
+	                   <div id="custom-fields-group"class="" ></div>
+	                     
+	      			</script>
+<script id="companies-custom-fields-append-template" type="text/html">
+ <li>
+	<a href="javascript:void(0);" class="p-b-none">
+		<label class="i-checks i-checks-sm companycoloumn"><input name="{{field_label}}" value="{{field_label}}"type="checkbox" class="choose-column-chbx"><i></i></label>{{field_label}}</a></li>
+
+</script>
+
+
+
 
