@@ -504,9 +504,19 @@ public class EmailGatewayUtil
 	try
 	{
 		List<Object[]> queryList = new ArrayList<Object[]>();
+		Map<String, String> campaignNameMap = new HashMap<String, String>();
 	    for (MailDeferredTask mailDeferredTask : tasks)
 	    {
-		    String campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId);
+	    	String campaignName = null;
+	    	if (!campaignNameMap.containsKey(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain))
+		    {
+			campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId);
+			campaignNameMap.put(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain, campaignName);
+		    }
+		    else
+		    {
+			campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
+		    }
 		    String oldNamespace = NamespaceManager.get();
 		    try{	    
 		    NamespaceManager.set(mailDeferredTask.domain);
