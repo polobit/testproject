@@ -209,36 +209,45 @@ function initializeTasksListeners(){
 		console.log("hello");
 		e.preventDefault();
 		var form_id = $(this).closest('.bulk-task-action-model').find('form').attr("id");
-		var json = serializeForm(form_id);
+		var priorityJson = serializeForm(form_id);
 		console.log("hello");
 		console.log(task_ids); 
-		saveBulkTaskProperties(task_ids,json,form_id);
+		saveBulkTaskProperties(task_ids,priorityJson,form_id);
 	});
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
 	{
-		var count = false;
+		var taskCount  = 0;
 		$.each($('.tbody_check'), function(index, element)
 			{
 				if($(element).is(':checked')){
-					$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
-					return false;
+					taskCount = taskCount + 1 ;
 				}
-				count = true;
 			});
-		if(count)
+		if(taskCount){
+			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
+			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' select <a id="select_total_tasks">all</a>');
+		}
+		else{			
 			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
+			$('#tasks-list-template').find('#select_all_tasks').empty();
+		}
+
 	});
 	$('#tasks-list-template').on('click', '.thead_check', function(event)
 	{
 		if(this.checked){
+			var taskCount = 0 ;
 			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
 			$.each($('.tbody_check'), function(index, element)
 				{
 					$(element).attr('checked', "checked");
+					taskCount = taskCount + 1;
 				});
+			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' select <a id="select_total_tasks">all</a>');
 		}
 		else{
-				$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
+			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
+			$('#tasks-list-template').find('#select_all_tasks').empty();
 			$.each($('.tbody_check'), function(index, element)
 				{
 					$(element).attr('checked', "unchecked");
@@ -893,15 +902,17 @@ function getTaskIds(){
 		});
 		return id_array;
 }
-function saveBulkTaskProperties(task_ids,json,form_id){
-	var IdJson = {} ;
-	IdJson.ids = JSON.stringify(task_ids);
+function saveBulkTaskProperties(task_ids,priorityJson,form_id){
+	var IdJson = {} ; 
+	var priority = {};
+	IdJson = JSON.stringify(task_ids);
+	priority = JSON.stringify(priorityJson);
 	console.log(task_ids);
 	console.log(json);
 	console.log(form_id);
-	var url = 'core/api/tasks/changeBulkTasks/'+JSON.stringify(IdJson)+'/'+JSON.stringify(json)+'/'+form_id ;
+	var url = 'core/api/tasks/changeBulkTasks/'+IdJson+'/'+priority+'/'+form_id ;
 	if(task_ids && json){
-		jQuery.ajax({ url : url, dataType : 'json' , success : function(result)
+		jQuery.ajax({ url : url, dataType : 'json', method: "POST" , success : function(result)
 		{
 		
 		}, async : false });
