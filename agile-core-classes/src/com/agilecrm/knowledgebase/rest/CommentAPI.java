@@ -6,17 +6,22 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.knowledgebase.entity.Article;
+import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Comment;
+import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.CommentUtil;
 import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.googlecode.objectify.Key;
@@ -50,6 +55,30 @@ public class CommentAPI
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Comment> createComment(Comment comment,@QueryParam("article_id") Long article_id) throws WebApplicationException
+	{
+		try
+		{
+			
+			comment.article_key = new Key<Article>(Article.class, article_id);
+
+			comment.save();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			System.out.println("exception occured while creating workflow creation activity");
+
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return CommentUtil.getCommentsByArticleID(article_id);
+	}
+	
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<Comment> updateComment(Comment comment,@QueryParam("article_id") Long article_id) throws WebApplicationException
 	{
 		try
 		{

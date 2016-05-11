@@ -13,7 +13,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 		"categorie/:categorie_id/section/:section_id/article/:article_id" : "viewArticle",
 
 		/*Search articles*/
-		"search-article/:search_term" : "searchArticle",
+		"search-article/:search_term" : "searchArticle"  
 	},
 	categories: function(){
 
@@ -113,61 +113,101 @@ var HelpcenterRouter = Backbone.Router.extend({
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
+		            App_Helpcenter.renderComment(el,article_id); 		    
 				    
-				    App_Helpcenter.commentsCollection = new Base_Collection_View({
-						url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
-						templateKey : "article-comments",
-						individual_tag_name : 'div',
-							postRenderCallback : function(el){
-						
-							var commentsView = new Base_Model_View({
-							isNew : true,
-							template : "add-newcomments",
-							url : "/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
-                        
-                            postRenderCallback : function(el){  		    
-						
-								$(".clear",el).on("click",function(){
-                               		$("#comment").val('').empty();
-							 	}); 
-
-							 	$(".remove-comment").on("click",function(e){
-							    	e.preventDefault();
-							    	var id = $(this).data("id");
-							    	 $.ajax({
-							            url: '/helpcenterapi/api/knowledgebase/comment?id='+id,
-							            type: 'DELETE',
-							            contentType : "application/json",
-							            success : function(response){
-							            	model=App_Helpcenter.commentsCollection.collection.get(id);
-							                model.destroy();     
-							            
-							            }  
-							        });
-								});
-							},
-							saveCallback : function(model){
-								console.log(model);
-                                App_Helpcenter.commentsCollection.collection.add(model);							  
-							}
-					    	});
-					    	$('#comments-add').html(commentsView.render().el);
-                        }
-					    
-					});
-                    
-                    //Fetching groups collections
-					App_Helpcenter.commentsCollection.collection.fetch();
-
-					//Rendering template
-					$('#comments-collection').html(App_Helpcenter.commentsCollection.el);  
-
 				}
 			});
 
 	 		$('#helpcenter-container').html(articleView.render().el);
 	 	});
 	},
+
+	renderComment : function(el,article_id){
+    	App_Helpcenter.commentsCollection = new Base_Collection_View({
+			url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
+			templateKey : "article-comments",
+			individual_tag_name : 'div',
+				postRenderCallback : function(el){
+			
+			
+		 	$(".remove-comment").on("click",function(e){
+		    	e.preventDefault();
+		    	var id = $(this).data("id");
+		    	 $.ajax({
+		            url: '/helpcenterapi/api/knowledgebase/comment?id='+id,
+		            type: 'DELETE',
+		            contentType : "application/json",
+		            success : function(response){
+		            	model=App_Helpcenter.commentsCollection.collection.get(id);
+		                model.destroy();     
+		            
+		            }  
+		        });
+			});
+	    	$(".edit-comment").on("click",function(e){
+                      
+                e.preventDefault();      
+                var id = $(this).data("id");
+
+		    	App_Helpcenter.renderHomeTemplate(function(){
+				
+					commentsModel=App_Helpcenter.commentsCollection.collection.get(id);
+					
+					var editCommentView = new Base_Model_View({
+					isNew : false,
+					template : "add-newcomments",
+					model : commentsModel,
+					url : "/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
+			 		
+			 		saveCallback : function(model){
+                        
+			 			$("#comment").val('').empty();
+                         //console.log(model);
+		                commentsModel=App_Helpcenter.commentsCollection.collection.get(id);
+						commentsModel.set(model);
+						$('#comments-collection').html(App_Helpcenter.commentsCollection.el);  
+                        
+			 		}
+			 		});
+			 		$('#comments-add').html(editCommentView.render().el);
+				});
+			});
+				App_Helpcenter.saveComment(el,article_id);
+            
+            }
+		    
+		});
+        
+        //Fetching groups collections
+		App_Helpcenter.commentsCollection.collection.fetch();
+
+		//Rendering template
+		$('#comments-collection').html(App_Helpcenter.commentsCollection.el);  
+
+	},
+    
+    saveComment:function(el,article_id){
+	
+		var commentsView = new Base_Model_View({
+		isNew : true,
+		template : "add-newcomments",
+		url : "/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
+    
+        postRenderCallback : function(el){  		    
+	
+			$(".clear",el).on("click",function(){
+           		$("#comment").val('').empty();
+		 	}); 
+
+		},
+		saveCallback : function(model){
+			console.log(model);
+            App_Helpcenter.commentsCollection.collection.add(model);							  
+		}
+    	});
+    	$('#comments-add').html(commentsView.render().el);
+	},	    	
+	
 	renderHomeTemplate: function(callback){
 
 		if($('#helpcenter-container').length)
@@ -187,7 +227,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 			callback();
 	 	});
 	},
-
+	 
 	searchArticle: function(search_term){
 
 		App_Helpcenter.renderHomeTemplate(function(){
@@ -211,4 +251,5 @@ var HelpcenterRouter = Backbone.Router.extend({
 			$('#helpcenter-container').html(App_Helpcenter.articlesCollection.el);
 		});
 	}
+
 });

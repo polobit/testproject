@@ -14,14 +14,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 	   	
 	   	/* Show add edit section */
 	   	"helpcenter/sections" : "sections",
-	    "helpcenter/add-section" : "sectionAdd",
+	    "helpcenter/add-section" : "addSection",
+        "categorie/:id/add-section" : "addSection",
 	    "categorie/:categorie_id/section/:section_id/edit-section":"sectionEdit",
         
         /* Show add edit article */
-        "helpcenter/add-article" : "articleAdd",
-        "categorie/:id/add-section" : "addSectionfromCategorie",
+        "helpcenter/add-article" : "addArticle",
         "categorie/:categorie_id/section/:section_id/articles" : "sectionArticles",
-        "categorie/:categorie_id/section/:section_id/add-article" :  "addArticlefromSection",
+        "categorie/:categorie_id/section/:section_id/add-article" :  "addArticle",
         "categorie/:categorie_id/section/:section_id/article/:article_id": "showArticle",
         "categorie/:categorie_id/section/:section_id/article/:article_id/edit-article": "editArticle"       
     },
@@ -61,74 +61,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 			$('#helpcenter-content').html(addCatogeryView.render().el);    
 		});
   },
- 
-  	sectionAdd:function(){
-		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
-			
-			    var addsectionView = new Base_Model_View({
-	 				isNew : true, 
-	 				url : '/core/api/knowledgebase/section',
-	 				template : "helpcenter-add-section",
-	 				window : "#helpcenter/categories",
-			        postRenderCallback : function(el){
-			        	 var optionsTemplate = "<option value={{id}}>{{name}}</option>";
- 						 fillSelect('catogery', '/core/api/knowledgebase/categorie', '', null,
- 						             optionsTemplate, true);
-
-			        }
-			    });
-
-				$('#helpcenter-content').html(addsectionView.render().el);    
-	        
-		});
-
-  },
-  articleAdd: function(){
   
-  	setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
-  
-  		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
-	
-			    var addarticleView = new Base_Model_View({
-	 				isNew : true, 
-	 				url : '/core/api/knowledgebase/article',
-	 				template : "helpcenter-add-article",
-	 				window : "#helpcenter/categories",
-			        
-                    prePersist : function(model){
-						var json = {};
-						var catogery_id = $("#catogery option:selected").data('catogery-id');
-						json = {"categorie_id" : catogery_id };
-
-						var plain_content = '';
-
-						try{
-							plain_content = $(tinyMCE.activeEditor.getBody()).text();
-
-							json.plain_content = plain_content;
-						}
-						catch(err){}
-						
-						model.set(json, { silent : true });
-				    },
-
-			        postRenderCallback : function(el){
-					fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
-    
-			 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
-
-					},'', true);
-
-			        }
-			        
-			    });
-
-				$('#helpcenter-content').html(addarticleView.render().el);    
-	        
-		});
-
-  },
-  addArticlefromSection: function(category_id,section_id){
+  addArticle: function(category_id,section_id){
   
   	setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
   
@@ -166,13 +100,13 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 								if(!template_ui)
 									return;
-				
-								$('#catogery', el).html($(template_ui));	
-								$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);
 
-								//console.log("section_id:"+section_id);
-                                 
-					 			if(callback)
+				                $('#catogery', el).html($(template_ui));
+
+				                if(category_id && section_id)
+									$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);
+
+								if(callback)
 					 				callback();
 			               	} );		
 					
@@ -187,7 +121,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 		});
     },
 
-  addSectionfromCategorie: function(category_id){
+  addSection: function(category_id){
         
         App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
 		
@@ -199,11 +133,12 @@ var HelpcenterRouter = Backbone.Router.extend({
 		        postRenderCallback : function(el){
 		        	 var optionsTemplate = "<option value={{id}}>{{name}}</option>";
 						 fillSelect('catogery', '/core/api/knowledgebase/categorie', '',function(){
-                               
-                                       $('select option[value="'+category_id+'"]').attr("selected",true);    
-			                          
+                                           
+                                       if(!category_id)
+                                       	  return;
 
-
+                                       $('select option[value="'+category_id+'"]').attr("selected",true);
+                                        
 						 },optionsTemplate, true);
 
 		        }
@@ -250,6 +185,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 				url : "/core/api/knowledgebase/section?id=" + section_id,
 		        postRenderCallback: function(){
 
+		             showTransitionBar();
 		        	//Initializing base collection with groups URL
 					App_Helpcenter_Module.articlesCollection = new Base_Collection_View({
 						url : '/core/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,

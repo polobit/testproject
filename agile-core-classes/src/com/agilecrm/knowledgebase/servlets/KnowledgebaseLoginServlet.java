@@ -24,6 +24,7 @@ import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
@@ -142,7 +143,7 @@ public class KnowledgebaseLoginServlet extends HttpServlet
 		if (!password.equals(user.password))
 			throw new Exception("Incorrect password. Please try again.");
 
-		if (!user.is_verified)
+		if (!VersioningUtil.isDevelopmentEnv() && !user.is_verified)
 		{
 			HelpcenterUserUtil.sendVerificationEmail(user);
 			throw new Exception(
@@ -152,8 +153,17 @@ public class KnowledgebaseLoginServlet extends HttpServlet
 		Role role = Role.CUSTOMER;
 		
 		// Define a role
-		if(DomainUserUtil.getDomainUserFromEmail(email) != null)
+		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+		if(domainUser != null){
+			
+			// Set Cookie and forward to /home
+			UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
+			request.getSession().setAttribute(
+					SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
+
 			role = Role.ADMIN;
+		}
+			
 		
 		KnowledgebaseUserInfo userInfo = new KnowledgebaseUserInfo("agilecrm.com", email, user.name, role, user.id);
 

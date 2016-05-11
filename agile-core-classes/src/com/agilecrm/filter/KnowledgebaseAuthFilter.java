@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.agilecrm.session.KnowledgebaseManager;
 import com.agilecrm.session.KnowledgebaseUserInfo;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 
 /**
  * <code>AgileAuthFilter</code> is a Servlet Filter on HTTP request with urls:
@@ -63,7 +65,16 @@ public class KnowledgebaseAuthFilter implements Filter
 			System.out.println("Userinfo not null so adding to thread local....");
 			KnowledgebaseManager.set((HttpServletRequest) request);
 		}
-
+		
+		// Set Cookie and forward to /home
+		UserInfo  agileUserInfo = (UserInfo) httpRequest.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+		if (agileUserInfo != null)
+		{
+			// Add this in session manager
+			System.out.println("Userinfo not null so adding to thread local....");
+			SessionManager.set((HttpServletRequest) request);
+		}
+		
 		chain.doFilter(request, response);
 		return;
 	}

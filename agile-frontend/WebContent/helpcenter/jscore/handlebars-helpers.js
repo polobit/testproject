@@ -33,6 +33,9 @@ Handlebars.registerHelper('Commented_user', function(hc_user,options){
 });
 Handlebars.registerHelper('Admin_Commented_user', function(hc_user,options){
      
+ 	if(!hc_user)
+    	return options.fn(this);
+
  	if(!USERINFO)
  		return options.inverse(this);
 

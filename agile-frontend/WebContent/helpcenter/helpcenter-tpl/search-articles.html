@@ -6,6 +6,7 @@
 	{{/unless}}
 </script>
 <script id="helpcenter-search-articles-model-template" type="text/html">
+{{#if is_article_published}}
 <div>
 	<i class="fa fa-chevron-right" aria-hidden="true"></i>
 	<a class="h5" href="#categorie/{{categorie_id}}/section/{{section_id}}/article/{{id}}" 
@@ -17,4 +18,5 @@
 	</div>
 <hr style="border-color: #DADDDE; margin-top: 10px; margin-bottom: 10px;"/>
 </div>
+{{/if}}
 </script>

@@ -3,6 +3,10 @@
 Add Comment
 </div>
 <form id="userForm" name="userForm" method="post" action="" class="form-horizontal"> 
+	{{#if id}}
+        <input type="text" name="id" class="hide" value={{id}} >
+    {{/if}}
+                    
 	<div class="col-md-12 m-t-xs">
         <div class="controls">
             <textarea id="comment" class="form-control required" name="comment" style="min-height: 100px;"></textarea>		
