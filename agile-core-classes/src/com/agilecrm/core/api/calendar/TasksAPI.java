@@ -666,5 +666,21 @@ public class TasksAPI
 
 	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime, endTime);
     }
+    @Path("/changeBulkTasks")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> changeBulkTasks(@QueryParam("ids") String task_ids, @QueryParam("json") String property,@QueryParam("formId") String form_id)throws Exception{
+    	System.out.println(task_ids);
+    	System.out.println(property);
+    	System.out.println(form_id);
+    	return null;
+    
+    }
+    
+    
+    
+    
+    
     /***************************************************************************/
 }

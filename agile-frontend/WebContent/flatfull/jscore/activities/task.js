@@ -6,6 +6,7 @@
  * 
  * author: Rammohan
  */
+var task_ids;
 
 $( document ).ready(function() {
 	/**
@@ -183,23 +184,35 @@ function initializeTasksListeners(){
 		// Show and Fill details in Task Edit modal
 		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
-	$('#tasks-list-template').on('click', '#bulk-change-owner', function(event)
+	$('#tasks-list-template').on('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status ', function(event)
 	{
-		var task_ids = getTaskIds();
+		task_ids = getTaskIds();
 		console.log(task_ids);
+		var taskAction = this.id ; 
+		if(taskAction == "bulk-change-status")
+			$("#task-bulk-change-status").modal('show');
+		if(taskAction == "bulk-change-priority")
+			$("#task-bulk-change-priority").modal('show');
+		if(taskAction == "bulk-change-owner"){
+			var el = $('#bulkTaskOwnerForm');
+			$("#task-bulk-change-owner").modal('show');
+			populateUsers("owners-list", el, undefined, undefined, function(data)
+			{
+				$("#task-bulk-change-owner").find("#owners-list").html(data);
+				$("#owners-list", $("#task-bulk-change-owner")).closest('div').find('.loading-img').hide();
+			});
+		}
 
 	});
-	$('#tasks-list-template').on('click', '#bulk-change-priority', function(event)
+	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority').on('click', '#task_bulk_validate', function(e)
 	{
-		var task_ids = getTaskIds();
-		console.log(task_ids);
-		
-	});
-	$('#tasks-list-template').on('click', '#bulk-change-status', function(event)
-	{
-		var task_ids = getTaskIds();
-		console.log(task_ids);
-		
+		console.log("hello");
+		e.preventDefault();
+		var form_id = $(this).closest('.bulk-task-action-model').find('form').attr("id");
+		var json = serializeForm(form_id);
+		console.log("hello");
+		console.log(task_ids); 
+		saveBulkTaskProperties(task_ids,json,form_id);
 	});
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
 	{
@@ -879,4 +892,19 @@ function getTaskIds(){
 			}
 		});
 		return id_array;
+}
+function saveBulkTaskProperties(task_ids,json,form_id){
+	var taskIds = JSON.stringify(task_ids);
+	console.log(task_ids);
+	console.log(json);
+	console.log(form_id);
+	var url = 'core/api/tasks/changeBulkTasks?ids='+taskIds+'&json='+json+'&formId='+form_id;
+	if(task_ids && json){
+		jQuery.ajax({ url : url, dataType : 'json' , success : function(result)
+		{
+		
+		}, async : false });
+
+
+	}
 }
