@@ -562,19 +562,19 @@ var CompaniesRouter = Backbone.Router
 		var collection_is_reverse = false;
 		template_key = "merge-companies";
 
-		if (App_Contacts.duplicateCompaniesListView == undefined || dup_companies_array.length<1){
-			Backbone.history.navigate("contacts", { trigger : true });
+		if (this.companyDetailView == undefined || dup_companies_array.length<1){
+			Backbone.history.navigate("companies", { trigger : true });
 			return;
 		}
 		var contacts = [];
 		for (var i = 0; i < dup_companies_array.length; i++){
 			var contact_id = Number(dup_companies_array[i]);
-			var data = App_Contacts.duplicateCompaniesListView.collection.where({ id : contact_id });
+			var data = this.duplicateCompanyListView.collection.where({ id : contact_id });
 			var temp = contacts.concat(data);
 			contacts = temp;
 		}
 		var bigObject = {};
-		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		var master_record = this.companyDetailView.model.toJSON();
 		console.log(master_record);
 		var objects = []
 		var length = 0;
@@ -588,7 +588,8 @@ var CompaniesRouter = Backbone.Router
 		
 		// Contact Edit - take him to continue-contact form
 		add_custom_fields_to_form(bigObject, function(contact){
-			this.mergeContactsView = new Contact_Details_Model_Events({ template : template_key, data : bigObject, 
+			this.mergeContactsView = new Contact_Details_Model_Events({ 
+				template : template_key, data : bigObject, 
 				postRenderCallback : function(el){
 				
 				} 
