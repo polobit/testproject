@@ -284,5 +284,11 @@ function onLandingPageSaved(landingPage) {
         },
     });
 
-    
+}
+
+function formEmbedIFrameLoaded(iFrameEl) {
+	if(iFrameEl) {
+	    iFrameEl.height = "";
+	    iFrameEl.height = iFrameEl.contentWindow.document.body.scrollHeight + "px";
+	}
 }

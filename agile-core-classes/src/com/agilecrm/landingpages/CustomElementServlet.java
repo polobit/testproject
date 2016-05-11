@@ -98,7 +98,7 @@ public class CustomElementServlet extends HttpServlet
         	    	JSONObject formElement = new JSONObject();
         	    	formElement.put("css", "");      	    	
     	    		formElement.put("config", String.format(formConfig, form.formName));
-    	    		formElement.put("html", "<div data-embed-agile-form=\""+form.id+"\" class=\"embed-container\" style=\"min-height: 250px;\"><iframe src=\"../../form.jsp?id="+form.id+"\" frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\"></iframe></div>");
+    	    		formElement.put("html", "<div data-embed-agile-form=\""+form.id+"\" class=\"form-embed-container\"><iframe src=\"../../forms/"+form.id+"\" frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\" width=\"100%\" onload=\"parent.parent.formEmbedIFrameLoaded(this)\"></iframe></div>");
     	    		elementsJsonArray.put(formElement);
     	    	}
     	    }

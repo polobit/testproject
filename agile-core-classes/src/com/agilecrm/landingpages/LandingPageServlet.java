@@ -117,7 +117,7 @@ public class LandingPageServlet extends HttpServlet {
 		
 		String responsiveMediaIFrame = "<div id=\""+domain+"_%s\" class=\"agile_crm_form_embed\"></div>";
 		System.out.println(responsiveMediaIFrame);
-		Pattern p = Pattern.compile("<div data-embed-agile-form=\"(.*?)\" class=\"embed-container\"(?:[^>\"']|\"[^\"]*\"|'[^']*')*>(.*?)</div>",Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Pattern p = Pattern.compile("<div data-embed-agile-form=\"(.*?)\" class=\"form-embed-container\"(?:[^>\"']|\"[^\"]*\"|'[^']*')*>(.*?)</div>",Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = p.matcher(fullHtml);
 		
 		while(m.find()){
