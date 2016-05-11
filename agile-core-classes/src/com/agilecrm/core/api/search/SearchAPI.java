@@ -218,46 +218,46 @@ public class SearchAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Collection getDuplicateCompanies(@PathParam("id") String id, @QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor){
-			Collection collection = null;
-			try{
-			    Contact contact = ContactUtil.getContact(Long.valueOf(id));
-		
-			    // getting search query for finding duplicate contacts
-			    String query = QueryDocumentUtil.constructDuplicateCompaniesQuery(contact);
-		
-			    int pageSize = Integer.parseInt(count) + 1;
-			    System.out.println(query);
-		
-			    AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
-			    collection = appEngineSearch.getSearchResults(query, pageSize, cursor);
-			    Iterator iterator = collection.iterator();
-			    int counter = 0;
-			    while (iterator.hasNext())
-			    {
-				Contact ctc = (Contact) iterator.next();
-				if (ctc.id.longValue() == contact.id.longValue()){
-				    if (counter == 0){
-						int collCount = ctc.count;
-						iterator.remove();
-						if (iterator.hasNext()){
-						    Contact ctc1 = (Contact) iterator.next();
-						    ctc1.count = collCount;
-						}
-						return collection;
-					}else{
-						iterator.remove();
-						return collection;
-				    }
-				}
-				counter++;
+    @QueryParam("cursor") String cursor){
+		Collection collection = null;
+		try{
+		    Contact contact = ContactUtil.getContact(Long.valueOf(id));
+	
+		    // getting search query for finding duplicate contacts
+		    String query = QueryDocumentUtil.constructDuplicateCompaniesQuery(contact);
+	
+		    int pageSize = Integer.parseInt(count) + 1;
+		    System.out.println(query);
+	
+		    AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
+		    collection = appEngineSearch.getSearchResults(query, pageSize, cursor);
+		    Iterator iterator = collection.iterator();
+		    int counter = 0;
+		    while (iterator.hasNext())
+		    {
+			Contact ctc = (Contact) iterator.next();
+			if (ctc.id.longValue() == contact.id.longValue()){
+			    if (counter == 0){
+					int collCount = ctc.count;
+					iterator.remove();
+					if (iterator.hasNext()){
+					    Contact ctc1 = (Contact) iterator.next();
+					    ctc1.count = collCount;
+					}
+					return collection;
+				}else{
+					iterator.remove();
+					return collection;
 			    }
-			    return collection;
-			}catch (Exception e){
-			    System.out.println(e.getMessage());
 			}
-			return collection;
-    	}
+			counter++;
+		    }
+		    return collection;
+		}catch (Exception e){
+		    System.out.println(e.getMessage());
+		}
+		return collection;
+	}
 
     @Path("/deals")
     @GET

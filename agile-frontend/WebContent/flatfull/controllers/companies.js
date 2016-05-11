@@ -195,8 +195,11 @@ var CompaniesRouter = Backbone.Router
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.companiesListView = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
-			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
+		this.companiesListView = new Contacts_Events_Collection_View({ 
+			url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, 
+			cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, 
+			sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
 				// To set chats and view when contacts are fetch by
@@ -524,7 +527,7 @@ var CompaniesRouter = Backbone.Router
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.duplicateCompanyListView = new Contacts_Events_Collection_View({ 
+		this.duplicateCompanyListView = new Contacts_Events_Collection_View({
 			url : url, 
 			templateKey : template_key, 
 			individual_tag_name : 'tr', 
@@ -542,9 +545,7 @@ var CompaniesRouter = Backbone.Router
 
 		// Contacts are fetched when the app loads in the initialize
 		this.duplicateCompanyListView.collection.fetch();
-
 		$('#content').html(this.duplicateCompanyListView.render().el);
-
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 

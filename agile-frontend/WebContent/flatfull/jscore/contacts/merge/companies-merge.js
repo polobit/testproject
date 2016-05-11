@@ -39,8 +39,8 @@ $(function(){
 			}
 			Backbone.history.navigate("merge-contacts", { trigger : true });
 		}else{
-			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to merge. Please select at least one record to continue.</div>')
-		}	.show().delay(3000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to merge. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+		}
 	});
 
 	/**
