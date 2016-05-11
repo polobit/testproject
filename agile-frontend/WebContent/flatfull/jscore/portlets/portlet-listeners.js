@@ -967,16 +967,7 @@ $('.portlet_body')
 	    }
 	});
 		
-			 $('.calls_popover').tooltip(
-								{
-									
-									"html" : "true",
-									"placement" : "right",
-									"container" : "body",
-									"template": '<div class="tooltip leaderboard_calls"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
-
-								});
-
+			
 }
 
 /** 

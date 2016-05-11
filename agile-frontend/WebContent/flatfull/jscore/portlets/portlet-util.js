@@ -695,6 +695,16 @@ var portlet_utility = {
 																	+ ' > .portlet_body')
 															.width() * 100)
 													+ '%');
+							 $('.calls_popover').tooltip(
+								{
+									
+									"html" : "true",
+									"placement" : "right",
+									"container" : "body",
+									"template": '<div class="tooltip leaderboard_calls"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+
+								});
+							
 						}
 					});
 			portlet_ele
