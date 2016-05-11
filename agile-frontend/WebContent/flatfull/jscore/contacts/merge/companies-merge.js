@@ -47,10 +47,10 @@ $(function(){
 	$('body').on('click', '#merge-companies-model', function(event){
 		event.preventDefault();
 		if (dup_companies_array.length > 1){
-			if (!confirm(" Delete " + dup_companies_array.length + " duplicate contacts and merge data to master record?")){
+			if (!confirm(" Delete " + dup_companies_array.length + " duplicate companies and merge data to master record?")){
 				return;
 			}
-		}else if (!confirm(" Delete 1 duplicate contact and merge data to master record?")){
+		}else if (!confirm(" Delete 1 duplicate companies and merge data to master record?")){
 				 return;
 		}
 
@@ -246,11 +246,11 @@ function merge_duplicate_companies(master_record, properties, selected_fields, c
 }
 
 
-function merge_related_entity_in_master_record(master_record, duplicate_contacts){
-	master_record.save({}, { url : '/core/api/contacts/merge/'+ duplicate_contacts.toString(), 
+function merge_related_entity_in_master_record(master_record, duplicate_companies){
+	master_record.save({}, { url : '/core/api/contacts/companies/merge/'+ duplicate_companies.toString(), 
 		success : function(){
 			$(".companies-merge-loading").remove();
-			CONTACTS_HARD_RELOAD = true;
+			COMPANIES_HARD_RELOAD = true;
 			var id = master_record.toJSON().id;
 			Backbone.history.navigate("company/" + id, { trigger : true });
 		} 

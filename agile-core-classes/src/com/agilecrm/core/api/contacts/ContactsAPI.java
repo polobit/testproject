@@ -1273,6 +1273,87 @@ public class ContactsAPI
 	// merge notes
 	return contact;
     }
+    
+    @Path("companies/merge/{contactIds}")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact mergeCompanies(Contact contact, @PathParam("contactIds") String contactIds)
+    {
+	String[] ids = contactIds.split(",");
+	for (String id : ids)
+	{
+	    // update notes
+	    try
+	    {
+		List<Note> notes = NoteUtil.getNotes(Long.valueOf(id));
+
+		for (Note note : notes)
+		{
+		    note.addContactIds(contact.id.toString());
+		    note.owner_id = String.valueOf(note.getDomainOwner().id);
+		    note.save();
+		}
+
+		// update events
+
+		List<Event> events = EventUtil.getContactEvents(Long.valueOf(id));
+
+		for (Event event : events)
+		{
+		    event.addContacts(contact.id.toString());
+		    event.save();
+		}
+
+		// update task
+		List<Task> tasks = TaskUtil.getContactTasks(Long.valueOf(id));
+		for (Task task : tasks)
+		{
+		    task.addContacts(contact.id.toString());
+		    task.save();
+		}
+
+		// update deals
+		List<Opportunity> opportunities = OpportunityUtil.getAllOpportunity(Long.valueOf(id));
+		for (Opportunity opportunity : opportunities)
+		{
+		    opportunity.addContactIds(contact.id.toString());
+		    opportunity.save();
+		}
+
+		// merge document
+
+		List<Document> documents = DocumentUtil.getContactDocuments(Long.valueOf(id));
+		for (Document document : documents)
+		{
+		    document.getContact_ids().add(contact.id.toString());
+		    document.save();
+		}
+
+		// merge Case
+		List<Case> cases = CaseUtil.getCases(Long.valueOf(id));
+		for (Case cas : cases)
+		{
+		    cas.addContactToCase(contact.id.toString());
+		    cas.save();
+		}
+		// delete duplicated record
+		ContactUtil.getContact(Long.valueOf(id)).delete();
+		// save master reccord
+		contact.save();
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+	if (contact.type.toString().equals(("PERSON")))
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
+	// merge notes
+	return contact;
+    }
 
     /* Fetch current time from contact's time zone */
     @Path("/gettz/{latitude}/{longitude}")
