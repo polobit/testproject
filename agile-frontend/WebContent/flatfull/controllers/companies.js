@@ -520,7 +520,7 @@ var CompaniesRouter = Backbone.Router
 		var collection_is_reverse = false;
 		template_key = "duplicate-companies";
 
-		if (this.companyDetailView === undefined){
+		if (App_Companies.companyDetailView === undefined){
 			Backbone.history.navigate("company/" + company_id, { trigger : true });
 			return;
 		}
@@ -549,7 +549,7 @@ var CompaniesRouter = Backbone.Router
 		this.duplicateCompanyListView.collection.fetch();
 		$('#content').html(this.duplicateCompanyListView.render().el);
 		$(".active").removeClass("active");
-		$("#contactsmenu").addClass("active");
+		$("#companiesmenu").addClass("active");
 
 	},
 
@@ -562,19 +562,19 @@ var CompaniesRouter = Backbone.Router
 		var collection_is_reverse = false;
 		template_key = "merge-companies";
 
-		if (this.companyDetailView == undefined || dup_companies_array.length<1){
+		if (App_Companies.duplicateCompanyListView == undefined || dup_companies_array.length<1){
 			Backbone.history.navigate("companies", { trigger : true });
 			return;
 		}
 		var contacts = [];
 		for (var i = 0; i < dup_companies_array.length; i++){
 			var contact_id = Number(dup_companies_array[i]);
-			var data = this.duplicateCompanyListView.collection.where({ id : contact_id });
+			var data = App_Companies.duplicateCompanyListView.collection.where({ id : contact_id });
 			var temp = contacts.concat(data);
 			contacts = temp;
 		}
 		var bigObject = {};
-		var master_record = this.companyDetailView.model.toJSON();
+		var master_record = App_Companies.companyDetailView.model.toJSON();
 		console.log(master_record);
 		var objects = []
 		var length = 0;
@@ -598,7 +598,7 @@ var CompaniesRouter = Backbone.Router
 			$('#content').html(this.mergeContactsView.render(true).el);
 			$( window ).scrollTop(0);
 			$(".active").removeClass("active");
-			$("#contactsmenu").addClass("active");
+			$("#companiesmenu").addClass("active");
 
 		}, master_record.type);	
 	}

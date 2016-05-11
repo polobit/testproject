@@ -6,7 +6,7 @@ $(function(){
 	$('body').on('click', '#duplicate-companies-cancel', function(event){
 		event.preventDefault();
 		dup_companies_array.length = 0;
-		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		var master_record = App_Companies.companyDetails.model.toJSON();
 		Backbone.history.navigate("company/" + master_record.id, { trigger : true });
 	});
 
@@ -14,7 +14,7 @@ $(function(){
 	$('body').on('click', '#companies-merge-cancel', function(event){
 		event.preventDefault();
 		dup_companies_array.length = 0;
-		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		var master_record = App_Companies.companyDetails.model.toJSON();
 		Backbone.history.navigate("duplicate-company/" + master_record.id, { trigger : true });
 	});
 
@@ -43,11 +43,7 @@ $(function(){
 		}
 	});
 
-	/**
-	 * Merges the selected duplicate contacts properties with the Master contact
-	 * object and deletes the duplicate contact objects from the datastore
-	 * 
-	 */
+	$('body').off('click', '#merge-companies-model');
 	$('body').on('click', '#merge-companies-model', function(event){
 		event.preventDefault();
 		if (dup_companies_array.length > 1){
@@ -59,11 +55,11 @@ $(function(){
 		}
 
 		$(this).attr('disabled', 'disabled');
-		$('#contact-merge-cancel').attr('disabled', 'disabled');
-		$('#contact-merge-cancel').after('<img class="contact-merge-loading p-r-xs m-b"  src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+		$('#companies-merge-cancel').attr('disabled', 'disabled');
+		$('#companies-merge-cancel').after('<img class="companies-merge-loading p-r-xs m-b"  src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 		var checked = false;
 		var selected_fields = [];
-		var table = $('body').find('#merge-contacts-table');
+		var table = $('body').find('#merge-companies-table');
 		var tbody = $(table).find('tbody');
 		var phones = [];
 		var emails = [];
@@ -71,7 +67,7 @@ $(function(){
 		var tags = [];
 		var custom_fields = [];
 		var remove_fields = [];
-		var master_record = App_Contacts.contactDetailView.model;
+		var master_record = App_Companies.companyDetails.model;
 		var master_record_dup = JSON.parse(JSON.stringify(master_record.toJSON()));
 		var master_id = master_record.id;
 		console.log(master_record.toJSON());
@@ -150,12 +146,12 @@ $(function(){
 		});
 		var properties = master_record_dup.properties;
 		master_record.set({ "tags" : tags });
-		merge_duplicate_contacts(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
+		merge_duplicate_companies(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
 	});
 });
 
 
-function merge_duplicate_contacts(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones){
+function merge_duplicate_companies(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones){
 	for (var i = properties.length - 1; i >= 0; i--){
 		if (properties[i].name.toLowerCase() === 'email' || properties[i].name.toLowerCase() === 'website' || properties[i].name.toLowerCase() === 'phone'){
 			properties.splice(i, 1);
@@ -246,17 +242,17 @@ function merge_duplicate_contacts(master_record, properties, selected_fields, cu
 		}
 	}
 	master_record.set({ "properties" : properties });
-	merge_related_entity_in_master_record(master_record,dup_companies_array);
+	merge_related_entity_in_master_record(master_record, dup_companies_array);
 }
 
 
-function merge_related_entity_in_master_record(master_record,duplicate_contacts){
-	master_record.save({}, { url : '/core/api/contacts/merge/'+duplicate_contacts.toString(), 
+function merge_related_entity_in_master_record(master_record, duplicate_contacts){
+	master_record.save({}, { url : '/core/api/contacts/merge/'+ duplicate_contacts.toString(), 
 		success : function(){
-			$(".contact-merge-loading").remove();
+			$(".companies-merge-loading").remove();
 			CONTACTS_HARD_RELOAD = true;
 			var id = master_record.toJSON().id;
-			Backbone.history.navigate("contact/" + id, { trigger : true });
+			Backbone.history.navigate("company/" + id, { trigger : true });
 		} 
 	});
 }
