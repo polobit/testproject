@@ -308,6 +308,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					if (data)
 					{
+						console.log("data of current-owner = "+data);
 						data["created_user_email"] = response.email;
 
 						add_created_user_info_as_note_to_owner(data);
