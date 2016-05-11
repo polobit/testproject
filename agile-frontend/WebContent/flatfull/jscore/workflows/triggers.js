@@ -465,6 +465,168 @@ function initializeTriggerEventListners()
 
 }
 
+function openVerifyEmailModal(el) {
+	if (window.parent.$('#workflow-verify-email').size() != 0)
+		window.parent.$('#workflow-verify-email').remove();
+
+	var selected = $(el).find(':selected').val();
+
+	if (selected == 'verify_email')
+		window.parent.workflow_alerts("Verify a new From address", undefined,
+				"workflow-verify-email-modal"
+
+				, function(modal) {
+
+					// Focus on input
+					modal.on('shown.bs.modal', function() {
+						$(this).find('input').focus();
+
+						parent.send_verify_email();
+					});
+
+					// On hidden
+					modal.on('hidden.bs.modal', function(e) {
+
+						var given_email = $(this).find('input').val();
+
+						resetAndFillFromSelect(given_email);
+					});
+				});
+}
+
+function rearrange_from_email_options($select, data) {
+
+	if (!data)
+		return;
+
+	var unverified = [];
+
+	$.each(data, function(index, obj) {
+
+		if (obj.verified == "NO")
+			unverified.push(obj.email);
+
+	});
+
+	$select.find('option').each(function() {
+
+		var email = $(this).val()
+
+		if (unverified.indexOf(email) != -1) {
+			$(this).attr('unverified', 'unverified');
+			$(this).text(email + ' (unverified)');
+		}
+	});
+
+}
+
+function resetAndFillFromSelect(selected_val) {
+	// Make send email node from email empty
+	$('#from_email').empty();
+
+	var options = {
+		"+ Add new" : "verify_email"
+	};
+
+	fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+
+				$select
+						.find("option:first")
+						.before(
+								"<option value='{{owner.email}}'>Contact's Owner</option>");
+
+				if (selected_val)
+					$select.val(selected_val).attr("selected", "selected");
+				else
+					$select.val("Contact's Owner").attr("selected", "selected");
+
+				rearrange_from_email_options($select, data);
+			});
+}
+
+
+function fetchAndFillSelect(url, keyField, valField, appendNameField, options, selectContainer, arrange_type, callback)
+{
+
+	var selectOptionAttributes ="";
+	
+	
+	// Populate Options - Naresh 23/04/2014
+	if(options !== undefined)
+	{
+		$.each(
+				options, function (key, value) {
+					
+					if(key.indexOf("*") == 0)
+					{
+						key  = key.substr(1);
+						selectOptionAttributes += "<option selected='selected' value='" + value + "'>" + key + "</option>";
+					}
+					else
+						selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
+				});
+	 }
+
+	$.ajax({
+		  url: url,
+		  async: false,
+		  dataType: "json",
+		  success: function(data)
+		  {	    			
+	    
+			// Append given options
+			if(selectOptionAttributes !== undefined)
+	    	$(selectOptionAttributes).appendTo(selectContainer);
+	    
+		var array = eval (data);	      
+		$.each(array, function( index, json )
+		{				
+				var key = eval("json." + keyField);			
+				var value = eval("json." + valField);
+				
+				var appendName = eval("json."+ appendNameField);
+				
+				// Append name to email like Naresh <naresh@agilecrm.com    >
+				if(key!= undefined && appendName != undefined)
+					key = appendName + " &lt;"+key+"&gt;";
+				
+				if(key != undefined && value != undefined)
+				{
+					console.log(key); 
+					if(key.indexOf("*") == 0)
+					{
+						key  = key.substr(1);
+						
+						option = "<option selected value='" + value + "'>" + key + "</option>";
+    				}
+    				else
+    				    option = "<option value='" + value + "'>" + key + "</option>";
+        				
+    				if(arrange_type && arrange_type == "prepend")
+    					$(option).prependTo(selectContainer);
+    				else
+    				{	
+    					// Append to container	
+        				$(option).appendTo(selectContainer);	        				        								
+        			}
+				}											   	   	   	  	   	  				
+		});
+
+		  if(callback && typeof (callback) === "function")
+		  	callback(selectContainer, data);
+		  }
+	});
+}
+
+
 function initializeTriggerListEventListners(id,trigger_type)
 {
 
@@ -497,6 +659,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 			show_email_tracking_campaigns();
 		});
 
+	
 	$('#trigger-selector, #trigger-edit-selector').on('change', '#trigger-type', function(e)
 	{
 		e.preventDefault();

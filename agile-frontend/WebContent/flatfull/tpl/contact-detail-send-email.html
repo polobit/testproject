@@ -23,7 +23,13 @@
                         <input type="text" placeholder="From Name" class="form-control b-r-none" id="from_name" name="from_name"/>
                     </div>
                     <div class="controls p-l-none col-sm-5 col-xs-6">
-                        <input type="text" placeholder="From Email" class="email required form-control" id="from_email" name="from" style="margin-left:-1px;" />
+                        <select class="email required form-control" id="from_email” 
+                            name="from" fieldType="dynamicselect"
+                            type="verified_email" onchange="openVerifyEmailModal(this)"
+                            url="/core/api/account-prefs/verified-emails/all"
+                            style="margin-left:-1px;"><option value=""></option>
+                            <option value="{{owner.email}}">Contact's Owner</option>
+                            <option value="verify_email">+ Add new</option></select>
                     </div>
                 </div>
 			<!--	<div class="control-group form-group">
