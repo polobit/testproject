@@ -488,6 +488,9 @@ function visibleFilter()
 }
 function showTransitionBar()
 {
+	// Remove transition bar for mobile browsers
+	if( agile_is_mobile_browser() )	return;
+	
 	if ($('.butterbar').hasClass('hide'))
 		$('.butterbar').removeClass('hide');
 	if (!$('.butterbar').hasClass('animation-active'))

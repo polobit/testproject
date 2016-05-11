@@ -659,7 +659,15 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </aside>
 <div class="app-content" id="agilecrm-container">
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
-<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>
+<script type="text/javascript">
+// In mobile browsers, don't show animation bar
+if( (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) )
+{
+	document.write('<div class="butterbar" style="z-index:99;"><span class="bar"></span></div>');
+} else {
+	document.write('<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>');
+}
+</script>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"
 src="img/21-0.gif"></img> -->
@@ -840,6 +848,12 @@ head.ready(["core"], function(){
       CURRENT_USER_PREFS.signature = sig;
 	}catch(e){}
 
+	//Turn off all animations if this is mobile
+	if( agile_is_mobile_browser() )
+	{
+		$("body")[0].addClass('disable-anim');
+	}
+	
 });
 
 });    
