@@ -189,10 +189,10 @@ public class AppengineMail
 	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
 
 	    // Read template - HTML
-	    String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, mergedJSON);
+	    String emailHTML = HandlebarsUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, mergedJSON);
 
 	    // Read template - Body
-	    String emailBody = MustacheUtil.templatize(template + SendMail.TEMPLATE_BODY_EXT, mergedJSON);
+	    String emailBody = HandlebarsUtil.templatize(template + SendMail.TEMPLATE_BODY_EXT, mergedJSON);
 
 	    if (StringUtils.isEmpty(emailBody))
 		emailBody = " ";

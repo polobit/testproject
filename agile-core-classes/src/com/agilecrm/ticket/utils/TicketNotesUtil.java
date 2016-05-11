@@ -36,7 +36,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.VersioningUtil;
-import com.agilecrm.util.email.MustacheUtil;
+import com.agilecrm.util.email.HandlebarsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -226,16 +226,16 @@ public class TicketNotesUtil
 		{
 			// No template is chosen so returning default template html content
 			if (group.template_id == null)
-				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON);
+				return HandlebarsUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON);
 
 			dataJSON.put("ticket_comments",
-					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					HandlebarsUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON));
 			dataJSON.put("ticket_footer",
-					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					HandlebarsUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON));
 
 			EmailTemplates emailTemplates = EmailTemplatesUtil.getEmailTemplate(group.template_id);
 
-			return MustacheUtil.compile(emailTemplates.text, dataJSON);
+			return HandlebarsUtil.compile(emailTemplates.text, dataJSON);
 		}
 		catch (Exception e)
 		{
