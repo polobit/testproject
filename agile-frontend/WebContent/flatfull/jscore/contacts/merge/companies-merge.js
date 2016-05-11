@@ -6,7 +6,7 @@ $(function(){
 	$('body').on('click', '#duplicate-companies-cancel', function(event){
 		event.preventDefault();
 		dup_companies_array.length = 0;
-		var master_record = App_Companies.companyDetails.model.toJSON();
+		var master_record = App_Companies.companyDetailView.model.toJSON();
 		Backbone.history.navigate("company/" + master_record.id, { trigger : true });
 	});
 
@@ -14,7 +14,7 @@ $(function(){
 	$('body').on('click', '#companies-merge-cancel', function(event){
 		event.preventDefault();
 		dup_companies_array.length = 0;
-		var master_record = App_Companies.companyDetails.model.toJSON();
+		var master_record = App_Companies.companyDetailView.model.toJSON();
 		Backbone.history.navigate("duplicate-company/" + master_record.id, { trigger : true });
 	});
 
@@ -67,7 +67,7 @@ $(function(){
 		var tags = [];
 		var custom_fields = [];
 		var remove_fields = [];
-		var master_record = App_Companies.companyDetails.model;
+		var master_record = App_Companies.companyDetailView.model;
 		var master_record_dup = JSON.parse(JSON.stringify(master_record.toJSON()));
 		var master_id = master_record.id;
 		console.log(master_record.toJSON());
