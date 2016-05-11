@@ -3965,3 +3965,7 @@ border-bottom:1px solid #eee;
     height: 100% !important;
 
   }
+
+  .alias-icon{
+    font-size: 11px;
+  }
