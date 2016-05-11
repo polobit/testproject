@@ -554,6 +554,51 @@ var CompaniesRouter = Backbone.Router
 	},
 
 	mergeCompanies : function(){
+
+		var id = dup_companies_array[0];
+		var max_companies_count = 20;
+		var individual_tag_name = "table";
+
+		var collection_is_reverse = false;
+		template_key = "merge-companies";
+
+		if (App_Contacts.duplicateCompaniesListView == undefined || dup_companies_array.length<1){
+			Backbone.history.navigate("contacts", { trigger : true });
+			return;
+		}
+		var contacts = [];
+		for (var i = 0; i < dup_companies_array.length; i++){
+			var contact_id = Number(dup_companies_array[i]);
+			var data = App_Contacts.duplicateCompaniesListView.collection.where({ id : contact_id });
+			var temp = contacts.concat(data);
+			contacts = temp;
+		}
+		var bigObject = {};
+		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		console.log(master_record);
+		var objects = []
+		var length = 0;
+		objects[0] = master_record;
+		for (i = 0; i < contacts.length; i++){
+			objects[i + 1] = contacts[i].toJSON();
+			length++;
+		}
+		bigObject["contacts"] = objects;
+		bigObject["length"] = length;
 		
+		// Contact Edit - take him to continue-contact form
+		add_custom_fields_to_form(bigObject, function(contact){
+			this.mergeContactsView = new Contact_Details_Model_Events({ template : template_key, data : bigObject, 
+				postRenderCallback : function(el){
+				
+				} 
+			});
+
+			$('#content').html(this.mergeContactsView.render(true).el);
+			$( window ).scrollTop(0);
+			$(".active").removeClass("active");
+			$("#contactsmenu").addClass("active");
+
+		}, master_record.type);	
 	}
 });
