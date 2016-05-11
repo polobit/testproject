@@ -15,22 +15,22 @@
 				{{/each_with_index}}
 			</tr>
 			<tr>
-				<td class="table-td-focus">First Name</td>
+				<td class="table-td-focus">Name</td>
 				{{#each_with_index  contacts}}
-					{{#property_is_exists "first_name" properties}}
+					{{#property_is_exists "name" properties}}
 						{{#if_equals index "1"}}
 							<td>
 					 			<label class="i-checks i-checks-sm">
-									<input type="radio" name="first_name_radio" data="{{getPropertyValue properties "first_name"}}" field="first_name" checked="checked" oid={{id}}>
+									<input type="radio" name="first_name_radio" data="{{getPropertyValue properties "name"}}" field="name" checked="checked" oid={{id}}>
 										<i></i>
-								</label>{{getPropertyValue properties "first_name"}}</b>
+								</label>{{getPropertyValue properties "name"}}</b>
 							</td>
 						{{else}}
 							<td>
 						 		<label class="i-checks i-checks-sm">
-									<input type="radio" name="first_name_radio" data="{{getPropertyValue properties "first_name"}}" field="first_name" oid={{id}}>
+									<input type="radio" name="first_name_radio" data="{{getPropertyValue properties "name"}}" field="name" oid={{id}}>
 									<i></i>
-								</label>{{getPropertyValue properties "first_name"}}</b>
+								</label>{{getPropertyValue properties "name"}}</b>
 							</td>
 						{{/if_equals}}
 						{{else}}
@@ -39,46 +39,22 @@
 				{{/each_with_index}}
 			</tr>
 			<tr>
-				<td class="table-td-focus">Last Name</td>
+				<td class="table-td-focus">URL</td>
 				{{#each_with_index  contacts}}
-					{{#property_is_exists "last_name" properties}}
+					{{#property_is_exists "url" properties}}
 						{{#if_equals index "1"}}
 							<td>
 								<label class="i-checks i-checks-sm">
-									<input type="radio" name="last_name_radio" data="{{getPropertyValue properties "last_name"}}" field="last_name" checked="checked" oid={{id}}>
+									<input type="radio" name="last_name_radio" data="{{getPropertyValue properties "url"}}" field="url" checked="checked" oid={{id}}>
 									<i></i>
-								</label>{{getPropertyValue properties "last_name"}}</b>
+								</label>{{getPropertyValue properties "url"}}</b>
 							</td>
 						{{else}}
 							<td>
 								<label class="i-checks i-checks-sm">
-									<input type="radio" name="last_name_radio" data="{{getPropertyValue properties "last_name"}}" field="last_name" oid={{id}}>
+									<input type="radio" name="last_name_radio" data="{{getPropertyValue properties "url"}}" field="url" oid={{id}}>
 									<i></i>
-								</label>{{getPropertyValue properties "last_name"}}</b>
-							</td>
-						{{/if_equals}}
-					{{else}}
-						<td></td>
-					{{/property_is_exists}}
-				{{/each_with_index}}
-			</tr>
-			<tr>
-				<td class="table-td-focus">Title</td>
-				{{#each_with_index  contacts}}
-					{{#property_is_exists "title" properties}}
-						{{#if_equals index "1"}}
-							<td>
-								<label class="i-checks i-checks-sm">
-									<input type="radio" name="title_radio" data="{{getPropertyValue properties "title"}}" field="title" checked="checked" oid={{id}}>
-									<i></i>
-								</label>{{getPropertyValue properties "title"}}</b>
-							</td>
-						{{else}}
-							<td>
-								<label class="i-checks i-checks-sm">
-									<input type="radio" name="title_radio" data="{{getPropertyValue properties "title"}}" field="title" oid={{id}}>
-									<i></i>
-								</label>{{getPropertyValue properties "title"}}</b>
+								</label>{{getPropertyValue properties "url"}}</b>
 							</td>
 						{{/if_equals}}
 					{{else}}
@@ -99,31 +75,7 @@
 						</td>
 					{{/if_equals}}
 				{{/each_with_index}}
-			</tr>
-			<tr>
-				<td class="table-td-focus">Company</td>
-				{{#each_with_index  contacts}}
-					{{#property_is_exists "company" properties}}
-						{{#if_equals index "1"}}
-							<td>
-								<label class="i-checks i-checks-sm">
-									<input type="radio" name="company_radio" data="{{getPropertyValue properties "company"}}" field="company" checked="checked" oid={{id}} company_id={{contact_company_id}}>
-									<i></i>
-								</label>{{getPropertyValue properties "company"}}</b>
-							</td>
-						{{else}}
-							<td>
-								<label class="i-checks i-checks-sm">
-									<input type="radio" name="company_radio" data="{{getPropertyValue properties "company"}}" field="company" oid={{id}} company_id={{contact_company_id}}>
-									<i></i>
-								</label>{{getPropertyValue properties "company"}}</b>
-							</td>
-						{{/if_equals}}
-					{{else}}
-						<td></td>
-					{{/property_is_exists}}
-				{{/each_with_index}}
-			</tr>
+			</tr>			
 			<tr>
 				<td class="table-td-focus">Tags</td>
 				{{#each_with_index  contacts}}
