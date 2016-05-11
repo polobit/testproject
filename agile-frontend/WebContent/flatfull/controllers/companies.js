@@ -21,7 +21,9 @@ var CompaniesRouter = Backbone.Router
 		
 		"company-view-prefs" : "companyViewPrefs",
 
-		"duplicate-company/:id" : "duplicateCompany"
+		"duplicate-company/:id" : "duplicateCompany",
+
+		"merge-companies" : "mergeCompanies"
 	},
 	
 	/**
@@ -549,5 +551,9 @@ var CompaniesRouter = Backbone.Router
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 
+	},
+
+	mergeCompanies : function(){
+		
 	}
 });

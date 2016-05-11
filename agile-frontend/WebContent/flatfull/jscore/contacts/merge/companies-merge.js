@@ -2,24 +2,24 @@ var dup_companies_array = [];
 
 
 $(function(){
-	$('body').off('click', '#duplicate-contacts-cancel');
-	$('body').on('click', '#duplicate-contacts-cancel', function(event){
+	$('body').off('click', '#duplicate-companies-cancel');
+	$('body').on('click', '#duplicate-companies-cancel', function(event){
 		event.preventDefault();
-		dup_contacts1_array.length = 0;
+		dup_companies_array.length = 0;
 		var master_record = App_Contacts.contactDetailView.model.toJSON();
-		Backbone.history.navigate("contact/" + master_record.id, { trigger : true });
+		Backbone.history.navigate("company/" + master_record.id, { trigger : true });
 	});
 
-	$('body').off('click', '#contact-merge-cancel');
-	$('body').on('click', '#contact-merge-cancel', function(event){
+	$('body').off('click', '#companies-merge-cancel');
+	$('body').on('click', '#companies-merge-cancel', function(event){
 		event.preventDefault();
-		dup_contacts1_array.length = 0;
+		dup_companies_array.length = 0;
 		var master_record = App_Contacts.contactDetailView.model.toJSON();
-		Backbone.history.navigate("duplicate-contacts/" + master_record.id, { trigger : true });
+		Backbone.history.navigate("duplicate-company/" + master_record.id, { trigger : true });
 	});
 
-	$('body').off('click', '#duplicate-contacts-checked-grid');
-	$('body').on('click', '#duplicate-contacts-checked-grid', function(event){
+	$('body').off('click', '#duplicate-companies-checked-grid');
+	$('body').on('click', '#duplicate-companies-checked-grid', function(event){
 		event.preventDefault();
 		var index_array = [];
 		var data_array = [];
@@ -27,17 +27,17 @@ $(function(){
 		var table = $('body').find('.showCheckboxes');
 		$(table).find('.tbody_check').each(function(index, element){			
 			if ($(element).is(':checked')){
-				dup_contacts1_array.push($(element).closest('tr').find('td.data').attr('data'));
+				dup_companies_array.push($(element).closest('tr').find('td.data').attr('data'));
 				checked = true;
 			}
 		});
 		if (checked){
-			if (dup_contacts1_array.length > 2){
+			if (dup_companies_array.length > 2){
 				alert('You can merge maximum of 2 records at a time with master record.');
-				dup_contacts1_array.length = 0;
+				dup_companies_array.length = 0;
 				return;
 			}
-			Backbone.history.navigate("merge-contacts", { trigger : true });
+			Backbone.history.navigate("merge-companies", { trigger : true });
 		}else{
 			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to merge. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 		}
@@ -48,10 +48,10 @@ $(function(){
 	 * object and deletes the duplicate contact objects from the datastore
 	 * 
 	 */
-	$('body').on('click', '#merge-contacts-model', function(event){
+	$('body').on('click', '#merge-companies-model', function(event){
 		event.preventDefault();
-		if (dup_contacts1_array.length > 1){
-			if (!confirm(" Delete " + dup_contacts1_array.length + " duplicate contacts and merge data to master record?")){
+		if (dup_companies_array.length > 1){
+			if (!confirm(" Delete " + dup_companies_array.length + " duplicate contacts and merge data to master record?")){
 				return;
 			}
 		}else if (!confirm(" Delete 1 duplicate contact and merge data to master record?")){
@@ -246,7 +246,7 @@ function merge_duplicate_contacts(master_record, properties, selected_fields, cu
 		}
 	}
 	master_record.set({ "properties" : properties });
-	merge_related_entity_in_master_record(master_record,dup_contacts1_array);
+	merge_related_entity_in_master_record(master_record,dup_companies_array);
 }
 
 
