@@ -114,7 +114,7 @@ function update_event_activity(ele)
 {
 	$("#updateActivityModal").html(getTemplate("update-activity-modal"));
 	
-	var value = JSON.parse(ele);
+	var value = ele;
 	deserializeForm(value, $("#updateActivityForm"));
 	$('.update-start-timepicker').val(fillTimePicker(value.start));
 	$('.update-end-timepicker').val(fillTimePicker(value.end));
