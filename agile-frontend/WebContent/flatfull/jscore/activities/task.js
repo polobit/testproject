@@ -894,11 +894,12 @@ function getTaskIds(){
 		return id_array;
 }
 function saveBulkTaskProperties(task_ids,json,form_id){
-	var taskIds = JSON.stringify(task_ids);
+	var IdJson = {} ;
+	IdJson.ids = JSON.stringify(task_ids);
 	console.log(task_ids);
 	console.log(json);
 	console.log(form_id);
-	var url = 'core/api/tasks/changeBulkTasks?ids='+taskIds+'&json='+json+'&formId='+form_id;
+	var url = 'core/api/tasks/changeBulkTasks/'+JSON.stringify(IdJson)+'/'+JSON.stringify(json)+'/'+form_id ;
 	if(task_ids && json){
 		jQuery.ajax({ url : url, dataType : 'json' , success : function(result)
 		{
