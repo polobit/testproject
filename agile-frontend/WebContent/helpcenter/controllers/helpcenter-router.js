@@ -127,53 +127,11 @@ var HelpcenterRouter = Backbone.Router.extend({
 			url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
 			templateKey : "article-comments",
 			individual_tag_name : 'div',
-				postRenderCallback : function(el){
-			
-			
-		 	$(".remove-comment").on("click",function(e){
-		    	e.preventDefault();
-		    	var id = $(this).data("id");
-		    	 $.ajax({
-		            url: '/helpcenterapi/api/knowledgebase/comment?id='+id,
-		            type: 'DELETE',
-		            contentType : "application/json",
-		            success : function(response){
-		            	model=App_Helpcenter.commentsCollection.collection.get(id);
-		                model.destroy();     
-		            
-		            }  
-		        });
-			});
-	    	$(".edit-comment").on("click",function(e){
-                      
-                e.preventDefault();      
-                var id = $(this).data("id");
-
-		    	App_Helpcenter.renderHomeTemplate(function(){
 				
-					commentsModel=App_Helpcenter.commentsCollection.collection.get(id);
-					
-					var editCommentView = new Base_Model_View({
-					isNew : false,
-					template : "add-newcomments",
-					model : commentsModel,
-					url : "/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
-			 		
-			 		saveCallback : function(model){
-                        
-			 			$("#comment").val('').empty();
-                         //console.log(model);
-		                commentsModel=App_Helpcenter.commentsCollection.collection.get(id);
-						commentsModel.set(model);
-						$('#comments-collection').html(App_Helpcenter.commentsCollection.el);  
-                        
-			 		}
-			 		});
-			 		$('#comments-add').html(editCommentView.render().el);
-				});
-			});
-				App_Helpcenter.saveComment(el,article_id);
-            
+		postRenderCallback : function(el){	
+		
+		 		App_Helpcenter.saveComment(el,article_id);
+                App_Helpcenter.editCommentandDelete(el,article_id);
             }
 		    
 		});
@@ -203,11 +161,70 @@ var HelpcenterRouter = Backbone.Router.extend({
 		saveCallback : function(model){
 			console.log(model);
             App_Helpcenter.commentsCollection.collection.add(model);							  
+		    App_Helpcenter.editCommentandDelete(el,article_id); 
 		}
     	});
     	$('#comments-add').html(commentsView.render().el);
 	},	    	
 	
+	editCommentandDelete:function(el,article_id){
+		$(".remove-comment").on("click",function(e){
+		    	e.preventDefault();
+		    	var id = $(this).data("id");
+		    	 $.ajax({
+		            url: '/helpcenterapi/api/knowledgebase/comment?id='+id,
+		            type: 'DELETE',
+		            contentType : "application/json",
+		            success : function(response){
+		            	model=App_Helpcenter.commentsCollection.collection.get(id);
+		                model.destroy();     
+		            
+		            }  
+		        });
+			});
+	    	$(".edit-comment").on("click",function(e){
+                      
+                
+                e.preventDefault();      
+                var id = $(this).data("id");
+
+		    	App_Helpcenter.renderHomeTemplate(function(){
+				
+					commentsModel=App_Helpcenter.commentsCollection.collection.get(id);
+					
+					var editCommentView = new Base_Model_View({
+					isNew : false,
+					template : "add-newcomments",
+					model : commentsModel,
+					url : "/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
+			 		
+			 		postRenderCallback : function(el){  		    
+	
+						$(".clear",el).on("click",function(){
+    	       				$("#comment").val('').empty();
+		 				}); 
+
+					},
+	
+			 		saveCallback : function(model){
+                        
+			 			$("#comment").val('').empty();
+                         //console.log(model);
+		                commentsModel=App_Helpcenter.commentsCollection.collection.get(id);
+						commentsModel.set(model);
+						//Fetching groups collections
+						App_Helpcenter.commentsCollection.collection.fetch();
+
+						$('#comments-collection').html(App_Helpcenter.commentsCollection.el);  
+                        
+			 		}
+			 		});
+			 		$('#comments-add').html(editCommentView.render().el);
+				});
+			});
+			
+
+	},
 	renderHomeTemplate: function(callback){
 
 		if($('#helpcenter-container').length)

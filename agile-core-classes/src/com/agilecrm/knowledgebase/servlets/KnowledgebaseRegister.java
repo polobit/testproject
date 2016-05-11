@@ -1,6 +1,7 @@
 package com.agilecrm.knowledgebase.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -60,12 +61,16 @@ public class KnowledgebaseRegister extends HttpServlet
 			String command = request.getParameter("command");
 
 			if (StringUtils.isNotBlank(command) && StringUtils.equalsIgnoreCase(command, "register"))
-			{
+			{				
 				registerHCUser(request, response);
+				
+				PrintWriter pw = response.getWriter();
+				pw.write("<h3>Verification email has been sent succesfully.</h3>");
+
 				return;
 			}
 
-		}
+	}
 		catch (Exception e)
 		{
 			String loginError = e.getMessage();

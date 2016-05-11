@@ -36,6 +36,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				postRenderCallback : function(el, collection) {
 
+
 				}
 			});
 
@@ -253,7 +254,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	        	//Helpcenter_Util.setBreadcrumbPath('article-breadcrumb', data);
 			},
 			deleteCallback : function(){
-				Backbone.history.navigate( "helpcenter/categories", { trigger : true });
+				window.history.back();
 		    }
 		});
 

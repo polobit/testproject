@@ -46,14 +46,14 @@ var Helcenter_Events = {
                            
                      }
 
-               });
+                  });
                   
-   				}, function(){
+   				  }, function(){
                     
                      if(!flag)
-                     $("."+article_id,el).prop('checked','true');
+                        $("."+article_id,el).prop('checked','true');
                      else   
-                     $("."+article_id,el).removeAttr('checked');  
+                        $("."+article_id,el).removeAttr('checked');  
                                     
                },null);
    		});
