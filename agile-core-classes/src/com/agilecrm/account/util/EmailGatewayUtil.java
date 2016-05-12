@@ -118,7 +118,7 @@ public class EmailGatewayUtil
 	    }
 
 	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
-		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + mailDeferredTask.subject,
+		    mailDeferredTask.subscriberId, GoogleSQL.getFutureDate(), "Subject: " + mailDeferredTask.subject,
 		    LogType.EMAIL_SENT.toString() };
 
 	    queryList.add(newLog);
@@ -129,7 +129,7 @@ public class EmailGatewayUtil
 	{
 	    Long start_time = System.currentTimeMillis();
 	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
-	    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
+//	    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
 	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
 	    System.out.println("Logs size : " + queryList.size());
 	}
