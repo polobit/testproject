@@ -65,6 +65,11 @@ var addAgileApi = function(json, api, callback)
 	agileformidtag.type = "input";
 	agileformidtag.value = "";
 
+	var agiletransparentbackground = {};
+	agiletransparentbackground.label = "Transparent Background";
+	agiletransparentbackground.type = "select";
+	agiletransparentbackground.value = [{value : "", selected : true, label : "no"}, {value : " agile-form-transparent", selected : false, label: "yes"}];
+
 	for ( var b = 0; b < json.length; b++)
 	{
 		json[b].fields["agileapi"] = agileapi;
@@ -74,6 +79,7 @@ var addAgileApi = function(json, api, callback)
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
 		json[b].fields["formemailnotification"] = formemailnotification;
+		json[b].fields["agiletransparentbackground"] = agiletransparentbackground;
 	}
 	callback(json);
 };
