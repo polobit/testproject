@@ -1,7 +1,7 @@
 cron:
 - description: TaskletsTimer
   url: /backend/cron
-  schedule: every 1 mins
+  schedule: every 2 mins
  
 - description: daily reports
   url: /backend/cron/reports?duration=DAILY
