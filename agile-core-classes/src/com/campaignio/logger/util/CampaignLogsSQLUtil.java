@@ -57,7 +57,7 @@ public class CampaignLogsSQLUtil
 		+ GoogleSQLUtil.encodeSQLColumnValue(campaignName)
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
-		+ ",NOW(3)"
+		+ ",NOW()"
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(message) + "," + GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
 	
@@ -66,7 +66,7 @@ public class CampaignLogsSQLUtil
 	try
 	{
 	    GoogleSQL.executeNonQuery(insertToLogs);
-	    GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
+	    //GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
 	}
 	catch (Exception e)
 	{

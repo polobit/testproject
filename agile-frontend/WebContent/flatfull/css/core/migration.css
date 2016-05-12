@@ -1904,7 +1904,7 @@ width: 1%!important;
 }
 
 #opportunities-model-list tr td:first-child,
- #companies-custom-view-model-list tr td:first-child, #companies-custom-view-model-list tr td:nth-child(n+3){
+ #companies-custom-view-model-list tr td:first-child, #companies-custom-view-model-list tr td:nth-child(n+4){
   
   display: none;
 }

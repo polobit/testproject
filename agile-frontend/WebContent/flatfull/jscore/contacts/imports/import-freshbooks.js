@@ -42,30 +42,27 @@ $(function()
 												});
 												return false;
 								}
-								$.ajax({ url : 'core/api/freshbooks/save/' + token + '/' + url + '', async : false, success : function(data)
-								{
+								$.ajax({ 
+									url : 'core/api/freshbooks/save/' + token + '/' + url + '', 
+									success : function(data) {
 												if (data)
 												{
-																console.log(data);
-
+													console.log(data);
 												}
-
-								} });
-								var location = window.location.hash;
-								if (location == "#sync/freshbooks/setting")
-								{
-												window.location.reload();
-								}
-								else if (location == "#sync/freshbooks")
-								{
-										DATA_SYNC_FORCE_FETCH=true;
-												window.location = agileWindowOrigin() + "#sync/freshbooks/setting";
-								}
-								else
-								{
-									DATA_SYNC_FORCE_FETCH=true;
-												window.location = agileWindowOrigin() + "#sync";
-								}
+									   
+												var location = window.location.hash;
+												if ( location == "#sync/freshbooks/setting" )
+												{
+													window.location.reload();
+												} else if( location == "#sync/freshbooks" ) {
+													DATA_SYNC_FORCE_FETCH=true;
+													window.location = agileWindowOrigin() + "#sync/freshbooks/setting";
+												} else {
+													DATA_SYNC_FORCE_FETCH=true;
+													window.location = agileWindowOrigin() + "#sync";
+												}
+											} 
+									});
 				});
 				
 	 function isBlank(str) {
