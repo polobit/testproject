@@ -540,6 +540,7 @@ function initializeSubscriptionListeners()
 							
 						}else{
 							var restrictions = data.restrictions;
+							restrictions = data.plan;
 							if(restrictions.contacts.count > restrictions.contacts.limit)
 								errorsCount++;
 							if(restrictions.webrules.count > restrictions.webrules.limit)
