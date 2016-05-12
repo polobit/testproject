@@ -463,7 +463,11 @@ public class EmailGatewayUtil
 		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 
 	// Add to pull queue with from email as Tag
+	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+		queueName = "amazon-ses-pull-queue";
+	}
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+	
     }
 
     /**
