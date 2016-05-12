@@ -44,7 +44,8 @@ $(function()
 		$("#handle", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
 
 		// Add website / handle of twitter of tweet owner.
-		$("#website", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
+		$("#website", $('#personModal')).attr("value",Tweet_Owner_For_Add_Contact);
+		//$("#website", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
 		$("#image", $('#personModal')).attr("value", tweet.user.profile_image_url);
 
 		// Select network type.
@@ -100,9 +101,11 @@ $(function()
 		// Tweet owner's description.
 		var description = tweet.user.description;
 
-		// Tweet owner's handle/Screen name.
-		Tweet_Owner_For_Add_Contact = tweet.user.screen_name;
-
+		// Tweet owner's handle/Screen name.tweeterId is coming here 
+	    var Tweet_Owner_For_Add_Contact = tweet.user.screen_name;
+        //appending the @ symbol for the tweeterID
+        var Tweet_Owner_For_Add_Contact="@"+Tweet_Owner_For_Add_Contact;   
+        
 		// Separate full name.
 		var firstName = fullName.substr(0, fullName.indexOf(' '));
 		var lastName = fullName.substr(fullName.indexOf(' ') + 1);
@@ -115,29 +118,26 @@ $(function()
 		$("#network_handle").addClass("socialsuite-network-handle");
 
 		//document.getElementById("network_handle").className = 'socialsuite-network-handle';
-		$("#handle", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
+		$("#handle", $('#personModal')).attr("value",Tweet_Owner_For_Add_Contact);
 
 		// Add website / handle of twitter of tweet owner.
 		$("#website", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
 		$("#image", $('#personModal')).attr("value",tweet.user.profile_image_url);
+		//$("#handle", $('#personModal')).attr("value",Tweet_Owner_For_Add_Contact);
 
 		// Select network type.
-		$("div.website select").val("TWITTER");
-
+		$("div.website-select").val("TWITTER");
+		
 		// If picture is not null and undefined, display it by given width, else
 		// display none
 		var pic = tweet.user.profile_image_url;
 		if (pic != undefined && pic != null)
 		{
 			var el = $('<img class="imgholder thumbnail person-img" onload="changeProperty()" style="display: inline;"  src="' + pic + '"></img>');
-			$('#pic').html(el).show();
-			//adding the code for to appending picture into the textbox
-			//$('#pic').addClass("imgholder thumbnail person-img")
-            /*
-            *adding this line for the if any error will come to locate a picture and 
-            *it must show the error msg
-            */
-			$("#img").error(function()
+			$('#pic').html(el).hide();
+			/*for appending twitterId and hiding it*/
+			$('#handle').val(Tweet_Owner_For_Add_Contact).hide();
+		   $("#img").error(function()
 			{
 				/*
 				*due to error picture will not display

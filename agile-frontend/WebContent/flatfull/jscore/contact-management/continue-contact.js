@@ -193,7 +193,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// Stores person's continue editing form template key
 		template = 'continue-contact';
 		obj.type = 'PERSON';
-
+        /*@priyanka
+        *saving first_name,last_name,picture and its TwitterId Pre-populate into the saving
+        * person model and continue saving it will also appers with same field
+        */
 		// Creates properties of contact (person)
 		if (isValidField(form_id + ' #fname'))
 			properties.push(property_JSON('first_name', form_id + ' #fname'));
@@ -205,7 +208,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// if(form_id == "personForm")
 		if (isValidField(form_id + ' #image'))
 			properties.push(property_JSON('image', form_id + ' #image'));
+        //checking the condition for the when tweeterId is saving into the datastore
+        if(isValidField(form_id +' #handle'))
+        	properties.push({ "name" : "website", "value" :$('#handle').val(), "subtype" : "TWITTER" })
 
+      
 		// /give preference to autofilled company, ignore any text in textfield
 		// for filling company name
 		var company_el = $("#" + form_id + " [name='contact_company_id']").find('li');
@@ -511,6 +518,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 												{
 													properties.push(contact_property);
 												}
+											
 											});
 						});
 	}
