@@ -1436,10 +1436,12 @@ public class JSAPI
 	    contact.formId = form.id;
 	    contact.save();
 
-	    /*Send a mail to owner when new contact created and when it clicked 
+	    /*@Priyanka
+	     * Send a mail to owner when new contact created and when it clicked 
 	     * on submit button
+	     * 
 	     * */
-	       if(form.emailNotification)
+	       if(form.emailNotification && newContact)
 	       FormUtil.sendMailToContactOwner(contact,formName);
 	    
 	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
