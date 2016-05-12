@@ -1077,8 +1077,11 @@ $(function()
 		var el = "";
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			
-			if (element.indexOf("CUSTOM_") == 0) {
+			if (element == "basic_info" || element == "image")
+			{
+				return true;
+			}
+			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
 				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
 			}
@@ -6531,6 +6534,10 @@ $(function()
 		var el = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
+			if(element == 'basic_info' || element == "image")
+			{
+				return true;
+			}
 			if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
 				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
