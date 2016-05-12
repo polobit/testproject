@@ -19,6 +19,8 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
+import com.amazonaws.services.datapipeline.model.TaskStatus;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
@@ -952,5 +954,61 @@ public class TaskUtil
 			.filter("task_completed_time >= ", start).filter("task_completed_time <=" , end)
 			.order("-task_completed_time").list();
 	    }*/
+	public static List<Task> changePropertyBulkTasks(ArrayList<String> taskIdList,JSONObject priority,String formId){
+		String newProperty = null;
+		List<Task> taskList = new ArrayList<Task>();
+		try {
+			if(formId.equalsIgnoreCase("bulkTaskStatusForm")){
+				newProperty = priority.getString("status");
+				for(String taskId : taskIdList){
+					Task task = getTask(Long.parseLong(taskId));
+					if(task != null && newProperty!= null){
+						task.status = Task.Status.valueOf(newProperty);
+						task.save();
+						taskList.add(task);
+					}
+				}
+			}			
+			else if (formId.equalsIgnoreCase("bulkTaskPriorityForm")){
+				newProperty = priority.getString("priority_type");
+				for(String taskId : taskIdList){
+					Task task = getTask(Long.parseLong(taskId));
+					if(task != null && newProperty!= null ){
+						task.priority_type = Task.PriorityType.valueOf(newProperty);
+						task.save();
+						taskList.add(task);
+					}
+				}
+			}
+			else if (formId.equalsIgnoreCase("bulkTaskOwnerForm")) {
+				newProperty = priority.getString("owner_id");
+				for(String taskId : taskIdList){
+					Task task = getTask(Long.parseLong(taskId));
+					if(task != null && newProperty!= null ){
+						task.owner_id = newProperty ;
+						task.save();
+						taskList.add(task);
+					}
+				}
+			}
+			else if (formId.equalsIgnoreCase("bulkTaskOwnerForm")) {
+				newProperty = priority.getString("due");
+				for(String taskId : taskIdList){
+					Task task = getTask(Long.parseLong(taskId));
+					if(task != null && newProperty!= null ){
+						task.due = Long.parseLong(newProperty);
+						task.save();
+						taskList.add(task);
+					}
+				}
+			}
+			return taskList ;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 }

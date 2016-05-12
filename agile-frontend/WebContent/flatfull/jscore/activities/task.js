@@ -184,16 +184,16 @@ function initializeTasksListeners(){
 		// Show and Fill details in Task Edit modal
 		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
-	$('#tasks-list-template').on('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status ', function(event)
+	$('#tasks-list-template').on('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status , #bulk-change-dueDate ', function(event)
 	{
 		task_ids = getTaskIds();
 		console.log(task_ids);
 		var taskAction = this.id ; 
 		if(taskAction == "bulk-change-status")
 			$("#task-bulk-change-status").modal('show');
-		if(taskAction == "bulk-change-priority")
+		else if(taskAction == "bulk-change-priority")
 			$("#task-bulk-change-priority").modal('show');
-		if(taskAction == "bulk-change-owner"){
+		else if(taskAction == "bulk-change-owner"){
 			var el = $('#bulkTaskOwnerForm');
 			$("#task-bulk-change-owner").modal('show');
 			populateUsers("owners-list", el, undefined, undefined, function(data)
@@ -202,16 +202,51 @@ function initializeTasksListeners(){
 				$("#owners-list", $("#task-bulk-change-owner")).closest('div').find('.loading-img').hide();
 			});
 		}
+		else {
+			$("#task-bulk-change-duedate").modal('show');
+			$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+			$('#task-date-1').datepicker('update');
+			var d1 = new Date ();
+			var d2 = new Date ( d1 );
+			d2.setHours(d1.getHours()+3)
+			$('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false });
+			$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
+			{
+			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
+			{
+				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+				if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+			});
+		}
 
 	});
-	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority').on('click', '#task_bulk_validate', function(e)
+	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority , #task-bulk-change-duedate').on('click', '#task_bulk_validate', function(e)
 	{
-		console.log("hello");
 		e.preventDefault();
+		//$('.bulk-task-action-model').find('#task_bulk_validate').addClass('disabled').text('changing');
 		var form_id = $(this).closest('.bulk-task-action-model').find('form').attr("id");
+
+		if ($(this).attr('disabled'))
+			return;
+		// Disables save button to prevent multiple click event issues
+		disable_save_button($(this));
+		if (!isValidForm('#' + form_id))
+		{
+			enable_save_button($(this));
+			return false;
+		}
 		var priorityJson = serializeForm(form_id);
-		console.log("hello");
-		console.log(task_ids); 
+		if(form_id == "bulkTaskDuedateForm"){
+			var startarray = (priorityJson.task_ending_time).split(":");
+			priorityJson.due = new Date((priorityJson.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+		}
+		$('.bulk-task-action-model').modal('hide');
+
 		saveBulkTaskProperties(task_ids,priorityJson,form_id);
 	});
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
@@ -903,20 +938,27 @@ function getTaskIds(){
 		return id_array;
 }
 function saveBulkTaskProperties(task_ids,priorityJson,form_id){
-	var IdJson = {} ; 
-	var priority = {};
-	IdJson = JSON.stringify(task_ids);
-	priority = JSON.stringify(priorityJson);
-	console.log(task_ids);
-	console.log(json);
-	console.log(form_id);
-	var url = 'core/api/tasks/changeBulkTasks/'+IdJson+'/'+priority+'/'+form_id ;
-	if(task_ids && json){
-		jQuery.ajax({ url : url, dataType : 'json', method: "POST" , success : function(result)
-		{
-		
-		}, async : false });
+	var sendData = {};
+	sendData.IdJson = task_ids;
+	sendData.priority = priorityJson;
+	sendData.form_id = form_id;
 
-
+	var url = 'core/api/tasks/changeBulkTasks';
+	if(sendData){
+		$.ajax({ url : url, method: "POST" ,
+			contentType: 'application/json', 
+		//	dataType: 'application/json',
+			data : JSON.stringify(sendData),
+			success : function(data){
+				console.log(data);
+				for (var i in data) {
+					App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
+				}
+				App_Calendar.allTasksListView.render(true);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+  				console.log(textStatus, errorThrown);
+       		} 
+		});
 	}
 }

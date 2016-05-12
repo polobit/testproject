@@ -118,3 +118,51 @@
 </div>
 
 <!--End of bulk task owner change model -->
+
+<!-- bulk task due date change model -->
+
+<div class="modal fade bulk-task-action-model" id='task-bulk-change-duedate'>
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:0px;">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">&times;</button>
+    <h3 class="modal-title" style="font-size:18px;">
+      &nbsp;Change due date of tasks
+    </h3>
+  </div>
+  <div class="modal-body">
+    <form id="bulkTaskDuedateForm" name="bulkTaskDuedateForm" method="post" class="form-horizontal">
+      <fieldset>
+        <div class="row">
+            <div class="col-sm-6">
+              <div class="control-group form-group">
+                  <label for="due" class="control-label col-sm-6">Date (Due)<span class="field_req">*</span></label>
+                  <div class="controls col-sm-5">
+                      <input type="text" name="due" placeholder="Select Date" id="task-date-1" class="required  date form-control" style="font-size:13px">                           
+                  </div>
+              </div>
+            </div>
+            <div class="col-sm-5">
+              <div class="control-group form-group">
+                  <label class="control-label col-sm-4"> Time<span class="field_req">*</span></label>
+                  <div class="controls col-sm-5" style="padding: 0 2px 0 0px;">
+                      <input type="text" name="task_ending_time" class="new-task-timepicker required form-control" id="task_ending_time" style="width:100px" placeholder="Time">     
+                  </div>
+              </div>
+            </div>
+
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <span class="error-status"></span>
+    <a href="#tasks" class="btn btn-sm btn-default">Close</a>
+    <a href="#" class="btn btn-primary btn-sm" id="task_bulk_validate">Change
+      </a> <span class="save-status"></span>
+  </div>
+</div>
+</div>
+</div>
+
+<!--End of bulk task due date change model -->
