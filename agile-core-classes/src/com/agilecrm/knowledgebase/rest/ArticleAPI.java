@@ -26,6 +26,7 @@ import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.ArticleUtil;
 import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
+import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
 /**
@@ -158,12 +159,18 @@ public class ArticleAPI
 	{
 		try
 		{
+			Article dbArticle = Article.dao.get(article.id);
+			
 			Key<Section> section_key = new Key<Section>(Section.class, article.section_id);
 			article.section_key = section_key;
 
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, article.categorie_id);
 			article.categorie_key = categorie_key;
 
+			article.created_by_key = dbArticle.created_by_key ;
+			
+			article.created_time = dbArticle.created_time;
+		
 			article.save();
 		}
 		catch (Exception e)

@@ -73,7 +73,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 				isNew : true, 
 	 				url : '/core/api/knowledgebase/article',
 	 				template : "helpcenter-add-article",
-	 				window : "#helpcenter/categories",
+	 				window : "back",
 			        
 					prePersist : function(model){
 						var json = {};
@@ -113,7 +113,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 					
 					},'', true);
 
-			        }
+			        },
 			        
 			    });
 
@@ -185,8 +185,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 				template : "helpcenter-section",
 				url : "/core/api/knowledgebase/section?id=" + section_id,
 		        postRenderCallback: function(){
-
-		             showTransitionBar();
 		        	//Initializing base collection with groups URL
 					App_Helpcenter_Module.articlesCollection = new Base_Collection_View({
 						url : '/core/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
@@ -206,6 +204,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 					App_Helpcenter_Module.articlesCollection.collection.fetch();
 
 					//Rendering template
+					showTransitionBar();
 					$('#articles-collection').html(App_Helpcenter_Module.articlesCollection.el);
 		        },
 		        deleteCallback : function(){
@@ -263,32 +262,32 @@ var HelpcenterRouter = Backbone.Router.extend({
   },
   editArticle : function(categorie_id,section_id,article_id){
     
-	    		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
+		App_Helpcenter_Module.loadhelpcenterTemplate(function(callback){
 	
-			    var editarticleView = new Base_Model_View({
-	 				isNew : false, 
-	 				url : "/core/api/knowledgebase/article/" +article_id,
-	 				template : "helpcenter-add-article",
-	 				window : "back",
-			        
-                    prePersist : function(model){
-						var json = {};
-						var catogery_id = $("#catogery option:selected").data('catogery-id');
-						json = {"categorie_id" : catogery_id };
-						model.set(json, { silent : true });
-				    },
+		    var editarticleView = new Base_Model_View({
+ 				isNew : false, 
+ 				url : "/core/api/knowledgebase/article/" +article_id,
+ 				template : "helpcenter-add-article",
+ 				window : "back",
+		        
+                prePersist : function(model){
+					var json = {};
+					var catogery_id = $("#catogery option:selected").data('catogery-id');
+					json = {"categorie_id" : catogery_id };
+					model.set(json, { silent : true });
+			    },
 
-			        postRenderCallback : function(el){
-					fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
-    
-			 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
+		        postRenderCallback : function(el){
+				fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+
+		 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
 
 
-					},'', true);
-					setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
-     
+				},'', true);
+				setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
+ 
 
-			        }
+		        }
 		    });    
 			    $('#helpcenter-content').html(editarticleView.render().el); 
 	    });
