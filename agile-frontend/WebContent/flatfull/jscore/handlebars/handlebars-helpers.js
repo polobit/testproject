@@ -5379,9 +5379,7 @@ $(function()
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
 	{
-		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
-		agile_api = JSON.parse(agile_api);
-		var inbound_email = window.location.hostname.split('.')[0] + "-" + agile_api.api_key + "@agle.cc";
+		var inbound_email = window.location.hostname.split('.')[0] + "-" + _AGILE_API_KEY + "@agle.cc";
 		return new Handlebars.SafeString(inbound_email);
 	});
 
@@ -5833,9 +5831,7 @@ $(function()
 
 	Handlebars.registerHelper('shopifyWebhook', function()
 	{
-		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
-		agile_api = JSON.parse(agile_api);
-		var shopify_webhook = agileWindowOrigin() + "/shopifytrigger?api-key=" + agile_api.api_key;
+		var shopify_webhook = agileWindowOrigin() + "/shopifytrigger?api-key=" + _AGILE_API_KEY;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
 
@@ -6183,13 +6179,10 @@ $(function()
 
 	Handlebars.registerHelper('getFormNameFromId', function(id)
 	{
-		var url = '/core/api/forms/form?formId=' + id;
-		var form = $.ajax({ type : 'GET', url : url, async : false, dataType : 'json' }).responseText;
-		if(!form)
-			return new Handlebars.SafeString("?");
-		form = JSON.parse(form);
-		var formName = form.formName;
-		return new Handlebars.SafeString(formName);
+		//Create a temporary place holder and later, fetch the name asynchronously and render it.
+		//Check the postRenderCallback for triggerCollectionView in controllers/workflows.js for more details
+		var html = "<div id='" + getFormNameCellIDForFormSubmitTriggers(id) + "'></div>";
+		return new Handlebars.SafeString(html);
 	});
 
 	/**
@@ -6663,44 +6656,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	return SALES_SCHEDULE_URL;
 
 });
-	Handlebars.registerHelper('trialDate', function()
-	{
-		
-		var TRAIL_PENDING_DAYS;
-		var _TRAIL_DAYS = 14; 
 
-		var json = $.ajax({ type : 'GET', url : '/core/api/subscription/', async : false,
-			dataType : 'json' }).responseText;
-		console.log("sub json:");
-		console.log(json);
-		var string = JSON.parse(json);
-		console.log("json string:");
-		console.log(string);
-//		var billingData = string.billing_data;
-//		var billingDataString = JSON.parse(billingData);
-		
-		
-		
-			if(TRAIL_PENDING_DAYS)
-				return TRAIL_PENDING_DAYS;
-			
-			if(!string || !string.created_time)
-				return (TRAIL_PENDING_DAYS = 14)
-				
-			var time = (new Date().getTime()/1000) - (string.created_time);
-			
-			var days = time / (24 * 60 *60);
-			
-			TRAIL_PENDING_DAYS = _TRAIL_DAYS - days;
-			
-			if(TRAIL_PENDING_DAYS < 0)
-			{
-				TRAIL_PENDING_DAYS = 0;
-			}
-			
-			TRAIL_PENDING_DAYS = Math.round(TRAIL_PENDING_DAYS);
-			return TRAIL_PENDING_DAYS;
-		});
 	Handlebars.registerHelper('get_portlet_description', function(p_name)
 			{
 	var description = '';
