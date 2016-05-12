@@ -732,9 +732,11 @@ public class QueryDocumentUtil {
 		String companyName = contact.getContactFieldValue(Contact.NAME);
 		StringBuffer emailBuffer = new StringBuffer();
 		StringBuffer phoneBuffer = new StringBuffer();
-		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer urlBuffer = new StringBuffer();
+		StringBuffer stringBuffer = new StringBuffer();		
 		Set<String> emails = new HashSet<String>();
 		Set<String> phones = new HashSet<String>();
+		Set<String> urls = new HashSet<String>();
 
 		if (StringUtils.isNotBlank(companyName)) {
 			String company_name = companyName.trim().replaceAll(" ", "")
@@ -753,7 +755,37 @@ public class QueryDocumentUtil {
 				if (StringUtils.isNotBlank(contactField.value))
 					emails.add((contactField.value).trim().replaceAll(" ", ""));
 			}
+			if (contactField.name.equalsIgnoreCase(Contact.URL)) {
+				if (StringUtils.isNotBlank(contactField.value))
+					urls.add((contactField.value).trim().replaceAll(" ", ""));
+			}
+			
 		}
+		
+		if(urls.size() > 0){
+			Object[] urlsArray = urls.toArray();
+			for (int i = 0; i < urlsArray.length; i++) {
+				if (i == 0) {
+					urlBuffer.append("url=(");
+				}
+				urlBuffer.append("\"");
+				urlBuffer.append(urlsArray[i]);
+				urlBuffer.append("\"");
+				if (!(i == urlsArray.length - 1)) {
+					urlBuffer.append(" OR ");
+				} else {
+					urlBuffer.append(")");
+				}
+			}
+		}
+		
+		if (StringUtils.isNotBlank(urlBuffer.toString())) {
+			if (StringUtils.isNotBlank(stringBuffer.toString())) {
+				stringBuffer.append(" OR ");
+			}
+			stringBuffer.append(urlBuffer.toString());
+		}
+		
 		if (emails.size() > 0) {
 			Object[] emailsArray = emails.toArray();
 			for (int i = 0; i < emailsArray.length; i++) {
