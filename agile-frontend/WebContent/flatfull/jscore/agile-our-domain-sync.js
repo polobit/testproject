@@ -341,16 +341,6 @@ function our_domain_sync() {
 			if(CURRENT_DOMAIN_USER['phone']){
 				param['phone'] = CURRENT_DOMAIN_USER['phone'];
 			}
-			var parentId = CURRENT_DOMAIN_USER['pid'];
-			console.log("parentId= "+parentId);
-			if(parentId == null )
-				return;
-			
-			$.ajax({ url : 'core/api/users/parentId?id=' + parentId, type : 'GET', dataType : 'json', success : function(data){
-						console.log("data = "+data);
-						add_created_user_info_as_note_to_createduser(data);
-			},
-			});
 			
 			if(emailType != "yopmail")
 			{
@@ -535,22 +525,6 @@ function add_created_user_info_as_note_to_owner(owner, callback) {
 
 }
 
-/**
- * adds user info as a note to created user  
- */
-function add_created_user_info_as_note_to_createduser(userdata) {
-	var note = {};
-	note.subject = "User created by";
-	note.description =  " User Email -  "
-			+userdata['email'];
-	console.log(userdata['email']);
-	_agile.add_note(note, function(data) {
-		/*if (callback && typeof callback == "function")
-			callback(data);*/
-
-	}, CURRENT_DOMAIN_USER.email);
-
-}
 
 // add note to owner when subscription is cancelled
 function add_cancel_subscription_info_as_note_to_owner(cus_email, callback) {
