@@ -375,6 +375,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			%>	
 			<img src="img/appointment_confirmation.png" style="float: left;margin-right: 10px;margin-top: 1px;">
 			<h2>Email verified  successfully</h2>
+			<h3> Please <a href="/helpcenter/login">Login</a><h3>
 			<%
 			}
 			%>
