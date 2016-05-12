@@ -2280,7 +2280,7 @@ color:#484848!important;
 .emailTemplates tr th:first-child{ width: 2% !important;}
 .min-h-auto{ min-height: auto !important;}
 .prefs-view{ display: inline !important;}
-.dealEditDropdown{ left: inherit; right: 4px; top: 20px;}
+.dealEditDropdown{ left: inherit; right: 6px; top: 25px;}
 
 .moreDetailsTab{ margin: 14px auto 0;} 
 .moreDetailsTab .panel-body{ padding: 15px;}
@@ -2308,6 +2308,17 @@ color:#484848!important;
 .icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span{ padding-top: 10%;}
 .recent-list-text-color a{ color: #363f44 !important;}
+.editicon{ border: 1px solid #dee5e7; height: 13px; padding: 0 2px; border-radius: 2px; transition:all 0.7s ease;}
+.editicon:hover{ background-color:#363f44; color: #fff; border: 1px solid #363f44;}
+
+
+/*cases_custom_popover css code*/
+.cases_custom_popover{ max-width:100%; width: 68.8%; left:80px !important;}
+.cases-popover-thumb-xs{ width: 20px; display: inline-block;}
+.cases-popover-thumb-xs img{ width: 20px; height: 20px;}
+/*end cases_custom_popover css code*/
+
+
 /*end custom css code*/
 
 
