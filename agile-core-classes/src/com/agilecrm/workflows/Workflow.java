@@ -78,6 +78,9 @@ public class Workflow extends Cursor {
 	 */
 	@NotSaved(IfDefault.class)
 	public Long updated_time = 0L;
+	
+	@NotSaved
+	public boolean updated_time_update = true;
 
 	/**
 	 * Complete workflow diagram as json string.
@@ -298,7 +301,7 @@ public class Workflow extends Cursor {
 									.build());
 			}
 		}
-		
+			
 		setAccessLevel(oldWorkflow);
 	}
 
@@ -316,6 +319,9 @@ public class Workflow extends Cursor {
 		}
 
 		// Store Created and Last Updated Time
+		
+		// Check time update event
+		
 		if (created_time == 0L) {
 			created_time = System.currentTimeMillis() / 1000;
 		}
@@ -326,7 +332,8 @@ public class Workflow extends Cursor {
 					round_robin_owner_key = new Key<DomainUser>(
 							DomainUser.class, round_robin_owner_id);
 
-				updated_time = System.currentTimeMillis() / 1000;
+				if(updated_time_update)
+					updated_time = System.currentTimeMillis() / 1000;
 			}
 		}
 	}

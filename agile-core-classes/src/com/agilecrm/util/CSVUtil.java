@@ -533,7 +533,7 @@ public class CSVUtil
 
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
 		    accessControl.setObject(tempContact);
-		    if (!accessControl.canDelete())
+		    if (!accessControl.canCreate())
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),

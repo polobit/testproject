@@ -210,6 +210,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				App_Admin_Settings.webhookSettings();
 				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
 			},
+			errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top",2000);
+			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
 				App_Admin_Settings.webhookSettings();
@@ -245,11 +248,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
-
-				
-
-
-
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".last-login-time", el).timeago();
@@ -310,6 +308,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					if (data)
 					{
+						console.log("data of current-owner = "+data);
 						data["created_user_email"] = response.email;
 
 						add_created_user_info_as_note_to_owner(data);

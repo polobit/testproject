@@ -362,8 +362,9 @@ if(isSafari && isWin)
 
         }*/
 
-      	//  newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
-        // agile-login-page-high.png
+
+      	
+        	// agile-login-page-high.png
         	preload_login_pages();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();

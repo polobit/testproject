@@ -384,7 +384,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    contact = mergeContacts(contact,queryMap);
 
 	    accessControl.setObject(contact);
-	    if (!accessControl.canDelete())
+	    if (!accessControl.canCreate())
 	    {
 		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
 		return contact;

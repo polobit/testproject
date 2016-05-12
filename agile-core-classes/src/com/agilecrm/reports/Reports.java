@@ -45,7 +45,7 @@ public class Reports extends SearchFilter implements Serializable
 
     public static enum ReportType
     {
-	Contact, Opportunity
+	Contact, Opportunity,Campaign
     }
 
     @Indexed
@@ -80,6 +80,9 @@ public class Reports extends SearchFilter implements Serializable
 
     @NotSaved(IfDefault.class)
     public String report_timezone;
+    
+    @NotSaved(IfDefault.class)
+    public String campaignId;
 
     public static ObjectifyGenericDao<Reports> dao = new ObjectifyGenericDao<Reports>(Reports.class);
 

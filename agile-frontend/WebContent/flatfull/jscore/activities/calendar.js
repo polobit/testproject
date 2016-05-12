@@ -27,6 +27,10 @@ function load_events_from_google(callback)
 		eventFilters = eventData[CURRENT_AGILE_USER.id];
 	}
 
+	// If Event Filters are not defined, don't load Google Events.
+	// This is default functionality.
+	if( !(eventFilters) )	return;
+	
 	var agile_event = false;
 	if (eventFilters)
 	{		

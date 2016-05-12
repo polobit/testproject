@@ -22,6 +22,7 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.Document;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
+import com.agilecrm.search.util.SearchUtil;
 
 /**
  * <code>SearchAPI</code> class is used to search contacts based on keywords and
@@ -90,28 +91,10 @@ public class SearchAPI
 	if (StringUtils.isEmpty(type)){
 		List<Object> searchResult =  (List<Object>)new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
 		if(searchResult.size() == Integer.parseInt(count) ){
-			Set<String> set = new HashSet<String>(); 
-			int searchCount = 0;
-			for(Object m : searchResult){
-				if(m instanceof Contact);
-					Contact contact = (Contact) m;
-					set.add(contact.contact_company_id);
-					searchCount = searchCount+1;
-			}
-			if(searchCount == Integer.parseInt(count) && set.size()==1){
-				Iterator iterator = set.iterator();
-				if(iterator.hasNext()){
-					String id = iterator.next().toString();
-					Contact contact = ContactUtil.getContact(Long.parseLong(id));
-					if(contact != null){
-						searchResult.remove(9);
-						searchResult.add(contact);
-					}
-				}
-			}
+				searchResult =  SearchUtil.searchForCompanyResult(searchResult);
 		}
 		return searchResult;
-		}
+	}
 
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
 		cursor, type);

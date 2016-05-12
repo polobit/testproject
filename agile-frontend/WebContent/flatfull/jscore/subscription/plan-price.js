@@ -518,6 +518,7 @@ function initializeSubscriptionListeners()
 									  return;
 								$(template_ui).modal('show');
 							}, null);
+							return;
 						}else if(data.is_allowed_plan){
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else if(data.lines){
@@ -557,7 +558,7 @@ function initializeSubscriptionListeners()
 										  return;
 									$(template_ui).modal('show');
 								}, null);
-								
+								return;
 							}
 						}
 						plan_json.date = data.nextPaymentAttempt;

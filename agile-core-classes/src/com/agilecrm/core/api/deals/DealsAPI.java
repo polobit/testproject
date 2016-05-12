@@ -189,21 +189,22 @@ public class DealsAPI
 	double totalValue = 0.0d;
 	JSONObject obj = new JSONObject();
 	System.out.println(count);
-	obj.put("id", "100");
 	if (filters != null)
 	{
 	    System.out.println(filters);
 	    try
 	    {
-		org.json.JSONObject json = new org.json.JSONObject(filters);
-		if (milestone != null)
-		    json.put("milestone", milestone);
-		System.out.println(json.toString());
-		totalValue = OpportunityUtil.getTotalValueOfDeals(json);
-		obj.put("total", totalValue);
-		obj.put("milestone", milestone);
-		return obj;
-	    }
+			org.json.JSONObject json = new org.json.JSONObject(filters);
+			if (milestone != null)
+				json.put("milestone", milestone);
+			if(fieldName != null)
+				json.put("field", fieldName);
+			System.out.println(json.toString());			
+			totalValue =  OpportunityUtil.getTotalValueOfDeals(json);
+			obj.put("total", totalValue);	
+			obj.put("milestone", milestone);
+			return obj;
+	     }
 	    catch (JSONException e)
 	    {
 		// TODO Auto-generated catch block
@@ -799,6 +800,7 @@ public class DealsAPI
 		opp.note_description = note.description;
 		opp.note_subject = note.subject;
 		opp.note_created_time = note.created_time;
+		opp.updated_time = System.currentTimeMillis() / 1000 ;
 		opp.save();
 	    }
 	}
@@ -826,17 +828,15 @@ public class DealsAPI
 	{
 	    updatedOpportunityid = deal_ids.get(0);
 	}
-	if (updatedOpportunityid != null)
-	{
-	    opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
-	    UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
-	    opportunity.note_description = note.description;
-	    opportunity.note_subject = note.subject;
-	}
 	note.save();
-
-	return opportunity;
+	if (updatedOpportunityid != null){
+		opportunity = OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+		opportunity.save();
+	    return opportunity ; 
+	}
+	return null;
     }
+    
 
     /**
      * Call backends archive deals.
@@ -1335,5 +1335,13 @@ public class DealsAPI
 
 	return dealsCountJSON;
     }
-
+    @Path("/numberOfDeals")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public String getDealsbyPipelineId(@QueryParam("id") Long pipeId){
+    	int  dealCount = OpportunityUtil.getDealsbyMilestone(pipeId);
+    	if(dealCount > 0)
+    		return "success";
+    	return "fail";
+    }
 }

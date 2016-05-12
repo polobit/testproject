@@ -3273,7 +3273,7 @@ background: none!important;
 
 /* account block model */
 #user-blocked-modal .panel-body{
-  padding: 60px 30px 60px 30px;
+  padding: 60px 30px 0px 30px;
   background-color: #edb25b;
   color: white;
 }
@@ -3856,4 +3856,6 @@ margin-left:27px;
     border: 1px solid #edf1f2;
     border-bottom: none;
 }
-
+.alias-icon{
+    font-size: 11px;
+  }

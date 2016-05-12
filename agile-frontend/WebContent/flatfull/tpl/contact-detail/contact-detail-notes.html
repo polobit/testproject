@@ -112,7 +112,7 @@
        	{{/each}}
 	
 </div>
-<div align="right" class="pos-abs pos-r-0 pos-b-0" style="right:19px;">
+<div align="right" class="pos-abs pos-r-0 pos-b-0 icons-text-sm" style="right:19px;">
 {{#if callType}}
 
 	{{#if_equals callType ""}}
@@ -120,13 +120,13 @@
 	{{else}}
 
 		<span class="actions  text-sm">
-		<a title="Edit"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="icon-pencil"></i> </a>
+		<a title="Edit"  data="{{id}}" class="edit-logPhone c-p text-l-none p-r-sm">  <i class="fa fa-edit"></i> </a>
 		
 	{{/if_equals}}
 
 {{else}}
 		<span class="actions  text-sm">
-		<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+		<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
 
 {{/if}}
             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>

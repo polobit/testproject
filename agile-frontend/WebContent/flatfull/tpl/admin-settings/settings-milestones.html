@@ -102,8 +102,8 @@
 			<fieldset>
     		<div class="control-group m-b-none">  	 
                     <div id="milestone-values-{{id}}">
-					<table class="table table-hover  milestones-table bg-white table-hover m-b-none" >
-					<colgroup><col width="50%"><col width="8%"></colgroup>
+					<table class="table table-hover  milestones-table bg-white table-hover m-b-none" data="{{id}}" >
+					<colgroup><col width="45%"><col width="8%"></colgroup>
 					<tbody class="deal-tracks-tbody ui-sortable">
 					{{#milestone_ul this}}{{/milestone_ul}}
 					</tbody>
@@ -164,10 +164,10 @@
 		<span id="lost_reason_existed_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
 	</div>
 	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
-		<a class="lost-reason-edit c-p m-l-sm text-l-none text-xs hover-show" >
+		<a class="lost-reason-edit c-p m-l-sm text-l-none text-sm hover-show" >
 			<i title="Edit Reason" class="icon icon-edit"></i>
 		</a>
-		<a class="lost-reason-delete text-l-none-hover c-p text-xs m-l-sm hover-show">
+		<a class="lost-reason-delete text-l-none-hover c-p text-sm m-l-sm hover-show">
 			<i title="Delete Reason" class="icon-trash"></i>
 		</a>
 	</div>
@@ -212,13 +212,13 @@
 		<span id="deal_source_existed_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
 	</div>
 	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
-		<a class="deal-source-edit c-p m-l-sm text-l-none text-xs hover-show" >
+		<a class="deal-source-edit c-p m-l-sm text-l-none text-sm hover-show" >
 			<i title="Edit Source" class="icon icon-edit"></i>
 		</a>
-		<a class="deal-source-delete text-l-none-hover c-p text-xs m-l-sm hover-show">
+		<a class="deal-source-delete text-l-none-hover c-p text-sm m-l-sm hover-show">
 			<i title="Delete Source" class="icon-trash"></i>
 		</a>
-		<a class="deal-source-move text-l-none-hover c-p text-xs m-l-sm hover-show">
+		<a class="deal-source-move text-l-none-hover c-p text-sm m-l-sm hover-show">
 			<i title="Drag Source" class="icon-move"></i>
 		</a>
 	</div>
