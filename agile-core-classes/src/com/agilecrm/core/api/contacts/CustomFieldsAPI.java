@@ -459,9 +459,7 @@ public class CustomFieldsAPI
     @GET
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
     public String syncAppData(@QueryParam("domain") String domain){
-    	String domainName = NamespaceManager.get();
     	String domainUser = DomainUserUtil.getCurrentDomainUser().domain;
-    	System.out.println(domainName);
     	System.out.println(domain);
     	if( domainUser != null){
     			try {
