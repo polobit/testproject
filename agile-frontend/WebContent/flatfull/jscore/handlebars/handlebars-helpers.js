@@ -996,7 +996,7 @@ $(function()
 
 		if (!obj[date_type])
 			return "-";
-		if (date_type != "created_time")
+		if (date_type)
 		{
 			if ((obj[date_type] / 100000000000) > 1)
 			{
