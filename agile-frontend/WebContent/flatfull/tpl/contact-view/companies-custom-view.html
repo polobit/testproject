@@ -140,7 +140,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="companies" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="companies" class="table table-striped  noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -216,9 +216,12 @@
 
 <script id="companies-custom-fields-template" type="text/html">
 			
-	       		  <li>
+	       		  <!--<li>
 	       		  	<a href="javascript:void(0);" class="p-b-none">
-						<label class="i-checks i-checks-sm companycoloumn "><input name="basic_info" value="basic_info"type="checkbox" class="choose-column-chbx"><i></i></label>Basic info</a></li>
+						<label class="i-checks i-checks-sm companycoloumn "><input name="basic_info" value="basic_info"type="checkbox" class="choose-column-chbx"><i></i></label>Basic info</a></li> -->
+					<li class="hide">
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="image" checked="checked"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
 	                  <li>
 	       		  		<a href="javascript:void(0);" class="p-b-none">
 							<label class="i-checks i-checks-sm companycoloumn "><input name="name" value = "name"type="checkbox" class="choose-column-chbx"><i></i></label>Name</a></li>

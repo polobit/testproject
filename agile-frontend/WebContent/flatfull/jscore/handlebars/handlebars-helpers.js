@@ -282,7 +282,7 @@ $(function()
 	 * @returns image link
 	 * 
 	 */
-	Handlebars.registerHelper('gravatarurl', function(items, width,type)
+	Handlebars.registerHelper('gravatarurl', function(items, width, char_count)
 	{
 
 		if (items == undefined)
@@ -302,7 +302,7 @@ $(function()
 		try
 		{
 			// if(!isIE())
-			initials = text_gravatar_initials(items);
+			initials = text_gravatar_initials(items, char_count);
 		}
 		catch (e)
 		{
@@ -375,13 +375,13 @@ $(function()
 	/**
 	 * To add data-name attribute to image tags
 	 */
-	Handlebars.registerHelper('dataNameAvatar', function(items)
+	Handlebars.registerHelper('dataNameAvatar', function(items, char_count)
 	{
 
 		if (items == undefined)
 			return;
 
-		return text_gravatar_initials(items);
+		return text_gravatar_initials(items, char_count);
 
 	});
 
@@ -1077,9 +1077,13 @@ $(function()
 		var el = "";
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			if (element == "basic_info" || element == "image")
+			if (element == "basic_info")
 			{
 				return true;
+			}
+			else if(element == "image")
+			{
+				el = el.concat('<th></th>');
 			}
 			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
@@ -6534,11 +6538,15 @@ $(function()
 		var el = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
-			if(element == 'basic_info' || element == "image")
+			if(element == 'basic_info')
 			{
 				return true;
 			}
-			if (element.indexOf("CUSTOM_") == 0) {
+			else if(element == "image")
+			{
+				el = el.concat('<th></th>');
+			}
+			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
 				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
 			}

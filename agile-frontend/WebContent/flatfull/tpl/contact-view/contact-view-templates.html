@@ -36,12 +36,13 @@
 </script>
 
 <script id = "contacts-custom-view-image-template" type="text/html">
-	<td class="data" data="{{id}}">
-    	<div class="overflow-hidden thumb-sm" style="width:15em;">
+	<td class="data" data="{{id}}" >
+    	<div class="overflow-hidden thumb-sm" style="width:2em;">
 			{{#if_equals type "COMPANY"}}
-					<img class="img-inital r r-2x pull-left hide" {{getCompanyImage "40"}}/></img>
+					<img class="img-inital r r-2x pull-left" style= "height:16px;width:16px;"{{getCompanyImage "40"}}/></img>
 				{{else}}
-					<img class="img-inital r r-2x hide" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties }}" />	
+					<img class="img-inital r r-2x " style= "height:16px;width:16px;" 
+          data-name="{{dataNameAvatar properties 40 1}}" src="{{gravatarurl properties undefined 1}}" />	
 			{{/if_equals}}
     	</div>
 	</td>
@@ -84,7 +85,7 @@
 
 <script id = "contacts-custom-view-name-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div class="text-ellipsis" style="width:15em;">
+    	<div class="text-ellipsis" style="width:8em;">
     		<a class="text-cap">{{getPropertyValue properties "name"}}</>
     	</div>
 	</td>
@@ -92,7 +93,7 @@
 
 <script id = "contacts-custom-view-first_name-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div class="text-ellipsis" style="width:15em;">
+    	<div class="text-ellipsis" style="width:10em;">
     		<a class="text-cap">{{getPropertyValue properties "first_name"}}</>
     	</div>
 	</td>
@@ -100,7 +101,7 @@
 
 <script id = "contacts-custom-view-last_name-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div class="text-ellipsis" style="width:15em;">
+    	<div class="text-ellipsis" style="width:10em;">
         	<a class="text-cap">{{getPropertyValue properties "last_name"}}</a>
         </div>
 	</td>
@@ -108,7 +109,7 @@
 
 <script id = "contacts-custom-view-phone-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div class="text-ellipsis" style="width:15em;">
+        <div class="text-ellipsis" style="width:10em;">
     		<a class="text-cap">{{getPropertyValue properties "phone"}}</a>
         </div>
 	</td>
@@ -116,7 +117,7 @@
 
 <script id = "contacts-custom-view-address-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div class="text-ellipsis" style="width:15em;">
+        <div class="text-ellipsis" style="width:10em;">
     		<a class="text-cap">{{#address_Template properties}}{{/address_Template}}</a>
         </div>
 	</td>
@@ -124,7 +125,7 @@
 
 <script id = "contacts-custom-view-website-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div class="text-ellipsis" style="width:15em;">
+        <div class="text-ellipsis" style="width:10em;">
     		<a class="text-cap">{{getPropertyValue properties "website"}}</a>
         </div>
 	</td>
@@ -132,7 +133,7 @@
 
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div class="text-ellipsis" style="width:15em;">
+        <div class="text-ellipsis" style="width:10em;">
     		<a class="">{{getPropertyValue properties "email"}}</a>
         </div>
 	</td>
@@ -140,7 +141,7 @@
 
 <script id = "contacts-custom-view-company-template" type="text/html">
 	<td class="data" data="{{id}}">
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
       	<a class="text-cap">{{getPropertyValue properties "company"}}</a>
       </div>
 	</td>
@@ -148,7 +149,7 @@
 
 <script id = "contacts-custom-view-tags-template" type="text/html">
 	<td class="data" data="{{id}}">
-	 <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;"> 	
+	 <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:10em;"> 	
 		{{#each tags}}
 	    	<span class="label bg-light dk text-tiny">{{this}}</span>	
 		{{/each}}
@@ -158,7 +159,7 @@
 
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div class="text-ellipsis" style="width:15em;">
+    <div class="text-ellipsis" style="width:10em;">
 		<a class="text-cap">{{epochToHumanDateInFormat  created_time}}</a>
     </div>
 	</td>
@@ -166,7 +167,7 @@
 
 <script id = "contacts-custom-view-updated_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div class="text-ellipsis" style="width:15em;">
+    <div class="text-ellipsis" style="width:10em;">
 		{{#if updated_time}}
 			{{epochToHumanDateInFormat  updated_time}}
 		{{/if}}
@@ -176,7 +177,7 @@
 
 <script id = "contacts-custom-view-title-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div class="text-ellipsis" style="width:15em;">
+    <div class="text-ellipsis" style="width:10em;">
 		<a class="text-cap">{{getPropertyValue properties "title"}}</a>
     </div>
 	</td>
@@ -184,7 +185,7 @@
 
 <script id = "contacts-custom-view-url-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div class="text-ellipsis" style="width:15em;">
+    <div class="text-ellipsis" style="width:10em;">
 		<a href="{{getPropertyValue properties 'url'}}" class="text-cap">{{getPropertyValue properties "url"}}</a>
     </div>
 	</td>
@@ -192,7 +193,7 @@
 
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+       <div class="text-ellipsis" style="width:10em;">
 	   	<a class="text-cap">{{owner.name}}</a>
        </div>
 	</td>
@@ -200,7 +201,7 @@
 
 <script id = "contacts-custom-view-owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+       <div class="text-ellipsis" style="width:10em;">
 	   	<a class="text-cap">{{owner.name}}</a>
        </div>
 	</td>
@@ -208,7 +209,7 @@
 
 <script id = "contacts-custom-view-star_value-template" type="text/html">
 	<td class='data' data='{{id}}'>
-		 <ul class="m-n p-n list-none" style="width:15em;">
+		 <ul class="m-n p-n list-none" style="width:10em;">
 			{{setupRating star_value}}
 		</ul>
 	</td>
@@ -216,7 +217,7 @@
 
 <script id = "contacts-custom-view-lead_score-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div style="width:15em;">
+       <div style="width:10em;">
 		  {{lead_score}}
        </div>
 	</td>
@@ -224,7 +225,7 @@
 
 <script id = "contacts-custom-view-last_contacted-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+       <div class="text-ellipsis" style="width:10em;">
        {{#if_equals last_contacted 0}}
        
 	   	{{else}}
@@ -244,7 +245,7 @@
 
 <script id ="contacts-custom-view-custom-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+       <div class="text-ellipsis" style="width:10em;">
 		  <span>{{value}}</span>
        </div>
 	</td>
@@ -252,7 +253,7 @@
 
 <script id ="contacts-custom-view-custom-contact-template" type="text/html">
 	<td class='data contact-type-custom-field-td' data='{{id}}'>
-		<div class="table-resp" style="width:15em;">
+		<div class="table-resp" style="width:10em;">
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm contact-type-image">
 					<img class="img-inital r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
@@ -264,7 +265,7 @@
 
 <script id ="contacts-custom-view-custom-company-template" type="text/html">
 	<td class='data company-type-custom-field-td' data='{{id}}'>
-		<div class="table-resp" style="width:15em;">
+		<div class="table-resp" style="width:10em;">
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm company-type-image">
 					<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
@@ -276,7 +277,7 @@
 
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+       <div class="text-ellipsis" style="width:10em;">
 	   	  <span>{{stringToHumanDateInFormat value}}</span>
        </div>
 	</td>
@@ -284,7 +285,7 @@
 
 <script id = "contacts-custom-view-last_contacted-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+       <div class="text-ellipsis" style="width:10em;">
        {{#if_equals last_contacted 0}}
        
 	   	{{else}}
@@ -303,7 +304,7 @@
 
 <script id = "contacts-custom-view-last_emailed-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+       <div class="text-ellipsis" style="width:10em;">
 	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_emailed}}</span>
        </div>
 	</td>
@@ -311,7 +312,7 @@
 
 <script id = "contacts-custom-view-last_called-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis" style="width:15em;">
+       <div class="text-ellipsis" style="width:10em;">
 	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_called}}</span>
        </div>
 	</td>
@@ -480,29 +481,29 @@
      <td class='data' data='{{../id}}'>
        {{#is_property_custom_field this}}
             {{#is_property_custom_field_date_type ../../custom_fields ../../properties this}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
 		<span>{{stringToHumanDateInFormat value}}</span>
       </div>
             {{else}}
-                 <div class="text-ellipsis" style="width:15em;">
+                 <div class="text-ellipsis" style="width:10em;">
  <span>{{value}}</span>
       </div>
             {{/is_property_custom_field_date_type}}
        {{else}}
       {{#if_equals this "last_called"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    <span>{{epochToHumanDate "dd mmm yyyy" ../../../last_called}}</span>
       </div>
       {{/if_equals}}
 
       {{#if_equals this "last_emailed"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    <span>{{epochToHumanDate "dd mmm yyyy" ../../../last_emailed}}</span>
       </div>
       {{/if_equals}}
 
       {{#if_equals this "last_contacted"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
       {{#if_equals ../../../last_contacted 0}}
       
   {{else}}
@@ -519,43 +520,43 @@
       {{/if_equals}}
 
       {{#if_equals this "lead_score"}}
-       <div style="width:15em;">
+       <div style="width:10em;">
  {{../../../lead_score}}
       </div>
       {{/if_equals}}
 
       {{#if_equals this "star_value"}}
-      <ul class="m-n p-n list-none" style="width:15em;">
+      <ul class="m-n p-n list-none" style="width:10em;">
 {{setupRating ../../../star_value}}
   </ul>
       {{/if_equals}}
 
       {{#if_equals this "owner"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
   <a class="text-cap">{{../../../owner.name}}</a>
    </div>
       {{/if_equals}}
 
       {{#if_equals this "lead_owner"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
   <a class="text-cap">{{../../../owner.name}}</a>
    </div>
       {{/if_equals}}
 
       {{#if_equals this "url"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
 <a href="{{getPropertyValue ../../../properties 'url'}}" class="text-cap">{{getPropertyValue ../../../properties "url"}}</a>
   </div>
       {{/if_equals}}
       
       {{#if_equals this "title"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
 <a class="text-cap">{{getPropertyValue ../../../properties "title"}}</a>
    </div>
       {{/if_equals}}
 
       {{#if_equals this "image"}}
-      <div class="overflow-hidden thumb-sm" style="width:15em;">
+      <div class="overflow-hidden thumb-sm" style="width:10em;">
 {{#if_equals ../../../type "COMPANY"}}
 <img class="img-inital r r-2x pull-left" {{getCompanyImage "40" "" ../../../../properties}}/></img>
 {{else}}
@@ -565,7 +566,7 @@
       {{/if_equals}}
 
       {{#if_equals this "basic_info"}}
-      <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 110px);" {{else}} style="width:15em;" {{/is_mobile}}>
+      <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 110px);" {{else}} style="width:10em;" {{/is_mobile}}>
    	<div class="agile-img m-r-sm {{#is_mobile}} thumb-55 {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
        	{{#if_equals ../../../type "PERSON"}}
        	<img class="img-inital r r-2x"  title="{{getPropertyValue ../../../../properties 'first_name'}} {{getPropertyValue ../../../../properties 'last_name'}}" data-name="{{dataNameAvatar ../../../../properties}}" src="{{gravatarurl ../../../../properties 40}}"/>
@@ -597,56 +598,56 @@
 
 
       {{#if_equals this "name"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    	<a class="text-cap">{{#getPropertyValue ../../../properties "name"}}{{/getPropertyValue}}</>
    	</div>
       {{/if_equals}}
 
       {{#if_equals this "first_name"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    	<a class="text-cap">{{#getPropertyValue ../../../properties "first_name"}}{{/getPropertyValue}}</>
    	</div>
       {{/if_equals}}
 
       {{#if_equals this "last_name"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    	<a class="text-cap">{{#getPropertyValue ../../../properties "last_name"}}{{/getPropertyValue}}</>
    	</div>
       {{/if_equals}}
 
 
 {{#if_equals this "phone"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    	<a class="text-cap">{{getPropertyValue ../../../properties "phone"}}</>
    	</div>
       {{/if_equals}}
 
       {{#if_equals this "address"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    	<a class="text-cap">{{#address_Template ../../../properties}}{{/address_Template}}</a>
        </div>
       {{/if_equals}}
 
       {{#if_equals this "website"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    	<a class="text-cap">{{getPropertyValue ../../../properties "website"}}</a>
        </div>
       {{/if_equals}}
 
 {{#if_equals this "email"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    	<a class="text-cap">{{getPropertyValue ../../../properties "email"}}</a>
        </div>
       {{/if_equals}}
 
       {{#if_equals this "company"}}
-      <div class="text-ellipsis" style="width:15em;">
+      <div class="text-ellipsis" style="width:10em;">
    	<a class="text-cap">{{getPropertyValue ../../../properties "company"}}</a>
        </div>
       {{/if_equals}}
 
       {{#if_equals this "tags"}}
-     <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:15em;">
+     <div class="overflow-hidden line-clamp line-clamp-2 no-wrap" style="width:10em;">
 {{#each ../../../tags}}
    	<span class="label bg-light dk text-tiny">{{this}}</span>
 {{/each}}
@@ -654,13 +655,13 @@
       {{/if_equals}}
 
       {{#if_equals this "created_time"}}
-     <div class="text-ellipsis" style="width:15em;">
+     <div class="text-ellipsis" style="width:10em;">
 <a class="text-cap">{{epochToHumanDateInFormat  ../../../created_time}}</a>
    </div>
       {{/if_equals}}
 
       {{#if_equals this "updated_time"}}
-     <div class="text-ellipsis" style="width:15em;">
+     <div class="text-ellipsis" style="width:10em;">
  {{epochToHumanDateInFormat  ../../../updated_time}}
    </div>
       {{/if_equals}}

@@ -374,9 +374,7 @@ function setUpCompanyFields(el)
 						}
 
 					}
-				}, dataType : 'json' });
-
-			$.ajax({
+					$.ajax({
 					url : 'core/api/contact-view-prefs/company',
 					type : 'GET',
 					dataType : 'json',
@@ -388,6 +386,9 @@ function setUpCompanyFields(el)
 						console.log(data);
 					}
 				});
+				}, dataType : 'json' });
+
+			
 
 
 }
