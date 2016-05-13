@@ -243,20 +243,16 @@ if(isSafari && isWin)
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 				<%}%>
-				<div style=" text-align: center;">
+				<div style=" text-align: center;margin-left: 100px; border:none;" class="imgholder thumb-wrapper thumb-lg">
 					<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
                        {
                        %>
-                   <img class="company_logo" src="<%=logo_url%>" style="width:50px;height:40px;" ></img>
+                   <img class="company_logo w-full" src="<%=logo_url%>" style="width:50px;height:40px;" ></img>
                    <%
-                   }else{
+                   }
                    %>
                   
-                   <img class="company_logo" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png" style="width:50px;height:40px;" ></img>
-                   <%
-               			}
-                   %>
-			
+                   
 				<form id='oauth' name='oauth' method='post'>
               <%--      <div><h3>Sign In
                    

@@ -53,11 +53,11 @@
                     <div class="control-group form-group">
                     <label class="control-label col-sm-4 col-xs-4">Company Logo</label> 
                     <div id="upload-container" class="controls col-sm-8 col-xs-8" messg="User image has been uploaded">     
-                                   <div class="imgholder company_logo form-whitelabel-image">
+                                   <div class="imgholder company_logo form-whitelabel-image thumb-wrapper thumb-lg">
                                             {{#if logo}}
-                                            <img  src="{{logo}}" height="60" width="120" />
+                                            <img class="w-full" src="{{logo}}" height="60" width="120" />
                                             {{else}}
-                                            <img  src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container"  height="60" width="120" />
+                                            <img class="w-full" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container"  height="60" width="120" />
                                             {{/if}}                                            
                                   </div>
                                   <div class="company_logo_upload">

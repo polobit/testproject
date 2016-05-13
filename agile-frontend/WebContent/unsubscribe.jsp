@@ -383,18 +383,20 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 <body>
 	<div class="wrapper rounded6" id="templateContainer">
 		<!--<h1><%=company%></h1>-->
+		<div class="imgholder thumb-wrapper thumb-lg" style="border:none;">
 			<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
 	            {
 	        %>
-           <img class="company_logo" src="<%=logo_url%>" style="width:50px;height:40px;" ></img>
+           <img class="company_logo w-full" src="<%=logo_url%>" style="width:50px;height:40px;" ></img>
            <%
            }else{
            %>
           
-           <img class="company_logo" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png" style="width:50px;height:40px;" ></img>
+           <img class="company_logo w-full" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png" style="width:50px;height:40px;" ></img>
            <%
        			}
             %>
+        </div>
 		<div id="templateBody" class="bodyContent rounded6">
 			<h2>Unsubscribe</h2>
 			<form id="unsubscribe-form" action="/confirmation" method="post" onsubmit="return isValid();" novalidate>
