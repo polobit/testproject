@@ -991,7 +991,7 @@ public class TaskUtil
 					}
 				}
 			}
-			else if (formId.equalsIgnoreCase("bulkTaskOwnerForm")) {
+			else {
 				newProperty = priority.getString("due");
 				for(String taskId : taskIdList){
 					Task task = getTask(Long.parseLong(taskId));

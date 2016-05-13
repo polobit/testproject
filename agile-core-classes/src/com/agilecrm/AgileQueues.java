@@ -82,4 +82,9 @@ public class AgileQueues
 	
 	//Queue to update name in companies
 	public static final String NAME_UPDATE_COMPANIES = "name-update-companies-queue";
+	
+	//Task bulk action queues
+	public static final String BULK_TASK_CHANGE_PRIORITY = "task-change-priority-queue";
+	public static final String BULK_TASK_CHANGE_STATUS = "task-change-status-queue";
+	public static final String BULK_TASK_CHANGE_DUEDATE = "task-change-duedate-queue";
 }

@@ -1030,6 +1030,13 @@ function getCount(collection)
 	else
 		return "(" + collection.length + " Total)";
 }
+function getSimpleCount(collection)
+{
+	if (collection[0] && collection[0].count && (collection[0].count != -1))
+		return collection[0].count ;
+	else
+		return collection.length ;
+}
 
 /**
  * Returns id from hash. Id must be last in hash.

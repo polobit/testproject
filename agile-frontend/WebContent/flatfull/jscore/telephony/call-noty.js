@@ -38,6 +38,19 @@ function showCallNotyPopup(state, type, message, duration)
 			});
 }
 
+function showTaskNotyMessage(message,type,position,timeout){
+ head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
+   LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
+  {
+  if(!timeout){
+   noty({ text : message, type : type, layout : position});
+   return;
+  }
+   noty({ text : message, type : type, layout : position, timeout : timeout});
+  
+  });
+}
+
 /**
  * Default noty without buttons.
  * 

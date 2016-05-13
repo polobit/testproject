@@ -245,9 +245,13 @@ function initializeTasksListeners(){
 			var startarray = (priorityJson.task_ending_time).split(":");
 			priorityJson.due = new Date((priorityJson.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
 		}
+		enable_save_button($(this));
 		$('.bulk-task-action-model').modal('hide');
-
-		saveBulkTaskProperties(task_ids,priorityJson,form_id);
+		if(task_ids && task_ids.length < 50)
+			saveBulkTaskProperties(task_ids,priorityJson,form_id);
+		else{
+			saveBulkTaskAction(task_ids,priorityJson,form_id);
+		}
 	});
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
 	{
@@ -260,11 +264,11 @@ function initializeTasksListeners(){
 			});
 		if(taskCount){
 			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
-			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' select <a id="select_total_tasks">all</a>');
+			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' select <a id="select_total_tasks">all</a>').removeAttr('data');
 		}
 		else{			
 			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
-			$('#tasks-list-template').find('#select_all_tasks').empty();
+			$('#tasks-list-template').find('#select_all_tasks').empty().removeAttr('data');
 		}
 
 	});
@@ -278,17 +282,24 @@ function initializeTasksListeners(){
 					$(element).attr('checked', "checked");
 					taskCount = taskCount + 1;
 				});
-			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' select <a id="select_total_tasks">all</a>');
+			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' select <a id="select_total_tasks">all</a>').removeAttr('data');
 		}
 		else{
 			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
-			$('#tasks-list-template').find('#select_all_tasks').empty();
+			$('#tasks-list-template').find('#select_all_tasks').empty().removeAttr('data');
 			$.each($('.tbody_check'), function(index, element)
 				{
 					$(element).attr('checked', "unchecked");
 				});
 		}
 
+	});
+	$('#tasks-list-template').on('click', '#select_total_tasks', function(event)
+	{	
+		$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
+		var taskCount = getSimpleCount(window.App_Calendar.allTasksListView.collection.toJSON()) ;
+		$('#tasks-list-template').find('.tbody_check').attr('checked', "checked");
+		$('#tasks-list-template').find('#select_all_tasks').empty().html('All '+taskCount+' tasks Selected').attr('data',taskCount);
 	});
 	
 	
@@ -938,27 +949,70 @@ function getTaskIds(){
 		return id_array;
 }
 function saveBulkTaskProperties(task_ids,priorityJson,form_id){
-	var sendData = {};
-	sendData.IdJson = task_ids;
-	sendData.priority = priorityJson;
-	sendData.form_id = form_id;
-
+	var sendData = getsendDataJson(task_ids,priorityJson,form_id);
 	var url = 'core/api/tasks/changeBulkTasks';
 	if(sendData){
 		$.ajax({ url : url, method: "POST" ,
 			contentType: 'application/json', 
-		//	dataType: 'application/json',
 			data : JSON.stringify(sendData),
-			success : function(data){
+			success : function(data){				
+				showNotyPopUp('information', "Task scheduled", "top", 5000);
 				console.log(data);
 				for (var i in data) {
 					App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
 				}
 				App_Calendar.allTasksListView.render(true);
+				showTaskNotyMessage(""+data.length+" tasks are modified","information","bottomRight",5000);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
   				console.log(textStatus, errorThrown);
        		} 
 		});
 	}
+}
+function saveBulkTaskAction(task_ids,priorityJson,form_id){
+	var sendData = getsendDataJson(task_ids,priorityJson,form_id);
+	var url = "core/api/bulkTask/changeProperty" ;
+	var taskType = $('#tasks-list-template').find('.owner-task-button').find('.selected_name').text();
+	var criteria = "LIST" ;
+	var pending = false; var ownerId = null ;
+	if(taskType ){
+		if(taskType == "All Pending Tasks")
+			pending = true ;
+		else if (taskType == "My Tasks")
+			ownerId = CURRENT_DOMAIN_USER.id ;
+		else if (taskType == "My Pending Tasks"){
+			pending = true;
+			ownerId = CURRENT_DOMAIN_USER.id ;
+		}
+	}
+	sendData.criteria = criteria ;
+	sendData.pending = pending;
+	sendData.ownerId = ownerId ;
+	if(sendData){
+		$.ajax({ url : url, method: "POST" ,
+			contentType: 'application/json', 
+			data : JSON.stringify(sendData),
+			success : function(data){				
+				showNotyPopUp('information', "Task scheduled", "top", 5000);
+				console.log(data);
+				for (var i in data) {
+					App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
+				}
+				App_Calendar.allTasksListView.render(true);
+				showTaskNotyMessage(""+data.length+" tasks are modified","information","bottomRight",5000);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+  				console.log(textStatus, errorThrown);
+       		} 
+		});
+	}
+
+}
+function getsendDataJson(task_ids,priorityJson,form_id){
+	var sendData = {};
+	sendData.IdJson = task_ids;
+	sendData.priority = priorityJson;
+	sendData.form_id = form_id;
+	return sendData;
 }
