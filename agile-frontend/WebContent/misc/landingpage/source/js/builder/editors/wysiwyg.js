@@ -115,6 +115,9 @@ angular.module('builder.wysiwyg', [])
 	      		$scope.frameBody.off('dblclick').on('dblclick', function(event) {
                     if (event.target.nodeName !== 'BODY' && $(event.target).text().trim().length) {
                         drawWysiwyg(event.pageX, event.pageY);
+                    } else if (event.target.nodeName === 'IMG') {
+                    	parent.document.getElementById("inspectorBuilderMenuItem").click();
+                    	$('#elements-container').show();
                     }
 	      		});
 
