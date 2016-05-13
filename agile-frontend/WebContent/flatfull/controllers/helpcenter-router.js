@@ -36,7 +36,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				postRenderCallback : function(el, collection) {
 
-
+                  Helcenter_Events.categorieDelete(el);
 				}
 			});
 
@@ -278,14 +278,17 @@ var HelpcenterRouter = Backbone.Router.extend({
 			    },
 
 		        postRenderCallback : function(el){
+				setupTinyMCEEditor('textarea#description-article', true, undefined, function(){
+					$("textarea#description-article").css("display", "none");
+				});
+
 				fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
 
 		 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
 
 
 				},'', true);
-				setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
- 
+				 
 
 		        }
 		    });    

@@ -57,7 +57,37 @@ var Helcenter_Events = {
                                     
                },null);
    		});
-	}
+	},
+
+   categorieDelete: function(el){
+     
+      $(".remove_categorie",el).on("click",function(e){
+                       
+         e.preventDefault();
+         var id = $(this).data("id");
+                  
+         showModalConfirmation("", "Are you sure, you want to delete categorie ", function(){
+
+                     
+                     
+            console.log(id);
+                     
+            $.ajax({
+              
+               url: '/core/api/knowledgebase/categorie/'+id,
+               type: 'DELETE',
+               contentType : "application/json",
+               success : function(response){
+                  model=App_Helpcenter_Module.categoriesCollection.collection.get(id);
+                  model.destroy();     
+               }
+            });                                    
+                     
+
+         }, null,null, "yes", "no");
+
+      });
+   }
 
 
 };

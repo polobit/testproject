@@ -54,5 +54,15 @@ Handlebars.registerHelper('Admin_Commented_user', function(hc_user,options){
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
+
+	if(!str)
+		return "";
+
+	str = str.trim();
+
+	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    return str;
+});
 
 
