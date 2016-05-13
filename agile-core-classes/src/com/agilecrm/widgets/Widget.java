@@ -72,6 +72,8 @@ public class Widget {
 
 	public String listOfUsers = null;
 
+	public String display_name = null;
+	
 	@NotSaved
 	public boolean isForAll = false;
 
@@ -177,9 +179,10 @@ public class Widget {
 	 * @param fav_ico
 	 * @param type
 	 */
-	public Widget(String name, String description, String url, String logo,
+	public Widget(String name, String displayName, String description, String url, String logo,
 			String mini_logo, String fav_ico, WidgetType type) {
 		this.name = name;
+		this.display_name = displayName;
 		this.description = description;
 		this.url = url;
 		this.logo_url = logo;

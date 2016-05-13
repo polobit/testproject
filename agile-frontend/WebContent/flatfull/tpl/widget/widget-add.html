@@ -45,13 +45,18 @@
 	{{#if_equals name "Bria"}}
   		 <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
     {{else}}
-	{{#if_equals name "Skype"}}
-		<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
- 	{{else}}
-		<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="{{description}}">
+		{{#if_equals name "Skype"}}
+			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
+	 	{{else}}
+			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="{{description}}">
+		{{/if_equals}}
 	{{/if_equals}}
-	{{/if_equals}}
-   
+		{{#if_equals widget_type "CUSTOM"}}
+			{{#if_equals name "Custom"}}
+			{{else}}
+				<center><h4 class="m-t-xxs">{{display_name}}</h4></center>
+			{{/if_equals}}
+		{{/if_equals}}
 		{{description}}
 	{{#if_equals name "Bria"}}
 		<br/>
@@ -64,8 +69,7 @@
 		<span style="font-size: 10px;">Support for Windows only</span>
 	{{/if_equals}}
 	{{/if_equals}}
-
-	</div>
+		</div>
     <div class="text-center">
 
 		{{#if_equals widget_type "CUSTOM"}}
@@ -78,7 +82,7 @@
   						</a>
   					{{/isAdmin}}
   						<a class="btn btn-sm btn-default m-r-sm" href="#Custom-widget/{{id}}" widget-name="{{name}}" widget-type="{{widget_type}}">Edit</a>
-        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete 1</a>  
+        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>  
         			</div>
 					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
@@ -569,12 +573,13 @@
 <form id="customwidget_login_form" name="customwidget_login_form" method="post">
 	<fieldset>		
 		<label>Enter your custom widget details </label>						
-		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control"value="CUSTOM" name="widget_type"/>
+		<input type="hidden" id="widget_type" class="input-medium required widget_input_box form-control" value="CUSTOM" name="widget_type"/>
+		<input type="hidden" id="name" class="input-medium required widget_input_box form-control" value="{{name}}" name="name"/>
 		{{#if id}}
 			<input type="hidden" id="id" class="input-medium required widget_input_box form-control"value="{{id}}" name="id"/>		
 			<div class="control-group form-group">
 				<div class="controls">
-					<input type="text" id="name" value="{{name}}" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="name">
+					<input type="text" id="display_name" value="{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="display_name">
 					</input>				
 				</div>
 			</div>
@@ -680,8 +685,16 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{{this.widget.name}}</h4>
+        <h4 class="modal-title">{{this.widget.display_name}}</h4>
       </div>
+      <div class="modal-body p-l p-t-xs p-b-xs">
+		  <span style="width:5%;">
+		  	<label class="i-checks i-checks-sm m-b-none" style="visibility: visible;">
+		    	<input type="checkbox" class="thead_check" value=""><i></i>
+		    </label>
+		  </span>
+		  <span>All Users</span>
+	  </div>
       <div class="modal-body overflow-auto p-xs" style="max-height: 500px;">
         	{{#if this.data.length}}
         	<div class="row p-none m-none">

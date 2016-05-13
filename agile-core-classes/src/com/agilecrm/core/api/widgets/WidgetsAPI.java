@@ -98,6 +98,11 @@ public class WidgetsAPI {
 	public Widget createWidget(Widget widget) throws Exception {
 		System.out.println("In widgets api create");
 		if (widget != null) {
+			if(widget.widget_type == WidgetType.CUSTOM){
+				widget.display_name = widget.name;
+				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
+			}
+			
 			WidgetsAPI.checkValidDetails(widget);
 			widget.save();
 			return widget;
@@ -118,28 +123,19 @@ public class WidgetsAPI {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget createCustomWidget(CustomWidget customWidget) {
+	public Widget createCustomWidget(Widget widget) {
 		System.out.println("In custom widgets api create");
-		if (customWidget != null) {
-			customWidget.name = customWidget.name.replaceAll("[^a-zA-Z]+", "");
-			if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
-				return null;
+		if (widget != null) {
+			if (widget.widget_type == WidgetType.CUSTOM) {
+				widget.display_name = widget.name;
+				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
 			}
-
-			Widget widget = new Widget();
-			widget.isForAll = customWidget.custom_isForAll;
-			widget.script = customWidget.script;
-			widget.logo_url = customWidget.logo_url;
-			widget.fav_ico_url = customWidget.fav_ico_url;
-			widget.mini_logo_url = customWidget.mini_logo_url;
-			widget.description = customWidget.description;
-			widget.name = customWidget.name;
-			widget.widget_type = customWidget.widget_type;
+			// if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
+			// return null;
+			// }
 			widget.save();
-
-			customWidget.is_added = true;
-
-			return customWidget;
+			widget.is_added = true;
+			return widget;
 		}
 		return null;
 	}
@@ -156,6 +152,13 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
+			
+			if (widget.widget_type == WidgetType.CUSTOM) {				
+				if(!(widget.display_name.trim().equals(widget.name))){					
+					widget.name = widget.display_name.replaceAll("[^a-zA-Z0-9]+", "");
+				}
+			}
+
 			WidgetsAPI.checkValidDetails(widget);
 			widget.save();
 			return widget;
