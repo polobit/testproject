@@ -465,9 +465,10 @@ public class CustomFieldsAPI
     			try {
     				ContactSchemaUpdateStats schema = ContactSchemaUpdateStats.get(domainUser);
     				if(schema != null){
-    					Long updated_time = schema.updated_time ;
+    					Long updated_time = schema.updated_time * 1000 ;
     					Date update_date = new Date(updated_time);
     					Date current_date = new Date();
+    					System.out.println(update_date.getMonth()+" "+current_date.getMonth()+" "+update_date.getYear()+" "+current_date.getYear());
 						if(update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear()){
 							UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domain);
 							// Add to queue
