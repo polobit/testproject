@@ -102,6 +102,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	// Reads id, to update the contact
 	var id = $('#' + form_id + ' input[name=id]').val();
 
+	//Surce of the contact
+	var contact_source = $('#' + form_id + ' input[name=source]').attr('data');
+
 	// Makes created time constant
 	var created_time = $('#' + form_id + ' input[name=created_time]').val();
 
@@ -193,6 +196,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// Stores person's continue editing form template key
 		template = 'continue-contact';
 		obj.type = 'PERSON';
+		if(contact_source)
+			obj.source = contact_source ;
 
 		// Creates properties of contact (person)
 		if (isValidField(form_id + ' #fname'))

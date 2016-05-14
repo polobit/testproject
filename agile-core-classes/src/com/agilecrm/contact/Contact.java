@@ -221,6 +221,9 @@ public class Contact extends Cursor
 
     @NotSaved
     public String entity_type = "contact_entity";
+    
+    @NotSaved(IfDefault.class)
+    public String source = null ;
 
     /**
      * related company key of this person, ignored for company entity, this is
