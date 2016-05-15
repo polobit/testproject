@@ -3859,3 +3859,14 @@ margin-left:27px;
 .alias-icon{
     font-size: 11px;
   }
+.autogrow{
+   min-height: 49px;
+    height: 80px;
+    max-height: 400px;
+    width: 100%;
+    text-indent: 0px;
+    resize: none;
+    padding: 8px 8px 1px;
+    overflow-y: hidden;
+
+}
