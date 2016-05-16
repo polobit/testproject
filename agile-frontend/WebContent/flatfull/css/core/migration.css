@@ -2308,8 +2308,8 @@ color:#484848!important;
 .icons-text-sm.actions i, .icons-text-sm.actions span.icon-trash{ font-size: 13px !important;}
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span{ padding-top: 10%;}
 .recent-list-text-color a{ color: #363f44 !important;}
-.editicon{ border: 1px solid #dee5e7; height: 13px; padding: 0 2px; border-radius: 2px; transition:all 0.7s ease;}
-.editicon:hover{ background-color:#363f44; color: #fff; border: 1px solid #363f44;}
+.editicon{ border: 1px solid #dee5e7; height: 13px; padding: 0 2px; border-radius: 2px;}
+.editicon:hover{ background-color:#666; color: #fff; border: 1px solid #666;}
 
 
 /*cases_custom_popover css code*/
