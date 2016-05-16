@@ -38,6 +38,7 @@ import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.upload.blob.status.ImportStatus;
+import com.agilecrm.deals.CurrencyConversionRates;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -260,6 +261,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//For deals update in textsearch
 	ObjectifyService.register(OpportunitySchemaUpdateStats.class);
+	
+	//For currency conversion rates
+	ObjectifyService.register(CurrencyConversionRates.class);
 
     }
 

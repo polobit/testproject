@@ -137,6 +137,6 @@ cron:
   url: /ticket-module/backend/ticket_stats
   schedule: every day 03:00
 
-- description: Ticket stats report
+- description: Currency convertion rates
   url: /backend/cron/deal-currency-converter
   schedule: every 60 mins 
