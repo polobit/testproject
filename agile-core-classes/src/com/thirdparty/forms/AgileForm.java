@@ -75,6 +75,8 @@ public class AgileForm extends HttpServlet
 
 	    contact.setContactOwner(owner);
 	    String[] tags = getContactTags(formJson);
+	    
+	    
 	    if (!ArrayUtils.isEmpty(tags))
 		contact.addTags(tags);
 	    else
@@ -83,6 +85,10 @@ public class AgileForm extends HttpServlet
 	    addNotesToContact(contact, owner, formJson);
 
 	    Form form = FormUtil.getFormByName(agileFormName);
+	    //creating the emailNotification for the new contact  
+	    if(form.emailNotification && newContact)
+	    	 FormUtil.sendMailToContactOwner(contact, agileFormName);
+	    
 	    if (form == null)
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
