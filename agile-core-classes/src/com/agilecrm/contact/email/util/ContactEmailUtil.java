@@ -933,7 +933,12 @@ public class ContactEmailUtil
 	    	}
 	    }
 	    
-	    List<Contact> ccEmailContacts = ContactUtil.searchContactsByEmailList(ccEmailsList);
+	    List<Contact> ccEmailContacts = null;
+	    
+	    if(ccEmailsList.size() > 0)
+	    {
+	    	ccEmailContacts = ContactUtil.searchContactsByEmailList(ccEmailsList);
+	    }
 	    
 	    if(ccEmailContacts != null && ccEmailContacts.size() > 0)
 	    {
@@ -965,7 +970,12 @@ public class ContactEmailUtil
 	    	}
 	    }
 	    
-	    List<Contact> bccEmailContacts = ContactUtil.searchContactsByEmailList(bccEmailsList);
+	    List<Contact> bccEmailContacts = null;
+	    
+	    if(bccEmailsList.size() > 0)
+	    {
+	    	bccEmailContacts = ContactUtil.searchContactsByEmailList(bccEmailsList);
+	    }
 	    
 	    if(bccEmailContacts != null && bccEmailContacts.size() > 0)
 	    {
