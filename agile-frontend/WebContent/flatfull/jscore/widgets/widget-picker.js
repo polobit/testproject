@@ -55,7 +55,7 @@ function initializeWidgetSettingsListeners(){
 	 * add widget then navigates back to the contact-details page
 	 */
 	$('#prefs-tabs-content').off();
-	$('#prefs-tabs-content .install-custom-widget').off();
+	$('#prefs-tabs-content .install-custom-widget').off('click');
 	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
 
@@ -112,7 +112,7 @@ function initializeWidgetSettingsListeners(){
 
 	});
 
-	$('#prefs-tabs-content .acl_widget').off();
+	$('#prefs-tabs-content .acl_widget').off('click');
 	$('#prefs-tabs-content').on('click', '.acl_widget', function(e){
 		// Fetching widget ID.
 		var widgetData = $(this).attr('widget-data');		
@@ -133,8 +133,17 @@ function initializeWidgetSettingsListeners(){
 			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
   				$("#widget-acls-modal").html(template_ui).modal('show');  	
 
-  				$('#widget-acls-modal .widget_acl_save').off();
-				$('#widget-acls-modal').one('click', '.widget_acl_save', function(e){
+  				$('#widget-acls-modal .agileUserChk_all').off('click');
+				$('#widget-acls-modal').on('click', '.agileUserChk_all', function(e){
+					if($(this).is(":checked")){
+						$('#widget-acls-modal .agileUserChk').prop('checked',true);
+					}else{
+						$('#widget-acls-modal .agileUserChk').prop('checked',false);
+					}					
+				});
+
+  				$('#widget-acls-modal .widget_acl_save').off('click');
+				$('#widget-acls-modal').on('click', '.widget_acl_save', function(e){
 					var widgetID = $(this).attr('widget-id');
 					var widget = result.widget;
 
@@ -171,7 +180,7 @@ function initializeWidgetSettingsListeners(){
 	 * When user chooses to delete a widget, on confirmation sends delete
 	 * request based on the name of the widget
 	 */
-	$('#prefs-tabs-content #delete-widget').off();
+	$('#prefs-tabs-content #delete-widget').off('click');
 	$('#prefs-tabs-content').on('click', '#delete-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
@@ -202,17 +211,17 @@ function initializeWidgetSettingsListeners(){
 	});	
 	
 	// Helps to know that widget is for all users.
-	$('#prefs-tabs-content .add_to_all').off();
+	$('#prefs-tabs-content .add_to_all').off('click');
 	$('#prefs-tabs-content').on('click', '.add_to_all', function(e){
 		isForAll = true;
 	});
 
-	$('#prefs-tabs-content .add-widget').off();
+	$('#prefs-tabs-content .add-widget').off('click');
 	$('#prefs-tabs-content').on('click', '.add-widget', function(e){
 		isForAll = false;
 	});
 	
-	$('#prefs-tabs-content #remove-widget').off();
+	$('#prefs-tabs-content #remove-widget').off('click');
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
 

@@ -153,10 +153,8 @@ public class WidgetsAPI {
 	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
 			
-			if (widget.widget_type == WidgetType.CUSTOM) {				
-				if(!(widget.display_name.trim().equals(widget.name))){					
-					widget.name = widget.display_name.replaceAll("[^a-zA-Z0-9]+", "");
-				}
+			if (widget.widget_type == WidgetType.CUSTOM) {											
+				widget.name = widget.display_name.replaceAll("[^a-zA-Z0-9]+", "");
 			}
 
 			WidgetsAPI.checkValidDetails(widget);

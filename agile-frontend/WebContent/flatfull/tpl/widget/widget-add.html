@@ -689,8 +689,8 @@
       </div>
       <div class="modal-body p-l p-t-xs p-b-xs">
 		  <span style="width:5%;">
-		  	<label class="i-checks i-checks-sm m-b-none" style="visibility: visible;">
-		    	<input type="checkbox" class="thead_check" value=""><i></i>
+		  	<label class="i-checks i-checks-sm m-b-none">
+		    	<input type="checkbox" class="agileUserChk_all" value=""><i></i>
 		    </label>
 		  </span>
 		  <span>All Users</span>
@@ -704,9 +704,9 @@
 	    					<div class="checkbox pull-left">
 				              <label class="i-checks">
 				               {{#if isChecked}}
-				                <input type="checkbox" name="agileUserChk" value="{{id}}" checked>
+				                <input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}" checked>
 				               {{else}}
-				               	<input type="checkbox" name="agileUserChk" value="{{id}}">
+				               	<input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}">
 				               {{/if}}
 				                <i></i>				           
 				              </label>
