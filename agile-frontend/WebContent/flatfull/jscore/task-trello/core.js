@@ -121,9 +121,12 @@ function initTaskListCollection()
 
 // Append sub collection and model
 function taskAppend(base_model)
-{
+{ var Trackstatus = getTaskTrackAutoWidthCurrentState(base_model.get("heading"))
 	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "new-tasks-lists-model", tagName : 'div',
-		className : "task-trello-list col-md-3 expand p-n pull-none inline-block m-r-none min-h-auto-xl", id : base_model.get("heading")});
+		className : "task-trello-list col-md-3 "+Trackstatus +" p-n pull-none inline-block m-r-none min-h-auto-xl", id : base_model.get("heading"),postRenderCallback :function(el){
+			var status = JSON.parse(_agile_get_prefs('task-page-status'));
+
+		}});
 
 	// Render model in main collection
 	var el = tasksListModel.render().el;
@@ -159,6 +162,8 @@ function taskFetch(base_model)
 			$('[data-toggle="tooltip"]', el).tooltip();
 
 			var flag = false;
+			console.log("inside the postrender call back of task collec")
+			
 
 			if (base_model.has("owner_id"))
 				flag = $("div[id='list-tasks-" + base_model.get("heading") + "-" + base_model.get("owner_id") + "']")[0];

@@ -3765,25 +3765,52 @@ opacity: .3;
 div.addField div.controls div:first-child{
   padding-bottom: 1px;
 }
-
-.taskautoadjust{
-  transform: rotate(-90deg);
-  font-size: 18px;
-    margin-top:20px;
+.task-trello-list.expand .task-list-minimized{
+ display: :block;
 }
-.taskpanelheight{
-height:75vh;
-overflow-y:hidden; 
-background-color: #f6f8f8;
-}
-.taskautowidth{
-  width:5% !important;
-}
-
-.taskheading{
-  height:70px;
-}
-.taskbuttonposition
+.task-trello-list.expand .panel.panel-default
 {
-  margin-left:-3px;
+  display: none;
+}
+.task-trello-list.compress .task-list-minimized
+{
+  display:none;
+}
+.task-trello-list.compress .panel.panel-default{
+  display:block;
+}
+
+.task-trello-list.expand{
+ width:5%!important;
+}
+.task-trello-list.expand .compressedHeading .task-count
+{
+  transform:rotate(-90deg);
+}
+.task-trello-list.expand .panel-default
+{
+  height:77vh;
+}
+.task-trello-list.expand .pull-left.text-ellipsis
+{
+  width:62%; 
+  transform: rotate(-90deg);
+   font-size: 18px;
+    margin-top: 90px;
+}
+.task-list-minimized{
+  background-color: #f6f8f8
+   padding: 10px 15px;
+  border: 1px solid #dee5e7;
+}
+.expand-button .transform-rotate{
+  position:absolute;
+  padding-left:10px;
+  margin-top:15px;
+}
+
+.task-list-minimized .taskheading
+{
+  font-size: 20px;
+  margin-top:150px;
 }

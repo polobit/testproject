@@ -189,68 +189,9 @@ function initializeTasksListeners(){
 	*/
 
 	$('#tasks-list-template').on("click", ".expandbutton", function(e)
-	{
+	{	
+		taskAutoWidth(this);
 		
-		
-		var expaded = 0 ;
-		var collapsed = 0 ;
-		if($(this.closest(".task-trello-list")).hasClass("expand"))
-			{
-				$(this).closest(".task-trello-list").addClass("compress");
-				$(this).closest(".task-trello-list").removeClass("expand");
-				$(".compress .transform-rotate").addClass("block");
-				$(this).closest(".compress .transform-rotate.block").addClass("p-l-xs");
-				$(".compress .CollapsedPanel").removeClass("hide");
-				$(".compress .compressedHeading").css("transform","rotate(-90deg)");
-				$(".compress .CollapsedPanel").addClass("taskautoadjust");
-				$(".compress .text-ellipsis").addClass("hide");
-				$(".compress .icon-plus").addClass("hide"); 
-				$(".compress .task-striped").addClass("hide");
-				$(".compress .panel.panel-default.w-full").addClass("taskpanelheight");
-				$(".compress .text-info .text-xs").addClass("fa-expand");
-				$(".compress .text-info .text-xs").removeClass("fa-compress ");
-				$(".compress .text-info .text-xs").removeClass("pull-left");
-				$(".compress").addClass("taskautowidth");
-				$(".compress .icon-plus").addClass("pull-left");
-				$(".compress .text-info .text-xs").addClass("taskexpandbutton");
-				$(".compress .list-header.panel-heading").addClass("taskheading");
-				$(".compress .taskexpandbutton").removeClass("pull-right");
-				$(".compress .taskexpandbutton").addClass("text-center");
-				$(".compress .taskexpandbutton").addClass("m-t-xs");
-				$(".compress .taskexpandbutton").addClass("taskbuttonposition");
-				$(".compress #no_task").addClass("hide");
-				$(".compress .transform-rotate").removeClass("inline-block");
-				$(".compress .icon-plus").removeClass("m-t-xs");
-			}
-		else
-		{
-				$(this).closest(".task-trello-list").addClass("expand");
-				$(this).closest(".task-trello-list").removeClass("compress");
-				$(".expand .transform-rotate").removeClass("block");
-				$(this).closest(".expand .transform-rotate.block").removeClass("p-l-xs");
-				$(".expand .CollapsedPanel").addClass("hide");
-				$(".expand .compressedHeading").css("transform","rotate(0deg)");
-				$(".expand .text-ellipsis").removeClass("hide");
-				$(".expand .CollapsedPanel").removeClass("taskautoadjust");
-				$(".expand .task-striped").removeClass("hide");
-				$(".expand .icon-plus").removeClass("hide"); 
-				$(".expand .panel.panel-default.w-full").removeClass("taskpanelheight");
-				$(".expand .text-info .text-xs").addClass("fa-compress");
-				$(".expand .text-info .text-xs").removeClass("fa-expand");
-				$(".expand").removeClass("taskautowidth");
-				$(".expand .text-info.text-xs").removeClass("taskexpandbutton");
-				$(".expand .list-header.panel-heading").removeClass("taskheading");
-				$(".expand .taskexpandbutton").addClass("pull-right");
-				$(".expand .taskexpandbutton").removeClass("text-center");
-				$(".expand .taskexpandbutton").removeClass("m-t-xs");
-				$(".expand .taskexpandbutton").removeClass("taskbuttonposition");
-				$(".expand .transform-rotate").addClass("inline-block");
-				$(".expand .icon-plus").addClass("m-t-xs");
-				$(this).closest(".compress .text-info .text-xs").addClass("pull-left");
-
-		}
-		
-		taskAutoWidth();
 	});	
 
 	
@@ -288,29 +229,47 @@ $("body").on("change", '.status', function()
 		// Change status UI and input field
 		changeStatus($(this).val(), $(this).closest("form"));
 	});	
+
+function getTaskTrackAutoWidthCurrentState(track_name){
+   if(!track_name)
+   	  return "compress";
+
+   	// Get prefs form storage 
+   	var prefs = _agile_get_prefs("task-page-status");
+   	if(prefs && prefs.indexOf(track_name) != -1)
+   		 return "expand";
+
+   	return "compress";
+}
+
 /*auto width for the task expand 
 */
-function taskAutoWidth()
+function taskAutoWidth(el)
 {	
-	var expanded = 0;
-	var collapsed = 0;
-	var childrens = $('.task-trello-list');
-		for(var i = 0 ; i<childrens.length ;i++)
-		{
-			if($(childrens[i]).hasClass("expand"))
-			{
-				expanded++;
-			}
-			else
-			{
-				collapsed++;
-			}
-		}
-		/*var expandedWidth = (100-(collapsed*5))/expanded;
-		$(".expand").css("width" , expandedWidth.toString() +"%");*/
-		
+	var arr = _agile_get_prefs("task-page-status");
+	if(!arr)
+		arr = [];
+	else 
+		arr = arr.split(",");
 
+	var id = $(el).closest(".task-trello-list").attr("id");
+	if(arr.indexOf(id) != -1)
+	{
+		delete arr[arr.indexOf(id)]
+	}
+
+	var expanded = $(el).closest(".task-trello-list").hasClass("compress");
+	if(expanded)
+	{
+		arr.push($(el).closest(".task-trello-list").attr("id"))
+	}
+
+	$(el).closest(".expand .text-info .text-xs").toggleClass("fa-compress fa-expand");
+	$(el).closest(".task-trello-list").toggleClass("expand compress");
+	_agile_set_prefs('task-page-status' , arr.toString());
+		
 }
+
 /**
  * Highlights the task portion of activity modal (Shows task form and hides
  * event form, changes color and font-weight)
