@@ -21,7 +21,7 @@ var Form_Collection_Events = Base_Collection_View.extend({
 		 	$codeShareModalEl.find("#fullsourceArea").text(currentModel.get("formHtml"));
 
 		 	//permanent link
-		 	var link = window.location.protocol + "//" +window.location.host+ "/form.jsp?id"+"=" +$(e.currentTarget).data("formid");
+		 	var link = window.location.protocol + "//" +window.location.host+ "/forms/"+$(e.currentTarget).data("formid");
 		 	$codeShareModalEl.find("#linkArea").text(link);
 
 		 	//iframe code
