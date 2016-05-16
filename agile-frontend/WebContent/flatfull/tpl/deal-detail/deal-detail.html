@@ -12,7 +12,7 @@
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
 
 <div class="inline-block w-full"><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
-<span class="h3 font-thin custom-color m-b-xs block" id="deals-inline" >
+<span class="h3 font-thin custom-color m-b-xs block" id="deals-inline">
 {{#if name}}{{name}}{{/if}}</span></div>
 
 {{#if expected_value}}
@@ -209,10 +209,10 @@
 
     {{#each contacts}}
           {{#if_contact_type "PERSON"}}
-            <a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+      <a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
-            <a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+            <a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs popover_contact" data="{{id}}"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
           {{/if_contact_type}}
       {{/each}}
       
@@ -260,7 +260,7 @@
   <div class="panel panel-default m-b">
     <div class="panel-body">
 <div class="inline-block w-full "><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
-<span class="h3 font-thin custom-color text-ellipsis m-b-xs block" id="deals-inline" >
+<span class="h3 font-thin custom-color text-ellipsis m-b-xs block" id="deals-inline" title="{{#if name}}{{name}}{{/if}}">
 {{#if name}}{{name}}{{/if}}</span></div>
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
@@ -463,10 +463,10 @@
 
     {{#each contacts}}
           {{#if_contact_type "PERSON"}}
-            <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+         <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
-            <a href="#company/{{id}}" class="activate-link thumb m-b-xs"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+                <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"> <img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
           {{/if_contact_type}}
       {{/each}}
       
