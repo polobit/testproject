@@ -50,5 +50,12 @@
       <web-uri>agile-sync.war</web-uri>
       <context-root>agile-sync</context-root>
     </web>
-  </module> -->
+  </module> 
+  <module>
+     <web>
+      <web-uri>agile-tasks-handler.war</web-uri>
+      <context-root>agile-tasks-handler</context-root>
+     </web>
+  </module>
+-->
 </application>
