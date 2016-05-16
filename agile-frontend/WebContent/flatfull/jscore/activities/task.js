@@ -972,7 +972,7 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 }
 function saveBulkTaskAction(task_ids,priorityJson,form_id){
 	var sendData = getsendDataJson(task_ids,priorityJson,form_id);
-	var url = "core/api/bulkTask/changeProperty" ;
+	var url = "core/api/tasks/bulk/changeBulkTasksProperties" ;
 	var taskType = $('#tasks-list-template').find('.owner-task-button').find('.selected_name').text();
 	var criteria = "LIST" ;
 	var pending = false; var ownerId = null ;
@@ -996,11 +996,7 @@ function saveBulkTaskAction(task_ids,priorityJson,form_id){
 			success : function(data){				
 				showNotyPopUp('information', "Task scheduled", "top", 5000);
 				console.log(data);
-				for (var i in data) {
-					App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
-				}
 				App_Calendar.allTasksListView.render(true);
-				showTaskNotyMessage(""+data.length+" tasks are modified","information","bottomRight",5000);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
   				console.log(textStatus, errorThrown);

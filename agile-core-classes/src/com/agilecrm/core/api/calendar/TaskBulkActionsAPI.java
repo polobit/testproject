@@ -9,44 +9,79 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @Path("/api/bulkTask")
 public class TaskBulkActionsAPI {
-	@Path("/changeProperty")
+	@Path("/ChangeStatus")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Task> changeBulkTaskProperty(String data) {
+	public List<Task> changeBulkTaskProperty(@QueryParam("data") String data) {
 		try {
 			String ownerId = null;
 			JSONObject json = new JSONObject(data);
-			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = json.getJSONArray("IdJson");
-			String formId = json.getString("form_id");
-			boolean pending =  json.getBoolean("pending");
-			 Calendar calendar = Calendar.getInstance();
-			 System.out.println(calendar.getTime().getMonth());
-			 System.out.println(calendar.getTime().getYear());
-			 Long updated_time =  1453011076000L ;
-			 Date update_date = new Date(updated_time);
-			 Date current_date = new Date();
-			 int m = update_date.getMonth();
-			 int n = update_date.getYear();
-			 int o =  current_date.getMonth();
-			 int p = current_date.getYear();
-			if(json.get("ownerId") != null || json.get("ownerId")!= "")
-				ownerId =  (String) json.getString("ownerId");
-			String criteria = json.getString("criteria");
 			JSONObject priority = json.getJSONObject("priority");
+			String newProperty = priority.getString("status");
 			ArrayList<String> taskIdList = new ArrayList<String>();
-			if (taskIdArray != null) {
-				int len = taskIdArray.length();
-				for (int i = 0; i < len; i++) {
-					taskIdList.add(taskIdArray.get(i).toString());
+			List<Task> subList = new ArrayList<Task>();
+			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = json.getJSONArray("IdJson");
+			if (taskIdArray != null) { 
+			   for (int i=0;i<taskIdArray.length();i++){ 
+				   try {
+					   Task task = null;
+					   Long id = taskIdArray.getLong(i);
+					   task = TaskUtil.getTask(id);
+					   task.status = Task.Status.valueOf(newProperty);
+					   subList.add(task);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+				   if (subList.size() >= 100)
+					{
+					    Task.dao.putAll(subList);
+					    subList.clear();
+					}
+			   }
+			   if (!subList.isEmpty())
+			    {
+				Task.dao.putAll(subList);
+			    }
+			   
+			}
+			else{
+			 boolean pending =  json.getBoolean("pending");
+			if(json.get("ownerId") != null || json.get("ownerId")!= "")
+				ownerId =  json.getString("ownerId");
+			
+			String criteria = json.getString("criteria");
+			String type = json.getString("type");
+			List<Task> tasks = TaskUtil.getTasksRelatedToOwnerOfType(criteria, type, ownerId,
+					pending, null , null);
+			for(Task task : tasks){
+				
+				task.status = Task.Status.valueOf(newProperty);
+				subList.add(task);
+				 if (subList.size() >= 100)
+					{
+					    Task.dao.putAll(subList);
+					    subList.clear();
+					}
+			}
+			if (!subList.isEmpty())
+		    {
+			Task.dao.putAll(subList);
+		    }	
+			
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -17,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,9 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
@@ -647,6 +650,37 @@ public class TasksAPI {
 		
 		return null;
 
+	}
+	@Path("/bulk/changeBulkTasksProperties")
+	@POST
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<Task> changeBulkTasksProperties(String data) {
+		try
+		{
+			String uri = "/core/api/bulkTask" ;
+			JSONObject json = new JSONObject(data);
+			String formId = json.getString("form_id");
+			if(formId.equalsIgnoreCase("bulkTaskStatusForm")){
+				uri = uri + "/ChangeStatus?data="+data ;
+			}
+			else if(formId.equalsIgnoreCase("bulkTaskPriorityForm")){
+				uri = uri + "/ChangePriority?data="+data ;
+			}
+			else if(formId.equalsIgnoreCase("bulkTaskOwnerForm")){
+				uri = uri + "/ChangeOwner?data="+data ;
+			}
+			else {
+				uri = uri + "/ChangeDuedate?data="+data ;
+			}
+		    TaskUtil.postDataToTaskBackend(uri);
+		}
+		catch (Exception je)
+		{
+		    je.printStackTrace();
+		}
+		
+		return null;
 	}
 
 }

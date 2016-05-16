@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -20,6 +21,9 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.amazonaws.services.datapipeline.model.TaskStatus;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
@@ -1009,6 +1013,12 @@ public class TaskUtil
 		}
 		return null;
 	}
-
-
+	public static void postDataToTaskBackend(String uri)
+    {
+		// Create Task and push it into Task Queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TASK_CHANGE_PROPERTY);
+		TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri);
+		queue.addAsync(taskOptions);
+		return;
+    }
 }
