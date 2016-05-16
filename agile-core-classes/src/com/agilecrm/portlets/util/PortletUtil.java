@@ -851,7 +851,7 @@ public class PortletUtil {
 						newOpportunityCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
 						meetingScheduledCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
+					else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
 						queuedCallsCount++;
 					totalCallsCount++;
 					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
@@ -2022,7 +2022,7 @@ public class PortletUtil {
 										case Call.MeetingScheduled :
 											meetingScheduledCallsCount++;
 											break;
-										case "queued" :
+										default :
 											queuedCallsCount++;
 											break;		
 									}
@@ -2050,7 +2050,7 @@ public class PortletUtil {
 						cateJson.put("incorrectReferral", incorrectReferralCallsCount);
 						cateJson.put("newOpportunity", newOpportunityCallsCount);
 						cateJson.put("meetingScheduled", meetingScheduledCallsCount);
-						cateJson.put("queued", queuedCallsCount);
+						cateJson.put("other", queuedCallsCount);
 						return cateJson;
 
 
