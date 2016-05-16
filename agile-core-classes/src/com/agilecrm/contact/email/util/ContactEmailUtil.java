@@ -235,7 +235,7 @@ public class ContactEmailUtil
 
 	public static void buildContactEmailAndSend(ContactEmailWrapper contactEmail) throws Exception
 	{
-		checkAndModifyToCcAndBccEmails(contactEmail);
+		//checkAndModifyToCcAndBccEmails(contactEmail);
 	    saveContactEmailAndSend(contactEmail);
 	}
 	
