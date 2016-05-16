@@ -474,12 +474,10 @@ function update_location_ports(nodeObject, jsonValues)
 //show popup -- how to connect one node to another node 
 
 function showNodeConnectPopup(nodeId){
-	var firstNode=$('#paintarea >div.contextMenuForNode').length;
-	window.parent.workflow_alerts("Message", "null", "show-connect-node-popup-modal", null);
-	
+	var firstNode=$('#paintarea >div.contextMenuForNode').length;	
 	if(firstNode==2 && nodeId===undefined)
 	{
-		window.parent.workflow_alerts(null, null, "show-connect-node-popup-modal", null);
+		window.parent.workflow_alerts("Message", "Title", "show-connect-node-popup-modal", null);
 	}
 
 }
