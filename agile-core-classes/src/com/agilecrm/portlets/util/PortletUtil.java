@@ -851,7 +851,7 @@ public class PortletUtil {
 						newOpportunityCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
 						meetingScheduledCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
+					else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
 						queuedCallsCount++;
 					totalCallsCount++;
 					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 

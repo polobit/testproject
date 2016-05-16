@@ -768,7 +768,7 @@ var portlet_graph_data_utility = {
 								series[10] = tempData;
 
 								tempData = {};
-								tempData.name = "Queued";
+								tempData.name = "Other";
 								tempData.data = queuedCallsCountList;
 								series[11] = tempData;
 

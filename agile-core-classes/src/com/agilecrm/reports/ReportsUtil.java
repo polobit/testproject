@@ -691,7 +691,7 @@ public class ReportsUtil
 				callsObject.put("incorrect referral",0);
 				callsObject.put("meeting scheduled",0);
 				callsObject.put("new opportunity",0);
-				callsObject.put("queued",0);
+				callsObject.put("other",0);
 
 				callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
 			        try{
@@ -775,9 +775,9 @@ public class ReportsUtil
 							{
 		                    	type=Call.NoInterest;
 	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
+							else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
 							{
-		                    	type="queued";
+		                    	type="other";
 	                    	}
 		                   
 		                    int count1=count.getInt(type);
