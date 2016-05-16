@@ -215,38 +215,6 @@ public class JSAPI
     }
 
     /**
-     * Deletes a contact. Fetches contact based on email and deletes.
-     * 
-     * It returns true if contact is found and deleted.
-     * 
-     * @param email
-     * @return
-     */
-   /* @Path("contact/delete")
-    @GET
-    @Produces("application/x-javascript;charset=UTF-8;")
-    public String deleteContact(@QueryParam("email") String email)
-    {
-	try
-	{
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-
-	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    contact.delete();
-	    JSONObject obj = new JSONObject();
-	    obj.put("success", "Contact deleted successfully");
-	    return obj.toString();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }*/
-
-    /**
      * Adds task. Takes email, task json and callback as query parameters, task
      * is created and related to contact based on the email. If contact doesn't
      * exist with current email, null is returned with out creating a task
@@ -459,6 +427,9 @@ public class JSAPI
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
 
+	    if(!JSAPIUtil.checkAllowedDomain())
+		return "Please contact Agile CRM to enable this method";
+	    
 	    contact.removeTags(tagsArray);
 
 	    // return new ObjectMapper().writeValueAsString(contact);
@@ -538,6 +509,9 @@ public class JSAPI
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
 
+	    if(!JSAPIUtil.checkAllowedDomain())
+		return "Please contact Agile CRM to enable this method";
+	    
 	    contact.subtractScore(score);
 	    // return new ObjectMapper().writeValueAsString(contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
@@ -721,48 +695,6 @@ public class JSAPI
     }
 
     /**
-     * Get notes from contact based on email
-     * 
-     * @param email
-     *            email of the contact
-     * 
-     * @return String (notes)
-     */
-    @Path("contacts/get-notes")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getNotes(@QueryParam("email") String email)
-    {
-	try
-	{
-	    if (!JSAPIUtil.isRequestFromOurDomain())
-		return new JSONArray().toString();
-
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    else
-	    {
-		List<Note> Notes = new ArrayList<Note>();
-		Notes = NoteUtil.getNotes(contact.id);
-		ObjectMapper mapper = new ObjectMapper();
-		JSONArray arr = new JSONArray();
-		for (Note note : Notes)
-		{
-		    arr.put(mapper.writeValueAsString(note));
-		}
-		return arr.toString();
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
      * Get contact tags based on email
      * 
      * @param email
@@ -785,84 +717,6 @@ public class JSAPI
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(contact.tags);
 	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
-     * Get tasks based on email of the contact
-     * 
-     * @param email
-     *            email of the contact
-     * 
-     * @return String (tasks)
-     */
-    @Path("contacts/get-tasks")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getTasks(@QueryParam("email") String email)
-    {
-	try
-	{
-	    if (!JSAPIUtil.isRequestFromOurDomain())
-		return new JSONArray().toString();
-
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    List<Task> tasks = new ArrayList<Task>();
-	    tasks = TaskUtil.getContactTasks(contact.id);
-	    ObjectMapper mapper = new ObjectMapper();
-	    JSONArray arr = new JSONArray();
-	    for (Task task : tasks)
-	    {
-		arr.put(mapper.writeValueAsString(task));
-	    }
-	    return arr.toString();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
-     * Get deals based on the email of the contact
-     * 
-     * @param email
-     *            email of the contact
-     * 
-     * @return String
-     */
-    @Path("contacts/get-deals")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getDeals(@QueryParam("email") String email)
-    {
-	try
-	{
-	    if (!JSAPIUtil.isRequestFromOurDomain())
-		return new JSONArray().toString();
-
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    List<Opportunity> deals = new ArrayList<Opportunity>();
-	    deals = OpportunityUtil.getDeals(contact.id, null, null);
-	    ObjectMapper mapper = new ObjectMapper();
-	    JSONArray arr = new JSONArray();
-	    for (Opportunity deal : deals)
-	    {
-		arr.put(mapper.writeValueAsString(deal));
-	    }
-	    return arr.toString();
 	}
 	catch (Exception e)
 	{
@@ -1254,6 +1108,9 @@ public class JSAPI
     {
 	try
 	{
+	    if(!JSAPIUtil.checkAllowedDomain())
+		return "Please contact Agile CRM to enable this method";
+	    
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -1289,6 +1146,9 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 	    if (contact.getContactField(name) == null)
 		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
+	    
+	    if(!JSAPIUtil.checkAllowedDomain())
+		return "Please contact Agile CRM to enable this method";
 
 	    contact.removeProperty(name);
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
@@ -1460,28 +1320,6 @@ public class JSAPI
 	{
 	    System.out.println("Error is " + e.getMessage());
 	    return;
-	}
-    }
-
-    /**
-     * Get all domain users.
-     */
-    @Path("users")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getAllDomainUsers()
-    {
-	try
-	{
-	    if (!JSAPIUtil.isRequestFromOurDomain())
-		return new JSONArray().toString();
-
-	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(DomainUserUtil.getUsers());
-	}
-	catch (Exception e)
-	{
-	    return null;
 	}
     }
 
