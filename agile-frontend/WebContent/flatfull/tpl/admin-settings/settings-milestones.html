@@ -129,7 +129,7 @@
 </script>
 
 <script id="admin-settings-lost-reasons-collection-template" type="text/html">
-<div class="panel wrapper">
+<div class="col panel wrapper b-t">
 <form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> Add Reason</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -147,7 +147,14 @@
 		</table>
 	</div>
 	
-<div>
+</div>
+
+<!-- Help Text -->
+<div class="col w-md  wrapper pos-rlt track-milestone-text">
+	 
+</div>
+<!-- Help Text -->
+
 </script>
 
 <script id="admin-settings-lost-reasons-model-template" type="text/html">
@@ -177,7 +184,7 @@
 </script>
 
 <script id="admin-settings-deal-sources-collection-template" type="text/html">
-<div class="panel wrapper">
+<div class="panel wrapper col b-t">
 <form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> Add Source</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -195,7 +202,14 @@
 		</table>
 	</div>
 	
-<div>
+</div>
+
+<!-- Help Text -->
+<div class="col w-md  wrapper pos-rlt track-milestone-text">
+	 
+</div>
+<!-- Help Text -->
+
 </script>
 
 <script id="admin-settings-deal-sources-model-template" type="text/html">
@@ -230,7 +244,7 @@
 
 <script id="admin-settings-deal-goals-collection-template" type="text/html">
 
-<div class="panel wrapper">
+<div class="panel wrapper col b-t">
 	<div class="form-horizontal">
 	<div class="w-md pull-right">
 	<label>Duration</label>
@@ -272,6 +286,139 @@
 
 </div>
 </div>
+
+
+<div class="panel wrapper col b-t">
+<div class="panel panel-default">
+ <div class="panel-heading">
+	<div class="pull-left  m-t-xs">Users</div>
+	<div class="pull-right">
+		<a href="#users-add" class="btn btn-sm btn-default btn-addon" id="addUser"><span><i class="icon-plus-sign" data-original-title="" title=""></i></span> Add User</a>
+	</div>
+	<div class="clearfix"></div>
+ </div>
+<div class="row">
+<div class="col-md-12 col-sm-12">
+            <div class=" table-responsive"> 
+            <table class="table table-striped showCheckboxes agile-table panel table-layout-mob-view" url="core/api/users/bulk">
+                <thead>
+                    <tr><th style="width:5%;"><label class="i-checks i-checks-sm m-b-none"><input type="checkbox" class="thead_check" value=""><i></i></label></th>
+						
+                        <th style="width:60%" class="header">User</th>
+						<!--  <th style="width:20%" class="header">Tags</th> -->
+                        <th style="width:20%" class="header">Created On</th>
+                        <th style="width:20%" class="header">Last Logged In</th>
+						<!-- <th style="width:20%" class="header">&nbsp;</th> -->
+                    </tr>
+                 </thead>
+                 <tbody id="admin-settings-users-model-list" route="user-edit/" class="agile-edit-row">
+                 <tr><td class="v-middle checkbox" style="cursor:default;"><label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label></td>
+    <td class="data" data="5066549580791808">
+    <div class="table-resp">
+	<div class="thumb-xs agile-img avatar">
+	   
+        <img class="img-inital r r-2x" src="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/3.png" title="hungrywdw">
+	   
+    </div>
+	<div class="agile-thumb agile-thumb-view">
+		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 101px);">hungrywdw</a>
+<span class="pull-left" style="width:91px">
+		
+			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+		
+		
+		
+		</span>	
+<div class="clearfix"></div>
+		<div class="text-xs">govind@invox.com</div>
+	</div>
+	</div>
+	</td>
+	<!-- <td>
+		<span class="pull-left" style="width:91px">
+		
+			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+		
+		
+		
+		</span>	
+	</td> -->
+    <td>
+		<div class="table-resp">
+		May 16, 2016
+		</div>
+	</td>
+    <td class="text-muted">
+		<div class="table-resp">
+			<i class="fa fa-clock-o" data-original-title="" title=""></i>
+			<time class="last-login-time" datetime="May 16 2016 15:31:06" title="May 16 2016 15:31:06">less than a minute ago</time>
+		</div>
+	</td>
+   <!-- <td><div class="table-resp"><span class="label m-r-xs bg-light dk text-tiny">Admin</span></div></td> -->
+    
+
+</tr><tr><td class="v-middle checkbox" style="cursor:default;"><label class="i-checks i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label></td>
+    <td class="data" data="5994537394634752">
+    <div class="table-resp">
+	<div class="thumb-xs agile-img avatar">
+	   
+		<img class="w-full" src="https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.jpg?s=50&amp;d=http%3A//localhost%3A8888/flatfull/images/user-default.jpg" title="sdfsdfsd">
+       
+    </div>
+	<div class="agile-thumb agile-thumb-view">
+		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 101px);">sdfsdfsd</a>
+<span class="pull-left" style="width:91px">
+		
+			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+		
+		
+			<span class="label bg-light dk text-tiny">Owner</span>
+		
+		
+		</span>	
+<div class="clearfix"></div>
+		<div class="text-xs">govind1@invox.com</div>
+	</div>
+	</div>
+	</td>
+	<!-- <td>
+		<span class="pull-left" style="width:91px">
+		
+			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+		
+		
+			<span class="label bg-light dk text-tiny">Owner</span>
+		
+		
+		</span>	
+	</td> -->
+    <td>
+		<div class="table-resp">
+		May 13, 2016
+		</div>
+	</td>
+    <td class="text-muted">
+		<div class="table-resp">
+			<i class="fa fa-clock-o" data-original-title="" title=""></i>
+			<time class="last-login-time" datetime="-" title="-">-</time>
+		</div>
+	</td>
+   <!-- <td><div class="table-resp"><span class="label m-r-xs bg-light dk text-tiny">Admin</span><span class="label bg-light dk text-tiny">Owner</span></div></td> -->
+    
+
+</tr></tbody>
+            </table><div><div class="select-none"></div></div><footer class="panel-footer"><a href="#" class="btn btn-danger btn-sm" id="delete-checked"> Delete</a></footer>
+            </div>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Help Text -->
+<div class="col w-md  wrapper pos-rlt track-milestone-text">
+	 
+</div>
+<!-- Help Text -->
 </script>
 
 <script id="admin-settings-deal-goals-model-template" type="text/html">
