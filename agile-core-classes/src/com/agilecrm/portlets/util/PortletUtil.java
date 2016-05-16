@@ -1475,72 +1475,9 @@ public class PortletUtil {
 					for(DomainUser domainUser : usersList){
 						JSONObject cateJson = new JSONObject();
 						//JSONObject cateJson_total = new JSONObject();
-						int answeredCallsCount=0;
-						int busyCallsCount=0;
-						int failedCallsCount=0;
-						int voiceMailCallsCount=0;
-						int missedCallsCount=0;
-						int inquiryCallsCount=0;
-						int interestCallsCount=0;
-						int noInterestCallsCount=0;
-						int incorrectReferralCallsCount=0;
-						int newOpportunityCallsCount=0;
-						int meetingScheduledCallsCount=0;
-						int queuedCallsCount=0;
-						
-						int total_Calls=0;
-						List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-						
-							for(Activity activity : callActivitiesList){
-								try{
-								if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
-									answeredCallsCount++;
-								else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
-									busyCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
-									failedCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-									voiceMailCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
-									missedCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
-									inquiryCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
-									interestCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
-									noInterestCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
-									incorrectReferralCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
-									newOpportunityCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
-									meetingScheduledCallsCount++;
-								else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
-									queuedCallsCount++;
-								total_Calls++;
-								
-								
-							}
-						catch(Exception e){
-							e.printStackTrace();
-						}
-							}
-						cateJson.put("total", total_Calls);
-						cateJson.put("answered", answeredCallsCount);
-						cateJson.put("busy", busyCallsCount);
-						cateJson.put("missed", missedCallsCount);
-						cateJson.put("failed", failedCallsCount);
-						cateJson.put("voiceMail", voiceMailCallsCount);
-						cateJson.put("missed", missedCallsCount);
-						cateJson.put("inquiry", inquiryCallsCount);
-						cateJson.put("interest", interestCallsCount);
-						cateJson.put("noInterest", noInterestCallsCount);
-						cateJson.put("incorrectReferral", incorrectReferralCallsCount);
-						cateJson.put("newOpportunity", newOpportunityCallsCount);
-						cateJson.put("meetingScheduled", meetingScheduledCallsCount);
-						cateJson.put("queued", queuedCallsCount);
-						cateJson.put("name", "Deals Won");
+						callsStatus(domainUser,minTime,maxTime,cateJson);
 						//cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
+						cateJson.put("name", "Deals Won");
 						cateJson.put("userName", domainUser.name);
 						if(dUser.id.equals(domainUser.id))
 							cateJson.put("isDomainUser", true);
@@ -2025,4 +1962,97 @@ public class PortletUtil {
 			return dataJson;
 	  }
 
+ 
+ public static JSONObject callsStatus(DomainUser domainUser,long minTime, long maxTime,JSONObject cateJson)
+ {
+			int answeredCallsCount=0;
+		int busyCallsCount=0;
+		int failedCallsCount=0;
+		int voiceMailCallsCount=0;
+		int missedCallsCount=0;
+		int inquiryCallsCount=0;
+		int interestCallsCount=0;
+		int noInterestCallsCount=0;
+		int incorrectReferralCallsCount=0;
+		int newOpportunityCallsCount=0;
+		int meetingScheduledCallsCount=0;
+		int queuedCallsCount=0;
+		
+		int total_Calls=0;
+						List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
+						
+							for(Activity activity : callActivitiesList){
+								try{
+									
+									 	if(activity.custom3!=null)
+								{
+									switch(activity.custom3.toLowerCase()){
+										case Call.ANSWERED :
+										case "completed" :
+											answeredCallsCount++;
+											break;
+										case Call.BUSY :
+										case Call.NO_ANSWER:
+											busyCallsCount++;
+											break;
+										case Call.FAILED :
+											failedCallsCount++;
+											break;
+										case Call.VOICEMAIL :
+											voiceMailCallsCount++;
+											break;	
+										case Call.Missed :
+											missedCallsCount++;
+											break;	
+										case Call.Inquiry :
+											inquiryCallsCount++;
+											break;	
+										case Call.Interest :
+											interestCallsCount++;
+											break;	
+										case Call.NoInterest :
+											noInterestCallsCount++;
+											break;	
+										case Call.IncorrectReferral :
+											incorrectReferralCallsCount++;
+											break;	
+										case Call.NewOpportunity :
+											newOpportunityCallsCount++;
+											break;		
+										case Call.MeetingScheduled :
+											meetingScheduledCallsCount++;
+											break;
+										case "queued" :
+											queuedCallsCount++;
+											break;		
+									}
+
+								}
+							
+								total_Calls++;
+								
+								
+							}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+							}
+						cateJson.put("total", total_Calls);
+						cateJson.put("answered", answeredCallsCount);
+						cateJson.put("busy", busyCallsCount);
+						cateJson.put("missed", missedCallsCount);
+						cateJson.put("failed", failedCallsCount);
+						cateJson.put("voiceMail", voiceMailCallsCount);
+						cateJson.put("missed", missedCallsCount);
+						cateJson.put("inquiry", inquiryCallsCount);
+						cateJson.put("interest", interestCallsCount);
+						cateJson.put("noInterest", noInterestCallsCount);
+						cateJson.put("incorrectReferral", incorrectReferralCallsCount);
+						cateJson.put("newOpportunity", newOpportunityCallsCount);
+						cateJson.put("meetingScheduled", meetingScheduledCallsCount);
+						cateJson.put("queued", queuedCallsCount);
+						return cateJson;
+
+
+ }
 }
