@@ -306,8 +306,22 @@ public class SendEmail extends TaskletAdapter
 		return;
 	    }
 
-	}
+	    else if (subscriberJSON.getString("isBounce").equals(EmailBounceStatus.EmailBounceType.SPAM.toString()))
+	    {
+		// Add log
+		LogUtil.addLogToSQL(
+		        AgileTaskletUtil.getId(campaignJSON),
+		        AgileTaskletUtil.getId(subscriberJSON),
+		        "Campaign email was not sent due to spam complaint <br><br> Email subject: "
+		                + getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
+		        LogType.EMAIL_SENDING_SKIPPED.toString());
 
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+		return;
+	    }
+	}
+	
 	// Get Scheduled Time and Day
 	String on = getStringValue(nodeJSON, subscriberJSON, data, ON);
 	String at = getStringValue(nodeJSON, subscriberJSON, data, AT);
