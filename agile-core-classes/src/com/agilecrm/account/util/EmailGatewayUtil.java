@@ -397,7 +397,7 @@ public class EmailGatewayUtil
 	    	        fromName, to, cc, bcc, subject, replyTo, html, text, null, null, null);
 
 	    	// Add to pull queue with from email as Tag
-	    	PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
+	    	PullQueueUtil.addToPullQueue(AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
 	    }
 
 	}
