@@ -683,14 +683,14 @@ function initializeSendEmailListeners(){
 
 						if(hasScope("EDIT_CONTACT"))
 						{
-							emailSend(that);
+							emailSend(that,json);
 						}
 						else
 						{
 							showModalConfirmation("Send Email", 
 								"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
 								function (){
-									emailSend(that);
+									emailSend(that,json);
 								},
 								function(){
 									return;
@@ -752,7 +752,7 @@ $('#send-email-listener-container').on('click', '#cc-link, #bcc-link', function(
 /*
  * Ajax call to send email
  */
-function emailSend(ele)
+function emailSend(ele,json)
 {
 	// Disables send button and change text to Sending...
 	disable_send_button(ele);

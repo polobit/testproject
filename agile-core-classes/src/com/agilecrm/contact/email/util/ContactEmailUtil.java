@@ -927,7 +927,7 @@ public class ContactEmailUtil
 	    for(String str : ccEmailsSet)
 	    {
 	    	String email = EmailUtil.getEmail(str);
-	    	if(email != null)
+	    	if(StringUtils.isNotBlank(email))
 	    	{
 	    		ccEmailsList.add(email);
 	    	}
@@ -964,7 +964,7 @@ public class ContactEmailUtil
 	    for(String str : bccEmailsSet)
 	    {
 	    	String email = EmailUtil.getEmail(str);
-	    	if(email != null)
+	    	if(StringUtils.isNotBlank(email))
 	    	{
 	    		bccEmailsList.add(email);
 	    	}
