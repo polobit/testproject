@@ -377,8 +377,10 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	String query = "SELECT *  FROM Customer  STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
 	if (prefs.lastSyncCheckPoint != null)
 	{
-	    query = "SELECT *  FROM Customer WHERE MetaData.CreateTime > '" + prefs.lastSyncCheckPoint
-		    + "' STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
+	  //  query = "SELECT *  FROM Customer WHERE MetaData.CreateTime > '" + prefs.lastSyncCheckPoint
+		 //   + "' STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
+	    query = "SELECT *  FROM Customer WHERE MetaData.LastUpdatedTime > '" + prefs.lastSyncCheckPoint 
+	    	+ "' STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
 	}
 	String customerAccessURl = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(query));
 
@@ -402,7 +404,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	    // get updated customer
 
-	    if (prefs.lastSyncCheckPoint != null)
+/*	    if (prefs.lastSyncCheckPoint != null)
 	    {
 		String updatedCustomerQuery = "SELECT *  FROM Customer WHERE MetaData.LastUpdatedTime > '"
 			+ prefs.lastSyncCheckPoint + "'";
@@ -424,7 +426,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    }
 		}
 
-	    }
+	    }*/
 
 	}
 	catch (Exception e)
