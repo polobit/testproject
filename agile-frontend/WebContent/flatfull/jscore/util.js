@@ -488,6 +488,9 @@ function visibleFilter()
 }
 function showTransitionBar()
 {
+	// Remove transition bar for mobile browsers
+	if( agile_is_mobile_browser() )	return;
+	
 	if ($('.butterbar').hasClass('hide'))
 		$('.butterbar').removeClass('hide');
 	if (!$('.butterbar').hasClass('animation-active'))
@@ -725,6 +728,11 @@ function endFunctionTimer(name){
 }
 
 function loadServiceLibrary(callback){
+	if(!tight_acl.checkPermission("HELPDESK")){
+		tight_acl.init_permissions();
+		hideTransitionBar();
+		return;
+	}
 	head.js(CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'tickets-min.js' + "?_=" + (_AGILE_VERSION + '1'), function(){
 
 		if(callback)

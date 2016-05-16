@@ -127,13 +127,10 @@ var WebreportsRouter = Backbone.Router.extend({
 
         $.getJSON("misc/modal-templates/webrule-templates.json", function(data) {
 
-            for (var i = 0; i < data.templates.length; i++) {
+            getTemplate("webrule-categories", null, undefined, function(ui){
+            	$("#webrule-listeners").append($(ui));
+            },"#webrule-listeners");
 
-            getTemplate("webrule-categories", data.templates[i], undefined, function(ui){
-                $("#webrule-listeners").append($(ui));
-            }, "#webrule-listeners");
-
-        }
             
             $(".web_fancybox").fancybox({
                     'autoDimensions': true,
@@ -163,8 +160,9 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
-						loadSavedTemplate(path);
-						$("#tiny_mce_webrules_link").trigger('click');
+						loadSavedTemplate(path, function(data) {
+							$("#tiny_mce_webrules_link").trigger('click');
+						});
 					}, true);
 				})
 				
@@ -237,16 +235,14 @@ function show_fancy_box(content_array)
  	}); // End of fancybox
 }
 
-function loadSavedTemplate(templateURL){
+function loadSavedTemplate(templateURL, callback){
 		
-		templateURL = "/misc/modal-templates/" + templateURL;
+	templateURL = "/misc/modal-templates/" + templateURL;
 
 	 $.ajax({
             url: templateURL,
-            async: false,
             data: {},
             success: function(data) {
-
             	data = data.trim();
 
             	if(isNotValid(data))
@@ -255,6 +251,8 @@ function loadSavedTemplate(templateURL){
 					return;
 				}
                 $("#tinyMCEhtml_email").text(data);
+				
+				if( callback && typeof(callback) === 'function' )	callback(data);
             }
         });
 }

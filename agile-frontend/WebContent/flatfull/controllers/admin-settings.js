@@ -12,6 +12,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Account preferences */
 	"account-prefs" : "accountPrefs",
 
+	"account-ipaccess" : "ipaccess",
+
 	/* Users */
 	"users" : "users", "users-add" : "usersAdd", "user-edit/:id" : "userEdit",
 
@@ -110,25 +112,77 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
+		var that=this;
+		$('#content').html("<div id='account-pref'>&nbsp;</div>");
 		
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
-			$('#content').html($(template_ui));	
+			$('#account-pref').html($(template_ui));
+			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});	
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
 			} });
 
-			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			
+
+			$('#account-pref').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
+			$('#account-pref').find('#AdminPrefsTab .select').removeClass('select');
+			$('#account-pref').find('.account-prefs-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-account-prefs').addClass('active');
+			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+
+
+		}, "#account-pref");
+
+		$('.settings-account-prefs').addClass('active');
+		$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+		
+	},
+
+
+	ipaccess : function()
+	{
+
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		var that = this;
+		$('#content').html("<div id='account-pref'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+				
+			$('#account-pref').html($(template_ui));
+			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});
+			var view = new Base_Model_View({ url : '/core/api/allowedips', template : "admin-settings-ip-prefs",
+				postRenderCallback : function(el)
+				{
+					loadip_access_events();
+					
+				}, saveCallback : function(){
+				console.log("saveCallback");
+				showNotyPopUp("information", "Your IP Address has been updated successfully.", "top", 4000);
+				App_Admin_Settings.ipaccess();
+			},errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top");
+			}
+
+				 });
+			
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.account-prefs-tab').addClass('select');
 			$(".active").removeClass("active");
+			$('.settings-account-ips').addClass('active');
+			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			//$('.settings-account-ips').parent().removeClass('b-b-none');
 
-		}, "#content");
-
-		
-		
+		}, "#account-pref");
 	},
 
 	
@@ -155,6 +209,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				console.log("saveCallback");
 				App_Admin_Settings.webhookSettings();
 				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+			},
+			errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top",2000);
 			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
@@ -191,11 +248,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
-
-				
-
-
-
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".last-login-time", el).timeago();
@@ -256,6 +308,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					if (data)
 					{
+						console.log("data of current-owner = "+data);
 						data["created_user_email"] = response.email;
 
 						add_created_user_info_as_note_to_owner(data);

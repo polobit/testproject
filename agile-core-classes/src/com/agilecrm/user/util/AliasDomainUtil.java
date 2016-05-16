@@ -8,6 +8,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -34,6 +35,8 @@ import com.google.appengine.api.datastore.PropertyProjection;
 
 public class AliasDomainUtil {
 
+	public static final String CACHED_ALIAS_KEY = "alias_domain_of_";
+	
 	// Dao
     public static ObjectifyGenericDao<AliasDomain> dao = new ObjectifyGenericDao<AliasDomain>(AliasDomain.class);
     
@@ -132,5 +135,46 @@ public class AliasDomainUtil {
 			NamespaceManager.set(oldNamespace);
 		}
 	}
+	
+	/**
+	 * Get Alias name from domain name
+	 * @param domainName
+	 * @return
+	 */
+	 public static String getCachedAliasDomainName(String domainName){
+    	if(StringUtils.isBlank(domainName))
+    		return domainName;
+    	
+    	String aliasName = "";
+    	
+    	try {
+    		String key = CACHED_ALIAS_KEY + domainName;
+    		
+    		// Get cached value
+        	aliasName = (String) CacheUtil.getCache(key);
+        	
+        	System.out.println("Cahced domain = " + aliasName);
+        	if(StringUtils.isBlank(aliasName)){
+        		// Get alias from domain
+        		AliasDomain domain =  AliasDomainUtil.getAliasDomain(domainName);
+        		if(domain == null || domain.alias == null || domain.alias.size() == 0)
+        			aliasName = domainName;
+        		else 
+        			aliasName = domain.alias.get(0);
+        		
+        		// Reset name
+        		CacheUtil.setCache(key, aliasName);
+        	}
+        	
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	
+    	if(StringUtils.isBlank(aliasName))
+    		aliasName = domainName;
+    	
+    	return aliasName;
+	    	
+	 }
 
 }

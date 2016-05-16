@@ -38,8 +38,8 @@
                 "name": "Email Group",
                 "thumbnail": "json/nodes/images/ticket/email-group.png",
                 "icon": "json/nodes/icons/ticket/email-group.png",
-                "info": "Check if a link in the email is clicked within a specified duration.",
-                "help": "Check if a link in the email is clicked within a specified duration.",
+                "info": "Send an email to assigned ticket group.",
+                "help": "Send an email to assigned ticket group.",
                 "author": "John",
                 "company": "mantra",
                 "language": "en",
@@ -47,6 +47,27 @@
                 "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketEmailGroup",
                 "category": "Tickets",
                 "ui": [
+                        {
+                          "label": "From (Name):",
+                          "category": "Info",
+                          "name": "from_name",
+                          "id": "from_name",
+                          "title": "Enter your name.",
+                          "required": "required",
+                          "fieldType": "input",
+                          "type": "text"
+                        },
+                        {
+                          "label": "From (Email)",
+                          "category": "Info",
+                          "name": "from_address",
+                          "id": "from_address",
+                          "value": "",
+                          "required": "required",
+                          "title": "Enter from email address",
+                          "fieldType": "input",
+                          "type": "email"
+                        },
                     {
                         "label": "Email Group",
                         "required": "Yes",
@@ -83,11 +104,11 @@
                         "title": "Write Email",
                         "fieldType": "textarea",
                         "cols": "75",
-                        "rows": "13",
+                        "rows": "7",
                         "type": "text"
                     },
                     {
-                        "label": "Write label for email group",
+                        "label": "Send an email to assigned ticket group.",
                         "category": "Help",
                         "fieldType": "label",
                         "type": "label"
@@ -102,6 +123,14 @@
                 {
                     "name": "nodename",
                     "value": "Email Group"
+                },
+                {
+                    "name": "from_name",
+                    "value": "Agile CRM"
+                },
+                {
+                    "name": "from_address",
+                    "value": "noreply@agilecrm.com"
                 },
                 {
                     "name": "email-group",

@@ -47,6 +47,7 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.prefs.SocialPrefsAPI.class);
 		s.add(com.agilecrm.core.api.UsersAPI.class);
 		s.add(com.agilecrm.core.api.AliasDomainAPI.class);
+		s.add(com.agilecrm.core.api.ReferAPI.class);
 		s.add(com.agilecrm.core.api.API.class);
 		s.add(com.agilecrm.core.api.widgets.WidgetsAPI.class);
 		s.add(com.agilecrm.core.api.bulkactions.backends.BulkActionsAPI.class);

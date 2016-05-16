@@ -153,6 +153,7 @@
                                                  {{#hasMenuScope 'ACTIVITY'}}
                                                  <li><a href="#ActivityReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>Activity Reports</a></li>
                                                  {{/hasMenuScope}}
+                                                 <li><a href="#CampaignReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-sitemap v-middle"></i>Campaign Reports</a></li>
                                                  </ul>
                                             </li>
                                           
@@ -163,8 +164,14 @@
                                                  <li><a href="#CompareCampaigns" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>Compare Campaigns</a></li>
                                                  </ul>
                                             </li>
-                                             <li role="presentation" data-tab="3" style="display: none;">
+                                             <li role="presentation" data-tab="3">
                                                 <a href="#helpdesk-tab" role="tab" data-toggle="tab">Help Desk</a>
+                                                <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+                                                 <li><a href="#Tickets" role="tab" data-toggle="tab"><i class="m-r-sm icon-dashboard v-middle"></i>Tickets</a></li>
+                                                 <li><a href="#SLAReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>SLA Report</a></li>
+                                                  <li><a href="#PriorityReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-dashboard v-middle"></i>Ticket Priority & Status Report</a></li>
+                                                 <li><a href="#FirstResponse" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>First Response</a></li>
+                                                 </ul>
                                             </li>
 
 </ul>
@@ -183,6 +190,7 @@
 
     </div>
      </a>
+
 
 
     </div>
@@ -571,7 +579,91 @@
 </a>
     </div>
 
+    <div class="tab-pane" id="CampaignReports">
+         <a class="report-go" href="#campaign-reports">
+                     <div class="wrapper text-center b-a" style="min-width:330px">
+        
+        <br />
+        <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+            Get a periodic email digest of various campaigns launched in Agile CRM. </div>
+ 
+    </div>
+</a>
+    </div>
 
+    <div class="tab-pane" id="Tickets">
+            <a class="report-go" href="#ticket-report/tickets">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            View new and closed tickets report for each day, week & month.
+        </div>
+        <img src='flatfull/img/reports_images/new-tickets.png'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
+
+    <div class="tab-pane" id="SLAReport">
+            <a class="report-go" href="#ticket-report/sla-report">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            
+        View tickets closed in < 2 hrs, between 2-6 hrs, between 6-12 hrs etc.  
+        <img src='flatfull/img/reports_images/sla-report.png'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
+
+    <div class="tab-pane" id="PriorityReport">
+            <a class="report-go" href="#ticket-report/priority-report">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            
+        View tickets priority and status reports over the date ranges.
+        </div>
+        <img src='flatfull/img/reports_images/status-report.png'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
+
+    <div class="tab-pane" id="FirstResponse">
+            <a class="report-go" href="#ticket-report/avg-first-resp-time">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            
+        View first response time over the date ranges.
+
+        </div>
+        <img src='flatfull/img/reports_images/first-response-time.png'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
+
+</div>
+</div>
+</div>
+ </div>
+</div>
 <div class="tab-pane" id="helpdesk-tab">
     <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
@@ -677,7 +769,6 @@
 
                    </div> 
 
-</div></div></div>
    </div>
 
 <div class="tab-content reports-Container wrapper-md">

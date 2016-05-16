@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -79,6 +80,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	public String email;
 
+	/**
+	 * Phone number of user
+	 */
+	@NotSaved(IfDefault.class)
+	public String phone = null;
+	
 	/** The Reference tracking object represents referercount and referece key */
 
 	@Embedded
@@ -150,6 +157,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	@NotSaved(IfDefault.class)
 	public String name = null;
 
+	
+
 	/**
 	 * Assigns its value to password attribute
 	 */
@@ -210,6 +219,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	@NotSaved(IfDefault.class)
 	public String timezone = null;
+	
+	
+	/**
+	 * Parent Id for current domain user
+	 */
+	@NotSaved(IfDefault.class)
+	public Long  pid;
 
 	@NotSaved(IfDefault.class)
 	public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
@@ -241,7 +257,33 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	@Embedded
 	public HelpdeskSettings helpdeskSettings = null;
+
+
+	/** Helpdesk settings */
 	
+
+	/** Browser Fingerprint */
+	public Set<String> finger_prints;
+	
+	@NotSaved(IfDefault.class)
+	public String generatedOTP;
+
+	/**Broswer Information*/
+	@NotSaved(IfDefault.class)
+	public String browser_os;
+	
+	@NotSaved(IfDefault.class)
+	public String browser_version;
+	
+	@NotSaved(IfDefault.class)
+	public String browser_name;
+	
+	@NotSaved(IfDefault.class)
+	public String owner_pic;
+	
+	@NotSaved(IfDefault.class)
+	public Boolean is_secure = true;
+
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
@@ -277,7 +319,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		this.name = name;
 		this.password = password;
 		this.is_admin = isAdmin;
-		this.is_account_owner = isAccountOwner;
+		this.is_account_owner = isAccountOwner;	
 	}
 
 	/**
@@ -533,10 +575,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			System.out.println("Domain empty - setting it to " + this.domain);
 		}
 
-		System.out.println("Creating or updating new user " + this);
-
 		// Check if user exists with this email
-
 		if (domainUser != null)
 		{
 			// If domain user exists, not allowing to create new user
@@ -560,6 +599,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			}
 
 			//sendPasswordChangedNotification(domainUser.encrypted_password);
+			
 		}
 		else if (id != null && !is_account_owner)
 		{
@@ -580,6 +620,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				throw new Exception("Domain is empty. Please login again & try.");
 			}
 
+		if(this.phone != null &&  !StringUtils.isEmpty(this.phone) ){
+			if(!DomainUserUtil.checkValidNumber(this.phone)){
+				throw new Exception("Phone number is not valid. Please enter a valid number and try again.");
+			}
+		}
+		
+		
+		
 		// Sends email, if the user is new
 		if (this.id == null)
 		{
@@ -594,6 +642,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		try
 		{
+
 			// Assigning Random avatar
 			if (pic == null)
 				pic = new UserPrefs().chooseRandomAvatar();
@@ -942,6 +991,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public void loadScopes()
 	{
 		List<UserAccessScopes> defaultScopes = UserAccessScopes.customValues();
+		
+		if(restricted_scopes != null && restricted_scopes.contains(UserAccessScopes.DELETE_CONTACTS))
+		{
+			restricted_scopes.remove(UserAccessScopes.DELETE_CONTACTS);
+			restricted_scopes.add(UserAccessScopes.EDIT_CONTACT);
+			restricted_scopes.add(UserAccessScopes.DELETE_CONTACT);
+		}
 
 		if (restricted_scopes != null)
 			defaultScopes.removeAll(restricted_scopes);

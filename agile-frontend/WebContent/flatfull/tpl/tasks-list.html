@@ -11,17 +11,36 @@
 		<div class="panel panel-default">
 		<div class="panel-heading">Tasks List</div>
         <div class="table-responsive">
-        <table class="table table-striped showCheckboxes no-sorting panel m-b-none agile-table table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+        <table class="table table-striped showCheckboxes no-sorting panel m-b-none 
+        {{#is_mobile}} {{else}} agile-table {{/is_mobile}} table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+            
+            {{#is_mobile}}
             <thead>
                 <tr>
-					<th style="width:10%;" class="header">Owner</th>
-					<th style="width:30%;" class="header">Task Name</th>
+					<th style="width:10%;" class="header text-ellipsis">Owner</th>
+					<th style="width:30%;" class="header text-ellipsis">Task Name</th>
+                    <th style="width:10%;" class="header text-ellipsis">Category</th>
+                   	<th style="width:10%;" class="header text-ellipsis">Priority</th>
+					<th style="width:10%;" class="header text-ellipsis">Due Date</th>
+                    <th style="width:30%;" class="header text-ellipsis">Related To</th>
+                </tr>
+            </thead>
+
+            {{else}}
+
+            <thead>
+                <tr>
+                    <th style="width:10%;" class="header">Owner</th>
+                    <th style="width:30%;" class="header">Task Name</th>
                     <th style="width:10%;" class="header">Category</th>
-                   	<th style="width:10%;" class="header">Priority</th>
-					<th style="width:10%;" class="header">Due Date</th>
+                    <th style="width:10%;" class="header">Priority</th>
+                    <th style="width:10%;" class="header">Due Date</th>
                     <th style="width:30%;" class="header">Related To</th>
                 </tr>
             </thead>
+
+            {{/is_mobile}}
+
             <tbody id="tasks-list-model-list" class="c-p" route="task/">
             </tbody>
         </table>
@@ -66,13 +85,13 @@
 		<div class="image-ellipsis-3">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        				<a href="#contact/{{id}}" class="activate-link thumb">
-							<img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+        				<a href="#contact/{{id}}"  class="activate-link thumb tasks-list-image">
+							<img class="r r-2x" url="contact/{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
 						</a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        				<a href="#company/{{id}}" class="activate-link thumb">
-							<img class="r r-2x" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+        				<a href="#company/{{id}}" class="activate-link thumb tasks-list-image">
+							<img class="r r-2x" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}" url="company/{{id}}" />
 						</a>
         		{{/if_contact_type}}
         	{{/each}}

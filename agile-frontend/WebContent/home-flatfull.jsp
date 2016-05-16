@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+<%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.subscription.Subscription"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.servlets.deferred.DomainUserAddPicDeferredTask"%>
@@ -26,6 +28,9 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="com.agilecrm.dashboards.Dashboard"%>
+<%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
+<%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -52,11 +57,15 @@ response.sendRedirect("/login");
 return;
 }
 
+
+
+
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 System.out.println("Domain user " + domainUser);
 
 DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
+
 // Add to queue
 Queue queue = QueueFactory.getDefaultQueue();
 queue.add(TaskOptions.Builder.withPayload(task));
@@ -124,6 +133,7 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
 
+List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
 %>
 
 
@@ -254,66 +264,112 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <nav  class="navi clearfix">
             <ul class="nav">
-              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+              <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Sales</span>
               </li>
-              
+        
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
   <li id="contactsmenu">
     <a  href="#contacts">
       <i class="icon icon-user"></i>
       <span>Contacts</span>
     </a>
   </li>
+  <%
+      }
+  %>
+
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
       <span>Companies</span>
     </a>
   </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
+  %>
    <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
       <span>Deals</span>
     </a>
   </li>
+  <%
+      }
+  %>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES)){
+  %>
    <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
   </li>
+  <%
+      }
+  %>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
+  %>
+  
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
       <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
+  <%
+        }
+  %>  
+
   <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
+   %>
    <li id="workflowsmenu">
     <a  href="#workflows">
       <i class="icon icon-sitemap"></i>
       <span>Campaigns</span>
     </a>
   </li>
+    <%
+        }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
+   %>
    <li id="socialsuitemenu">
     <a  href="#social">
-      <i class="icon icon-comments"></i>
+      <i class="icon-bubbles"></i>
       <span>Social</span>
     </a>
   </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
+    %>
    <li id="web-rules-menu">
     <a  href="#web-rules">
       <i class="icon icon-globe"></i>
       <span>Web Rules</span>
     </a>
   </li>
+    <%
+          }
+    %>
    <li id="segmentationmenu">
-    <a  href="#segments">
+    <a  href="#visitors">
        <i class="icon-large icon-screenshot"></i>
-      <span>Segments</span>  
+      <span>Visitors</span>  
     </a>
   </li>
   <li id="landing-pages-menu">
@@ -322,32 +378,51 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Landing Pages</span>
     </a>
   </li>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
     <li id="activitiesmenu">
     <a  href="#activities">
-      <i class="icon-cogs icon-white"></i>
+      <i class="icon-speedometer icon-white"></i>
       <span>Activities</span>
     </a>
   </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
   <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
       <span>Reports</span>
     </a>
-  </li>  
+  </li> 
+    <%
+          }
+    %> 
   
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
-  <li class="line dk m-t-none m-b-none" style="height: 1px; display: none;"></li>
-  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs" style="display: none;">
-    <span>Support</span>
+  <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span>Service</span>
   </li>
-  <li id="tickets" style="display: none;">
-    <a  href="#tickets">
+  
+  <li id="tickets">
+    <a href="#tickets">
       <i class="icon icon-ticket"></i>
-      <span>Help Desk</span>
+      <span style="padding-top: 9%;">Help Desk</span>
     </a>
-  </li>            
+  </li>
+  <%
+      }
+  %>             
   </ul>
 
 
@@ -584,7 +659,15 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </aside>
 <div class="app-content" id="agilecrm-container">
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
-<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>
+<script type="text/javascript">
+// In mobile browsers, don't show animation bar
+if( (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) )
+{
+	document.write('<div class="butterbar" style="z-index:99;"><span class="bar"></span></div>');
+} else {
+	document.write('<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>');
+}
+</script>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"
 src="img/21-0.gif"></img> -->
@@ -619,6 +702,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
+
     <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
   <!-- Include bootstrap modal divs-->
@@ -680,6 +764,11 @@ var ACCOUNT_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(accountPr
 
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
+
+// Get current user dashboards
+var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
+// Get Current Agile User
+var CURRENT_AGILE_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(AgileUser.getCurrentAgileUser()))%>;
 
 // Get Contact Date Fields
 var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;
@@ -759,6 +848,12 @@ head.ready(["core"], function(){
       CURRENT_USER_PREFS.signature = sig;
 	}catch(e){}
 
+	//Turn off all animations if this is mobile
+	if( agile_is_mobile_browser() )
+	{
+		$("body")[0].addClass('disable-anim');
+	}
+	
 });
 
 });    
@@ -837,7 +932,7 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
           
         
         </div>
-</div>
-
+  </div>
+<div id="fb-root"></div>
 </body>
 </html>

@@ -1010,6 +1010,8 @@ function add_contact_to_view(appView, model, isUpdate)
 
 	if (model.get('type') == 'COMPANY')
 	{
+		//Change the entity type to company
+		model.set({ "entity_type" : "company_entity" }, { silent : true });
 		if (appView.collection.get(model.id) != null) // update existing model
 			appView.collection.get(model.id).set(model);
 		else if (company_util.isCompany()) // add model only if its in

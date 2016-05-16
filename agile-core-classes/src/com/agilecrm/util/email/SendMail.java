@@ -1,11 +1,14 @@
 package com.agilecrm.util.email;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.Mandrill;
+import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.sendgrid.lib.SendGridLib;
 
 /**
  * <code>SendMail</code> is the base class to send email using different
@@ -46,6 +49,7 @@ public class SendMail
     public static final String SUBSCRIPTION_DELETED_SUBJECT = "Your Account Deleted";
 
     public static final String REPORTS = "reports";
+    public static final String CAMPAIGN_REPORTS = "campaign_reports";
     public static final String REPORTS_SUBJECT = "Agile CRM Report";
 
     public static final String WELCOME = "welcome";
@@ -130,13 +134,23 @@ public class SendMail
 	// For campaign sharing
 	public static final String SHARE_CAMPAIGN_CONFIRMATION = "share_campaign_confirmation";
 	public static final String SHARE_CAMPAIGN_SUBJECT = " Campaign Shared - Agile CRM";
-	
+
+	//For AllowAccessIP
+	public static final String ALLOW_IP_ACCESS = "allow_ip_access";
+	public static final String ALLOW_IP_ACCESS_SUBJECT = "Verify Your New IP Address for Uninterrupted Access";
+
+
 	// Ticket template names
    	public static final String TICKET_REPLY = "ticket_reply_email";
    	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
    	public static final String TICKET_FORWARD = "ticket_forward_email";
    	public static final String TICKET_STATS = "ticket_stats";
-   	
+   	public static final String TICKET_COMMENTS = "ticket_comments";
+   	public static final String TICKET_FOOTER = "ticket_footer";
+
+   	//For browser Fingerprint
+   	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
+
     /**
      * From Name of email.
      */
@@ -258,15 +272,18 @@ public class SendMail
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
 
+	    SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, args);
+
 	    // Send Email
-	    Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
-		    null, args);
+	    // Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
+	    // 	null, args);
 
 	    NamespaceManager.set(oldNamespace);
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    System.err.println("Exception occured in SendMail..." + e.getMessage());
 	}
     }

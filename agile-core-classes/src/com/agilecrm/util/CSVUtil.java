@@ -132,7 +132,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG;
 
     }
 
@@ -508,7 +508,8 @@ public class CSVUtil
 		    }
 		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
 		    {
-			tempContact.properties.add(new ContactField(Contact.COMPANY, csvValues[j].trim().toLowerCase(),
+		    	String companyName = csvValues[j].trim();
+			tempContact.properties.add(new ContactField(Contact.COMPANY, companyName,
 				null));
 		    }
 
@@ -532,7 +533,7 @@ public class CSVUtil
 
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
 		    accessControl.setObject(tempContact);
-		    if (!accessControl.canDelete())
+		    if (!accessControl.canCreate())
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
@@ -736,6 +737,7 @@ public class CSVUtil
 	int accessDeniedToUpdate = 0;
 	int failedCompany = 0;
 	int nameMissing = 0;
+	int tagInvalid = 0;
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", type);
 
@@ -752,7 +754,7 @@ public class CSVUtil
 
 	    tempContact.properties = new ArrayList<ContactField>();
 	    String companyName = null;
-
+	    boolean canSave = true;
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
@@ -781,6 +783,37 @@ public class CSVUtil
 		// be trimmed for notes
 		csvValues[j] = checkAndTrimValue(csvValue);
 
+		if ("tags".equals(field.name))
+		{
+		    // Multiple tags are supported. Multiple tags are added
+		    // split at , or ;
+
+		    String[] tagsArray = csvValues[j].split("[,;]+");
+		    boolean isInvalid = false;
+		    System.out.println("number of tags : " + tagsArray.length);
+		    for (String tag : tagsArray)
+		    {
+			System.out.println("New tag : " + tag);
+			tag = tag.trim();
+			if (TagValidator.getInstance().validate(tag))
+			{
+			    tempContact.tags.add(tag);
+			}
+			else
+			{
+			    canSave = false;
+			    isInvalid = true;
+			    break;
+			}
+
+		    }
+		    if (isInvalid)
+		    {
+			tagInvalid++;
+			break;
+		    }
+		    continue;
+		}
 		if (Contact.ADDRESS.equals(field.name))
 		{
 		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
@@ -818,9 +851,9 @@ public class CSVUtil
 
 		if (field.name.equalsIgnoreCase(Contact.NAME))
 		{
-		    companyName = field.value = csvValues[j];
+		    companyName = field.value = csvValues[j].trim();
 		    // added company in new field in lower case
-		    tempContact.properties.add(new ContactField("company", companyName.trim().toLowerCase(), null));
+		    tempContact.properties.add(new ContactField("company", companyName, null));
 		}
 		else
 		{
@@ -865,6 +898,11 @@ public class CSVUtil
 	    else
 	    {
 		++nameMissing;
+		continue;
+	    }
+
+	    if (!canSave)
+	    {
 		continue;
 	    }
 
@@ -929,6 +967,10 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.NAME_MANDATORY, nameMissing);
 
 	}
+	if (tagInvalid > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.INVALID_TAG, tagInvalid);
+	}
 
 	if (limitExceeded > 0)
 	{
@@ -938,10 +980,10 @@ public class CSVUtil
 	{
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
-	if (failedCompany > 0 || nameMissing > 0 || accessDeniedToUpdate > 0 || limitExceeded > 0)
+	if (failedCompany > 0 || nameMissing > 0 || accessDeniedToUpdate > 0 || limitExceeded > 0 || tagInvalid > 0)
 	{
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany + nameMissing + accessDeniedToUpdate
-		    + limitExceeded);
+		    + limitExceeded + tagInvalid);
 	}
 
 	// avoid message of attached failed csv file add new property in map so

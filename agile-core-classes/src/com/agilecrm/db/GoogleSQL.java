@@ -89,6 +89,69 @@ public class GoogleSQL
 
 	return conn;
     }
+    
+    /**
+     * Establishes connection with Google Cloud SQL with instance name
+     * 'agiledbs:agile' and database 'stats'.
+     * 
+     * @return connection object instance.
+     */
+    public static Connection getNewInstanceGoogleSQLConnection()
+    {
+
+	String url = null;
+	Connection conn = null;
+
+	try
+	{
+	    if (SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
+	    {
+
+		if (SystemProperty.environment.value() == null)
+		{
+		    // Local MySQL instance to use during development.
+		    conn = getNewInstanceConnection();
+		    return conn;
+		}
+		// Load the class that provides the new "jdbc:google:mysql://"
+		// prefix.
+		Class.forName("com.mysql.jdbc.GoogleDriver");
+		url = "jdbc:google:mysql://agiledbs:agile-sql-first-gen/stats2?user=root&password=agileRocks$";
+
+		System.out.println("Google sql url is " + url);
+	    }
+	    else
+	    {
+		Class.forName("com.mysql.jdbc.Driver");
+		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
+		// Alternatively, connect to a Google Cloud SQL instance using:
+		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.err.println(e.getMessage());
+	}
+
+	try
+	{
+	    System.out.println("The connection url is  " + url);
+
+	    Long startTime = System.currentTimeMillis();
+
+	    conn = DriverManager.getConnection(url);
+
+	    System.out.println(conn.isClosed());
+	    System.out.println("Time taken to get sql connection  : " + (System.currentTimeMillis() - startTime));
+	}
+	catch (Exception ex)
+	{
+	    System.out.println(" Error getting the connection object " + ex.getMessage());
+	    ex.printStackTrace();
+	}
+
+	return conn;
+    }
 
     /**
      * Executes the given SQL statement, which may be an INSERT, UPDATE, or
@@ -109,6 +172,56 @@ public class GoogleSQL
 	{
 	    // get the connection object
 	    conn = getGoogleSQLConnection();
+	    if (conn == null)
+		return;
+
+	    // creates the statement object
+	    Statement stmt = conn.createStatement();
+
+	    // Execute the query. Returns the row count for INSERT, DELETE and
+	    // UPDATE or 0 for other statements
+	    rowCount = stmt.executeUpdate(sql);
+
+	    System.out.println("Number of rows affected in SQL by DML statement: " + rowCount);
+	}
+	catch (SQLException ex)
+	{
+	    System.out.println("Error in executing given query: " + ex);
+	    ex.printStackTrace();
+	}
+	finally
+	{
+	    if (conn != null)
+		try
+		{
+		    conn.close();
+		}
+		catch (SQLException e)
+		{
+		    e.printStackTrace();
+		}
+	}
+    }
+    
+    /**
+     * Executes the given SQL statement, which may be an INSERT, UPDATE, or
+     * DELETE statement or an SQL statement that returns nothing, such as an SQL
+     * DDL statement.
+     * 
+     * @param sql
+     *            - sql statement.
+     * @throws Exception
+     *             throws SQLException
+     */
+    public static void executeNonQueryInNewInstance(String sql) throws Exception
+    {
+	Connection conn = null;
+	int rowCount;
+
+	try
+	{
+	    // get the connection object
+	    conn = getNewInstanceGoogleSQLConnection();
 	    if (conn == null)
 		return;
 
@@ -302,6 +415,23 @@ public class GoogleSQL
 
 	return null;
     }
+    
+    public static PreparedStatement getPreparedStatementFromNewInstance(String sql) throws SQLException
+    {
+	PreparedStatement stmp;
+	try
+	{
+	    stmp = getNewInstanceConnection().prepareStatement(sql);
+	    return stmp;
+	}
+	catch (PropertyVetoException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return null;
+    }
 
     private static ComboPooledDataSource cpds = null;
 
@@ -349,16 +479,78 @@ public class GoogleSQL
 
 	return cpds.getConnection();
     }
-
-    public static void main(String[] args)
+    
+    private static ComboPooledDataSource cpds2 = null;
+    
+    private static Connection getNewInstanceConnection() throws PropertyVetoException, SQLException
     {
-	System.out.println(getFutureDate());
+	if (SystemProperty.environment.value() != null
+		&& SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
+	{
+	    return getNewInstanceGoogleSQLConnection();
+	}
+
+	// String url =
+	// "jdbc:mysql://173.194.84.175:3306/stats?user=root&password=mysql123";
+	String url = "jdbc:mysql://173.194.110.53:3306/stats2?user=root&password=agileRocks$";
+
+	if (cpds2 != null)
+	    return cpds2.getConnection();
+
+	Properties property = new Properties(System.getProperties());
+	property.put("com.mchange.v2.log.MLog", "log4j");
+	property.put("autoReconnect", "true");
+
+	// property.put("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL",
+	// "OFF");
+	System.setProperties(property);
+	cpds2 = new ComboPooledDataSource();
+	cpds2.setDataSourceName("stats2");
+	cpds2.setDriverClass("com.mysql.jdbc.Driver"); // loads the jdbc driver
+	// cpds.setJdbcUrl("jdbc:mysql://localhost:3306/stats?user=root&password=mysql123");
+	// jdbc:mysql://localhost:3306/stats?user=root&password=mysql123
+	cpds2.setJdbcUrl(url);
+	// cpds.setUser("root");
+	// cpds.setPassword("mysql123");
+
+	cpds2.setProperties(property);
+
+	// the settings below are optional -- c3p0 can work with defaults
+	cpds2.setMinPoolSize(2);
+	cpds2.setAcquireIncrement(2);
+	cpds2.setMaxPoolSize(10);
+	cpds2.setMaxIdleTime(1200000); // In milli-seconds
+	System.out.println(cpds2.getMaxIdleTime());
+	System.out.println(cpds2.getMaxStatementsPerConnection());
+	System.out.println(cpds2.getMaxIdleTime());
+
+	return cpds2.getConnection();
     }
 
     public static String getFutureDate()
     {
 
 	DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+
+	Calendar calendar = Calendar.getInstance();
+
+	// calendar.add(Calendar.DATE, 30);
+
+	String futuredate = dateFormat.format(calendar.getTime());
+
+	return futuredate;
+
+    }
+    
+    /**
+     * Returns current date with millionsecond precision
+     * level format.
+     * @return
+     */
+    public static String getCurrentDate()
+    {
+
+	DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss.SSS");
 
 	Calendar calendar = Calendar.getInstance();
 

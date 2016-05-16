@@ -34,6 +34,23 @@ function initializeReportsListeners(){
 						
 					});
 
+	$('#reports-listerners-container')
+			.on(
+					'click',
+					'#reports-campaign-email-now',
+					function(e)
+					{
+						// e.preventDefault();
+						e.stopPropagation();
+
+						var id = $(this).attr('data');
+						var url='core/api/campaignReports/send/' + id;
+						$("#report-send-confirmation").find('input').attr("data",url);
+						$('#report-send-confirmation').modal('show');
+						initializeReportSendConfirm();
+						
+					});
+
 	$('#reports-listerners-container').on(
 			'click',
 			'#campaign_id',
@@ -278,7 +295,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 }
 
 
-function deserialize_multiselect(data, el)
+function deserialize_multiselect(data, el, flag)
 {
 	$("#reports-listerners-container").html(el);
 
@@ -286,6 +303,7 @@ function deserialize_multiselect(data, el)
 		return;
 	$.each(data['fields_set'], function(index, field)
 	{
+	  if(flag !==true)
 		$('#multipleSelect', el).multiSelect('select', field);
 	});
 

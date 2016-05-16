@@ -26,13 +26,20 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.sendgrid.util.SendGridUtil;
+import com.agilecrm.ipaccess.AllowAccessMailServlet;
+import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.Referer;
 import com.agilecrm.user.RegisterVerificationServlet;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.ReferUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -40,6 +47,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>RegisterServlet</code> class registers the user account in agile crm.
@@ -89,6 +97,7 @@ public class RegisterServlet extends HttpServlet
 	// Type the type of registration for the user - oauth or agile
 	try
 	{
+		
 	    if (type != null)
 	    {
 		if (type.equalsIgnoreCase("oauth"))
@@ -228,7 +237,10 @@ public class RegisterServlet extends HttpServlet
 	EventReminder.getEventReminder(domainUser.domain, null);
 	
 	// Create subaccount in Mandrill after registration
-	MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	//MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	
+	// Creates subUser in SendGrid after registration
+	SendGridSubUser.createSubAccountInSendGrid(domainUser.domain);
 	
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
@@ -531,7 +543,9 @@ public class RegisterServlet extends HttpServlet
 	if (domainUser != null && reference_domain != null)
 	{
 	    ReferenceUtil.updateReferralCount(reference_domain);
+	    setReferenceInfo(reference_domain, domainUser.domain);
 	}
+	
 
 	try
 	{
@@ -543,6 +557,30 @@ public class RegisterServlet extends HttpServlet
 	}
 	userInfo.setDomainId(domainUser.id);
 	return domainUser;
+    }
+    
+    public void setReferenceInfo(String reference_domain, String registered_domain){
+    	System.out.println("Referer process started");
+    	String oldNamespace = NamespaceManager.get();
+    	NamespaceManager.set(reference_domain);
+    	try{
+    		System.out.println("refer_domain: "+reference_domain+" Namespace :"+NamespaceManager.get());
+    		Referer referer = ReferUtil.getReferrer();
+    		++referer.referral_count;
+    		System.out.println("referral_count"+referer.referral_count);
+    		referer.referedDomains.add(registered_domain);
+    		referer.save();
+    		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    		System.out.println("adding email credits");
+    		restriction.incrementEmailCreditsCount(500);
+    		restriction.save();
+    		System.out.println("Referer process ended");
+    	}catch(Exception e){
+    		System.out.println(ExceptionUtils.getMessage(e));
+    		e.printStackTrace();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
     }
 
     /**

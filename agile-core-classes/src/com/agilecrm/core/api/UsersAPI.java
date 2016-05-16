@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -16,6 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -24,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.ticket.entitys.HelpdeskSettings;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -31,6 +35,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.ReferenceUtil;
+import com.amazonaws.Request;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -145,12 +150,13 @@ public class UsersAPI
 	 */
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public DomainUser createDomainUser(DomainUser domainUser)
+	public DomainUser createDomainUser(DomainUser domainUser,@Context HttpServletRequest request)
 	{
 
 		try
 		{
 			DomainUser owner = null;
+			domainUser.setInfo("Ip_Address", request.getRemoteAddr()) ;
 			if (domainUser.is_account_owner == true)
 			{
 				if (domainUser.is_admin == false)
@@ -161,12 +167,17 @@ public class UsersAPI
 				owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
 
 			}
-			domainUser.save();
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		     System.out.println("current domain user = " + user);
+		     domainUser.pid = user.id;
+		     System.out.println("domainuser pid = "+domainUser.pid);
+		     domainUser.save();
 			if (owner != null && domainUser.id != null && !domainUser.id.equals(owner.id))
 			{
 				owner.is_account_owner = false;
 				owner.save();
 			}
+			ActivitySave.createNewUserActivity(domainUser);
 			return domainUser;
 		}
 		catch (Exception e)
@@ -195,7 +206,7 @@ public class UsersAPI
 	 */
 	@PUT
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public DomainUser updateDomainUser(DomainUser domainUser)
+	public DomainUser updateDomainUser(DomainUser domainUser,@Context HttpServletRequest request)
 	{
 		try
 		{
@@ -213,6 +224,16 @@ public class UsersAPI
 							"Owner should always be an administrator. Please select administrator option and try again.");
 				}
 				owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+			}
+			try
+			{
+				domainUser.setInfo("Ip_Address", request.getRemoteAddr()) ;
+				ActivitySave.createUserEditActivity(domainUser);
+				ActivitySave.createOwnerChangeActivity(domainUser);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
 			}
 			domainUser.save();
 			if (owner != null && !domainUser.id.equals(owner.id))
@@ -268,6 +289,9 @@ public class UsersAPI
 		AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
 
 		domainUser.delete();
+		
+		
+		
 	}
 
 	/**
@@ -287,8 +311,9 @@ public class UsersAPI
 		for (int i = 0; i < usersJSONArray.length(); i++)
 		{
 			DomainUser domainuser = DomainUserUtil.getDomainUser(Long.parseLong(usersJSONArray.getString(i)));
-
+			ActivitySave.createDeleteUserActivity(domainuser);
 			deleteDomainUser(domainuser);
+			
 		}
 	}
 
@@ -500,6 +525,7 @@ public class UsersAPI
 		return helpdeskSettings;
 	}
 
+
 	// Update ticket collection view in helpdesk settings
 	@POST
 	@Path("/helpdesk-settings/toggle-view")
@@ -523,4 +549,40 @@ public class UsersAPI
 			e.printStackTrace();
 		}
 	}
+	/*@POST
+
+	@Path("/fingerprintscanner")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void getFingerPrints(@QueryParam("result") String result,@FormParam("obj") String obj){
+		try{
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			String existingFingerprint = domainUser.finger_print;
+			
+			// Check with equality with present
+			if(StringUtils.isNotBlank(existingFingerprint) && !existingFingerprint.equals(result))
+			{
+				domainUser.finger_print=result;		
+				
+			}
+			String mail = domainUser.email;
+			domainUser.save();
+		}
+		catch(Exception e){
+			
+
+		} }*/
+		
+
+
+    
+    @Path("/parentId")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public DomainUser getDomainUserByID(@QueryParam("id") Long id)
+    {
+    	 DomainUser domainuser = DomainUserUtil.getDomainUser(id);
+    	 System.out.println("created user = "+domainuser);
+    	 return domainuser;
+    }
+
 }

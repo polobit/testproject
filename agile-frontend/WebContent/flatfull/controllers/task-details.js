@@ -456,7 +456,7 @@ function update_task(value)
  */
 function fill_task_owners(el, data, callback)
 {
-	var optionsTemplate = "<li><a class='task-owner-list' data='{{id}}'>{{name}}</a></li>";
+	var optionsTemplate = "<li><a href='javascript:void(0);' class='task-owner-list' data='{{id}}'>{{name}}</a></li>";
 	fillSelect('task-detail-owner', '/core/api/users', 'domainUsers', callback, optionsTemplate, true);
 }
 

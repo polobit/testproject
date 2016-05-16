@@ -35,7 +35,7 @@
 <!--  start filterstab section -->	
 
 	<div class="content-tabs-show filtersTabList m-none" id="filtersTab" role="tablist" aria-multiselectable="true">
-	 <div class="panel panel-default m-b-sm"> 
+	 <div class="panel panel-default m-b-sm bg-transparent"> 
 	 <div class="panel-heading" role="tab" id="headingOne"> 
 	 <h4 class="panel-title text-left"> 
 	 <a role="button" data-toggle="collapse" data-parent="#filtersTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed" style="padding-left:16px;"> Filters</a> </h4> 
@@ -45,11 +45,28 @@
 
 			<div class="" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
 
-			<div class="data-block">
+			<div class="data-block mobile_lhs_filters_conatiner">
 			<div id="lhs_filters_conatiner"></div>
+			<hr class="m m-t-sm m-b-sm" style="border-top: 1px solid #DCDCDC;">
+					<div class="wrapper bg-light p-b-xs p-t-xs savedFlitersMain">
+					<div class="panel panel-default m-b-none">
+					<div class="panel-body">
+					<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+					<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label block">
+					Saved Filters
+					<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+					 
+					 <div id="filter-list" class="hide mobile-contact-filter-list"></div>
+			
+					</div>
+
+					</div>
+					</div>
+					</div>
+
 			<div class="wrapper bg-light p-b-xs p-t-xs">
   <div class="panel panel-default m-b-sm">
-			<div class="p-t-sm p-b-sm text-center">
+			<div class="p-t-sm p-b-sm text-center" style="padding-top: 8px; padding-bottom: 8px;">
       <a href='#contact-filters' class="text-info">Add or Edit Filter</a></div>
 </div>
 </div>
@@ -84,7 +101,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table b-n no-radius showCheckboxes no-sorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -146,7 +163,7 @@
     	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
     	
     	
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
         	<!--<li>
             	<a href="#contacts" class="DefaultView">Default</a>
 				 a href="#contacts" class="GridView">Grid View</a 
@@ -154,7 +171,7 @@
 			<li class="divider"></li>-->
 			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
 
-				<ul class="dropdown-menu" id="contact-sort-views">
+				<ul class="dropdown-menu" id="contact-sort-views" role="menu">
 					<li><a class="sort bold-text" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
 					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
 					<li class="divider"></li>
@@ -181,15 +198,20 @@
     	</ul>
     	
 	</div>
+	{{#hasRestrictedMenuScope 'CREATE_CONTACT'}} {{else}}
     <div class="btn-group">
+
         <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
-        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-		<ul class="dropdown-menu pull-right">
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+		<ul class="dropdown-menu pull-right" role="menu">
 			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import from CSV</a></li>
+
 			<li><a href="#import">Import from Salesforce</a></li>
 			
 		</ul>
-	</div></div>
+	</div>
+	{{/hasRestrictedMenuScope}}
+	</div>
             </div>
 	    </div>
 	    
@@ -206,6 +228,7 @@
 	<div class="contacts-div">
 <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
 				      	
+				      	
 					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add Tags</button>
 					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Remove Tags</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
@@ -217,8 +240,9 @@
 					    {{#hasScope "EXPORT_CONTACTS"}}
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
 					    {{/hasScope}}
+					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
-					    
+					     {{/hasRestrictedMenuScope}}
 				    </div>
 
 
@@ -283,7 +307,8 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table table-striped  no-sorting panel agile-table 
+                {{#is_mobile}} noDelete contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>

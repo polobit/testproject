@@ -12,12 +12,16 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>WorkflowSubscribeUtil</code> is the utility class that handles
@@ -27,7 +31,7 @@ import com.google.appengine.api.NamespaceManager;
  */
 public class WorkflowSubscribeUtil
 {
-
+	public static final String _ACTIVE_STATUS_SET = "_active_status_set";
     /**
      * Subscribes list of contacts into a campaign and runs workflow in
      * {@link TaskletUtil} executeCampaign method which runs using DeferredTask
@@ -137,5 +141,109 @@ public class WorkflowSubscribeUtil
 	{
 	    e.printStackTrace();
 	}
+    }
+    public static void subscribeDeferredCampaign(List<Contact> contacts,Long workflowId){
+    	// Convert Contacts into JSON Array
+    	JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts, workflowId);
+    	subscribeCampaignDeferred(workflowId, subscriberJSONArray);
+    }
+    
+    /**
+     * @param workflowId
+     * @param subscriberJSONArray
+     */
+    private static void subscribeCampaignDeferred(Long workflowId, JSONArray subscriberJSONArray)
+    {
+	// Get Campaign JSON
+	JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(workflowId);
+
+	if (campaignJSON == null)
+	    return;
+
+	executeCampaign(campaignJSON, subscriberJSONArray);
+    }
+    /**
+     * Executes campaign when there is a list of subscribers.
+     * 
+     * @param campaignJSON
+     *            nodes that are connected in a workflow.
+     * @param subscriberJSONArray
+     *            list of subscribers.
+     */
+    public static void executeCampaign(JSONObject campaignJSON, JSONArray subscriberJSONArray)
+    {
+	String namespace = NamespaceManager.get();
+	String campaignId = AgileTaskletUtil.getId(campaignJSON);
+	String campaignName = AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON);
+
+	// Iterate through JSONArray
+	for (int i = 0, len = subscriberJSONArray.length(); i < len; i++)
+	{
+	    JSONObject subscriberJSON;
+
+	    try
+	    {
+		// Get Subscriber
+		subscriberJSON = subscriberJSONArray.getJSONObject(i);
+
+		// Set campaign-status as campaignId-ACTIVE.
+		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), campaignId,
+			campaignName, Status.ACTIVE);
+
+		// To avoid setting status in Start Node again
+		subscriberJSON.put(_ACTIVE_STATUS_SET, true);
+	    }
+	    catch (Exception e)
+	    {
+		System.err.println("Got Exception in executeCampaign " + e.getMessage());
+		continue;
+	    }
+
+	    System.out.println("Executing " + subscriberJSON);
+
+	    String key = AgileTaskletUtil.getId(subscriberJSON) + " " + AgileTaskletUtil.getId(campaignJSON);
+
+	    if (key.contains("null"))
+		continue;
+
+	    System.out.println("Checking for duplicates " + key);
+
+	    // Check if this campaign has been executed for this user
+	    /*
+	     * if(CacheUtil.isPresent(key)) {
+	     * System.out.println("Duplicate found " + key + " " +
+	     * subscriberJSON + " " + campaignJSON); continue; } else { //
+	     * Campaign is new to new subscriber - let's add them to Cache
+	     * CacheUtil.put(key, new Boolean("true")); }
+	     */
+	    try
+	    {
+		// Execute it in a task queue each batch
+		// executeWorkflow(campaignJSON, subscriberJSON);
+
+		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
+			AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
+
+		// taskletWorkflowDeferredTask.run();
+
+		
+		Queue queue = QueueFactory.getQueue(AgileQueues.NORMAL_CAMPAIGN_PUSH_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));	
+		
+		 
+		// Add deferred tasks to pull queue with namespace as tag
+		//PullQueueUtil.addToPullQueue((VersioningUtil.isBackgroundThread() || len >= 200) ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+			//: AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
+
+	    }
+	    catch (Exception e)
+	    {
+		System.err.println("Exception " + e);
+	    }
+
+	    System.out.println("Done Executing ");
+	}
+
+	System.out.println("Campaign Completed ");
     }
 }

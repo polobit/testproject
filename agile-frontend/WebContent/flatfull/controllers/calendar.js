@@ -20,22 +20,19 @@ calendar : function()
 {
 	$('#due_tasks').css('pointer-events','none');
 	_agile_delete_prefs("agile_calendar_view");
-	// read cookie for view if list_view is there then rendar list view else
-	// rendar default view
+
+	$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
+	showTransitionBar();
 	
-
-		$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
-		$('#calendar-listers').html(LOADING_ON_CURSOR);
-		getTemplate("calendar", {}, undefined, function(template_ui){
-
-		if(!template_ui)
-			  return;
-
-		getCalendarUsersDetails(function(users){
-
+	getTemplate("calendar", {}, undefined, function(template_ui) {
+		if( !template_ui )	return;
+		
 		$('#calendar-listers').html($(template_ui));
 		
-
+		$('#calendar_event').html(LOADING_ON_CURSOR);
+		$('#calendar-listers').find("#calendar-filters").html(LOADING_ON_CURSOR);
+		
+		getCalendarUsersDetails(function(users) {
 				getTemplate("event-left-filter", users, undefined, function(template_ui1){
 					
 						$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
@@ -61,32 +58,27 @@ calendar : function()
 						$("#calendarmenu").addClass("active");
 						$('#agile_event_list').addClass('hide');
 
-						// Typahead also uses jqueryui - if you are changing the version
-						// here,
-						// change it there too
-						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
-						{
-							showCalendar(users);
-							hideTransitionBar();
-							initializeEventListners();
-							loadPortlets('Events');
-							$('#due_tasks').css('pointer-events','inherit');
-						});
-
+						put_thirdparty_calendar_links();
+					
 						$('#grp_filter').css('display', 'none');
 						$('#event_tab').css('display', 'none');
 					
 						 $("[data-toggle=tooltip").tooltip();
 						 
 					}, $('#calendar-listers').find("#calendar-filters"));
-					
+		});
+		
+		head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
+		{
+			$('#calendar_event').html('');
+			showCalendar([]);
+			hideTransitionBar();
+			initializeEventListners();
+			loadPortlets('Events');
+			$('#due_tasks').css('pointer-events','inherit');
+		});
 
-		});	
-			
-	}, "#calendar-listers");
-
-
-	
+	}, '#calendar-listers');
 },
 
 /* Show tasks list when All Tasks clicked under calendar page. */
@@ -148,7 +140,6 @@ tasks_new : function()
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();
 		loadPortlets('Tasks');
-
 	}, "#tasks-list-template");
 
 },
@@ -568,7 +559,7 @@ function loadGoogleEvents()
 		{
 			_agile_set_prefs('google_event_token', response.access_token);
 
-			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27', function()
 			{
 				setupGC(function()
 				{

@@ -518,6 +518,7 @@ function initializeSubscriptionListeners()
 									  return;
 								$(template_ui).modal('show');
 							}, null);
+							return;
 						}else if(data.is_allowed_plan){
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else if(data.lines){
@@ -539,6 +540,7 @@ function initializeSubscriptionListeners()
 							
 						}else{
 							var restrictions = data.restrictions;
+							restrictions.plan = data.plan;
 							if(restrictions.contacts.count > restrictions.contacts.limit)
 								errorsCount++;
 							if(restrictions.webrules.count > restrictions.webrules.limit)
@@ -557,7 +559,7 @@ function initializeSubscriptionListeners()
 										  return;
 									$(template_ui).modal('show');
 								}, null);
-								
+								return;
 							}
 						}
 						plan_json.date = data.nextPaymentAttempt;

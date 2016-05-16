@@ -452,6 +452,7 @@ function saveCallNoteSkype(){
 		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
+					twilioIOSaveContactedTime();
 					accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
 						var json = resp;
 						if(json == null) {

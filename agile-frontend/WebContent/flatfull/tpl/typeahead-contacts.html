@@ -1,15 +1,15 @@
 <script id="typeahead-contacts-model-template" type="text/html">
-<div class="custom-color wrapper-sm">
+<div class="custom-color wrapper-sm overflow-hidden">
 	{{#if_equals type "COMPANY"}}
 	<div class="thumb-sm agile-img m-r-xs">
 		<img class="img-inital r r-2x" {{getCompanyImage "40"}} /></img>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-	 {{getPropertyValue properties "name"}}<br />
+	 <div>{{getPropertyValue properties "name"}}</div>
         
-		{{getPropertyValue properties "email"}}</br>
+		<div class="text-ellipsis"><small>{{getPropertyValue properties "email"}}</small></div>
         
-       {{getPropertyValue properties "url"}}</br>
+       <div class="text-ellipsis"><small>{{getPropertyValue properties "url"}}</small></div>
        
 	</div>
 	{{/if_equals}}
@@ -18,10 +18,10 @@
 		<img class="img-inital r r-2x" src="{{gravatarurl properties 40}}" /></img>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		{{getPropertyValue properties "first_name"}} {{getPropertyValue
-			properties "last_name"}}
-        <br /> {{getPropertyValue properties
-		"email"}} </br> {{getPropertyValue properties "company"}}
+		<div>{{getPropertyValue properties "first_name"}} {{getPropertyValue
+			properties "last_name"}}</div>
+        <div class="text-ellipsis"><small>{{getPropertyValue properties
+		"email"}} </small></div> <div class="text-ellipsis"><small>{{getPropertyValue properties "company"}}</small></div>
    		
 	</div>
 	{{/if_equals}} 
@@ -36,9 +36,9 @@
 	</div>
 	<div class="agile-thumb text-ellipsis">
 		<div class="text-ellipsis"> {{name}}</div>
-<div><span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
-({{probability}}%)<br/>
-<div>{{description}}</div>
+<div class="text-ellipsis"><small>{{currencySymbol}}{{numberWithCommas expected_value}}</small>
+<small>({{probability}}%)</small> </div>
+<div class="text-ellipsis"><small>{{description}}</small></div>
 	</div>
 	{{/if_equals}}
 
@@ -49,7 +49,8 @@
 				<i class="icon-file img-inital r r-2x" id="minus" style="font-size:2.75em;"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		 <span>{{name}}</span><br /> {{network network_type}}
+		 <div class="text-ellipsis">{{name}}</div>
+		 <div class="text-ellipsis"><small>{{network network_type}}</small></div>
          
 	</div>
 	{{/if_equals}}
@@ -61,7 +62,7 @@
 				<i class="icon-folder-close img-inital r r-2x" id="minus" style="font-size:2.75em;"></i>
 	</div>
 	<div class="text-ellipsis agile-thumb">
-		 <span>{{title}}</span><br /> {{description}}
+		 <div class="text-ellipsis">{{title}}</div> <div class="text-ellipsis"> <small>{{description}}</small></div>
          
 	</div>
 	{{/if_equals}}
@@ -76,8 +77,9 @@
       	{{/if}}
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		#{{id}} {{subject}}
-        <br/>{{first_notes_text}} </br> {{epochToHumanDate "mmm dd, yyyy" created_time}}
+		<div class="text-ellipsis">#{{id}} {{subject}}</div>
+        <div class="text-ellipsis"><small>{{first_notes_text}}</small></div>
+        <div class="text-ellipsis"><small>{{epochToHumanDate "mmm dd, yyyy" created_time}}</small></div>
 	</div>
 {{/if_equals}}	
 

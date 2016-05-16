@@ -13,7 +13,8 @@ var Ticket_Utils = {
 
 		//Initializing base collection with groups URL
 		Assingees_Collection = new Base_Collection_View({
-			url : '/core/api/users/partial'
+			url : '/core/api/users/partial',
+			preserveAcrossRoutes: true
 		});
 
 		//Fetching assingnee collection
@@ -39,7 +40,8 @@ var Ticket_Utils = {
 
 		//Initializing base collection with groups URL
 		Groups_Collection = new Base_Collection_View({
-			url : '/core/api/tickets/groups'
+			url : '/core/api/tickets/groups',
+			preserveAcrossRoutes: true
 		});
 
 		//Fetching groups collection

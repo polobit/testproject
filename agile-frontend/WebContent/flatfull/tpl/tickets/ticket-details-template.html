@@ -106,15 +106,18 @@
                   <div class="col-md-12 p-n m-b-xs sla-due-date">
 
                     <div class="col-md-12 p-n m-b-xxs"> 
-                      <span class="sla-text">Due Date</span>
+                      <span class="sla-text">Due Date</span> 
                       <a class="link-color pull-right text-xs remove-date {{#if due_time}}{{#if_equals status "CLOSED"}}display-none{{/if_equals}}{{else}}display-none 
                       {{/if}}" href="javascript:void(0);">
                         Remove
                       </a>
                     </div>
                       
-                    <input "type="text" class="form-control text-xs" id="ticket_change_sla" placeholder="Select Date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
+                    <input type="text" style="width:70%;float:left"class="form-control text-xs" id="ticket_change_sla" placeholder="Select Date" value="{{#if due_time}}{{epochToHumanDate "mm/dd/yyyy" due_time}}{{/if}}" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
+                    
+                    <input type="text" style="width:30%;float:right" class="form-control text-xs ticket_change_slatime" placeholder="Time" {{#if_equals status "CLOSED"}}disabled="disabled"{{/if_equals}}/>
 
+                   
                     <div class="col-md-12 p-n">
                       <div class="col-md-3 p-n">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="tomorrow">Tomorrow</a>
@@ -317,7 +320,7 @@
           <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">Canned Responses <span class="caret"></span></a>
           <ul class="dropdown-menu">
             {{#each canned_responses}}
-            <li id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
+            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
             {{/each}}
           </ul>
         </div>

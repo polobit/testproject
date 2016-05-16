@@ -2,8 +2,11 @@
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 
 <%
+
+
 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
 }
@@ -215,7 +218,7 @@ if(isSafari && isWin)
 </div>
 <div class="wrapper-md">
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3 col-sm-offset-3 col-sm-6 col-xs-12">
+		<div class="col-lg-6 col-lg-offset-3 col-sm-offset-1 col-sm-10 col-xs-12">
 	<form class="form-horizontal" method="post" onsubmit="return isValid(this);">
 <div class="panel panel-default">
 <div class="panel-heading text-center"> It's time to configure your account </div>

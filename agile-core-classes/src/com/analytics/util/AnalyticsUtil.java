@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,26 +11,16 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.db.util.GoogleSQLUtil;
-import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.IMAPEmailPrefs;
-import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.HTTPUtil;
-import com.analytics.Analytics;
+import com.analytics.VisitorFilter;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -44,6 +33,7 @@ import com.googlecode.objectify.ObjectifyService;
 public class AnalyticsUtil
 {
     public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
+   public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
     
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
     
@@ -414,5 +404,50 @@ public class AnalyticsUtil
 	}
 	return result;
     }
+    /**
+     * Returns url for the mysql database
+     * 
+     * @param domain
+     * 
+     * @param startDate
+     *              -epoch Time
+     * @param endDate
+     *            -epoch Time
+     * @return
+     *        -url for mysql database
+     */       
+    
+    public static String getStatsUrlForVisitsCount(String domain, String startDate, String endDate, String timeZone)
+    {
+    	String url = null;
+    	String hostUrl = STATS_SERVER_URL+"/reports?domain="+domain+"&psd="+STATS_SEREVR_HTTP_REQUEST_PWD;
+    	url = hostUrl + "&action=VISITS_COUNT&start_date="+startDate+"&end_date="+endDate+"&time_zone="+timeZone;
+    	return url;
+    }
+
+    public static List<VisitorFilter> getAllSegmentFilters(Key<DomainUser> domainUserKey)
+    {
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("owner_key", domainUserKey);
+		
+		return VisitorFilter.dao.listByProperty(searchMap);
+    }
+    
+    
+    public static void deleteSegmentFilter(long id) 
+    {
+		VisitorFilter.dao.ofy().delete(VisitorFilter.class, id);
+    }
+
+     public static String getUrlForRefferalurlCount(String domain, String startDate, String endDate) throws UnsupportedEncodingException
+       {
+        	String url = null;
+        	//String hostUrl = getStatsServerUrl(domain);
+        	String hostUrl=STATS_SERVER_URL+"/reports?domain="+domain+"&psd="+STATS_SEREVR_HTTP_REQUEST_PWD;
+        	startDate=URLEncoder.encode(startDate, "UTF-8");
+        	endDate=URLEncoder.encode(endDate, "UTF-8");
+        	url = hostUrl + "&action=REFURL_COUNT&start_time="+startDate+"&end_time="+endDate;
+        	return url;
+        }
     
 }

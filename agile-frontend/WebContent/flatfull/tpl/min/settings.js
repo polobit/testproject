@@ -46,7 +46,7 @@
 <div class="span4">
 	<div class="well" style="width: 220px; height: 200px;">
 		<center>
-			<img class="thumbnail" src="/img/email-prefs/imap.jpg" style="height:70px;width:210px;"/>
+			<img class="thumbnail" src="/img/email-prefs/imap.png" style="height:70px;width:210px;"/>
 		</center>
 		<br />
     	<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="Just link your IMAP account and Agile will show emails below a contact from your Inbox.">

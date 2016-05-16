@@ -509,7 +509,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 			$('form#addTriggerForm').find('select#trigger-deal-milestone').closest('div.control-group').css('display', 'none');
 		}
 		
-		if(type !== 'RUNS_DAILY' || type !== 'RUNS_WEEKLY' || type !== 'RUNS_MONTHLY'){
+		if(type !== 'RUNS_HOURLY' || type !== 'RUNS_DAILY' || type !== 'RUNS_WEEKLY' || type !== 'RUNS_MONTHLY'){
 			$('form#addTriggerForm').find('select#contact-filter').closest('div.control-group').css('display', 'none');
 		}
 
@@ -572,7 +572,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 		}
 		
 		// Initialize tags typeahead
-		if (type == 'RUNS_DAILY' || type == 'RUNS_WEEKLY' || type == 'RUNS_MONTHLY')
+		if (type == 'RUNS_HOURLY' || type == 'RUNS_DAILY' || type == 'RUNS_WEEKLY' || type == 'RUNS_MONTHLY')
 		{	
 			populate_contact_filters_in_trigger($('form#addTriggerForm'), 'contact-filter');
 		}
@@ -634,4 +634,54 @@ function initializeTriggerListEventListners(id,trigger_type)
 
 	});
 }
- 
+
+var _AGILE_API_KEY = "";
+
+function setGlobalAPIKey(callback)
+{
+	if( _AGILE_API_KEY && _AGILE_API_KEY != '' )
+	{
+		//If key is set, call the function directly.
+		if( callback && typeof(callback) === 'function')	callback();
+		return;
+	}
+	
+    $.ajax({ 
+    	type : 'GET', 
+        url : '/core/api/api-key', 
+        dataType : 'json',
+        success : function(resp) {
+            if( resp )
+            {
+                console.log("Setting API KEY: " + resp.api_key);
+                _AGILE_API_KEY = resp.api_key;
+				
+				if( callback && typeof(callback) === 'function' )
+				{
+					callback();
+				}
+            }
+        }
+    });
+}
+  
+function getFormNameForTrigger(formID, callback)
+{
+	if( !formID )	return false;
+
+	if( !callback || !(typeof(callback) === 'function'))	return false;
+	
+	$.ajax({
+		type : "GET",
+		url : '/core/api/forms/form?formId=' + formID,
+		dataType : 'json',
+		success : function(response) {
+			callback(response.formName);
+		}
+	});
+}
+
+function getFormNameCellIDForFormSubmitTriggers(formID)
+{
+	return formID + "_formNameField";
+}

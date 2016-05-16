@@ -837,9 +837,9 @@ tbody a.no-style-a {
 }
 /* Handle */
 #opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb, #opportunities-by-paging-model-list  ::-webkit-scrollbar-thumb {
-/* -webkit-border-radius: 10px;
+ -webkit-border-radius: 10px;
  border-radius: 10px;
- -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
+/* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
  background: #bebebe;
  
 }
@@ -973,7 +973,6 @@ li.deal-color.GREY:after { background: grey;}
 
 .milestone-main {
   white-space: nowrap;
-  overflow: auto;
   width: 100%;
   
   border:1px solid #dee5e7;
@@ -3139,6 +3138,9 @@ table.hide-head-checkbox th label.i-checks {
 
 .conversion_track::-webkit-scrollbar-thumb {
  background: #bebebe;
+ -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
 }
 .conversion_track::-webkit-scrollbar {
  width: 5px;
@@ -3228,8 +3230,22 @@ table.hide-head-checkbox th label.i-checks {
 	font-size: 18px;
 }
 .well{
-  background: none!important;
-   border:none!important;
+
+	background: none!important;
+	 border:none!important;	  
+}
+.inlineditor{
+	font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+}
+
+.error-inputfield
+{
+border:1px solid red !important;
+background: none!important;
+
     
 }
 
@@ -3257,7 +3273,7 @@ table.hide-head-checkbox th label.i-checks {
 
 /* account block model */
 #user-blocked-modal .panel-body{
-  padding: 60px 30px 60px 30px;
+  padding: 60px 30px 0px 30px;
   background-color: #edb25b;
   color: white;
 }
@@ -3318,6 +3334,7 @@ table.hide-head-checkbox th label.i-checks {
   color: black !important;
   opacity: 0.9;
 }
+
 #removeBtn:hover
 {
   color: black !important;
@@ -3524,6 +3541,7 @@ overflow-x:hidden;
 text-align:left;
 }
 
+
 .new-user
 {
   margin-left: 10px;
@@ -3542,6 +3560,7 @@ text-align:left;
 #send-cancellation #cancel_subscription_modal{
   width: 70%;
   margin: 0px auto;
+
 }
 #send-cancellation #account_cancel_options .wrapper{
   border: 1px solid #ccc;
@@ -3646,6 +3665,7 @@ margin-left: 33px;
 #contact-container:hover .contact-image-view{
 opacity: .3;
 }
+
 #schedule_demo{
   margin-right: 214px;
 }
@@ -3735,3 +3755,134 @@ opacity: .3;
 {
 	margin-left : 15px;
 }
+.dash_tabview .tab-content{
+   border-color: none;
+  border: none !important;
+}
+.dash_tabview .nav-tabs li a{ border-bottom: none;}
+
+
+@media (min-width: 767px) {
+#referModal .modal-dialog{
+	width:62%;
+}
+}
+#referModal ul{
+	padding: 20px 30px 0px 30px;
+}
+#referModal .referrals-body{
+	padding: 20px 30px 0px 30px;
+}
+#referModal ul li:nth-child(odd) {
+	background-color: #f6f6f6;
+}
+#referModal ul li:nth-child(even) {
+	background-color: #fcfcfc;
+}
+#referModal ul li a{
+	padding: 15px 10px 10px 15px;
+}
+#referModal ul li .clear{
+	border-right: 1px solid #e7ecee;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+#referModal ul li:hover {
+	background-color: #f8f8f8;
+}
+#referModal .refer-checked{
+	color: #27c24c;
+	top: 10px;
+	right: -25px;
+}
+.c-na{
+	cursor: not-allowed;
+}
+
+.company_input{
+ padding-right:37px;
+}
+.company_Edit_Fields
+{
+  padding-right: 20px;
+}
+/*div.addField div.controls:not(.hide):first-child{
+  margin-top: 5px; 
+}*/
+div.addField div.controls div:first-child{
+  padding-bottom: 1px;
+}
+
+.xedit{
+	font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 4px 10px;
+    height:26px;
+
+}
+
+.error-inputfield
+{
+ border:1px solid red;
+}
+
+
+#segment-filter-list-model-list .segment-lilist .remove-segment-filter{
+
+    float: right;
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    line-height: .8;
+    font-weight: bold;
+    opacity: .7;
+}
+#segmentsModal #duplicate-name {
+  color: #f05050;
+}
+#lhs_filters_segmentation #error-message{
+  color: #f05050;
+}
+
+li .segment-lilist{
+	  display: block;
+	  padding: 5px 15px;
+}
+li .visitor-filter{
+   width: 80%;
+}
+
+li .segment-lilist:hover {
+	background-color:#EEE;
+	cursor: pointer;
+}
+
+.twilio-sound:hover  .options-record-twilio
+{
+	display : block;
+}
+
+.delete_ip{
+	font-size: 11px;
+    margin-top: -2px;
+}
+#newip-modal-width{
+	margin-top:90px;
+	width:33%;
+}
+
+.allow_access_editicon{
+margin-left:27px;
+}
+
+.allow_access_panelheading{
+	background-color: #f6f8f8;
+    margin-top: 10px;
+    border-color: #edf1f2;
+    border: 1px solid #edf1f2;
+    border-bottom: none;
+}
+.alias-icon{
+    font-size: 11px;
+  }

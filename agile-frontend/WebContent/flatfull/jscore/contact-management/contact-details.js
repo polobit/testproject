@@ -105,14 +105,103 @@ function checkContactUpdated(){
 		});
 }
 
+   function inlineCompanyNameChange(el){
+    
+    console.log("inlineCompanyNameChange");
+    var companyInlineName = $("#company-inline-input").val();
+      companyname = companyInlineName.trim();
+    console.log(companyname);
+    if(!companyname)
+    {
+      $("#company-inline-input").addClass("error-inputfield");
+      return;
+     }
+     companyname=companyname.trim();
+     if(agile_crm_is_model_property_changed("name", companyname)){
+       // Update first name
+      agile_crm_update_contact("name", companyname);
+          
+         }
+         /* toggle fields*/
+          $("#company-inline-input").addClass("hidden");
+          $("#company-name-text").text(companyname).removeClass("hidden");
+          $("#company-name-text").addClass("text-capitalize ");
+          $("#company-inline-input").removeClass("error-inputfield");
+
+  }
+
+  function inlineNameChange(e,data){
+
+      
+           // Get actual name
+          var first = $("#Contact-input-firstname").val();
+          var last  = $("#Contact-input-lastname").val();
+          firstName =first.trim();
+          lastName =last.trim();
+          if(!firstName)
+          {
+            $("#Contact-input-firstname").addClass("error-inputfield");
+            return;
+          }
+          /*if(!lastName)
+          {
+            $("#Contact-input-lastname").addClass("error-inputfield");
+            return;
+          }*/
+          if(agile_crm_is_model_property_changed("first_name", firstName)){
+        // Update first name
+              var model_id = App_Contacts.contactDetailView.model.toJSON().id;
+              agile_crm_update_contact("first_name", firstName, function(contact_model)
+              {
+               if(model_id != contact_model.id)
+                return;
+
+              $("#Contact-input").addClass("hidden");
+              $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+              $("#contactName").addClass("text-capitalize ");
+              $("#Contact-input-firstname" ).removeClass("error-inputfield");
+              $("#Contact-input-lastname" ).removeClass("error-inputfield");  
+              return;
+              });
+              // Toggle fields
+          }
+
+          if(agile_crm_is_model_property_changed("last_name", lastName)){
+               // Update last name
+               agile_crm_update_contact("last_name", lastName,function(contact_model){
+                
+                if(model_id != contact_model.id)
+                return;
+
+
+                $("#Contact-input").addClass("hidden");
+              $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+              $("#contactName").addClass("text-capitalize ");
+              $("#Contact-input-firstname").removeClass("error-inputfield");
+              $("#Contact-input-lastname").removeClass("error-inputfield");
+              return ;
+               });
+               // Toggle fields
+          }
+
+          // Toggle fields
+          $("#Contact-input").addClass("hidden");
+          $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
+          $("#contactName").addClass("text-capitalize ");
+          $("#Contact-input-firstname").removeClass("error-inputfield");
+          $("#Contact-input-lastname").removeClass("error-inputfield"); 
+    }
+
+
+
 /**
  * Shows all the domain users names as ul drop down list 
  * to change the owner of a contact 
  */
 function fill_owners(el, data, callback){
-	var optionsTemplate = "<li><a class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
+	var optionsTemplate = "<li><a href='javascript:void(0)' class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
 	if(company_util.isCompany())
-		optionsTemplate = "<li><a class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
+		optionsTemplate = "<li><a href='javascript:void(0)' class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
 	
     fillSelect('contact-detail-owner','/core/api/users/partial', 'domainUsers', callback, optionsTemplate, true); 
 }
@@ -258,6 +347,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contactDetailsTab a[href="#mail"]' : 'openMails',
     	'click #contactDetailsTab a[href="#stats"]' : 'openWebStats',
     	'click #contactDetailsTab a[href="#campaigns"]' : 'openCampaigns',
+    	'click #contactDetailsTab a[href="#tickets"]' : 'openTickets',
     	'click .agile-emails' : 'openEmails',
     	'click #email-reply' : 'repltToEmails',
     	'click .activity-delete' : 'deleteActivity',
@@ -286,6 +376,12 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #contacts-inner-tabs #next' : 'tabViewNext',
     	'click #contacts-inner-tabs #prev' : 'tabViewPrev',
 
+    	/** Inliner edits input fields **/
+    	'click #contactName'  : 'togglehiddenfield',
+      'keydown #Contact-input-firstname' : 'contactNameChange',
+      'keydown  #Contact-input-lastname' : 'contactNameChange',
+    	'blur #Contact-input' : 'contact_inline_edit' ,       /** End of inliner edits **/
+
     	/** Company events **/
     	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
     	'click #contactDetailsTab a[href="#company-deals"]' : 'listCompanyDeals',
@@ -297,11 +393,61 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #company-actions-delete' : 'companyDelete',
     	'click .company-owner-list' : 'companyOwnerList',
     	'click .remove-company-tags' : 'removeCmpanyTags',
-
     	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
+
+		/** inliner edits input fields**/
+		'click #company-name-text '  : 'toggleinline_company',
+		'blur #company-Input input ' : 'companyInlineEdit',
+    'keydown #company-inline-input' : 'companyNameChange'  
     },
+    
+    
+   
+  /*xedit enter key press event listening and calling the name name chanage method*/  
+  contact_inline_edit :function(e){
+    console.log("harsha");
+  },
+  contactNameChange : function(e)
+  {
+    if(e.keyCode == 13)
+      inlineNameChange(e);
+  },
+
+/*
+show and hide the input for editing the contact name and saving that
+*/
+	togglehiddenfield :function(e)
+	{	
+		
+		$("#contactName").toggleClass("hidden");
+		$("#Contact-input").toggleClass("hidden");
+    console.log(this);
+		if(!$("#Contact-input").hasClass("hidden"))
+		{
+			$("#Contact-input-lastname").focus();	
+		}
+
+	},
 
 
+  companyNameChange : function(e)
+  {
+    if(e.keyCode == 13)
+     inlineCompanyNameChange(e);
+  },
+	/*
+	show and hide the input for editing the company name and save that
+	*/
+	toggleinline_company :function(e){
+		$("#company-inline-input").toggleClass("hidden");
+		$("#company-name-text").toggleClass("hidden");
+		if(!$("#company-inline-input").hasClass("hidden"))
+			$("#company-inline-input").focus();
+	},
+  companyInlineEdit : function (e){
+    inlineCompanyNameChange(e);
+  },
+	
 	contactActionsGridDelete: function(e){
 		
 		e.preventDefault();
@@ -441,6 +587,18 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("campaigns");
 		contact_details_tab.load_campaigns();
+	},
+
+	/**
+	 * Fetches all the logs of the campaigns that the contact is subscribed to
+	 * and shows them in a table. Also shows a campaigns drop down list to
+	 * subscribe the contact to the selected campaign.
+	 */
+	openTickets : function(e)
+	{
+		e.preventDefault();
+		save_contact_tab_position_in_cookie("tickets");
+		contact_details_tab.load_tickets();
 	},
 
 
@@ -705,6 +863,12 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 
 						 	// Adds contact name to tags ul as li element
 							$('#added-tags-ul').append(template({name : new_tags}));
+							    $.each(data.get("tagsWithTime"), function(e, d) {
+        						if (d.tag == new_tags) {
+							            $('#added-tags-ul').find("li[data='"+new_tags+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+							        }
+    }
+    );
 		       			}
 		       			
 		       			console.log(new_tags);
@@ -1060,6 +1224,7 @@ enterCompanyScore: function(e){
 
 	},
 
+
 	tabViewNext :  function(e){
 	  console.log("next clicked");
 	    var target = $("#contactDetailsTab");
@@ -1290,3 +1455,83 @@ $(function(){
     }
     );
 });
+
+/**
+ * Check whether there are any updates in the displaying contact.
+ * If there are any updates, show the refresh contact button.
+ */
+function checkCompanyUpdated(){
+	var contact_model  =  App_Companies.companyDetailView.model;
+	
+	var contact_id = contact_model.id;
+	var updated_time = contact_model.attributes.updated_time;
+
+		queueGetRequest("contact_queue" + contact_id, "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
+		{
+			// If true show refresh contact button.
+			if (data == 'true')
+			{
+				// Download
+				var contact_details_model = Backbone.Model.extend({ 
+					url : function(){
+							return '/core/api/contacts/' + contact_id;
+					}
+				});
+                
+				var model = new contact_details_model();
+				model.id = id;
+				model.fetch({ success : function(data){
+					
+					var old_updated_time = contact_model.attributes.updated_time;
+					
+					var new_updated_time = model.attributes.updated_time;
+					
+					// Update Model
+					if(old_updated_time != new_updated_time)
+					{
+						App_Companies.companyDetailView.model.set(model);
+//						$('#refresh_contact').hide();
+					}
+
+				    }
+				});
+				
+				$('#refresh_contact').show();
+			}
+				
+			
+			
+		}, function error(data)
+		{
+			// Error message is shown
+			
+		});
+}
+
+function epochToHumanDate(format,date)
+{
+	if (!format)
+			format = "mmm dd yyyy HH:MM:ss";
+
+		if (!date)
+			return;
+
+		if ((date / 100000000000) > 1)
+		{
+			console.log(new Date(parseInt(date)).format(format));
+			return new Date(parseInt(date)).format(format, 0);
+		}
+		// date form milliseconds
+		var d = "";
+		try
+		{
+			d= new Date(parseInt(date) * 1000).format(format);
+		}
+		catch (err)
+		{
+			console.log("Invalid date for custom field.");
+		}
+
+		return d
+
+}

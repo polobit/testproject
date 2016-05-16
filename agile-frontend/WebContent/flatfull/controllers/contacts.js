@@ -8,6 +8,7 @@
 CONTACTS_HARD_RELOAD = true;
 
 var import_tab_Id;
+var REFER_DATA;
 
 var ContactsRouter = Backbone.Router.extend({
 
@@ -61,7 +62,9 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with only mobile number */
 			"contacts/call-lead/:mob" : "addMobLead",
 			
+
 			"call-contacts" : "callcontacts"
+
 	},
 	
 	initialize : function()
@@ -90,7 +93,27 @@ var ContactsRouter = Backbone.Router.extend({
             return;
 		}
 
-		getTemplate('portlets', {}, undefined, function(template_ui){
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+
+		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
+
+		var dashboardJSON = {};
+		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(dashboard_name != "DashBoard" && value.id == dashboard_name) {
+					dashboardJSON["id"] = value.id;
+					dashboardJSON["name"] = value.name;
+					dashboardJSON["description"] = value.description;
+				}
+			});
+		}
+
+		if(!dashboardJSON["id"])
+		{
+			dashboard_name = "DashBoard";
+		}
+
+		getTemplate('portlets', dashboardJSON, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 
@@ -103,7 +126,7 @@ var ContactsRouter = Backbone.Router.extend({
 					$("#chrome-extension-button").removeClass('hide');
 				}
 
-				loadPortlets('DashBoard',el);
+				loadPortlets(dashboard_name,el);
 
 		}, "#content");
 
@@ -585,7 +608,19 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-
+			$(el).on('click',function(el){
+				var newId = el.target.id;
+				if(newId == "contact_name")
+					return ;
+				if(newId == "contactName")
+					return ;
+				if(newId == 'Contact-input-firstname' || newId == 'Contact-input-lastname')
+					return;
+				
+					inlineNameChange(el,newId);
+				
+			});
+		
 			//mobile tabs
 			 $('.content-tabs').tabCollapse(); 
 
@@ -641,7 +676,9 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-call",el).removeClass("c-progress");
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
-			} });
+			} 
+			
+		});
 
 		var el = this.contactDetailView.render(true).el;
 		$(el).find('.content-tabs').tabCollapse(); 
@@ -976,7 +1013,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 			//loadPortlets('Contacts',el);
 			if(agile_is_mobile_browser()) {
-			$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+			// $('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 			}
 			
 
@@ -1097,7 +1134,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				if(agile_is_mobile_browser()) {
 				
 					var $nextEle = $('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
-					$('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
+					// $('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
 				}
 				
 
@@ -1105,7 +1142,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 			}, appendItemCallback: function(el){
 				if(agile_is_mobile_browser()) {
-					$('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
+					// $('#contacts-table tbody tr .icon-append-mobile',el).after('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 				}
 			}, });
 
@@ -1256,9 +1293,10 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
-	}
-		
+	}	
 	});
+
+
 
 function getAndUpdateCollectionCount(type, el, countFetchURL){
 

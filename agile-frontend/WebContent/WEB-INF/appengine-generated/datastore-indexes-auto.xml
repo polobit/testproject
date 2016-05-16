@@ -35,6 +35,11 @@
         <property name="type" direction="asc"/>
     </datastore-index>
     
+    <datastore-index kind="Workflow" ancestor="false" source="manual">
+        <property name="access_level" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+    
     <datastore-index kind="Opportunity" ancestor="false" source="manual">
         <property name="__key__" direction="asc"/>
         <property name="name" direction="asc"/>
@@ -525,5 +530,16 @@
     <datastore-index kind="Contact" ancestor="false" source="manual">
         <property name="campaignStatus.status" direction="asc"/>
         <property name="campaignStatus.start_time" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="close_date" direction="asc"/>
+        <property name="expected_value" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="archived" direction="asc"/>
+        <property name="milestone" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+        <property name="expected_value" direction="asc"/>
     </datastore-index>
 </datastore-indexes>

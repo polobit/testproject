@@ -88,18 +88,54 @@ public abstract class BulkActionAdaptor implements DeferredTask
 
 	    UserAccessControl access = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null, user);
 
-	    if (contacts != null && !access.hasScope(UserAccessScopes.DELETE_CONTACTS))
+	    if (contacts != null && !access.hasScope(UserAccessScopes.EDIT_CONTACT))
 	    {
 		Iterator<Contact> contactIterator = contacts.iterator();
 		while (contactIterator.hasNext())
 		{
 		    Contact contact = contactIterator.next();
 		    access.setObject(contact);
-		    if (!access.canDelete())
+		    if (!access.canCreate())
 			contactIterator.remove();
 		}
 	    }
 
+	}
+
+	return contacts;
+
+    }
+    
+    protected List<Contact> fetchContactsForDelete()
+    {
+	if (contacts != null)
+	    return contacts;
+
+	try
+	{
+		UserAccessControl access = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null, user);
+		//Checking for contacts delete permission, if no permission will return empty list
+		if(!access.hasScope(UserAccessScopes.DELETE_CONTACT))
+		{
+			return new ArrayList<Contact>();
+		}
+	    contacts = Contact.dao.fetchAllByKeys(new ArrayList<Key<Contact>>(contactKeySet));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    contacts = new ArrayList<Contact>();
+	    for (Key<Contact> contactKey : contactKeySet)
+	    {
+		try
+		{
+		    contacts.add(Contact.dao.get(contactKey));
+		}
+		catch (Exception e1)
+		{
+		    e.printStackTrace();
+		}
+	    }
 	}
 
 	return contacts;

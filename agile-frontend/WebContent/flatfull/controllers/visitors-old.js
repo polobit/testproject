@@ -1,6 +1,6 @@
 var VisitorsRouter = Backbone.Router.extend({
 
-routes : { "visitors" : "loadGmap" },
+routes : { "visitors-old" : "loadGmap" },
 
 initialize : function()
 {

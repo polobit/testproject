@@ -8,7 +8,7 @@
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
-                        <input type="text" name="id" class="hide" value={{id}} >
+                        <input type="text" name="id" class="hide" value="{{id}}"/>
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
@@ -45,8 +45,18 @@
                             <label class="control-label col-md-3" for="send_as">Send as</label> 
                             <div class="col-md-6">
                                 <div class="controls">
-                                    <input type="text" name="send_as" id="send_as" value="{{send_as}}" class="form-control email" placeholder="Email" minlength="4" maxlength="30">
+                                    <input type="text" name="send_as" id="send_as" value="{{send_as}}" class="form-control email" placeholder="Email" minlength="4"/>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="send_as">Email Template</label> 
+                            <div class="col-md-6">
+                                <div class="controls">
+                                    <select id="template_id" name="template_id" class="form-control">
+                                    </select>
+                                </div>
+                                <!--<i class="icon-info-sign"></i><span class="text-muted"> Email template subject will not be considered when sending replies</span>-->
                             </div>
                         </div>
                         <div class="row">

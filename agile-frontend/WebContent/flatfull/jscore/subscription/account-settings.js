@@ -105,7 +105,7 @@ $(function(){
 			
 			// Shows cancellation modal
 			//$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
-			$("#send-cancellation").html(getTemplate('cancel-subscription-request', {})).modal('show');	
+			$("#send-cancellation").html(getTemplate('cancel-subscription-request', {'date':$(this).attr("data")})).modal('show');	
 			
 	});
 

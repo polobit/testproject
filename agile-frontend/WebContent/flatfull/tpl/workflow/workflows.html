@@ -79,10 +79,10 @@
                 -->
 
                 </div>
-                <a href="#triggers" class="btn right btn-default btn-sm pos-rlt m-r-sm pull-right btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
+                <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-right btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
             </div>
 <div class="pull-right">
-<div><a id="campaign_logs" class="btn btn-default btn-sm m-r-sm" href="#">Reports</a></div>
+<div><a id="campaign_logs" class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}}" href="#">Reports</a></div>
             </div>
             <div class="clearfix"></div>
         
@@ -111,7 +111,7 @@
         {{/unless}}
         {{#if this.length}}
             {{add_tag "Campaigns"}}
-            <div class="col-md-9 col-sm-9">
+            <div class="col-md-9">
              <!-- Pending Triggers Content -->
         <div id="triggers-verification" class="m-t-n-sm" style="display:none;">
             <div class="alert danger info-block alert-warning text-black">
@@ -147,7 +147,7 @@
                 </div>
             </div>
         {{/if}}
-    <div class="col-md-3 col-sm-3" id="learn-workflows">
+    <div class="col-md-3" id="learn-workflows">
         
             <h4 class="m-t-none h4 m-b-sm">
                 What is Workflow Automation?

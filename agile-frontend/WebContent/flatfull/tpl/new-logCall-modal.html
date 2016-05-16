@@ -55,7 +55,7 @@
        				   		<span class="caret"></span>
 	                  </button>
 				</a>
-						<ul class="dropdown-menu" style="top:121px;left: 157px;">
+						<ul class="dropdown-menu" style="top:121px;left: 157px;" role="menu">
 							{{#each num}}<li><a id = "logPhone_number_option" value = "{{this}}">{{this}}</a></li> {{/each}}
 						</ul>
 		{{/if_equals}}	
@@ -94,7 +94,7 @@
 							
  							</button>
 						</a>
-								<ul class="dropdown-menu" style="top:196px;left: 157px;">
+								<ul class="dropdown-menu" style="top:196px;left: 157px;" role="menu">
 									<li><a id = "statusValue"  value = "answered">Answered</a></li>
 									<li><a id = "statusValue"  value = "busy">Busy</a></li>
 									<li><a id = "statusValue"  value = "failed">Failed</a></li>
@@ -133,9 +133,15 @@
                 
                 
                 <div class="control-group form-group">
-                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Related To</b> </label>
-                     <div class="controls">
-                      <ul id="logPhone_relatedto_tag" name="contact_ids" class="contacts tags p-none"></ul>
+                    <label class="control-label pull-left p-l-none"><b>Related To</b><span class="field_req">*</span> </label>
+                    <div class="controls">
+                        <div>
+                     <input type="text" placeholder="Contact Name" id="call_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />
+                     <div class="controls" style="padding-top:1px">
+                      <ul id="logPhone_relatedto_tag" name="contact_ids" class="contacts tags tagsinput p-none"></ul>
+                     </div>
+                     <span id="log_relatedto_error" style="color:#d9534f;display:none;">Please relate the call to a contact.</span>
+                     </div>
                      </div>
                 </div>
             </fieldset>

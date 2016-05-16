@@ -52,6 +52,8 @@ function save_widget_prefs(pluginName, prefs, callback) {
 	
 	var msgType = "success";
 	var displayName = pluginName;
+	if(displayName=="TwilioIO")
+		displayName="Twilio";
 	var msg = displayName+" widget saved successfully";	
 
 	/*
@@ -374,15 +376,27 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			var widget_el = getTemplate("widget-settings", model);
 			$('#prefs-tabs-content').html(widget_el);
 
-			// Create a view modal for widgets
-			renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
-			
+			if(widgetName == "Braintree"){
+				// Retrieve all custom from Agile account
+				$.get("/core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data){
+					// Include 'stripe_field_name' to stripe_widget_prefs and save
+					model['custom_fields'] = data;
+					
+					renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
+
+				}, "json").error(function(data){
+					
+				});
+				
+			}else{
+				// Create a view modal for widgets
+				renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
+			}
+
 			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
-
 		});
-
 	});
 }
 

@@ -39,6 +39,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
 /**
  * <code>DBUtil</code> class contains the utility methods to delete a name-space
@@ -203,7 +204,10 @@ public class AccountDeleteUtil
 			{
 				// Cancel subscription before starting delete
 				Subscription.deleteSubscriptionOfParticularDomain(namespace);
-
+				
+				//Delete subuser account from sendgrid
+				 SendGridSubUser.deleteSubAccountFromSendGrid(namespace);
+				
 				// Gets all entities of the given name-space
 				List<String> kinds = getKinds(namespace);
 

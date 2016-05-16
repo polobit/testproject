@@ -211,6 +211,9 @@ var portlet_utility = {
 		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
 			json['activity_type'] = "ALL";
 			json['duration'] = "this-quarter";
+		}
+		else if (portlet_type == "USERACTIVITY" && p_name == "Referralurl stats") {
+			json['duration'] = "yesterday";
 		}	
 		return json;
 	
@@ -336,6 +339,8 @@ var portlet_utility = {
 			"Incoming Deals" : "portlets-incoming-deals",
 			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
 			"Average Deviation" : "portlets-Tasks-Deviation",
+			"Webstat Visits" : "portlets-webstat-visits",
+			"Referralurl stats" : "portlets-Referralurl-stats-report",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -1320,6 +1325,65 @@ var portlet_utility = {
 			setPortletContentHeight(base_model);
 			break;
 		}
+		case "Webstat Visits": {
+			var url = '/core/api/web-stats/reports?start_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
+					+ '&end_time='
+					+portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000;
+			portlet_graph_data_utility.webstatVisitsGraphData(base_model,
+					selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Referralurl stats": {
+			var ref_url,count;
+			selector='referralurl-stats-portlet-body-'+ column_position + '-'
+					+ row_position;
+			var sizey = parseInt($('.' + selector).parent().attr("data-sizey"));
+			var topPos = 50 * sizey;
+			if (sizey == 2 || sizey == 3)
+				topPos += 50;
+			$('.'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+ topPos
+								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+			var url = '/core/api/web-stats/refurl-stats?start_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
+					+ '&end_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000
+					+ '&time_zone=' + (new Date().getTimezoneOffset());
+			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
+				if(data.length==0){
+						$('.'+selector).html('<div class="portlet-error-message">No Referral URL Found</div>');
+								return;
+					}
+				var span;
+				var element_list=$("<div style=' padding-top: 2px;'></div>");
+				$.each( data, function(e) {					
+					var width;
+					if(e==0)
+						width=75;
+					else
+						width=(data[e].count/data[0].count)*100;
+					if(e!=0 && width >75){
+						width=100-width;
+						width=75-width;
+					}
+
+					span = $("<div style='margin: 0px 20px -21px 15px; padding-bottom: 1px;'/>");
+					var url_name=data[e].ref_url.substring(data[e].ref_url.indexOf('/')+2,data[e].ref_url.lastIndexOf('/'));
+					if(url_name.startsWith("www"))
+						url_name= url_name.substring(url_name.indexOf("www")+4);
+					span.append("<a data-toggle='popover' class='text-ellipsis' title="+ data[e].ref_url +" style='font-size: 14px; position: absolute;width: 75%;'>" + url_name + "</a>");
+		            span.append("<div  style='margin-left: 90%;width: 15%;'>" + data[e].count + "</div>");
+		            span.append("<div class='bar' style='width: "+width+"%; margin: 1px;height: .8rem; background: #03A9F4;'></div>");
+		            span.append("<br/>");
+		            element_list.append(span);
+				});
+				$('.'+selector).html(element_list);
+			});
+			
+			setPortletContentHeight(base_model);
+			break;
+		}
 		}
 	},
 
@@ -1915,6 +1979,27 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					break;
+		}
+		case "Webstat Visits": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsWebstatVisitsSettingsModal");
+			elData = $('#portletsWebstatVisitsSettingsModal');
+			$("#duration", elData).find(
+				               'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;
+		}
+		case "Referralurl stats": {
+			that.addPortletSettingsModalContent(base_model,"portletsReferralurlStatsSettingsModal");
+			elData = $('#portletsReferralurlStatsSettingsModal');
+			$("#duration", elData).find(
+				               'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;		
+			
 		}
 		}
 		if (base_model.get('name') == "Pending Deals"

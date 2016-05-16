@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketStats;
+import com.agilecrm.ticket.entitys.TicketsBackup;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -111,14 +113,14 @@ public class SendgridInboundParser extends HttpServlet
 	{
 		try
 		{
+			Key<TicketsBackup> backupKey = null;
+
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
 			System.out.println("isMultipart: " + isMultipart);
 
 			try
 			{
-				Long currentTime = Calendar.getInstance().getTimeInMillis();
-
 				if (isMultipart)
 				{
 					JSONObject json = getJSONFromMIME(request);
@@ -130,204 +132,242 @@ public class SendgridInboundParser extends HttpServlet
 					JSONObject enveloperJSON = new JSONObject(envelope);
 					String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
 
-					/**
-					 * Replacing email suffix with space so that we'll get a
-					 * string of namespace and group ID separated by delimeter
-					 * '+'
-					 */
-					String inboundSuffix = TicketGroupUtil.getInboundSuffix();
-
-					String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
+					String[] toAddressArray = getNamespaceAndGroup(toAddress);
 
 					if (toAddressArray.length < 2)
 						return;
 
-					String namespace = toAddressArray[0];
-					System.out.println("namespace: " + namespace);
+					// Adding record to tickets backup db
+					backupKey = new TicketsBackup(json.toString(), toAddressArray[0]).save();
 
-					/**
-					 * Verifying for valid domain or not
-					 */
-					if (DomainUserUtil.count(namespace) <= 0)
-					{
-						System.out.println("Invalid domain: " + namespace);
-						return;
-					}
+					saveTicket(json, toAddressArray);
 
-					String oldNamespace = NamespaceManager.get();
-
-					// Setting namespace
-					NamespaceManager.set(namespace);
-
-					/**
-					 * GroupID is converted with Base62. So to get original
-					 * GroupID converting back to decimal with Base62.
-					 */
-					Long groupID = TicketGroupUtil.getLongGroupID(toAddressArray[1]);
-
-					System.out.println("groupID: " + groupID);
-
-					TicketGroups ticketGroup = null;
-
-					/**
-					 * Verifying for valid Group or not
-					 */
-					try
-					{
-						ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
-					}
-					catch (Exception e)
-					{
-						System.out.println("Invalid groupID: " + groupID);
-						return;
-					}
-
-					List<String> ccEmails = getCCEmails(json);
-
-					String plainText = "", htmlText = "";
-
-					if (json.has("text"))
-						plainText = json.getString("text");
-
-					if (json.has("html"))
-						htmlText = json.getString("html");
-
-					boolean attachmentExists = false;
-
-					if (json.has("attachments"))
-						attachmentExists = json.getInt("attachments") > 0 ? true : false;
-
-					List<TicketDocuments> documentsList = (attachmentExists) ? getAttachmentsList(json)
-							: (new ArrayList<TicketDocuments>());
-
-					try
-					{
-						// Creating jsoup object to remove inline image tags
-						Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
-
-						/**
-						 * Iterating through each attachment and removing inline
-						 * image text and tags fron plain text content and html
-						 * content
-						 */
-						for (TicketDocuments ticketDocument : documentsList)
-						{
-							String fileContentType = ticketDocument.extension;
-
-							boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
-
-							if (!isImage)
-								continue;
-
-							Elements elements = doc.getElementsByAttributeValue("src", "cid:" + ticketDocument.name);
-
-							if (elements == null || elements.size() == 0)
-								continue;
-
-							for (Element element : elements)
-							{
-								plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
-
-								try
-								{
-									element.remove();
-								}
-								catch (Exception e)
-								{
-									System.out.println(ExceptionUtils.getFullStackTrace(e));
-								}
-							}
-						}
-
-						if (documentsList != null && documentsList.size() > 0)
-							htmlText = doc.body().html();
-					}
-					catch (Exception e)
-					{
-						System.out.println(ExceptionUtils.getFullStackTrace(e));
-					}
-
-					Tickets ticket = null;
-
-					String[] nameEmail = getNameAndEmail(json);
-
-					// boolean isNewTicket = isNewTicket(toAddressArray);
-					String ticketID = extractTicketIDFromHtml(htmlText);
-
-					boolean isNewTicket = StringUtils.isBlank(ticketID) ? true : false;
-
-					if (isNewTicket)
-					{
-						// Creating new Ticket in Ticket table
-						ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1],
-								json.getString("subject"), ccEmails, plainText, Status.NEW, Type.PROBLEM, Priority.LOW,
-								Source.EMAIL, CreatedBy.CUSTOMER, attachmentExists, json.getString("sender_ip"),
-								new ArrayList<Key<TicketLabels>>());
-
-						TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
-					}
-					else
-					{
-						try
-						{
-							ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
-						}
-						catch (Exception e)
-						{
-							System.out.println(ExceptionUtils.getFullStackTrace(e));
-						}
-
-						// Check if ticket exists
-						if (ticket == null)
-						{
-							System.out.println("Invalid ticketID or ticket has been deleted: " + toAddressArray[2]);
-							return;
-						}
-
-						String lastRepliedText = TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText);
-
-						// Checking if contact existing or not
-						Contact contact = ticket.getTicketRelatedContact();
-
-						ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
-						ticket.contactID = contact.id;
-
-						ticket.updateTicketAndSave(ccEmails, lastRepliedText, LAST_UPDATED_BY.REQUESTER, currentTime,
-								currentTime, null, attachmentExists, false, true);
-
-						// Sending user replied notification
-						TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name
-								+ " replied to ticket #" + ticket.id);
-
-						// Execute note created by customer trigger
-						TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
-					}
-
-					// Creating new Notes in TicketNotes table
-					TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID,
-							CREATED_BY.REQUESTER, nameEmail[0], nameEmail[1], plainText, htmlText, NOTE_TYPE.PUBLIC,
-							documentsList, json.toString(), isNewTicket);
-
-					notes.save();
-
-					// Updating ticket count DB
-					TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
-
-					NamespaceManager.set(oldNamespace);
-
-					System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime)
-							+ "ms");
+					// Removing backup if everything is ok
+					TicketsBackup.delete(backupKey);
 				}
 			}
 			catch (Exception e)
 			{
-				System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
+	}
+
+	/**
+	 * Converts the json object into ticket object and saves to db.
+	 * 
+	 * @param json
+	 * @param key
+	 * @throws Exception
+	 */
+	public void saveTicket(JSONObject json, String[] toAddressArray) throws Exception
+	{
+		Long currentTime = Calendar.getInstance().getTimeInMillis();
+
+		String namespace = toAddressArray[0];
+		System.out.println("namespace: " + namespace);
+
+		/**
+		 * Verifying for valid domain or not
+		 */
+		if (DomainUserUtil.count(namespace) <= 0)
+		{
+			System.out.println("Invalid domain: " + namespace);
+			return;
+		}
+
+		String oldNamespace = NamespaceManager.get();
+
+		// Setting namespace
+		NamespaceManager.set(namespace);
+
+		/**
+		 * GroupID is converted with Base62. So to get original GroupID
+		 * converting back to decimal with Base62.
+		 */
+		Long groupID = TicketGroupUtil.getLongGroupID(toAddressArray[1]);
+
+		System.out.println("groupID: " + groupID);
+
+		TicketGroups ticketGroup = null;
+
+		/**
+		 * Verifying for valid Group or not
+		 */
+		try
+		{
+			ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
+		}
+		catch (Exception e)
+		{
+			// We are generating group forwarding email addresses
+			// which are case sensitive.
+			// So verifying if lowered case group id exists in
+			// to address.
+			boolean idFound = false;
+
+			String tempGroupID = toAddressArray[1];
+
+			List<TicketGroups> allGroups = TicketGroups.ticketGroupsDao.fetchAll();
+
+			for (TicketGroups tempTicketGroup : allGroups)
+			{
+				String groupEmail = tempTicketGroup.group_email.toLowerCase();
+
+				if (groupEmail.contains(tempGroupID.toLowerCase()))
+				{
+					ticketGroup = tempTicketGroup;
+					idFound = true;
+					break;
+				}
+			}
+
+			if (!idFound)
+			{
+				System.out.println("Invalid groupID: " + groupID);
+				return;
+			}
+		}
+
+		List<String> ccEmails = getCCEmails(json);
+
+		String plainText = "", htmlText = "";
+
+		if (json.has("text"))
+			plainText = json.getString("text");
+
+		if (json.has("html"))
+			htmlText = json.getString("html");
+
+		boolean attachmentExists = false;
+
+		if (json.has("attachments"))
+			attachmentExists = json.getInt("attachments") > 0 ? true : false;
+
+		List<TicketDocuments> documentsList = (attachmentExists) ? getAttachmentsList(json)
+				: (new ArrayList<TicketDocuments>());
+
+		try
+		{
+			// Creating jsoup object to remove inline image tags
+			Document doc = Jsoup.parseBodyFragment(htmlText, "UTF-8");
+
+			/**
+			 * Iterating through each attachment and removing inline image text
+			 * and tags fron plain text content and html content
+			 */
+			for (TicketDocuments ticketDocument : documentsList)
+			{
+				String fileContentType = ticketDocument.extension;
+
+				boolean isImage = (fileContentType.contains("image") || fileContentType.contains("img"));
+
+				if (!isImage)
+					continue;
+
+				Elements elements = doc.getElementsByAttributeValue("src", "cid:" + ticketDocument.name);
+
+				if (elements == null || elements.size() == 0)
+					continue;
+
+				for (Element element : elements)
+				{
+					plainText = plainText.replace("[image: " + element.attr("alt") + "]", "");
+
+					try
+					{
+						element.remove();
+					}
+					catch (Exception e)
+					{
+						System.out.println(ExceptionUtils.getFullStackTrace(e));
+					}
+				}
+			}
+
+			if (documentsList != null && documentsList.size() > 0)
+				htmlText = doc.body().html();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+
+		Tickets ticket = null;
+
+		String[] nameEmail = getNameAndEmail(json);
+
+		System.out.println("Name & email fetched: " + Arrays.toString(nameEmail));
+
+		// boolean isNewTicket = isNewTicket(toAddressArray);
+		String ticketID = extractTicketIDFromHtml(htmlText);
+
+		boolean isNewTicket = StringUtils.isBlank(ticketID) ? true : false;
+
+		if (isNewTicket)
+		{
+			// Creating new Ticket in Ticket table
+			ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1], json.getString("subject"), ccEmails,
+					plainText, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
+					attachmentExists, json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
+
+			TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
+		}
+		else
+		{
+			try
+			{
+				ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
+			}
+			catch (Exception e)
+			{
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+
+			// Check if ticket exists
+			if (ticket == null)
+			{
+				System.out.println("Invalid ticketID or ticket has been deleted: " + toAddressArray[2]);
+				return;
+			}
+
+			String lastRepliedText = TicketNotesUtil.removedQuotedRepliesFromPlainText(plainText);
+
+			// Checking if contact existing or not
+			Contact contact = ticket.getTicketRelatedContact();
+
+			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
+			ticket.contactID = contact.id;
+
+			ticket.updateTicketAndSave(ccEmails, lastRepliedText, LAST_UPDATED_BY.REQUESTER, currentTime, currentTime,
+					null, attachmentExists, false, true);
+
+			// Sending user replied notification
+			TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name + " replied to ticket #"
+					+ ticket.id);
+
+			// Execute note created by customer trigger
+			TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
+		}
+
+		// Creating new Notes in TicketNotes table
+		TicketNotes notes = new TicketNotes(ticket.id, ticketGroup.id, ticket.assigneeID, CREATED_BY.REQUESTER,
+				nameEmail[0], nameEmail[1], plainText, htmlText, NOTE_TYPE.PUBLIC, documentsList, json.toString(),
+				isNewTicket);
+
+		notes.save();
+
+		// Updating ticket count DB. Async job.
+		TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
+
+		NamespaceManager.set(oldNamespace);
+
+		System.out.println("Successfully created ticket...");
+		System.out.println("Execution time: " + (Calendar.getInstance().getTimeInMillis() - currentTime) + "ms");
 	}
 
 	/**
@@ -397,29 +437,32 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
+	 * Reads the from name and email address from posted data.
 	 * 
 	 * @param json
-	 * @return
+	 * @return string array containing name at first index and from address at
+	 *         second index.
 	 */
 	private String[] getNameAndEmail(JSONObject json)
 	{
-		String name = "x", from = "customer@domain.com";
+		String name = "", from = "";
 		try
 		{
 			from = json.getString("from");
+			name = from;
 
 			int delimeterIndex = from.indexOf("<");
 
-			name = from.substring(0, delimeterIndex).trim();
-			from = from.substring((delimeterIndex + 1), from.indexOf(">")).trim();
-
-			if (StringUtils.isBlank(name))
+			if (delimeterIndex == -1)
 				name = from.substring(0, from.lastIndexOf("@"));
 			else
 			{
-				if (name.contains("\""))
-					name = name.replace("\"", "");
+				name = from.substring(0, delimeterIndex).trim();
+				from = from.substring((delimeterIndex + 1), from.indexOf(">")).trim();
 			}
+
+			if (name.contains("\""))
+				name = name.replace("\"", "");
 
 			System.out.println("name: " + name);
 			System.out.println("from: " + from);
@@ -430,6 +473,39 @@ public class SendgridInboundParser extends HttpServlet
 		}
 
 		return new String[] { name, from };
+	}
+
+	/**
+	 * Splits to address into array of namespace and groupid.
+	 * 
+	 * @return a string array containing namespace at first index and group id
+	 *         in second index.
+	 */
+	public String[] getNamespaceAndGroup(String toAddress)
+	{
+		/**
+		 * Replacing email suffix with space so that we'll get a string of
+		 * namespace and group ID separated by delimeter '+'
+		 */
+		String inboundSuffix = TicketGroupUtil.getInboundSuffix();
+
+		String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
+
+		System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
+
+		if (toAddressArray.length < 2)
+		{
+			// Earlier we have provided forwarding email's with plus delimeter.
+			// This is fall-back code to handle those addresses.
+			toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
+
+			System.out.println("toAddressArray with plus delimeter: " + Arrays.toString(toAddressArray));
+
+			if (toAddressArray.length < 2)
+				return new String[0];
+		}
+
+		return toAddressArray;
 	}
 
 	/**
@@ -524,15 +600,7 @@ public class SendgridInboundParser extends HttpServlet
 	}
 
 	/**
-	 * If received ticket is reply to existing ticket then email address will be
-	 * in the form of namespace+groupid+ticketid@helptor.com
-	 */
-	// public static boolean isNewTicket(String[] toAddressArray)
-	// {
-	// return (toAddressArray.length == 3) ? false : true;
-	// }
-
-	/**
+	 * Returns ticket ID from HTML content
 	 * 
 	 * @param htmlContent
 	 * @return ticketID
@@ -593,10 +661,5 @@ public class SendgridInboundParser extends HttpServlet
 		System.out.println("Added saved document....");
 
 		return service;
-	}
-
-	public static void main(String[] args) throws Exception
-	{
-		System.out.println("reply\r\ntest..\r\n\r\n".trim());
 	}
 }
