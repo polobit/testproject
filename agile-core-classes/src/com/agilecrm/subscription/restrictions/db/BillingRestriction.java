@@ -442,7 +442,7 @@ public class BillingRestriction
 	this.one_time_emails_backup = one_time_emails_count;
 	this.email_credits_backup = email_credits_count;
 	
-	if(this.lastAutoRechargeTime < restriction.lastAutoRechargeTime || this.email_credits_count < restriction.email_credits_count){
+	if(this.lastAutoRechargeTime <= restriction.lastAutoRechargeTime || this.email_credits_count < restriction.email_credits_count){
 		this.lastAutoRechargeTime = restriction.lastAutoRechargeTime;
 		this.last_credit_id = restriction.last_credit_id;
 		this.email_credits_count = restriction.email_credits_count;
