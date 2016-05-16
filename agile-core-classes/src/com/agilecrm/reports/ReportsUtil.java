@@ -933,113 +933,112 @@ public class ReportsUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+			String type="";
+				callsObject.put("answered", 0);
+				callsObject.put("busy",0);
+				callsObject.put("failed",0);
+				callsObject.put("voicemail",0);
+				callsObject.put("missed",0);
+				callsObject.put("inquiry",0);
+				callsObject.put("interest",0);
+				callsObject.put("no interest",0);
+				callsObject.put("incorrect referral",0);
+				callsObject.put("meeting scheduled",0);
+				callsObject.put("new opportunity",0);
+				callsObject.put("other",0);
 
-	String type="";
-		callsObject.put("answered", 0);
-		callsObject.put("busy",0);
-		callsObject.put("failed",0);
-		callsObject.put("voicemail",0);
-		callsObject.put("missed",0);
-		callsObject.put("inquiry",0);
-		callsObject.put("interest",0);
-		callsObject.put("no interest",0);
-		callsObject.put("incorrect referral",0);
-		callsObject.put("meeting scheduled",0);
-		callsObject.put("new opportunity",0);
-		callsObject.put("queued",0);
-
-		callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
-	        try{
-		for(Activity activity : activitieslist){
-			String last="";
-			
-			   Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-	            calendar.setTimeInMillis(activity.time * 1000);
-	            if(StringUtils.equalsIgnoreCase(frequency, "monthly")) 
-	    			calendar.set(Calendar.DAY_OF_MONTH, 1);
-	    		if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
-	    			{
-	    			
-	    			Iterator iter = callsPerPersonJSON.keys();
-	    			while (iter.hasNext()) {
-	    			    String key = (String) iter.next();
-	    			    if((calendar.getTimeInMillis()/1000+"").compareToIgnoreCase(key.toString())>-1)
-	    			     {
-	    			    	last=key;
-	    			    	continue;	
-	    			     }
-	    			    break;
-	    			}
-	    			
-	    			}
-	            calendar.set(Calendar.HOUR_OF_DAY, 0);
-	            calendar.set(Calendar.MINUTE, 0);
-	            calendar.set(Calendar.SECOND, 0);
-	            calendar.set(Calendar.MILLISECOND, 0);
-	            
-	            String createdTime ;
-	            if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
-	            	createdTime=last;
-	            else
-	            	createdTime= (calendar.getTimeInMillis() / 1000) + "";
-	            if (callsPerPersonJSON.containsKey(createdTime))
-	            {
-	            	net.sf.json.JSONObject count = callsPerPersonJSON.getJSONObject(createdTime);
-                    if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
-                    	{	
-                    		type=Call.ANSWERED;
-                    	}
-					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
-					{
-						type=Call.BUSY;
-                		
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
-					{
-                    	type=Call.FAILED;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-					{
-                    	type=Call.VOICEMAIL;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
-					{
-                    	type=Call.Missed;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
-					{
-                    	type=Call.NewOpportunity;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
-					{
-                    	type=Call.MeetingScheduled;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
-					{
-                    	type=Call.Inquiry;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
-					{
-                    	type=Call.IncorrectReferral;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
-					{
-                    	type=Call.Interest;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
-					{
-                    	type=Call.NoInterest;
-                	}
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))
-					{
-                    	type="queued";
-                	}
-                   
-                    int count1=count.getInt(type);
-            		count1++;
-            		count.put(type,count1);
-                    callsPerPersonJSON.put(createdTime, count);
-	            }
+				callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
+			        try{
+				for(Activity activity : activitieslist){
+					String last="";
+					
+					   Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			            calendar.setTimeInMillis(activity.time * 1000);
+			            if(StringUtils.equalsIgnoreCase(frequency, "monthly")) 
+			    			calendar.set(Calendar.DAY_OF_MONTH, 1);
+			    		if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
+			    			{
+			    			
+			    			Iterator iter = callsPerPersonJSON.keys();
+			    			while (iter.hasNext()) {
+			    			    String key = (String) iter.next();
+			    			    if((calendar.getTimeInMillis()/1000+"").compareToIgnoreCase(key.toString())>-1)
+			    			     {
+			    			    	last=key;
+			    			    	continue;	
+			    			     }
+			    			    break;
+			    			}
+			    			
+			    			}
+			            calendar.set(Calendar.HOUR_OF_DAY, 0);
+			            calendar.set(Calendar.MINUTE, 0);
+			            calendar.set(Calendar.SECOND, 0);
+			            calendar.set(Calendar.MILLISECOND, 0);
+			            
+			            String createdTime ;
+			            if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
+			            	createdTime=last;
+			            else
+			            	createdTime= (calendar.getTimeInMillis() / 1000) + "";
+			            if (callsPerPersonJSON.containsKey(createdTime))
+			            {
+			            	net.sf.json.JSONObject count = callsPerPersonJSON.getJSONObject(createdTime);
+		                    if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
+		                    	{	
+		                    		type=Call.ANSWERED;
+		                    	}
+							else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
+							{
+								type=Call.BUSY;
+	                    		
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+							{
+		                    	type=Call.FAILED;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
+							{
+		                    	type=Call.VOICEMAIL;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
+							{
+		                    	type=Call.Missed;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
+							{
+		                    	type=Call.NewOpportunity;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
+							{
+		                    	type=Call.MeetingScheduled;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
+							{
+		                    	type=Call.Inquiry;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
+							{
+		                    	type=Call.IncorrectReferral;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
+							{
+		                    	type=Call.Interest;
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
+							{
+		                    	type=Call.NoInterest;
+	                    	}
+							else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
+							{
+		                    	type="other";
+	                    	}
+		                   
+		                    int count1=count.getInt(type);
+                    		count1++;
+                    		count.put(type,count1);
+		                    callsPerPersonJSON.put(createdTime, count);
+			            }
 				}
 		} catch (Exception e) {
 			e.printStackTrace();

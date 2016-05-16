@@ -174,7 +174,7 @@ call_reports : function(url,reportType,graphOn){
 		domainUsersList=data["domainUsersList"];
 		domainUserImgList=data["domainUserImgList"];
 		pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
-		'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity','Queued'];
+		'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity','Other'];
 		
 		var series=[];
 		var text='';
@@ -318,7 +318,7 @@ call_reports : function(url,reportType,graphOn){
 			series[10] = tempData;
 
 				tempData = {};
-			tempData.name = "Queued";
+			tempData.name = "Other";
 			tempData.data = queuedCallsCountList;
 			series[11] = tempData;
 
@@ -429,7 +429,7 @@ user_reports :function(callReportUrl){
 			domainUsersList=data["domainUsersList"];
 			domainUserImgList=data["domainUserImgList"];
 			pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
-			'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity','Queued'];
+			'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity','Other'];
 			
 			var series=[];
 			var text='';
