@@ -1418,13 +1418,17 @@ public class JSAPI
     @Path("formsubmit")
     @GET
     public void formSubmitTrigger(@QueryParam("formname") String formName, @QueryParam("contactid") String contactId,
-	    @QueryParam("formdata") String formData, @QueryParam("new") Boolean newContact)
+	    @QueryParam("formdata") String formData, @QueryParam("new") Boolean newContact,@QueryParam("checkId") String idCheck)
     {
 	try
 	{
-	    Form form = FormUtil.getFormByName(formName);
+	    Form form=null;
 	    JSONObject formFields = new JSONObject(formData);
-
+	    if(idCheck.equalsIgnoreCase("true"))
+		form=FormUtil.getFormById(Long.parseLong(formFields.get("_agile_form_id").toString()));
+	    else
+		form = FormUtil.getFormByName(formName);
+	    
 	    if (contactId == null || form == null)
 		return;
 
