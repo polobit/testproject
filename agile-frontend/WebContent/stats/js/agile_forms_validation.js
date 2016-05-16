@@ -142,7 +142,7 @@ function validateEmail(email){
 
 function validatePhonenumber(str)  
 {  
-	var pattern=/^(?=.*[0-9])[0-9]+$/;
+	var pattern=/^(?=.*[0-9])[- +().0-9]+$/;
 
 	if(pattern.test(str))
 		return true;	
