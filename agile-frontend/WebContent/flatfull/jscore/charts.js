@@ -1600,7 +1600,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
     });
 }
 
-function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData,x_pos,y_pos){
+function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData,x_pos,y_pos,base_model){
 	if(x_pos == undefined)
 		x_pos = -10;
 	if(y_pos == undefined)
