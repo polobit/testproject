@@ -5,6 +5,25 @@ import com.google.appengine.api.modules.ModulesServiceFactory;
 
 public class ModuleUtil
 {
+	public enum AgileModules 
+	{
+		AGILE_CAMPAIGNS_BULK("agile-campaigns-bulk"), AGILE_TASKS_HANDLER("agile-tasks-handler"),AGILE_CAMPAIGNS_NORMAL("agile-campaigns-normal"),
+		AGILE_NORMAL_BULK("agile-normal-bulk");
+		
+		private String moduleName = "default";
+		
+		AgileModules(String moduleName)
+		{
+			this.moduleName = moduleName;
+		}
+		
+		public String getModuleName()
+		{
+			return moduleName;
+		}
+	};
+	
+	
     public static String getCurrentModuleName()
     {
 	try
@@ -25,4 +44,5 @@ public class ModuleUtil
 
 	return "";
     }
+    
 }

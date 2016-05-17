@@ -30,6 +30,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.validator.TagValidator;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.modules.ModulesServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskAlreadyExistsException;
@@ -122,7 +123,7 @@ public class TagUtil
 	    // Update Tags - Create a deferred task
 	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tagsSet);
 	    Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
-	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask).header("Host", ModulesServiceFactory.getModulesService().getDefaultVersion(ModuleUtil.AgileModules.AGILE_TASKS_HANDLER.getModuleName())));
 	    return;
 	}
 
@@ -136,7 +137,7 @@ public class TagUtil
 	    try
 	    {
 		System.out.println("tag name : " + tagName);
-		queue.addAsync(TaskOptions.Builder.withPayload(task).taskName(tagName));
+		queue.addAsync(TaskOptions.Builder.withHeader("Host", ModulesServiceFactory.getModulesService().getDefaultVersion(ModuleUtil.AgileModules.AGILE_TASKS_HANDLER.getModuleName())).payload(task).taskName(tagName));
 	    }
 	    catch (TaskAlreadyExistsException e)
 	    {
