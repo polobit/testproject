@@ -5,8 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
@@ -57,6 +61,14 @@ public class WidgetUtil {
 		// Getting the list widget saved by the current user.
 		List<Widget> currentWidgets = getAddedWidgetsForCurrentUser();
 		// || currentWidget.widget_type.equals(WidgetType.CUSTOM)
+
+		Objectify ofy = ObjectifyService.begin();
+		List<Widget> allWidget = ofy.query(Widget.class)
+				.filter("widget_type !=", WidgetType.INTEGRATIONS)
+				.filter("add_by_admin =", false).list();
+		System.out.println(allWidget.size());
+		DomainUser dmu = AgileUser.getCurrentAgileUser().getDomainUser();
+
 		for (Widget widget : widgets) {
 			for (Widget currentWidget : currentWidgets) {
 				if (currentWidget.name.equals(widget.name)) {
@@ -67,8 +79,31 @@ public class WidgetUtil {
 					if (currentWidget.listOfUsers == null) {
 						currentWidget.save();
 					}
-					widget.listOfUsers = currentWidget.listOfUsers;
 
+					JSONArray listOfUsers = null;
+
+					try {						
+						if (dmu.is_admin) {
+							listOfUsers = new JSONArray(currentWidget.listOfUsers);
+							for (int i = 0; i < allWidget.size(); i++) {
+								Widget gWidget = allWidget.get(i);
+								if (widget.name.equals(gWidget.name)) {			
+									AgileUser agileUser = AgileUser.getCurrentAgileUser(gWidget.getUserID());
+									String userID = agileUser.domain_user_id
+											.toString();
+									if (!currentWidget.listOfUsers
+											.contains(userID)) {
+										listOfUsers.put(userID);
+									}
+								}
+							}
+							widget.listOfUsers = listOfUsers.toString();
+						}
+
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
 				}
 			}
 		}
