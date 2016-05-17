@@ -427,9 +427,6 @@ public class JSAPI
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
 
-	    if(!JSAPIUtil.checkAllowedDomain())
-		return "Please contact Agile CRM to enable this method";
-	    
 	    contact.removeTags(tagsArray);
 
 	    // return new ObjectMapper().writeValueAsString(contact);
@@ -509,9 +506,6 @@ public class JSAPI
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
 
-	    if(!JSAPIUtil.checkAllowedDomain())
-		return "Please contact Agile CRM to enable this method";
-	    
 	    contact.subtractScore(score);
 	    // return new ObjectMapper().writeValueAsString(contact);
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
