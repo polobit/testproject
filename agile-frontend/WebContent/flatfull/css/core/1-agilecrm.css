@@ -3829,4 +3829,13 @@ li .segment-lilist:hover {
 	cursor: pointer;
 }
 
+.tableNewView thead tr th:nth-child(n+3){
+padding-right:0px;
+padding-left:0px;
+}
+
+.tableNewView tbody tr td:nth-child(n+3){
+padding-right:0px;
+padding-left:0px;
+}
 
