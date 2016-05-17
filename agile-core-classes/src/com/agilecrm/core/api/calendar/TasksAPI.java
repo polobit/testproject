@@ -662,18 +662,18 @@ public class TasksAPI {
 			JSONObject json = new JSONObject(data);
 			String formId = json.getString("form_id");
 			if(formId.equalsIgnoreCase("bulkTaskStatusForm")){
-				uri = uri + "/ChangeStatus?data="+data ;
+				uri = uri + "/ChangeStatus" ;
 			}
 			else if(formId.equalsIgnoreCase("bulkTaskPriorityForm")){
-				uri = uri + "/ChangePriority?data="+data ;
+				uri = uri + "/ChangePriority" ;
 			}
 			else if(formId.equalsIgnoreCase("bulkTaskOwnerForm")){
-				uri = uri + "/ChangeOwner?data="+data ;
+				uri = uri + "/ChangeOwner" ;
 			}
 			else {
-				uri = uri + "/ChangeDuedate?data="+data ;
+				uri = uri + "/ChangeDuedate" ;
 			}
-		    TaskUtil.postDataToTaskBackend(uri);
+		    TaskUtil.postDataToTaskBackend(uri,data);
 		}
 		catch (Exception je)
 		{

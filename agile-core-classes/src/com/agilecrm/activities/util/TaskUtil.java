@@ -24,6 +24,7 @@ import com.amazonaws.services.datapipeline.model.TaskStatus;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
@@ -1013,12 +1014,20 @@ public class TaskUtil
 		}
 		return null;
 	}
-	public static void postDataToTaskBackend(String uri)
+	public static void postDataToTaskBackend(String uri ,String data)
     {
-		// Create Task and push it into Task Queue
-		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TASK_CHANGE_PROPERTY);
-		TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri);
-		queue.addAsync(taskOptions);
-		return;
+		try {
+			JSONObject json = new JSONObject(data);
+			String ids = json.getString("IdJson");
+			// Create Task and push it into Task Queue
+			Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TASK_CHANGE_STATUS);
+			TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).param("data", data)
+				    .header("Content-Type", "application/json").method(Method.POST);
+			queue.addAsync(taskOptions);
+			return;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

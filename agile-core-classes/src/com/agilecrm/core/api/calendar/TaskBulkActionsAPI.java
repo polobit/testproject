@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -25,7 +26,7 @@ public class TaskBulkActionsAPI {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Task> changeBulkTaskProperty(@QueryParam("data") String data) {
+	public List<Task> changeBulkTaskProperty(@FormParam("data") String data) {
 		try {
 			String ownerId = null;
 			JSONObject json = new JSONObject(data);
