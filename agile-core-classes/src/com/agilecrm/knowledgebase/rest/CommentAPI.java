@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Comment;
+import com.agilecrm.knowledgebase.entity.HelpcenterUser;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.CommentUtil;
 import com.agilecrm.knowledgebase.util.SectionUtil;
@@ -54,14 +55,13 @@ public class CommentAPI
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Comment> createComment(Comment comment,@QueryParam("article_id") Long article_id) throws WebApplicationException
+	public List<Comment> createComment(Comment comment,@QueryParam("article_id") long article_id) throws WebApplicationException
 	{
 		try
 		{
-			
 			comment.article_key = new Key<Article>(Article.class, article_id);
-
-			comment.save();
+			comment.save();			
+		
 		}
 		catch (Exception e)
 		{
@@ -78,14 +78,13 @@ public class CommentAPI
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Comment> updateComment(Comment comment,@QueryParam("article_id") Long article_id) throws WebApplicationException
+	public Comment updateComment(Comment comment,@QueryParam("article_id") long article_id) throws WebApplicationException
 	{
 		try
 		{
-			
 			comment.article_key = new Key<Article>(Article.class, article_id);
-
-			comment.save();
+			comment.save();			
+		
 		}
 		catch (Exception e)
 		{
@@ -96,7 +95,7 @@ public class CommentAPI
 					.build());
 		}
 
-		return CommentUtil.getCommentsByArticleID(article_id);
+		return comment;
 	}
 
 	@DELETE 
