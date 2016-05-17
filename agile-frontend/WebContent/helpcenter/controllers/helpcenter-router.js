@@ -123,6 +123,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},
 
 	renderComment : function(el,article_id){
+    	
     	App_Helpcenter.commentsCollection = new Base_Collection_View({
 			url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
 			templateKey : "article-comments",
@@ -168,6 +169,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},	    	
 	
 	editCommentandDelete:function(el,article_id){
+		
 		$(".remove-comment").on("click",function(e){
 		    	e.preventDefault();
 		    	var id = $(this).data("id");
@@ -182,9 +184,10 @@ var HelpcenterRouter = Backbone.Router.extend({
 		            }  
 		        });
 			});
+
 	    	$(".edit-comment").on("click",function(e){
                       
-                
+      
                 e.preventDefault();      
                 var id = $(this).data("id");
 
@@ -207,12 +210,9 @@ var HelpcenterRouter = Backbone.Router.extend({
 					},
 	
 			 		saveCallback : function(model){
-                        
-			 			$("#comment").val('').empty();
-                         //console.log(model);
-		                commentsModel=App_Helpcenter.commentsCollection.collection.get(id);
-						commentsModel.set(model);  
-                        
+
+						                        
+			 			App_Helpcenter.updateEditComment(model,el,article_id,id);
 			 		}
 			 		});
 			 		$('#comments-add').html(editCommentView.render().el);
@@ -220,6 +220,15 @@ var HelpcenterRouter = Backbone.Router.extend({
 			});
 			
 
+	},
+	updateEditComment: function(model,el,article_id,id){
+		$("#comment").val('').empty();
+        console.log(model);
+       	var commentsModel = App_Helpcenter.commentsCollection.collection.get(id);
+		commentsModel.set(model);
+		App_Helpcenter.editCommentandDelete(el,article_id);
+		App_Helpcenter.saveComment(el,article_id); 
+                        	
 	},
 	renderHomeTemplate: function(callback){
 
