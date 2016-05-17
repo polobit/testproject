@@ -211,11 +211,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 			 			$("#comment").val('').empty();
                          //console.log(model);
 		                commentsModel=App_Helpcenter.commentsCollection.collection.get(id);
-						commentsModel.set(model);
-						//Fetching groups collections
-						App_Helpcenter.commentsCollection.collection.fetch();
-
-						$('#comments-collection').html(App_Helpcenter.commentsCollection.el);  
+						commentsModel.set(model);  
                         
 			 		}
 			 		});

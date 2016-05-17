@@ -1186,6 +1186,7 @@
 	<filter-mapping>
 		<filter-name>HelpcenterFilter</filter-name>
 		<url-pattern>/helpcenter/*</url-pattern>
+		<url-pattern>/helpcenterapi/*</url-pattern>
 	</filter-mapping>
   	<!-- Helpcenter filter -->
   	

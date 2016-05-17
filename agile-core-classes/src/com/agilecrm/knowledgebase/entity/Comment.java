@@ -100,6 +100,20 @@ public class Comment implements Serializable
 		System.out.println(userInfo);
 		
 		created_by_key = new Key<HelpcenterUser>(HelpcenterUser.class, userInfo.getUserId());
+		
+		if (created_by_key != null)
+		{
+			created_by = created_by_key.getId();
+
+			try
+			{
+				hc_user = HelpcenterUserUtil.getUser(created_by);
+			}
+			catch (Exception e)
+			{
+				// TODO: handle exception
+			}
+		}
 	}
 
 	public Key<Comment> save()

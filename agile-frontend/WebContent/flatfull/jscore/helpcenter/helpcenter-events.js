@@ -66,7 +66,7 @@ var Helcenter_Events = {
          e.preventDefault();
          var id = $(this).data("id");
                   
-         showModalConfirmation("", "Are you sure, you want to delete categorie ", function(){
+         showModalConfirmation("Dlete Categorie", "Are you sure, you want to delete categorie ", function(){
 
                      
                      
@@ -84,7 +84,7 @@ var Helcenter_Events = {
             });                                    
                      
 
-         }, null,null, "yes", "no");
+         }, null,null, "Yes", "No");
 
       });
    }
