@@ -190,6 +190,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			contact = ContactUtil.searchContactByEmail(fromEmail);
 
 		contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, fromEmail, null));
+		contact.source = "Inbound Email" ;
 		try
 		{
 			JSONObject from = getSenderNames(fromName, fromEmail, isNewContact);

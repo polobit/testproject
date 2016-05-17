@@ -1189,6 +1189,13 @@ public class ContactUtil
 	}
 
 	oldContact.tags.addAll(newContact.tags);
+	
+	//source of the contact
+	oldContact.source = "import" ;
+	if(newContact.source != null)
+		oldContact.source = newContact.source ;
+	
+	
 
 	return oldContact;
     }

@@ -514,6 +514,7 @@ public class CSVUtil
 		    }
 
 		    tempContact.properties.add(field);
+		    tempContact.source = "import" ;
 
 		}// end of inner for loop
 
