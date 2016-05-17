@@ -1132,7 +1132,7 @@ var portlet_graph_data_utility = {
 	                            
 	                    }
 	                });
-	                chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30);
+	                chartRenderforIncoming(selector,categories,'','',min_tick_interval,type,series,AllData,0,30);
 	                } 
 	            });
 	        	}
