@@ -95,7 +95,7 @@
                 <span id="task-count-{{heading}}-{{owner_id}}" class="label {{getthemecolor}}  m-r-xs" style="vertical-align:middle;">0</span> 
                 </div>
                 <div class="expand-button">
-                <span class="inline-block pull-left transform-rotate"><a class="text-info expandbutton"><i class="fa fa-compress text-xs"></i></a></span>
+                <span class="inline-block pull-left transform-rotate"><a class="text-info expandbutton"><i class="{{tasksttausicon heading}} text-xs"></i></a></span>
                 </div>
           </div>
       </div>
@@ -113,7 +113,7 @@
         <div class="list-header panel-heading" attr="{{heading}}" ownerID={{owner_id}}>
 <div class="pull-left" style="margin-top:-2px;"> 
 <div class="compressedHeading">
-        <span id="task-count-{{heading}}-{{owner_id}}" class="label {{getthemecolor}}  m-r-xs" style="vertical-align:middle;">0</span> 
+        
         </div>
 </div>
 <div class="pull-left text-ellipsis" style="width:62%;"> 
@@ -128,6 +128,7 @@
 <i class="icon-plus text-xs"></i>
 </a></span>
 <span class="inline-block transform-rotate"><a class="text-info expandbutton"><i class="fa fa-compress text-xs"></i></a></span>
+<span id="task-count-{{heading}}-{{owner_id}}" class="label pull-left {{getthemecolor}}  m-r-xs" style="vertical-align:middle;">0</span> 
 </div>  
 <div class="clearfix"></div>               
      </div>     
@@ -184,10 +185,10 @@
 <div class="pull-left task-content-view">
 <div class="pull-left" style="width:80%">
       {{#if is_complete}}
-         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
+         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis ">{{/is_link}}{{safe_string subject}}</span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link ">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis ">{{/is_link}}{{safe_string subject}}</span></a>
          {{else}}
            {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis">{{/is_link}}{{safe_string subject}}</span></a>
          {{/if_equals}}       
@@ -208,6 +209,14 @@
     </div>
 </div>
 {{/if_equals}}
+{{#if_equals status "YET_TO_START"}}
+<i class="fa fa-hourglass-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Status"></i>
+ 
+ {{/if_equals}}
+ {{#if_equals status "COMPLETED"}}
+ <label class="icon icon-check" data-toggle="tooltip" data-placement="top" data-container="body" title="Status"></label>
+ {{/if_equals}}
+
   
   </div>
 
@@ -234,7 +243,8 @@
      <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time></div> -->
 
      <div class="pull-left w-full text-ellipsis text-muted m-t-n-xs">
-      <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Due date & time">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time></div>
+     <label class="label bg-light dk text-tiny m-r-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label>
+      </div>
 
 </div>
 <div class="clearfix"></div>
@@ -269,10 +279,7 @@
      <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
 </div>-->  
 <div class="pull-left text-ellipsis" style="width:70%;">
-    
-      <label class="label bg-light dk text-tiny m-r-xs" title="Category" data-toggle="tooltip" data-placement="bottom" data-container="body">{{get_normal_name type}}</label>
-      <label class="label bg-light dk text-tiny" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Status">{{get_normal_name status}}</label>
-      
+    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date & time">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
   </div>  
   
 <div class="pull-right"> 

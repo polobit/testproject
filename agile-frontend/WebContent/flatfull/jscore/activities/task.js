@@ -262,9 +262,18 @@ function taskAutoWidth(el)
 	if(expanded)
 	{
 		arr.push($(el).closest(".task-trello-list").attr("id"))
+		$(el).children().removeClass("fa")
+		$(el).children().addClass("fa fa-expand")
+		$(el).children().removeClass("fa-compress")
 	}
 
-	$(el).closest(".expand .text-info .text-xs").toggleClass("fa-compress fa-expand");
+	else
+	{
+		$(el).children().removeClass("fa")
+		$(el).children().removeClass("fa fa-compress")
+		$(el).children().addClass("fa fa-expand")
+		
+	}
 	$(el).closest(".task-trello-list").toggleClass("expand compress");
 	_agile_set_prefs('task-page-status' , arr.toString());
 		

@@ -3814,3 +3814,6 @@ div.addField div.controls div:first-child{
   font-size: 20px;
   margin-top:150px;
 }
+.fa-hourglass-o:before{
+      content: "\f250";
+}

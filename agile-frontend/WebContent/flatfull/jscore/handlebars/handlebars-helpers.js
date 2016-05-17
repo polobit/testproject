@@ -387,6 +387,21 @@ $(function()
 		return text_gravatar_initials(items);
 
 	});
+	/**
+	 * task page expand and compress icon 
+	 */
+
+	Handlebars.registerHelper('tasksttausicon', function(heading)
+	{
+
+		var c = getTaskTrackAutoWidthCurrentState('heading');
+		 if(c == 'expand')
+		 
+		 	return 'fa fa-compresss'
+		 
+		 return 'fa fa-expand'
+
+	});
 
 	/**
 	 * Helper function to return icons based on given name
