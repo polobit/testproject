@@ -641,22 +641,36 @@ public class Opportunity extends Cursor implements Serializable
     // Sets the currency conversion value
     	
     	 try {
-			String s = "https://openexchangerates.org/api/latest.json?app_id=2e2f1446f9b7407091f10a515dc8ad65";
-			URL url = new URL(s);
-	
-		    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			      
-				Scanner scan = new Scanner(con.getInputStream());
-				String string = new String();
-				while (scan.hasNext()){
+    		 JSONObject listOfRates = null;String userpref_currency_type = null;
+    		 CurrencyConversionRates cuRates = dao.ofy().query(CurrencyConversionRates.class).get();
+    		 if(cuRates == null || cuRates.currencyRates ==  null){
+    			 String s = "https://openexchangerates.org/api/latest.json?app_id=0713eecad3e9481dabea356a7f91ca60";
+    			 URL url = new URL(s);	
+    			 HttpURLConnection con = (HttpURLConnection) url.openConnection();			      
+    			 Scanner scan = new Scanner(con.getInputStream());
+    			 String string = new String();
+    			 while (scan.hasNext()){
 				    string += scan.nextLine();
 			     }
 				   scan.close();
 			    JSONObject jsonObject = new JSONObject(string);
-				JSONObject listOfRates =  (JSONObject) jsonObject.get("rates");
-			    String userpref_currency_type =UserPrefsUtil.getCurrentUserPrefs().currency.substring(0,3).toUpperCase();
+				listOfRates = jsonObject.getJSONObject("rates");
+				String ratesToDb = jsonObject.getString("rates");
+				CurrencyConversionRates Rates = new CurrencyConversionRates();
+				Rates.currencyRates = ratesToDb ; 
+				Rates.save();
+    		 }
+    		 else
+    		 {
+    			 listOfRates =  new JSONObject(cuRates.currencyRates);
+    		 }
+				UserPrefs userPrefs  = UserPrefsUtil.getCurrentUserPrefs();
+				if(userPrefs != null)
+			    userpref_currency_type = userPrefs.currency ;
 			    if(userpref_currency_type == null)
 			    	userpref_currency_type = "USD";
+			    else
+			    	userpref_currency_type = userpref_currency_type.substring(0,3).toUpperCase();
 				String  deal_currency_type = currency_type.substring(0,3);
 			    if(deal_currency_type == null)
 				    deal_currency_type =  userpref_currency_type ;

@@ -1132,7 +1132,7 @@
 	
 	<servlet>
 		<servlet-name>DealCurrencyConverter</servlet-name>
-		<servlet-class>com.agilecrm.DealsCurrencyConverter</servlet-class>
+		<servlet-class>com.agilecrm.DealCurrencyConverter</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DealCurrencyConverter</servlet-name>

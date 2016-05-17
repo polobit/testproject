@@ -1,5 +1,7 @@
 package com.agilecrm.deals;
 
+import javax.persistence.Id;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -7,6 +9,8 @@ import com.googlecode.objectify.condition.IfDefault;
 public class CurrencyConversionRates {
 	public static ObjectifyGenericDao<CurrencyConversionRates> dao = new ObjectifyGenericDao<CurrencyConversionRates>(
 			CurrencyConversionRates.class);
+	@Id
+	public Long id;
 
 	@NotSaved(IfDefault.class)
 	public String currencyRates = null;
