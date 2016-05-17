@@ -235,7 +235,7 @@ public class ContactEmailUtil
 
 	public static void buildContactEmailAndSend(ContactEmailWrapper contactEmail) throws Exception
 	{
-		//checkAndModifyToCcAndBccEmails(contactEmail);
+		checkAndModifyToCcAndBccEmails(contactEmail);
 	    saveContactEmailAndSend(contactEmail);
 	}
 	
@@ -887,116 +887,136 @@ public class ContactEmailUtil
 		StringBuffer ccEmails = new StringBuffer();
 		StringBuffer bccEmails = new StringBuffer();
 		
-		Set<String> toEmailsSet = getToEmailSet(to);
-	    
-	    List<String> toEmailsList = new ArrayList<String>();
-	    
-	    for(String str : toEmailsSet)
-	    {
-	    	String email = EmailUtil.getEmail(str);
-	    	if(email != null)
-	    	{
-	    		toEmailsList.add(email);
-	    	}
-	    }
-	    
-	    List<Contact> toEmailContacts = ContactUtil.searchContactsByEmailList(toEmailsList);
-	    
-	    if(toEmailContacts != null && toEmailContacts.size() > 0)
-	    {
-	    	for(Contact con : toEmailContacts)
-	    	{
-	    		try 
-	    		{
-	    			UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, true);
-		    		toEmails.append(con.getContactFieldValue(Contact.EMAIL));
+		List<String> toEmailsList = new ArrayList<String>();
+		List<String> ccEmailsList = new ArrayList<String>();
+		List<String> bccEmailsList = new ArrayList<String>();
+		
+		List<String> toEmailsTempList = new ArrayList<String>();
+		List<String> ccEmailsTempList = new ArrayList<String>();
+		List<String> bccEmailsTempList = new ArrayList<String>();
+		
+		try 
+		{
+			Set<String> toEmailsSet = getToEmailSet(to);
+		    
+		    for(String str : toEmailsSet)
+		    {
+		    	String email = EmailUtil.getEmail(str);
+		    	if(email != null)
+		    	{
+		    		toEmailsList.add(email);
+		    	}
+		    }
+		    
+		    List<Contact> toEmailContacts = ContactUtil.searchContactsByEmailList(toEmailsList);
+		    
+		    if(toEmailContacts != null && toEmailContacts.size() > 0)
+		    {
+		    	for(Contact con : toEmailContacts)
+		    	{
+		    		String email = con.getContactFieldValue(Contact.EMAIL);
+		    		toEmailsTempList.add(email);
+		    		boolean can_update = UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, false);
+	    			if(can_update)
+	    			{
+	    				toEmails.append(email);
+			    		toEmails.append(",");
+	    			}
+		    		
+		    	}
+		    	toEmailsList.removeAll(toEmailsTempList);
+		    	for(String email : toEmailsList)
+		    	{
+		    		toEmails.append(email);
 		    		toEmails.append(",");
-				} 
-	    		catch (Exception e) 
-	    		{
-					e.printStackTrace();
-				}
-	    		
-	    	}
-	    }
-	    
-	    Set<String> ccEmailsSet = getToEmailSet(cc);
-	    
-	    List<String> ccEmailsList = new ArrayList<String>();
-	    
-	    for(String str : ccEmailsSet)
-	    {
-	    	String email = EmailUtil.getEmail(str);
-	    	if(StringUtils.isNotBlank(email))
-	    	{
-	    		ccEmailsList.add(email);
-	    	}
-	    }
-	    
-	    List<Contact> ccEmailContacts = null;
-	    
-	    if(ccEmailsList.size() > 0)
-	    {
-	    	ccEmailContacts = ContactUtil.searchContactsByEmailList(ccEmailsList);
-	    }
-	    
-	    if(ccEmailContacts != null && ccEmailContacts.size() > 0)
-	    {
-	    	for(Contact con : ccEmailContacts)
-	    	{
-	    		try 
-	    		{
-	    			UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, true);
-	    			ccEmails.append(con.getContactFieldValue(Contact.EMAIL));
+		    	}
+		    }
+		    
+		    Set<String> ccEmailsSet = getToEmailSet(cc);
+		    
+		    for(String str : ccEmailsSet)
+		    {
+		    	String email = EmailUtil.getEmail(str);
+		    	if(StringUtils.isNotBlank(email))
+		    	{
+		    		ccEmailsList.add(email);
+		    	}
+		    }
+		    
+		    List<Contact> ccEmailContacts = null;
+		    
+		    if(ccEmailsList.size() > 0)
+		    {
+		    	ccEmailContacts = ContactUtil.searchContactsByEmailList(ccEmailsList);
+		    }
+		    
+		    if(ccEmailContacts != null && ccEmailContacts.size() > 0)
+		    {
+		    	for(Contact con : ccEmailContacts)
+		    	{
+		    		String email = con.getContactFieldValue(Contact.EMAIL);
+		    		ccEmailsTempList.add(email);
+		    		boolean can_update = UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, false);
+	    			if(can_update)
+	    			{
+	    				ccEmails.append(email);
+			    		ccEmails.append(",");
+	    			}
+		    	}
+		    	ccEmailsList.removeAll(ccEmailsTempList);
+		    	for(String email : ccEmailsList)
+		    	{
+		    		ccEmails.append(email);
 		    		ccEmails.append(",");
-				} 
-	    		catch (Exception e) 
-	    		{
-					e.printStackTrace();
-				}
-	    	}
-	    }
-	    
-	    Set<String> bccEmailsSet = getToEmailSet(bcc);
-	    
-	    List<String> bccEmailsList = new ArrayList<String>();
-	    
-	    for(String str : bccEmailsSet)
-	    {
-	    	String email = EmailUtil.getEmail(str);
-	    	if(StringUtils.isNotBlank(email))
-	    	{
-	    		bccEmailsList.add(email);
-	    	}
-	    }
-	    
-	    List<Contact> bccEmailContacts = null;
-	    
-	    if(bccEmailsList.size() > 0)
-	    {
-	    	bccEmailContacts = ContactUtil.searchContactsByEmailList(bccEmailsList);
-	    }
-	    
-	    if(bccEmailContacts != null && bccEmailContacts.size() > 0)
-	    {
-	    	for(Contact con : bccEmailContacts)
-	    	{
-	    		try 
-	    		{
-	    			UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, true);
-	    			bccEmails.append(con.getContactFieldValue(Contact.EMAIL));
+		    	}
+		    }
+		    
+		    Set<String> bccEmailsSet = getToEmailSet(bcc);
+		    
+		    for(String str : bccEmailsSet)
+		    {
+		    	String email = EmailUtil.getEmail(str);
+		    	if(StringUtils.isNotBlank(email))
+		    	{
+		    		bccEmailsList.add(email);
+		    	}
+		    }
+		    
+		    List<Contact> bccEmailContacts = null;
+		    
+		    if(bccEmailsList.size() > 0)
+		    {
+		    	bccEmailContacts = ContactUtil.searchContactsByEmailList(bccEmailsList);
+		    }
+		    
+		    if(bccEmailContacts != null && bccEmailContacts.size() > 0)
+		    {
+		    	for(Contact con : bccEmailContacts)
+		    	{
+		    		String email = con.getContactFieldValue(Contact.EMAIL);
+		    		bccEmailsTempList.add(email);
+		    		boolean can_update = UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, false);
+	    			if(can_update)
+	    			{
+	    				bccEmails.append(email);
+			    		bccEmails.append(",");
+	    			}
+		    	}
+		    	bccEmailsList.removeAll(bccEmailsTempList);
+		    	for(String email : bccEmailsList)
+		    	{
+		    		bccEmails.append(email);
 		    		bccEmails.append(",");
-				} 
-	    		catch (Exception e) 
-	    		{
-					e.printStackTrace();
-				}
-	    	}
-	    }
-	    
-	    contactEmailWrapper.setTo(toEmails.toString());
-	    contactEmailWrapper.setCc(ccEmails.toString());
-	    contactEmailWrapper.setBcc(bccEmails.toString());
+		    	}
+		    }
+		    
+		    contactEmailWrapper.setTo(toEmails.toString());
+		    contactEmailWrapper.setCc(ccEmails.toString());
+		    contactEmailWrapper.setBcc(bccEmails.toString());
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
