@@ -1417,4 +1417,46 @@ public class JSAPI
 	    return null;
 	}
     }
+    
+    /**
+     * Get notes from contact based on email
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String (notes)
+     */
+    @Path("contacts/get-notes")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getNotes(@QueryParam("email") String email)
+    {
+	try
+	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    else
+	    {
+		List<Note> Notes = new ArrayList<Note>();
+		Notes = NoteUtil.getNotes(contact.id);
+		ObjectMapper mapper = new ObjectMapper();
+		JSONArray arr = new JSONArray();
+		for (Note note : Notes)
+		{
+		    arr.put(mapper.writeValueAsString(note));
+		}
+		return arr.toString();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 }
