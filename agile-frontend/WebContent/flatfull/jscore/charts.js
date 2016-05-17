@@ -1610,9 +1610,8 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     renderTo: selector,
                     type: 'area',
                     marginRight: 130,
-                    marginBottom: 50
-                },
-                events: {
+                    marginBottom: 50,
+                    events: {
 			   		load: function(){
 			   			console.log("load");
 			   			if(base_model!=undefined)
@@ -1623,6 +1622,8 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
 			   			portlet_utility.toggle_chart_legends(this, base_model);
 			   		}
 			   },
+                },
+                
                 colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
                 title: {
                     text: name,
