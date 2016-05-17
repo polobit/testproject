@@ -243,7 +243,7 @@ This is where you and your users will log in to your account
 <label class="col-sm-3 control-label">Choose Plan</label>
 <div class="col-sm-6">
 	<select class="form-control required" required  name="plan_type" data-width="100%" >
-											<option value="" selected disabled>Choose Plan</option>
+											<option value="" disabled>Choose Plan</option>
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
@@ -350,12 +350,18 @@ This is where you and your users will log in to your account
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 	$("#password").value = "<%=request.getParameter("password")%>"
+// Plan type
+var selected_plan_type = '<%=request.getParameter("plan_type")%>';
 </script>
 
 <script>
 $(document).ready(function(){
 
-	
+	// Set selected plan name
+	if(selected_plan_type){
+        $("select[name='plan_type']").val(selected_plan_type);
+	}
+
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
 	$('#account_timezone').val(jstz.determine().name());
