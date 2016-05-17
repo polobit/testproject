@@ -243,7 +243,7 @@ This is where you and your users will log in to your account
 <label class="col-sm-3 control-label">Choose Plan</label>
 <div class="col-sm-6">
 	<select class="form-control required" required  name="plan_type" data-width="100%" >
-											<option value="" disabled>Choose Plan</option>
+											<option value="" selected disabled>Choose Plan</option>
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
