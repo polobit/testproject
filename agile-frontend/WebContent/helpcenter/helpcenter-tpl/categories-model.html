@@ -2,8 +2,9 @@
 <div class="m-b row m-l-none m-r-none">
 	<h4><i class="fa fa-cube" aria-hidden="true"></i> {{name}}</h4>
 	<hr class="m-t-none" style="border-color: #DADDDE;"/>
-
 	{{#sections}}
+	{{#if_equals visible_to "CUSTOMER"}}
+
 		<div class="col-md-6 m-b-md">
 			<h4 class="m-b-none"><a href="#categorie/{{../id}}/section/{{id}}">
 				{{name}} ({{articles_count}})</a>
@@ -12,6 +13,7 @@
 				Created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
 			</small>
 		</div>
+	{{/if_equals}}
 	{{/sections}}
 </div>
 </script>
