@@ -7356,6 +7356,24 @@ Handlebars.registerHelper('canDeleteContact', function(owner_id, options)
 	return options.inverse(this)
 });
 
+Handlebars.registerHelper("isInCurrentView", function(properties,key,options)
+{
+	try{
+		var currentContactEntity;
+		var contactEntity;
+		if(window.location.hash.indexOf("#contact/") != -1 || window.location.hash.indexOf("#company/") != -1){
+			var currentId = window.location.hash.split("/")[1];
+			var contactId = this.id;
+			if (currentId == contactId)
+				return options.fn(this);
+		}
+		
+	}catch(e){
+	}
+	
+	return options.inverse(this);
+});
+
 
 function getLastDateOfSubscription(customer){
 	if(customer.subscriptions && customer.subscriptions.data.length > 0){
@@ -7376,3 +7394,5 @@ function getLastDateOfSubscription(customer){
 	}
 	return;
 }
+
+
