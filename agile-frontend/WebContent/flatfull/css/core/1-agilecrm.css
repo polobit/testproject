@@ -3857,3 +3857,7 @@ margin-left:27px;
     border-bottom: none;
 }
 
+.milestones > li:hover .deal-options{
+  visibility: visible;
+}
+

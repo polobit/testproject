@@ -44,7 +44,7 @@ var DealsRouter = Backbone.Router.extend({
 			if (pipeline_id == 1)
 				pipeline_id = 0;
 
-			getTemplate("new-opportunity-header", {}, undefined, function(template_ui){
+			getTemplate("opportunities-header", {}, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$('#opportunity-listners').html($(template_ui));
@@ -61,75 +61,17 @@ var DealsRouter = Backbone.Router.extend({
 		else
 		{
 			var that = this;
-			setupDealFilters(function(){
-				DEALS_LIST_COLLECTION = null;
-				getTemplate("opportunities-header-list", {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$('#opportunity-listners').html($(template_ui));
-				
-				var query = ''
-				if (_agile_get_prefs('deal-filters'))
-				{
-					query = '&filters=' + encodeURIComponent(getDealFilters());
-				}
-				// Fetches deals as list
-				that.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query,
-					templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
-					postRenderCallback : function(el)
-					{
-						if (pipeline_id == 1)
-							pipeline_id = 0;
-						var cel = App_Deals.opportunityCollectionView.el;
-						appendCustomfieldsHeaders(el);
-						appendCustomfields(el);
-						// Showing time ago plugin for close date
-						includeTimeAgo(el);
-						// Shows Milestones Pie
-						pieMilestonesByPipeline(pipeline_id);
-
-						var dealCount = new Base_Model_View({ url : 'core/api/opportunity/based/count?pipeline_id=' + pipeline_id + query, template : "" });
-
-						dealCount.model.fetch({ success : function(data)
-						{
-							var count = data.get("count") ? data.get("count") : 0;
-							if(count != undefined && count <= 1000)
-							{
-								// Shows deals chart
-								$("#total-pipeline-chart").show();
-								dealsLineChartByPipeline(pipeline_id);
-							}
-							else if(count != undefined && count > 1000){
-								$("#total-pipeline-chart").hide();
-							}
-							if(App_Deals.opportunityCollectionView.collection && App_Deals.opportunityCollectionView.collection.models[0])
-							{
-								App_Deals.opportunityCollectionView.collection.models[0].set({ "count" : count }, { silent : true })
-							}
-						} });
-						deal_bulk_actions.init_dom(el);
-						setupDealsTracksList(cel);
-						//setupDealFilters(cel);
-						setNewDealFilters(App_Deals.deal_filters.collection);
-						initializeDealListners(el);
-						contactListener();
-						setTimeout(function(){
-							$('#delete-checked',el).attr("id","deal-delete-checked");
-						},500);
-					}, appendItemCallback : function(el)
-					{
-						appendCustomfields(el);
-
-						// To show timeago for models appended by infini scroll
-						includeTimeAgo(el);
-
-					} });
-				that.opportunityCollectionView.collection.fetch();
-
-				$('.new-collection-deal-list').html(that.opportunityCollectionView.render().el);
-				loadPortlets('Deals');
+			DEALS_LIST_COLLECTION = null;
+			setupDealFilters(function(data){
+				getTemplate("opportunities-header", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#opportunity-listners').html($(template_ui));
+					
+					fetchDealsList(data);
+					loadPortlets('Deals');
+				});
 			});
-});
 		}
 
 		$(".active").removeClass("active");

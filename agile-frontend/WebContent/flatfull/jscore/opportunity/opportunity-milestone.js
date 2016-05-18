@@ -70,7 +70,7 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 function initDealListCollection(milestones)
 {
 	// Define main collection
-	DEALS_LIST_COLLECTION = new Deals_Events_Collection_View({ restKey : "deal", templateKey : "opportunities-by-paging", individual_tag_name : 'div',
+	DEALS_LIST_COLLECTION = new Deals_Milestone_Events_Collection_View({ restKey : "deal", templateKey : "opportunities-by-paging", individual_tag_name : 'div',
 		sort_collection : false, postRenderCallback : function(el)
 		{
 			// Remove loding imgs

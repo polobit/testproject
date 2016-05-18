@@ -5,109 +5,6 @@
  * @module Deals
  * 
  **/
-$(function () {
-	
-	/**
-	 * When mouseover on any row of opportunities list, the popover of deal is shown
-	 **/
-	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
-        var data = $(this).find('.data').attr('data');
-
-        var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
-        var that = this;
-        
-        getTemplate("opportunity-detail-popover", currentDeal.toJSON(), undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			
-			var ele = $(template_ui);
-	        console.log(ele);
-	        console.log(that);
-	        $(that).popover({
-	        	"rel" : "popover",
-	        	"trigger" : "hover",
-	        	"placement" : 'right',
-	        	"original-title" : currentDeal.toJSON().name,
-	        	"content" :  ele,
-	        	"html" : true,
-	        	"container": 'body'
-	        });
-       
-	        /**
-	         * Checks for last 'tr' and change placement of popover to 'top' inorder
-	         * to prevent scrolling on last row of list
-	         **/
-	       $('#opportunities-model-list > tr:last').popover({
-	        	"rel" : "popover",
-	        	"trigger" : "hover",
-	        	"placement" : 'top',
-	        	"original-title" : currentDeal.toJSON().name,
-	        	"content" :  ele,
-	        	"html" : true,
-	        	"container": 'body'
-	        });
-
-	        $(that).popover('show');
-
-		}, null);
-
-     });
-	
-    /**
-     * On mouse out on the row hides the popover.
-     **/
-	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
-    	 $(this).popover('hide');
-    });
-	
-    /**
-     * On click on the row hides the popover.
-     **/
-	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
-    	 $(this).closest('tr').popover('hide');
-    });
-    
-   /**
-    * When deal is added from contact-detail by selecting 'Add Opportunity' from actions 
-    * and then close button of deal is clicked, it should navigate to contact-detail.
-    **/
-	$('#opportunity-listners').on('click', '#close-deal', function(e) {
-    	e.preventDefault();
-    	window.history.back();
-    });
-	
-	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
-    	e.preventDefault();
-    	_agile_delete_prefs('deal-milestone-view');
-    	App_Deals.deals();
-    });
-	
-	$('body').on('click', '#deal-milestone-compact', function(e) {
-    	e.preventDefault();
-    	_agile_set_prefs('deal-milestone-view','compact');
-    	App_Deals.deals();
-    });
-	
-	$('body').on('click', '#deal-milestone-fit', function(e) {
-    	e.preventDefault();
-    	_agile_set_prefs('deal-milestone-view','fit');
-    	App_Deals.deals();
-    });
-	
-	//Check the archived filter for the first time and set it to false as default.
-	if(_agile_get_prefs('deal-filters')){
-		var json = $.parseJSON(_agile_get_prefs('deal-filters'));
-		if(!json.archived){
-			json.archived="false";
-			_agile_set_prefs('deal-filters',JSON.stringify(json));
-		}
-	} else {
-		var json = {"owner_id":"","pipeline_id":"","milestone":"","value_filter":"equals","value":"","value_start":"","value_end":"","archived":"false","":false,"contact_ids":[]};
-		json.archived="false";
-		_agile_set_prefs('deal-filters',JSON.stringify(json));
-	}
-	
-});
 
 /**
  * Populate users in options of owner input field drop-down.
@@ -356,35 +253,47 @@ function populateMilestones(el, dealsDetails, pipeline, value, callback, default
  * @returns
  */
 function setupDealsTracksList(cel){
-	this.trackListView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "opportunity-track-list", individual_tag_name : 'li', postRenderCallback : function(el){
-		
-		var tracksArray = trackListView.collection.models;
-		$.each(tracksArray,function(i,value){
-			console.log(value.toJSON());
-			if(pipeline_id == 0 && value.toJSON().isDefault){
-				pipeline_id = value.id;
-				console.log('default pipeline set.');
-				_agile_set_prefs('agile_deal_track',pipeline_id);
-			}
-				
-			if(value.id == pipeline_id)
-				$('#deals-tracks .filter-dropdown').append(Handlebars.compile('{{name}}')({name : value.attributes.name}));
-		});
-		
-		// Add all option for the deals in the list view.
-		if (_agile_get_prefs("agile_deal_view"))
-			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All" style="cursor: pointer;">All</a></li>');
-		else{
+	var track_name = "";
+	if(!this.trackListView)
+	{
+		this.trackListView = new Deals_Track_Change_Events_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "opportunity-track-list", individual_tag_name : 'li', postRenderCallback : function(el){
+			var tracksArray = trackListView.collection.models;
+			$.each(tracksArray,function(i,value){
+				console.log(value.toJSON());
+				if(pipeline_id == 0 && value.toJSON().isDefault){
+					pipeline_id = value.id;
+					console.log('default pipeline set.');
+					_agile_set_prefs('agile_deal_track',pipeline_id);
+				}
+					
+				if(value.id == pipeline_id)
+				{
+					track_name = value.attributes.name;
+				}
+			});
+			
+			$("#deals-new-list-view", $("#opportunity-listners")).hide();
+			$("#deals-new-milestone-view", $("#opportunity-listners")).show();
+			$('#deals-tracks',$("#opportunity-listners")).show();
+			setTimeout(function(){
+				$('#deals-tracks .filter-dropdown', $("#opportunity-listners")).append(Handlebars.compile('{{name}}')({name : track_name}));
+			}, 100);
 			startGettingDeals();
-		}
-		// Hide the track list if there is only one pipeline.
-		if(tracksArray.length<=1)
-			$('#deals-tracks',cel).hide();
-		
-		
-	}});
-	this.trackListView.collection.fetch();
-	$('#deals-tracks',cel).append(this.trackListView.render().el);
+
+			// Hide the track list if there is only one pipeline.
+			if(tracksArray.length<=1)
+				$('#deals-tracks',cel).hide();
+			
+			
+		}});
+		this.trackListView.collection.fetch();
+		$('#deals-tracks',cel).append(this.trackListView.render().el);
+	}
+	else
+	{
+		$('#deals-tracks',cel).append(this.trackListView.render(true).el);
+	}
+	
 	
 }
 
@@ -405,43 +314,34 @@ function copyCursor(dealPipelineModel, newDeal){
 /**
  * Append Column names for Deals customfields to the Deals List view.
  */
-function appendCustomfieldsHeaders(el){
+function appendCustomfields(el, is_append){
 	$.ajax({
 		url: 'core/api/custom-fields/scope?scope=DEAL',
 		type: 'GET',
 		dataType: 'json',
 		success: function(customfields){
-			var columns = '';
-			$.each(customfields, function(index,customfield){
-				columns +=  Handlebars.compile('<th>{{label}}</th>')({label : customfield.field_label});
-			});
-			$(el).find('#deal-list thead tr').append(columns);
-		}
-	});
-}
+			//If header already added, we can ignore header part
+			if(!is_append)
+			{
+				var columns = '';
+				$.each(customfields, function(index,customfield){
+					columns +=  Handlebars.compile('<th>{{label}}</th>')({label : customfield.field_label});
+				});
+				$(el).find('#deal-list thead tr').append(columns);
+			}
 
-/**
- * Append Deals customfields to the Deals List view.
- */ 
-function appendCustomfields(el){
-	$.ajax({
-		url: 'core/api/custom-fields/scope?scope=DEAL',
-		type: 'GET',
-		dataType: 'json',
-		success: function(customfields){
-			 var deals = App_Deals.opportunityCollectionView.collection.models;
-			 $(el).find('td.deal_custom_replace').remove();
-			 $(el).find('#opportunities-model-list tr').each(function(index,element){
-				 var row = '';
-				 $.each(customfields, function(i,customfield){
-				 		if(customfield.field_type == "DATE")
-				 			row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
-				 		else
-							row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
-					});
-				 $(this).append(row);
-			 });
-			 
+			var deals = App_Deals.opportunityCollectionView.collection.models;
+			$(el).find('td.deal_custom_replace').remove();
+			$(el).find('#opportunities-model-list tr').each(function(index,element){
+				var row = '';
+				$.each(customfields, function(i,customfield){
+				 	if(customfield.field_type == "DATE")
+				 		row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 	else
+						row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				});
+				$(this).append(row);
+			});
 		}
 	});
 }
@@ -564,4 +464,85 @@ function populateDealSources(el, value){
 			}
 		}
 	}); 
+}
+
+/**
+ * Fetches deals list view data.
+ *
+ * @param data - deal filters collection.
+ */
+function fetchDealsList(data){
+	var filters_collection = data;
+    if(!filters_collection && App_Deals.deal_filters && App_Deals.deal_filters.collection)
+    {
+    	filters_collection = App_Deals.deal_filters.collection;
+    }
+    setNewDealFilters(filters_collection);
+	var query = ''
+    if (_agile_get_prefs('deal-filters'))
+    {
+        query = '&filters=' + encodeURIComponent(getDealFilters());
+    }
+    // Fetches deals as list
+    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query,
+        templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
+        postRenderCallback : function(el)
+        {
+        	$("#deals-new-milestone-view", $("#opportunity-listners")).hide();
+        	$('#deals-tracks',$("#opportunity-listners")).hide();
+        	$("#deals-new-list-view", $("#opportunity-listners")).show();
+        	if (pipeline_id == 1)
+            {
+                pipeline_id = 0;
+            }
+            appendCustomfields(el, false);
+            // Showing time ago plugin for close date
+            includeTimeAgo(el);
+            //deal_bulk_actions.init_dom(el);
+            initializeDealListners(el);
+            contactListener();
+            setTimeout(function(){
+                $('#delete-checked',el).attr("id","deal-delete-checked");
+            },500);
+        }, appendItemCallback : function(el)
+        {
+            appendCustomfields(el, true);
+
+            // To show timeago for models appended by infini scroll
+            includeTimeAgo(el);
+
+        } });
+    App_Deals.opportunityCollectionView.collection.fetch();
+
+    $('.new-collection-deal-list', $("#opportunity-listners")).html(App_Deals.opportunityCollectionView.render().el);
+}
+
+function setupMilestoneViewWidth(){
+	var currentTrack = trackListView.collection.get(pipeline_id).toJSON();
+	var milestones = currentTrack.milestones.split(',');
+	var count = milestones.length;
+	if (!count){
+		return;
+	}
+	// Setting dynamic auto width
+	var width = 100 / count;
+
+	if (_agile_get_prefs('deal-milestone-view'))
+	{
+		if (_agile_get_prefs('deal-milestone-view') == "compact" && count > 8)
+			width = 100 / 8;
+	}
+	else if (count > 5)
+	{
+		width = 100 / 5;
+	}
+	var mile_col_ele = $('#opportunities-by-paging-model-list', $("#opportunity-listners")).find('.milestone-column');
+
+	mile_col_ele.each(function(index){
+		if(index != mile_col_ele.length - 1){
+			$(this).width((width - 1) + "%");
+		}else{
+			$(this).width(width + "%");
+		}
+	});
 }
