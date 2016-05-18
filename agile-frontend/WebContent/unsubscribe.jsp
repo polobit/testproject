@@ -383,7 +383,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 <body>
 	<div class="wrapper rounded6" id="templateContainer">
 		<!--<h1><%=company%></h1>-->
-		<div class="imgholder thumb-wrapper thumb-lg" style="border:none;">
+		<div class="imgholder thumb-wrapper thumb-lg" style="border:none;text-align: center;">
 			<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
 	            {
 	        %>
