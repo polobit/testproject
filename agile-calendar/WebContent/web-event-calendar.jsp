@@ -249,7 +249,7 @@ if (scheduleid != null && multiple_users){  %>
 <p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
 			<div class="col-sm-10 segment segment0">
 			<div class="numberlt" id="users_div">1</div>
-			<div class="event-title">Select a Person</div>
+			<div class="event-title" >Select a Person</div>
 			<div class="row user_avatars hide">
 		
 			<!-- <div align="center" style="margin: 5px auto;width: 100%;"> -->
@@ -288,7 +288,7 @@ if (scheduleid != null && multiple_users){  %>
 <%} %>
 		<div class="col-sm-10 segment segment1 blockdiv" >
 			<div class="numberlt" id="one">1</div>
-			<div class="event-title">Choose a Time Slot</div>
+			<div class="event-title" >Choose a Time Slot</div>
 
 		</div>
 
@@ -298,7 +298,7 @@ if (scheduleid != null && multiple_users){  %>
 				<div class="col-sm-10 segment segment2 me-disable "
 					style="display: table;display:none">
 					<div class="numberlt" id="two">2</div>
-					<div class="event-title" style="margin-bottom:4px;margin-top:2px;">
+					<div class="event-title" style="margin-bottom:4px;margin-top:2px;font-weight:normal;">
 						<span class="pull-left">Select Date and Time</span>
 						<span class="timezone ">											<span id="base_timezone"class="font-normal"></span>
 								<select name="user_timezone" class="form-control hidden m-b-none m-t-n-sm" style="font-weight:normal;height:32px;" id="user_timezone">
@@ -1123,7 +1123,7 @@ if (scheduleid != null && multiple_users){  %>
 				<div class="col-sm-10 segment segment3 me-disable" style="display:none">
 
 					<div class="numberlt" id="three">3</div>
-					<div class="event-title" style="margin-bottom:20;margin-top: 5px;">
+					<div class="event-title" style="margin-bottom:20;margin-top: 5px;font-weight:normal">
 						Contact Info</div>
 
 					<div class="col-sm-4">
