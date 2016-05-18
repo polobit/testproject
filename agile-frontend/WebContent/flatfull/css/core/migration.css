@@ -2313,7 +2313,7 @@ color:#484848!important;
 
 
 /*cases_custom_popover css code*/
-.cases_custom_popover{ max-width:100%; width: 68.8%; left:80px !important;}
+/*.cases_custom_popover{ max-width:300px;}*/
 .cases-popover-thumb-xs{ width: 20px; display: inline-block;}
 .cases-popover-thumb-xs img{ width: 20px; height: 20px;}
 /*end cases_custom_popover css code*/

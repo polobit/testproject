@@ -69,7 +69,7 @@ function initializeCasesListeners(el){
 	    		return;
 	    	var ele = $(template_ui);
 			$(that).popover(
-					{ "rel" : "popover", "trigger" : "hover", "placement" : 'top', "container" : 'body', "original-title" : currentCase.toJSON().name, "content" : ele,
+					{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "container" : 'body', "original-title" : currentCase.toJSON().name, "content" : ele,
 						"html" : true, });
 			$(that).popover('show');
 			var $this = $('.popover').find("#cases_detail_popover-div");
