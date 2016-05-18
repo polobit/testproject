@@ -243,11 +243,13 @@ if(isSafari && isWin)
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 				<%}%>
-				<div style=" text-align: center;margin-left: 100px; border:none;" class="imgholder thumb-wrapper thumb-lg">
+				<div>
 					<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
                        {
                        %>
-                   <img class="company_logo w-full" src="<%=logo_url%>" style="width:50px;height:40px;" ></img>
+                     <div style=" text-align: center;margin-left: 100px; border:none;" class="imgholder thumb-wrapper thumb-lg">
+                   		<img class="company_logo w-full" src="<%=logo_url%>" style="width:50px;height:40px;" ></img>
+                   	 </div>
                    <%
                    }
                    %>
