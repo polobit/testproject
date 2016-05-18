@@ -209,6 +209,7 @@ if (scheduleid != null && multiple_users){  %>
 <link rel="stylesheet" type="text/css" href="<%=baseUrl%>css/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
 <!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" ></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
@@ -228,6 +229,11 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
+<style type="text/css">
+* {
+	font-family: 'Lato', sans-serif;
+}
+</style>
 </head>
 
 <body onload="bodyLoad();">
