@@ -524,7 +524,7 @@ function contactPopupScoreValue()
 		var decimalcheck=$("#contactscorebox").val();
 		var contact_model =  App_Contacts.contact_popover.toJSON();
 		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
-		if ((scoreboxval != prvs && (decimalcheck%1==0))|| $("#contactscorebox").val()==""){ 
+		if (((contact_model.type=="PERSON" && scoreboxval != prvs && (decimalcheck%1==0))|| $("#contactscorebox").val()=="")||((contact_model.type=="COMPANY" && (scoreboxval>0) && scoreboxval != prvs && (decimalcheck%1==0))|| $("#contactscorebox").val()=="")){ 
 			if($("#contactscorebox").val()==""){scoreboxval=0;
 			}					
 			App_Contacts.contact_popover.set({'lead_score': scoreboxval}, {silent: true});
@@ -536,10 +536,20 @@ function contactPopupScoreValue()
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
+         if(contact_model.type=="COMPANY" && (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)))
+         {
+         	alert("Please enter a valid number.");
+			scoreboxval=prvs;
+
+         }
+         
+         
+
+		else if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
 			alert("Please enter a valid number.");
 			scoreboxval=prvs;
 		}
+	
 		else{
 			if(scoreboxval== prvs){
 			scoreboxval=prvs;

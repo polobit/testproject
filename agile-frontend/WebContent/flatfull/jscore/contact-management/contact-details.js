@@ -323,7 +323,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #enable_map_view' : 'onEnableMapView',
     	'click #add' : 'onAddScore',
     	'click #minus' : 'onRemoveScore',
-    	'click #lead-score' : 'onGetScorebox',
+    	'click #lead-contactscore' : 'onGetScorebox',
     	'focusout #scorebox' : 'getScore',
 	   	'keyup  #scorebox' : 'scoreValEnter',
 	   	'click #lead-cscore' : 'onCompanyGetScorebox',
@@ -931,13 +931,13 @@ show and hide the input for editing the contact name and saving that
 	    e.preventDefault();
 	    
 	    // Convert string type to int
-	    var add_score = parseInt($('#lead-score').text());
+	    var add_score = parseInt($('#lead-contactscore').text());
 	    
 	    add_score = add_score + 1;
 	    
 	    // Changes score in UI
-	    $('#lead-score').text(add_score);
-       $("#lead-score").attr("title",add_score);
+	    $('#lead-contactscore').text(add_score);
+       $("#lead-contactscore").attr("title",add_score);
 	    App_Contacts.contactDetailView.model.set({'lead_score': add_score}, {silent: true});
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 	    
@@ -972,8 +972,8 @@ onGetScorebox:  function(e){
 	    e.preventDefault();
 	   //$('[data-toggle="tooltip"]').tooltip();
 	   $("#scorebox").removeClass("hide");
-	   $("#lead-score").addClass("hide");
-	   $("#scorebox").val($("#lead-score").text());
+	   $("#lead-contactscore").addClass("hide");
+	   $("#scorebox").val($("#lead-contactscore").text());
 	   $("#scorebox").focus();
 	}, 
 
@@ -1045,15 +1045,15 @@ enterCompanyScore: function(e){
 		e.preventDefault();
 		
 		// Converts string type to Int
-		var sub_score = parseInt($('#lead-score').text());
+		var sub_score = parseInt($('#lead-contactscore').text());
 		
 		//if(sub_score <= 0)
 		//	return;		
 		sub_score = sub_score - 1;
 		
 		// Changes score in UI
-		$('#lead-score').text(sub_score);
-		$("#lead-score").attr("title",sub_score);
+		$('#lead-contactscore').text(sub_score);
+		$("#lead-contactscore").attr("title",sub_score);
 		// Changes lead_score of the contact and save it.
 		App_Contacts.contactDetailView.model.set({'lead_score': sub_score}, {silent: true});
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
@@ -1398,10 +1398,10 @@ updateScoreValue :function(){
 			scoreboxval=prvs;
 			}
 		}
-		$('#lead-score').attr("data-original-title", scoreboxval);
-		$('#lead-score').text(scoreboxval).removeClass("hide");
+		$('#lead-contactscore').attr("data-original-title", scoreboxval);
+		$('#lead-contactscore').text(scoreboxval).removeClass("hide");
 	   	$("#scorebox").addClass("hide").val(scoreboxval);
-	   	$("#lead-score").attr("title",scoreboxval);
+	   	$("#lead-contactscore").attr("title",scoreboxval);
 	},
 
 	updateCompanyScoreValue :function(){

@@ -320,7 +320,7 @@
 <script id = "contacts-custom-view-popover-template" type="text/html">
        <div class="data panel-default" data={{id}} style="width:260px">
 	   
-       	<div class="text-cap panel-heading text-ellipsis">
+       <div class="text-cap panel-heading text-ellipsis">
          {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}}</div>{{/if_contact_type}}
              {{#if_contact_type "COMPANY"}}
