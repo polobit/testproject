@@ -1,0 +1,29 @@
+<header id="header" class="app-header navbar" role="menu">
+    <div class="navbar-header bg-primary">
+      <button class="pull-right hide dk" id="mobile-menu-settings" ui-toggle-class="show" data-target=".navbar-collapse">
+        <i class="glyphicon glyphicon-cog"></i>
+      </button>
+      <button class="pull-left visible-xs" id="mobile-menu" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
+        <i class="glyphicon glyphicon-align-justify"></i>
+      </button>
+      <button class="pull-right hide visible-xs search-menu-mobile" id="search-menu-mobile" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
+      <i class="icon-magnifier search-menu-mobile"></i>
+      </button>
+      <a class="navbar-brand font-bold text-lt" href="#">
+      <i class="fa fa-cloud hidden-xs"></i> <span class="hidden-folded m-l-xs"> Agile CRM </span></a>     
+   </div>
+   <div id="navbar" class="collapse pos-rlt hide-xs  navbar-collapse box-shadow bg-white-only">
+      <ul class="nav  navbar-nav  navbar-right show_shortcuts">
+      	  
+      	  <%if(kuserInfo == null){ %>
+          	<li><a href="/helpcenter/login">Login</a></li>
+          <%}
+      		else{
+      			%>
+	          		<li><a href="/helpcenter/login">Logout</a></li>
+		        <%
+      		}
+          %>
+      </ul>
+   </div>
+</header>
