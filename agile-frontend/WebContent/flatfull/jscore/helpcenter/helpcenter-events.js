@@ -66,7 +66,7 @@ var Helcenter_Events = {
          e.preventDefault();
          var id = $(this).data("id");
                   
-         showModalConfirmation("Dlete Categorie", "Are you sure, you want to delete categorie ", function(){
+         showModalConfirmation("Delete Categorie", "Are you sure, you want to delete categorie ", function(){
 
                      
                      
