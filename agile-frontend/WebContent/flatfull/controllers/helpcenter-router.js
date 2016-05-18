@@ -285,9 +285,11 @@ var HelpcenterRouter = Backbone.Router.extend({
 				fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
 
 		 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
-
-
+   					$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);                    
+				
 				},'', true);
+
+				
 				 
 
 		        }
