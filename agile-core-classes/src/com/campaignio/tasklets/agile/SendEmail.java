@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
+import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
@@ -635,11 +636,26 @@ public class SendEmail extends TaskletAdapter
 	// Update campaign emailed time
 	ContactUtil.updateCampaignEmailedTime(Long.parseLong(subscriberId), System.currentTimeMillis()/1000, to);
 	
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	try{
+	
+	if(emailGateway!=null && emailGateway.email_api!=null && emailGateway.email_api.name()!=null && emailGateway.email_api.name().equalsIgnoreCase("SES")){
+ 		System.out.println("Sending mails through amazon pull queue");
+ 		EmailGatewayUtil.sendBulkEmail(
+ 		                 AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
+ 		        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+  	}else{
+	
 	// Send Email using email gateway
 	EmailGatewayUtil.sendBulkEmail(
 			Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
 	                : AgileQueues.NORMAL_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
 	        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+  	}
+	}catch(Exception e){
+		System.err.println("Error occured in sending email:"+e.getMessage());
+	}
 
     }
 

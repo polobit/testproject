@@ -58,9 +58,6 @@ public class ContactBulkEmailUtil
 			List<String> dateCustomFieldLabels = AgileTaskletUtil.getDateCustomLabelsFromCache();
 			String timezone = AccountPrefsUtil.getTimeZone();
 			
-			EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
-
-
 			for (Contact contact : contactList)
 			{
 
@@ -121,9 +118,12 @@ public class ContactBulkEmailUtil
 						// Agile label to outgoing emails
 						replacedBody = EmailUtil.appendAgileToHTML(replacedBody, "email", "Sent using",
 								emailSender.isEmailWhiteLabelEnabled());
-
+						String emailGatewayName = null;
+						if(emailSender!=null && emailSender.emailGateway!=null && emailSender.emailGateway.email_api!=null){
+							emailGatewayName = emailSender.emailGateway.email_api.name();
+						}
 						emailSender.addToQueue(len >= 200 ? AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE
-								: AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, emailGateway.email_api.name(), null, null, domain, fromEmail,
+								: AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, emailGatewayName, null, null, domain, fromEmail,
 								fromName, email, null, null, replacedSubject, fromEmail, replacedBody, null, null,
 								null, null);
 						
