@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.LoginServlet;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -57,6 +58,7 @@ public class AgileAuthFilter implements Filter
 
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
+    SessionCache.setSession(httpRequest.getSession());
 
 	// If it is JS API, we will pass it through JSAPIFilter is used to
 	// filter the request i.e., to check the API key allocated to the
@@ -71,6 +73,7 @@ public class AgileAuthFilter implements Filter
 	{
 	    System.out.println("JS API - ignoring filter");
 	    chain.doFilter(request, response);
+	    SessionCache.unsetSession();
 	    return;
 	}
 	// }
@@ -144,7 +147,8 @@ public class AgileAuthFilter implements Filter
 		DomainUserUtil.setNewUpdateContactACLs(domainUser);
 	}
 
-	chain.doFilter(httpRequest, httpResponse);
+    chain.doFilter(httpRequest, httpResponse);
+    SessionCache.unsetSession();
 	return;
     }
 

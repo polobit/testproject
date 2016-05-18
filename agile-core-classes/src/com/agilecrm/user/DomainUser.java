@@ -26,6 +26,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.ticket.entitys.HelpdeskSettings;
@@ -650,6 +651,15 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			dao.put(this);
 
 			/*
+			 * Check if this user is currently logged in domain user.
+			 * If so, add the new Domain User to the session cache.
+			 */
+			Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+			if( obj != null && obj instanceof DomainUser && ((DomainUser)obj).id == this.id )
+				SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, this);
+			
+			
+			/*
 			 * // Sets scopes when domain user is updated UserInfo info =
 			 * SessionManager.get(); if (info != null)
 			 * info.setScopes(this.scopes);
@@ -1093,6 +1103,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		try
 		{
+			if( pic != null )
+				return pic;
+			
 			// Get owner pic through agileuser prefs
 			if (id != null)
 				agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
@@ -1101,7 +1114,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 
 			if (userPrefs != null)
+			{
+				pic = userPrefs.pic;
 				return userPrefs.pic;
+			}
 		}
 		catch (Exception e)
 		{
