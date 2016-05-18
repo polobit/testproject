@@ -24,7 +24,7 @@ public class Form
     @NotSaved(IfDefault.class)
     public String formJson = null;
     
-    public boolean emailNotification=true;
+    public boolean emailNotification=false;
 
     @NotSaved(IfDefault.class)
     public String formHtml= null;
