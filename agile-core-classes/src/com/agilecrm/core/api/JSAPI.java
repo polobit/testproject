@@ -2,8 +2,10 @@ package com.agilecrm.core.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -45,12 +47,15 @@ import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.GeoLocationUtil;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
@@ -63,6 +68,7 @@ import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
 import com.google.appengine.api.NamespaceManager;
+import com.twilio.sdk.client.TwilioCapability;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -1358,6 +1364,48 @@ public class JSAPI
 	{
 	    return null;
 	}
+    }
+    //for call webrules
+    @Path("webrule/gettwiliotoken")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getTwilioTokenWebrule(@QueryParam("webruleid") String webruleId)
+    {
+	String fromNumber =null;
+	String toNumber =null;
+	String token =null;
+	Map<String,String> params= new HashMap<String,String>();
+	try
+	{
+	    Widget twilioObj = WidgetUtil.getWidget("TwilioIO");
+	    /*twilioObj.prefs.*/
+	    if(twilioObj.prefs.contains("twilio_from_number"))
+		fromNumber=(String) new JSONObject(twilioObj.prefs).get("twilio_from_number");
+	    else if(twilioObj.prefs.contains("twilio_number"))
+		fromNumber=(String) new JSONObject(twilioObj.prefs).get("twilio_number");
+	    
+	    toNumber =WebRuleUtil.getPhoneNumberByWebruleId(Long.parseLong(webruleId));
+		
+	    //getting call token here 
+	    Long agileUserID = AgileUser.getCurrentAgileUser().id;
+	    String applicationSid = twilioObj.getProperty("twilio_app_sid");
+	    TwilioCapability capability = new TwilioCapability(twilioObj.getProperty("twilio_acc_sid"),twilioObj.getProperty("twilio_auth_token"));
+	    capability.allowClientOutgoing(applicationSid);
+	    capability.allowClientIncoming("agileclient" + agileUserID);
+	    token = capability.generateToken(86400);
+	    
+	    params.put("token", token);
+	    params.put("fromNumber", fromNumber);
+	    params.put("toNumber", toNumber);
+	    
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	
+	return new JSONObject(params).toString();
     }
 
     /**

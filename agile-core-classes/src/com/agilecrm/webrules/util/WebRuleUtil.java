@@ -8,8 +8,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.forms.Form;
 import com.agilecrm.webrules.WebRule;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 public class WebRuleUtil
 {
@@ -54,5 +56,14 @@ public class WebRuleUtil
 	    }
 	}
 	return activeWebRules;
+    }
+    
+    public static String getPhoneNumberByWebruleId(Long wid)
+    {
+	Query<WebRule> query = WebRule.dao.ofy().query(WebRule.class);
+	query.filter("id", wid);
+	WebRule webrule = query.get();	
+	String number=  WebRule.getPhoneNumber(webrule);
+	return number;
     }
 }

@@ -480,6 +480,7 @@
 											 <optgroup label="Popup">
 												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
 												<option value="CORNER_NOTY" class="POPUP">Noty Message</option>
+												<option value="CALL_POPUP" class="POPUP">Call Popup</option>
 											</optgroup>
 											<optgroup label="Campaign">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -543,6 +544,7 @@
  													<a href='#' id="tiny_mce_webrules_link" class="pull-right text-info" style="display:none">(Select a template / Edit in HTML editor)</a>
 													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="Paste HTML context"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
+													<textarea  cols="" name="webrule-custom-html" id="callwebrule-code"  class="custom_html required CALL_POPUP w-full form-control" rows="10" ></textarea>
 <textarea  cols="" name="webrule-javascript" class="code  JAVA_SCRIPT form-control w-full required" rows="10" placeholder="">function agile_js_code_exec() {
     // Copy your code here
 
@@ -556,13 +558,23 @@
 										</td>
 									</tr>
 									<tr>
+										<td class="controls  v-top">
+											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css m-r-xs" style="margin-top:3px;">
+												<span class="CALL_POPUP" style="color:#474444">Phone Number
+												</span>
+												<input type="number" name="temp" class="CALL_POPUP required number form-control" placeholder="Enter the Incoming number"></input>
+												
+												</div>
+										</td>
+									</tr>
+									<tr>
 										<td class="controls v-top">
 											<div name="position" id="possition">
 												<div class="pull-left p-t-sm"><span style="color:#474444">Where to show</span></div></br></br>
 												<select class="required form-control m-t-n-xxs">
-													<option value="CENTER" class="MODAL_POPUP">Center</option>
-													<option value="RIGHT_BOTTOM" class="MODAL_POPUP">Right Bottom</option>
-													<option value="LEFT_BOTTOM" class="MODAL_POPUP">Left Bottom</option>
+													<option value="CENTER" class="MODAL_POPUP CALL_POPUP">Center</option>
+													<option value="RIGHT_BOTTOM" class="MODAL_POPUP CALL_POPUP">Right Bottom</option>
+													<option value="LEFT_BOTTOM" class="MODAL_POPUP CALL_POPUP">Left Bottom</option>
 												</select>
 											</div>
 										</td>
@@ -572,11 +584,11 @@
 											<div name="delay" id="delay">
 												<div class="pull-left p-t-sm"><span style="color:#474444">When to show</span></div></br></br>
 												<select class="required form-control m-t-n-xxs">
-														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY">Immediately</option>
-														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY">After certain time</option>
-														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY">On starting scroll</option>
-														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY">On reaching end of page</option>
-														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY">About to exit page</option> 
+														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">Immediately</option>
+														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">After certain time</option>
+														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">On starting scroll</option>
+														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">On reaching end of page</option>
+														<option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY CALL_POPUP">About to exit page</option> 
 												</select>
 											</div>
 										

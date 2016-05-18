@@ -2,6 +2,8 @@
  * Creates backbone router to access preferences of the user (email templates,
  * email (gmail/IMAP), notifications and etc..).
  */
+
+ var templateUrl;
 var WebreportsRouter = Backbone.Router.extend({
 
 	routes : {
@@ -154,6 +156,8 @@ var WebreportsRouter = Backbone.Router.extend({
 		var web_reports_add = new Web_Rules_Event_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
 			postRenderCallback : function(el)
 			{
+				if(path.includes("callpopup.html"))
+					el.find("#action select").val("CALL_POPUP");
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
 				{
 					chainFilters(el, undefined, function()
@@ -236,7 +240,8 @@ function show_fancy_box(content_array)
 }
 
 function loadSavedTemplate(templateURL, callback){
-		
+	
+	templateUrl=templateURL;
 	templateURL = "/misc/modal-templates/" + templateURL;
 
 	 $.ajax({
@@ -250,7 +255,10 @@ function loadSavedTemplate(templateURL, callback){
 					showError("Please enter a valid html message");
 					return;
 				}
-                $("#tinyMCEhtml_email").text(data);
+				if(templateUrl.includes("callpopup.html"))
+					$("#callwebrule-code").text(data);
+				else
+                	$("#tinyMCEhtml_email").text(data);
 				
 				if( callback && typeof(callback) === 'function' )	callback(data);
             }
@@ -267,3 +275,4 @@ function isNotValid(value)
 	
 	return false;
 }
+
