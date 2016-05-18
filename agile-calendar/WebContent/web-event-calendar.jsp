@@ -249,7 +249,7 @@ if (scheduleid != null && multiple_users){  %>
 <p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
 			<div class="col-sm-10 segment segment0">
 			<div class="numberlt" id="users_div">1</div>
-			<div class="event-title" >Select a Person</div>
+			<div class="event-title" style="font-weight:normal">Select a Person</div>
 			<div class="row user_avatars hide">
 		
 			<!-- <div align="center" style="margin: 5px auto;width: 100%;"> -->
@@ -288,7 +288,7 @@ if (scheduleid != null && multiple_users){  %>
 <%} %>
 		<div class="col-sm-10 segment segment1 blockdiv" >
 			<div class="numberlt" id="one">1</div>
-			<div class="event-title" >Choose a Time Slot</div>
+			<div class="event-title" style="font-weight:normal;">Choose a Time Slot</div>
 
 		</div>
 
