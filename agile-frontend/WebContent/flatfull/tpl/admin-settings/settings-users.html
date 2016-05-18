@@ -34,35 +34,20 @@
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
     <td class='data' data='{{id}}'>
-    <div class="table-resp">
+    <div class="table-resp" style="overflow: inherit;">
 	<div class="thumb-xs agile-img avatar" style="width:20px;">
 	   {{#if ownerPic}}
         <img class="img-inital r r-2x" src="{{ownerPic}}"  title="{{name}}" style="width:20px; height:20px; border-radius:2px;" />
 	   {{else}}
-		<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" />
+		<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" style="width:20px; height:20px; border-radius:2px;" />
        {{/if}}
     </div>
-	<!--<div class="agile-thumb agile-thumb-view">
-		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 20px);">{{name}}</a>
-<!--<span class="pull-left" style="width:91px">
-		{{#if is_admin}}
-			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
-		{{/if}}
-		{{#if is_account_owner}}
-			<span class="label bg-light dk text-tiny">Owner</span>
-		{{/if}}
-		{{#if is_disabled}}
-			<span class="label label-danger">Disabled</span>
-		{{/if}}
-		</span>	-->
-<div class="clearfix"></div>
-		<!--<div class="text-xs">{{email}}</div>-->
-	</div>
+	
 	</div>
 	</td>
 
-	<td><div class="agile-thumb agile-thumb-view">
-		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 20px);">{{name}}</a>
+	<td><div class="agile-thumb agile-thumb-view" style="width: calc(100% - 0px)">
+		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 1px);">{{name}}</a>
 <div class="clearfix"></div>
 		 
 	</div>
@@ -83,7 +68,7 @@
 	</td> -->
     <td>
 		<div class="table-resp">
-		<div class="text-xs">{{email}}</div>
+		<div class="text-base text-ellipsis">{{email}}</div>
 		</div>
 	</td>
     <td class="text-muted">
@@ -102,15 +87,15 @@
 	</td>
 
 	<td>
-		<span class="pull-left" style="width:91px">
+		<span class="pull-left" style="width:91px; margin-top: 4px;">
 		{{#if is_admin}}
-			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
+			<span class="label m-r-xs bg-light dk text-tiny pull-left">Admin</span>
 		{{/if}}
 		{{#if is_account_owner}}
-			<span class="label bg-light dk text-tiny">Owner</span>
+			<span class="label bg-light dk text-tiny pull-left">Owner</span>
 		{{/if}}
 		{{#if is_disabled}}
-			<span class="label label-danger">Disabled</span>
+			<span class="label label-danger pull-left">Disabled</span>
 		{{/if}}
 		</span>	
 	</td>
