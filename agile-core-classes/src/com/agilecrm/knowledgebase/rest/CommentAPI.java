@@ -82,7 +82,9 @@ public class CommentAPI
 	{
 		try
 		{
+			Comment dbComment = Comment.dao.get(comment.id);
 			comment.article_key = new Key<Article>(Article.class, article_id);
+			comment.created_time = dbComment.created_time;
 			comment.save();			
 		
 		}
