@@ -241,8 +241,9 @@
 					    {{/hasScope}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
 					    <div class="btn-group dropdown pull-right multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
-							 <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns">
-                    		<i class="fa fa-navicon" ></i>
+							<div class="btn-group dropdown pull-right multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
+							 <button class="btn btn-default btn-sm" id="contactTabelView"><i class="icon-list"></i></button><button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns">
+                    		<i class="caret"></i>
                 			</button>
                 			<ul class="pull-right dropdown-menu  p-l"  role="menu">
                 			
@@ -339,10 +340,22 @@
             <!-- </div> -->
 </script>
 <script id="contact-custom-fields-template" type="text/html">
-				
+				{{#iscompactContactTabel}}
 				<li class="hide">
 	       		  			<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image" checked="checked"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
+				<li class="hide">
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="basic_info"value = "basic_info"type="checkbox"  checked="checked" class="choose-column-chbx"><i></i></label>Basic Info</a></li>
+				{{else}}
+				<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="basic_info"value = "basic_info"type="checkbox" class="choose-column-chbx"><i></i></label>Basic Info</a></li>
+				<li class="hide">
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image" checked="checked"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
+				
+				{{/iscompactContactTabel}}
 	       		  
 	                  <li>
 	       		  		<a href="javascript:void(0);" class="p-b-none">

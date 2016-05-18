@@ -1068,31 +1068,58 @@ $(function()
 		return logArray[0][name];
 	});
 
+
+	/**
+	 * contacts tabel new template  
+	 */
+
+	Handlebars.registerHelper('iscompactContactTabel', function(options)
+	{
+		if(_agile_get_prefs("contactTabelView"))
+			return options.fn(this);
+
+		return options.inverse(this);
+	});
 	/**
 	 * Returns table headings for custom contacts list view
 	 */
 	Handlebars.registerHelper('contactTableHeadings', function(item)
 	{
 
-		var el = "";
+		var el = "", cls = ""; 
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			if (element == "basic_info")
+			if (element == "basic_info" || element == "image")
 			{
-				return true;
+				if(element == "image")
+					{
+						element = "";
+						cls = "";
+					}
+				if(_agile_get_prefs("contactTabelView"))
+				{
+					if(element == "basic_info")
+						return ;
+
+					if(element == "image")
+					{
+						element = "";
+						cls = "";
+					}
+						  
+				}
 			}
-			else if(element == "image")
-			{
-				el = el.concat('<th></th>');
-			}
+			
 			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
-				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+				cls = "text-muted";
 			}
 			else {
-			element = element.replace("_", " ")
-			el = el.concat('<th>' + ucfirst(element) + '</th>');
-			}	
+			element = element.replace("_", " ");
+			cls = "";
+			}
+
+			el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
 
 		});
 
@@ -6535,25 +6562,42 @@ $(function()
 	Handlebars.registerHelper('companyTableHeadings', function(item)
 	{
 
-		var el = "";
+		var el = "" ,cls = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
-			if(element == 'basic_info')
+			if (element == "basic_info" || element == "image")
 			{
-				return true;
+				if(element == "image")
+					{
+						element = "";
+						cls = "";
+					}
+				if(_agile_get_prefs("companyTabelView"))
+				{
+					if(element == "basic_info")
+						return ;
+
+					if(element == "image")
+					{
+						element = "";
+						cls = "";
+					}
+						  
+				}
 			}
-			else if(element == "image")
-			{
-				el = el.concat('<th></th>');
-			}
+			
 			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
-				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+				cls = "text-muted";
 			}
 			else {
-			element = element.replace("_", " ")
-			el = el.concat('<th>' + ucfirst(element) + '</th>');
-			}	
+			element = element.replace("_", " ");
+			cls = "";
+			}
+
+			el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+
+				
 		});
 
 		return new Handlebars.SafeString(el);

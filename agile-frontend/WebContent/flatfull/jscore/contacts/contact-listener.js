@@ -23,10 +23,29 @@ var timer = undefined;
 			
 		});
 
+		$("body").on('click','#contactTabelView',function(el){
+			
+			if(_agile_get_prefs("contactTabelView"))
+				_agile_delete_prefs("contactTabelView");
+			else
+				_agile_set_prefs("contactTabelView","true");
+
+			App_Contacts.contacts();
+	});
+		$("body").on('click','#companiesTabelView',function(el){
+
+		if(_agile_get_prefs("companyTabelView"))
+			_agile_delete_prefs("companyTabelView");
+		else
+			_agile_set_prefs("companyTabelView","true");
+
+		App_Companies.companies();
+		});
+
 
 			$('body').on('click','.companycoloumn',function(e){
 				var array = serializeForm('companies-static-fields');
-				console.log("harsha magic");
+				
 				$.ajax({
 					url : 'core/api/contact-view-prefs/company',
 					type : 'PUT',
@@ -148,6 +167,7 @@ function contactListener(el)
 		popout(that);
 		
 	});
+	
 
 	$('#company-contacts-model-list').off('mouseenter','tr > td');
 		$('#company-contacts-model-list').on('mouseenter','tr > td',function(e){
