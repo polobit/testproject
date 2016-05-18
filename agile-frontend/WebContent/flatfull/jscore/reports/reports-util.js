@@ -139,6 +139,7 @@ call_reports : function(url,reportType,graphOn){
 	var incorrectReferralCallsCountList= [];
 	var newOpportunityCallsCountList= [];
 	var meetingScheduledCallsCountList = [];
+	var queuedCallsCountList = [];
 	var callsDurationList=[];
 	var totalCallsCountList=[];
 	var domainUsersList=[];
@@ -167,12 +168,13 @@ call_reports : function(url,reportType,graphOn){
 		incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
 		meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
 		newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
+		queuedCallsCountList = data["queuedCallsCountList"];
 		callsDurationList=data["callsDurationList"];
 		totalCallsCountList=data["totalCallsCountList"];
 		domainUsersList=data["domainUsersList"];
 		domainUserImgList=data["domainUserImgList"];
 		pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
-		'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity'];
+		'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity','Other'];
 		
 		var series=[];
 		var text='';
@@ -234,11 +236,6 @@ call_reports : function(url,reportType,graphOn){
 			});
 			CompleteCallsCount.push(incorrectReferralCallsCount);
 
-			var newOpportunityCallsCount=0;
-			$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
-				newOpportunityCallsCount +=newOpportunityCall;
-			});
-			CompleteCallsCount.push(newOpportunityCallsCount);
 
 			var meetingScheduledCallsCount=0;
 			$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
@@ -246,7 +243,17 @@ call_reports : function(url,reportType,graphOn){
 			});
 			CompleteCallsCount.push(meetingScheduledCallsCount);
 
-			
+			var newOpportunityCallsCount=0;
+			$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
+				newOpportunityCallsCount +=newOpportunityCall;
+			});
+			CompleteCallsCount.push(newOpportunityCallsCount);
+
+			var queuedCallsCount=0;
+				$.each(queuedCallsCountList,function(index,queuedCall){
+					queuedCallsCount +=queuedCall;
+				});
+				CompleteCallsCount.push(queuedCallsCount);
 			
 			portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
 			return;
@@ -309,6 +316,12 @@ call_reports : function(url,reportType,graphOn){
 			tempData.name = "New Opportunity";
 			tempData.data = newOpportunityCallsCountList;
 			series[10] = tempData;
+
+				tempData = {};
+			tempData.name = "Other";
+			tempData.data = queuedCallsCountList;
+			series[11] = tempData;
+
 			text="Total Calls";
 			colors=['green','blue','red','violet'];
 		}
@@ -377,6 +390,7 @@ user_reports :function(callReportUrl){
 		var incorrectReferralCallsCountList= [];
 		var newOpportunityCallsCountList= [];
 		var meetingScheduledCallsCountList = [];
+		var queuedCallsCountList = [];
 		var callsDurationList=[];
 		var totalCallsCountList=[];
 		var domainUsersList=[];
@@ -409,12 +423,13 @@ user_reports :function(callReportUrl){
 			incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
 			meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
 			newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
+			queuedCallsCountList = data["queuedCallsCountList"];
 			callsDurationList=data["callsDurationList"];
 			totalCallsCountList=data["totalCallsCountList"];
 			domainUsersList=data["domainUsersList"];
 			domainUserImgList=data["domainUserImgList"];
 			pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
-			'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity'];
+			'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity','Other'];
 			
 			var series=[];
 			var text='';
@@ -474,18 +489,24 @@ user_reports :function(callReportUrl){
 				});
 				CompleteCallsCount.push(incorrectReferralCallsCount);
 
+				var meetingScheduledCallsCount=0;
+				$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
+					meetingScheduledCallsCount +=meetingScheduledCall;
+				});
+				CompleteCallsCount.push(meetingScheduledCallsCount);
+
 				var newOpportunityCallsCount=0;
 				$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
 					newOpportunityCallsCount +=newOpportunityCall;
 				});
 				CompleteCallsCount.push(newOpportunityCallsCount);
 
-				var meetingScheduledCallsCount=0;
-				$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
-					meetingScheduledCallsCount +=meetingScheduledCall;
+				var queuedCallsCount=0;
+				$.each(queuedCallsCountList,function(index,queuedCall){
+					queuedCallsCount +=queuedCall;
 				});
-				CompleteCallsCount.push(meetingScheduledCallsCount);
-				
+				CompleteCallsCount.push(queuedCallsCount);
+
 				if(callsDurationList[0]!=0)
 				   callsDurationAvg=callsDurationList[0]/answeredCallsCountList[0];
 

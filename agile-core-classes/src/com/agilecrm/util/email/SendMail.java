@@ -139,7 +139,9 @@ public class SendMail
 	public static final String ALLOW_IP_ACCESS = "allow_ip_access";
 	public static final String ALLOW_IP_ACCESS_SUBJECT = "Verify Your New IP Address for Uninterrupted Access";
 
-
+	//for formBuider
+	public static final String CONTACT_FORM_SUBMITTED_SUBJECT = " Form Submitted - ";
+	public static final String CONTACT_FORM_SUBMITTED ="contact_form_submitted";
 	// Ticket template names
    	public static final String TICKET_REPLY = "ticket_reply_email";
    	public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
@@ -149,8 +151,12 @@ public class SendMail
    	public static final String TICKET_FOOTER = "ticket_footer";
 
    	//For browser Fingerprint
-   	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
+	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
 
+   	//Helpcenter
+   	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
+   	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
+   	
     /**
      * From Name of email.
      */

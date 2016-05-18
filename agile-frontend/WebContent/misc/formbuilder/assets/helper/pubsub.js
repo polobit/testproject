@@ -54,6 +54,11 @@ var addAgileApi = function(json, api, callback)
 	agilepreloadfields.label = "Preload Fields";
 	agilepreloadfields.type = "select";
 	agilepreloadfields.value = [{value : false, selected : true, label : "no"}, {value : true, selected : false, label: "yes"}];
+   // adding the tag for the TO SEND EMAIL Notification 
+	var formemailnotification = {};
+	formemailnotification.label = "Email Notification";
+	formemailnotification.type = "select";
+	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
 
 	var agileformidtag = {};
 	agileformidtag.label = "Form Tags";
@@ -68,6 +73,7 @@ var addAgileApi = function(json, api, callback)
 		json[b].fields["agileformmethod"] = agileformmethod;
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
+		json[b].fields["formemailnotification"] = formemailnotification;
 	}
 	callback(json);
 };

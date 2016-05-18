@@ -1,0 +1,54 @@
+<script id="helpcenter-categories-collection-template" type="text/html">
+   <div class="wrapper-md">
+      <div class="row">
+         <div class="col-md-9 col-sm-9">
+            {{#unless this.length}}
+                <div class="alert bg-white">
+                   <div class="slate-content  p-md">
+                      <div class="box-left pull-left m-r-md">
+                         <img alt="Clipboard" src="/img/clipboard.png" />
+                      </div>
+                      <div class="box-right pull-left">
+                         <h4 class="m-t-none">There are no landing pages.</h4>
+                         <div class="text">
+                            You can add Landing Pages by clicking the button below or the one on the right side of the page.
+                         </div>
+                         <a href="#landing-page-templates" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  Add Landing Page</a>
+                      </div>
+                      <div class="clearfix">
+                      </div>
+                   </div>
+                </div>
+                <div class="embed-responsive embed-responsive-16by9">
+                   <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/vrxV_52QQTc?rel=0&amp;" frameborder="0" style="
+                      width: 58%;
+                      position: absolute;
+                      left: 37%;
+                      top: 15%;
+                      margin: -75px 0 0 -135px;
+                      height: 304px;
+                      " allowfullscreen=""></iframe>
+                </div>
+            {{/unless}}
+            {{#if this.length}}
+                <div class="row" id="helpcenter-categories-model-list"></div>
+            {{/if}}
+         </div>
+         <div class="col-md-3 col-sm-3" id="learn-workflows">
+            <h4 class="m-t-none h4 m-b-sm">
+               What is Help Center?
+            </h4>
+            <p>
+               Help Center content yet to prepare!.....
+            </p>
+            <br>
+            {{#if this.length}}
+            <p>
+               <a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+               <img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+               </a>
+            </p>
+            <br>
+            {{/if}}
+      
+</script>

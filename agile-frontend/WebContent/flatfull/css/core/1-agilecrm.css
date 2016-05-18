@@ -3859,3 +3859,21 @@ margin-left:27px;
 .alias-icon{
     font-size: 11px;
   }
+
+.leaderboard_calls td{
+
+border-bottom:1px solid #eee;
+}
+
+.leaderboard_calls .tooltip-inner{
+  text-align:left!important;
+}
+.line-clamp-5 
+{
+  -webkit-line-clamp : 5;
+}
+
+.leaderboard_calls .tooltip-arrow
+{
+  display: none!important;
+}

@@ -437,7 +437,24 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
-						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+						<div class="text-xlg calls_popover"  data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
+						        					<tr><td style="color:#27c24c">Answered:&nbsp</td><td>{{answered}}</td></tr>
+					        		              	<tr><td style="color:#23b7e5">Busy:&nbsp</td><td>{{busy}}</td></tr>
+					        		              	<tr><td style="color:#f05050">Failed:&nbsp</td><td>{{failed}}</td></tr>
+					        		              	<tr><td style="color:#7266ba">Voicemail:&nbsp</td><td>{{voiceMail}}</td></tr>
+					        		              	<tr><td style="color:#fad733">Missed:&nbsp</td><td>{{missed}}</td></tr>
+					        		              	<tr><td style="color:#FF9900">Inquiry:&nbsp</td><td>{{inquiry}}</td></tr>
+					        		              	<tr><td style="color:#7AF168">Interest:&nbsp</td><td>{{interest}}</td></tr>
+					        		              	<tr><td style="color:#167F80">No Interest:&nbsp</td><td>{{noInterest}}</td></tr>
+					        		              	<tr><td style="color:#0560A2">Incorrect Referral:&nbsp</td><td>{{incorrectReferral}}</td></tr>
+					        		              	<tr><td style="color:#D3E6C7">Meeting Scheduled:&nbsp</td><td>{{meetingScheduled}}</td></tr>
+					        		              	<tr><td style="color:#7798BF">New Opportunity:&nbsp</td><td>{{newOpportunity}}</td></tr>
+					        		              	
+					        		              	<tr><td style="color:#27c24c">Other:&nbsp</td><td>{{other}}</td></tr>
+					        		              
+					        		              <tr><td class="b-b-none">Total:</td>
+					        		        	  <td class="b-b-none">{{total}}</td></tr>
+					        		        	  </table></div>'>{{numberWithCommasForActivities answered}}/{{numberWithCommasForActivities total}}</div>
 					</div>
 				</div>
 			{{else}}
@@ -452,7 +469,24 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
-						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+						<div class="text-xlg calls_popover" data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
+						        					<tr><td style="color:#27c24c">Answered:&nbsp</td><td>{{answered}}</td></tr>
+					        		              	<tr><td style="color:#23b7e5">Busy:&nbsp</td><td>{{busy}}</td></tr>
+					        		              	<tr><td style="color:#f05050">Failed:&nbsp</td><td>{{failed}}</td></tr>
+					        		              	<tr><td style="color:#7266ba">Voicemail:&nbsp</td><td>{{voiceMail}}</td></tr>
+					        		              	<tr><td style="color:#fad733">Missed:&nbsp</td><td>{{missed}}</td></tr>
+					        		              	<tr><td style="color:#FF9900">Inquiry:&nbsp</td><td>{{inquiry}}</td></tr>
+					        		              	<tr><td style="color:#7AF168">Interest:&nbsp</td><td>{{interest}}</td></tr>
+					        		              	<tr><td style="color:#167F80">No Interest:&nbsp</td><td>{{noInterest}}</td></tr>
+					        		              	<tr><td style="color:#0560A2">Incorrect Referral:&nbsp</td><td>{{incorrectReferral}}</td></tr>
+					        		              	<tr><td style="color:#D3E6C7">Meeting Scheduled:&nbsp</td><td>{{meetingScheduled}}</td></tr>
+					        		              	<tr><td style="color:#7798BF">New Opportunity:&nbsp</td><td>{{newOpportunity}}</td></tr>
+					        		              	
+					        		              	<tr><td style="color:#27c24c">Other:&nbsp</td><td>{{other}}</td></tr>
+
+					        		              <tr><td class="b-b-none">Total:</td>
+					        		        	  <td class="b-b-none">{{total}}</td></tr>
+					        		        	  </table></div>'>{{numberWithCommasForActivities answered}}/{{numberWithCommasForActivities total}}</div>
 					</div>
 					</div>
 				</div>

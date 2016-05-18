@@ -135,6 +135,12 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.ticket.rest.TicketLabelsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketReportsRest.class);
 	
+	//Knowledgebase rest classes
+	s.add(com.agilecrm.knowledgebase.rest.CategorieAPI.class);
+	s.add(com.agilecrm.knowledgebase.rest.SectionAPI.class);
+	s.add(com.agilecrm.knowledgebase.rest.ArticleAPI.class);
+	s.add(com.agilecrm.knowledgebase.rest.CommentAPI.class);
+	
 	s.add(com.agilecrm.core.api.widgets.UservoiceWidgetAPI.class);
 	s.add(com.agilecrm.core.api.analytics.VisitorFilterAPI.class);
 	s.add(IpAccessAPI.class);
