@@ -818,6 +818,8 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 										}else{
 											that.after($(getTemplate("calendar-mouseover-popover", eventJSON)));
 										}
+										that.parent().find('.fc-overlayw').show();
+										that.find(".ui-resizable-handle").show();
 										
 										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw')
 												.height())
@@ -863,6 +865,8 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 										}else{
 											that.after(getTemplate("week-calendar-mouseover-popover", eventJSON));
 										}
+										that.parent().find('.fc-overlayw').show();
+										that.find(".ui-resizable-handle").show();
 										
 										if ($('.fc-agenda-slots:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw').height())
 										{
@@ -893,6 +897,8 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 												that.after(getTemplate("day-calendar-mouseover-popover", eventJSON));
 											}catch(e){}
 										}
+										that.parent().find('.fc-overlayw').show();
+										that.find(".ui-resizable-handle").show();
 										
 										that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
 										if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
@@ -928,6 +934,5 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 							if (event.allDay){
 								$(that_event.parentElement).css('z-index', 9);
 							}
-							that.parent().find('.fc-overlayw').show();
-							that.find(".ui-resizable-handle").show();
+							
 }
