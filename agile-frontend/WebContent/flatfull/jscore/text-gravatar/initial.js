@@ -74,7 +74,7 @@ function image_error(element)
 		if(!name)
 			return;
 
-        console.log("image_error");
+        //console.log("image_error");
 		$(element).attr("data-name", name);
 
         var initialCSS = {charCount: 2,fontWeight: 'normal'};
@@ -106,5 +106,8 @@ function image_load(element)
 			$(element).removeAttr("onLoad");
 			//$(element).initial({charCount: 2, fontWeight : 'normal'});
 		}
+    if(src.indexOf(DEFAULT_GRAVARTAR_IMG)>-1){
+        image_error(element);
+    }
 }
 

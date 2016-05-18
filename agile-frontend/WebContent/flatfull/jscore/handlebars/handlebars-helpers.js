@@ -295,8 +295,8 @@ $(function()
 
 		// Default image
 		var img = DEFAULT_GRAVATAR_url;
-		var backup_image = "&d=404\" ";
-		// backup_image="";
+		var backup_image = "&d=" + DEFAULT_GRAVARTAR_IMG + "\" ";
+		//backup_image='&d=404" '; 
 		var initials = '';
 
 		try
@@ -314,7 +314,7 @@ $(function()
 
 		var data_name =  '';
 		// if(!isIE())
-			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+			data_name = "onLoad=\"image_load(this)\" _data-name=\"" + initials;
 		
 		var email = getPropertyValue(items, "email");
 		if (email)
@@ -2815,10 +2815,8 @@ $(function()
 	Handlebars.registerHelper("hasRestrictedMenuScope", function(scope_constant, options)
 	{
 		if (CURRENT_DOMAIN_USER.restricted_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_scopes) != -1){
-			console.log("restricted permissions = " +  options.fn(this));
 			return options.fn(this);
 		}
-		console.log("restricted permissions = " +  options.fn(this));
 		return options.inverse(this);
 	});
 
