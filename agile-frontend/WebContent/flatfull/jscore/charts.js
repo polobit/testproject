@@ -1609,7 +1609,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 chart: {
                     renderTo: selector,
                     type: 'area',
-                    marginRight: 130,
+                    marginRight: 50,
                     marginBottom: 50,
                     events: {
 			   		load: function(){
@@ -1657,7 +1657,17 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     verticalAlign: 'top',
                     x: x_pos,
                     y: y_pos,
-                    borderWidth: 0
+                    borderWidth: 0,
+                    labelFormatter : function() {
+														if (this.name.length > 12) {
+															return this.name
+																	.slice(0,
+																			12)
+																	+ '...';
+														} else {
+															return this.name;
+														}
+													}
                 },
                  plotOptions: {
                     area: {
