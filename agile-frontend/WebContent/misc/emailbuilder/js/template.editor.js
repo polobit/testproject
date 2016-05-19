@@ -388,7 +388,7 @@ function handleButtons(obj) {
 
 function handleButtonsTxt(obj) {
     $('#buttons').hide();
-    var buttons = obj.find('table tbody tr td div a.textbuttonsimg');
+    var buttons = obj.find('table tbody tr td a.textbuttonsimg');
     if(buttons.length) {
         $('#buttonstxt').show();
     }
@@ -512,7 +512,7 @@ function downloadLayoutSrc() {
     var t = $("#download-layout");
     t.find(".preview, .configuration, .drag, .remove").remove();
     // applica le proprietà al bottone;
-    t.find("div a.button-1").each(function () {
+    t.find("a.button-1").each(function () {
 
         $(this).attr('href', $(this).data('href'));
     });
@@ -761,10 +761,10 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         var index = getIndex($(this).parent().parent(), $('#buttonstxtlist li')) - 1;
 
-        var bg = $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('background-color');
-        var font_color = $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('color');
-        var font_size = $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('font-size');
-        var btn_size = $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('width');
+        var bg = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('background-color');
+        var font_color = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('color');
+        var font_size = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size');
+        var btn_size = $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width');
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.background span.pickerTxt').css('backgroundColor', bg);
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div.fontcolor span.pickerTxt').css('backgroundColor', font_color);
@@ -775,7 +775,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="FontSize"]').change(function (e) {
             var fontSize = parseInt($(this).val());
-            $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
         });
 
 
@@ -783,21 +783,21 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             var fontSize = parseInt($(this).parent().next('input').val());
             fontSize = fontSize + 1 + "px";
             $(this).parent().next('input').val(fontSize);
-            $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
         });
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div span.font i.fa-minus').click(function (e) {
             var fontSize = parseInt($(this).parent().prev('input').val());
             fontSize = fontSize - 1 + "px";
             $(this).parent().prev('input').val(fontSize);
-            $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('font-size', fontSize);
         });
 
         // button size
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div input[name="ButtonSize"]').change(function (e) {
             var btnsize = parseInt($(this).val());
-            $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
         });
 
 
@@ -805,14 +805,14 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             var btnsize = parseInt($(this).parent().next('input').val());
             btnsize = btnsize + 1 + "px";
             $(this).parent().next('input').val(btnsize);
-            $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
         });
 
         $('#buttonstxtlist li:eq(' + getIndex($(this).parent().parent(), $('#buttonstxtlist li')) + ') div div div span.button i.fa-minus').click(function (e) {
             var btnsize = parseInt($(this).parent().prev('input').val());
             btnsize = btnsize - 1 + "px";
             $(this).parent().prev('input').val(btnsize);
-            $('#' + $('#path').val()).find('table tbody tr td div a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
+            $('#' + $('#path').val()).find('table tbody tr td a.textbuttonsimg:eq(' + index + ')').css('width', btnsize);
         });
 
 
