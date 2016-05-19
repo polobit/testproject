@@ -270,10 +270,11 @@
  
    <div class="new-task-footer m-t-xs">
 <!--<div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
-     <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
+     <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
 </div>-->  
 <div class="pull-left text-ellipsis" style="width:100%;">
-    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date & time">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
+<i class="fa fa-clock-o"></i>
+    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date & time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
     <div class="pull-right"> 
 <div class="new-task-owner  thumb-xxs avatar taskavatarimg">     
          {{#if taskOwner.pic}}
