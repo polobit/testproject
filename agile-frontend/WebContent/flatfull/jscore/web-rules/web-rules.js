@@ -46,13 +46,15 @@ function chainWebRules(el, data, isNew, actions)
 				$("#tiny_mce_webrules_link", self).show();
 
 				if(value=="CALL_POPUP"){
-					loadSavedTemplate("call/callpopup.html")
+					loadSavedTemplate("call/callpopup.html");
+					$("#twilio-info").show();
 				}
 				self.find(".web-rule-preview").show();
 			return;
 			}
 		self.find(".web-rule-preview").hide();
 	});
+	
 	
 	if(data && data.actions)
 		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone, data.actions[0]);
