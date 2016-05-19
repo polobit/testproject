@@ -92,7 +92,7 @@
       <div class="pull-left" style="margin-top:-2px;"> 
           <div class="compressedHeading">
           <div class="task-count">
-                <span id="task-count-{{heading}}-{{owner_id}}" class="label {{getthemecolor}}  m-r-xs" style="vertical-align:middle;">0</span> 
+                <span id="task-count-{{heading}}-{{owner_id}}" class="label {{getthemecolor}}  m-r-sm" style="vertical-align:middle; position:relative;margin-top:2px;">0</span> 
                 </div>
                 <div class="expand-button">
                 <span class="inline-block pull-left transform-rotate"><a class="text-info expandbutton"><i class="{{tasksttausicon heading}} text-xs"></i></a></span>
@@ -100,7 +100,7 @@
           </div>
       </div>
       <div class="taskheading" style="width:62%; transform: rotate(-90deg);"> 
-          <span class="m-r-xs">{{get_normal_name heading}}</span>
+          <p class="m-r-xs word-break" style="width:62%;">{{get_normal_name heading}}</p>
         <!-- <span id="task-count-{{heading}}-{{owner_id}}" class="badge bg-primary txt-mute"></span> -->
          
       </div>
@@ -128,7 +128,7 @@
 <i class="icon-plus text-xs"></i>
 </a></span>
 <span class="inline-block transform-rotate"><a class="text-info expandbutton"><i class="fa fa-compress text-xs"></i></a></span>
-<span id="task-count-{{heading}}-{{owner_id}}" class="label pull-left {{getthemecolor}}  m-r-xs" style="vertical-align:middle; margin-top:2px;">0</span> 
+<span id="task-count-{{heading}}-{{owner_id}}" class="label pull-left {{getthemecolor}}  m-r-sm" style="vertical-align:middle; margin-top:2px;">0</span> 
 </div>  
 <div class="clearfix"></div>               
      </div>     
@@ -179,12 +179,12 @@
 <div class="pull-left task-content-view">
 <div class="pull-left" style="width:80%">
       {{#if is_complete}}
-         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis ">{{/is_link}}{{safe_string subject}}</span></a>
+         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal font-bold w-full block  activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full font-bold block  ">{{/is_link}}{{safe_string subject}}</span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link ">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis ">{{/is_link}}{{safe_string subject}}</span></a>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full block word-break-all white-space-normal  activate-link ">{{else}}<a href="#task/{{id}}"><span class="new-task-subject font-bold word-break-all white-space-normal w-full block  ">{{/is_link}}{{safe_string subject}}</span></a>
          {{else}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis">{{/is_link}}{{safe_string subject}}</span></a>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal font-bold w-full block  activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold block ">{{/is_link}}{{safe_string subject}}</span></a> 
          {{/if_equals}}       
       {{/if}}      
 </div>
@@ -204,17 +204,17 @@
 </div>
 {{/if_equals}}
 {{#if_equals status "YET_TO_START"}}
-<i class="fa fa-hourglass-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-container="body" title="Status"></i>
+<i class="fa fa-hourglass-o" aria-hidden="true"style="position: absolute;margin-left: 20px;" data-toggle="tooltip" data-placement="top" data-container="body" title="Status"></i>
  
  {{/if_equals}}
  {{#if_equals status "COMPLETED"}}
- <label class="icon icon-check" data-toggle="tooltip" data-placement="top" data-container="body" title="Status"></label>
+ <label class="icon icon-check" data-toggle="tooltip" style="position: absolute;margin-left: 20px;" data-placement="top" data-container="body" title="Status"></label>
  {{/if_equals}}
 
   
   </div>
 
-  <!--<div class="task-right text-ellipsis" style="width:30%">
+  <!--<div class="task-right text-ellipsis" style="width:30%; position: absolute;margin-left: 20px;new-task-subject">
       <label class="label bg-light dk text-tiny" title="Category">{{get_normal_name type}}</label>
   </div>-->
 
@@ -274,13 +274,13 @@
 </div>-->  
 <div class="pull-left text-ellipsis" style="width:100%;">
 <i class="fa fa-clock-o"></i>
-    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date & time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
+    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
     <div class="pull-right"> 
-<div class="new-task-owner  thumb-xxs avatar taskavatarimg">     
+<div class="new-task-owner  thumb-xxs avatar taskavatarimg p-b-sm">     
          {{#if taskOwner.pic}}
-          <img src="{{taskOwner.pic}}" class="thumb-xxs r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
+          <img src="{{taskOwner.pic}}" style="height:25px;width:25px;" class="thumb-xxs m-l-sm r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{else}}
-      <img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
+      <img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x m-l-sm" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{/if}}
       </div> 
   </div>  
