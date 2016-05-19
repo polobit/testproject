@@ -235,7 +235,7 @@ public class ContactEmailUtil
 
 	public static void buildContactEmailAndSend(ContactEmailWrapper contactEmail) throws Exception
 	{
-		//checkAndModifyToCcAndBccEmails(contactEmail);
+		checkAndModifyToCcAndBccEmails(contactEmail);
 	    saveContactEmailAndSend(contactEmail);
 	}
 	
@@ -924,13 +924,13 @@ public class ContactEmailUtil
 	    			}
 		    		
 		    	}
-		    	toEmailsList.removeAll(toEmailsTempList);
-		    	for(String email : toEmailsList)
-		    	{
-		    		toEmails.append(email);
-		    		toEmails.append(",");
-		    	}
 		    }
+		    toEmailsList.removeAll(toEmailsTempList);
+	    	for(String email : toEmailsList)
+	    	{
+	    		toEmails.append(email);
+	    		toEmails.append(",");
+	    	}
 		    
 		    Set<String> ccEmailsSet = getToEmailSet(cc);
 		    
@@ -963,13 +963,13 @@ public class ContactEmailUtil
 			    		ccEmails.append(",");
 	    			}
 		    	}
-		    	ccEmailsList.removeAll(ccEmailsTempList);
-		    	for(String email : ccEmailsList)
-		    	{
-		    		ccEmails.append(email);
-		    		ccEmails.append(",");
-		    	}
 		    }
+		    ccEmailsList.removeAll(ccEmailsTempList);
+	    	for(String email : ccEmailsList)
+	    	{
+	    		ccEmails.append(email);
+	    		ccEmails.append(",");
+	    	}
 		    
 		    Set<String> bccEmailsSet = getToEmailSet(bcc);
 		    
@@ -1002,13 +1002,13 @@ public class ContactEmailUtil
 			    		bccEmails.append(",");
 	    			}
 		    	}
-		    	bccEmailsList.removeAll(bccEmailsTempList);
-		    	for(String email : bccEmailsList)
-		    	{
-		    		bccEmails.append(email);
-		    		bccEmails.append(",");
-		    	}
 		    }
+		    bccEmailsList.removeAll(bccEmailsTempList);
+	    	for(String email : bccEmailsList)
+	    	{
+	    		bccEmails.append(email);
+	    		bccEmails.append(",");
+	    	}
 		    
 		    contactEmailWrapper.setTo(toEmails.toString());
 		    contactEmailWrapper.setCc(ccEmails.toString());
