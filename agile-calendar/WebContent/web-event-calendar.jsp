@@ -215,7 +215,7 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
-<script type="text/javascript" src="../../lib/bootstrap.v3.min.js"></script>
+<script type="text/javascript" src="../../lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
 
