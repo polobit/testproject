@@ -512,7 +512,7 @@ function downloadLayoutSrc() {
     var t = $("#download-layout");
     t.find(".preview, .configuration, .drag, .remove").remove();
     // applica le proprietà al bottone;
-    t.find("a.button-1").each(function () {
+    t.find("div a.button-1").each(function () {
 
         $(this).attr('href', $(this).data('href'));
     });
