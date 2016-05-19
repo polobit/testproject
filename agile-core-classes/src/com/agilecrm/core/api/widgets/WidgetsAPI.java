@@ -24,6 +24,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.BrainTreeUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -98,11 +99,11 @@ public class WidgetsAPI {
 	public Widget createWidget(Widget widget) throws Exception {
 		System.out.println("In widgets api create");
 		if (widget != null) {
-			if(widget.widget_type == WidgetType.CUSTOM){
+			if (widget.widget_type == WidgetType.CUSTOM) {
 				widget.display_name = widget.name;
 				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
 			}
-			
+
 			WidgetsAPI.checkValidDetails(widget);
 			widget.save();
 			return widget;
@@ -152,9 +153,10 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
-			
-			if (widget.widget_type == WidgetType.CUSTOM) {											
-				widget.name = widget.display_name.replaceAll("[^a-zA-Z0-9]+", "");
+
+			if (widget.widget_type == WidgetType.CUSTOM) {
+				widget.name = widget.display_name.replaceAll("[^a-zA-Z0-9]+",
+						"");
 			}
 
 			WidgetsAPI.checkValidDetails(widget);
@@ -361,8 +363,31 @@ public class WidgetsAPI {
 	public void saveWidgetPrivilages(String obj) throws Exception {
 		if (obj != null) {
 			JSONObject widgetObj = new JSONObject(obj);
+			String widgetName = widgetObj.getString("name");
 			Widget widget = WidgetUtil.getWidget(widgetObj.getLong("id"));
-			widget.listOfUsers = widgetObj.getString("listOfUsers");
+
+			// widgetObj.getJSONArray("listOfUsers");
+			String newUsersList = widgetObj.getString("listOfUsers");
+			String oldUsersList = widget.listOfUsers;
+			JSONArray oldUserArray = new JSONArray(oldUsersList);
+			// JSONArray removeWidgets = new JSONArray();
+
+			for (int i = 0; i < oldUserArray.length(); i++) {
+				String oldUserID = oldUserArray.getString(i);
+				if (newUsersList.contains(oldUserID)) {
+
+					AgileUser widgetUser = AgileUser.getCurrentAgileUser(Long
+							.parseLong(oldUserID));
+
+					Widget deleteWidget = WidgetUtil.getWidget(widgetName,
+							widgetUser.domain_user_id);
+					if (deleteWidget.add_by_admin) {
+						WidgetUtil.deleteWidget(oldUserID, widgetName);
+					}
+				}
+			}
+
+			widget.listOfUsers = newUsersList;
 			widget.save();
 
 		}

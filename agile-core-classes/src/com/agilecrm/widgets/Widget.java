@@ -1,5 +1,8 @@
 package com.agilecrm.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,7 +15,10 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.util.DefaultWidgets;
+import com.agilecrm.widgets.util.WidgetUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -242,6 +248,25 @@ public class Widget {
 	 * differentiate widgets based on {@link AgileUser}
 	 */
 	public void save() {
+		
+//		List<DomainUser> users = DomainUserUtil.getUsers(domain);			
+//		for (DomainUser domainUser : users) {
+//			//System.out.println("*** In For Loop "+domainUser.id);			
+//			//System.out.println("widiget data "+ this.name+ " "+  AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id).id );
+//			AgileUser agileUsr =  AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+//			if(agileUsr != null){
+//				System.out.println("agile usr "+agileUsr.id);
+//				Widget widget = WidgetUtil.getWidget(this.name,agileUsr.id);
+//				if(widget == null){
+//					this.id = null;
+//					System.out.println("widget is null *****");
+//					//System.out.println("user id : "+AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id).id);
+//					user = new Key<AgileUser>(AgileUser.class,agileUsr.id);				
+//					dao.put(this);
+//				}
+//			}
+//		}	
+		
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
 		DomainUser domainUser = agileUser.getDomainUser();
 		boolean isAdmin = domainUser.is_admin;

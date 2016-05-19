@@ -373,6 +373,24 @@ public class WidgetUtil {
 		dao.deleteKeys(dao.listKeysByProperty("name", name));
 	}
 
+	
+	public static void deleteWidget(String id, String name) {
+		Objectify ofy = ObjectifyService.begin();
+
+		// Creates Current AgileUser key
+		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,id);
+
+		/*
+		 * Fetches list of widgets related to AgileUser key and adds is_added
+		 * field as true to default widgets if not present
+		 */
+		List<Widget> widgets = ofy.query(Widget.class)
+				.ancestor(userKey).filter("name", name).list();
+		for (Widget widget : widgets) {			
+			widget.delete();
+		}
+	}
+	
 	/**
 	 * 
 	 * 
