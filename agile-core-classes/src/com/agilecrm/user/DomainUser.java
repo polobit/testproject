@@ -654,9 +654,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			 * Check if this user is currently logged in domain user.
 			 * If so, add the new Domain User to the session cache.
 			 */
-			Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
-			if( obj != null && obj instanceof DomainUser && ((DomainUser)obj).id == this.id )
-				SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, this);
+//			Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+//			if( obj != null && obj instanceof DomainUser && ((DomainUser)obj).id == this.id )
+//				SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, this);
 			
 			
 			/*

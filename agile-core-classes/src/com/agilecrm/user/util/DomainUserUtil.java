@@ -279,8 +279,8 @@ public class DomainUserUtil
     public static DomainUser getCurrentDomainUser()
     {
     	//Check in cache. If user is present, return result.
-    	Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
-    	if( obj != null && obj instanceof DomainUser )	return (DomainUser) obj;
+//    	Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+//    	if( obj != null && obj instanceof DomainUser )	return (DomainUser) obj;
     	
 		// Get Current Logged In user
 		UserInfo userInfo = SessionManager.get();
@@ -295,7 +295,7 @@ public class DomainUserUtil
 		 * 
 		 * System.out.println("**************************" + user.menu_scopes);
 		 */
-		SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, user);
+//		SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, user);
 		return user;
     }
 
