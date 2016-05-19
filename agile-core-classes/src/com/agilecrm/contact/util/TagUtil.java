@@ -24,6 +24,7 @@ import com.agilecrm.contact.deferred.tags.TagDBUpdateDeferredTask;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.queues.backend.ModuleUtil;
+import com.agilecrm.queues.backend.ModuleUtil.AgileModules;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -123,7 +124,7 @@ public class TagUtil
 	    // Update Tags - Create a deferred task
 	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tagsSet);
 	    Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
-	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask).header("Host", ModulesServiceFactory.getModulesService().getDefaultVersion(ModuleUtil.AgileModules.AGILE_TASKS_HANDLER.getModuleName())));
+	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask).header("Host", ModuleUtil.getModuleDefaultVersionHost(AgileModules.AGILE_TASKS_HANDLER.getModuleName())));
 	    return;
 	}
 
@@ -137,7 +138,7 @@ public class TagUtil
 	    try
 	    {
 		System.out.println("tag name : " + tagName);
-		queue.addAsync(TaskOptions.Builder.withHeader("Host", ModulesServiceFactory.getModulesService().getDefaultVersion(ModuleUtil.AgileModules.AGILE_TASKS_HANDLER.getModuleName())).payload(task).taskName(tagName));
+		queue.addAsync(TaskOptions.Builder.withHeader("Host", ModuleUtil.getModuleDefaultVersionHost(AgileModules.AGILE_TASKS_HANDLER.getModuleName())).payload(task).taskName(tagName));
 	    }
 	    catch (TaskAlreadyExistsException e)
 	    {

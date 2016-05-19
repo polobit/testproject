@@ -45,4 +45,20 @@ public class ModuleUtil
 	return "";
     }
     
+    public static String getModuleDefaultVersionHost(String moduleName)
+    {
+	    try
+		{
+			ModulesService ms = ModulesServiceFactory.getModulesService();
+			return ms.getVersionHostname(moduleName, ms.getDefaultVersion(moduleName));
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured while getting current module version host name..." + e.getMessage());
+			e.printStackTrace();
+		}
+	    
+	    return moduleName;
+	}
+    
 }

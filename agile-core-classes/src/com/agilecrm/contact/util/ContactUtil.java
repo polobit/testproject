@@ -37,6 +37,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.queues.backend.ModuleUtil;
+import com.agilecrm.queues.backend.ModuleUtil.AgileModules;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -56,6 +57,7 @@ import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.modules.ModulesService;
 import com.google.appengine.api.modules.ModulesServiceFactory;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
@@ -1858,8 +1860,11 @@ public class ContactUtil
     {
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
 		lastCampaignEmailed, toEmail);
+
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
-	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).header("Host", ModulesServiceFactory.getModulesService().getDefaultVersion(ModuleUtil.AgileModules.AGILE_TASKS_HANDLER.getModuleName())).etaMillis(System.currentTimeMillis() + 5000));
+	
+	// Add these tasks to run in Agile Tasks Handler backend
+	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).header("Host", ModuleUtil.getModuleDefaultVersionHost(AgileModules.AGILE_TASKS_HANDLER.getModuleName())).etaMillis(System.currentTimeMillis() + 5000));
     }
 
     public static String getMD5EncodedImage(Contact contact)
