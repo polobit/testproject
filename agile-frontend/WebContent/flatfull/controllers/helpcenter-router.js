@@ -9,7 +9,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 		/* Show add edit categorie */
 		"helpcenter/categories":"categories",
-        "helpcenter/add-categorie":"categorieAdd",
+        "helpcenter/add-category":"categorieAdd",
 	   	"categorie/:id/edit-categorie":"categorieEdit",
 	   	
 	   	/* Show add edit section */
