@@ -2836,8 +2836,14 @@ function agile_webRules(callback)
  */
 function _agile_execute_web_rules()
 {
-	// Download web rules and call _agile_webrules
+	/*// Download web rules and call _agile_webrules for live
 	_agile_require_js("https://s3.amazonaws.com/agilewebgrabbers/v2/scripts/agile-webrules-min.js", function()
+	{
+		_agile_webrules();
+	});*/
+
+// Download web rules and call _agile_webrules for beta
+	_agile_require_js("https://agiletestapp.appspot.com/agilewebgrabbers/scripts/agile-webrules-min.js", function()
 	{
 		_agile_webrules();
 	});
