@@ -115,7 +115,9 @@ public class DefaultWidgets {
 				"/widgets/gplusicon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget("CallScript",
 				"Shows you the script for a call based on your preset rules.",
-				"/widgets/callscript.js", null, null, null, WidgetType.CALL));
+				"/widgets/callscript.js", "/widgets/call-script-logo-small.png",
+		        "/widgets/call-script-logo-small.png", null, WidgetType.CALL));
+
 
 		/*
 		 * widgets.add(new Widget( "Linkedin",

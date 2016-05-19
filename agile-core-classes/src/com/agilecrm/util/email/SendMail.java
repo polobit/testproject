@@ -151,8 +151,12 @@ public class SendMail
    	public static final String TICKET_FOOTER = "ticket_footer";
 
    	//For browser Fingerprint
-   	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
+	public static final String OTP_EMAIL_TO_USER = "otp_email_to_user";
 
+   	//Helpcenter
+   	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
+   	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
+   	
     /**
      * From Name of email.
      */

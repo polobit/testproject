@@ -1903,7 +1903,7 @@ public class OpportunityUtil
 		    Query<Opportunity> timeChanged = dao.ofy().query(Opportunity.class)
 				    .filter("milestone", milestone.won_milestone).filter("milestone_changed_time >= ", minTime)
 				    .filter("milestone_changed_time <= ", maxTime).filter("archived", false)
-				    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("milestone_changed_time");
+				    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("-milestone_changed_time");
 			 ;
 		    List<Opportunity> listWonDate = dao.fetchAll(q);
 		    List<Opportunity> listTimeChanged = dao.fetchAll(timeChanged);

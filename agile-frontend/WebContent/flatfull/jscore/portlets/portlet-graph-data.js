@@ -1117,7 +1117,7 @@ var portlet_graph_data_utility = {
 	                }
 	            }
 	            if(series==undefined)
-	            	 chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30);
+	            	 chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30,base_model);
 	            else
 	            {
 	            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
@@ -1132,7 +1132,7 @@ var portlet_graph_data_utility = {
 	                            
 	                    }
 	                });
-	                chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30);
+	                chartRenderforIncoming(selector,categories,'','',min_tick_interval,type,series,AllData,0,30,base_model);
 	                } 
 	            });
 	        	}

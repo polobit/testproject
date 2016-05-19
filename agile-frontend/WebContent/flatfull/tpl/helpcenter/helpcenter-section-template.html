@@ -1,0 +1,32 @@
+<script id="helpcenter-section-template" type="text/html">
+  <div class="col-md-9">
+      <div class="wrapper">
+          <div class="panel panel-default">
+              <div class="panel-heading h4"> {{name}}
+                <div class="pull-right">
+                  <div class="btn-group right pos-rlt pull-right">
+                    <a class="btn btn-default btn-sm" style="margin-top:-4px" href="#categorie/{{categorie_id}}/section/{{id}}/add-article">Add Article</a>
+                      <button class="btn btn-sm btn-default"  style="margin-top:-4px" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                          <ul class="dropdown-menu">
+                            <li><a href="#categorie/{{categorie_id}}/section/{{id}}/edit-section">Edit Section</aria-expanded></li>
+                            <li><a href="#helpcenter" class="delete">Delete Section</a></li>
+                          </ul>
+                  </div>
+                </div>
+                    <!--<div>
+                      <small class="text-muted m-b-sm">
+                        created on {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
+                      </small>
+                      </div>
+                      <div>
+                      {{description}}
+                      </div>-->
+              </div>  
+            <div class="panel-body">                                
+              <div id="articles-collection">
+              </div>
+            </div>
+          </div>
+      </div>
+  </div> 
+</script>
