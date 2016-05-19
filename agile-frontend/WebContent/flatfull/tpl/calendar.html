@@ -244,15 +244,18 @@
 <script id="calendar-popover-meeting-type-template" type="text/html">
     {{#if event.description}}
         {{#if event.meeting_type}}
-	    	<i class="icon-comment-alt text-muted m-r-xs"></i>
+	    	<i class="icon-comment-alt text-muted m-r-xs pull-left"></i>
 	    	<span>Meeting Type - {{event.meeting_type}}</span><br/>
-	    	<span title="{{event.description}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{event.description}}
-	    	</span>
+	    	<div  style="-webkit-line-clamp : 5; overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box; -webkit-box-orient:vertical; margin-left:18px;
+ " title="{{event.description}}">{{event.description}}</div>
+
 	    {{else}}
 	         <i class="icon-comment-alt text-muted m-r-xs pull-left"></i>
-	         <div  style="-webkit-line-clamp : 5; overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box; -webkit-box-orient:vertical;
+		         <div  style="-webkit-line-clamp : 5; overflow: hidden;
+	    text-overflow: ellipsis;
+	    display: -webkit-box; -webkit-box-orient:vertical;
  " title="{{event.description}}">{{event.description}}</div>
 	    {{/if}}
 	{{/if}}
