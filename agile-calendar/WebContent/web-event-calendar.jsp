@@ -229,7 +229,7 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/umd/tooltip.js"></script>
+
 <style type="text/css">
 * {
 	font-family: 'Lato', sans-serif;
@@ -1210,7 +1210,7 @@ var BUFFERTIME=null;
 
 				function()
 				{
-					$('[data-toggle="tooltip"]').tooltip(); 
+					
 
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;
