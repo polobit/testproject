@@ -3868,6 +3868,10 @@ border-bottom:1px solid #eee;
 .leaderboard_calls .tooltip-inner{
   text-align:left!important;
 }
+.line-clamp-5 
+{
+  -webkit-line-clamp : 5;
+}
 
 .leaderboard_calls .tooltip-arrow
 {

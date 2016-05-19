@@ -1600,7 +1600,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
     });
 }
 
-function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData,x_pos,y_pos){
+function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData,x_pos,y_pos,base_model){
 	if(x_pos == undefined)
 		x_pos = -10;
 	if(y_pos == undefined)
@@ -1609,9 +1609,21 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 chart: {
                     renderTo: selector,
                     type: 'area',
-                    marginRight: 130,
-                    marginBottom: 50
+                    marginRight: 50,
+                    marginBottom: 50,
+                    events: {
+			   		load: function(){
+			   			console.log("load");
+			   			if(base_model!=undefined)
+			   			portlet_utility.toggle_chart_legends(this, base_model);
+			   		}, redraw : function(){
+			   			console.log("redraw");
+			   			if(base_model!=undefined)
+			   			portlet_utility.toggle_chart_legends(this, base_model);
+			   		}
+			   },
                 },
+                
                 colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
                 title: {
                     text: name,
@@ -1645,7 +1657,17 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     verticalAlign: 'top',
                     x: x_pos,
                     y: y_pos,
-                    borderWidth: 0
+                    borderWidth: 0,
+                    labelFormatter : function() {
+														if (this.name.length > 12) {
+															return this.name
+																	.slice(0,
+																			12)
+																	+ '...';
+														} else {
+															return this.name;
+														}
+													}
                 },
                  plotOptions: {
                     area: {

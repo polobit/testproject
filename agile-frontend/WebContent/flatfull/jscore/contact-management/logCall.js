@@ -237,23 +237,34 @@ $(function()
 		
 		try{
 			var logCallParam = {};
-			contact = agile_crm_get_contact();
+			var contact = null;
+			if(company_util.isCompany()){
+				contact = App_Companies.companyDetailView.model.toJSON();
+			} else {
+				contact = App_Contacts.contactDetailView.model.toJSON();
+			}
+		//	contact = agile_crm_get_contact();
 			name = getContactName(contact);
 			phone = getPhoneWithSkypeInArray(contact.properties);
+			
 			logCallParam['num'] = phone;
 			logCallParam['action'] = "add";
-		}catch(e){
-			$('#logCallModal').modal('hide');
-			console.log ("an error has occured")
-		}
+		
 		
 		$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
+		
+		
 		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
+		
 		$('#phoneLogForm #saveActivity').val("true");
 		$("#logCallModal").modal('show');
 		var el = $("#phoneLogForm");
 		agile_type_ahead("call_related_to", el, contacts_typeahead);
 
+		}catch(e){
+			$('#logCallModal').modal('hide');
+			console.log ("an error has occured")
+		}
 
 	});
 	
@@ -398,26 +409,6 @@ function saveLogPhoneActivity(data){
 }
 
 
-
-/**
- * It will return the phone and skype phone in array having more than one contact
- */
-function getPhoneWithSkypeInArray(items)
-{
-	var va = [];
-	var phone = "phone";
-	var skype = "skypePhone";
-	for (var i = 0, l = items.length; i < l; i++)
-	{
-		if (items[i].name == phone || items[i].name == skype)
-		{
-			// If phone number has value only then add to array
-			if (items[i].value != "" || items[i].value != null)
-				va[va.length] = items[i].value;
-		}
-	}
-	return va;
-}
 
 
 /**

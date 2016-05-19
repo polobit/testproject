@@ -91,12 +91,9 @@
 
 {{/if}}
 	</div>	
-	 	
-			
 		{{#each contacts}}
-
            	{{#if id}}
-				{{#isDuplicateContactProperty properties "email"}}
+				{{#isInCurrentView properties "email"}}
 					{{else}}	
 <div class="inline-block word-break-all">
 					{{#if_contact_type "PERSON"}}
@@ -106,7 +103,7 @@
         		<a class="text-info text-capitalize popover_contact" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         			{{/if_contact_type}}
 </div>
-				{{/isDuplicateContactProperty}}
+				{{/isInCurrentView}}
            		
            	{{/if}}
        	{{/each}}
