@@ -272,11 +272,11 @@ if (scheduleid != null && multiple_users){  %>
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
 		   <div style="display: inline-block;width: 160px;margin-right: 5px;">
-		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title='<%=custom_message%>'/>
-		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
-		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
-		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
-		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Timezone"><%=timezone %></span>
+		   <img src="<%=pr_pic%>" id="multi-user-avatar" data-toggle="tooltip" data-placement="bottom" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title='<%=custom_message%>'/>
+		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" ><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
+		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" ><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
+		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" ><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
+		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" ><%=timezone %></span>
 		</div>
 		</div>
 		
@@ -1205,8 +1205,12 @@ var BUFFERTIME=null;
 		var Selected_Date = null;		
 
 		$(document).ready(
+
+
 				function()
 				{
+					$('[data-toggle="tooltip"]').tooltip(); 
+
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;
 					if(multiple_schedule_ids){
@@ -1284,6 +1288,7 @@ var BUFFERTIME=null;
 								{
 									form.submit();
 								} });
+  
 				});
 
 		function bodyLoad()
