@@ -79,7 +79,7 @@
 	</td>
 
 	<td>
-		<div class="table-resp text-muted text-xs">
+		<div class="table-resp text-muted text-xs" style="margin-top:3px;">
 		<i class="fa fa-clock-o"></i>
 		<span><em>Created</em>&nbsp;</span>
 		<time class="last-login-time" datetime="{{epochToDate info_json_string "created_time"}}" >{{epochToDate info_json_string "created_time"}}</time>
@@ -87,15 +87,15 @@
 	</td>
 
 	<td>
-		<span class="pull-left" style="width:91px; margin-top: 4px;">
+		<span class="pull-left" style="width:91px;">
 		{{#if is_admin}}
-			<span class="label m-r-xs bg-light dk text-tiny pull-left">Admin</span>
+			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
 		{{/if}}
 		{{#if is_account_owner}}
-			<span class="label bg-light dk text-tiny pull-left">Owner</span>
+			<span class="label bg-light dk text-tiny">Owner</span>
 		{{/if}}
 		{{#if is_disabled}}
-			<span class="label label-danger pull-left">Disabled</span>
+			<span class="label label-danger">Disabled</span>
 		{{/if}}
 		</span>	
 	</td>
