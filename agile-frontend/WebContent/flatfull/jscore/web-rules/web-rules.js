@@ -40,10 +40,14 @@ function chainWebRules(el, data, isNew, actions)
 		$(self).show();
 		console.log(value);
 	
-		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")
+		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value== "CALL_POPUP")
 			{
-				if(value == "MODAL_POPUP")
+				if(value == "MODAL_POPUP"  || value=="CALL_POPUP")
 				$("#tiny_mce_webrules_link", self).show();
+
+				if(value=="CALL_POPUP"){
+					loadSavedTemplate("call/callpopup.html")
+				}
 				self.find(".web-rule-preview").show();
 			return;
 			}
