@@ -1,11 +1,14 @@
 package com.agilecrm.contact.deferred;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.ContactUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -42,7 +45,7 @@ public class DeleteCustomField implements DeferredTask
 	{
 		if (StringUtils.isNotEmpty(domain) && !domain.equals("all"))
 		{
-			saveCompanywithName(domain);
+			deleteCustomField(domain,customField);
 		}
 
 	}
@@ -58,13 +61,17 @@ public class DeleteCustomField implements DeferredTask
 
     }
     
-    public void saveCompanywithName(String namespace)
+    public static void deleteCustomField(String namespace,String customField)
     {
-    	List<Contact> contacts; 
     	 NamespaceManager.set(namespace);
-    	 contacts = ContactUtil.getAllContacts();
-			for (Contact contact : contacts)
-			{
+    	 Map<String, Object> searchMap = new HashMap<String, Object>();
+    		searchMap.put("properties.name", customField);
+		ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,"",0,200);
+    	// contacts = ContactUtil.getAllContacts(200,null);
+		System.out.println("Fetcher"+ fetcher.getTotalFetchedCount());
+		while (fetcher.hasNextSet())
+		{
+				Contact contact = fetcher.next();
 				ContactField contactField= contact.getContactField(customField);
 					if(contactField!=null)
     				{
@@ -72,4 +79,5 @@ public class DeleteCustomField implements DeferredTask
     				}
 			}
     }
+    
 }
