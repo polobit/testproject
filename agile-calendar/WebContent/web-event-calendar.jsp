@@ -215,7 +215,6 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
-<script type="text/javascript" src="../../lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
 
@@ -230,6 +229,7 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
+<script type="text/javascript" src="../../lib/bootstrap.min.js"></script>
 <style type="text/css">
 * {
 	font-family: 'Lato', sans-serif;
