@@ -15,11 +15,13 @@
                 <thead>
                     <tr>
 						
-                        <th style="width:60%" class="header">User</th>
-						<!--  <th style="width:20%" class="header">Tags</th> -->
-                        <th style="width:20%" class="header">Created On</th>
+                        <th style="width:5%"></th>
+                        <th style="width:20%" class="header">Name</th>
+						 <th style="width:20%" class="header">Email</th>
+                        <!-- <th style="width:20%" class="header">Created On</th>-->
                         <th style="width:20%" class="header">Last Logged In</th>
-						<!-- <th style="width:20%" class="header">&nbsp;</th> -->
+						 <th style="width:20%"></th> 
+						 <th style="width:15%"></th> 
                     </tr>
                  </thead>
                  <tbody id='admin-settings-users-model-list' route='user-edit/'>
@@ -32,32 +34,25 @@
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
     <td class='data' data='{{id}}'>
-    <div class="table-resp">
-	<div class="thumb-xs agile-img avatar">
+    <div class="table-resp" style="overflow: inherit; width:100%;">
+	<div class="thumb-xs agile-img avatar" style="width:20px;">
 	   {{#if ownerPic}}
-        <img class="img-inital r r-2x" src="{{ownerPic}}"  title="{{name}}" />
+        <img class="img-inital r r-2x" src="{{ownerPic}}"  title="{{name}}" style="width:20px; height:20px; border-radius:2px;" />
 	   {{else}}
-		<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" />
+		<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" style="width:20px; height:20px; border-radius:2px;" />
        {{/if}}
     </div>
-	<div class="agile-thumb agile-thumb-view">
-		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 101px);">{{name}}</a>
-<span class="pull-left" style="width:91px">
-		{{#if is_admin}}
-			<span class="label m-r-xs bg-light dk text-tiny">Admin</span>
-		{{/if}}
-		{{#if is_account_owner}}
-			<span class="label bg-light dk text-tiny">Owner</span>
-		{{/if}}
-		{{#if is_disabled}}
-			<span class="label label-danger">Disabled</span>
-		{{/if}}
-		</span>	
-<div class="clearfix"></div>
-		<div class="text-xs">{{email}}</div>
-	</div>
+	
 	</div>
 	</td>
+
+	<td><div class="agile-thumb agile-thumb-view" style="width: calc(100% - 0px)">
+		<a class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 1px);">{{name}}</a>
+<div class="clearfix"></div>
+		 
+	</div>
+	</td>
+
 	<!-- <td>
 		<span class="pull-left" style="width:91px">
 		{{#if is_admin}}
@@ -73,7 +68,7 @@
 	</td> -->
     <td>
 		<div class="table-resp">
-		{{epochToDate info_json_string "created_time"}}
+		<div class="text-base text-ellipsis">{{email}}</div>
 		</div>
 	</td>
     <td class="text-muted">
@@ -81,6 +76,28 @@
 			<i class="fa fa-clock-o"></i>
 			<time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
 		</div>
+	</td>
+
+	<td>
+		<div class="table-resp text-muted text-xs">
+		<i class="fa fa-clock-o"></i>
+		<span><em>Created</em>&nbsp;</span>
+		<time class="last-login-time" datetime="{{epochToDate info_json_string "created_time"}}" >{{epochToDate info_json_string "created_time"}}</time>
+		</div>
+	</td>
+
+	<td>
+		<span class="pull-left" style="width:91px; margin-top: 4px;">
+		{{#if is_admin}}
+			<span class="label m-r-xs bg-light dk text-tiny pull-left">Admin</span>
+		{{/if}}
+		{{#if is_account_owner}}
+			<span class="label bg-light dk text-tiny pull-left">Owner</span>
+		{{/if}}
+		{{#if is_disabled}}
+			<span class="label label-danger pull-left">Disabled</span>
+		{{/if}}
+		</span>	
 	</td>
    <!-- <td><div class="table-resp">{{#if is_admin}}<span class="label m-r-xs bg-light dk text-tiny">Admin</span>{{/if}}{{#if is_account_owner}}<span class="label bg-light dk text-tiny">Owner</span>{{/if}}{{#if is_disabled}}<span class="label label-danger">Disabled</span>{{/if}}</div></td> -->
     
