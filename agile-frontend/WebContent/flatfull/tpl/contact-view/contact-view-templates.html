@@ -105,7 +105,7 @@
 
 <script id = "contacts-custom-view-last_name-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div class="text-ellipsis harsha3" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+    	<div class="text-ellipsis" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
         	<a class="text-cap">{{getPropertyValue properties "last_name"}}</a>
         </div>
 	</td>
@@ -137,7 +137,7 @@
 
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div class="text-ellipsis harsha7"  {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+        <div class="text-ellipsis"  {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
     		<a class="">{{getPropertyValue properties "email"}}</a>
         </div>
 	</td>
@@ -145,7 +145,7 @@
 
 <script id = "contacts-custom-view-company-template" type="text/html">
 	<td class="data" data="{{id}}">
-      <div class="text-ellipsis harsha8" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+      <div class="text-ellipsis" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
       	<a class="text-cap">{{getPropertyValue properties "company"}}</a>
       </div>
 	</td>
@@ -197,7 +197,7 @@
 
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis harsha13" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+       <div class="text-ellipsis " {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
 	   	<a class="text-cap">{{owner.name}}</a>
        </div>
 	</td>
@@ -229,7 +229,7 @@
 
 <script id = "contacts-custom-view-last_contacted-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis harsha16" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+       <div class="text-ellipsis " {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
        {{#if_equals last_contacted 0}}
        
 	   	{{else}}
@@ -249,7 +249,7 @@
 
 <script id ="contacts-custom-view-custom-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis harsha17" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+       <div class="text-ellipsis " {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
 		  <span>{{value}}</span>
        </div>
 	</td>
@@ -257,7 +257,7 @@
 
 <script id ="contacts-custom-view-custom-contact-template" type="text/html">
 	<td class='data contact-type-custom-field-td' data='{{id}}'>
-		<div class="table-resp harsha18" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+		<div class="table-resp " {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm contact-type-image">
 					<img class="img-inital r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
@@ -269,7 +269,7 @@
 
 <script id ="contacts-custom-view-custom-company-template" type="text/html">
 	<td class='data company-type-custom-field-td' data='{{id}}'>
-		<div class="table-resp harsha19" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+		<div class="table-resp " {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm company-type-image">
 					<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
@@ -281,7 +281,7 @@
 
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis harsha20"{{#iscompactContactTabel}}  style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+       <div class="text-ellipsis "{{#iscompactContactTabel}}  style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
 	   	  <span>{{stringToHumanDateInFormat value}}</span>
        </div>
 	</td>
@@ -289,7 +289,7 @@
 
 <script id = "contacts-custom-view-last_contacted-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis harsha21" {{#iscompactContactTabel}} style="width:8em;"  >
+       <div class="text-ellipsis " {{#iscompactContactTabel}} style="width:8em;"  >
        {{#if_equals last_contacted 0}}
        
 	   	{{else}}
@@ -308,7 +308,7 @@
 
 <script id = "contacts-custom-view-last_emailed-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis harsha22" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+       <div class="text-ellipsis " {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
 	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_emailed}}</span>
        </div>
 	</td>
@@ -316,7 +316,7 @@
 
 <script id = "contacts-custom-view-last_called-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div class="text-ellipsis harsha23" {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
+       <div class="text-ellipsis " {{#iscompactContactTabel}} style="width:8em;" {{else}}  style="width:15em;"{{/iscompactContactTabel}}>
 	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_called}}</span>
        </div>
 	</td>
