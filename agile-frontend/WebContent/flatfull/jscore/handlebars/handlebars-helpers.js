@@ -1068,6 +1068,15 @@ $(function()
 		return logArray[0][name];
 	});
 
+	Handlebars.registerHelper('iscompactTabel', function(type , options)
+	{
+		var setCompactView = (type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
+
+		if(setCompactView)
+				return options.fn(this);
+
+		return options.inverse(this);
+	});
 
 	/**
 	 * contacts tabel new template  
@@ -1075,10 +1084,12 @@ $(function()
 
 	Handlebars.registerHelper('iscompactContactTabel', function(options)
 	{
-		if(_agile_get_prefs("contactTabelView"))
+		
+			if(_agile_get_prefs("contactTabelView"))
 			return options.fn(this);
 
-		return options.inverse(this);
+			return options.inverse(this);
+		
 	});
 	/**
 	 * Returns table headings for custom contacts list view
@@ -6567,11 +6578,6 @@ $(function()
 		{
 			if (element == "basic_info" || element == "image")
 			{
-				if(element == "image")
-					{
-						element = "";
-						cls = "";
-					}
 				if(_agile_get_prefs("companyTabelView"))
 				{
 					if(element == "basic_info")
@@ -6584,6 +6590,11 @@ $(function()
 					}
 						  
 				}
+				if(element == "image")
+					{
+						element = "";
+						cls = "";
+					}
 			}
 			
 			else if (element.indexOf("CUSTOM_") == 0) {
