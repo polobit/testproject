@@ -700,10 +700,17 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		e.preventDefault();
 		$('.popover').remove();
 		var currentdeal = $(this).closest('tr').data();
+
 		if($(this).find(".contact-type-image").length > 0 || $(this).find(".company-type-image").length > 0)
 		{
 			return;
 		}
+
+		if (e.ctrlKey) {
+           window.open("#deal/" +currentdeal.id , '_blank');
+           return;
+        } 	
+
 		Backbone.history.navigate("deal/" + currentdeal.id, { trigger : true });
 		// updateDeal($(this).closest('tr').data());
 	});

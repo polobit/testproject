@@ -26,8 +26,14 @@ $(function() {
 			
 			var data = $(this).closest('tr').find('.data').attr('data');
 
-			if(route == "contact/" || route == "company/")
-				SCROLL_POSITION = window.pageYOffset;
+		// Open route in seperate window with CTRL + CLICK
+		if (e.ctrlKey) {
+            window.open("#" + route + data, '_blank');
+            return;
+        } 
+
+		if(route == "contact/" || route == "company/")
+			SCROLL_POSITION = window.pageYOffset;
 
 					if (route == "contact/")
 						SCROLL_POSITION = window.pageYOffset;
