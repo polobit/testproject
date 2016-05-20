@@ -24,12 +24,35 @@
             <br/> 
                     <div class="control-group form-group">
 
-              <label class="control-label col-md-3" for="cname">Name <span class="field_req">*</span></label> 
-<div class="col-md-9">
+              <label class="control-label col-md-3" for="cname">Name <span class="field_req">*</span></label>
+              {{#if id}} 
+              <div class="col-md-6">
+                      <div class="controls">
+                      <input type="text" id="cname" name="name" class="required form-control" placeholder="Name" autocapitalize="off"/>
+                      </div>
+              </div>
+              <div id="upload-container" messg="User image has been uploaded">     
+                                   <div class="imgholder company_logo form-whitelabel-image thumb-wrapper thumb-lg">
+                                            {{#if userpic}}
+                                            <img class="w-full" src="{{userpic}}" height="60" width="120" />
+                                            {{else}}
+                                            <img class="w-full" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container"  height="60" width="120" />
+                                            {{/if}}                                            
+                                  </div>
+                                  <div class="company_logo_upload m-l-sm">
+                                     <input type="hidden" id="upload_url" name="userpic" class="userpic"  />  
+                                     <input  class="upload_s3 btn btn-xs btn-default" type="button" id="account_prefs_image" value="Upload" />
+                                  </div>
+                       
+              </div>
+              {{else}}
+              <div class="col-md-9">
                       <div class="controls">
                 <input type="text" id="cname" name="name" class="required form-control" placeholder="Name" autocapitalize="off"/>
               </div>
-</div>
+              </div>
+              {{/if}}
+
             </div> 
           
             <div class="control-group form-group">
