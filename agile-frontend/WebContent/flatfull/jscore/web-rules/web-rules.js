@@ -38,6 +38,7 @@ function chainWebRules(el, data, isNew, actions)
 	$("#noty-message", el).chained($("#action", el), function(select, self){
 		var value = $("select", select).val();
 		$(self).show();
+		$("#twilio-info").hide();
 		console.log(value);
 	
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value== "CALL_POPUP")
