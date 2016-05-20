@@ -14,11 +14,11 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
- * <code>CompanyNameUpdateServlet</code> add name for the company if not added in the
+ * <code>DeleteCustomField</code> add name for the company if not added in the
  * namespace.
  * 
- * Task is initialized from {@link CompanyNameUpdateServlet}, which is called by cron
- * with duration query parameter in URL
+ * Task is initialized from {@link CustomFieldDeletionServlet}, which is called by cron
+ * with domain andd customfield name query parameter in URL
  * 
  * @author nidhi
  * 
@@ -63,7 +63,7 @@ public class DeleteCustomField implements DeferredTask
     
     public static void deleteCustomField(String namespace,String customField)
     {
-    	 //NamespaceManager.set(namespace);
+    	 NamespaceManager.set(namespace);
     	 Map<String, Object> searchMap = new HashMap<String, Object>();
     		searchMap.put("properties.name", customField);
 		ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,"",0,200);
