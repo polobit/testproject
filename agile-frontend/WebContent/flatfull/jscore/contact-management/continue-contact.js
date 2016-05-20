@@ -316,6 +316,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 						contact_company = company ;
 						return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template , company);
 					}
+				},
+				error: function(){
+					console.log("company fetch failed.");
+					return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
 				}
 			});
 		}
@@ -538,8 +542,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 			if(!addressFlag){
 				var form_element = $(e.target).attr('id')
 				if(form_element == "person_validate" || form_element == "continue-contact"){						
-						console.log(prop);
-						properties.push({ "name" : "address", "value" : JSON.stringify(prop), "subtype" : "office"});
+					console.log(prop);
+					properties.push({ "name" : "address", "value" : JSON.stringify(prop), "subtype" : "office"});
 				}
 			}
 		}
