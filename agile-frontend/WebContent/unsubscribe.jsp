@@ -375,6 +375,17 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 		box-sizing: border-box;
 	}
 }
+.thumb-lg{
+	display: inline-block;
+    width: 96px;
+}
+.thumb-wrapper{
+	padding: 2px;
+    border: 1px solid #dee5e7;
+}
+.w-full {
+    width: 100%;
+}
 </style>
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
