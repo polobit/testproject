@@ -516,6 +516,7 @@ $('.popover').on('click', '.contact-owner-list-popover', function(e){
 });
 
 }
+
 function contactPopupScoreValue()
 {
 

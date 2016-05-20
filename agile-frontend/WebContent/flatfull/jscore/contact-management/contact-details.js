@@ -1042,6 +1042,7 @@ enterCompanyScore: function(e){
 	 * gets decreased by one, both in UI and back end
 	 * 
 	 */
+   
 	onRemoveScore :  function(e){
 		e.preventDefault();
 		
