@@ -63,21 +63,26 @@ public class DeleteCustomField implements DeferredTask
     
     public static void deleteCustomField(String namespace,String customField)
     {
-    	 NamespaceManager.set(namespace);
+    	 //NamespaceManager.set(namespace);
     	 Map<String, Object> searchMap = new HashMap<String, Object>();
     		searchMap.put("properties.name", customField);
 		ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,"",0,200);
     	// contacts = ContactUtil.getAllContacts(200,null);
+		//fetcher.fetchNextSet();
 		System.out.println("Fetcher"+ fetcher.getTotalFetchedCount());
-		while (fetcher.hasNextSet())
+		do
 		{
-				Contact contact = fetcher.next();
+				List<Contact> contacts = fetcher.nextSet();
+				for(Contact contact :contacts){
 				ContactField contactField= contact.getContactField(customField);
 					if(contactField!=null)
     				{
 						contact.properties.remove(contactField);
+						
+						contact.save();
     				}
-			}
+				}
+			}while (fetcher.hasNextSet());
     }
     
 }
