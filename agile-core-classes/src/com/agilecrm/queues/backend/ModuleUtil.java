@@ -8,7 +8,7 @@ public class ModuleUtil
 	public enum AgileModules 
 	{
 		AGILE_CAMPAIGNS_BULK("agile-campaigns-bulk"), AGILE_TASKS_HANDLER("agile-tasks-handler"),AGILE_CAMPAIGNS_NORMAL("agile-campaigns-normal"),
-		AGILE_NORMAL_BULK("agile-normal-bulk");
+		AGILE_NORMAL_BULK("agile-normal-bulk"), DEFAULT("default");
 		
 		private String moduleName = "default";
 		
@@ -43,6 +43,26 @@ public class ModuleUtil
 	}
 
 	return "";
+    }
+    
+    public static boolean isDefaultModule()
+    {
+    	try
+		{
+			ModulesService moduleService = ModulesServiceFactory.getModulesService();
+
+			// Get the backend handling the current request.
+			String moduleName = moduleService.getCurrentModule();
+			
+			if(moduleName.equalsIgnoreCase(AgileModules.DEFAULT.getModuleName()))
+				return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	    
+	    return false;
     }
     
     public static String getModuleDefaultVersionHost(String moduleName)
