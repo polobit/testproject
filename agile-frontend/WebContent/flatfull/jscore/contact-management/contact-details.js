@@ -967,6 +967,7 @@ scoreValEnter: function(e){
 	   }
 	
 	},
+  
 // On Clicking the score Score Input field appears
 onGetScorebox:  function(e){
 	    e.preventDefault();
