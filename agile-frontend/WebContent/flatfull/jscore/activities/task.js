@@ -142,14 +142,14 @@ function initializeTasksListeners(){
 
 	 $('#tasks-list-template').on('mouseenter', '.listed-task', function(e)
 	{
-		$(this).find(".task-actions").css("display", "block");
+		$(this).find(".task-actions").css("visibility", "visible");
 		$(this).find(".task-note-action").hide();
 	});
 
 	// Hide task actions
 	$('#tasks-list-template').on('mouseleave', '.listed-task', function(e)
 	{
-		$(this).find(".task-actions").css("display", "none");
+		$(this).find(".task-actions").css("visibility", "hidden");
 		$(this).find(".task-note-action").show();
 	});
 

@@ -69,8 +69,8 @@
 	</div>
 	</div>
 
-<div class="wrapper-md p-b-none">
-	<div id="new-task-list-based-condition"style="position:absolute;left:15px;right:15px;"> 
+<div class="wrapper-md p-b-none" style="position:relative;">
+	<div id="new-task-list-based-condition"> 
   		<img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
 	</div>
 	<div id="task-list-based-condition"></div>
@@ -80,7 +80,7 @@
 </script>
 
 <script id="new-tasks-lists-collection-template" type="text/html"> 
- <div id="new-tasks-lists-model-list" class="list-area p-b-none">
+ <div id="new-tasks-lists-model-list" class="list-area p-b-none" style="height:100%">
  
 
  </div>
@@ -179,12 +179,12 @@
 <div class="pull-left task-content-view">
 <div class="pull-left" style="width:80%">
       {{#if is_complete}}
-         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal font-bold w-full block  activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full font-bold block  ">{{/is_link}}{{safe_string subject}}</span></a>
+         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full block  activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full font-bold block  ">{{/is_link}}{{safe_string subject}}</span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full block word-break-all white-space-normal  activate-link ">{{else}}<a href="#task/{{id}}"><span class="new-task-subject font-bold word-break-all white-space-normal w-full block  ">{{/is_link}}{{safe_string subject}}</span></a>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full block word-break white-space-normal  activate-link ">{{else}}<a href="#task/{{id}}"><span class="new-task-subject font-bold word-break-all white-space-normal w-full block  ">{{/is_link}}{{safe_string subject}}</span></a>
          {{else}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal font-bold w-full block  activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold block ">{{/is_link}}{{safe_string subject}}</span></a> 
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full block  activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold block ">{{/is_link}}{{safe_string subject}}</span></a> 
          {{/if_equals}}       
       {{/if}}      
 </div>
@@ -193,7 +193,7 @@
 
    {{#if_equals status "IN_PROGRESS"}}
        <!-- <label class="label bg-light dk text-tiny progress-label" title="Progress">{{progress}}%</label> -->
-<div class="task-circle">
+<div class="task-circle" style="position:absolute;right:0px;">
     <div id="activeBorder" class="active-border" style="{{getcircle progress}}">
 <abbr title="{{progress}}%">
         <div id="circle" class="circle">
@@ -208,7 +208,7 @@
  
  {{/if_equals}}
  {{#if_equals status "COMPLETED"}}
- <label class="icon icon-check" data-toggle="tooltip" style="position: absolute;margin-left: 20px;" data-placement="top" data-container="body" title="Status"></label>
+ <label class="icon icon-check" data-toggle="tooltip" style="position: absolute;margin-left: 20px; font-size:17px;color:green" data-placement="top" data-container="body" title="Status"></label>
  {{/if_equals}}
 
   
@@ -286,7 +286,7 @@
   </div>  
   
 
- <div class="task-actions">
+ <div class="task-actions" ">
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
           <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>

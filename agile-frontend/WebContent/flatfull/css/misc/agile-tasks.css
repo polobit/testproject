@@ -318,7 +318,7 @@
 
 .task-actions {
 	color: #888;
-	display: none;
+	visibility: hidden;
 	/*padding-right: 4px;*/
 	/*float: right;*/
 	cursor: pointer;
