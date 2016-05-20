@@ -31,10 +31,7 @@ $(function(){
 							
 						},
 						"Cancel", "");
-			}
-			else
-			{
-				uploadImage("contact-container");
+				return;
 			}
 		}
 		if(Current_Route && Current_Route.indexOf("company/") == 0 && App_Companies.companyDetailView && App_Companies.companyDetailView.model)
@@ -54,12 +51,10 @@ $(function(){
 							
 						},
 						"Cancel", "");
-			}
-			else
-			{
-				uploadImage("contact-container");
+				return;
 			}
 		}
+		uploadImage("contact-container");
 	});
 	
 	//Upload personal prefs

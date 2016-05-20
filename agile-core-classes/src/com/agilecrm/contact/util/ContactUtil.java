@@ -2009,21 +2009,18 @@ public class ContactUtil
     }
     
     /**
-     * Gets a contact based on its email
+     * Gets contacts and companies based on its email collection
      * 
-     * @param email
-     *            email value to get a contact
-     * @return {@Contact} related to an email
+     * @param emails
+     *            emails collection to get contacts and companies
+     * @return {@List} related to all emails
      */
-    public static List<Contact> searchContactsByEmailList(List<String> emails)
+    public static List<Contact> searchContactsAndCompaniesByEmailList(Set<String> emails)
     {
 	if (emails == null)
 	    return null;
 
-	Query<Contact> q = dao.ofy().query(Contact.class);
-	q.filter("properties.name", Contact.EMAIL);
-	q.filter("type", Type.PERSON);
-	q.filter("properties.value in", emails);
+	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value in", emails);
 
 	try
 	{
