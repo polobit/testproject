@@ -931,17 +931,25 @@ public class ContactsAPI
 	 if(notesJSONArray!=null && notesJSONArray.length()>0){
 		 for (int i = 0; i < notesJSONArray.length(); i++) {
 			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
-			 try {
-				List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
-				 for(Opportunity opp : deals){
-					opp.save();
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			 if(note != null){
+				 try {
+					List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
+					 for(Opportunity opp : deals){
+						opp.save();
+					}
+				 }catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				 }
+				 if(note.getContact_ids() != null && note.getContact_ids().size() > 0 ){
+					List<String>contactIds = note.getContact_ids();
+					for(String s : contactIds){
+						Contact c = ContactUtil.getContact(Long.parseLong(s));
+						c.save();
+					}
+				 }
+			 }
 		 }
-		 
 	 }
 	 Note.dao.deleteBulkByIds(notesJSONArray);
 }

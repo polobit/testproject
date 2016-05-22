@@ -316,6 +316,18 @@ public class DealsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	if(opportunity != null &&(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0)){
+		List<String> contactIds = opportunity.getContact_ids();
+		for(String s : contactIds){
+			try{
+				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.save();
+			}
+			catch(Exception e){
+				
+			}
+		}
+	}
 	return opportunity;
     }
 
@@ -331,6 +343,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
+    Opportunity old = null;
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
@@ -351,8 +364,33 @@ public class DealsAPI
 	{
 	    e.printStackTrace();
 	}
-
+	if(opportunity != null)
+		old = OpportunityUtil.getOpportunity(opportunity.id);
+	if(old != null &&(old.getContact_ids()!= null && old.getContact_ids().size() > 0)){
+		List<String> contactIds = old.getContact_ids();
+		for(String s : contactIds){
+			try{
+				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.save();
+			}
+			catch(Exception e){
+				
+			}
+		}
+	}
 	opportunity.save();
+	if(opportunity != null &&(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0)){
+		List<String> contactIds = opportunity.getContact_ids();
+		for(String s : contactIds){
+			try{
+				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.save();
+			}
+			catch(Exception e){
+				
+			}
+		}
+	}
 	return opportunity;
     }
 
@@ -372,6 +410,18 @@ public class DealsAPI
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
 	if (opportunity != null)
 	{
+		if(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0){
+			List<String> contactIds = opportunity.getContact_ids();
+			for(String s : contactIds){
+				try{
+					Contact contact = ContactUtil.getContact(Long.parseLong(s));
+					contact.save();
+				}
+				catch(Exception e){
+					
+				}
+			}
+		}
 	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
 		NoteUtil.deleteBulkNotes(opportunity.getNotes());

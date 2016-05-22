@@ -1181,6 +1181,8 @@ public class Contact extends Cursor
 	{
 	    created_time = System.currentTimeMillis() / 1000;
 	}
+	if(id != null)
+		updated_time = System.currentTimeMillis() / 1000;
 
     }
 

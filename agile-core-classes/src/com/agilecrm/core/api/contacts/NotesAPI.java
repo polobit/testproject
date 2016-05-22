@@ -53,6 +53,17 @@ public class NotesAPI
     public Note saveNote(Note note)
     {
 	note.save();
+	if(note.getContact_ids() != null && note.getContact_ids().size() > 0){
+		List<String> contactIds = note.getContact_ids();
+		for(String s : contactIds){
+			try{			
+				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.save();		
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
 	try
 	{
 	    ActivitySave.createNoteAddActivity(note);
@@ -77,8 +88,41 @@ public class NotesAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Note updateNote(Note note)
     {
-	note.save();
-	return note;
+    	try {
+			Note oldNote = NoteUtil.getNote(note.id);
+			if(oldNote.getContact_ids() != null && oldNote.getContact_ids().size() > 0){
+				List<String> contactIds = oldNote.getContact_ids();
+				for(String s : contactIds){
+					try{			
+						Contact contact = ContactUtil.getContact(Long.parseLong(s));
+						contact.save();		
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	note.save();
+    	try {
+			if(note.getContact_ids() != null && note.getContact_ids().size() > 0){
+				List<String> contactIds = note.getContact_ids();
+				for(String s : contactIds){
+					try{			
+						Contact contact = ContactUtil.getContact(Long.parseLong(s));
+						contact.save();		
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return note;
     }
 
     /**
