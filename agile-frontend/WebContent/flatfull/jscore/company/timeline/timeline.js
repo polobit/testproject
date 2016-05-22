@@ -40,19 +40,22 @@ function GetTimelineBuilder(templateKey, view, model, appendTo, comparatorFuncti
 	var comparatorFunction = comparatorFunction;
 
 	var timelineView;
-	GetTimelineBuilder.prototype.timeline = function(callback)
+	GetTimelineBuilder.prototype.timeline = function(id, callback)
 	{
-		if(timelineView)
+		if(timelineView && id == model.get('id'))
 		{
+			$(appendTo, view.el).isotope('destroy');
 			if(callback && typeof callback)
 				callback();
+
+			return;
 		}
 
 		// Load plugins for timeline
 		head.load(FLAT_FULL_PATH + "lib/isotope.pkgd.js", FLAT_FULL_PATH + "lib/jquery.event.resize.js", FLAT_FULL_PATH + "css/misc/agile-timline.css", function()
 		{
-			configure_timeline();
-
+			
+			$(appendTo, view.el).isotope('destroy');
 			timelineView = new generic_timeline_view ({
 				"model" : model,
 				"tempateKey" : templateKey,
@@ -63,9 +66,14 @@ function GetTimelineBuilder(templateKey, view, model, appendTo, comparatorFuncti
 				}
 			});
 
+				configure_timeline(view.el);
+
 			configure_timeline_comparator(timelineView.collection, timelineView);
 
 			timelineView.render(true);
+
+		
+
 
 
 			if(callback && typeof callback)
@@ -86,6 +94,7 @@ var generic_timeline_view = Backbone.View.extend({ initialize : function(options
 	_.bindAll(this, 'render', 'appendItem', 'addItems');
 
 	this.options.data = [];
+	this.collection = new BaseCollection([], {});
 	this.options.data.push(this.model.toJSON());
 	this.collection = new BaseCollection([], {});
 	this.month_year_marker = [];

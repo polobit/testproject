@@ -75,8 +75,28 @@ var deal_details_tab = {
 		
 		load_deal_activities : function()
 		{
+			$('#dealactivities').addClass('active');
 		    var id = App_Deal_Details.dealDetailView.model.id;
 		    if(id){
+
+		    if($("#timeline", App_Deal_Details.dealDetailView.el).hasClass('isotope'))
+		    {
+		    	$("#timeline", App_Deal_Details.dealDetailView.el).isotope('reloadItems');
+		    	return;
+		    }
+		    	
+			var builder = new GetTimelineBuilder("deal-timeline", App_Deal_Details.dealDetailView, App_Deal_Details.dealDetailView.model, "#timeline")
+
+			builder.timeline(id, function(){
+				$.getJSON('/core/api/opportunity/' + id + '/activities?page_size=20', function(data){
+					builder.addEntities(data);
+				})
+			});	
+		}
+
+		   // ('#timeline').html();
+
+/*
 		    dealActivitiesView = new Base_Collection_View({
 	            url: '/core/api/opportunity/' + id + "/activities",
 	            templateKey: "deal-detail-activities",
@@ -95,7 +115,7 @@ var deal_details_tab = {
 		    dealActivitiesView.collection.fetch();
 	        $('#dealactivities').html(dealActivitiesView.el);
 		    }
-		},
+*/		},
 
 		load_deal_tasks : function()
 		{
