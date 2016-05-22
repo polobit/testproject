@@ -275,8 +275,12 @@ $(function()
 	$('#logCallModal').on('click', '.add_logPhone', function(e)
 	{
 		e.preventDefault();
+		$("#contact-add-phone-span", "#phoneLogForm").show();
+		
+		/*		
 		$("#logCallModal").modal('hide');
 		routeToPage("contact-edit");
+		
 		setTimeout(function()
 			{
 				if($("#continueform #phone:visible").length < 1){
@@ -286,9 +290,57 @@ $(function()
 							}, 2000);
 				}
 				$("#continueform #phone:visible").trigger('focus');
-			}, 1500);
+			}, 1500);*/
 		
 	});
+	
+	$('#logCallModal').on('click', '.contact_phone_add', function(e)
+			{
+				e.preventDefault();
+				var contact;
+				var is_person = false;
+				
+				var prop = property_JSON('phone', 'phoneLogForm #contact_phone');
+				prop['subtype'] = "";
+			if(company_util.isCompany()){
+				contact = App_Companies.companyDetailView.model.toJSON();
+			} else {
+				contact = App_Contacts.contactDetailView.model.toJSON();
+				is_person = true;
+			}
+			contact.properties.push(prop);
+			
+			var contactModel = new BaseModel();
+			contactModel.url = "core/api/contacts";
+			contactModel.save(contact,{success : function(data){
+				console.log("contact " + data);
+				$("#contact-add-phone-span").hide();
+				$("#contact_logPhone_number").attr("value",prop.value);
+				$("#contact_logPhone_number").html(prop.value);
+				if(is_person)
+					App_Contacts.contactDetailView.model = data;
+				else
+					App_Companies.companyDetailView.model = data;
+			}
+			})
+			
+				/*		
+				$("#logCallModal").modal('hide');
+				routeToPage("contact-edit");
+				
+				setTimeout(function()
+					{
+						if($("#continueform #phone:visible").length < 1){
+							setTimeout(function()
+									{
+										$("#continueform #phone:visible").trigger('focus');
+									}, 2000);
+						}
+						$("#continueform #phone:visible").trigger('focus');
+					}, 1500);*/
+				
+			});
+	
 	
 
 });
@@ -451,7 +503,6 @@ function showDynamicCallLogs(data)
 		CallLogVariables.duration = data.duration;
 		CallLogVariables.phone = data.number;
 		CallLogVariables.url = data.url;
-		
 		
 	}catch(e){
 		$('#logCallModal').modal('hide');
