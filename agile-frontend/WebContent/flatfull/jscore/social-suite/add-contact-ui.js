@@ -107,9 +107,14 @@ $(function()
         var Tweet_Owner_For_Add_Contact="@"+Tweet_Owner_For_Add_Contact;   
         
 		// Separate full name.
-		var firstName = fullName.substr(0, fullName.indexOf(' '));
-		var lastName = fullName.substr(fullName.indexOf(' ') + 1);
-
+		var firstName;
+		var lastName;
+		if(!fullName.includes(" "))
+			firstName = fullName.substr(0);
+		else{
+			firstName = fullName.substr(0, fullName.indexOf(' '));
+			lastName = fullName.substr(fullName.indexOf(' ') + 1);
+		}
 		// Add values in add contact form.
 		$("#fname", $('#personModal')).val(firstName);
 		$("#lname", $('#personModal')).val(lastName);
