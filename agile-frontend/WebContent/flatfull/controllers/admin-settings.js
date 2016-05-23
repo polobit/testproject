@@ -1135,7 +1135,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			$('.settings-deal-sources').addClass('active');
 			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
-			//$('.settings-deal-sources').parent().removeClass('b-b-none');
+			//$('.settings-deal-sources').parent().removeClass('b-b-none'); 
 
 		}, "#milestone-listner");
 	},
