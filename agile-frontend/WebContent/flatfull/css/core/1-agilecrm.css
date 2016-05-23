@@ -3737,6 +3737,33 @@ opacity: .3;
 #lhs_filters_segmentation #lhs-filters-header i{
 	top : 3px;
 }
+
+#reports-tab-container .nav-tabs>li{
+	float: none!important;
+}
+
+.reports_tab_content{
+	 padding : 10px!important;
+    left: 200px;
+    top: 0px;
+    position: absolute;
+    z-index: 1000;
+  	 box-shadow: 0px 5px 10px rgba(0,0,0,.2);
+    border-radius: 6px!important;
+   	border-top-width : 1px!important;
+   	border: 1px solid rgba(0,0,0,.2)!important;
+
+}
+
+.report-selected
+{
+	background-color: #e4eaec!important;
+}
+
+.sub-nav-tab li
+{
+	margin-left : 15px;
+}
 .dash_tabview .tab-content{
    border-color: none;
   border: none !important;
