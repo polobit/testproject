@@ -394,7 +394,7 @@ public class EmailGatewayUtil
 	    	        fromName, to, cc, bcc, subject, replyTo, html, text, null, null, null);
 
 	    	// Add to pull queue with from email as Tag
-	    	PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
+	    	PullQueueUtil.addToPullQueue(AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
 	    }
 
 	}
@@ -458,9 +458,15 @@ public class EmailGatewayUtil
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
 		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+	
+	System.out.println("Emailgatewaytype is:"+emailGatewayType);
 
 	// Add to pull queue with from email as Tag
+	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+		queueName = "amazon-ses-pull-queue";
+	}
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+	
     }
 
     /**
@@ -541,7 +547,7 @@ public class EmailGatewayUtil
 		{
 		    Long start_time = System.currentTimeMillis();
 		    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
-		    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
+//		    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
 		    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
 		    System.out.println("Logs size : " + queryList.size());
 		}

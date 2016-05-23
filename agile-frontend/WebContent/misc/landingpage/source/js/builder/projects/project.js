@@ -278,7 +278,9 @@ angular.module('builder.projects', [])
                                   	returnDataFormat.pages[0].name = "index";
                       				project.active = returnDataFormat;
 
-                      				$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
+                      				console.log("Requested method== "+reqMethod);
+                      				if(reqMethod==='POST')
+                      					$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
 
                       				$timeout(function() {
                                       	$(".saveLandingPageButton",parent.document).prop("disabled",false);

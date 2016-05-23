@@ -128,7 +128,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 			url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
 			templateKey : "article-comments",
 			individual_tag_name : 'div',
-				
+			sort_collection:"true",
+			sortKey:"created_time",	
 		postRenderCallback : function(el){	
 		
 		 		App_Helpcenter.saveComment(el,article_id);

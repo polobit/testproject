@@ -1676,7 +1676,7 @@ text-align: center;
   width: 100%;
 }
 .leader-board-view li {
-  width: 100%;
+  width: 100% !important;
   float: none!important;
 }
 .bigger-font-mobile {

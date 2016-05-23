@@ -627,7 +627,7 @@ public class CampaignLogsSQLUtil
     		
     		try
     		{
-    		   GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
+    		   GoogleSQL.executeNonQuery(insertToLogs);
     		}
     		catch (Exception e)
     		{

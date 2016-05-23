@@ -1,0 +1,28 @@
+<!--  Add to Campaign Form -->
+	<div class="gadget-campaign" row-fluid">
+        <form class="gadget-campaign-form form-horizontal" name="gadget_campaign_form" method="post" style="margin:0px;">
+            <fieldset style="margin:0px;">
+				<input type="hidden" name="email" value='{{email}}' />
+                
+				<div class="control-group" style="margin:0px; padding-top:6px;">       
+                    <label class="control-label" for="campaign-select">Select campaign<span class="field_req">*</span></label>
+                    <div class="controls">
+                        <select name="id" id="campaign-select" class="required" style="width:210px;">
+							<option value="">Select..</option>
+							{{#if this.length}}
+								{{#each this}}
+									<option value="{{id}}">{{name}}</option>
+								{{/each}}
+							{{/if}}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">         
+                    <a type="submit" class="btn btn-primary gadget-campaign-validate" style="padding:2px 6px 2px;">Add to Campaign</a> 
+                    <a class="cancel btn " data-tab-identity="campaigns" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+					<img class="campaign-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+                </div>
+            </fieldset>
+        </form>
+    </div>
