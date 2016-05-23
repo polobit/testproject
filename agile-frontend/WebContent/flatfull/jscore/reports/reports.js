@@ -127,6 +127,111 @@ function initializeReportsListeners(){
 
 						$('.show_screenshot').popover();
 					});
+			$('.tab-pane')
+			.on(
+					"click",
+					'.report-go',
+					function(e) {
+
+						var tab_id=$(this).parents('.tab-pane').attr('id');
+						tab_id=$('a[href="#'+tab_id+'"]').parents('.maintab').find('a').attr("href").substring(1);
+						_agile_set_prefs('reports_tab', tab_id);
+						return;
+					/*	$.each($("#reports-tab-container .tab-container ul li"),function(){
+					var temp = $(this).find("a").attr("href").substring(1);
+					if(temp==tab_id)
+					{*/
+						//$(this).addClass('report-selected');
+					/*	var reportsTab = _agile_get_prefs("reports_tab");
+				if(!reportsTab || reportsTab == null) {
+					var tabTemp;
+					if(islocalStorageHasSpace()){
+						if($("#dealstab").length>0)
+							tabTemp="deals-tab";
+						else
+							tabTemp="calls-tab";
+							_agile_set_prefs('reports_tab', tabTemp);	
+					}
+					reportsTab = tabTemp;
+						return;*/
+					//}
+				//});
+					});
+			$('#reports-listerners-container')
+			.off(
+					"click",'#reports-tab-container>div>ul>li');
+			$('#reports-listerners-container')
+			.on(
+					"click",'#reports-tab-container>div>ul>li',function(e){
+
+						/* var collapse = $("i",'#reports-tab-container>div>ul>li>a');
+        				collapse.removeClass("fa-minus").addClass("fa-plus");*/
+						var flag=$(this).find('.sub-nav-tab').is(":visible");
+						if($('.reports_tab_content').is(":visible"))
+							$('.reports_tab_content').hide();
+						$('.sub-nav-tab').hide();
+						if(flag){
+							//$("i", this).first().removeClass("fa-minus").addClass("fa-plus");
+							$(this).find('.sub-nav-tab').hide();
+						}
+							
+						else{
+							//$("i", this).first().removeClass("fa-plus").addClass("fa-minus");
+							$(this).find('.sub-nav-tab').show();
+						}
+						//$('.reports_tab_content').show();
+					});
+
+		$('#reports-listerners-container')
+			.off("mouseenter",'.sub-nav-tab');
+			$('#reports-listerners-container')
+			.on("mouseenter",'.sub-nav-tab',function(e){
+					$('.reports_tab_content').show();
+					var top= $(this).offset().top;top = top-130;
+					$('.reports_tab_content').css('top',top+'px')
+				});
+			
+			
+			$('#reports-listerners-container')
+			.off("mouseleave",'#reports-tab-container');
+			$('#reports-listerners-container')
+			.on("mouseleave",'#reports-tab-container',function(e){
+					$('.reports_tab_content').hide();
+					$('.nav-tabs .active').removeClass('active');
+				});
+
+			$('#reports-listerners-container')
+			.off(
+					"mouseover",
+					'.sub-nav-tab a');
+			$('#reports-listerners-container')
+			.on(
+					"mouseover",
+					'.sub-nav-tab a',
+					function(e) {
+						var tab_id = $(this).attr('href').substring(1);
+
+		$('.sub-nav-tab a').removeClass('active');
+		$('.tab-pane').removeClass('active');
+
+		$(this).addClass('active');
+		$("#"+tab_id).addClass('active');
+					});
+
+			$('#reports-listerners-container')
+			.off(
+					"click",
+					'.sub-nav-tab a');
+			$('#reports-listerners-container')
+			.on(
+					"click",
+					'.sub-nav-tab a',
+					function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+					});
+			
+
 }
 
 function reportsContactTableView(base_model, customDatefields, view)
