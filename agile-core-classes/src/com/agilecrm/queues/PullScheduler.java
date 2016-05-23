@@ -208,7 +208,7 @@ public class PullScheduler
 	    	{
 	    		iteration++;
 	    		
-	    		if(iteration > ITERATIONS_LIMIT)
+	    		if(iteration >= ITERATIONS_LIMIT)
 	    			return false;
 	    	}
 	    	
@@ -240,7 +240,7 @@ public class PullScheduler
         System.out.println("Checking run time memory took " + (System.currentTimeMillis() - start));
         
         // if less than 1MB
-        if(memory < MEGABYTE)
+        if(memory < 1)
         {
         	System.err.println("Available memory is less than 1 MB");
         	return false;
