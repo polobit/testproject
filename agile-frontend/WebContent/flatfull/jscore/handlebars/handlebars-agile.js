@@ -345,6 +345,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("referals.js");
 	}
+	if (templateName.indexOf("generic-timeline") == 0)
+	{
+		template_relative_urls.push("generic-timeline.js");
+	}
 	return template_relative_urls;
 }
 

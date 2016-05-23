@@ -88,7 +88,7 @@ var deal_details_tab = {
 			var builder = new GetTimelineBuilder("deal-timeline", App_Deal_Details.dealDetailView, App_Deal_Details.dealDetailView.model, "#timeline")
 
 			builder.timeline(id, function(){
-				$.getJSON('/core/api/opportunity/' + id + '/activities?page_size=20', function(data){
+				$.getJSON('/core/api/opportunity/' + id + '/activities?page_size=100', function(data){
 					builder.addEntities(data);
 				})
 			});	

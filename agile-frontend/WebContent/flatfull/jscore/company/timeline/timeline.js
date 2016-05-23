@@ -114,7 +114,7 @@ var generic_timeline_view = Backbone.View.extend({ initialize : function(options
 		if (model.get("entity_type") == "year-marker")
 		{
 
-			getTemplate("year-marker", model.toJSON(), "yes", function(template)
+			getTemplate("generic-timeline-year-marker", model.toJSON(), "yes", function(template)
 			{
 				$(that.timeline_config.appendTo, that.timeline_config.view.el).isotope('insert', $(template));
 			});
