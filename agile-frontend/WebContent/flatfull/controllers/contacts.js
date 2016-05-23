@@ -1201,7 +1201,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLead : function(first, last){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 		});
@@ -1209,7 +1209,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLeadDirectly : function(first, last,mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 			$(this).find("#phone").val(mob);
@@ -1218,7 +1218,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 
 	addMobLead : function(mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
