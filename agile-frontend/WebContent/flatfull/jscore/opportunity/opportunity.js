@@ -315,34 +315,47 @@ function copyCursor(dealPipelineModel, newDeal){
  * Append Column names for Deals customfields to the Deals List view.
  */
 function appendCustomfields(el, is_append){
-	$.ajax({
-		url: 'core/api/custom-fields/scope?scope=DEAL',
-		type: 'GET',
-		dataType: 'json',
-		success: function(customfields){
-			//If header already added, we can ignore header part
-			if(!is_append)
-			{
-				var columns = '';
-				$.each(customfields, function(index,customfield){
-					columns +=  Handlebars.compile('<th>{{label}}</th>')({label : customfield.field_label});
-				});
-				$(el).find('#deal-list thead tr').append(columns);
-			}
+	if(!App_Deals.custom_fields_list)
+	{
+		$.ajax({
+			url: 'core/api/custom-fields/scope?scope=DEAL',
+			type: 'GET',
+			dataType: 'json',
+			success: function(customfields){
+				App_Deals.custom_fields_list = customfields;
+				//If header already added, we can ignore header part
+				if(!is_append)
+				{
+					var columns = '';
+					$.each(customfields, function(index,customfield){
+						columns +=  Handlebars.compile('<th>{{label}}</th>')({label : customfield.field_label});
+					});
+					$(el).find('#deal-list thead tr').append(columns);
+				}
 
-			var deals = App_Deals.opportunityCollectionView.collection.models;
-			$(el).find('td.deal_custom_replace').remove();
-			$(el).find('#opportunities-model-list tr').each(function(index,element){
-				var row = '';
-				$.each(customfields, function(i,customfield){
-				 	if(customfield.field_type == "DATE")
-				 		row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
-				 	else
-						row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
-				});
-				$(this).append(row);
-			});
-		}
+				appendCustomFiledsData(el, customfields);
+			}
+		});
+	}
+	else
+	{
+		appendCustomFiledsData(el, App_Deals.custom_fields_list);
+	}
+}
+
+function appendCustomFiledsData(el, customfields)
+{
+	var deals = App_Deals.opportunityCollectionView.collection.models;
+	$(el).find('td.deal_custom_replace').remove();
+	$(el).find('#opportunities-model-list tr').each(function(index,element){
+		var row = '';
+		$.each(customfields, function(i,customfield){
+		 	if(customfield.field_type == "DATE")
+		 		row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+		 	else
+				row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+		});
+		$(this).append(row);
 	});
 }
 
@@ -498,7 +511,6 @@ function fetchDealsList(data){
             appendCustomfields(el, false);
             // Showing time ago plugin for close date
             includeTimeAgo(el);
-            //deal_bulk_actions.init_dom(el);
             initializeDealListners(el);
             contactListener();
             setTimeout(function(){

@@ -1,18 +1,21 @@
 $(function()
 {
-
- 	$('.deals-add').on('click', function(e)
+	$('#opportunity-listners').off('click', '.deals-add');
+ 	$('#opportunity-listners').on('click', '.deals-add', function(e)
 	{
 		e.preventDefault();
 		show_deal();
 	});
 
+ 	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
 	{
 		e.preventDefault();
 		$('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
 		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
 	});
+
+	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_unarchive');
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
 	{
 		e.preventDefault();
@@ -24,6 +27,7 @@ $(function()
 	/**
 	 * Validates deal and saves
 	 */
+	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_validate');
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
 	{
 		e.preventDefault();
@@ -51,6 +55,7 @@ $(function()
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
+	$('#opportunity-listners').off('mouseenter', '#opportunities-model-list > tr');
 	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
         var data = $(this).find('.data').attr('data');
 
@@ -97,6 +102,7 @@ $(function()
     /**
      * On mouse out on the row hides the popover.
      **/
+    $('#opportunity-listners').off('mouseleave', '#opportunities-model-list > tr');
 	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
     	 $(this).popover('hide');
     });
@@ -104,6 +110,7 @@ $(function()
     /**
      * On click on the row hides the popover.
      **/
+    $('#opportunity-listners').off('click', '#opportunities-model-list > tr, .hide-popover');
 	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
     	 $(this).closest('tr').popover('hide');
     });
@@ -112,30 +119,18 @@ $(function()
     * When deal is added from contact-detail by selecting 'Add Opportunity' from actions 
     * and then close button of deal is clicked, it should navigate to contact-detail.
     **/
+    $('#opportunity-listners').off('click', '#close-deal');
 	$('#opportunity-listners').on('click', '#close-deal', function(e) {
     	e.preventDefault();
     	window.history.back();
     });
-	
-	//Check the archived filter for the first time and set it to false as default.
-	if(_agile_get_prefs('deal-filters')){
-		var json = $.parseJSON(_agile_get_prefs('deal-filters'));
-		if(!json.archived){
-			json.archived="false";
-			_agile_set_prefs('deal-filters',JSON.stringify(json));
-		}
-	} else {
-		var json = {"owner_id":"","pipeline_id":"","milestone":"","value_filter":"equals","value":"","value_start":"","value_end":"","archived":"false","":false,"contact_ids":[]};
-		json.archived="false";
-		_agile_set_prefs('deal-filters',JSON.stringify(json));
-	}
-
 	
 });
 
 // Deal Listeners
 function initializeDealListners(el){
 
+	$('#opportunity-listners').off('change', '#deal-cd-condition .deal-cd-value');
 	$('#opportunity-listners').on('change', '#deal-cd-condition .deal-cd-value', function(e) {
 		if(this.value == "BETWEEN"){
 			$('#deal-cd-rhs').parent().removeClass("hide");

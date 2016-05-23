@@ -68,9 +68,9 @@ var DealsRouter = Backbone.Router.extend({
 						  return;
 					$('#opportunity-listners').html($(template_ui));
 					
-					fetchDealsList(data);
 					loadPortlets('Deals');
 				});
+				fetchDealsList(data);
 			});
 		}
 
