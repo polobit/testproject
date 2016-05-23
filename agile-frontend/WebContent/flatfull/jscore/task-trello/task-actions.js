@@ -93,9 +93,12 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 			{
 				App_Calendar.allTasksListView.collection.remove(taskId);
 				var taskCount = App_Calendar.allTasksListView.collection.length;
-				$('#tasks-list-template').find('.tasks-count').empty();
-				if(taskCount){
-					$('#tasks-list-template').find('.tasks-count').text('('+taskCount+' Total)');
+				var count = $('#tasks-list-template').find('.tasks-count').attr('data');
+				if(count){
+					count = count - 1 ;
+					$('#tasks-list-template').find('.tasks-count').removeAttr('data');
+					$('#tasks-list-template').find('.tasks-count').attr('data' , count);
+					$('#tasks-list-template').find('.tasks-count').text('('+count+' Total)');
 				}
 			} 
 		});

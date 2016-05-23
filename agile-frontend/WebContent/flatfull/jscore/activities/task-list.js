@@ -63,6 +63,8 @@ function updateData(params) {
 		individual_tag_name : 'tr',
 		postRenderCallback : function(el) {
 			$('.tasks-count').html(getCount(this.App_Calendar.allTasksListView.collection.toJSON()));
+
+			$('.tasks-count').attr('data', getTaskCount(this.App_Calendar.allTasksListView.collection.toJSON()));
 			includeTimeAgo(el);
 		},
 		appendItemCallback : function(el)

@@ -12,8 +12,7 @@ function editTask(taskId, taskListId, taskListOwnerId)
 	if (modelTaskList && modelTaskList.length)
 		modelTask = modelTaskList[0].get('taskCollection').get(taskId).toJSON();
 	else
-		modelTask = $.ajax({ type : "GET", url :'core/api/tasks/'+taskId, async : false, dataType : 'json' }).responseJSON ;
-
+		modelTask = App_Calendar.allTasksListView.collection.get(taskId).toJSON();
 	if (!modelTask)
 		return;
 
@@ -174,8 +173,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	if (modelTaskList && modelTaskList.length)
 		modelTask = modelTaskList[0].get('taskCollection').get(taskId).toJSON();
 	else
-		modelTask = $.ajax({ type : "GET", url :'core/api/tasks/'+taskId, async : false, dataType : 'json' }).responseJSON ;
-
+		modelTask = App_Calendar.allTasksListView.collection.get(taskId).toJSON();
 	if (!modelTask)
 		return;
 
