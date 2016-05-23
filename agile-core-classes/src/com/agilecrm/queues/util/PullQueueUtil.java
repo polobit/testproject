@@ -1,6 +1,7 @@
 package com.agilecrm.queues.util;
 
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,6 +12,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.LeaseOptions;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.QueueStatistics;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
@@ -115,8 +117,35 @@ public class PullQueueUtil
 	    String currentQueueName = getCampaignQueueName(queueName);
 	    Queue queue = QueueFactory.getQueue(currentQueueName);
 	    TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
-		    .method(Method.POST);
+			    .method(Method.POST);
 	    queue.addAsync(taskOptions);
+	    
+	    try
+		{
+			Future<QueueStatistics> fqs = queue.fetchStatisticsAsync(null);
+			
+			if(fqs.isDone())
+			{
+				QueueStatistics qs = fqs.get();
+				int count = qs.getNumTasks();
+				
+				// Sends 20 requests to increase tasks execution
+				if(count < 20)
+				{
+					while(count != 0)
+					{
+						queue.addAsync(taskOptions);
+						count--;
+					}
+				}
+					
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while adding tasks async " + e.getMessage());
+		}
 	}
 	catch (Exception e)
 	{
@@ -167,7 +196,7 @@ public class PullQueueUtil
 
 	// Delete Tasks
 	Queue q = QueueFactory.getQueue(queue);
-	q.deleteTask(tasks);
+	q.deleteTaskAsync(tasks);
     }
 
 }

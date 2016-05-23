@@ -1,11 +1,14 @@
 package com.agilecrm.queues.cron;
 
+import java.util.concurrent.Future;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.taskqueue.Queue;
@@ -73,30 +76,18 @@ public class CronPullServlet extends HttpServlet
 	if (tasksCount > FETCH_LIMIT)
 	{
 	    System.out.println("Running " + queueName + " tasks in backend...");
-	    int count = tasksCount/500;
-	    
-	    // If tasks count is less than 500, send 10 requests to backend at once
-	    count = (count == 0) ? 10 : count;
 
-	    while(count > 0){
-	    	try
-	    	{
-	    		System.out.println("backendpullqueue iteration count:" +count +"and tasksCount:" + tasksCount);
-	    		long startTime = System.currentTimeMillis();
-	    		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
-	    		System.out.println("Took" +(System.currentTimeMillis()-startTime)+" milliseconds to process backendpullqueue ");
-	    	}
-	    	catch (Exception e)
-	    	{
-	    		System.out.println("exception raised to process task");
-	    		e.printStackTrace();
-	    	}
-	    	count--;
-	    }
-
-	    // Run tasks from frontend too
-	    PullScheduler pullScheduler = new PullScheduler(queueName, true);
-	    pullScheduler.run();
+    	try
+    	{
+    		long startTime = System.currentTimeMillis();
+    		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
+    		System.out.println("Took" +(System.currentTimeMillis()-startTime)+" milliseconds to process backendpullqueue ");
+    	}
+    	catch (Exception e)
+    	{
+    		System.out.println("exception raised to process task");
+    		e.printStackTrace();
+    	}
 	}
 	else
 	{

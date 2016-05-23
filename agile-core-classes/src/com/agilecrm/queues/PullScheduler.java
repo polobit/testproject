@@ -2,6 +2,7 @@ package com.agilecrm.queues;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
@@ -131,7 +132,6 @@ public class PullScheduler
 
 	try
 	{
-	    System.out.println("Infinite loop started at : " + System.currentTimeMillis());
 	    int i = 0;
 	    while (shouldContinue(true))
 	    {
@@ -323,19 +323,18 @@ public class PullScheduler
 		else
 		{
 		    
-			boolean deleted = false;
+			Future<Boolean> deleted = null;
 			
 			try
 		    {
 			deferredTask.run();
 
-			// Delete task from Queue
-			deleted = queue.deleteTask(taskHandle);
+			// Delete task from Queue async
+			deleted = queue.deleteTaskAsync(taskHandle);
 		    }
 		    catch(InternalFailureException fe)
 		    {
-		    	// Retries once again
-		    	if(!deleted)
+		    	if(deleted != null && deleted.isCancelled())
 		    		queue.deleteTask(taskHandle);
 		    }
 		    catch (Exception e)
