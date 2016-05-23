@@ -190,12 +190,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public String gadget_id = null;
 
 	/**
-	 * Stores created time and logged_in time of the user
-	 */
-	@NotSaved
-	private JSONObject info_json = new JSONObject();
-
-	/**
 	 * schedule_id is nothing but name of the domain user at this time we are
 	 * not allowing user to change this but in future we give edit feature also
 	 */
@@ -654,9 +648,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			 * Check if this user is currently logged in domain user.
 			 * If so, add the new Domain User to the session cache.
 			 */
-//			Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
-//			if( obj != null && obj instanceof DomainUser && ((DomainUser)obj).id == this.id )
-//				SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, this);
+			Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+			if( obj != null && obj instanceof DomainUser && ((DomainUser)obj).id == this.id )
+				SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, this);
 			
 			
 			/*
@@ -701,7 +695,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			return;
 		try
 		{
+			JSONObject info_json = fetchInfoJSON();
 			info_json.put(key, value);
+			info_json_string = info_json.toString();
 		}
 		catch (Exception e)
 		{
@@ -719,6 +715,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 		try
 		{
+			JSONObject info_json = fetchInfoJSON();
 			return info_json.getString(key);
 		}
 		catch (Exception e)
@@ -738,6 +735,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 		try
 		{
+			JSONObject info_json = fetchInfoJSON();
 			return info_json.has(key);
 		}
 		catch (Exception e)
@@ -850,8 +848,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		setScopes();
 		setPerpersisMenuScopes();
 
-		info_json_string = info_json.toString();
-
 		// Lowercase
 		email = StringUtils.lowerCase(email);
 		domain = StringUtils.lowerCase(domain);
@@ -894,9 +890,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		{
 
 			this.calendar_url = getCalendarURL();
-
-			if (info_json != null)
-				info_json = new JSONObject(info_json_string);
 
 			// If no scopes are set, then all scopes are added
 			loadScopes();
@@ -1086,7 +1079,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public String toString()
 	{
 		return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-				+ this.id + " Name: " + this.name + "\n " + info_json;
+				+ this.id + " Name: " + this.name + "\n " + info_json_string;
 	}
 
 	/**
@@ -1131,6 +1124,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 		try
 		{
+			JSONObject info_json = fetchInfoJSON();
 			Long created_time = info_json.getLong(DomainUser.CREATED_TIME);
 			return created_time;
 		}
@@ -1168,4 +1162,15 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	}
 
+	
+	private JSONObject fetchInfoJSON()
+	{
+		if( info_json_string == null || ("").equalsIgnoreCase(info_json_string) )	return new JSONObject();
+			
+		try {
+			return new JSONObject(info_json_string);
+		} catch(JSONException e) {
+			return new JSONObject();
+		}
+	}
 }
