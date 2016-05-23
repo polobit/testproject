@@ -217,6 +217,19 @@ function initializeReportsListeners(){
 		$(this).addClass('active');
 		$("#"+tab_id).addClass('active');
 					});
+
+			$('#reports-listerners-container')
+			.off(
+					"click",
+					'.sub-nav-tab a');
+			$('#reports-listerners-container')
+			.on(
+					"click",
+					'.sub-nav-tab a',
+					function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+					});
 			
 
 }
