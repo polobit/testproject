@@ -438,10 +438,19 @@ function appendCustomfields(el){
 				 $.each(customfields, function(i,customfield){
 				 		if(customfield.field_type == "DATE")
 				 			row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 		else if(customfield.field_type == "CONTACT")
+				 		{
+				 			row += '<td class="deal_custom_replace" deal_contact_id="'+Handlebars.compile('{{id}}')({id : deals[index].attributes.id})+'"></td>';
+				 		}
+				 		else if(customfield.field_type == "COMPANY")
+				 		{
+				 			row += '<td class="deal_custom_replace" deal_company_id="'+Handlebars.compile('{{id}}')({id : deals[index].attributes.id})+'"></td>';
+				 		}
 				 		else
 							row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
+				 dealCustomFieldValueForContact(el,customfields,deals[index]);
 			 });
 			 
 		}
@@ -479,6 +488,58 @@ function dealCustomFieldValueForDate(name, data){
 		}
 	});
 	return value;
+}
+
+function dealCustomFieldValueForContact(el, customfields, deal){
+	$.each(deal.attributes.custom_data, function(ind, field){
+		var is_contact_field = isContactTypeCustomField(customfields, field);
+		var is_company_field = isCompanyTypeCustomField(customfields, field);
+		
+		if(is_contact_field || is_company_field)
+		{
+			var template = 'contacts-custom-view-custom-contact';
+			var ele_id = "deal_contact_id";
+			var img_ele_class = "contact-type-image";
+			if(is_company_field)
+			{
+				template = 'contacts-custom-view-custom-company';
+				ele_id = "deal_company_id";
+				img_ele_class = "company-type-image";
+			}
+			var contactIdsJSON = JSON.parse(field.value);
+			var referenceContactIds = "";
+			$.each(contactIdsJSON, function(index, val){
+				referenceContactIds += val+",";
+			});
+			App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+			
+			App_Contacts.referenceContactsCollection.collection.fetch({
+				success : function(data){
+					if (data && data.length > 0)
+					{
+						getTemplate(template, data.toJSON(), undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							$(el).find("td["+ele_id+"="+deal.id+"]").html($(template_ui).html());
+							var ellipsis_required = false;
+							$(el).find("td["+ele_id+"="+deal.id+"]").find("."+img_ele_class).each(function(index, val){
+								if(index > 2)
+								{
+									ellipsis_required = true;
+									$(this).remove();
+								}
+							});
+							if(ellipsis_required)
+							{
+								$(el).find("td["+ele_id+"="+deal.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
+							}
+						}, null);
+					}
+					hideTransitionBar();
+				}
+			});
+		}
+	});
 }
 
 function populateLostReasons(el, value){
