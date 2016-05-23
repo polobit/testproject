@@ -1,10 +1,10 @@
-<script id="ticket-helpcenter-add-article-template" type="text/html">
+<script id="ticket-helpcenter-add-section-template" type="text/html">
 <div class="wrapper">
     <div class="row">
     	<div class="col-md-10">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			{{#if id}}Edit {{else}}Add {{/if}}Article
+        			{{#if id}}Edit{{else}}Add{{/if}} Section
     			</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
@@ -12,43 +12,43 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="Title">Article Title<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="name">Name <span class="field_req">*</span></label> 
                             <div class="col-md-5">
                                 <div class="controls">
-                                    <input type="text" name="title" id="title"  placeholder="Title" class="required form-control" maxlength="60">
+                                    <input type="text" name="name" id="name"  placeholder="Name" class="required form-control" maxlength="60">
                                 </div>
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="description">Description </label> 
+                            <label class="control-label col-md-3" for="description">Description <span class="field_req">*</span></label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
-                                    <textarea id="description-article" class="form-control required" name="content" style="min-height: 100px; width:90%; dispaly:none; visibility:hidden;"></textarea>
+                                    <textarea id="description" class="form-control required" name="description" style="min-height: 100px;"></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="Catogery">Section<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="Catogery">Category<span class="field_req">*</span></label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
-                                    <select name="section_id" class="form-control" id="catogery">
+                                    <select name="categorie_id" class="form-control" id="catogery">
                                     </select>
                                 </div>    
                             </div>
                         </div>
                         <div class="control-group form-group">
-                        <label class="control-label col-md-3" for="description"><span></span></label> 
-                            <div class="col-md-4 m-t-xs">
+                            <label class="control-label col-md-3" for="Visible_To">Visible To<span class="field_req">*</span></label> 
+                            <div class="col-md-6 m-t-xs">
                                 <div class="controls">
-                                <input type="radio" name="is_article_published" value="true" checked="" style="vertical-align: top; "> Mark as publish&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="is_article_published" style="vertical-align: top;" value="false"> Mark as draft                                      
-                                </div> 
+                                    <select name="visible_to" class=" form-control" id="visible_to">
+                                        <option  value="CUSTOMER" selected="selected">Customer</option>
+                                        <option value="AGENTS">Agents</option>
+                                        <option value="ADMIN">Admin</option>            
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="control-group form-group">
-                        <label class="control-label col-md-3" for="description"><span></span></label> 
-                        </div>
-                        <div class="row">
+                         <div class="row">
                             <div class="col-md-12"><hr></div>
                         </div>
                         <div class="form-group">
@@ -66,15 +66,3 @@
     </div>
 </div>
 </script>
-<script id="helpcenter-section-category-template" type="text/html">
-    {{#each this}}
-      <optgroup  name='categorie_id' data-id="{{id}}"  label="{{name}}">
-        {{#sections}}
-          <option name='section_id'  data-catogery-id="{{../id}}" value="{{id}}">
-            {{name}}
-          </option>
-        {{/sections}}
-      </optgroup>
-    {{/each}}
-    </script>
- 

@@ -23,11 +23,8 @@ public class CategorieUtil
 		List<Categorie> categories = Categorie.dao.fetchAll();
 
 		if (categories == null || categories.size() == 0)
-		{
-			createDefaultCategorie();
-
-			categories = Categorie.dao.fetchAll();
-		}
+			return null;
+		
 
 		return categories;
 	}

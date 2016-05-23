@@ -1,0 +1,59 @@
+<script id="ticket-helpcenter-sections-collection-template" type="text/html">
+{{#unless this.length}}
+    <div class="col panel wrapper">
+    <div class="hbox h-auto m-b-sm">
+        <div class="text-center padder-v">
+            <h4 class="m-t-none m-b-xs">You don&#39;t have any sections</h4>
+            <div class="m-b-xs">
+                Create sections to configure your knowledge base
+            </div>
+            <div>
+                <a href="#knowledgebase/add-section" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                    Create Section
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+    <div class="col panel wrapper">
+        <div class="hbox h-auto m-b-sm">
+            <div class="pull-right">
+                <a href="#knowledgebase/add-section" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-plus-sign"></i></span> Add Section
+                </a>
+            </div>
+            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/section/bulk" data-bulk-delete-title="Delete"
+                data-bulk-delete-msg="Are you sure you want to delete?">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th style="width:30%">Section Name</th>
+                            <th style="width:45%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-helpcenter-sections-model-list"  class="c-p"> </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none invisible" >
+            <h4 class="m-t-none h4 m-b-sm">
+               What is Help Center?
+            </h4>
+            <p>
+               Help Center content yet to prepare!.....
+            </p>
+            <br>
+            {{#if this.length}}
+            <p>
+               <a href="https://www.youtube.com/watch?v=vrxV_52QQTc" target="_blank">
+               <img src="{{getS3ImagePath '../../img/landingpage-info.png'}}" class="img-responsive w-full">
+               </a>
+            </p>
+            <br>
+            {{/if}}
+      
+    </div>        
+{{/if}}
+</script>

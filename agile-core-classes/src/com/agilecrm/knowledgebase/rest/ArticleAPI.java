@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.knowledgebase.entity.Article;
@@ -26,6 +28,7 @@ import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.ArticleUtil;
 import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
+import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
@@ -72,10 +75,9 @@ public class ArticleAPI
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Article> getArticles(@QueryParam("categorie_id") Long categorie_id,
-			@QueryParam("section_id") Long section_id)
+	public List<Article> getArticles(@QueryParam("section_id") Long section_id)
 	{
-		return ArticleUtil.getArticles(categorie_id, section_id);
+		return ArticleUtil.getArticles(section_id);
 	}
 	
 	/**
@@ -145,6 +147,27 @@ public class ArticleAPI
 
 		return article;
 	}
+	
+	@POST
+	@Path("/bulk")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteArticles(@FormParam("ids") String model_ids) throws JSONException
+	{
+		try
+		{
+			Article.dao.deleteBulkByIds(new JSONArray(model_ids));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return new JSONObject().put("status", "success").toString();
+	}
+	
 	/**
 	 * 
 	 * @param article,id

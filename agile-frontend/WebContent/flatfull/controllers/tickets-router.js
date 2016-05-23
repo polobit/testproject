@@ -37,7 +37,21 @@
 
 		/*Ticket reports*/
 		"ticket-reports" : "ticketReports",
-		"ticket-report/:report_type" : "ticketReport"
+		"ticket-report/:report_type" : "ticketReport",
+	     
+         /*Help center Routes*/
+		"knowledgebase" : "categories",
+        "knowledgebase/:id/sections":"sections",  
+       	"knowledgebase/articles/:id":"articles",
+		"knowledgebase/add-article" : "addArticle",
+		"knowledgebase/section/:section_id/article/:article_id/edit-article" : "editArticle",	
+		"knowledgebase/section/:section_id/article/:id" : "showArticle",
+		"knowledgebase/add-section" : "addSection",
+		"knowledgebase/catogery/:categorie_id/section/:id/edit-section" : "editSection",	
+		"knowledgebase/add-category":"addCategory",
+		"knowledgebase/:id/edit-category":"editCategory",
+
+
 	},
 
 	/**
@@ -947,6 +961,328 @@
 
  			if(callback)
  				callback(tab_highlight_callback);
+		});
+	},
+
+	categories: function(){
+				loadServiceLibrary(function(){
+		 	//Rendering root template
+			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+				//Initializing base collection with groups URL
+			App_Ticket_Module.categoriesCollection = new Base_Collection_View({
+				url : '/core/api/knowledgebase/categorie',
+				templateKey : "ticket-helpcenter-categories",
+				individual_tag_name : 'tr',
+				sort_collection : true, 
+	 			sortKey : 'updated_time',
+	 			descending : true,
+				postRenderCallback : function(el, collection) {
+
+                  //Helcenter_Events.categorieDelete(el);
+				}
+			});
+
+			//Fetching groups collections
+			App_Ticket_Module.categoriesCollection.collection.fetch();
+
+			//Rendering template
+			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.categoriesCollection.el);
+
+		 	});
+		});
+	},
+
+
+	sections: function(categorie_id){
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+				//Initializing base collection with groups URL
+			App_Ticket_Module.sectionsCollection = new Base_Collection_View({
+				
+				url : '/helpcenterapi/api/knowledgebase/section/categorie/' + categorie_id,		
+				templateKey : "ticket-helpcenter-sections",
+				individual_tag_name : 'tr',
+				sort_collection : true, 
+	 			sortKey : 'updated_time',
+	 			descending : true,
+				postRenderCallback : function(el, collection) {
+
+                  Helcenter_Events.sectionDelete(el);
+				}
+			});
+
+			//Fetching groups collections
+			App_Ticket_Module.sectionsCollection.collection.fetch();
+
+			//Rendering template
+			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.sectionsCollection.el);
+
+		 	});
+		});
+	},
+    
+    articles: function(section_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+				//Initializing base collection with groups URL
+			App_Ticket_Module.articlesCollection = new Base_Collection_View({
+
+				url : '/core/api/knowledgebase/article?section_id=' + section_id, 		
+				templateKey : "ticket-helpcenter-articles",
+				individual_tag_name : 'tr',
+				sort_collection : true, 
+	 			sortKey : 'updated_time',
+	 			descending : true,
+				postRenderCallback : function(el, collection) {
+
+                  Helcenter_Events.articleDelete(el);
+				
+
+				}
+			});
+
+			//Fetching groups collections
+			App_Ticket_Module.articlesCollection.collection.fetch();
+
+			//Rendering template
+			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.articlesCollection.el);
+
+		 	});
+		});
+	},
+
+	addArticle : function(section_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+
+		 		var addArticleView = new Base_Model_View({
+	 				isNew : true, 
+	 				url : '/core/api/knowledgebase/article',
+	 				template : "ticket-helpcenter-add-article",
+	 				window : "back",
+			        
+					prePersist : function(model){
+						var json = {};
+						var catogery_id = $("#catogery option:selected").data('catogery-id');
+						json = {"categorie_id" : catogery_id };
+
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+
+							json.plain_content = plain_content;
+						}
+						catch(err){}
+						
+						model.set(json, { silent : true });
+				    },
+
+			        postRenderCallback : function(el){
+					
+						setupTinyMCEEditor('textarea#description-article', true, undefined, function(){});
+  
+						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+			 	 			getTemplate("helpcenter-section-category", collection.toJSON(), undefined, function(template_ui){						
+
+								if(!template_ui)
+									return;
+
+				                $('#catogery', el).html($(template_ui));
+
+				                if(section_id)
+									$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);
+
+								if(callback)
+					 				callback();
+			               	} );		
+					
+					},'', true);
+
+			        },
+			        
+			    });
+
+	 			$('#admin-prefs-tabs-content').html(addArticleView.render().el);
+
+		 		if(callback)
+		 			callback();
+		 	});
+		});
+
+	},
+
+	editArticle : function(section_id,article_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+
+		 		var editarticleView = new Base_Model_View({
+ 				isNew : false, 
+ 				url : "/core/api/knowledgebase/article/" +article_id,
+ 				template : "ticket-helpcenter-add-article",
+ 				window : "back",
+		        
+                prePersist : function(model){
+					var json = {};
+					var catogery_id = $("#catogery option:selected").data('catogery-id');
+					json = {"categorie_id" : catogery_id };
+					model.set(json, { silent : true });
+			    },
+
+		        postRenderCallback : function(el){
+				setupTinyMCEEditor('textarea#description-article', true, undefined, function(){
+					$("textarea#description-article").css("display", "none");
+				});
+
+				fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(collection){
+
+		 	 		$('#catogery', el).html(getTemplate('helpcenter-section-category', collection.toJSON()));
+   					$('#catogery option[value="'+section_id+'"]',el).attr("selected",true);                    
+				
+				},'', true);
+
+		        }
+		    });    
+	 			$('#admin-prefs-tabs-content').html(editarticleView.render().el);
+
+		 		if(callback)
+		 			callback();
+		 	});
+		});
+
+	},
+
+	showArticle : function(section_id,article_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+				var articleView = new Base_Model_View({
+					
+					isNew : false,
+					template : "ticket-helpcenter-article",
+					url : "/core/api/knowledgebase/article/" + article_id,
+			        postRenderCallback: function(el, data){
+
+			     
+					}
+				});
+
+				$('#admin-prefs-tabs-content').html(articleView.render().el);
+
+							
+			});	
+		});	
+	},
+
+	addSection : function(category_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+				var addsectionView = new Base_Model_View({
+
+	 				isNew : true, 
+	 				url : '/core/api/knowledgebase/section',
+	 				template : "helpcenter-add-section",
+			        window:'back',
+			        postRenderCallback : function(el){
+			        	 var optionsTemplate = "<option value={{id}}>{{name}}</option>";
+							 fillSelect('catogery', '/core/api/knowledgebase/categorie', '',function(){
+	                                           
+	                                       if(!category_id)
+	                                       	  return;
+
+	                                       $('select option[value="'+category_id+'"]').attr("selected",true);
+	                                        
+							 },optionsTemplate, true);
+
+			        }
+				});
+
+				$('#admin-prefs-tabs-content').html(addsectionView.render().el);			
+			});	
+		});	
+	},
+
+
+    editSection : function(category_id,section_id){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+				var editSectionView = new Base_Model_View({
+					isNew : false,
+					template : "helpcenter-add-section",
+					url : "/core/api/knowledgebase/section?id=" + section_id,
+					window:'back',
+				    postRenderCallback : function(el){
+				        var optionsTemplate = "<option value={{id}}>{{name}}</option>";
+	 						fillSelect('catogery', '/core/api/knowledgebase/categorie', '', function(){
+	                                       $('select option[value="'+category_id+'"]').attr("selected",true);    
+				                     		},optionsTemplate, true);
+	 				}
+				   
+			    });
+
+				$('#admin-prefs-tabs-content').html(editSectionView.render().el);			
+			});	
+		});	
+	}, 
+
+	addCategory : function(){
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+				var addCatogeryView = new Base_Model_View({
+							isNew : true, 
+						 	url : '/core/api/knowledgebase/categorie',
+							template : "helpcenter-add-catogery",
+							window : "back",
+				    });
+
+				$('#admin-prefs-tabs-content').html(addCatogeryView.render().el);    
+			});
+		});
+	},
+
+
+	editCategory : function(category_id){
+
+		if(!App_Ticket_Module.categoriesCollection || !App_Ticket_Module.categoriesCollection.collection){
+	 		return;
+	} 			
+
+		loadServiceLibrary(function(){
+		 	//Rendering root template
+		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+  
+			var categorieModel = App_Ticket_Module.categoriesCollection.collection.get(category_id);
+
+        	console.log(categorieModel);
+		
+		    var editCatogeryView = new Base_Model_View({
+ 				model : categorieModel,
+ 				isNew : true, 
+ 				url : '/core/api/knowledgebase/categorie',
+ 				template : "helpcenter-add-catogery",
+ 				window : "back",
+		    });
+
+				$('#admin-prefs-tabs-content').html(editCatogeryView.render().el);    
+			});
 		});
 	},
 

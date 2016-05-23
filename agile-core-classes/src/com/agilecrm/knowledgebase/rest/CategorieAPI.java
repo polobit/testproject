@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.agilecrm.knowledgebase.entity.Categorie;
+import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.CategorieUtil;
 import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.ticket.entitys.TicketCannedMessages;
@@ -40,6 +41,9 @@ public class CategorieAPI
 	public List<Categorie> getCategories()
 	{
 		List<Categorie> categories = CategorieUtil.getCategories();
+		
+		if(categories == null)
+		 return null;
 
 		for (Categorie categorie : categories)
 			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id);
@@ -84,6 +88,27 @@ public class CategorieAPI
 
 		return categorie;
 	}
+	
+	@POST
+	@Path("/bulk")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteCategories(@FormParam("ids") String model_ids) throws JSONException
+	{
+		try
+		{
+			Categorie.dao.deleteBulkByIds(new JSONArray(model_ids));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return new JSONObject().put("status", "success").toString();
+	}
+
 
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

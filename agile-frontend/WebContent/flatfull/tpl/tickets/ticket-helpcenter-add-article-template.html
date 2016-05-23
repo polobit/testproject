@@ -12,23 +12,23 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="Title">Article Title<span class="field_req">*</span></label> 
-                            <div class="col-md-5">
+                            <label class="control-label col-md-2" for="Title">Article Title<span class="field_req">*</span></label> 
+                            <div class="col-md-8">
                                 <div class="controls">
                                     <input type="text" name="title" id="title"  placeholder="Title" class="required form-control" maxlength="60">
                                 </div>
                             </div>
                         </div>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="description">Description </label> 
-                            <div class="col-md-6 m-t-xs">
-                                <div class="controls">
-                                    <textarea id="description-article" class="form-control required" name="content" style="min-height: 100px; width:90%; dispaly:none; visibility:hidden;"></textarea>
-                                </div>
+                            <label class="control-label col-md-2 col-sm-2">Description </label>
+                            <div class="controls col-sm-10 email-editor-custom-scroll-bar">
+                                <div id="loading-editor"></div>
+                                <textarea class="form-control required" name="content" id="description-article" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
                             </div>
-                        </div>
+                        </div>   
+                
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="Catogery">Section<span class="field_req">*</span></label> 
+                            <label class="control-label col-md-2" for="Catogery">Section<span class="field_req">*</span></label> 
                             <div class="col-md-6 m-t-xs">
                                 <div class="controls">
                                     <select name="section_id" class="form-control" id="catogery">
@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <div class="control-group form-group">
-                        <label class="control-label col-md-3" for="description"><span></span></label> 
+                        <label class="control-label col-md-2" for="description"><span></span></label> 
                             <div class="col-md-4 m-t-xs">
                                 <div class="controls">
                                 <input type="radio" name="is_article_published" value="true" checked="" style="vertical-align: top; "> Mark as publish&nbsp;&nbsp;&nbsp;

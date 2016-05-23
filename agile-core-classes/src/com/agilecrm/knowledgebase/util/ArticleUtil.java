@@ -24,12 +24,9 @@ public class ArticleUtil
 	 * @param sectionID
 	 * @return
 	 */
-	public static List<Article> getArticles(Long categorieID, Long sectionID)
+	public static List<Article> getArticles( Long sectionID)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
-
-		if (categorieID != null)
-			map.put("categorie_key", new Key<>(Categorie.class, categorieID));
 
 		if (sectionID != null)
 			map.put("section_key", new Key<>(Section.class, sectionID));
