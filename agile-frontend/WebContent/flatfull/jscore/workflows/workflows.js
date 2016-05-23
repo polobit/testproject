@@ -738,11 +738,11 @@ function change_access_level(level, el){
     if(level == "1"){
         $("#campaign_access_level span", el).text('Make Private');
         $("#campaign_access_level i", el).removeClass("icon-unlock");
-        $("#campaign_access_level i", el).addClass("icon-lock");
+        $("#campaign_access_level i", el).addClass("fa fa-lock");
     }
     else {
         $("#campaign_access_level span", el).text('Make Public');
-        $("#campaign_access_level i", el).removeClass("icon-lock");
+        $("#campaign_access_level i", el).removeClass("fa fa-lock");
         $("#campaign_access_level i", el).addClass("icon-unlock");
     }
 }
