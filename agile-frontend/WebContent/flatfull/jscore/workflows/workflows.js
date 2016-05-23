@@ -244,6 +244,8 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 if($(targetEl).attr('id') === 'campaign_access_level'){
                     if(access_permission == "1")
                         show_campaign_save(e,"The Campaign is now Public.");
+                       //show_campaign_save(e,"The Campaign is now Public.");
+
                     else 
                         show_campaign_save(e,"The Campaign is now Private.");
                 }
