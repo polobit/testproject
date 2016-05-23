@@ -73,9 +73,12 @@ public class CronPullServlet extends HttpServlet
 	if (tasksCount > FETCH_LIMIT)
 	{
 	    System.out.println("Running " + queueName + " tasks in backend...");
-	    int count = tasksCount/400+1;
+	    int count = tasksCount/500;
+	    
+	    // If tasks count is less than 500, send 10 requests to backend at once
+	    count = (count == 0) ? 10 : count;
 
-	    while(count>0){
+	    while(count > 0){
 	    	try
 	    	{
 	    		System.out.println("backendpullqueue iteration count:" +count +"and tasksCount:" + tasksCount);
