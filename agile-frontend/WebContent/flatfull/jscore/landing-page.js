@@ -16,35 +16,50 @@ jQuery.validator.addMethod("lpdirectorypath", function(value, element) {
 	return /^(\/\w+)+[a-z0-9-.]+$/.test("/"+value);
 	},"Invalid path.");
 
+ /**making an function  for the reusable the code for the save 
+ landing page and here one LandingPageId we are defining with empty  
+ **/
+
+function saveLandingPageToDataStore(isAutoSaved,pageId) {
+
+	if (isValidForm('#landingPageBuilderForm')) {
+		$(".saveLandingPageButton").prop("disabled",true);
+		
+		$(".saveLandingPageButtonText").html("Saving...");
+		    		
+		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
+		if(App_LandingPageRouter.LandingPageCollectionView) {
+			App_LandingPageRouter.LandingPageCollectionView.collection.fetch();
+		}
+        /*when autosaved value is true that time it will be work
+        * for the */
+		if(!isAutoSaved) {	
+			if (typeof pageId !== "undefined" && readData("landingpages-save-popup")!=="true" ) {
+				getTemplate("landingpages-save-popup-modal",{"id":pageId}, undefined, function(ui){
+					$("#landingPagesSavePopup").html(ui).modal("show");
+					$("#popup-msg").fadeOut(8000);
+				});//function closing
+			}//if closed
+	 	}//outer if closed
+      
+
+ } else {
+		if(!$("#landingpagename").val().trim()) {
+			$('html, body').animate({scrollTop: $('body').offset().top}, 500);
+		}
+	}
+}
+
 function initializeLandingPageListeners(pageId) {
 
 	$('#landingpages-listeners').off();
 	
 	$('#landingpages-listeners').on('click', '.saveLandingPageButton', function(e){
 		e.preventDefault();
-		// Check if the form is valid
-    	if (isValidForm('#landingPageBuilderForm')) {
-    		$(".saveLandingPageButton").prop("disabled",true);
-    		
-			$(".saveLandingPageButtonText").html("Saving...");
-			    		
-    		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
-    		if(App_LandingPageRouter.LandingPageCollectionView) {
-    			App_LandingPageRouter.LandingPageCollectionView.collection.fetch();
-    		}
-    		track_with_save_success_model(e.currentTarget);
-            //craeting an function for the popup
-           
-    	} else {
-    		if(!$("#landingpagename").val().trim()) {
-    			$('html, body').animate({scrollTop: $('body').offset().top}, 500);
-    		}
-    	}
+		saveLandingPageToDataStore(false,pageId);
+		track_with_save_success_model(e.currentTarget);
 	});
-
-
-	
-	$('#landingpages-listeners').on('click', '.lpDeviceView', function(e){
+   $('#landingpages-listeners').on('click', '.lpDeviceView', function(e){
 		e.preventDefault();
 		var triggeringElement = $(this).data("trigger");
     	var landingPageIframe = document.getElementById('landingPageBuilder').contentWindow;
@@ -77,29 +92,24 @@ function initializeLandingPageListeners(pageId) {
 	//creating an function for the  save
     
       
-	 $('#landingpages-listeners').on('click','.saveLandingPageButton',function(e){
+	  /*$('#landingpages-listeners').on('click','.saveLandingPageButton',function(e){
 		   e.preventDefault();
-		   	 
+		   // var flag=false;	    
             var id={"id":pageId};
-            if (isValidForm('#landingPageBuilderForm') && pageId !== undefined && readData("landingpages-save-popup")!=="true") {
+            if (flag===false && isValidForm('#landingPageBuilderForm') && pageId !== undefined && readData("landingpages-save-popup")!=="true") {
  
 		    getTemplate("landingpages-save-popup-modal",id, undefined, function(ui){
 		   	// var id={"id":pageId};
-           $("#landingPagesSavePopup").html(ui).modal("show");
-           $("#popup-msg").fadeOut(8000);
+             $("#landingPagesSavePopup").html(ui).modal("show");
+             $("#popup-msg").fadeOut(8000);
+             flag=true;
        
        
       });
-    }//if() block closing 
-   });
-	
-
-
-     
-
-
-		
+    }
     
+   });*/
+	 
 	$('#landingpages-listeners').on('click', '#builderPageOptionsLink', function (e) {
 		e.preventDefault();
 		$(this).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
@@ -185,18 +195,7 @@ function initializeLandingPageListeners(pageId) {
 		
 		builderIFrame.$(selector).trigger("click");
 	});
-    //adding the function for the click event
-   /* $('#landingpages-listeners').on('click',.saveLandingPageButtonText,function(e){
-    	e.preventDefault();
-    	onAddPopup();
-
-    });
-      //creating an function for the onAddingPopup function
-      function onAddPopup(){
-
-
-      }**/
-
+    
 	$('#landingpages-listeners').on('click', '.lpCodeEditorMenuItem', function(e){
 		e.preventDefault();
 		document.getElementById('landingPageBuilder').contentWindow.$('#codeEditorAgileId').trigger("click");
@@ -243,13 +242,13 @@ function onLandingPageSaved(landingPage) {
 	$("#landingPageBuilderMenuNav").show();
      }
 
-function landingPageShowAlertMessage(message, type) {
+  function landingPageShowAlertMessage(message, type) {
 	$("#statusMessageHolder").html('<div class="alert '+type+'" role="alert">'
 	+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
 	+ message + '</div>');
-}
+   }
 
-function landingPageSaveCnameSettings(pageId,CNAME) {
+ function landingPageSaveCnameSettings(pageId,CNAME) {
 
     var cnameSettings = {
     "landing_page_id": pageId,
@@ -285,12 +284,5 @@ function landingPageSaveCnameSettings(pageId,CNAME) {
         },
     });
 
-    //creating function for the hidlandingpage
-    /*function hideLandingpagePopup(){
-   
-        if($("#landingpages-save-popup").prop("checked"))
-            storeData("landingpages-save-popup", true,10);
-        else
-            storeData("landingpages-save-popup", false,10);
-      }*/
+    
 }

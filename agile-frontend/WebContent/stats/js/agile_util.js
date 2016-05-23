@@ -159,10 +159,15 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 	{
 		if (contact_id)
 		{
+			var id_check;
+			if(form_data._agile_form_id)
+				id_check=true;
+			else
+				id_check=false;
 			var form_name = form_data["_agile_form_name"] || (agile_form.getElementsByTagName("legend")[0] ? agile_form.getElementsByTagName("legend")[0].innerHTML
 					: "");
 			var trigger_url = agile_id.getURL() + "/formsubmit?id=" + agile_id.get() + "&contactid=" + contact_id + "&formname=" + encodeURIComponent(form_name) + "&formdata=" + encodeURIComponent(JSON
-					.stringify(form_data)) + "&new=" + new_contact;
+					.stringify(form_data)) + "&new=" + new_contact+"&checkId="+id_check;
 			agile_json(trigger_url);
 		}
 	}

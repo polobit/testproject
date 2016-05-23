@@ -868,12 +868,12 @@ $('.portlet_body')
 				}
 			});
 
-	$('.gridster-portlets')
+	$('.portlet_body')
 			.on(
 					"click",
 					'.portlets-tasks-select',
 					function(e) {
-
+						
 						e.stopPropagation();
 						if ($(this).is(':checked')) {
 
@@ -966,7 +966,8 @@ $('.portlet_body')
 		    }
 	    }
 	});
-
+		
+			
 }
 
 /** 

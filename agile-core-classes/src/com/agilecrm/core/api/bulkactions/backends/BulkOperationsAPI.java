@@ -77,6 +77,7 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.RetryOptions;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.thirdparty.Mailgun;
@@ -277,7 +278,9 @@ public class BulkOperationsAPI
 
 		// Add to queue
 		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
-		queue.add(TaskOptions.Builder.withPayload(task));
+		
+		// Added Retries 5 with 120 secs interval gap for next retry
+		queue.add(TaskOptions.Builder.withPayload(task).retryOptions(RetryOptions.Builder.withTaskRetryLimit(5).minBackoffSeconds(120).maxBackoffSeconds(300)));
 
 	    }
 	    catch (Exception e)

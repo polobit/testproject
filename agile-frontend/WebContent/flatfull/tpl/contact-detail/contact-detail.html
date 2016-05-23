@@ -47,12 +47,14 @@
 							</form>
 						</div>
 
-						 <div class="pos-abs pos-r-0 m-t-sm isotope-item">
+						 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:14px;">
 
 						<div class="dropdown contact-detail-edit" >
 
 
-								<button href="#"class="dropdown-toggle bg-transparent b-n" data-toggle="dropdown" role="menu"><span class="caret" style="margin-top:-6px;"></span></button>
+								<button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+								<span class="caret m-l-none" style="margin-top:-11px;"></span>
+								</button>
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
                                    <li role="menuitem"><a href='#contact-edit'>
 
@@ -740,11 +742,13 @@ class="icon-plus"></i> <span >Add</span></a>
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
 						</div>
-						 <div class="pos-abs pos-r-0 m-t-sm isotope-item">
+						 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:14px;">
 						<div>
 								
 								
-								<button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
+								<button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+								<span class="caret m-l-none" style="margin-top:-11px;"></span>
+								</button>
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
                                    <li><a href='#contact-edit'>
                                      <div class="pull-left"><i class="fa fa-edit"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
@@ -801,7 +805,7 @@ class="icon-plus"></i> <span >Add</span></a>
 							<input type="text"id="Contact-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
 										"last_name"}}">
 					</div>
-					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:5px; height:28px;" id ="contactName">
+					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="contactName">
 
 								<span class="text-capitalize " id="contact_name">{{getPropertyValue properties
 										"first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
@@ -1461,7 +1465,7 @@ class="icon-plus"></i> <span >Add</span></a>
 					</div>
 
 					<div class="m-auto">
-						<div id="timeline" style="float:left; z-index:1;">
+						<div id="timeline" style="float:left;">
 							<div id="line-container">
 								<div id="line"></div>
 							</div>

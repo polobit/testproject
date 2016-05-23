@@ -40,6 +40,7 @@ function agile_validations(){
  						else {
  							document.getElementById("agile_span"+i).innerHTML = "Please enter a valid email.";
  							count++;
+ 							isValid = false;
  							continue;
  						}	
  					}
@@ -52,8 +53,9 @@ function agile_validations(){
 		 					continue;
 						}
  						else {
- 							document.getElementById("agile_span"+i).innerHTML = "Please enter valid phone number (+xxxxxxxxxx)";
+ 							document.getElementById("agile_span"+i).innerHTML = "Please enter valid phone number";
  							count++;
+ 							isValid = false;
  							continue;
  						}	
  					}
@@ -84,6 +86,7 @@ function agile_validations(){
 						spanTag.style.fontSize = "12px";
 						inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
 						count++;    //if span created then we will increase by one
+						isValid = false;
 						continue;
  						}
 
@@ -97,12 +100,13 @@ function agile_validations(){
 						}
  						else{
 	 						var spanTag = document.createElement("span");
-							spanTag.innerHTML = "Please enter valid phone number (+xxxxxxxxxx)";
+							spanTag.innerHTML = "Please enter valid phone number";
 							spanTag.id = "agile_span"+i;
 							spanTag.style.color = "red";
 							spanTag.style.fontSize = "12px";
 							inputNode.parentNode.insertBefore(spanTag,inputNode.nextSibling);
 							count++;    //if span created then we will increase by one
+							isValid = false;
 							continue;
  						}
 
@@ -138,7 +142,7 @@ function validateEmail(email){
 
 function validatePhonenumber(str)  
 {  
-	var pattern=/^((\+)(\d)+)$/;
+	var pattern=/^(?=.*[0-9])[- +().0-9]+$/;
 
 	if(pattern.test(str))
 		return true;	

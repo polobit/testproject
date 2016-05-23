@@ -43,7 +43,7 @@ var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail)
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail, page_size)
 {
 
 	// Turn off browser default auto complete
@@ -52,6 +52,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 		url = "core/api/search/"
 
 	var CONTACTS = {};
+	if(!page_size)
+		page_size = 10;
 
 	var el_typeahead = $('#' + id, el)
 			.typeahead(
@@ -86,7 +88,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							// Sends search request and holds request object,
 							// which can be reference to cancel request if there
 							// is any new request
-							this.options.searchAJAXRequest = $.getJSON(url + "?q=" + encodeURIComponent(query) + "&page_size=10" + type_url, function(data)
+							this.options.searchAJAXRequest = $.getJSON(url + "?q=" + encodeURIComponent(query) + "&page_size=" + page_size + "" + type_url, function(data)
 							{
 
 								var current_query = $('#' + id, el).val();
@@ -239,6 +241,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								this.show();
 								return;
 							}
+			
 
 							// Stores all the matched elements (<li> drop down)
 							// in items

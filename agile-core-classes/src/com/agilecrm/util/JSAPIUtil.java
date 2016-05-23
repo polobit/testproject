@@ -160,5 +160,18 @@ public class JSAPIUtil
 		return mapper.writeValueAsString(jsContact);
 		
     }
+
+    public static boolean checkAllowedDomain() {
+	
+	String domain = NamespaceManager.get();
+	    List<String> whiteList = new ArrayList<String>();
+	    whiteList.add("ghanshyam");
+	    whiteList.add("debunc");
+	    
+	    if(!StringUtils.isEmpty(domain) && whiteList.contains(domain))
+	    	return true;
+	    
+	    return false;
+    }
     
 }

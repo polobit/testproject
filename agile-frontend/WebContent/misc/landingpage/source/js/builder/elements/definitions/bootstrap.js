@@ -98,7 +98,7 @@ baseBuilderElements.push({
  	nodes: '*',
  	frameworks: ['bootstrap'],
  	class: 'row',
- 	html: 	'<div class="container"><div class="row"><div class="col-md-4"></div><div class="col-md-3"></div><div class="col-md-5"></div></div></div>',
+ 	html: '<div class="container"><div class="row"><div class="col-md-4"></div><div class="col-md-3"></div><div class="col-md-5"></div></div></div>',
  	types: ['flow'],
  	validChildren: ['flow'],
  	category: 'layout',
@@ -603,22 +603,22 @@ baseBuilderElements.push({
  	html:   '<div class="row image-grid">'+
 			 '<div class="col-xs-3">'+
 			    '<a href="#" class="thumbnail">'+
-			      '<img src="templates/freelancer/images/portfolio/cabin.png">'+
+			      '<img src="https://s3.amazonaws.com/agilecrm/landing/public/img/profile.png">'+
 			    '</a>'+
 			  '</div>'+
 			  '<div class="col-xs-3">'+
 			    '<a href="#" class="thumbnail">'+
-			      '<img src="templates/freelancer/images/portfolio/cabin.png">'+
+			      '<img src="https://s3.amazonaws.com/agilecrm/landing/public/img/profile.png">'+
 			    '</a>'+
 			  '</div>'+
 			  '<div class="col-xs-3">'+
 			    '<a href="#" class="thumbnail">'+
-			      '<img src="templates/freelancer/images/portfolio/cabin.png">'+
+			      '<img src="https://s3.amazonaws.com/agilecrm/landing/public/img/profile.png">'+
 			    '</a>'+
 			  '</div>'+
 			  '<div class="col-xs-3">'+
 			    '<a href="#" class="thumbnail">'+
-			      '<img src="templates/freelancer/images/portfolio/cabin.png">'+
+			      '<img src="https://s3.amazonaws.com/agilecrm/landing/public/img/profile.png">'+
 			    '</a>'+
 			  '</div>'+
 			'</div>',

@@ -666,6 +666,7 @@ var portlet_graph_data_utility = {
 		var incorrectReferralCallsCountList= [];
 		var newOpportunityCallsCountList= [];
 		var meetingScheduledCallsCountList = [];
+		var queuedCallsCountList = [];
 		var callsDurationList = [];
 		var totalCallsCountList = [];
 		var domainUsersList = [];
@@ -700,6 +701,7 @@ var portlet_graph_data_utility = {
 							incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
 							meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
 							newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
+							queuedCallsCountList = data["queuedCallsCountList"];
 							callsDurationList = data["callsDurationList"];
 							totalCallsCountList = data["totalCallsCountList"];
 							domainUsersList = data["domainUsersList"];
@@ -764,6 +766,12 @@ var portlet_graph_data_utility = {
 								tempData.name = "New Opportunity";
 								tempData.data = newOpportunityCallsCountList;
 								series[10] = tempData;
+
+								tempData = {};
+								tempData.name = "Other";
+								tempData.data = queuedCallsCountList;
+								series[11] = tempData;
+
 								text = "No. of Calls";
 								colors = [ 'green', 'blue', 'red', 'violet' ];
 							} else {
@@ -1109,7 +1117,7 @@ var portlet_graph_data_utility = {
 	                }
 	            }
 	            if(series==undefined)
-	            	 chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30);
+	            	 chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30,base_model);
 	            else
 	            {
 	            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
@@ -1124,7 +1132,7 @@ var portlet_graph_data_utility = {
 	                            
 	                    }
 	                });
-	                chartRenderforIncoming(selector,categories,name,'',min_tick_interval,type,series,AllData,0,30);
+	                chartRenderforIncoming(selector,categories,'','',min_tick_interval,type,series,AllData,0,30,base_model);
 	                } 
 	            });
 	        	}
