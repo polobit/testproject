@@ -122,29 +122,26 @@ public class PullQueueUtil
 	    
 	    try
 		{
-			Future<QueueStatistics> fqs = queue.fetchStatisticsAsync(null);
+			QueueStatistics qs = queue.fetchStatistics();
 			
-			if(fqs.isDone())
-			{
-				QueueStatistics qs = fqs.get();
-				int count = qs.getNumTasks();
+			int count = qs.getNumTasks();
 				
-				// Sends 20 requests to increase tasks execution
-				if(count < 20)
+			// Sends 20 requests to increase tasks execution
+			if(count < 20)
+			{
+				count = 20;
+				
+				while(count != 0)
 				{
-					while(count != 0)
-					{
-						queue.addAsync(taskOptions);
-						count--;
-					}
+					queue.addAsync(taskOptions);
+					count--;
 				}
-					
 			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			System.err.println("Exception occured while adding tasks async " + e.getMessage());
+			System.err.println("Exception occured while adding tasks " + e.getMessage());
 		}
 	}
 	catch (Exception e)
