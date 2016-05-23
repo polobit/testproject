@@ -81,7 +81,7 @@ var ReportsRouter = Backbone.Router
 			/** shows list of campaign reports added * */
 			campaignReports : function()
 			{
-				$("#content").html("<div id='reports-listerners-container'></div>");
+				//$("#content").html("<div id='reports-listerners-container'></div>");
 
 				this.reports = new Base_Collection_View({ url : '/core/api/campaignReports', restKey : "reports", templateKey : "report-campaign", individual_tag_name : 'tr',
 					postRenderCallback : function()
@@ -92,7 +92,10 @@ var ReportsRouter = Backbone.Router
 
 
 				this.reports.collection.fetch();
-				$("#reports-listerners-container").html(this.reports.render().el);
+				var b=this.reports;
+				report_utility.loadReportsTemplate(function(){
+				$(".reports-Container").html(b.render().el);
+			});
 			},
 
 			/**
@@ -500,10 +503,11 @@ var ReportsRouter = Backbone.Router
 			campaignReportInstantResults : function(id, report)
 			{	
 				
-
+			report_utility.loadReportsTemplate(function(){
 				var report_results_view = new Base_Model_View({ url : "core/api/campaignReports/show-results/" + id, template : "campaign-report-via-email"});// Collection
 				var _that = this;
-				$("#content").html(report_results_view.render().el);
+				$(".reports-Container").html(report_results_view.render().el);
+			});
 			},
 
 

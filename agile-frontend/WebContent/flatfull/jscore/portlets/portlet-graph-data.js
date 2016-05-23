@@ -778,7 +778,7 @@ var portlet_graph_data_utility = {
 												});
 								tempData.data = callsDurationInMinsList;
 								series[0] = tempData;
-								text = "Calls Duration (Mins)";
+								text = "Calls Duration (Sec)";
 								colors = [ 'green' ];
 							}
 

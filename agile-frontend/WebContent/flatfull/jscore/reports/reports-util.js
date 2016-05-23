@@ -330,7 +330,7 @@ call_reports : function(url,reportType,graphOn){
 			    tempData.data=averageCallList;
 			    tempData.showInLegend=false;
 			    series[0]=tempData;
-			    text="Average Call Duration (Mins)";
+			    text="Average Call Duration (Sec)";
 			    colors=['green'];
 		}
 		else
@@ -349,7 +349,7 @@ call_reports : function(url,reportType,graphOn){
 			tempData.data=callsDurationInMinsList;
 			tempData.showInLegend=false;
 			series[0]=tempData;
-			text="Calls Duration (Mins)";
+			text="Calls Duration (Sec)";
 			colors=['green'];
 		}
 		
