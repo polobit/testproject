@@ -58,6 +58,10 @@ public class PullScheduler
      * Started time
      */
     public long startTime = 0L;
+    
+    private int iteration = 0;
+    
+    private int ITERATIONS_LIMIT = 2;
 
     /**
      * Constructs a new {@link PullScheduler}
@@ -109,6 +113,9 @@ public class PullScheduler
      */
     public int getCountLimit(String queueName)
     {
+    	if(StringUtils.containsIgnoreCase(queueName, "campaign"))
+    		return 50;
+    		
 	return DEFAULT_COUNT_LIMIT;
     }
 
@@ -126,7 +133,7 @@ public class PullScheduler
 	{
 	    System.out.println("Infinite loop started at : " + System.currentTimeMillis());
 	    int i = 0;
-	    while (shouldContinue())
+	    while (shouldContinue(true))
 	    {
 		System.out.println("while loop started at :" + System.currentTimeMillis() + "iteration : " + i);
 		List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
@@ -157,9 +164,11 @@ public class PullScheduler
      * tasks are processing in frontend. Verifies backend instance shutting down
      * status while processing tasks in backend.
      * 
+     * @param doLimitIterations - flag to limit iterations of loop for leasing on backends
+     * 
      * @return boolean value
      */
-    public boolean shouldContinue()
+    public boolean shouldContinue(boolean doLimitIterations)
     {
 	System.out.println("isCron" + isCron);
 	// Verify request deadline - 10mins
@@ -185,13 +194,59 @@ public class PullScheduler
 	    // Verify backend instance shut down
 	    if (backendStatus)
 	    {
-		System.err.println("Backend instance is shutting down...");
-		return false;
+			System.err.println("Backend instance is shutting down...");
+			return false;
 	    }
 	    else
-		return true;
+	    {
+	    	// Checks memory usage
+	    	if(!checkMemoryUsage())
+	    		return false;
+	    		
+	    	// To increase backend instances for accessing more requests
+	    	if(doLimitIterations)
+	    	{
+	    		iteration++;
+	    		
+	    		if(iteration > ITERATIONS_LIMIT)
+	    			return false;
+	    	}
+	    	
+	    	return true;
+		}
 	}
 
+    }
+    
+    private boolean checkMemoryUsage()
+    {
+    	long start = System.currentTimeMillis();
+    	System.out.println("Start of check memory usage. "  + start);
+    	
+    	// Get the Java runtime
+        Runtime runtime = Runtime.getRuntime();
+       
+        // Run the garbage collector
+        runtime.gc();
+        
+        // Calculate the used memory
+        long memory = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println("Used memory is bytes: " + memory);
+        
+        memory = bytesToMegabytes(memory);
+        System.out.println("Used memory is megabytes: "
+            + memory);
+        
+        System.out.println("Checking run time memory took " + (System.currentTimeMillis() - start));
+        
+        // if less than 1MB
+        if(memory < MEGABYTE)
+        {
+        	System.err.println("Available memory is less than 1 MB");
+        	return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -227,7 +282,7 @@ public class PullScheduler
 	{
 	    // Verifies backend shutdown or cron limit before processing each
 	    // one
-	    if (shouldContinue())
+	    if (shouldContinue(false))
 	    {
 		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
@@ -304,6 +359,12 @@ public class PullScheduler
 
 	// System.out.println("deleting tasks " + completedTasks.size());
 
+    }
+    
+    private static final long MEGABYTE = 1024L * 1024L;
+
+    public static long bytesToMegabytes(long bytes) {
+      return bytes / MEGABYTE;
     }
 
 }

@@ -91,6 +91,9 @@ public class CronPullServlet extends HttpServlet
 	    	count--;
 	    }
 
+	    // Run tasks from frontend too
+	    PullScheduler pullScheduler = new PullScheduler(queueName, true);
+	    pullScheduler.run();
 	}
 	else
 	{
