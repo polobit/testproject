@@ -1272,7 +1272,11 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 									if(company){
 										console.log(company);
 										contact_company = company ;
-										var prop = jQuery.parseJSON(company.properties[1].value);
+										var prop = null;
+										$.each(contact_company.properties , function(){
+											if(this.name == "address")
+												prop = this.value;
+										});
 										if(prop){
 											$("#content .address-type").val("office");
 											if(prop.address)

@@ -529,7 +529,11 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 						});
 	}
 	if(contact_company){
-		var prop = jQuery.parseJSON(contact_company.properties[1].value);
+		var prop = null;
+		$.each(contact_company.properties , function(){
+			if(this.name == "address")
+				prop = this.value;
+			});
 		if(prop){
 			var addressFlag = false;
 			$.each(properties, function(key, value){
@@ -773,7 +777,11 @@ function deserialize_contact(contact, template)
 						if(company){
 							console.log(company);
 							contact_company = company ;
-							var prop = jQuery.parseJSON(company.properties[1].value);
+							var prop = null;
+							$.each(contact_company.properties , function(){
+								if(this.name == "address")
+									prop = this.value;
+							});				
 							if(prop){
 								$("#content .address-type").val("office");
 								if(prop.address)
@@ -992,8 +1000,11 @@ $(function()
 		$("#content #contact_company").show();
 		$("#content [name='contact_company_id']").html('');
 		if(contact_company){
-			var flag = false ; 
-			var prop = jQuery.parseJSON(contact_company.properties[1].value);
+			var flag = false ; var prop = null;
+			$.each(contact_company.properties , function(){
+				if(this.name == "address")
+					prop = this.value;
+				});
 				if(prop){
 					if(prop.address && $("#content #address").val() && $("#content #address").val() != prop.address)
 						flag = true;
