@@ -27,7 +27,8 @@ $(function() {
 			var data = $(this).closest('tr').find('.data').attr('data');
 
 		// Open route in seperate window with CTRL + CLICK
-		if (e.ctrlKey) {
+		if (e.ctrlKey && (route != "workflow/" && route !=
+			"webrule-edit/" && route != "user-edit/" && route != "ticket-group/")) {
             window.open("#" + route + data, '_blank');
             return;
         } 
