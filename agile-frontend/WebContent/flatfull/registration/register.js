@@ -133,6 +133,13 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 						 	$(submit_button).removeAttr("disabled"); 
 							 submitForm(form, submit_button);
 							 $('.loading-image').removeClass("hide");
+							 var $frame = document.createElement('iframe');
+							 $frame.src = "";
+							 $frame.style.display = "none";
+							 document.body.appendChild($frame);
+    						 //$frame.attr("src", $frame.attr("data-source"));
+    						 //$('body').append($frame);
+
 						 }, function(error){
 						 	$('.loading-image').addClass("hide");
 						 	$(submit_button).removeAttr("disabled");
