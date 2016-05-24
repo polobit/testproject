@@ -77,17 +77,23 @@ public class CronPullServlet extends HttpServlet
 	{
 	    System.out.println("Running " + queueName + " tasks in backend...");
 
-    	try
-    	{
-    		long startTime = System.currentTimeMillis();
-    		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
-    		System.out.println("Took" +(System.currentTimeMillis()-startTime)+" milliseconds to process backendpullqueue ");
-    	}
-    	catch (Exception e)
-    	{
-    		System.out.println("exception raised to process task");
-    		e.printStackTrace();
-    	}
+	    int count = tasksCount/500 + 1;
+	    
+	    while(count > 0){
+	    	try
+	    	{
+	    		long startTime = System.currentTimeMillis();
+	    		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
+	    		System.out.println("Took" +(System.currentTimeMillis()-startTime)+" milliseconds to process backendpullqueue ");
+	    	}
+	    	catch (Exception e)
+	    	{
+	    		System.out.println("exception raised to process task");
+	    		e.printStackTrace();
+	    	}
+	    	
+    	count--;
+	    }
 	}
 	else
 	{
