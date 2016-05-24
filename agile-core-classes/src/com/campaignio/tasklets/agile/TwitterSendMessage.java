@@ -2,6 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.sms.SendMessage;
@@ -71,15 +72,26 @@ public class TwitterSendMessage extends TaskletAdapter
 					AgileTaskletUtil.getId(campaignJSON), data.getString(TWEET_CLICK_TRACKING_ID), "twt", ShortenURLType.TWEET, trackClicks);
 		}
 		
-		
-		TwitterJobQueueUtil.addToTwitterQueue(account, token, tokenSecret, message, rateLimit, subscriberJSON, campaignJSON);
+		 /**@Priyanka
+		  * checking condition here for the tweet_limit for the Domain user 25 in a
+		  * day if its reaches to its limit then
+		  * after one day it domain user an send the tweet message
+		  * if a day completed and someone trying to send tweet 
+		  * then Simply this message will 
+		  * shown into the screen  */
+		if(BillingRestrictionUtil.getBillingRestrictionFromDB().tweet_limit >= 0)
+		{	 
+		    TwitterJobQueueUtil.addToTwitterQueue(account, token, tokenSecret, message, rateLimit, subscriberJSON, campaignJSON);
+		    BillingRestrictionUtil.decrementTweetLimit();
+		 }else{
+			 System.out.println("please try after one day!!!:"); 
+		 }
 	}
 	catch(Exception e)
 	{
 		e.printStackTrace();
 		System.err.println("Exception occured in TwitterSendMessage node - " + e.getMessage());
 	}
-
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
     }

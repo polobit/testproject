@@ -23,6 +23,7 @@ import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
@@ -38,6 +39,12 @@ public class BillingRestrictionUtil {
 	 * @author yaswanth
 	 * 
 	 */
+	/**
+	 * Declaring the TWEETS_LIMIT variable
+	 *  for the default value 25
+	 * */
+	public static int TWEETS_LIMIT=25;
+	
 	public static enum ErrorMessages {
 		Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow(
 				"Campaigns limit reached"), REPORT(
@@ -445,4 +452,40 @@ public class BillingRestrictionUtil {
 		
 	}
 	
+	/**@Priyanka
+	  * campaign Tweet_node sendTweet_limit upto 25 in a day
+	 * creating the method for the giving the default send tweet messsage 
+	 * limit upto 25 in a day*/
+	
+	public static void setDefaultTweetLimit(){
+		
+		String oldNamespace=NamespaceManager.get();
+		try{
+		Set<String> domains = NamespaceUtil.getAllNamespaces();
+
+		for (String namespace : domains)
+		{
+			NamespaceManager.set(namespace);
+			BillingRestriction billingRestriction=BillingRestrictionUtil.getBillingRestrictionFromDB();
+			billingRestriction.tweet_limit=TWEETS_LIMIT;
+			billingRestriction.save();
+		}
+		}catch(Exception e){
+			System.out.println("error occured:"+e.getMessage());
+			
+		}finally{
+		
+		NamespaceManager.set(oldNamespace);
+	  }
+	}
+	/**
+	 * this method used for the to decrement the limit */
+	public static void decrementTweetLimit(){
+		BillingRestriction billingRestriction=BillingRestrictionUtil.getBillingRestrictionFromDB();
+		billingRestriction.tweet_limit=billingRestriction.tweet_limit-1;
+		billingRestriction.save();
+		
+	}
+	
 }
+

@@ -121,7 +121,11 @@ public class BillingRestriction
     public boolean isNewEmailPlanUpgrade = false;
 
     public Integer max_emails_count;
-
+    /**
+     * Declaring the tweet_limit variable here
+     * */
+    public Integer tweet_limit;
+    
     public Long email_pack_start_time = 0L;
 
     @NotSaved(IfDefault.class)

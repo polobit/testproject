@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -29,6 +30,13 @@ import com.google.appengine.api.blobstore.BlobKey;
 public class AllDomainStatsServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
 	    {
+		   /**
+		    * calling the setDefaultTweetLimit() method here 
+		    * 
+		    * */
+		 BillingRestrictionUtil.setDefaultTweetLimit();
+
+
 		   DateUtil dateUtil=new DateUtil();
 		   
 		 //yesterday mid night time in millisecond
@@ -48,7 +56,7 @@ public class AllDomainStatsServlet extends HttpServlet {
 			   try
 			   	{
 			   	    EmailSender emailSender = EmailSender.getEmailSender();
-			   		     emailSender.sendEmail("stats@agilecrm.com", "Agile CRM", "manohar@agilecrm.com", "rahul@agilecrm.com", "pavan@agilecrm.com", "All Domain Stats Report for "+current_date, null, 
+			   		     emailSender.sendEmail("stats@agilecrm.com", "Agile CRM", "devika@agilecrm.com", "veidhey@agilecrm.com", "prashannjeet@agilecrm.com", "All Domain Stats Report for "+current_date, null, 
 			   				textMail,"Hi", null, new ArrayList<Long>(),new ArrayList<BlobKey>());
 
 			   		}
