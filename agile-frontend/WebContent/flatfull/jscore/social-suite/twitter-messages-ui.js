@@ -142,64 +142,64 @@ $(function()
 	$('body').on('click', '.undo-retweet-status', function(e)
 	{
 		// Ask for confirmation from user.
-		if (!confirm("Are you sure you want to undo retweet this status?"))
-			return;
+		var $that = $(this);
+		showAlertModal("undow_retweet_status", "confirm", function(){
+			// Get the id of the tweet on which undo-retweet is clicked
+			var streamId = ($that.closest('article').attr('stream-id'));
+			var tweetId = ($that.closest('article').attr('id'));
+			var tweetIdStr = null;
 
-		// Get the id of the tweet on which undo-retweet is clicked
-		var streamId = ($(this).closest('article').attr('stream-id'));
-		var tweetId = ($(this).closest('article').attr('id'));
-		var tweetIdStr = null;
+			// Get stream from collection.
+			var modelStream = Streams_List_View.collection.get(streamId);
 
-		// Get stream from collection.
-		var modelStream = Streams_List_View.collection.get(streamId);
+			// Get tweet from stream.
+			var modelTweet = modelStream.get('tweetListView').get(tweetId);
+			var tweet = modelTweet.toJSON();
 
-		// Get tweet from stream.
-		var modelTweet = modelStream.get('tweetListView').get(tweetId);
-		var tweet = modelTweet.toJSON();
+			// If stream type is "Sent" then "tweet-id-str" is tweet handle else
+			// "retweet-id" to perform action.
+			if (modelStream.toJSON().stream_type == "Sent")
+				tweetIdStr = tweet.id_str;
+			else if (modelStream.toJSON().stream_type == "Home")
+				tweetIdStr = tweet.retweet_id;
 
-		// If stream type is "Sent" then "tweet-id-str" is tweet handle else
-		// "retweet-id" to perform action.
-		if (modelStream.toJSON().stream_type == "Sent")
-			tweetIdStr = tweet.id_str;
-		else if (modelStream.toJSON().stream_type == "Home")
-			tweetIdStr = tweet.retweet_id;
+			/*
+			 * Sends get request to url "core/social/undoretweet/" and Calls
+			 * StreamAPI with Stream id, tweet id and tweet idStr as path
+			 * parameters.
+			 */
+			$.get("/core/social/undoretweet/" + streamId + "/" + tweetId + "/" + tweetIdStr,
 
-		/*
-		 * Sends get request to url "core/social/undoretweet/" and Calls
-		 * StreamAPI with Stream id, tweet id and tweet idStr as path
-		 * parameters.
-		 */
-		$.get("/core/social/undoretweet/" + streamId + "/" + tweetId + "/" + tweetIdStr,
-
-		function(data)
-		{
-			// Undo-Retweet is Unsuccessful.
-			if (data == "Unsuccessful")
+			function(data)
 			{
-				showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-				return;
-			}
+				// Undo-Retweet is Unsuccessful.
+				if (data == "Unsuccessful")
+				{
+					showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+					return;
+				}
 
-			// On success, Change retweet icon to normal.
-			// Delete tweet from stream
-			if (tweet.stream_type == "Sent")
-				modelTweet.set("deleted_msg", "deleted");
-			else
-				modelTweet.unset("retweeted_by_user");
+				// On success, Change retweet icon to normal.
+				// Delete tweet from stream
+				if (tweet.stream_type == "Sent")
+					modelTweet.set("deleted_msg", "deleted");
+				else
+					modelTweet.unset("retweeted_by_user");
 
-			// Add back to stream.
-			modelStream.get('tweetListView').add(modelTweet);
+				// Add back to stream.
+				modelStream.get('tweetListView').add(modelTweet);
 
-			// Remove tweet element from ui
-			$('.deleted').remove();
+				// Remove tweet element from ui
+				$('.deleted').remove();
 
-			// Create normal time.
-			displayTimeAgo($(".chirp-container"));
+				// Create normal time.
+				displayTimeAgo($(".chirp-container"));
 
-		}).error(function(data)
-		{
-			// Error message is shown when error occurs
-			displayError(null, data);
+			}).error(function(data)
+			{
+				// Error message is shown when error occurs
+				displayError(null, data);
+			});
 		});
 	});
 

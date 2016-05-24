@@ -576,8 +576,10 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			}
 			else
 			{
-				alert("Sorry. You can't have multiple 'Between' conditions.");
-				$(this).val('equals');
+				var $that = $(this);
+				showAlertModal("multiple_conditions", undefined, function(){
+					$that.val('equals');
+				});	
 			}
 
 		}
@@ -1056,17 +1058,18 @@ function initializeMilestoneListners(el){
 	$('#milestone-listner').off('click', '.milestone-delete');
 	$('#milestone-listner').on('click', '.milestone-delete', function(e) {
 		e.preventDefault();
-		if (!confirm("Are you sure you want to delete ?" ))
-			return;
+		var $that = $(this);
+		showAlertModal("delete_opportunity", "confirm", function(){
+			var formId = $that.closest('form');
+			if($that.closest('tr').find('.mark-won').length > 0){
+				formId.find('input[name="won_milestone"]').val('');
+			} else if($that.closest('tr').find('.mark-lost').length > 0){
+				formId.find('input[name="lost_milestone"]').val('');
+			}
+			$that.closest('tr').css("display", "none");
+			fill_ordered_milestone($(this).closest('form').attr('id'));
+		});
 		
-		var formId = $(this).closest('form');
-		if($(this).closest('tr').find('.mark-won').length > 0){
-			formId.find('input[name="won_milestone"]').val('');
-		} else if($(this).closest('tr').find('.mark-lost').length > 0){
-			formId.find('input[name="lost_milestone"]').val('');
-		}
-		$(this).closest('tr').css("display", "none");
-		fill_ordered_milestone($(this).closest('form').attr('id'));
 	});
 	
 	/**
@@ -1315,9 +1318,9 @@ function initializeMilestoneListners(el){
 	
 	$("#milestone-listner").off('click', '.lost-reason-delete');
 	$("#milestone-listner").on('click', '.lost-reason-delete', function(e){
-		if(confirm("Are you sure you want to delete ?")){
-			e.preventDefault();
-			var that = $(this);
+		e.preventDefault();
+		var that = $(this);
+		showAlertModal("delete_task", "confirm", function(){
 			var obj = serializeForm($(this).closest('form').attr("id"));
 			var model = new BaseModel();
 			model.url = 'core/api/categories/'+obj.id;
@@ -1331,7 +1334,7 @@ function initializeMilestoneListners(el){
         	error: function (model, response) {
         	
         	}});
-		}
+		});
 	});
 
 	$("#milestone-listner").off('click', '.add_deal_source');
@@ -1456,9 +1459,9 @@ function initializeMilestoneListners(el){
 	
 	$("#milestone-listner").off('click', '.deal-source-delete');
 	$("#milestone-listner").on('click', '.deal-source-delete', function(e){
-		if(confirm("Are you sure you want to delete ?")){
-			e.preventDefault();
-			var that = $(this);
+		e.preventDefault();
+		var that = $(this);
+		showAlertModal("delete_deal_source", "confirm", function(){
 			var obj = serializeForm($(this).closest('form').attr("id"));
 			var model = new BaseModel();
 			model.url = 'core/api/categories/'+obj.id;
@@ -1472,7 +1475,7 @@ function initializeMilestoneListners(el){
         	error: function (model, response) {
         	
         	}});
-		}
+		});
 	});
 
 	$("#milestone-listner").on('click','.goalSave',function(e)

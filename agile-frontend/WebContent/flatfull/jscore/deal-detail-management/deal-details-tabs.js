@@ -217,20 +217,19 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	{
 		e.preventDefault();
 
-		if (!confirm("Are you sure you want to delete?"))
-			return;
+		showAlertModal("delete_opportunity", "confirm", function(){
+			var targetEl = $(e.currentTarget);
+			var id = $(targetEl).closest('.deal_detail_delete').attr('data');
 
-		var targetEl = $(e.currentTarget);
-		var id = $(targetEl).closest('.deal_detail_delete').attr('data');
-
-		$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
-		{
-			Backbone.history.navigate("#deals", { trigger : true });
-		}, error : function(response)
-		{
-			//alert("some exception occured please try again");
-			alert(response.responseText);
-		} });
+			$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
+			{
+				Backbone.history.navigate("#deals", { trigger : true });
+			}, error : function(response)
+			{
+				//alert("some exception occured please try again");
+				showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
+			} });
+		});
 	},
 
 	dealNoteEdit:  function(e)

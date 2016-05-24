@@ -55,8 +55,10 @@ $(function()
 																								{
 																												if (dup_contacts1_array.length > 2)
 																												{
-																																alert('You can merge maximum of 2 records at a time with master record.');
-																																dup_contacts1_array.length = 0;
+																																showAlertModal("contacts_merge_limit", undefined, function(){
+																																	dup_contacts1_array.length = 0;
+																																	
+																																});
 																																return;
 																												}
 																												Backbone.history.navigate("merge-contacts", { trigger : true });
@@ -77,123 +79,124 @@ $(function()
 				$('body').on('click', '#merge-contacts-model', function(event)
 				{
 								event.preventDefault();
-								if (dup_contacts1_array.length > 1)
-								{
-												if (!confirm(" Delete " + dup_contacts1_array.length + " duplicate contacts and merge data to master record?"))
-																return;
-								}
-								else if (!confirm(" Delete 1 duplicate contact and merge data to master record?"))
-												return;
-								$(this).attr('disabled', 'disabled');
-								$('#contact-merge-cancel').attr('disabled', 'disabled');
-								$('#contact-merge-cancel').after('<img class="contact-merge-loading p-r-xs m-b"  src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
-								var checked = false;
-								var selected_fields = [];
-								var table = $('body').find('#merge-contacts-table');
-								var tbody = $(table).find('tbody');
-								var phones = [];
-								var emails = [];
-								var websites = [];
-								var tags = [];
-								var custom_fields = [];
-								var remove_fields = [];
-								var master_record = App_Contacts.contactDetailView.model;
-								var master_record_dup = JSON.parse(JSON.stringify(master_record.toJSON()));
-								var master_id = master_record.id;
-								console.log(master_record.toJSON());
+								var confirm_message = "Delete 1 duplicate contact and merge data to master record?"
+								if(dup_contacts1_array.length > 1)
+									confirm_message = "Delete " + dup_contacts1_array.length + " duplicate contacts and merge data to master record?";
+								var $that = $(this)
+								showAlertModal(confirm_message, "confirm", function(){
+									$that.attr('disabled', 'disabled');
+									$('#contact-merge-cancel').attr('disabled', 'disabled');
+									$('#contact-merge-cancel').after('<img class="contact-merge-loading p-r-xs m-b"  src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+									var checked = false;
+									var selected_fields = [];
+									var table = $('body').find('#merge-contacts-table');
+									var tbody = $(table).find('tbody');
+									var phones = [];
+									var emails = [];
+									var websites = [];
+									var tags = [];
+									var custom_fields = [];
+									var remove_fields = [];
+									var master_record = App_Contacts.contactDetailView.model;
+									var master_record_dup = JSON.parse(JSON.stringify(master_record.toJSON()));
+									var master_id = master_record.id;
+									console.log(master_record.toJSON());
 
-								tbody.children().each(function(index, element)
-								{
-												$(element).find("[type=radio]:checked").each(function(index, element)
-												{
-																if ($(element).attr("oid") != master_id)
-																{
-																				var fieldName = $(element).attr("field");
-																				var fieldValue = $(element).attr("data");
-																				var fieldType = $(element).attr("fieldtype");
-																				if (typeof fieldType !== typeof undefined && fieldType !== false)
-																				{
-																								if (fieldValue)
-																								{
-																												custom_field = {};
-																												custom_field['name'] = fieldName;
-																												custom_field['value'] = fieldValue;
-																												custom_field['type'] = 'CUSTOM';
-																												custom_fields.push(custom_field);
-																								}
-																								else
-																								{
-																												remove_field = {};
-																												remove_field['name'] = fieldName;
-																												remove_field['type'] = 'CUSTOM';
-																												remove_fields.push(remove_field);
-																								}
-																				}
-																				else
-																				{
-																								if (fieldValue)
-																								{
-																												selected_field = {};
-																												selected_field['name'] = fieldName;
-																												selected_field['value'] = fieldValue;
-																												selected_fields.push(selected_field);
-																												if (fieldName.toLowerCase() == 'company')
-																												{
-																																var company_id = $(element).attr("company_id");
-																																master_record.set({ "contact_company_id" : company_id });
-																												}
-																								}
-																								else
-																								{
-																												remove_field = {};
-																												remove_field['name'] = fieldName;
-																												remove_field['type'] = 'SYSTEM';
-																												remove_fields.push(remove_field);
-																								}
-																				}
-																}
-												});
-												$(element).find("[type=checkbox]:checked").each(function(index, element)
-												{
-																var fieldName = $(element).attr("field");
-																var fieldValue = $(element).attr("data");
-																var fieldType = $(element).attr("fieldtype");
-																if (fieldName === "email")
-																{
-																				var subtype = $(element).attr("subtype");
-																				email = {};
-																				email['value'] = fieldValue;
-																				if (subtype)
-																								email['subtype'] = subtype;
-																				emails.push(email);
-																}
-																else if (fieldName === "website")
-																{
-																				var subtype = $(element).attr("subtype");
-																				website = {};
-																				website['value'] = fieldValue;
-																				if (subtype)
-																								website['subtype'] = subtype;
-																				websites.push(website);
-																}
-																else if (fieldName === "phone")
-																{
-																				var subtype = $(element).attr("subtype");
-																				phone = {};
-																				phone['value'] = fieldValue;
-																				if (subtype)
-																								phone['subtype'] = subtype;
-																				phones.push(phone);
-																}
-																else if (fieldName === "tags")
-																{
-																				tags.push(fieldValue);
-																}
-												});
-								});
-								var properties = master_record_dup.properties;
-								master_record.set({ "tags" : tags });
-								merge_duplicate_contacts(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
+									tbody.children().each(function(index, element)
+									{
+													$(element).find("[type=radio]:checked").each(function(index, element)
+													{
+																	if ($(element).attr("oid") != master_id)
+																	{
+																					var fieldName = $(element).attr("field");
+																					var fieldValue = $(element).attr("data");
+																					var fieldType = $(element).attr("fieldtype");
+																					if (typeof fieldType !== typeof undefined && fieldType !== false)
+																					{
+																									if (fieldValue)
+																									{
+																													custom_field = {};
+																													custom_field['name'] = fieldName;
+																													custom_field['value'] = fieldValue;
+																													custom_field['type'] = 'CUSTOM';
+																													custom_fields.push(custom_field);
+																									}
+																									else
+																									{
+																													remove_field = {};
+																													remove_field['name'] = fieldName;
+																													remove_field['type'] = 'CUSTOM';
+																													remove_fields.push(remove_field);
+																									}
+																					}
+																					else
+																					{
+																									if (fieldValue)
+																									{
+																													selected_field = {};
+																													selected_field['name'] = fieldName;
+																													selected_field['value'] = fieldValue;
+																													selected_fields.push(selected_field);
+																													if (fieldName.toLowerCase() == 'company')
+																													{
+																																	var company_id = $(element).attr("company_id");
+																																	master_record.set({ "contact_company_id" : company_id });
+																													}
+																									}
+																									else
+																									{
+																													remove_field = {};
+																													remove_field['name'] = fieldName;
+																													remove_field['type'] = 'SYSTEM';
+																													remove_fields.push(remove_field);
+																									}
+																					}
+																	}
+													});
+													$(element).find("[type=checkbox]:checked").each(function(index, element)
+													{
+																	var fieldName = $(element).attr("field");
+																	var fieldValue = $(element).attr("data");
+																	var fieldType = $(element).attr("fieldtype");
+																	if (fieldName === "email")
+																	{
+																					var subtype = $(element).attr("subtype");
+																					email = {};
+																					email['value'] = fieldValue;
+																					if (subtype)
+																									email['subtype'] = subtype;
+																					emails.push(email);
+																	}
+																	else if (fieldName === "website")
+																	{
+																					var subtype = $(element).attr("subtype");
+																					website = {};
+																					website['value'] = fieldValue;
+																					if (subtype)
+																									website['subtype'] = subtype;
+																					websites.push(website);
+																	}
+																	else if (fieldName === "phone")
+																	{
+																					var subtype = $(element).attr("subtype");
+																					phone = {};
+																					phone['value'] = fieldValue;
+																					if (subtype)
+																									phone['subtype'] = subtype;
+																					phones.push(phone);
+																	}
+																	else if (fieldName === "tags")
+																	{
+																					tags.push(fieldValue);
+																	}
+													});
+									});
+									var properties = master_record_dup.properties;
+									master_record.set({ "tags" : tags });
+									merge_duplicate_contacts(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
+								},undefined, "Detete duplicate Contacts");
+
+								
 				});
 });
 

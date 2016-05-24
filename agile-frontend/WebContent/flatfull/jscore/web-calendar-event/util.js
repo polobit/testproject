@@ -343,7 +343,7 @@ function save_web_event(formId, confirmBtn)
 
 	if (web_calendar_event["selectedSlotsString"].length == 0)
 	{
-		alert("Please select appointment time.");
+		showAlertModal("appointment_time");
 		return false;
 	}
 	$('#confirm').attr('disabled', 'disabled');
@@ -383,16 +383,19 @@ function save_web_event(formId, confirmBtn)
 					}
 					else if (res.responseText == "slot booked")
 					{
-						alert("Looks like this slot is booked already. Please try another one.");
-						get_slots(selecteddate, Selected_Time);
-						$('#confirm').attr('disabled', false);
+						showAlertModal("slot_booking", undefined, function(){
+							get_slots(selecteddate, Selected_Time);
+							$('#confirm').attr('disabled', false);
+						});
 					}
 
 					else
 					{
-						alert("Something went wrong as your appointment was not scheduled. Please try again in few hours. Error: " + res.statusText);
-						resetAll();
+						showAlertModal("Something went wrong as your appointment was not scheduled. Please try again in few hours. Error: " + res.statusText, undefined, function(){
+							resetAll();
 						location.reload(true);
+						},undefined,"Appointment Schedule");
+						
 					}
 
 				} });

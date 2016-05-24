@@ -147,8 +147,9 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 				if($('#tinyMCEhtml_email').val() !== "")
 				{
 					if($('.custom_html').length > 1){
-						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
-						$($(e.currentTarget)).closest(".alert").remove();
+						showAlertModal("webrule_popup_limit", undefined, function(){
+							$($(e.currentTarget)).closest(".alert").remove();
+						});
 						return;
 					}
 					loadTinyMCE("tinyMCEhtml_email");
@@ -289,8 +290,9 @@ function merge_webrules_jsons(target, object1, object2)
 				if($('#tinyMCEhtml_email').val() !== "")
 				{
 					if($('.custom_html').length > 1){
-						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
-						$($(e.currentTarget)).closest(".alert").remove();
+						showAlertModal("webrule_popup_limit", undefined, function(){
+							$($(e.currentTarget)).closest(".alert").remove();
+						});
 						return;
 					}
 				}

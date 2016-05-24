@@ -159,11 +159,10 @@ function initializeTasksListeners(){
 	 */
 	$('#tasks-list-template').on('click', '.delete-task', function(event)
 	{
-		if (!confirm("Are you sure you want to delete?"))
-			return;
-
-		// Delete Task.
-		deleteTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
+		showAlertModal("delete_task", "confirm", function(){
+			// Delete Task.
+			deleteTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
+		});
 	});
 
 	// Task Action: Mark task complete, make changes in DB.
