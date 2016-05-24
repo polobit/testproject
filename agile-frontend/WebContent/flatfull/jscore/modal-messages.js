@@ -246,4 +246,4 @@ var MODAL_MESSAGES = {
 		"message" : "URL provided for Twitter is not valid"
 	},
 
-}
+};
