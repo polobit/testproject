@@ -1447,4 +1447,82 @@ public class JSAPI
 	    return null;
 	}
     }
+    
+    
+     /**
+     * Get deals based on the email of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String
+     */
+    @Path("contacts/get-our-deals")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getDeals(@QueryParam("email") String email)
+    {
+     try
+     {
+         if (!JSAPIUtil.isRequestFromOurDomain())
+        	 return new JSONArray().toString();
+
+         Contact contact = ContactUtil.searchContactByEmail(email);
+         if (contact == null)
+        	 return JSAPIUtil.generateContactMissingError();
+
+         List<Opportunity> deals = new ArrayList<Opportunity>();
+         deals = OpportunityUtil.getDeals(contact.id, null, null);
+         ObjectMapper mapper = new ObjectMapper();
+         JSONArray arr = new JSONArray();
+         for (Opportunity deal : deals)
+         {
+        	 arr.put(mapper.writeValueAsString(deal));
+         }
+         return arr.toString();
+     }
+     catch (Exception e)
+     {
+         e.printStackTrace();
+         return null;
+     }
+    }
+    /*
+     * Get tasks based on email of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String (tasks)
+     */
+    @Path("contacts/get-our-tasks")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getTasks(@QueryParam("email") String email)
+    {
+     try
+     {
+         if (!JSAPIUtil.isRequestFromOurDomain())
+        	 return new JSONArray().toString();
+
+         Contact contact = ContactUtil.searchContactByEmail(email);
+         if (contact == null)
+        	 return JSAPIUtil.generateContactMissingError();
+
+         List<Task> tasks = new ArrayList<Task>();
+         tasks = TaskUtil.getContactTasks(contact.id);
+         ObjectMapper mapper = new ObjectMapper();
+         JSONArray arr = new JSONArray();
+         for (Task task : tasks)
+         {
+        	 arr.put(mapper.writeValueAsString(task));
+         }
+         return arr.toString();
+     }
+     catch (Exception e)
+     {
+         e.printStackTrace();
+         return null;
+     }
+    }
 }
