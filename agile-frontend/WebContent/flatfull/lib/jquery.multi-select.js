@@ -44,7 +44,7 @@
               optgroupLabel = $(this).attr('label');
               optgroupId = 'ms-'+ms.attr('id')+'-optgroup-'+optgroupCpt;
               selectableUl.append($('<li class="ms-optgroup-container" id="'+
-                                  optgroupId+'"><ul class="ms-optgroup"><li class="ms-optgroup-label">'+
+                                  optgroupId+'"><ul class="ms-optgroup"><li class="ms-optgroup-label" style="padding-top: 0px;">'+
                                   optgroupLabel+'</li></ul></li>'));
               optgroupCpt++;
             } else {
