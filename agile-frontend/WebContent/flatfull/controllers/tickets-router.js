@@ -973,12 +973,62 @@
 				url : '/core/api/knowledgebase/categorie',
 				templateKey : "ticket-helpcenter-categories",
 				individual_tag_name : 'tr',
-				sort_collection : true, 
-	 			sortKey : 'updated_time',
-	 			descending : true,
+				sortKey:"updated_time",
+				sort_collection:"true",
 				postRenderCallback : function(el, collection) {
 
-                  //Helcenter_Events.categorieDelete(el);
+					head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
+						$(el).find('tbody').each(function(index){
+							$(this).sortable({
+							      items:'tr',
+							      helper: function(e, tr){
+							          var $originals = tr.children();
+							          var $helper = tr.clone();
+							          $helper.children().each(function(index)
+							          {
+							            // Set helper cell sizes to match the original sizes
+							            $(this).width($originals.eq(index).width());
+							            console.log('-----------'+$originals.eq(index).width());
+							 
+							          });
+							          return $helper;
+							      },
+							      start: function(event, ui){
+							    	  $.each(ui.item.children(),function(index,ele){
+							    		  ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+							    	  });
+							    	  ui.helper.width(ui.helper.width());
+							      },
+							      sort: function(event, ui){
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							      },
+							      forceHelperSize:true,
+							      placeholder:'<tr><td></td></tr>',
+							      forcePlaceholderSize:true,
+							      handle: ".icon-move",
+							      cursor: "move",
+							      tolerance: "intersect",
+							      
+							      update : function(event, ui) {
+							      	var id = $(ui.item).children().eq(1).data("id");
+							    	console.log($(ui.item).children().eq(1).data("id"));
+							        
+							    	var newArticleModel = new BaseModel();
+				                 
+				                  newArticleModel.url = "/core/api/knowledgebase/categorie/id/" +id;
+				               
+				                  var json = {} ;
+				                  var time = new Date().getTime(); 
+				                   
+				                  json = {"id":id,"updated_time":time };
+
+				                  newArticleModel.save(json);
+				                  
+							    	console.log(event);  
+							        }
+						    });
+						});
+					});
 				}
 			});
 
@@ -1008,7 +1058,7 @@
 	 			descending : true,
 				postRenderCallback : function(el, collection) {
 
-                  Helcenter_Events.sectionDelete(el);
+                  //Helcenter_Events.sectionDelete(el);
 				}
 			});
 
@@ -1038,13 +1088,13 @@
 	 			descending : true,
 				postRenderCallback : function(el, collection) {
 
-                  Helcenter_Events.articleDelete(el);
+                  //Helcenter_Events.articleDelete(el);
 				
 
 				}
 			});
 
-			//Fetching groups collections
+			//Fetching article collections
 			App_Ticket_Module.articlesCollection.collection.fetch();
 
 			//Rendering template
@@ -1193,7 +1243,7 @@
 
 	 				isNew : true, 
 	 				url : '/core/api/knowledgebase/section',
-	 				template : "helpcenter-add-section",
+	 				template : "ticket-helpcenter-add-section",
 			        window:'back',
 			        postRenderCallback : function(el){
 			        	 var optionsTemplate = "<option value={{id}}>{{name}}</option>";
@@ -1223,7 +1273,7 @@
   
 				var editSectionView = new Base_Model_View({
 					isNew : false,
-					template : "helpcenter-add-section",
+					template : "ticket-helpcenter-add-section",
 					url : "/core/api/knowledgebase/section?id=" + section_id,
 					window:'back',
 				    postRenderCallback : function(el){

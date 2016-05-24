@@ -52,7 +52,7 @@ public class CategorieAPI
 	}
 
 	@GET
-	@Path("/{id}")
+	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Categorie getCategorie(@PathParam("id") Long id)
 	{
@@ -110,6 +110,29 @@ public class CategorieAPI
 	}
 
 
+	@PUT
+	@Path("/id/{id}")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Categorie updateCategorieUpdatedTime(Categorie categorie,@PathParam("id") Long id ) throws WebApplicationException
+	{
+		try
+		{
+			Categorie dbCategorie = Categorie.dao.get(categorie.id);
+			dbCategorie.updated_time = categorie.updated_time;
+			dbCategorie.save();
+		}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while creating workflow creation activity");
+
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return categorie;
+	}
+	
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
