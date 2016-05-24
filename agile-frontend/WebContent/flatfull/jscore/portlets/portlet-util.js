@@ -1817,6 +1817,17 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					$("#due-date", elData)
+					.val(
+							getDateInFormatFromEpoc(base_model.get("settings")["due-date"]));
+					$("#start_date", elData)
+					.val(
+							
+									getDateInFormatFromEpoc(base_model.get("settings").start-date));
+					$("#end_date", elData)
+					.val(
+							
+									getDateInFormatFromEpoc(base_model.get("settings").end-date));
 
 			if (leaderboardCate && leaderboardCate.revenue)
 				$("#category-list", elData).find('option[value=revenue]').attr(

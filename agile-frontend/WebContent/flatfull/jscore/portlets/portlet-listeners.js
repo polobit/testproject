@@ -966,6 +966,23 @@ $('.portlet_body')
 		    }
 	    }
 	});
+	
+		$('.modal-body').on('change','#duration',function(e){
+			var el = $(this).closest('form');
+		var duration = $('#duration', el).val();
+		if(duration=='Custom')
+		{
+			$('.daterange').removeClass('hide');
+			$('#start_date').datepicker({
+				format : CURRENT_USER_PREFS.dateFormat
+			});
+			$('#end_date').datepicker({
+				format : CURRENT_USER_PREFS.dateFormat
+			});
+		}
+		else
+			$('.daterange').addClass('hide');
+		});
 
 }
 
