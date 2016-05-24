@@ -268,7 +268,7 @@
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
   
-{{#getTracksCount}}<span>{{pipeline.name}} , </span>{{/getTracksCount}}         
+{{#getTracksCount}}<span>{{#if pipeline.name}}{{pipeline.name}} , {{/if}}</span>{{/getTracksCount}}         
             
 {{#if_equals milestone "Won"}} <span>{{milestone}}</span>
 {{else}}
