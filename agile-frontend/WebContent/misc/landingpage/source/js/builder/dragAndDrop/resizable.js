@@ -38,9 +38,11 @@ dnd.directive('blResizable', ['$rootScope', 'elements', 'undoManager', function(
         		ydiff  = (e.pageY + $rootScope.frameOffset.top) - this.originalPos.y,
         		calc   = this._calc[this.direction];
 
+
 	  		//calculate the new elements height, width, top and left
 			var data = calc.apply(this, [xdiff, ydiff]);
 			data.overflow = 'hidden';
+
 			
 			//enforce minimum 10px height/width
 			if ((angular.isNumber(data.height) && data.height < 10) || (angular.isNumber(data.width) && data.width < 10)) {
@@ -117,10 +119,12 @@ dnd.directive('blResizable', ['$rootScope', 'elements', 'undoManager', function(
 	  	},
 	  	_calc: {
 			n: function(xdiff, ydiff) {
-				return { top: this.originalSize.top + ydiff, height: this.originalSize.height - ydiff };
+				if($rootScope.selected.node.nodeName == 'IMG'){return {  top: this.originalSize.top + ydiff, height: this.originalSize.height - ydiff};}
+				return {  'padding-top': - ydiff};
 			},
 			s: function(xdiff, ydiff) {
-				return { height: this.originalSize.height + ydiff };
+				if($rootScope.selected.node.nodeName == 'IMG'){return { height: this.originalSize.height + ydiff };}
+				return { 'padding-bottom': ydiff};
 			},
 			e: function(xdiff, ydiff) {
 				return { width: this.originalSize.width + xdiff };
@@ -140,6 +144,7 @@ dnd.directive('blResizable', ['$rootScope', 'elements', 'undoManager', function(
 			nw: function(xdiff, ydiff) {
 				return $.extend(this._calc.n.apply(this, arguments),this._calc.w.apply(this, arguments));
 			}
+			
 		},
 	});
 
