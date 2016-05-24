@@ -460,32 +460,33 @@ public class CustomFieldsAPI
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
     public String syncAppData(@QueryParam("domain") String domain){
     	String domainUser = DomainUserUtil.getCurrentDomainUser().domain;
-    	System.out.println(domain);
+    	System.out.println(domain +" and "+domainUser);
     	if( domainUser != null){
-    			try {
-    				ContactSchemaUpdateStats schema = ContactSchemaUpdateStats.get(domainUser);
-    				if(schema != null){
-    					Long updated_time = schema.updated_time * 1000 ;
-    					Date update_date = new Date(updated_time);
-    					Date current_date = new Date();
-    					System.out.println(update_date.getMonth()+" "+current_date.getMonth()+" "+update_date.getYear()+" "+current_date.getYear());
-						if(update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear()){
-							UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domain);
-							// Add to queue
-							Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
-							queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
-							return "success";
-						}
-						return "limitReached" ;
-    				}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+    		try {
+				Long updated_time = null;
+				Date update_date = null;
+				ContactSchemaUpdateStats schema = ContactSchemaUpdateStats.get(domainUser);
+				System.out.println(schema);    				
+				if(schema != null){
+					updated_time = schema.updated_time * 1000 ;
+					update_date = new Date(updated_time);
 				}
-    	
+				Date current_date = new Date(); 
+				System.out.println(update_date.getMonth()+"update month "+current_date.getMonth()+"current month "+update_date.getYear()+" update year"+current_date.getYear()+"current year"+update_date.getTime()+"update time"+current_date.getTime()+"");
+				if(update_date == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
+					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);
+					// Add to queue
+					Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
+					queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
+					return "success";
+				}
+				return "limitReached" ;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
-    	return "fail";
-    	
+    	return "fail";    	
     }
     
 }
