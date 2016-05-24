@@ -29,6 +29,15 @@
             "type": "multiselect"
         },
         {
+            "label": "Owner Merge Field",
+            "category": "Settings",
+            "name": "mergefield_owner_id",
+            "id": "mergefield_owner_id",
+            "title": "Enter the merge field for the owner. Eg: {{event.owner.id}}",
+            "fieldType": "input",
+            "type": "text"
+        },
+        {
             "label": "Change the owner of the contact.<br/><br/>An example use case for this could be - If the contact clicks a link in email, set the owner to a sales guy so that the contact shows up in his My Contacts list.",
             "category": "Help",
             "fieldType": "label",
