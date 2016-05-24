@@ -261,8 +261,8 @@ public class DocumentsAPI
 		for (int i = 0; i < documentsJSONArray.length(); i++) {
 			try
 			   {
-				String eventId =  (String) documentsJSONArray.getString(i);
-				Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
+				String docId =  (String) documentsJSONArray.getString(i);
+				Document doc = DocumentUtil.getDocument(Long.parseLong(docId));
 				if(!doc.getDeal_ids().isEmpty()){
 					for(String dealId : doc.getDeal_ids()){
 						Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
