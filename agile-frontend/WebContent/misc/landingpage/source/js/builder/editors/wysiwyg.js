@@ -75,11 +75,24 @@ angular.module('builder.wysiwyg', [])
 			var drawWysiwyg = function(x, y, node) {
 				node    = node ? node : $scope.elementFromPoint(x, y - $scope.frameBody.scrollTop());
   				var matched = elements.match(node);
+  				var block_element=new Array('P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'DL', 'PRE', 'HR', 'BLOCKQUOTE', 'ADDRESS');
   	
-  				if (matched.canModify.indexOf('text') > -1 && matched.showWysiwyg) {
+   				if (matched.canModify.indexOf('text') > -1 && matched.showWysiwyg) {
   					$scope.selectBox.hide();
-
-                    node.setAttribute('contenteditable', true);                  
+  					if(block_element.includes(node.tagName))
+  						node.setAttribute('contenteditable', true); 
+  					else {
+  						var k=0;
+  						var i=node;
+  						while(k==0){
+  							if(block_element.includes(i.tagName)){
+  								i.setAttribute('contenteditable', true);
+  								k=1; 
+  							} 
+  							else 
+  								i=i.parentNode;
+  						}
+  					}                                     
                     node.focus();
 
                     var pos   = node.getBoundingClientRect(),
