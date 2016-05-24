@@ -58,7 +58,6 @@ public class AgileAuthFilter implements Filter
 
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
-    SessionCache.setSession(httpRequest.getSession());
 
 	// If it is JS API, we will pass it through JSAPIFilter is used to
 	// filter the request i.e., to check the API key allocated to the
@@ -96,6 +95,9 @@ public class AgileAuthFilter implements Filter
 
 	// Add this in session manager
 	SessionManager.set((HttpServletRequest) request);
+	
+	// Set the session in SessionCache
+    SessionCache.setSession(httpRequest.getSession());
 
 	// For registering all entities - AgileUser is a just a random class we
 	// are using
