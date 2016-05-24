@@ -244,6 +244,8 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 if($(targetEl).attr('id') === 'campaign_access_level'){
                     if(access_permission == "1")
                         show_campaign_save(e,"The Campaign is now Public.");
+                       //show_campaign_save(e,"The Campaign is now Public.");
+
                     else 
                         show_campaign_save(e,"The Campaign is now Private.");
                 }
@@ -733,9 +735,15 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
 function initializeWorkflowsListeners() {}
 
 function change_access_level(level, el){
-    if(level == "1")
+    if(level == "1"){
         $("#campaign_access_level span", el).text('Make Private');
-    else 
+        $("#campaign_access_level i", el).removeClass("icon-unlock");
+        $("#campaign_access_level i", el).addClass("fa fa-lock");
+    }
+    else {
         $("#campaign_access_level span", el).text('Make Public');
+        $("#campaign_access_level i", el).removeClass("fa fa-lock");
+        $("#campaign_access_level i", el).addClass("icon-unlock");
+    }
 }
 

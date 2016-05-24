@@ -1102,9 +1102,6 @@ public class JSAPI
     {
 	try
 	{
-	    if(!JSAPIUtil.checkAllowedDomain())
-		return "Please contact Agile CRM to enable this method";
-	    
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -1141,9 +1138,6 @@ public class JSAPI
 	    if (contact.getContactField(name) == null)
 		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
 	    
-	    if(!JSAPIUtil.checkAllowedDomain())
-		return "Please contact Agile CRM to enable this method";
-
 	    contact.removeProperty(name);
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 	    contact.save();
