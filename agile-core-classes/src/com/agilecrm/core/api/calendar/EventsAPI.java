@@ -202,6 +202,21 @@ public class EventsAPI
 	{
 	    e.printStackTrace();
 	}
+	try {
+		if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
+			for(Contact c : event.relatedContacts()){
+				try {
+					c.save();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	return event;
     }
 
@@ -232,6 +247,21 @@ public class EventsAPI
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
+    try {
+		if(oldEvent.relatedContacts() != null && oldEvent.relatedContacts().size() > 0){
+			for(Contact c : oldEvent.relatedContacts()){
+				try {
+					c.save();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	} catch (Exception e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
     UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.UPDATE, true);
     event.save();
     System.out.println(event.getDeal_ids());
@@ -242,6 +272,21 @@ public class EventsAPI
 			{
 				Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
 				opportuinty.save();
+			}
+		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+    try {
+		if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
+			for(Contact c : event.relatedContacts()){
+				try {
+					c.save();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	} catch (Exception e1) {
@@ -278,20 +323,36 @@ public class EventsAPI
     	try {    		
     		for(int i = 0; i < eventsJSONArray.length(); i++) {
     			
-    			String eventId =  (String) eventsJSONArray.get(i);
+    			String eventId = eventsJSONArray.getString(i);
 				Event event = EventUtil.getEvent(Long.parseLong(eventId));
 				if(!event.getDeal_ids().isEmpty()){
 					for(String dealId : event.getDeal_ids()){
-						Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
-						oppr.save();
-					 }
+						try {
+							Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
+							oppr.save();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				 }
+				if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
+					for(Contact c : event.relatedContacts()){
+						try {
+							c.save();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}			
     			}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 		}
      }
+    
 	ActivitySave.createLogForBulkDeletes(EntityType.EVENT, eventsJSONArray,
 		String.valueOf(eventsJSONArray.length()), "");
 

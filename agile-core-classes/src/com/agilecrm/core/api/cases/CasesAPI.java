@@ -17,8 +17,12 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
@@ -95,6 +99,16 @@ public class CasesAPI
     public Case createCase(Case newCase)
     {
 	newCase.save();
+	try {
+		if(newCase.relatedContacts() != null && newCase.relatedContacts().size() > 0){
+			for(Contact con : newCase.relatedContacts()){
+				con.save();
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	return newCase;
     }
 
@@ -110,7 +124,28 @@ public class CasesAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Case updateCase(Case newCase)
     {
+	Case oldCase = CaseUtil.getCase(newCase.id);
+	try {
+		if(oldCase.relatedContacts() != null && oldCase.relatedContacts().size() > 0){
+			for(Contact con : oldCase.relatedContacts()){
+				con.save();
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	newCase.save();
+	try {
+		if(newCase.relatedContacts() != null && newCase.relatedContacts().size() > 0){
+			for(Contact con : newCase.relatedContacts()){
+				con.save();
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	return newCase;
     }
 
@@ -124,6 +159,16 @@ public class CasesAPI
     @Path("/{id}")
     public void deleteCase(@PathParam("id") Long id)
     {
+    Case c = CaseUtil.getCase(id);
+    try {
+		if(c.relatedContacts() != null && c.relatedContacts().size() > 0){
+			for(Contact con : c.relatedContacts())
+				con.save();
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	CaseUtil.delete(id);
     }
 
@@ -139,6 +184,20 @@ public class CasesAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteMultipleCases(@FormParam("ids") String ids) throws JSONException
     {
+    	JSONArray caseJSONArray = new JSONArray(ids);    	 
+		try {
+			for (int i = 0; i < caseJSONArray.length(); i++) {
+				 String caseId =  (String) caseJSONArray.get(i);
+				 Case c = CaseUtil.getCase(Long.parseLong(caseId));
+				 if(c != null && c.relatedContacts() != null && c.relatedContacts().size() > 0){
+					 for(Contact con : c.relatedContacts())
+						 con.save();
+				 }
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	Case.dao.deleteBulkByIds(new JSONArray(ids));
     }
 

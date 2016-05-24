@@ -247,6 +247,19 @@ public class TasksAPI
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	try {
+		if(!(task.relatedContacts()).isEmpty() && task.relatedContacts().size() > 0)
+		{
+			for(Contact c : task.relatedContacts())
+			{
+				c.save();
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
 	return TaskUtil.getTask(task.id);
     }
 
@@ -263,7 +276,7 @@ public class TasksAPI
     public Task updateTask(Task task)
     {
     	Task oldTask = TaskUtil.getTask(task.id);
-    	  try {
+    	try {
 			if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())
 				{
 					for(Opportunity oppr : oldTask.relatedDeals())
@@ -271,6 +284,10 @@ public class TasksAPI
 						oppr.save();
 					}
 				}
+			if(oldTask != null && oldTask.relatedContacts() != null && oldTask.relatedContacts().size() > 0){
+				for(Contact c : oldTask.relatedContacts())
+					c.save();
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -283,6 +300,10 @@ public class TasksAPI
 			{
 				oppr.save();
 			}
+		}
+		if(task.relatedContacts() != null && task.relatedContacts().size() > 0){
+			for(Contact c : task.relatedContacts())
+				c.save();
 		}
 	} catch (Exception e1) {
 		// TODO Auto-generated catch block
@@ -318,10 +339,14 @@ public class TasksAPI
 			for (int i = 0; i < tasksJSONArray.length(); i++) {
 				 String taskId =  (String) tasksJSONArray.get(i);
 				 Task task = TaskUtil.getTask(Long.parseLong(taskId));
-				 if(!task.relatedDeals().isEmpty()){
+				 if(!task.relatedDeals().isEmpty() && task.relatedDeals().size() > 0){
 					 for(Opportunity oppr : task.relatedDeals()){
 						 oppr.save();
 					 }
+				 }
+				 if(task.relatedContacts() != null && task.relatedContacts().size() > 0){
+					 for(Contact c : task.relatedContacts())
+						 c.save();
 				 }
 			}
 		} catch (Exception e) {
