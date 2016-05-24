@@ -780,7 +780,7 @@ function deserialize_contact(contact, template)
 							var prop = null;
 							$.each(contact_company.properties , function(){
 								if(this.name == "address")
-									prop = this.value;
+									prop = JSON.parse(this.value);
 							});				
 							if(prop){
 								$("#content .address-type").val("office");
