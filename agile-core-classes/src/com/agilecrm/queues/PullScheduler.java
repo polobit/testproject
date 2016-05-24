@@ -199,16 +199,13 @@ public class PullScheduler
 	    }
 	    else
 	    {
-	    	// Checks memory usage
-	    	if(!checkMemoryUsage())
-	    		return false;
 	    		
 	    	// To increase backend instances for accessing more requests
 	    	if(doLimitIterations)
 	    	{
 	    		iteration++;
 	    		
-	    		if(iteration >= ITERATIONS_LIMIT)
+	    		if(iteration > ITERATIONS_LIMIT)
 	    			return false;
 	    	}
 	    	
@@ -218,37 +215,6 @@ public class PullScheduler
 
     }
     
-    private boolean checkMemoryUsage()
-    {
-    	long start = System.currentTimeMillis();
-    	System.out.println("Start of check memory usage. "  + start);
-    	
-    	// Get the Java runtime
-        Runtime runtime = Runtime.getRuntime();
-       
-        // Run the garbage collector
-        runtime.gc();
-        
-        // Calculate the used memory
-        long memory = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Used memory is bytes: " + memory);
-        
-        memory = bytesToMegabytes(memory);
-        System.out.println("Used memory is megabytes: "
-            + memory);
-        
-        System.out.println("Checking run time memory took " + (System.currentTimeMillis() - start));
-        
-        // if less than 1MB
-        if(memory < 1)
-        {
-        	System.err.println("Available memory is less than 1 MB");
-        	return false;
-        }
-        
-        return true;
-    }
-
     /**
      * Process leased tasks
      * 
@@ -358,12 +324,6 @@ public class PullScheduler
 
 	// System.out.println("deleting tasks " + completedTasks.size());
 
-    }
-    
-    private static final long MEGABYTE = 1024L * 1024L;
-
-    public static long bytesToMegabytes(long bytes) {
-      return bytes / MEGABYTE;
     }
 
 }
