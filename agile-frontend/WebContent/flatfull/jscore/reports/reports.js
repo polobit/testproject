@@ -187,7 +187,7 @@ function initializeReportsListeners(){
 			$('#reports-listerners-container')
 			.on("mouseenter",'.sub-nav-tab',function(e){
 					$('.reports_tab_content').show();
-					var top= $(this).offset().top;top = top-100;
+					var top= $(this).offset().top;top = top-130;
 					$('.reports_tab_content').css('top',top+'px')
 				});
 			
