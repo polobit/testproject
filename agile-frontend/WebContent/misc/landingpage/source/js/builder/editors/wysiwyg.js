@@ -75,24 +75,28 @@ angular.module('builder.wysiwyg', [])
 			var drawWysiwyg = function(x, y, node) {
 				node    = node ? node : $scope.elementFromPoint(x, y - $scope.frameBody.scrollTop());
   				var matched = elements.match(node);
-  				var block_element=new Array('P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'DL', 'PRE', 'HR', 'BLOCKQUOTE', 'ADDRESS');
-  	
+  				var inline_element=['U','S','B', 'BIG', 'I', 'SMALL','EM', 'KBD','STRONG', 'SAMP', 'TIME', 'VAR', 'BR', 'SPAN','SUB', 'SUP'];
+
    				if (matched.canModify.indexOf('text') > -1 && matched.showWysiwyg) {
   					$scope.selectBox.hide();
-  					if(block_element.includes(node.tagName))
-  						node.setAttribute('contenteditable', true); 
-  					else {
-  						var k=0;
-  						var i=node;
-  						while(k==0){
-  							if(block_element.includes(i.tagName)){
-  								i.setAttribute('contenteditable', true);
-  								k=1; 
-  							} 
-  							else 
-  								i=i.parentNode;
-  						}
-  					}                                     
+  					
+  					if(inline_element.includes(node.tagName)){
+			              var k=0;
+			              var i=node;
+			              while(k==0){
+			                if(!inline_element.includes(i.tagName)){
+			                  i.setAttribute('contenteditable', true);
+			                  k=1; 
+			                } 
+			                else 
+			                  i=i.parentNode;
+			              }
+			            }
+              
+		            else {
+		              node.setAttribute('contenteditable', true); 
+		            }  
+  								                         
                     node.focus();
 
                     var pos   = node.getBoundingClientRect(),
@@ -183,9 +187,9 @@ angular.module('builder.wysiwyg', [])
 			//Add passed alignment class to active node and remove
 			//all other alignment classes currently on it.
 			$scope.align = function(direction) {
-				var block_element=new Array('P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'DL', 'PRE', 'HR', 'BLOCKQUOTE', 'ADDRESS');
-  			
-				if(!block_element.includes($scope.selected.node.tagName) && direction!="center" ){
+				var inline_element=['U','S','B', 'BIG', 'I', 'SMALL','EM', 'KBD','STRONG', 'SAMP', 'TIME', 'VAR', 'BR', 'SPAN','SUB', 'SUP'];
+
+				if(inline_element.includes($scope.selected.node.tagName) && direction!="center" ){
 					$($scope.selected.node).removeClass(function (i,c) {
 				    return (c.match (/(^|\s)text-\S+/g) || []).join(' ');
 					}).addClass('text-'+direction).attr('style', 'display:block');
