@@ -50,7 +50,11 @@ public class SessionCache
 			session.setAttribute(SESSION_ATTRIBUTE_NAME, cache);
 		}
 		
-		cache.put(key, value);
+		// Remove the object from cache if value is null
+		if( value == null )		cache.remove(key);
+		else cache.put(key, value);
+		
+		session.setAttribute(SESSION_ATTRIBUTE_NAME, cache);
 	}
 	
 	/**

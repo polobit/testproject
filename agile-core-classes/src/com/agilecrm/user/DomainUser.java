@@ -649,8 +649,19 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			 * If so, add the new Domain User to the session cache.
 			 */
 			Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
-			if( obj != null && obj instanceof DomainUser && ((DomainUser)obj).id == this.id )
+			if( obj != null && obj instanceof DomainUser && ((DomainUser)obj).id.equals(this.id) )
 				SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, this);
+			
+			/*
+			 * Check if this user is same as the DomainUser in currently logged in AgileUser.
+			 * If yes, make a correction in the SessionCache for AgileUser
+			 */
+			obj = SessionCache.getObject(SessionCache.CURRENT_AGILE_USER);
+			if( obj != null && obj instanceof AgileUser && ((AgileUser)obj).domain_user_id.equals(this.id) )
+			{
+				((AgileUser)obj).setDomainUser(this);
+				SessionCache.putObject(SessionCache.CURRENT_AGILE_USER, obj);
+			}
 			
 			
 			/*
