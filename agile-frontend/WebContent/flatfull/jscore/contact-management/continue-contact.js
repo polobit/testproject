@@ -1003,7 +1003,7 @@ $(function()
 			var flag = false ; var prop = null;
 			$.each(contact_company.properties , function(){
 				if(this.name == "address")
-					prop = this.value;
+					prop = JSON.parse(this.value);
 				});
 				if(prop){
 					if(prop.address && $("#content #address").val() && $("#content #address").val() != prop.address)
