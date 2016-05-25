@@ -80,14 +80,16 @@ else{
 
 //if schedule id contains , it is team calendar
 //if team calendar then we don't consider available meeting slots
+System.out.println("scheduleid :: "+scheduleid);
 if(scheduleid.contains(",")){
     multiple_users=true; slots_array=null;
     List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
  String _multiple_schedule_ids[]=list.toArray(new String[list.size()]);
  for(int i=0;i<=_multiple_schedule_ids.length-1;i++){
-     System.out.println(_multiple_schedule_ids[i]+"  schedule id");
+     System.out.println(_multiple_schedule_ids[i]+"  schedule d");
      OnlineCalendarPrefs online_prefs=null;
       online_prefs=OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[i]);
+      System.out.println("online_prefs ::: "+online_prefs);
       if(online_prefs==null)
     	  continue;
 	  
