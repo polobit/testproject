@@ -12,10 +12,14 @@
     </div>   
   </td>  
 	<td>
-    <div class="text-ellipsis">
-       {{epochToHumanDate "ddd mmm dd, yyyy" created_time}}
-    </div>   
-  </td>   
+    <div class="table-resp">
+      <small class="edit-hover text-muted"> 
+        <i class="fa fa-clock-o m-r-xs"></i>
+      <span>Last updated on&nbsp;</span>
+          <time class="b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+      </small>
+    </div>
+  </td> 
   <td>
   <a title= "Edit" style="padding-left:10px;padding-right:5px;" href="#knowledgebase/section/{{section_id}}/article/{{id}}/edit-article"> <small class="text-muted m-b-sm"><i class="fa fa-pencil-square-o"></i></small></a>
   </td>

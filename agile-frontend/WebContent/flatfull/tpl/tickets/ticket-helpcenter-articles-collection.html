@@ -8,13 +8,12 @@
                 You can add article for your section by clicking the button below.
             </div>
             <div>
-                <a href="#knowledgebase/add-article" class="btn btn-sm btn-default btn-slate-action">
+                <a href="#knowledgebase/add-article{{#helpcenter_url_section}}{{/helpcenter_url_section}}" class="btn btn-sm btn-default btn-slate-action">
                     <span><i class="icon-plus-sign"></i></span> Add Article
                 </a>
             </div>
         </div>
     </div>
-</div>
 {{/unless}}
 {{#if this.length}}
     <div class="col panel wrapper">
@@ -29,9 +28,9 @@
                     <thead>
                         <tr>
                             <th class="hide">Id</th>
-                            <th>Title</th>
-                            <th>Created By</th>
-                            <th>Created On</th>
+                            <th style="width:20%">Title</th>
+                            <th style="width:20%">Created By</th>
+                            <th style="width:40%"></th>
                         </tr>
                     </thead>
                     <tbody id="ticket-helpcenter-articles-model-list"  class="c-p"> </tbody>
