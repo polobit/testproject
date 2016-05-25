@@ -190,6 +190,8 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
+
+						
 						$(el).append($(template_ui));
 					}, null);
 				});
@@ -223,7 +225,14 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 	// Sets data to tr
 	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data(
 			base_model);
-	
+	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data();
+	var c  = $(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').find("tr:first").find("th:first").text()
+	if(c == "Basic info")
+	{
+		$(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').removeClass("contactsimage");
+		$(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').addClass("contactsimage");
+	}
+
 }
 
 // Check whether the given fields list has the property name.

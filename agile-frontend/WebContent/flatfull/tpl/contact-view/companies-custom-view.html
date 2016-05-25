@@ -85,7 +85,7 @@
 	    			{{#is_mobile}}
 					{{else}}
 	    			<a id="companies-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-            			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+            			<i id="icon-filter" class="fa fa-filter text-base"></i>
           			</a>
           			{{/is_mobile}}
 	    		</h3><br>
@@ -113,9 +113,9 @@
 					    {{/hasScope}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >Delete</button>
 					    <div class="btn-group dropdown pull-right multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
-					    	<button class="btn btn-default btn-sm" id="companiesTabelView"><i class="icon-list"></i></button>
+					    <!--	<button class="btn btn-default btn-sm" id="companiesTabelView"><i class="icon-list"></i></button> -->
 							 <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="companies_columns">
-                    		<i class="caret" ></i>
+                    		<i class="fa fa-navicon" ></i>
                 			</button>
                 			<ul class="pull-right dropdown-menu  p-l"  role="menu">
                 			
@@ -141,7 +141,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="companies" class="table table-striped tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="companies" class="table table-striped companies-custom tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -216,21 +216,14 @@
 
 
 <script id="companies-custom-fields-template" type="text/html">
-			{{#iscompactContactTabel}}
-	       		  <li class="hide">
-	       		  	<a href="javascript:void(0);" class="p-b-none">
-						<label class="i-checks i-checks-sm companycoloumn "><input name="basic_info" value="basic_info"type="checkbox"checked="checked" class="choose-column-chbx"><i></i></label>Basic info</a></li> 
-					<li class="hide">
-	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm companycoloumn"><input name="image" checked="checked"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
-				{{else}}
+			
 				<li >
 	       		  	<a href="javascript:void(0);" class="p-b-none">
-						<label class="i-checks i-checks-sm companycoloumn "><input name="basic_info" value="basic_info"type="checkbox" checked="checked" class="choose-column-chbx"><i></i></label>Basic info</a></li> 
+						<label class="i-checks i-checks-sm companycoloumn "><input name="basic_info" value="basic_info"type="checkbox"  class="choose-column-chbx"><i></i></label>Basic info</a></li> 
 					<li class="hide">
 	       		  			<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm companycoloumn"><input name="image" checked="checked"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
-				{{/iscompactContactTabel}}
+				
 	                  <li>
 	       		  		<a href="javascript:void(0);" class="p-b-none">
 							<label class="i-checks i-checks-sm companycoloumn "><input name="name" value = "name"type="checkbox" class="choose-column-chbx"><i></i></label>Name</a></li>

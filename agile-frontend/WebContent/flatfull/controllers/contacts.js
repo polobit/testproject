@@ -1082,7 +1082,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 				contactListener();
 
-
+				
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
 				//setup_tags(el);

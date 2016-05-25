@@ -15,7 +15,7 @@ var timer = undefined;
 					success : function(data)
 						{
 							
-							location.reload();
+							App_Contacts.contacts()
 						} 
 					});
 
@@ -54,7 +54,7 @@ var timer = undefined;
 					data :JSON.stringify(array),
 					success : function(data)
 						{
-							location.reload();
+							App_Companies.companies()
 							
 						} 
 					});

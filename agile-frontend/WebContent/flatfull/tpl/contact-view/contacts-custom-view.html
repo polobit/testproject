@@ -145,7 +145,7 @@
 	    		<span id="contacts-count" class="">{{contacts_count}}</span>
 	    			 
 	    			<a id="contacts-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters" onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
-            			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+            			<i id="icon-filter" class="fa fa-filter text-base"></i>
           			</a>
 	    		</h4>
 	    		<br>
@@ -242,8 +242,9 @@
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
 					    <div class="btn-group dropdown pull-right multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 							<div class="btn-group dropdown pull-right multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
-							 <button class="btn btn-default btn-sm" id="contactTabelView"><i class="icon-list"></i></button><button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns">
-                    		<i class="caret"></i>
+							<!-- <button class="btn btn-default btn-sm" id="contactTabelView"><i class="icon-list"></i></button> -->
+							 <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns" >
+                    		<i class="fa fa-navicon"></i>
                 			</button>
                 			<ul class="pull-right dropdown-menu  p-l"  role="menu">
                 			
@@ -258,7 +259,7 @@
 				        </div>
 					    
 				    </div>
-
+</div>
 
 <div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
 				<div class="panel panel-default" style="overflow-x:auto; border-left:none;">
@@ -267,7 +268,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table noDelete  tableNewView table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table contacts-custom noDelete   table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -321,7 +322,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table table-striped   noDelete  no-sorting panel agile-table 
+                <table id="contacts-table" class="table table-striped    noDelete  no-sorting panel agile-table 
                 {{#is_mobile}}contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="ore/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
@@ -340,22 +341,15 @@
             <!-- </div> -->
 </script>
 <script id="contact-custom-fields-template" type="text/html">
-				{{#iscompactContactTabel}}
-				<li class="hide">
-	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image" checked="checked"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
-				<li class="hide">
-	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="basic_info"value = "basic_info"type="checkbox"  checked="checked" class="choose-column-chbx"><i></i></label>Basic Info</a></li>
-				{{else}}
+				
 				<li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
-								<label class="i-checks i-checks-sm contactcoloumn"><input name="basic_info"value = "basic_info"type="checkbox" class="choose-column-chbx"><i></i></label>Basic Info</a></li>
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="basic_info"value = "basic_info" type="checkbox" class="choose-column-chbx"><i></i></label>Basic Info</a></li>
 				<li class="hide">
 	       		  			<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image" checked="checked"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
 				
-				{{/iscompactContactTabel}}
+				
 	       		  
 	                  <li>
 	       		  		<a href="javascript:void(0);" class="p-b-none">

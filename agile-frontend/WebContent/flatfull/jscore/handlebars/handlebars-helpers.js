@@ -1100,12 +1100,13 @@ $(function()
 		var el = "", cls = ""; 
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			if (element == "basic_info" || element == "image")
+			
+			if (element == "image")
 			{
-				if(element == "image")
+				if((App_Contacts.contactViewModel[item]).indexOf("basic_info") != -1)
 					{
 						element = "";
-						cls = "";
+						cls = "contactimageheader";
 					}
 				if(_agile_get_prefs("contactTabelView"))
 				{
@@ -1120,6 +1121,7 @@ $(function()
 						  
 				}
 			}
+			
 			
 			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
@@ -6576,25 +6578,13 @@ $(function()
 		var el = "" ,cls = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
-			if (element == "basic_info" || element == "image")
+			if (element == "image")
 			{
-				if(_agile_get_prefs("companyTabelView"))
-				{
-					if(element == "basic_info")
-						return ;
-
-					if(element == "image")
-					{
-						element = "";
-						cls = "";
-					}
-						  
+				if(App_Companies.companyViewModel[item].indexOf("basic_info") != -1)
+				{	
+					cls = "companiesnewimage";		  
 				}
-				if(element == "image")
-					{
-						element = "";
-						cls = "";
-					}
+				element = "";
 			}
 			
 			else if (element.indexOf("CUSTOM_") == 0) {
