@@ -161,7 +161,7 @@ angular.module('builder.wysiwyg', [])
 		link: function($scope, el) {
 			rangy.init();
 
-			//register rangy class appliers for basic text styling
+  			//register rangy class appliers for basic text styling
 			$scope.bold       = rangy.createCssClassApplier('strong', {elementTagName: "strong"});
 			$scope.underline  = rangy.createCssClassApplier('u', {elementTagName: "u"});
 			$scope.italic     = rangy.createCssClassApplier('em', {elementTagName: "em"});
@@ -183,9 +183,18 @@ angular.module('builder.wysiwyg', [])
 			//Add passed alignment class to active node and remove
 			//all other alignment classes currently on it.
 			$scope.align = function(direction) {
-				$($scope.selected.node).removeClass(function (i,c) {
+				var block_element=new Array('P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'DL', 'PRE', 'HR', 'BLOCKQUOTE', 'ADDRESS');
+  			
+				if(!block_element.includes($scope.selected.node.tagName) && direction!="center" ){
+					$($scope.selected.node).removeClass(function (i,c) {
 				    return (c.match (/(^|\s)text-\S+/g) || []).join(' ');
-				}).addClass('text-'+direction);
+					}).addClass('text-'+direction).attr('style', 'display:block');
+				}
+				else{
+					$($scope.selected.node).removeClass(function (i,c) {
+					    return (c.match (/(^|\s)text-\S+/g) || []).join(' ');
+					}).addClass('text-'+direction);
+				}
 			};
 			
 			//handle clicks on text styling/aligning buttons
