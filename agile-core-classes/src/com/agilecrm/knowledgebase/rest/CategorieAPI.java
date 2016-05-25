@@ -1,5 +1,6 @@
 package com.agilecrm.knowledgebase.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -15,6 +16,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+
 /**
  * 
  * @author Sasi
@@ -41,9 +44,9 @@ public class CategorieAPI
 	public List<Categorie> getCategories()
 	{
 		List<Categorie> categories = CategorieUtil.getCategories();
-		
-		if(categories == null)
-		 return null;
+
+		if (categories == null)
+			return null;
 
 		for (Categorie categorie : categories)
 			categorie.sections = SectionUtil.getSectionByCategorie(categorie.id);
@@ -88,7 +91,7 @@ public class CategorieAPI
 
 		return categorie;
 	}
-	
+
 	@POST
 	@Path("/bulk")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -109,30 +112,54 @@ public class CategorieAPI
 		return new JSONObject().put("status", "success").toString();
 	}
 
-
-	@PUT
-	@Path("/id/{id}")
+	/**
+	 * Save the category order based on the order of the category id's sent.
+	 * 
+	 * @param ids
+	 *            category ids.
+	 * @return successes message after saving or else error message.
+	 */
+	@Path("position")
+	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Categorie updateCategorieUpdatedTime(Categorie categorie,@PathParam("id") Long id ) throws WebApplicationException
+	public String setCategorieOrder(String ids)
 	{
+		System.out.println("-----------" + ids);
+		JSONObject result = new JSONObject();
 		try
 		{
-			Categorie dbCategorie = Categorie.dao.get(categorie.id);
-			dbCategorie.updated_time = categorie.updated_time;
-			dbCategorie.save();
+			JSONArray idsArray = null;
+			if (StringUtils.isNotEmpty(ids))
+			{
+				idsArray = new JSONArray(ids);
+				System.out.println("------------" + idsArray.length());
+				List<Long> catIds = new ArrayList<Long>();
+				for (int i = 0; i < idsArray.length(); i++)
+				{
+					catIds.add(Long.parseLong(idsArray.getString(i)));
+				}
+				CategorieUtil.saveCategorieOrder(catIds);
+				result.put("message", "Order changes sucessfully.");
+			}
+			return result.toString();
 		}
-		catch (Exception e)
+		catch (Exception je)
 		{
-			System.out.println("exception occured while creating workflow creation activity");
-
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			je.printStackTrace();
+			try
+			{
+				result.put("error", "Unable to update the order. Please check the input.");
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(result).build());
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+			return null;
 		}
-
-		return categorie;
 	}
-	
+
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -179,7 +206,5 @@ public class CategorieAPI
 		}
 
 	}
-	
-	
-	
+
 }

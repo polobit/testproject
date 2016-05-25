@@ -991,7 +991,6 @@
 							            // Set helper cell sizes to match the original sizes
 							            $(this).width($originals.eq(index).width());
 							            console.log('-----------'+$originals.eq(index).width());
-							 
 							          });
 							          return $helper;
 							      },
@@ -1011,29 +1010,29 @@
 							      cursor: "move",
 							      tolerance: "intersect",
 							      
-							      update : function(event, ui) {
-							      	var id = $(ui.item).children().eq(1).data("id");
-							    	console.log($(ui.item).children().eq(1).data("id"));
-							        
-							    	var newArticleModel = new BaseModel();
-				                 
-				                  newArticleModel.url = "/core/api/knowledgebase/categorie/id/" +id;
-				               
-				                  var json = {} ;
-				                  var time = new Date().getTime(); 
-				                   
-				                  json = {"id":id,"updated_time":time };
-
-				                  newArticleModel.save(json);
-				                  
-							    	console.log(event);  
-							        }
 						    });
-						});
-					});
-				}
-			});
+						
+							$('#ticket-helpcenter-categories-model-list',$('#ticket-categorie-table')).on("sortstop",function(event, ui){
+								
+								var sourceIds = [];
+								$('#ticket-helpcenter-categories-model-list > tr').each(function(column){
+									sourceIds[column] = $(this).data().id;
+								});
+								// Saves new positions in server
+									$.ajax({ type : 'POST', url : '/core/api/knowledgebase/categorie/position', data : JSON.stringify(sourceIds),
+										contentType : "application/json; charset=utf-8", dataType : 'json', success : function(data){
+											$.each(sourceIds, function(index, val){
+												$('#dealSourcesForm_'+val).find('input[name="order"]').val(index);
+									
+											});
+									}});	
+								});
+							});	
+							
 
+						});	
+				}
+			});	
 			//Fetching groups collections
 			App_Ticket_Module.categoriesCollection.collection.fetch();
 
