@@ -76,6 +76,15 @@ public class SessionCache
 	}
 	
 	/**
+	 * Remove an object from Session Cache
+	 * @param key
+	 */
+	public static void removeObject(String key)
+	{
+		putObject(key, null);
+	}
+	
+	/**
 	 * Set the session for this cache
 	 * @param session
 	 */
