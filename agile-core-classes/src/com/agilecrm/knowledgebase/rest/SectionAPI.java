@@ -80,8 +80,7 @@ public class SectionAPI
 	{
 		try
 		{
-			if (StringUtils.isBlank(section.name) || StringUtils.isBlank(section.description)
-					|| section.categorie_id == null)
+			if (StringUtils.isBlank(section.name) || section.categorie_id == null)
 				throw new Exception("Required params missing.");
 
 			Key<Categorie> categorie_key = new Key<Categorie>(Categorie.class, section.categorie_id);
