@@ -3913,3 +3913,12 @@ border-bottom:1px solid #eee;
 {
   display: none!important;
 }
+
+.p-8{
+	padding:8px;
+}
+
+ .draggable-noty:hover .move-icon{
+ display:block!important;
+ }
+ 

@@ -16,6 +16,7 @@ TWILIO_CALLTYPE = "";
 TWILIO_DIRECTION = "";
 TWILIO_CALLED_NO = "";
 TWILIO_IS_VOICEMAIL = false;
+var TWILIO_CONTACT ;
 
 function initializeTwilioGlobalListeners(){
 	
@@ -41,7 +42,7 @@ $(function(){
 				
 				globalconnection.mute(true);
 				
-				$('.noty_buttons').find('.noty_twilio_unmute').toggle();
+				$('.noty_buttons').find('.noty_twilio_unmute').css('display','inline');
 				$('.noty_buttons').find('.noty_twilio_mute').toggle();
 			});
 	
@@ -73,6 +74,12 @@ $(function(){
 		console.log("Twilio call dailpad from noty");
 
 		$('.noty_buttons').find('#dialpad_in_twilio').toggle();
+		if($('#dialpad_in_twilio:visible').length > 0){
+			$("#panel-body1, #draggable-noty" ).css({"height":"150px"});
+		}else{
+			$("#panel-body1, #draggable-noty" ).css({"height":"45px"});
+		}
+		
 	});
 	
 	//START voice mails
@@ -194,6 +201,7 @@ $(function(){
 		
 		var contactDetailsObj = agile_crm_get_contact();
 		TWILIO_CONTACT_ID = contactDetailsObj.id;
+		TWILIO_CONTACT = contactDetailsObj;
 //		alert(TWILIO_CONTACT_ID);
 
 		if (Twilio.Device.status() == "busy"  || checkForActiveCall())
@@ -831,7 +839,11 @@ function setUpGlobalTwilio()
 						//Twilio_Call_Noty_IMG = addContactImg("Incoming");
 					  
 						console.log("calling call noty");
-						showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
+						
+						var btns = [{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_mute icon-microphone","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_unmute icon-microphone-off","title":""},{"id":"", "class":"btn btn-xs btn-default noty_twilio_dialpad icon-th","title":""},{"id":"", "class":"btn btn-sm btn-danger noty_twilio_hangup","title":"Hangup"}];
+						showDraggableNoty("Twilioio", TWILIO_CONTACT, "connected", To_Number, btns);
+						
+						/*showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
 					 }		
 		});
 
@@ -984,6 +996,7 @@ function setUpGlobalTwilio()
 					TWILIO_DIRECTION = "inbound";
 					TWILIO_IS_VOICEMAIL = false;
 					TWILIO_CONTACT_ID = 0;
+					TWILIO_CONTACT = null;
 					globalconnection = conn;
 					var previousDialled;
 					
@@ -1002,8 +1015,10 @@ function setUpGlobalTwilio()
 						if (Twilio.Device.status() == "busy" || (CALL_CAMPAIGN.call_status == "CONNECTED" || CALL_CAMPAIGN.call_status == "CALLING" || CALL_CAMPAIGN.autodial == true))
 						{
 							console.log("getting one more call.");
-
-							showCallNotyPopup("missedCall", "error", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
+							var btns = [];
+							showDraggableNoty("Twilioio", TWILIO_CONTACT, "missedCall", conn.parameters.From, btns);
+							
+							//showCallNotyPopup("missedCall", "error", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
 							if(previousDialled){
 								To_Number = previousDialled ;  
 							}
@@ -1023,9 +1038,11 @@ function setUpGlobalTwilio()
 						searchForContact(To_Number, function(name){
 								To_Name = name;
 
-
-								showCallNotyPopup("incoming", "Twilio",
-										Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Incoming call </b>'+ To_Number + '<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);										
+								var btns = [{"id":"", "class":"btn btn-primary noty_twilio_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_twilio_ignore","title":"Ignore"}];
+								showDraggableNoty("Twilioio", TWILIO_CONTACT, "incoming", To_Number, btns);
+								
+								/*showCallNotyPopup("incoming", "Twilio",
+										Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Incoming call </b>'+ To_Number + '<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);										*/
 						});
 					});	
 					
@@ -1161,7 +1178,11 @@ function twiliocall(phoneNumber, toName)
 			Twilio_Call_Noty_IMG = img;
 			// this was added to remve the error of popup message	
 				console.log("calling call noty");
-				showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
+				
+				var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"Cancel"}];
+				showDraggableNoty("Twilioio", TWILIO_CONTACT, "outgoing", To_Number, btns);
+				
+				/*showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
 		});		
 	}	
 }
@@ -1188,13 +1209,15 @@ function closeTwilioNoty()
 	globalconnection = undefined;
 	To_Number = undefined;
 	To_Name = "";
-
+	closeCallNoty(true);
 	// Close noty
 	if (Twilio_Call_Noty != undefined)
 	{
 		Twilio_Call_Noty.close();
 		Twilio_Call_Noty = undefined;
 	}
+	
+	
 }
 
 function showNoteAfterCall(callRespJson,messageObj)
@@ -1392,6 +1415,7 @@ function searchForContact(from, callback) {
 	    		 callback(name);
 
 			TWILIO_CONTACT_ID = responseJson.id;
+			TWILIO_CONTACT = responseJson;
 			console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);
 			callback(getContactName(responseJson));
 	    });
