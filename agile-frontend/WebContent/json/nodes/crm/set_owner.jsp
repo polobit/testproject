@@ -29,6 +29,12 @@
             "type": "multiselect"
         },
         {
+			"label"   : "Or",
+			"category": "Settings",
+			"fieldType": "label",
+            "type": "label" 
+        },
+        {
             "label": "Owner Merge Field",
             "category": "Settings",
             "name": "mergefield_owner_id",
