@@ -46,6 +46,27 @@ pageEncoding="UTF-8"%>
 <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
 
+<%
+	if( !(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) )
+	{
+%>
+<%@ include file="file-hash.json"%>
+<%
+	}
+%>
+<script type="text/javascript">
+	var _AGILE_FILE_HASH;
+	
+	function _agile_get_file_hash(filename)
+	{
+		if( !filename || filename == '' )	return _AGILE_VERSION;
+		
+		if( _AGILE_FILE_HASH && _AGILE_FILE_HASH[filename] )	return _AGILE_FILE_HASH[filename];
+		
+		return _AGILE_VERSION;
+	}
+</script>
+
 <!-- Include ios meta tags -->
 <%@ include file="ios-native-app-meta-tags.jsp"%>
 
@@ -797,10 +818,10 @@ var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(re
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
 head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
-			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _AGILE_VERSION,
+			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
 			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
 			"https://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js",
-			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _AGILE_VERSION, 
+			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'), 
 			function(){
 		        load_globalize();
 		        showVideoForRegisteredUser();
@@ -809,7 +830,7 @@ head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _agile_get_file_hash('tpl.js'));	
 
 var en;
 
@@ -822,7 +843,7 @@ var Agile_Contact = {};
 head.ready(function() {
 
 if(!HANDLEBARS_PRECOMPILATION){
-    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
+    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _agile_get_file_hash('download-template.js'), function()
     {
         downloadTemplate("tpl.js");
         downloadTemplate("contact-view.js");
@@ -833,7 +854,7 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _agile_get_file_hash('js-all-min.js')}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js'));
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
