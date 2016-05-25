@@ -91,7 +91,17 @@ if(scheduleid.contains(",")){
       if(online_prefs==null)
     	  continue;
 	  
-	  DomainUser _domain_user= DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
+      System.out.println("In agile-calendar -- web-event-calendar.jsp");
+      
+	  //DomainUser _domain_user= DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
+      Long domainUserId = OnlineCalendarUtil.getDomainUserID(online_prefs);
+      if(domainUserId==null){
+	      domainUserId = 0; 
+      }
+    	System.out.println("domainUserId :: "+domainUserId);
+	  DomainUser _domain_user= DomainUserUtil.getDomainUser(domainUserId);
+    	System.out.println("_domain_user :: "+_domain_user);
+
 	    if(_domain_user!=null){
 		AgileUser agile_user=AgileUser.getCurrentAgileUserFromDomainUser(_domain_user.id);
 		 if(agile_user==null)
@@ -110,6 +120,7 @@ if(scheduleid.contains(",")){
 
 		}
 
+ System.out.println("Here we are");
 		//if multiple schedule ids were given in url but no matching found
 		if (_multiple_users.size() == 1)
 		{
@@ -150,7 +161,9 @@ if(scheduleid.contains(",")){
 	   }
 
 	UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-	System.out.println("userPrefs " + userPrefs.pic);
+	//System.out.println("userPrefs " + userPrefs.pic);
+	System.out.println("userPrefs " + userPrefs);
+	if(userPrefs!=null)
 	profile_pic = userPrefs.pic;
 	user_name = domainUser.name;
 	user_id = domainUser.id;
