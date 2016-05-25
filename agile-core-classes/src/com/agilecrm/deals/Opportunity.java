@@ -46,6 +46,7 @@ import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -639,55 +640,67 @@ public class Opportunity extends Cursor implements Serializable
     {
    	
     // Sets the currency conversion value
-    	
-    	 try {
-    		 JSONObject listOfRates = null;String userpref_currency_type = null;
-    		 CurrencyConversionRates cuRates = dao.ofy().query(CurrencyConversionRates.class).get();
-    		 if(cuRates == null || cuRates.currencyRates ==  null){
-    			 String s = "https://openexchangerates.org/api/latest.json?app_id=0713eecad3e9481dabea356a7f91ca60";
-    			 URL url = new URL(s);	
-    			 HttpURLConnection con = (HttpURLConnection) url.openConnection();			      
-    			 Scanner scan = new Scanner(con.getInputStream());
-    			 String string = new String();
-    			 while (scan.hasNext()){
-				    string += scan.nextLine();
-			     }
-				   scan.close();
-			    JSONObject jsonObject = new JSONObject(string);
+    	JSONObject listOfRates = null;String userpref_currency_type = null;Scanner scan = null ;
+    	String domain = NamespaceManager.get();   	
+		try {
+			NamespaceManager.set("");
+			CurrencyConversionRates cuRates = dao.ofy()
+					.query(CurrencyConversionRates.class).get();
+			if (cuRates == null || cuRates.currencyRates == null) {
+				String s = "https://openexchangerates.org/api/latest.json?app_id=0713eecad3e9481dabea356a7f91ca60";
+				URL url = new URL(s);
+				HttpURLConnection con = (HttpURLConnection) url
+						.openConnection();
+				scan = new Scanner(con.getInputStream());
+				String string = new String();
+				while(scan != null && scan.hasNext()) {
+					string += scan.nextLine();
+				}
+				
+				JSONObject jsonObject = new JSONObject(string);
 				listOfRates = jsonObject.getJSONObject("rates");
 				String ratesToDb = jsonObject.getString("rates");
 				CurrencyConversionRates Rates = new CurrencyConversionRates();
-				Rates.currencyRates = ratesToDb ; 
+				Rates.currencyRates = ratesToDb;
 				Rates.save();
-    		 }
-    		 else
-    		 {
-    			 listOfRates =  new JSONObject(cuRates.currencyRates);
-    		 }
-				UserPrefs userPrefs  = UserPrefsUtil.getCurrentUserPrefs();
-				if(userPrefs != null)
-			    userpref_currency_type = userPrefs.currency ;
-			    if(userpref_currency_type == null)
-			    	userpref_currency_type = "USD";
-			    else
-			    	userpref_currency_type = userpref_currency_type.substring(0,3).toUpperCase();
-				String  deal_currency_type = currency_type.substring(0,3);
-			    if(deal_currency_type == null)
-				    deal_currency_type =  userpref_currency_type ;
-			    double pre_conversion_value_numerator =  (double) listOfRates.getDouble(deal_currency_type); 
-			    double pre_conversion_value_denominator = (double) listOfRates.getDouble(userpref_currency_type);
- 
-              if(userpref_currency_type.equalsIgnoreCase(deal_currency_type))
-			       { 
-			         expected_value = currency_conversion_value;
-			   }else{   
-				
-                 expected_value = (pre_conversion_value_denominator/pre_conversion_value_numerator)*currency_conversion_value;
-			 }
-		   } catch (Exception e) {
+			} else {
+				listOfRates = new JSONObject(cuRates.currencyRates);
+			}
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		   }
+		} finally {
+			scan.close();
+			NamespaceManager.set(domain);
+		}
+		try {
+			UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+			if (userPrefs != null)
+				userpref_currency_type = userPrefs.currency;
+			if (userpref_currency_type == null)
+				userpref_currency_type = "USD";
+			else
+				userpref_currency_type = userpref_currency_type.substring(0, 3)
+						.toUpperCase();
+			String deal_currency_type = currency_type.substring(0, 3);
+			if (deal_currency_type == null)
+				deal_currency_type = userpref_currency_type;
+			double pre_conversion_value_numerator = (double) listOfRates
+					.getDouble(deal_currency_type);
+			double pre_conversion_value_denominator = (double) listOfRates
+					.getDouble(userpref_currency_type);
+
+			if (userpref_currency_type.equalsIgnoreCase(deal_currency_type)) {
+				expected_value = currency_conversion_value;
+			} else {
+
+				expected_value = (pre_conversion_value_denominator / pre_conversion_value_numerator)
+						* currency_conversion_value;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	if (colorName == null)
 	    colorName = Color.GREY;
