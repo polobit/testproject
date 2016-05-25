@@ -26,7 +26,13 @@ function initializePortletsListeners() {
 								.val();
 						var portletName = $('#portlet-name', $('#' + modal_id))
 								.val();
+
 						json = serializeForm(form_id);
+						if($('#duration','#'+modal_id)!=null && $('#duration','#'+modal_id).val()!='Custom')
+						{
+							delete json["start-date"];
+							delete json["end-date"];
+						}
 						if (portletType == "CONTACTS"
 								&& portletName == "Growth Graph") {
 							var tags = '';
@@ -970,8 +976,11 @@ $('.portlet_body')
 		$('.modal-body').on('change','#duration',function(e){
 			var el = $(this).closest('form');
 		var duration = $('#duration', el).val();
+
 		if(duration=='Custom')
 		{
+			$('#start_date').val("");
+			$('#end_date').val("");
 			$('.daterange').removeClass('hide');
 			$('#start_date').datepicker({
 				format : CURRENT_USER_PREFS.dateFormat

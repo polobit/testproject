@@ -251,11 +251,17 @@ var portlet_utility = {
 			durationJson['end_date_str'] = 'now';
 		} else if (duration == 'today' || duration == '1-day' || duration == '2-days' || duration == '1-week' || duration == '1-month' || duration == 'all-over-due') {
 			durationJson['end_date_str'] = 'TOMORROW';
-		} else {
+		}
+		else if(duration=='Custom'){
+			durationJson['start_date_str'] = 'custom-start'
+				durationJson['end_date_str'] = 'custom-end';
+		} 
+		else {
 			durationJson['start_date_str'] = ''
 				+ base_model.get('settings').duration + '-start';
 			durationJson['end_date_str'] = '' + base_model.get('settings').duration + '-end';
 		}
+		
 
 		return callback(durationJson);
 	},
@@ -655,10 +661,10 @@ var portlet_utility = {
 								+ base_model.get('settings').duration
 								+ '&start-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str)
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str)
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 								+ '&revenue='
 								+ leaderboardCate.revenue
 								+ '&dealsWon='
@@ -1817,17 +1823,15 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-					$("#due-date", elData)
-					.val(
-							getDateInFormatFromEpoc(base_model.get("settings")["due-date"]));
+				
 					$("#start_date", elData)
 					.val(
 							
-									getDateInFormatFromEpoc(base_model.get("settings").start-date));
+									getDateInFormatFromEpoc(base_model.get("settings")["start-date"]));
 					$("#end_date", elData)
 					.val(
 							
-									getDateInFormatFromEpoc(base_model.get("settings").end-date));
+									getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
 
 			if (leaderboardCate && leaderboardCate.revenue)
 				$("#category-list", elData).find('option[value=revenue]').attr(
@@ -2221,9 +2225,16 @@ var portlet_utility = {
 	/**
 	 * Get the start and end dates epoch based on duration.
 	 */
-	getStartAndEndDatesOnDue : function(duration) {
+	getStartAndEndDatesOnDue : function(duration,custom_date) {
 
 		var d = new Date();
+		if(duration=="custom-start")
+			return custom_date;
+		if(duration=="custom-end")
+		{
+			custom_date=custom_date+(24*60*60);
+			return custom_date;
+		}
 
 		// Last 24 Hrs
 		if (duration == "24-hours") {
@@ -2444,6 +2455,7 @@ var portlet_utility = {
 			d.setMonth(d.getMonth() - d.getMonth());
 			d.setDate(1);
 		}
+
 
 		return (getGMTTimeFromDate(d) / 1000);
 	},

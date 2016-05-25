@@ -830,8 +830,11 @@
 			</div>
 
 				<div class="control-group form-group hide daterange">
-					<span class="field_req">*</span><input id="start_date" name="start-date"  class="start date" placeholder="Start date"></input> To 
-					<input id="end_date" class="end date" name="end-date"  placeholder="End date"></input>
+					<div class="control-label col-sm-3"><span class="field_req">*</span></div>
+					<div class="controls col-sm-8">
+					<div class="col-sm-6"><input type="text" id="start_date" name="start-date"  class="start date required" placeholder="Start date"></input></div>  
+					<div class="col-sm-6"><input type="text" id="end_date" class="end date required" name="end-date"  placeholder="End date"></input></div>
+				</div>
 				</div>
 		</form>
 	</div>
