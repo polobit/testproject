@@ -378,10 +378,11 @@
 
 
  									{{#property_is_exists "address" properties}}
- 									<div class="m-b-sm">
+ 									
+ 									  {{#property_json_is_not_empty "address" properties}}
+ 									  <div class="m-b-sm">
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
- 									  {{#property_json_is_not_empty "address" properties}}
 									<small class="text-base text-muted">Location</small>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
@@ -390,10 +391,11 @@
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
 											</div>
 										</div>
+										 </div>
+									 </div>
+									 </div>
 									  {{/property_json_is_not_empty}}
-									 </div>
-									 </div>
-									 </div>
+									
 									{{/property_is_exists}}
 <div class="clearfix"></div>
 <!-- ending funda for contact detail edit -->
@@ -773,12 +775,13 @@
 
 
 
- 									{{#property_is_exists "address" properties}}
- 									<div class="wrapper" style="padding-top:0px;">
+ 						{{#property_is_exists "address" properties}}
+ 									
+ 						  {{#property_json_is_not_empty "address" properties}}
+ 						  <div class="wrapper" style="padding-top:0px;">
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
- 									  {{#property_json_is_not_empty "address" properties}}
-									<small class="text-base text-muted">Location</small>
+								<small class="text-base text-muted">Location</small>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
@@ -786,10 +789,11 @@
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
 											</div>
 										</div>
+										 </div>
+									 </div>
+									 </div>
 									  {{/property_json_is_not_empty}}
-									 </div>
-									 </div>
-									 </div>
+									
 									{{/property_is_exists}}
 <div class="clearfix"></div>
 <!-- ending funda for contact detail edit -->
