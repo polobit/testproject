@@ -97,11 +97,13 @@ if(scheduleid.contains(",")){
       
 	  //DomainUser _domain_user= DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
       Long domainUserId = OnlineCalendarUtil.getDomainUserID(online_prefs);
+      DomainUser _domain_user= null;
       if(domainUserId==null){
 	      domainUserId = 0L; 
+      }else{
+	   	_domain_user= DomainUserUtil.getDomainUser(domainUserId);
       }
     	System.out.println("domainUserId :: "+domainUserId);
-	  DomainUser _domain_user= DomainUserUtil.getDomainUser(domainUserId);
     	System.out.println("_domain_user :: "+_domain_user);
 
 	    if(_domain_user!=null){
