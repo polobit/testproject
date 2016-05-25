@@ -127,10 +127,12 @@ dnd.directive('blResizable', ['$rootScope', 'elements', 'undoManager', function(
 				return { 'padding-bottom': ydiff};
 			},
 			e: function(xdiff, ydiff) {
-				return { width: this.originalSize.width + xdiff };
+				if($rootScope.selected.node.nodeName == 'IMG'){return { width: this.originalSize.width + xdiff };}
+				return {'padding-right' : xdiff};
 			},
 			w: function(xdiff, ydiff) {
-				return { left: this.originalSize.left + xdiff, width: this.originalSize.width - xdiff };
+				if($rootScope.selected.node.nodeName == 'IMG'){return { left: this.originalSize.left + xdiff, width: this.originalSize.width - xdiff };}
+				return {'padding-left': - xdiff};
 			},
 			se: function(xdiff, ydiff) {
 				return $.extend(this._calc.s.apply(this, arguments), this._calc.e.apply(this, arguments));
