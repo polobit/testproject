@@ -240,6 +240,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 * Info Keys of the user
 	 */
 	public static final String CREATED_TIME = "created_time";
+	public static final String UPDATED_TIME = "updated_time";
 	public static final String LOGGED_IN_TIME = "logged_in_time";
 	public static final String LAST_LOGGED_IN_TIME = "last_logged_in_time";
 	public static final String COUNTRY = "country";
@@ -749,6 +750,30 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		return StringUtils.isEmpty(encrypted_password);
 	}
 
+	private void resetMiscInfo(DomainUser dbDomainuser){
+		
+		try
+		{
+			JSONObject obj = new JSONObject(dbDomainuser.info_json_string);
+			
+			if(obj.has(CREATED_TIME) && !info_json.has(CREATED_TIME))
+				setInfo(CREATED_TIME, obj.getLong("created_time"));
+			if(obj.has(UPDATED_TIME) && !info_json.has(UPDATED_TIME)) 
+				setInfo(UPDATED_TIME, obj.getLong(UPDATED_TIME));
+			if (obj.has("logged_in_time") && !info_json.has("logged_in_time"))
+				setInfo(LOGGED_IN_TIME, obj.getLong("logged_in_time"));
+			if (obj.has("last_logged_in_time") && !info_json.has("last_logged_in_time"))
+				setInfo(LAST_LOGGED_IN_TIME, obj.getLong("last_logged_in_time"));
+
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	/**
 	 * Assigns values to info_json_string and for created time and encrypted
 	 * password based on their old values.
@@ -757,39 +782,20 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	private void PrePersist()
 	{
 		DomainUser domainuser = null;
-		// Stores created time in info_json
-		if (!hasInfo(CREATED_TIME))
-		{
-			if (info_json_string == null)
-				setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
-			else
-			{
-				try
-				{
-					JSONObject obj = new JSONObject(info_json_string);
-					setInfo(CREATED_TIME, obj.getLong("created_time"));
-					if (obj.has("logged_in_time"))
-						setInfo(LOGGED_IN_TIME, obj.getLong("logged_in_time"));
-					if (obj.has("last_logged_in_time"))
-						setInfo(LAST_LOGGED_IN_TIME, obj.getLong("last_logged_in_time"));
-
-				}
-				catch (JSONException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		}
-
 		if (this.id != null)
 		{
-
 			domainuser = DomainUserUtil.getDomainUser(id);
 			if (StringUtils.isBlank(this.schedule_id))
 				this.schedule_id = domainuser.schedule_id;
-
+			
+			// Reset Misc items
+			resetMiscInfo(domainuser);
+		}
+		
+		// Stores created time in info_json
+		if (this.id == null)
+		{
+			setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 		}
 
 		// Stores password

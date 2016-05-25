@@ -2559,6 +2559,12 @@ $(function()
 		// if '_' exists splits
 		return data.split('_')[0];
 	});
+	Handlebars.registerHelper('hasKey', function(json , key , options)
+	{
+		if(json.indexOf(key) == -1)
+			return options.inverse(this)
+		return options.fn(this);
+	});
 
 	/**
 	 * Get task list name without underscore and caps, for new task UI.
