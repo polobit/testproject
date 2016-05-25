@@ -173,7 +173,10 @@ if(scheduleid.contains(",")){
 	user_id = domainUser.id;
 	agile_user_id = agileUser.id;
 	domain_name = domainUser.domain;
+
+	if(userPrefs!=null && !userPrefs.calendar_wk_start_day.equals(""))
 	calendar_wk_start_day = Integer.parseInt(userPrefs.calendar_wk_start_day);
+	
 	if (online_prefs == null)
 	{
 		meeting_durations = domainUser.meeting_durations;
