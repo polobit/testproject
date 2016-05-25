@@ -81,8 +81,13 @@
 	<td>
 		<div class="table-resp text-muted text-xs" style="margin-top:3px;">
 		<i class="fa fa-clock-o"></i>
+		{{#hasKey  info_json_string "updated_time"}}
+		<span><em>Modified</em>&nbsp;</span>
+		<time class="last-login-time" datetime="{{epochToDate info_json_string "updated_time"}}" >{{epochToDate info_json_string "updated_time"}}</time>
+		{{else}}
 		<span><em>Created</em>&nbsp;</span>
 		<time class="last-login-time" datetime="{{epochToDate info_json_string "created_time"}}" >{{epochToDate info_json_string "created_time"}}</time>
+		{{/hasKey}} 
 		</div>
 	</td>
 
