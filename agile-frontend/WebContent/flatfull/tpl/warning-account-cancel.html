@@ -99,7 +99,7 @@
             </p>
 		<form id="cancelation-request-form">
       <div class="form-group">
-        <label>What's the main reason for the cancellation?</label>
+        <label>What's the main reason for the cancellation?<span class="field_req">*</span></label>
         <select id="account_cancel_reason" name="account_cancel_reason" class="form-control required">
           <option value="">--select--</option>
           <option value="Out of business">Out of business</option>
@@ -111,7 +111,7 @@
         </select>
       </div>
       <div id="other_cancel_container" style="display: none;">
-        <label>Reason</label>
+        <label>Reason<span class="field_req">*</span></label>
         <textarea name="other_cancel_reason" class="form-control w-full" id="other_cancel_reason" rows="3" ></textarea>
       </div>
       <div id="agile_pros_container">
