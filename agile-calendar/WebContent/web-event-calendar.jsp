@@ -274,7 +274,7 @@ if (scheduleid != null && multiple_users){  %>
 				 String workHours=pro_pic.get(2);
 				 String timezone=pro_pic.get(3);
 				 String domain_user_id=pro_pic.get(4);
-				 String custom_message = online_prefs.user_calendar_title;
+				 String custom_message = online_prefs==null?"":online_prefs.user_calendar_title;
 				 custom_message = Jsoup.parse(custom_message).text();
 				 if(custom_message == null)
 					 custom_message = "Welcome to my scheduling page.Please follow the instructions to book an appointment."; 
