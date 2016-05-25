@@ -29,11 +29,13 @@ public class DeleteCustomField implements DeferredTask
 
     private String domain;
     private String customField;
+    private String type;
 
-    public DeleteCustomField(String domain,String customField)
+    public DeleteCustomField(String domain,String customField,String type)
     {
 	this.domain = domain;
 	this.customField=customField;
+	this.type=type;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class DeleteCustomField implements DeferredTask
 	{
 		if (StringUtils.isNotEmpty(domain) && !domain.equals("all"))
 		{
-			deleteCustomField(domain,customField);
+			deleteCustomField(domain,type,customField);
 		}
 
 	}
@@ -61,10 +63,11 @@ public class DeleteCustomField implements DeferredTask
 
     }
     
-    public static void deleteCustomField(String namespace,String customField)
+    public static void deleteCustomField(String namespace,String type,String customField)
     {
     	 NamespaceManager.set(namespace);
     	 Map<String, Object> searchMap = new HashMap<String, Object>();
+    	 	searchMap.put("type",type);	
     		searchMap.put("properties.name", customField);
 		ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,"",0,200);
     	// contacts = ContactUtil.getAllContacts(200,null);

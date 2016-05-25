@@ -27,7 +27,8 @@ public class CustomFieldDeletionServlet extends HttpServlet
 		
 		String domain = req.getParameter("domain");
 		String customField = req.getParameter("field");
-		DeleteCustomField deleteCustomField = new DeleteCustomField(domain,customField);
+		String type = req.getParameter("type");
+		DeleteCustomField deleteCustomField = new DeleteCustomField(domain,type,customField);
 
 		// Add to queue
 		Queue queue = QueueFactory.getQueue(AgileQueues.NAME_UPDATE_COMPANIES);
