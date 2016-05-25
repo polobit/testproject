@@ -204,7 +204,6 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 
 		if($(this).attr('disabled'))
 	   	     return;
-		
 		// If not a valid form return else serialize form data to parse
 		if(!isValidForm($("#cancelation-request-form")))
 			return;
@@ -214,43 +213,60 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 		
 		var json = serializeForm("cancelation-request-form");
 		
-		var info = json.account_cancel_reason;
-		
-		// Replace \r\n with <br> tags as email is sent as text/html
-		var reason = info.replace(/\r\n/g,"<br/>");
-		
+		var info = {};
+		info.reason_type = json.account_cancel_reason;
+		var cancel_reason = $("#account_cancel_reason").val();
+		if(cancel_reason == "Other")
+			info.reason = json.other_cancel_reason;
+		info.likes_in_agile = json.agile_pros;
+		info.advices = json.advices;
+		// Replace \r\n with <br> tags as emaaccount_cancel_reason;il is sent as text/html
+		var description = getTemplate("cancellation-description", info);
 		// Build url
 		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
-		encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
-		encodeURIComponent(reason);
+		encodeURIComponent("narmada@invox.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
+		encodeURIComponent(description);
 
 		$.post(url,function(){
-
 			// Reset form fields after sending email
 			$("#cancelation-request-form").each(function () {
 				this.reset();
 			});
-			
+			// Enables Send Email button.
+			enable_send_button($('#send-delete-request'));
+			$("#send-cancellation").modal("hide");
+
 			// Adds "Cancellation Request" tag in "Our" domain
 			add_tag_our_domain("Cancellation Request");
 			
 			// Adds note in "Our" domain
 			var note = {};
 			note.subject = "Cancellation Request";
-			note.description = info;
+			note.description = description;
 			
 			agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
-								
-			$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());		    
-		    $("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
-			$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
 			
-			// Enables Send Email button.
-			enable_send_button($('#send-delete-request'));
-			$("#send-cancellation").modal("hide");
+			if(cancel_reason == "Out of business")
+				$.ajax({
+					url : "core/api/subscription/cancel/subscription",
+					type : "GET",
+					success : function(data){
+						showNotyPopUp("information","Your subscription has been cancelled successfully.", "top");
+					}
+				});
 		});
 		
 	});
+
+$('#send-cancellation').on('change', '#account_cancel_reason', function(e) {
+	$("#other_cancel_reason").text("").removeClass("required");
+	if($(this).val() == "Other"){
+		$("#other_cancel_container").show();
+		$("#other_cancel_reason").addClass("required");
+	}
+	else
+		$("#other_cancel_container").hide();
+});
 
 $('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e) {
 		e.preventDefault();
