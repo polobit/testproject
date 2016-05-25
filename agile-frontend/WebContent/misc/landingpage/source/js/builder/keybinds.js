@@ -23,6 +23,11 @@ angular.module('builder')
 				   		// del
 				   		//e.preventDefault();
 				        //dom.delete($rootScope.selected.node);
+				   	} else if (e.which === 8) {
+				   		//backspace or mac fn+delete
+				   		if(!confirm("It looks like you have been editing something. If you leave before saving, your changes will be lost. Are you sure ?")) {
+				   			e.preventDefault();
+				   		}
 				   	} else if (e.which === 67 && e.ctrlKey) {
 				   		// C + Ctrl
 				   		e.preventDefault();
