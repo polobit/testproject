@@ -532,7 +532,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+field.field_label
 							+'" max_len="'+max_len+'"></textarea></div></div>');
 				}else{
-					el = el.concat('<div class="control-group form-group "><label class="control-label '+label_style+'">'
+					el = el.concat('<div class="control-group form-group  "><label class="control-label '+label_style+'">'
 							+field.field_label
 							+'<span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
@@ -544,7 +544,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group  "><label class="control-label word-break-all '+modal_label_style+'">'
 							+field.field_label
 							+'</label><div class="controls '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
@@ -556,12 +556,12 @@ function show_custom_fields_helper(custom_fields, properties){
 				}else{
 					el = el.concat('<div class="control-group form-group "><label class="control-label '+label_style+'">'
 							+field.field_label
-							+'</label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
+							+'</label><div class="controls col-sm-9 agiletxexpander'+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control resize-vertical field_length" id='
+							+'_input custom_field form-control textarea resize-vertical field_length" data-agileexpand="true" id='
 							+field.id+' name="'
-							+field.field_label
+							+field.field_label+
 							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}
 			}

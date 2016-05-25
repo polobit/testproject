@@ -3859,7 +3859,7 @@ margin-left:27px;
 .alias-icon{
     font-size: 11px;
   }
-.autogrow{
+.textarea{
    min-height: 49px;
     height: 80px;
     max-height: 400px;
