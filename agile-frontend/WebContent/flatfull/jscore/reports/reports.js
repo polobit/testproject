@@ -137,25 +137,7 @@ function initializeReportsListeners(){
 						tab_id=$('a[href="#'+tab_id+'"]').parents('.maintab').find('a').attr("href").substring(1);
 						_agile_set_prefs('reports_tab', tab_id);
 						return;
-					/*	$.each($("#reports-tab-container .tab-container ul li"),function(){
-					var temp = $(this).find("a").attr("href").substring(1);
-					if(temp==tab_id)
-					{*/
-						//$(this).addClass('report-selected');
-					/*	var reportsTab = _agile_get_prefs("reports_tab");
-				if(!reportsTab || reportsTab == null) {
-					var tabTemp;
-					if(islocalStorageHasSpace()){
-						if($("#dealstab").length>0)
-							tabTemp="deals-tab";
-						else
-							tabTemp="calls-tab";
-							_agile_set_prefs('reports_tab', tabTemp);	
-					}
-					reportsTab = tabTemp;
-						return;*/
-					//}
-				//});
+					
 					});
 			$('#reports-listerners-container')
 			.off(
@@ -221,14 +203,26 @@ function initializeReportsListeners(){
 			$('#reports-listerners-container')
 			.off(
 					"click",
-					'.sub-nav-tab a');
+					'.sub-nav-tab li');
 			$('#reports-listerners-container')
 			.on(
 					"click",
-					'.sub-nav-tab a',
+					'.sub-nav-tab li',
 					function(e) {
 						e.preventDefault();
 						e.stopPropagation();
+
+						var tab_id=$('a',$(this)).attr('href').substring(1);
+						$('._upgrade','#'+tab_id).trigger('click');
+						var url=($("#"+tab_id).find('a:not(.text-info)').attr('href') || $("#"+tab_id).find('a#call-activity-link').attr('id'))
+						if(url!=undefined)
+						{
+							$("#"+tab_id).find('a').trigger('click');
+							if(url=='call-activity-link' || url=='#')
+								return;
+							url=url.substring(1);
+						Backbone.history.navigate(url,{trigger:true});
+					}
 					});
 			
 
