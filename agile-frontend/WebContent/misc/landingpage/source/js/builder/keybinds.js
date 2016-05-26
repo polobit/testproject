@@ -25,13 +25,13 @@ angular.module('builder')
 				        //dom.delete($rootScope.selected.node);
 				   	} else if (e.which === 8) {
 				   		//backspace or mac fn+delete
-				   		if(navigator.platform.indexOf("Mac") != -1) {
+				   		if(navigator.platform.indexOf("Mac") == -1) {
 				   			if(!confirm("It looks like you have been editing something. If you leave before saving, your changes will be lost. Are you sure ?")) {
 				   				e.preventDefault();
 				   			}
 				   		} else {
 				   			e.preventDefault();
-				        	dom.delete($rootScope.selected.node);
+				        		dom.delete($rootScope.selected.node);
 				   		}
 				   	} else if (e.which === 67 && e.ctrlKey) {
 				   		// C + Ctrl
