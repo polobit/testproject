@@ -134,14 +134,17 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 							 submitForm(form, submit_button);
 							 $('.loading-image').removeClass("hide");
 							 var $frame = document.createElement('iframe');
-							 $frame.src = "";
+							 $frame.src = "https://www.agilecrm.com/registration-success";
 							 $frame.style.display = "none";
 							 document.body.appendChild($frame);
+							 alert("iframe")
     						 //$frame.attr("src", $frame.attr("data-source"));
     						 //$('body').append($frame);
 
 						 }, function(error){
 						 	$('.loading-image').addClass("hide");
+						 	$('iframe').removeAttr('src');
+						 	 alert("iframe removed");
 						 	$(submit_button).removeAttr("disabled");
 
 						 	if(domain)
