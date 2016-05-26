@@ -34,6 +34,7 @@ function chainWebRules(el, data, isNew, actions)
 	
 	$("#timer", el).chained($("#delay", el));
 	$("#delay", el).chained($("#action", el));
+	$("#twilio-info", el).chained($("#action", el));
 	
 	$("#noty-message", el).chained($("#action", el), function(select, self){
 		var value = $("select", select).val();
@@ -48,7 +49,6 @@ function chainWebRules(el, data, isNew, actions)
 
 				if(value=="CALL_POPUP"){
 					loadSavedTemplate("call/callpopup.html");
-					$("#twilio-info").show();
 				}
 				self.find(".web-rule-preview").show();
 			return;

@@ -1378,11 +1378,11 @@ public class JSAPI
 	try
 	{
 	    Widget twilioObj = WidgetUtil.getWidget("TwilioIO");
-	    /*twilioObj.prefs.*/
-	    if(twilioObj.prefs.contains("twilio_from_number"))
-		fromNumber=(String) new JSONObject(twilioObj.prefs).get("twilio_from_number");
-	    else if(twilioObj.prefs.contains("twilio_number"))
-		fromNumber=(String) new JSONObject(twilioObj.prefs).get("twilio_number");
+	    JSONObject jsonPrefs= new JSONObject(twilioObj.prefs);
+	    if(!jsonPrefs.get("twilio_from_number").toString().isEmpty())
+		fromNumber=jsonPrefs.get("twilio_from_number").toString();
+	    else if(!jsonPrefs.get("twilio_number").toString().isEmpty())
+		fromNumber=jsonPrefs.get("twilio_number").toString();
 	    
 	    toNumber =WebRuleUtil.getPhoneNumberByWebruleId(Long.parseLong(webruleId));
 		
