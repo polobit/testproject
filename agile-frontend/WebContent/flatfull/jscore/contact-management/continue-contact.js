@@ -531,7 +531,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 	if(contact_company){
 		var prop = null;
 		$.each(contact_company.properties , function(){
-			if(this.name == "address")
+			if(this.name == "address" && this.subtype == "office")
 				prop = this.value;
 			});
 		if(prop){
@@ -547,7 +547,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				var form_element = $(e.target).attr('id')
 				if(form_element == "person_validate" || form_element == "continue-contact"){						
 					console.log(prop);
-					properties.push({ "name" : "address", "value" : JSON.stringify(prop), "subtype" : "office"});
+					properties.push({ "name" : "address", "value" : prop, "subtype" : "office"});
 				}
 			}
 		}
@@ -779,7 +779,7 @@ function deserialize_contact(contact, template)
 							contact_company = company ;
 							var prop = null;
 							$.each(contact_company.properties , function(){
-								if(this.name == "address")
+								if(this.name == "address" && this.subtype == "office")
 									prop = JSON.parse(this.value);
 							});				
 							if(prop){
@@ -1002,7 +1002,7 @@ $(function()
 		if(contact_company){
 			var flag = false ; var prop = null;
 			$.each(contact_company.properties , function(){
-				if(this.name == "address")
+				if(this.name == "address" && this.subtype == "office")
 					prop = JSON.parse(this.value);
 				});
 				if(prop){
@@ -1017,13 +1017,12 @@ $(function()
 					else if(prop.country && $("#content #country").val() && $("#content #country").val() != prop.country)
 						flag = true ;
 					if(!flag){
-						$("#content .address-type").val('');
-						$("#content .address-type").val('');
-						$("#content #address").val('');
+						$("#content .address-type,#address,#city,#state,#zip,#country").val('');
+						/*$("#content #address").val('');
 						$("#content #city").val('');
 						$("#content #state").val('');
 						$("#content #zip").val('');
-						$("#content #country").val('');
+						$("#content #country").val('');*/
 					}
 				}
 			}

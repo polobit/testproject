@@ -1274,7 +1274,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 										contact_company = company ;
 										var prop = null;
 										$.each(contact_company.properties , function(){
-											if(this.name == "address")
+											if(this.name == "address" && this.subtype == "office")
 												prop = JSON.parse(this.value);
 										});
 										if(prop){

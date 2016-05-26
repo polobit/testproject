@@ -234,16 +234,20 @@ var contact_details_documentandtasks_actions = {
 			// shown.
 			// Disables typeahead, as it won't be needed as there will be no Company
 			// input text box.
-			var json = {};
+			var json = {}; 
 
 			if(Current_Route.indexOf("company") > -1)
 				 json = App_Companies.companyDetailView.model.toJSON();
 			else 
 				 json = App_Contacts.contactDetailView.model.toJSON();
-
+			contact_company = json ;	
 			forceCompany.name = getContactName(json); // name of Company
 			forceCompany.id = json.id; // id of Company
-			forceCompany.doit = true; // yes force it. If this is false the
+			forceCompany.doit = true;
+			$.each(json.properties , function(){
+				if(this.name == "address" && this.subtype == "office")
+					comp_addr_prop = JSON.parse(this.value);
+				}); // yes force it. If this is false the
 			// Company won't be forced.
 			// Also after showing modal, it is set to false internally, so
 			// Company is not forced otherwise.
@@ -257,7 +261,23 @@ var contact_details_documentandtasks_actions = {
 					{
 						Backbone.history.navigate("contact-add" , {trigger: true});
 						setTimeout(function(){ 
-						$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="text-white m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close text-white" id="remove_tag">×</a></span></li>')
+						$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="text-white m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close text-white" id="remove_tag">×</a></span></li>');
+						console.log(comp_addr_prop);
+						if(comp_addr_prop){
+							$("#content .address-type").val("office");
+							if(comp_addr_prop.address)
+								$("#content #address").val(comp_addr_prop.address);
+							if(comp_addr_prop.city)
+								$("#content #city").val(comp_addr_prop.city);
+							if(comp_addr_prop.state)
+								$("#content #state").val(comp_addr_prop.state);
+							if(comp_addr_prop.zip)
+								$("#content #zip").val(comp_addr_prop.zip);
+							if(comp_addr_prop.country)
+								$("#content #country").val(comp_addr_prop.country);
+							$("#content #remove_tag").addClass("companyAddress");
+						}
+						
 						}, 800);
 					}
 					else
