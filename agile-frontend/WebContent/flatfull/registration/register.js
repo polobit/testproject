@@ -137,14 +137,11 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 							 $frame.src = "https://www.agilecrm.com/registration-success";
 							 $frame.style.display = "none";
 							 document.body.appendChild($frame);
-							 alert("iframe")
     						 //$frame.attr("src", $frame.attr("data-source"));
     						 //$('body').append($frame);
 
 						 }, function(error){
 						 	$('.loading-image').addClass("hide");
-						 	$('iframe').removeAttr('src');
-						 	 alert("iframe removed");
 						 	$(submit_button).removeAttr("disabled");
 
 						 	if(domain)
