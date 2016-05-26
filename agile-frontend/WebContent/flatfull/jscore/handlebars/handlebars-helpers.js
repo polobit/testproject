@@ -1105,10 +1105,10 @@ $(function()
 			{
 				if((App_Contacts.contactViewModel[item]).indexOf("basic_info") != -1)
 					{
-						element = "";
+						
 						cls = "contactimageheader";
 					}
-				if(_agile_get_prefs("contactTabelView"))
+				/*if(_agile_get_prefs("contactTabelView"))
 				{
 					if(element == "basic_info")
 						return ;
@@ -1119,7 +1119,8 @@ $(function()
 						cls = "";
 					}
 						  
-				}
+				}*/
+				element = "";
 			}
 			
 			
