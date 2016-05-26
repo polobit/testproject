@@ -1379,11 +1379,12 @@ public class JSAPI
 	{
 	    Widget twilioObj = WidgetUtil.getWidget("TwilioIO");
 	    JSONObject jsonPrefs= new JSONObject(twilioObj.prefs);
-	    if(!jsonPrefs.get("twilio_from_number").toString().isEmpty())
-		fromNumber=jsonPrefs.get("twilio_from_number").toString();
-	    else if(!jsonPrefs.get("twilio_number").toString().isEmpty())
-		fromNumber=jsonPrefs.get("twilio_number").toString();
 	    
+	    if(jsonPrefs.has("twilio_from_number") && jsonPrefs.get("twilio_from_number")!=null && !jsonPrefs.get("twilio_from_number").toString().isEmpty())
+		fromNumber=jsonPrefs.get("twilio_from_number").toString();
+	    else if(jsonPrefs.has("twilio_number") && jsonPrefs.get("twilio_number")!=null && !jsonPrefs.get("twilio_number").toString().isEmpty())
+		fromNumber=jsonPrefs.get("twilio_number").toString();
+	   
 	    toNumber =WebRuleUtil.getPhoneNumberByWebruleId(Long.parseLong(webruleId));
 		
 	    //getting call token here 
