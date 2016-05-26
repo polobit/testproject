@@ -89,7 +89,7 @@
 <script id="new-tasks-lists-model-template" type="text/html"> 
 <div class="task-list-minimized panel-default">
     <div class="list-header panel-heading" style="height:75vh;" attr="{{heading}}" ownerID={{owner_id}} >
-      <div class="pull-left" style="margin-top:-2px;"> 
+      <div> 
           <div class="compressedHeading">
           <div class="task-count">
                 <span id="task-count-{{heading}}-{{owner_id}}" class="label {{getthemecolor}}  m-r-sm" style="vertical-align:middle; position:relative;margin-top:2px;">0</span> 
@@ -220,7 +220,7 @@
 
     <div class="clearfix"></div>
       <!--{{#if contacts}}  
-      <!--   <div class="task-related-to task-related-contacts" title="Related To">
+         <div class="task-related-to task-related-contacts" title="Related To">
         	{{#each contacts}}
             {{#if_contact_type "PERSON"}}
               <a href="#contact/{{id}}" class="activate-link text-xs text-muted popover_contact text-cap" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
@@ -230,7 +230,7 @@
             {{/if_contact_type}}
             {{#if @last}} {{else}},{{/if}}
           {{/each}}
-		 </div> -->
+		 </div> 
       {{/if}}-->
 
       <!-- <div class="pull-left w-full text-ellipsis text-muted">
@@ -243,7 +243,7 @@
 </div>
 <div class="clearfix"></div>
 
-{{#if contacts}}  
+<!--{{#if contacts}}  
          <div class="task-related-to task-related-contacts" title="Related To">
           {{#each contacts}}
             {{#if_contact_type "PERSON"}}
@@ -256,7 +256,7 @@
           {{/each}}
      </div>
       {{/if}}
-
+-->
 
      
 
