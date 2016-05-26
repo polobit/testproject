@@ -21,6 +21,7 @@ import com.agilecrm.OpportunitySchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.DomainLimits;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.MenuSetting;
 import com.agilecrm.account.VerifiedEmails;
@@ -271,7 +272,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(VisitorFilter.class);
 
 	ObjectifyService.register(IpAccess.class);
-
+    /**
+     * Registering the DomainLimits class into dataStore
+     * for tweet node in campaing an domain user can send
+     *  the maximum 25 tweet message in a day 
+     * */
+	ObjectifyService.register(DomainLimits.class);
 
     }
 
