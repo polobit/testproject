@@ -119,19 +119,19 @@ dnd.directive('blResizable', ['$rootScope', 'elements', 'undoManager', function(
 	  	},
 	  	_calc: {
 			n: function(xdiff, ydiff) {
-				if($rootScope.selected.node.nodeName == 'IMG'){return {  top: this.originalSize.top + ydiff, height: this.originalSize.height - ydiff};}
+				if($rootScope.selected.node.nodeName == 'IMG' || $rootScope.selected.node.nodeName == 'BUTTON'){return {  top: this.originalSize.top + ydiff, height: this.originalSize.height - ydiff};}
 				return {  'padding-top': - ydiff};
 			},
 			s: function(xdiff, ydiff) {
-				if($rootScope.selected.node.nodeName == 'IMG'){return { height: this.originalSize.height + ydiff };}
+				if($rootScope.selected.node.nodeName == 'IMG' || $rootScope.selected.node.nodeName == 'BUTTON'){return { height: this.originalSize.height + ydiff };}
 				return { 'padding-bottom': ydiff};
 			},
 			e: function(xdiff, ydiff) {
-				if($rootScope.selected.node.nodeName == 'IMG'){return { width: this.originalSize.width + xdiff };}
+				if($rootScope.selected.node.nodeName == 'IMG' || $rootScope.selected.node.nodeName == 'BUTTON'){return { width: this.originalSize.width + xdiff };}
 				return {'padding-right' : xdiff};
 			},
 			w: function(xdiff, ydiff) {
-				if($rootScope.selected.node.nodeName == 'IMG'){return { left: this.originalSize.left + xdiff, width: this.originalSize.width - xdiff };}
+				if($rootScope.selected.node.nodeName == 'IMG' || $rootScope.selected.node.nodeName == 'BUTTON'){return { left: this.originalSize.left + xdiff, width: this.originalSize.width - xdiff };}
 				return {'padding-left': - xdiff};
 			},
 			se: function(xdiff, ydiff) {
