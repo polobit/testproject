@@ -78,7 +78,11 @@ public class WebCalendarEventUtil
 	{
 		DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
 		OnlineCalendarPrefs prefs = OnlineCalendarUtil.getCalendarPrefs(userid);
-		String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		//String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		String domainUser_timezone = null;
+		if(domain_user!=null){
+			domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		}
 		String business_hours = null;
 		if (prefs != null)
 		{
