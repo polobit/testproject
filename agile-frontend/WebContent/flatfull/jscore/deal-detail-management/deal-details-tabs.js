@@ -705,7 +705,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		}
 		if (value.description)
 		{
-			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls agiletxexpander"><textarea id="description" data-agileexpand="true" name="description" rows="3" class="input form-control textarea" placeholder="Add Description"></textarea></div>'
 			$("#event_desc").html(description);
 			$("textarea#description").val(value.description);
 		}
