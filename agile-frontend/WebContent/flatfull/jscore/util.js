@@ -21,7 +21,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
 
 var DEFAULT_GRAVATAR_url = agileWindowOrigin() + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
-var DEFAULT_GRAVARTAR_IMG = "https://doxhze3l6s7v9.cloudfront.net/img/gravatar-default-img.png";
+var DEFAULT_GRAVARTAR_IMG = "https://doxhze3l6s7v9.cloudfront.net/img/default-404.png";
 
 var ONBOARDING_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
