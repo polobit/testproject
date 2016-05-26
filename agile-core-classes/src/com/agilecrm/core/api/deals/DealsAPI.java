@@ -442,6 +442,22 @@ public class DealsAPI
 	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException
     {
 	JSONArray opportunitiesJSONArray = new JSONArray(ids);
+	List<Long> opportunityIds = new ArrayList<Long>();
+	for(int i = 0 ;i<opportunitiesJSONArray.length();i++){
+		opportunityIds.add(opportunitiesJSONArray.getLong(i));
+	}
+	try {
+		List<Opportunity> deals = OpportunityUtil.getDealsBulkbyIds(opportunityIds);
+		for(Opportunity oppr :deals){
+			if(oppr.relatedContacts() != null && oppr.relatedContacts().size() > 0){
+				for(Contact c : oppr.relatedContacts())
+					c.save();
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	DealTriggerUtil.executeTriggerForDeleteDeal(opportunitiesJSONArray);
 	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
 	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray,

@@ -3302,4 +3302,16 @@ public class OpportunityUtil
     	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("related_notes", new Key<Note>(Note.class,noteId) );
     	return dao.fetchAll(q);
     }
+    public static List<Opportunity> getDealsBulkbyIds(List<Long> dealIds)
+    {
+	List<Key<Opportunity>> dealKeys = new ArrayList<Key<Opportunity>>();
+
+	for (Long id : dealIds)
+	{
+		dealKeys.add(new Key<Opportunity>(Opportunity.class, id));
+	}
+	System.out.println(dao.fetchAllByKeys(dealKeys));
+
+	return dao.fetchAllByKeys(dealKeys);
+    }
 }
