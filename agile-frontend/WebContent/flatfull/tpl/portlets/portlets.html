@@ -1519,10 +1519,10 @@
 <div class="pos-rlt p-sm p-b-xs p-t-xs">
 	<div class="pull-left avatar thumb-xs m-r m-t-xs">
 
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg"  alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{#if domainUser}}
+				<img class="user-img ref-roundedimg"  alt="" src="{{domainUser.pic}}" title="{{domainUser.name}}">
 			{{else}}
-				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{domainUser.name}}" >
 			{{/if}}
 	</div>
 <div class="activity-tag p-l-xxl">
