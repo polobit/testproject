@@ -76,9 +76,9 @@
     <td><div class="table-resp"><!--<i class="{{icons type}}"></i>&nbsp;-->
 
           <span class="label bg-light dk text-tiny m-r-xs">{{task_property type}}</span></div></td>
-    <td>	{{#if_equals priority_type "NORMAL"}}{{else}}
+    <td>	
 					<span class="m-l-xs" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
-				{{/if_equals}}</td>
+				</td>
 	<td><div class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></div></td>
 {{/if}}
 	<td>
