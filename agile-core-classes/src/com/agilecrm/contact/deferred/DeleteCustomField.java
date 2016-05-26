@@ -31,7 +31,7 @@ public class DeleteCustomField implements DeferredTask
     private String customField;
     private String type;
 
-    public DeleteCustomField(String domain,String customField,String type)
+    public DeleteCustomField(String domain,String type,String customField)
     {
 	this.domain = domain;
 	this.customField=customField;
@@ -65,7 +65,7 @@ public class DeleteCustomField implements DeferredTask
     
     public static void deleteCustomField(String namespace,String type,String customField)
     {
-    	 NamespaceManager.set(namespace);
+    	 //NamespaceManager.set(namespace);
     	 Map<String, Object> searchMap = new HashMap<String, Object>();
     	 	searchMap.put("type",type);	
     		searchMap.put("properties.name", customField);
