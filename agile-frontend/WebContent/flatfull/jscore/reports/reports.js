@@ -214,6 +214,7 @@ function initializeReportsListeners(){
 
 						var tab_id=$('a',$(this)).attr('href').substring(1);
 						$('._upgrade','#'+tab_id).trigger('click');
+						$('#reportsUpgradeModal').modal('show');
 						var url=($("#"+tab_id).find('a:not(.text-info)').attr('href') || $("#"+tab_id).find('a#call-activity-link').attr('id'))
 						if(url!=undefined)
 						{

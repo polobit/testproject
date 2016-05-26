@@ -530,7 +530,7 @@
                     <a class=""  href="#activity-reports" id="activity-reports-upgrade">
 
                          <div class="wrapper text-center b-a" style="min-width:330px">
-                          <div class="m-b-sm" rel="tooltip" title="{{description}}">
+                          <div class="m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get a periodic  email digest of various activities by users in Agile.
             <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
         </div>
@@ -540,7 +540,7 @@
             {{else}}
                 <span class="disabled" >
                      <div class="wrapper text-center b-a" style="min-width:330px">
-                          <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+                          <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get a periodic  email digest of various activities by users in Agile.
             <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
         </div>
@@ -553,7 +553,7 @@
              <div class="wrapper text-center b-a" style="min-width:330px">
              <div class="_upgrade" id="activity-reports-upgrade">
             <!-- Description -->
-            <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+            <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get a periodic  email digest of various activities by users in Agile. </div></div>
             <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
             
@@ -569,9 +569,8 @@
          <a class="report-go" href="#contact-reports">
                      <div class="wrapper text-center b-a" style="min-width:330px">
         
-        <br />
         <!-- Description -->
-        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+        <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
         </div>
  
@@ -583,9 +582,8 @@
          <a class="report-go" href="#campaign-reports">
                      <div class="wrapper text-center b-a" style="min-width:330px">
         
-        <br />
         <!-- Description -->
-        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+        <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get a periodic email digest of various campaigns launched in Agile CRM. </div>
  
     </div>
@@ -675,3 +673,21 @@
 
 </div>
 </script>
+
+<div id="reportsUpgradeModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Upgrade</h3>
+	</div>
+	<div class="modal-body">
+	<div style="display:none;" class="activity-reports-upgrade m-t-sm" ><span class="text-danger">{{toSafeString message}}<span></div>
+               </div>  
+	</div>
+	<div class="modal-footer">
+		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">Ok</a>
+	</div>
+</div>
+</div>
+</div>
