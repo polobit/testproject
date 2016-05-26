@@ -2288,12 +2288,12 @@ li.error {
   top: -3px;
   width: 30px;*/
     content: ' ';
-  display: block;
-  height: 31px;
-  position: absolute;
-  left: -15px;
-  top: 0px;
-  width: 2px;
+    display: block;
+    height: 2px;
+    position: absolute;
+    left: -9px;
+    top: -15px;
+    width: 35px;
 }
 
 .listed-task.yellow:after {
