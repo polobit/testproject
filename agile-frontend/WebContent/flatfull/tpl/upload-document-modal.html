@@ -13,7 +13,9 @@
           <form id='uploadDocumentModalForm' name="uploadDocumentModalForm" class="form-horizontal" accept-charset="UTF-8">
           <div class="formsection chainedSelect">
               <fieldset>
-              <input name="extension" id="extension" type="hidden"/>
+                        <input id="id" type="hidden"/>
+                        <input name="extension" id="extension" type="hidden"/>
+                        <input type="hidden" name="template_type" id="template_type"/>
                         <div class="control-group form-group hide">
                            <label class="control-label  col-sm-3"><b>Type </b><span
                               class="field_req">*</span></label>
@@ -26,7 +28,7 @@
                               </span>
                            </div>
                         </div>
-               
+                        
                
                         <div class="control-group form-group">
                            <label class="control-label col-sm-3"><b>Title </b><span
@@ -36,51 +38,6 @@
                                  class="required form-control" maxlength="200" placeholder="Name of Document" /></span>
                            </div>
                         </div>
-                        <div class="control-group form-group attachment">
-                           <label class="control-label col-sm-3"><b>Choose Document </b><span
-                              class="field_req">*</span></label>
-                           <div class="controls col-sm-9">
-                              <input type="hidden" name="url" id="upload_url" class="required"/>
-                              <input type="hidden" name="size" id="size" class="required"/>
-                              <input type="hidden" name="network_type" id="network_type" class="required"/>
-                              
-                              <div class="row" id="document-link">
-                                 <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
-                                    <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
-                                       <a href="#" id="S3"><i class="icon-desktop icon-2x" title="Custom"></i><br/><span>My Computer</span></a>
-                                    </div>
-                                 </div>
-                                 <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
-                                    <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
-                                       <a href="#" id="GOOGLE"><i class="icon-google-plus icon-2x" title="Google"></i><br/><span>Google Drive</span></a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-               
-                  <div class="senddoc hide">
-                      <div class="control-group form-group hide">
-                             <label class="control-label col-sm-3"><b>Select Template </b><span
-                                class="field_req">*</span></label>
-                             <div class="controls col-sm-9">
-                                <span>
-                                  <text type="text" name="template_type" id="template_type"  class="required form-control" placeholder="Type of Template">
-                                      
-                                  </text>
-                                </span>
-                             </div>
-                          </div>
-                          <div class="control-group form-group">
-                            <label class="control-label col-sm-3"><b>Content </b></label>
-                             <div class="controls col-sm-9">
-                                 <div id="loading-editor" ></div>
-                                  <textarea class="col-md-6 required" style="display: none;" name="text" id="signdoc-template-html" placeholder="Document template html"></textarea>
-                             </div>  
-                           </div>
-                       </div>
-                  <div id="error"></div>
-                  
                         <div class="control-group form-group">
                            <label class="control-label col-sm-3"><b>Related Contacts </b></label>
                            <div class="controls col-sm-9" id="contactTypeAhead">
@@ -109,12 +66,52 @@
                               </div>
                            </div>
                         </div>
+
+                        <div class="control-group form-group attachment">
+                           <label class="control-label col-sm-3"><b>Choose Document </b><span
+                              class="field_req">*</span></label>
+                           <div class="controls col-sm-9">
+                              <input type="hidden" name="url" id="upload_url" class="required"/>
+                              <input type="hidden" name="size" id="size" class="required"/>
+                              <input type="hidden" name="network_type" id="network_type" class="required"/>
+                              
+                              <div class="row" id="document-link">
+                                 <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
+                                    <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
+                                       <a href="#" id="S3"><i class="icon-desktop icon-2x" title="Custom"></i><br/><span>My Computer</span></a>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
+                                    <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
+                                       <a href="#" id="GOOGLE"><i class="icon-google-plus icon-2x" title="Google"></i><br/><span>Google Drive</span></a>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+               
+                  <div class="senddoc hide">
+                      
+                          
+                          <div class="control-group   form-group">
+                            <label class="control-label col-sm-3"><b>Content </b></label>
+                             <div class="controls col-sm-9">
+                                 <div id="loading-editor" ></div>
+                                  <textarea class="col-md-6 required" style="display: none;" name="text" id="signdoc-template-html" placeholder="Document template html"></textarea>
+                             </div>  
+                           </div>
+                       </div>
+                  <div id="error"></div>
                   
+                                          
                   <div class="form-actions">      
                     <div class="col-sm-offset-3 col-sm-9">    
                       <a href="#" class="btn btn-default btn-sm cancel-document  m-r-xs">Cancel</a> 
-                        <a href="#" class="btn btn-sm btn-primary" id="document_validate">Save</a> <span class="save-status"></span>
-                  
+                      <a  class="c-p m-l-n-xs m-r-xs btn btn-sm hide btn-success text-white generate-send-doc">Generate</a>
+                        
+                        <a href="#" class="btn btn-sm btn-primary" id="document_validate" title="Save Document">Save</a> <span class="save-status"></span>
+                        <a href="#" class="btn btn-sm btn-primary email-send-doc btn-success hide" title="Send Email" >Send Email</a>
+                         
                     </div>
                   </div>
               </fieldset>

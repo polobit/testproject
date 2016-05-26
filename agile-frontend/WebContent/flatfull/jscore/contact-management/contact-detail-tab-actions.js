@@ -368,7 +368,7 @@ var contact_details_documentandtasks_actions = {
        		var el = $(targetEl).closest("div");
 			$(targetEl).css("display", "none");
 			//$(targetEl).previous().css("display", "none");
-			$(".add-contact-edocument-select,.add-company-edocument-select",el).css("display", "none");
+			$(".add-contact-edocument-select,.add-company-edocument-select,.dropdown-toggle",el).css("display", "none");
 			if(agile_is_mobile_browser()){
 			el.find(".contact-document-select").css("display", "block");
 			}

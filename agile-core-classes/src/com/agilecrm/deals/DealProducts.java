@@ -6,10 +6,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.products.Product;
+import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
 
 @XmlRootElement
 class DealProducts {
+	
 	
 	public static ObjectifyGenericDao<Product> dao = new ObjectifyGenericDao<Product>(Product.class);
     /**
@@ -51,6 +54,8 @@ class DealProducts {
      * 
      */
     
+	public String image = null;
+	
 
     public static final String SPACE = "_SPACE_";
 

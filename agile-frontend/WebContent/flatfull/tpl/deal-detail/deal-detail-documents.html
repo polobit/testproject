@@ -11,17 +11,24 @@
                     <div class="text">
                         You can add a document related to a Deal.
                     </div>
-					<div><a href="#" class="btn btn-default btn-sm add-deal-edocument-select m-t-xs m-r-xs"><i class='icon-plus-sign'/></i> Add eDoc</a><a href="#" class="btn btn-default btn-sm add-deal-document-select  m-t-xs"><i class='icon-plus-sign'/></i> Add Document</a>
-						<span class="deal-document-select upload-doc-field" style="display:none;">
-							<select class="form-control m-b-sm inline-block w m-r-sm" id="document-select">
-								<option value="">Select...</option>
-							</select>
-							<div class="clearfix"></div>
-                    		<a href="#" class="btn btn-primary btn-sm add-deal-document-confirm">Add</a> 
-                   			<a href="#" class="btn btn-default btn-sm add-deal-document-cancel">Cancel</a>
-							<span class="save-status"></span>
-						</span>
-					</div>
+                    <div class="btn-group">
+						        <a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+
+								<ul class="dropdown-menu pull-right" style="margin-top:3px;">
+									<li style="padding:0px 0px;border:0px;"><a href="#" class="add-deal-edocument-select">Add eDocument</a></li>
+								</ul>
+								<span class="deal-document-select upload-doc-field" style="display:none;">
+									<select class="form-control m-b-sm inline-block w m-r-sm" id="document-select">
+										<option value="">Select...</option>
+									</select>
+									<div class="clearfix"></div>
+		                    		<a href="#" class="btn btn-primary btn-sm add-deal-document-confirm">Add</a> 
+		                   			<a href="#" class="btn btn-default btn-sm add-deal-document-cancel">Cancel</a>
+									<span class="save-status"></span>
+								</span>
+						</div>
+					
 					{{/hasMenuScope}}
          			<!--<div class="btn-group" style="margin-top:12px;">
         				<a href="#" class="btn right deal-add-document m-t-xs"><i class="icon-plus-sign"></i> Add Document</a>
@@ -46,18 +53,23 @@
 			</ul>
 		</div>-->
 		{{#hasMenuScope 'DOCUMENT'}}
+						<div class="btn-group">
+						        <a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
-		<div><a href="#" class="btn btn-sm btn-default btn-addon add-deal-edocument-select m-r-xs"><i class='icon-plus-sign'/></i> Add eDoc</a><a href="#" class="btn btn-sm btn-default btn-addon add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
-			<span class="deal-document-select" style="display:none;">
-				<select class="form-control w m-r-sm p-t-xs inline-block" id="document-select">
-					<option value="">Select...</option>
-				</select>
-				<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <a href="#" class="btn btn-sm btn-primary add-deal-document-confirm">Add</a> 
-                <a href="#" class="btn btn-default btn-sm add-deal-document-cancel">Cancel</a>
-				<span class="save-status"></span>
-			</span>
-		</div>
+								<ul class="dropdown-menu pull-right" style="margin-top:3px;">
+									<li style="padding:0px 0px;border:0px;"><a href="#" class="add-deal-edocument-select">Add eDocument</a></li>
+								</ul>
+								<span class="deal-document-select" style="display:none;">
+									<select class="form-control w m-r-sm p-t-xs inline-block" id="document-select">
+										<option value="">Select...</option>
+									</select>
+									<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					                <a href="#" class="btn btn-sm btn-primary add-deal-document-confirm">Add</a> 
+					                <a href="#" class="btn btn-default btn-sm add-deal-document-cancel">Cancel</a>
+									<span class="save-status"></span>
+								</span>
+						</div>
 		{{/hasMenuScope}}
 	</div>
 			<ul id="deal-docs-model-list" class="ativity-block-ul list-group list-group-lg m-b-none"></ul>

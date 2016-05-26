@@ -8,12 +8,13 @@
 </div>
 <div class="wrapper-md">
   <div class="row">
+  <form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post" class="form-horizontal" accept-charset="UTF-8">
     <div class="col-md-9">
       <div class="panel wrapper">
-        <form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post" class="form-horizontal" accept-charset="UTF-8">
+        
         <div class="formsection chainedSelect">
            <fieldset>
-              <input name="id" type="hidden"/>
+              <input name="id" id="id" type="hidden"/>
               <input name="extension" id="extension" type="hidden"/>
                    <div class="control-group form-group hide">
                               <label class="control-label  col-sm-3"><b>Type </b><span
@@ -36,7 +37,33 @@
                              class="required form-control" placeholder="Name of Document" /></span>
                        </div>
                     </div>
-              
+                    <div class="control-group form-group">
+                 <label class="control-label  col-sm-3"><b>Related Contacts </b></label>
+                 <div class="controls col-sm-9" id="contactTypeAhead">
+                    <div>
+                       <div>
+                          <ul name="contact_ids" class="contacts tagsinput tags p-n m-n"></ul>
+                       </div>
+                       <input type="text" id="document_relates_to_contacts" name="related_contacts"
+                          placeholder="Contact Name" class="typeahead typeahead_contacts form-control"
+                          data-provide="typeahead" data-mode="multiple" />
+                    </div>
+                 </div>
+              </div>
+              <div class="control-group form-group">
+                 <label class="control-label  col-sm-3"><b>Related Deals </b></label>
+                 <div class="controls col-sm-9" id="dealTypeAhead">
+                    <div>
+                       <div>
+                          <ul name="deal_ids" class="deals tagsinput deal_tags tags p-n m-n"></ul>
+                       </div>
+                       <input type="text" id="document_relates_to_deals" name="related_deals"
+                          placeholder="Deal Name" class="typeahead typeahead_deals form-control"
+                          data-provide="typeahead" data-mode="multiple" />
+                    </div>
+                 </div>
+                    
+              </div>
               
                     <div class="control-group form-group attachment">
                        <label class="control-label  col-sm-3"><b>Choose Document </b><span
@@ -81,60 +108,36 @@
                               </div>
                           </div>
               <div id="error"></div>
-              <div class="control-group form-group">
-                 <label class="control-label  col-sm-3"><b>Related Contacts </b></label>
-                 <div class="controls col-sm-9" id="contactTypeAhead">
-                    <div>
-                       <div>
-                          <ul name="contact_ids" class="contacts tagsinput tags p-n m-n"></ul>
-                       </div>
-                       <input type="text" id="document_relates_to_contacts" name="related_contacts"
-                          placeholder="Contact Name" class="typeahead typeahead_contacts form-control"
-                          data-provide="typeahead" data-mode="multiple" />
-                    </div>
-                 </div>
-              </div>
-              <div class="control-group form-group">
-                 <label class="control-label  col-sm-3"><b>Related Deals </b></label>
-                 <div class="controls col-sm-9" id="dealTypeAhead">
-                    <div>
-                       <div>
-                          <ul name="deal_ids" class="deals tagsinput deal_tags tags p-n m-n"></ul>
-                       </div>
-                       <input type="text" id="document_relates_to_deals" name="related_deals"
-                          placeholder="Deal Name" class="typeahead typeahead_deals form-control"
-                          data-provide="typeahead" data-mode="multiple" />
-                    </div>
-                 </div>
-                    
-              </div>
+              
               <div class="form-actions">      
                        <div class="col-sm-offset-3 col-sm-9">    
                           <a href="#" class="btn btn-default btn-sm cancel-document m-r-xs">Cancel</a> 
                           <a href="#" class="btn btn-sm btn-primary" id="document_update_validate">Save
         Changes</a> <span class="save-status"></span>
-                     
+                          <a href="#" class="btn btn-sm btn-primary email-send-doc btn-success hide" >Send Email</a>
                        </div>
                    </div>  
            </fieldset>
            </div>
-        </form>
+        
       </div>
     </div>
-        <div class="col-md-3">
-           <div class="panel wrapper">
-               <h4 class="m-t-none font-thin">
-                   What are documents?
-               </h4>
-               
-               
-           <p>1. Documents helps you to build and deliver sales quotes and proposals as well as track presentations and close deals faster with legally binding eSignatures.</p>
-   
-           <p>2. Upload documents from computer and append them from cloud storage like Google Drive.</p>
-   
-           <p>Need more help? Please check the <a class="text-info" href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> detailed documentation.</a></p> 
-           </div>
-       </div>
+          <div class="col-md-3">
+                <div class="  documents-activities" style1="height:90%;">
+                     
+                </div>
+                <div class="padder b-t  text-center">
+                         <div class="m-t-sm"><div class="row">
+                              <textarea class="inputtext " rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
+                              <text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
+                              <text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
+                          </div>
+                          <div class="row">
+                              <a  class="text-info" data="{{id}}" id="document-send-comments"><i class="icon-envelope-alt"></i> Send Comments</a>
+                          </div>
+                  </div>
+         </div>
+       </form>
   </div>
 </div>      
 

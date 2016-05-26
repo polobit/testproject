@@ -233,11 +233,42 @@ var DocumentsRouter = Backbone.Router.extend({
 	} 
 });
 
-function renderDocumentsActivityView(params)
+function renderEachDocumentActivityView(id)
 {
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/documentviewer/documents' , sortKey : 'time',
+	this.eachdocumentactivitiesview = new Base_Collection_View({ url : '/core/api/documentviewer/documents/' + id , sortKey : 'time',
 		descending : true, templateKey : "document-notes", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 10,
+		individual_tag_name : 'li', postRenderCallback : function(el)
+		{
+			deal_infi_scroll($('.document-comments-history'), this.eachdocumentactivitiesview);
+			includeTimeAgo(el);
+			
+		}, appendItemCallback : function(el)
+		{
+			includeTimeAgo(el);
+		}
+
+	});
+	this.eachdocumentactivitiesview.appendItem = append_document_notes;
+	// Fetches data from server
+	this.eachdocumentactivitiesview.collection.fetch();
+
+	// Renders data to activity list page.
+	$('.documents-activities').html(this.eachdocumentactivitiesview.render().el);
+
+}
+function renderDocumentsActivityView(id)
+{
+	// Creates backbone collection view
+	var sURLQuery="",sTemplateName="documents-notes";
+	if(id)
+	{
+		sURLQuery="?documentid=" +id;
+		sTemplateName="document-notes"
+	}
+
+	this.activitiesview = new Base_Collection_View({ url : '/core/api/documentviewer/documents' + sURLQuery , sortKey : 'time',
+		descending : true, templateKey : sTemplateName, sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 10,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
 			deal_infi_scroll($('#documents-comments-history'), this.activitiesview);
@@ -304,9 +335,159 @@ function append_document_notes(base_model)
 	}
 
 }
+function process_add_document_templatemodel(template_model)
+{
+	var template;
+	var contactcompanydealtype =$("#documents-listener-container").attr("contactcompanydealtype")
+	sTemplateText=template_model.text;
+	var sPricingTable="";
+	if($("#documents-listener-container").data("deal_model_json"))
+	{
+		sPricingTable=get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
+	}	
+	
+	var json={};
+	if($("#documents-listener-container").data("contact_model_json"))
+	{
+		json = get_contact_json_for_merge_fields($("#documents-listener-container").data("contact_model_json"));	
+	}
+	
+	json= merge_jsons({}, {"pricing_table":sPricingTable}, json);	
+	
+	
+	try
+	{
+		template = Handlebars.compile(sTemplateText);
+		sTemplateText = template(json);
+	}
+	catch (err)
+	{
+		sTemplateText = add_square_brackets_to_merge_fields(sTemplateText);
+
+		template = Handlebars.compile(sTemplateText);
+		sTemplateText = template(json);
+	}
+	set_tinymce_content('signdoc-template-html', sTemplateText);
+}
 
 function initializeDocumentsListeners()
 {
+	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '#document-send-comments', function(e)
+	{
+		e.preventDefault();
+		var source = event.target || event.srcElement;
+		var sId="";
+		if($(source).attr("data"))						
+			sId=$(source).attr("data");
+		if(sId=="")
+			return;
+						var sCommentsVal=$("#comments",'#uploadDocumentUpdateForm,#uploadDocumentModalForm').val();
+						if(!sCommentsVal.trim())
+						{
+							alert("Enter comments");
+							return;
+						}
+						var doc_json={"description":sCommentsVal,
+							"contact_id": "",
+							"commenter_id": CURRENT_DOMAIN_USER.id,
+							"commenter_name": CURRENT_DOMAIN_USER.name,
+							"document_id":sId,
+							"owner_id" : CURRENT_DOMAIN_USER.id,
+							"agileUserId" : CURRENT_AGILE_USER.id,
+							"d_name" : CURRENT_DOMAIN_USER.domain,
+							"domainname" : CURRENT_DOMAIN_USER.domain,
+							};
+						
+						$.ajax({
+							url : '/core/api/documentviewer',
+							type : 'PUT',
+							contentType : 'application/json; charset=utf-8',
+							data : JSON.stringify(doc_json),
+							dataType : '',
+							complete : function(res, status)
+							{
+
+							},
+							success:function(res){
+								var sComments=$("#comments").val();
+								//var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="display:-moz-box;word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="1455888773">less than a minute ago</time></small></li></ul>'
+								var sHTML='<li><li class="wrapper-sm b-b"><div title="'+ sComments + '" class="m-b-none text-flow-ellipsis line-clamp" style="display:-moz-box;">' + sComments +'</div><small class="block text-muted"> <div class="m-b-none text-flow-ellipsis line-clamp">by ' + CURRENT_DOMAIN_USER.name + '</div><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>&nbsp;<time class="text-sm" datetime="" title="">less than a minute ago</time></small></small></li><small class="block text-muted"></small></li>'
+								$("#today-activity").prepend(sHTML)
+								$("#comments").val("")
+								$('#comments').focus();
+							}
+							, error : function(response)
+							{
+
+								console.log(response);
+							}	
+						});			
+
+	});
+	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '.generate-send-doc', function(e)
+	{	
+
+		$(".generate-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide");			
+		$(".senddoc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");			
+		$(".email-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");			
+		setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
+		{
+
+			// Register focus
+			register_focus_on_tinymce('signdoc-template-html');
+			var sTemplateText="";
+			var templateid =$("#documents-listener-container").attr("templateid");	
+			if(templateid)
+			{
+				
+				var tempate_model=null;
+				if(eDocTemplate_Select_View && eDocTemplate_Select_View.collection)
+					tempate_model=eDocTemplate_Select_View.collection.get(templateid)	
+				if(!tempate_model)
+				{
+					//$("#documents-listener-container").data({"pricing_table":sPricingTable})
+					//$("#documents-listener-container").attr("pricingtable",sPricingTable)
+					var url = '/core/api/document/templates/'+ templateid;
+					$.ajax({
+						url : url,
+						type: 'GET',
+						dataType: 'json',
+						success: function(data){
+							process_add_document_templatemodel(data)
+							//console.log(sPricingTable)
+							
+						}
+					});										
+				}
+				else
+				{
+					process_add_document_templatemodel(tempate_model.toJSON());
+				}
+			
+			}
+			// Reset tinymce
+			
+		},
+		function(contact_json)
+		{
+			if($("#documents-listener-container").data("contact_model_json"))
+			{
+				contact_json=get_contact_json_for_merge_fields($("#documents-listener-container").data("contact_model_json"));
+			}
+			else
+				contact_json={}										
+			if($("#documents-listener-container").data("deal_model_json"))
+			{
+				contact_json["pricing_table"]=get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
+			}										
+			return contact_json;
+		});		
+
+		$(".generate-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide");
+		$("#document_validate",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");
+		$(".email-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");
+		
+	});
 	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '.cancel-document', function(e)
 	{
  		e.preventDefault();
@@ -370,10 +551,18 @@ function initializeDocumentsListeners()
 			});
 		}
 	});
+	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '.email-send-doc', function(e)
+	{
+ 		e.preventDefault();
+ 		var sURL="#send-email/documents/" + $('#uploadDocumentUpdateForm,#uploadDocumentModalForm').find("#id").val();
+		Backbone.history.navigate(sURL, { trigger : true });
+ 		return;
+ 		
+	});
 	$('#uploadDocumentUpdateForm,#uploadDocumentModalForm').on('click', '#document_validate, #document_update_validate', function(e)
 	{
  		e.preventDefault();
-
+ 	
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
     	var form_id = $(this).closest('#documents-listener-container').find('form').attr("id");
     	
@@ -412,10 +601,11 @@ function initializeDocumentsListeners()
 }
 function proc_add_document(model_json)
 {
-		var contactcompanydealtype =$("#documents-listener-container").attr("contactcompanydealtype")
-		var contactcompanydealid =$("#documents-listener-container").attr("contactcompanydealid")
-		var templateid =$("#documents-listener-container").attr("templateid")	
-		var edocattachtype =$("#documents-listener-container").attr("edocattachtype")	
+		var contactcompanydealtype =$("#documents-listener-container").attr("contactcompanydealtype");
+		var contactcompanydealid =$("#documents-listener-container").attr("contactcompanydealid");
+		var templateid =$("#documents-listener-container").attr("templateid");	
+		var edocattachtype =$("#documents-listener-container").attr("edocattachtype");	
+		$("#documents-listener-container").data("context_model",model_json);
 		var that = this;
 		getTemplate("upload-document-modal", model_json, undefined, function(template_ui){
 			if(!template_ui)
@@ -429,7 +619,7 @@ function proc_add_document(model_json)
 			{	
 				if(contactcompanydealtype=="deal")
 				{
-					sPricingTable= get_pricingtable_from_deal(model_json)	
+					//sPricingTable= get_pricingtable_from_deal(model_json)	
 					$('.deal_tags',el).append('<li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ model_json.id +'">'+model_json.name+'</li>');
 				}
 				else 
@@ -440,163 +630,84 @@ function proc_add_document(model_json)
 			}
 			
 			
-			var fxn_process_added_contact = function(data, item)
-		     {
-		      $("#content [name='contact_ids']")
-		        .html(
-		          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
-		      		var url = '/core/api/contacts/'+ data;
-					$.ajax({
-						url : url,
-						type: 'GET',
-						dataType: 'json',
-						success: function(data)
-						{
-							$("#documents-listener-container").data("contact_model_json",data)
-							
-						}
-					});
-		     }
-			// Contacts type-ahead
-			agile_type_ahead("document_relates_to_contacts", el_form, contacts_typeahead,fxn_process_added_contact);
-		     
-			var fxn_process_added_deal = function(data, item)
-		     {
-		      $("#content [name='deal_ids']")
-		        .html(
-		          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
-		      		var url = '/core/api/opportunity/'+ data;
-					$.ajax({
-						url : url,
-						type: 'GET',
-						dataType: 'json',
-						success: function(data){
-							$("#documents-listener-container").data("deal_model_json",data)
-							
-						}
-					});
-		     }
-
-			// Deals type-ahead
-			agile_type_ahead("document_relates_to_deals", el_form, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
-
-			initializeDocumentsListeners();	
+			
 	
 				
 				if(edocattachtype=="edoc")
 				{
+						var fxn_process_added_contact = function(data, item)
+					     {
+					      $("#content [name='contact_ids']")
+					        .html(
+					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+					      		var url = '/core/api/contacts/'+ data;
+								$.ajax({
+									url : url,
+									type: 'GET',
+									dataType: 'json',
+									success: function(data)
+									{
+										$("#documents-listener-container").data("contact_model_json",data)
+										
+									}
+								});
+					     }
+						// Contacts type-ahead
+						agile_type_ahead("document_relates_to_contacts", el_form, contacts_typeahead,fxn_process_added_contact);
+					     
+						var fxn_process_added_deal = function(data, item)
+					     {
+					      $("#content [name='deal_ids']")
+					        .html(
+					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+					      		var url = '/core/api/opportunity/'+ data;
+								$.ajax({
+									url : url,
+									type: 'GET',
+									dataType: 'json',
+									success: function(data){
+										$("#documents-listener-container").data("deal_model_json",data)
+										
+									}
+								});
+					     }
+
+						// Deals type-ahead
+						agile_type_ahead("document_relates_to_deals", el_form, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
+
 
 						$("#network_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val("NONE");
 						$("#doc_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val("SENDDOC");
 					
 						
-						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
-						{
-							
-							// Register focus
-							register_focus_on_tinymce('signdoc-template-html');
-							var sTemplateText="";
-							if(templateid)
-							{
-								
-								var tempate_model=null;
-								if(eDocTemplate_Select_View && eDocTemplate_Select_View.collection)
-									tempate_model=eDocTemplate_Select_View.collection.get(templateid)	
-								if(!tempate_model)
-								{
-									$("#documents-listener-container").data({"pricing_table":sPricingTable,"context_model":model_json})
-									//$("#documents-listener-container").attr("pricingtable",sPricingTable)
-									var url = '/core/api/document/templates/'+ templateid;
-									$.ajax({
-										url : url,
-										type: 'GET',
-										dataType: 'json',
-										success: function(data){
-											process_add_document_templatemodel(data)
-											//console.log(sPricingTable)
-											
-										}
-									});										
-								}
-								else
-								{
-									process_add_document_templatemodel(tempate_model.toJSON(),sPricingTable,model_json);
-								}
-							
-							}
-							// Reset tinymce
-							
-						},
-						function(contact_json)
-						{
-							if($("#documents-listener-container").data("contact_model_json"))
-							{
-								contact_json=get_contact_json_for_merge_fields($("#documents-listener-container").data("contact_model_json"));
-							}
-							else
-								contact_json={}										
-							if($("#documents-listener-container").data("deal_model_json"))
-							{
-								contact_json["pricing_table"]=get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
-							}										
-							return contact_json;
-						});		
-
-					$(".senddoc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
-					$(".send-doc-button",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
+						
+					
+					$(".generate-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
+					$("#document_validate",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
+					$(".email-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
+					
 					$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide");
 				}	
 				else
 				{
+						agile_type_ahead("document_relates_to_contacts", el_form, contacts_typeahead);
+
+						// Deals type-ahead
+						agile_type_ahead("document_relates_to_deals", el_form, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
+
 					$("#doc_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val("ATTACHMENT");	
 					$(".senddoc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
 					$(".send-doc-button",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
 					$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide");	
 				}
 			
+				initializeDocumentsListeners();	
 			
 			
 		}, "#documents-listener-container"); 
 	}
 	
 
-function process_add_document_templatemodel(template_model,sPricingTable,context_model)
-{
-	var template;
-	var contactcompanydealtype =$("#documents-listener-container").attr("contactcompanydealtype")
-	sTemplateText=template_model.text;
-
-	if(context_model==null)
-		context_model=$("#documents-listener-container").data("context_model");
-	var json={};
-	if(contactcompanydealtype!="deal" && contactcompanydealtype!="document")
-	{
-		json = get_contact_json_for_merge_fields(context_model);	
-	}
-	
-	if(contactcompanydealtype=="deal" && sPricingTable==null)
-	{
-		sPricingTable=$("#documents-listener-container").data("pricing_table");
-
-	}
-	$("#documents-listener-container").data("pricing_table","");
-	json= merge_jsons({}, {"pricing_table":sPricingTable}, json);	
-	
-	
-	try
-	{
-		template = Handlebars.compile(sTemplateText);
-		sTemplateText = template(json);
-	}
-	catch (err)
-	{
-		sTemplateText = add_square_brackets_to_merge_fields(sTemplateText);
-
-		template = Handlebars.compile(sTemplateText);
-		sTemplateText = template(json);
-	}
-	set_tinymce_content('signdoc-template-html', sTemplateText);
-}
 
 function process_edoctemplates_model(base_model) {
 
@@ -635,8 +746,14 @@ function get_pricingtable_from_deal(model_json)
 	{
 
 		var iTotal=0
-		$.each(model_json.products, function(nr, data){
-			sProductsTR+="<tr><td><table style='border:none;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;'>" + data.name	+"</td></tr>" + "<tr><td style='border:none;'>"+ data.description + "</td></tr></table></td><td  align='center' style='align:center;'>" + sCurrency + data.price.toFixed(2)+"</td><td  align='center'  style='align:right;'>"+data.qty+ "</td><td  align='right' style='align:right;'>" + sCurrency + data.total.toFixed(2) + "</tr>"
+		$.each(model_json.products, function(nr, data)
+		{	
+			var sImage="";
+			if(data.image)
+			{
+				sImage="<td style='border:none;' rowspan='2'><img src='" + data.image	+"' style='width:85px;'></img></td>";	
+			}
+			sProductsTR+="<tr><td><table style='border:none;' border='0' cellpadding='0' cellspacing='0'><tr><td style='border:none;'>" + data.name	+"</td>" + sImage + "</tr>" + "<tr><td style='border:none;'>"+ data.description + "</td></tr></table></td><td  align='center' style='align:center;'>" + sCurrency + data.price.toFixed(2)+"</td><td  align='center'  style='align:right;'>"+data.qty+ "</td><td  align='right' style='align:right;'>" + sCurrency + data.total.toFixed(2) + "</tr>"
 			iTotal+=data.total;
 		});			
 		if(sProductsTR!="")
@@ -780,6 +897,8 @@ function load_document_from_edit_model(model)
 				var 	template_type=model.template_type;
 				if($("#doc_type",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').val()=="SENDDOC")
 				{
+
+						$(".email-send-doc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".senddoc",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".send-doc-button",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
@@ -832,58 +951,69 @@ function load_document_from_edit_model(model)
 									}
 								});
 						}
+						renderDocumentsActivityView(model.id)
+						
+						var fxn_process_added_contact = function(data, item)
+					     {
+					      $("#content [name='contact_ids']")
+					        .html(
+					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+					      		var url = '/core/api/contacts/'+ data;
+								$.ajax({
+									url : url,
+									type: 'GET',
+									dataType: 'json',
+									success: function(data)
+									{
+										$("#documents-listener-container").data("contact_model_json",data)
+										
+									}
+								});
+					     }
+						
+						// Contacts type-ahead
+						agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead,fxn_process_added_contact);
+					     
+						var fxn_process_added_deal = function(data, item)
+					     {
+					      $("#content [name='deal_ids']")
+					        .html(
+					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+					      		var url = '/core/api/opportunity/'+ data;
+								$.ajax({
+									url : url,
+									type: 'GET',
+									dataType: 'json',
+									success: function(data){
+										$("#documents-listener-container").data("deal_model_json",data)
+										
+									}
+								});
+					     }
+
+						// Deals type-ahead
+						agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
 				}
 				else
 				{
 						$(".senddoc",'#uploadDocumentModalForm,"#uploadDocumentUpdateForm').addClass("hide ");
 						$(".send-doc-button",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').addClass("hide ");
 						$(".attachment",'#uploadDocumentModalForm,#uploadDocumentUpdateForm').removeClass("hide ");				
+
+						agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead);
+
+						// Deals type-ahead
+						agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
+
+						//agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead,fxn_process_added_contact);
+						//agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
 				}
 
 				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
 				$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#EDEDED");
 
 				
-			var fxn_process_added_contact = function(data, item)
-		     {
-		      $("#content [name='contact_ids']")
-		        .html(
-		          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
-		      		var url = '/core/api/contacts/'+ data;
-					$.ajax({
-						url : url,
-						type: 'GET',
-						dataType: 'json',
-						success: function(data)
-						{
-							$("#documents-listener-container").data("contact_model_json",data)
-							
-						}
-					});
-		     }
 			
-			// Contacts type-ahead
-			agile_type_ahead("document_relates_to_contacts", uploadDocumentUpdateForm, contacts_typeahead,fxn_process_added_contact);
-		     
-			var fxn_process_added_deal = function(data, item)
-		     {
-		      $("#content [name='deal_ids']")
-		        .html(
-		          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
-		      		var url = '/core/api/opportunity/'+ data;
-					$.ajax({
-						url : url,
-						type: 'GET',
-						dataType: 'json',
-						success: function(data){
-							$("#documents-listener-container").data("deal_model_json",data)
-							
-						}
-					});
-		     }
-
-			// Deals type-ahead
-			agile_type_ahead("document_relates_to_deals", uploadDocumentUpdateForm, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
 
 			initializeDocumentsListeners();	
 		}, "#documents-listener-container");		

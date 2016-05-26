@@ -36,6 +36,13 @@ public class Product
     @NotSaved(IfDefault.class)
     private String name = null;
 
+    
+    /**
+     * Product Logo
+     * */
+    @NotSaved(IfDefault.class)
+	public String image = null;
+    
     @NotSaved(IfDefault.class)
     private String description = null;
 

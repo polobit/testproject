@@ -73,17 +73,10 @@ public class DocumentNote extends Cursor
 		this.commenter_name = commenter_name;
 	}
 
-	public String getContact_id() {
-		return contact_id;
-	}
+	
 
-	public void setContact_id(String contact_id) {
-		this.contact_id = contact_id;
-	}
-
-
-
-	private String contact_id;
+	@NotSaved(IfDefault.class)
+	public String contact_id=null;
 
     
     

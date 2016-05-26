@@ -179,70 +179,72 @@ var subject=<%=mapper.writeValueAsString(sNoteSubject)%>
                       
                </div>
            </div>
-   </div>
+</div>
 <div class="hbox hbox-auto-xs bg-light  ng-scope" >
-  
   <!-- column -->
- <div class="col" style="height:90%;">
-   <div class="vbox">
-     <div class="row-row">
-       <div class="cell" style="height:90%;">
-         <div class="cell-inner">
-           <div class="wrapper-md">
-            <div class="col-md-8 col-sm-12 col-xs-12 container panel panel-default col-md-offset-2">
-<!-- Container Div -->
-<div class="panel-body">
-<!-- Left Div -->
-<div class="col-md-12">
-<%=htmlContent%>
-</div>
-<!-- Right Div -->
-<div class="col-md-4"></div>
-</div>
-</div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </div>
- </div>
- <!-- /column -->
+	 <div class="col" style="height:90%;">
+	   <div class="vbox">
+	     <div class="row-row">
+	       <div class="cell" style="height:90%;">
+	         <div class="cell-inner">
+	           <div class="wrapper-md">
+	            <div class="col-md-8 col-sm-12 col-xs-12 container panel panel-default col-md-offset-2">
+					<!-- Container Div -->
+					<div class="panel-body">
+					<!-- Left Div -->
+					<div class="col-md-12">
+					<%=htmlContent%>
+					</div>
+					<!-- Right Div -->
+					<div class="col-md-4"></div>
+					</div>
+					</div>
+	           </div>
+	         </div>
+	       </div>
+	     </div>
+	   </div>
+	 </div>
+	 <!-- /column -->
 
-  <!-- column -->
- <div class="col w-md lter b-l" style="height:90%;">
-   <div class="vbox" style="height:85%;">
-     <div class="wrapper b-b b-light">
-       <div class="font-thin h4">Comments History</div>
-     </div>
-     <div class="row-row">
-       <div class="cell">
-         <div class="cell-inner">
-           <div class="wrapper-md comments-history">
-<% if(notes!=null ){ for(DocumentNote note:notes){ %>
-             <ul class="list-group">
-<li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;" title="<%=note.description %>" ><%=note.description %></p>
-<small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="<%=note.created_time %>"><%=note.created_time%></time></small>
-</li>
-</ul>
-<%};} %>
-           </div>
-         </div>
-       </div>
-     </div>
-     <div class="padder b-t  text-center">
-       <div class="m-t-sm"><div class="row">
-       	<textarea class="inputtext " rows="6" 
-id="comments" name="notes" placeholder="Comments"></textarea>
-
-<text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
-<text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
-</div>
-<div class="row">
-<a  class="text-info" id="send-comments"><i class="icon-envelope-alt"></i> Send Comments</a>
-</div></div>
-     </div>
-   </div>
- </div>
+	  <!-- column -->
+	 <div class="col w-md lter b-l" style="height:90%;">
+		   <div class="vbox" style="height:85%;">
+			     <div class="wrapper b-b b-light">
+			       <div class="font-thin h4">Comments History</div>
+			     </div>
+			     <div class="row-row">
+				       <div class="cell">
+				         <div class="cell-inner">
+				           <div class="wrapper-md comments-history">
+								<% if(notes!=null ){ for(DocumentNote note:notes){ %>
+								             <ul class="list-group">
+								<li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="word-wrap: break-word;overflow:hidden;" title="<%=note.description %>" ><%=note.description %></p>
+									<small class="block text-muted"> 
+					                    	<div class="m-b-none text-flow-ellipsis line-clamp">by <%=note.getcommenter_name()%></div>
+					                    	<small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time 	class="timeago" datetime="<%=note.created_time %>"><%=note.created_time%></time></small>
+				                    </small>
+								
+								</li>
+								</ul>
+								<%};} %>
+				           </div>
+				         </div>
+				       </div>
+			     </div>
+			     <div class="padder b-t  text-center">
+				       <div class="m-t-sm"><div class="row">
+				       		<textarea class="inputtext " rows="6" id="comments" name="notes" placeholder="Comments"></textarea>
+							<text id="contact_id" name="subject" type="hidden" value="<%=sContactId%>"></text>
+							<text id="subject" name="subject" type="hidden" value="<%=sNoteSubject%>"></text>
+						</div>
+						<div class="row">
+							<a  class="text-info" id="send-comments"><i class="icon-envelope-alt"></i> Send Comments</a>
+						</div>
+				</div>
+		    </div>
+	   </div>
+	</div>
  <!-- /column -->
  <!-- /column -->
 <script type="text/javascript">
@@ -305,8 +307,10 @@ function bodyLoad()
 
 							},
 							success:function(res){
+								var d = new Date();
+								var sSeconds = d.getTime() / 1000;
 								var sComments=$("#comments").val();
-								var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="display:-moz-box;word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="1455888773">less than a minute ago</time></small></li></ul>'
+								var sHTML='<ul class="list-group"><li class="list-group-item document-notes"><p class="line-clamp line-clamp-3 activity-tag" style="display:-moz-box;word-wrap: break-word;overflow:hidden;">'+ sComments +'</p><small class="block text-muted"><div class="m-b-none text-flow-ellipsis line-clamp">by ' + contact_name + '</div><small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> <time class="timeago" datetime="Feb 19 2016 19:02:53" title="'+ sSeconds + '">less than a minute ago</time></small></small></li></ul>'
 								$(".comments-history").prepend(sHTML)
 								$("#comments").val("")
 								$('#comments').focus();

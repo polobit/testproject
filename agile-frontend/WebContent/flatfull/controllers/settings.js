@@ -665,7 +665,6 @@ var SettingsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					that.view = new Base_Model_View({url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",
-					window : 'document-templates',
 					postRenderCallback : function(el)
 					{
 								// set up TinyMCE Editor
@@ -676,7 +675,7 @@ var SettingsRouter = Backbone.Router
 
 									// Register focus
 									register_focus_on_tinymce('document-template-html');
-									$("#document-template-html_ifr").height("90vh");
+									//$("#document-template-html_ifr").height("90vh");
 								});
 						
 					} });
@@ -711,7 +710,6 @@ var SettingsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					that.view = new Base_Model_View({url : '/core/api/document/templates', model : that.currentTemplate, template : "settings-document-template-add",
-					window : 'document-templates',
 					postRenderCallback : function(el)
 					{
 								// set up TinyMCE Editor
@@ -722,7 +720,7 @@ var SettingsRouter = Backbone.Router
 
 									// Register focus
 									register_focus_on_tinymce('document-template-html');
-									$("#document-template-html_ifr").height("90vh");
+									//$("#document-template-html_ifr").height("90vh");
 								});
 						
 					} });

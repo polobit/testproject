@@ -756,21 +756,38 @@ function populate_deal_products(el, value,form_id){
 						
 				this.toggleAllProducts=function(e)
 				{
-
 					if($(".dealproducts_th_checkbox",me._form_id).is(":checked"))
 					{	
 						$(".dealproducts_td_checkbox",me._form_id).each(function(index,value){
 							if(!$(value).is(":checked"))			
-								$(value).trigger("click")
+							{	
+								var _id=$(value).attr("data")
+								var objModel= App_Deal_Details.deal_products_collection_view.collection.get(_id)
+			
+								
+								objModel.set("isChecked",true)	
+									
+								//$(value).prop('checked',true);
+								//$(value).trigger("click")
+							}	
 						});
 					}
 					else
 					{
 						$(".dealproducts_td_checkbox",me._form_id).each(function(index,value){
 							if($(value).is(":checked"))			
-								$(value).trigger("click")
+							{
+								var _id=$(value).attr("data")
+								var objModel= App_Deal_Details.deal_products_collection_view.collection.get(_id)
+			
+								
+								objModel.set("isChecked",false)	
+								//$(value).prop('checked',false);
+								//$(value).trigger("click")
+							}	
 						});
 					}
+					me.calculateGrandTotal();
 				}
 				this.updateOnEnter=function (e)
 				{
@@ -923,7 +940,7 @@ function populate_deal_products(el, value,form_id){
 						App_Deal_Details.deal_products_collection_view.collection.models[key].set("total",iQtyPriceTotal)
 						var sId=App_Deal_Details.deal_products_collection_view.collection.models[key].get("id")
 						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
-							iTotal+=iQtyPriceTotal;		
+							iTotal+=parseFloat(iQtyPriceTotal);		
 					}
 					var iDiscountAmt=0;
 					if($("#apply_discount",me._form_id).is(':checked'))

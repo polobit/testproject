@@ -1,10 +1,10 @@
 <script id="admin-settings-products-collection-template" type="text/html">
 
-<div class="panel panel-default">
+<div class="panel">
  <div class="panel-heading">
-    <div class="pull-left  m-t-xs">Products</div>
-    <div class="pull-right">
-        <a href="#product-add" class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> Add Product</a>
+    
+    <div class="pull-right p-t ">
+        <a href="#product-add" role="button" data-toggle="modal" type="submit"  class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> Add Product</a>
     </div>
     <div class="clearfix"></div>
  </div>
@@ -18,7 +18,7 @@
                      <div class="box-right pull-left">
                         <h4 class="m-t-none">You do not have any Products currently.</h4>
                          <div class="text">You can add product by clicking the button below or the one on the right side of the page.</div>
-                            <a href="#product-add" class="btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Products</a>
+                            <a href="#product-add" role="button" data-toggle="modal" type="submit" class="btn product-add btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Products</a>
                     </div>
                     <div class="clearfix"></div>
         </div>
@@ -30,17 +30,17 @@
     <div class="row">
         <div class="col-md-12 col-sm-12">
                     <div class=" table-responsive" style="overflow:hidden;"> 
-                    <table class="table table-striped agile-table panel table-layout-mob-view showCheckboxes" url="core/api/products/bulk?action_type=DELETE">
+                    <table class="table table-striped agile-table panel table-layout-mob-view table table-hover  onlySorting custom-fields-table products-table table-hover m-b-none agile-table" url1="core/api/products/bulk?action_type=DELETE">
                         <thead>
                             <tr>
-                                <th style="width:25%" class="header">Name</th>
-        						<th style="width:25%" class="header">Description</th>
-        						<th style="width:25%" class="header">Price</th>
-                                <th style="width:25%" class="header">Created On</th>
-                                <!-- <th style="width:20%" class="header">&nbsp;</th> -->
+                                <th style="width:23%" class="header">Name</th>
+        						<th style="width:23%" class="header">Description</th>
+        						<th style="width:23%" class="header">Price</th>
+                                <th style="width:23%" class="header">Image</th>
+                                <th style="width:8%" class="">&nbsp;</th>
                             </tr>
                          </thead>
-                         <tbody id='admin-settings-products-model-list' route='product-edit/'>
+                         <tbody id='admin-settings-products-model-list' route1='product-edit/'>
                          </tbody>
                     </table>
                     </div>
@@ -64,14 +64,23 @@
 	<td class='data'>
     {{currencySymbol}}{{price}}
 	</td>
-    <td class="text-muted" style="color: #b2b0b1;">
-       {{#if created_time}}
-          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-               Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time>
-          </div>
-       {{/if}}
-    </td>    
-   
+    <td class='data'>
+        {{#if image}}
+            <img class="w-full" src="{{image}}" style="width:85px;" align="center" />
+        {{else}}
+            &nbsp;
+        {{/if}}    
+    </td>
+   <td align="right" class="b-r-none p-l-none" style="width:10%;">
+        <div style="visibility:hidden;">
+            <a id="edit-product-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+                <i title="Edit Product" class="task-action icon icon-edit"></i>
+            </a>
+            <a id="delete-product-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+                <i title="Delete Product" class="task-action icon icon-trash"></i>
+            </a>
+        </div>
+    </td>
 </script>
 <script id="admin-settings-product-add-template" type="text/html">
 <div class="wrapper">
@@ -81,7 +90,6 @@
                  <div class="panel-heading">
                     {{#if id}}
                        Edit Product Details
-                        
                     {{else}}
                         New Product Details
                     {{/if}}
@@ -116,6 +124,14 @@
             					</div>
                             </div>
         				</div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3">Logo</label> 
+                            <div class="col-md-9">
+                                <div class="controls">
+                                     <input class="upload_prefs_s3 submit btn btn-sm  btn-default " type="submit" id="product_image" value="Upload"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                                 <div class="col-md-12"><hr>
                             </div>

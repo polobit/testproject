@@ -345,7 +345,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var el = $(targetEl).closest("div");
 		$(targetEl).css("display", "none");
-		$(".add-deal-edocument-select",el).css("display", "none");
+		$(".add-deal-edocument-select,.dropdown-toggle",el).css("display", "none");
 		el.find(".deal-document-select").css("display", "block");
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
@@ -423,8 +423,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var el = $(targetEl).closest("div");
 		el.find(".deal-document-select").css("display", "none");
-		el.find(".add-deal-document-select").css("display", "inline");
-		el.find(".add-deal-edocument-select").css("display", "inline");
+		el.find(".add-deal-document-select,.add-deal-edocument-select,.dropdown-toggle").css("display", "inline");
+		
 	},
 
 	

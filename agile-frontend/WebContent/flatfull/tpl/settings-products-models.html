@@ -1,0 +1,71 @@
+<div id="admin-products-modal"></div>
+<script id="product-field-add-modal-template" type="text/html">
+<!-- New (Text) Modal views -->
+<div class="modal fade" id="product-field-add-modal">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Product</h3>
+    </div>
+    <div class="modal-body">
+        <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Name <span class="field_req">*</span></label> 
+                    <div class="controls col-sm-7">
+                        <input name="name" type="text" field="pipeline" class="required form-control" id="product_name" placeholder="Product" />
+                    </div>
+                </div>
+                
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Description </label>
+                    <div class="controls col-sm-7">
+                         <textarea id="pdescription" rows="3" maxlength="400" name="description" class="form-control" placeholder="Description"></textarea>
+                    </div>
+                </div>
+                 <div class="control-group form-group" >
+                    <label class="control-label col-sm-3">Price <span class="field_req">*</span></label>
+                    <div class="controls col-sm-7">
+                       <input type="text" id="pprice" name="price" class="required number form-control" placeholder="Price" min="0" max="1000000000000"/> 
+                    </div>
+                </div>
+                <div class="control-group form-group">
+                            <label class="control-label col-md-3">Image</label> 
+                            <div class="col-md-9">
+                                <div class="controls">
+                                    <div id="upload-container">
+                                        <div class="clearfix">
+                                            <div class="imgholder  thumb-wrapper thumb-lg">
+                                            {{#if image}}
+                                                    <img class="w-full" src="{{image}}"  width="85" />
+                                              {{else}}
+                                                    <img class="w-full" src="https://contactuswidget.appspot.com/images/pic.png"  width="85" />
+                                                {{/if}}     
+                                            </div>    
+                                            <div class="m-l-xs inline-block">
+                                                    <input type="hidden" class="form-control" id="upload_url" name="image" />  
+                                                     <input class="upload_s3 submit btn btn-sm  btn-default" type="submit" id="product_image" value="Upload Image"/>
+                                            </div> 
+                                        </div>    
+                                    </div>    
+                                </div>
+                                <span style="color:#B94A48;" id="duplicate-product-err" class="hide text-base"></span>
+                            </div>
+                </div>
+
+                {{#if id}}
+                    <input name="id" value="{{id}}" class="hide form-control"></input>
+                {{/if}}
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <span style="color:#B94A48;" id="duplicate-custom-field-err" class="hide text-base"></span>
+        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+

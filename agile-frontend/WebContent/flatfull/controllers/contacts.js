@@ -834,7 +834,9 @@ var ContactsRouter = Backbone.Router.extend({
 
 	sendDocumentEmail:function(id) 
 	{
-		this.sendEmail(id,null,null,null,null,null,"documents");
+		//this.sendEmail(id,null,null,null,null,null,"documents");
+		var that=this;
+		sendMail(id,null,null,null,null,that,null,"documents");
 	},
 
 	/**
@@ -1341,16 +1343,27 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
 		}
-		if(id_type=="documents" && App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
+		if(id_type=="documents" )
 		{
-			$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
+			if(App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
 			{
-				if(id && document_model.id==id	)
+				$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
 				{
-					model=document_model.toJSON();	
-					return false;
-				}	
-			});
+					if(id && document_model.id==id	)
+					{
+						model=document_model.toJSON();	
+						return false;
+					}	
+				});
+			}
+			if (documentsView && documentsView.collection)
+			{
+				if(documentsView.collection.get(id))
+				{
+					model=documentsView.collection.get(id).toJSON();
+				}
+				
+			}
 		}	
 	}
 	

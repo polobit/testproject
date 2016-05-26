@@ -619,12 +619,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		} 
 		var that = this;
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
-			$('#content').html($(template_ui));	
+			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+	
+			
 
-			that.productsGridView = new Base_Collection_View({ url : '/core/api/products', 
+			App_Admin_Settings.productsGridView = new Base_Collection_View({ url : '/core/api/products', 
 			templateKey : "admin-settings-products",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
@@ -634,15 +638,20 @@ var AdminSettingsRouter = Backbone.Router.extend({
 							
 							$(".created_time", el).timeago();
 						});
+				initializeAdminProductsListners();		
 				
 			} });
-			that.productsGridView.collection.fetch();
+			App_Admin_Settings.productsGridView.collection.fetch();
 
-			$('#content').find('#admin-prefs-tabs-content').html(that.productsGridView.render().el);
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(App_Admin_Settings.productsGridView.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
-			$('#content').find('.products-tab').addClass('select');
+			$('#content').find('.milestones-tab').addClass('select');
 			$(".active").removeClass("active");
-		}, "#content");
+			$('.settings-deal-products').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			$('.settings-deal-products').parent().removeClass('b-b-none');
+
+		}, "#milestone-listner");
 
 		
 		
@@ -720,14 +729,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				$('#content').html($(template_ui));	
 
 				// If products list is not defined then take back to products template
-				if (!that.productsGridView || !that.productsGridView.collection.get(id))
+				if (!App_Admin_Settings.productsGridView || !App_Admin_Settings.productsGridView.collection.get(id))
 				{
 					that.navigate("products", { trigger : true });
 					return;
 				}
 
 				// Gets product from the collection based on id
-				var product = that.productsGridView.collection.get(id);
+				var product = App_Admin_Settings.productsGridView.collection.get(id);
 			
 			
 				/*
@@ -742,7 +751,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				}, 
 				postRenderCallback : function(el)
 				{
-					//initializeIntegrationsTabListeners("integrations_tab", "integrations");
+					initializeAdminProductsListners("settings-milestones-tab-content");
 								
 				}
 			 });

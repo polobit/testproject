@@ -194,7 +194,9 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 
 			// Removes disabled attribute of save button
 			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
-			
+			var id=$('#' + form_id).find("#id")
+			$(id).attr("name","id");
+			$(id).val(data.toJSON().id);
 			// While attaching document is from existing documenst list, no need of form verification.
 			if(form_id)
 			{
@@ -204,14 +206,14 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 				$('#' + form_id).find("#upload_url").val("");
 				$('#' + form_id).find("#extension").val("");
 				
-				$('#' + form_id).each(function() {
+				/*$('#' + form_id).each(function() {
 					this.reset();
-				});
+				});*/
 			}
 			
 			//$('#' + modalId).find('span.save-status img').remove();
-			if(form_id)
-				$('#' + modal_id).modal('hide');
+			//if(form_id)
+			//	$('#' + modal_id).modal('hide');
 			
 			var document = data.toJSON();
 			add_recent_view(new BaseModel(document));
@@ -250,14 +252,14 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 									return false;
 							}
 						});	
-						var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
-						Backbone.history.navigate(sURL, { trigger : true });
+						//var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+						//Backbone.history.navigate(sURL, { trigger : true });
 						return;	
 					}
 					else if( Current_Route.indexOf( App_Contacts.contactDetailView.model.get('id'))>-1)
 					{
-						var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
-						Backbone.history.navigate(sURL, { trigger : true });
+						//var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+						//Backbone.history.navigate(sURL, { trigger : true });
 						return;
 					}		
 					
@@ -306,15 +308,15 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 									return false;
 							}
 						});	
-						var sURL="company/" + App_Companies.companyDetailView.model.get('id');
-						Backbone.history.navigate(sURL, { trigger : true });
+						//var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+						//Backbone.history.navigate(sURL, { trigger : true });
 						return;	
 					}
 					else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
 					{
 						company_util.updateDocumentsList(document,true);
-						var sURL="company/" + App_Companies.companyDetailView.model.get('id');
-						Backbone.history.navigate(sURL, { trigger : true });
+						//var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+						//Backbone.history.navigate(sURL, { trigger : true });
 						return;
 					}				
 					
@@ -345,8 +347,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 								return false;			
 							}
 						});
-						var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
-						Backbone.history.navigate(sURL, { trigger : true });
+						//var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
+						//Backbone.history.navigate(sURL, { trigger : true });
 						return;			
 						
 					}
@@ -362,8 +364,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 				App_Documents.DocumentCollectionView.collection.add(data);
 
 				App_Documents.DocumentCollectionView.render(true);
-					App_Documents.navigate("documents", {
-					trigger : true});
+					//App_Documents.navigate("documents", {trigger : true});
 				return;	
 
 			}
@@ -371,15 +372,11 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			{
 				$('#tpl-attachment-select').find('select').find('option:last').after("<option value="+document.id+" selected='selected'>"+document.name+"</option>");
 				$('.add-tpl-attachment-confirm').trigger("click");
-				App_Settings.navigate(Current_Route, {
-						trigger : true
-					});
+				//App_Settings.navigate(Current_Route, {trigger : true});
 			}
 			else 
 			{
-				App_Documents.navigate("documents", {
-					trigger : true
-				});
+				//App_Documents.navigate("documents", {trigger : true});
 			}
 		}
 	});
