@@ -240,7 +240,7 @@ function isValidForm(form) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
 		}	
 	);
-
+    
 
 	// domain name validation
 	jQuery.validator.addMethod("domain_format", function(value, element){
@@ -248,6 +248,12 @@ function isValidForm(form) {
 		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
 	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
     
+
+    jQuery.validator.addMethod("localField", function(value, element){
+		
+		var custvals = /^\s*[a-zA-Z0-9\s]+\s*$/;
+		return custvals.test(value);
+	}," Label should not contain special characters");
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);
