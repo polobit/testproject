@@ -23,7 +23,7 @@ public class DealCurrencyConverter extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		try {
-			String s = "https://openexchangerates.org/api/latest.json?app_id=2e2f1446f9b7407091f10a515dc8ad65";
+			String s = "https://openexchangerates.org/api/latest.json?app_id=0713eecad3e9481dabea356a7f91ca60";
 			URL url = new URL(s);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			Scanner scan = new Scanner(con.getInputStream());
@@ -34,12 +34,14 @@ public class DealCurrencyConverter extends HttpServlet {
 			JSONObject jsonObject = new JSONObject(string);
 			JSONObject listOfRates =  jsonObject.getJSONObject("rates");
 			String rateString = listOfRates.toString();
-			System.out.println(rateString);
+			System.out.println("currency rates for cron = "+rateString);
 			CurrencyConversionRates q = dao.ofy().query(CurrencyConversionRates.class).get();
 			q.currencyRates = rateString ;
-			q.save();		
+			q.save();
+			scan.close();
 			
 		} catch (Exception e) {
+			System.out.println("currency converter catch block");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		

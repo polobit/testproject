@@ -139,4 +139,4 @@ cron:
 
 - description: Currency convertion rates
   url: /backend/cron/deal-currency-converter
-  schedule: every 60 mins 
+  schedule: every 1 hours

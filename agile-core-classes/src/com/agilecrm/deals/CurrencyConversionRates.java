@@ -1,6 +1,11 @@
 package com.agilecrm.deals;
 
+import java.io.IOException;
+
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+
+import org.json.JSONException;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -17,6 +22,9 @@ public class CurrencyConversionRates {
 
 	@NotSaved(IfDefault.class)
 	public String baseRate = null;
+	
+	@NotSaved(IfDefault.class)
+	public Long updated_time = 0L;
 
 	public void save() {
 		dao.put(this);
@@ -25,5 +33,11 @@ public class CurrencyConversionRates {
 	public void delete() {
 		dao.delete(this);
 	}
+	@PrePersist
+    private void PrePersist() throws IOException, JSONException
+    {
+		updated_time = System.currentTimeMillis() / 1000 ;
+		System.out.println("updated time for currency rates is "+updated_time);
+    }
 
 }

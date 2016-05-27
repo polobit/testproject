@@ -663,6 +663,7 @@ public class Opportunity extends Cursor implements Serializable
 				CurrencyConversionRates Rates = new CurrencyConversionRates();
 				Rates.currencyRates = ratesToDb;
 				Rates.save();
+				scan.close();
 			} else {
 				listOfRates = new JSONObject(cuRates.currencyRates);
 			}
