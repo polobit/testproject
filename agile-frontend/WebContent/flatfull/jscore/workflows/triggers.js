@@ -534,7 +534,7 @@ function resetAndFillFromSelect(selected_val) {
 			"email",
 			undefined,
 			options,
-			$('#from_email'),
+			$('.email'),
 			"prepend",
 			function($select, data) {
 
@@ -581,7 +581,7 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 		  dataType: "json",
 		  success: function(data)
 		  {	    			
-	    
+	    	$(selectContainer[0]).find('option').remove();
 			// Append given options
 			if(selectOptionAttributes !== undefined)
 	    	$(selectOptionAttributes).appendTo(selectContainer);
@@ -611,11 +611,11 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
     				    option = "<option value='" + value + "'>" + key + "</option>";
         				
     				if(arrange_type && arrange_type == "prepend")
-    					$(option).prependTo(selectContainer);
+    					$(option).prependTo(selectContainer[0]);
     				else
     				{	
     					// Append to container	
-        				$(option).appendTo(selectContainer);	        				        								
+        				$(option).appendTo(selectContainer[0]);	        				        								
         			}
 				}											   	   	   	  	   	  				
 		});
