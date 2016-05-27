@@ -1100,6 +1100,7 @@ $(function()
 		var el = "", cls = ""; 
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
+
 			
 			if (element == "image")
 			{
@@ -1122,6 +1123,8 @@ $(function()
 				}*/
 				element = "";
 			}
+			if(element == "basic_info")
+				return;
 			
 			
 			else if (element.indexOf("CUSTOM_") == 0) {
@@ -6587,7 +6590,8 @@ $(function()
 				}
 				element = "";
 			}
-			
+			if (element == "basic_info")
+				return
 			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
 				cls = "text-muted";
