@@ -1120,10 +1120,12 @@ $(function()
 						cls = "";
 					}
 						  
-				}*/
+				}
 				element = "";
+				*/
+				return ; 
 			}
-			if(element == "basic_info")
+			else if(element == "basic_info")
 				return;
 			
 			
@@ -6584,13 +6586,14 @@ $(function()
 		{
 			if (element == "image")
 			{
-				if(App_Companies.companyViewModel[item].indexOf("basic_info") != -1)
+				/*if(App_Companies.companyViewModel[item].indexOf("basic_info") != -1)
 				{	
 					cls = "companiesnewimage";		  
 				}
-				element = "";
+				element = "";*/
+				return ;
 			}
-			if (element == "basic_info")
+			else if (element == "basic_info")
 				return
 			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];

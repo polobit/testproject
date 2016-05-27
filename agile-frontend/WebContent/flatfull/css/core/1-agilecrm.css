@@ -3863,3 +3863,21 @@ padding-left:0px;
 .table.companies-custom tbody tr td {
       padding: 6px 15px;
 }
+/*#contacts-table thead tr th:nth-child(3),#companies thead tr th:nth-child(3)
+{
+  padding:6px 0px;
+}
+.table.contacts-custom tbody tr td:nth-child(4),#companies thead tr td:nth-child(4)
+{
+  padding:6px 0px;
+}
+.companies-custom .contactsnewimage{
+   padding:2px 0px;
+}*/
+#companies thead tr th:nth-child(2){
+  padding: 7px 15px !Important;
+}
+
+#contacts-table thead tr th:nth-child(2){
+   padding: 7px 15px !Important;
+}
