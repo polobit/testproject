@@ -301,9 +301,9 @@
 </script>
 
 <script id="admin-settings-deal-goals-model-template" type="text/html">
-<td>
-	
-	<div class="table-resp pull-left" style="overflow: inherit; width:100%;">
+
+	<td>
+	<div class="table-resp" style="overflow: inherit; width:100%;">
 	<div class="thumb-xs agile-img avatar" style="width:20px; margin-top:3px;">
 	{{#if pic}}
 		<img class="img-inital r r-2x" src="{{pic}}"  title="{{name}}" style="width:20px; height:20px; border-radius:2px;">
@@ -312,27 +312,32 @@
 	{{/if}}
 	</div>
 	</div>
-		
-	<div id={{id}} class="goal agile-thumb agile-thumb-view" style="width: calc(100% - 0px); margin-top:3px;">
+	</td>
+	<td>	
+	<div id={{id}} class="goal goalid agile-thumb agile-thumb-view" style="width: calc(100% - 0px); margin-top:3px;">
 	<span class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 1px);">{{name}}</span>
 	<div class="clearfix"></div>
 	</div>
-   
+	</td>
+  
+	<td>   
+   <div class="input-group">
+      <input class="count goal-form-control w-full" type="text">
+	  <small class="count_percent m-l-xs thumb-tiny pos-abs" style="right:12px; top:5px;" ></small>
+      <span id="goal_count_error"  generated="true" class="help-inline" style="display:none;">Please enter a valid number.</span>
+   </div>
+	   
+  
+	</td>
+
+	<td>
    <div class="input-group">
       <span class="input-group-addon" id="basic-addon1">{{currencySymbol}}</span>
-	  <input class="amount goal-form-control" type="text" aria-describedby="basic-addon1"
+	  <input class="amount goal-form-control w-full" type="text" aria-describedby="basic-addon1"
 		style="border-top-left-radius: 0px; border-bottom-right-radius: 0px;">
 	 <small class="amount_percent m-l-xs thumb-tiny pos-abs" style="right:12px; top:5px;"></small>
       <span id="goal_amount_error"  generated="true" class="help-inline" style="display:none">Please enter a valid number.</span>
    </div>
-	   
-	   
-   <div class="input-group">
-      <input class="count goal-form-control w-full" type="text">
-	  <small class="count_percent m-l-xs thumb-tiny"></small>
-      <span id="goal_count_error"  generated="true" class="help-inline" style="display:none;">Please enter a valid number.</span>
-   </div>
-	   
-   </form>
-</td>
+	</td> 
+	 </form>
 </script>
