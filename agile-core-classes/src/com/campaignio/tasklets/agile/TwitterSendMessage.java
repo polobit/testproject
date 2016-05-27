@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.DomainLimitsUtil;
@@ -100,7 +101,7 @@ public class TwitterSendMessage extends TaskletAdapter
 	}
 	catch(Exception e)
 	{
-		e.printStackTrace();
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 		System.err.println("Exception occured in TwitterSendMessage node - " + e.getMessage());
 	}
 	// Execute Next One in Loop
