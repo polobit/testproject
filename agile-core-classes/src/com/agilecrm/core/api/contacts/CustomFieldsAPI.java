@@ -459,8 +459,7 @@ public class CustomFieldsAPI
     @GET
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
     public String syncAppData(@QueryParam("domain") String domain){
-    	String domainUser = DomainUserUtil.getCurrentDomainUser().domain;
-    	System.out.println(domain +" and "+domainUser);
+    	String domainUser = domain;
     	if( domainUser != null){
     		try {
 				Long updated_time = null;
@@ -472,9 +471,14 @@ public class CustomFieldsAPI
 					update_date = new Date(updated_time);
 				}
 				Date current_date = new Date(); 
-				System.out.println(update_date.getMonth()+"update month "+current_date.getMonth()+"current month "+update_date.getYear()+" update year"+current_date.getYear()+"current year"+update_date.getTime()+"update time"+current_date.getTime()+"");
-				if(update_date == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
-					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);
+				if(schema == null || (update_date.getHours() < current_date.getHours() && update_date.getYear() <= current_date.getYear())){
+					if(schema == null){
+						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
+						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
+						newSchema.domain = domainUser;
+						newSchema.save();
+					}
+					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);					
 					// Add to queue
 					Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
 					queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
