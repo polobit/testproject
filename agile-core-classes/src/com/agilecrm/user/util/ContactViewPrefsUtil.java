@@ -159,7 +159,9 @@ public class ContactViewPrefsUtil
     private static ContactViewPrefs getDefaultContactViewPrefs(AgileUser agileUser)
     {
 	LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
-	fields_set.add("basic_info");
+	fields_set.add("first_name");
+	fields_set.add("last_name");
+	fields_set.add("email");
 	fields_set.add("company");
 	fields_set.add("tags");
 	fields_set.add("lead_score");
@@ -178,7 +180,7 @@ public class ContactViewPrefsUtil
     private static ContactViewPrefs getDefaultCompanyViewPrefs(AgileUser agileUser)
     {
 	LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
-	fields_set.add("basic_info");
+	fields_set.add("name");
 	fields_set.add("owner");
 	fields_set.add("star_value");
 	fields_set.add("created_time");

@@ -80,7 +80,7 @@
 	    		<h4 class="inline-block m-n">
 	    		Companies
 	    		<div class="inline-block" id="filter-list"></div>
-	    		<span id="contacts-count" class="m-l-xs">{{companies_count}}</span>
+	    		<span id="contacts-count" class="">{{companies_count}}</span>
 
 	    			{{#is_mobile}}
 					{{else}}
@@ -112,7 +112,8 @@
 					    <button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Export as CSV</button>
 					    {{/hasScope}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >Delete</button>
-					    <div class="btn-group dropdown pull-right multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
+				    </div>
+					<div class="btn-group dropdown pull-right multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
 					    <!--	<button class="btn btn-default btn-sm" id="companiesTabelView"><i class="icon-list"></i></button> -->
 							 <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="companies_columns">
                     		<i class="fa fa-navicon" ></i>
@@ -128,10 +129,6 @@
                 			</ul>
 
 				        </div>
-					    
-					    
-				    </div>
-					
 
 	<div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
 				
