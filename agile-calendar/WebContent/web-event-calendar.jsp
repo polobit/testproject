@@ -217,6 +217,7 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
+<script type="text/javascript" src="../../lib/web-calendar-event/bootstrap.v3.min.js"></script>
 
 <link rel="stylesheet" href="../../css/web-calendar-event/datepicker.css"
 	type="text/css" />
