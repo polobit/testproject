@@ -761,8 +761,26 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		e.preventDefault();
 		$('.popover').remove();
 		var currentdeal = $(this).closest('tr').data();
+		if($(this).find(".contact-type-image").length > 0 || $(this).find(".company-type-image").length > 0)
+		{
+			return;
+		}
 		Backbone.history.navigate("deal/" + currentdeal.id, { trigger : true });
 		// updateDeal($(this).closest('tr').data());
+	});
+
+	$('#opportunity-listners').off('click', '.contact-type-image');
+	$('#opportunity-listners').on('click', '.contact-type-image', function(e){
+		e.preventDefault();
+		
+		Backbone.history.navigate("contact/" + $(this).attr("id"), { trigger : true });
+	});
+
+	$('#opportunity-listners').off('click', '.company-type-image');
+	$('#opportunity-listners').on('click', '.company-type-image', function(e){
+		e.preventDefault();
+		
+		Backbone.history.navigate("company/" + $(this).attr("id"), { trigger : true });
 	});
 
 
