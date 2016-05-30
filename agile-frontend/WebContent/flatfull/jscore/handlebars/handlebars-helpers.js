@@ -1360,6 +1360,12 @@ $(function()
 		return CURRENT_DOMAIN_USER.email;
 	});
 
+	//gets domainuser pic
+	Handlebars.registerHelper('get_current_domain_pic', function()
+	{
+		return CURRENT_DOMAIN_USER.pic;
+	});
+
 	Handlebars.registerHelper('get_current_domain_name', function()
 	{
 		var name =  CURRENT_DOMAIN_USER.name;
