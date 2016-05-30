@@ -324,36 +324,6 @@ var deal_bulk_actions = {
 };
 
 $(function(){
-	$('#opportunity-listners').off('click', '#select-all-available-deals');
-	$('#opportunity-listners').on('click', '#select-all-available-deals', function(e) {
-		e.preventDefault();
-		deal_bulk_actions.SELECT_ALL_DEALS = true;
-		deal_bulk_actions.getAvailableDeals(function(deals_cnt){
-			var total_available_deals = deals_cnt;
-			var deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals);
-			if(total_available_deals > 1000)
-			{
-				deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals - 1)+"+";
-			}
-			$('body').find('#bulk-select').html("Selected " + deals_count_with_commas + " deals. <a id='select-choosen-deals' href='#'>Select choosen deals only.</a>");
-		});
-	});
-	
-	$('#opportunity-listners').off('click', '#select-choosen-deals');
-	$('#opportunity-listners').on('click', '#select-choosen-deals', function(e) {
-		e.preventDefault();
-		deal_bulk_actions.SELECT_ALL_DEALS = false;
-		deal_bulk_actions.getAvailableDeals(function(deals_cnt){
-			var total_available_deals = deals_cnt;
-			var deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals);
-			if(total_available_deals > 1000)
-			{
-				deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals - 1)+"+";
-			}
-			$('body').find('#bulk-select').html("Selected " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + deals_count_with_commas + " deals</a>");
-		});
-	});
-
 	$(".deal_bulk_modal").on('show.bs.modal',function(){
 		var that = this;
 		deal_bulk_actions.getAvailableDeals(function(deals_cnt){

@@ -15,7 +15,9 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         'click #bulk_deals_add_campaign_to_contacts' : 'bulkDealsAddCampaignToContacts',
         'click #bulk_deals_archive' : 'bulkDealsArchive',
         'click #bulk_deals_restore' : 'bulkDealsRestore',
-        'click #bulk_deals_delete' : 'bulkDealsDelete'
+        'click #bulk_deals_delete' : 'bulkDealsDelete',
+        'click #select-all-available-deals' : 'selectAllAvailableDeals',
+        'click #select-choosen-deals' : 'selectChoosenDeals'
     },
 
     dealEdit : function(e){
@@ -78,7 +80,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         // where ids are read using form param
         id_json.ids = JSON.stringify(id_array);
 
-        var that = this;
+        var that = e.currentTarget;
         $.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function()
         {
             // Remove the deal from the collection and remove the UI element.
@@ -123,12 +125,6 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
 
             // Removes deal from list
             $(that).closest('li').css("display", "none");
-
-            // Shows Milestones Pie
-            pieMilestones();
-
-            // Shows deals chart
-            dealsLineChart();
         }, error : function(err)
         {
             $('.error-status', $('#opportunity-listners')).html(err.responseText);
@@ -144,8 +140,8 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         e.preventDefault();
 
         var temp = {};
-        temp.id = $(this).closest('.data').attr('id');
-        temp.milestone = ($(this).closest('ul').attr("milestone")).trim();
+        temp.id = $(e.currentTarget).closest('.data').attr('id');
+        temp.milestone = ($(e.currentTarget).closest('ul').attr("milestone")).trim();
         $("#deal_archive_confirm_modal").html(getTemplate('archive-deal'));
         $("#archived-deal-id", $("#deal_archive_confirm_modal")).val(temp.id);
         $("#archived-deal-milestone", $("#deal_archive_confirm_modal")).val(temp.milestone);
@@ -156,8 +152,8 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         e.preventDefault();
 
         var temp = {};
-        temp.id = $(this).closest('.data').attr('id');
-        temp.milestone = ($(this).closest('ul').attr("milestone")).trim();
+        temp.id = $(e.currentTarget).closest('.data').attr('id');
+        temp.milestone = ($(e.currentTarget).closest('ul').attr("milestone")).trim();
         $("#deal_restore_confirm_modal").html(getTemplate('restore-deal'));
         $("#restored-deal-id", $("#deal_restore_confirm_modal")).val(temp.id);
         $("#restored-deal-milestone", $("#deal_restore_confirm_modal")).val(temp.milestone);
@@ -375,6 +371,34 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
 
         }, '');
     },
+
+    selectAllAvailableDeals : function(e){
+        e.preventDefault();
+        SELECT_ALL_DEALS = true;
+        deal_bulk_actions.getAvailableDeals(function(deals_cnt){
+            var total_available_deals = deals_cnt;
+            var deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals);
+            if(total_available_deals > 1000)
+            {
+                deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals - 1)+"+";
+            }
+            $('body').find('#bulk-select').html("Selected " + deals_count_with_commas + " deals. <a id='select-choosen-deals' href='#'>Select choosen deals only.</a>");
+        });
+    },
+
+    selectChoosenDeals : function(e){
+        e.preventDefault();
+        SELECT_ALL_DEALS = false;
+        deal_bulk_actions.getAvailableDeals(function(deals_cnt){
+            var total_available_deals = deals_cnt;
+            var deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals);
+            if(total_available_deals > 1000)
+            {
+                deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals - 1)+"+";
+            }
+            $('body').find('#bulk-select').html("Selected " + deal_bulk_actions.numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + deals_count_with_commas + " deals</a>");
+        });
+    }
 });
 
 
@@ -399,11 +423,11 @@ var Deals_Track_Change_Events_Collection_View = Base_Collection_View.extend({
         _agile_set_prefs("agile_deal_track", $(e.currentTarget).attr('id'));
         if(_agile_get_prefs('deal-filters')){
             var json = $.parseJSON(_agile_get_prefs('deal-filters'));
-            var track = $(this).attr('id');
+            var track = $(e.currentTarget).attr('id');
             if(track == '1')
                 json.pipeline_id = '';
             else
-                json.pipeline_id = $(this).attr('id');
+                json.pipeline_id = $(e.currentTarget).attr('id');
             _agile_set_prefs('deal-filters',JSON.stringify(json));
         }
         pipeline_id = _agile_get_prefs("agile_deal_track");

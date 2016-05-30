@@ -1,7 +1,6 @@
 $(function()
 {
-	$('#opportunity-listners').off('click', '.deals-add');
- 	$('#opportunity-listners').on('click', '.deals-add', function(e)
+	$('body').on('click', '.deals-add', function(e)
 	{
 		e.preventDefault();
 		show_deal();
@@ -304,8 +303,26 @@ function initializeDealListners(el){
 		e.preventDefault();
 		$('.popover').remove();
 		var currentdeal = $(this).closest('tr').data();
+		if($(this).find(".contact-type-image").length > 0 || $(this).find(".company-type-image").length > 0)
+		{
+			return;
+		}
 		Backbone.history.navigate("deal/" + currentdeal.id, { trigger : true });
 		// updateDeal($(this).closest('tr').data());
+	});
+
+	$('#opportunity-listners').off('click', '.contact-type-image');
+	$('#opportunity-listners').on('click', '.contact-type-image', function(e){
+		e.preventDefault();
+		
+		Backbone.history.navigate("contact/" + $(this).attr("id"), { trigger : true });
+	});
+
+	$('#opportunity-listners').off('click', '.company-type-image');
+	$('#opportunity-listners').on('click', '.company-type-image', function(e){
+		e.preventDefault();
+		
+		Backbone.history.navigate("company/" + $(this).attr("id"), { trigger : true });
 	});
 
 	/**
@@ -344,13 +361,15 @@ function initializeDealListners(el){
 		if(!_agile_get_prefs("agile_deal_view") && !_agile_get_prefs("deal-milestone-view")){
 			return;
 		}
-		_agile_delete_prefs('deal-milestone-view');
-    	_agile_delete_prefs("agile_deal_view");
 
 		if(!_agile_get_prefs("agile_deal_view")){
 			setupMilestoneViewWidth();
 			return;
 		}
+
+		_agile_delete_prefs('deal-milestone-view');
+    	_agile_delete_prefs("agile_deal_view");
+
     	setupDealsTracksList();
     });
 	
@@ -361,13 +380,15 @@ function initializeDealListners(el){
 		if(!_agile_get_prefs("agile_deal_view") && _agile_get_prefs("deal-milestone-view") == "compact"){
 			return;
 		}
-    	_agile_set_prefs('deal-milestone-view','compact');
-    	_agile_delete_prefs("agile_deal_view");
 
-    	if(!_agile_get_prefs("agile_deal_view")){
+		if(!_agile_get_prefs("agile_deal_view")){
 			setupMilestoneViewWidth();
 			return;
 		}
+
+    	_agile_set_prefs('deal-milestone-view','compact');
+    	_agile_delete_prefs("agile_deal_view");
+
     	setupDealsTracksList();
     });
 	
@@ -378,13 +399,15 @@ function initializeDealListners(el){
 		if(!_agile_get_prefs("agile_deal_view") && _agile_get_prefs("deal-milestone-view") == "fit"){
 			return;
 		}
-    	_agile_set_prefs('deal-milestone-view','fit');
-    	_agile_delete_prefs("agile_deal_view");
 
-    	if(!_agile_get_prefs("agile_deal_view")){
+		if(!_agile_get_prefs("agile_deal_view")){
 			setupMilestoneViewWidth();
 			return;
 		}
+
+    	_agile_set_prefs('deal-milestone-view','fit');
+    	_agile_delete_prefs("agile_deal_view");
+
     	setupDealsTracksList();
     });
 
