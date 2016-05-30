@@ -73,7 +73,7 @@ function isValidForm(form) {
 	jQuery.validator.addMethod("email", function(value, element){
 		
 		if($(element).find("option").length !=0){
-				if($(element).find("option[value=\""+value+"\"]").attr("unverified") == "undefined")
+				if(typeof($(element).find("option[value=\""+value+"\"]").attr("unverified")) == "undefined")
 					return true;
 				
 					return false;
