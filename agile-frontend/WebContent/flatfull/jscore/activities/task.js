@@ -159,7 +159,7 @@ function initializeTasksListeners(){
 	 */
 	$('#tasks-list-template').on('click', '.delete-task', function(event)
 	{
-		vat that = this;
+		var that = this;
 		showAlertModal("delete_task", "confirm", function(){
 			// Delete Task.
 			deleteTask(getTaskId(that), getTaskListId(that), getTaskListOwnerId(that));

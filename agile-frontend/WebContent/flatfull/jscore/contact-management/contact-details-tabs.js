@@ -75,46 +75,46 @@ var Contact_Details_Tab_Actions = {
 	  // to remove contact from active campaign.
 	  removeActiveCampaigns : function(e){
 	  	var targetEl = $(e.currentTarget);
+	  	showAlertModal("Are you sure to remove " + $(targetEl).attr("contact_name") + " from " + $(targetEl).attr("campaign_name") + " campaign?", "confirm", function(){
+			var $active_campaign = $(targetEl).closest('span#active-campaign');
+			var campaign_id = $active_campaign.attr('data');
+			var contact_id;
 
-  		if (!confirm("Are you sure to remove " + $(targetEl).attr("contact_name") + " from " + $(targetEl).attr("campaign_name") + " campaign?"))
-		return;
+			// Fetch contact id from model
+			if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+				contact_id = App_Contacts.contactDetailView.model.get('id');
 
-		var $active_campaign = $(targetEl).closest('span#active-campaign');
-		var campaign_id = $active_campaign.attr('data');
-		var contact_id;
+			// Url to delete
+			var deleteUrl = 'core/api/workflows/remove-active-subscriber/' + campaign_id + '/' + contact_id;
 
-		// Fetch contact id from model
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-			contact_id = App_Contacts.contactDetailView.model.get('id');
-
-		// Url to delete
-		var deleteUrl = 'core/api/workflows/remove-active-subscriber/' + campaign_id + '/' + contact_id;
-
-		$.ajax({ url : deleteUrl, type : 'DELETE', success : function(data)
-		{
-
-			var contact_json = App_Contacts.contactDetailView.model.toJSON();
-			var campaign_status = contact_json.campaignStatus;
-
-			// On success callback, remove from both UI and backbone contact
-			// model.
-			if (campaign_status !== undefined)
+			$.ajax({ url : deleteUrl, type : 'DELETE', success : function(data)
 			{
-				for (var i = 0, len = campaign_status.length; i < len; i++)
+
+				var contact_json = App_Contacts.contactDetailView.model.toJSON();
+				var campaign_status = contact_json.campaignStatus;
+
+				// On success callback, remove from both UI and backbone contact
+				// model.
+				if (campaign_status !== undefined)
 				{
-					if (campaign_id === campaign_status[i].campaign_id)
+					for (var i = 0, len = campaign_status.length; i < len; i++)
 					{
-						// Remove from campaignStatus array of contact model
-						campaign_status.splice(i, 1);
-						break;
+						if (campaign_id === campaign_status[i].campaign_id)
+						{
+							// Remove from campaignStatus array of contact model
+							campaign_status.splice(i, 1);
+							break;
+						}
 					}
 				}
-			}
 
-			// Remove li
-			$active_campaign.remove();
+				// Remove li
+				$active_campaign.remove();
 
-		} });
+			} });
+		},undefined, "Remove Active Campaign");
+
+		
 	  },
 
 	  /**
@@ -230,77 +230,20 @@ var Contact_Details_Tab_Actions = {
 				$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
 				return;
 			}
-
-			if (model && model.toJSON().type != "WEB_APPOINTMENT")
-			{
-				if (!confirm("Are you sure you want to delete?"))
-					return;
-			}
-			else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
-			{
-				if (!confirm("Are you sure you want to delete?"))
-					return;
-			}
-
-			if (model && model.collection)
-			{
-				model.collection.remove(model);
-			}
-
 			// Gets the id of the entity
 			var entity_id = $(targetEl).attr('id');
-
-			if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+			if (model && model.toJSON().type != "WEB_APPOINTMENT" || parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
 			{
-				web_event_title = model.toJSON().title;
-				if (model.toJSON().contacts.length > 0)
-				{
-					var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
-					if (firstname == undefined)
-						firstname = "";
-					var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
-					if (lastname == undefined)
-						lastname = "";
-					web_event_contact_name = firstname + " " + lastname;
-				}
-				$("#webEventCancelModel").modal('show');
-				$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
-				$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+				showAlertModal("delete", "confirm", function(){
+					modelDelete(model, targetEl, function(){
+						removeItemFromTimeline($("#" + entity_id, $("#timeline")));
+					});
+				});
 				return;
 			}
+			modelDelete(model, targetEl);
 
-			// Gets the url to which delete request is to be sent
-			var entity_url = $(targetEl).attr('url');
-
-			if (!entity_url)
-				return;
-
-			var id_array = [];
-			var id_json = {};
-
-			// Create array with entity id.
-			id_array.push(entity_id);
-
-			// Set entity id array in to json object with key ids,
-			// where ids are read using form param
-			id_json.ids = JSON.stringify(id_array);
-			var that = targetEl;
-
-			// Add loading. Adds loading only if there is no loaded image added
-			// already i.e.,
-			// to avoid multiple loading images on hitting delete multiple times
-			if ($(targetEl).find('.loading').length == 0)
-				$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
-
-			$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-			{
-				// Removes activity from list
-				$(that).parents(".activity").fadeOut(400, function()
-				{
-					$(targetEl).remove();
-				});
-				removeItemFromTimeline($("#" + entity_id, $("#timeline")));
-			} });
+			
 	  },
 
 	 
@@ -764,4 +707,68 @@ $('#send-email-listener-container').on('click', '#cc-link, #bcc-link', function(
 		return;
 	});
 
+}
+
+function modelDelete(model, targetEl, callback){
+	if (model && model.collection)
+	{
+		model.collection.remove(model);
+	}
+
+	if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+	{
+		web_event_title = model.toJSON().title;
+		if (model.toJSON().contacts.length > 0)
+		{
+			var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+			if (firstname == undefined)
+				firstname = "";
+			var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+			if (lastname == undefined)
+				lastname = "";
+			web_event_contact_name = firstname + " " + lastname;
+		}
+		$("#webEventCancelModel").modal('show');
+		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+		return;
+	}
+
+	// Gets the id of the entity
+	var entity_id = $(targetEl).attr('id');
+
+	// Gets the url to which delete request is to be sent
+	var entity_url = $(targetEl).attr('url');
+
+	if (!entity_url)
+		return;
+
+	var id_array = [];
+	var id_json = {};
+
+	// Create array with entity id.
+	id_array.push(entity_id);
+
+	// Set entity id array in to json object with key ids,
+	// where ids are read using form param
+	id_json.ids = JSON.stringify(id_array);
+	var that = targetEl;
+
+	// Add loading. Adds loading only if there is no loaded image added
+	// already i.e.,
+	// to avoid multiple loading images on hitting delete multiple times
+	if ($(targetEl).find('.loading').length == 0)
+		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+
+	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
+	{
+		// Removes activity from list
+		$(that).parents(".activity").fadeOut(400, function()
+		{
+			$(targetEl).remove();
+		});
+		if(callback && typeof(callback) === "function"){
+			callback();
+		}
+	} });
 }

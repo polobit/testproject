@@ -497,7 +497,7 @@
 	// Deletes a contact from database
 	company_detail_tab.deleteCurrentCompany = function(){
 		
-    	showAlertModal("delete_campany", "confirm", function(){
+    	showAlertModal("delete_company", "confirm", function(){
     		App_Companies.companyDetailView.model.url = "core/api/contacts/" + App_Companies.companyDetailView.model.id;
 			App_Companies.companyDetailView.model.destroy({success: function(model, response) {
 				  Backbone.history.navigate("companies",{trigger: true});
