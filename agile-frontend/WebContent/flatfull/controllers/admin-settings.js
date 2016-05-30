@@ -625,7 +625,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 
-			that.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
+			that.pipelineGridView = new Track_And_Milestone_Events_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
 			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
 			{
 				setup_milestones(el);
@@ -1086,7 +1086,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-			that.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
+			that.dealLostReasons = new Sources_Loss_Reasons_Events_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
 				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 				{
 					initializeMilestoneListners(el);
@@ -1120,7 +1120,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-			that.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
+			that.dealSourcesView = new Sources_Loss_Reasons_Events_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
 				individual_tag_name : 'tr', sort_collection : false, postRenderCallback : function(el)
 				{
 					initializeMilestoneListners(el);
@@ -1155,7 +1155,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 
-			that1.dealGoalsView = new Base_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
+			that1.dealGoalsView = new Sources_Loss_Reasons_Events_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
 				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 				{
 					initQuota(function(){

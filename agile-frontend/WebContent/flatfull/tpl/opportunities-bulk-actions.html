@@ -1,0 +1,283 @@
+<script id="deal-owner-change-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Change Owner</h3>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="control-group form-group col-md-5">
+						<p class="m-t-xs">Changing owner for <span class="count"> </span> Deal(s).</p>
+						<label class="control-label"><b>Select Owner </b><span class="field_req">*</span></label>
+						<div class="controls" id="owners">
+							<select id="owners-list-bulk" class="required form-control" name="owner_id"></select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" id="deal-bulk-owner" class="btn btn-sm btn-primary">Done</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-mile-change-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Change Milestone/Track</h3>
+			</div>
+			<div class="modal-body">
+				<form id="bulk_mile_Form" name="opportunityForm" method="post">
+					<p>Changing track/milestone for <span class="count"> </span> Deal(s).</p>
+					<div class="row">
+						<div class="control-group form-group col-md-5">
+							<label class="control-label"><b>Select Track </b>
+								<span class="field_req">*</span>
+							</label>
+							<div class="controls" id="bulk-pipeline">
+								<select id="pipeline-list-bulk" class="required form-control" name="pipeline"></select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="control-group form-group col-md-5">
+							<label class="control-label"><b>Select Milestone </b><span class="field_req">*</span></label>
+							<div class="controls" id="bulk-pipeline">
+								<select id="milestone-list-bulk" class="required form-control" name="milestone"></select>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="pipeline-name"  name="pipeline-name"></input>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a href="#" id="deal-bulk-mile" class="btn btn-sm btn-primary">Done</a>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="deal-bulk-archive-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Archive</h3>
+			</div>
+			<div class="modal-body">
+				<div id="deal-bulk-confirm">
+					Archive <span class="count"> </span> Deal(s)?
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+				<a href="#" id="deal-bulk-archive" class="btn btn-sm btn-primary">Yes</a>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="deal-bulk-restore-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Restore</h3>
+			</div>
+			<div class="modal-body">
+				<div id="deal-bulk-confirm">
+					Restore <span class="count"> </span> Deal(s)?
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+				<a href="#" id="deal-bulk-restore" class="btn btn-sm btn-primary">Yes</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-bulk-delete-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Delete</h3>
+			</div>
+			<div class="modal-body">
+				<div id="deal-bulk-confirm">
+					Delete <span class="count"> </span> Deal(s)?
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+				<a href="#" id="deal-bulk-delete" class="btn btn-sm btn-primary">Yes</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-contact-add-tag-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Add tag</h3>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<form id="dealContactTagsBulkForm">
+						<div class="control-group form-group col-md-7">
+							<p class="m-t-xs">Add Tag to related Contacts of selected <span class="count"> </span> Deal(s)</p>
+							<label class="control-label"><b>Add tags</b> <span class="field_req">*</span></label>
+							<div class="controls">
+								<div class="pull-left">
+									<ul name="tags" class="tagsinput tags p-n"></ul>
+								</div>
+								<input name="tags" type="text" id="addBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma" autocomplete="off">
+								<ul class="typeahead dropdown-menu" style="top: 34px; left: 15px; display: none;">
+									<li class="active"><a href="#"><strong>Te</strong>st</a></li>
+									<li><a href="#"><strong>Te</strong>st Company</a></li>
+									<li><a href="#"><strong>Te</strong>st2</a></li>
+									<li><a href="#"><strong>Te</strong>st3</a></li>
+									<li><a href="#"><strong>Te</strong>xt</a></li>
+									<li><a href="#"><strong>te</strong>st</a></li>
+								</ul>
+								<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+								<span class="invalid-tags" style="display:none;color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</span>
+								<input class="hide">      
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<!-- <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button> -->
+				<a href="#" id="deal-contact-add-tag" class="btn btn-primary btn-sm">Done</a> 
+				<span class="save-status"></span>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-contact-add-camp-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Add to Campaign</h3>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="control-group form-group col-md-8">
+						<p class="m-t-xs">Add related Contacts of selected <span class="count"> </span> Deal(s) to Campaign</p>
+						<label class="control-label"><b>Select Campaign </b><span
+							class="field_req">*</span></label>
+						<div class="controls" id="workflows">
+							<select id="workflows-list-bulk" class="required form-control" name="workflow_id"></select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" id="deal-contact-add-camp" class="btn btn-sm btn-primary">Done</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-bulk-archive-acl-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Archive</h3>
+			</div>
+			<div class="modal-body">
+				You may not have permission to archive some of the deals selected. Proceeding with this operation will archive only the deals that you are permitted to update.<br/><br/> Do you want to proceed?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+				<a href="#" id="deal-bulk-archive-acl" class="btn btn-sm btn-primary">Yes</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-bulk-restore-acl-modal-template" type="text/html">
+<div id="deal_bulk_restore_acl_modal" class="deal_bulk_modal modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Restore</h3>
+			</div>
+			<div class="modal-body">
+				You may not have permission to restore some of the deals selected. Proceeding with this operation will restore only the deals that you are permitted to update.<br/><br/> Do you want to proceed?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+				<a href="#" id="deal-bulk-restore-acl" class="btn btn-sm btn-primary">Yes</a>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="deal-update-privileges-error-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<a href="#" data-dismiss="modal" class="close">×</a>
+				<h3>Update</h3>
+			</div>
+			<div class="modal-body">You do not have permission to update this deal.</div>
+			<div class="modal-footer">
+				<div>
+					<a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-delete-privileges-error-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<a href="#" data-dismiss="modal" class="close">×</a>
+				<h3>Delete</h3>
+			</div>
+			<div class="modal-body">You do not have permission to delete this deal.</div>
+			<div class="modal-footer">
+				<div>
+					<a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-bulk-delete-acl-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">Delete</h3>
+			</div>
+			<div class="modal-body">
+				You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">No</button>
+				<a href="#" id="deal-bulk-delete-acl" class="btn btn-sm btn-primary">Yes</a>
+			</div>
+		</div>
+	</div>
+</script>

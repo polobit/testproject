@@ -3897,7 +3897,6 @@ margin-left:27px;
   }
 
 .leaderboard_calls td{
-
 border-bottom:1px solid #eee;
 }
 
@@ -3922,3 +3921,6 @@ border-bottom:1px solid #eee;
  display:block!important;
  }
  
+.milestones > li:hover .deal-options{
+  visibility: visible;
+}
