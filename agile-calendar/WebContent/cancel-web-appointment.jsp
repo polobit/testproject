@@ -318,7 +318,7 @@ a:link, a:active, a:visited, a {
 
 </style>
 <title>Online Appointment Cancellation - <%=user_name %></title>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="../../lib-new/jquery.js"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 </head>
 <body>
