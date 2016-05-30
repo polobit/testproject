@@ -73,8 +73,9 @@ function initializeReportsListeners(){
 
 					}, error : function(response)
 					{
-						alert("error occured Please try again");
-						window.document.location = "#reports";
+						showAlertModal("retry", undefined, function(){
+							window.document.location = "#reports";
+						});
 					} });
 
 			});

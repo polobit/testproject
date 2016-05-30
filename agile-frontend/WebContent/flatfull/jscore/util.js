@@ -758,3 +758,34 @@ function sendEmail(json, callback){
 			}
 			});
 }
+
+function showAlertModal(json_key, type, confirm_callback, decline_callback,dynamic_title){
+	var data = {};
+	if(MODAL_MESSAGES[json_key] != undefined){
+		data.title = MODAL_MESSAGES[json_key]['title'];
+		data.message = MODAL_MESSAGES[json_key]['message'];
+	}else{
+		data.title = dynamic_title;
+		data.message = json_key;
+	}
+	if(type == undefined)
+		type = "alert";
+	data.type = type;
+	getTemplate("modal-confirm", data, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		$("#alertModal").html($(template_ui)).modal('show');
+		$('#alertModal #success_callback').click(function (e) {
+			e.preventDefault();
+			$("#alertModal").modal('hide');
+	    	if(confirm_callback && typeof(confirm_callback === "function"))
+	    		confirm_callback();
+		});
+		$('#alertModal #decline_callback').click(function (e) {
+			e.preventDefault();
+			$("#alertModal").modal('hide');
+	    	if(decline_callback && typeof(decline_callback === "function"))
+	    		decline_callback();
+		});
+	}, null);
+}
