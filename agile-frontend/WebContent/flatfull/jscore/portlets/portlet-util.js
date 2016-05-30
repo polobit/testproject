@@ -1824,15 +1824,7 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 				
-					$("#start_date", elData)
-					.val(
-							
-									getDateInFormatFromEpoc(base_model.get("settings")["start-date"]));
-					$("#end_date", elData)
-					.val(
-							
-									getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
-
+				initializeCustomRangeInModal(base_model,elData);
 			if (leaderboardCate && leaderboardCate.revenue)
 				$("#category-list", elData).find('option[value=revenue]').attr(
 						"selected", "selected");
@@ -2599,3 +2591,40 @@ var portlet_utility = {
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
 	}
 };
+
+function initializeCustomRangeInModal(base_model,elData)
+{
+	if(base_model.get("settings").duration=='Custom'){
+					$('.daterange',elData).removeClass('hide');
+					$("#start_date", elData)
+					.val(
+							
+									getDateInFormatFromEpoc(base_model.get("settings")["start-date"]));
+					$("#end_date", elData)
+					.val(
+							
+									getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
+var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',elData).val()));
+			else
+			 	eventDate2 = new Date($('#end_date',elData).val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				var en_value=ev.date.valueOf()+86400000;
+				$('#end_date',elData).val(new Date(en_value).format(CURRENT_USER_PREFS.dateFormat));
+			}
+
+		});
+
+
+		$('#end_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		}
+		else
+			$(elData).find('.daterange').addClass('hide');
+								$(elData).find(".invalid-range").parents('.form-group').hide();
+}

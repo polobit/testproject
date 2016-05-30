@@ -33,6 +33,17 @@ function initializePortletsListeners() {
 							delete json["start-date"];
 							delete json["end-date"];
 						}
+						if($('#duration','#'+modal_id)!=null && $('#duration','#'+modal_id).val()=='Custom')
+						{
+							if(!is_valid_custom_range(json["start-date"]*1000,json["end-date"]*1000,modal_id))
+								{
+									$(this).attr('disabled', false);
+        							$(this).text('Save');
+								return;
+							}
+						}
+							if($('#' + modal_id).find(".invalid-range").is(':visible'))
+								$('#' + modal_id).find(".invalid-range").parents('.form-group').hide();
 						if (portletType == "CONTACTS"
 								&& portletName == "Growth Graph") {
 							var tags = '';
@@ -982,15 +993,37 @@ $('.portlet_body')
 			$('#start_date').val("");
 			$('#end_date').val("");
 			$('.daterange').removeClass('hide');
-			$('#start_date').datepicker({
+			/*$('#start_date').datepicker({
 				format : CURRENT_USER_PREFS.dateFormat
 			});
 			$('#end_date').datepicker({
 				format : CURRENT_USER_PREFS.dateFormat
-			});
+			});*/
+			var eventDate = $('#start_date').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date').val()));
+			else
+			 	eventDate2 = new Date($('#end_date').val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				var en_value=ev.date.valueOf()+86400000;
+				$('#end_date').val(new Date(en_value).format(CURRENT_USER_PREFS.dateFormat));
+			}
+
+		});
+
+
+		$('#end_date').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		
 		}
 		else
-			$('.daterange').addClass('hide');
+			$(el).find('.daterange').addClass('hide');
+			if($(el).find(".invalid-range").is(':visible'))
+								$(el).find(".invalid-range").parents('.form-group').hide();
 		});
 
 }
@@ -1309,3 +1342,21 @@ function clickfunction(that,url,forAll,route){
 				});
 			});
 				}
+
+function is_valid_custom_range(startDate,endDate,modalName)
+{
+if (endDate - startDate >= 86400000)
+	{
+		return true;
+	}
+	else if (startDate >= endDate)
+	{
+		$('#' + modalName)
+				.find(".invalid-range")
+				.html(
+						'<span style="color:#d9534f">Start date should not be greater or equal to end date.</span>');
+				$('#' + modalName)
+				.find(".invalid-range").parents('.form-group').show();
+		return false;
+	}
+}

@@ -6461,6 +6461,10 @@ $(function()
 		{
 			time_period = 'Last Year';
 		}
+		else if (duration == 'Custom')
+		{
+			time_period = 'Custom';
+		}
 		
 		return time_period;
 	});
