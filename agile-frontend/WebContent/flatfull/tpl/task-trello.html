@@ -92,7 +92,7 @@
       <div> 
           <div class="compressedHeading">
           <div class="task-count">
-                <span id="task-count-{{heading}}-{{owner_id}}" class="label {{getthemecolor}}  m-r-sm" style="vertical-align:middle; position:relative;margin-top:2px;">0</span> 
+                <span id="task-count-{{heading}}-{{owner_id}}" {{getthemecolor}} class="label   m-r-sm" style="vertical-align:middle; position:relative;margin-top:2px;background-color:#cfdadd;">0</span> 
                 </div>
                 <div class="expand-button">
                 <span class="inline-block pull-left transform-rotate"><a class="text-info expandbutton"><i class="{{tasksttausicon heading}} text-xs"></i></a></span>
@@ -128,14 +128,14 @@
 <i class="icon-plus text-xs"></i>
 </a></span>
 <span class="inline-block transform-rotate"><a class="text-info expandbutton"><i class="fa fa-compress text-xs"></i></a></span>
-<span id="task-count-{{heading}}-{{owner_id}}" class="label pull-left {{getthemecolor}}  m-r-sm" style="vertical-align:middle; margin-top:2px;">0</span> 
+<span id="task-count-{{heading}}-{{owner_id}}"  {{getthemecolor}} class="label pull-left m-r-sm" style="vertical-align:middle; margin-top:2px; background-color:#cfdadd;">0</span> 
 </div>  
 <div class="clearfix"></div>               
      </div>     
      {{#if owner_id}}
-      <div id="list-tasks-{{heading}}-{{owner_id}}" class="list-tasks panel-body bg-light lter p-n" style="overflow-y:hidden;">
+      <div id="list-tasks-{{heading}}-{{owner_id}}" class="list-tasks panel-body bg-light lter p-n" style="">
      {{else}}
-      <div id="list-tasks-{{heading}}" class="list-tasks panel-body bg-light lter p-n" style="overflow-y:hidden;">
+      <div id="list-tasks-{{heading}}" class="list-tasks panel-body bg-light lter p-n" style="">
      {{/if}}
         
      </div>  
@@ -181,8 +181,8 @@
 <div class=" text-ellipsis">
 
    {{#if_equals status "IN_PROGRESS"}}
-       <!-- <label class="label bg-light dk text-tiny progress-label" title="Progress">{{progress}}%</label> -->
-       <label class="i-checks pull-left i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label>
+       <!-- <label class="label bg-light dk text-tiny progress-label" data = "{{id}}" title="Progress">{{progress}}%</label> -->
+       <label class="i-checks pull-left i-checks-sm"><input type="checkbox taskComplete" class="tbody_check taskComplete" value=""><i></i></label>
 <div class="task-circle m-r-xs" style="float:left;">
     <div id="activeBorder" class="active-border" style="{{getcircle progress}}">
 <abbr title="{{progress}}%">
@@ -194,7 +194,7 @@
 </div>
 {{/if_equals}}
 {{#if_equals status "YET_TO_START"}}
-<label class="i-checks pull-left i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label>
+<label class="i-checks pull-left i-checks-sm"><input type="checkbox" class="tbody_check taskComplete" data ='{{id}}' value=""><i></i></label>
 <i class="icon-target m-r-xs" aria-hidden="true"style="float:left;font-size:17px;" data-toggle="tooltip" data-placement="top" data-container="body" title="Yet to start"></i>
  
  {{/if_equals}}

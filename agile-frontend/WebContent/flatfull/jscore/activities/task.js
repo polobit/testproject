@@ -195,7 +195,12 @@ function initializeTasksListeners(){
 	});	
 
 	
-	
+	$('#tasks-list-template').on('click','.taskComplete',function(e){
+		if($(this).prop("checked") == true)
+		{
+			$(this).closest(".task-striped").find(".is-task-complete").trigger("click");
+		}
+	});
 
 	/*
 	 * In new/update task modal, on selection of status, show progress slider
@@ -222,6 +227,7 @@ function initializeTasksListeners(){
 			});	
 }
 
+
 $("body").on("change", '.status', function()
 	{
 		console.log("status change event");
@@ -241,6 +247,25 @@ function getTaskTrackAutoWidthCurrentState(track_name){
 
    	return "compress";
 }
+/*function checkboxTaskCompleted(taskId, taskListId, taskListOwnerId){
+
+	var modelTaskList;
+
+	if (taskListOwnerId)
+		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
+	else
+		modelTaskList = getTaskList(null, taskListId, null);
+
+	if (!modelTaskList)
+		return;
+
+	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
+
+	modelTask.set("is_complete" , "true");
+	modelTask.set("status" , "completed");
+	modelTask.save();
+}*/
+
 
 /*auto width for the task expand 
 */

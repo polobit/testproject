@@ -1,4 +1,4 @@
-/* ************* Task UI (Trello) CSS ***************** */
+f/* ************* Task UI (Trello) CSS ***************** */
 #activityModal>.modal-body, #activityTaskModal>.modal-body {
 	max-height: 453px;
 	padding-bottom: 0 !important;
@@ -161,7 +161,7 @@
     position: absolute;
     left: -9px;
     top: -15px;
-    width: 100%;
+    width: 108%;
 }
 
 .listed-task.yellow:after {
