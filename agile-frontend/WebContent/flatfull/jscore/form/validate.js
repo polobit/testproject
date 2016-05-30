@@ -72,10 +72,13 @@ function isValidForm(form) {
 	// This regex solves that, overriding 'email'
 	jQuery.validator.addMethod("email", function(value, element){
 		
-		if($(element).find("option[value=\""+value+"\"]").attr("unverified") == "undefined")
-			return true;
-		
-		return false;
+		if($(element).find("option").length !=0){
+				if($(element).find("option[value=\""+value+"\"]").attr("unverified") == "undefined")
+					return true;
+				
+					return false;
+		}
+		if($(element).find("option").length == 0){return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);}
 	}," From email is not verified. Please verify it.");
 
 	// Phone number validation
