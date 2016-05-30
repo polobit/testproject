@@ -249,7 +249,7 @@ function isValidForm(form) {
 	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
     
 
-    jQuery.validator.addMethod("localField", function(value, element){
+    jQuery.validator.addMethod("customFieldSpecialCharacter", function(value, element){
 		
 		var custvals = /^\s*[a-zA-Z0-9\s]+\s*$/;
 		return custvals.test(value);
