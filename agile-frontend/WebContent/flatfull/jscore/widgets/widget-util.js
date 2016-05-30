@@ -397,6 +397,7 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 				fill_twilioio_numbers();
 			}
 		});
+
 	});
 }
 

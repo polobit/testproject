@@ -416,6 +416,9 @@ function renderWidgetView(templateName, url, model, renderEle){
             if(model && model.name != "Stripe"){
                 deserializeWidget(model, el);
             }
+             if(model && model.name == "CallScript"){
+                adjust_form();
+             }
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
             initializeTabListeners("widget_tab", "add-widget");
