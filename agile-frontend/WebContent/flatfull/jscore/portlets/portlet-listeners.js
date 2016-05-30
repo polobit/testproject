@@ -990,34 +990,34 @@ $('.portlet_body')
 
 		if(duration=='Custom')
 		{
-			$('#start_date').val("");
-			$('#end_date').val("");
-			$('.daterange').removeClass('hide');
+			$('#start_date',el).val("");
+			$('#end_date',el).val("");
+			$('.daterange',el).removeClass('hide');
 			/*$('#start_date').datepicker({
 				format : CURRENT_USER_PREFS.dateFormat
 			});
 			$('#end_date').datepicker({
 				format : CURRENT_USER_PREFS.dateFormat
 			});*/
-			var eventDate = $('#start_date').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+			var eventDate = $('#start_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
 		{
 			// If event start date is changed and end date is less than start date,
 			// change the value of the end date to start date.
 			var eventDate2;
 			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date').val()));
+				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',el).val()));
 			else
-			 	eventDate2 = new Date($('#end_date').val());
+			 	eventDate2 = new Date($('#end_date',el).val());
 			if (ev.date.valueOf() > eventDate2.valueOf())
 			{
 				var en_value=ev.date.valueOf()+86400000;
-				$('#end_date').val(new Date(en_value).format(CURRENT_USER_PREFS.dateFormat));
+				$('#end_date',el).val(new Date(en_value).format(CURRENT_USER_PREFS.dateFormat));
 			}
 
 		});
 
 
-		$('#end_date').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#end_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 		
 		}
 		else
