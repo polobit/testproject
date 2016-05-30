@@ -375,17 +375,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 		box-sizing: border-box;
 	}
 }
-.thumb-lg{
-	display: inline-block;
-    width: 96px;
-}
-.thumb-wrapper{
-	padding: 2px;
-    border: 1px solid #dee5e7;
-}
-.w-full {
-    width: 100%;
-}
+
 </style>
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
@@ -403,7 +393,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
            }else{
            %>
           
-           <img class="company_logo w-full" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png" style="width:50px;height:40px;" ></img>
+           <img class="company_logo w-full" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png" style="width:120px;" ></img>
            <%
        			}
             %>
