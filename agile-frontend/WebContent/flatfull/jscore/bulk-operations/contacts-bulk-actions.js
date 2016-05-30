@@ -1374,9 +1374,16 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		if (isBulk)
 		{
 			if(company_util.isCompany())
+			{
 				$("#bulk-action-btns button").addClass("disabled");
+				$("#companies_columns").removeClass("disabled");
+			}
 			else
+			{
 				$("#bulk-action-btns button").addClass("disabled");
+				$("#contact_columns").removeClass("disabled");
+			}
+				
 			return;
 		}
 
