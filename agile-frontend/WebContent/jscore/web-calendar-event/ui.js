@@ -7,7 +7,8 @@ $(function()
 	var MIDNIGHT_END_TIME = null;
 
 	// Select slot duration 60/30/15min
-	$(".selected_meeting_time").die().live('click', function(e)
+	//$(".selected_meeting_time").die().live('click', function(e)
+	$('body').on('click','.selected_meeting_time',function(e)
 	{
 		// e.preventDefault();
 
@@ -60,7 +61,8 @@ $(function()
 	});
 
 	// Only single slot selection is allowed
-	$(".selected-slot").die().live('click', function(e)
+	//$(".selected-slot").die().live('click', function(e)
+	$('body').on('click','.selected-slot',function(e)
 	{
 		var currentId = $(this).attr('id');
 
@@ -80,7 +82,8 @@ $(function()
 
 	});
 
-	$("#multi-user-avatar").die().live('click', function(e)
+	//$("#multi-user-avatar").die().live('click', function(e)
+	$('body').on('click','#multi-user-avatar',function(e)
 	{
 		$(".thumbnail").css("background", "none");
 		$(this).css("background", "#4A90E2");
@@ -125,7 +128,8 @@ $(function()
 
 	});
 
-	$('#user_timezone').die().change(function()
+	//$('#user_timezone').die().change(function()
+	$('#user_timezone').change(function()
 	{
 
 		SELECTED_TIMEZONE = $('#user_timezone').val();		
