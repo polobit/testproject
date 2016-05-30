@@ -512,14 +512,7 @@
 											class="webrule-multiple-remove icon-remove-circle c-p"
 											style="display: none;"></i></div></td>
 									</tr>
-									<tr>
-										<td>
-										<div class="m-t" id="twilio-info">
-											<small class=CALL_POPUP><i class="CALL_POPUP icon-info-sign"></i> You need to setup Twilio account. </small>
-										</div>
-																					
-										</td>
-									</tr>
+									
 									<tr>	
 										<td class="controls v-top">
 											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css m-r-xs" style="margin-top:3px;">
@@ -550,6 +543,8 @@
 										<td class="controls v-top">
 												<div id="noty-message" name="popup_text" class="p-t-sm">
  													<a href='#' id="tiny_mce_webrules_link" class="pull-right text-info" style="display:none">(Select a template / Edit in HTML editor)</a>
+ 													<small id="twilio-info" style="display:none"><i class="icon-info-sign"></i> You need to setup Twilio account.
+ 													</small>
 													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="Paste HTML context"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="callwebrule-code"  class="custom_html required CALL_POPUP w-full form-control" rows="10" ></textarea>
@@ -571,7 +566,7 @@
 												<lable class="CALL_POPUP" style="color:#474444">Phone Number
 												<span class="field_req">*</span>
 												</lable>
-												<input type="number" name="number" class="CALL_POPUP required number form-control" placeholder="Enter the Incoming number"></input>					
+												<input type="text" name="number" class="CALL_POPUP required number form-control" placeholder="Enter the Incoming number"></input>					
 												</div>
 											
 										</td>

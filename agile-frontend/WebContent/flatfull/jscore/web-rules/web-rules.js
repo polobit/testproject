@@ -34,12 +34,10 @@ function chainWebRules(el, data, isNew, actions)
 	
 	$("#timer", el).chained($("#delay", el));
 	$("#delay", el).chained($("#action", el));
-	$("#twilio-info", el).chained($("#action", el));
 	
 	$("#noty-message", el).chained($("#action", el), function(select, self){
 		var value = $("select", select).val();
 		$(self).show();
-		$("#twilio-info").hide();
 		console.log(value);
 	
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value== "CALL_POPUP")
@@ -49,6 +47,7 @@ function chainWebRules(el, data, isNew, actions)
 
 				if(value=="CALL_POPUP"){
 					loadSavedTemplate("call/callpopup.html");
+					$('#twilio-info',self).show();
 				}
 				self.find(".web-rule-preview").show();
 			return;
@@ -151,7 +150,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 				e.preventDefault();
 
 				// If not empty, redirect to tinymce
-				if($('#tinyMCEhtml_email').val() !== "")
+				if($('#tinyMCEhtml_email').val() !== "" && $('#action select').val()!='CALL_POPUP')
 				{
 					if($('.custom_html').length > 1){
 						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
@@ -159,6 +158,16 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 						return;
 					}
 					loadTinyMCE("tinyMCEhtml_email");
+					return;
+
+				}else if($('#callwebrule-code').val() !== "" && $('#action select').val()=='CALL_POPUP'){
+
+					if($('.custom_html').length > 1){
+						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
+						$($(e.currentTarget)).closest(".alert").remove();
+						return;
+					}
+					loadTinyMCE("callwebrule-code");
 					return;
 				}
 				var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
