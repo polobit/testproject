@@ -926,7 +926,27 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		}
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
-	
+
+		var options = {
+		"+ Add new" : "verify_email"
+		};
+		
+		fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('.email'),
+			"prepend",
+			function($select, data) {
+
+				$select
+						.find("option:first")
+						.before(
+								"<option value=''>Empty</option>");
+				rearrange_from_email_options($select, data);
+			});
 	},
 
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
