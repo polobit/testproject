@@ -18,6 +18,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
         'click .goalSave' : 'goalSave',
         'keypress .count' : 'goalCount',
         'keypress .amount' : 'goalAmount',
+        'click .show_milestone_field' : 'showMilestoneField'
     },
 
     dealSourceAdd : function(e){
@@ -369,6 +370,15 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
 
     goalAmount : function(e){
         $(e.currentTarget).siblings('#goal_amount_error').hide();
+    },
+
+    showMilestoneField : function(e){
+        e.preventDefault();
+        var form = $(e.currentTarget).closest('form');
+        console.log('New Milestone to - ',form.attr('id'));
+        $(e.currentTarget).closest("div").css("display","none");
+        form.find('.show_field').css("display","block");
+        form.find(".add_new_milestone").focus();
     }
 
     
