@@ -473,10 +473,13 @@ public class CustomFieldsAPI
 				Date current_date = new Date(); 
 				if(schema == null || (update_date.getHours() < current_date.getHours() && update_date.getYear() <= current_date.getYear())){
 					if(schema == null){
+						String oldNamespace = NamespaceManager.get();
+						NamespaceManager.set("");
 						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
 						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
 						newSchema.domain = domainUser;
 						newSchema.save();
+						NamespaceManager.set(oldNamespace);
 					}
 					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);					
 					// Add to queue
