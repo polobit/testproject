@@ -12,8 +12,8 @@ $(function()
 		// e.preventDefault();
 
 		$("#details").empty();
-		Selected_Time = $(this).attr('data');
-		$(".show_slots").find('input:radio').attr('checked', false);
+		Selected_Time = $(this).prop('data');
+		$(".show_slots").find('input:radio').prop('checked', false);
 		$(this, [
 			'input:radio'
 		]).prop('checked', true);
@@ -62,12 +62,12 @@ $(function()
 	// Only single slot selection is allowed
 	$('body').on('click', '.selected-slot', function(e)
 	{
-		var currentId = $(this).attr('id');
+		var currentId = $(this).prop('id');
 
 		$('.selected-slot').each(function()
 		{
-			if ($(this).attr('id') != currentId)
-				$(this).attr("checked", false);
+			if ($(this).prop('id') != currentId)
+				$(this).prop("checked", false);
 		});
 
 		// Make next part enable
@@ -85,7 +85,7 @@ $(function()
 		$(".thumbnail").css("background", "none");
 		$(this).css("background", "#4A90E2");
 		$('#users_div').addClass('green-bg').html('<i class="fa fa-check"></i>');
-		var domainUser_id = $(this).attr('data');
+		var domainUser_id = $(this).prop('data');
 		if (domainUser_id != User_Id)
 		{
 			resetToPrevious();

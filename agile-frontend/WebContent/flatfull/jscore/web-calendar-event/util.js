@@ -346,7 +346,7 @@ function save_web_event(formId, confirmBtn)
 		alert("Please select appointment time.");
 		return false;
 	}
-	$('#confirm').attr('disabled', 'disabled');
+	$('#confirm').prop('disabled', 'disabled');
 	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
@@ -385,7 +385,7 @@ function save_web_event(formId, confirmBtn)
 					{
 						alert("Looks like this slot is booked already. Please try another one.");
 						get_slots(selecteddate, Selected_Time);
-						$('#confirm').attr('disabled', false);
+						$('#confirm').prop('disabled', false);
 					}
 
 					else
