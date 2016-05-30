@@ -2260,7 +2260,7 @@ select.input-xs{
     position: absolute;
     left: -9px;
     top: -15px;
-    width: 35px;
+    width: 100%;
 }
 
 .listed-task.yellow:after {

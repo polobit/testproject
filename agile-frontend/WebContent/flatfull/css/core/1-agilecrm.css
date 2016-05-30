@@ -2160,7 +2160,7 @@ li.error {
   font-size: 0;
   line-height: 0;*/
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: auto;
   padding-bottom: 10px;
   white-space: nowrap;
   width: 100%;
@@ -2293,7 +2293,7 @@ li.error {
     position: absolute;
     left: -9px;
     top: -15px;
-    width: 35px;
+    width: 100%;
 }
 
 .listed-task.yellow:after {

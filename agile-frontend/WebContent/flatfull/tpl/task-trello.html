@@ -15,7 +15,7 @@
       </div>
     </div>
 		<div class="btn-group owner-task-button m-r">
-	            <button class="btn btn-default btn-sm selected_name">My Pending Tasks</button>
+	            <button class="btn btn-default btn-sm fnew-task-subjectselected_name">My Pending Tasks</button>
 	            <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 	            <span class="caret"></span>
 	            </a>
@@ -108,9 +108,9 @@
 </div>
 
     </div>
-<div class="panel panel-default w-full m-r-none m-b-none">
+<div class="panel panel-default w-full m-r-none m-b-none" style="border:none;"> 
 
-        <div class="list-header panel-heading" attr="{{heading}}" ownerID={{owner_id}}>
+        <div class="list-header panel-heading" style="border:none;"attr="{{heading}}" ownerID={{owner_id}}>
 <div class="pull-left" style="margin-top:-2px;"> 
 <div class="compressedHeading">
         
@@ -133,9 +133,9 @@
 <div class="clearfix"></div>               
      </div>     
      {{#if owner_id}}
-      <div id="list-tasks-{{heading}}-{{owner_id}}" class="list-tasks panel-body bg-light lter p-n">
+      <div id="list-tasks-{{heading}}-{{owner_id}}" class="list-tasks panel-body bg-light lter p-n" style="overflow-y:hidden;">
      {{else}}
-      <div id="list-tasks-{{heading}}" class="list-tasks panel-body bg-light lter p-n">
+      <div id="list-tasks-{{heading}}" class="list-tasks panel-body bg-light lter p-n" style="overflow-y:hidden;">
      {{/if}}
         
      </div>  
@@ -177,23 +177,13 @@
 
       </div>
 <div class="pull-left task-content-view">
-<div class="pull-left" style="width:80%">
-      {{#if is_complete}}
-         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full block  activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full font-bold block  ">{{/is_link}}{{safe_string subject}}</span></a>
-      {{else}}
-         {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full block word-break white-space-normal  activate-link ">{{else}}<a href="#task/{{id}}"><span class="new-task-subject font-bold word-break-all white-space-normal w-full block  ">{{/is_link}}{{safe_string subject}}</span></a>
-         {{else}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full block  activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold block ">{{/is_link}}{{safe_string subject}}</span></a> 
-         {{/if_equals}}       
-      {{/if}}      
-</div>
-
-  <div class="text-right text-ellipsis">
+<div>
+<div class=" text-ellipsis">
 
    {{#if_equals status "IN_PROGRESS"}}
        <!-- <label class="label bg-light dk text-tiny progress-label" title="Progress">{{progress}}%</label> -->
-<div class="task-circle" style="position:absolute;right:0px;">
+       <label class="i-checks pull-left i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label>
+<div class="task-circle m-r-xs" style="float:left;">
     <div id="activeBorder" class="active-border" style="{{getcircle progress}}">
 <abbr title="{{progress}}%">
         <div id="circle" class="circle">
@@ -204,15 +194,28 @@
 </div>
 {{/if_equals}}
 {{#if_equals status "YET_TO_START"}}
-<i class="icon-target" aria-hidden="true"style="position: absolute;margin-left: 20px;font-size:17px;" data-toggle="tooltip" data-placement="top" data-container="body" title="Yet to start"></i>
+<label class="i-checks pull-left i-checks-sm"><input type="checkbox" class="tbody_check" value=""><i></i></label>
+<i class="icon-target m-r-xs" aria-hidden="true"style="float:left;font-size:17px;" data-toggle="tooltip" data-placement="top" data-container="body" title="Yet to start"></i>
  
  {{/if_equals}}
  {{#if_equals status "COMPLETED"}}
- <label class="icon icon-check" data-toggle="tooltip" style="position: absolute;margin-left: 20px; font-size:17px;color:green" data-placement="top" data-container="body" title="Completed"></label>
+ <label class="icon icon-check m-r-xs" data-toggle="tooltip" style="float:left;font-size:17px;color:green" data-placement="top" data-container="body" title="Completed"></label>
  {{/if_equals}}
 
   
-  </div>
+  
+      {{#if is_complete}}
+         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full   activate-link" style="opacity:0.8">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full font-bold " style="opacity:0.8;top:0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a>
+      {{else}}
+         {{#if_equals status "COMPLETED"}}
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.8">{{else}}<a href="#task/{{id}}"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.8;top: 0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a>
+         {{else}}
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.8">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.8;top:0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a> 
+         {{/if_equals}}       
+      {{/if}}      
+</div>
+</div>
+  
 
   <!--<div class="task-right text-ellipsis" style="width:30%; position: absolute;margin-left: 20px;new-task-subject">
       <label class="label bg-light dk text-tiny" title="Category">{{get_normal_name type}}</label>
@@ -237,7 +240,7 @@
      <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time></div> -->
 
      <div class="pull-left w-full text-ellipsis text-muted ">
-     <label class="label bg-light dk text-tiny m-r-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label>
+     
       </div>
 
 </div>

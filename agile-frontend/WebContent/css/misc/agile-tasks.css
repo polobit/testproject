@@ -151,7 +151,7 @@
 	position: absolute;
 	left: 8px;
 	top: 0;
-	width: 34px;
+	width: 100%;
 }
 
 .listed-task.yellow:after {
