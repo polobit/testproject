@@ -16,7 +16,7 @@ $(function()
 		$(".show_slots").find('input:radio').attr('checked', false);
 		$(this, [
 			'input:radio'
-		]).attr('checked', true);
+		]).prop('checked', true);
 		appointmenttype = $('input[name="selected_meeting_time"]:checked').val();
 
 		$(".activemin").removeClass("activemin");
