@@ -88,6 +88,10 @@ var MODAL_MESSAGES = {
 		"title": "Delete",
 		"message" : "Are you sure you want to delete this Form from your Facebook page?"
 	},
+	"delete_facebook_linked_page_error" : {
+		"title": "Error",
+		"message" : "To delete the Form from Page, Link your Facebook account which is associated to the Page."
+	},
 	"delete_campaign_logs" : {
 		"title": "Delete Campaign logs",
 		"message" : "Are you sure you want to delete all logs?"

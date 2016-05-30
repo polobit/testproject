@@ -75,33 +75,33 @@ function initializeFbPageTabListners(el){
 			var pageId = $that.attr("data-pageid");
 			var pageToken = $("#facebookTabPage option[value='"+pageId+"']").attr("data-token");
 			if(typeof pageToken == "undefined") {
-				var isAgreed = confirm("To delete the Form from Page, Link your Facebook account which is associated to the Page.");
-				if(isAgreed) {
+				$("#alertModal").modal("hide");
+				showAlertModal("delete_facebook_linked_page_error", "confirm", function(){
 					var fbLoginLink = $("#AddFormLinkFacebookAccount").attr("href");
 					if(typeof fbLoginLink != "undefined") {
 						window.location.href = fbLoginLink;
 					}
-				}
+				});
+			}else{
+				var formData = "facebookPageID=" + pageId;
+				formData += "&facebookPageToken=" + pageToken;
+				
+				$.ajax({
+				    url : "fbpage?action=DELETE_TAB",
+				    type: "POST",
+				    data : formData,
+				    success: function(data, textStatus, jqXHR){
+				       if(data == "true") {
+				    	   $("#connectedFormHolder_"+pageId).remove();
+				    	   $("#delStatusMessageHolder").html("Deleted successfully.<br>").show().fadeOut(8000);
+				       } else {
+				    	   $("#delStatusMessageHolder").html("Something went wrong, please try again.");
+				       }
+				    },
+				    error: function (jqXHR, textStatus, errorThrown){
+				    }
+				    });
 			}
-		},function(){
-			var formData = "facebookPageID=" + pageId;
-			formData += "&facebookPageToken=" + pageToken;
-			
-			$.ajax({
-			    url : "fbpage?action=DELETE_TAB",
-			    type: "POST",
-			    data : formData,
-			    success: function(data, textStatus, jqXHR){
-			       if(data == "true") {
-			    	   $("#connectedFormHolder_"+pageId).remove();
-			    	   $("#delStatusMessageHolder").html("Deleted successfully.<br>").show().fadeOut(8000);
-			       } else {
-			    	   $("#delStatusMessageHolder").html("Something went wrong, please try again.");
-			       }
-			    },
-			    error: function (jqXHR, textStatus, errorThrown){
-			    }
-			    });
 		});	
 	});
 	
