@@ -1,4 +1,4 @@
-var existingDocumentsView;
+var existingDocumentsView;var comp_addr_prop ; 
 
 // Documents actions
 var contact_details_documentandtasks_actions = {
@@ -244,10 +244,12 @@ var contact_details_documentandtasks_actions = {
 			forceCompany.name = getContactName(json); // name of Company
 			forceCompany.id = json.id; // id of Company
 			forceCompany.doit = true;
-			$.each(json.properties , function(){
+			comp_addr_prop = null ; 
+			$.each(contact_company.properties , function(){
 				if(this.name == "address" && this.subtype == "office")
-					comp_addr_prop = JSON.parse(this.value);
-				}); // yes force it. If this is false the
+					comp_addr_prop = JSON.parse(this.value);				
+			}); 
+			// yes force it. If this is false the
 			// Company won't be forced.
 			// Also after showing modal, it is set to false internally, so
 			// Company is not forced otherwise.
