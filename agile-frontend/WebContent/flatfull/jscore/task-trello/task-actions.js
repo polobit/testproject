@@ -61,35 +61,47 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
 	else
 		modelTaskList = getTaskList(null, taskListId, null);
+	if(modelTaskList && modelTaskList.length){
+		// Call method with task id to be deleted.
+		var new_task = modelTaskList[0].get('taskCollection').get(taskId);
+		new_task.url = '/core/api/tasks/' + taskId;
+		new_task.destroy({ success : function(model, response)
+		{
+			// Creates normal time.
+			displayTimeAgo($(".task-trello-list"));
 
-	if (!modelTaskList)
-		return;
+			// change task count in header of task list
+			changeTaskCount(modelTaskList[0].toJSON(), false);
+			
+			getDueTasksCount(function(count){
+				var due_task_count= count;
+				if(due_task_count==0)
+					$(".navbar_due_tasks").css("display", "none");
+				else
+					$(".navbar_due_tasks").css("display", "inline-block");
+				if(due_task_count !=0)
+					$('#due_tasks_count').html(due_task_count);
+				else
+					$('#due_tasks_count').html("");
 
-	// Call method with task id to be deleted.
-	var new_task = modelTaskList[0].get('taskCollection').get(taskId);
-	new_task.url = '/core/api/tasks/' + taskId;
-	new_task.destroy({ success : function(model, response)
-	{
-		// Creates normal time.
-		displayTimeAgo($(".task-trello-list"));
-
-		// change task count in header of task list
-		changeTaskCount(modelTaskList[0].toJSON(), false);
-		
-		getDueTasksCount(function(count){
-			var due_task_count= count;
-			if(due_task_count==0)
-				$(".navbar_due_tasks").css("display", "none");
-			else
-				$(".navbar_due_tasks").css("display", "inline-block");
-			if(due_task_count !=0)
-				$('#due_tasks_count').html(due_task_count);
-			else
-				$('#due_tasks_count').html("");
-
+			});
+			
+		} });
+	}
+	else
+		$.ajax({ type : "DELETE", url :'core/api/tasks/'+taskId, async : false, dataType : 'json', success : function()
+			{
+				App_Calendar.allTasksListView.collection.remove(taskId);
+				var taskCount = App_Calendar.allTasksListView.collection.length;
+				var count = $('#tasks-list-template').find('.tasks-count').attr('data');
+				if(count){
+					count = count - 1 ;
+					$('#tasks-list-template').find('.tasks-count').removeAttr('data');
+					$('#tasks-list-template').find('.tasks-count').attr('data' , count);
+					$('#tasks-list-template').find('.tasks-count').text('('+count+' Total)');
+				}
+			} 
 		});
-		
-	} });
 }
 
 /*

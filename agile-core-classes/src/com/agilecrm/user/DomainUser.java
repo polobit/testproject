@@ -29,6 +29,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.ticket.entitys.HelpdeskSettings;
+import com.agilecrm.user.access.JavaScriptUserAccess;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
@@ -284,6 +285,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	
 	@NotSaved(IfDefault.class)
 	public Boolean is_secure = true;
+	
+	@NotSaved(IfDefault.class)
+	public HashSet<String> jsrestricted_scopes = null;
+		
+	@NotSaved(IfDefault.class)
+	public HashSet<String> jsrestricted_propertiess = null;
 
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
@@ -901,6 +908,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			
 			if(helpdeskSettings == null)
 				helpdeskSettings = new HelpdeskSettings().defaultSettings();
+			
+			//if no javascrupt permission set, load default
+			loadJavaScriptScope();
 		}
 		catch (Exception e)
 		{
@@ -1156,6 +1166,16 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		return calendar_url;
 
+	}
+	
+	 private void loadJavaScriptScope() {
+		    
+		if(jsrestricted_propertiess == null)
+		    jsrestricted_propertiess = new JavaScriptUserAccess().defaultPropertiesLoad();
+		    
+		if(jsrestricted_scopes == null)
+		    jsrestricted_scopes = new JavaScriptUserAccess().defaultJSScopeLoad();
+		    
 	}
 
 }

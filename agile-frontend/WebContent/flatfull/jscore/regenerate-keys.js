@@ -71,6 +71,16 @@ $("#webhook_accordian").on('click', function(e) {
        
     });
 
+$("#js-security_accordian").on('click', function(e) {
+        e.preventDefault();
+        if($("#js-security-accordian-template").html() != "")
+            return;
+        setTimeout(function(){
+             App_Admin_Settings.jsSecuritySettings();
+        },500)
+       
+    });
+
     $(".allowed-domain-delete").off('click');
     $(".allowed-domain-delete").on('click', function(e) {
         e.preventDefault();

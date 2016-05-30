@@ -19,25 +19,26 @@ $(function() {
 		e.preventDefault();
 		
 		var route = $(this).parents('.agile-edit-row').attr('route');
-		
-		// Newly added code for displaying contacts and companies in same table with different routes.
-		if($(this).closest('tr').find('[route]').length != 0)
-			route = $(this).closest('tr').find('[route]').attr('route');
-		
-		var data = $(this).closest('tr').find('.data').attr('data');
+		if (route != "task/"){
+			// Newly added code for displaying contacts and companies in same table with different routes.
+			if($(this).closest('tr').find('[route]').length != 0)
+				route = $(this).closest('tr').find('[route]').attr('route');
+			
+			var data = $(this).closest('tr').find('.data').attr('data');
 
-		if(route == "contact/" || route == "company/")
-			SCROLL_POSITION = window.pageYOffset;
+			if(route == "contact/" || route == "company/")
+				SCROLL_POSITION = window.pageYOffset;
 
-				if (route == "contact/")
-					SCROLL_POSITION = window.pageYOffset;
+					if (route == "contact/")
+						SCROLL_POSITION = window.pageYOffset;
 
-				console.log(data);
+					console.log(data);
 
-				if (data) {
-					Backbone.history.navigate(route + data, {
-						trigger : true
-					});
-				}
+					if (data) {
+						Backbone.history.navigate(route + data, {
+							trigger : true
+						});
+					}
+			}
 			});
 });
