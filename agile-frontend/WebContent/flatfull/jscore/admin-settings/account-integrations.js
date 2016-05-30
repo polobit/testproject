@@ -97,7 +97,11 @@ $('#email-stats-listners a[href="#sync-stats-new"]').on('click', function(e) {
 });
 }
 function syncAppData(){
-	 if (confirm("Are you sure to Update?") == true) {
+	 showModalConfirmation(
+		"Sync Contact Data",
+		"Are you sure to sync contacts data.",
+		function()
+		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 
 	 	$.ajax({
 			url : 'core/api/custom-fields/syncappdata?domain='+domain,
@@ -105,13 +109,31 @@ function syncAppData(){
 			success : function(data) {
 				console.log(data);
 				if(data == "success"){
-					alert("Done");
+					showModalConfirmation(
+						"Sync Data",
+						"Request is successfully sent to sync your data.",
+						function()
+						{
+							return;
+						}, "Ok", "Close");
                   }
                   else if (data == "limitReached"){
-                  	alert("Limit for this month reached.Try on coming month.");
+                  	showModalConfirmation(
+						"Sync Data",
+						"You reached your limit.You can try on coming month.",
+						function()
+						{
+							return;
+						}, "Ok", "Close");
                   }
                   else{
-                  	alert("Sorry domain is not matching");
+                  	showModalConfirmation(
+						"Sync Data",
+						"Your domain is not matching.Please try after some time.",
+						function()
+						{
+							return;
+						}, "Ok" , "Close");
                   }
 			},
 			error : function(response) {
@@ -119,5 +141,12 @@ function syncAppData(){
 				console.log(response);
 			}
 			});
-    }
+	    }, function()
+			{
+				// No callback
+				return;
+			}, function()
+			{
+				return;
+			}, "Sync", "Close");
 }
