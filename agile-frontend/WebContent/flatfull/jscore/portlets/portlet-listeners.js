@@ -28,12 +28,12 @@ function initializePortletsListeners() {
 								.val();
 
 						json = serializeForm(form_id);
-						if($('#duration','#'+modal_id)!=null && $('#duration','#'+modal_id).val()!='Custom')
+						if($('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id)!=null && $('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id).val()!='Custom')
 						{
 							delete json["start-date"];
 							delete json["end-date"];
 						}
-						if($('#duration','#'+modal_id)!=null && $('#duration','#'+modal_id).val()=='Custom')
+						if($('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id)!=null && $('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id).val()=='Custom')
 						{
 							if(!is_valid_custom_range(json["start-date"]*1000,json["end-date"]*1000,modal_id))
 								{
@@ -983,22 +983,26 @@ $('.portlet_body')
 		    }
 	    }
 	});
-	
-		$('.modal-body').on('change','#duration',function(e){
+		$('.modal-body').off('change','#duration,#duration-lost-deal-analysis,#duration-incoming-deals,#duration-user-activities');
+		
+		$('.modal-body').on('change','#duration,#duration-lost-deal-analysis,#duration-incoming-deals,#duration-user-activities',function(e){
 			var el = $(this).closest('form');
-		var duration = $('#duration', el).val();
+		var duration = $(this, el).val();
 
 		if(duration=='Custom')
 		{
+			
 			$('#start_date',el).val("");
 			$('#end_date',el).val("");
 			$('.daterange',el).removeClass('hide');
-			/*$('#start_date').datepicker({
-				format : CURRENT_USER_PREFS.dateFormat
-			});
-			$('#end_date').datepicker({
-				format : CURRENT_USER_PREFS.dateFormat
-			});*/
+			
+			if(el.attr('id')=='portletsGoalsSettingsForm')
+			{
+				$('#start_date',el).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+				$('#end_date',el).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+	
+			}
+        else{
 			var eventDate = $('#start_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
 		{
 			// If event start date is changed and end date is less than start date,
@@ -1018,7 +1022,7 @@ $('.portlet_body')
 
 
 		$('#end_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
-		
+			}
 		}
 		else
 			$(el).find('.daterange').addClass('hide');
