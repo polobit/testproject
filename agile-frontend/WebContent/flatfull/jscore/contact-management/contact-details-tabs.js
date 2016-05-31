@@ -655,6 +655,8 @@ function initializeSendEmailListeners(){
 
 						// serialize form.
 						var json = serializeForm("emailForm");
+						
+						json.from = $(".email").find(":selected").val();
 						if ((json.contact_to_ids).join())
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 

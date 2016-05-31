@@ -944,7 +944,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				$select
 						.find("option:first")
 						.before(
-								"<option value=''>Empty</option>");
+								"<option value="+CURRENT_DOMAIN_USER.email+">Domain User</option>");
 				rearrange_from_email_options($select, data);
 			});
 	},

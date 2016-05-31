@@ -541,7 +541,7 @@ function resetAndFillFromSelect(selected_val) {
 				$select
 						.find("option:first")
 						.before(
-								"<option value=''>Empty</option>");
+								"<option value="+CURRENT_DOMAIN_USER.email+">Domain User</option>");
 
 				if (selected_val)
 					$select.val(selected_val).attr("selected", "selected");
