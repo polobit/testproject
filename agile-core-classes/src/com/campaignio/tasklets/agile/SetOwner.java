@@ -57,7 +57,7 @@ public class SetOwner extends TaskletAdapter
 	mergefield_owner_id = getStringValue(nodeJSON, subscriberJSON, data, MERGEFIELD_OWNER_ID);
 	System.out.println("mergefield_owner_id:"+mergefield_owner_id);
 	}catch(Exception e){
-		System.err.println("Error occured in fetching merge field owner id");
+		System.err.println("Error occured in fetching merge field owner id"+e.getMessage());
 	}
 
 	try
