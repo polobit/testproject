@@ -359,6 +359,13 @@ function save_web_event(formId, confirmBtn)
 				contentType : 'application/json; charset=utf-8',
 				data : JSON.stringify(web_calendar_event),
 				dataType : '',
+				success : function(response){
+					console.log(response);
+				},
+				error : function(response){
+					console.log(response);	
+				}
+				/*
 				complete : function(res, status)
 				{
 
@@ -385,7 +392,7 @@ function save_web_event(formId, confirmBtn)
 					{
 						alert("Looks like this slot is booked already. Please try another one.");
 						get_slots(selecteddate, Selected_Time);
-						$('#confirm').prop('disabled', false);
+						$('#confirm').attr('disabled', false);
 					}
 
 					else
@@ -395,7 +402,8 @@ function save_web_event(formId, confirmBtn)
 						location.reload(true);
 					}
 
-				} });
+				} */
+				});
 }
 
 function convertToHumanDate(format, date)
