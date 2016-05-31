@@ -108,34 +108,35 @@
 </div>
 
     </div>
-<div class="panel panel-default w-full m-r-none m-b-none" style="border:none;"> 
+<div class=" panel-default w-full m-r-none m-b-none" style="border:none;"> 
 
-        <div class="list-header panel-heading" style="border:none;"attr="{{heading}}" ownerID={{owner_id}}>
+        <div class="list-header panel-heading" style="border-bottom:none;"attr="{{heading}}" ownerID={{owner_id}}>
 <div class="pull-left" style="margin-top:-2px;"> 
 <div class="compressedHeading">
         
         </div>
 </div>
-<div class="pull-left text-ellipsis" style="width:62%;"> 
-         <span class="m-r-xs">{{get_normal_name heading}}</span>
+<div class="pull-left" style="width:80%;display: inline-flex;">  
+         <span class="m-r-xs text-ellipsis">{{get_normal_name heading}}</span>
         <!-- <span id="task-count-{{heading}}-{{owner_id}}" class="badge bg-primary txt-mute"></span> -->
-         
+        <span class="list-bottom pull-left add-task m-r-sm" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#">
+<i class="icon-plus text-xs"></i>
+</a></span>
 </div>
+ 
 
 
          <div class="pull-right taskexpandbutton" ><img id="task-list-loading-img-{{heading}}-{{owner_id}}"  src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}">
-<span class="list-bottom left add-task m-r-sm" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#">
-<i class="icon-plus text-xs"></i>
-</a></span>
+
 <span class="inline-block transform-rotate"><a class="text-info expandbutton"><i class="fa fa-compress text-xs"></i></a></span>
 <span id="task-count-{{heading}}-{{owner_id}}"  {{getthemecolor}} class="label pull-left m-r-sm" style="vertical-align:middle; margin-top:2px; background-color:#cfdadd;">0</span> 
 </div>  
 <div class="clearfix"></div>               
      </div>     
      {{#if owner_id}}
-      <div id="list-tasks-{{heading}}-{{owner_id}}" class="list-tasks panel-body bg-light lter p-n" style="">
+      <div id="list-tasks-{{heading}}-{{owner_id}}" class="list-tasks panel-body  lter p-n" style="">
      {{else}}
-      <div id="list-tasks-{{heading}}" class="list-tasks panel-body bg-light lter p-n" style="">
+      <div id="list-tasks-{{heading}}" class="list-tasks panel-body  lter p-n" style="">
      {{/if}}
         
      </div>  
@@ -205,12 +206,12 @@
   
   
       {{#if is_complete}}
-         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full   activate-link" style="opacity:0.8">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full font-bold " style="opacity:0.8;top:0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a>
+         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full   activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full font-bold " style="opacity:0.75;top:0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.8">{{else}}<a href="#task/{{id}}"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.8;top: 0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a>
          {{else}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.8">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.8;top:0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a> 
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.75;top:0px;">{{/is_link}}{{safe_string subject}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{get_normal_name type}}</label></a> 
          {{/if_equals}}       
       {{/if}}      
 </div>
@@ -271,13 +272,11 @@
     
 <div class="clearfix"></div>
  
-   <div class="new-task-footer m-t-xs">
+   <div class="new-task-footer">
 <!--<div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
      <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
 </div>-->  
-<div class="pull-left text-ellipsis" style="width:100%;">
-<i class="fa fa-clock-o"></i>
-    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
+<div class="pull-left text-ellipsis" style="width:100%; margin-top:-8px;">
     <div class="pull-right"> 
 <div class="new-task-owner  thumb-xxs avatar taskavatarimg p-b-sm" style="margin-top:3px;">     
          {{#if taskOwner.pic}}
@@ -288,8 +287,10 @@
       </div> 
   </div>  
   
+<i class="fa fa-clock-o" style="margin-top:15px;"></i>
+    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
 
- <div class="task-actions" style="margin-bottom: -5px;visibility:visible;">
+ <span class="task-actions" style="margin-bottom: -5px;">
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
          <!-- <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i> -->
@@ -297,7 +298,7 @@
              <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="Notes"></i>
              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
            {{/if}}
-      </div>
+      </span>
       {{#if notes}} 
            <div class="task-note-action">
              <i class="task-action icon icon-comment" data="{{id}}" title="Notes"></i>

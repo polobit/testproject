@@ -3817,3 +3817,9 @@ div.addField div.controls div:first-child{
 .fa-hourglass-o:before{
       content: "\f250";
 }
+
+.task-trello-list .list-header.panel-heading
+{
+  background-color: initial!important;
+  border-color:initial!important;
+}

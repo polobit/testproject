@@ -6,7 +6,7 @@ function displaySettings()
 
 	$(".listed-task").parent().addClass("task-striped m-sm ");
 	$(".task-striped").css("padding-bottom","5px")
-	$(".task-striped").css("margin-bottom","15px")
+	$(".task-striped").css("margin-bottom","20px")
 	// Get selected criteria
 	var criteria = getCriteria();
 

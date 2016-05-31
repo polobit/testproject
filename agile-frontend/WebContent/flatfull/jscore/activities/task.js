@@ -140,7 +140,7 @@ function initializeTasksListeners(){
 	 * });
 	 */
 
-	 /*$('#tasks-list-template').on('mouseenter', '.listed-task', function(e)
+	 $('#tasks-list-template').on('mouseenter', '.listed-task', function(e)
 	{
 		$(this).find(".task-actions").css("visibility", "visible");
 		$(this).find(".task-note-action").hide();
@@ -149,9 +149,9 @@ function initializeTasksListeners(){
 	// Hide task actions
 	$('#tasks-list-template').on('mouseleave', '.listed-task', function(e)
 	{
-		/*$(this).find(".task-actions").css("visibility", "hidden");
+		$(this).find(".task-actions").css("visibility", "hidden");
 		$(this).find(".task-note-action").show();
-	});*/
+	});
 
 	/*
 	 * Task Action: Delete task from UI as well as DB. Need to do this manually
