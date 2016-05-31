@@ -1029,7 +1029,7 @@ function initializeMilestoneListners(el){
 				formId.find('input[name="lost_milestone"]').val('');
 			}
 			$that.closest('tr').css("display", "none");
-			fill_ordered_milestone($(this).closest('form').attr('id'));
+			fill_ordered_milestone($that.closest('form').attr('id'));
 		});
 		
 	});
