@@ -62,11 +62,11 @@ $(function()
 	// Only single slot selection is allowed
 	$('body').on('click', '.selected-slot', function(e)
 	{
-		var currentId = $(this).prop('id');
+		var currentId = $(this).attr('id');
 
 		$('.selected-slot').each(function()
 		{
-			if ($(this).prop('id') != currentId)
+			if ($(this).attr('id') != currentId)
 				$(this).prop("checked", false);
 		});
 
