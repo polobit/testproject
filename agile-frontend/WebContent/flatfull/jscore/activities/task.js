@@ -230,7 +230,7 @@ function initializeTasksListeners(){
 				event.stopPropagation();
 				
 			});	
-	$('#tasks-list-template').on('click', '.view-task-details', function()
+	$('#tasks-list-template').on('click', '.view-task-details', function(event)
 	{
 		event.preventDefault();
 		var route = $(this).parents('.agile-edit-row').attr('route');
