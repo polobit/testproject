@@ -1021,7 +1021,7 @@ function initializeMilestoneListners(el){
 	$('#milestone-listner').on('click', '.milestone-delete', function(e) {
 		e.preventDefault();
 		var $that = $(this);
-		showAlertModal("delete_opportunity", "confirm", function(){
+		showAlertModal("delete_milestone", "confirm", function(){
 			var formId = $that.closest('form');
 			if($that.closest('tr').find('.mark-won').length > 0){
 				formId.find('input[name="won_milestone"]').val('');
@@ -1282,7 +1282,7 @@ function initializeMilestoneListners(el){
 	$("#milestone-listner").on('click', '.lost-reason-delete', function(e){
 		e.preventDefault();
 		var $that = $(this);
-		showAlertModal("delete_task", "confirm", function(){
+		showAlertModal("delete_lost_reason", "confirm", function(){
 			var obj = serializeForm($that.closest('form').attr("id"));
 			var model = new BaseModel();
 			model.url = 'core/api/categories/'+obj.id;
