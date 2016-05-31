@@ -26,8 +26,10 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         var shopName = $('#shop').val();
         if (shopName == "") {
-            alert("Enter Shop name");
-            $('#shop').focus();
+            showAlertModal("empty_shop", undefined, function(){
+              $('#shop').focus();
+              
+            });
             return false;
         }
         var domain = agileWindowOrigin();
@@ -387,27 +389,28 @@ binds all click events  for google calendar model
      deleteGoogleCalendarPrefs: function(e) {
 
      	e.preventDefault();
+      var $that = $(this);
+      showAlertModal("delete_calendar_prefs", "confirm", function(){
+        var ele = $(e.currentTarget);
 
-     	if (!confirm("Are you sure you want to delete?"))
-    			return false;
-       var ele = $(e.currentTarget);
+        var disabled = $that.attr("disabled");
+        if (disabled)
+          return;
 
-		var disabled = $(this).attr("disabled");
-		if (disabled)
-			return;
+        $(ele).attr("disabled", "disabled");
 
-		$(ele).attr("disabled", "disabled");
+        $(ele).after(getRandomLoadingImg());
+        App_Datasync.calendar_sync_google.model.url = "/core/api/calendar-prefs/type/GOOGLE"
+        App_Datasync.calendar_sync_google.model.destroy({ success : function()
+        {
 
-		$(ele).after(getRandomLoadingImg());
-		App_Datasync.calendar_sync_google.model.url = "/core/api/calendar-prefs/type/GOOGLE"
-		App_Datasync.calendar_sync_google.model.destroy({ success : function()
-		{
-
-			App_Datasync.calendar_sync_google.model.clear();
-			App_Datasync.calendar_sync_google.render(true);
-			erase_google_calendar_prefs_cookie();
-            _resetGAPI();
-		} });
+          App_Datasync.calendar_sync_google.model.clear();
+          App_Datasync.calendar_sync_google.render(true);
+          erase_google_calendar_prefs_cookie();
+                _resetGAPI();
+        } });
+      });
+       
 
     }
 }); 

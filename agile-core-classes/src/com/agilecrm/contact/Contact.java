@@ -1196,6 +1196,17 @@ public class Contact extends Cursor
     @PostLoad
     private void postLoad()
     {
+/*    	if (this.type == Contact.Type.COMPANY)
+    	{
+    		if(this.name==""){
+    			if(getContactField(NAME)!=null)
+    				{
+    				this.name=getContactField(NAME).value.toLowerCase();
+    				save();
+    				}
+    		}
+    	}*/	
+    
 	tags = getContactTags();
 
 	ContactField field = this.getContactField("image");

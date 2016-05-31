@@ -3,12 +3,19 @@
   <div class="panel-heading">
    {{#if_equals name "Sip"}}  
    <center>  
-    <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/sip.png'}}" />
+    <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
+    <span style="margin-top:6px; display:inline-block;"><img src="{{logo_url}}"  class="img-responsive inline-block" 
+    style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">SIP</span>
+    </span>
+
    </center>
    {{else}} 
       {{#if_equals name "CallScript"}}
      <center>    
-        <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/call_script.png'}}" />
+       <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
+    <span style="margin-top:6px; display:inline-block; padding-bottom: 7px;">
+    <img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">Call Script</span>
+    </span>
      </center>  
     {{else}}
 			{{#if_equals name "Bria"}}
@@ -276,10 +283,10 @@
 								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
 						{{else}}	
 							{{#if_equals name "Bria"}}
-								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
 						{{else}}
 							{{#if_equals name "Skype"}}
-								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
 								{{else}}	
 									
 								<div class="btn-group">										
@@ -352,7 +359,8 @@
 				<div class="col-md-4" id="custom-widget" >
 					<div class="panel panel-default widget-add" style="min-height:220px;">
 					<div class="panel-heading">
-    					<center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/widgets/custom_widget.png'}}" /></center>
+    					<center>
+    					<span style="font-size: 24px;width: 135px;height: 47px; text-align:center;vertical-align: middle;"><span style="margin-top:6px; display:inline-block; padding-bottom:7px;"><img class="img-responsive inline-block" style="margin-top:-4px; width:25px; height:25px; margin-right:2px;" src="{{getS3ImagePath '/widgets/custom-widget-logo-small.png'}}" />Custom Widget</span></span></center>
     				</div>
     				<div class="panel-body">
     					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="You can now develop your own custom widget in javascript or any backend server language.">

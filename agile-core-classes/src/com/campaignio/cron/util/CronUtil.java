@@ -261,7 +261,7 @@ public class CronUtil
 	 */
 	public void fetchAndExecute(int limit) throws Exception
 	{
-		long timeout = System.currentTimeMillis();
+		long timeout = System.currentTimeMillis() + 60000; // Added 60 secs to wake up 1 min early
 		
 		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", timeout).order("timeout");
 		

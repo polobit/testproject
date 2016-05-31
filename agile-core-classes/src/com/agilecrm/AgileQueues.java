@@ -45,6 +45,8 @@ public class AgileQueues
     // Personal bulk Email pull queues
     public static final String NORMAL_PERSONAL_EMAIL_PULL_QUEUE = "normal-personal-email-pull-queue";
     public static final String BULK_PERSONAL_EMAIL_PULL_QUEUE = "bulk-personal-email-pull-queue";
+    
+    public static final String AMAZON_SES_EMAIL_PULL_QUEUE ="amazon-ses-pull-queue";
 
     // Campaign pull queues
     public static final String BULK_CAMPAIGN_PULL_QUEUE = "bulk-campaign-pull-queue";
@@ -79,5 +81,7 @@ public class AgileQueues
 	
 	//Deals update to textsearch queue
 	public static final String DEALS_SCHEMA_CHANGE_QUEUE = "deals-schema-change-queue";
-
+	
+	//Queue to update name in companies
+	public static final String NAME_UPDATE_COMPANIES = "name-update-companies-queue";
 }

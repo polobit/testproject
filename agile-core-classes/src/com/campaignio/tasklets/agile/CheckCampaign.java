@@ -33,12 +33,12 @@ public class CheckCampaign extends TaskletAdapter
 	/**
 	 * Branch Yes
 	 */
-	public static final String BRANCH_YES = "yes";
+	public static final String BRANCH_YES = "Yes";
 
 	/**
 	 * Branch No
 	 */
-	public static final String BRANCH_NO = "no";
+	public static final String BRANCH_NO = "No";
 
 	/**
 	 * Option any in select dropdown for campaign status

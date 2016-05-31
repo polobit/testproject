@@ -75,7 +75,8 @@
 </script>
 
 <script type="text/html" id="report-categories-template">
-<div class="custom-animated custom-fadeInUp">
+<div id='reports-listerners-container'>
+<div class="">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
@@ -88,689 +89,603 @@
     </div>
 </div>
 </div>
-<div class="wrapper-md p-t-none">
+<div class="p-t-none">
 
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
+<div class="col w b-r">
+     <div class="vbox" "="">
 
-<div id="reports-tab-container">
+        <div id="reports-tab-container">
                <div class="tab-container">
        <ul class="nav nav-tabs" id="subTab">
                                             {{#hasMenuScope 'DEALS'}}
-                                            <li role="presentation" data-tab="6" id="dealstab">
+                                            <li role="presentation" data-tab="6" id="dealstab" class="maintab">
                                                 <a href="#deals-tab" role="tab" data-toggle="tab">Deals</a>
+                                                 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+                                                 <li><a href="#IncomingDeals" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i> Incoming Deals</a></li>
+                                                 <li><a href="#LostDeal" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Lost Deal Analysis</a></li>
+                                                 <li><a href="#RevenuebySource" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Revenue by Source</a></li>
+                                                 <li><a href="#SalesForecast" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>Sales Forecast</a></li>
+
+                                                 <li><a href="#UserReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>User Reports</a></li>
+                                                 <li><a href="#RepPerformance" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-user v-middle"></i>Rep Performance</a></li>
+                                                 <li><a href="#ComparisonReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-users v-middle"></i>Comparison Report</a></li>
+                                                 </ul>
+                                                     
                                             </li>
                                             {{/hasMenuScope}}
-                                             <li role="presentation" data-tab="5" id="callstab">
+                                             <li role="presentation" data-tab="5" id="callstab" class="maintab">
                                                 <a href="#calls-tab"   role="tab" data-toggle="tab" >Calls</a>
+                                                 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+                                                 <li><a href="#CallsbyUser" role="tab" data-toggle="tab"><i class="m-r-sm icon-call-end v-middle"></i>Calls by User</a></li>
+
+                                                 <li><a href="#Averagecall" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle" style="float:left"></i><div style="display:table-cell">Average call duration</div></a></li>
+                                                  <li><a href="#CallLogs" role="tab" data-toggle="tab"><i class="m-r-sm icon-list v-middle"></i>
+                                                  Call Logs</a></li>
+                                                   <li><a href="#CallOutcomes" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Call Outcomes</a></li>
+                                                    <li><a href="#CallReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle" style="float:left"></i><div style="display:table-cell">Call Report-Time Based</div></a></li>
+                                                 </ul>
+                                                   
                                             </li>
                                             {{#hasMenuScope 'ACTIVITY'}}
-                                             <li role="presentation" data-tab="4">
+                                             <li role="presentation" data-tab="4" class="maintab">
                                                 <a href="#activities-tab"  role="tab" data-toggle="tab" >Activities</a>
+                                                <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+                                                 <li><a href="#UserActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>User Activities</a></li>
+                                                 <li><a href="#ContactActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>Contact Activities</a></li>
+                                                 </ul>
                                             </li>
                                             {{/hasMenuScope}}
-                                              <li role="presentation" data-tab="2">
+                                              <li role="presentation" data-tab="2" class="maintab">
                                                 <a href="#graph-tab"  role="tab" data-toggle="tab">Growth Graphs</a>
+                                                 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+                                                 <li><a href="#GrowthGraphs" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>Growth Graphs</a></li>
+                                                 <li><a href="#FunnelGraphs" role="tab" data-toggle="tab"><i class="m-r-sm icon-filter v-middle"></i>Funnel Graphs</a></li>
+                                                 <li><a href="#RatioReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-group v-middle"></i>Ratio Reports</a></li>
+                                                 </ul>
+
+
                                             </li>
-                                            <li role="presentation"  data-tab="1">
-                                                <a href="#email-tab" role="tab"  data-toggle="tab">Reports via Email</a>
+                                            <li role="presentation"  data-tab="1" class="maintab">
+                                                <a href="#email-tab" role="tab" data-toggle="tab" >Reports via Email</i></a>
+                                                <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+                                                 <li><a href="#ContactReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-user v-middle"></i>Contact Reports</a></li>
+                                                 {{#hasMenuScope 'ACTIVITY'}}
+                                                 <li><a href="#ActivityReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>Activity Reports</a></li>
+                                                 {{/hasMenuScope}}
+                                                 <li><a href="#CampaignReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-sitemap v-middle"></i>Campaign Reports</a></li>
+                                                 </ul>
                                             </li>
                                           
-                                             <li role="presentation" data-tab="3">
+                                             <li role="presentation" data-tab="3" class="maintab">
                                                 <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
+                                                <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+                                                 <li><a href="#CampaignStats" role="tab" data-toggle="tab"><i class="m-r-sm icon-dashboard v-middle"></i>Campaign Stats</a></li>
+                                                 <li><a href="#CompareCampaigns" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>Compare Campaigns</a></li>
+                                                 </ul>
                                             </li>
-                                             <li role="presentation" data-tab="3">
+                                             <li role="presentation" data-tab="3" class="maintab">
                                                 <a href="#helpdesk-tab" role="tab" data-toggle="tab">Help Desk</a>
+                                                <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
+                                                 <li><a href="#Tickets" role="tab" data-toggle="tab"><i class="m-r-sm icon-tasks v-middle"></i>Tickets</a></li>
+                                                 <li><a href="#SLAReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-check-square-o v-middle"></i>SLA Report</a></li>
+                                                  <li><a href="#PriorityReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-star v-middle" style="float:left"></i><div style="display:table-cell">Ticket Priority & Status Report</div></a></li>
+                                                 <li><a href="#FirstResponse" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle"></i>First Response</a></li>
+                                                 </ul>
                                             </li>
 
 </ul>
 
-
-<div class="tab-content wrapper-md-panel" style="display:block">
-<div class="tab-pane" id="email-tab">
-   <div class="row"> 
-<!-- Contact reports -->
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-user icon-3x"></i>
-            </div>
-            <b>Contact Reports</b>
+<div class="tab-content wrapper-md-panel reports_tab_content" style="display:none">
+        <div class="tab-pane" id="IncomingDeals">
+ 
+                   <a class="report-go" href="#report-deals">
+                   <div class="text-center show_screenshot">
+                   <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            See how your deal sources are performing over time.
         </div>
+                   <img src='flatfull/img/reports_images/Incoming-Deals.png'></img>
         <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#contact-reports" onclick="Agile_GA_Event_Tracker.track_event('Contact Reports')">Go</a>
-        </div>
+
     </div>
-</div>
+     </a>
 
 
-<!-- Activity reports -->
-{{#hasMenuScope 'ACTIVITY'}}
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center b-a">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-cogs icon-3x"></i>
-            </div>
-            <b>Activity Reports</b>
-        </div>  
-        <br />
-                
-        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Get a periodic  email digest of various activities by users in Agile.
-            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+
+    </div>
+
+    <div class="tab-pane" id="LostDeal">
+     <a class="report-go" href="#report-lossReason">
+                 <div class="text-center show_screenshot">
+<!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+           Get insights into why deals were lost. Filter by owner, track and source.
+
+
         </div>
-        <!-- Add button -->
-            {{#hasMenuScope 'ACTIVITY'}}
-                <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade" onclick="Agile_GA_Event_Tracker.track_event('Activity Reports')">Go</a>
-                </div>
-                
-            {{else}}
-                <span class="btn btn-default btn-sm disabled" >Go</span>
-            {{/hasMenuScope}}
-            {{else}}
-            <!-- Description -->
-            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Get a periodic  email digest of various activities by users in Agile.
-            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
-             </div>
-        <!-- Add button -->
-            <div >
-                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
-                </div>
-                 
-            {{/isAllowedInCurrentPlan}}
-             <div class="clearfix"></div>
+                 <img src='flatfull/img/reports_images/Lost-Deal-Analysis.png'></img>
+           
+             <br />
         
-    </div>
-</div>
-{{/hasMenuScope}}
-</div>
-    </div>
-
-
-<div class="tab-pane" id="graph-tab">
-<div class="row">
- <div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Growth-graph.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-bar-chart icon-3x"></i>
-            </div>
-            <b>Growth Graphs</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            Visually see how your leads are growing over time. Compare channels for essential insights.
-        </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/growth" onclick="Agile_GA_Event_Tracker.track_event('Growth Graphs')">Go</a>
-        </div>
-    </div>
-</div>
-<!-- Funnel reports -->
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/funnel-graph.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-filter icon-3x"></i>
-            </div>
-            <b>Funnel Graphs</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See a funnel graph of how leads are passing through various stages in your sales cycle.
-        </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/funnel" onclick="Agile_GA_Event_Tracker.track_event('Funnel Graphs')">Go</a>
-        </div>
-    </div>
-</div>
-<!-- cohorts reports -->
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/ratio.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-group icon-3x"></i>
-            </div>
-            <b>Ratio Reports</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See what percentage of leads are converting over time.
-        </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#report-charts/cohorts" onclick="Agile_GA_Event_Tracker.track_event('Ratio Reports')">Go</a>
-        </div>
-    </div>
-</div>   
-</div>
-</div>
-
-<div class="tab-pane" id="campaign-tab">
-<div class="row">
-<!-- Performance Stats -->
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Daily-reports.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-dashboard icon-3x"></i>
-            </div>
-            <b>Campaign Stats</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-           Find out how a campaign is performing over a time period.
-        </div>
-        <!-- Add button -->
-       
-        <div >
-            <a id="campaign_id" class="btn btn-sm btn-default" href="#" onclick="Agile_GA_Event_Tracker.track_event('Campaign Stats')">Go</a>
-
-        </div>
-    </div>
-</div>
-
-
-<!-- Comparison -->
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Campaign-stats.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-bar-chart icon-3x"></i>
-            </div>
-            <b>Compare Campaigns</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See how your campaigns fare against each other.
-        </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats" onclick="Agile_GA_Event_Tracker.track_event('Compare Campaigns')">Go</a>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="activities-tab">
-<div class="row">
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/user-activities.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-cogs icon-3x"></i>
-            </div>
-            <b>User Activities</b>
-        </div>
-        <br />
-        
-        {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          See a chronological activity report of your CRM users.
-          <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
-        </div>
         <!-- Add button -->
           
-                <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                      <a class="btn btn-sm btn-default" href="#activities" onclick="Agile_GA_Event_Tracker.track_event('User Activities')">Go</a>
-                </div>
+    </div>
+     </a>
+
+    </div>
+
+    <div class="tab-pane" id="RevenuebySource">
+    <a class="report-go" href="#reports-wonDeals">
+                  <div class="text-center show_screenshot">
+
+                   <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+           See how each source contributes to revenue. Know which owner converts from which source better.
+        </div><img src='flatfull/img/reports_images/Revenue.png'></img>
+           <!-- Icon and Title -->
+       
+             <br />
+       
+
+    </div>
+    </a>
+ </div>
+
+     <div class="tab-pane" id="SalesForecast">
+             <a class="report-go" href="#report-sales">
+                   <div class="text-center show_screenshot">
+                   <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+         Know your revenue forecast based on your deals data.
+        </div>
+                   <img src='flatfull/img/reports_images/Sales-forecast.png'></img>
+
+        <br />
+        
+        <!-- Add button -->
+    </div></a>
+ </div>
+    
+
+
+     <div class="tab-pane" id="UserReports">
+     <a class="report-go" href="#user-reports">
+                  <div class="text-center show_screenshot">
+                  <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+        Analyze sales performance by user.
+        </div><img src='flatfull/img/reports_images/User-reports.png'></img>
+     
+        <br />
+        
+
+    </div></a>
+ </div>
+
+
+
+     <div class="tab-pane" id="RepPerformance">
+        <!-- Description -->
+        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
+         <a class="btn btn-sm btn-default" href="#rep-reports">
+        <div class="text-center show_screenshot">
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+         Know the performance by each user.
+        
+        </div>
+        <img src='flatfull/img/reports_images/Rep_Performance.png' style="width:360px"></img></div>
+         <div style="display:none;" class="activity-reports-upgrade m-t-sm" ><span class="text-danger">{{toSafeString message}}<span></div>
+        </a>
             {{else}}
+           
+            <div class="text-center show_screenshot">
             <!-- Description -->
-            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-             See a chronological activity report of your CRM users.
-           <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+            <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+             Know the performance by each user.
             </div>
-        <!-- Add button -->
-            <div class="inline " style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-                    <div class="btn btn-sm btn-default _upgrade" id="activities-upgrade">Go</div>
-                </div>
-                 
+             <div class="_upgrade report-go" id="activity-reports-upgrade">
+            <img src='flatfull/img/reports_images/Rep_Performance.png' style="width:360px"></img>
+                
+             
+            </div>
+            <div style="display:none;" class="activity-reports-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
+               </div>   
             {{/isAllowedInCurrentPlan}}
-             <div class="clearfix"></div>
+   
 
     </div>
-</div>
 
-<!-- Contact Activities -->
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/contact.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-cogs icon-3x"></i>
-            </div>
-            <b>Contact Activities</b>
+     <div class="tab-pane" id="ComparisonReport">
+<a class="report-go" href="#report-comparison">
+                    <div class="text-center show_screenshot">
+                    <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+        Compare the pipeline stages for each user.
         </div>
+        <img src='flatfull/img/reports_images/Comparison_Report.png' style="width:360px; height:230px"></img>
+       
         <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          See a chronological contact activity report of your CRM contacts.
-        </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#contact-activities" onclick="Agile_GA_Event_Tracker.track_event('Contact Activities')">Go</a>
-        </div>
     </div>
-</div>
-</div>
-</div>
-<div class="tab-pane" id="calls-tab">
-<div class="row">
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Calls-By-User.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-call-end  icon-3x"></i>
-            </div>
-            <b>Calls by User</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="See a report of total calls made or total time spent on calls by each user.">
+ </a>
+    </div>
+
+    <div class="tab-pane" id="CallsbyUser">
+<a class="report-go" href="#report-calls/total-calls">
+                    <div class="text-center show_screenshot">
+                    <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="See a report of total calls made or total time spent on calls by each user.">
           See a report of total calls made or total time spent on calls by each user.
-          <div style="display:none;" class="activities-upgrade" ><p class="text-danger"><p></div>
+          
         </div>
-        <!-- Add button -->
-
-     <div><a class="btn btn-sm btn-default" href="#report-calls/total-calls" onclick="Agile_GA_Event_Tracker.track_event('Calls by User')">Go</a></div>
+        <img src='flatfull/img/reports_images/Calls-By-User.png'></img>        
+        <br />
+        
+    
                  
             
              <div class="clearfix"></div>
 
     </div>
-</div>
+    </a>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/averageofcall.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-clock icon-3x"></i>
-            </div>
-            <b>Average call duration</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Know the average time spent on a call by each user.">
+    </div>
+
+    <div class="tab-pane" id="Averagecall">
+<a class="report-go" href="#report-calls/average-calls">
+                   <div class="text-center show_screenshot">
+                    <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="Know the average time spent on a call by each user.">
           Know the average time spent on a call by each user.
         </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/average-calls" onclick="Agile_GA_Event_Tracker.track_event('Average call duration')">Go</a>
-        </div>
-    </div>
-</div>
-
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/user-activities-call.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-list  icon-3x"></i>
-            </div>
-            <b>Call Logs</b>
-        </div>
+        <img src='flatfull/img/reports_images/averageofcall.png'></img>
+        
         <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="See a full call log of all users.">
+
+    </div>
+</a>
+    </div>
+
+    <div class="tab-pane" id="CallLogs">
+    <a class="report-go" id="call-activity-link">
+                   <div class="text-center show_screenshot">
+                   <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="See a full call log of all users.">
           Generate timelines of calls by user.
         </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" id="call-activity-link" onclick="Agile_GA_Event_Tracker.track_event('Call Logs')">Go</a>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Call-Outcomes.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-pie-chart  icon-3x"></i>
-            </div>
-            <b>Call Outcomes</b>
-        </div>
+        <img src='flatfull/img/reports_images/user-activities-call.png'></img>
+        
         <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Know the calls made  by each user on a pie graph.">
+
+    </div>
+</a>
+    </div>
+
+    <div class="tab-pane" id="CallOutcomes">
+
+    <a class="report-go" href="#report-calls/pie-graph">
+<div class="text-center show_screenshot">
+<!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="Know the calls made  by each user on a pie graph.">
           Generate a pie graph with call outcomes.
-        </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/pie-graph" onclick="Agile_GA_Event_Tracker.track_event('Call Outcomes')">Go</a>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Call_Report_Time.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-bar-chart  icon-3x"></i>
-            </div>
-            <b>Call Report-Time Based</b>
-        </div>
+        </div><img src='flatfull/img/reports_images/Call-Outcomes.png'></img>
         <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="Generate a bar graph with calls based on time.">
+        
+    </div>
+        </a>
+    </div>
+
+    <div class="tab-pane" id="CallReport">
+<a class="report-go" href="#report-calls/timebased">
+                      <div class="text-center show_screenshot">
+                      <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="Generate a bar graph with calls based on time.">
           Generate a bar graph with calls based on time.
         </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#report-calls/timebased" onclick="Agile_GA_Event_Tracker.track_event('Call Report-Time Based')">Go</a>
-        </div>
-    </div>
-</div>
-
-
-
-</div>
-</div>
-
-<div class="tab-pane" id="deals-tab">
-<div class="row">
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Incoming-Deals.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-graph icon-3x"></i>
-            </div>
-            <b>Incoming Deals</b>
-        </div>
+        <img src='flatfull/img/reports_images/Call_Report_Time.png'></img>
+       
         <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See how your deal sources are performing over time.
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#report-deals" onclick="Agile_GA_Event_Tracker.track_event('Incoming Deals')">Go</a>
-        </div>
+        
+
+    </div></a>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Lost-Deal-Analysis.png'></img>" data-trigger="hover">
-           <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-pie-chart icon-3x"></i>
-            </div>
-            <b>Lost Deal Analysis</b>
-            </div>
-             <br />
+    <div class="tab-pane" id="UserActivities">
+
+        
+        {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+        <a class="report-go" href="#activities">
+        <div class="text-center show_screenshot" >
         <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-           Get insights into why deals were lost. Filter by owner, track and source.
-
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+          See a chronological activity report of your CRM users.
+          
         </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#report-lossReason" onclick="Agile_GA_Event_Tracker.track_event('Lost Deal Analysis' )">Go</a>
+        <img src='flatfull/img/reports_images/user-activities.png'></img>
+        <div style="display:none;" class="activities-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
         </div>
-    </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Revenue.png'></img>" data-trigger="hover">
-           <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-pie-chart icon-3x"></i>
-            </div>
-            <b>Revenue by Source</b>
-            </div>
-             <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-           See how each source contributes to revenue. Know which owner converts from which source better.
-        </div>
-        <!-- Add button -->
-        <div >
-            <a class="btn btn-sm btn-default" href="#reports-wonDeals" onclick="Agile_GA_Event_Tracker.track_event('Revenue by Source')">Go</a>
-        </div>
-    </div>
- </div>
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Sales-forecast.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-graph icon-3x"></i>
-            </div>
-            <b>Sales Forecast</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-         Know your revenue forecast based on your deals data.
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#report-sales" onclick="Agile_GA_Event_Tracker.track_event('Salesforecast')">Go</a>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/User-reports.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-graph icon-3x"></i>
-            </div>
-            <b>User Reports</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-        Analyze sales performance by user.
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#user-reports" onclick="Agile_GA_Event_Tracker.track_event('User Reports' )">Go</a>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/Rep_Performance.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-graph icon-3x"></i>
-            </div>
-            <b>Rep Performance</b><span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
-        </div>
-        <br />
-        <!-- Description -->
-        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-         Know the performance by each user.
-         <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
-        </div>
-        <!-- Add button -->
-        <div  style="display:inline;">
-            <a class="btn btn-sm btn-default" href="#rep-reports" onclick="Agile_GA_Event_Tracker.track_event('Rep Performance' )">Go</a>
-        </div>
-
+                </a>
             {{else}}
+            
+            <div class="text-center show_screenshot" >
             <!-- Description -->
-            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-             Know the performance by each user.
-            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+            <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+             See a chronological activity report of your CRM users.
+           
+            </div>
+            <div class="_upgrade" id="activities-upgrade">
+            <img src='flatfull/img/reports_images/user-activities.png'></img>
+            </div>
+
+            <div style="display:none;" class="activities-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
+               </div>  
+            {{/isAllowedInCurrentPlan}}
+             <div class="clearfix"></div>
+    </div>
+
+    <div class="tab-pane" id="ContactActivities">
+<a class="report-go" href="#contact-activities">
+                    <div class="text-center show_screenshot" >
+
+                            <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+          See a chronological contact activity report of your CRM contacts.
+        </div>
+        <img src='flatfull/img/reports_images/contact.png'></img>
+       
+        <br />
+
+    </div>
+        </a>
+    </div>
+
+      <div class="tab-pane" id="CampaignStats">
+                     <a id="campaign_id" class="report-go" href="#">
+                    <div class="text-center show_screenshot" >
+
+                    <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+           Find out how a campaign is performing over a time period.
+        </div><img src='flatfull/img/reports_images/Daily-reports.png'>
+        </img>
+       
+        <br />
+        
+    </div>
+    </a>
+    </div>
+
+      <div class="tab-pane" id="CompareCampaigns">
+<a class="report-go" href="#campaign-stats" id="campaign-stats">
+                    <div class="text-center show_screenshot" >
+
+                    <!-- Description -->
+        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+            See how your campaigns fare against each other.
+        </div>
+        <img src='flatfull/img/reports_images/Campaign-stats.png'></img>
+        
+        <br />
+        
+
+    </div>
+        </a>
+    </div>
+
+      <div class="tab-pane" id="GrowthGraphs">
+ <a class="report-go" href="#report-charts/growth">
+                    <div class="text-center show_screenshot" >
+
+                     <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            Visually see how your leads are growing over time. Compare channels for essential insights.
+        </div>
+        <img src='flatfull/img/reports_images/Growth-graph.png'></img>
+       
+        <br />
+       
+        
+    </div>
+    </a>
+    </div>
+
+      <div class="tab-pane" id="FunnelGraphs">
+<a class="report-go" href="#report-charts/funnel">
+                    <div class="text-center show_screenshot" >
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            See a funnel graph of how leads are passing through various stages in your sales cycle.
+        </div>
+        <img src='flatfull/img/reports_images/funnel-graph.png'></img>
+       
+        <br />
+        
+       
+    </div>
+    </a>
+    </div>
+
+      <div class="tab-pane" id="RatioReport">
+            <a class="report-go" href="#report-charts/cohorts">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            See what percentage of leads are converting over time.
+        </div>
+        <img src='flatfull/img/reports_images/ratio.png'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
+
+      <div class="tab-pane" id="ActivityReports">
+  
+        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
+
+        {{#hasMenuScope 'ACTIVITY'}}
+                    <a class=""  href="#activity-reports" id="activity-reports-upgrade">
+
+                         <div class="wrapper text-center b-a" style="min-width:330px">
+                          <div class="m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
+            Get a periodic  email digest of various activities by users in Agile.
+            <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
+        </div>
+        </div>
+                    </a>
+                
+            {{else}}
+                <span class="disabled" >
+                     <div class="wrapper text-center b-a" style="min-width:330px">
+                          <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
+            Get a periodic  email digest of various activities by users in Agile.
+            <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
+        </div>
+        </div>
+                </span>
+            {{/hasMenuScope}}
+       
+            {{else}}
+            
+             <div class="wrapper text-center b-a" style="min-width:330px">
+             <div class="_upgrade" id="activity-reports-upgrade">
+            <!-- Description -->
+            <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
+            Get a periodic  email digest of various activities by users in Agile. </div></div>
+            <div style="display:none;" class="activity-reports-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
+            
+             
              </div>
-        <!-- Add button -->
-            <div >
-                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
-                </div>
                  
             {{/isAllowedInCurrentPlan}}
-    </div>
-</div>
+             <div class="clearfix"></div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-     <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="left" data-content="<img src='flatfull/img/reports_images/Comparison_Report.png'></img>" data-trigger="hover">
-        <!-- Icon and Title -->
-        <div>
-            <div>
-                <i class="icon-graph icon-3x"></i>
-            </div>
-            <b>Comparison Reports</b>
-        </div>
-        <br />
+    </div>
+
+      <div class="tab-pane" id="ContactReports">
+         <a class="report-go" href="#contact-reports">
+                     <div class="wrapper text-center b-a" style="min-width:330px">
+        
         <!-- Description -->
-        <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-        Compare the pipeline stages for each user.
+        <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
+            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
         </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#report-comparison" onclick="Agile_GA_Event_Tracker.track_event('Comparision Reports' )">Go</a>
-        </div>
+ 
     </div>
-</div>
-</div>
-</div>
-<div class="tab-pane" id="helpdesk-tab">
-    <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/new-tickets.png' width='400px' height='212px'></img>" data-trigger="hover">
-                <!-- Icon and Title -->
-                <div>
-                    <div>
-                        <i class="icon-tasks icon-3x"></i>
-                    </div>
-                    <b>Tickets</b>
-                </div>
-                <br />
-                <!-- Description -->
-                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                    View new and closed tickets report for each day, week & month.
-                </div>
-                <!-- Add button -->
-                <div>
-                    <a class="btn btn-sm btn-default" href="#ticket-report/tickets">Go</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/sla-report.png' width='400px' height='212px'></img>" data-trigger="hover">
-                <!-- Icon and Title -->
-                <div>
-                    <div>
-                        <i class="fa fa-check-square-o fa-3x"></i>
-                    </div>
-                    <b>SLA Report</b>
-                </div>
-                <br />
-                <!-- Description -->
-                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                    View tickets closed in < 2 hrs, between 2-6 hrs, between 6-12 hrs etc.
-                </div>
-                <!-- Add button -->
-                <div>
-                    <a class="btn btn-sm btn-default" href="#ticket-report/sla-report">Go</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" data-placement="left" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/status-report.png' width='400px' height='212px'></img>" data-trigger="hover">
-                <!-- Icon and Title -->
-                <div>
-                    <div>
-                        <i class="fa fa-star fa-3x"></i>
-                    </div>
-                    <b>Ticket Priority & Status Reports</b>
-                </div>
-                <br />
-                <!-- Description -->
-                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                    View tickets priority and status reports over the date ranges.
-                </div>
-                <!-- Add button -->
-                <div>
-                    <a class="btn btn-sm btn-default" href="#ticket-report/priority-report">Go</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="panel wrapper text-center b-a show_screenshot" data-html="true" data-placement="left" rel="popover" data-placement="right" data-content="<img src='flatfull/img/reports_images/first-response-time.png' width='400px' height='212px'></img>" data-trigger="hover">
-                <!-- Icon and Title -->
-                <div>
-                    <div>
-                        <i class="icon-clock icon-3x"></i>
-                    </div>
-                    <b>First Response Time</b>
-                </div>
-                <br />
-                <!-- Description -->
-                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                    View first response time over the date ranges.
-                </div>
-                <!-- Add button -->
-                <div>
-                    <a class="btn btn-sm btn-default" href="#ticket-report/avg-first-resp-time">Go</a>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="panel wrapper text-center b-a">
-                <div>
-                    <div>
-                        <i class="fa fa-th-large fa-3x"></i>
-                    </div>
-                    <b>Ticket status</b>
-                </div>
-                <br />
-                <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-                    View tickets status chart
-                </div>
-                <div>
-                    <a class="btn btn-sm btn-default" href="#ticket-report/status-report">Go</a>
-                </div>
-            </div>
-        </div> -->
+</a>
     </div>
-</div>
 
-</div>
+    <div class="tab-pane" id="CampaignReports">
+         <a class="report-go" href="#campaign-reports">
+                     <div class="wrapper text-center b-a" style="min-width:330px">
+        
+        <!-- Description -->
+        <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
+            Get a periodic email digest of various campaigns launched in Agile CRM. </div>
+ 
+    </div>
+</a>
+    </div>
+
+    <div class="tab-pane" id="Tickets">
+            <a class="report-go" href="#ticket-report/tickets">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            View new and closed tickets report for each day, week & month.
+        </div>
+        <img src='flatfull/img/reports_images/new-tickets.png'  width='400px' height='212px'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
+
+    <div class="tab-pane" id="SLAReport">
+            <a class="report-go" href="#ticket-report/sla-report">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            
+        View tickets closed in < 2 hrs, between 2-6 hrs, between 6-12 hrs etc.  
+        </div>
+        <img src='flatfull/img/reports_images/sla-report.png'  width='400px' height='212px'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
+
+    <div class="tab-pane" id="PriorityReport">
+            <a class="report-go" href="#ticket-report/priority-report">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            
+        View tickets priority and status reports over the date ranges.
+        </div>
+        <img src='flatfull/img/reports_images/status-report.png'  width='400px' height='212px'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
+
+    <div class="tab-pane" id="FirstResponse">
+            <a class="report-go" href="#ticket-report/avg-first-resp-time">
+                    <div class="text-center show_screenshot">
+
+                    <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            
+        View first response time over the date ranges.
+
+        </div>
+        <img src='flatfull/img/reports_images/first-response-time.png'  width='400px' height='212px'></img>
+        
+        <br />
+        
+    </div>
+        </a>
+    </div>
 
 </div>
 </div>
+</div>
+ </div>
+</div>
+
+<div class="tab-content reports-Container wrapper-md">
+            
+        </div>
+</div>
+</div>
+</div>
+
+</div>
+</script>
+
+<script id="upgradeModal-template" type="text/html">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Upgrade</h3>
+	</div>
+	<div class="modal-body">
+               </div>  
+	<div class="modal-footer">
+		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">Ok</a>
+	</div>
 </div>
 </div>
 </script>

@@ -21,6 +21,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-r
 
 var DEFAULT_GRAVATAR_url = agileWindowOrigin() + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
+var DEFAULT_GRAVARTAR_IMG = "https://doxhze3l6s7v9.cloudfront.net/img/default-404.png";
 
 var ONBOARDING_SCHEDULE_URL = "http://supportcal.agilecrm.com";
 
@@ -64,6 +65,8 @@ function getUrlVars()
 	return vars;
 }
 
+var _agile_owners_collection = null;
+
 /**
  * Creates a select fields with the options fetched from the url specified,
  * fetches the collection from the url and creates a select element and appends
@@ -103,12 +106,29 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();
 
-	// On successful fetch of collection loading symbol is removed and options
-	// template is populated and appended in the selectId sent to the function
-	collection.fetch({ success : function()
+	// Check if owners are already fetched and stored in global variable.
+	// If yes, fill the select field directly otherwise, fetch from the server
+	if( url == '/core/api/users/partial' && _agile_owners_collection != null )
 	{
+		_fillSelectCallback(_agile_owners_collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption);
+	} else {
+		// On successful fetch of collection loading symbol is removed and options
+		// template is populated and appended in the selectId sent to the function
+		collection.fetch({success: function() {
+				_fillSelectCallback(collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption);
+				if( url == '/core/api/users/partial' )	_agile_owners_collection = collection;
+			} 
+		});
+	}
+}
 
-		// Remove loading
+/*
+ *	This function will remove the loading symbol, populate the options template
+ *	and append the options to the selectId sent to it
+ */
+function _fillSelectCallback(collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption)
+{
+			// Remove loading
 		if ($("#" + selectId, el).next().hasClass("select-loading"))
 			$("#" + selectId, el).next().html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 		else
@@ -160,10 +180,9 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			// necessary
 			callback(collection, optionsHTML);
 		}
-	}
-
-	});
 }
+
+
 
 // Fill selects with tokenized data
 /**
@@ -488,6 +507,9 @@ function visibleFilter()
 }
 function showTransitionBar()
 {
+	// Remove transition bar for mobile browsers
+	if( agile_is_mobile_browser() )	return;
+	
 	if ($('.butterbar').hasClass('hide'))
 		$('.butterbar').removeClass('hide');
 	if (!$('.butterbar').hasClass('animation-active'))
@@ -753,4 +775,35 @@ function sendEmail(json, callback){
 				showNotyPopUp("warning", data.responseText, "top");
 			}
 			});
+}
+
+function showAlertModal(json_key, type, confirm_callback, decline_callback,dynamic_title){
+	var data = {};
+	if(MODAL_MESSAGES[json_key] != undefined){
+		data.title = MODAL_MESSAGES[json_key]['title'];
+		data.message = MODAL_MESSAGES[json_key]['message'];
+	}else{
+		data.title = dynamic_title;
+		data.message = json_key;
+	}
+	if(type == undefined)
+		type = "alert";
+	data.type = type;
+	getTemplate("modal-confirm", data, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		$("#alertModal").html($(template_ui)).modal('show');
+		$('#alertModal #success_callback').click(function (e) {
+			e.preventDefault();
+			$("#alertModal").modal('hide');
+	    	if(confirm_callback && typeof(confirm_callback === "function"))
+	    		confirm_callback();
+		});
+		$('#alertModal #decline_callback').click(function (e) {
+			e.preventDefault();
+			$("#alertModal").modal('hide');
+	    	if(decline_callback && typeof(decline_callback === "function"))
+	    		decline_callback();
+		});
+	}, null);
 }

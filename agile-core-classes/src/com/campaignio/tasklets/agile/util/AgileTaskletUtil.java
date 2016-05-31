@@ -725,9 +725,10 @@ public class AgileTaskletUtil {
 			for (EmailBounceStatus emailBounceStatus : contact.emailBounceStatus) {
 				if (StringUtils.equals(emailBounceStatus.email,
 						subscriberJSON.getString(Contact.EMAIL))) {
-					if (emailBounceStatus.emailBounceType
-							.equals(EmailBounceType.HARD_BOUNCE))
+					if (emailBounceStatus.emailBounceType.equals(EmailBounceType.HARD_BOUNCE))
 						return EmailBounceType.HARD_BOUNCE;
+					else if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SPAM))
+						return EmailBounceType.SPAM;
 
 					return EmailBounceType.SOFT_BOUNCE;
 				}

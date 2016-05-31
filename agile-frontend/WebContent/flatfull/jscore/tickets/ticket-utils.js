@@ -107,7 +107,7 @@ var Ticket_Utils = {
 	loadDateChartAndDatePicker: function(callback){
 
 		head.js(LIB_PATH + 'lib/date-charts.js', 
-				  LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _AGILE_VERSION, function(){
+				  LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _agile_get_file_hash('date-range-picker.js'), function(){
 
 			if(callback)
 				callback();
@@ -116,7 +116,7 @@ var Ticket_Utils = {
 
 	loadTextExpander: function(callback){
 
-		head.js('/flatfull/lib/jquery.textarea-expander.js?_=' + _AGILE_VERSION, function(){
+		head.js('/flatfull/lib/jquery.textarea-expander.js?_=' + _agile_get_file_hash('jquery.textarea-expander.js'), function(){
 
 			if(callback)
 				callback();
@@ -125,7 +125,7 @@ var Ticket_Utils = {
 
 	loadInsertCursor: function(callback){
 
-		head.js('/flatfull/lib/jquery.insertatcursor.js?_=' + _AGILE_VERSION, function(){
+		head.js('/flatfull/lib/jquery.insertatcursor.js?_=' + _agile_get_file_hash('jquery.insertatcursor.js'), function(){
 
 			if(callback)
 				callback();

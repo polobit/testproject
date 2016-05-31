@@ -438,11 +438,20 @@ function appendCustomfields(el){
 				 $.each(customfields, function(i,customfield){
 				 		if(customfield.field_type == "DATE")
 				 			row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 		else if(customfield.field_type == "CONTACT")
+				 		{
+				 			row += '<td class="deal_custom_replace" deal_contact_id="'+Handlebars.compile('{{id}}')({id : deals[index].attributes.id})+'_'+Handlebars.compile('{{id}}')({id : customfield.id})+'"></td>';
+				 		}
+				 		else if(customfield.field_type == "COMPANY")
+				 		{
+				 			row += '<td class="deal_custom_replace" deal_company_id="'+Handlebars.compile('{{id}}')({id : deals[index].attributes.id})+'_'+Handlebars.compile('{{id}}')({id : customfield.id})+'"></td>';
+				 		}
 				 		else
 							row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
 			 });
+			dealCustomFieldValueForContact(el,customfields,deals);
 			 
 		}
 	});
@@ -479,6 +488,128 @@ function dealCustomFieldValueForDate(name, data){
 		}
 	});
 	return value;
+}
+
+function dealCustomFieldValueForContact(el, customfields, deals){
+	var referenceContactIds = "";
+	$.each(deals, function(index, dealModel){
+		$.each(dealModel.get("custom_data"), function(index, field){
+			if(isContactTypeCustomField(customfields, field) || isCompanyTypeCustomField(customfields, field))
+			{
+				var contactIdsJSON = JSON.parse(field.value);
+				$.each(contactIdsJSON, function(index_1, val){
+					if(App_Deals.dealContactTypeCustomFields && App_Deals.dealContactTypeCustomFields.collection && !App_Deals.dealContactTypeCustomFields.collection.get(val))
+					{
+						referenceContactIds += val+",";
+					}
+					else if(!App_Deals.dealContactTypeCustomFields)
+					{
+						referenceContactIds += val+",";
+					}
+					
+				});
+			}
+		});
+	});
+
+	App_Deals.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+	
+	if(referenceContactIds)
+	{
+		App_Deals.referenceContactsCollection.collection.fetch({
+			success : function(data){
+				if (data && data.length > 0)
+				{
+					if(App_Deals.dealContactTypeCustomFields && App_Deals.dealContactTypeCustomFields.collection)
+					{
+						App_Deals.dealContactTypeCustomFields.collection.add(data.toJSON());
+					}
+					else
+					{
+						App_Deals.dealContactTypeCustomFields = new Base_Collection_View({ data : data.toJSON() });
+					}
+				}
+				setupContactTypeCustomFields(el, customfields, deals);
+				hideTransitionBar();
+			}
+		});
+	}
+	else
+	{
+		setupContactTypeCustomFields(el, customfields, deals);
+		hideTransitionBar();
+	}
+}
+
+function setupContactTypeCustomFields(el, customfields, deals){
+	$.each(deals, function(index, dealModel){
+		var contacts_data_json = {};
+		var companies_data_json = {};
+		$.each(customfields, function(index, cu_field){
+			$.each(dealModel.get("custom_data"), function(index, field){
+				if(field.name == cu_field.field_label && cu_field.field_type == "CONTACT")
+				{
+					var contacts_data_array = [];
+					var contactIdsJSON = JSON.parse(field.value);
+					$.each(contactIdsJSON, function(index_1, val){
+						contacts_data_array.push(App_Deals.dealContactTypeCustomFields.collection.get(val).toJSON());
+					});
+					//If same deal has two or more different contact type custom fields, 
+					//we will add them to contacts_data_json with deal id and custom field name
+					contacts_data_json[dealModel.id+"_"+field.name] = contacts_data_array;
+				}
+
+				if(field.name == cu_field.field_label && cu_field.field_type == "COMPANY")
+				{
+					var companies_data_array = [];
+					var contactIdsJSON = JSON.parse(field.value);
+					$.each(contactIdsJSON, function(index_1, val){
+						companies_data_array.push(App_Deals.dealContactTypeCustomFields.collection.get(val).toJSON());
+					});
+					//If same deal has two or more different company type custom fields, 
+					//we will add them to companies_data_json with deal id and custom field name
+					companies_data_json[dealModel.id+"_"+field.name] = companies_data_array
+				}
+			});
+		});
+
+		$.each(customfields, function(index, cu_field){
+			$.each(dealModel.get("custom_data"), function(index, field){
+				if(field.name == cu_field.field_label && (cu_field.field_type == "CONTACT" || cu_field.field_type == "COMPANY"))
+				{
+					var data_json = contacts_data_json[dealModel.id+"_"+field.name];
+					var template = 'contacts-custom-view-custom-contact';
+					var ele_id = "deal_contact_id";
+					var img_ele_class = "contact-type-image";
+
+					if(cu_field.field_type == "COMPANY")
+					{
+						template = 'contacts-custom-view-custom-company';
+						ele_id = "deal_company_id";
+						img_ele_class = "company-type-image";
+						data_json = companies_data_json[dealModel.id+"_"+field.name];
+					}
+					getTemplate(template, data_json, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(el).find("td["+ele_id+"="+dealModel.id+"_"+cu_field.id+"]").html($(template_ui).html());
+						var ellipsis_required = false;
+						$(el).find("td["+ele_id+"="+dealModel.id+"_"+cu_field.id+"]").find("."+img_ele_class).each(function(index, val){
+							if(index > 2)
+							{
+								ellipsis_required = true;
+								$(this).remove();
+							}
+						});
+						if(ellipsis_required)
+						{
+							$(el).find("td["+ele_id+"="+dealModel.id+"_"+cu_field.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
+						}
+					}, null);
+				}
+			});
+		});
+	});
 }
 
 function populateLostReasons(el, value){

@@ -75,11 +75,28 @@ angular.module('builder.wysiwyg', [])
 			var drawWysiwyg = function(x, y, node) {
 				node    = node ? node : $scope.elementFromPoint(x, y - $scope.frameBody.scrollTop());
   				var matched = elements.match(node);
-  	
-  				if (matched.canModify.indexOf('text') > -1 && matched.showWysiwyg) {
-  					$scope.selectBox.hide();
+  				var inline_element=['U','S','B', 'BIG', 'I', 'SMALL','EM', 'KBD','STRONG', 'SAMP', 'TIME', 'VAR', 'BR', 'SPAN','SUB', 'SUP'];
 
-                    node.setAttribute('contenteditable', true);                  
+   				if (matched.canModify.indexOf('text') > -1 && matched.showWysiwyg) {
+  					$scope.selectBox.hide();
+  					
+  					if(inline_element.includes(node.tagName)){
+			              var k=0;
+			              var i=node;
+			              while(k==0){
+			                if(!inline_element.includes(i.tagName)){
+			                  i.setAttribute('contenteditable', true);
+			                  k=1; 
+			                } 
+			                else 
+			                  i=i.parentNode;
+			              }
+			            }
+              
+		            else {
+		              node.setAttribute('contenteditable', true); 
+		            }  
+  								                         
                     node.focus();
 
                     var pos   = node.getBoundingClientRect(),
@@ -115,6 +132,9 @@ angular.module('builder.wysiwyg', [])
 	      		$scope.frameBody.off('dblclick').on('dblclick', function(event) {
                     if (event.target.nodeName !== 'BODY' && $(event.target).text().trim().length) {
                         drawWysiwyg(event.pageX, event.pageY);
+                    } else if (event.target.nodeName === 'IMG') {
+                    	parent.document.getElementById("inspectorBuilderMenuItem").click();
+                    	$('#elements-container').show();
                     }
 	      		});
 
@@ -145,7 +165,7 @@ angular.module('builder.wysiwyg', [])
 		link: function($scope, el) {
 			rangy.init();
 
-			//register rangy class appliers for basic text styling
+  			//register rangy class appliers for basic text styling
 			$scope.bold       = rangy.createCssClassApplier('strong', {elementTagName: "strong"});
 			$scope.underline  = rangy.createCssClassApplier('u', {elementTagName: "u"});
 			$scope.italic     = rangy.createCssClassApplier('em', {elementTagName: "em"});
@@ -167,9 +187,18 @@ angular.module('builder.wysiwyg', [])
 			//Add passed alignment class to active node and remove
 			//all other alignment classes currently on it.
 			$scope.align = function(direction) {
-				$($scope.selected.node).removeClass(function (i,c) {
+				var inline_element=['U','S','B', 'BIG', 'I', 'SMALL','EM', 'KBD','STRONG', 'SAMP', 'TIME', 'VAR', 'BR', 'SPAN','SUB', 'SUP'];
+
+				if(inline_element.includes($scope.selected.node.tagName) && direction!="center" ){
+					$($scope.selected.node).removeClass(function (i,c) {
 				    return (c.match (/(^|\s)text-\S+/g) || []).join(' ');
-				}).addClass('text-'+direction);
+					}).addClass('text-'+direction).attr('style', 'display:block');
+				}
+				else{
+					$($scope.selected.node).removeClass(function (i,c) {
+					    return (c.match (/(^|\s)text-\S+/g) || []).join(' ');
+					}).addClass('text-'+direction);
+				}
 			};
 			
 			//handle clicks on text styling/aligning buttons

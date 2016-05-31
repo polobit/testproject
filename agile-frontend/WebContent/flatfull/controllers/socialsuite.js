@@ -32,12 +32,20 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	before : 
 	{	
 		'*any': function(fragment, args, next) {
-			// Gets template to display.
+		// Gets template to display.
 		getTemplate('socialsuite-show-streams', {}, undefined, function(template_ui){
-			next();
+			// For production versions
+			if(HANDLEBARS_PRECOMPILATION)
+				next();
+			// For local env
+			else {
+				head.js("jscore/min/flatfull/social-suite-all-min.js", function(){
+                   next();
+				});
+			}
 
 		}, "#content");
-			
+	
 		}
 	},
 	/**

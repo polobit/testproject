@@ -172,7 +172,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
 
         // Check for valid name
         if (isNotValid(name)) {
-            alert("Name not valid");
+            showAlertModal("name_not_valid");
             return;
         }
 
@@ -244,6 +244,8 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 if($(targetEl).attr('id') === 'campaign_access_level'){
                     if(access_permission == "1")
                         show_campaign_save(e,"The Campaign is now Public.");
+                       //show_campaign_save(e,"The Campaign is now Public.");
+
                     else 
                         show_campaign_save(e,"The Campaign is now Private.");
                 }
@@ -386,17 +388,16 @@ var Workflow_Reports_Events = Base_Collection_View.extend({
         if(!campaign_id)
             return;
         
-        if(!confirm("Are you sure you want to delete all logs?"))
-            return;
-        
-        // Sends delete request to CampaignsAPI for deletion of logs
-        $.ajax({
-            url: 'core/api/campaigns/logs/' + campaign_id,
-            type: 'DELETE',
-            success: function(){
-                App_Workflows.logsToCampaign(campaign_id);
-                //location.reload(true);
-            }
+        showAlertModal("delete_campaign_logs", "confirm", function(){
+            // Sends delete request to CampaignsAPI for deletion of logs
+            $.ajax({
+                url: 'core/api/campaigns/logs/' + campaign_id,
+                type: 'DELETE',
+                success: function(){
+                    App_Workflows.logsToCampaign(campaign_id);
+                    //location.reload(true);
+                }
+            });
         });
     },
 
@@ -484,12 +485,12 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
             	  {
             		  if(status.responseText === "Please change the given name. Same kind of name already exists.")
             		  {
-            			  alert("Please change the name and click on 'Create a Copy' again.");
+            			  showAlertModal("duplicate_workflow");
             			  return;
             		  }
             	  }
             	  
-            	  alert(status.responseText);
+            	  showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
               }
               else
             	  {
@@ -733,9 +734,15 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
 function initializeWorkflowsListeners() {}
 
 function change_access_level(level, el){
-    if(level == "1")
+    if(level == "1"){
         $("#campaign_access_level span", el).text('Make Private');
-    else 
+        $("#campaign_access_level i", el).removeClass("icon-unlock");
+        $("#campaign_access_level i", el).addClass("fa fa-lock");
+    }
+    else {
         $("#campaign_access_level span", el).text('Make Public');
+        $("#campaign_access_level i", el).removeClass("fa fa-lock");
+        $("#campaign_access_level i", el).addClass("icon-unlock");
+    }
 }
 

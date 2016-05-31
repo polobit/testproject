@@ -680,7 +680,7 @@ $(function() {
 function isContactTypeCustomField(customContactfields,property){
 	var count = 0;
 	$.each(customContactfields,function(index,field){
-		if(field.field_label==property.name)
+		if(field.field_label==property.name && field.field_type == "CONTACT")
 			count++;
 	});
 	return count>0;
@@ -689,7 +689,7 @@ function isContactTypeCustomField(customContactfields,property){
 function isCompanyTypeCustomField(customCompanyfields,property){
 	var count = 0;
 	$.each(customCompanyfields,function(index,field){
-		if(field.field_label==property.name)
+		if(field.field_label==property.name && field.field_type == "COMPANY")
 			count++;
 	});
 	return count>0;

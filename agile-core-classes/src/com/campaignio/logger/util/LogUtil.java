@@ -124,7 +124,7 @@ public class LogUtil
 	    }
 
 	    Object[] newLog = new Object[] { logDeferredTask.domain, logDeferredTask.campaignId, campaignName,
-	    		logDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), logDeferredTask.message,
+	    		logDeferredTask.subscriberId, GoogleSQL.getFutureDate(), logDeferredTask.message,
 	    		logDeferredTask.logType };
 
 	    queryList.add(newLog);
@@ -138,7 +138,7 @@ public class LogUtil
 	{
 	    Long start_time = System.currentTimeMillis();
 	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
-	    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
+//	    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
 	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
 	    System.out.println("Logs size : " + queryList.size());
 	}

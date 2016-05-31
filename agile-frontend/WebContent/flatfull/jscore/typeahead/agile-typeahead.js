@@ -43,7 +43,7 @@ var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail)
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail, page_size)
 {
 
 	// Turn off browser default auto complete
@@ -52,6 +52,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 		url = "core/api/search/"
 
 	var CONTACTS = {};
+	if(!page_size)
+		page_size = 10;
 
 	var el_typeahead = $('#' + id, el)
 			.typeahead(
@@ -86,7 +88,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							// Sends search request and holds request object,
 							// which can be reference to cancel request if there
 							// is any new request
-							this.options.searchAJAXRequest = $.getJSON(url + "?q=" + encodeURIComponent(query) + "&page_size=10" + type_url, function(data)
+							this.options.searchAJAXRequest = $.getJSON(url + "?q=" + encodeURIComponent(query) + "&page_size=" + page_size + "" + type_url, function(data)
 							{
 
 								var current_query = $('#' + id, el).val();
@@ -239,6 +241,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								this.show();
 								return;
 							}
+			
 
 							// Stores all the matched elements (<li> drop down)
 							// in items
@@ -630,7 +633,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 // Removes tags ("Related to" field contacts)
 $("body").on("click", '#remove_tag', function(event)
 {
-	event.preventDefault();
+	event.preventDefault();var company_name ;var prop = null;var flag = false;
 	if($(this).parent().attr("data-deal-related-contacts"))
 	{
 		var deal_related_contacts = $(this).parent().attr("data-deal-related-contacts").split(" ");
@@ -639,6 +642,27 @@ $("body").on("click", '#remove_tag', function(event)
 			$("li[data="+contact_id+"]", el).remove();
 		});
 	}
+	if($(this).hasClass("companyAddress") && contact_company){
+		$.each(contact_company.properties , function(){
+			if(this.name == "address" && this.subtype == "office")
+				prop = JSON.parse(this.value);
+		});
+		if(prop){
+			if(prop.address && $("#content #address").val() && $("#content #address").val() != prop.address)
+				flag = true;
+			else if(prop.city && $("#content #city").val() && $("#content #city").val() != prop.city)
+				flag = true;
+			else if(prop.state && $("#content #state").val() && $("#content #state").val() != prop.state)
+				flag = true;
+			else if(prop.zip && $("#content #zip").val() && $("#content #zip").val() != prop.zip)
+				flag = true;
+			else if(prop.country && $("#content #country").val() && $("#content #country").val() != prop.country)
+				flag = true ;
+			if(!flag){
+				$("#content .address-type,#address,#city,#state,#zip,#country").val('');
+			}
+        }
+    }
 	$(this).parent().remove();
 });
 

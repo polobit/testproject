@@ -241,7 +241,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    System.out.println(data);
 	    if (data.has("quantity"))
 		plan.put("quantity", data.get("quantity"));
-
+	    plan.put("invoiceId", obj.get("id"));
 	    if (data.has("plan"))
 	    {
 		JSONObject planJSON = data.getJSONObject("plan");
@@ -298,6 +298,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	Map<String, Object> details = getPlanDetails();
 	details.put("user_name", user.name);
 	details.put("domain", getDomain());
+	details.put("email", user.email);
 	Card card = StripeUtil.getDefaultCard(customer);
 	details.put("last4", card.getLast4());
 

@@ -16,6 +16,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import com.agilecrm.util.JSONUtil;
+import com.agilecrm.util.VersioningUtil;
 
 /**
  * <code>AppengineMail</code> is an alternative to send grid email, it is used
@@ -29,7 +30,14 @@ import com.agilecrm.util.JSONUtil;
  */
 public class AppengineMail
 {
-    public static final String FROM = "agilecrm@agilecrmbeta.appspotmail.com";
+    public static String FROM = "agilecrm@agilecrmbeta.appspotmail.com";
+    static {
+    	if(VersioningUtil.isProductionAPP()){
+    		FROM = "agilecrm@agile-crm-cloud.appspotmail.com";
+    	} else {
+    		FROM = "agilecrm@agilecrmbeta.appspotmail.com";
+    	}
+    }
     public static final String FRIENDLY_NAME = "AgileCRM";
 
     public static boolean sendHTMLEmail(String to, String subject, String textBody, String htmlBody)
@@ -41,6 +49,8 @@ public class AppengineMail
 	// Send Email (HTML Email and Plain Text)
 	try
 	{
+		System.out.println("from = " + from);
+		
 	    Properties props = System.getProperties();
 	    Session session = Session.getDefaultInstance(props, null);
 

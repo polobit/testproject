@@ -36,6 +36,8 @@ import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.queues.backend.ModuleUtil;
+import com.agilecrm.queues.backend.ModuleUtil.AgileModules;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -55,6 +57,8 @@ import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.modules.ModulesService;
+import com.google.appengine.api.modules.ModulesServiceFactory;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.SearchException;
@@ -1453,7 +1457,7 @@ public class ContactUtil
 	UserAccessControl control = UserAccessControl.getAccessControl(
 		UserAccessControl.AccessControlClasses.Contact.toString(), null, null);
 
-	if (control.hasScope(UserAccessScopes.DELETE_CONTACTS) || control.hasScope(UserAccessScopes.UPDATE_CONTACT) || control.hasScope(UserAccessScopes.EDIT_CONTACT))
+	if (control.hasScope(UserAccessScopes.UPDATE_CONTACT) || control.hasScope(UserAccessScopes.EDIT_CONTACT))
 	    return;
 
 	Iterator<Contact> i = contacts.iterator();
@@ -1461,7 +1465,7 @@ public class ContactUtil
 	{
 	    Contact c = i.next();
 	    control.setObject(c);
-	    if (control.canDelete())
+	    if (control.canCreate())
 		continue;
 
 	    i.remove();
@@ -1856,8 +1860,11 @@ public class ContactUtil
     {
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
 		lastCampaignEmailed, toEmail);
+
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
-	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
+	
+	// Add these tasks to run in Agile Tasks Handler backend
+	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).header("Host", ModuleUtil.getModuleDefaultVersionHost(AgileModules.AGILE_TASKS_HANDLER.getModuleName())).etaMillis(System.currentTimeMillis() + 5000));
     }
 
     public static String getMD5EncodedImage(Contact contact)

@@ -42,7 +42,7 @@ public class ContactsBulkDeleteDeferredTask extends BulkActionAdaptor
     protected void performAction()
     {
 	System.out.println("performing operation");
-	List<Contact> contacts = fetchContacts();
+	List<Contact> contacts = fetchContactsForDelete();
 
 	ContactUtil.deleteContacts(contacts);
 

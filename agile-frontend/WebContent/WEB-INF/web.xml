@@ -229,6 +229,20 @@
 		<servlet-name>Jersey Developers REST Service</servlet-name>
 		<url-pattern>/dev/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Jersey Helpcenter REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/helpcenterapi</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Jersey Helpcenter REST Service</servlet-name>
+		<url-pattern>/helpcenterapi/*</url-pattern>
+	</servlet-mapping>
 
 
 
@@ -261,6 +275,7 @@
 		<url-pattern>/meeting</url-pattern>
 	</servlet-mapping>
 
+	<!--
 	<servlet>
 		<servlet-name>ActivityReports</servlet-name>
 		<servlet-class>com.agilecrm.reports.ActivityReportServlet</servlet-class>
@@ -270,6 +285,7 @@
 		<servlet-name>ActivityReports</servlet-name>
 		<url-pattern>/backend/cron/activity-reports/*</url-pattern>
 	</servlet-mapping>
+	-->
 	
 	<servlet>
 		<servlet-name>Reports</servlet-name>
@@ -280,6 +296,17 @@
 		<servlet-name>Reports</servlet-name>
 		<url-pattern>/backend/cron/reports/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CampaignReports</servlet-name>
+		<servlet-class>com.agilecrm.reports.CampaignReportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CampaignReports</servlet-name>
+		<url-pattern>/backend/cron/campaignReports/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>Triggers</servlet-name>
 		<servlet-class>com.agilecrm.workflows.triggers.TriggerServlet</servlet-class>
@@ -741,6 +768,16 @@
 		<servlet-name>AgileFormRedirect</servlet-name>
 		<url-pattern>/agileformredirect</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>FormRenderingServlet</servlet-name>
+		<servlet-class>com.agilecrm.forms.FormRenderingServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FormRenderingServlet</servlet-name>
+		<url-pattern>/forms/*</url-pattern>
+	</servlet-mapping>
+	
 
 	<servlet>
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>
@@ -1162,5 +1199,93 @@
 		<servlet-name>_ah_sessioncleanup</servlet-name>
 		<url-pattern>/_ah/sessioncleanup</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>CompanyNameUpdate</servlet-name>
+		<servlet-class>com.agilecrm.CompanyNameUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CompanyNameUpdate</servlet-name>
+		<url-pattern>/backend/cron/company-name-update</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CustomFieldDelete</servlet-name>
+		<servlet-class>com.agilecrm.CustomFieldDeletionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CustomFieldDelete</servlet-name>
+		<url-pattern>/backend/cron/delete-custom-field</url-pattern>
+	</servlet-mapping>
   
+  	<!--  Helpcenter filter -->
+  	<filter>
+		<filter-name>HelpcenterFilter</filter-name>
+		<filter-class>com.agilecrm.filter.KnowledgebaseAuthFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>HelpcenterFilter</filter-name>
+		<url-pattern>/helpcenter/*</url-pattern>
+		<url-pattern>/helpcenterapi/*</url-pattern>
+	</filter-mapping>
+  	<!-- Helpcenter filter -->
+  	
+  	<!-- HelpCenter -->
+	<servlet>
+		<servlet-name>HelpCenter</servlet-name>
+		<jsp-file>/helpcenter.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HelpCenter</servlet-name>
+		<url-pattern>/helpcenter</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>HelpCenterLogin</servlet-name>
+		<servlet-class>com.agilecrm.knowledgebase.servlets.KnowledgebaseLoginServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HelpCenterLogin</servlet-name>
+		<url-pattern>/helpcenter/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>HelpCenter</servlet-name>
+		<url-pattern>/helpcenter</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>HelpCenterRegister</servlet-name>
+		<servlet-class>com.agilecrm.knowledgebase.servlets.KnowledgebaseRegister</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HelpCenterRegister</servlet-name>
+		<url-pattern>/helpcenter/register</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HelpcenterVerifyEmail</servlet-name>
+		<jsp-file>/helpcenter/helpcenter_verify_from_email.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HelpcenterVerifyEmail</servlet-name>
+		<url-pattern>/helpcenter/verify_email</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Help Center Panel REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/knowledgebase</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Help Center Panel REST Service</servlet-name>
+		<url-pattern>/knowledgebase/*</url-pattern>
+	</servlet-mapping>
+	<!-- End of HelpCenter -->
 </web-app>

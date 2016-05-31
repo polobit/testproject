@@ -270,6 +270,35 @@ $('.popover').on('click', '#minus-score', function(e){
 		});
 		          
 	});
+
+
+ $('.popover').off('click', '#lead-score')
+$('.popover').on('click', '#lead-score', function(e){
+       e.preventDefault();
+	   //$('[data-toggle="tooltip"]').tooltip();
+	   $("#contactscorebox").removeClass("hide");
+	   $("#lead-score").addClass("hide");
+	   $("#contactscorebox").val($("#lead-score").text());
+	   $("#contactscorebox").focus();
+
+});
+
+$('.popover').off('focusout', '#contactscorebox')
+$('.popover').on('focusout', '#contactscorebox', function(e){
+      e.preventDefault();
+		contactPopupScoreValue();
+
+});
+
+$('.popover').off('keyup', '#contactscorebox')
+$('.popover').on('keyup', '#contactscorebox', function(e){
+      e.preventDefault();
+		if(e.keyCode == 13){
+	   		contactPopupScoreValue();
+	   }	
+
+});
+
 $('.popover').off('click', '#company-minus-score')
 $('.popover').on('click', '#company-minus-score', function(e){
 	    e.preventDefault();
@@ -423,7 +452,7 @@ e.preventDefault();
 		       		},
 		       		error: function(model,response){
 		       			console.log(response);
-		       			alert(response.responseText);
+		       			showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
 		       		}
 		        });
 			});
@@ -487,6 +516,52 @@ $('.popover').on('click', '.contact-owner-list-popover', function(e){
 });
 
 }
+
+function contactPopupScoreValue()
+{
+
+	    var scoreboxval = parseInt($("#contactscorebox").val());
+		var decimalcheck=$("#contactscorebox").val();
+		var contact_model =  App_Contacts.contact_popover.toJSON();
+		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
+		if (((contact_model.type=="PERSON" && scoreboxval != prvs && (decimalcheck%1==0))|| $("#contactscorebox").val()=="")||((contact_model.type=="COMPANY" && (scoreboxval>0) && scoreboxval != prvs && (decimalcheck%1==0))|| $("#contactscorebox").val()=="")){ 
+			if($("#contactscorebox").val()==""){scoreboxval=0;
+			}					
+			App_Contacts.contact_popover.set({'lead_score': scoreboxval}, {silent: true});
+			var contact_model =  App_Contacts.contact_popover.toJSON();			
+			var new_model = new Backbone.Model();
+			new_model.url = 'core/api/contacts';
+			new_model.save(contact_model,{
+			success: function(model){
+					}
+				});							
+		}
+         if(contact_model.type=="COMPANY" && (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)))
+         {
+         	alert("Please enter a valid number.");
+			scoreboxval=prvs;
+
+         }
+         
+         
+
+		else if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
+			alert("Please enter a valid number.");
+			scoreboxval=prvs;
+		}
+	
+		else{
+			if(scoreboxval== prvs){
+			scoreboxval=prvs;
+			}
+		}
+		$('#lead-score').attr("data-original-title", scoreboxval);
+		$('#lead-score').text(scoreboxval).removeClass("hide");
+	   	$("#contactscorebox").addClass("hide").val(scoreboxval);
+	   	$("#lead-score").attr("title",scoreboxval);
+	}
+
+
 
 function agile_crm_get_List_contact_properties_list(propertyName)
 {

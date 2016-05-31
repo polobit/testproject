@@ -337,7 +337,7 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("uservoice.js");
 	}
-	if (templateName.indexOf("dashboard") == 0)
+    if (templateName.indexOf("dashboard") == 0)
 	{
 		template_relative_urls.push("dashboards.js");
 	}
@@ -345,6 +345,11 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("referals.js");
 	}
+	if (templateName.indexOf("helpcenter") == 0)
+	{
+		template_relative_urls.push("helpcenter.js");
+	}
+	
 	return template_relative_urls;
 }
 
@@ -1029,6 +1034,13 @@ function getCount(collection)
 		return "(" + collection[0].count + " Total)";
 	else
 		return "(" + collection.length + " Total)";
+}
+function getTaskCount(collection)
+{
+	if (collection[0] && collection[0].count && (collection[0].count != -1))
+		return collection[0].count ;
+	else
+		return collection.length ;
 }
 
 /**

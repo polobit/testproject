@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -236,7 +237,10 @@ public class UserPrefs
 		DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
 
 		// Assigning Random avatar
-		if (pic == null)
+		if (StringUtils.isBlank(pic) && currentDomainUser != null)
+			pic = currentDomainUser.pic;
+		
+		if(StringUtils.isBlank(pic))
 			pic = chooseRandomAvatar();
 		
 		boolean isDomainUserUpdated = false;
@@ -263,7 +267,7 @@ public class UserPrefs
 		}
 
 		try {
-			if(!isDomainUserUpdated){
+			if(!isDomainUserUpdated && !StringUtils.equals(currentDomainUser.pic, pic)){
 				// Add pic also
 				currentDomainUser.pic = pic;
 				currentDomainUser.save();

@@ -1,5 +1,6 @@
 package com.agilecrm.webrules;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.webrules.util.WebRuleUtil;
 import com.google.appengine.api.datastore.Text;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -18,9 +20,14 @@ import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 @Cached
-public class WebRule
+public class WebRule implements Serializable
 {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     public Long id;
 
     @NotSaved(IfDefault.class)
@@ -70,6 +77,7 @@ public class WebRule
     public void save() throws PlanRestrictedException
     {
 	dao.put(this);
+	WebRuleUtil.deleteRulesFromCache();
     }
 }
 

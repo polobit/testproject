@@ -125,6 +125,11 @@ $(function()
 			return;
 		}
 
+		 if ($("#"+formName +" #logPhone_relatedto_tag").children().length == 0) {
+            $("#"+formName + " #log_relatedto_error").show().delay(5000).hide(1);
+            return
+        }
+
 		json['status'] = $("#"+formName +" #callStatus").attr("value");
 		
 		var h = json.hour;
@@ -205,7 +210,14 @@ $(function()
 			}
 			
 			$("#logCallModal").modal('show');
-			$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
+			agile_type_ahead("call_related_to", $("#phoneLogForm", '#logCallModal'), contacts_typeahead);
+			/*var contact_html="";
+			$.each(contacts,function(index,contact){
+				contact_html=contact_html.concat('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+getContactName(contact)+'</li>');
+	
+			});
+			$('#phoneLogForm #logPhone_relatedto_tag').html(contact_html);*/
+			//$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+getContactName(contact)+'</li>');
 		}catch(e){
 			$('#logCallModal').modal('hide');
 			console.log ("an error has occured")
@@ -225,21 +237,34 @@ $(function()
 		
 		try{
 			var logCallParam = {};
-			contact = agile_crm_get_contact();
+			var contact = null;
+			if(company_util.isCompany()){
+				contact = App_Companies.companyDetailView.model.toJSON();
+			} else {
+				contact = App_Contacts.contactDetailView.model.toJSON();
+			}
+		//	contact = agile_crm_get_contact();
 			name = getContactName(contact);
 			phone = getPhoneWithSkypeInArray(contact.properties);
+			
 			logCallParam['num'] = phone;
 			logCallParam['action'] = "add";
+		
+		
+		$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
+		
+		
+		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
+		
+		$('#phoneLogForm #saveActivity').val("true");
+		$("#logCallModal").modal('show');
+		var el = $("#phoneLogForm");
+		agile_type_ahead("call_related_to", el, contacts_typeahead);
+
 		}catch(e){
 			$('#logCallModal').modal('hide');
 			console.log ("an error has occured")
 		}
-		
-		$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
-		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
-		$('#phoneLogForm #saveActivity').val("true");
-		$("#logCallModal").modal('show');
-
 
 	});
 	
@@ -385,26 +410,6 @@ function saveLogPhoneActivity(data){
 
 
 
-/**
- * It will return the phone and skype phone in array having more than one contact
- */
-function getPhoneWithSkypeInArray(items)
-{
-	var va = [];
-	var phone = "phone";
-	var skype = "skypePhone";
-	for (var i = 0, l = items.length; i < l; i++)
-	{
-		if (items[i].name == phone || items[i].name == skype)
-		{
-			// If phone number has value only then add to array
-			if (items[i].value != "" || items[i].value != null)
-				va[va.length] = items[i].value;
-		}
-	}
-	return va;
-}
-
 
 /**
  * this method will dynamically populate the log call modal with the supplier params
@@ -436,6 +441,7 @@ function showDynamicCallLogs(data)
 		$('#phoneLogForm #saveActivity').val("true");
 		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ data.contId +'">'+data.contact_name+'</li>');
 		$("#phoneLogForm").find("#description").focus();
+		agile_type_ahead("call_related_to",  $("#phoneLogForm", '#logCallModal'), contacts_typeahead);
 		
 		CallLogVariables.callActivitySaved = false;
 		CallLogVariables.id = data.contId;

@@ -230,7 +230,7 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 				$("#stripe_credits_panel *").removeAttr("disabled");
 			});
 		}else{
-			alert('Please enter proper amount');
+			showAlertModal("proper_amount");
 		}
 	});	
 
