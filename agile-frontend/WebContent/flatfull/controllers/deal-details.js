@@ -43,6 +43,7 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 		} });
 		var that = this;
+
 		this.dealDetailView.model.fetch();//({success : function(data){
 			var ele = that.dealDetailView.render(true).el;
 			$("#deal-detail-page").html(getRandomLoadingImg());

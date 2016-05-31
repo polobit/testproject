@@ -75,13 +75,14 @@ function initializeFbPageTabListners(el){
 			var pageId = $that.attr("data-pageid");
 			var pageToken = $("#facebookTabPage option[value='"+pageId+"']").attr("data-token");
 			if(typeof pageToken == "undefined") {
-				$("#alertModal").modal("hide");
-				showAlertModal("delete_facebook_linked_page_error", "confirm", function(){
-					var fbLoginLink = $("#AddFormLinkFacebookAccount").attr("href");
-					if(typeof fbLoginLink != "undefined") {
-						window.location.href = fbLoginLink;
-					}
-				});
+				setTimeout(function(){
+					showAlertModal("delete_facebook_linked_page_error", "confirm", function(){
+						var fbLoginLink = $("#AddFormLinkFacebookAccount").attr("href");
+						if(typeof fbLoginLink != "undefined") {
+							window.location.href = fbLoginLink;
+						}
+					});
+				},1000);
 			}else{
 				var formData = "facebookPageID=" + pageId;
 				formData += "&facebookPageToken=" + pageToken;

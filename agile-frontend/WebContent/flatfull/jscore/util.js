@@ -65,6 +65,8 @@ function getUrlVars()
 	return vars;
 }
 
+var _agile_owners_collection = null;
+
 /**
  * Creates a select fields with the options fetched from the url specified,
  * fetches the collection from the url and creates a select element and appends
@@ -104,12 +106,29 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();
 
-	// On successful fetch of collection loading symbol is removed and options
-	// template is populated and appended in the selectId sent to the function
-	collection.fetch({ success : function()
+	// Check if owners are already fetched and stored in global variable.
+	// If yes, fill the select field directly otherwise, fetch from the server
+	if( url == '/core/api/users/partial' && _agile_owners_collection != null )
 	{
+		_fillSelectCallback(_agile_owners_collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption);
+	} else {
+		// On successful fetch of collection loading symbol is removed and options
+		// template is populated and appended in the selectId sent to the function
+		collection.fetch({success: function() {
+				_fillSelectCallback(collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption);
+				if( url == '/core/api/users/partial' )	_agile_owners_collection = collection;
+			} 
+		});
+	}
+}
 
-		// Remove loading
+/*
+ *	This function will remove the loading symbol, populate the options template
+ *	and append the options to the selectId sent to it
+ */
+function _fillSelectCallback(collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption)
+{
+			// Remove loading
 		if ($("#" + selectId, el).next().hasClass("select-loading"))
 			$("#" + selectId, el).next().html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 		else
@@ -161,10 +180,9 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			// necessary
 			callback(collection, optionsHTML);
 		}
-	}
-
-	});
 }
+
+
 
 // Fill selects with tokenized data
 /**

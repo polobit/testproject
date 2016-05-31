@@ -2,7 +2,6 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -19,6 +18,7 @@ import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessUtil;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -161,20 +161,17 @@ public class HomeServlet extends HttpServlet
      * Saves logged in time in domain user before request is forwarded to
      * dashboard (home.jsp)
      */
-    private void setLoggedInTime(HttpServletRequest req)
+    private void setLoggedInTime(HttpServletRequest req, DomainUser domainUser)
     {
 	try
 	{
-	    // Gets current domain user and saves current time as logged in
-	    // time.
-	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-
+	    // saves current time as logged in
+	    // time for Domain user
 	    setLastLoggedInTime(domainUser);
 
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 	    setUserInfoTimezone(req, domainUser.id);
 	    domainUser = createOnlineCalendarPrefs(domainUser);
-	    domainUser.save();
 	}
 	catch (Exception e)
 	{
@@ -186,7 +183,7 @@ public class HomeServlet extends HttpServlet
      * Saves finger print in domain user before request is forwarded to
      * dashboard (home.jsp)
      */
-    private void saveFingerPrint(HttpServletRequest req)
+    private void saveFingerPrint(HttpServletRequest req, DomainUser domainUser)
     {
 	try
 	{
@@ -194,14 +191,10 @@ public class HomeServlet extends HttpServlet
 	    if(StringUtils.isBlank(info.finger_print))
 	    	return;
 		    
-	    // Gets current domain user and saves current fingerprint 
-	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-	    
 	    if(domainUser.finger_prints == null)
 	    	domainUser.finger_prints = new HashSet();
 	    
 	    domainUser.finger_prints.add(info.finger_print);
-	    domainUser.save();
 	}
 	catch (Exception e)
 	{
@@ -239,12 +232,24 @@ public class HomeServlet extends HttpServlet
     			return;
     		}
     		
+    		SessionCache.removeObject(SessionCache.CURRENT_AGILE_USER);
+    		SessionCache.removeObject(SessionCache.CURRENT_DOMAIN_USER);
+
+    		// Avoid saving the DomainUser twice.
+    		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+    		
     	    // Saves logged in time in domain user.
-    	    setLoggedInTime(req);
+    	    setLoggedInTime(req, domainUser);
     	    setAccountTimezone(req);
     	    
     	    // Save user finger print
-    	    saveFingerPrint(req);
+    	    saveFingerPrint(req, domainUser);
+    	    
+    	    try {
+    	    	domainUser.save();
+    	    } catch(Exception e) {
+    	    	e.printStackTrace();
+    	    }
 
     	    String old_ui = req.getParameter("old");
     	     
@@ -334,7 +339,7 @@ public class HomeServlet extends HttpServlet
     {
 	try
 	{
-	    UserPrefs user_prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(domainid));
+	    UserPrefs user_prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUser());
 	    System.out.println("user_prefs in setUserInfoTimezone --------------- " + user_prefs);
 	    if (StringUtils.isEmpty(user_prefs.timezone) || "UTC".equals(user_prefs.timezone))
 	    {

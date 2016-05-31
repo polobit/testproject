@@ -101,7 +101,7 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL();
 }
 
-// Users can show their logo on login page. 
+// Users can show their company logo on login page. 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
@@ -244,7 +244,17 @@ if(isSafari && isWin)
 					</a>
 				<%}%>
 				<div>
-				
+					<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
+                       {
+                       %>
+                     <div style=" text-align:center;margin-left:120px; border:none;" class="imgholder thumb-wrapper thumb-lg">
+                   		<img class="company_logo w-full" src="<%=logo_url%>" ></img>
+                   	 </div>
+                   <%
+                   }
+                   %>
+                  
+                   
 				<form id='oauth' name='oauth' method='post'>
               <%--      <div><h3>Sign In
                    

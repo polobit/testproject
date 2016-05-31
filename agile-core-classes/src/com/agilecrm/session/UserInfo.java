@@ -62,6 +62,10 @@ public class UserInfo implements Serializable
      */
     private String plan;
 
+    private HashSet<String> jsrestricted_scopes = null;
+	
+    private HashSet<String> jsrestricted_propertiess = null;
+    
     public UserInfo()
     {
     }
@@ -215,5 +219,21 @@ public class UserInfo implements Serializable
     public void setMenuScopes(HashSet<NavbarConstants> menuScopes)
     {
 	this.menuScopes = menuScopes;
+    }
+    
+    public HashSet<String> getJsrestricted_scopes() {
+        return jsrestricted_scopes;
+    }
+
+    public void setJsrestricted_scopes(HashSet<String> jsrestricted_scopes) {
+        this.jsrestricted_scopes = jsrestricted_scopes;
+    }
+
+    public HashSet<String> getJsrestricted_propertiess() {
+        return jsrestricted_propertiess;
+    }
+
+    public void setJsrestricted_propertiess(HashSet<String> jsrestricted_propertiess) {
+        this.jsrestricted_propertiess = jsrestricted_propertiess;
     }
 }
