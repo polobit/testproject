@@ -1,7 +1,7 @@
 
-cat ../WebContent/flatfull/jscore/backbone/*.js > ../WebContent/jscore/min/flatfull/js-all-min.js
+cat ../WebContent/flatfull/jscore/backbone/*.js > ../WebContent/jscore/min/flatfull/js-all-min-1.js
 
-cat $(find ../WebContent/flatfull/controllers ! -path ../WebContent/flatfull/controllers/app.js -name "*.js") >> ../WebContent/jscore/min/flatfull/js-all-min.js
+cat $(find ../WebContent/flatfull/controllers ! -path ../WebContent/flatfull/controllers/app.js -name "*.js") >> ../WebContent/jscore/min/flatfull/js-all-min-1.js
 
 
 ## Not path is set to avoid duplicating backbone js files that is already included and min files that should not be include again jscore.
@@ -12,9 +12,9 @@ find ../WebContent/flatfull/jscore ! -path ../WebContent/flatfull/jscore/backbon
 
 # Push 75 files into each of js-all-min-1.js, js-all-min-2.js and js-all-min-3.js
 # To add more files or change the number of files in every js-all-min, make appropriate changes here.
-cat $(awk 'NR>=1 && NR<=75 {print}' js-file-list) > ../WebContent/jscore/min/flatfull/js-all-min-1.js
-cat $(awk 'NR>=76 && NR<=150 {print}' js-file-list) > ../WebContent/jscore/min/flatfull/js-all-min-2.js
-cat $(awk 'NR>=151 {print}' js-file-list) > ../WebContent/jscore/min/flatfull/js-all-min-3.js
+cat $(awk 'NR>=1 && NR<=75 {print}' js-file-list) > ../WebContent/jscore/min/flatfull/js-all-min-2.js
+cat $(awk 'NR>=76 && NR<=150 {print}' js-file-list) > ../WebContent/jscore/min/flatfull/js-all-min-3.js
+cat $(awk 'NR>=151 {print}' js-file-list) > ../WebContent/jscore/min/flatfull/js-all-min-4.js
 
 rm js-file-list
 
@@ -38,20 +38,20 @@ java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.
 #java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/web-rules-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/web-rules-min.js
 #cat ../WebContent/jscore/min/flatfull/web-rules-min.js >> ../WebContent/tpl/min/precompiled/flatfull/web-rules.js
 
-cat ../WebContent/flatfull/controllers/app.js >> ../WebContent/jscore/min/flatfull/js-all-min-3.js
+cat ../WebContent/flatfull/controllers/app.js >> ../WebContent/jscore/min/flatfull/js-all-min-4.js
 
 cat ../WebContent/stats/js/*.js > ../WebContent/stats/min/agile-min.js
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/stats/min/agile-min.js --type js -o  ../WebContent/stats/min/agile-min.js
 
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min.js
-
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-1.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-1.js
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-2.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-2.js
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-3.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-3.js
+
+java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min-4.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min-4.js
 
 
 
