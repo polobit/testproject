@@ -13,7 +13,7 @@ $(function()
 		// e.preventDefault();
 
 		$("#details").empty();
-		Selected_Time = $(this).prop('data');
+		Selected_Time = $(this).attr('data');
 		$(".show_slots").find('input:radio').prop('checked', false);
 		$(this, [
 			'input:radio'
