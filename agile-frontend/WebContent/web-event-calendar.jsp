@@ -1192,7 +1192,8 @@ var BUFFERTIME=null;
 
 				function()
 				{
-					$('img#multi-user-avatar').tooltip();
+					//$('img#multi-user-avatar').tooltip();
+					$("img#multi-user-avatar").tooltip({placement:'bottom'});
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;
 					if(multiple_schedule_ids){
