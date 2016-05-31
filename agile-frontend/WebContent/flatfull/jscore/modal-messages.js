@@ -44,6 +44,10 @@ var MODAL_MESSAGES = {
 		"title": "Delete Custom field",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
+	"delete_milestone" : {
+		"title": "Delete Milestone",
+		"message" : GLOBAL_MODAL_MESSAGES.global_delete
+	},
 	"delete_stream" : {
 		"title": "Delete Stream",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
@@ -53,7 +57,7 @@ var MODAL_MESSAGES = {
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_lost_reason" : {
-		"title": "Delete Lost Reason",
+		"title": "Delete Loss Reason",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
 	},
 	"delete_deal_source" : {

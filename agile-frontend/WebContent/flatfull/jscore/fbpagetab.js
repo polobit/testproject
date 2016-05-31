@@ -76,7 +76,7 @@ function initializeFbPageTabListners(el){
 			var pageToken = $("#facebookTabPage option[value='"+pageId+"']").attr("data-token");
 			if(typeof pageToken == "undefined") {
 				setTimeout(function(){
-					showAlertModal("delete_facebook_linked_page_error", "confirm", function(){
+					showAlertModal("delete_facebook_linked_page_error", undefined, function(){
 						var fbLoginLink = $("#AddFormLinkFacebookAccount").attr("href");
 						if(typeof fbLoginLink != "undefined") {
 							window.location.href = fbLoginLink;
