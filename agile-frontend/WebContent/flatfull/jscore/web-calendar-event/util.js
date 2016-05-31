@@ -464,11 +464,13 @@ function convertToHumanDateUsingMoment(format, date)
 	return time_s;
 }
 
-$('body').on('click', '#create_new_appointment', function(e)
-{
-	// reloads the page
-	location.reload(true);
+$(function(){
+	$('body').on('click','#create_new_appointment',function(e)
+	{
+		// reloads the page
+		location.reload(true);
 
+	});	
 });
 
 /**

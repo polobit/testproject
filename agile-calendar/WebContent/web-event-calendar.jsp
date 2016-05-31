@@ -1212,7 +1212,7 @@ var BUFFERTIME=null;
 				function()
 				{
 					
-					$('[data-toggle="tooltip"]').tooltip(); 
+					// $('[data-toggle="tooltip"]').tooltip(); 
 					
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;

@@ -482,12 +482,15 @@ function convertToHumanDateUsingMoment(format, date)
 }
 
 //$("#create_new_appointment").die().live('click', function(e)
-$('body').on('click','#create_new_appointment',function(e)
-{
-	// reloads the page
-	location.reload(true);
+$(function(){
+	$('body').on('click','#create_new_appointment',function(e)
+	{
+		// reloads the page
+		location.reload(true);
 
+	});	
 });
+
 
 /**
  * if value morethan 50 adds .. at the end
