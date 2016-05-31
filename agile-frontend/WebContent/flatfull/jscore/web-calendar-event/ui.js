@@ -85,7 +85,7 @@ $(function()
 		$(".thumbnail").css("background", "none");
 		$(this).css("background", "#4A90E2");
 		$('#users_div').addClass('green-bg').html('<i class="fa fa-check"></i>');
-		var domainUser_id = $(this).prop('data');
+		var domainUser_id = $(this).attr('data');
 		if (domainUser_id != User_Id)
 		{
 			resetToPrevious();
