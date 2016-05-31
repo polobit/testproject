@@ -671,7 +671,7 @@ public class Opportunity extends Cursor implements Serializable
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			scan.close();
+
 			NamespaceManager.set(domain);
 		}
 		try {
