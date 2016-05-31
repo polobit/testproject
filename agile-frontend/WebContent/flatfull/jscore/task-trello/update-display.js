@@ -5,7 +5,8 @@ function displaySettings()
 	displayTimeAgo($(".task-trello-list"));
 
 	$(".listed-task").parent().addClass("task-striped m-sm ");
-
+	$(".task-striped").css("padding-bottom","5px")
+	$(".task-striped").css("margin-bottom","15px")
 	// Get selected criteria
 	var criteria = getCriteria();
 

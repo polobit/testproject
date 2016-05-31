@@ -182,7 +182,7 @@
 
    {{#if_equals status "IN_PROGRESS"}}
        <!-- <label class="label bg-light dk text-tiny progress-label" data = "{{id}}" title="Progress">{{progress}}%</label> -->
-       <label class="i-checks pull-left i-checks-sm"><input type="checkbox taskComplete" class="tbody_check taskComplete" value=""><i></i></label>
+       <label class="i-checks pull-left i-checks-sm" style='margin-top:-2px;'><input type="checkbox taskComplete" class="tbody_check taskComplete" value=""><i></i></label>
 <div class="task-circle m-r-xs" style="float:left;">
     <div id="activeBorder" class="active-border" style="{{getcircle progress}}">
 <abbr title="{{progress}}%">
@@ -194,12 +194,12 @@
 </div>
 {{/if_equals}}
 {{#if_equals status "YET_TO_START"}}
-<label class="i-checks pull-left i-checks-sm"><input type="checkbox" class="tbody_check taskComplete" data ='{{id}}' value=""><i></i></label>
+<label class="i-checks pull-left i-checks-sm" style='margin-top:-2px;'><input type="checkbox" class="tbody_check taskComplete" data ='{{id}}' value=""><i></i></label>
 <i class="icon-target m-r-xs" aria-hidden="true"style="float:left;font-size:17px;" data-toggle="tooltip" data-placement="top" data-container="body" title="Yet to start"></i>
  
  {{/if_equals}}
  {{#if_equals status "COMPLETED"}}
- <label class="icon icon-check m-r-xs" data-toggle="tooltip" style="float:left;font-size:17px;color:green" data-placement="top" data-container="body" title="Completed"></label>
+ <label class="icon icon-check m-r-xs" data-toggle="tooltip" style="float:left;font-size:15px;color:green;margin-top:3px;" data-placement="top" data-container="body" title="Completed"></label>
  {{/if_equals}}
 
   
@@ -289,10 +289,10 @@
   </div>  
   
 
- <div class="task-actions" style="margin-bottom: -5px;">
+ <div class="task-actions" style="margin-bottom: -5px;visibility:visible;">
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
-          <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
+         <!-- <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i> -->
            {{#if notes}} 
              <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="Notes"></i>
              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
