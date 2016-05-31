@@ -9,6 +9,7 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.Base64Encoder"%>
 <%@page import="com.agilecrm.util.NamespaceUtil"%>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 
 <%
     		String campaignId = request.getParameter("cid");
@@ -55,6 +56,11 @@
 				out.println("You are successfully unsubscribed. Thank you.");
 				return;
 			}
+			//Static images s3 path
+			String FLAT_FULL_PATH = "flatfull/";
+			String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+			String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+			
 			// Users can show their company logo on login page. 
 			AccountPrefs accountPrefs2 = AccountPrefsUtil.getAccountPrefs();
 			String logo_url = accountPrefs2.logo;
@@ -388,7 +394,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
 	            {
 	        %>
-           <img class="company_logo w-full" src="<%=logo_url%>"></img>
+           <img class="company_logo w-full" src="<%=logo_url%>" style="width:120px;"></img>
            <%
            }else{
            %>
