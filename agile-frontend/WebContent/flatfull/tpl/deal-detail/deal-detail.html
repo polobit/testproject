@@ -11,8 +11,13 @@
   <div class="panel panel-default m-b">
     <div class="panel-body">
 <div class="w-full   text-lg font-thin custom-color word-break text-ellipsis" >{{#if name}}{{name}}{{/if}}</div>
-{{#if expected_value}}
-<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+{{#if currency_conversion_value}}
+    <div class="m-b-sm text-base font-thin">{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}
+    </div>
+    {{else}}
+      {{#if expected_value}}
+        <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+      {{/if}}
 {{/if}}
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}

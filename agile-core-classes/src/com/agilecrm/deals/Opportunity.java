@@ -274,6 +274,8 @@ public class Opportunity extends Cursor implements Serializable
      * @throws IOException 
      * @throws MalformedURLException 
      */
+    @NotSaved
+    public boolean isCurrencyUpdateRequired = false ;
     
    //Value of the currency converted at the time of deal created
     private Double currency_conversion_value = 0.00;
@@ -596,6 +598,15 @@ public class Opportunity extends Cursor implements Serializable
 	}
 	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase(wonMilestone))
 	    this.won_date = System.currentTimeMillis() / 1000;
+	if(oldOpportunity != null){
+		if (oldOpportunity.currency_type != null && oldOpportunity.currency_conversion_value != null){
+			if(this.currency_conversion_value == oldOpportunity.currency_conversion_value && this.currency_type == oldOpportunity.currency_type)
+				isCurrencyUpdateRequired = true;
+		}
+		else{
+			
+		}				
+	}
 	dao.put(this);
 
 	// Executes trigger
