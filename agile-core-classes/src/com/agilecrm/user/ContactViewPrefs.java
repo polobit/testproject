@@ -1,8 +1,11 @@
 package com.agilecrm.user;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -86,6 +89,27 @@ public class ContactViewPrefs
     public void save()
     {
 	dao.put(this);
+    }
+    /*
+	 * method for removing the basic info in the field set
+	 */
+    @PostLoad
+    public  void postLoad()
+    { 
+    	if(this.type == Type.PERSON)
+    	{
+    		List<String> list = new ArrayList<String>(fields_set);
+        	if(list.contains("basic_info"))
+        	{
+        		list.add(list.indexOf("basic_info"), "first_name");
+        		list.add(list.indexOf("first_name")+1,"last_name");
+        		list.add(list.indexOf("last_name")+1,"email");
+        		list.remove("basic_info");
+        	}
+        	this.fields_set = new LinkedHashSet<String>(list);
+    	}
+    	    	
+    	
     }
 
     /**

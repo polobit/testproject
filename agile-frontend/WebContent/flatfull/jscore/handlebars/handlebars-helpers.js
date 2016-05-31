@@ -1125,10 +1125,6 @@ $(function()
 				*/
 				return ; 
 			}
-			else if(element == "basic_info")
-				return;
-			
-			
 			else if (element.indexOf("CUSTOM_") == 0) {
 				element = element.split("_")[1];
 				cls = "text-muted";
