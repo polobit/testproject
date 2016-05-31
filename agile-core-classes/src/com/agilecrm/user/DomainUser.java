@@ -639,6 +639,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			checkAdminDisabled();
 			sendWelcomeEmail();
 		}
+		
+		// Assigning Random avatar
+		if(pic == null && this.id != null && domainUser != null)
+			pic = domainUser.pic;
+		
+	    if (StringUtils.isBlank(pic))
+	    pic = new UserPrefs().chooseRandomAvatar();
 
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
@@ -646,10 +653,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		try
 		{
 
-			// Assigning Random avatar
-			if (pic == null)
-				pic = new UserPrefs().chooseRandomAvatar();
-			
 			dao.put(this);
 
 			/*
@@ -1119,6 +1122,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	@XmlElement
 	public String getOwnerPic()
 	{
+		if(StringUtils.isNotBlank(pic))
+			 return pic;
+		
 		AgileUser agileUser = null;
 		UserPrefs userPrefs = null;
 
