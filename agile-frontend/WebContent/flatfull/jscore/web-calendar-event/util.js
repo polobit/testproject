@@ -346,7 +346,7 @@ function save_web_event(formId, confirmBtn)
 		alert("Please select appointment time.");
 		return false;
 	}
-	$('#confirm').prop('disabled', 'disabled');
+	$('#confirm').attr('disabled', 'disabled');
 	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
