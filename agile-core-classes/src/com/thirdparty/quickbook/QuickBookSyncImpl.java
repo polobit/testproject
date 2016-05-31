@@ -51,6 +51,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	int noOfPages = 1;
 	int total_customer = getTotalCustomer();
+	System.out.println("Total customer fetch in quickbook is " + total_customer);
 	if (total_customer == 0)
 	{
 	    sendNotification(prefs.type.getNotificationEmailSubject());
@@ -59,11 +60,12 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 	if (total_customer > MAX_RESULT)
 	{
-	    noOfPages = (int) Math.ceil(total_customer / MAX_RESULT);
+	    noOfPages = (int) Math.ceil(total_customer * 1.00 / MAX_RESULT);
 	}
-
+		System.out.println("Total number of pages for contact in quickbook is "+ noOfPages);
 	while (current_page <= noOfPages)
 	{
+		
 	    JSONArray customers = getCustomers(START_POSITION, MAX_RESULT);
 	    try
 	    {
@@ -82,8 +84,8 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 		e.printStackTrace();
 	    }
-	    current_page += current_page + 1;
-	    START_POSITION = MAX_RESULT + 1;
+	    current_page = current_page + 1;
+	    START_POSITION = MAX_RESULT + START_POSITION;
 
 	}
 	sendNotification(prefs.type.getNotificationEmailSubject());
@@ -375,8 +377,10 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	String query = "SELECT *  FROM Customer  STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
 	if (prefs.lastSyncCheckPoint != null)
 	{
-	    query = "SELECT *  FROM Customer WHERE MetaData.CreateTime > '" + prefs.lastSyncCheckPoint
-		    + "' STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
+	  //  query = "SELECT *  FROM Customer WHERE MetaData.CreateTime > '" + prefs.lastSyncCheckPoint
+		 //   + "' STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
+	    query = "SELECT *  FROM Customer WHERE MetaData.LastUpdatedTime > '" + prefs.lastSyncCheckPoint 
+	    	+ "' STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
 	}
 	String customerAccessURl = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(query));
 
@@ -400,7 +404,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	    // get updated customer
 
-	    if (prefs.lastSyncCheckPoint != null)
+/*	    if (prefs.lastSyncCheckPoint != null)
 	    {
 		String updatedCustomerQuery = "SELECT *  FROM Customer WHERE MetaData.LastUpdatedTime > '"
 			+ prefs.lastSyncCheckPoint + "'";
@@ -422,7 +426,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    }
 		}
 
-	    }
+	    }*/
 
 	}
 	catch (Exception e)
@@ -434,47 +438,31 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
     public int getTotalCustomer()
     {
-	String countQuery = "SELECT COUNT(*) FROM Customer";
-	String  updatecountURL = null;
-	if (prefs.lastSyncCheckPoint != null)
-	{
-	    countQuery = "SELECT COUNT(*) FROM Customer Where MetaData.CreateTime > '" + prefs.lastSyncCheckPoint + "'";
-	    String updatedCountQuery = "SELECT COUNT(*) FROM Customer Where MetaData.LastUpdatedTime > '"
-		    + prefs.lastSyncCheckPoint + "'";
-	     updatecountURL = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(updatedCountQuery));
-	}
-	int count = 0;
-	String countURL = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(countQuery));
-
-	try
-	{
-	    String response = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
-		    Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, countURL, "GET", "", "quickbooks");
-
-	    JSONObject object = new JSONObject(response);
-
-	    JSONObject queryResponse = object.getJSONObject("QueryResponse");
-	    if (queryResponse.has("totalCount"))
-	    {
-		count = (int) queryResponse.get("totalCount");
-	    }
-
-	    if (prefs.lastSyncCheckPoint != null)
-	    {
-		String updateResponse = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
-			Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, updatecountURL, "GET", "",
-			"quickbooks");
-
-		JSONObject updateCountResp = new JSONObject(updateResponse);
-
-		JSONObject countResp = updateCountResp.getJSONObject("QueryResponse");
-		if (countResp.has("totalCount"))
+    
+   int count = 0;	
+    
+    try
+    {
+		String countQuery = "SELECT COUNT(*) FROM Customer";
+		//countQuery = "SELECT COUNT(*) FROM Customer Where MetaData.CreateTime > '" + prefs.lastSyncCheckPoint + "'";
+	
+		if (prefs.lastSyncCheckPoint != null)
 		{
-		    count += (int) countResp.get("totalCount");
+		    countQuery = "SELECT COUNT(*) FROM Customer Where MetaData.LastUpdatedTime > '"
+				    + prefs.lastSyncCheckPoint + "'";
 		}
 
-	    }
+		String countURL = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(countQuery));
+		
+		String response = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
+			    Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, countURL, "GET", "", "quickbooks");
+		 JSONObject object = new JSONObject(response);
 
+		    JSONObject queryResponse = object.getJSONObject("QueryResponse");
+		    if (queryResponse.has("totalCount"))
+		    {
+			count = (int) queryResponse.get("totalCount");
+		    }
 	}
 	catch (Exception e)
 	{

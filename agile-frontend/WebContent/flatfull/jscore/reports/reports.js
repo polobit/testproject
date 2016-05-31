@@ -73,8 +73,9 @@ function initializeReportsListeners(){
 
 					}, error : function(response)
 					{
-						alert("error occured Please try again");
-						window.document.location = "#reports";
+						showAlertModal("retry", undefined, function(){
+							window.document.location = "#reports";
+						});
 					} });
 
 			});
@@ -127,6 +128,121 @@ function initializeReportsListeners(){
 
 						$('.show_screenshot').popover();
 					});
+			$('.tab-pane')
+			.on(
+					"click",
+					'.report-go',
+					function(e) {
+
+						var tab_id=$(this).parents('.tab-pane').attr('id');
+						tab_id=$('a[href="#'+tab_id+'"]').parents('.maintab').find('a').attr("href").substring(1);
+						_agile_set_prefs('reports_tab', tab_id);
+						return;
+					
+					});
+			$('#reports-listerners-container')
+			.off(
+					"click",'#reports-tab-container>div>ul>li');
+			$('#reports-listerners-container')
+			.on(
+					"click",'#reports-tab-container>div>ul>li',function(e){
+
+						var flag=$(this).find('.sub-nav-tab').is(":visible");
+						if($('.reports_tab_content').is(":visible"))
+							$('.reports_tab_content').hide();
+						$('.sub-nav-tab').hide();
+						if(flag){
+							//$("i", this).first().removeClass("fa-minus").addClass("fa-plus");
+							$(this).find('.sub-nav-tab').hide();
+						}
+							
+						else{
+							//$("i", this).first().removeClass("fa-plus").addClass("fa-minus");
+							$(this).find('.sub-nav-tab').show();
+						}
+						//$('.reports_tab_content').show();
+					});
+
+		$('#reports-listerners-container')
+			.off("mouseenter",'.sub-nav-tab');
+			$('#reports-listerners-container')
+			.on("mouseenter",'.sub-nav-tab',function(e){
+					$('.reports_tab_content').show();
+					var top= $(this).offset().top;top = top-130;
+					$('.reports_tab_content').css('top',top+'px')
+				});
+
+			$('#reports-listerners-container')
+			.off("mouseleave",'#reports-tab-container');
+			$('#reports-listerners-container')
+			.on("mouseleave",'#reports-tab-container',function(e){
+					$('.reports_tab_content').hide();
+					$('.nav-tabs .active').removeClass('active');
+				});
+				$('#reports-listerners-container')
+			.off("mouseover",'.reports_tab_content');
+			$('#reports-listerners-container')
+			.on("mouseover",'.reports_tab_content',function(e){
+					$('.reports_tab_content').hide();				});
+
+
+			$('#reports-listerners-container')
+			.off(
+					"mouseover",
+					'.sub-nav-tab a');
+			$('#reports-listerners-container')
+			.on(
+					"mouseover",
+					'.sub-nav-tab a',
+					function(e) {
+						var tab_id = $(this).attr('href').substring(1);
+
+		$('.sub-nav-tab a').removeClass('active');
+		$('.tab-pane').removeClass('active');
+
+		$(this).addClass('active');
+		$("#"+tab_id).addClass('active');
+					});
+
+			$('#reports-listerners-container')
+			.off(
+					"click",
+					'.sub-nav-tab li');
+			$('#reports-listerners-container')
+			.on(
+					"click",
+					'.sub-nav-tab li',
+					function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+
+						var tab_id=$('a',$(this)).attr('href').substring(1);
+						//$('._upgrade','#'+tab_id).trigger('click');
+						var upgrade_id=$('._upgrade','#'+tab_id).attr('id');
+						var upgrade_span=$('.'+upgrade_id,'#'+tab_id);
+						if(upgrade_span.length!=0)
+						{$('#reportsUpgradeModal').html(getTemplate('upgradeModal'));
+					var cloned_upgrade=upgrade_span.clone();
+							$('.modal-body','#reportsUpgradeModal').html(cloned_upgrade);
+							$(cloned_upgrade,'.modal-body').show();
+							$('.text-info',cloned_upgrade).addClass('upgrade_close');
+									$('#reportsUpgradeModal').modal('show');
+								}
+						var url=($("#"+tab_id).find('a:not(.text-info)').attr('href') || $("#"+tab_id).find('a#call-activity-link').attr('id'))
+						if(url!=undefined)
+						{
+							$("#"+tab_id).find('a').trigger('click');
+							if(url=='call-activity-link' || url=='#')
+								return;
+							url=url.substring(1);
+						Backbone.history.navigate(url,{trigger:true});
+					}
+					});
+			$('#reportsUpgradeModal').on('click','.upgrade_close',function(e){
+					$('#reportsUpgradeModal').modal('hide');
+			});
+			
+
 }
 
 function reportsContactTableView(base_model, customDatefields, view)

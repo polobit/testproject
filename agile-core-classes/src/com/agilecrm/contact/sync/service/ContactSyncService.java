@@ -321,6 +321,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    
 
 	    int count = contact.dao.getCountByProperty(queryMap);
+	    System.out.println("Number of count of contact found for given querymap is " + count);
 	    if (count > 0)
 	    {
 		isDuplicate = isDuplicateById = true;
@@ -355,8 +356,10 @@ public abstract class ContactSyncService implements IContactSyncService
 	{
 	    oldContact = Contact.dao.getByProperty(queryMap);
 	    if (oldContact != null)
-		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
-	    return contact;
+		{
+	    	contact = ContactUtil.mergeContactFeilds(contact, oldContact);
+	    	 return contact;
+		}
 	}
 
 	return ContactUtil.mergeContactFields(contact);
@@ -377,10 +380,16 @@ public abstract class ContactSyncService implements IContactSyncService
 		queryMap = new HashMap<String , Object>();
     queryMap.put("properties.name", Contact.QUICKBOOK_SYNC);
     queryMap.put("properties.value", contact.getContactFieldValue(Contact.QUICKBOOK_SYNC));
+    
+    System.out.println("Quickbook id for the ongoing contact is "+ contact.getContactFieldValue(Contact.QUICKBOOK_SYNC) );
 	}
+	
+	
 	boolean isUpdated= findDuplicateAndMerge(contact,queryMap);
+	System.out.println("Is Contact duplicate  in contactsyncimpl is" + isUpdated);
 	if (isUpdated)
 	{
+		
 	    contact = mergeContacts(contact,queryMap);
 
 	    accessControl.setObject(contact);
@@ -394,8 +403,9 @@ public abstract class ContactSyncService implements IContactSyncService
 
 		contact.bulkActionTracker = bulk_action_tracker;
 		contact.save();
-
+		
 		syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
+		System.out.println("Total merged contact " + syncStatus.get(ImportStatus.MERGED_CONTACTS));
 	    }
 	    catch (AccessDeniedException e)
 	    {
@@ -420,6 +430,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    }
 	    restriction.contacts_count++;
 	    syncStatus.put(ImportStatus.NEW_CONTACTS, syncStatus.get(ImportStatus.NEW_CONTACTS) + 1);
+	    System.out.println("Total created contact " + syncStatus.get(ImportStatus.MERGED_CONTACTS));
 	}
 	else
 	{

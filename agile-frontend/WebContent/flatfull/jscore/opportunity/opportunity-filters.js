@@ -576,8 +576,10 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			}
 			else
 			{
-				alert("Sorry. You can't have multiple 'Between' conditions.");
-				$(this).val('equals');
+				var $that = $(this);
+				showAlertModal("multiple_conditions", undefined, function(){
+					$that.val('equals');
+				});	
 			}
 
 		}
@@ -653,7 +655,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		var id = $(this).closest('.data').attr('id');
 		var milestone = ($(this).closest('ul').attr("milestone")).trim();
 		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-
+		var that = this;
 		if(dealPipelineModel)
 		{
 			if(!hasScope("MANAGE_DEALS"))
@@ -665,92 +667,29 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 				}
 				else
 				{
-					if (!confirm("Are you sure you want to delete?"))
-						return;
+					showAlertModal("delete", "confirm", function(){
+						deleteDeal(id, milestone, dealPipelineModel, that);
+					});
+					return;
 				}
 			}
 			else
 			{
-				if (!confirm("Are you sure you want to delete?"))
-					return;
+				showAlertModal("delete", "confirm", function(){
+					deleteDeal(id, milestone, dealPipelineModel, that);
+				});
+				return;
 			}
 		}
 		else
 		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
+			showAlertModal("delete", "confirm", function(){
+				deleteDeal(id, milestone, dealPipelineModel, that);
+			});
+			return;
 		}
-
-		var id_array = [];
-		var id_json = {};
-
-		// Create array with entity id.
-		id_array.push(id);
-
-		// Set entity id array in to json object with key ids,
-		// where ids are read using form param
-		id_json.ids = JSON.stringify(id_array);
-
-		var that = this;
-		$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function()
-		{
-			// Remove the deal from the collection and remove the UI element.
-			var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-			if (!dealPipelineModel)
-				return;
-
-			var dealRemoveModel = dealPipelineModel[0].get('dealCollection').get(id);
-			
-			var dealRemoveValue = dealRemoveModel.attributes.expected_value;
-			
-			var removeDealValue = parseFloat($('#'+milestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealRemoveValue); 
-            
-
-
-            $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue));
-          
-            $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);	
-	          
-			 /* average of deal total */
-	      	var avg_deal_size = 0;
-	     	var deal_count = parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()); 
-	     	if(deal_count == 0)
-	     		avg_new_deal_size = 0;
-	     	else
-	     		avg_new_deal_size = removeDealValue / deal_count;	
-
- 			removeDealValue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue) ;
-        	avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
-           	var heading = milestone.replace(/ +/g, '');
-            var symbol = getCurrencySymbolForCharts();
-	       
-	        $("#"+heading+" .dealtitle-angular").removeAttr("data"); 
-	        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();	       
-	        var dealdata = {"dealTrack":dealTrack,"heading": heading ,"dealcount":removeDealValue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":deal_count};
-			var dealDataString = JSON.stringify(dealdata); 
-			$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString); 
-
-			dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
-
-
-
-			// Removes deal from list
-			$(that).closest('li').css("display", "none");
-
-			// Shows Milestones Pie
-			pieMilestones();
-
-			// Shows deals chart
-			dealsLineChart();
-		}, error : function(err)
-		{
-			$('.error-status', $('#opportunity-listners')).html(err.responseText);
-			setTimeout(function()
-			{
-				$('.error-status', $('#opportunity-listners')).html('');
-			}, 2000);
-			console.log('-----------------', err.responseText);
-		} });
+		deleteDeal(id, milestone, dealPipelineModel, that);
+		
 	});
 
 	/**
@@ -761,8 +700,33 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		e.preventDefault();
 		$('.popover').remove();
 		var currentdeal = $(this).closest('tr').data();
+
+		if($(this).find(".contact-type-image").length > 0 || $(this).find(".company-type-image").length > 0)
+		{
+			return;
+		}
+
+		if (e.ctrlKey) {
+           window.open("#deal/" +currentdeal.id , '_blank');
+           return;
+        } 	
+
 		Backbone.history.navigate("deal/" + currentdeal.id, { trigger : true });
 		// updateDeal($(this).closest('tr').data());
+	});
+
+	$('#opportunity-listners').off('click', '.contact-type-image');
+	$('#opportunity-listners').on('click', '.contact-type-image', function(e){
+		e.preventDefault();
+		
+		Backbone.history.navigate("contact/" + $(this).attr("id"), { trigger : true });
+	});
+
+	$('#opportunity-listners').off('click', '.company-type-image');
+	$('#opportunity-listners').on('click', '.company-type-image', function(e){
+		e.preventDefault();
+		
+		Backbone.history.navigate("company/" + $(this).attr("id"), { trigger : true });
 	});
 
 
@@ -1056,17 +1020,18 @@ function initializeMilestoneListners(el){
 	$('#milestone-listner').off('click', '.milestone-delete');
 	$('#milestone-listner').on('click', '.milestone-delete', function(e) {
 		e.preventDefault();
-		if (!confirm("Are you sure you want to delete ?" ))
-			return;
+		var $that = $(this);
+		showAlertModal("delete_milestone", "confirm", function(){
+			var formId = $that.closest('form');
+			if($that.closest('tr').find('.mark-won').length > 0){
+				formId.find('input[name="won_milestone"]').val('');
+			} else if($that.closest('tr').find('.mark-lost').length > 0){
+				formId.find('input[name="lost_milestone"]').val('');
+			}
+			$that.closest('tr').css("display", "none");
+			fill_ordered_milestone($that.closest('form').attr('id'));
+		});
 		
-		var formId = $(this).closest('form');
-		if($(this).closest('tr').find('.mark-won').length > 0){
-			formId.find('input[name="won_milestone"]').val('');
-		} else if($(this).closest('tr').find('.mark-lost').length > 0){
-			formId.find('input[name="lost_milestone"]').val('');
-		}
-		$(this).closest('tr').css("display", "none");
-		fill_ordered_milestone($(this).closest('form').attr('id'));
 	});
 	
 	/**
@@ -1315,10 +1280,10 @@ function initializeMilestoneListners(el){
 	
 	$("#milestone-listner").off('click', '.lost-reason-delete');
 	$("#milestone-listner").on('click', '.lost-reason-delete', function(e){
-		if(confirm("Are you sure you want to delete ?")){
-			e.preventDefault();
-			var that = $(this);
-			var obj = serializeForm($(this).closest('form').attr("id"));
+		e.preventDefault();
+		var $that = $(this);
+		showAlertModal("delete_lost_reason", "confirm", function(){
+			var obj = serializeForm($that.closest('form').attr("id"));
 			var model = new BaseModel();
 			model.url = 'core/api/categories/'+obj.id;
 			model.set({ "id" : obj.id });
@@ -1326,12 +1291,12 @@ function initializeMilestoneListners(el){
         	success: function (data) {
         		var model = data.toJSON();
 	      	  App_Admin_Settings.dealLostReasons.collection.remove(new BaseModel(model));
-	      	  that.closest('tr').remove();
+	      	  $that.closest('tr').remove();
         	},
         	error: function (model, response) {
         	
         	}});
-		}
+		});
 	});
 
 	$("#milestone-listner").off('click', '.add_deal_source');
@@ -1456,10 +1421,10 @@ function initializeMilestoneListners(el){
 	
 	$("#milestone-listner").off('click', '.deal-source-delete');
 	$("#milestone-listner").on('click', '.deal-source-delete', function(e){
-		if(confirm("Are you sure you want to delete ?")){
-			e.preventDefault();
-			var that = $(this);
-			var obj = serializeForm($(this).closest('form').attr("id"));
+		e.preventDefault();
+		var $that = $(this);
+		showAlertModal("delete_deal_source", "confirm", function(){
+			var obj = serializeForm($that.closest('form').attr("id"));
 			var model = new BaseModel();
 			model.url = 'core/api/categories/'+obj.id;
 			model.set({ "id" : obj.id });
@@ -1467,12 +1432,12 @@ function initializeMilestoneListners(el){
         	success: function (data) {
         		var model = data.toJSON();
 	      	  App_Admin_Settings.dealSourcesView.collection.remove(new BaseModel(model));
-	      	  that.closest('tr').remove();
+	      	  $that.closest('tr').remove();
         	},
         	error: function (model, response) {
         	
         	}});
-		}
+		});
 	});
 
 	$("#milestone-listner").on('click','.goalSave',function(e)
@@ -1672,4 +1637,77 @@ function dealSourcesSorting()
 				} });
 		});
 	});
+}
+
+function deleteDeal(id, milestone, dealPipelineModel, el){
+	var id_array = [];
+	var id_json = {};
+
+	// Create array with entity id.
+	id_array.push(id);
+
+	// Set entity id array in to json object with key ids,
+	// where ids are read using form param
+	id_json.ids = JSON.stringify(id_array);
+
+	var that = el;
+	$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function()
+	{
+		// Remove the deal from the collection and remove the UI element.
+		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+		if (!dealPipelineModel)
+			return;
+
+		var dealRemoveModel = dealPipelineModel[0].get('dealCollection').get(id);
+		
+		var dealRemoveValue = dealRemoveModel.attributes.expected_value;
+		
+		var removeDealValue = parseFloat($('#'+milestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealRemoveValue); 
+        
+
+
+        $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue));
+      
+        $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);	
+          
+		 /* average of deal total */
+      	var avg_deal_size = 0;
+     	var deal_count = parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()); 
+     	if(deal_count == 0)
+     		avg_new_deal_size = 0;
+     	else
+     		avg_new_deal_size = removeDealValue / deal_count;	
+
+			removeDealValue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue) ;
+    	avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
+       	var heading = milestone.replace(/ +/g, '');
+        var symbol = getCurrencySymbolForCharts();
+       
+        $("#"+heading+" .dealtitle-angular").removeAttr("data"); 
+        var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();	       
+        var dealdata = {"dealTrack":dealTrack,"heading": heading ,"dealcount":removeDealValue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":deal_count};
+		var dealDataString = JSON.stringify(dealdata); 
+		$("#"+heading+" .dealtitle-angular").attr("data" , dealDataString); 
+
+		dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+
+
+
+		// Removes deal from list
+		$(that).closest('li').css("display", "none");
+
+		// Shows Milestones Pie
+		pieMilestones();
+
+		// Shows deals chart
+		dealsLineChart();
+	}, error : function(err)
+	{
+		$('.error-status', $('#opportunity-listners')).html(err.responseText);
+		setTimeout(function()
+		{
+			$('.error-status', $('#opportunity-listners')).html('');
+		}, 2000);
+		console.log('-----------------', err.responseText);
+	} });
 }

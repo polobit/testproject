@@ -295,8 +295,8 @@ $(function()
 
 		// Default image
 		var img = DEFAULT_GRAVATAR_url;
-		var backup_image = "&d=404\" ";
-		// backup_image="";
+		var backup_image = "&d=" + DEFAULT_GRAVARTAR_IMG + "\" ";
+		//backup_image='&d=404" '; 
 		var initials = '';
 
 		try
@@ -314,7 +314,7 @@ $(function()
 
 		var data_name =  '';
 		// if(!isIE())
-			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+			data_name = "onLoad=\"image_load(this)\" _data-name=\"" + initials;
 		
 		var email = getPropertyValue(items, "email");
 		if (email)
@@ -996,7 +996,7 @@ $(function()
 
 		if (!obj[date_type])
 			return "-";
-		if (date_type != "created_time")
+		if (date_type)
 		{
 			if ((obj[date_type] / 100000000000) > 1)
 			{
@@ -1358,6 +1358,12 @@ $(function()
 	Handlebars.registerHelper('get_current_domain_email', function()
 	{
 		return CURRENT_DOMAIN_USER.email;
+	});
+
+	//gets domainuser pic
+	Handlebars.registerHelper('get_current_domain_pic', function()
+	{
+		return CURRENT_DOMAIN_USER.pic;
 	});
 
 	Handlebars.registerHelper('get_current_domain_name', function()
@@ -2559,6 +2565,12 @@ $(function()
 		// if '_' exists splits
 		return data.split('_')[0];
 	});
+	Handlebars.registerHelper('hasKey', function(json , key , options)
+	{
+		if(json.indexOf(key) == -1)
+			return options.inverse(this)
+		return options.fn(this);
+	});
 
 	/**
 	 * Get task list name without underscore and caps, for new task UI.
@@ -2809,10 +2821,8 @@ $(function()
 	Handlebars.registerHelper("hasRestrictedMenuScope", function(scope_constant, options)
 	{
 		if (CURRENT_DOMAIN_USER.restricted_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_scopes) != -1){
-			console.log("restricted permissions = " +  options.fn(this));
 			return options.fn(this);
 		}
-		console.log("restricted permissions = " +  options.fn(this));
 		return options.inverse(this);
 	});
 
@@ -7363,6 +7373,24 @@ Handlebars.registerHelper('canDeleteContact', function(owner_id, options)
 		return options.fn(this);
 
 	return options.inverse(this)
+});
+
+Handlebars.registerHelper("isInCurrentView", function(properties,key,options)
+{
+	try{
+		var currentContactEntity;
+		var contactEntity;
+		if(window.location.hash.indexOf("#contact/") != -1 || window.location.hash.indexOf("#company/") != -1){
+			var currentId = window.location.hash.split("/")[1];
+			var contactId = this.id;
+			if (currentId == contactId)
+				return options.fn(this);
+		}
+		
+	}catch(e){
+	}
+	
+	return options.inverse(this);
 });
 
 

@@ -868,12 +868,12 @@ $('.portlet_body')
 				}
 			});
 
-	$('.gridster-portlets')
+	$('.portlet_body')
 			.on(
 					"click",
 					'.portlets-tasks-select',
 					function(e) {
-
+						
 						e.stopPropagation();
 						if ($(this).is(':checked')) {
 
@@ -966,7 +966,8 @@ $('.portlet_body')
 		    }
 	    }
 	});
-
+		
+			
 }
 
 /** 
@@ -1278,7 +1279,7 @@ function clickfunction(that,url,forAll,route){
 						}*/
 					},
 					error : function(model, response) {
-						alert("Failed to add.");
+						showAlertModal("add_error");
 					}
 				});
 			});

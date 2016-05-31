@@ -264,20 +264,20 @@ function initializeTaskDetailListeners(){
 	{
 		var id = $('.delete_task').attr('data');
 		e.preventDefault();
-		if (!confirm("Are you sure you want to delete?"))
-			return false;
-		$.ajax({ url : 'core/api/tasks/' + id, type : 'DELETE', success : function(response)
-		{
-			document.location.href = document.location.origin + "#/tasks";
-			getDueTasksCount(function(count){
-				var due_task_count = count;
-				if(due_task_count !=0)
-					$('#due_tasks_count').html(due_task_count);
-				else
-					$('#due_tasks_count').html("");
-			});
-			
-		} });
+		showAlertModal("delete_task", "confirm", function(){
+			$.ajax({ url : 'core/api/tasks/' + id, type : 'DELETE', success : function(response)
+			{
+				document.location.href = document.location.origin + "#/tasks";
+				getDueTasksCount(function(count){
+					var due_task_count = count;
+					if(due_task_count !=0)
+						$('#due_tasks_count').html(due_task_count);
+					else
+						$('#due_tasks_count').html("");
+				});
+				
+			} });
+		});
 	});
 
 	/**

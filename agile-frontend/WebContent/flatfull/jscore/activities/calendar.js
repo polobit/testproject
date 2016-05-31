@@ -482,38 +482,39 @@ function showCalendar(users)
 							}
 
 							// Confirm from the user about the change
-							if (!confirm("Are you sure about this change?"))
-							{
+							showAlertModal("event_drop", "confirm", function(){
+								event1 = revertEventColorBasedOnPriority(event1);
+								var event = $.extend(true, {}, event1);
+
+								// Update event if the user changes it in the
+								// calendar
+								event.start = new Date(event.start).getTime() / 1000;
+								event.end = new Date(event.end).getTime() / 1000;
+								if (event.end == null || event.end == 0)
+									event.end = event.start;
+
+								var jsoncontacts = event.contacts;
+								var _contacts = [];
+								for ( var i in jsoncontacts)
+								{
+									_contacts.push(jsoncontacts[i].id);
+
+								}
+								if(event.owner)
+								event.owner_id = event.owner.id;
+								delete event.contacts;
+								delete event.owner;
+								event
+								event.contacts = _contacts;
+								var eventModel = new Backbone.Model();
+								eventModel.url = 'core/api/events';
+
+								eventModel.save(event);
+							},function(){
 								revertFunc();
-								return;
-							}
-							event1 = revertEventColorBasedOnPriority(event1);
-							var event = $.extend(true, {}, event1);
+							});
 
-							// Update event if the user changes it in the
-							// calendar
-							event.start = new Date(event.start).getTime() / 1000;
-							event.end = new Date(event.end).getTime() / 1000;
-							if (event.end == null || event.end == 0)
-								event.end = event.start;
-
-							var jsoncontacts = event.contacts;
-							var _contacts = [];
-							for ( var i in jsoncontacts)
-							{
-								_contacts.push(jsoncontacts[i].id);
-
-							}
-							if(event.owner)
-							event.owner_id = event.owner.id;
-							delete event.contacts;
-							delete event.owner;
-							event
-							event.contacts = _contacts;
-							var eventModel = new Backbone.Model();
-							eventModel.url = 'core/api/events';
-
-							eventModel.save(event);
+							
 						},
 						/**
 						 * Updates or deletes an event by clicking on it
@@ -818,6 +819,8 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 										}else{
 											that.after($(getTemplate("calendar-mouseover-popover", eventJSON)));
 										}
+										that.parent().find('.fc-overlayw').show();
+										that.find(".ui-resizable-handle").show();
 										
 										if (that.parents('.fc-view-month').find('.fc-border-separate:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw')
 												.height())
@@ -863,6 +866,8 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 										}else{
 											that.after(getTemplate("week-calendar-mouseover-popover", eventJSON));
 										}
+										that.parent().find('.fc-overlayw').show();
+										that.find(".ui-resizable-handle").show();
 										
 										if ($('.fc-agenda-slots:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw').height())
 										{
@@ -893,6 +898,8 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 												that.after(getTemplate("day-calendar-mouseover-popover", eventJSON));
 											}catch(e){}
 										}
+										that.parent().find('.fc-overlayw').show();
+										that.find(".ui-resizable-handle").show();
 										
 										that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
 										if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
@@ -928,6 +935,5 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 							if (event.allDay){
 								$(that_event.parentElement).css('z-index', 9);
 							}
-							that.parent().find('.fc-overlayw').show();
-							that.find(".ui-resizable-handle").show();
+							
 }

@@ -1,0 +1,28 @@
+<script id="article-comments-model-template" type="text/html">
+{{#Admin_Commented_user hc_user}}
+<div class="pull-right">
+  <div class="btn-group right pos-rlt pull-right">
+    <a class="btn btn-default btn-sm remove-comment" data-id={{id}} style="margin-top:-4px" href="#"><i class="icon-trash"></i></a>
+     </div>
+</div>
+{{/Admin_Commented_user}}
+{{#Commented_user hc_user}}
+<div class="pull-right">
+  <div class="btn-group right pos-rlt pull-right">
+    <a class="btn btn-default btn-sm edit-comment" data-id={{id}} style="margin-top:-4px" href="#"><i class="icon-edit"></i></a>
+     </div>
+</div>
+{{/Commented_user}}
+<div class="m-n font-thin h4 text-black m-b-sm">
+{{hc_user.name}}
+</div>
+<small class="text-muted m-b-sm ">
+{{hc_user.email}}<br/>
+ created on {{epochToHumanDate "ddd mmm dd, yyyy" hc_user.updated_time}}
+	</small><br/> 
+
+<p class="font-thin h5 text-black" style="padding-top:10px" data-id="{{id}}">
+{{{replace_newline_with_br comment}}} 
+</p> 
+<hr style="border-color: #DADDDE; margin-top: 10px; margin-bottom: 10px;"/>
+</script>

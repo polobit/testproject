@@ -369,7 +369,7 @@ function initializeSubscriptionListeners()
 				var billing_cycle = $("#billing_cycle").val();
 				if (!plan || plan == "free")
 				{
-					alert("Please select a plan to proceed");
+					showAlertModal("select_plan");
 					$(this).text(buttonText).removeAttr("disabled");
 					return false;
 				}
@@ -421,7 +421,7 @@ function initializeSubscriptionListeners()
 
 				if (selected_plan_name.toLowerCase() + "-" + quantity == user_existing_plan_name + "-" + USER_DETAILS.getQuantity(USER_BILLING_PREFS))
 				{
-					alert("Please change your plan to proceed");
+					showAlertModal("change_plan");
 					$(this).text(buttonText).removeAttr("disabled");
 					return false;
 				}
@@ -477,7 +477,7 @@ function initializeSubscriptionListeners()
 						.getPlanInterval(USER_BILLING_PREFS)) == (plan.toUpperCase() + "-" + quantity + "-" + cycle.toUpperCase()))
 				{
 
-					alert("Please change the plan to proceed");
+					showAlertModal("change_plan");
 					$(this).text(buttonText).removeAttr("disabled");
 					return false;
 				}
@@ -540,6 +540,7 @@ function initializeSubscriptionListeners()
 							
 						}else{
 							var restrictions = data.restrictions;
+							restrictions.plan = data.plan;
 							if(restrictions.contacts.count > restrictions.contacts.limit)
 								errorsCount++;
 							if(restrictions.webrules.count > restrictions.webrules.limit)
@@ -658,30 +659,31 @@ function initializeSubscriptionListeners()
 
 	$("#subscribe_plan_change").on("click","#cancel_free_trial",function(e){
 		e.preventDefault();
-		if (!confirm("Are you sure you want cancel your trial?"))
-			return;
-		$.ajax({url:'core/api/subscription/cancel/trial',
-			type:'GET',
-			success:function(data){
-				if(data && JSON.parse(data).is_success)
-				{
-					add_tag_our_domain("Cancelled Trial");
-					document.location.reload();
-				}else if(data)
-				{
-					getTemplate("trial-error-modal",JSON.parse(data) , undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$(template_ui).modal('show');
-					}, null);
+		showAlertModal("delete_free_trial", "confirm", function(){
+			$.ajax({url:'core/api/subscription/cancel/trial',
+				type:'GET',
+				success:function(data){
+					if(data && JSON.parse(data).is_success)
+					{
+						add_tag_our_domain("Cancelled Trial");
+						document.location.reload();
+					}else if(data)
+					{
+						getTemplate("trial-error-modal",JSON.parse(data) , undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							$(template_ui).modal('show');
+						}, null);
+					}
+
+
+					
+				},error: function(){
+					alert("Error occured, Please try again");
 				}
-
-
-				
-			},error: function(){
-				alert("Error occured, Please try again");
-			}
+			});
 		});
+		
 	});
 
 	$('#subscribe_plan_change').on('mouseenter', '.show_limits', function(e)
@@ -717,7 +719,7 @@ function initializeSubscriptionListeners()
 					document.location.reload();
 				}, 1000);				
 			},error: function(){
-				alert("Error occured, Please try again");
+				showAlertModal("retry");
 			}
 		});
 	});

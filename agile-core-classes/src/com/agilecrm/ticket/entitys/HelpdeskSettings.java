@@ -1,9 +1,10 @@
 package com.agilecrm.ticket.entitys;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HelpdeskSettings
+public class HelpdeskSettings implements Serializable
 {
 	public enum TicketViewType
 	{

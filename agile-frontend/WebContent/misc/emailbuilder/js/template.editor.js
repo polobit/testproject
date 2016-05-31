@@ -159,6 +159,7 @@ function handleObjects() {
 
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
+                        $('#image-alt-text').val(img.attr('alt'));
 
                         $('#image-link').val("");
                         if(img.parent('a').length) {
@@ -187,6 +188,7 @@ function handleObjects() {
 
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
+                        $('#image-alt-text').val(img.attr('alt'));
 
                         $('#image-link').val("");
                         if(img.parent('a').length) {
@@ -235,6 +237,7 @@ function handleObjects() {
 
                         $('#image-w').val(img.css('width'));
                         $('#image-h').val(img.css('height'));
+                        $('#image-alt-text').val(img.attr('alt'));
 
                         $('#image-link').val("");
                         if(img.parent('a').length) {
@@ -599,9 +602,10 @@ $(document).ready(function () {
     $('#change-image').on('click', function(e){
         e.preventDefault();
          var id= $('#image-url').data('id');
-         $('#'+id).attr('src', $('#image-url').val()) ;
-         $('#'+id).attr('width', $('#image-w').val()) ;
-         $('#'+id).attr('height', $('#image-h').val()) ;
+         $('#'+id).attr('src', $('#image-url').val());
+         $('#'+id).attr('width', $('#image-w').val());
+         $('#'+id).attr('height', $('#image-h').val());
+         $('#'+id).attr('alt', $('#image-alt-text').val());
          if($('#image-link').val()) {
             if($('#'+id).parent("a").length) {
                 var anchorTag = $('#'+id).parent("a");
@@ -1096,6 +1100,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         $('#image-w').val($(this).css('width'));
         $('#image-h').val($(this).css('height'));
+        $('#image-alt-text').val($(this).attr('alt'));
         $('#image-link').val("");
         if(img.parent('a').length) {
             $('#image-link').val(img.parent('a').attr('href'));

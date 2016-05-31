@@ -197,16 +197,15 @@ function initializeWidgetSettingsListeners(){
 			displayName = widget_name;
 		}
 
-		if (!confirm("Are you sure to delete " + displayName))
-			return;
-		
-		delete_widget(widget_name);
+		showAlertModal("Are you sure to delete " + displayName, "confirm", function(){
+			delete_widget(widget_name);
 
-		if(widget_name == "Linkedin")
-			$('#Linkedin-container').hide();
-		
-		if(widget_name == "Twilio")
-			$('#Twilio-container').hide();
+			if(widget_name == "Linkedin")
+				$('#Linkedin-container').hide();
+			
+			if(widget_name == "Twilio")
+				$('#Twilio-container').hide();
+		},undefined, "Delete Widget");
 
 	});	
 	
@@ -230,27 +229,28 @@ function initializeWidgetSettingsListeners(){
 		
 		
 		// If not confirmed to delete, return
-		if (!confirm("Are you sure to remove " + widget_name))
-			return;
-
-		//Deletes the cutom widget form the widget entity.
-		delete_widget(widget_name);
-		
-		/*
-		 * Sends Delete request with widget name as path parameter, and on
-		 * success fetches the widgets to reflect the changes is_added, to show
-		 * add widget in the view instead of delete option
-		 */
-		$.ajax({ type : 'DELETE', url : '/core/api/widgets/remove?widget_name=' + widget_name, contentType : "application/json; charset=utf-8",
-
-		success : function(data)
-		{
-			update_collection(widget_name);
+		showAlertModal("delete", "confirm", function(){
+			//Deletes the cutom widget form the widget entity.
+			delete_widget(widget_name);
 			
-			// Call fetch on collection to update widget models
-			App_Widgets.Catalog_Widgets_View.collection.fetch();
+			/*
+			 * Sends Delete request with widget name as path parameter, and on
+			 * success fetches the widgets to reflect the changes is_added, to show
+			 * add widget in the view instead of delete option
+			 */
+			$.ajax({ type : 'DELETE', url : '/core/api/widgets/remove?widget_name=' + widget_name, contentType : "application/json; charset=utf-8",
 
-		}, dataType : 'json' });
+			success : function(data)
+			{
+				update_collection(widget_name);
+				
+				// Call fetch on collection to update widget models
+				App_Widgets.Catalog_Widgets_View.collection.fetch();
+
+			}, dataType : 'json' });
+		},undefined, "Delete Widget");
+
+		
 
 	});
                 

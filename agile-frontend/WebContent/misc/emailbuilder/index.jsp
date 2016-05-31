@@ -263,6 +263,13 @@ AGILE_EB_OPTIONS['templateId'] = "";
                             </div>
 
                             <div class="row">
+                                <div class="col-xs-11">
+                                    <input type="text" id="image-alt-text" class="form-control" placeholder="Alternate Text" data-id="none">
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col-xs-1">
                                     W:
                                 </div>

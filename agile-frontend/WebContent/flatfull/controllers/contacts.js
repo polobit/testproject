@@ -9,6 +9,7 @@ CONTACTS_HARD_RELOAD = true;
 
 var import_tab_Id;
 var REFER_DATA;
+var contact_company ;
 
 var ContactsRouter = Backbone.Router.extend({
 
@@ -764,6 +765,19 @@ var ContactsRouter = Backbone.Router.extend({
 
 			return;
 		}
+		if(contact.contact_company_id){							
+			$.ajax({
+				url : "/core/api/contacts/"+contact.contact_company_id ,
+				type: 'GET',
+				dataType: 'json',
+				success: function(company){
+					if(company){
+						console.log(company);
+						contact_company = company ;
+					}
+				}
+			});
+		}
 
 		// Contact Edit - take him to continue-contact form
 		add_custom_fields_to_form(contact, function(contact)
@@ -1201,7 +1215,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLead : function(first, last){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 		});
@@ -1209,7 +1223,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLeadDirectly : function(first, last,mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 			$(this).find("#phone").val(mob);
@@ -1218,7 +1232,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 
 	addMobLead : function(mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
@@ -1249,6 +1263,39 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 								.html(
 										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 						$("#content #contact_company").hide();
+						if(data){							
+							$.ajax({
+								url : "/core/api/contacts/"+data,
+								type: 'GET',
+								dataType: 'json',
+								success: function(company){
+									if(company){
+										console.log(company);
+										contact_company = company ;
+										var prop = null;
+										$.each(contact_company.properties , function(){
+											if(this.name == "address" && this.subtype == "office")
+												prop = JSON.parse(this.value);
+										});
+										if(prop){
+											$("#content .address-type").val("office");
+											if(prop.address)
+												$("#content #address").val(prop.address);
+											if(prop.city)
+												$("#content #city").val(prop.city);
+											if(prop.state)
+												$("#content #state").val(prop.state);
+											if(prop.zip)
+												$("#content #zip").val(prop.zip);
+											if(prop.country)
+												$("#content #country").val(prop.country);
+										}
+
+									}
+
+								}
+							});
+						}
 					}
 					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
 

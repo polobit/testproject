@@ -350,12 +350,18 @@ This is where you and your users will log in to your account
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 	$("#password").value = "<%=request.getParameter("password")%>"
+// Plan type
+var selected_plan_type = '<%=request.getParameter("plan_type")%>';
 </script>
 
 <script>
 $(document).ready(function(){
 
-	
+	// Set selected plan name
+	if(selected_plan_type){
+        $("select[name='plan_type']").val(selected_plan_type);
+	}
+
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
 	$('#account_timezone').val(jstz.determine().name());

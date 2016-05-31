@@ -3,12 +3,19 @@
   <div class="panel-heading">
    {{#if_equals name "Sip"}}  
    <center>  
-    <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/sip.png'}}" />
+    <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
+    <span style="margin-top:6px; display:inline-block;"><img src="{{logo_url}}"  class="img-responsive inline-block" 
+    style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">SIP</span>
+    </span>
+
    </center>
    {{else}} 
       {{#if_equals name "CallScript"}}
      <center>    
-        <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/call_script.png'}}" />
+       <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
+    <span style="margin-top:6px; display:inline-block; padding-bottom: 7px;">
+    <img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">Call Script</span>
+    </span>
      </center>  
     {{else}}
 			{{#if_equals name "Bria"}}
@@ -265,10 +272,10 @@
 								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
 						{{else}}	
 							{{#if_equals name "Bria"}}
-								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
 						{{else}}
 							{{#if_equals name "Skype"}}
-								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
 								{{else}}	
 									
 								<div class="btn-group">										

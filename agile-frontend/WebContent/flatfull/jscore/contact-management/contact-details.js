@@ -233,7 +233,7 @@ function qr_load(){
 		      alert('You have cancelled the saving of this file.');
 		    },*/
 		    onError: function(){ 
-		      alert('Error downloading a file!'); 
+          showAlertModal("download_error");
 		    },
 		    transparent: false,
 		    swf: 'media/downloadify.swf',
@@ -323,7 +323,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #enable_map_view' : 'onEnableMapView',
     	'click #add' : 'onAddScore',
     	'click #minus' : 'onRemoveScore',
-    	'click #lead-score' : 'onGetScorebox',
+    	'click #lead-contactscore' : 'onGetScorebox',
     	'focusout #scorebox' : 'getScore',
 	   	'keyup  #scorebox' : 'scoreValEnter',
 	   	'click #lead-cscore' : 'onCompanyGetScorebox',
@@ -729,13 +729,12 @@ show and hide the input for editing the contact name and saving that
     onContactDetailsDelete : function(e){
 
     	e.preventDefault();
-		if(!confirm("Do you want to delete the contact?"))
-    		return;
-		
-		App_Contacts.contactDetailView.model.url = "core/api/contacts/" + App_Contacts.contactDetailView.model.id;
-		App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
-			  Backbone.history.navigate("contacts",{trigger: true});
-		}});
+      showAlertModal("delete_contact", "confirm", function(){
+        App_Contacts.contactDetailView.model.url = "core/api/contacts/" + App_Contacts.contactDetailView.model.id;
+        App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
+            Backbone.history.navigate("contacts",{trigger: true});
+        }});
+      });
 		
     },
 
@@ -877,7 +876,7 @@ show and hide the input for editing the contact name and saving that
 		       		},
 		       		error: function(model,response){
 		       			console.log(response);
-		       			alert(response.responseText);
+                showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
 		       		}
 		        });
 			});
@@ -931,13 +930,13 @@ show and hide the input for editing the contact name and saving that
 	    e.preventDefault();
 	    
 	    // Convert string type to int
-	    var add_score = parseInt($('#lead-score').text());
+	    var add_score = parseInt($('#lead-contactscore').text());
 	    
 	    add_score = add_score + 1;
 	    
 	    // Changes score in UI
-	    $('#lead-score').text(add_score);
-       $("#lead-score").attr("title",add_score);
+	    $('#lead-contactscore').text(add_score);
+       $("#lead-contactscore").attr("title",add_score);
 	    App_Contacts.contactDetailView.model.set({'lead_score': add_score}, {silent: true});
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 	    
@@ -967,13 +966,14 @@ scoreValEnter: function(e){
 	   }
 	
 	},
+  
 // On Clicking the score Score Input field appears
 onGetScorebox:  function(e){
 	    e.preventDefault();
 	   //$('[data-toggle="tooltip"]').tooltip();
 	   $("#scorebox").removeClass("hide");
-	   $("#lead-score").addClass("hide");
-	   $("#scorebox").val($("#lead-score").text());
+	   $("#lead-contactscore").addClass("hide");
+	   $("#scorebox").val($("#lead-contactscore").text());
 	   $("#scorebox").focus();
 	}, 
 
@@ -1041,19 +1041,20 @@ enterCompanyScore: function(e){
 	 * gets decreased by one, both in UI and back end
 	 * 
 	 */
+   
 	onRemoveScore :  function(e){
 		e.preventDefault();
 		
 		// Converts string type to Int
-		var sub_score = parseInt($('#lead-score').text());
+		var sub_score = parseInt($('#lead-contactscore').text());
 		
 		//if(sub_score <= 0)
 		//	return;		
 		sub_score = sub_score - 1;
 		
 		// Changes score in UI
-		$('#lead-score').text(sub_score);
-		$("#lead-score").attr("title",sub_score);
+		$('#lead-contactscore').text(sub_score);
+		$("#lead-contactscore").attr("title",sub_score);
 		// Changes lead_score of the contact and save it.
 		App_Contacts.contactDetailView.model.set({'lead_score': sub_score}, {silent: true});
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
@@ -1371,13 +1372,13 @@ enterCompanyScore: function(e){
 	},
 updateScoreValue :function(){
 		var scoreboxval = parseInt($("#scorebox").val());
-		var decemialcheck=$("#scorebox").val();
+		var decimalcheck=$("#scorebox").val();
 		//var txt=$("#scorebox").text();
 		//var partxt=parseInt($("#scorebox").text());
 		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
-		if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val()==""){ 
+		if ((scoreboxval != prvs && (decimalcheck%1==0))|| $("#scorebox").val()==""){ 
 			if($("#scorebox").val()==""){scoreboxval=0;
 			}					
 			App_Contacts.contactDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
@@ -1390,29 +1391,29 @@ updateScoreValue :function(){
 				});							
 		}
 		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
-			alert("Please enter a valid number.");
-			scoreboxval=prvs;
+      showAlertModal("number_validation", undefined, function(){
+        scoreboxval=prvs;
+        setleadScoreStyles(scoreboxval);
+      });
+      return;
 		}
 		else{
 			if(scoreboxval== prvs){
 			scoreboxval=prvs;
 			}
 		}
-		$('#lead-score').attr("data-original-title", scoreboxval);
-		$('#lead-score').text(scoreboxval).removeClass("hide");
-	   	$("#scorebox").addClass("hide").val(scoreboxval);
-	   	$("#lead-score").attr("title",scoreboxval);
+		setleadScoreStyles(scoreboxval);
 	},
 
 	updateCompanyScoreValue :function(){
 		var scoreboxval = parseInt($("#cscorebox").val());
-		var decemialcheck=$("#cscorebox").val();
+		var decimalcheck=$("#cscorebox").val();
 		//var txt=$("#scorebox").text();
 		//var partxt=parseInt($("#scorebox").text());
 		//if ((scoreboxval != prvs && (!isNaN(scoreboxval)))|| $("#scorebox").val().length==0)
 		var contact_model =  App_Companies.companyDetailView.model.toJSON();
 		var prvs = ((contact_model.lead_score)? contact_model.lead_score:0);
-		if ((scoreboxval != prvs && (!isNaN(scoreboxval)) && (scoreboxval>=0))|| $("#cscorebox").val()==""){ 
+		if ((scoreboxval != prvs && (decimalcheck%1==0) && (scoreboxval>=0))|| $("#cscorebox").val()==""){ 
 			if($("#cscorebox").val()==""){scoreboxval=0;
 			}					
 			App_Companies.companyDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
@@ -1425,18 +1426,18 @@ updateScoreValue :function(){
 				});							
 		}
 		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
-			alert("Please enter a valid number.");
-			scoreboxval=prvs;
+      showAlertModal("number_validation", undefined, function(){
+        scoreboxval=prvs;
+        setleadScoreStyles(scoreboxval);
+      });
+      return;
 		}
 		else{
 			if(scoreboxval== prvs){
 				scoreboxval=prvs;
 			}
 		}
-		$('#lead-cscore').attr("data-original-title", scoreboxval);
-		$('#lead-cscore').text(scoreboxval).removeClass("hide");
-	   	$("#cscorebox").addClass("hide").val(scoreboxval);
-	   	$("#lead-cscore").attr("title",scoreboxval);
+		setleadScoreStyles(scoreboxval)
 	}
 });
 
@@ -1534,4 +1535,10 @@ function epochToHumanDate(format,date)
 
 		return d
 
+}
+function setleadScoreStyles(scoreboxval){
+  $('#lead-score').attr("data-original-title", scoreboxval);
+  $('#lead-score').text(scoreboxval).removeClass("hide");
+  $("#scorebox").addClass("hide").val(scoreboxval);
+  $("#lead-score").attr("title",scoreboxval);
 }

@@ -123,8 +123,9 @@ var Widget_Model_Events = Base_Model_View.extend({
 			var domain = window.location.origin;
 			window.location = "/scribe?service_type=shopify&url=shopify&isForAll="+isForAll+"&shop=" + shopName + "&domain=" + domain + "";
 		}else{
-			alert("Please enter proper shop name");
-			$('#shop').focus();
+			showAlertModal("enter_shop_name", undefined, function(){
+        $('#shop').focus();
+      });
 			return false;
 		}
    }

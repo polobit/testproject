@@ -12,7 +12,7 @@
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
 
 <div class="inline-block w-full"><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
-<span class="h3 font-thin custom-color m-b-xs block" id="deals-inline" >
+<span class="h3 font-thin custom-color m-b-xs block" id="deals-inline">
 {{#if name}}{{name}}{{/if}}</span></div>
 
 {{#if expected_value}}
@@ -58,7 +58,9 @@
 <div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown dealEditDropdown opa-full">
                 
                 
-                <button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
+                <button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+                <span class="caret m-l-none" style="margin-top:-11px;"></span>
+                </button>
                 <ul class="dropdown-menu pull-right deals-edit text-sm">
        <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>
                                     <li class="divider"></li>
@@ -209,10 +211,10 @@
 
     {{#each contacts}}
           {{#if_contact_type "PERSON"}}
-            <a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+      <a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
-            <a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+            <a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs popover_contact" data="{{id}}"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
           {{/if_contact_type}}
       {{/each}}
       
@@ -260,7 +262,7 @@
   <div class="panel panel-default m-b">
     <div class="panel-body">
 <div class="inline-block w-full "><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
-<span class="h3 font-thin custom-color text-ellipsis m-b-xs block" id="deals-inline" >
+<span class="h3 font-thin custom-color text-ellipsis m-b-xs block" id="deals-inline" title="{{#if name}}{{name}}{{/if}}">
 {{#if name}}{{name}}{{/if}}</span></div>
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
@@ -268,7 +270,7 @@
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
   
-{{#getTracksCount}}<span>{{pipeline.name}} , </span>{{/getTracksCount}}         
+{{#getTracksCount}}<span>{{#if pipeline.name}}{{pipeline.name}} , {{/if}}</span>{{/getTracksCount}}         
             
 {{#if_equals milestone "Won"}} <span>{{milestone}}</span>
 {{else}}
@@ -315,7 +317,9 @@
 <div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown dealEditDropdown opa-full">
                 
                 
-                <button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
+                <button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+                <span class="caret m-l-none" style="margin-top:-11px;"></span>
+                </button>
 
                 <ul class="dropdown-menu pull-right deals-edit text-sm">
        <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>
@@ -463,10 +467,10 @@
 
     {{#each contacts}}
           {{#if_contact_type "PERSON"}}
-            <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+         <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
-            <a href="#company/{{id}}" class="activate-link thumb m-b-xs"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+                <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"> <img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
           {{/if_contact_type}}
       {{/each}}
       

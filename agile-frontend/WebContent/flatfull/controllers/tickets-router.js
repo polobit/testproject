@@ -765,6 +765,7 @@
 	ticketReports: function(){
 
 		loadServiceLibrary(function(){
+			
 			getTemplate("ticket-report-container", {}, undefined, function(template_ui){
 
 		 		if(!template_ui)
@@ -776,6 +777,7 @@
 
 		 		$('#ticket-reports-tab-container a[href="#overview"]').tab('show');
 		 	});
+	
 		});
 	},
 
@@ -785,6 +787,7 @@
 	ticketReport: function(report_type){
 
 		loadServiceLibrary(function(){
+			report_utility.loadReportsTemplate(function(){
 			hideTransitionBar();
 
 			$(".active").removeClass("active");
@@ -823,15 +826,16 @@
 
 					var $template_ui = $(template_ui);
 
-					$('#content').html($template_ui);	
+					$('.reports-Container').html($template_ui);	
 
 					//initializing date range picket
 					initDateRange(callback);
 
 					callback();
 
-				}, "#content");
+				}, ".reports-Container");
 			});
+				});
 		});
 	},
 

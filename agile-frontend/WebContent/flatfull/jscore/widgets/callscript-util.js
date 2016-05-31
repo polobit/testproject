@@ -72,16 +72,16 @@ function initializeCallScriptListeners(){
 	$('#prefs-tabs-content').on('click', '.delete-callscriptrule', function(e)
 	{
 		e.preventDefault();
-		
+		var $that = $(this);
 		// If not confirmed to delete, return
-		if (!confirm("Are you sure to delete a rule"))
-			return;
+		showAlertModal("delete_rule", "confirm", function(){
+			// Remove element
+			$that.closest("tr").remove();
 
-		// Remove element
-		$(this).closest("tr").remove();
+			// Delete rule from widget
+			deleteCallScriptRule($(this).attr("data"));
+		});
 
-		// Delete rule from widget
-		deleteCallScriptRule($(this).attr("data"))
 	});
 
 	// Display rule actions
@@ -612,6 +612,71 @@ function saveCallScriptWidgetPrefs() {
  */
 function callscript_save_widget_prefs() {
 	
+}
+
+function build_custom_widget_form(el)
+{
+	var divClone;
+	
+    $('#prefs-tabs-content').off('click', '#add-custom-widget');
+	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
+	{
+		$('#custom-widget-btn').removeClass('open');
+		divClone = $("#custom-widget").clone();
+		var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
+			postRenderCallback : function(el)
+			{
+				console.log('In post render callback');
+				console.log(el);
+                
+				$('#custom-widget').off('change').on('change', '#script_type', function(e)
+				{
+					var script_type = $('#script_type').val();
+					if (script_type == "script")
+					{
+						$('#script_div').show();
+						$('#url_div').hide();
+						return;
+					}
+
+					if (script_type == "url")
+					{
+						$('#script_div').hide();
+						$('#url_div').show();
+					}
+				});
+
+			}, saveCallback : function(model)
+			{
+				console.log('In save callback');
+
+				console.log(model);
+
+				if (model == null){
+					showAlertModal("duplicate_widget");
+					return;
+				}
+
+				App_Widgets.Catalog_Widgets_View.collection.add(model);
+				$("#custom-widget").replaceWith(divClone);
+			} });
+
+		$('#custom-widget', el).html(widget_custom_view.render(true).el);
+		
+		// Is Custom widget for all.
+		if(!($(this).hasClass('add_to_all'))){
+			isForAll = false;
+		}
+
+		$('#custom_isForAll').val(isForAll);
+		
+        $('#prefs-tabs-content').off('click', '#cancel_custom_widget');
+		$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
+		{
+			// Restore element back to original
+			$("#custom-widget").replaceWith(divClone); 
+		});
+	});
 }
 
 //It will insert the value at the cursor point of the given element(textarea)
