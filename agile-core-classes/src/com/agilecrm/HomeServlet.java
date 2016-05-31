@@ -19,6 +19,7 @@ import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessUtil;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -239,6 +240,8 @@ public class HomeServlet extends HttpServlet
     			return;
     		}
     		
+    		SessionCache.removeObject(SessionCache.CURRENT_AGILE_USER);
+    		SessionCache.removeObject(SessionCache.CURRENT_DOMAIN_USER);
     	    // Saves logged in time in domain user.
     	    setLoggedInTime(req);
     	    setAccountTimezone(req);
@@ -334,7 +337,7 @@ public class HomeServlet extends HttpServlet
     {
 	try
 	{
-	    UserPrefs user_prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(domainid));
+	    UserPrefs user_prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUser());
 	    System.out.println("user_prefs in setUserInfoTimezone --------------- " + user_prefs);
 	    if (StringUtils.isEmpty(user_prefs.timezone) || "UTC".equals(user_prefs.timezone))
 	    {
