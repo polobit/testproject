@@ -122,6 +122,8 @@ var contact_details_documentandtasks_actions = {
 
 				$("#opportunityModal").modal('show');
 
+				$("#opportunityModal").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
+
 				add_custom_fields_to_form({}, function(data)
 				{
 					var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [

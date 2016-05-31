@@ -436,6 +436,16 @@ function updateDeal(ele, editFromMilestoneView)
 
     $("#opportunityUpdateModal").modal('show');
 
+    $("#opportunityUpdateModal").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
+    if(value.currency_type){
+    	$("#opportunityUpdateModal").find("#currency-conversion-symbols").val(value.currency_type);
+    }
+    else{
+    	var currency_value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+    	$("#opportunityUpdateModal").find("#currency-conversion-symbols").val(currency_value);
+    }
+
+
 	// Hide archive button, if the is already archived.
 	if (value.archived)
 	{
@@ -559,6 +569,8 @@ function show_deal()
 
 
     $("#opportunityModal").modal('show');
+
+    $("#opportunityModal").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
 
 	add_custom_fields_to_form({}, function(data)
 	{
