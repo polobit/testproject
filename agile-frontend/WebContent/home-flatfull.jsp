@@ -783,28 +783,8 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-a
 	});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
-/*
-head.ready(["js-core-1", "js-core-2", "js-core-3", "js-core-4"], function(){
-	console.log("All files loaded. Now continuing with script");
-   try{
-      $('[data-toggle="tooltip"]').tooltip();  
-      //Code to display alerts of widgets.
-      showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
-   }catch(e){}
-	 
-	//Resting the variables.
-	<% session.removeAttribute("widgetMsgType");
-	   session.removeAttribute("widgetMsg"); 
-  %>
-	
-	try{
-      var sig = CURRENT_USER_PREFS.signature;
-      sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-      CURRENT_USER_PREFS.signature = sig;
-	}catch(e){}
 
-});
-*/
+}); //End of head.ready() function. Check above.
 
 function load_globalize()
 {
