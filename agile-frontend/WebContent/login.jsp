@@ -247,7 +247,7 @@ if(isSafari && isWin)
 					<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
                        {
                        %>
-                     <div style=" text-align:center;margin-left:100px; border:none;" class="imgholder thumb-wrapper thumb-lg">
+                     <div style=" text-align:center;margin-left:120px; border:none;" class="imgholder thumb-wrapper thumb-lg">
                    		<img class="company_logo w-full" src="<%=logo_url%>" ></img>
                    	 </div>
                    <%

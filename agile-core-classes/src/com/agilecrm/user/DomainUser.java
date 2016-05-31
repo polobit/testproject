@@ -781,6 +781,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		try
 		{
 			JSONObject obj = new JSONObject(dbDomainuser.info_json_string);
+			JSONObject info_json = fetchInfoJSON();
 			
 			if(obj.has(CREATED_TIME) && !info_json.has(CREATED_TIME))
 				setInfo(CREATED_TIME, obj.getLong("created_time"));

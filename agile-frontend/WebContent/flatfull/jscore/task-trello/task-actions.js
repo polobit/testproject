@@ -92,6 +92,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 		$.ajax({ type : "DELETE", url :'core/api/tasks/'+taskId, async : false, dataType : 'json', success : function()
 			{
 				App_Calendar.allTasksListView.collection.remove(taskId);
+				App_Calendar.allTasksListView.render(true);
 				var taskCount = App_Calendar.allTasksListView.collection.length;
 				var count = $('#tasks-list-template').find('.tasks-count').attr('data');
 				if(count){
