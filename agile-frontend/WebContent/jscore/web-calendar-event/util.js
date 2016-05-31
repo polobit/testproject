@@ -368,7 +368,7 @@ function save_web_event(formId, confirmBtn)
 					var d = dates[0];
 					var start = convertToHumanDateUsingMoment("", d.start);
 
-					if (status == "success" && res.responseText != "slot booked")
+					if (res.statusText == "OK" && res.responseText != "slot booked")
 					{
 						$('#mainwrap').addClass("appointment-wrap");
 						var appointment_success_img1 = "/img/appointment_confirmation.png";
