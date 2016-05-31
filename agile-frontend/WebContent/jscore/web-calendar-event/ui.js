@@ -64,11 +64,11 @@ $(function()
 	//$(".selected-slot").die().live('click', function(e)
 	$('body').on('click','.selected-slot',function(e)
 	{
-		var currentId = $(this).prop('id');
+		var currentId = $(this).attr('id');
 
 		$('.selected-slot').each(function()
 		{
-			if ($(this).prop('id') != currentId)
+			if ($(this).attr('id') != currentId)
 				$(this).prop("checked", false);
 		});
 
@@ -88,7 +88,7 @@ $(function()
 		$(".thumbnail").css("background", "none");
 		$(this).css("background", "#4A90E2");
 		$('#users_div').addClass('green-bg').html('<i class="fa fa-check"></i>');
-		var domainUser_id = $(this).prop('data');
+		var domainUser_id = $(this).attr('data');
 		if (domainUser_id != User_Id)
 		{
 			resetToPrevious();
