@@ -127,7 +127,37 @@
         </div>
         <!-- End of Pending Triggers Content -->
             <div class="panel panel-default">
-                <div class="panel-heading">Campaigns List</div>
+                <div class="panel-heading">Campaigns List
+                    <div class="btn-group dropdown p-l" style="float: none;">
+                        <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort" aria-expanded="false">
+                                <span class="text-muted">Sort by </span>
+                                <span class="sort-field-txt"></span>
+                            </button>
+                            <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-sort-desc" style="position:absolute;"></i>
+                            </button>
+
+                            <ul class="pull-right dropdown-menu " id="sort_menu" role="menu">
+                                <li>
+                                <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name" label_name="Name">
+                                Name
+                                    <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
+                                    </a>
+                            </li>
+                            <li>
+                                <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="created_time" label_name="Created Time">
+                                Created Time
+                                <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
+                                </a>
+                            </li>
+                            <li class="divider" id="sort-divider"></li>
+                                    <li>
+                                        <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  display-none"></i> </a>
+                                    </li>
+                                    <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check display-none"></i> </a></li>
+                            </ul>
+                        </div>
+                </div>
                 <div class="table-responsive">
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/workflows/bulk" id="workflows-tour-step">
                     <thead>

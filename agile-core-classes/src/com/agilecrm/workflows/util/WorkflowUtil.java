@@ -99,7 +99,7 @@ public class WorkflowUtil
 	 * 
 	 * @return list of all workflows.
 	 */
-	public static List<Workflow> getAccountWorkflows(Long allowCampaign)
+	public static List<Workflow> getAccountWorkflows(Long allowCampaign, String orderBy)
 	{
 		Map map = new HashMap();
 		Long userId = DomainUserUtil.getCurentUserId();
@@ -111,8 +111,9 @@ public class WorkflowUtil
 			
 			map.put("access_level in", set);
 		}
-		
-		List<Workflow> list = dao.fetchAllByOrder("name", map);
+		if(orderBy == null)
+			orderBy = "name";
+		List<Workflow> list = dao.fetchAllByOrder(orderBy, map);
 		if(allowCampaign == null)
 			  return list;
 		
@@ -135,7 +136,7 @@ public class WorkflowUtil
 	 */
 	public static List<Workflow> getAllWorkflows()
 	{
-		return getAccountWorkflows(null);
+		return getAccountWorkflows(null, null);
 	}
 	
 	/**
@@ -143,9 +144,9 @@ public class WorkflowUtil
 	 * 
 	 * @return list of all workflows.
 	 */
-	public static List<Workflow> getAllWorkflows(Long allowCampaign)
+	public static List<Workflow> getAllWorkflows(Long allowCampaign, String orderBy)
 	{
-		return getAccountWorkflows(allowCampaign);
+		return getAccountWorkflows(allowCampaign, orderBy);
 	}
 	
 	/**
@@ -159,9 +160,10 @@ public class WorkflowUtil
 	 * @return Returns list of workflows with respective to page size and
 	 *         cursor.
 	 */
-	public static List<Workflow> getAllWorkflows(int max, String cursor)
+	public static List<Workflow> getAllWorkflows(int max, String cursor, String orderBy)
 	{
-		
+		if(orderBy == null)
+			orderBy = "name";
 		Long userId = DomainUserUtil.getCurentUserId();
 		Map map = new HashMap();
 		
@@ -174,7 +176,7 @@ public class WorkflowUtil
 			map.put("access_level in", set);
 		}
 		
-		return dao.fetchAllByOrder(max, cursor, map, true, false, "name");
+		return dao.fetchAllByOrder(max, cursor, map, true, false, orderBy);
 	}
 
 	/**

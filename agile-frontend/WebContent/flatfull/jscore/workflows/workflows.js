@@ -338,6 +338,34 @@ var Workflow_Model_Events = Base_Model_View.extend({
 
 });
 
+var Workflow_Collection_Events = Base_Collection_View.extend({
+    events: {
+        'click #sort_menu > li': 'workflowsSort',
+        
+    },
+
+    workflowsSort : function(e)
+    {
+        e.preventDefault();
+        var targetEl = $(e.currentTarget);
+        var ele = $(targetEl).find("a").attr("data");
+        if($(targetEl).find("a").hasClass("sort-field")){
+            $("#sort_menu").find(".sort-field i").addClass("display-none");
+        }else{
+            $("#sort_menu").find(".order-by i").addClass("display-none");
+        }
+        $(targetEl).find("i").removeClass("display-none");
+        var sort_key = $("#sort_menu").find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
+        sort_key = sort_key + $("#sort_menu").find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
+        var previous_sortKey = _agile_get_prefs("workflow_sort_key");
+        if(sort_key == previous_sortKey)
+            return;
+        _agile_set_prefs("workflow_sort_key", sort_key);
+        printSortByName($(".sort-field[data='"+sort_key+"']").attr("label_name"), $(targetEl).closest("#workflows-listener-container"));
+        App_Workflows.navigate("workflows", { trigger : true });
+    },  
+});
+
 function initializeLogReportHandlers(){
 
     // Show stats of selected campaign
