@@ -513,14 +513,8 @@ function rearrange_from_email_options($select, data) {
 	$select.find('option').each(function() {
 
 		var email = $(this).val();
-		var count = 0;
 		
-		for(var i=0; i<data.length; i++){
-			if(email == data[i].email)
-				count++;
-		 }
-		
-		if (unverified.indexOf(email) != -1 && count == 0) {
+		if (unverified.indexOf(email) != -1) {
 			$(this).attr('unverified', 'unverified');
 			$(this).text(email + ' (unverified)');
 		}
@@ -552,11 +546,15 @@ function resetAndFillFromSelect(selected_val) {
 						.before(
 								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
 
-				if (selected_val)
-					$select.val(selected_val).attr("selected", "selected");
-				else
-					$select.val("Contact's Owner").attr("selected", "selected");
-
+				var options = $(($select)[0]).find("optin");
+				
+				options.each(function(){
+					var option = $(this).val();
+					for(var i=0; i<options.length; i++){
+						if(options[i] == option)
+							options[i].remove();
+					}
+			});
 				rearrange_from_email_options($select, data);
 			});
 }
