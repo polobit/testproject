@@ -706,7 +706,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			return;
 		}
 
-		if (e.ctrlKey) {
+		if (e.ctrlKey || e.metaKey) {
            window.open("#deal/" +currentdeal.id , '_blank');
            return;
         } 	
