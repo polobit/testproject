@@ -76,9 +76,14 @@ public class WebCalendarEventUtil
 			Long epochTime, Long startTime, Long endTime, Long agileuserid, int timezone) throws ParseException,
 			JSONException
 	{
+		System.out.println("In getSlots Start");
+		System.out.println("userid :"+userid);
 		DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
+		System.out.println("domain_user :"+domain_user);
 		OnlineCalendarPrefs prefs = OnlineCalendarUtil.getCalendarPrefs(userid);
+		System.out.println("prefs :"+prefs);
 		String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		System.out.println("domainUser_timezone :"+domainUser_timezone);
 		String business_hours = null;
 		if (prefs != null)
 		{
@@ -86,6 +91,7 @@ public class WebCalendarEventUtil
 		}
 		if (StringUtils.isEmpty(business_hours))
 			business_hours = domain_user.business_hours;
+		System.out.println("business_hours :"+business_hours);
 		if (StringUtils.isEmpty(domainUser_timezone))
 		{
 			domainUser_timezone = domain_user.timezone;
@@ -95,10 +101,10 @@ public class WebCalendarEventUtil
 		// Get all permutations possible based on selected slottime(duration) in
 		// 24 Hr.
 		List<List<Long>> possibleSlots = getAllPossibleSlots(slotTime, date, startTime, timezone, timezoneName);
-		
+		System.out.println("possibleSlots :"+possibleSlots);
 		// Get all filled slots from Agile calendar.
 		List<List<Long>> filledAgileSlots = getFilledAgileSlots(agileuserid, slotTime, startTime, endTime);
-
+		System.out.println("filledAgileSlots :"+filledAgileSlots);
 		// Remove all filled slots from available/possible slots.
 		possibleSlots.removeAll(filledAgileSlots);
 
@@ -112,7 +118,7 @@ public class WebCalendarEventUtil
 		// Get all filled slots from Google calendar.
 		List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(userid, slotTime, timezone,
 				timezoneName, startTime, endTime);
-
+		System.out.println("filledGoogleSlots :"+filledGoogleSlots);
 		if (filledGoogleSlots != null){
 			// Remove all filled slots from available/possible slots.
 			possibleSlots.removeAll(filledGoogleSlots);
@@ -124,7 +130,7 @@ public class WebCalendarEventUtil
 		// Get all filled slots from office calendar.
 		List<List<Long>> filledOfficeSlots = Office365CalendarUtil.getFilledOfficeSlots(userid, slotTime, timezone,
 				timezoneName, startTime, endTime, "online");
-		
+		System.out.println("filledOfficeSlots :"+filledOfficeSlots);
 		if(filledOfficeSlots != null){
 			System.out.println(filledOfficeSlots.toString());
 			// Remove all filled slots from available/possible slots.
@@ -134,6 +140,7 @@ public class WebCalendarEventUtil
 			possibleSlots = removeAllOddSlots(possibleSlots, filledOfficeSlots);
 		}
 
+		System.out.println("final possibleSlots :"+possibleSlots);
 		if (possibleSlots != null && possibleSlots.size() > 0)
 		{
 			for (int i = 0; i <= possibleSlots.size() - 1; i++)
@@ -149,6 +156,8 @@ public class WebCalendarEventUtil
 		}
 		System.out.println(listOfLists.toString());
 		// Return available slots
+		
+		System.out.println("In getSlots End");
 		return listOfLists;
 	}
 
@@ -990,6 +999,8 @@ public class WebCalendarEventUtil
 	 */
 	public static List<String> getSlotDetails(Long id, String meeting_types)
 	{
+		System.out.println("In getSlotDetails Start");
+		System.out.println("id :"+id+":::meeting_types :"+meeting_types);
 		JSONObject slot = new JSONObject();
 		/* JSONArray slots = new JSONArray(); */
 
@@ -1009,6 +1020,7 @@ public class WebCalendarEventUtil
 		try
 		{
 			JSONObject js = new JSONObject(dm.meeting_durations);
+			System.out.println("dm.meeting_durations ::"+dm.meeting_durations);
 			if (StringUtils.isNotEmpty(js.getString("15mins")))
 			{
 				slot.put("time", 15);
@@ -1033,6 +1045,9 @@ public class WebCalendarEventUtil
 		{
 			e.printStackTrace();
 		}
+		System.out.println("slots :"+slots);
+		System.out.println("In getSlotDetails End");
+		
 		return slots;
 
 	}
@@ -1372,6 +1387,8 @@ public class WebCalendarEventUtil
 	 */
 	public static String[] getSlotsArrayFromUrl(String slots)
 	{
+		System.out.println("In getSlotsArrayFromUrl Start");
+		System.out.println("slots : "+slots);
 		String[] slots_array = null;
 		slots_array = slots.split("-");
 		List<String> list = Arrays.asList(slots_array);
@@ -1386,6 +1403,8 @@ public class WebCalendarEventUtil
 		{
 			slots_array = after_sorting;
 		}
+		System.out.println("slots_array : "+slots_array);
+		System.out.println("In getSlotsArrayFromUrl End");
 		return slots_array;
 	}
 	
