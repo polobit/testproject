@@ -474,8 +474,21 @@ function update_location_ports(nodeObject, jsonValues)
 //show popup -- how to connect one node to another node 
 
 function showNodeConnectPopup(nodeId){
+    var campaignCount=0;
+	 $.ajax({ 
+	 	url : '/core/api/workflows/count' ,
+	 	type : 'GET',
+	 	dataType : 'text',
+	 	 success : function(data){
+	 	 },
+	 	error : function(response)
+			{
+					campaignCount=response;
+				
+			}
+	 	});
 	var firstNode=$('#paintarea >div.contextMenuForNode').length;	
-	if(firstNode==2 && nodeId===undefined)
+	if(firstNode==2 && nodeId===undefined && campaignCount===0)
 	{
 		window.parent.workflow_alerts("Message", "Title", "show-connect-node-popup-modal", null);
 	}
