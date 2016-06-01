@@ -478,8 +478,10 @@ function showNodeConnectPopup(nodeId){
 	 $.ajax({ 
 	 	url : '/core/api/workflows/count' ,
 	 	type : 'GET',
+	 	async : false,
 	 	dataType : 'text',
 	 	 success : function(data){
+	 	 	campaignCount=data;
 	 	 },
 	 	error : function(response)
 			{
@@ -487,8 +489,8 @@ function showNodeConnectPopup(nodeId){
 				
 			}
 	 	});
-	var firstNode=$('#paintarea >div.contextMenuForNode').length;	
-	if(firstNode==2 && nodeId===undefined && campaignCount===0)
+	var firstNode=$('#paintarea >div.contextMenuForNode').length;
+	if(firstNode==2 && nodeId===undefined && campaignCount==0)
 	{
 		window.parent.workflow_alerts("Message", "Title", "show-connect-node-popup-modal", null);
 	}
