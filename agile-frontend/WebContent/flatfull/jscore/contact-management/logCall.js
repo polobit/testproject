@@ -162,7 +162,7 @@ $(function()
 					
 					if(json['status'] == 'answered' || json['status'] == 'inquiry' || json['status'] == 'interest' || json['status'] == 'new opportunity' || json['status'] == 'meeting scheduled'){
 						if(duration <= 0){
-							$("#"+formName +" #logPhone_duration_error1").show().delay(5000).hide(1);
+							$("#"+formName +" #logPhone_duration_error2").show().delay(5000).hide(1);
 							return;
 						}
 					}
