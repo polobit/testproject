@@ -363,6 +363,7 @@ function initializeDealListners(el){
 		}
 
 		if(!_agile_get_prefs("agile_deal_view")){
+			_agile_delete_prefs('deal-milestone-view');
 			setupMilestoneViewWidth();
 			return;
 		}
@@ -382,11 +383,12 @@ function initializeDealListners(el){
 		}
 
 		if(!_agile_get_prefs("agile_deal_view")){
+			_agile_set_prefs('deal-milestone-view','compact');
 			setupMilestoneViewWidth();
 			return;
 		}
 
-    	_agile_set_prefs('deal-milestone-view','compact');
+		_agile_set_prefs('deal-milestone-view','compact');
     	_agile_delete_prefs("agile_deal_view");
 
     	setupDealsTracksList();
@@ -401,11 +403,12 @@ function initializeDealListners(el){
 		}
 
 		if(!_agile_get_prefs("agile_deal_view")){
+			_agile_set_prefs('deal-milestone-view','fit');
 			setupMilestoneViewWidth();
 			return;
 		}
 
-    	_agile_set_prefs('deal-milestone-view','fit');
+		_agile_set_prefs('deal-milestone-view','fit');
     	_agile_delete_prefs("agile_deal_view");
 
     	setupDealsTracksList();
