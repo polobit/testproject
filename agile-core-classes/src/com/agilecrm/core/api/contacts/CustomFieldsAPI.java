@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.contacts;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -20,10 +21,19 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AgileQueues;
+import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.deferred.UpdateContactsDeferredTask;
 import com.agilecrm.contact.exception.DuplicateCustomFieldException;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>CustomFieldsAPI</code> includes REST calls to interact with
@@ -440,4 +450,50 @@ public class CustomFieldsAPI
     		return null;
     	}
     }
+    /**
+     * Gets all custom fields order by position
+     * 
+     * @return List of custom fields
+     */
+    @Path("/syncappdata")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    public String syncAppData(@QueryParam("domain") String domain){
+    	String domainUser = domain;
+    	if( domainUser != null){
+    		try {
+				Long updated_time = null;
+				Date update_date = null;
+				ContactSchemaUpdateStats schema = ContactSchemaUpdateStats.get(domainUser);
+				System.out.println(schema);    				
+				if(schema != null){
+					updated_time = schema.updated_time * 1000 ;
+					update_date = new Date(updated_time);
+				}
+				Date current_date = new Date(); 
+				if(schema == null || (update_date.getHours() < current_date.getHours() && update_date.getYear() <= current_date.getYear())){
+					if(schema == null){
+						String oldNamespace = NamespaceManager.get();
+						NamespaceManager.set("");
+						ContactSchemaUpdateStats newSchema = new ContactSchemaUpdateStats();					
+						newSchema.updated_time = System.currentTimeMillis() / 1000 ;
+						newSchema.domain = domainUser;
+						newSchema.save();
+						NamespaceManager.set(oldNamespace);
+					}
+					UpdateContactsDeferredTask updateContactDeferredTask = new UpdateContactsDeferredTask(domainUser);					
+					// Add to queue
+					Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_SCHEMA_CHANGE_QUEUE);
+					queue.add(TaskOptions.Builder.withPayload(updateContactDeferredTask));
+					return "success";
+				}
+				return "limitReached" ;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	return "fail";    	
+    }
+    
 }
