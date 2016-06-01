@@ -181,6 +181,7 @@ public class ContactViewPrefsUtil
     {
 	LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 	fields_set.add("name");
+	fields_set.add("url");
 	fields_set.add("owner");
 	fields_set.add("star_value");
 	fields_set.add("created_time");
