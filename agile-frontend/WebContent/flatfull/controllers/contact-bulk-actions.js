@@ -138,6 +138,33 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 
 			}, "#send-email-listener-container");			
 		}
+
+		var options = {
+		"+ Add new" : "verify_email"
+		};
+
+	fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('.email'),
+			"prepend",
+			function($select, data) {
+
+				$select
+						.find("option:first")
+						.before(
+								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+
+				if (selected_val)
+					$select.val(selected_val).attr("selected", "selected");
+				else
+					$select.val("Contact's Owner").attr("selected", "selected");
+
+				rearrange_from_email_options($select, data);
+			});
 	},
 	
 	/**
