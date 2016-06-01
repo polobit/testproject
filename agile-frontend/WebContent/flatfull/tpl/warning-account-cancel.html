@@ -101,20 +101,20 @@
       <div class="form-group">
         <label>What's the main reason for the cancellation?<span class="field_req">*</span></label>
         <select id="account_cancel_reason" name="account_cancel_reason" class="form-control required">
-          <option value="">--select--</option>
-          <option value="Out of business">Out of business</option>
-          <option value="Over priced">Over priced</option>
-          <option value="Lack of features">Lack of features</option>
-          <option value="moving to a different competitor">moving to a different competitor</option>
-          <option value="Lack of good support">Lack of good support</option>
+          <option value="">-- Select --</option>
+          <option value="Over Priced">Over Priced</option>
+          <option value="Lack of Features">Lack of Features</option>
+          <option value="Moving to a different competitor">Moving to a different competitor</option>
+          <option value="Out of Business">Out of Business</option>
+          <option value="Lack of Good Support">Lack of Good Support</option>
           <option value="Other">Other</option>
         </select>
       </div>
-      <div id="other_cancel_container" style="display: none;">
+      <div id="other_cancel_container" class="form-group" style="display: none;">
         <label>Reason<span class="field_req">*</span></label>
         <textarea name="other_cancel_reason" class="form-control w-full" id="other_cancel_reason" rows="3" ></textarea>
       </div>
-      <div id="agile_pros_container">
+      <div id="agile_pros_container" class="form-group">
         <label>What did you like in Agile?</label>
         <textarea name="agile_pros" class="form-control w-full" id="agile_pros" rows="3" ></textarea>
       </div>
@@ -127,7 +127,7 @@
 	 </div>
    </div>
     <div class="modal-footer">
-        <!-- <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a> -->
+        <span id="cancel_info_msg" class="text-danger text-sm p-r-xs" style="display:none;">Your subscription will be cancelled immediately once you click the 'Cancel Subscription' button.</span>
         <a href="#" id="send-delete-request" class="btn btn-sm btn-primary ">Send Request</a>
     </div>
 </div>

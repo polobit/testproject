@@ -246,7 +246,7 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 			
 			agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
 			
-			if(cancel_reason == "Out of business")
+			if(cancel_reason == "Out of Business")
 				$.ajax({
 					url : "core/api/subscription/cancel/subscription",
 					type : "GET",
@@ -254,6 +254,8 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 						showNotyPopUp("information","Your subscription has been cancelled successfully.", "top");
 					}
 				});
+			else
+				showNotyPopUp("information","Your cancellation request has been sent successfully.", "top");
 		});
 		
 	});
@@ -266,6 +268,14 @@ $('#send-cancellation').on('change', '#account_cancel_reason', function(e) {
 	}
 	else
 		$("#other_cancel_container").hide();
+	if($(this).val() == "Out of Business"){
+		$("#send-delete-request").text("Cancel Subscription");
+		$("#cancel_info_msg").show();
+	}
+	else{
+		$("#send-delete-request").text("Send Request");
+		$("#cancel_info_msg").hide();
+	}
 });
 
 $('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e) {
