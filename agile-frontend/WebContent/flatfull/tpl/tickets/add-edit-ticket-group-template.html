@@ -12,13 +12,14 @@
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="group_name">Group Name <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="group_name">Name <span class="field_req">*</span></label> 
                             <div class="col-md-6">
                                 <div class="controls">
                                     <input type="text" name="group_name" id="group_name" value="{{group_name}}" class="required form-control tickets_group_name" placeholder="Group" minlength="4" maxlength="30">
                                 </div>
                             </div>
                         </div>
+
                         {{#if group_email}}
                             <div class="control-group form-group">
                                 <label class="control-label col-sm-3">Forwarding Email</label>
