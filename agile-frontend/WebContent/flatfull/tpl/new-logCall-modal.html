@@ -36,7 +36,7 @@
 
 
 	{{#if_equals num.length "0"}}
-		<span  title="Add Phone">
+		<span  title="Add Phone" class="add_logPhone_span">
 			<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> Add Phone</a>
         </span>
 	{{else}}
@@ -44,7 +44,7 @@
 			{{#if num.[0]}}
 				<span id="contact_logPhone_number" name="contact_logPhone_number" value="{{num.[0]}}" >{{num.[0]}}</span>
 			{{else}}
-				<span  title="Add Phone">
+				<span  title="Add Phone" class="add_logPhone_span">
 					<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> Add Phone</a>
         		</span>
 			{{/if}}
@@ -60,8 +60,8 @@
 						</ul>
 		{{/if_equals}}	
 	{{/if_equals}}	
-						<span id="contact-add-phone-span" class="none p-l-sm"> 
-								<input type="text" name="contact_phone" id="contact_phone" style="border: 1px solid #CFDADD;" /> 
+						<span id="contact-add-phone-span" class="none"> 
+								<input type="text" name="contact_phone" id="contact_phone" style="border: 1px solid #CFDADD;height:30px;" /> 
 								<a class= "btn btn-default btn-xs contact_phone_add"> save </a>   
 						</span>
 						

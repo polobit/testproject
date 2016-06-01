@@ -275,6 +275,7 @@ $(function()
 	$('#logCallModal').on('click', '.add_logPhone', function(e)
 	{
 		e.preventDefault();
+		$(".add_logPhone_span","#phoneLogForm").hide();
 		$("#contact-add-phone-span", "#phoneLogForm").show();
 		
 		/*		
@@ -320,6 +321,7 @@ $(function()
 				console.log("contact " + data);
 				$("#contact-add-phone-span").hide();
 				$("#contact_logPhone_number").attr("value",prop.value);
+				$(".add_logPhone_span","#phoneLogForm").show();
 				$("#contact_logPhone_number").html(prop.value);
 				if(is_person)
 					App_Contacts.contactDetailView.model = data;
