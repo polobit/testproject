@@ -551,7 +551,7 @@ function resetAndFillFromSelect(selected_val) {
 				options.each(function(){
 					var option = $(this).val();
 					for(var i=0; i<options.length; i++){
-						if(options[i] == option)
+						if($(options[i]).val() == option)
 							options[i].remove();
 					}
 			});
