@@ -158,11 +158,6 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 						.before(
 								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
 
-				if (selected_val)
-					$select.val(selected_val).attr("selected", "selected");
-				else
-					$select.val("Contact's Owner").attr("selected", "selected");
-
 				rearrange_from_email_options($select, data);
 			});
 	},

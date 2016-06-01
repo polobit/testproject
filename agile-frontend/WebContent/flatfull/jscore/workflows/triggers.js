@@ -512,12 +512,19 @@ function rearrange_from_email_options($select, data) {
 
 	$select.find('option').each(function() {
 
-		var email = $(this).val()
-
-		if (unverified.indexOf(email) != -1) {
+		var email = $(this).val();
+		var count = 0;
+		
+		for(var i=0; i<data.length; i++){
+			if(email == data[i].email)
+				count++;
+		 }
+		
+		if (unverified.indexOf(email) != -1 && count == 0) {
 			$(this).attr('unverified', 'unverified');
 			$(this).text(email + ' (unverified)');
 		}
+		
 	});
 
 }
