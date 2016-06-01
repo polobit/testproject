@@ -1358,7 +1358,8 @@ if (endDate - startDate >= 86400000)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<span style="color:#d9534f">Start date should not be greater or equal to end date.</span>');
+					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater or equal to end date.</div>'
+						);
 				$('#' + modalName)
 				.find(".invalid-range").parents('.form-group').show();
 		return false;

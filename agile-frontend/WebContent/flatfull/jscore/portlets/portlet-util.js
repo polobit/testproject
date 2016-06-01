@@ -915,8 +915,7 @@ var portlet_utility = {
 		}
 		case "Campaign graph": {
 			var url = '/core/api/portlets/campaign-graph?start-date='
-					+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
 					+ '&campaign_type='
 					+ base_model.get('settings').campaign_type;
 			portlet_graph_data_utility.campaignStatsGraphData(base_model,
@@ -1665,7 +1664,6 @@ var portlet_utility = {
 					$('.loading-img').hide();
 				}
 			});
-				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 
