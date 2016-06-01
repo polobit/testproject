@@ -21,6 +21,17 @@ function isValidForm(form) {
 			
 			return false;
 		}," This field is required.");
+	
+	// Internal regex of jQuery validator allows for special characters in e-mails for ticketing.
+	// This regex solves that, overriding 'email'
+	jQuery.validator.addMethod("tickets_email", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
+	}," Please enter a valid email.");
+
 
 	// Credit card validation to check card is valid for next 3 months
 	jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
