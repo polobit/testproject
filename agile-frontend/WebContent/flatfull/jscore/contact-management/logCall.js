@@ -139,6 +139,10 @@ $(function()
 			if(json['status'] == 'busy' || json['status'] == 'failed' || json['status'] == 'missed' ){
 				duration = 0;
 			}else{
+				if(!h || !m || !s){
+					$("#"+formName +" #logPhone_duration_error1").show().delay(5000).hide(1);
+					return;
+				}
 				if(isNaN(h) || isNaN(m) || isNaN(s)){
 					$("#"+formName +" #logPhone_duration_error1").show().delay(5000).hide(1);
 					return;
@@ -150,10 +154,19 @@ $(function()
 						$("#"+formName +" #logPhone_duration_error").show().delay(5000).hide(1);
 						return;
 					}
+					
 					h = parseInt(h);
 					m = parseInt(m);
 					s = parseInt(s);
 					duration = (h*3600)+(m*60)+(s*1);
+					
+					if(json['status'] == 'answered' || json['status'] == 'inquiry' || json['status'] == 'interest' || json['status'] == 'new opportunity' || json['status'] == 'meeting scheduled'){
+						if(duration <= 0){
+							$("#"+formName +" #logPhone_duration_error2").show().delay(5000).hide(1);
+							return;
+						}
+					}
+					
 				}
 			}
 		
