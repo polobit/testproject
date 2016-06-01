@@ -1192,8 +1192,11 @@ public class ContactUtil
 	
 	//source of the contact
 	oldContact.source = "import" ;
-	if(newContact.source != null)
+	System.out.println("old contact source = "+oldContact.source);
+	if(newContact.source != null){
 		oldContact.source = newContact.source ;
+		System.out.println("new contact source is "+newContact.source);
+	}
 	
 	
 

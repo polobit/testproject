@@ -223,6 +223,7 @@ public class Contact extends Cursor
     public String entity_type = "contact_entity";
     
     @NotSaved(IfDefault.class)
+    @Indexed
     public String source = null ;
 
     /**
