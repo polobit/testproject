@@ -263,6 +263,16 @@ function saveCallActivityBria(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 
+	if(!globalCall.contactedId && dialled.using == "dialler"){
+		$.post( "/core/api/widgets/bria/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+		return;
+	}
+	
 	if(call.status == "Answered"){
 		return;
 	}

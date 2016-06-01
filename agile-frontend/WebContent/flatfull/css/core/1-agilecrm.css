@@ -3973,3 +3973,46 @@ border-bottom:1px solid #eee;
     margin-left: 0px;
     margin-right: 0px;
    }
+
+.dialler-1-r-1-c
+{
+	    border-radius: 5px;
+	border-top: 1px solid #98a6ad;
+    border-right: 1px solid #98a6ad;
+    border-left: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+
+.dialler-1-r-2-c
+{
+	    border-radius: 5px;
+	border-right: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+    border-top: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-2-r-1-c
+{
+	    border-radius: 5px;
+    border-right: 1px solid #98a6ad;
+    border-left: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-2-r-2-c
+{
+	    border-radius: 5px;
+	border-right: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-1-r-1-c:hover, .dialler-1-r-2-c:hover, .dialler-2-r-1-c:hover, .dialler-2-r-2-c:hover
+{
+background-color : #522E2E;
+}
+

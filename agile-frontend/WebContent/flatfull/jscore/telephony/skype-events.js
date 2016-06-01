@@ -155,6 +155,14 @@ function saveCallActivitySkype(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 	
+	if(!globalCall.contactedId && dialled.using == "dialler"){
+		$.post( "/core/api/widgets/skype/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+	}
 	if(call.status == "Answered"){
 		return;
 	}

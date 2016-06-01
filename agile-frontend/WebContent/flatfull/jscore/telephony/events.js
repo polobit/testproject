@@ -184,20 +184,36 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			else if (e.description == "Media stream permission denied")
 				showCallNotyPopup("permissiondenied", "error", "SIP: Media stream permission denied.",5000);
 			else if (e.description == "Call terminated")
-				showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Call ended with  <b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
+				showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Call ended with  <b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
+				if(dialled.using == "dialler"){
+				  $("#direct-dialler-div").show();
+				  dialled.dialler = "default";
+				}
 			else if (e.description == "Decline")
-				showCallNotyPopup("decline", "error", "Call Decline.", 5000);
+				showCallNotyPopup("decline", "error", "Call Decline.", false);
+				if(dialled.using == "dialler"){
+					  $("#direct-dialler-div").show();
+					  dialled.dialler = "default";
+					}
 			else if (e.description == "Request Timeout")
-				showCallNotyPopup("requestTimeout", "error", "SIP: Request Timeout.", 5000);
+				showCallNotyPopup("requestTimeout", "error", "SIP: Request Timeout.", false);
+			
 			else if (e.description == "Hackers Forbidden")
 				showCallNotyPopup("hackersForbidden", "error", "SIP: Hackers Forbidden.", 5000);
 			else if (e.description == "User not found")
-				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", 5000);
+				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", false);
+				if(dialled.using == "dialler"){
+					  $("#direct-dialler-div").show();
+					  dialled.dialler = "default";
+					}
 			else if(e.description == "Call terminating...")
 			    console.log("SIP : Terminated because " + e.description);
 			else if(!Is_Ignore)
 				showCallNotyPopup("disconnected", 'error', "SIP : Terminated because " + e.description, 5000);
-
+				if(dialled.using == "dialler"){
+					  $("#direct-dialler-div").show();
+					  dialled.dialler = "default";
+					}
 			// Show add contact modal if contact id not added
 			if(Show_Add_Contact == true)
 				{
