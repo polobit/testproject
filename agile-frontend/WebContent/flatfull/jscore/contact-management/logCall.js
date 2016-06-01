@@ -299,7 +299,11 @@ $(function()
 				e.preventDefault();
 				var contact;
 				var is_person = false;
-				
+				var phone = $("#phoneLogForm #contact_phone").val().trim();
+				if(!phone){
+					$("#phoneLogForm #logPhone_number_error").show().delay(5000).hide(1);
+					return;
+				}
 				var prop = property_JSON('phone', 'phoneLogForm #contact_phone');
 				prop['subtype'] = "";
 			if(company_util.isCompany()){
