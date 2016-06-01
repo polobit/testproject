@@ -546,7 +546,7 @@ function resetAndFillFromSelect(selected_val) {
 						.before(
 								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
 
-				var options = $(($select)[0]).find("optin");
+				var options = $(($select)[0]).find("option");
 				
 				options.each(function(){
 					var option = $(this).val();
