@@ -138,25 +138,23 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
     },
 
     dealSourceDelete : function(e){
-        if(!confirm("Are you sure you want to delete ?")){
-            return;
-        }
-
         e.preventDefault();
-        var that = $(e.currentTarget);
-        var obj = serializeForm($(e.currentTarget).closest('form').attr("id"));
-        var model = new BaseModel();
-        model.url = 'core/api/categories/'+obj.id;
-        model.set({ "id" : obj.id });
-        model.destroy({
-        success: function (data) {
-            var model = data.toJSON();
-            App_Admin_Settings.dealSourcesView.collection.remove(new BaseModel(model));
-            that.closest('tr').remove();
-        },
-        error: function (model, response) {
-        
-        }});
+        var $that = $(e.currentTarget);
+        showAlertModal("delete_deal_source", "confirm", function(){
+            var obj = serializeForm($that.closest('form').attr("id"));
+            var model = new BaseModel();
+            model.url = 'core/api/categories/'+obj.id;
+            model.set({ "id" : obj.id });
+            model.destroy({
+            success: function (data) {
+                var model = data.toJSON();
+              App_Admin_Settings.dealSourcesView.collection.remove(new BaseModel(model));
+              $that.closest('tr').remove();
+            },
+            error: function (model, response) {
+            
+            }});
+        });
     },
 
     lossReasonAdd : function(e){
@@ -265,25 +263,23 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
     },
 
     lossReasonDelete : function(e){
-        if(!confirm("Are you sure you want to delete ?")){
-            return;
-        }
-
         e.preventDefault();
-        var that = $(e.currentTarget);
-        var obj = serializeForm($(e.currentTarget).closest('form').attr("id"));
-        var model = new BaseModel();
-        model.url = 'core/api/categories/'+obj.id;
-        model.set({ "id" : obj.id });
-        model.destroy({
-        success: function (data) {
-            var model = data.toJSON();
-          App_Admin_Settings.dealLostReasons.collection.remove(new BaseModel(model));
-          that.closest('tr').remove();
-        },
-        error: function (model, response) {
-        
-        }});
+        var $that = $(e.currentTarget);
+        showAlertModal("delete_lost_reason", "confirm", function(){
+            var obj = serializeForm($that.closest('form').attr("id"));
+            var model = new BaseModel();
+            model.url = 'core/api/categories/'+obj.id;
+            model.set({ "id" : obj.id });
+            model.destroy({
+            success: function (data) {
+                var model = data.toJSON();
+              App_Admin_Settings.dealLostReasons.collection.remove(new BaseModel(model));
+              $that.closest('tr').remove();
+            },
+            error: function (model, response) {
+            
+            }});
+        });
     },
 
     goalSave : function(e){

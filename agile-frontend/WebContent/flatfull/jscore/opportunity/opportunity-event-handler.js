@@ -42,7 +42,7 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         var id = $(e.currentTarget).closest('.data').attr('id');
         var milestone = ($(e.currentTarget).closest('ul').attr("milestone")).trim();
         var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-
+        var that = e.currentTarget;
         if(dealPipelineModel)
         {
             if(!hasScope("MANAGE_DEALS"))
@@ -54,86 +54,28 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
                 }
                 else
                 {
-                    if (!confirm("Are you sure you want to delete?"))
-                        return;
+                    showAlertModal("delete", "confirm", function(){
+                        deleteDeal(id, milestone, dealPipelineModel, that);
+                    });
+                    return;
                 }
             }
             else
             {
-                if (!confirm("Are you sure you want to delete?"))
-                    return;
+                showAlertModal("delete", "confirm", function(){
+                    deleteDeal(id, milestone, dealPipelineModel, that);
+                });
+                return;
             }
         }
         else
         {
-            if (!confirm("Are you sure you want to delete?"))
-                return;
+            showAlertModal("delete", "confirm", function(){
+                deleteDeal(id, milestone, dealPipelineModel, that);
+            });
+            return;
         }
-
-        var id_array = [];
-        var id_json = {};
-
-        // Create array with entity id.
-        id_array.push(id);
-
-        // Set entity id array in to json object with key ids,
-        // where ids are read using form param
-        id_json.ids = JSON.stringify(id_array);
-
-        var that = e.currentTarget;
-        $.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function()
-        {
-            // Remove the deal from the collection and remove the UI element.
-            var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-            if (!dealPipelineModel)
-                return;
-
-            var dealRemoveModel = dealPipelineModel[0].get('dealCollection').get(id);
-            
-            var dealRemoveValue = dealRemoveModel.attributes.expected_value;
-            
-            var removeDealValue = parseFloat($('#'+milestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealRemoveValue); 
-            
-
-
-            $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue));
-          
-            $('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);    
-              
-             /* average of deal total */
-            var avg_deal_size = 0;
-            var deal_count = parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()); 
-            if(deal_count == 0)
-                avg_new_deal_size = 0;
-            else
-                avg_new_deal_size = removeDealValue / deal_count;   
-
-            removeDealValue = portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue) ;
-            avg_new_deal_size =  portlet_utility.getNumberWithCommasAndDecimalsForPortlets(avg_new_deal_size);
-            var heading = milestone.replace(/ +/g, '');
-            var symbol = getCurrencySymbolForCharts();
-           
-            $("#"+heading+" .dealtitle-angular").removeAttr("data"); 
-            var dealTrack = $("#pipeline-tour-step").children('.filter-dropdown').text();          
-            var dealdata = {"dealTrack":dealTrack,"heading": heading ,"dealcount":removeDealValue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":deal_count};
-            var dealDataString = JSON.stringify(dealdata); 
-            $("#"+heading+" .dealtitle-angular").attr("data" , dealDataString); 
-
-            dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
-
-
-
-            // Removes deal from list
-            $(that).closest('li').css("display", "none");
-        }, error : function(err)
-        {
-            $('.error-status', $('#opportunity-listners')).html(err.responseText);
-            setTimeout(function()
-            {
-                $('.error-status', $('#opportunity-listners')).html('');
-            }, 2000);
-            console.log('-----------------', err.responseText);
-        } });
+        deleteDeal(id, milestone, dealPipelineModel, that);
     },
 
     dealArchive : function(e){

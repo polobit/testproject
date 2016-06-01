@@ -78,17 +78,17 @@ var Track_And_Milestone_Events_Collection_View = Base_Collection_View.extend({
 
     milestoneDelete : function(e){
         e.preventDefault();
-        if (!confirm("Are you sure you want to delete ?" ))
-            return;
-        
-        var formId = $(e.currentTarget).closest('form');
-        if($(e.currentTarget).closest('tr').find('.mark-won').length > 0){
-            formId.find('input[name="won_milestone"]').val('');
-        } else if($(e.currentTarget).closest('tr').find('.mark-lost').length > 0){
-            formId.find('input[name="lost_milestone"]').val('');
-        }
-        $(e.currentTarget).closest('tr').css("display", "none");
-        fill_ordered_milestone($(e.currentTarget).closest('form').attr('id'));
+        var $that = $(e.currentTarget);
+        showAlertModal("delete_milestone", "confirm", function(){
+            var formId = $that.closest('form');
+            if($that.closest('tr').find('.mark-won').length > 0){
+                formId.find('input[name="won_milestone"]').val('');
+            } else if($that.closest('tr').find('.mark-lost').length > 0){
+                formId.find('input[name="lost_milestone"]').val('');
+            }
+            $that.closest('tr').css("display", "none");
+            fill_ordered_milestone($that.closest('form').attr('id'));
+        });
     },
 
     /**
