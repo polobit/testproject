@@ -545,16 +545,12 @@ function resetAndFillFromSelect(selected_val) {
 						.find("option:first")
 						.before(
 								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+	
+				if (selected_val)
+					$select.val(selected_val).attr("selected", "selected");
+				else
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
 
-				var options = $(($select)[0]).find("option");
-				
-				options.each(function(){
-					var option = $(this).val();
-					for(var i=0; i<options.length; i++){
-						if($(options[i]).val() == option)
-							options[i].remove();
-					}
-			});
 				rearrange_from_email_options($select, data);
 			});
 }
