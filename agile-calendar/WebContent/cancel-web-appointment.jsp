@@ -385,7 +385,7 @@ a:link, a:active, a:visited, a {
 	
 <script type="text/javascript">
 var domain_user_name=<%=mapper.writeValueAsString(user_name)%>;
-$("#cancel_appointment_confirmation").die().live('click', function(e)
+$("body").on("click","#cancel_appointment_confirmation",function(e)
 {
 	e.preventDefault();
 	  var event_id=<%=event_id%>

@@ -231,12 +231,13 @@ if (scheduleid != null && multiple_users){  %>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 <link href='https://fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" ></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" >   </script>
 <script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
+<script type="text/javascript" src="../../lib/web-calendar-event/bootstrap.v3.min.js"></script>
 
 <link rel="stylesheet" href="../../css/web-calendar-event/datepicker.css"
 	type="text/css" />
@@ -1234,7 +1235,9 @@ var BUFFERTIME=null;
 				function()
 				{
 					
-
+					//$('img#multi-user-avatar').tooltip();
+					$("img#multi-user-avatar").tooltip({placement:'bottom'});
+					
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;
 					if(multiple_schedule_ids){
