@@ -96,9 +96,9 @@ public class ContactViewPrefs
     @PostLoad
     public  void postLoad()
     { 
+    	List<String> list = new ArrayList<String>(fields_set);
     	if(this.type == Type.PERSON)
     	{
-    		List<String> list = new ArrayList<String>(fields_set);
         	if(list.contains("basic_info"))
         	{
         		list.add(list.indexOf("basic_info"), "first_name");
@@ -106,10 +106,18 @@ public class ContactViewPrefs
         		list.add(list.indexOf("last_name")+1,"email");
         		list.remove("basic_info");
         	}
-        	this.fields_set = new LinkedHashSet<String>(list);
+        	
     	}
-    	    	
-    	
+    	else
+    	{
+    		if(list.contains("basic_info"))
+        	{
+        		list.add(list.indexOf("basic_info"), "name");
+        		list.add(list.indexOf("name")+1,"url");
+        		list.remove("basic_info");
+        	}
+    	}
+    	this.fields_set = new LinkedHashSet<String>(list);
     }
 
     /**
