@@ -30,6 +30,8 @@ function editTask(taskId, taskListId, taskListOwnerId)
 		deserializeForm(taskJson, $("#updateTaskForm"));
 		$('.update-task-timepicker').val(fillTimePicker(taskJson.due));
 
+		$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+
 		categories.getCategoriesHtml(taskJson,function(catsHtml){
 			$('#type',$("#updateTaskForm")).html(catsHtml);
 			// Fills owner select element
