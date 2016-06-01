@@ -191,7 +191,7 @@
 					    {{/hasScope}}
 					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Delete</button>
 				    </div>
-				    <div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
+
       <div class="m-l-sm filter-criteria"></div>
       {{#unless this.length}}
         <div class="m-l-sm" id="slate">
@@ -200,6 +200,7 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container contacts-inner-div">
+             <div  class="btn-group inline-block text-center" style="display: none; border:1px solid #dee5e7;" id="bulk-select"></div>
                 <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/contacts/delete?action=DELETE"></div>
             </div>
         </div>
