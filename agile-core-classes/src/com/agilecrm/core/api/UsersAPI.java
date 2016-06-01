@@ -1,6 +1,7 @@
 package com.agilecrm.core.api;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -228,6 +229,7 @@ public class UsersAPI
 			try
 			{
 				domainUser.setInfo("Ip_Address", request.getRemoteAddr()) ;
+				domainUser.setInfo("updated_time", new Long(System.currentTimeMillis() / 1000)) ;
 				ActivitySave.createUserEditActivity(domainUser);
 				ActivitySave.createOwnerChangeActivity(domainUser);
 			}

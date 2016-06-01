@@ -672,7 +672,7 @@ var SubscribeRouter = Backbone.Router
 							}
 							that.subscribe();
 						},error : function(){
-							alert("Error occured. Please Reload the page.")
+							showAlertModal("error");
 						}
 					});	
 				}

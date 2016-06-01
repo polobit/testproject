@@ -1279,7 +1279,7 @@ function clickfunction(that,url,forAll,route){
 						}*/
 					},
 					error : function(model, response) {
-						alert("Failed to add.");
+						showAlertModal("add_error");
 					}
 				});
 			});

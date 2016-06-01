@@ -16,6 +16,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.ipaccess.IpAccess;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -277,20 +278,25 @@ public class DomainUserUtil
      */
     public static DomainUser getCurrentDomainUser()
     {
-	// Get Current Logged In user
-	UserInfo userInfo = SessionManager.get();
-	if (userInfo == null)
-	    return null;
-	DomainUser user = getDomainUserFromEmail(userInfo.getEmail());
-
-	/*
-	 * try { user.postLoad(); } catch (DecoderException e) {
-	 * System.out.println("exception exception **************************");
-	 * // TODO Auto-generated catch block e.printStackTrace(); }
-	 * 
-	 * System.out.println("**************************" + user.menu_scopes);
-	 */
-	return user;
+    	//Check in cache. If user is present, return result.
+    	Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+    	if( obj != null && obj instanceof DomainUser )	return (DomainUser) obj;
+    	
+		// Get Current Logged In user
+		UserInfo userInfo = SessionManager.get();
+		if (userInfo == null)
+		    return null;
+		DomainUser user = getDomainUserFromEmail(userInfo.getEmail());
+	
+		/*
+		 * try { user.postLoad(); } catch (DecoderException e) {
+		 * System.out.println("exception exception **************************");
+		 * // TODO Auto-generated catch block e.printStackTrace(); }
+		 * 
+		 * System.out.println("**************************" + user.menu_scopes);
+		 */
+		SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, user);
+		return user;
     }
 
     /**

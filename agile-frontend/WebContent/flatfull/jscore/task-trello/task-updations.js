@@ -2,22 +2,21 @@
 function editTask(taskId, taskListId, taskListOwnerId)
 {
 	console.log("editTask");
-	var modelTaskList;
+	var modelTaskList;var modelTask;
 
 	if (taskListOwnerId)
 		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
 	else
 		modelTaskList = getTaskList(null, taskListId, null);
 
-	if (!modelTaskList)
-		return;
-
-	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
-
+	if (modelTaskList && modelTaskList.length)
+		modelTask = modelTaskList[0].get('taskCollection').get(taskId).toJSON();
+	else
+		modelTask = App_Calendar.allTasksListView.collection.get(taskId).toJSON();
 	if (!modelTask)
 		return;
 
-	var taskJson = modelTask.toJSON();
+	var taskJson = modelTask;
 
 	taskJson["taskListId"] = taskListId;
 	taskJson["taskListOwnerId"] = taskListOwnerId;
@@ -164,21 +163,21 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 // On click of task action , makes task completed
 function completeTask(taskId, taskListId, taskListOwnerId)
 {
-	var modelTaskList;
+	var modelTaskList;var modelTask;
 
-	// Get task list
 	if (taskListOwnerId)
 		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
 	else
 		modelTaskList = getTaskList(null, taskListId, null);
 
-	if (!modelTaskList)
+	if (modelTaskList && modelTaskList.length)
+		modelTask = modelTaskList[0].get('taskCollection').get(taskId).toJSON();
+	else
+		modelTask = App_Calendar.allTasksListView.collection.get(taskId).toJSON();
+	if (!modelTask)
 		return;
 
-	// Get task
-	var modelTsk = modelTaskList[0].get('taskCollection').get(taskId);
-
-	var taskJson = modelTsk.toJSON();
+	var taskJson = modelTask;
 
 	if (taskJson.status == COMPLETED || taskJson.is_complete == true)
 		return;
@@ -229,8 +228,12 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 				$('#due_tasks_count').html("");
 
 		});
-		
-		updateTask(true, data, taskJson);
+		if (modelTaskList && modelTaskList.length)
+			updateTask(true, data, taskJson);
+		else{
+			App_Calendar.allTasksListView.collection.get(taskJson).set(new BaseModel(data));
+			App_Calendar.allTasksListView.render(true);
+		}
 
 		// Maintain changes in UI
 		displaySettings();

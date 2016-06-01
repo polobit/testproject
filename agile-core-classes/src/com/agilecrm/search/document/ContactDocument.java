@@ -187,6 +187,10 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		 * Get all field names in contact seperated by space and adds it in
 		 * document "field_labels"
 		 */
+		//Remove tags field from fields if the contact has no tags
+		if(contact.tagsWithTime == null || contact.tagsWithTime.size() == 0)
+			fields.keySet().remove("tags");
+			
 		doc.addField(Field.newBuilder().setName("field_labels")
 				.setText(StringUtils.join(fields.keySet(), " ")));
 

@@ -50,11 +50,11 @@
 		{{#if custom1}}
     		<div class="pos-rlt list-group-item"> 
 			<div class="pull-left avatar thumb-xs m-r m-t-xs">
-				{{#if this.user}}
+				{{#if domainUser}}
                 
-					<img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
+					<img class="user-img ref-roundedimg"  alt="" src="{{domainUser.pic}}" title="{{domainUser.name}}">
 				{{else}}
-					<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+					<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{domainUser.name}}" >
 				{{/if}}
 			</div>
 			<div class="activity-tag p-l-xxl">
@@ -85,9 +85,9 @@
 {{else}}
 	    <div class="pos-rlt list-group-item"> 
 	<div class="pull-left avatar thumb-xs m-r m-t-xs">
-			{{#if this.user}}
+			{{#if domainUser}}
                 
-				<img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
+				<img class="user-img ref-roundedimg"  alt="" src="{{domainUser.pic}}" title="{{this.user.name}}">
 			{{else}}
 				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}

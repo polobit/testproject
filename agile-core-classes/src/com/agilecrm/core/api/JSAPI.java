@@ -2,6 +2,7 @@ package com.agilecrm.core.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,6 +45,8 @@ import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.GeoLocationUtil;
@@ -116,6 +119,7 @@ public class JSAPI
 	}
 	catch (Exception e)
 	{
+	    System.out.println("EXCEPPPPPPPPPPPPPPPPPPPPPPPPTION"+e);
 	    e.printStackTrace();
 	    return null;
 	}
@@ -147,6 +151,13 @@ public class JSAPI
     {
 	try
 	{
+	    UserInfo userInfo = SessionManager.get();
+		
+	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    if(!js_scopes.contains("create_contact"))
+		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
+	    
 	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = mapper.readValue(json, Contact.class);
 	    System.out.println(mapper.writeValueAsString(contact));
@@ -950,6 +961,13 @@ public class JSAPI
     {
 	try
 	{
+	    UserInfo userInfo = SessionManager.get();
+		
+	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    if(!js_scopes.contains("update_contact"))
+		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_UPDATE_RESTRICT);
+	    
 	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
@@ -1102,9 +1120,6 @@ public class JSAPI
     {
 	try
 	{
-	    if(!JSAPIUtil.checkAllowedDomain())
-		return "Please contact Agile CRM to enable this method";
-	    
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
@@ -1141,9 +1156,6 @@ public class JSAPI
 	    if (contact.getContactField(name) == null)
 		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
 	    
-	    if(!JSAPIUtil.checkAllowedDomain())
-		return "Please contact Agile CRM to enable this method";
-
 	    contact.removeProperty(name);
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 	    contact.save();
@@ -1452,5 +1464,83 @@ public class JSAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    
+     /**
+     * Get deals based on the email of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String
+     */
+    @Path("contacts/get-our-deals")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getDeals(@QueryParam("email") String email)
+    {
+     try
+     {
+         if (!JSAPIUtil.isRequestFromOurDomain())
+        	 return new JSONArray().toString();
+
+         Contact contact = ContactUtil.searchContactByEmail(email);
+         if (contact == null)
+        	 return JSAPIUtil.generateContactMissingError();
+
+         List<Opportunity> deals = new ArrayList<Opportunity>();
+         deals = OpportunityUtil.getDeals(contact.id, null, null);
+         ObjectMapper mapper = new ObjectMapper();
+         JSONArray arr = new JSONArray();
+         for (Opportunity deal : deals)
+         {
+        	 arr.put(mapper.writeValueAsString(deal));
+         }
+         return arr.toString();
+     }
+     catch (Exception e)
+     {
+         e.printStackTrace();
+         return null;
+     }
+    }
+    /*
+     * Get tasks based on email of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String (tasks)
+     */
+    @Path("contacts/get-our-tasks")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getTasks(@QueryParam("email") String email)
+    {
+     try
+     {
+         if (!JSAPIUtil.isRequestFromOurDomain())
+        	 return new JSONArray().toString();
+
+         Contact contact = ContactUtil.searchContactByEmail(email);
+         if (contact == null)
+        	 return JSAPIUtil.generateContactMissingError();
+
+         List<Task> tasks = new ArrayList<Task>();
+         tasks = TaskUtil.getContactTasks(contact.id);
+         ObjectMapper mapper = new ObjectMapper();
+         JSONArray arr = new JSONArray();
+         for (Task task : tasks)
+         {
+        	 arr.put(mapper.writeValueAsString(task));
+         }
+         return arr.toString();
+     }
+     catch (Exception e)
+     {
+         e.printStackTrace();
+         return null;
+     }
     }
 }

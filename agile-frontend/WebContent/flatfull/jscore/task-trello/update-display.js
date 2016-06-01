@@ -369,10 +369,10 @@ function displayListView()
 	$('#task-list-based-condition').show();
 	
 	// Display group view
-	$(".group-view").show();
+	$(".group-view").hide();
 	
 	// Hide group by
-	$(".do-onclick-nothing").hide();
+	$(".do-onclick-nothing").show();
 	
 	// Hide list view
 	$(".list-view").hide();
@@ -398,7 +398,7 @@ function displayListView()
 //
 function bindDropdownEvents()
 {
-	$('.dropdown-menu').find(".do-onclick-nothing").on("click",function(e)
+	$('.dropdown-menu').find(".group-view").on("click",function(e)
 	 {
 	    e.stopImmediatePropagation();
 	 });
@@ -436,6 +436,12 @@ function bindDropdownEvents()
 		// Hide dropdown
 		if($(".type-task-button").hasClass("open"))
 			$(".type-task-button").removeClass("open");
+
+		if(criteria == "CATEGORY" || criteria == "DUE" || criteria == "PRIORITY" )
+		{
+			$(".list-view").css('display', '');
+			$(".calendar-view").css('display', '');
+		}			
 
 		// Empty collection
 		if(TASKS_LIST_COLLECTION != null)
@@ -576,10 +582,10 @@ function displayCalendarView()
 	$(".calendar-view").hide();
 
 	// Display group view
-	$(".group-view").show();
+	$(".group-view").hide();
 	
 	// Hide group by
-	$(".do-onclick-nothing").hide();
+	$(".do-onclick-nothing").show();
 
 	// Display group view
 	$(".list-view").show();

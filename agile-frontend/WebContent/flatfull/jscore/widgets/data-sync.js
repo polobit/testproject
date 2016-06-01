@@ -82,33 +82,33 @@ function initializeDataSyncListners(){
 
 	$('#prefs-tabs-content #sync-import-prefs-delete').off();
     $('#prefs-tabs-content').on('click', '#sync-import-prefs-delete', function(e){
-		
+		var $that = $(this);
+		showAlertModal("delete", "confirm", function(){
+			var sync_widget_type=$that.attr("data_sync_type");
 
-    	if(!confirm("Are you sure you want to delete?"))
-		    		return false;
-		var sync_widget_type=$(this).attr("data_sync_type");
+			var sync_widget_id=$that.attr("data_sync_id");
 
-		var sync_widget_id=$(this).attr("data_sync_id");
+			if(!sync_widget_type)
+				return;
 
-		if(!sync_widget_type)
-			return;
-
-		var deleteSyncUrl="core/api/contactprefs/delete/"+sync_widget_type+"/"+sync_widget_id;
-		$.ajax({
- 				url : deleteSyncUrl,
-				type : 'DELETE',
-				success : function(){
-					console.log("success");
-					
-					if(sync_widget_type == "SALESFORCE"){
-						DATA_SYNC_FORCE_FETCH=true;
-						App_Datasync.salesforce();
-					}
+			var deleteSyncUrl="core/api/contactprefs/delete/"+sync_widget_type+"/"+sync_widget_id;
+			$.ajax({
+	 				url : deleteSyncUrl,
+					type : 'DELETE',
+					success : function(){
+						console.log("success");
 						
-					else
-						App_Datasync.dataSync();
-				}
-			});
+						if(sync_widget_type == "SALESFORCE"){
+							DATA_SYNC_FORCE_FETCH=true;
+							App_Datasync.salesforce();
+						}
+							
+						else
+							App_Datasync.dataSync();
+					}
+				});
+		});
+		
 		
 			
 

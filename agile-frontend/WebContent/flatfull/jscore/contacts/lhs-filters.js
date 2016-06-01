@@ -729,6 +729,13 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
             $('#segmentsModal').html(segmentView.render().el).modal('show');
             
         });
+	$('#content').on('change',"#tags-filter" , function() {
+	  	if(this.value == "DEFINED" || this.value == "NOT_DEFINED" ){
+	  		$(this).parent().removeAttr("style");
+	  	}else
+	  		$(this).parent().css("min-height","90px");
+
+	});
 
 }
 /**

@@ -355,30 +355,30 @@ function getCalendarView() {
 						{
 
 							// Confirm from the user about the change
-							if (!confirm("Are you sure about this change?"))
-							{
+							showAlertModal("event_drop", "confirm", function(){
+								var task = $.extend(true, {}, task1);
+
+								// Update task if the user changes it in the
+								// calendar
+								task.due = new Date(task.start).getTime() / 1000;
+								var jsoncontacts = task.contacts;
+								var _contacts = [];
+								for ( var i in jsoncontacts)
+								{
+									_contacts.push(jsoncontacts[i].id);
+
+								}
+								if(task.taskOwner)
+								task.owner_id = task.taskOwner.id;
+								task.contacts = _contacts;
+								var taskModel = new Backbone.Model();
+								taskModel.url = 'core/api/tasks';
+
+								taskModel.save(task);
+							}, function(){
 								revertFunc();
-								return;
-							}
-							var task = $.extend(true, {}, task1);
-
-							// Update task if the user changes it in the
-							// calendar
-							task.due = new Date(task.start).getTime() / 1000;
-							var jsoncontacts = task.contacts;
-							var _contacts = [];
-							for ( var i in jsoncontacts)
-							{
-								_contacts.push(jsoncontacts[i].id);
-
-							}
-							if(task.taskOwner)
-							task.owner_id = task.taskOwner.id;
-							task.contacts = _contacts;
-							var taskModel = new Backbone.Model();
-							taskModel.url = 'core/api/tasks';
-
-							taskModel.save(task);
+							});
+							
 						},
 						/**
 						 * Updates or deletes a task by clicking on it

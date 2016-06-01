@@ -482,38 +482,39 @@ function showCalendar(users)
 							}
 
 							// Confirm from the user about the change
-							if (!confirm("Are you sure about this change?"))
-							{
+							showAlertModal("event_drop", "confirm", function(){
+								event1 = revertEventColorBasedOnPriority(event1);
+								var event = $.extend(true, {}, event1);
+
+								// Update event if the user changes it in the
+								// calendar
+								event.start = new Date(event.start).getTime() / 1000;
+								event.end = new Date(event.end).getTime() / 1000;
+								if (event.end == null || event.end == 0)
+									event.end = event.start;
+
+								var jsoncontacts = event.contacts;
+								var _contacts = [];
+								for ( var i in jsoncontacts)
+								{
+									_contacts.push(jsoncontacts[i].id);
+
+								}
+								if(event.owner)
+								event.owner_id = event.owner.id;
+								delete event.contacts;
+								delete event.owner;
+								event
+								event.contacts = _contacts;
+								var eventModel = new Backbone.Model();
+								eventModel.url = 'core/api/events';
+
+								eventModel.save(event);
+							},function(){
 								revertFunc();
-								return;
-							}
-							event1 = revertEventColorBasedOnPriority(event1);
-							var event = $.extend(true, {}, event1);
+							});
 
-							// Update event if the user changes it in the
-							// calendar
-							event.start = new Date(event.start).getTime() / 1000;
-							event.end = new Date(event.end).getTime() / 1000;
-							if (event.end == null || event.end == 0)
-								event.end = event.start;
-
-							var jsoncontacts = event.contacts;
-							var _contacts = [];
-							for ( var i in jsoncontacts)
-							{
-								_contacts.push(jsoncontacts[i].id);
-
-							}
-							if(event.owner)
-							event.owner_id = event.owner.id;
-							delete event.contacts;
-							delete event.owner;
-							event
-							event.contacts = _contacts;
-							var eventModel = new Backbone.Model();
-							eventModel.url = 'core/api/events';
-
-							eventModel.save(event);
+							
 						},
 						/**
 						 * Updates or deletes an event by clicking on it

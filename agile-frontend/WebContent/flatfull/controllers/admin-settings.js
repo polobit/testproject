@@ -56,7 +56,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Webhook */
 	"webhook" : "webhookSettings",
 
-	"change-domain" : "changeDomain"
+	"change-domain" : "changeDomain",
+
+	/* Java Script API Permission*/
+	"js-security" : "jsSecuritySettings"
 
 
 	},
@@ -219,6 +222,36 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			} });
 
 			$('#content').find('#webhook-accordian-template').html(view.render().el);
+	
+	},
+
+
+	jsSecuritySettings : function()
+	{
+		
+		
+			var view = new Base_Model_View({ url : '/core/api/jspermission/', template : "admin-settings-js-security", 
+			no_reload_on_delete : true,
+			postRenderCallback : function()
+			{
+				
+			}, 
+			form_custom_validate : function(){
+				$(".checkedMultiCheckbox").find(".help-inline").remove();
+                if($(".checkedMultiCheckbox").find('input:checked').length > 0)
+                      return true;
+                else{
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                }
+                
+                 return false;
+			}, saveCallback : function(){
+				console.log("saveCallback");
+				App_Admin_Settings.jsSecuritySettings();
+				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+			} });
+
+			$('#content').find('#js-security-accordian-template').html(view.render().el);
 	
 	},
 	
