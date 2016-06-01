@@ -1,5 +1,6 @@
 package com.campaignio.cron.deferred;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.workflows.status.CampaignStatus.Status;
@@ -135,6 +136,7 @@ public class CronDeferredTask implements DeferredTask
 					AgileTaskletUtil.getId(campaignJSON), "", Status.REMOVED);
 
 			npe.printStackTrace();
+			System.out.println("Campaign stopped on the contact. Exception is:"+ExceptionUtils.getFullStackTrace(npe));
 		}
 		catch (Exception e)
 		{

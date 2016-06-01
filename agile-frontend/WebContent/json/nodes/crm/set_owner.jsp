@@ -39,7 +39,7 @@
             "category": "Settings",
             "name": "mergefield_owner_id",
             "id": "mergefield_owner_id",
-            "title": "Enter the merge field for the owner. Eg: {{event.owner.id}}",
+            "title": "Enter the merge field for the owner. Eg: {{event.owner.id}} or {{deal.owner.id}}",
             "fieldType": "input",
             "type": "text"
         },
