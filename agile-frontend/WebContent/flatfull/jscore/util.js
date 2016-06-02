@@ -724,8 +724,11 @@ function showPageBlockModal() {
 			$("#alert-message").html(template_ui).show();
 		}, null);
 
-	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time != null && USER_BILLING_PREFS.updated_time != undefined && USER_BILLING_PREFS.updated_time > 1457494200){
-		getTemplate("block-user", {}, undefined, function(template_ui){
+	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time > 1457494200){
+		var template = "block-payment-failed-user";
+		if(USER_BILLING_PREFS.status == "SUBSCRIPTION_DELETED" || USER_BILLING_PREFS.status == "SUB&#x73;criptION_DELETED")
+			template = "block-cancelled-user";
+		getTemplate(template, {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$("body").append(template_ui);
