@@ -6589,6 +6589,11 @@ $(function()
 				element = "";*/
 				return ;
 			}
+			else if(element == "url")
+			{
+				el = el.concat('<th class="'+ cls +'">' + "URL" + '</th>');
+				return ;
+			}
 			else if (element == "basic_info")
 				return
 			else if (element.indexOf("CUSTOM_") == 0) {
