@@ -36,7 +36,7 @@ function chainWebRules(el, data, isNew, actions)
 	$("#delay", el).chained($("#action", el));
 	
 	$("#noty-message", el).chained($("#action", el), function(select, self){
-		var value = $("select", select).val();
+		var value = $("select", select).val();					
 		$(self).show();
 		console.log(value);
 	
@@ -163,8 +163,9 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 				}else if($('#callwebrule-code').val() !== "" && $('#action select').val()=='CALL_POPUP'){
 
 					if($('.custom_html').length > 1){
-						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
-						$($(e.currentTarget)).closest(".alert").remove();
+						showAlertModal("webrule_popup_limit", undefined, function() {
+                   			 $($(e.currentTarget)).closest(".alert").remove()
+                		});
 						return;
 					}
 					loadTinyMCE("callwebrule-code");
