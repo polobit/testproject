@@ -224,7 +224,7 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 		var description = getTemplate("cancellation-description", info);
 		// Build url
 		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
-		encodeURIComponent("narmada@invox.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
+		encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
 		encodeURIComponent(description);
 
 		$.post(url,function(){
