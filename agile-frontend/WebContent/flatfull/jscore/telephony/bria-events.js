@@ -234,6 +234,8 @@ function saveCallNoteBria(){
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
+		}else{
+			return showNewContactModal(number);
 		}
 	}
 }

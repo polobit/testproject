@@ -234,6 +234,7 @@ function dialFromTwilio(to,from,contact){
 	if(contact){
 		name = 	getContactName(contact);
 		TWILIO_CONTACT_ID = contact.id;
+		TWILIO_CONTACT = contact;
 	}
 	
 		TWILIO_CALLTYPE = "Outgoing";
@@ -250,7 +251,7 @@ function dialFromTwilio(to,from,contact){
 			}
 			CALL_CAMPAIGN.state = "PAUSE" ;
 		  }
-	twiliocall(to, name);
+	twiliocall(to, name,contact);
 }
 
 function dialFromBria(to,from,contact){

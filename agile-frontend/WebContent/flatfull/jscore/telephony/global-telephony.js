@@ -391,16 +391,6 @@ function handleCallRequest(message)
 		else if (message.state == "error")
 		{
 			closeCallNoty(true);
-						try
-						{
-							if(globalCall.calledFrom == "Bria"){
-								resetglobalCallVariables();
-								resetglobalCallForActivityVariables();
-							}
-						}
-						catch (e)
-						{
-						}
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
 			
@@ -483,17 +473,6 @@ function handleCallRequest(message)
 		else if (message.state == "error")
 		{
 			closeCallNoty(true);
-						try
-						{
-							if(globalCall.calledFrom == "Skype"){
-								resetglobalCallVariables();
-								resetglobalCallForActivityVariables();
-							}
-						}
-						catch (e)
-						{
-						}
-					});
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
 			if(dialled.using == "dialler"){

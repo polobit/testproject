@@ -1140,7 +1140,7 @@ function setUpGlobalTwilio()
 		});
 	});
 }
-function twiliocall(phoneNumber, toName)
+function twiliocall(phoneNumber, toName, contact)
 {
 	// get the phone number to connect the call to
 	
@@ -1192,7 +1192,7 @@ function twiliocall(phoneNumber, toName)
 				showDraggableNoty("Twilioio", TWILIO_CONTACT, "outgoing", To_Number, btns);
 				
 				/*showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
-		});		
+		},contact);		
 	}	
 }
 
@@ -1597,13 +1597,26 @@ function searchForContactImg(from, callback) {
 }
 
 // Add contact img in html for call noty text with contact url
-function addContactImg(callType, callback)
+function addContactImg(callType, callback, contact)
 {
 	var notyContactImg = "";
 	try{
 		if(callType == "Outgoing")
 		  {
-			var currentContact = agile_crm_get_contact();
+			var currentContact;
+			if(contact){
+				currentContact = contact;
+			}else{
+				try{
+					currentContact = agile_crm_get_contact();
+				}catch (e) {
+				}
+			}
+			
+			if(!currentContact){
+				return callback(notyContactImg);
+			}
+			
 			var contactImg = getGravatar(currentContact.properties, 40);
 			notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
 			return callback(notyContactImg);
