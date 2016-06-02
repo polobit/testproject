@@ -232,7 +232,7 @@ if (scheduleid != null && multiple_users){  %>
 <link href='https://fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" >   </script>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js?_"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
