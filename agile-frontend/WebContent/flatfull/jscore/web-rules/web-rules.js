@@ -86,6 +86,14 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 						  return;
 
 					var htmlContent = $(template_ui).find('.webrule-actions > div').clone();
+					var action_count=$('#action select').length;
+					for(var i=0;i<action_count;i++){
+
+						if($($('#action select')[i]).val()==='CALL_POPUP' || $($('#action select')[i]).val()==='MODAL_POPUP'){
+							$($(htmlContent).find('#action select optgroup option')[0]).remove();
+							$($(htmlContent).find('#action select optgroup option')[1]).remove();
+						}
+					}
 					chainWebRules($(htmlContent)[0], undefined, true);
 					// var htmlContent = $(this).closest("tr").clone();
 					$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
