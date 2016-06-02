@@ -31,6 +31,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -83,6 +84,7 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -453,11 +455,20 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Contact getContact(@PathParam("contact-id") Long id) throws AccessDeniedException
     {
-	Contact contact = ContactUtil.getContact(id);
+    Contact contact = null;
+    try {
+    	contact = ContactUtil.getContact(id);
+    	System.out.println("contact : " + contact);
 
-	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
+    	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
 
-	return contact;
+    	return contact;
+	} catch (Exception e) {
+		// TODO: handle exception
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	}
+	
+    return contact;
     }
 
     @Path("related-entities/{contact-id}")
