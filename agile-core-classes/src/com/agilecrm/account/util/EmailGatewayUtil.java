@@ -459,8 +459,6 @@ public class EmailGatewayUtil
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
 		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 	
-	System.out.println("Emailgatewaytype is:"+emailGatewayType);
-
 	// Add to pull queue with from email as Tag
 	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
 		queueName = "amazon-ses-pull-queue";
