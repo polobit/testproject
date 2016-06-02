@@ -197,8 +197,10 @@ $(function()
 			logCallParam['action'] = "edit";
 			$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
 			deserializeForm(logPhone, $("#phoneLogForm", "#logCallModal"));
+			
 			$("#phoneLogForm #contact_logPhone_number").html(logPhone.phone);
 			$("#phoneLogForm #contact_logPhone_number").attr("value", logPhone.phone);
+			$("#phoneLogForm #contact_logPhone_number").removeClass("add_logPhone");
 			
 			$("#phoneLogForm #callStatus").attr("value", logPhone.status);
 			$("#phoneLogForm #callStatus").html(toTitleCase(logPhone.status));
@@ -323,11 +325,15 @@ $(function()
 				$("#contact_logPhone_number").attr("value",prop.value);
 				$(".add_logPhone_span","#phoneLogForm").show();
 				$("#contact_logPhone_number").html(prop.value);
-				if(is_person)
+				if(is_person){
 					App_Contacts.contactDetailView.model = data;
-				else
+				}else{
 					App_Companies.companyDetailView.model = data;
+				}
+					
+				$("#phoneLogForm #contact_logPhone_number").removeClass("add_logPhone");
 			}
+			
 			})
 			
 				/*		
