@@ -110,7 +110,7 @@ public class JSONNode extends TaskletAdapter
     private void enqueueJSONTask(String campaignId, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON,String url, String methodType, String paramsJSONArrayString, String headersJSONArrayString)
     {
     	JSONIODeferredTask task = new JSONIODeferredTask(campaignId, subscriberJSON.toString(), data.toString(), nodeJSON.toString());
-    	task.setUrl(url);;
+    	task.setUrl(url);
     	task.setMethodType(methodType);
     	task.setParams(paramsJSONArrayString);
     	task.setHeaders(headersJSONArrayString);
@@ -254,7 +254,7 @@ class JSONIODeferredTask implements DeferredTask
 	 */
 	private static final long serialVersionUID = -7873554548997239668L;
 	
-	public String campaignId, dataString, subscriberJSONString, nodeJSONString;
+	private String campaignId, dataString, subscriberJSONString, nodeJSONString;
 	private String url, methodType, params, headers;
 
 	public JSONIODeferredTask(String campaignId, String subscriberJSONString, String dataString,
