@@ -103,6 +103,7 @@ function setup_tags_typeahead(callback) {
     			if($.inArray(tag, json.tags) >= 0){
     				$("#addTagsForm").css("display", "none");
                     $("#add-tags").css("display", "block");
+                    $("#addTags").val('');
                     return;
                 }
 

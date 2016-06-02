@@ -769,7 +769,7 @@ public class Opportunity extends Cursor implements Serializable
 	return tags;
     }
    
-    public  void updateDealTagsEntity(Opportunity oldDeal, Opportunity updatedDeal)
+    public static  void updateDealTagsEntity(Opportunity oldDeal, Opportunity updatedDeal)
     {
 
 	try
@@ -979,6 +979,11 @@ public class Opportunity extends Cursor implements Serializable
 
 	// Setting note_ids from api calls
 	setRelatedNotes();
+	if(this.tagsWithTime != null && this.tagsWithTime.size() > 0){
+		for(Tag tag : this.tagsWithTime){
+			this.tags.add(tag.tag);
+		}
+	}
 	
     }
 

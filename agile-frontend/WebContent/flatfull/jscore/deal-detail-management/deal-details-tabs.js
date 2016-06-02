@@ -129,6 +129,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			if($.inArray(new_tags, json.tags) >= 0){
 				$("#addTagsForm").css("display", "none");
         		$("#add-tags").css("display", "block");
+        		$("#addTags").val('');
 				return;
 			}
 			acl_util.canAddTag(new_tags.toString(),function(respnse){

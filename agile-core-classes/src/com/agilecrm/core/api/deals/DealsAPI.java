@@ -1385,11 +1385,14 @@ public class DealsAPI
     public Opportunity AddDealTag(@QueryParam("tag") String tag,@QueryParam("id") Long id)
     {
     	if(id != null && tag != null){
-    		Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+    		Opportunity oldOpportunity  = new Opportunity();
+    		Opportunity opportunity  = new Opportunity();
+    		oldOpportunity = OpportunityUtil.getOpportunity(id);
+    		opportunity = oldOpportunity;
     		Tag newTag = new Tag();
     		newTag.tag = tag;
-    		opportunity.tagsWithTime.add(newTag);
-    		opportunity.updateDealTagsEntity(opportunity);
+    		oldOpportunity.tagsWithTime.add(newTag);
+    		Opportunity.updateDealTagsEntity(opportunity,oldOpportunity);
     		try
     		{
     		    ActivitySave.createDealEditActivity(opportunity);
