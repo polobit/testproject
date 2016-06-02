@@ -3874,10 +3874,4 @@ padding-left:0px;
 .companies-custom .contactsnewimage{
    padding:2px 0px;
 }*/
-#companies thead tr th:nth-child(2){
-  padding: 7px 0px !Important;
-}
 
-#contacts-table thead tr th:nth-child(2){
-   padding: 7px 0px !Important;
-}
