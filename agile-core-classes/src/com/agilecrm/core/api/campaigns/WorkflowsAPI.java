@@ -568,4 +568,22 @@ public class WorkflowsAPI {
 
 	}
 
+	/**
+	 * Returns count of workflow for all users.
+	 * 
+	 * @param workflowId
+	 *            - workflow id
+	 * @return
+	 */
+	@Path("count")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getWorkflowCount() {
+		try {
+			return  String.valueOf(WorkflowUtil.getAllWorkflows().size());
+		} catch (Exception e) {
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 }
