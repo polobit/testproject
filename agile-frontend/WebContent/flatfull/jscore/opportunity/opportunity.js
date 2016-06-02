@@ -258,6 +258,25 @@ function setupDealsTracksList(cel){
 	{
 		this.trackListView = new Deals_Track_Change_Events_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "opportunity-track-list", individual_tag_name : 'li', postRenderCallback : function(el){
 			var tracksArray = trackListView.collection.models;
+			if(tracksArray && tracksArray.length==1){
+				milestone_util.showMilestonePopup(tracksArray[0].toJSON(), function(new_milestone){
+					if(new_milestone)
+					{
+						trackListView.collection.get(new_milestone.id).set(new BaseModel(new_milestone), { silent : true });
+					}
+				});
+			}
+			else if(tracksArray){
+				milestone_util.isNotyVisible = false;
+				$.each(tracksArray,function(index,mile){
+					milestone_util.showMilestonePopup(mile.toJSON(), function(new_milestone){
+						if(new_milestone)
+						{
+							trackListView.collection.get(new_milestone.id).set(new BaseModel(new_milestone), { silent : true });
+						}
+					});
+				});
+			}
 			$.each(tracksArray,function(i,value){
 				console.log(value.toJSON());
 				if(pipeline_id == 0 && value.toJSON().isDefault){

@@ -471,7 +471,7 @@ public class CustomFieldsAPI
 					update_date = new Date(updated_time);
 				}
 				Date current_date = new Date(); 
-				if(schema == null || (update_date.getHours() < current_date.getHours() && update_date.getYear() <= current_date.getYear())){
+				if(schema == null || (update_date.getMonth() < current_date.getMonth() && update_date.getYear() <= current_date.getYear())){
 					if(schema == null){
 						String oldNamespace = NamespaceManager.get();
 						NamespaceManager.set("");
