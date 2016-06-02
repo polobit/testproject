@@ -503,6 +503,13 @@ function rearrange_from_email_options($select, data) {
 
 	var unverified = [];
 
+	for(var i=0; i<$($select[0]).find("option").length; i++){
+		for(var j=$($select[0]).find("option").length-1; j>i; j--){
+		if($($($select[0]).find("option")[i]).val() == $($($select[0]).find("option")[j]).val())
+			$($($select[0]).find("option")[i]).remove();
+		}
+	}
+
 	$.each(data, function(index, obj) {
 
 		if (obj.verified == "NO")
