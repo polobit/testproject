@@ -503,12 +503,12 @@ function rearrange_from_email_options($select, data) {
 
 	var unverified = [];
 
-	for(var i=0; i<$($select[0]).find("option").length; i++){
+	/*for(var i=0; i<$($select[0]).find("option").length; i++){
 		for(var j=$($select[0]).find("option").length-1; j>i; j--){
 		if($($($select[0]).find("option")[i]).val() == $($($select[0]).find("option")[j]).val())
 			$($($select[0]).find("option")[i]).remove();
 		}
-	}
+	}*/
 
 	$.each(data, function(index, obj) {
 
@@ -547,11 +547,14 @@ function resetAndFillFromSelect(selected_val) {
 			$('.email'),
 			"prepend",
 			function($select, data) {
-
+				var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+				if(typeof(ownerEmail) == "undefined")
+				{
 				$select
 						.find("option:first")
 						.before(
 								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+				}
 	
 				if (selected_val)
 					$select.val(selected_val).attr("selected", "selected");
