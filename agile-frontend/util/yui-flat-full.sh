@@ -3,6 +3,8 @@ cat ../WebContent/flatfull/jscore/backbone/*.js > ../WebContent/jscore/min/flatf
 
 cat $(find ../WebContent/flatfull/controllers ! -path ../WebContent/flatfull/controllers/app.js -name "*.js") >> ../WebContent/jscore/min/flatfull/js-all-min-1.js
 
+# Add dependency files and prerequisites to js-all-min-1.js
+cat $(find ../WebContent/flatfull/prereq -name "*.js") >> ../WebContent/jscore/min/flatfull/js-all-min-1.js
 
 ## Not path is set to avoid duplicating backbone js files that is already included and min files that should not be include again jscore.
 find ../WebContent/flatfull/jscore ! -path ../WebContent/flatfull/jscore/backbone/\*.js ! -path  ../WebContent/flatfull/jscore/min/*.js \
