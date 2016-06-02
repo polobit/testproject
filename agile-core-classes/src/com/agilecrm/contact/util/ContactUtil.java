@@ -151,7 +151,7 @@ public class ContactUtil
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    return null;
 	}
     }

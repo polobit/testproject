@@ -375,6 +375,19 @@
     <target>agile-normal-bulk</target>
   </queue>
   
+  <queue>
+    <name>jsonio-node-queue</name>
+    <rate>10/s</rate>
+    <bucket-size>50</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+      <min-backoff-seconds>120</min-backoff-seconds>
+      <max-backoff-seconds>300</max-backoff-seconds>
+    </retry-parameters>
+    <target>agile-slow-tasks-handler</target>
+  </queue>
+  
   <!-- pull queues -->
    <!-- Export queue -->
    <queue>
