@@ -820,10 +820,12 @@ public class Opportunity extends Cursor implements Serializable
    }
     public static void updateDealTagsEntity(Opportunity opportunity,String tag)
     {
-    	Tag newTag = new Tag();
-		newTag.tag = tag;
-		newTag.createdTime = System.currentTimeMillis() ; 
-		opportunity.tagsWithTime.add(newTag);
+    	if(opportunity != null && tag != null){
+	    	Tag newTag = new Tag();
+			newTag.tag = tag;
+			newTag.createdTime = System.currentTimeMillis() ; 
+			opportunity.tagsWithTime.add(newTag);
+    	}
     }
 
 
