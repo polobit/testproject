@@ -383,7 +383,7 @@ function handleCallRequest(message)
 			
 			if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 			  }
 			
 			return;
@@ -396,7 +396,7 @@ function handleCallRequest(message)
 			
 			if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 			  }
 			
 			return;
@@ -417,7 +417,7 @@ function handleCallRequest(message)
 			
 			if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 			  }
 			return;
 		}
@@ -465,7 +465,7 @@ function handleCallRequest(message)
 			
 			if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 			  }
 			
 			return;
@@ -477,7 +477,7 @@ function handleCallRequest(message)
 			resetglobalCallForActivityVariables();
 			if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 			  }
 			
 			return;
@@ -499,7 +499,7 @@ function handleCallRequest(message)
 			
 			if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 			  }
 			return;
 		}

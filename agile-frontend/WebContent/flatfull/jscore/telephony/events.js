@@ -187,13 +187,13 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 				showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Call ended with  <b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 				if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 				}
 			else if (e.description == "Decline")
 				showCallNotyPopup("decline", "error", "Call Decline.", false);
 				if(dialled.using == "dialler"){
 					  $("#direct-dialler-div").show();
-					  dialled.dialler = "default";
+					  dialled.using = "default";
 					}
 			else if (e.description == "Request Timeout")
 				showCallNotyPopup("requestTimeout", "error", "SIP: Request Timeout.", false);
@@ -212,7 +212,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 				showCallNotyPopup("disconnected", 'error', "SIP : Terminated because " + e.description, 5000);
 				if(dialled.using == "dialler"){
 					  $("#direct-dialler-div").show();
-					  dialled.dialler = "default";
+					  dialled.using = "default";
 					}
 			// Show add contact modal if contact id not added
 			if(Show_Add_Contact == true)

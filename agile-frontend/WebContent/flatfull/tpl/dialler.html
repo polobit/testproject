@@ -3,90 +3,122 @@
 <div class="row">
     <div class="col-md-12">
 <div id="dialler-page" class="text-base">
-<div class="col-lg-12" style="padding: 0px;argin: 0px;"> 
-<div class="panel panel-default" style="padding: 0px;margin: 0px;width: 282px;height: 325px;">
-<div class="panel-heading" style="background:#23b7e5;">
+<div class="col-lg-12" style="padding: 0px;margin: 0px;"> 
+<div class="panel panel-default" style="padding: 0px;margin: 0px;width: 300px;height: 350px;">
+<div class="panel-heading" style="background:#23b7e5;margin: 1px;padding: 5px;">
 		<div  id="close-dialler" style="float: right;height: 0px;top: 2px;position: relative;left: -5px;">
-			<span class="glyphicon glyphicon-remove clear-dialler c-p"></span>
+			<span class="clear-dialler c-p">X</span>
 		</div>
 
-	<span id = "dialler-widget-icon" style="float: left;">
-		<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >
-	</span>
-	<span>Dial</span>
+	<span style="font-size:15px;color:whitesmoke;margin-left:15px">Dial</span>
 	
-		<span style="text-align:center;">
-			<select id = "dialler-widget" style="font-size: 12px;">
-			</select>
+		<span style="text-align:center;margin-left: 26px;">
+						<a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
+    				      <button id="dialler-widget" type="button" class="btn btn-default" style="width: 147px;border-radius: 17px;">
+    						  				  
+								<span  id="dialler-widget-name-span" style="float: left;" value = "" >
+								 Select
+								</span>
+         				   		<span class="caret" style="color: #23B7E5;position: relative;top: 5px;float: right;zoom: 1.5"></span>
+							
+ 							</button>
+						</a>
+								<ul class="dropdown-menu" style="top: 40px;left: 84px;min-width: 135px;padding: 0px;margin: 0px;border-radius: 5px;">
+									<li class = "dialler-widget-name-Twilio dialler-widget-li none">
+										<a href="" value = "Twilio" style="float: left;width: 100%;">
+											<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >
+											Twilio
+										</a> 
+									</li>
+									<li class = "dialler-widget-name-Sip dialler-widget-li none">
+										<a class = "dialler-widget-name-span-value" href="" value = "Sip" style="float: left;width: 100%;">
+											<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >
+											SIP
+										</a> 
+									</li>
+									<li class = "dialler-widget-name-Bria dialler-widget-li none">
+										<a class = "dialler-widget-name-span-value" href="" value = "Bria" style="float: left;width: 100%;">
+											<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >
+											Bria
+										</a> 
+									</li>
+									<li class = "dialler-widget-name-Skype dialler-widget-li none">
+										<a class = "dialler-widget-name-span-value" href="" value = "Skype" style="float: left;width: 100%;">
+											<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >
+											Skype
+										</a> 
+									</li>
+								</ul>
+
   		</span>
 
 </div>
      
-<div class="panel-body" style=" background: #fff;padding-bottom: 0px;margin-bottom: 0px;border-bottom: 1px solid #DEE5E7;">
+<div class="panel-body" style=" background: #fff;padding-bottom: 0px;margin-bottom: 0px;">
      
 		<div class="form-group has-feedback"> 
 			<!-- write your things here -->
 		<div  id="clear-dialler" style="float: right;height: 0px;top: 7px;position: relative;left: -5px;">
-			<span class="glyphicon glyphicon-remove clear-dialler c-p"></span>
+			<span class="clear-dialler c-p">X</span>
 		</div>
-		<input type = "text" name="dail_phone_number" id="dail_phone_number" style="width: 100%;padding: 5px;border: 1px solid #98A6AD;border-radius: 10px;" />
+		<input type = "text" name="dail_phone_number" id="dail_phone_number" style="width: 100%;padding: 5px; border:none; border-bottom: 1px solid rgb(191, 200, 203);" />
 
 		</div>	
 
 	<div style="font-size: 28px;">
 		<div class="form-group">
-        	<div class="col-lg-4 dialler-1-r-1-c dial1">
-				1  
+        	<div class="dial1" style="float:left;">
+				<img src="/flatfull/img/telephony/1.png">  
 			</div>
-			<div class="col-lg-4 dialler-1-r-2-c dial2">
-				2 <small class="text-xs pull-right"> ABC </small>
+			<div class="dial2" style="float:left;">
+				<img src="/flatfull/img/telephony/2.png">  
 			</div>
-			<div class="col-lg-4 dialler-1-r-2-c dial3">
-				3 <small class="text-xs pull-right"> DEF </small>
+			<div class="dial3" style="float:left;">
+				<img src="/flatfull/img/telephony/3.png">
 			</div>
 	    </div>
 
 
 		<div class="form-group">
-        	<div class="col-lg-4 dialler-2-r-1-c dial4">
-				4 <small class="text-xs pull-right"> GHI </small>
+        	<div class="dial4" style="float:left;">
+				<img src="/flatfull/img/telephony/4.png">
 			</div>
-			<div class="col-lg-4 dialler-2-r-2-c dial5">
-				5 <small class="text-xs pull-right"> JKL </small>
+			<div class="dial5" style="float:left;">
+				<img src="/flatfull/img/telephony/5.png">
 			</div>
-			<div class="col-lg-4 dialler-2-r-2-c dial6">
-				6 <small class="text-xs pull-right"> MNO </small>
-			</div>
-	    </div>
-
-		<div class="form-group">
-        	<div class="col-lg-4 dialler-2-r-1-c dial7">
-				7 <small class="text-xs pull-right"> PQRS </small>
-			</div>
-			<div class="col-lg-4 dialler-2-r-2-c dial8">
-				8 <small class="text-xs pull-right"> TUV </small>
-			</div>
-			<div class="col-lg-4 dialler-2-r-2-c dial9">
-				9 <small class="text-xs pull-right"> WXYZ </small>
+			<div class="dial6" style="float:left;">
+				<img src="/flatfull/img/telephony/6.png">
 			</div>
 	    </div>
 
 		<div class="form-group">
-        	<div class="col-lg-4 dialler-2-r-1-c dial-star">
-				*
+        	<div class="dial7" style="float:left;">
+				<img src="/flatfull/img/telephony/7.png">
 			</div>
-			<div class="col-lg-4 dialler-2-r-2-c dial0">
-				0
+			<div class="dial8" style="float:left;">
+				<img src="/flatfull/img/telephony/8.png">
 			</div>
-			<div class="col-lg-4 dialler-2-r-2-c dial-hash">
-				#
+			<div class="dial9" style="float:left;">
+				<img src="/flatfull/img/telephony/9.png">
+			</div>
+	    </div>
+
+		<div class="form-group">
+        	<div class="dial-star" style="float:left;">
+				<img src="/flatfull/img/telephony/asrisk.png">  
+			</div>
+			<div class="dial0" style="float:left;">
+				<img src="/flatfull/img/telephony/0.png">  
+			</div>
+			<div class="dial-hash" style="float:left;">
+				<img src="/flatfull/img/telephony/hash.png">  
 			</div>
 </div>
 
 		<div class="form-group">
-			<div class="col-lg-12 c-p dial-number" style="height:40px;background:rgb(34, 223, 51);margin-top: 10px;margin-bottom: 5px;border-radius: 10px; left:calc(30%);width: 100px">
-				<center style="margin-top:5px;">
-					<i class="fa fa-phone cam-call-icon" style="font-size:35px;"></i>
+			<div class="col-lg-12 c-p dial-number" style="height:45px;background:rgb(34, 223, 51);margin-top: 5px;margin-bottom: 5px;border-radius: 5px;">
+				<center style="margin-top:7px;">
+					<i class="fa fa-phone cam-call-icon" style="font-size:35px;color:white;"></i>
 				</center>
 			</div>
   		</div>

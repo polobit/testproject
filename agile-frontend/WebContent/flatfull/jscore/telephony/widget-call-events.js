@@ -228,6 +228,12 @@ function sendActionToClient(action){
 			showCallNotyMessage("Executable file is not running");
 			return;
 		}
+		
+		if(dialled.using == "dialler"){
+			  $("#direct-dialler-div").show();
+			  dialled.using = "default";
+		 }
+		
 		if(client == "Bria"){
 			$('#briaInfoModal').html(getTemplate("briaInfoModal"));
 			$('#briaInfoModal').modal('show');

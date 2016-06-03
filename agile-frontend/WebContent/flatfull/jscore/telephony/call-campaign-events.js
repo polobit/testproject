@@ -22,9 +22,9 @@ $(function(){
 					  }
 				}
 			}
-			if(dialled.dialler == "dialler"){
+			if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 			  }
 		}
 	});  
@@ -45,9 +45,9 @@ $(function(){
 					  }
 				}
 			}
-			if(dialled.dialler == "dialler"){
+			if(dialled.using == "dialler"){
 				  $("#direct-dialler-div").show();
-				  dialled.dialler = "default";
+				  dialled.using = "default";
 			  }
 		}	
 		});  

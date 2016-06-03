@@ -19,14 +19,10 @@ $(function()
 						$("#direct-dialler-div").show();
 						$.each(default_call_option.callOption, function(i, obj){
 							var name = widgetCallName[obj.name];
-							var $option = new Option(name,name); 
-							$("#dialler-widget").append($option);
+							$(".dialler-widget-name-" + name).show();
 						});
 						
-						
-						
-						dialled.dialler = "default";
-						
+						dialled.using = "default";
 						
 						$("#direct-dialler-div").draggable({
 							  stop: function( event, ui ) {
@@ -51,6 +47,16 @@ $(function()
 			  	$("#dail_phone_number").val("");
 			});
 	
+	$('#agilecrm-container #direct-dialler-div').on('click', '.dialler-widget-li', function(e)
+			{
+			  	e.preventDefault();
+			  	var html = $(this).find("a").html();
+			  	var value = $(this).find("a").attr("value");
+			  	$("#dialler-widget-name-span").html(html);
+			  	$("#dialler-widget-name-span").attr("value",value);
+			});
+	
+	
 	$('#agilecrm-container #direct-dialler-div').on('click', '#close-dialler', function(e)
 			{
 			  	e.preventDefault();
@@ -64,12 +70,17 @@ $(function()
 			  	e.preventDefault();
 			  	var to = $("#dail_phone_number").val();
 			  	var from ;
-			  	if (to.length < 1){
-			  		console.log("have no number inn dialler option. Please dial a valid number");
+			  	var widgetName = $("#dialler-widget-name-span").attr("value");
+			  	
+			  	if(!widgetName){
+			  		alert("Please select a widget to call");
 			  		return;
 			  	}
-			  		var widgetName = $("#dialler-widget option:selected").attr("value");
-			  
+			  	if (to.length < 1){
+			  		alert("Please press number to dial");
+			  		return;
+			  	}
+			  		
 			  if(checkForActiveCall()){
 					alert("Already on call.");
 					return;
@@ -79,25 +90,6 @@ $(function()
 				  callToNumber(to,from,widgetName,responseJson,"dialler");
 			  });
 			});
-	
-	
-	$('#agilecrm-container #direct-dialler-div').on('change', '#dialler-widget', function(e)
-			{
-				console.log("In dialler function widget option is changed..");
-				var widget = $("#dialler-widget").val();
-				var icon = "";
-			if(widget == "Twilio"){
-				icon = "<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >";
-				$("#dialler-widget-icon").html()
-			}else if(widget == "Sip"){
-				icon = "<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >";
-			}else if(widget == "Bria"){
-				icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >";
-			}else if(widget == "Skype"){
-				icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >";
-			}
-			$("#dialler-widget-icon").html(icon);
-		});
 	
 	
 	$('body #direct-dialler-div').on('click', '.dial0', function(e)
@@ -216,7 +208,7 @@ try{
 }catch(e){
 	console.log("error occured in calltonumber function " + e);
 	 $("#direct-dialler-div").show();
-	 dialled.dialler = "default";
+	 dialled.using = "default";
 }	 
 	
 }	
@@ -353,4 +345,17 @@ function dialFromSip(to,from,contact){
 		showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling  </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 	}
 
+}
+
+function getIcon(widgetName){
+	
+	if(widgetName == "Twilio"){
+		icon = "<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >";
+	}else if(widgetName == "Sip"){
+		icon = "<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >";
+	}else if(widgetName == "Bria"){
+		icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >";
+	}else if(widgetName == "Skype"){
+		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >";
+	}
 }
