@@ -7,7 +7,7 @@
 	rel="stylesheet" type="text/css">
 <style type="text/css">
 body {
-	background: background: #9E9E9E;;
+	background: #fff;
 	width: 310px;
 	height: 210px;
 }
@@ -15,10 +15,7 @@ body {
 #popup {
 	background: #FCFCFC;;
 	  border: 1px solid #f6f6f6;
-	-webkit-border-radius: 5px 5px 0 0;
-	-moz-border-radius: 5px 5px 0 0;
 	border-radius: 5px 5px 0 0;
-	/*box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25); */
 	color: #333 !important;
 	font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
 	letter-spacing: 0;
@@ -47,10 +44,8 @@ body {
 }
 
 #popup-body {
-	-webkit-border-radius: 8px;
-	-moz-border-radius: 8px;
 	border-radius: 8px;
-	margin: 5px;
+	margin: 17px;
 	padding: 20px 20px 20px;
 	position: relative;
 }
@@ -70,6 +65,21 @@ body {
 	opacity: 1;
 }
 
+.popup-link {
+	/*color: #848484; */
+	color : #6c5553;
+	cursor: pointer;
+	font: 28px/28px Arial, Helvetica, sans-serif !important;
+	opacity: .6;
+	  font-size: 16px!important;
+  line-height: 18px!important;
+  text-decoration: none;
+}
+
+.popup-link:hover {
+	opacity: 1;
+}
+
 #popup-title {
 	color: #505653 !important;
 	font: bold 20px/24px "Montserrat", Arial, Helvetica,
@@ -80,12 +90,16 @@ body {
 #popup-body p {
 	margin: 15px 0;
 }
-
 #popup-content p:first-child {
 	  font-size: 11px!important;
   margin-bottom: 20px;
   line-height: 1.5;
 }
+#popup-content button:hover {
+	/*background: #6b403d; */
+	background: #5ECF9C;
+}
+
 #popup-footer {
 	color: #fff !important;
 	font: bold 10px/10px "Montserat", Arial, Helvetica,
@@ -103,6 +117,13 @@ body {
 
 #popup-content {
    word-wrap : break-word;
+}
+
+.m-t-sm{
+  margin-top: 10px!important;
+  height: 5px;
+} .m-b-sm{
+margin-bottom: 5px!important;
 }
 #popup-content button {
 	background: #08BB6A;
@@ -126,8 +147,8 @@ body {
 }
 </style>
 </head>
-<body >
-		<div id="opened">
+<body>
+	<div id="opened">
 		<div id="popup">
 			<div id="popup-body">
 				<div id="popup-title">Contact Us</div>
@@ -135,6 +156,7 @@ body {
 					<p>Looking to talk to our friendly reps?You can call from here.</p>
 					<button data-webruleid='' onclick="parent._agile_call_webrules(this);">Call Now</button>
 				</div>
+				<div id="popup-close">x</div>
 			</div>
 			<div id="popup-footer">
 				Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
@@ -142,7 +164,6 @@ body {
 			</div>
 		</div>
 	</div>
-
 
 </body>
 </html>
