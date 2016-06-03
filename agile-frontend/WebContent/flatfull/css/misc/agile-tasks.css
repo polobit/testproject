@@ -171,7 +171,7 @@ f/* ************* Task UI (Trello) CSS ***************** */
 .listed-task.red:after {
 	background: #f05050;
 }
-
+/*
 .listed-task.gray:after {
 	background: #edf1f2;
 }
@@ -179,7 +179,7 @@ f/* ************* Task UI (Trello) CSS ***************** */
 .listed-task.blue:after {
 	background: #7266ba;
 }
-
+*/
 .listed-task:first-child {
 	/*margin-top: 0;*/
 }
