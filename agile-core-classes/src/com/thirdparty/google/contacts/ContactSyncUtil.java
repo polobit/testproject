@@ -10,9 +10,11 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -20,6 +22,9 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.contacts.ContactsService;
+import com.google.gdata.data.PlainTextConstruct;
+import com.google.gdata.data.TextConstruct;
+import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
@@ -166,6 +171,7 @@ public class ContactSyncUtil
 		addPhoneNumbersToGoogleContact(contact, createContact);
 		addOrganizationDetailsToGoogleContact(contact, createContact);
 		addAddressToGoogleContact(contact, createContact);
+		addNotesToGoogleContact(contact,createContact);
 
 		// If group is defined then group id is added which save contact in
 		// specified group.
@@ -747,5 +753,52 @@ public class ContactSyncUtil
 		}
 		System.out.println(email);
 		return email;
+	}
+	private static void addNotesToGoogleContact(Contact contact, ContactEntry googleContactEntry)
+	{
+		
+		try{
+		List<Note> notesList = NoteUtil.getNotes(contact.id,"1",null);
+				//contact.getContactPropertiesList(Contact.PHONE);
+		//List<Note> newNotes = new ArrayList<Note>();
+
+		boolean isNewContact = StringUtils.isEmpty(googleContactEntry.getId());
+
+		if (!isNewContact)
+		{
+			// Sets Emails to contact
+			for (Note note : notesList)
+			{
+				boolean isNew = true;
+				
+					if (StringUtils.equals(googleContactEntry.getTextContent().getContent().getPlainText(), note.description))
+					{
+						isNew = false;
+						break;
+					}
+					
+				if (isNew)
+				{
+					googleContactEntry.setContent(new PlainTextConstruct(note.description));
+				}
+			}
+		}
+		else
+		{
+			for (Note note : notesList)
+			{
+				googleContactEntry.setContent(new PlainTextConstruct(note.description));
+				//googleContactEntry.getTextContent().getContent().setLang(note.description);
+			}
+		}
+
+			
+		
+	}
+	catch(Exception e)
+	{
+		System.out.println("Notes not found");
+		e.printStackTrace();
+	}
 	}
 }

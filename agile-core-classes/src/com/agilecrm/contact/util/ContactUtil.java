@@ -1193,8 +1193,8 @@ public class ContactUtil
 	}
 
 	oldContact.tags.addAll(newContact.tags);
-
-	return oldContact;
+	newContact=oldContact;
+	return newContact;
     }
 
     public static Contact mergeCompanyFields(Contact newContact, Contact oldContact)
