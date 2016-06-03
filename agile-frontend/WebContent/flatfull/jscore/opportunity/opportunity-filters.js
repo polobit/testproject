@@ -12,6 +12,8 @@ $(function()
 	{
 		e.preventDefault();
 		show_deal();
+		// To set typeahead for tags
+		setup_tags_typeahead();
 	});
 
 

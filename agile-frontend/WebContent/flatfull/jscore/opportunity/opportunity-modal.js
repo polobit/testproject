@@ -431,6 +431,7 @@ function updateDeal(ele, editFromMilestoneView)
       	  colorcode = "#808080";
     $('#color1' , dealForm).attr('value', colorcode);
     $('.colorPicker-picker', dealForm).css("background-color", colorcode);
+    $('#tags-new-person', dealForm).val('');
      if (value.tagsWithTime && value.tagsWithTime.length)
 		{
 			var i;

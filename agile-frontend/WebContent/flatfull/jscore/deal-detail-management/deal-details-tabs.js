@@ -135,10 +135,10 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			acl_util.canAddTag(new_tags.toString(),function(respnse){
 		    	json.tagsWithTime.push({"tag" : new_tags.toString()});
 	   			
-		    	// Save the contact with added tags
-		    	var contact = new Backbone.Model();
-		        contact.url = 'core/api/opportunity/AddDealTag?tag='+new_tags+'&id='+id;
-		        contact.save(json,{
+		    	// Save the deal with added tags
+		    	var dealWithTag = new Backbone.Model();
+		        dealWithTag.url = 'core/api/opportunity/AddDealTag?tag='+new_tags+'&id='+id;
+		        dealWithTag.save(json,{
 		       		success: function(data){
 		       			
 		       			// Updates to both model and collection

@@ -777,9 +777,12 @@ public class Opportunity extends Cursor implements Serializable
 		List <Tag> oldtags = new ArrayList<Tag>(oldDeal.tagsWithTime);
 		List <Tag> newtags = new ArrayList<Tag>(updatedDeal.tagsWithTime);
 		if(oldtags != null && newtags != null){
-			for(Tag tag : newtags){
-				if(!oldtags.contains(tag)){
-					tag.createdTime = System.currentTimeMillis();
+			for(Tag newTag : newtags){
+				for(Tag oldTag: oldtags){
+					if(newTag.equals(oldTag))
+						newTag.createdTime = oldTag.createdTime ;
+					else if (newTag.createdTime <= 0L)
+						newTag.createdTime = System.currentTimeMillis();						
 				}
 			}
 		}
@@ -788,12 +791,6 @@ public class Opportunity extends Cursor implements Serializable
 				newtag.createdTime = System.currentTimeMillis();
 			}
 		}
-	}
-	catch (WebApplicationException e)
-	{
-	    System.out.println("Exception in tags - " + e.getResponse().getEntity());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(e.getResponse().getEntity().toString()).build());
 	}
 	catch (Exception e)
 	{
@@ -814,19 +811,20 @@ public class Opportunity extends Cursor implements Serializable
 			}
 		}
 	}
-	catch (WebApplicationException e)
-	{
-	    System.out.println("Exception in tags - " + e.getResponse().getEntity());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(e.getResponse().getEntity().toString()).build());
-	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+		e.printStackTrace();
 	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
 	}
     
    }
+    public static void updateDealTagsEntity(Opportunity opportunity,String tag)
+    {
+    	Tag newTag = new Tag();
+		newTag.tag = tag;
+		newTag.createdTime = System.currentTimeMillis() ; 
+		opportunity.tagsWithTime.add(newTag);
+    }
 
 
     /**

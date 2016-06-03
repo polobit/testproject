@@ -981,6 +981,8 @@ enterCompanyScore: function(e){
 	{
 		e.preventDefault();
 		contact_details_documentandtasks_actions.add_deal(e);
+		// To set typeahead for tags
+		setup_tags_typeahead();
 
 	},
 
