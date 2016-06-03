@@ -95,19 +95,29 @@ function image_load(element)
 	var src = $(element).attr('src');
 	
 	if(!src)
-		{
-			$(element).attr('src', DEFAULT_GRAVATAR_url);
-			return;
-		}
+	{
+		$(element).attr('src', DEFAULT_GRAVATAR_url);
+		return;
+	}
 	
 	if(src.indexOf(DEFAULT_GRAVATAR_url) >= 0)
-		{
-			$(element).attr("data-name", name);
-			$(element).removeAttr("onLoad");
-			//$(element).initial({charCount: 2, fontWeight : 'normal'});
-		}
-    if(src.indexOf(DEFAULT_GRAVARTAR_IMG)>-1){
+	{
+		$(element).attr("data-name", name);
+		$(element).removeAttr("onLoad");
+		//$(element).initial({charCount: 2, fontWeight : 'normal'});
+	}
+
+    if(src.indexOf(DEFAULT_GRAVARTAR_IMG) > -1 && is_agile_default_image_loaded(src)){
         image_error(element);
     }
+}
+
+function is_agile_default_image_loaded(src){
+    try{
+        var image = document.createElement("img");
+        image.src = src;
+        return (image.width == 9 && image.height == 9);    
+    }catch(e){}
+    return true;
 }
 
