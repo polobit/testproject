@@ -201,6 +201,7 @@ $(function()
 			$("#phoneLogForm #contact_logPhone_number").html(logPhone.phone);
 			$("#phoneLogForm #contact_logPhone_number").attr("value", logPhone.phone);
 			$("#phoneLogForm #contact_logPhone_number").removeClass("add_logPhone");
+			$("#phoneLogForm #contact_logPhone_number").css({"cursor": "auto","color":"#777"});
 			
 			$("#phoneLogForm #callStatus").attr("value", logPhone.status);
 			$("#phoneLogForm #callStatus").html(toTitleCase(logPhone.status));
@@ -332,6 +333,7 @@ $(function()
 				}
 					
 				$("#phoneLogForm #contact_logPhone_number").removeClass("add_logPhone");
+				$("#phoneLogForm #contact_logPhone_number").css({"cursor": "auto","color":"#777"});
 			}
 			
 			})
