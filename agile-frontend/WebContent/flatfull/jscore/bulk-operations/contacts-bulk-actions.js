@@ -1232,9 +1232,11 @@ function show_bulk_owner_change_page()
 
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			
-			form_json.from = $(".email").find(":selected").val();
-			form_json.from_name = $("#from_name").val();
+
+			if (form_json.from != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
+ 			{
+ 				form_json.from_name = "";
+ 			}
 
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 
