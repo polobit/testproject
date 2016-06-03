@@ -72,7 +72,6 @@ public class HandlebarsUtil {
 	    JsonParser parser = JSON_FACTORY.createJsonParser(json.toString());
 	    JsonNode jsonNode = parser.readValueAsTree();
 	    Object object = toObject(jsonNode);
-	    System.out.println(object);
 	    
 	    Handlebars handlebars = defaultHandlebars();
 	    Template temp = handlebars.compileInline(template);
@@ -195,8 +194,8 @@ public class HandlebarsUtil {
      */
     
     public static Handlebars withHelpers(Handlebars handlebars){
-    	handlebars.registerHelper("safeVal", HandlebarsHelpers.firstNameHelper());
-    	handlebars.registerHelper("safeStr", HandlebarsHelpers.safeStringHelper());
+    	handlebars.registerHelper("safeval", HandlebarsHelpers.safeValueHelper());
+    	handlebars.registerHelper("safestr", HandlebarsHelpers.safeStringHelper());
     	return handlebars;
     }
     /**
@@ -216,6 +215,9 @@ public class HandlebarsUtil {
 	
 	String template = "{{first_name}}";
 	System.out.println(compile(template, json));
+	
+	String gl = "";
+	System.out.println("hai"+gl.toString().length());
     }
 
 }
