@@ -71,12 +71,14 @@ public class ActivityUtil
 			String old_data, String changed_field)
 	{
 		String contact_name = "";
+		String company_name = "";
 		Activity activity = new Activity();
 		if (contact != null)
 		{
 
 			ContactField firstname = contact.getContactFieldByName("first_name");
 			ContactField lastname = contact.getContactFieldByName("last_name");
+			ContactField companyName = contact.getContactFieldByName("name");
 			if (firstname != null)
 			{
 				contact_name += firstname.value;
@@ -85,6 +87,11 @@ public class ActivityUtil
 			{
 				contact_name += " ";
 				contact_name += lastname.value;
+			}
+			
+			if(companyName != null)
+			{
+			contact_name += companyName.value;	
 			}
 
 			activity.label = contact_name;
@@ -163,12 +170,14 @@ public class ActivityUtil
 			String old_data, String changed_field, String custom4)
 	{
 		String contact_name = "";
+		
 		Activity activity = new Activity();
 		if (contact != null)
 		{
 
 			ContactField firstname = contact.getContactFieldByName("first_name");
 			ContactField lastname = contact.getContactFieldByName("last_name");
+			ContactField company_name = contact.getContactFieldByName("name");
 			if (firstname != null)
 			{
 				contact_name += firstname.value;
@@ -177,6 +186,11 @@ public class ActivityUtil
 			{
 				contact_name += " ";
 				contact_name += lastname.value;
+			}
+			if (company_name != null)
+			{
+				contact_name += " ";
+				contact_name += company_name.value;
 			}
 
 			activity.label = contact_name;
