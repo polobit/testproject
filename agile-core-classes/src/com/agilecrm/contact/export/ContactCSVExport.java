@@ -74,6 +74,8 @@ public class ContactCSVExport
     public static final String NAME = "Name";
     public static final String URL = "Url";
 
+    //created time column added - 05.06 - prakash
+    public static final String CREATED_TIME = "Created time";
     /**
      * Inserts contact properties into CSV w.r.t header name.
      * 
@@ -262,6 +264,9 @@ public class ContactCSVExport
 	setFieldAtIndex(TAGS, tagWithTimes[0], str, indexMap);
 	setFieldAtIndex(TAGS_TIME, tagWithTimes[1], str, indexMap);
 
+	//Add creted time
+	setFieldAtIndex(CREATED_TIME, contact.created_time.toString(), str, indexMap);
+	
 	return str;
     }
 
