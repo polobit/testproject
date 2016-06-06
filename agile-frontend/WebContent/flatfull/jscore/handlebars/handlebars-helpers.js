@@ -7181,7 +7181,11 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					{
 						trim_name = trim_name.substring(0, 15)+"...";
 					}
-					if(this.name)
+					if (this.name && this.name.trim()=="Marketing Dashboard")
+					{
+						options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='"+this.name.trim()+"'>"+trim_name+"</option>";
+					}
+					else if(this.name)
 					{
 						options_el += "<option value="+this.id+" class='user-dashboard' title='"+this.name.trim()+"'>"+trim_name+"</option>";
 					}
@@ -7205,9 +7209,14 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					{
 						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
 					}
+
 					if(selected_li_id == this.id)
 					{
 						options_el += "<li class='active'><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+					}
+					else if (this.name.trim()=="Marketing Dashboard")
+					{
+						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
 					}
 					else
 					{
@@ -7223,10 +7232,14 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 				}
 
 			});
+
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
+				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
+				options_el += "<li class='divider'></li>";	
 				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
-			}
+			}			
 		}
 
 		return options_el;

@@ -54,6 +54,7 @@ public class PortletsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Portlet> getAvailablePortlets()throws Exception {
+	    	
 		return PortletUtil.getAvailablePortlets();
 	}
 	/**
@@ -64,8 +65,15 @@ public class PortletsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Portlet> getPortlets(@QueryParam("route") String route)throws Exception{
-		// Returns list of portlets saved by current user
-		return PortletUtil.getAddedPortletsForCurrentUser(route);
+			
+	    	//added  default marketing dashboard
+	    	PortletUtil.addMarketingDashboard();
+	    	
+	    	// Returns list of portlets saved by current user
+	    	if(!route.equalsIgnoreCase("MarketingDashboard"))
+	    	    return PortletUtil.getAddedPortletsForCurrentUser(route);
+	    	else 
+	    	    return PortletUtil.getAddedPortletsForMarketingDashboard(route);
 	}
 	/**
 	 * Adding of new portlet

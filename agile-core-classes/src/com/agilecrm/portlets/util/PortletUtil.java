@@ -34,6 +34,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Goals;
@@ -157,6 +158,7 @@ public class PortletUtil {
 		
 		// Creates Current AgileUser key
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+		
 
 		/*
 		 * Fetches list of portlets related to AgileUser key
@@ -932,6 +934,7 @@ public class PortletUtil {
 			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2,Portlet.PortletRoute.DashBoard.toString());
 			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,3,5,1,1,Portlet.PortletRoute.DashBoard.toString());
 			
+						
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
 			filterBasedContactsPortlet.prefs = filterBasedContactsPortletJSON.toString();
@@ -1011,7 +1014,7 @@ public class PortletUtil {
 			statsReportPortlet.save();
 			dealGoalsPortlet.save();
 			onboardingPortlet.save();
-			
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2055,4 +2058,96 @@ public class PortletUtil {
 
 
  }
+ 
+ public static void addDefaultMarketingPortlets(){
+	try {
+	    Portlet onboardingMarketingPortlet = new Portlet("Marketing Onboarding",PortletType.CONTACTS,3,1,1,3,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet dummyMarketiPortlet = new Portlet("Dummy Marketing Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet campaignStatsMarketingPortlet = new Portlet("Campaign stats",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet campaignGraphMarketingPortlet = new Portlet("Campaign graph",PortletType.USERACTIVITY,2,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet webstatVisitsMarketingPortlet = new Portlet("Webstat Visits",PortletType.USERACTIVITY,1,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet referralurlStatsMarketingPortlet = new Portlet("Referralurl stats",PortletType.USERACTIVITY,2,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet emailOpenedMarketingPortlet = new Portlet("Emails Opened",PortletType.USERACTIVITY,1,3,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    
+	    JSONObject campaignStatsMarketingPortletJSON = new JSONObject();
+	    campaignStatsMarketingPortletJSON.put("duration","yesterday");
+	    campaignStatsMarketingPortletJSON.put("campaign_type", "All");
+	    campaignStatsMarketingPortlet.prefs = campaignStatsMarketingPortletJSON.toString();
+	    
+	    JSONObject campaignGraphMarketingPortletJSON = new JSONObject();
+	    campaignGraphMarketingPortletJSON.put("duration","1-month");
+	    campaignGraphMarketingPortletJSON.put("campaign_type", "All");
+	    campaignGraphMarketingPortlet.prefs = campaignGraphMarketingPortletJSON.toString();
+	    
+	    JSONObject webstatVisitsMarketingPortletJSON = new JSONObject();
+	    webstatVisitsMarketingPortletJSON.put("duration","today");
+	    webstatVisitsMarketingPortlet.prefs = webstatVisitsMarketingPortletJSON.toString();
+	    
+	    JSONObject referralurlStatsMarketingPortletJSON = new JSONObject();
+	    referralurlStatsMarketingPortletJSON.put("duration","yesterday");
+	    referralurlStatsMarketingPortlet.prefs = referralurlStatsMarketingPortletJSON.toString();
+	    
+	    JSONObject emailOpenedMarketingPortletJSON = new JSONObject();
+	    emailOpenedMarketingPortletJSON.put("duration","2-days");
+	    emailOpenedMarketingPortlet.prefs = emailOpenedMarketingPortletJSON.toString();    
+		
+
+		//default portle saving for marketing dashlet
+		campaignStatsMarketingPortlet.save();
+		campaignGraphMarketingPortlet.save();
+		emailOpenedMarketingPortlet.save();
+		webstatVisitsMarketingPortlet.save();
+		referralurlStatsMarketingPortlet.save();
+		dummyMarketiPortlet.save();		
+		onboardingMarketingPortlet.save();
+		
+		
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+     }
+//for marketing dashboard
+ public static List<Portlet> getAddedPortletsForMarketingDashboard(String route)throws Exception{
+     
+     	Objectify ofy = ObjectifyService.begin();	
+	List<Portlet> added_portlets = new ArrayList<Portlet>();
+	List<Portlet> portlets;
+	
+	// Creates Current AgileUser key
+	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+	
+	if(route.equals(Portlet.PortletRoute.MarketingDashboard.toString())){
+	    portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",Portlet.PortletRoute.MarketingDashboard.toString()).list();
+	    if(portlets!=null && portlets.isEmpty() && route.equals(Portlet.PortletRoute.MarketingDashboard.toString()))
+		{
+			addDefaultMarketingPortlets();
+			portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",Portlet.PortletRoute.MarketingDashboard.toString() ).list();
+		}
+	    for(Portlet portlet : portlets){
+		if(portlet.prefs!=null){
+		    JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
+		    portlet.settings=json;
+		}
+		if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Marketing Blog"))
+			added_portlets.add(portlet);
+	    }
+	}
+	
+	return added_portlets;
+ }
+ 
+//checking for marketing dashboard ,if it is not there then add marketing dashboard
+ public static void addMarketingDashboard (){
+     		
+     		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+		List<Dashboard> dashboardList= dao.ofy().query(Dashboard.class).filter("agileUser", userKey).filter("name", "Marketing Dashboard").list();
+		
+		if(dashboardList.isEmpty()){
+        		Dashboard marketingDashboard= new Dashboard();
+        		marketingDashboard.name="Marketing Dashboard";
+        		marketingDashboard.description="Welcome to Agile CRM marketing automation.";
+        		marketingDashboard.save();
+		}
+ }
+ 
 }
