@@ -3357,8 +3357,7 @@ background: none!important;
 }
 
 #lhs_filters_conatiner .panel-body{
-  padding: 5px 15px;
-  min-height: 35px;
+  padding: 8px 15px;
 }
 #lhs_filters_conatiner #lhs-filters-header{
   font-size : 14px;
