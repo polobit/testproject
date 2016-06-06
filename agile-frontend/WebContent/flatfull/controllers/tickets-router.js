@@ -39,19 +39,19 @@
 		"ticket-reports" : "ticketReports",
 		"ticket-report/:report_type" : "ticketReport",
 	     
-         /*Help center Routes*/
-		"knowledgebase" : "categories",
-        "knowledgebase/:id/sections":"sections",  
-       	"knowledgebase/articles/:id":"articles",
-		"knowledgebase/add-article" : "addArticle",
-		"knowledgebase/add-article/:id" : "addArticle",
-		"knowledgebase/section/:section_id/article/:article_id/edit-article" : "editArticle",	
-		"knowledgebase/section/:section_id/article/:id" : "showArticle",
-		"knowledgebase/add-section" : "addSection",
-		"knowledgebase/add-section/:id" : "addSection",
-		"knowledgebase/catogery/:categorie_id/section/:id/edit-section" : "editSection",	
-		"knowledgebase/add-category":"addCategory",
-		"knowledgebase/:id/edit-category":"editCategory",
+				         /*Help center Routes*/
+						"knowledgebase" : "categories",
+				        "knowledgebase/:id/sections":"sections",  
+				       	"knowledgebase/articles/:id":"articles",
+						"knowledgebase/add-article" : "addArticle",
+						"knowledgebase/add-article/:id" : "addArticle",
+						"knowledgebase/section/:section_id/article/:article_id/edit-article" : "editArticle",	
+						"knowledgebase/section/:section_id/article/:id" : "showArticle",
+						"knowledgebase/add-section" : "addSection",
+						"knowledgebase/add-section/:id" : "addSection",
+						"knowledgebase/catogery/:categorie_id/section/:id/edit-section" : "editSection",	
+						"knowledgebase/add-category":"addCategory",
+						"knowledgebase/:id/edit-category":"editCategory",
 
 
 	},
