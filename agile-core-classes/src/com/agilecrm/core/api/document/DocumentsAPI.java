@@ -220,25 +220,23 @@ public class DocumentsAPI
     public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray documentsJSONArray = new JSONArray(model_ids);
-	if(documentsJSONArray!=null && documentsJSONArray.length()>0){
-		for (int i = 0; i < documentsJSONArray.length(); i++) {
-			try
-			   {
-				String eventId =  (String) documentsJSONArray.getString(i);
-				Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
+	  if(documentsJSONArray!=null && documentsJSONArray.length()>0){
+		  for (int i = 0; i < documentsJSONArray.length(); i++) {
+			 String eventId =  (String) documentsJSONArray.get(i);
+			 Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
+			 try {
 				if(!doc.getDeal_ids().isEmpty()){
-					for(String dealId : doc.getDeal_ids()){
-						Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
-						oppr.save();
-					 }	
+					 for(String dealId : doc.getDeal_ids()){
+						 Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
+						 oppr.save();
+					 }
 				 }
-			  }
-			 catch (Exception e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
          }
-	  }
+     }
 	ActivitySave.createLogForBulkDeletes(EntityType.DOCUMENT, documentsJSONArray,
 		String.valueOf(documentsJSONArray.length()), "documents deleted");
 
