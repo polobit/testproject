@@ -13,7 +13,12 @@
 		</div>
 		<div class="pull-left"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> Add Tag</a>
 		<label class="btn btn-default btn-sm m-l-xs allow_users_switch" id="disable_new_tags" >
-		 	<span  id="disable_new_tags" > Disable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked">
+			{{#if_equals  "false" ACCOUNT_PREFS.tagsPermission }}
+		 	<span  id="disable_new_tags" > Disable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
+		 	{{else}}
+		 	<span  id="disable_new_tags" > Enable Access </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked">
+
+		 	{{/if_equals}}
 			</label></div>
 		<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="New Tag"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">Add</a></div>
 		<div class="clearfix"></div>
