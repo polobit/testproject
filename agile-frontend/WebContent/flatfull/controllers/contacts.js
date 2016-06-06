@@ -937,7 +937,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			"email",
 			undefined,
 			options,
-			$('.fromEmail'),
+			$('#from_email'),
 			"prepend",
 			function($select, data) {
 			

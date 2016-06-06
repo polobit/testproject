@@ -544,7 +544,7 @@ function resetAndFillFromSelect(selected_val) {
 			"email",
 			undefined,
 			options,
-			$('.fromEmail'),
+			$('#from_email'),
 			"prepend",
 			function($select, data) {
 				var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();

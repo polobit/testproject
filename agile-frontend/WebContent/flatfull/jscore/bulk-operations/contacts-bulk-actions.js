@@ -1233,18 +1233,6 @@ function show_bulk_owner_change_page()
 			// serialize form.
 			var form_json = serializeForm("emailForm");
 
-			//for contacts bulk email
-			form_json.from = $(".email").find(":selected").val();
-
-			//for companies bulk mail
-			if(typeof(form_json.from) == "undefined")
-				form_json.from = $(".email").val();
-
-			if (form_json.from != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
- 			{
- 				form_json.from_name = "";
- 			}
-
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 
 			var json = {};
