@@ -362,7 +362,8 @@ var Workflow_Collection_Events = Base_Collection_View.extend({
             return;
         _agile_set_prefs("workflow_sort_key", sort_key);
         printSortByName($(".sort-field[data='"+sort_key+"']").attr("label_name"), $(targetEl).closest("#workflows-listener-container"));
-        App_Workflows.navigate("workflows", { trigger : true });
+        App_Workflows.workflow_list_view.collection.reset();
+        Backbone.history.loadUrl(Backbone.history.fragment);
     },  
 });
 
