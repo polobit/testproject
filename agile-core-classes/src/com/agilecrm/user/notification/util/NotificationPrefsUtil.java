@@ -132,11 +132,11 @@ public class NotificationPrefsUtil
 	 * 
 	 * @return boolean
 	 */
-	public static boolean isValid(Type type, JSONObject customValue, String domain)
+	private static boolean isValid(Type type, JSONObject customValue, String domain)
 	{
 		// If not frontend module
-		if(ModuleUtil.isDefaultModule())
-			return true;
+//		if(ModuleUtil.isDefaultModule())
+//			return true;
 		
 		// If notifications are not Tag type, return true
 		if(type == null || !(type.equals(NotificationPrefs.Type.TAG_ADDED) || type.equals(NotificationPrefs.Type.TAG_DELETED)))
