@@ -24,7 +24,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
-import com.agilecrm.util.email.MustacheUtil;
+import com.agilecrm.util.email.HandlebarsUtil;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
@@ -131,7 +131,7 @@ public class TicketsPdfServlet extends HttpServlet
 //			System.out.println("htmlText "+htmlText);
 //			
 			
-			String ticketTemplate = MustacheUtil.templatize("ticket_pdf_download_html.html",json);
+			String ticketTemplate = HandlebarsUtil.templatize("ticket_pdf_download_html.html",json);
 			System.out.println("json "+json);			
 			response.setContentType("application/pdf");
 			response.setHeader("Content-Disposition","attachment; filename=TicketDetails.pdf");
