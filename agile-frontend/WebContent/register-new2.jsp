@@ -305,7 +305,7 @@ This is where you and your users will log in to your account
 <input
 											class="field form-control required tel-number"
 											id="login_phone_number" required name='phone_number' type="text"
-											placeholder="Phone Number" autocapitalize="off">
+											placeholder="Phone Number" autocapitalize="off" autocomplete="off">
 											<div class='custom-error'>Please enter valid number</div>
 </div>
 </div>
