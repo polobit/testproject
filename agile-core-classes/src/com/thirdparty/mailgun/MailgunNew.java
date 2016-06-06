@@ -246,6 +246,9 @@ public class MailgunNew
 
 	       FormDataMultiPart form = new FormDataMultiPart();
 	       
+	       if(fromName.isEmpty())
+	    	   fromEmail = fromName + " <" + fromEmail + ">";
+	       
 	       form.field(MAILGUN_API_PARAM_FROM, fromEmail);
 	       
 	       form.field(MAILGUN_API_PARAM_TO, to);

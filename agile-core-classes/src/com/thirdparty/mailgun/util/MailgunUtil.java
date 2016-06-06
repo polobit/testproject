@@ -43,7 +43,7 @@ public class MailgunUtil {
 	{
 		try
 		 {
-			System.out.println("calling sendmailgunmails method");
+			System.out.println("calling sendMilgunMails method for sending Bulk emails");
 			 Client client = new Client();
 		     client.addFilter(new HTTPBasicAuthFilter(MailgunNew.MAILGUN_API_KEY,emailSender.emailGateway.api_key));
 		       
@@ -127,6 +127,8 @@ public class MailgunUtil {
 			return null;
 		
 		MailDeferredTask message=task.get(0);
+		  if(message.fromName.isEmpty())
+			  message.fromEmail = message.fromName + " <" + message.fromEmail + ">";
 		String fromAddress=message.fromEmail;
 		return fromAddress;
 	}
@@ -220,7 +222,7 @@ public class MailgunUtil {
 			{
 				msgJSON.put(MailgunNew.MAILGUN_API_PARAM_SUBJECT, mailDeferredTask.subject);
 				msgJSON.put(MailgunNew.MAILGUN_API_PARAM_TEXT_BODY, mailDeferredTask.text);
-				
+			
 	            if( !StringUtils.isBlank(mailDeferredTask.html)){
 	            	  msgJSON.put(MailgunNew.MAILGUN_API_PARAM_HTML_BODY, mailDeferredTask.html);
 	            	  flag=true;
