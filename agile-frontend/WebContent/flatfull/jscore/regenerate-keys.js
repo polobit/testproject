@@ -71,6 +71,33 @@ $("#webhook_accordian").on('click', function(e) {
        
     });
 
+ $("sendgrid-dkim_accordian").off('click');
+ $("#sendgrid-dkim_accordian").on('click', function(e) {
+    e.preventDefault();
+    var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/permission', template : "admin-setting-sendgrid-whitelabel-permission",
+    
+        postRenderCallback : function(e)
+            {
+               if($("#sendgrid-dkim-restriction-template").html().search("undefined")==-1)
+                    {
+                        $("#get_whitelabel_key").attr("disabled",true);
+                        $("#validate_whitelabel").attr("disabled",true);
+                        $("#whitelabel-domain").attr("disabled",true);
+                    }
+                else
+                {
+                    $("#get_whitelabel_key").attr("disabled",false);
+                    $("#validate_whitelabel").attr("disabled",false);
+                    $("#whitelabel-domain").attr("disabled",false);
+                    $("#sendgrid-dkim-restriction-template").html("");
+                }
+                console.log( $("#sendgrid-dkim-restriction-template").html()+"hhh");
+            }
+       });
+    $("#sendgrid-dkim-restriction-template").html(view.render().el);
+    return;
+    });
+
 $("#js-security_accordian").on('click', function(e) {
         e.preventDefault();
         if($("#js-security-accordian-template").html() != "")
@@ -128,6 +155,35 @@ $("#js-security_accordian").on('click', function(e) {
         var blocked_ips = get_blocked_ips();
         put_blocked_ips(blocked_ips);
     });
+
+    //Sendgrid DKIM and SPF verification
+    $("#get_whitelabel_key").off('click');
+    $("#get_whitelabel_key").on('click', function(e) {
+        e.preventDefault();
+        var whitelabel_domain = $("#whitelabel-domain").val();
+        if(whitelabel_domain==="")
+             $("#empty_domain_message").removeClass("hide");
+         else
+         {
+             $("#empty_domain_message").addClass("hide");
+             getSendgridWhitelabel(whitelabel_domain)
+         }
+    });
+
+    $("#validate_whitelabel").off('click');
+    $("#validate_whitelabel").on('click', function(e) {
+        e.preventDefault();
+        var whitelabel_domain = $("#whitelabel-domain").val();
+        if(whitelabel_domain==="")
+             $("#empty_domain_message").removeClass("hide");
+         else
+         {
+             $("#empty_domain_message").addClass("hide");
+             validateSendgridWhitelabel(whitelabel_domain)
+         }
+    });
+
+
     try {
         if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
             $("#tracking-webrules, .tracking-webrules-tab").hide();
@@ -136,4 +192,21 @@ $("#js-security_accordian").on('click', function(e) {
     } catch (e) {
         $("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
     }
+}
+
+function getSendgridWhitelabel(domainName)
+{   
+    var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/whitelabel?emailDomain='+domainName,
+     template : "admin-setting-sendgrid-whitelabel",
+    });
+  $("#sendgrid-whitelabel-key-template").html(view.render().el);
+}
+
+
+function validateSendgridWhitelabel(domainName)
+{   
+    var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/whitelabel/validate?emailDomain='+domainName,
+     template : "admin-setting-sendgrid-whitelabel-validate",
+    });
+  $("#sendgrid-whitelabel-key-template").html(view.render().el);
 }
