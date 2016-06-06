@@ -10,7 +10,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 		"section/:id" : "sectionArticles",
 		"categorie/:categorie_id" : "categorieSections",
 		"categorie/:categorie_id/section/:section_id" : "sectionArticles",
-		"categorie/:categorie_id/section/:section_id/article/:article_id" : "viewArticle",
+		"article/:article_id" : "viewArticle",
 
 		/*Search articles*/
 		"search-article/:search_term" : "searchArticle"  
@@ -102,7 +102,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 	});
 	},
 
-	viewArticle:function(categorie_id, section_id, article_id){
+	viewArticle:function(article_id){
 
 		App_Helpcenter.renderHomeTemplate(function(){
 

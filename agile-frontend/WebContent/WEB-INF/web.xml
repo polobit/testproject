@@ -1225,12 +1225,12 @@
   	<!-- HelpCenter -->
 	<servlet>
 		<servlet-name>HelpCenter</servlet-name>
-		<jsp-file>/helpcenter.jsp</jsp-file>
+		<jsp-file>knowledgebase.jsp</jsp-file>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>HelpCenter</servlet-name>
-		<url-pattern>/helpcenter</url-pattern>
+		<url-pattern>/Knowledgebase</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>HelpCenterLogin</servlet-name>
@@ -1241,11 +1241,7 @@
 		<servlet-name>HelpCenterLogin</servlet-name>
 		<url-pattern>/helpcenter/login</url-pattern>
 	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>HelpCenter</servlet-name>
-		<url-pattern>/helpcenter</url-pattern>
-	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>HelpCenterRegister</servlet-name>
 		<servlet-class>com.agilecrm.knowledgebase.servlets.KnowledgebaseRegister</servlet-class>
