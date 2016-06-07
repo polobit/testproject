@@ -149,7 +149,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			"email",
 			undefined,
 			options,
-			$('.email'),
+			$('#from_email'),
 			"prepend",
 			function($select, data) {
 			
@@ -165,7 +165,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
 				}
 				else
-					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
 				
 				rearrange_from_email_options($select, data);
 			});
