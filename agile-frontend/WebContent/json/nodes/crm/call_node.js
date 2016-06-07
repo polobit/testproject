@@ -30,6 +30,7 @@
             "category": "Settings",
             "name": "phonenumber1",
             "id":"phonenumber1",
+            "value":"{{phone}}",
             "title": "Enter the recipient number or {{phone}}",
             "fieldType": "input",
             "type": "text",
@@ -51,6 +52,7 @@
          },
          {
             "label": "Owner Number:",
+            "required": "required", 
             "category": "Settings",
             "name": "phonenumber2",
             "id":"phonenumber2",
