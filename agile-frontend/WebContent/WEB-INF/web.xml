@@ -1230,7 +1230,7 @@
 
 	<servlet-mapping>
 		<servlet-name>HelpCenter</servlet-name>
-		<url-pattern>/Knowledgebase</url-pattern>
+		<url-pattern>/helpcenter</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>HelpCenterLogin</servlet-name>
