@@ -9,6 +9,7 @@
  			setTimeout(function(){
  				push_signup_plan(plan);
  			}, 2000);
+			return;
  		}
  		ga('send', 'event', 'Dashboard', 'Signup', _plan_on_signup["plan_type"], _plan_on_signup["quantity"]);	
  	}
@@ -29,6 +30,7 @@
  			setTimeout(function(){
  				push_actual_plan(plan);
  			}, 2000);
+			return;
  		}
 
 		ga('send', 'event', 'Dashboard', 'Paid', plan["plan_type"], plan["quantity"]);
