@@ -1225,7 +1225,7 @@
   	<!-- HelpCenter -->
 	<servlet>
 		<servlet-name>HelpCenter</servlet-name>
-		<jsp-file>knowledgebase.jsp</jsp-file>
+		<jsp-file>helpcenter.jsp</jsp-file>
 	</servlet>
 
 	<servlet-mapping>
