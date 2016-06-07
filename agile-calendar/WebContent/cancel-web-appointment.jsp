@@ -409,5 +409,6 @@ $("body").on("click","#cancel_appointment_confirmation",function(e)
 			} });
 });
 </script>
+<script type="text/javascript">_agile.set_account('fl5qv213433bpc32l2kbfe80s0','our');_agile.track_page_view();_agile_execute_web_rules();</script>
 </body>
 </html>
