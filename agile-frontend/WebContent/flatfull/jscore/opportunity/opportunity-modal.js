@@ -546,6 +546,9 @@ function updateDeal(ele, editFromMilestoneView)
 	populateLostReasons(dealForm, value);
 
 	populateDealSources(dealForm, value);
+	// setup tags for the search 
+	setup_tags_typeahead();
+
 }
 
 /**
@@ -627,6 +630,7 @@ function show_deal()
 	$('#close_date', el).datepicker({
 		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
 	});
+	setup_tags_typeahead();
 }
 
 function checkPipeline(pipeId)
