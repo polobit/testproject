@@ -703,6 +703,11 @@ function setupMilestoneViewWidth(){
 	{
 		if (_agile_get_prefs('deal-milestone-view') == "compact" && count > 8)
 			width = 100 / 8;
+
+		if (_agile_get_prefs('deal-milestone-view') == "fit")
+		{
+			$('#opportunities-by-paging-model-list', $("#opportunity-listners")).find('.milestone-column').css("min-width",0);
+		}
 	}
 	else if (count > 5)
 	{
