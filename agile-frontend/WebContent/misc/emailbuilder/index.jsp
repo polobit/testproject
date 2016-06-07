@@ -20,7 +20,7 @@ String action = request.getParameter("action");
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
         <link href="css/responsive-table.css" rel="stylesheet"/>
-        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans|PT+Sans|Tahoma|Source+Sans+Pro|PT+Serif|Josefin+Slab|Lato|Arvo|Vollkorn|Abril+Fatface|Playfair+Display|Yeseva+One|Poiret+One|Comfortaa|Marck+Script|Pacifico" >
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans|PT+Sans|Tahoma|Source+Sans+Pro|PT+Serif|Josefin+Slab|Lato|Arvo|Vollkorn|Abril+Fatface|Playfair+Display|Yeseva+One|Poiret+One|Comfortaa|Marck+Script|Pacifico" >
 
 <script>
 var AGILE_EB_ROOT = window.location.origin + "/";
