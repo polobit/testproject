@@ -371,7 +371,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 			makeDraggableDialpad("bria-widgetdialpad",{},$('.noty_buttons'));
 		}
 	}else if(s == "dialing"){
-		$("#draggable_noty .draggable_noty_notes").html();
+		$("#draggable_noty .draggable_noty_notes").html("");
 	}else if(s == "connecting" || s == "outgoing" || s == "ringing" || s == "incoming"){
 		$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
 	}
