@@ -96,7 +96,7 @@ public class ContactViewPrefs
     @PostLoad
     public  void postLoad()
     { 
-    	List<String> list = new ArrayList<String>(fields_set);
+    	/*List<String> list = new ArrayList<String>(fields_set);
     	if(this.type == Type.PERSON)
     	{
         	if(list.contains("basic_info"))
@@ -118,6 +118,7 @@ public class ContactViewPrefs
         	}
     	}
     	this.fields_set = new LinkedHashSet<String>(list);
+    	*/
     }
 
     /**

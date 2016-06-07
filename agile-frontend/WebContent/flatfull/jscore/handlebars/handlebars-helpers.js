@@ -1095,52 +1095,52 @@ $(function()
 	 * Returns table headings for custom contacts list view
 	 */
 	Handlebars.registerHelper('contactTableHeadings', function(item)
-	{
-
+  	{
 		var el = "", cls = ""; 
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
+  		{
+  			if (element == "basic_info" || element == "image")
+  			{
+					
+					if(_agile_get_prefs("contactTabelView"))
+					{
+						// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+						if(element == "basic_info")
+							return ;
+	
+						if(element == "image")
+						{
+							element = "";
+							cls = "";
+						}
+							  
+					}
+					else
+					{
+						if(element == "image")
+						{
+							element = "";
+							cls = "compactcontact";
+						}
+					}
+			}
+		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-
-			
-			if (element == "image")
-			{
-				if((App_Contacts.contactViewModel[item]).indexOf("basic_info") != -1)
-					{
-						
-						cls = "contactimageheader";
-					}
-				/*if(_agile_get_prefs("contactTabelView"))
-				{
-					if(element == "basic_info")
-						return ;
-
-					if(element == "image")
-					{
-						element = "";
-						cls = "";
-					}
-						  
-				}
-				element = "";
-				*/
-				return ; 
-			}
-			else if (element.indexOf("CUSTOM_") == 0) {
-				element = element.split("_")[1];
-				cls = "text-muted";
-			}
-			else {
+  			element = element.split("_")[1];
+  			cls = "text-muted";
+  		}
+  		else 
+  		{
 			element = element.replace("_", " ");
 			cls = "";
-			}
-
-			el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
-
-		});
-
+	 	}
+	 
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	  
+	 });
 		return new Handlebars.SafeString(el);
 	});
-
 	/**
 	 * Returns table headings for reports custom contacts list view
 	 */
@@ -6579,39 +6579,50 @@ $(function()
 
 		var el = "" ,cls = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
+  		{
+
+  			if (element == "basic_info" || element == "image")
+  			{
+					
+					if(_agile_get_prefs("companyTabelView"))
+					{
+						// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+						if(element == "basic_info")
+							return ;
+	
+						if(element == "image")
+						{
+							element = "";
+							cls = "";
+						}
+							  
+					}
+					else
+					{
+						if(element == "image")
+						{
+							element = "";
+							cls = "compactcontact";
+						}
+					}
+			}
+		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-			if (element == "image")
-			{
-				/*if(App_Companies.companyViewModel[item].indexOf("basic_info") != -1)
-				{	
-					cls = "companiesnewimage";		  
-				}
-				element = "";*/
-				return ;
-			}
-			else if(element == "url")
-			{
-				el = el.concat('<th class="'+ cls +'">' + "URL" + '</th>');
-				return ;
-			}
-			else if (element == "basic_info")
-				return
-			else if (element.indexOf("CUSTOM_") == 0) {
-				element = element.split("_")[1];
-				cls = "text-muted";
-			}
-			else {
+  			element = element.split("_")[1];
+  			cls = "text-muted";
+  		}
+  		else 
+  		{
 			element = element.replace("_", " ");
 			cls = "";
-			}
-
-			el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
-
-				
-		});
-
+	 	}
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	  
+  		});
 		return new Handlebars.SafeString(el);
 	});
+	
 	
 	Handlebars
 	.registerHelper(

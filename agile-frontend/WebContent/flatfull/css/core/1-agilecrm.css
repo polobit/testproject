@@ -3874,4 +3874,9 @@ padding-left:0px;
 .companies-custom .contactsnewimage{
    padding:2px 0px;
 }*/
-
+#contacts-table .compactcontact {
+  display:none;
+}
+#company-table .compactcontact {
+  display:none;
+}
