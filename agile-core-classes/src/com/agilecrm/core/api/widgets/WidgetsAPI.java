@@ -24,7 +24,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.BrainTreeUtil;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -364,31 +363,19 @@ public class WidgetsAPI {
 		if (obj != null) {
 			JSONObject widgetObj = new JSONObject(obj);
 			String widgetName = widgetObj.getString("name");
-			Widget widget = WidgetUtil.getWidget(widgetObj.getLong("id"));
+			JSONArray userArray = WidgetUtil.getWigetUsersList(widgetName);
 
-			// widgetObj.getJSONArray("listOfUsers");
 			String newUsersList = widgetObj.getString("listOfUsers");
-			String oldUsersList = widget.listOfUsers;
-			JSONArray oldUserArray = new JSONArray(oldUsersList);
+			String oldUsersList = userArray.toString();
 			// JSONArray removeWidgets = new JSONArray();
 
-			for (int i = 0; i < oldUserArray.length(); i++) {
-				String oldUserID = oldUserArray.getString(i);
-				if (newUsersList.contains(oldUserID)) {
-
-					AgileUser widgetUser = AgileUser.getCurrentAgileUser(Long
-							.parseLong(oldUserID));
-
+			for (int i = 0; i < userArray.length(); i++) {
+				String oldUserID = userArray.getString(i);
+				if (!(newUsersList.contains(oldUserID))) {
 					Widget deleteWidget = WidgetUtil.getWidget(widgetName,
-							widgetUser.domain_user_id);
-					if (deleteWidget.add_by_admin) {
-						WidgetUtil.deleteWidget(oldUserID, widgetName);
-					}
+							Long.parseLong(oldUserID));
 				}
 			}
-
-			widget.listOfUsers = newUsersList;
-			widget.save();
 
 		}
 	}

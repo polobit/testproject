@@ -11,10 +11,12 @@ import org.json.JSONException;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -58,52 +60,27 @@ public class WidgetUtil {
 	 * @return {@link List} of {@link Widget}
 	 */
 	public static List<Widget> setIsAddedStatus(List<Widget> widgets) {
+		
 		// Getting the list widget saved by the current user.
 		List<Widget> currentWidgets = getAddedWidgetsForCurrentUser();
-		// || currentWidget.widget_type.equals(WidgetType.CUSTOM)
-
-		Objectify ofy = ObjectifyService.begin();
-		List<Widget> allWidget = ofy.query(Widget.class)
-				.filter("widget_type !=", WidgetType.INTEGRATIONS)
-				.filter("add_by_admin =", false).list();
-		System.out.println(allWidget.size());
 		DomainUser dmu = AgileUser.getCurrentAgileUser().getDomainUser();
-
 		for (Widget widget : widgets) {
-			for (Widget currentWidget : currentWidgets) {
+			for (Widget currentWidget : currentWidgets){
 				if (currentWidget.name.equals(widget.name)) {
+					if(dmu.is_admin){
+						try {
+							JSONArray userIDs = new JSONArray(currentWidget.listOfUsers);
+							userIDs.put(WidgetUtil.getWigetUsersList(widget.name));
+							widget.listOfUsers = userIDs.toString();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 					// Setting true to know that widget is configured.
 					widget.is_added = true;
 					widget.id = currentWidget.id;
 					widget.prefs = currentWidget.prefs;
-					if (currentWidget.listOfUsers == null) {
-						currentWidget.save();
-					}
-
-					JSONArray listOfUsers = null;
-
-					try {						
-						if (dmu.is_admin) {
-							listOfUsers = new JSONArray(currentWidget.listOfUsers);
-							for (int i = 0; i < allWidget.size(); i++) {
-								Widget gWidget = allWidget.get(i);
-								if (widget.name.equals(gWidget.name)) {			
-									AgileUser agileUser = AgileUser.getCurrentAgileUser(gWidget.getUserID());
-									String userID = agileUser.domain_user_id
-											.toString();
-									if (!currentWidget.listOfUsers
-											.contains(userID)) {
-										listOfUsers.put(userID);
-									}
-								}
-							}
-							widget.listOfUsers = listOfUsers.toString();
-						}
-
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}					
 				}
 			}
 		}
@@ -335,6 +312,25 @@ public class WidgetUtil {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static JSONArray getWigetUsersList(String name){
+		JSONArray userIDs = new JSONArray();
+		String domain = NamespaceManager.get();
+		System.out.println("*** domain "+domain);		
+		
+		//if(domain != null){
+			List<DomainUser> users = DomainUserUtil.getUsers(domain);			
+			for (DomainUser dUser : users) {
+				AgileUser aUser = AgileUser.getCurrentAgileUserFromDomainUser(dUser.id);
+				Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
+				if(userWidget != null){
+					userIDs.put(userWidget.id);
+				}
+			}
+		//}
+			
+		return userIDs;
 	}
 
 	/**
