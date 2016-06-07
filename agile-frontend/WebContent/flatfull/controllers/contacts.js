@@ -940,7 +940,36 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		}
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
-	
+
+		var options = {
+		"+ Add new" : "verify_email"
+		};
+		
+		fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+			
+			var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+				
+				if(typeof(ownerEmail) == "undefined")
+				{
+				$select
+						.find("option:first")
+						.before(
+								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				}
+				else
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				rearrange_from_email_options($select, data);
+			});
 	},
 
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)

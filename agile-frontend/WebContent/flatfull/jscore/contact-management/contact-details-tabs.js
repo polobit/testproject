@@ -583,6 +583,7 @@ function initializeSendEmailListeners(){
 						// Is valid
 						if (!isValidForm($form))
 							return;
+
 						var network_type = $('#attachment-select').find(":selected").attr('network_type');
 						// checking email attachment type , email doesn't allow
 						// google drive documents as attachments
@@ -597,6 +598,8 @@ function initializeSendEmailListeners(){
 
 						// serialize form.
 						var json = serializeForm("emailForm");
+						
+						json.from = $(".email").find(":selected").val();
 						if ((json.contact_to_ids).join())
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
