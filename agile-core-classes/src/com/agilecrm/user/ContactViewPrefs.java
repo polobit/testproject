@@ -97,8 +97,8 @@ public class ContactViewPrefs
     public  void postLoad()
     { 
     	List<String> list = new ArrayList<String>(fields_set);
-    	list.add("basic_info");
-    	list.add("image");
+    	list.add(0,"basic_info");
+    	list.add(1,"image");
     	/*if(this.type == Type.PERSON)
     	{
         	if(list.contains("basic_info"))
