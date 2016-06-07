@@ -226,8 +226,9 @@ function initializeSocialSuite()
 						// Check if Oauth is done.
 						if ($('#twitter_account').val() == null || $('#twitter_account').val() == '')
 						{
-							alert("You have to give access to your social account.");
-							$("#add-stream").click();
+							showAlertModal("social_access", undefined, function(){
+								$("#add-stream").click();
+							});
 							return;
 						}
 
@@ -312,29 +313,27 @@ function initializeSocialSuite()
 	 */
 	$('body').on('click', '.stream-delete', function(e)
 	{
-		if (!confirm("Are you sure you want to delete?"))
-			return;
-
 		var id = $(this).attr('id');
+		showAlertModal("delete_stream", "confirm", function(){
+			// Fetch stream from collection
+			var stream = Streams_List_View.collection.get(id).toJSON();
 
-		// Fetch stream from collection
-		var stream = Streams_List_View.collection.get(id).toJSON();
+			// Stream size is too big, can not handle by pubnub so remove list of
+			// tweet.
+			delete stream.tweetListView;
 
-		// Stream size is too big, can not handle by pubnub so remove list of
-		// tweet.
-		delete stream.tweetListView;
+			// Unregister on server
+			var publishJSON = { "message_type" : "unregister", "stream" : stream };
+			sendMessage(publishJSON);
 
-		// Unregister on server
-		var publishJSON = { "message_type" : "unregister", "stream" : stream };
-		sendMessage(publishJSON);
-
-		// Delete stream from collection and DB
-		//Streams_List_View.collection.get(id).destroy();
-		$.ajax({ type : 'DELETE', url : '/core/social/' + id, contentType : "application/json; charset=utf-8",
-			success : function(data){
-				Streams_List_View.collection.remove(id);
-				Streams_List_View.render(true).el;
-			}, dataType : 'json' });
+			// Delete stream from collection and DB
+			//Streams_List_View.collection.get(id).destroy();
+			$.ajax({ type : 'DELETE', url : '/core/social/' + id, contentType : "application/json; charset=utf-8",
+				success : function(data){
+					Streams_List_View.collection.remove(id);
+					Streams_List_View.render(true).el;
+				}, dataType : 'json' });
+		});
 	});
 
 	/**

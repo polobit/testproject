@@ -10,12 +10,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
-import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
@@ -32,13 +32,12 @@ import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
-import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
+import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.ses.util.AmazonSESUtil;
-import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>EmailGatewayUtil</code> is the utility class for EmailGateway. It
@@ -127,6 +126,7 @@ public class EmailGatewayUtil
 	{
 	    Long start_time = System.currentTimeMillis();
 	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+//	    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
 	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
 	    System.out.println("Logs size : " + queryList.size());
 	}
@@ -364,61 +364,47 @@ public class EmailGatewayUtil
     {
 	try
 	{
-	    // For domain "clickdeskengage" - use SendGrid API
-	    if (StringUtils.equals(domain, Globals.CLICKDESK_ENGAGE_DOMAIN))
+	    // If no gateway setup, sends email through Agile's default
+	    if (emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api))
+	    		&& ((documentIds != null && documentIds.size() != 0) 
+	    		|| (blobKeys != null && blobKeys.size() != 0)) 
+	    		|| (EMAIL_API.SES.equals(emailGateway.email_api) && attachments!=null && attachments.length !=0))
 	    {
-		SendGrid.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
-		return;
-	    }
-	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null || ((EMAIL_API.SEND_GRID.equals(emailGateway.email_api) || EMAIL_API.SES.equals(emailGateway.email_api)) && ((documentIds != null && documentIds.size() != 0) || (blobKeys != null && blobKeys.size() != 0))) || (EMAIL_API.SES.equals(emailGateway.email_api) && attachments!=null && attachments.length !=0))
-	    {
-	    	if(attachments!=null)
-	    	{
-	    		for(String str :attachments)
-	    		{
-	    			System.out.println("support debug:EmailGatewayUtil:0:" + str);
-	    		}
-	    		
-	    	}
-		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-			mandrillMetadata, documentIds, blobKeys, attachments);
-
-		return;
+			//Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
+			//		mandrillMetadata, documentIds, blobKeys, attachments);
+	    	
+	    	SendGrid.sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, documentIds, blobKeys, attachments);
+	    	return;
 	    }
 
 	    // If Mandrill
-	    if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
+	    else if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
 		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
 			text, mandrillMetadata, documentIds, blobKeys, attachments);
 
 	    // If SendGrid
 	    else if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
 		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
-		        subject, replyTo, html, text, null, attachments);
+		        subject, replyTo, html, text, null, documentIds, blobKeys, attachments);
 	    
+	    // If SES
 	    else if (EMAIL_API.SES.equals(emailGateway.email_api))
 	    {
 	    	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain, fromEmail,
 	    	        fromName, to, cc, bcc, subject, replyTo, html, text, null, null, null);
 
 	    	// Add to pull queue with from email as Tag
-	    	PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
+	    	PullQueueUtil.addToPullQueue(AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
 	    }
 
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    System.err.println("Exception occured while sending emails through thirdparty email apis..."
 		    + e.getMessage());
 
 	    e.printStackTrace();
-
-	    System.out.println("Sending email again from exception in EmailGatewayUtil... " + e.getMessage());
-
-	    Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		    mandrillMetadata, documentIds, blobKeys, attachments);
-
 	}
     }
 
@@ -472,9 +458,13 @@ public class EmailGatewayUtil
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
 		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
-
+	
 	// Add to pull queue with from email as Tag
+	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+		queueName = "amazon-ses-pull-queue";
+	}
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+	
     }
 
     /**
@@ -517,18 +507,49 @@ public class EmailGatewayUtil
     {
 	try
 	{
+		List<Object[]> queryList = new ArrayList<Object[]>();
+		Map<String, String> campaignNameMap = new HashMap<String, String>();
 	    for (MailDeferredTask mailDeferredTask : tasks)
 	    {
+	    	String campaignName = null;
+	    	if (!campaignNameMap.containsKey(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain))
+		    {
+			campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId);
+			campaignNameMap.put(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain, campaignName);
+		    }
+		    else
+		    {
+			campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
+		    }
+		    String oldNamespace = NamespaceManager.get();
+		    try{	    
+		    NamespaceManager.set(mailDeferredTask.domain);
+		    // For personal bulk emails, no need to add log
+		    if (StringUtils.isEmpty(mailDeferredTask.campaignId ) && StringUtils.isBlank(mailDeferredTask.subscriberId))
+		    {
+			continue;
+		    }
 
-		// For personal bulk emails, no need to add log
-		if (StringUtils.isBlank(mailDeferredTask.campaignId)
-			&& StringUtils.isBlank(mailDeferredTask.subscriberId))
-		    break;
+		    Object[] newLog = new Object[] { mailDeferredTask.domain,mailDeferredTask.campaignId, campaignName,mailDeferredTask.subscriberId,
+		    		GoogleSQL.getCurrentDate(), "Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString(),
+		    		 };
 
-		LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId,
-			"Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString());
+		    queryList.add(newLog);
+		    }
+		    finally{
+		    	NamespaceManager.set(oldNamespace);
+		    }
+		}
+		
+		if (queryList.size() > 0)
+		{
+		    Long start_time = System.currentTimeMillis();
+		    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+//		    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
+		    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
+		    System.out.println("Logs size : " + queryList.size());
+		}
 
-	    }
 	}
 	catch (Exception e)
 	{
@@ -557,21 +578,21 @@ public class EmailGatewayUtil
 
 	    if (emailSender.canSend())
 	    {
-		// If null or Mandrill
-		if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
-		    MandrillUtil.splitMandrillTasks(tasks, emailSender);
-
-		// If SendGrid
-		else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
-		    SendGridUtil.sendSendGridMails(tasks, emailSender);
+	    	// If No Gateway or SendGrid
+	    	if (emailGateway == null || emailGateway.email_api == EMAIL_API.SEND_GRID)
+			    SendGridUtil.sendSendGridMails(tasks, emailSender);
 		
-		else if (emailGateway.email_api == EMAIL_API.SES)
-			AmazonSESUtil.sendSESMails(tasks, emailSender);
-
-		addEmailLogs(tasks);
-
-		emailSender.setCount(tasks.size());
-		emailSender.updateStats();
+	    	// If Mandrill
+	    	else if (emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
+	    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
+		
+	    	else if (emailGateway.email_api == EMAIL_API.SES)
+				AmazonSESUtil.sendSESMails(tasks, emailSender);
+	
+			addEmailLogs(tasks);
+	
+			emailSender.setCount(tasks.size());
+			emailSender.updateStats();
 
 	    }
 	    else

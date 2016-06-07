@@ -322,20 +322,19 @@ var Settings_Collection_Events = Base_Collection_View.extend({
 		if ($(saveBtn).attr('disabled'))
 			return;
 
-		if (!confirm("Are you sure you want to delete this?"))
-			return false;
+		showAlertModal("delete", "confirm", function(){
+			// Disables save button to prevent multiple click event issues
+			disable_save_button($(saveBtn));
 
-		// Disables save button to prevent multiple click event issues
-		disable_save_button($(saveBtn));
-
-		$.ajax({
-			url : '/core/api/social-prefs/delete' + "/" + id,
-			type : 'DELETE',
-			success : function() {
-				enable_save_button($(saveBtn));
-				App_Settings.email();
-				return;
-			}
+			$.ajax({
+				url : '/core/api/social-prefs/delete' + "/" + id,
+				type : 'DELETE',
+				success : function() {
+					enable_save_button($(saveBtn));
+					App_Settings.email();
+					return;
+				}
+			});
 		});
 	},
 
@@ -350,24 +349,23 @@ var Settings_Collection_Events = Base_Collection_View.extend({
 		if ($(saveBtn).attr('disabled'))
 			return;
 		
-		if(!confirm("Are you sure you want to delete?"))
-    		return false;
-		
-		// Disables save button to prevent multiple click event issues
-		disable_save_button($(saveBtn));
+		showAlertModal("delete", "confirm", function(){
+			// Disables save button to prevent multiple click event issues
+			disable_save_button($(saveBtn));
 
-		var button_id = $(saveBtn).attr("name");
+			var button_id = $(saveBtn).attr("name");
 
-		$.ajax({
-			url : '/core/api/' + button_id + "/delete/" + id,
-			type : 'DELETE',
-			success : function()
-			{
-				enable_save_button($(saveBtn));
-				App_Settings.email();
-				return;
-			}
-		});
+			$.ajax({
+				url : '/core/api/' + button_id + "/delete/" + id,
+				type : 'DELETE',
+				success : function()
+				{
+					enable_save_button($(saveBtn));
+					App_Settings.email();
+					return;
+				}
+			});
+		});		
 
 	},
 });
@@ -378,46 +376,46 @@ $(function(){
 	$("#content").on("click", '#email-gateway-delete', function(e) {
 		e.preventDefault();
 		
-		if(!confirm("Are you sure you want to delete?"))
-    		return false;
-		
-		$.ajax({
-			url: 'core/api/email-gateway',
-			type: 'DELETE',
-			success: function(){
-				
-				if(App_Admin_Settings.email_gateway && App_Admin_Settings.email_gateway.model)
-			     {
-			    	 var data = App_Admin_Settings.email_gateway.model.toJSON();
-			    	 
-			    	 if(data.email_api == "MANDRILL")
-			    	 {
-			    		 	// Delete mandrill webhook
-							$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
-								
-								console.log(data);
-								
-							});
-			    	 }
-			     }	
-				
-				location.reload(true);
-			}
+    	showAlertModal("delete", "confirm", function(){
+    		$.ajax({
+				url: 'core/api/email-gateway',
+				type: 'DELETE',
+				success: function(){
+					
+					if(App_Admin_Settings.email_gateway && App_Admin_Settings.email_gateway.model)
+				     {
+				    	 var data = App_Admin_Settings.email_gateway.model.toJSON();
+				    	 
+				    	 if(data.email_api == "MANDRILL")
+				    	 {
+				    		 	// Delete mandrill webhook
+								$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
+									
+									console.log(data);
+									
+								});
+				    	 }
+				     }	
+					
+					location.reload(true);
+				}
+			});
 		});
+		
+		
 	});
 
 	$("#content").on('click', '#sms-gateway-delete', function(e){ 
 		e.preventDefault();
-		
-		if(!confirm("Are you sure you want to delete?"))
-    		return false;
 		var id=$(this).attr('data');
-		$.ajax({
-			url: 'core/api/widgets/integrations/'+id,
-			type: 'DELETE',
-			success: function(){
-				location.reload(true);
-			}
+    	showAlertModal("delete", "confirm", function(){
+    		$.ajax({
+				url: 'core/api/widgets/integrations/'+id,
+				type: 'DELETE',
+				success: function(){
+					location.reload(true);
+				}
+			});
 		});
 	});
 
@@ -431,5 +429,75 @@ $(function(){
 });
 
 
+function loadip_access_events()
+{
+	$(".blocked-panel-ip-delete").on('click', function(e) {
+         e.preventDefault();
+         var formId = $(this).closest('form');
+ 
+         var ip = $(this).closest("tr").find('input').val();
+         var id = $(this).closest("form").find('input[name="id"]').val();
+         var $that = $(this);
+		showAlertModal("delete", "confirm", function(){
+			$.ajax({ url : 'core/api/allowedips/delete_ip?id='+id+'&ip='+ip,
+		 			type : 'DELETE',
+			 		success : function()
+			 		{
+			 			$that.closest("tr").remove(); 
+			 
+			 		},error : function(response)
+		 			{
+		 
+		 				console.log(response);
+		 			}
+			 
+	 		});
+		});
+          
+     });
+
+	//To add new ip to allow access
+    $(".upsert-ip").on('click',function(e){
+    	var obj = {};
+    	if(element_has_attr($(this), "data-position")){
+    		obj.position = $(this).attr("data-position");
+    		obj.ip = $(this).closest("tr").find("input").val();
+    	}
+
+		$("#ipaccess-modal").html(getTemplate('add-new-ip', obj)).modal('show');
+		$("#ip-add").on('click',function(e){
+			
+			var form = $(this).closest("form");
+			if (!isValidForm(form)) {
+				return;
+			}
+            
+            // Get ip new value
+            var userEnteredIp = $("#iplist").val();
+
+            // Set add/edit field value
+            if(element_has_attr($(this), "data-position")){
+				 var trIndex = $(this).attr("data-position");
+				 $(".iptable tbody tr").eq(trIndex).find("input").val(userEnteredIp);
+			}else {
+				$(".newip").val(userEnteredIp);	
+			}            
+
+			form.trigger("reset");
+			$('.newip').closest('form').find('.save').trigger("click");
+			$("#ipaccess-modal").html(getTemplate('add-new-ip', {})).modal('hide');
+		});
+	});
+
+
+}
+
+function element_has_attr(ele, attr_name){
+	var attr = $(ele).attr(attr_name);
+
+	// For some browsers, `attr` is undefined; for others,
+	// `attr` is false.  Check for both.
+	return (typeof attr !== typeof undefined && attr !== false);
+}
 
 	

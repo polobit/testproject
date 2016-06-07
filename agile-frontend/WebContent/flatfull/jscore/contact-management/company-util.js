@@ -497,13 +497,12 @@
 	// Deletes a contact from database
 	company_detail_tab.deleteCurrentCompany = function(){
 		
-		if(!confirm("Do you want to delete the company?"))
-    		return;
-		
-		App_Companies.companyDetailView.model.url = "core/api/contacts/" + App_Companies.companyDetailView.model.id;
-		App_Companies.companyDetailView.model.destroy({success: function(model, response) {
-			  Backbone.history.navigate("companies",{trigger: true});
-		}});
+    	showAlertModal("delete_company", "confirm", function(){
+    		App_Companies.companyDetailView.model.url = "core/api/contacts/" + App_Companies.companyDetailView.model.id;
+			App_Companies.companyDetailView.model.destroy({success: function(model, response) {
+				  Backbone.history.navigate("companies",{trigger: true});
+			}});
+		});
 	};
 	
 	
@@ -564,6 +563,12 @@
 
 						 	// Adds contact name to tags ul as li element
 							$('#added-tags-ul').append(template({name : new_tags}));
+							$.each(data.get("tagsWithTime"), function(e, d) {
+        						if (d.tag == new_tags) {
+							            $('#added-tags-ul').find("li[data='"+new_tags+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+							        }
+								    }
+								    );
 
 		       			}
 		       			

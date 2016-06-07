@@ -21,7 +21,7 @@ function hasScope(scope_constant)
 
 function canEditContacts()
 {
-	return hasScope("DELETE_CONTACTS");
+	return hasScope("EDIT_CONTACT");
 }
 
 function canEditContacts()
@@ -48,7 +48,7 @@ function canExportContacts()
 
 function canEditContact(owner_id)
 {
-	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+	if((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 		return true;
 	
 	return false;
@@ -73,7 +73,7 @@ function canRunBulkOperations()
 	if(!hasScope('VIEW_CONTACTS'))
 		return true;
 	
-	if(!(hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')))
+	if(!(hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')))
 		return false;
 	
 	return true;

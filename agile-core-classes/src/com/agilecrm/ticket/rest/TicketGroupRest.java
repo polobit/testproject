@@ -21,8 +21,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -144,6 +147,9 @@ public class TicketGroupRest
 			ticketGroup.setAgents_key_list(agents_key_list);
 			ticketGroup.save();
 
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.GROUPS_COUNT);
+
 			return ticketGroup;
 		}
 		catch (Exception e)
@@ -199,6 +205,10 @@ public class TicketGroupRest
 			// Set updated values
 			dbGroup.group_name = ticketGroup.group_name;
 			dbGroup.setAgents_key_list(agents_key_list);
+			dbGroup.send_as = ticketGroup.send_as;
+
+			dbGroup.email_template_key = (ticketGroup.template_id != null) ? new Key<>(EmailTemplates.class,
+					ticketGroup.template_id) : null;
 
 			dbGroup.save();
 

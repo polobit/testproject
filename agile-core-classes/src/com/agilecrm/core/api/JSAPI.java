@@ -2,8 +2,11 @@ package com.agilecrm.core.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -26,11 +29,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
+import com.agilecrm.contact.js.JSContact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
@@ -42,13 +47,18 @@ import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.GeoLocationUtil;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
@@ -60,6 +70,9 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
+import com.google.appengine.api.NamespaceManager;
+import com.thirdparty.sendgrid.SendGrid;
+import com.twilio.sdk.client.TwilioCapability;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -101,17 +114,25 @@ public class JSAPI
 	{
 	    // Search contact based on email, returns empty contact if contact
 	    // is not available with given email
+	    
+	    if(StringUtils.isNotBlank(email) && !email.contains("@"))
+		return JSAPIUtil.generateContactMissingError();
 
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
 	    if (contact == null)
+	    	return JSAPIUtil.generateContactMissingError();
+	    
+	    String contactEmail = contact.getContactFieldValue("EMAIL");
+	    if(!contactEmail.equalsIgnoreCase(email))
 		return JSAPIUtil.generateContactMissingError();
-
-	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(contact);
+	    
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    
 	}
 	catch (Exception e)
 	{
+	    System.out.println("EXCEPPPPPPPPPPPPPPPPPPPPPPPPTION"+e);
 	    e.printStackTrace();
 	    return null;
 	}
@@ -143,6 +164,13 @@ public class JSAPI
     {
 	try
 	{
+	    UserInfo userInfo = SessionManager.get();
+		
+	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    if(!js_scopes.contains("create_contact"))
+		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_CREATE_RESTRICT);
+	    
 	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = mapper.readValue(json, Contact.class);
 	    System.out.println(mapper.writeValueAsString(contact));
@@ -186,7 +214,9 @@ public class JSAPI
 	    }
 	    if (StringUtils.isNotBlank(campaignIds))
 		JSAPIUtil.subscribeCampaigns(campaignIds, contact);
-	    return mapper.writeValueAsString(contact);
+	    
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (PlanRestrictedException e)
 	{
@@ -200,33 +230,6 @@ public class JSAPI
 	{
 	    e.printStackTrace();
 	    return null;
-	}
-    }
-
-    /**
-     * Deletes a contact. Fetches contact based on email and deletes.
-     * 
-     * It returns true if contact is found and deleted.
-     * 
-     * @param email
-     * @return
-     */
-    @Path("contact/delete")
-    @GET
-    @Produces("application/x-javascript;charset=UTF-8;")
-    public String deleteContact(@QueryParam("email") String email)
-    {
-	try
-	{
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-
-	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    contact.delete();
-	    JSONObject obj = new JSONObject();
-	    obj.put("success", "Contact deleted successfully");
-	    return obj.toString();
 	}
 	catch (Exception e)
 	{
@@ -387,7 +390,8 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
 	    }
 
-	    return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
 
 	}
 	catch (JsonGenerationException e)
@@ -401,6 +405,11 @@ public class JSAPI
 	    return e.getMessage();
 	}
 	catch (IOException e)
+	{
+	    e.printStackTrace();
+	    return e.getMessage();
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return e.getMessage();
@@ -444,7 +453,8 @@ public class JSAPI
 
 	    contact.removeTags(tagsArray);
 
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 
 	}
 	catch (Exception e)
@@ -480,7 +490,8 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    contact.addScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
@@ -520,7 +531,8 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    contact.subtractScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    // return new ObjectMapper().writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
@@ -609,7 +621,8 @@ public class JSAPI
 	    properties.add(field);
 	    contact.properties = properties;
 	    contact.save();
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (JSONException e)
 	{
@@ -624,6 +637,10 @@ public class JSAPI
 	    return null;
 	}
 	catch (IOException e)
+	{
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    return null;
 	}
@@ -696,48 +713,6 @@ public class JSAPI
     }
 
     /**
-     * Get notes from contact based on email
-     * 
-     * @param email
-     *            email of the contact
-     * 
-     * @return String (notes)
-     */
-    @Path("contacts/get-notes")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getNotes(@QueryParam("email") String email)
-    {
-	try
-	{
-	    if (!JSAPIUtil.isRequestFromOurDomain())
-		return new JSONArray().toString();
-
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    else
-	    {
-		List<Note> Notes = new ArrayList<Note>();
-		Notes = NoteUtil.getNotes(contact.id);
-		ObjectMapper mapper = new ObjectMapper();
-		JSONArray arr = new JSONArray();
-		for (Note note : Notes)
-		{
-		    arr.put(mapper.writeValueAsString(note));
-		}
-		return arr.toString();
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
      * Get contact tags based on email
      * 
      * @param email
@@ -760,84 +735,6 @@ public class JSAPI
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(contact.tags);
 	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
-     * Get tasks based on email of the contact
-     * 
-     * @param email
-     *            email of the contact
-     * 
-     * @return String (tasks)
-     */
-    @Path("contacts/get-tasks")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getTasks(@QueryParam("email") String email)
-    {
-	try
-	{
-	    if (!JSAPIUtil.isRequestFromOurDomain())
-		return new JSONArray().toString();
-
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    List<Task> tasks = new ArrayList<Task>();
-	    tasks = TaskUtil.getContactTasks(contact.id);
-	    ObjectMapper mapper = new ObjectMapper();
-	    JSONArray arr = new JSONArray();
-	    for (Task task : tasks)
-	    {
-		arr.put(mapper.writeValueAsString(task));
-	    }
-	    return arr.toString();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
-     * Get deals based on the email of the contact
-     * 
-     * @param email
-     *            email of the contact
-     * 
-     * @return String
-     */
-    @Path("contacts/get-deals")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getDeals(@QueryParam("email") String email)
-    {
-	try
-	{
-	    if (!JSAPIUtil.isRequestFromOurDomain())
-		return new JSONArray().toString();
-
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
-
-	    List<Opportunity> deals = new ArrayList<Opportunity>();
-	    deals = OpportunityUtil.getDeals(contact.id, null, null);
-	    ObjectMapper mapper = new ObjectMapper();
-	    JSONArray arr = new JSONArray();
-	    for (Opportunity deal : deals)
-	    {
-		arr.put(mapper.writeValueAsString(deal));
-	    }
-	    return arr.toString();
 	}
 	catch (Exception e)
 	{
@@ -1077,6 +974,13 @@ public class JSAPI
     {
 	try
 	{
+	    UserInfo userInfo = SessionManager.get();
+		
+	    HashSet<String> js_scopes = userInfo.getJsrestricted_scopes();
+	    
+	    if(!js_scopes.contains("update_contact"))
+		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_UPDATE_RESTRICT);
+	    
 	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
@@ -1104,7 +1008,8 @@ public class JSAPI
 		    contact.addProperty(field);
 		}
 	    }
-	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    // Set owner not required : customer issu
+	    // contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 
 	    // To set company again, if company updated this is mandatory.
 	    contact.contact_company_id = null;
@@ -1123,7 +1028,8 @@ public class JSAPI
 	    else
 		contact.save();
 
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (JsonGenerationException e)
 	{
@@ -1141,6 +1047,11 @@ public class JSAPI
 	    return null;
 	}
 	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return null;
@@ -1198,7 +1109,8 @@ public class JSAPI
 	    {
 		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
 	    }
-	    return mapper.writeValueAsString(contact);
+	    // return mapper.writeValueAsString(contact);
+	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	}
 	catch (Exception e)
 	{
@@ -1256,7 +1168,7 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 	    if (contact.getContactField(name) == null)
 		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
-
+	    
 	    contact.removeProperty(name);
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 	    contact.save();
@@ -1327,6 +1239,49 @@ public class JSAPI
 	    return null;
 	}
     }
+    //for call webrules
+    @Path("webrule/gettwiliotoken")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getTwilioTokenWebrule(@QueryParam("webruleid") String webruleId)
+    {
+	String fromNumber =null;
+	String toNumber =null;
+	String token =null;
+	Map<String,String> params= new HashMap<String,String>();
+	try
+	{
+	    Widget twilioObj = WidgetUtil.getWidget("TwilioIO");
+	    JSONObject jsonPrefs= new JSONObject(twilioObj.prefs);
+	    
+	    if(jsonPrefs.has("twilio_from_number") && jsonPrefs.get("twilio_from_number")!=null && !jsonPrefs.get("twilio_from_number").toString().isEmpty())
+		fromNumber=jsonPrefs.get("twilio_from_number").toString();
+	    else if(jsonPrefs.has("twilio_number") && jsonPrefs.get("twilio_number")!=null && !jsonPrefs.get("twilio_number").toString().isEmpty())
+		fromNumber=jsonPrefs.get("twilio_number").toString();
+	   
+	    toNumber =WebRuleUtil.getPhoneNumberByWebruleId(Long.parseLong(webruleId));
+		
+	    //getting call token here 
+	    Long agileUserID = AgileUser.getCurrentAgileUser().id;
+	    String applicationSid = twilioObj.getProperty("twilio_app_sid");
+	    TwilioCapability capability = new TwilioCapability(twilioObj.getProperty("twilio_acc_sid"),twilioObj.getProperty("twilio_auth_token"));
+	    capability.allowClientOutgoing(applicationSid);
+	    capability.allowClientIncoming("agileclient" + agileUserID);
+	    token = capability.generateToken(86400);
+	    
+	    params.put("token", token);
+	    params.put("fromNumber", fromNumber);
+	    params.put("toNumber", toNumber);
+	    
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	
+	return new JSONObject(params).toString();
+    }
 
     /**
      * Unsubscribe contact from campaign based in email of contact
@@ -1385,13 +1340,17 @@ public class JSAPI
     @Path("formsubmit")
     @GET
     public void formSubmitTrigger(@QueryParam("formname") String formName, @QueryParam("contactid") String contactId,
-	    @QueryParam("formdata") String formData, @QueryParam("new") Boolean newContact)
+	    @QueryParam("formdata") String formData, @QueryParam("new") Boolean newContact,@QueryParam("checkId") String idCheck)
     {
 	try
 	{
-	    Form form = FormUtil.getFormByName(formName);
+	    Form form=null;
 	    JSONObject formFields = new JSONObject(formData);
-
+	    if(idCheck.equalsIgnoreCase("true"))
+		form=FormUtil.getFormById(Long.parseLong(formFields.get("_agile_form_id").toString()));
+	    else
+		form = FormUtil.getFormByName(formName);
+	    
 	    if (contactId == null || form == null)
 		return;
 
@@ -1399,6 +1358,14 @@ public class JSAPI
 	    contact.formId = form.id;
 	    contact.save();
 
+	    /*@Priyanka
+	     * Send a mail to owner when new contact created and when it clicked 
+	     * on submit button
+	     * 
+	     * */
+	       if(form.emailNotification && newContact)
+	       FormUtil.sendMailToContactOwner(contact,formName);
+	    
 	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
 	    for (Trigger trigger : triggers)
 	    {
@@ -1419,28 +1386,6 @@ public class JSAPI
 	{
 	    System.out.println("Error is " + e.getMessage());
 	    return;
-	}
-    }
-
-    /**
-     * Get all domain users.
-     */
-    @Path("users")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getAllDomainUsers()
-    {
-	try
-	{
-	    if (!JSAPIUtil.isRequestFromOurDomain())
-		return new JSONArray().toString();
-
-	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(DomainUserUtil.getUsers());
-	}
-	catch (Exception e)
-	{
-	    return null;
 	}
     }
 
@@ -1533,5 +1478,125 @@ public class JSAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    /**
+     * Get notes from contact based on email
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String (notes)
+     */
+    @Path("contacts/get-notes")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getNotes(@QueryParam("email") String email)
+    {
+	try
+	{
+	    if (!JSAPIUtil.isRequestFromOurDomain())
+		return new JSONArray().toString();
+
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    else
+	    {
+		List<Note> Notes = new ArrayList<Note>();
+		Notes = NoteUtil.getNotes(contact.id);
+		ObjectMapper mapper = new ObjectMapper();
+		JSONArray arr = new JSONArray();
+		for (Note note : Notes)
+		{
+		    arr.put(mapper.writeValueAsString(note));
+		}
+		return arr.toString();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    
+     /**
+     * Get deals based on the email of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String
+     */
+    @Path("contacts/get-our-deals")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getDeals(@QueryParam("email") String email)
+    {
+     try
+     {
+         if (!JSAPIUtil.isRequestFromOurDomain())
+        	 return new JSONArray().toString();
+
+         Contact contact = ContactUtil.searchContactByEmail(email);
+         if (contact == null)
+        	 return JSAPIUtil.generateContactMissingError();
+
+         List<Opportunity> deals = new ArrayList<Opportunity>();
+         deals = OpportunityUtil.getDeals(contact.id, null, null);
+         ObjectMapper mapper = new ObjectMapper();
+         JSONArray arr = new JSONArray();
+         for (Opportunity deal : deals)
+         {
+        	 arr.put(mapper.writeValueAsString(deal));
+         }
+         return arr.toString();
+     }
+     catch (Exception e)
+     {
+         e.printStackTrace();
+         return null;
+     }
+    }
+    /*
+     * Get tasks based on email of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * 
+     * @return String (tasks)
+     */
+    @Path("contacts/get-our-tasks")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getTasks(@QueryParam("email") String email)
+    {
+     try
+     {
+         if (!JSAPIUtil.isRequestFromOurDomain())
+        	 return new JSONArray().toString();
+
+         Contact contact = ContactUtil.searchContactByEmail(email);
+         if (contact == null)
+        	 return JSAPIUtil.generateContactMissingError();
+
+         List<Task> tasks = new ArrayList<Task>();
+         tasks = TaskUtil.getContactTasks(contact.id);
+         ObjectMapper mapper = new ObjectMapper();
+         JSONArray arr = new JSONArray();
+         for (Task task : tasks)
+         {
+        	 arr.put(mapper.writeValueAsString(task));
+         }
+         return arr.toString();
+     }
+     catch (Exception e)
+     {
+         e.printStackTrace();
+         return null;
+     }
     }
 }

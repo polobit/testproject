@@ -1,7 +1,9 @@
 package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,7 +34,6 @@ import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -45,6 +46,7 @@ import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.TicketWorkflow;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.CreatedBy;
@@ -52,8 +54,11 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.agilecrm.ticket.entitys.TicketsBackup;
+import com.agilecrm.ticket.servlets.SendgridInboundParser;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -150,8 +155,11 @@ public class TicketsRest
 
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
-			List<SearchRule> customFilters = new ObjectMapper().readValue(customFiltersString,
-					TypeFactory.collectionType(List.class, SearchRule.class));
+			List<SearchRule> customFilters = new ArrayList<>();
+
+			if (StringUtils.isNotBlank(customFiltersString))
+				customFilters = new ObjectMapper().readValue(customFiltersString,
+						TypeFactory.collectionType(List.class, SearchRule.class));
 
 			String queryString = (customFilters == null || customFilters.size() == 0) ? TicketFiltersUtil
 					.getQueryFromConditions(filter.conditions) : TicketFiltersUtil
@@ -354,7 +362,7 @@ public class TicketsRest
 			// Creating new Notes in TicketNotes table
 			TicketNotes notes = new TicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
 					ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
-					attachmentsList, "");
+					attachmentsList, "", true);
 			notes.save();
 
 			ticket.groupID = ticket.group_id.getId();
@@ -362,7 +370,12 @@ public class TicketsRest
 			// Execute triggers
 			// TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 
-			BulkActionNotifications.publishNotification("Ticket #" + ticket.id + " has been created.");
+			// BulkActionNotifications.publishNotification("Ticket #" +
+			// ticket.id + " has been created.");
+			TicketBulkActionsBackendsRest.publishNotification("Ticket #" + ticket.id + " has been created.");
+
+			// Updating ticket count DB
+			TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
 
 			return ticket;
 		}
@@ -636,6 +649,25 @@ public class TicketsRest
 					.build());
 		}
 	}
+	
+	@GET
+	@Path("/contact/{id}")
+	public List<Tickets> getTicketsByContactID(@PathParam("id") Long id)
+	{
+		try
+		{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("contact_key", new Key<Contact>(Contact.class, id));
+			
+			return Tickets.ticketsDao.listByProperty(map);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 
 	@GET
 	@Path("/{email}/count")
@@ -841,6 +873,48 @@ public class TicketsRest
 	}
 
 	/**
+	 * Creates ticket by fetching its json from backup table
+	 * 
+	 * @return
+	 * @throws JSONException
+	 */
+	@GET
+	@Path("/create-ticket-with-id")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void createTicketFromBackup(@QueryParam("id") Long id) throws JSONException
+	{
+		try
+		{
+			if (id == null)
+				throw new Exception("Id is missing.");
+
+			JSONObject json = new TicketsBackup().getData(id);
+			
+			String envelope = json.getString("envelope");
+
+			System.out.println("Envelope:" + envelope);
+
+			JSONObject enveloperJSON = new JSONObject(envelope);
+			String toAddress = (String) new JSONArray(enveloperJSON.getString("to")).get(0);
+
+			SendgridInboundParser parser = new SendgridInboundParser();
+			
+			String[] toAddressArray = parser.getNamespaceAndGroup(toAddress);
+			
+			parser.saveTicket(json, toAddressArray);
+			
+			//Deleting record from backup table
+			TicketsBackup.delete(new Key<TicketsBackup>(TicketsBackup.class, id));
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
 	 * 
 	 * @return
 	 * @throws JSONException
@@ -866,7 +940,7 @@ public class TicketsRest
 				// Creating new Notes in TicketNotes table
 				TicketNotes notes = new TicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER,
 						"Sasi", "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC,
-						new ArrayList<TicketDocuments>(), "");
+						new ArrayList<TicketDocuments>(), "", true);
 				notes.save();
 			}
 		}
@@ -886,7 +960,7 @@ public class TicketsRest
 	 * @return list of domain users
 	 */
 	@GET
-	@Path ("/users")
+	@Path("/users")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<DomainUser> getUsers()
 	{
@@ -896,7 +970,7 @@ public class TicketsRest
 			String domain = NamespaceManager.get();
 			// Gets the users and update the password to the masked one
 			List<DomainUser> users = DomainUserUtil.getUsers(domain);
-			DomainUser domainUser =  new DomainUser();
+			DomainUser domainUser = new DomainUser();
 			domainUser.name = "Current User";
 			domainUser.id = (long) 0;
 			users.add(domainUser);
@@ -905,6 +979,31 @@ public class TicketsRest
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Gets list of users of a domain
+	 * 
+	 * @return list of domain users
+	 */
+	@GET
+	@Path("/stats")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getStats()
+	{
+		try
+		{
+			TicketStats stats = TicketStats.ticketStatsdao.getByProperty("created_time", 1460399400l);
+
+			JSONObject json = new JSONObject(stats.toString());
+
+			return json.toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			return null;
 		}
 	}

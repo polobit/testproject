@@ -2,6 +2,7 @@ package com.agilecrm.workflows.triggers;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -9,8 +10,13 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -68,7 +74,9 @@ public class Trigger
 	 */
 	public enum Type
 	{
-		TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, SPAM_REPORT, INBOUND_MAIL_EVENT, EMAIL_OPENED, EMAIL_LINK_CLICKED, EVENT_IS_ADDED, UNSUBSCRIBED, FORM_SUBMIT, INBOUND_CALL, OUTBOUND_CALL, NEW_TICKET_IS_ADDED, TICKET_NOTE_ADDED_BY_USER, TICKET_NOTE_ADDED_BY_CUSTOMER, TICKET_IS_CLOSED, TICKET_SLA_REACHED, TICKET_ASSIGNEE_CHANGED, TICKET_LABEL_IS_ADDED, TICKET_LABEL_IS_DELETED
+
+		TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_HOURLY,RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, SPAM_REPORT, INBOUND_MAIL_EVENT, EMAIL_OPENED, EMAIL_LINK_CLICKED, EVENT_IS_ADDED, UNSUBSCRIBED, FORM_SUBMIT, INBOUND_CALL, OUTBOUND_CALL, NEW_TICKET_IS_ADDED, TICKET_NOTE_ADDED_BY_USER, TICKET_NOTE_ADDED_BY_CUSTOMER, TICKET_IS_CLOSED, TICKET_SLA_REACHED, TICKET_ASSIGNEE_CHANGED, TICKET_LABEL_IS_ADDED, TICKET_LABEL_IS_DELETED
+
 	};
 
 	/**
@@ -206,10 +214,12 @@ public class Trigger
 	@XmlElement(name = "campaign")
 	public String getCampaign() throws Exception
 	{
+		System.out.println("getCampaign call");
 		if (campaign_id == null)
 			return " ";
-
-		this.workflow = WorkflowUtil.getWorkflow(campaign_id);
+		
+		if(this.workflow == null)
+			this.workflow = WorkflowUtil.getWorkflow(campaign_id);
 
 		if (this.workflow != null)
 			return this.workflow.name;
@@ -239,6 +249,38 @@ public class Trigger
 			return contactFilter.name;
 
 		return "?";
+	}
+	
+	/**
+	 * Sets created time and updated time. PrePersist is called each time before
+	 * object gets saved. Sets creator key when it is null.
+	 */
+	@PrePersist
+	private void PrePersist() throws Exception {
+		
+		Trigger oldTrigger = null;
+		// Validate before save
+		if(id != null){
+			oldTrigger = TriggerUtil.getTrigger(id);
+		}
+		
+		if(oldTrigger == null)
+			 return;
+		
+		// Check private campaign assignment for old trigger
+		Long campaignId = oldTrigger.campaign_id;
+		if(campaignId != null && campaignId.equals(campaign_id))
+			return;
+		
+		Workflow workflow = WorkflowUtil.getWorkflow(campaignId);
+		if(workflow == null)
+			 return;
+		
+		if(workflow.access_level != null){
+			if(workflow.access_level != 1L && !workflow.access_level.equals(DomainUserUtil.getCurentUserId()))
+				 throw new Exception("Sorry, this trigger is already being used by another user for a private campaign.");
+		} 
+		
 	}
 
 	/**

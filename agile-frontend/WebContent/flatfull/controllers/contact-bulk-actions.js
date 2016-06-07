@@ -19,7 +19,11 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 		
 		"company-bulk-owner" : "companyOwnerBulk",
 		
-		"company-bulk-email" : "companyEmailBulk"
+		"company-bulk-email" : "companyEmailBulk",
+
+		"company-bulk-tags" : "companyTagsBulk",
+
+		"company-bulk-tags-remove" : "companyTagsRemoveBulk",
 		
 	},
 
@@ -134,6 +138,37 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 
 			}, "#send-email-listener-container");			
 		}
+
+		var options = {
+		"+ Add new" : "verify_email"
+		};
+
+	fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+			
+			var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+			
+				if(typeof(ownerEmail) == "undefined")
+				{
+				$select
+						.find("option:first")
+						.before(
+								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				}
+				else
+				$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
+				
+				rearrange_from_email_options($select, data);
+			});
 	},
 	
 	/**
@@ -184,6 +219,41 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 				sendEmailAttachmentListeners("send-email-listener-container");
 
 			}, "#send-email-listener-container");
+		}
+	},
+
+	/**
+	 * Loads the tags template to remove tags to the selected contacts
+	 */
+	companyTagsRemoveBulk : function()
+	{
+		// On reloading redirecting to contacts list
+		if (!App_Companies.companiesListView)
+			Backbone.history.navigate("companies", { trigger : true });
+		else
+			getTemplate("bulk-actions-companies-tags-remove", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+			}, "#content");	
+	},
+
+	/**
+	 * Loads the tags template to add tags to the selected contacts
+	 */
+	companyTagsBulk : function()
+	{
+		// On reloading redirecting to contacts list
+		if (!App_Companies.companiesListView)
+			Backbone.history.navigate("companies", { trigger : true });
+		else{
+
+			getTemplate("bulk-actions-companies-tags", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+			}, "#content");	
+
 		}
 	}
 	

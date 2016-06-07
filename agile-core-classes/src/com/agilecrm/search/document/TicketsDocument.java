@@ -304,7 +304,7 @@ public class TicketsDocument implements BuilderInterface
 		}
 
 		sortExpressionBuilder.setExpression(sortField);
-		sortExpressionBuilder.setDefaultValueNumeric(0d);
+		//sortExpressionBuilder.setDefaultValueNumeric(0d);
 
 		SortOptions sortOptions = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build()).build();
 
@@ -448,5 +448,12 @@ public class TicketsDocument implements BuilderInterface
 		{
 			ExceptionUtils.getFullStackTrace(e);
 		}
+	}
+
+	@Override
+	public void addAsync(Object entity)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

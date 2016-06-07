@@ -138,6 +138,11 @@ function setup_tags_typeahead(callback) {
                             var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}"><span><a class="anchor m-r-xs" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
                             // Adds contact name to tags ul as li element
                             $('#added-tags-ul').append(template({name : tag}));
+                                    $.each(data.get("tagsWithTime"), function(e, d) {
+                                if (d.tag == tag) {
+                                        $('#added-tags-ul').find("li[data='"+tag+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+                                    }
+                                    } );
                         }
 	       			}
 	       			else{
@@ -149,6 +154,11 @@ function setup_tags_typeahead(callback) {
                             var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}"><span><a class="anchor m-r-xs" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
                             // Adds contact name to tags ul as li element
                             $('#added-tags-ul').append(template({name : tag}));
+                             $.each(data.get("tagsWithTime"), function(e, d) {
+                                if (d.tag == tag) {
+                                        $('#added-tags-ul').find("li[data='"+tag+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+                                    }
+                                    } );
                         }
 	    				
 	       			}
@@ -247,10 +257,20 @@ function setup_tags_typeahead(callback) {
         				tagsCollection.add(new BaseModel( {"tag" : tag} ));
         			$("#addTagsForm").css("display", "none");
         		    $("#add-tags").css("display", "block");
+
+                    var template = Handlebars.compile('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{name}}" ><span><a class="anchor m-r-xs" href="#tags/{{name}}">{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+                    // Adds contact name to tags ul as li element
+                    $('#added-tags-ul').append(template({name : tag}));
+                     $.each(data.get("tagsWithTime"), function(e, d) {
+                                if (d.tag == tag) {
+                                        $('#added-tags-ul').find("li[data='"+tag+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+                                    }
+                                    } );
                     
         			},function(model,response){
         				console.log(response);
-    	       			alert(response.responseText);
+    	       			showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
         			});
     			});
     			

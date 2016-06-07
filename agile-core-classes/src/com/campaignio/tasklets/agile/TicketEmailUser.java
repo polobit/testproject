@@ -21,6 +21,16 @@ public class TicketEmailUser extends TaskletAdapter
 	/**
 	 * Ticket
 	 */
+	public static String FROM_NAME = "from_name";
+
+	/**
+	 * Ticket Group id
+	 */
+	public static String FROM_ADDRESS = "from_address";
+	
+	/**
+	 * Ticket
+	 */
 	public static String TICKET = "ticket";
 
 	/**
@@ -55,6 +65,11 @@ public class TicketEmailUser extends TaskletAdapter
 
 			if (ticketJSON != null)
 			{
+				// Get from name
+				String from_name = getStringValue(nodeJSON, subscriberJSON, data, FROM_NAME);
+
+				// Get from address
+				String from_address = getStringValue(nodeJSON, subscriberJSON, data, FROM_ADDRESS);
 
 				// Get email user
 				String emailUserId = getStringValue(nodeJSON, subscriberJSON, data, EMAIL_USER);
@@ -66,7 +81,7 @@ public class TicketEmailUser extends TaskletAdapter
 				String emailBody = getStringValue(nodeJSON, subscriberJSON, data, BODY);
 
 				// Change Group and Assignee
-				TicketsUtil.sendEmailToUser(emailUserId, subject, emailBody);
+				TicketsUtil.sendEmailToUser(emailUserId, subject, emailBody, from_name, from_address);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 						"Ticket(#" + ticketJSON.getString("id") + ") email sent to user - " + emailUserId,

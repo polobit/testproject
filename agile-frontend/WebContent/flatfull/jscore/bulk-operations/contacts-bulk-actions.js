@@ -39,9 +39,10 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     	'click .filter' : 'filterResults',
     	'click .default_filter' : 'defaultFilterResults',
     	// 'click #companies-filter' : 'companyFilterResults',
-    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag'
+    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
 
     	//'click .contact-actions-delete-mobile' : 'onContactDelete'
+    	'click .contact-type-image, .company-type-image' : 'navigateToProperContact'
     	
     },
 
@@ -281,6 +282,19 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
 			html = "Selected " + resultCount + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + appCount + " contacts</a>";
 		}
 		$('body').find('#bulk-select').html(html);
+    },
+
+    navigateToProperContact : function(e){
+    	e.stopPropagation();
+		var currentObjId = $(e.currentTarget).attr("id");
+		if($(e.currentTarget).hasClass("contact-type-image"))
+		{
+			Backbone.history.navigate("contact/" + currentObjId, { trigger : true });
+		}
+		else
+		{
+			Backbone.history.navigate("company/" + currentObjId, { trigger : true });
+		}
     } 
 
    
@@ -940,7 +954,14 @@ function show_bulk_owner_change_page()
 
 		// var tags = get_tags('tagsBulkForm');
 
+		 if (company_util.isCompany()) {
+        Backbone.history.navigate("company-bulk-tags", {
+            trigger: true
+        })
+    } else {
+
 		Backbone.history.navigate("bulk-tags", { trigger : true });
+	}
 
 		setup_tags_typeahead();
 
@@ -1040,8 +1061,14 @@ function show_bulk_owner_change_page()
 		var id_array = get_contacts_bulk_ids();
 
 		// var tags = get_tags('tagsBulkForm');
+		 if (company_util.isCompany()) {
+        Backbone.history.navigate("company-bulk-tags-remove", {
+            trigger: true
+        })
+    } else {
 
 		Backbone.history.navigate("bulk-tags-remove", { trigger : true });
+	}
 
 		setup_tags_typeahead();
 
@@ -1205,10 +1232,7 @@ function show_bulk_owner_change_page()
 
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			if (form_json.from_email != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
-			{
-				form_json.from_name = "";
-			}
+
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 
 			var json = {};

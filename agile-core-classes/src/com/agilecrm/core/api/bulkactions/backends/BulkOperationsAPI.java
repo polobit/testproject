@@ -77,6 +77,7 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.RetryOptions;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.thirdparty.Mailgun;
@@ -244,7 +245,10 @@ public class BulkOperationsAPI
 	{
 	    // To avoid running same bulk action twice
 	    if (!StringUtils.isEmpty(tracker) && BulkActionLog.checkAndSaveNewEntity(tracker))
-		return;
+		{
+	    	System.err.println("Avoiding running same campaign twice..." + tracker);
+	    	return;
+		}
 	}
 	catch (Exception e)
 	{
@@ -274,7 +278,9 @@ public class BulkOperationsAPI
 
 		// Add to queue
 		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
-		queue.add(TaskOptions.Builder.withPayload(task));
+		
+		// Added Retries 5 with 120 secs interval gap for next retry
+		queue.add(TaskOptions.Builder.withPayload(task).retryOptions(RetryOptions.Builder.withTaskRetryLimit(5).minBackoffSeconds(120).maxBackoffSeconds(300)));
 
 	    }
 	    catch (Exception e)
@@ -293,12 +299,14 @@ public class BulkOperationsAPI
 		    "campaigns@agile.com",
 		    "Campaign Observer",
 		    "naresh@agilecrm.com",
-		    "bhasuri@invox.com",
+		    "prashannjeet@agilecrm.com",
 		    null,
-		    "Campaign Initiated in " + NamespaceManager.get(),
+		    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
 		    null,
 		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
 			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
+			    + "<br><br>Dynamic Filter: " + dynamicFilter
+			    + "<br><br>User email: " + user.email
 			    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
 		    null);
 	}
@@ -436,11 +444,20 @@ public class BulkOperationsAPI
 	    }
 
 	}
+	if(idsFetcher.getCompanyCount()>0)
+	{
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.COMPANY_ADD_TAGS, Arrays.asList(tagsArray)
+				.toString(), String.valueOf(idsFetcher.getTotalCount()));
+
+			ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "companies", "");
+	}
+	if(idsFetcher.getContactCount()>0){
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
 		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "contacts", "");
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -507,11 +524,21 @@ public class BulkOperationsAPI
 	    }
 
 	}
+	
+	if(idsFetcher.getCompanyCount()>0)
+	{
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.COMPANY_REMOVE_TAGS, Arrays.asList(tagsArray)
+				.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
+			ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "companies", "");
+	}
+	
+	if(idsFetcher.getContactCount()>0){
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
 		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "contacts", "");
+	}
 
     }
 

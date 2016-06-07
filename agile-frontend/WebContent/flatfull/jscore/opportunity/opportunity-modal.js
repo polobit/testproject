@@ -466,8 +466,8 @@ function updateDeal(ele, editFromMilestoneView)
 		if (value.owner)
 		{
 			$("#owners-list", dealForm).find('option[value=' + value['owner'].id + ']').attr("selected", "selected");
-			$("#owners-list", $("#opportunityUpdateForm")).closest('div').find('.loading-img').hide();
 		}
+		$("#owners-list", $("#opportunityUpdateForm")).closest('div').find('.loading-img').hide();
 	});
 
 	// Fills the pipelines list in the select menu.
@@ -477,6 +477,7 @@ function updateDeal(ele, editFromMilestoneView)
 	});
 
 	// Enable the datepicker
+	$('#close_date', dealForm).datepicker("remove");
 	$('#close_date', dealForm).datepicker({
 		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
 	});
@@ -622,6 +623,7 @@ function show_deal()
 	populateDealSources(el, undefined);
 
 	// Enable the datepicker
+	$('#close_date', el).datepicker("remove");
 	$('#close_date', el).datepicker({
 		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
 	});

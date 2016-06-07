@@ -79,6 +79,7 @@ else{
 
 //if schedule id contains , it is team calendar
 //if team calendar then we don't consider available meeting slots
+System.out.println("scheduleid in agile-frontend :: "+scheduleid);
 if(scheduleid.contains(",")){
     multiple_users=true; slots_array=null;
     List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
@@ -87,10 +88,17 @@ if(scheduleid.contains(",")){
      System.out.println(_multiple_schedule_ids[i]+"  schedule id");
      OnlineCalendarPrefs online_prefs=null;
       online_prefs=OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[i]);
+      System.out.println("online_prefs ::: "+online_prefs);
       if(online_prefs==null)
     	  continue;
 	  
-	  DomainUser _domain_user= DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
+      Long domainUserId = OnlineCalendarUtil.getDomainUserID(online_prefs);
+      if(domainUserId==null){
+	      domainUserId = 0L; 
+      }
+    	System.out.println("domainUserId :: "+domainUserId);
+	  DomainUser _domain_user= DomainUserUtil.getDomainUser(domainUserId);
+    	System.out.println("_domain_user :: "+_domain_user);
 	    if(_domain_user!=null){
 		AgileUser agile_user=AgileUser.getCurrentAgileUserFromDomainUser(_domain_user.id);
 		 if(agile_user==null)
@@ -108,7 +116,7 @@ if(scheduleid.contains(",")){
 	}
 
 		}
-
+ System.out.println("Here we are");
 		//if multiple schedule ids were given in url but no matching found
 		if (_multiple_users.size() == 1)
 		{
@@ -149,7 +157,8 @@ if(scheduleid.contains(",")){
 	   }
 
 	UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-	System.out.println("userPrefs " + userPrefs.pic);
+	System.out.println("userPrefs " + userPrefs);
+	if(userPrefs!=null)
 	profile_pic = userPrefs.pic;
 	user_name = domainUser.name;
 	user_id = domainUser.id;
@@ -215,6 +224,7 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
+<script type="text/javascript" src="../../lib/web-calendar-event/bootstrap.v3.min.js"></script>
 
 <link rel="stylesheet" href="../../css/web-calendar-event/datepicker.css"
 	type="text/css" />
@@ -256,7 +266,7 @@ if (scheduleid != null && multiple_users){  %>
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
 		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
-		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title="<%=pr_name%>"/>
+		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" data-toggle="tooltip" data-placement="bottom" title="<%=pr_name%>"/>
 		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
 		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
 		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
@@ -284,8 +294,7 @@ if (scheduleid != null && multiple_users){  %>
 					<div class="numberlt" id="two">2</div>
 					<div class="event-title" style="margin-bottom:7px;">
 						<span class="pull-left">Select Date and Time</span>
-						<span class="timezone">														
-								<select name="user_timezone" class="form-control" id="user_timezone">
+						<span class="timezone">												<select name="user_timezone" class="form-control" id="user_timezone" >
                                 	<optgroup label="US/Canada">
 										<option value="US/Arizona">US/Arizona</option>
 										<option value="US/Alaska">US/Alaska</option>
@@ -1189,8 +1198,11 @@ var BUFFERTIME=null;
 		var Selected_Date = null;		
 
 		$(document).ready(
+
 				function()
 				{
+					//$('img#multi-user-avatar').tooltip();
+					$("img#multi-user-avatar").tooltip({placement:'bottom'});
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;
 					if(multiple_schedule_ids){

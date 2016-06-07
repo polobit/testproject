@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -75,12 +76,13 @@ public class WorkflowsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Workflow> getWorkflows(@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
+			@QueryParam("cursor") String cursor, @QueryParam("allow_campaign") Long allow_campaign) {
 		if (count != null) {
 			return WorkflowUtil
 					.getAllWorkflows(Integer.parseInt(count), cursor);
 		}
-		return WorkflowUtil.getAllWorkflows();
+		
+		return WorkflowUtil.getAllWorkflows(allow_campaign);
 	}
 
 	/**
@@ -94,9 +96,13 @@ public class WorkflowsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Workflow getWorkflow(@PathParam("workflow-id") String workflowId) {
-		Workflow workflow = WorkflowUtil
-				.getWorkflow(Long.parseLong(workflowId));
-		return workflow;
+		try {
+			return  WorkflowUtil
+					.getWorkflow(Long.parseLong(workflowId), true);
+		} catch (Exception e) {
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
 	}
 
 	/**
@@ -177,17 +183,21 @@ public class WorkflowsAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Workflow updateWorkflow(Workflow workflow) throws Exception {
-		workflow.save();
-
 		try {
-			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
-					workflow, null);
+			workflow.save();
+			
+			try {
+				ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_EDIT,
+						workflow, null);
+			} catch (Exception e) {
+				System.out
+						.println("exception occured while creating workflow creation activity");
+			}
+			return workflow;
 		} catch (Exception e) {
-			System.out
-					.println("exception occured while creating workflow creation activity");
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
 		}
-
-		return workflow;
 	}
 
 	/**
@@ -558,4 +568,22 @@ public class WorkflowsAPI {
 
 	}
 
+	/**
+	 * Returns count of workflow for all users.
+	 * 
+	 * @param workflowId
+	 *            - workflow id
+	 * @return
+	 */
+	@Path("count")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getWorkflowCount() {
+		try {
+			return  String.valueOf(WorkflowUtil.getAllWorkflows().size());
+		} catch (Exception e) {
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 }

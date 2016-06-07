@@ -1,9 +1,12 @@
 package com.agilecrm.bulkaction.deferred;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,9 +14,12 @@ import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.google.appengine.api.NamespaceManager;
@@ -56,10 +62,71 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 
     protected void performAction()
     {
-	List<Contact> contacts = fetchContacts();
-
-	WorkflowSubscribeUtil.subscribeDeferred(contacts, campaignId);
+		try
+		{
+			List<Contact> contacts = fetchContacts();
+			
+			String token = null;
+			String retryCount = null;
+			
+			try
+			{
+				token = VersioningUtil.getQueueHeaderValue(VersioningUtil.APPENGINE_TASK_NAME);
+				retryCount = VersioningUtil.getQueueHeaderValue(VersioningUtil.APPENGINE_TASK_RETRY_COUNT);
+				
+				// Add Started status to DB
+				CampaignLogsSQLUtil.insertCampaignAssignedStatus(namespace, campaignId.toString(), "STARTED", "Campaign Assigning started for " + contacts.size() + " contacts. Task Retry count is " + retryCount , token);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			// Removed before assigned contacts if task get retried
+			contacts = removeAssignedContacts(contacts);
+			
+			WorkflowSubscribeUtil.subscribeDeferred(contacts, campaignId);
+			
+			// Add Complete status to DB
+			CampaignLogsSQLUtil.insertCampaignAssignedStatus(namespace, campaignId.toString(), "COMPLETED", "Campaign Assigning completed for " + contacts.size() + " contacts", token);
+		}
+		catch(Exception ex)
+		{
+			System.err.println("Exception occured while assiging campaigns..." + ex.getMessage());
+			System.err.println(ExceptionUtils.getFullStackTrace(ex));
+		}
     }
+
+	private List<Contact> removeAssignedContacts(List<Contact> contacts)
+	{
+		try
+		{
+			// If task gets retried, verifies whether same campaign run before within time span
+			if("agile-normal-bulk".equalsIgnoreCase(VersioningUtil.getCurrentModuleName()) && VersioningUtil.isTaskRetried())
+			{
+				Iterator<Contact> iterator = contacts.iterator();
+				
+				while (iterator.hasNext()) {
+					
+					Contact contact = iterator.next();
+				 
+				    // If task retried, remove assigned contacts previously
+					if(CampaignStatusUtil.isContactAssignedAlready(contact, campaignId, null))
+					{
+						System.err.println("Removing duplicate assigned contact id " + contact.id);
+						iterator.remove();
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured while assiging campaigns..." + e.getMessage());
+			System.err.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return contacts;
+	}
 
     @Deprecated
     private void runCampaign(List<Contact> contacts)

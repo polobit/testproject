@@ -33,6 +33,7 @@ function loadPortlets(route,el){
 	App_Portlets.adminPortlets = new Array();
 	App_Portlets.RoutePortlets=new Array();
 	App_Portlets.taskAverage = new Array();
+	App_Portlets.DashboardPortlets=new Array();
 	if(Portlets_View!=undefined)
 	console.log("before initialized" +route+ Portlets_View.collection.length);
 	/*
@@ -45,7 +46,7 @@ function loadPortlets(route,el){
 	// postrender. It is set to false after portlet setup is initialized
 	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
-			if(route!='DashBoard' && Portlets_View.collection.length!=0 && !$('.route_Portlet').is(':visible'))
+			if(route!='DashBoard' && Portlets_View.collection.length!=0 && !$('.route_Portlet').is(':visible') && isNaN(route))
 			{
 				/*if($('#zero-portlets').is(':visible') || $('#no-portlets').is(':visible'))
 				$('#no-portlets').parents('.wrapper-md').hide();*/
@@ -87,6 +88,39 @@ function loadPortlets(route,el){
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 					
 				//}
+
+				if(route!='DashBoard' && App_Portlets.DashboardPortlets.length!=0){
+					var models = [];
+					$.each(App_Portlets.DashboardPortlets, function(index,model) {
+						var obj={};
+						var next_position = gridster.next_position(1, 1);
+						obj.column_position = next_position.col;
+						obj.row_position = next_position.row;
+
+					
+						model.set({ 'column_position' : obj.column_position}, { silent : true });
+						model.set({ 'row_position' : obj.row_position  }, { silent : true });
+						model.set({'isForAll' : false});
+						portlet_utility.getOuterViewOfPortlet(model,portlets_el, function() {
+								portlet_utility.getInnerViewOfPortlet(model, portlets_el);
+							});
+						portlet_utility.addWidgetToGridster(model);
+						var that=$('#'+model.id).parent();
+						if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
+						{
+							model.set({ 'column_position' : parseInt(that.attr("data-col")) }, { silent : true });
+							model.set({ 'row_position' : parseInt(that.attr("data-row")) }, { silent : true });
+							that.attr('id','ui-id-'+that.attr("data-col")+'-'+that.attr("data-row"));
+							that.find('div.portlet_body').attr('id','p-body-'+that.attr("data-col")+'-'+that.attr("data-row"));
+						}
+						models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
+			
+					});
+					$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+						contentType : "application/json; charset=utf-8", dataType : 'json' });
+					
+				}
+
 				if(App_Portlets.adminPortlets.length!=0)
 				{
 					var models = [];
@@ -549,18 +583,20 @@ function googledataforEvents(p_el,response,startTime,endTime)
 					request.execute(function(resp)
 					{
 						console.log(resp);
-						for (var i = 0; i < resp.items.length; i++)
-						{
-							var fc_event = google2fcEvent(resp.items[i]);
-							fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
-							fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
-							if (isNaN(fc_event.endEpoch))
+						if(resp.items){
+							for (var i = 0; i < resp.items.length; i++)
 							{
-								fc_event.endEpoch = new Date(fc_event.google.end.date).getTime()/1000;
-							}
-							console.log(fc_event);
-							events.push(fc_event);
+								var fc_event = google2fcEvent(resp.items[i]);
+								fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
+								fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
+								if (isNaN(fc_event.endEpoch))
+								{
+									fc_event.endEpoch = new Date(fc_event.google.end.date).getTime()/1000;
+								}
+								console.log(fc_event);
+								events.push(fc_event);
 
+							}
 						}
 						App_Portlets.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "portlets-google-events", individual_tag_name : 'tr',
 							sort_collection : true, sortKey : 'start', descending : false, 

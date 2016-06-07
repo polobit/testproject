@@ -44,15 +44,15 @@ var AdminPanelRouter = Backbone.Router.extend({
 		{
 			console.log(data);
 
-			var emails = data.emailcount;
-			data.emailcount = JSON.parse(data.emailcount);
+			
 			getTemplate("domain-info", data, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$(el).find('#account').html($(template_ui));
 
 			}, $(el).find('#account'));
-
+			var emails = data.emailcount;
+			data.emailcount = JSON.parse(data.emailcount);
 			getTemplate("email-stats", JSON.parse(emails), undefined, function(template_ui){
 				if(!template_ui)
 					  return;

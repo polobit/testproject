@@ -32,7 +32,9 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -132,7 +134,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG;
 
     }
 
@@ -508,7 +510,8 @@ public class CSVUtil
 		    }
 		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
 		    {
-			tempContact.properties.add(new ContactField(Contact.COMPANY, csvValues[j].trim().toLowerCase(),
+		    	String companyName = csvValues[j].trim();
+			tempContact.properties.add(new ContactField(Contact.COMPANY, companyName,
 				null));
 		    }
 
@@ -532,7 +535,7 @@ public class CSVUtil
 
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
 		    accessControl.setObject(tempContact);
-		    if (!accessControl.canDelete())
+		    if (!accessControl.canCreate())
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
@@ -736,6 +739,7 @@ public class CSVUtil
 	int accessDeniedToUpdate = 0;
 	int failedCompany = 0;
 	int nameMissing = 0;
+	int tagInvalid = 0;
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", type);
 
@@ -752,7 +756,7 @@ public class CSVUtil
 
 	    tempContact.properties = new ArrayList<ContactField>();
 	    String companyName = null;
-
+	    boolean canSave = true;
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
@@ -781,6 +785,37 @@ public class CSVUtil
 		// be trimmed for notes
 		csvValues[j] = checkAndTrimValue(csvValue);
 
+		if ("tags".equals(field.name))
+		{
+		    // Multiple tags are supported. Multiple tags are added
+		    // split at , or ;
+
+		    String[] tagsArray = csvValues[j].split("[,;]+");
+		    boolean isInvalid = false;
+		    System.out.println("number of tags : " + tagsArray.length);
+		    for (String tag : tagsArray)
+		    {
+			System.out.println("New tag : " + tag);
+			tag = tag.trim();
+			if (TagValidator.getInstance().validate(tag))
+			{
+			    tempContact.tags.add(tag);
+			}
+			else
+			{
+			    canSave = false;
+			    isInvalid = true;
+			    break;
+			}
+
+		    }
+		    if (isInvalid)
+		    {
+			tagInvalid++;
+			break;
+		    }
+		    continue;
+		}
 		if (Contact.ADDRESS.equals(field.name))
 		{
 		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
@@ -818,9 +853,9 @@ public class CSVUtil
 
 		if (field.name.equalsIgnoreCase(Contact.NAME))
 		{
-		    companyName = field.value = csvValues[j];
+		    companyName = field.value = csvValues[j].trim();
 		    // added company in new field in lower case
-		    tempContact.properties.add(new ContactField("company", companyName.trim().toLowerCase(), null));
+		    tempContact.properties.add(new ContactField("company", companyName, null));
 		}
 		else
 		{
@@ -865,6 +900,11 @@ public class CSVUtil
 	    else
 	    {
 		++nameMissing;
+		continue;
+	    }
+
+	    if (!canSave)
+	    {
 		continue;
 	    }
 
@@ -929,6 +969,10 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.NAME_MANDATORY, nameMissing);
 
 	}
+	if (tagInvalid > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.INVALID_TAG, tagInvalid);
+	}
 
 	if (limitExceeded > 0)
 	{
@@ -938,10 +982,10 @@ public class CSVUtil
 	{
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
-	if (failedCompany > 0 || nameMissing > 0 || accessDeniedToUpdate > 0 || limitExceeded > 0)
+	if (failedCompany > 0 || nameMissing > 0 || accessDeniedToUpdate > 0 || limitExceeded > 0 || tagInvalid > 0)
 	{
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany + nameMissing + accessDeniedToUpdate
-		    + limitExceeded);
+		    + limitExceeded + tagInvalid);
 	}
 
 	// avoid message of attached failed csv file add new property in map so
@@ -1083,6 +1127,8 @@ public class CSVUtil
 	    boolean wrongMilestone = false;
 	    ArrayList<CustomFieldData> customFields = new ArrayList<CustomFieldData>();
 	    List<Milestone> list = null;
+	    List<Category> source_list = null;
+	    List<Category> reason_list = null;
 	    for (int i = 0; i < dealPropValues.length; i++)
 	    {
 
@@ -1317,6 +1363,37 @@ public class CSVUtil
 			    note.description = dealPropValues[i];
 			    note.save();
 			}
+			else if(value.equalsIgnoreCase("dealSource"))
+			{
+				    String sourceName = dealPropValues[i];
+				    //trackFound = true;
+				    CategoriesUtil source= new CategoriesUtil();
+				    source_list = source.getCategoryByName(sourceName);
+				    if (source_list.size() > 0)
+				   
+				    {
+				    	for(Category cat:source_list){
+				    		opportunity.deal_source_id=cat.getId();
+				    	}
+					
+				    }
+
+			}
+			else if(value.equalsIgnoreCase("lossReason"))
+			{
+				    String lossReason = dealPropValues[i];
+				    //trackFound = true;
+				    CategoriesUtil reason= new CategoriesUtil();
+				    reason_list = reason.getCategoryByName(lossReason);
+				    if (reason_list.size() > 0)
+				    {
+				    	for(Category cat:reason_list){
+				    		opportunity.lost_reason_id=cat.getId();
+				    	}
+					
+				    }
+
+			}
 
 		    }
 		    else
@@ -1360,7 +1437,28 @@ public class CSVUtil
 		    opportunity.milestone = values[0];
 		}
 	    }
+	    
+	    //Remove Lost Reason if milestone is not lost
+	    
+		String lostMilestone = "Lost";
+		try
+		{
+			if(opportunity.pipeline_id!=0){
+				 Milestone mile = MilestoneUtil.getMilestone(opportunity.pipeline_id);
+				    if (mile.lost_milestone != null)
+					lostMilestone = mile.lost_milestone;
+			}
+		   
 
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    if(opportunity.milestone!=null && !opportunity.milestone.equalsIgnoreCase(lostMilestone))
+	    {
+	    	opportunity.lost_reason_id=null;
+	    }
 	    // add all custom field in deals
 	    opportunity.custom_data = customFields;
 	    try

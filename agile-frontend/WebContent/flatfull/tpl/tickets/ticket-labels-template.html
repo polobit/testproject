@@ -4,12 +4,13 @@
     <div class="hbox h-auto m-b-sm">
         <div class="text-center padder-v">
             <h4 class="m-t-none m-b-xs">You don&#39;t have any labels</h4>
-            <div class="m-b-xs">
-                Create lables to streamline your tickets
+            <div class="m-b-xs text-muted">
+            
+                You can add label by clicking the button below to streamline your tickets.<small>
             </div>
             <div>
                 <a href="#add-ticket-label" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                    Create Labels
+                   <span><i class="icon-plus-sign"></i></span> Add Label
                 </a>
             </div>
         </div>
@@ -17,25 +18,24 @@
 </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="col panel wrapper">
-        <div class="hbox h-auto m-b-sm">
-            <div class="pull-right">
-                <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-plus-sign"></i></span> Add
-                </a>
-            </div>
-            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/labels/bulk" data-bulk-delete-title="Delete"
-                data-bulk-delete-msg="Are you sure you want to delete?">
-                    <thead>
-                        <tr>
-                            <th class="hide">Id</th>
-                            <th style="width:20%">Label</th>
-                            <th style="width:35%">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ticket-label-model-list" route="ticket-label/" class="c-p"> </tbody>
-            </table>
+    <div class="panel panel-default">
+        <div class="pull-right m-b-2">
+            <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon"
+                style="margin-top:20px;margin-right:20px"><span><i class="icon-plus-sign"></i></span> Add Label
+            </a>
         </div>
+        <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="Delete"
+            data-bulk-delete-msg="Are you sure you want to delete?" data-resizable-columns-id="tickets-labels">
+                <thead>
+                    <tr>
+                        <th data-resizable-column-id="hide" class="hide">Id</th>
+                        <th data-resizable-column-id="label">Label</th>
+                        <th data-resizable-column-id="">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody id="ticket-label-model-list" route="ticket-label/" class="c-p"> </tbody>
+        </table>
+    
     </div>
 {{/if}}
 </script>
@@ -47,7 +47,7 @@
     {{label}}
 </td>
 <td>
-    <div class="table-resp">
+    <div class="table-resp overflow-hidden line-clamp no-wrap">
         <small class="edit-hover text-muted"> 
             <i class="fa fa-clock-o m-r-xs"></i>
             <span>Last updated on&nbsp;</span>

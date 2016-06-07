@@ -2,8 +2,11 @@
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 
 <%
+
+
 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
 }
@@ -215,7 +218,7 @@ if(isSafari && isWin)
 </div>
 <div class="wrapper-md">
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3 col-sm-offset-3 col-sm-6 col-xs-12">
+		<div class="col-lg-6 col-lg-offset-3 col-sm-offset-1 col-sm-10 col-xs-12">
 	<form class="form-horizontal" method="post" onsubmit="return isValid(this);">
 <div class="panel panel-default">
 <div class="panel-heading text-center"> It's time to configure your account </div>
@@ -302,7 +305,7 @@ This is where you and your users will log in to your account
 <input
 											class="field form-control required tel-number"
 											id="login_phone_number" required name='phone_number' type="text"
-											placeholder="Phone Number" autocapitalize="off">
+											placeholder="Phone Number" autocapitalize="off" autocomplete="off">
 											<div class='custom-error'>Please enter valid number</div>
 </div>
 </div>
@@ -347,12 +350,18 @@ This is where you and your users will log in to your account
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 	$("#password").value = "<%=request.getParameter("password")%>"
+// Plan type
+var selected_plan_type = '<%=request.getParameter("plan_type")%>';
 </script>
 
 <script>
 $(document).ready(function(){
 
-	
+	// Set selected plan name
+	if(selected_plan_type){
+        $("select[name='plan_type']").val(selected_plan_type);
+	}
+
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
 	$('#account_timezone').val(jstz.determine().name());

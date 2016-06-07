@@ -12,6 +12,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Account preferences */
 	"account-prefs" : "accountPrefs",
 
+	"account-ipaccess" : "ipaccess",
+
 	/* Users */
 	"users" : "users", "users-add" : "usersAdd", "user-edit/:id" : "userEdit",
 
@@ -54,7 +56,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Webhook */
 	"webhook" : "webhookSettings",
 
-	"change-domain" : "changeDomain"
+	"change-domain" : "changeDomain",
+
+	/* Java Script API Permission*/
+	"js-security" : "jsSecuritySettings"
 
 
 	},
@@ -110,25 +115,77 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
+		var that=this;
+		$('#content').html("<div id='account-pref'>&nbsp;</div>");
 		
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
-			$('#content').html($(template_ui));	
+			$('#account-pref').html($(template_ui));
+			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});	
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
 			} });
 
-			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			
+
+			$('#account-pref').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
+			$('#account-pref').find('#AdminPrefsTab .select').removeClass('select');
+			$('#account-pref').find('.account-prefs-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-account-prefs').addClass('active');
+			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+
+
+		}, "#account-pref");
+
+		$('.settings-account-prefs').addClass('active');
+		$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+		
+	},
+
+
+	ipaccess : function()
+	{
+
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		var that = this;
+		$('#content').html("<div id='account-pref'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+				
+			$('#account-pref').html($(template_ui));
+			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});
+			var view = new Base_Model_View({ url : '/core/api/allowedips', template : "admin-settings-ip-prefs",
+				postRenderCallback : function(el)
+				{
+					loadip_access_events();
+					
+				}, saveCallback : function(){
+				console.log("saveCallback");
+				showNotyPopUp("information", "Your IP Address has been updated successfully.", "top", 4000);
+				App_Admin_Settings.ipaccess();
+			},errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top");
+			}
+
+				 });
+			
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.account-prefs-tab').addClass('select');
 			$(".active").removeClass("active");
+			$('.settings-account-ips').addClass('active');
+			$('#account-pref').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			//$('.settings-account-ips').parent().removeClass('b-b-none');
 
-		}, "#content");
-
-		
-		
+		}, "#account-pref");
 	},
 
 	
@@ -156,12 +213,45 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				App_Admin_Settings.webhookSettings();
 				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
 			},
+			errorCallback : function(data){
+				showNotyPopUp("warning", data.responseText, "top",2000);
+			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
 				App_Admin_Settings.webhookSettings();
 			} });
 
 			$('#content').find('#webhook-accordian-template').html(view.render().el);
+	
+	},
+
+
+	jsSecuritySettings : function()
+	{
+		
+		
+			var view = new Base_Model_View({ url : '/core/api/jspermission/', template : "admin-settings-js-security", 
+			no_reload_on_delete : true,
+			postRenderCallback : function()
+			{
+				
+			}, 
+			form_custom_validate : function(){
+				$(".checkedMultiCheckbox").find(".help-inline").remove();
+                if($(".checkedMultiCheckbox").find('input:checked').length > 0)
+                      return true;
+                else{
+                    $(".checkedMultiCheckbox").append("<span generated='true' class='help-inline col-sm-offset-4 col-xs-offset-4 controls col-sm-8 col-xs-8' style='display: block;'>Please select at least one option.</span>"); 
+                }
+                
+                 return false;
+			}, saveCallback : function(){
+				console.log("saveCallback");
+				App_Admin_Settings.jsSecuritySettings();
+				showNotyPopUp("information", "Preferences saved successfully", "top", 1000);
+			} });
+
+			$('#content').find('#js-security-accordian-template').html(view.render().el);
 	
 	},
 	
@@ -191,11 +281,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : "tr", sortKey : "name", postRenderCallback : function(el)
 			{
 				$('i').tooltip();
-
-				
-
-
-
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".last-login-time", el).timeago();
@@ -256,6 +341,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					if (data)
 					{
+						console.log("data of current-owner = "+data);
 						data["created_user_email"] = response.email;
 
 						add_created_user_info_as_note_to_owner(data);
@@ -572,7 +658,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 
-			that.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
+			that.pipelineGridView = new Track_And_Milestone_Events_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
 			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
 			{
 				setup_milestones(el);
@@ -1033,7 +1119,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-			that.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
+			that.dealLostReasons = new Sources_Loss_Reasons_Events_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
 				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 				{
 					initializeMilestoneListners(el);
@@ -1067,7 +1153,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				  return;
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
-			that.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
+			that.dealSourcesView = new Sources_Loss_Reasons_Events_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
 				individual_tag_name : 'tr', sort_collection : false, postRenderCallback : function(el)
 				{
 					initializeMilestoneListners(el);
@@ -1102,7 +1188,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#milestone-listner').html($(template_ui));
 			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 
-			that1.dealGoalsView = new Base_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
+			that1.dealGoalsView = new Sources_Loss_Reasons_Events_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
 				individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 				{
 					initQuota(function(){

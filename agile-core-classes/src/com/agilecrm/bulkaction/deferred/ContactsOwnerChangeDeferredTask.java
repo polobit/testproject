@@ -9,6 +9,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.VersioningUtil;
 import com.googlecode.objectify.Key;
 
 public class ContactsOwnerChangeDeferredTask extends BulkActionAdaptor
@@ -29,7 +30,7 @@ public class ContactsOwnerChangeDeferredTask extends BulkActionAdaptor
     @Override
     public boolean isValidTask()
     {
-	if (StringUtils.isEmpty(namespace))
+	if (!VersioningUtil.isDevelopmentEnv() && StringUtils.isEmpty(namespace))
 	    return false;
 
 	if (new_owner == null)

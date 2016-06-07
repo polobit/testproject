@@ -208,7 +208,15 @@ var portlet_utility = {
 		else if (portlet_type == "TASKSANDEVENTS" && p_name == "Average Deviation") {
 			json['duration'] = "1-day";
 		}
+		else if (portlet_type == "USERACTIVITY" && p_name == "User Activities") {	
+			json['activity_type'] = "ALL";
+			json['duration'] = "this-quarter";
+		}
+		else if (portlet_type == "USERACTIVITY" && p_name == "Referralurl stats") {
+			json['duration'] = "yesterday";
+		}	
 		return json;
+	
 	},
 
 	/**
@@ -331,6 +339,8 @@ var portlet_utility = {
 			"Incoming Deals" : "portlets-incoming-deals",
 			"Lost Deal Analysis" : "portlets-lost-deal-analysis",
 			"Average Deviation" : "portlets-Tasks-Deviation",
+			"Webstat Visits" : "portlets-webstat-visits",
+			"Referralurl stats" : "portlets-Referralurl-stats-report",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -685,6 +695,17 @@ var portlet_utility = {
 																	+ ' > .portlet_body')
 															.width() * 100)
 													+ '%');
+							 $('.calls_popover',('#p-body-' + base_model.get('column_position') + '-'
+											+ base_model.get('row_position'))).tooltip(
+								{
+									
+									"html" : "true",
+									"placement" : "right",
+									"container" : "body",
+									"template": '<div class="tooltip leaderboard_calls"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+
+								});
+							
 						}
 					});
 			portlet_ele
@@ -707,8 +728,25 @@ var portlet_utility = {
 			break;
 		}
 		case "User Activities": {
+			var options="?";
+			if(base_model.get('settings').activity_type == undefined)
+					options+='&entity_type=ALL';
+				else
+				options+='&entity_type='+base_model.get('settings').activity_type;
+			if(base_model.get('settings').duration == undefined){
+				start_date_str="this-quarter-start";
+				end_date_str="this-quarter-end";
+				base_model.get('settings').duration='this-quarter';
+			}
+			if (base_model.get('settings').owner != undefined
+					&& base_model.get('settings').owner != "") 
+				options+='&user_id='+base_model.get('settings').owner;
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
-				url : '/core/api/portlets/customer-activity',
+				url : '/core/api/portlets/customer-activity'+options
+				+ '&start_time='
+				+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ '&end_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str),
 				sortKey : 'time',
 				descending : true,
 				templateKey : "portlets-activities-list-log",
@@ -738,7 +776,8 @@ var portlet_utility = {
 			break;
 		}
 		case "Campaign stats": {
-			var emailsSentCount, emailsOpenedCount, emailsClickedCount, emailsUnsubscribed, that = portlet_ele;
+			var emailsSentCount, emailsOpenedCount, emailsClickedCount, emailsUnsubscribed,
+			emailsSpamCount, emailsSkippedCount, emailsHardBounceCount, emailsSoftBounceCount, that = portlet_ele;
 			var url = '/core/api/portlets/campaign-stats?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -765,43 +804,62 @@ var portlet_utility = {
 								emailsOpenedCount = data["emailopened"];
 								emailsClickedCount = data["emailclicked"];
 								emailsUnsubscribed = data["emailunsubscribed"];
-								if (emailsSentCount == 0) {
-									that.find('#emails-sent').css('width',
-											'100%').css('height', '100%');
-									that
-											.find('#emails-sent')
-											.html(
-													'<div class="portlet-error-message">No Email activity</div>');
-								} else {
+								emailsSpamCount = data["emailSpam"];
+								emailsSkippedCount = data["emailSkipped"];
+								emailsHardBounceCount = data["hardBounce"];
+								emailsSoftBounceCount = data["softBounce"];
+				
 									that
 											.find('#emails-opened')
 											.css('display', 'block')
 											.addClass(
-													'pull-left p-xs b-b b-light w-half');
+													'pull-left p-xs b-b b-r b-light w-half');
 									that
 											.find('#emails-clicked')
 											.css('display', 'block')
 											.addClass(
-													'pull-left p-xs b-r b-light w-half');
+													'pull-left p-xs b-b b-light w-half');
+
+									that.find('#emails-hard-bounce').css('display', 'block').addClass('pull-left p-xs b-r b-light w-half');
+
+									that.find('#emails-soft-bounce').css('display', 'block').addClass('pull-left p-xs b-r b-light w-half');
+
 									that.find('#emails-unsubscribed').css(
 											'display', 'block').addClass(
-											'pull-left p-xs w-half');
+											'pull-left p-xs b-r b-light w-half');
 									that
 											.find('#emails-sent')
 											.addClass(
-													'pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+													'pull-left p-xs b-r b-b b-light w-half overflow-hidden');
 
 									that
 											.find('#emails-sent-count')
 											.text(
 													portlet_utility
 															.getNumberWithCommasForPortlets(emailsSentCount));
-									that.find('#emails-sent-label').text(
+											that.find('#emails-sent-label').text(
 											"Emails sent");
+
+									that.find('#emails-skipped')
+											.addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+
+									that.find('#emails-skipped-count')
+											.text(portlet_utility.getNumberWithCommasForPortlets(emailsSkippedCount));
+
+									that.find('#emails-skipped-label').text("Skipped");
+
+									that.find('#emails-spam')
+											.addClass('pull-left p-xs b-r b-light w-half overflow-hidden');
+
+									that.find('#emails-spam-count')
+											.text(portlet_utility.getNumberWithCommasForPortlets(emailsSpamCount));
+
+									that.find('#emails-spam-label').text("Spam");
+
 									that
 											.find('#emails-opened')
 											.html(
-													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'
+													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:#08C;">'
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsOpenedCount)
 															+ '</div></div>');
@@ -812,14 +870,25 @@ var portlet_utility = {
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsClickedCount)
 															+ '</div></div>');
+
+									that.find('#emails-hard-bounce')
+											.html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Hard Bounced</div><div class="text-count text-center" style="color:#009688;">'
+															+ portlet_utility
+																	.getNumberWithCommasForPortlets(emailsHardBounceCount)
+															+ '</div></div>');
+
+									that.find('#emails-soft-bounce')
+											.html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Soft Bounced</div><div class="text-count text-center" style="color:#9C27B0;">'
+															+ portlet_utility
+																	.getNumberWithCommasForPortlets(emailsSoftBounceCount)
+															+ '</div></div>');
 									that
 											.find('#emails-unsubscribed')
 											.html(
-													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'
+													'<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(205,15,0);">'
 															+ portlet_utility
 																	.getNumberWithCommasForPortlets(emailsUnsubscribed)
-															+ '</div>');
-								}
+															+ '</div></div>');
 
 								portlet_utility.addWidgetToGridster(base_model);
 							});
@@ -1264,6 +1333,65 @@ var portlet_utility = {
 										.getStartAndEndDatesOnDue(end_date_str);
 			portlet_graph_data_utility.taskDeviationGraphData(base_model,
 					selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Webstat Visits": {
+			var url = '/core/api/web-stats/reports?start_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
+					+ '&end_time='
+					+portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000;
+			portlet_graph_data_utility.webstatVisitsGraphData(base_model,
+					selector, url);
+			setPortletContentHeight(base_model);
+			break;
+		}
+		case "Referralurl stats": {
+			var ref_url,count;
+			selector='referralurl-stats-portlet-body-'+ column_position + '-'
+					+ row_position;
+			var sizey = parseInt($('.' + selector).parent().attr("data-sizey"));
+			var topPos = 50 * sizey;
+			if (sizey == 2 || sizey == 3)
+				topPos += 50;
+			$('.'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+ topPos
+								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+			var url = '/core/api/web-stats/refurl-stats?start_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
+					+ '&end_time='
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000
+					+ '&time_zone=' + (new Date().getTimezoneOffset());
+			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
+				if(data.length==0){
+						$('.'+selector).html('<div class="portlet-error-message">No Referral URL Found</div>');
+								return;
+					}
+				var span;
+				var element_list=$("<div style=' padding-top: 2px;'></div>");
+				$.each( data, function(e) {					
+					var width;
+					if(e==0)
+						width=75;
+					else
+						width=(data[e].count/data[0].count)*100;
+					if(e!=0 && width >75){
+						width=100-width;
+						width=75-width;
+					}
+
+					span = $("<div style='margin: 0px 20px -21px 15px; padding-bottom: 1px;'/>");
+					var url_name=data[e].ref_url.substring(data[e].ref_url.indexOf('/')+2,data[e].ref_url.lastIndexOf('/'));
+					if(url_name.startsWith("www"))
+						url_name= url_name.substring(url_name.indexOf("www")+4);
+					span.append("<a data-toggle='popover' class='text-ellipsis' title="+ data[e].ref_url +" style='font-size: 14px; position: absolute;width: 75%;'>" + url_name + "</a>");
+		            span.append("<div  style='margin-left: 90%;width: 15%;'>" + data[e].count + "</div>");
+		            span.append("<div class='bar' style='width: "+width+"%; margin: 1px;height: .8rem; background: #03A9F4;'></div>");
+		            span.append("<br/>");
+		            element_list.append(span);
+				});
+				$('.'+selector).html(element_list);
+			});
+			
 			setPortletContentHeight(base_model);
 			break;
 		}
@@ -1851,6 +1979,38 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 						break;
+		}
+
+		case "User Activities" : {
+			that.addPortletSettingsModalContent(base_model,"portletsUserActivitiesSettingsModal");
+			elData = $("#portletsUserActivitiesSettingsModal");
+			portlet_utility.setOwners("owner-user-activities", base_model, elData);
+			$("#duration-user-activities", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+					break;
+		}
+		case "Webstat Visits": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsWebstatVisitsSettingsModal");
+			elData = $('#portletsWebstatVisitsSettingsModal');
+			$("#duration", elData).find(
+				               'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;
+		}
+		case "Referralurl stats": {
+			that.addPortletSettingsModalContent(base_model,"portletsReferralurlStatsSettingsModal");
+			elData = $('#portletsReferralurlStatsSettingsModal');
+			$("#duration", elData).find(
+				               'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
+			break;		
+			
 		}
 		}
 		if (base_model.get('name') == "Pending Deals"

@@ -51,6 +51,7 @@ function serializeForm(form_id) {
 		};
 	}).get());
 	console.log(arr);
+
 	
 	//Included to set content editable data
 	arr = arr.concat($('#' + form_id + ' div[contenteditable="true"]').map(function() {
@@ -87,6 +88,15 @@ function serializeForm(form_id) {
 	//Serialize attachments list
 	//arr = arr.concat(Ticket_Attachments.serializeList(form_id));
 
+	arr = arr.concat($('#' + form_id + ' .array-input-fields').map(function() {
+		console.log($(this).val());
+		return {
+			"name" : this.name,
+			"value" : $(this).val()
+		};
+	}).get());
+
+
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
 
@@ -120,7 +130,6 @@ function serializeForm(form_id) {
 		};
 	}).get());
 
-
 	arr = arr.concat($('#' + form_id + ' .chosen-select').map(function() {
 		var fields_set = [];
 
@@ -131,6 +140,27 @@ function serializeForm(form_id) {
 			"value" : $(this).val()
 		};
 	}).get());
+
+	arr = arr.concat($('#' + form_id + ' .multiple-input').map(function() {
+		var fields_set = [];
+
+		// Gets list of options, selected and pushes the field values in to an
+		// array fields_set
+		$.each($(this).find('input'), function(index, data) {
+			if($(data).val())
+				fields_set.push($(data).val());
+		});
+
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : fields_set
+		};
+	}).get());
+
+	
 	
 	arr = arr.concat($('#' + form_id + ' .multiple-checkbox').map(function() {
 		var fields_set = [];
@@ -302,7 +332,7 @@ function serializeLhsFilters(element)
 		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
 			var date = getFormattedDateObjectWithString($(RHS_ELEMENT).val());
 
-			RHS_VALUE = getGMTEpochFromDate(date);
+			RHS_VALUE = getGMTEpochFromDateForDynamicFilters(date);
 		}
 		if ($(RHS_ELEMENT).hasClass("custom_contact") || $(RHS_ELEMENT).hasClass("custom_company")) {
 			RHS_VALUE = $(RHS_ELEMENT).parent().find("input").attr("data");
@@ -332,11 +362,10 @@ function serializeLhsFilters(element)
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
 			var date = getFormattedDateObjectWithString($(RHS_NEW_ELEMENT).val());
 		if(CONDITION != "BETWEEN") {
-			RHS_NEW_VALUE = getGMTEpochFromDate(date);
+			RHS_NEW_VALUE = getGMTEpochFromDateForDynamicFilters(date);
 		}
 		else {
-			date = new Date(getGMTEpochFromDate(date) + (24 * 60 * 60 * 1000) - 1);
-
+			date = new Date(getGMTEpochFromDateForDynamicFilters(date) + (24 * 60 * 60 * 1000) - 1);
 			RHS_NEW_VALUE = date.getTime();
 		}
 			

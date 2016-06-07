@@ -29,6 +29,11 @@ var CONTENT_JSON = {
 		//"modal_id" : "personModal",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"filter_results_segments" : {
+		"title" : "There are no contacts for the selected filter. Try refining the filters and the date range.",
+		"route" : "#",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	"filter_results_companies" : {
 		"title" : "No companies matching this criteria.",
 		//"learn_more" : "click here to learn more",
@@ -85,6 +90,14 @@ var CONTENT_JSON = {
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Report",
 		"route" : "#activity-report-add",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
+	"campaign-reports" : {
+		"title" : "You do not have any campaign reports currently.",
+		"description" : "Get a periodic  email digest of various campaign reports stats by users in Agile.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Report",
+		"route" : "#campaign-report-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
 	"contact-filters" : {
@@ -195,6 +208,14 @@ var CONTENT_JSON = {
 		"route" : "#deal-filter-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"dashboards" : {
+		"title" : "There are no user-defined dashboards.",
+		"description" : "User-defined dashboards allow users to configure multiple dashboards with different dashlets for various purposes.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Dashboard",
+		"route" : "#add-dashboard",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	/*"web-rules" : {/All_Activities
 		
 		"title" : "Engage visitors on website",
@@ -259,6 +280,15 @@ function getContactPadcontentKey(url)
 		return "filter_results";
 	
 	return "contacts";
+		
+}
+
+function getSegmentPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	return "filter_results_segments";
 		
 }
 

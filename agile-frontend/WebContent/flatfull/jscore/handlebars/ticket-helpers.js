@@ -460,7 +460,7 @@ Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
 
 	str = str.trim();
 
-	str = str.replace(/(?:\r\n)/g, '<br/>');
+	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return str;
 });
 
@@ -579,4 +579,10 @@ Handlebars.registerHelper('gravatarurl', function(items, width)
 		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
 	});
+
+Handlebars.registerHelper('uc_first', function(text, options)
+{
+	return ucfirst(text);
+});
+
 /** End of ticketing handlebars* */

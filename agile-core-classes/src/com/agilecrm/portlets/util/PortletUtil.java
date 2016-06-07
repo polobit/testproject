@@ -130,10 +130,12 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign graph",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Referralurl stats",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 			allPortlets.add(new Portlet("Account Details",PortletType.ACCOUNT));
+			allPortlets.add(new Portlet("Webstat Visits",PortletType.WEBSTATS));
 			
 			//setIsAddedStatus(allPortlets);
 		} catch (Exception e) {
@@ -146,7 +148,7 @@ public class PortletUtil {
 	 *  
 	 * @return {@link List} of {@link Portlet}s
 	 */
-	public static List<Portlet> getAddedPortletsForCurrentUser(PortletRoute route)throws Exception{
+	public static List<Portlet> getAddedPortletsForCurrentUser(String route)throws Exception{
 		
 		Objectify ofy = ObjectifyService.begin();
 		
@@ -161,25 +163,26 @@ public class PortletUtil {
 		 */
 		List<Portlet> portlets;
 		if(route==null){
-			route= Portlet.PortletRoute.DashBoard;
+			route= Portlet.PortletRoute.DashBoard.toString();
 		}
 
-		if(route.equals(Portlet.PortletRoute.DashBoard)){
+		if(route.equals(Portlet.PortletRoute.DashBoard.toString())){
 		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
 		//If user first time login after portlets code deploy, we add some portlets by default
 		//in DB and one null portlet also
 		if(portlets!=null && portlets.size()>0){
 			for(Portlet portlet : portlets){
-				if(portlet.portlet_route==null)
-					portlet.portlet_route=Portlet.PortletRoute.DashBoard;
-				portlet.save();
+				if(portlet.portlet_route==null){
+					portlet.portlet_route=Portlet.PortletRoute.DashBoard.toString();
+					portlet.save();
+				}	
 			}
 		}
 		}
 		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route", route).list();
-		if(portlets!=null && portlets.size()==0 && route.equals(Portlet.PortletRoute.DashBoard))
+		if(portlets!=null && portlets.size()==0 && route.equals(Portlet.PortletRoute.DashBoard.toString()))
 			{addDefaultPortlets();
-		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",Portlet.PortletRoute.DashBoard ).list();
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").filter("portlet_route",Portlet.PortletRoute.DashBoard.toString() ).list();
 		}
 
 		for(Portlet portlet : portlets){
@@ -190,6 +193,8 @@ public class PortletUtil {
 					json.put("duration","1-week");
 				else if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks")) && !json.containsKey("duration"))
 					json.put("duration","1-day");
+				else if(portlet.name!=null && portlet.name.equalsIgnoreCase("User Activities") && !json.containsKey("duration"))
+					json.put("duration","this-quarter");
 				portlet.settings=json;
 			}else{
 				if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks"))){
@@ -197,7 +202,17 @@ public class PortletUtil {
 					json.put("duration","1-day");
 					portlet.settings=json;
 				}
+				else
+				{
+					if(portlet.name!=null && portlet.name.equalsIgnoreCase("User Activities") ){
+						JSONObject json=new JSONObject();
+						json.put("duration","this-quarter");
+					json.put("activity_type","ALL");
+					portlet.settings=json;
+					}
+				}
 			}
+
 			if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
 		}
@@ -242,7 +257,7 @@ public class PortletUtil {
 		
 
 			
-		List<Portlet> currentPortlets = getAddedPortletsForCurrentUser(Portlet.PortletRoute.DashBoard);
+		List<Portlet> currentPortlets = getAddedPortletsForCurrentUser(Portlet.PortletRoute.DashBoard.toString());
 		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Contacts));
 		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Deals));
 		//currentPortlets.addAll(getAddedPortletsForCurrentUser(Portlet.PortletRoute.Tasks));
@@ -466,6 +481,7 @@ public class PortletUtil {
 	}
 	public static JSONObject getDealsByMilestoneData(JSONObject json)throws Exception{
 		JSONObject dealsByMilestoneJSON=new JSONObject();
+		try{
 		if(json!=null){
 			if(json.get("deals")!=null && (json.get("deals").toString().equalsIgnoreCase("all-deals") || json.get("deals").toString().equalsIgnoreCase("my-deals")) && json.get("track")!=null){
 				List<String> milestonesList=new ArrayList<String>();
@@ -492,16 +508,17 @@ public class PortletUtil {
 				dealsByMilestoneJSON.put("milestonesList",milestonesList);
 				dealsByMilestoneJSON.put("milestoneValuesList",milestoneValuesList);
 				dealsByMilestoneJSON.put("milestoneNumbersList",milestoneNumbersList);
-				if(milestone.won_milestone != null){
+				if(milestone!=null && milestone.won_milestone != null){
 					dealsByMilestoneJSON.put("wonMilestone",milestone.won_milestone);
 				}else{
 					dealsByMilestoneJSON.put("wonMilestone","Won");
 				}
-				if(milestone.lost_milestone != null){
+				if(milestone!=null && milestone.lost_milestone != null){
 					dealsByMilestoneJSON.put("lostMilestone",milestone.lost_milestone);
 				}else{
 					dealsByMilestoneJSON.put("lostMilestone","Lost");
 				}
+
 			}
 		}
 		List<Milestone> milestoneList=MilestoneUtil.getMilestonesList();
@@ -511,6 +528,12 @@ public class PortletUtil {
 		}
 		dealsByMilestoneJSON.put("milestoneMap",milestoneMap);
 		
+		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return dealsByMilestoneJSON;
 	}
 	public static JSONObject getClosuresPerPersonData(JSONObject json)throws Exception{
@@ -753,6 +776,8 @@ public class PortletUtil {
 		List<Integer> incorrectReferralCallsCountList=new ArrayList<Integer>();
 		List<Integer> newOpportunityCallsCountList=new ArrayList<Integer>();
 		List<Integer> meetingScheduledCallsCountList=new ArrayList<Integer>();
+		List<Integer> queuedCallsCountList=new ArrayList<Integer>();
+		
 		
 		List<Integer> totalCallsCountList=new ArrayList<Integer>();
 		
@@ -794,14 +819,16 @@ public class PortletUtil {
 			int incorrectReferralCallsCount=0;
 			int newOpportunityCallsCount=0;
 			int meetingScheduledCallsCount=0;
+			int queuedCallsCount=0;
 			
 			int totalCallsCount=0;
 			
 			long callsDuration=0;
 			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-			try{
+			
 				for(Activity activity : callActivitiesList){
+					try{
 					if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
 						answeredCallsCount++;
 					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
@@ -824,14 +851,18 @@ public class PortletUtil {
 						newOpportunityCallsCount++;
 					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
 						meetingScheduledCallsCount++;
+					else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
+						queuedCallsCount++;
+					totalCallsCount++;
 					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
 							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
 						callsDuration+=Long.valueOf(activity.custom4);
-					totalCallsCount++;
+					
 				}
-			}catch(Exception e){
+			catch(Exception e){
 				e.printStackTrace();
 			}
+				}
 			
 			answeredCallsCountList.add(answeredCallsCount);
 			busyCallsCountList.add(busyCallsCount);
@@ -844,6 +875,7 @@ public class PortletUtil {
 			incorrectReferralCallsCountList.add(incorrectReferralCallsCount);
 			newOpportunityCallsCountList.add(newOpportunityCallsCount);
 			meetingScheduledCallsCountList.add(meetingScheduledCallsCount);
+			queuedCallsCountList.add(queuedCallsCount);
 			
 			totalCallsCountList.add(totalCallsCount);
 			
@@ -874,6 +906,7 @@ public class PortletUtil {
 		callsPerPersonJSON.put("incorrectReferralCallsCountList",incorrectReferralCallsCountList);
 		callsPerPersonJSON.put("newOpportunityCallsCountList",newOpportunityCallsCountList);
 		callsPerPersonJSON.put("meetingScheduledCallsCountList",meetingScheduledCallsCountList);
+		callsPerPersonJSON.put("queuedCallsCountList",queuedCallsCountList);
 
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
@@ -886,18 +919,18 @@ public class PortletUtil {
 		try {
 			//Added dummy portlet for recognizing whether Agile CRM Blog 
 			//portlet is deleted by user or not
-			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.DashBoard);
-			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.DashBoard);
-			Portlet dealGoalsPortlet = new Portlet("Deal Goals",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.DashBoard);
-			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,5,1,1,Portlet.PortletRoute.DashBoard);
-			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,3,1,2,Portlet.PortletRoute.DashBoard);
-			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1,Portlet.PortletRoute.DashBoard);
-			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1,Portlet.PortletRoute.DashBoard);
-			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,4,2,1,Portlet.PortletRoute.DashBoard);
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1,Portlet.PortletRoute.DashBoard);
-			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,1,5,1,1,Portlet.PortletRoute.DashBoard);
-			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2,Portlet.PortletRoute.DashBoard);
-			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,3,5,1,1,Portlet.PortletRoute.DashBoard);
+			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet dealGoalsPortlet = new Portlet("Deal Goals",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,5,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,3,1,2,Portlet.PortletRoute.DashBoard.toString());
+			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,4,2,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,1,5,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2,Portlet.PortletRoute.DashBoard.toString());
+			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,3,5,1,1,Portlet.PortletRoute.DashBoard.toString());
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -929,6 +962,11 @@ public class PortletUtil {
 			JSONObject dealGoalPortletJSON = new JSONObject();
 			dealGoalPortletJSON.put("duration","this-month");
 			dealGoalsPortlet.prefs = dealGoalPortletJSON.toString();
+
+			JSONObject activitiesPortletJSON = new JSONObject();
+			activitiesPortletJSON.put("duration","this-quarter");
+			activitiesPortletJSON.put("activity_type","ALL");
+			activityPortlet.prefs = activitiesPortletJSON.toString();
 			
 			JSONObject onboardingPortletJSON = new JSONObject();
 			List<String> onboardingSteps = new ArrayList<>();
@@ -1363,6 +1401,7 @@ public class PortletUtil {
 						Double milestoneValue = 0d;
 						if(wonDealsList!=null){
 							for(Opportunity opportunity : wonDealsList){
+								if(opportunity.expected_value!=null)
 								milestoneValue += opportunity.expected_value;
 							}
 						}
@@ -1435,8 +1474,10 @@ public class PortletUtil {
 					cateList = new ArrayList<JSONObject>();
 					for(DomainUser domainUser : usersList){
 						JSONObject cateJson = new JSONObject();
+						//JSONObject cateJson_total = new JSONObject();
+						callsStatus(domainUser,minTime,maxTime,cateJson);
+						//cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
 						cateJson.put("name", "Deals Won");
-						cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
 						cateJson.put("userName", domainUser.name);
 						if(dUser.id.equals(domainUser.id))
 							cateJson.put("isDomainUser", true);
@@ -1457,7 +1498,7 @@ public class PortletUtil {
 						Collections.sort(cateList,new Comparator<JSONObject>(){
 							@Override  
 			                public int compare(JSONObject o1, JSONObject o2){
-								return Integer.valueOf(o2.getInt("value")).compareTo(Integer.valueOf(o1.getInt("value")));  
+								return Integer.valueOf(o2.getInt("answered")).compareTo(Integer.valueOf(o1.getInt("answered")));  
 			                }
 			            });
 					}
@@ -1533,6 +1574,10 @@ public class PortletUtil {
 		int emailsOpened =0;
 		int emailsent = 0;
 		int unsubscribe =0;
+		int hardBounce=0;
+		int softBounce=0;
+		int emailsSkipped=0;
+		int emailsSpam=0;
 		String a="";
 		JSONArray campaignEmailsJSONArray;
 		long minTime=0L;
@@ -1567,12 +1612,28 @@ public class PortletUtil {
 
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_OPENED"))
 			{emailsOpened = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
 			{emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
 			{emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
 			{unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SPAM"))
+			{emailsSpam= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
+			{emailsSkipped= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_HARD_BOUNCED"))
+			{hardBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SOFT_BOUNCED"))
+			{softBounce= Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+		
 			}
 			
 			}
@@ -1583,10 +1644,14 @@ public class PortletUtil {
 		}
 		
 	}
-		datajson.put("emailopened",emailsOpened);
+		    datajson.put("emailopened",emailsOpened);
 			datajson.put("emailclicked",emailsClicked);
 			datajson.put("emailsent",emailsent);
 			datajson.put("emailunsubscribed",unsubscribe);
+			datajson.put("emailSpam",emailsSpam);
+			datajson.put("emailSkipped", emailsSkipped);
+			datajson.put("hardBounce", hardBounce);
+			datajson.put("softBounce", softBounce);
 		return datajson;
 		}
 		
@@ -1628,13 +1693,13 @@ public class PortletUtil {
 			if(campaignType.equalsIgnoreCase("All"))	 
 				 query  =  "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+ 
 									" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
-									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED', 'EMAIL_SPAM', 'EMAIL_SENDING_SKIPPED', 'EMAIL_HARD_BOUNCED', 'EMAIL_SOFT_BOUNCED')"+
 									" AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " +
 										 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
 			else
 				 query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
 									"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
-									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED', 'EMAIL_SPAM', 'EMAIL_SENDING_SKIPPED', 'EMAIL_HARD_BOUNCED', 'EMAIL_SOFT_BOUNCED')"+
 									"AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
 									"AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type " ;
                 
@@ -1693,9 +1758,11 @@ public class PortletUtil {
 		return json;
 	}
 	
-	public static List<Activity> getPortletActivitydata(int max,String cursor) {
-		System.out.println("Inside list");
-		List<Activity> list=ActivityUtil.getActivities(max, cursor);
+	public static List<Activity> getPortletActivitydata(String entitytype, Long userid, int max,
+			String cursor, Long starttime, Long endtime) {
+		
+		List<Activity> list = ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, max, cursor,
+	        starttime, endtime, null);
 		System.out.println("Size of List"+list.size());
 		System.out.println(list);
 		return list;
@@ -1715,12 +1782,15 @@ public class PortletUtil {
 		Long count_goal=0L;
 		Double value=0.0;
 		Double amount_goal=0.0;
-		JSONObject json=new JSONObject();;
+		JSONObject json=new JSONObject();
+		try{
 		List<Opportunity> opportunities=OpportunityUtil.getWonDealsListWithOwner(minTime, maxTime, owner_id);
 		if(opportunities!=null){
 			for(Opportunity opp:opportunities){
+				if(opp.expected_value!=null){
 			value = value+opp.expected_value;
 			count++;
+				}
 		}
 		}
 		json.put("dealcount", count);
@@ -1737,6 +1807,11 @@ public class PortletUtil {
 			json.put("goalCount",count_goal);
 			json.put("goalAmount", amount_goal);
 	}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return json;
 	}
 	
@@ -1780,11 +1855,13 @@ public class PortletUtil {
 					int count=0;
 					for(Task task:tasksList){
 						Long time_deviation=0L;
+						if(task.task_completed_time!=null && task.due!=null){
 						if(task.task_completed_time>task.due)
 							{
 							time_deviation=(task.task_completed_time-task.due);
 							count++;
 							}
+						}
 						Total_closure+=time_deviation;
 								}
 					l.add((long)count);
@@ -1885,4 +1962,97 @@ public class PortletUtil {
 			return dataJson;
 	  }
 
+ 
+ public static JSONObject callsStatus(DomainUser domainUser,long minTime, long maxTime,JSONObject cateJson)
+ {
+			int answeredCallsCount=0;
+		int busyCallsCount=0;
+		int failedCallsCount=0;
+		int voiceMailCallsCount=0;
+		int missedCallsCount=0;
+		int inquiryCallsCount=0;
+		int interestCallsCount=0;
+		int noInterestCallsCount=0;
+		int incorrectReferralCallsCount=0;
+		int newOpportunityCallsCount=0;
+		int meetingScheduledCallsCount=0;
+		int queuedCallsCount=0;
+		
+		int total_Calls=0;
+						List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
+						
+							for(Activity activity : callActivitiesList){
+								try{
+									
+									 	if(activity.custom3!=null)
+								{
+									switch(activity.custom3.toLowerCase()){
+										case Call.ANSWERED :
+										case "completed" :
+											answeredCallsCount++;
+											break;
+										case Call.BUSY :
+										case Call.NO_ANSWER:
+											busyCallsCount++;
+											break;
+										case Call.FAILED :
+											failedCallsCount++;
+											break;
+										case Call.VOICEMAIL :
+											voiceMailCallsCount++;
+											break;	
+										case Call.Missed :
+											missedCallsCount++;
+											break;	
+										case Call.Inquiry :
+											inquiryCallsCount++;
+											break;	
+										case Call.Interest :
+											interestCallsCount++;
+											break;	
+										case Call.NoInterest :
+											noInterestCallsCount++;
+											break;	
+										case Call.IncorrectReferral :
+											incorrectReferralCallsCount++;
+											break;	
+										case Call.NewOpportunity :
+											newOpportunityCallsCount++;
+											break;		
+										case Call.MeetingScheduled :
+											meetingScheduledCallsCount++;
+											break;
+										default :
+											queuedCallsCount++;
+											break;		
+									}
+
+								}
+							
+								total_Calls++;
+								
+								
+							}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+							}
+						cateJson.put("total", total_Calls);
+						cateJson.put("answered", answeredCallsCount);
+						cateJson.put("busy", busyCallsCount);
+						cateJson.put("missed", missedCallsCount);
+						cateJson.put("failed", failedCallsCount);
+						cateJson.put("voiceMail", voiceMailCallsCount);
+						cateJson.put("missed", missedCallsCount);
+						cateJson.put("inquiry", inquiryCallsCount);
+						cateJson.put("interest", interestCallsCount);
+						cateJson.put("noInterest", noInterestCallsCount);
+						cateJson.put("incorrectReferral", incorrectReferralCallsCount);
+						cateJson.put("newOpportunity", newOpportunityCallsCount);
+						cateJson.put("meetingScheduled", meetingScheduledCallsCount);
+						cateJson.put("other", queuedCallsCount);
+						return cateJson;
+
+
+ }
 }

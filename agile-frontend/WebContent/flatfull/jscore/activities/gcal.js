@@ -29,8 +29,7 @@ function loadUserEventsfromGoogle(start, end, callback){
 
 function isDefined(x)
 {
-	var undefined;
-	return typeof x !== undefined;
+	 return typeof x !== "undefined"
 }
 
 var isSet1  =false;
@@ -99,21 +98,28 @@ function agile_transform_options(sourceOptions, start, end)
 
 function _load_gapi(callback)
 {
-	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
+	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27', function()
 		{
 			setupGC(callback);
 		});
 }
 
+
+
 // Setup Google Calendar
 function setupGC(callback)
 {
-	console.log("Set up GC");
+	var helper = new gapi_helper_prototype();
+
+
 
 	// Configure Calendar
-	gapi_helper.configure({ scopes : 'https://www.googleapis.com/auth/calendar', services : { calendar : 'v3' } });
+	helper.configure({ scopes : 'https://www.googleapis.com/auth/calendar', services : { calendar : 'v3' } });
 
-	gapi_helper.when('calendarLoaded', callback);
+	/*if((gapi_helper.listeners.calendarLoaded))
+		callback();
+	else*/
+	helper.when('calendarLoaded', callback);
 }
 
 function _set_token_from_session(callback)
@@ -224,7 +230,9 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 					{
 						var fc_event = google2fcEvent(resp.items[i]);
 
+						
 						if (fc_event)
+						if(fc_event.allDay==false){	
 							var utcTime = new Date(fc_event.start).toUTCString();
 	    					var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
 	      					fc_event.start = tz.format();
@@ -232,7 +240,7 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 	      					utcTime = new Date(fc_event.end).toUTCString();
 	    					tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
 	      					fc_event.end = tz.format();
-	      					
+	      				}	
 							google_events.push(fc_event);
 						renderEventBasedOnOwner(fc_event);
 						//$('#calendar_event').fullCalendar('renderEvent', fc_event);		

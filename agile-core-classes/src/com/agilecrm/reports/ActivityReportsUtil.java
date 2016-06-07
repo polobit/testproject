@@ -34,7 +34,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
-import com.agilecrm.util.email.MustacheUtil;
+import com.agilecrm.util.email.HandlebarsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -136,8 +136,8 @@ public class ActivityReportsUtil
 	    String format = "EEE, MMM d, yyyy HH:mm z";
 
 	    // Fill the map object with the required data.
-	    activityReports.put("start_time", MustacheUtil.convertDate(format, timeBounds.get("startTime")));
-	    activityReports.put("end_time", MustacheUtil.convertDate(format, timeBounds.get("endTime")));
+	    activityReports.put("start_time", HandlebarsUtil.convertDate(format, timeBounds.get("startTime")));
+	    activityReports.put("end_time", HandlebarsUtil.convertDate(format, timeBounds.get("endTime")));
 	    activityReports.put("report_name", report.name);
 
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
@@ -510,7 +510,7 @@ public class ActivityReportsUtil
 	    }
 	    for (Event event : events)
 	    {
-		event.color = MustacheUtil.convertDate("MMM dd HH:mm", event.start);
+		event.color = HandlebarsUtil.convertDate("MMM dd HH:mm", event.start);
 	    }
 	}
 	catch (Exception e)
@@ -1167,105 +1167,111 @@ public class ActivityReportsUtil
     public static Long getTimeForSettingEtaForReports(String time, String week_day, String date, String timezone,
 	    String duration)
     {
-	int sec_per_day = 86400;
-	int sec_per_week = 604800;
-	if (StringUtils.isEmpty(timezone))
+    try 
+    {
+    	int sec_per_day = 86400;
+    	int sec_per_week = 604800;
+    	if (StringUtils.isEmpty(timezone))
+    	{
+    	    timezone = AccountPrefsUtil.getAccountPrefs().timezone;
+    	}
+
+    	int hour = Integer.parseInt(time.split(":")[0].trim());
+    	int min = Integer.parseInt(time.split(":")[1].trim());
+    	Long currentTime = new com.agilecrm.util.DateUtil().toTZ(timezone).getCalendar().getTimeInMillis() / 1000;
+    	if (duration.equals("DAILY"))
+    	{
+    	    Calendar cal = new com.agilecrm.util.DateUtil().toTZ(timezone).getCalendar();
+
+    	    int day_of_month = cal.get(Calendar.DAY_OF_MONTH);
+
+    	    cal.set(Calendar.DAY_OF_MONTH, day_of_month);
+    	    cal.set(Calendar.HOUR_OF_DAY, hour);
+    	    cal.set(Calendar.MINUTE, min);
+    	    Long time_based_on_setting = cal.getTimeInMillis() / 1000;
+
+    	    if (currentTime > time_based_on_setting)
+    	    {
+    		time_based_on_setting += sec_per_day;
+    	    }
+    	    System.out.println(time_based_on_setting + " -------------------Time for daily  " + NamespaceManager.get());
+    	    return time_based_on_setting;
+
+    	}
+
+    	if (duration.equals("WEEKLY"))
+    	{
+    	    Calendar cal = new com.agilecrm.util.DateUtil().toTZ(timezone).getCalendar();
+
+    	    int weekday = cal.get(Calendar.DAY_OF_WEEK);
+    	    int day_of_month = cal.get(Calendar.DAY_OF_MONTH);
+
+    	    if (Integer.parseInt(week_day) > weekday)
+    	    {
+    		day_of_month += (Integer.parseInt(week_day) - weekday);
+    	    }
+    	    else
+    	    {
+    		day_of_month = (day_of_month - (weekday - Integer.parseInt(week_day))) + 7;
+    	    }
+
+    	    cal.set(Calendar.DAY_OF_MONTH, day_of_month);
+    	    cal.set(Calendar.HOUR_OF_DAY, hour);
+    	    cal.set(Calendar.MINUTE, min);
+    	    Long time_based_on_setting = cal.getTimeInMillis() / 1000;
+    	    if (currentTime > time_based_on_setting)
+    	    {
+    		time_based_on_setting += sec_per_week;
+    	    }
+    	    System.out
+    		    .println(time_based_on_setting + " -------------------Time for weekly  " + NamespaceManager.get());
+    	    return time_based_on_setting;
+
+    	}
+
+    	if (duration.equals("MONTHLY"))
+    	{
+    	    Calendar cal = new com.agilecrm.util.DateUtil().toTZ(timezone).getCalendar();
+    	    int day_of_month = cal.get(Calendar.DAY_OF_MONTH);
+    	    int month_in_year = cal.get(Calendar.MONTH);
+    	    if (Integer.parseInt(date) > day_of_month)
+    	    {
+    		month_in_year = month_in_year;
+    	    }
+    	    else
+    	    {
+    		month_in_year = month_in_year + 1;
+    	    }
+    	    if ((Integer.parseInt(date) == 29 || Integer.parseInt(date) == 30 || Integer.parseInt(date) == 31)
+    		    && month_in_year == 1)
+    	    {
+    		date = "28";
+    	    }
+    	    cal.set(Calendar.MONTH, month_in_year);
+    	    cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
+    	    cal.set(Calendar.HOUR_OF_DAY, hour);
+    	    cal.set(Calendar.MINUTE, min);
+    	    Long time_based_on_setting = cal.getTimeInMillis() / 1000;
+    	    if (currentTime > time_based_on_setting)
+    	    {
+    		cal.set(Calendar.MONTH, month_in_year + 1);
+    		cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
+    		cal.set(Calendar.HOUR_OF_DAY, hour);
+    		cal.set(Calendar.MINUTE, min);
+    		System.out.println("time for monthly current time greater than first one " + cal.getTimeInMillis()
+    			/ 1000);
+    		return cal.getTimeInMillis() / 1000;
+    	    }
+    	    System.out.println(time_based_on_setting + " -------------------Time for monthly  "
+    		    + NamespaceManager.get());
+    	    return time_based_on_setting;
+
+    	}
+	} 
+    catch (Exception e) 
 	{
-	    timezone = AccountPrefsUtil.getAccountPrefs().timezone;
+		e.printStackTrace();
 	}
-
-	int hour = Integer.parseInt(time.split(":")[0].trim());
-	int min = Integer.parseInt(time.split(":")[1].trim());
-	Long currentTime = new com.agilecrm.util.DateUtil().toTZ(timezone).getCalendar().getTimeInMillis() / 1000;
-	if (duration.equals("DAILY"))
-	{
-	    Calendar cal = new com.agilecrm.util.DateUtil().toTZ(timezone).getCalendar();
-
-	    int day_of_month = cal.get(Calendar.DAY_OF_MONTH);
-
-	    cal.set(Calendar.DAY_OF_MONTH, day_of_month);
-	    cal.set(Calendar.HOUR_OF_DAY, hour);
-	    cal.set(Calendar.MINUTE, min);
-	    Long time_based_on_setting = cal.getTimeInMillis() / 1000;
-
-	    if (currentTime > time_based_on_setting)
-	    {
-		time_based_on_setting += sec_per_day;
-	    }
-	    System.out.println(time_based_on_setting + " -------------------Time for daily  " + NamespaceManager.get());
-	    return time_based_on_setting;
-
-	}
-
-	if (duration.equals("WEEKLY"))
-	{
-	    Calendar cal = new com.agilecrm.util.DateUtil().toTZ(timezone).getCalendar();
-
-	    int weekday = cal.get(Calendar.DAY_OF_WEEK);
-	    int day_of_month = cal.get(Calendar.DAY_OF_MONTH);
-
-	    if (Integer.parseInt(week_day) > weekday)
-	    {
-		day_of_month += (Integer.parseInt(week_day) - weekday);
-	    }
-	    else
-	    {
-		day_of_month = (day_of_month - (weekday - Integer.parseInt(week_day))) + 7;
-	    }
-
-	    cal.set(Calendar.DAY_OF_MONTH, day_of_month);
-	    cal.set(Calendar.HOUR_OF_DAY, hour);
-	    cal.set(Calendar.MINUTE, min);
-	    Long time_based_on_setting = cal.getTimeInMillis() / 1000;
-	    if (currentTime > time_based_on_setting)
-	    {
-		time_based_on_setting += sec_per_week;
-	    }
-	    System.out
-		    .println(time_based_on_setting + " -------------------Time for weekly  " + NamespaceManager.get());
-	    return time_based_on_setting;
-
-	}
-
-	if (duration.equals("MONTHLY"))
-	{
-	    Calendar cal = new com.agilecrm.util.DateUtil().toTZ(timezone).getCalendar();
-	    int day_of_month = cal.get(Calendar.DAY_OF_MONTH);
-	    int month_in_year = cal.get(Calendar.MONTH);
-	    if (Integer.parseInt(date) > day_of_month)
-	    {
-		month_in_year = month_in_year;
-	    }
-	    else
-	    {
-		month_in_year = month_in_year + 1;
-	    }
-	    if ((Integer.parseInt(date) == 29 || Integer.parseInt(date) == 30 || Integer.parseInt(date) == 31)
-		    && month_in_year == 1)
-	    {
-		date = "28";
-	    }
-	    cal.set(Calendar.MONTH, month_in_year);
-	    cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
-	    cal.set(Calendar.HOUR_OF_DAY, hour);
-	    cal.set(Calendar.MINUTE, min);
-	    Long time_based_on_setting = cal.getTimeInMillis() / 1000;
-	    if (currentTime > time_based_on_setting)
-	    {
-		cal.set(Calendar.MONTH, month_in_year + 1);
-		cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
-		cal.set(Calendar.HOUR_OF_DAY, hour);
-		cal.set(Calendar.MINUTE, min);
-		System.out.println("time for monthly current time greater than first one " + cal.getTimeInMillis()
-			/ 1000);
-		return cal.getTimeInMillis() / 1000;
-	    }
-	    System.out.println(time_based_on_setting + " -------------------Time for monthly  "
-		    + NamespaceManager.get());
-	    return time_based_on_setting;
-
-	}
-
 	return null;
     }
 

@@ -21,7 +21,7 @@ cat ../WebContent/tpl/min/precompiled/flatfull/socialsuite.js >  ../WebContent/t
 cat ../WebContent/jscore/min/flatfull/social-suite-all-min.js >> ../WebContent/tpl/min/precompiled/flatfull/socialsuite-all.js
 #rm ../WebContent/tpl/min/precompiled/flatfull/temp.js
 
-## Social suite into templates
+## Tickets module min file
 cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull/jscore/tickets/*.js > ../WebContent/jscore/min/flatfull/tickets-min.js
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/tickets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/tickets-min.js
 
@@ -41,6 +41,19 @@ java -jar yuicompressor-2.4.7.jar ../WebContent/stats/min/agile-min.js --type js
 java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/js-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/js-all-min.js
 
 
+echo 'Minifying helpcenter files...'
+
+cat ../WebContent/flatfull/jscore/backbone/*.js > ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
+
+cat $(find ../WebContent/helpcenter/controllers ! -path ../WebContent/helpcenter/controllers/app.js -name "*.js") >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
+
+cat ../WebContent/flatfull/jscore/form/*.js ../WebContent/flatfull/jscore/handlebars/*.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
+
+cat ../WebContent/helpcenter/jscore/*.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
+
+cat ../WebContent/helpcenter/controllers/app.js >> ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
+
+java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/helpcenter-all-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/helpcenter-all-min.js
 
 #java -jar yuicompressor-2.4.7.jar ../WebContent/jscore/min/flatfull/portlets-min.js --line-break 10000 --type js -o  ../WebContent/jscore/min/flatfull/portlets-min.js
 

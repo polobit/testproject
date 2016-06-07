@@ -80,18 +80,32 @@ else{
 
 //if schedule id contains , it is team calendar
 //if team calendar then we don't consider available meeting slots
+System.out.println("scheduleid :: "+scheduleid);
 if(scheduleid.contains(",")){
     multiple_users=true; slots_array=null;
     List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
  String _multiple_schedule_ids[]=list.toArray(new String[list.size()]);
  for(int i=0;i<=_multiple_schedule_ids.length-1;i++){
-     System.out.println(_multiple_schedule_ids[i]+"  schedule id");
+     System.out.println(_multiple_schedule_ids[i]+"  schedule d");
      OnlineCalendarPrefs online_prefs=null;
       online_prefs=OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[i]);
+      System.out.println("online_prefs ::: "+online_prefs);
       if(online_prefs==null)
     	  continue;
 	  
-	  DomainUser _domain_user= DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
+      System.out.println("In agile-calendar -- web-event-calendar.jsp");
+      
+	  //DomainUser _domain_user= DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
+      Long domainUserId = OnlineCalendarUtil.getDomainUserID(online_prefs);
+      DomainUser _domain_user= null;
+      if(domainUserId==null){
+	      domainUserId = 0L; 
+      }else{
+	   	_domain_user= DomainUserUtil.getDomainUser(domainUserId);
+      }
+    	System.out.println("domainUserId :: "+domainUserId);
+    	System.out.println("_domain_user :: "+_domain_user);
+
 	    if(_domain_user!=null){
 		AgileUser agile_user=AgileUser.getCurrentAgileUserFromDomainUser(_domain_user.id);
 		 if(agile_user==null)
@@ -110,6 +124,7 @@ if(scheduleid.contains(",")){
 
 		}
 
+ System.out.println("Here we are");
 		//if multiple schedule ids were given in url but no matching found
 		if (_multiple_users.size() == 1)
 		{
@@ -150,13 +165,18 @@ if(scheduleid.contains(",")){
 	   }
 
 	UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-	System.out.println("userPrefs " + userPrefs.pic);
+	//System.out.println("userPrefs " + userPrefs.pic);
+	System.out.println("userPrefs " + userPrefs);
+	if(userPrefs!=null)
 	profile_pic = userPrefs.pic;
 	user_name = domainUser.name;
 	user_id = domainUser.id;
 	agile_user_id = agileUser.id;
 	domain_name = domainUser.domain;
+
+	if(userPrefs!=null && !userPrefs.calendar_wk_start_day.equals(""))
 	calendar_wk_start_day = Integer.parseInt(userPrefs.calendar_wk_start_day);
+	
 	if (online_prefs == null)
 	{
 		meeting_durations = domainUser.meeting_durations;
@@ -209,13 +229,15 @@ if (scheduleid != null && multiple_users){  %>
 <link rel="stylesheet" type="text/css" href="<%=baseUrl%>css/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
 <!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" ></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" >   </script>
+<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js?_"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
+<script type="text/javascript" src="../../lib/web-calendar-event/bootstrap.v3.min.js"></script>
 
 <link rel="stylesheet" href="../../css/web-calendar-event/datepicker.css"
 	type="text/css" />
@@ -228,6 +250,12 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
 <script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
+
+<style type="text/css">
+* {
+	font-family: 'Lato', sans-serif;
+}
+</style>
 </head>
 
 <body onload="bodyLoad();">
@@ -243,7 +271,7 @@ if (scheduleid != null && multiple_users){  %>
 <p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
 			<div class="col-sm-10 segment segment0">
 			<div class="numberlt" id="users_div">1</div>
-			<div class="event-title">Select a Person</div>
+			<div class="event-title" style="font-weight:normal">Select a Person</div>
 			<div class="row user_avatars hide">
 		
 			<!-- <div align="center" style="margin: 5px auto;width: 100%;"> -->
@@ -259,18 +287,21 @@ if (scheduleid != null && multiple_users){  %>
 				 String workHours=pro_pic.get(2);
 				 String timezone=pro_pic.get(3);
 				 String domain_user_id=pro_pic.get(4);
-				 String custom_message = online_prefs.user_calendar_title;
+				 String custom_message = "";
+				 if(online_prefs!=null)
+					 custom_message = online_prefs.user_calendar_title;
+				 
 				 custom_message = Jsoup.parse(custom_message).text();
 				 if(custom_message == null)
 					 custom_message = "Welcome to my scheduling page.Please follow the instructions to book an appointment."; 
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
-		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
-		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title='<%=custom_message%>'/>
-		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
-		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
-		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
-		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Timezone"><%=timezone %></span>
+		   <div style="display: inline-block;width: 160px;margin-right: 5px;">
+		   <img src="<%=pr_pic%>" id="multi-user-avatar" data-toggle="tooltip" data-placement="bottom" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title='<%=custom_message%>'/>
+		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" ><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
+		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:14px;" ><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
+		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:14px;" ><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
+		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" ><%=timezone %></span>
 		</div>
 		</div>
 		
@@ -282,7 +313,7 @@ if (scheduleid != null && multiple_users){  %>
 <%} %>
 		<div class="col-sm-10 segment segment1 blockdiv" >
 			<div class="numberlt" id="one">1</div>
-			<div class="event-title">Choose a Time Slot</div>
+			<div class="event-title" style="font-weight:normal;">Choose a Time Slot</div>
 
 		</div>
 
@@ -292,10 +323,10 @@ if (scheduleid != null && multiple_users){  %>
 				<div class="col-sm-10 segment segment2 me-disable "
 					style="display: table;display:none">
 					<div class="numberlt" id="two">2</div>
-					<div class="event-title" style="margin-bottom:7px;">
+					<div class="event-title" style="margin-bottom:4px;margin-top:2px;font-weight:normal;">
 						<span class="pull-left">Select Date and Time</span>
-						<span class="timezone">														
-								<select name="user_timezone" class="form-control" id="user_timezone">
+						<span class="timezone ">											<span id="base_timezone"class="font-normal"></span>
+								<select name="user_timezone" class="form-control hidden m-b-none m-t-n-sm" style="font-weight:normal;height:32px;" id="user_timezone">
                                 	<optgroup label="US/Canada">
 										<option value="US/Arizona">US/Arizona</option>
 										<option value="US/Alaska">US/Alaska</option>
@@ -1117,7 +1148,7 @@ if (scheduleid != null && multiple_users){  %>
 				<div class="col-sm-10 segment segment3 me-disable" style="display:none">
 
 					<div class="numberlt" id="three">3</div>
-					<div class="event-title" style="margin-bottom:20;margin-top: 5px;">
+					<div class="event-title" style="margin-bottom:20;margin-top: 5px;font-weight:normal">
 						Contact Info</div>
 
 					<div class="col-sm-4">
@@ -1199,8 +1230,14 @@ var BUFFERTIME=null;
 		var Selected_Date = null;		
 
 		$(document).ready(
+
+
 				function()
 				{
+					
+					//$('img#multi-user-avatar').tooltip();
+					$("img#multi-user-avatar").tooltip({placement:'bottom'});
+					
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;
 					if(multiple_schedule_ids){
@@ -1278,6 +1315,7 @@ var BUFFERTIME=null;
 								{
 									form.submit();
 								} });
+  
 				});
 
 		function bodyLoad()
@@ -1290,6 +1328,12 @@ var BUFFERTIME=null;
 	            }
 			SELECTED_TIMEZONE=jstz.determine().name();			
 			$('#user_timezone').val(SELECTED_TIMEZONE);
+			$('#base_timezone').html(SELECTED_TIMEZONE);
+			$('#base_timezone').click(function()
+			{
+				$('#base_timezone').addClass('hidden');
+				$('#user_timezone').removeClass('hidden');
+			});
 			$("#current_local_time").html("Current Time: "+getConvertedTimeFromEpoch(new Date().getTime()/1000) );
 			console.log("bodyonlod  : " + Selected_Date);
 		

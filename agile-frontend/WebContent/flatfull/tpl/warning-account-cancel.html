@@ -95,18 +95,39 @@
      <div class="display-center">
         <h4>Request for Cancellation</h4>
             <p class="p-t-xs">
-			   Please let us know why you want to leave. In case of any issues, our support team will be in touch with you soon.
+			   Please tell us why you want to leave. Your feedback will help us to serve you better.
             </p>
 		<form id="cancelation-request-form">
-			<div class="controls">
-				<textarea name="account_cancel_reason" class="required form-control w-full" id="account_cancel_reason" rows="10" ></textarea>
-				<p class="p-t-xs"><span class="font-bold">Important: </span>Upon cancellation of your account, unused period will automatically lapse.</p>
-    		</div>
+      <div class="form-group">
+        <label>What's the main reason for the cancellation?<span class="field_req">*</span></label>
+        <select id="account_cancel_reason" name="account_cancel_reason" class="form-control required">
+          <option value="">-- Select --</option>
+          <option value="Over Priced">Over Priced</option>
+          <option value="Lack of Features">Lack of Features</option>
+          <option value="Moving to a different competitor">Moving to a Different Competitor</option>
+          <option value="Out of Business">Out of Business</option>
+          <option value="Lack of Good Support">Lack of Good Support</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div id="other_cancel_container" class="form-group" style="display: none;">
+        <label>Reason<span class="field_req">*</span></label>
+        <textarea name="other_cancel_reason" class="form-control w-full" id="other_cancel_reason" rows="3" ></textarea>
+      </div>
+      <div id="agile_pros_container" class="form-group">
+        <label>What did you like in Agile?</label>
+        <textarea name="agile_pros" class="form-control w-full" id="agile_pros" rows="3" ></textarea>
+      </div>
+      <div id="advices_container">
+        <label>Explain in brief how we can serve you better in the future</label>
+        <textarea name="advices" class="form-control w-full" id="advices" rows="3" ></textarea>
+      </div>
+			<p class="p-t-xs"><span class="font-bold">Important: </span>Upon cancellation of your account, unused period will automatically lapse.</p>
 		</form>
 	 </div>
    </div>
     <div class="modal-footer">
-        <!-- <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a> -->
+        <span id="cancel_info_msg" class="text-danger text-sm p-r-xs" style="display:none;">Once you click the 'Cancel Subscription' button, your subscription will be cancelled immediately.</span>
         <a href="#" id="send-delete-request" class="btn btn-sm btn-primary ">Send Request</a>
     </div>
 </div>
@@ -184,13 +205,33 @@
                             <div class="display-center" style="width: 87%;"><hr></div>
                           </div>
                     <div class="text-center text-lg">Still want to cancel?</div>
-                    <div class="text-base text-muted m-b m-t-xs">By cancelling your subscription all your data and settings will be lost and never restore them back.</div>
                     <div class="m-b">
+                    <div class="text-base text-muted m-t-xs">By cancelling your subscription all your data and settings will be lost and never restore them back.</div>
+                    {{#ifCond date "greaterthan" "0"}}
+                    <div class="text-sm text-muted">Please note that your subscription is valid till <strong>{{epochToHumanDate "dd mmm yyyy" date}}</strong>. Cancelling your account now will result in lapse of remaining usage period.</div>
+                    {{/ifCond}}
+                    </div>
+                    <div class="m-b-sm">
                     	<a href="#" id="cancel-account-request-proceed" class="btn btn-sm btn-default">Cancel My Subscription</a>
                         <a href="#" onClick="$('#send-cancellation').modal('hide');" class="btn btn-sm m-l-sm" style="background-color: #50c7a7;color:white;">Back to Dashboard</a>
-                        </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>
+</script>
+
+<script id="cancellation-description-template" type="text/html">
+  Cancellation Reason : {{reason_type}}
+  {{#if_equals reason_type "Other"}}
+    <br/><br/>Description : {{reason}}
+  {{/if_equals}}
+  {{#if likes_in_agile}}
+    <br/><br/>
+    Likes in Agile : {{likes_in_agile}}
+  {{/if}}
+  {{#if advices}}
+    <br/><br/>
+    Advices : {{advices}}
+  {{/if}}
 </script>

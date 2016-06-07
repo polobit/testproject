@@ -3,7 +3,7 @@
 			<div class="show_screeshot"  
 						id="{{remove_spaces name}}">
 			<div class="panel wrapper b-a text-center">
-				<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
+				<div class="text-base"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
 					<b>{{get_portlet_name name}}</b>
 					</div><br>
 				<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
@@ -11,7 +11,7 @@
 					<!--<img class="show_screeshot v-top question-tag" id="{{remove_spaces name}}"
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"/>-->
 				</div>
-				{{#if_equals "Mini Calendar" name}}
+				<!-- {{#if_equals "Mini Calendar" name}}
 					{{#isAdmin}}
 				<div class="btn-group  m-l-n-lg">
   									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
@@ -45,7 +45,8 @@
 					  {{else}}
 				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
 				{{/if_equals}}
-				{{/if_equals}}
+				{{/if_equals}} -->
+				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
 				
 		</div> 
 		</div>
@@ -55,53 +56,64 @@
 <div class="bg-light lter b-b wrapper-md">
 <h3 class="m-n font-thin h3">Dashlets </h3>
 </div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Contacts</h4>
-		<div id="contacts" class="row"></div><br/>
+
+
+<div class="tab-container wrapper-md dash_tabview">
+	<div class="tabs" id="dashlet-tabs-content">
+	<div class="tab-container m-b-none">
+  	<ul class="nav nav-tabs ">
+
+        <li class="p-none active">
+        <a  href="#contacts_dashlet" class="b-l-none" data-toggle="tab" >Contacts</a></li>
+        <li class="p-none deals-aclpermission">
+        <a   href="#deals_dashlet" data-toggle= "tab">Deals</a></li>
+        <li class="p-none taksAndEvents-aclpermission">
+        <a   href="#calendar_dashlet" data-toggle= "tab">Calendar</a></li>
+        <li class="p-none userActivity-aclpermission">
+        <a   href="#activity_dashlet" data-toggle= "tab">Activity</a></li>
+        <li class="p-none">
+        <a   href="#rss_dashlet" data-toggle="tab"> RSS Feed</a></li>
+        <li class="p-none">
+        <a   href="#account_Info_dashlet" data-toggle= "tab">Account Info</a></li>
+        <li class="p-none">
+        <a  href="#webstats_dashlet" data-toggle= "tab">Visitors</a></li>
+
+   </ul>
+   </div>
+   </div>
+
+
+<div class="tab-content wrapper-md panel">
+	<div class="tab-pane active" id="contacts_dashlet">
+				<div id="contacts" class="row"></div><br/>
+			
 	</div>
-    </div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Deals</h4>
-		<div id="deals" class="row"></div><br/>
-    </div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Calendar</h4>
-		<div id="taksAndEvents" class="row"></div><br/>
+	
+	
+	<div class="tab-pane deals-aclpermission" id="deals_dashlet">
+					<div id="deals" class="row"></div><br/>
+			    
 	</div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Activity</h4>
-		<div id="userActivity" class="row"></div><br/>
+	<div class="tab-pane taksAndEvents-aclpermission" id="calendar_dashlet">
+			
+					<div id="taksAndEvents" class="row"></div><br/>
+				
 	</div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">RSS Feed</h4>
-		<div id="rssFeed" class="row"></div><br/>
+	<div class="tab-pane userActivity-aclpermission" id="activity_dashlet" style="height:510px;">
+					<div id="userActivity" class="row"></div><br/>
+				
 	</div>
-</div>
-</div>
-<div class="wrapper-md p-t-none">
-<div class="row">
-	<div class="col-md-12">
-		<h4 class="m-b">Account Info</h4>
-		<div id="accountInfo" class="row"></div><br/>
+	<div class="tab-pane" id="rss_dashlet">
+					<div id="rssFeed" class="row"></div><br/>
 	</div>
+
+	<div class="tab-pane" id="account_Info_dashlet">
+					<div id="accountInfo" class="row"></div><br/>	
+	</div>
+	<div class="tab-pane" id="webstats_dashlet">
+					<div id="webstats" class="row"></div><br/>	
+	</div>
+
 </div>
 </div>
 </script>

@@ -42,7 +42,7 @@ public class CampaignReportsAPI
      */
     @Path("/stats")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON + ";charset=utf-8" , MediaType.APPLICATION_XML })
     public String getAllCampaignStats() throws Exception
     {
 	try
@@ -155,35 +155,6 @@ public class CampaignReportsAPI
 	    // To show hardbounce and softbounce only for email sent campaigns
 	    int statsLength = stats.length();
 
-	    try
-	    {
-		// Hard Bounce data
-		stats.put(new JSONObject().put("log_type", "HARD_BOUNCE").put(
-			"total",
-			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
-				EmailBounceType.HARD_BOUNCE, Long.parseLong(startTime) / 1000,
-				Long.parseLong(endTime) / 1000) : 0));
-
-		// Soft Bounce Data
-		stats.put(new JSONObject().put("log_type", "SOFT_BOUNCE").put(
-			"total",
-			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
-				EmailBounceType.SOFT_BOUNCE, Long.parseLong(startTime) / 1000,
-				Long.parseLong(endTime) / 1000) : 0));
-
-		// Soft Bounce Data
-		stats.put(new JSONObject().put("log_type", "SPAM").put(
-			"total",
-			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId, EmailBounceType.SPAM,
-				Long.parseLong(startTime) / 1000, Long.parseLong(endTime) / 1000) : 0));
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-		System.err.println("Exception occured while retrieving bounced stats from datastore..."
-			+ e.getMessage());
-	    }
-
 	    JSONObject statsJSON = new JSONObject();
 
 	    // Add log_type as key and its count as value
@@ -192,20 +163,26 @@ public class CampaignReportsAPI
 		JSONObject json = stats.getJSONObject(i);
 
 		if (json.getString("log_type").equals("EMAIL_CLICKED"))
-		    statsJSON.put("unique_clicks", json.getString("count"));
+		    statsJSON.put("clicks", json.getString("total"));
 		
 		if (json.getString("log_type").equals("EMAIL_OPENED"))
-		    statsJSON.put("unique_opened", json.getString("count"));
+		    statsJSON.put("opened", json.getString("total"));
+		
+		if (json.getString("log_type").equals("EMAIL_SENDING_SKIPPED"))
+		    statsJSON.put("skipped", json.getString("total"));
 
-		statsJSON.put(stats.getJSONObject(i).getString("log_type"), stats.getJSONObject(i).getInt("total"));
+		if (json.getString("log_type").equals("EMAIL_SENT"))
+		    statsJSON.put("sent", json.getString("total"));
+
+		statsJSON.put(stats.getJSONObject(i).getString("log_type"), stats.getJSONObject(i).getInt("count"));
 	    }
 
 	    System.out.println("stats JSON is " + statsJSON);
 
-	    return statsJSON.toString().replace("EMAIL_SENT", "sent").replace("EMAIL_OPENED", "opened")
-		    .replace("EMAIL_CLICKED", "clicks").replace("UNSUBSCRIBED", "unsubscribed")
-		    .replace("HARD_BOUNCE", "hard_bounce").replace("SOFT_BOUNCE", "soft_bounce")
-		    .replace("SPAM", "spam");
+	    return statsJSON.toString().replace("EMAIL_OPENED", "unique_opened")
+		    .replace("EMAIL_CLICKED", "unique_clicks").replace("UNSUBSCRIBED", "unsubscribed")
+		    .replace("EMAIL_HARD_BOUNCED", "hard_bounce").replace("EMAIL_SOFT_BOUNCED", "soft_bounce")
+		    .replace("EMAIL_SENDING_SKIPPED", "unique_skipped").replace("EMAIL_SPAM", "spam");
 	}
 	catch (Exception e)
 	{

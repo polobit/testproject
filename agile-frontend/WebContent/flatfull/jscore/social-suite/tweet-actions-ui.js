@@ -203,46 +203,46 @@ $(function()
 	$('body').on('click', '.delete-tweet', function(e)
 	{
 		// Ask confirmation to user.
-		if (!confirm("Are you sure you want to delete this tweet?"))
-			return;
+		var $that = $(this);
+		showAlertModal("delete_tweet", "confirm", function(){
+			// Details to pass on to method.
+			var streamId = ($that.closest('article').attr('stream-id'));
+			var tweetId = ($that.closest('article').attr('id'));
 
-		// Details to pass on to method.
-		var streamId = ($(this).closest('article').attr('stream-id'));
-		var tweetId = ($(this).closest('article').attr('id'));
+			// Get stream from collection.
+			var modelStream = Streams_List_View.collection.get(streamId);
 
-		// Get stream from collection.
-		var modelStream = Streams_List_View.collection.get(streamId);
+			// Get tweet from stream.
+			var modelTweet = modelStream.get('tweetListView').get(tweetId);
+			var tweet = modelTweet.toJSON();
 
-		// Get tweet from stream.
-		var modelTweet = modelStream.get('tweetListView').get(tweetId);
-		var tweet = modelTweet.toJSON();
+			var tweetIdStr = tweet.id_str;
+			var tweetOwner = tweet.user.screen_name;
 
-		var tweetIdStr = tweet.id_str;
-		var tweetOwner = tweet.user.screen_name;
-
-		// Call method with details of tweet to be deleted.
-		$.get("/core/social/deletetweet/" + streamId + "/" + tweetOwner + "/" + tweetIdStr, function(data)
-		{
-			if (data == "Successful")
+			// Call method with details of tweet to be deleted.
+			$.get("/core/social/deletetweet/" + streamId + "/" + tweetOwner + "/" + tweetIdStr, function(data)
 			{
-				modelTweet.set("deleted_msg", "deleted");
+				if (data == "Successful")
+				{
+					modelTweet.set("deleted_msg", "deleted");
 
-				// Add back to stream.
-				modelStream.get('tweetListView').add(modelTweet);
+					// Add back to stream.
+					modelStream.get('tweetListView').add(modelTweet);
 
-				showNotyPopUp('information', "Your tweet has been deleted.", "top", 5000);
+					showNotyPopUp('information', "Your tweet has been deleted.", "top", 5000);
 
-				// Remove tweet element from ui
-				$('.deleted').remove();
-			}
-			else if (data == "Unsuccessful")
+					// Remove tweet element from ui
+					$('.deleted').remove();
+				}
+				else if (data == "Unsuccessful")
+				{
+					showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+				}
+			}).error(function(data)
 			{
-				showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-			}
-		}).error(function(data)
-		{
-			// Error message is shown if error occurs
-			displayError(null, data);
+				// Error message is shown if error occurs
+				displayError(null, data);
+			});
 		});
 	});
 

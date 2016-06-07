@@ -66,9 +66,11 @@ public class CampaignLogsSQLUtil
 	try
 	{
 	    GoogleSQL.executeNonQuery(insertToLogs);
+	    //GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
 	}
 	catch (Exception e)
 	{
+	    System.out.println("Exception occured while adding campaign log " + e.getMessage());
 	    e.printStackTrace();
 	}
     }
@@ -445,6 +447,70 @@ public class CampaignLogsSQLUtil
     }
     
     /**
+     * Takes list of string arrays and create a batch request and persists in
+     * DB. It returns number of succefull insertions
+     * 
+     * @param listOfLogs
+     * @return
+     */
+    public static int[] addCampaignLogsToNewInstance(List<Object[]> listOfLogs)
+    {
+	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES(?, ?, ?, ?, ?, ?, ?)";
+	Connection conn = null;
+	PreparedStatement statement = null;
+	int[] resultFlags = new int[listOfLogs.size()];
+	try
+	{
+	    statement = GoogleSQL.getPreparedStatementFromNewInstance(insertToLogs);
+	    conn = statement.getConnection();
+	    conn.setAutoCommit(false);
+	    
+	    Long start_time = System.currentTimeMillis();
+	    for (Object[] log : listOfLogs)
+	    {
+		for (int i = 1; i <= log.length; i++)
+		{
+		    statement.setObject(i, log[i - 1]);
+		}
+		
+		statement.addBatch();
+		
+	    }
+	    
+	    System.out.println("time taken to add batch requests : " + (System.currentTimeMillis() - start_time));
+	    
+	    start_time = System.currentTimeMillis();
+	    resultFlags = statement.executeBatch();
+	    System.out.println("time taken to add batch  completed: " + (System.currentTimeMillis() - start_time));
+	    
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    
+	    try
+	    {
+		conn.commit();
+		statement.close();
+		if (conn != null)
+		    conn.close();
+	    }
+	    catch (SQLException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+	
+	return resultFlags;
+	
+    }
+    
+    /**
      * Fetches Contact Activities (Both Page Views and Campaign Logs) Fetches
      * page by page. Uses Offset and Limit.
      * 
@@ -540,6 +606,34 @@ public class CampaignLogsSQLUtil
 	    System.out.println("Exception while fetching contact activites by page " + e.getMessage());
 	}
 	return contactActivities;
+    }
+    
+    public static void insertCampaignAssignedStatus(String domain, String campaignId, String status, String message, String token)
+    {
+    	String insertToLogs = "INSERT INTO campaign_assigned (domain, campaign_id, status, log_time, message, token) VALUES("
+    			+ GoogleSQLUtil.encodeSQLColumnValue(domain)
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(campaignId)
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(status)
+    			+ ",NOW(3)"
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(message) 
+    			+ ","
+    			+ GoogleSQLUtil.encodeSQLColumnValue(token) 
+    			+ ")";
+    		
+    		System.out.println("Insert Query to Campaigns Assigned: " + insertToLogs);
+    		
+    		try
+    		{
+    		   GoogleSQL.executeNonQuery(insertToLogs);
+    		}
+    		catch (Exception e)
+    		{
+    		    System.out.println("Exception occured while adding campaign log " + e.getMessage());
+    		    e.printStackTrace();
+    		}
     }
     
 }

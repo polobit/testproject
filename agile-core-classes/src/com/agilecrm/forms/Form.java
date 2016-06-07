@@ -23,6 +23,8 @@ public class Form
 
     @NotSaved(IfDefault.class)
     public String formJson = null;
+    
+    public boolean emailNotification=false;
 
     @NotSaved(IfDefault.class)
     public String formHtml= null;
@@ -46,10 +48,19 @@ public class Form
     this.formJson = json;
     this.formHtml = html;
     }
+    
+    public Form(String name, String json, String html, boolean emailnotification)
+    {
+    this.formName = name;
+    this.formJson = json;
+    this.formHtml = html;
+    this.emailNotification=emailnotification;
+    }
 
     public void save()
     {
 	this.updated_time = System.currentTimeMillis() / 1000;
 	dao.put(this);
     }
+    
 }

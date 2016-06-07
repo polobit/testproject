@@ -30,7 +30,6 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>PortletsAPI</code> includes REST calls to interact with
@@ -64,7 +63,7 @@ public class PortletsAPI {
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Portlet> getPortlets(@QueryParam("route") PortletRoute route)throws Exception{
+	public List<Portlet> getPortlets(@QueryParam("route") String route)throws Exception{
 		// Returns list of portlets saved by current user
 		return PortletUtil.getAddedPortletsForCurrentUser(route);
 	}
@@ -540,7 +539,7 @@ public class PortletsAPI {
 			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
 		else
 			json.put("user", null);
-		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		//PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletLeaderboardData(json);
 	}
 	/**
@@ -564,11 +563,15 @@ public class PortletsAPI {
 	@Path("/customer-activity")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Activity> getPortletActivityData(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)throws Exception {
+	public List<Activity> getPortletActivityData(@QueryParam("entity_type") String entitytype,
+	    @QueryParam("user_id") Long userid, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
+	    @QueryParam("end_time") Long endtime)throws Exception {
 		
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		if(count!=null){
-		return PortletUtil.getPortletActivitydata(Integer.parseInt(count), cursor);
+		return PortletUtil.getPortletActivitydata(entitytype, userid, Integer.parseInt(count), cursor,
+	        starttime, endtime);
 		}
 		else
 			return null;

@@ -38,8 +38,8 @@
                 "name": "Email User",
                 "thumbnail": "json/nodes/images/ticket/email-user.png",
                 "icon": "json/nodes/icons/ticket/email-user.png",
-                "info": "Check if a link in the email is clicked within a specified duration.",
-                "help": "Check if a link in the email is clicked within a specified duration.",
+                "info": "Send an email to requester or assignee.",
+                "help": "Send an email to requester or assignee.",
                 "author": "John",
                 "company": "mantra",
                 "language": "en",
@@ -47,6 +47,27 @@
                 "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketEmailUser",
                 "category": "Tickets",
                 "ui": [
+                    {
+                      "label": "From (Name):",
+                      "category": "Info",
+                      "name": "from_name",
+                      "id": "from_name",
+                      "title": "Enter your name.",
+                      "required": "required",
+                      "fieldType": "input",
+                      "type": "text"
+                    },
+                    {
+                      "label": "From (Email)",
+                      "category": "Info",
+                      "name": "from_address",
+                      "id": "from_address",
+                      "value": "",
+                      "required": "required",
+                      "title": "Enter from email address",
+                      "fieldType": "input",
+                      "type": "email"
+                    },
                     {
                         "label": "Email User",
                         "required": "Yes",
@@ -60,7 +81,7 @@
                         "appendToDynamicName": "name",
                         "options": {
                             "(requester)": "{{ticket.requester_email}}",
-                            "Ticket Assignee User": "{{ticket.assigneeID}}"
+                            "Ticket Assignee User": "{{ticket.assignee.email}}"
                         },
                         "fieldType": "dynamicselect",
                         "type": "select"
@@ -84,11 +105,11 @@
                         "title": "Write Email",
                         "fieldType": "textarea",
                         "cols": "75",
-                        "rows": "13",
+                        "rows": "7",
                         "type": "text"
                     },
                     {
-                        "label": "Write label for email user",
+                        "label": "Send an email to requester or assignee.",
                         "category": "Help",
                         "fieldType": "label",
                         "type": "label"
@@ -103,6 +124,14 @@
                 {
                     "name": "nodename",
                     "value": "Email User"
+                },
+                {
+                    "name": "from_name",
+                    "value": "Agile CRM"
+                },
+                {
+                    "name": "from_address",
+                    "value": "noreply@agilecrm.com"
                 },
                 {
                     "name": "email-user",

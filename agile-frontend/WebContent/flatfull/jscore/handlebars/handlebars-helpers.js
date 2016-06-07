@@ -17,7 +17,6 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
-
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
 		if(amount == 0){
@@ -296,8 +295,8 @@ $(function()
 
 		// Default image
 		var img = DEFAULT_GRAVATAR_url;
-		var backup_image = "&d=404\" ";
-		// backup_image="";
+		var backup_image = "&d=" + DEFAULT_GRAVARTAR_IMG + "\" ";
+		//backup_image='&d=404" '; 
 		var initials = '';
 
 		try
@@ -315,7 +314,7 @@ $(function()
 
 		var data_name =  '';
 		// if(!isIE())
-			data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\"_data-name=\"" + initials;
+			data_name = "onLoad=\"image_load(this)\" _data-name=\"" + initials;
 		
 		var email = getPropertyValue(items, "email");
 		if (email)
@@ -813,6 +812,21 @@ $(function()
 	});
 
 
+	Handlebars.registerHelper('decodeString', function(data){
+		return data;
+	});
+
+	/**
+	 * Helper function to return date string from epoch time
+	 */
+	Handlebars.registerHelper('uservoicedate', function(date)
+	{
+		if(date){
+			var newDate = new Date(date);
+			newDate = (newDate.getMonth() + 1) + '/' + newDate.getDate() + '/' +  newDate.getFullYear() + " "+ newDate.getHours()+":"+newDate.getMinutes()+":"+newDate.getSeconds();
+			return newDate;
+		}
+	});
 
 	// Helper function to return date in user selected format in  preferences.
 
@@ -833,6 +847,8 @@ $(function()
 		return "Select Date";
 		
 	});
+
+
 
 	// Helper function to return current date in preferences page.
 
@@ -980,7 +996,7 @@ $(function()
 
 		if (!obj[date_type])
 			return "-";
-		if (date_type != "created_time")
+		if (date_type)
 		{
 			if ((obj[date_type] / 100000000000) > 1)
 			{
@@ -1342,6 +1358,18 @@ $(function()
 	Handlebars.registerHelper('get_current_domain_email', function()
 	{
 		return CURRENT_DOMAIN_USER.email;
+	});
+
+	//gets domainuser pic
+	Handlebars.registerHelper('get_current_domain_pic', function()
+	{
+		return CURRENT_DOMAIN_USER.pic;
+	});
+
+	Handlebars.registerHelper('get_current_domain_name', function()
+	{
+		var name =  CURRENT_DOMAIN_USER.name;
+		return name.charAt(0).toUpperCase() + name.slice(1);
 	});
 
 	
@@ -1722,6 +1750,11 @@ $(function()
 	Handlebars.registerHelper("getBase64Domain", function()
 			{
 				return window.btoa(window.location.host.split(".")[0]);
+	});
+
+	Handlebars.registerHelper("getBase64ActualDomain", function()
+			{
+				return window.btoa(CURRENT_DOMAIN_USER.domain);
 	});
 
 	// Gets date in given range
@@ -2532,6 +2565,12 @@ $(function()
 		// if '_' exists splits
 		return data.split('_')[0];
 	});
+	Handlebars.registerHelper('hasKey', function(json , key , options)
+	{
+		if(json.indexOf(key) == -1)
+			return options.inverse(this)
+		return options.fn(this);
+	});
 
 	/**
 	 * Get task list name without underscore and caps, for new task UI.
@@ -2553,7 +2592,23 @@ $(function()
 		return name;
 
 	});
-
+	/** put the users according to the plan
+	*/
+	Handlebars.registerHelper('referedUsersPlan', function(plan)
+	{
+		var plantype = [];
+		plantype =  plan.plan_type.split("_");
+		var temp = plantype[0].toLowerCase();
+		
+		if(plantype.length == 1)
+		var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1);
+		else{
+			var temp1 = plantype[1].toLowerCase();
+			var string = plan.quantity + " Users  " + temp.charAt(0).toUpperCase() + temp.slice(1) + " (" + temp1.charAt(0).toUpperCase() +temp1.slice(1)+ ")";
+		}
+		
+		return string;
+	});
 	/**
 	 * put user address location togather separated by comma.
 	 */
@@ -2589,33 +2644,40 @@ $(function()
 	{
 		var type = "bg-light dk text-tiny";
 		var reputation = "Unknown";
+		var badge="";
 
 		if (value > 1 && value < 40)
 		{
 			type = "label-danger text-tiny";
 			reputation = "Poor";
+			badge="red;";
 		}
 		else if (value >= 40 && value < 75)
 		{
-			type = "bg-light text-tiny";
+			type = "label-warning text-tiny";
 			reputation = "Ok";
+			badge="yellow";
 		}
 		else if (value >= 75 && value < 90)
 		{
-			type = "label-success text-tiny";
+			type = "label-primary text-tiny";
 			reputation = "Good";
+			badge="blue";
 		}
 		else if (value >= 90)
 		{
 			type = "label-success text-tiny";
 			reputation = "Excellent";
+			badge="green"
 		}
 
-		return "<span style='position: relative;' class='label " + type
+		return "<span style='font-weight: bold;font-size: 12px;position: relative;' class='label " + type
 
-		+ "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+		+ "'>" + reputation + " <span style='margin: 0px -2px 0px 5px; padding:1px 5px 1px 5px ; background-color:white; color:"+ badge +"' class='badge " 
+		+ type + "'>" + value + " %</span> </span>";
 
 	});
+
 
 	/**
 	 * Returns id from hash. It returns id from hash iff id exists at last.
@@ -2748,6 +2810,19 @@ $(function()
 		if (CURRENT_DOMAIN_USER.menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.menu_scopes) != -1)
 			return options.fn(this);
 
+		console.log("menuscope "+ options.fn(this));
+		return options.inverse(this);
+
+	});
+
+	/**
+	 * Helps to check the restricted permissions of the user based on the ACL.
+	 */
+	Handlebars.registerHelper("hasRestrictedMenuScope", function(scope_constant, options)
+	{
+		if (CURRENT_DOMAIN_USER.restricted_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.restricted_scopes) != -1){
+			return options.fn(this);
+		}
 		return options.inverse(this);
 	});
 
@@ -2929,7 +3004,7 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
 		return options.inverse(this)
@@ -3241,7 +3316,7 @@ $(function()
 				el = el.concat(html);
 				return;
 			}
-			el = el.concat(html + ", ");
+			el = el.concat(html + ",");
 		});
 		return new Handlebars.SafeString(el);
 	});
@@ -3258,6 +3333,7 @@ $(function()
 			if (key <= 3)
 			{
 				var html = getTemplate("related-to-contacts", value);
+				html=html.trim();
 				if (--count == 0 || key == 3)
 				{
 					el = el.concat(html);
@@ -3400,7 +3476,7 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						var default_return = "src='"+updateImageS3Path('img/company-default-image1.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/building.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3415,7 +3491,7 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
-								error_fxn = "this.src='"+updateImageS3Path('img/company-default-image1.png')+"'; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path('img/building.png')+"'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3427,7 +3503,7 @@ $(function()
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-								error_fxn = "this.src='"+updateImageS3Path("img/company-default-image1.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path("img/building.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -4574,29 +4650,12 @@ $(function()
 	 */
 	Handlebars.registerHelper('contact_model', function(options)
 	{
-
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
-
-			// To show Active Campaigns list immediately after campaign
-			// assigned.
-			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
-			{
-				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
-
-				// fetches updated contact json
-				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
-					dataType : 'json' }).responseText;
-
-				// Updates Contact Detail model
-				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
-
-				return options.fn(JSON.parse(contact_json));
-			}
-
 			// if simply Campaigns tab clicked, use current collection
 			return options.fn(App_Contacts.contactDetailView.model.toJSON());
 		}
+
 	});
 	
 
@@ -4693,6 +4752,7 @@ $(function()
 		var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost",
 			"DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
 			"DEAL_ARCHIVE" : "Deal Archived", "DEAL_RESTORE" : "Deal Restored","DEAL_TAG_CHANGE" : "Deal Tags Changed","DEAL_TAG_ADD" : "Deal Tags Added","DEAL_TAG_DELETE" : "Deal Tags Deleted",
+			"User_Email_Changed" : "User email","User_Name_Changed" :"User Name Changed","User_Created" : "New User Created","User_Deleted" : "User Deleted","User_Permissions_Change" : "User Permissions Changed",
 
 			"NOTE_ADD" : "Note Added", "TASK_ADD" : "Task Created", "TASK_EDIT" : "Task Updated", "TASK_PROGRESS_CHANGE" : "Progress Changed",
 			"TASK_OWNER_CHANGE" : "Owner Changed", "TASK_STATUS_CHANGE" : "Status Changed", "TASK_COMPLETED" : "Task Completed",
@@ -4740,7 +4800,7 @@ $(function()
 	 */
 	Handlebars
 			.registerHelper(
-					'get_subaccount_reputation',
+					'get_subaccount_reputation_duplicate',
 					function(value)
 					{
 						var type = "bg-light dk text-tiny";
@@ -4984,6 +5044,7 @@ $(function()
 						}
 
 						console.log(keys);
+						keys.sort();
 						var html_temp = "";
 
 						for (var i = 0; i < keys.length; i++)
@@ -5011,6 +5072,11 @@ $(function()
 		if (CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 		return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('getAccountOwnerId', function(options)
+	{
+		return CURRENT_DOMAIN_USER.id;
 	});
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
@@ -5108,7 +5174,7 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('EDIT_CONTACT')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
 		return options.inverse(this)
@@ -5306,9 +5372,7 @@ $(function()
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
 	{
-		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
-		agile_api = JSON.parse(agile_api);
-		var inbound_email = window.location.hostname.split('.')[0] + "-" + agile_api.api_key + "@agle.cc";
+		var inbound_email = window.location.hostname.split('.')[0] + "-" + _AGILE_API_KEY + "@agle.cc";
 		return new Handlebars.SafeString(inbound_email);
 	});
 
@@ -5760,9 +5824,7 @@ $(function()
 
 	Handlebars.registerHelper('shopifyWebhook', function()
 	{
-		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
-		agile_api = JSON.parse(agile_api);
-		var shopify_webhook = agileWindowOrigin() + "/shopifytrigger?api-key=" + agile_api.api_key;
+		var shopify_webhook = agileWindowOrigin() + "/shopifytrigger?api-key=" + _AGILE_API_KEY;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
 
@@ -5818,6 +5880,10 @@ $(function()
 			portlet_name = "Campaign Status";
 		else if(p_name=='Average Deviation')
 			portlet_name = "Tasks Completion Time Deviation";
+		else if(p_name == 'Webstat Visits')
+			portlet_name = "Visits";
+		else if(p_name=='Referralurl stats')
+ 			portlet_name = "Referral URL Stats";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5852,7 +5918,7 @@ $(function()
 			icon_name = 'icon-user';
 		else if (p_name == 'Agenda' || p_name == 'Mini Calendar')
 			icon_name = "icon-calendar";
-		else if (p_name == 'Today Tasks' || p_name == 'Task Report')
+		else if (p_name == 'Today Tasks' || p_name == 'Task Report' || p_name == 'Referralurl stats')
 			icon_name = "icon-tasks";
 		else if (p_name == 'Agile CRM Blog')
 			icon_name = "icon-feed";
@@ -5874,6 +5940,8 @@ $(function()
 			icon_name = 'icon-flag';
 		else if (p_name == 'Lost Deal Analysis')
 			icon_name = 'icon-pie-chart';
+		else if(p_name == 'Webstat Visits')
+			icon_name = 'icon-globe';
 		return icon_name;
 	});
 	
@@ -6104,13 +6172,10 @@ $(function()
 
 	Handlebars.registerHelper('getFormNameFromId', function(id)
 	{
-		var url = '/core/api/forms/form?formId=' + id;
-		var form = $.ajax({ type : 'GET', url : url, async : false, dataType : 'json' }).responseText;
-		if(!form)
-			return new Handlebars.SafeString("?");
-		form = JSON.parse(form);
-		var formName = form.formName;
-		return new Handlebars.SafeString(formName);
+		//Create a temporary place holder and later, fetch the name asynchronously and render it.
+		//Check the postRenderCallback for triggerCollectionView in controllers/workflows.js for more details
+		var html = "<div id='" + getFormNameCellIDForFormSubmitTriggers(id) + "'></div>";
+		return new Handlebars.SafeString(html);
 	});
 
 	/**
@@ -6512,6 +6577,18 @@ $(function()
 
 				return new Handlebars.SafeString(count_message);
 			});
+
+	Handlebars.registerHelper('getSubscriptionDate', function(customer, options){
+		if(!customer)
+			return 0;
+		var date = getLastDateOfSubscription(customer);
+		if(!date)
+			return 0;
+		var currentEpoch = Math.round(new Date().getTime()/1000);
+		if(date < currentEpoch)
+			return 0;
+		return date;
+	});
 	
 });
 
@@ -6572,44 +6649,7 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	return SALES_SCHEDULE_URL;
 
 });
-	Handlebars.registerHelper('trialDate', function()
-	{
-		
-		var TRAIL_PENDING_DAYS;
-		var _TRAIL_DAYS = 14; 
 
-		var json = $.ajax({ type : 'GET', url : '/core/api/subscription/', async : false,
-			dataType : 'json' }).responseText;
-		console.log("sub json:");
-		console.log(json);
-		var string = JSON.parse(json);
-		console.log("json string:");
-		console.log(string);
-//		var billingData = string.billing_data;
-//		var billingDataString = JSON.parse(billingData);
-		
-		
-		
-			if(TRAIL_PENDING_DAYS)
-				return TRAIL_PENDING_DAYS;
-			
-			if(!string || !string.created_time)
-				return (TRAIL_PENDING_DAYS = 14)
-				
-			var time = (new Date().getTime()/1000) - (string.created_time);
-			
-			var days = time / (24 * 60 *60);
-			
-			TRAIL_PENDING_DAYS = _TRAIL_DAYS - days;
-			
-			if(TRAIL_PENDING_DAYS < 0)
-			{
-				TRAIL_PENDING_DAYS = 0;
-			}
-			
-			TRAIL_PENDING_DAYS = Math.round(TRAIL_PENDING_DAYS);
-			return TRAIL_PENDING_DAYS;
-		});
 	Handlebars.registerHelper('get_portlet_description', function(p_name)
 			{
 	var description = '';
@@ -6659,6 +6699,10 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Get insights into why deals were lost. Filter by owner, track and source.'
 	else if(p_name == 'Average Deviation')
 		description = 'A quick view of deviation in tasks completion times.'
+	else if (p_name== 'Webstat Visits')
+		description = 'A pie chart of Known and Unknown Visits on your website.';
+	else if(p_name == 'Referralurl stats')
+		description = 'A quick view of Top 5 Referral URL’s for your website traffic.'
 	return description;
 			});
 
@@ -7109,6 +7153,94 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('getCurrentUserDashboards', function(type, options)
+	{
+		var options_el = "";
+		if(CURRENT_USER_DASHBOARDS)
+		{
+			CURRENT_USER_DASHBOARDS.sort(function(a,b){return a.name.trim() < b.name.trim() ? -1 : a.name.trim() > b.name.trim() ? 1 : 0;});
+			var is_active_added = false;
+			var selected_li_id = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(selected_li_id == this.id)
+				{
+					is_active_added = true;
+				}
+			});
+
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(type == 'portlet')
+				{
+					var trim_name = this.name;
+					if(trim_name)
+					{
+						trim_name = trim_name.trim();
+					}
+					if(trim_name && trim_name.length > 15)
+					{
+						trim_name = trim_name.substring(0, 15)+"...";
+					}
+					if(this.name)
+					{
+						options_el += "<option value="+this.id+" class='user-dashboard' title='"+this.name.trim()+"'>"+trim_name+"</option>";
+					}
+				}
+				else
+				{
+					var trim_name = this.name;
+					if(trim_name)
+					{
+						trim_name = trim_name.trim();
+					}
+					if(trim_name && trim_name.length > 30)
+					{
+						trim_name = trim_name.substring(0, 30)+"...";
+					}
+					if(index == 0 && (!selected_li_id || !is_active_added))
+					{
+						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+					}
+					else if(index == 0)
+					{
+						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+					}
+					if(selected_li_id == this.id)
+					{
+						options_el += "<li class='active'><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+					}
+					else
+					{
+						options_el += "<li><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
+					}
+
+					if(index == CURRENT_USER_DASHBOARDS.length-1)
+					{
+						options_el += "<li class='divider'></li>";
+						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+					}
+					
+				}
+
+			});
+			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
+			{
+				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
+			}
+		}
+
+		return options_el;
+	});
+
+	Handlebars.registerHelper('getTruncatedDashboardName', function(dashboard_name)
+	{
+		if(dashboard_name && dashboard_name.trim().length > 30)
+		{
+			return dashboard_name.trim().substring(0, 30)+"...";
+		}
+		return dashboard_name;
+	});
+
 	Handlebars.registerHelper('is_acl_allowed', function(options)
 	{
 		if(_plan_restrictions.is_ACL_allowed[0]() || checkForSpecialUsers())
@@ -7213,3 +7345,64 @@ Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
 		return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
 	
 });
+
+Handlebars.registerHelper('getSuggestionName', function(suggestionId){
+		if(suggestionId){
+			return uservoiceOBJ.suggestions[suggestionId];
+		}		
+});
+
+Handlebars.registerHelper('removeSpecialCharacter',function(value){
+          var value = value.replace(/[^\w\s]/gi, '-');
+          return value;
+
+});
+
+Handlebars.registerHelper('canDeleteContact', function(owner_id, options)
+{
+	if (hasScope('DELETE_CONTACT'))
+		return options.fn(this);
+
+	return options.inverse(this)
+});
+
+Handlebars.registerHelper("isInCurrentView", function(properties,key,options)
+{
+	try{
+		var currentContactEntity;
+		var contactEntity;
+		if(window.location.hash.indexOf("#contact/") != -1 || window.location.hash.indexOf("#company/") != -1){
+			var currentId = window.location.hash.split("/")[1];
+			var contactId = this.id;
+			if (currentId == contactId)
+				return options.fn(this);
+		}
+		
+	}catch(e){
+	}
+	
+	return options.inverse(this);
+});
+
+
+function getLastDateOfSubscription(customer){
+	if(customer.subscriptions && customer.subscriptions.data.length > 0){
+		var date;
+ 		$.each(customer.subscriptions.data, function(index, value){
+ 			if(value.plan.id.indexOf("email") == -1){
+ 				if(value.trial_end && value.trialEnd != null)
+ 					date = value.trialEnd;
+ 				else{
+ 					date = value.currentPeriodEnd;
+ 					var tempArray = value.plan.id.split("-");
+ 					if(tempArray.length > 0 && tempArray[1] == 24)
+ 						date = date+31557600;
+ 				}
+ 			}
+ 		});
+ 		return date;
+	}
+	return;
+}
+
+

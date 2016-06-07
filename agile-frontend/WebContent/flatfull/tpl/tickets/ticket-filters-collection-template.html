@@ -17,24 +17,23 @@
     </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="col panel wrapper">
-        <div class="hbox h-auto m-b-sm">
-            <div class="pull-right">
-                <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-plus-sign"></i></span> Add
-                </a>
-            </div>
-            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/filters/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
-                <thead>
-                    <tr>
-                        <th class="hide">Id</th>
-                        <th style="width: 35%">Name</th>
-                        <th style="width: 40%">&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody id="ticket-filters-model-list" route="ticket-view/" class="c-p"></tbody>
-            </table>
+    <div class="panel-defaut panel">
+        <div class="pull-right">
+            <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon" style="margin-top:20px;margin-right:20px;">
+                <span><i class="icon-plus-sign"></i></span> Add View
+            </a>
         </div>
+        <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/filters/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
+            <thead>
+                <tr>
+                    <th class="hide">Id</th>
+                    <th style="width: 35%">View Name</th>
+                    <th style="width: 40%">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="ticket-filters-model-list" route="ticket-view/" class="c-p"></tbody>
+        </table>
+
     </div>
 {{/if}}
 </script>

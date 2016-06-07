@@ -156,11 +156,14 @@ function getCriteria()
 // Get task list from main-collection by ID
 function getTaskList(criteria, taskListId, owner_id)
 {
-	// Get task list
-	if (criteria == "OWNER")
-		return TASKS_LIST_COLLECTION.collection.where({ heading : taskListId, owner_id : parseInt(owner_id) });
-	else
-		return TASKS_LIST_COLLECTION.collection.where({ heading : taskListId });
+	if(TASKS_LIST_COLLECTION){
+		// Get task list
+		if (criteria == "OWNER")
+			return TASKS_LIST_COLLECTION.collection.where({ heading : taskListId, owner_id : parseInt(owner_id) });
+		else
+			return TASKS_LIST_COLLECTION.collection.where({ heading : taskListId });
+	}
+	return null
 }
 
 // Get form ID for notes in task

@@ -1,15 +1,14 @@
+//Ticket_Custom_Filters allows you to initialize events on LHS filters, cancel and save as options.
 var Ticket_Custom_Filters = {
 
 	customFilters: new Array(),
-	assignees: [],
-	groups: [],
 	filters: [],
-	template_ui: '',
-	template_data_json: {},
+	//template_ui: '',
+	//template_data_json: {},
 
 	reset: function(){
 		this.customFilters = new Array();
-		template_data_json = {};
+		//template_data_json = {};
 	},
 	
 	initEvents: function(){
@@ -198,6 +197,7 @@ var Ticket_Custom_Filters = {
 		});
 	},
 
+	//Initializing click events on checkboxes (status, priority, type, assignees, groups etc)
 	initCheckboxEvents: function(){
 
 		var $container = $('#custom-filters-container');
@@ -254,6 +254,7 @@ var Ticket_Custom_Filters = {
 		});
 	},
 
+	//Renders the LHS custom filters layout
 	renderLayout: function(){
 
 		getTemplate("ticket-custom-filters", {}, undefined, function(template_ui){
@@ -261,9 +262,8 @@ var Ticket_Custom_Filters = {
 			if(!template_ui)
 		  		return;
 
-		  	Ticket_Custom_Filters.template_ui = template_ui;
-
-		  	var $container = $('#custom-filters-container');
+		  	//Ticket_Custom_Filters.template_ui = template_ui;
+			var $container = $('#custom-filters-container');
 
 		  	$container.html($(template_ui));
 
@@ -290,6 +290,7 @@ var Ticket_Custom_Filters = {
 				});
 		  	});
 
+		  	//Fetching assignees and groups
 		  	Ticket_Utils.fetchAssignees(function(){
 
 		  		var assigneeCollection = new Base_Collection_View({
@@ -319,6 +320,8 @@ var Ticket_Custom_Filters = {
 		});
 	},
 
+	//Selects the view conditions on LHS filters. 
+	//For eg if view is 'New Tickets' then status new checkbox alone will be checked.
 	checkSelectedConditions: function(){
 
 		if(Ticket_Custom_Filters.customFilters.length == 0){
@@ -418,6 +421,7 @@ var Ticket_Custom_Filters = {
 		}
 	},
 
+	//Callback function if due date is changed
 	changeDueDate: function(epoch_time){
 
 		//Removing existing due date conditions from custom filters
@@ -433,10 +437,16 @@ var Ticket_Custom_Filters = {
 
 		if(epoch_time){
 
+			//Add 23 hrs 59 mins & 59 secs to make due time to End of day
+			var date = new Date(epoch_time);
+			date.setHours(23);
+			date.setMinutes(59);
+			date.setSeconds(59);
+
 			var condition = {};
 			condition.LHS = 'due_date';
 			condition.CONDITION = 'IS_LESS_THAN';
-			condition.RHS = Math.floor(epoch_time/1000);
+			condition.RHS = Math.floor(date.getTime()/1000);
 
 			Ticket_Custom_Filters.customFilters.push(condition);
 		}
@@ -445,6 +455,7 @@ var Ticket_Custom_Filters = {
 		Tickets.fetchTicketsCollection();
 	},
 
+	//Callback function if created date is changed
 	changeCreatedDate: function(start, end){
 
 		//Removing existing due date conditions from custom filters
@@ -467,6 +478,7 @@ var Ticket_Custom_Filters = {
 			condition.RHS = Math.floor(new Date(start).getTime()/1000);
 			condition.RHS_NEW =  Math.floor(new Date(end).getTime()/1000);
 			
+			//Adding seconds to end date to change end time to End of day
 			condition.RHS_NEW += 86400;
 
 			Ticket_Custom_Filters.customFilters.push(condition);
@@ -476,6 +488,7 @@ var Ticket_Custom_Filters = {
 		Tickets.fetchTicketsCollection();
 	},
 
+	//Returns true if selected view conditions are changed.
 	isFilterChanged: function(){
 
 		var filterJSON = App_Ticket_Module.ticketFiltersList.collection.get(Ticket_Filter_ID).toJSON();
