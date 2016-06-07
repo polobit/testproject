@@ -243,7 +243,7 @@ function dialFromTwilio(to,from,contact){
 			}
 			CALL_CAMPAIGN.state = "PAUSE" ;
 		  }
-	twiliocall(to, name,contact);
+	twiliocall(to, name, null, contact);
 }
 
 function dialFromBria(to,from,contact){
