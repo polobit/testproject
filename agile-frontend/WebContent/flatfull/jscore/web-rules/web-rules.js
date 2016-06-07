@@ -6,6 +6,8 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#action-details", el).chained($("#action", el),  function(){
 	});
+	$("#RHS_CALL_POPUOP", el).chained($("#action", el),  function(){
+	});
 	$("#WEB_RULE_RHS", el).chained($("#action", el), function(el, self){
 
 		var select = $('select', $(self));
