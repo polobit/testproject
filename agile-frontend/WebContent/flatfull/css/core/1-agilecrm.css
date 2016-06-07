@@ -3880,3 +3880,11 @@ padding-left:0px;
 #companies .compactcontact {
   display:none;
 }
+#companies-custom-coloumns:hover.compact .dropdown-menu {
+    display: block;
+    margin-top: 0; 
+ }
+ div#contact-custom-coloumns:hover.compact .dropdown-menu{
+    display: block;
+    margin-top: 0; 
+ }

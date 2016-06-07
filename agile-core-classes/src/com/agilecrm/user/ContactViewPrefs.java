@@ -96,8 +96,10 @@ public class ContactViewPrefs
     @PostLoad
     public  void postLoad()
     { 
-    	/*List<String> list = new ArrayList<String>(fields_set);
-    	if(this.type == Type.PERSON)
+    	List<String> list = new ArrayList<String>(fields_set);
+    	list.add("basic_info");
+    	list.add("image");
+    	/*if(this.type == Type.PERSON)
     	{
         	if(list.contains("basic_info"))
         	{
@@ -116,9 +118,9 @@ public class ContactViewPrefs
         		list.add(list.indexOf("name")+1,"url");
         		list.remove("basic_info");
         	}
-    	}
+    	}*/
     	this.fields_set = new LinkedHashSet<String>(list);
-    	*/
+    	
     }
 
     /**

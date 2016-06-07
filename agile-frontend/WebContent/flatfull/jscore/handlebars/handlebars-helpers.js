@@ -1125,6 +1125,7 @@ $(function()
 						}
 					}
 			}
+
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
   			element = element.split("_")[1];
@@ -6607,6 +6608,11 @@ $(function()
 						}
 					}
 			}
+		else if(element == "url")
+		{
+			el = el.concat('<th class="'+ cls +'">' +"URL"+ '</th>');
+			return;
+		}
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
   			element = element.split("_")[1];
