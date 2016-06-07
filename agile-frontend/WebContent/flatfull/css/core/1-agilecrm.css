@@ -3301,26 +3301,43 @@ background: none!important;
     bottom: 0;
 }
 .user-alert .user-alert-message{
-  position: fixed;
-    width: 50%;
+    position: fixed;
+    width: 51%;
     margin: 25px auto;
     text-align: center;
     background: #f7ecc2!important;
-    border: 1px solid rgb(255, 194, 55);
+    border: 1px solid #ffc237;
     left: 0;
     right: 0;
     z-index: 99999;
     cursor: pointer;
-    padding: 5px;
+    padding: 9px;
     margin-top: 5px;
-    border-radius: 6px;
+    border-radius: 3px;
 }
 .user-alert .user-alert-message span{
-  background-color: #DCD1A5;
-    padding: 0px 6px 4px;
-  margin-left: 10px;
+    padding: 0 6px 4px;
+    margin-left: 10px;
     margin-right: 5px;
     font-size: 15px;
+}
+.user-alert .user-alert-message span:before{
+    content: "\e083";
+    transform: rotate(45deg);    
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    position: absolute;
+    font-weight: bold;
+    font-size: 14px;
+    opacity:0.2;
+
+}
+.user-alert .user-alert-message span:hover:before{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: .5;
+
 }
 .companies_input{
   height:30px;

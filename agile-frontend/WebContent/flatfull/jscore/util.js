@@ -715,10 +715,7 @@ function showPageBlockModal() {
 	else if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456803000)
 		return;
 	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
-		var expiry_date = (USER_BILLING_PREFS.updated_time+691200)*1000;
-		if(USER_BILLING_PREFS.status == "BILLING_FAILED_1")
-			expiry_date = (USER_BILLING_PREFS.updated_time+432000)*1000;
-		getTemplate("user-alert", {"message":"Action Required! Your account has dues. Please update your credit card information to pay your outstanding amount. Non-payment of the dues will lead to locking of your account on "+new Date(expiry_date).format('mmm dd, yyyy')+"."}, undefined, function(template_ui){
+		getTemplate("user-alert", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$("#alert-message").html(template_ui).show();

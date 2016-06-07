@@ -223,6 +223,9 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 		// Replace \r\n with <br> tags as emaaccount_cancel_reason;il is sent as text/html
 		var description = getTemplate("cancellation-description", info);
 		// Build url
+		var subject = "Cancellation Request";
+		if(cancel_reason == "Out of Business")
+			subject = subject + " (Subscription Cancelled)";
 		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
 		encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
 		encodeURIComponent(description);
