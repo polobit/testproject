@@ -12,12 +12,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.agilecrm.Globals;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
-
 import com.agilecrm.user.util.AliasDomainUtil;
 
 //import com.agilecrm.user.util.AliasDomainUtil;
@@ -39,6 +40,9 @@ import com.google.appengine.api.utils.SystemProperty;
  */
 public class NamespaceFilter implements Filter
 {
+	
+	private static final String ACTUAL_DOMAIN_SESSION_ATTRIBUTE = "__agile__actual__domain__";
+	
     /**
      * Sets the namespace to the subdomain in the request url, when namespace is
      * not aready set or request is to create a new domain, forgot domain.
@@ -131,13 +135,47 @@ public class NamespaceFilter implements Filter
 	    return false;
 	}
 
+	/*
+	 * In order to avoid fetching the Alias Domain everytime, we use this logic:
+	 * First, check if the domain set for the DomainUser is equal to current subdomain.
+	 * If not, check if a session attribute is set for the actual domain.
+	 * If both these steps fail, fetch the Actual Domain 
+	 */
+	HttpSession session = ((HttpServletRequest)request).getSession();
 	try
 	{
-		subdomain = AliasDomainUtil.getActualDomain(subdomain);	
+		boolean fetchActualDomain = true;
+		
+		if( session != null );
+		{
+			SessionCache.setSession(session);
+			DomainUser currentUser = (DomainUser) SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+			
+			if( currentUser != null && currentUser.domain == subdomain )
+			{
+				fetchActualDomain = false;
+			} else {
+				String actual = (String) session.getAttribute(ACTUAL_DOMAIN_SESSION_ATTRIBUTE);
+				
+				if( actual != null )
+				{
+					subdomain = actual;
+					fetchActualDomain = false;
+				}
+			}
+		}
+		
+		if( fetchActualDomain )	
+		{
+			subdomain = AliasDomainUtil.getActualDomain(subdomain);	
+			session.setAttribute(ACTUAL_DOMAIN_SESSION_ATTRIBUTE, subdomain);
+		}
 	}
 	catch(Exception e)
 	{
 		e.printStackTrace();
+	} finally {
+		if( session != null )	SessionCache.unsetSession();
 	}
 	
 	// Set the subdomain as name space
