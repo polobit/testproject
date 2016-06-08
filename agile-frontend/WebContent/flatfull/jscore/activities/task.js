@@ -193,6 +193,11 @@ function initializeTasksListeners(){
 		taskAutoWidth(this);
 		
 	});	
+	/*$('#tasks-list-template').on("click", ".task-list-minimized", function(e)
+	{	
+		taskAutoWidth(this);
+		
+	});	*/
 
 	
 	$('#tasks-list-template').on('click','.taskComplete',function(e){

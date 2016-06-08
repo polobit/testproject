@@ -148,9 +148,9 @@
 </script>
 
 <script id="task-collection-template" type="text/html">
-<div id="task-model-list" class="task-model-list">
+<div id="task-model-list" class="task-model-list ">
 {{#unless this.length}}
-            <div class="alert bg-white ui-state-disabled " id="no_task" style="margin-top:10px;margin-left:10px;margin-right:10px;border:none;border-radius:0px;margin-bottom:0px;">
+            <div class="alert bg-white ui-state-disabled m-t-md m-l-sm" id="no_task" style="margin-right:10px;border:none;border-radius:0px;margin-bottom:0px;">
             <div class="slate-content " style="padding:18px;">
                 <div class="box-right pull-left">
                     <h4 class="text-lg" style="opacity:0.8;font-size:14px;">No Tasks Found</h4>
@@ -174,7 +174,7 @@
   {{/if_equals}}
 {{/if_equals}}
 
-  <div class="p">    
+  <div class="p p-b-sm">    
     <div class="task-left">  
 
       </div>
@@ -282,9 +282,9 @@
     <div class="pull-right"> 
 <div class="new-task-owner  thumb-xxs avatar taskavatarimg p-b-sm">     
          {{#if taskOwner.pic}}
-          <img src="{{taskOwner.pic}}" style="height:25px;width:25px;" class="thumb-xxs m-l-sm r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
+          <img src="{{taskOwner.pic}}" style="height:25px;width:25px;" class="thumb-xxs m-r-sm r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{else}}
-      <img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x m-l-sm" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
+      <img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x m-r-sm" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{/if}}
       </div> 
   </div>  
