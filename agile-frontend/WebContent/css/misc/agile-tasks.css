@@ -146,17 +146,17 @@
 .listed-task:after {
 	/* background: yellow; */
 	content: ' ';
-	display: block;
-	height: 3px;
-	position: absolute;
-	left: 8px;
-	top: 0;
-	width: 108%;
+	display: block!important;
+	height: 2px!important;
+	position: absolute!important;
+	left: 0px!important;
+	top: 0!important;
+	width: 100%!important;
 }
 
-.listed-task.yellow:after {
+/*.listed-task.yellow:after {
 	background: yellow;
-}
+}*/
 
 .listed-task.red:after {
 	background: red;

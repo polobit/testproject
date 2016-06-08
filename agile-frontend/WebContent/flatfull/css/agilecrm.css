@@ -2258,22 +2258,22 @@ select.input-xs{
     display: block;
     height: 2px;
     position: absolute;
-    left: -15px;
-    top: -15px;
-    width: 112%;
+    left: 0px;
+    top: 0px;
+    width: 100%;
 }
 
-.listed-task.yellow:after {
+/*.listed-task.yellow:after {
 	background: #fad733;
-}
+}*/
 
 .listed-task.red:after {
 	background: #f05050;
 }
-
+/*
 .listed-task.gray:after {
 	background: #edf1f2;
-}
+}*/
 
 .listed-task:first-child {
 	/*margin-top: 0;*/

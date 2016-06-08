@@ -2291,23 +2291,23 @@ li.error {
     display: block;
     height: 2px;
     position: absolute;
-    left: -15px;
-    top: -15px;
-    width: 112%;
+    left: 0px;
+    top: 0px;
+    width: 100%;
 }
 
-.listed-task.yellow:after {
+/*.listed-task.yellow:after {
   background: #fad733;
-}
+}*/
 
 .listed-task.red:after {
   background: #f05050;
 }
-
+/*
 .listed-task.gray:after {
   background: #edf1f2;
 }
-
+*/
 .listed-task:first-child {
   /*margin-top: 0;*/
 }
@@ -3822,4 +3822,16 @@ div.addField div.controls div:first-child{
 {
   background-color: initial!important;
   border-color:initial!important;
+}
+.taskhead
+{
+  margin-top:0px!important;
+  margin-bottom:10px!Important;
+}
+.tasktime
+{
+  visibility:visible!Important;
+  position:relative;
+  margin-left: 5px;
+  top:2px;
 }

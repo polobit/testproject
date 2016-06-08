@@ -159,15 +159,15 @@ f/* ************* Task UI (Trello) CSS ***************** */
     display: block;
     height: 2px;
     position: absolute;
-    left: -15px;
-    top: -15px;
-    width: 112%;
+    left: 0px;
+    top: 0px;
+    width: 100%;
 }
-
+/*
 .listed-task.yellow:after {
 	background: #fad733;
 }
-
+*/
 .listed-task.red:after {
 	background: #f05050;
 }
