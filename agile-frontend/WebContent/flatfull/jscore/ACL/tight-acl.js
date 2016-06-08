@@ -1,6 +1,7 @@
 /**
  * To implement ACL for all the modules.
  */
+ //ACCOUNT_PREFS.tag_disable=true;
 (function(tight_acl, $, undefined) {
 	
 	//Contants to denote the permission
@@ -193,18 +194,16 @@
 	$('#disable_new_tags').on('click',function(e){
 	if($('#disable_new_tags').text().trim() == 'Enable Access')
 	{
-		
 		$('#disable_new_tags').text("Disable Access");
-		
-		updateTagAcl(true);console.log(false);
+				//ACCOUNT_PREFS.tagsPermision=false;
+		updateTagAcl(false);console.log(false);
 	}
 	else if($('#disable_new_tags').text().trim() == 'Disable Access')
 	{
 		$('#disable_new_tags').text("Enable Access");
-		
-		updateTagAcl(false);
+		//ACCOUNT_PREFS.setTagPermission(true);
+		updateTagAcl(true);
 		//$('#disable_new_tags').attr("option","");
-
 	}  
 	});
 	/*	$('#new_tag_acl',el).off('change').on('change',function(){
