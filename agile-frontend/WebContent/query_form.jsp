@@ -8,7 +8,7 @@
 <div class="header-div">
 <span class="label-header" >Leave us a message
 </span>
-<a class="close-tag">x</a>
+<button class="close-tag">x</button>
 </div>
 </header>
 <div class="form-content ">
@@ -20,18 +20,18 @@
 <br><br>
 <label class="email-field">
 <div class="email-div">Email address*</div>
-<input value="" name="email" type="email" id="email" onblur="validateEmail(this);">
-<p id="wrong-email" style="color:#f05050; margin-left: 35px; display: inline;width: 50%;"></p>
+<input value="" name="email" type="text" id="email" onblur="validateEmail(this);">
+<p id="wrong-email" style="color:#f05050; margin-left: 3px; display: inline;width: 50%;"></p>
 </label>
 <br><br>
 <label class="query-field">
 <div class="query-div">Query*</div>
-<textarea id="querytext" name="querytext" id="query" ></textarea></label>
+<textarea id="querytext" name="querytext" ></textarea></label>
 </div>
 <br>
 <footer>
 <p id="error-message" style="color:#f05050; margin-left: 35px; display: inline;width: 50%;"></p>
-<button value="Submit" name="submit" type="submit" >Submit</button
+<button value="Submit" name="submit" type="submit" id="agile_submit" >Submit</button
 </footer>
 </div>
 </form>
@@ -59,11 +59,14 @@ font-weight: 700;
 font-size: 1rem!important;
 }
 .form-header .close-tag{
-margin-left: 95px;
+margin-left: 94px;
 font-size: 21px;
 color: #999;
 font-weight: 700;
+padding: 0;
 cursor: pointer;
+background: transparent;
+border: 0;
 }
 .header-div{
 line-height: .8;
@@ -112,23 +115,25 @@ color: #939393;
 width: 100%;
 height: 6.5rem;
 }
-footer button{
+footer #agile_submit{
 cursor: pointer;
 border-color: #ccc;
 background-color: #fafafa;
 color: #333;
 padding: 5px 10px 5px 10px;
-margin-left: 278px;
+margin-left: 272px;
 }
 </style>
 <script type="text/javascript">
 function checkField(field){
   if(document.getElementById('email').value=="" ){
-  document.getElementById('error-message').innerHTML = "please fill this rquired field.";
+  document.getElementById('error-message').innerHTML = "please fill email field.";
+  document.getElementById("agile_submit").style="margin-left: 126px;"
   return false;
   }
-  else if(document.getElementById('query').value==""){
-  document.getElementById('error-message').innerHTML = "please fill this rquired field.";
+  else if(document.getElementById('querytext').value==""){
+  document.getElementById('error-message').innerHTML = "please fill query  field.";
+  document.getElementById("agile_submit").style="margin-left: 126px;"
   return false;
   }
 }

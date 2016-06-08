@@ -33,21 +33,6 @@
                             "link": "/misc/modal-templates/information/radiant/radiant.html"
                         }
                     ]
-                },
-                {
-                    "label": "Help Desk",
-                    "title": "help-desk",
-                    "theme_preview": {
-                        "theme_small": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png",
-                        "theme_big": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png"
-                    },
-                    "layouts": [
-                        {
-                            "title": "help-desk",
-                            "href": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png",
-                            "link": "/misc/modal-templates/help/help-popup.html"
-                        }
-                    ]
                 }
             ]
         },
@@ -330,6 +315,29 @@
                             "title": "choice-multi-survey",
                             "href": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png",
                             "link": "/misc/modal-templates/survey/choice-multi/choice-multi.html"
+                        }
+                    ]
+                }
+                
+            ]
+        },
+
+        {
+            "label": "Service",
+            "category": "service",
+            "themes": [
+                {
+                    "label": "Help Desk",
+                    "title": "help desk",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/help/images/helppopup.png",
+                        "theme_big": "/misc/modal-templates/help/images/helppopup.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "help desk",
+                            "href": "/misc/modal-templates/help/images/helppopup.png",
+                            "link": "/misc/modal-templates/help/help-popup.html;"
                         }
                     ]
                 }
