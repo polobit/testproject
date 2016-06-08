@@ -143,9 +143,13 @@ public class MailgunUtil {
 		if(task.isEmpty())
 			return null;
 		
-		MailDeferredTask message=task.get(0);
-		String fromAddress=message.cc;
-		return fromAddress;
+		String ccAddress="";
+		for(MailDeferredTask mailDeferredTask : task)
+		{
+			ccAddress +=mailDeferredTask.cc+", ";
+			
+		}
+		return ccAddress;
 	}
 	/**
 	 * 
@@ -157,9 +161,13 @@ public class MailgunUtil {
 		if(task.isEmpty())
 			return null;
 		
-		MailDeferredTask message=task.get(0);
-		String fromAddress=message.bcc;
-		return fromAddress;
+		String bccAddress="";
+		for(MailDeferredTask mailDeferredTask : task)
+		{
+			bccAddress +=mailDeferredTask.bcc+", ";
+			
+		}
+		return bccAddress;
 	}
 	
 	/**
