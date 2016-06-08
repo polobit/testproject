@@ -1,7 +1,8 @@
 <script id="admin-setting-sendgrid-whitelabel-template" type="text/html">
 {{#if mail_server}}    
 <div class="controls portlet_body dkim_spf">
-<div class="controls">       
+<div class="controls">  
+ <center><label class="p-l p-r">Copy the below settings and update in your Web domain DNS. </label></center>    
   <table class="table">
     <thead>
       <tr>
@@ -14,19 +15,19 @@
       <tr>
       <td>{{mail_server.type}}</td>
         <td>
-        <code class="prettyprint pull-left Api_code">{{mail_server.host}}</code>
+        <span class="prettyprint pull-left Api_span">{{mail_server.host}}</span>
         </td>
-        <td><code class="prettyprint pull-left Api_code" >{{mail_server.data}}</code></td>
+        <td><span class="prettyprint pull-left Api_span" >{{mail_server.data}}</span></td>
       </tr>
       <tr>
       <td>{{subdomain_spf.type}}</td>
-        <td><code class="prettyprint pull-left Api_code" >{{subdomain_spf.host}}</code></td>
-        <td><code class="prettyprint pull-left Api_code" >{{subdomain_spf.data}}</code></td>
+        <td><span class="prettyprint pull-left Api_span" >{{subdomain_spf.host}}</span></td>
+        <td><span class="prettyprint pull-left Api_span" >{{subdomain_spf.data}}</span></td>
       </tr>
       <tr>
       <td>{{dkim.type}}</td>
-        <td><code class="prettyprint pull-left Api_code" >{{dkim.host}}</code></td>
-        <td><code class="prettyprint pull-left Api_code" >{{dkim.data}}</code></td>
+        <td><span class="prettyprint pull-left Api_span" >{{dkim.host}}</span></td>
+        <td><span class="prettyprint pull-left Api_span" >{{dkim.data}}</span></td>
       </tr>
     </tbody>
   </table>
@@ -39,7 +40,7 @@
 
 <script id="admin-setting-sendgrid-whitelabel-validate-template" type="text/html">
 {{#if mail_server}} 
-<div class="controls portlet_body dkim_spf" >
+<div class="controls dkim_spf" >
 <div class="controls">          
   <table class="table">
     <thead>
@@ -51,21 +52,21 @@
     <tbody>
       <tr>
         <td>{{{validateSendgridWhitelabel mail_server.valid}}}</td>
-        <td> <code class="prettyprint pull-left Api_code">{{#if mail_server.reason}}{{mail_server.reason}}{{else}} Mail Server settings is Varified Successfully {{/if}}</code>  </td>
+        <td> <code class="prettyprint pull-left Api_span">{{#if mail_server.reason}}{{mail_server.reason}}{{else}} <span style="color:green;">Mail Server settings is Varified Successfully {{/if}}</span> </code> </td>
       </tr>
       <tr>
         <td>{{{validateSendgridWhitelabel subdomain_spf.valid}}}</td>
-        <td><code class="prettyprint pull-left Api_code" >{{#if subdomain_spf.reason}}{{subdomain_spf.reason}} {{else}} SPF settings is Varified Successfully {{/if}}</code></td>
+        <td><code class="prettyprint pull-left Api_span" >{{#if subdomain_spf.reason}}{{subdomain_spf.reason}} {{else}}<span style="color:green;"> SPF settings is Varified Successfully {{/if}}</span></code></td>
       </tr>
       <tr>
         <td>{{{validateSendgridWhitelabel dkim.valid}}}</td>
-        <td><code class="prettyprint pull-left Api_code" >{{#if dkim.reason}} {{dkim.reason}}{{else}} DKIM settings is Varified Successfully {{/if}}</code></td>
+        <td><code class="prettyprint pull-left Api_span" >{{#if dkim.reason}} {{dkim.reason}}{{else}}<span style="color:green;"> DKIM settings is Varified Successfully {{/if}}</span></code></td>
        
       </tr>
     </tbody>
   </table>
   {{else}}
-  <label style="color:red">Please click on Get Settings first to register your domain.</label>
+  <label class="dkim_spf" style="color:red">Please click on Get Settings first to register your domain.</label>
   {{/if}}
 </div>
 </div>
