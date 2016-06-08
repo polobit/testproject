@@ -3835,3 +3835,11 @@ div.addField div.controls div:first-child{
   margin-left: 5px;
   top:2px;
 }
+div.list-tasks.panel-body
+{
+  overflow: hidden;
+}
+div.list-tasks.panel-body:hover
+ {
+  overflow: auto;
+}
