@@ -2015,7 +2015,7 @@ public class ContactUtil
      *            emails collection to get contacts and companies
      * @return {@List} related to all emails
      */
-    public static List<Contact> searchContactsAndCompaniesByEmailList(Set<String> emails)
+    public static List<Contact> searchContactsAndCompaniesByEmailList(List<String> emails)
     {
 	if (emails == null)
 	    return null;

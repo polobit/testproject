@@ -896,6 +896,7 @@ public class ContactEmailUtil
 	
 	public static String getMailsAfterUpdateCheck(String to)
 	{
+		List<String> toEmailsList = new ArrayList<String>();
 		try 
 		{
 			Set<String> toEmailsSet = getToEmailSet(to);
@@ -903,10 +904,10 @@ public class ContactEmailUtil
 		    for(String str : toEmailsSet)
 		    {
 		    	String email = EmailUtil.getEmail(str);
-		    	str = email;
+		    	toEmailsList.add(email);
 		    }
 		    
-		    List<Contact> toEmailContacts = ContactUtil.searchContactsAndCompaniesByEmailList(toEmailsSet);
+		    List<Contact> toEmailContacts = ContactUtil.searchContactsAndCompaniesByEmailList(toEmailsList);
 		    
 		    if(toEmailContacts != null && toEmailContacts.size() > 0)
 		    {
@@ -916,11 +917,11 @@ public class ContactEmailUtil
 		    		boolean can_update = UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, false);
 	    			if(!can_update)
 	    			{
-	    				toEmailsSet.remove(email);
+	    				toEmailsList.remove(email);
 	    			}
 		    	}
 		    }
-		    return StringUtils.join(toEmailsSet, ",");
+		    return StringUtils.join(toEmailsList, ",");
 		} 
 		catch (Exception e) 
 		{
