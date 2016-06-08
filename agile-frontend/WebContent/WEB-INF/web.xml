@@ -1288,4 +1288,13 @@
 		<url-pattern>/knowledgebase/*</url-pattern>
 	</servlet-mapping>
 	<!-- End of HelpCenter -->
+	<servlet>
+		<servlet-name>QuerySubmitServlet</servlet-name>
+		<servlet-class>com.agilecrm.webrules.util.QuerySubmitServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QuerySubmitServlet</servlet-name>
+		<url-pattern>/querysubmit</url-pattern>
+	</servlet-mapping>
 </web-app>

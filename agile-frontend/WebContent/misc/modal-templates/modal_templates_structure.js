@@ -33,6 +33,21 @@
                             "link": "/misc/modal-templates/information/radiant/radiant.html"
                         }
                     ]
+                },
+                {
+                    "label": "Help Desk",
+                    "title": "help-desk",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png",
+                        "theme_big": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "help-desk",
+                            "href": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png",
+                            "link": "/misc/modal-templates/help/help-popup.html"
+                        }
+                    ]
                 }
             ]
         },
@@ -321,5 +336,6 @@
                 
             ]
         }
+        
     ]
 }
