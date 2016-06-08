@@ -1,5 +1,5 @@
 {
-    "name": "Voice Call",
+    "name": "Call",
     "thumbnail": "json/nodes/images/callnode.png",
     "icon": "json/nodes/icons/sms/callnode.png",
     "info": "Call and Play an automated voice message to your contacts",
