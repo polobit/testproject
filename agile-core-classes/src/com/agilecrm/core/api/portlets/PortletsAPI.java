@@ -66,9 +66,7 @@ public class PortletsAPI {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Portlet> getPortlets(@QueryParam("route") String route)throws Exception{
 			
-	    	//added  default marketing dashboard
-	    	PortletUtil.addMarketingDashboard();
-	    	
+	    	    	
 	    	// Returns list of portlets saved by current user
 	    	if(!route.equalsIgnoreCase("MarketingDashboard"))
 	    	    return PortletUtil.getAddedPortletsForCurrentUser(route);

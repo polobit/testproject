@@ -2817,22 +2817,23 @@ Deleted  {{custom1}} Campaigns<br/>
 		</div>
 
 		<div>
-			{{#if settings.webSegmentation.done}}
-				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="webSegmentation">
+			{{#if settings.webEngagement.done}}
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="webEngagement">
 					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="webSegmentation">
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="webEngagement">
 					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
-			{{#if settings.webSegmentation.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#visitors">Web Engagement</a></span>
+			{{#if settings.webEngagement.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#web-rules">Web Engagement</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#visitors">Web Engagement</a></span>
+				<span class="inline-block v-text-bottom"><a href="#web-rules">Web Engagement</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Track who is visiting and get real time notifications</p>
+				<p>Show the personalised popup messages to your visitors to keep them coming back
+				</p>
 			</div>
 		</div>
 		<div>

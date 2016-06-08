@@ -937,6 +937,12 @@ $('.portlet_body')
 				_agile_delete_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 				loadPortlets("DashBoard", $('#content'));
 		    }
+		    else if(id=="MarketingDashboard"){
+				e.preventDefault();
+				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
+				gridster = undefined;
+				loadPortlets(id, $('#content'));
+		    }
 		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
 				e.preventDefault();
 				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);				

@@ -2136,18 +2136,5 @@ public class PortletUtil {
 	return added_portlets;
  }
  
-//checking for marketing dashboard ,if it is not there then add marketing dashboard
- public static void addMarketingDashboard (){
-     		
-     		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
-		List<Dashboard> dashboardList= dao.ofy().query(Dashboard.class).filter("agileUser", userKey).filter("name", "Marketing Dashboard").list();
-		
-		if(dashboardList.isEmpty()){
-        		Dashboard marketingDashboard= new Dashboard();
-        		marketingDashboard.name="Marketing Dashboard";
-        		marketingDashboard.description="Welcome to Agile CRM marketing automation.";
-        		marketingDashboard.save();
-		}
- }
  
 }
