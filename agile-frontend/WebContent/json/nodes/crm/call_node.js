@@ -1,7 +1,7 @@
 {
     "name": "Voice Call",
-    "thumbnail": "json/nodes/images/sms/sendmessage.png",
-    "icon": "json/nodes/icons/sms/sendmessage.png",
+    "thumbnail": "json/nodes/images/callnode.png",
+    "icon": "json/nodes/icons/sms/callnode.png",
     "info": "Call and Play an automated voice message to your contacts",
     "help": "You can enable Twilio Call widget Integration from Admin settings -> preferences",
     "author": "Sonali",
