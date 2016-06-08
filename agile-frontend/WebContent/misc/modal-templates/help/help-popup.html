@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Popup</title>
+<link
+	href="https://fonts.googleapis.com/css?family=Varela:400|Montserrat:700"
+	rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+	background: #fff;
+	width: 310px;
+	height: 210px;
+}
+#popup {
+	background: #FCFCFC;;
+	  border: 1px solid #f6f6f6;
+	border-radius: 5px 5px 0 0;
+	color: #333 !important;
+	font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
+	letter-spacing: 0;
+	width: 302px;
+	position: fixed;
+	bottom: 0;
+}
+#popup-body {
+	border-radius: 8px;
+	margin: 25px;
+	padding: 20px 20px 20px;
+	position: relative;
+}
+#popup-close {
+	color: #848484;
+	cursor: pointer;
+	font: 28px/28px Arial, Helvetica, sans-serif !important;
+	opacity: .6;
+	position: absolute;
+	right: 15px;
+	top: 8px;
+	display: none;
+}
+#popup-close:hover {
+	opacity: 1;
+}
+#popup-title {
+	color: #505653 !important;
+	font: bold 20px/24px "Montserrat", Arial, Helvetica,
+		sans-serif !important;
+	  padding-top: 5px;
+}
+#popup-body p {
+	margin: 15px 0;
+}
+#popup-content p:first-child {
+	  font-size: 11px!important;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+#popup-content button:hover {
+	/*background: #6b403d; */
+	background: #5ECF9C;
+}
+#popup-footer {
+	color: #fff !important;
+	font: bold 10px/10px "Montserat", Arial, Helvetica,
+		sans-serif !important;
+	letter-spacing: 1px;
+	padding: 8px;
+	text-align: center;
+	text-transform: uppercase;
+	display: none;
+}
+#popup-footer a {
+	color: #fff;
+}
+#popup-content {
+   word-wrap : break-word;
+}
+.m-t-sm{
+  margin-top: 10px!important;
+  height: 5px;
+} .m-b-sm{
+margin-bottom: 5px!important;
+}
+#popup-content button {
+	background: #086F40;
+	border: 0;
+	border-radius: 5px;
+	color: #fff;
+	cursor: pointer;
+	font: bold 13px/19px "Montserat", Arial, Helvetica,
+		sans-serif !important;
+	padding: 3px 12px;
+	text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 15px!important;
+}
+</style>
+</head>
+<body>
+	<div id="opened">
+		<div id="popup">
+			<div id="popup-body">
+				<div id="popup-title">Contact Us</div>
+				<div id="popup-content">
+					<p>You can send your query to us.</p>
+					<button onclick="parent._agile_help_element();">Help</button>
+				</div>
+				<div id="popup-close">x</div>
+			</div>
+			<div id="popup-footer">
+				Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
+					CRM</a>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
