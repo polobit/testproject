@@ -33,6 +33,7 @@ import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
@@ -65,6 +66,7 @@ import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -2013,5 +2015,25 @@ public class ContactUtil
 	    return null;
 	}
 
+    }
+    public static Set<Contact> searchContactsByCustomFields(String id)
+    {
+    	Set<Contact> contacts = (HashSet<Contact>) dao.ofy().query(Contact.class).filter("Companytype = ", id);
+    	return contacts;
+    }
+    public static List<Contact> getContactsWithCustomFields(String id ,List<String> customField){
+    	
+    	if(id != null && customField != null){
+    		ContactFilter contact_filter = new ContactFilter();
+    		SearchRule rule = new SearchRule();
+    		for(String eachfield : customField){
+	    		rule.LHS = eachfield;
+	    		rule.CONDITION = RuleCondition.EQUALS;
+	    		rule.RHS = id ;
+	    		contact_filter.or_rules.add(rule);
+    		}
+    		return new ArrayList<Contact>(contact_filter.queryContacts(50, null, "type"));
+    	}
+    	return null;
     }
 }

@@ -57,6 +57,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
+import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.bulk.ContactsDeleteTask;
@@ -69,6 +70,7 @@ import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
 import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
@@ -1827,5 +1829,21 @@ public class ContactsAPI
 	    }
 	    contact.save();
 	}
+    }
+    @Path("/getCustomfieldBasedContacts")
+    @GET
+    public List<Contact> getCustomfieldBasedContacts(@QueryParam("id") String id ,@QueryParam("type") String type)
+    {
+    	List<String> customFieldNames = null;
+    	List<CustomFieldDef> customfields = CustomFieldDefUtil.getContactAndCompanyCustomFields();
+	    if(customfields != null && customfields.size() > 0){
+	    	for(CustomFieldDef c : customfields){
+	    		if(c.field_type.equals(type))
+	    			customFieldNames.add(c.field_label);
+	    	}
+	    }
+	    if(customFieldNames != null && customFieldNames.size() > 0 && id != null)
+	    	return ContactUtil.getContactsWithCustomFields(id,customFieldNames);
+	    return null ; 
     }
 }
