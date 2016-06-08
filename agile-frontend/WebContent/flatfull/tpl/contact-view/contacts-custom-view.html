@@ -198,7 +198,6 @@
     	</ul>
     	
 	</div>
-	{{#hasRestrictedMenuScope 'CREATE_CONTACT'}} {{else}}
     <div class="btn-group">
 
         <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
@@ -209,9 +208,7 @@
 			<li><a href="#import">Import from Salesforce</a></li>
 			
 		</ul>
-	</div>
-	{{/hasRestrictedMenuScope}}
-	</div>
+	</div></div>
             </div>
 	    </div>
 	    
@@ -228,7 +225,6 @@
 	<div class="contacts-div">
 <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
 				      	
-				      	
 					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add Tags</button>
 					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Remove Tags</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
@@ -240,9 +236,8 @@
 					    {{#hasScope "EXPORT_CONTACTS"}}
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
 					    {{/hasScope}}
-					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
-					     {{/hasRestrictedMenuScope}}
+					    
 				    </div>
 
 
@@ -308,7 +303,7 @@
 		        {{/unless}}
 		        {{#if this.length}}
                 <table id="contacts-table" class="table table-striped  no-sorting panel agile-table 
-                {{#is_mobile}} noDelete contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                {{#is_mobile}} noDelete contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="ore/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
