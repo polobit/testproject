@@ -1376,12 +1376,12 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 			if(company_util.isCompany())
 			{
 				$("#bulk-action-btns button").addClass("disabled");
-				$("#companies_columns").removeClass("disabled");
+				$("#companiesTabelView").removeClass("disabled");
 			}
 			else
 			{
 				$("#bulk-action-btns button").addClass("disabled");
-				$("#contact_columns").removeClass("disabled");
+				$("#contactTabelView").removeClass("disabled");
 			}
 				
 			return;

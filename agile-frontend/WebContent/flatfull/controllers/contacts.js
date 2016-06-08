@@ -1036,6 +1036,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
 			$("#contactsmenu").addClass("active");
+			 App_Contacts.contactsListView.delegateEvents();
 			return;
 		}
 
