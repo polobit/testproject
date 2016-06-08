@@ -1,7 +1,6 @@
 package com.agilecrm;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -14,19 +13,13 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.account.AccountPrefs;
-import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.OnlineCalendarPrefs;
-import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.OnlineCalendarUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.Defaults;
 import com.google.appengine.api.NamespaceManager;
 
@@ -170,31 +163,6 @@ public class HomeServlet extends HttpServlet
 	    setLastLoggedInTime(domainUser);
 
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
-	    setUserInfoTimezone(req, domainUser.id);
-	    domainUser = createOnlineCalendarPrefs(domainUser);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-    
-    /**
-     * Saves finger print in domain user before request is forwarded to
-     * dashboard (home.jsp)
-     */
-    private void saveFingerPrint(HttpServletRequest req, DomainUser domainUser)
-    {
-	try
-	{
-		UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(req);
-	    if(StringUtils.isBlank(info.finger_print))
-	    	return;
-		    
-	    if(domainUser.finger_prints == null)
-	    	domainUser.finger_prints = new HashSet();
-	    
-	    domainUser.finger_prints.add(info.finger_print);
 	}
 	catch (Exception e)
 	{
@@ -240,10 +208,6 @@ public class HomeServlet extends HttpServlet
     		
     	    // Saves logged in time in domain user.
     	    setLoggedInTime(req, domainUser);
-    	    setAccountTimezone(req);
-    	    
-    	    // Save user finger print
-    	    saveFingerPrint(req, domainUser);
     	    
     	    try {
     	    	domainUser.save();
@@ -316,78 +280,4 @@ public class HomeServlet extends HttpServlet
 
     }
 
-    private void setAccountTimezone(HttpServletRequest req)
-    {
-	try
-	{
-	    // Set timezone in account prefs.
-	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
-	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
-		    || "GMT".equals(accPrefs.timezone))
-	    {
-		accPrefs.timezone = (String) req.getSession().getAttribute("account_timezone");
-		accPrefs.save();
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception in setting timezone in account prefs.");
-	}
-    }
-
-    private void setUserInfoTimezone(HttpServletRequest req, Long domainid)
-    {
-	try
-	{
-	    UserPrefs user_prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUser());
-	    System.out.println("user_prefs in setUserInfoTimezone --------------- " + user_prefs);
-	    if (StringUtils.isEmpty(user_prefs.timezone) || "UTC".equals(user_prefs.timezone))
-	    {
-
-		user_prefs.timezone = (String) req.getSession().getAttribute("account_timezone");
-		user_prefs.save();
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception in setting timezone in user prefs.");
-	}
-    }
-
-    private DomainUser createOnlineCalendarPrefs(DomainUser user)
-    {
-	OnlineCalendarPrefs onlinePrefs = OnlineCalendarUtil.getCalendarPrefs(user.id);
-	if (onlinePrefs == null)
-	{
-	    if (StringUtils.isNotEmpty(user.schedule_id))
-	    {
-		onlinePrefs = new OnlineCalendarPrefs(user.schedule_id, user.meeting_types, user.business_hours,
-			user.meeting_durations, user.id);
-	    }
-	    else
-	    {
-		onlinePrefs = new OnlineCalendarPrefs(OnlineCalendarUtil.getScheduleid(user.name), user.id);
-	    }
-	    user.schedule_id = onlinePrefs.schedule_id;
-	    onlinePrefs.save();
-	}
-	else
-	{
-	    if (StringUtils.isBlank(user.schedule_id) || !(onlinePrefs.schedule_id.equalsIgnoreCase(user.schedule_id)))
-	    {
-		try
-		{
-		    user.schedule_id = onlinePrefs.schedule_id;
-		    return user;
-		}
-		catch (Exception e)
-		{
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-	    }
-	}
-	return user;
-    }
-    
 }

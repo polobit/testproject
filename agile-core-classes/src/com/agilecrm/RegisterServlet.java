@@ -261,6 +261,10 @@ public class RegisterServlet extends HttpServlet
 	String planValue = request.getParameter(RegistrationGlobals.PLAN_TYPE);
 	if(!planValue.equals("Free"))
 		redirectionURL+= "#subscribe";
+	
+	// Set misc values at Register before sending user to home page.
+	LoginUtil.setMiscValuesAtLogin(request, domainUser);
+	
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);
     }
