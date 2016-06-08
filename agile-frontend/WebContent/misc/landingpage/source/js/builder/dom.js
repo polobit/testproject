@@ -407,6 +407,11 @@ angular.module('builder')
 		delete: function(node) {
 
 			if (node && node.nodeName != 'BODY') {
+				var agileEmbedForm = $(node).closest('.form-embed-container form#agile-form');
+				if(agileEmbedForm.length > 0) {
+					alert("Can't delete agile form fields, to make changes to form go to Form Builder.");
+					return;
+				}
 
 				if (node.parentNode) {
 					$rootScope.$apply(function() {$rootScope.selectNode(node.parentNode);});
