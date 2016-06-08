@@ -19,9 +19,8 @@ var agile_id = {
 			if (!this.namespace || this.namespace == "localhost")
 				return "http://localhost:8888/core/js/api";
 			else
-				/*return "https://" + this.namespace + ".agilecrm.com/core/js/api";*/
-				//for beta
-				return "https://" + this.namespace + "-dot-sandbox-dot-agilecrmbeta.appspot.com/core/js/api";
+				return "https://" + this.namespace + ".agilecrm.com/core/js/api";
+				
 		}, getNamespace : function()
 		{
 			// Returns the namespace by id

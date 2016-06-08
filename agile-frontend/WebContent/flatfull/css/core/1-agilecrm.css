@@ -3302,7 +3302,7 @@ background: none!important;
 }
 .user-alert .user-alert-message{
     position: fixed;
-    width: 51%;
+    width: 55%;
     margin: 25px auto;
     text-align: center;
     background: #f7ecc2!important;
@@ -3316,23 +3316,15 @@ background: none!important;
     border-radius: 3px;
 }
 .user-alert .user-alert-message span{
+    position: relative;
+    top: -6px;
     padding: 0 6px 4px;
     margin-left: 10px;
     margin-right: 5px;
-    font-size: 15px;
+    font-size: 20px;
+    opacity: 0.2;
 }
-.user-alert .user-alert-message span:before{
-    content: "\e083";
-    transform: rotate(45deg);    
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
-    position: absolute;
-    font-weight: bold;
-    font-size: 14px;
-    opacity:0.2;
-
-}
-.user-alert .user-alert-message span:hover:before{
+.user-alert .user-alert-message span:hover{
     color: #000;
     text-decoration: none;
     cursor: pointer;
