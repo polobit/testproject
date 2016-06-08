@@ -1,7 +1,7 @@
 <script id="admin-setting-sendgrid-whitelabel-template" type="text/html">
-<div class="controls" style="overflow: scroll;margin: 16px;">
-<div class="controls"> 
-{{#if mail_server}}          
+{{#if mail_server}}    
+<div class="controls portlet_body dkim_spf">
+<div class="controls">       
   <table class="table">
     <thead>
       <tr>
@@ -38,9 +38,9 @@
 </script>
 
 <script id="admin-setting-sendgrid-whitelabel-validate-template" type="text/html">
-<div class="controls" style="overflow: scroll;margin: 16px;">
-<div class="controls"> 
-{{#if mail_server}}          
+{{#if mail_server}} 
+<div class="controls portlet_body dkim_spf" >
+<div class="controls">          
   <table class="table">
     <thead>
       <tr>
@@ -51,25 +51,26 @@
     <tbody>
       <tr>
         <td>{{{validateSendgridWhitelabel mail_server.valid}}}</td>
-        <td>   <code class="prettyprint pull-left Api_code">{{mail_server.reason}}</code>  </td>
+        <td> <code class="prettyprint pull-left Api_code">{{#if mail_server.reason}}{{mail_server.reason}}{{else}} Mail Server settings is Varified Successfully {{/if}}</code>  </td>
       </tr>
       <tr>
         <td>{{{validateSendgridWhitelabel subdomain_spf.valid}}}</td>
-        <td><code class="prettyprint pull-left Api_code" >{{subdomain_spf.reason}}</code></td>
+        <td><code class="prettyprint pull-left Api_code" >{{#if subdomain_spf.reason}}{{subdomain_spf.reason}} {{else}} SPF settings is Varified Successfully {{/if}}</code></td>
       </tr>
       <tr>
         <td>{{{validateSendgridWhitelabel dkim.valid}}}</td>
-        <td><code class="prettyprint pull-left Api_code" >{{dkim.reason}}</code></td>
+        <td><code class="prettyprint pull-left Api_code" >{{#if dkim.reason}} {{dkim.reason}}{{else}} DKIM settings is Varified Successfully {{/if}}</code></td>
        
       </tr>
     </tbody>
   </table>
   {{else}}
-  <label style="color:red">Error occured while validating please check your email domain name</label>
+  <label style="color:red">Please click on Get Settings first to register your domain.</label>
   {{/if}}
 </div>
 </div>
 </script>
+
 <script id="admin-setting-sendgrid-whitelabel-permission-template" type="text/html">
 {{#if plan}}
  <div class="m-xs " style="text-align:center;font-size: 13px; margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <a href="#subscribe-plan" class="c-p text-info">upgrade</a> plan to use this feature. </span>

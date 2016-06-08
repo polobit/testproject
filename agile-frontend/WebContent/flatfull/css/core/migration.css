@@ -2319,6 +2319,17 @@ color:#484848!important;
 /*end cases_custom_popover css code*/
 
 
+.dkim_spf::-webkit-scrollbar, .dkim_spf::-webkit-scrollbar, .dkim_spf::-webkit-scrollbar {
+ height: 7px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+
+.dkim_spf{
+  margin: 15px;
+  overflow: auto;
+  overflow-y:hidden;
+}
 /*end custom css code*/
 
 

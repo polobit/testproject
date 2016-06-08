@@ -160,8 +160,11 @@ $("#js-security_accordian").on('click', function(e) {
     $("#get_whitelabel_key").off('click');
     $("#get_whitelabel_key").on('click', function(e) {
         e.preventDefault();
+         $("#sendgrid-whitelabel-key-template").html("");
         var whitelabel_domain = $("#whitelabel-domain").val();
-        if(whitelabel_domain==="")
+
+        var pattern = /^[a-z0-9-\.]+\.[a-z]{2,4}/;
+        if(!pattern.test(whitelabel_domain))
              $("#empty_domain_message").removeClass("hide");
          else
          {
@@ -173,8 +176,11 @@ $("#js-security_accordian").on('click', function(e) {
     $("#validate_whitelabel").off('click');
     $("#validate_whitelabel").on('click', function(e) {
         e.preventDefault();
+         $("#sendgrid-whitelabel-key-template").html("");
+
         var whitelabel_domain = $("#whitelabel-domain").val();
-        if(whitelabel_domain==="")
+        var pattern = /^[a-z0-9-\.]+\.[a-z]{2,4}/;
+        if(!pattern.test(whitelabel_domain))
              $("#empty_domain_message").removeClass("hide");
          else
          {
@@ -196,7 +202,7 @@ $("#js-security_accordian").on('click', function(e) {
 
 function getSendgridWhitelabel(domainName)
 {   
-    var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/whitelabel?emailDomain='+domainName,
+     var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/whitelabel?emailDomain='+domainName,
      template : "admin-setting-sendgrid-whitelabel",
     });
   $("#sendgrid-whitelabel-key-template").html(view.render().el);
@@ -205,7 +211,7 @@ function getSendgridWhitelabel(domainName)
 
 function validateSendgridWhitelabel(domainName)
 {   
-    var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/whitelabel/validate?emailDomain='+domainName,
+   var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/whitelabel/validate?emailDomain='+domainName,
      template : "admin-setting-sendgrid-whitelabel-validate",
     });
   $("#sendgrid-whitelabel-key-template").html(view.render().el);
