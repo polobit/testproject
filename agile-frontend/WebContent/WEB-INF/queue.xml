@@ -11,11 +11,14 @@
   <target>agile-normal-bulk</target>
   </queue>
   <queue>
-    <name>campaign-log-pull-queue</name>
-    <mode>pull</mode>
+    <name>campaign-log-queue</name>
+    <<rate>10/s</rate>
+    <bucket-size>50</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
     <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
+  <target>agile-campaigns-logs</target>
   </queue>
   <queue>
     <name>bulk-campaign-queue</name>

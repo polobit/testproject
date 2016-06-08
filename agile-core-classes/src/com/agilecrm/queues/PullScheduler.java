@@ -253,7 +253,7 @@ public class PullScheduler
 		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
 		Boolean isMailDeferredTask = deferredTask instanceof MailDeferredTask;
-		Boolean isLogDeferredTask = deferredTask instanceof LogDeferredTask;
+//		Boolean isLogDeferredTask = deferredTask instanceof LogDeferredTask;
 		System.out.println("is instance of mail deferred task" + isMailDeferredTask);
 		if (isMailDeferredTask)
 		{
@@ -271,21 +271,21 @@ public class PullScheduler
 		    PullQueueUtil.deleteTasks(queueName, tasks);
 		    return;
 		}
-		else if(isLogDeferredTask){
-			try
-		    {
-			// System.out.println("Executing mandrill mail tasks...");
-			LogUtil.sendCampaignLogs(tasks);
-		    }
-		    catch (Exception e)
-		    {
-			e.printStackTrace();
-			System.err.println("Exception occured while runnning campaign deferred tasks..." + e.getMessage());
-		    }
-
-		    PullQueueUtil.deleteTasks(queueName, tasks);
-		    return;
-		}
+//		else if(isLogDeferredTask){
+//			try
+//		    {
+//			// System.out.println("Executing mandrill mail tasks...");
+//			LogUtil.sendCampaignLogs(tasks);
+//		    }
+//		    catch (Exception e)
+//		    {
+//			e.printStackTrace();
+//			System.err.println("Exception occured while runnning campaign deferred tasks..." + e.getMessage());
+//		    }
+//
+//		    PullQueueUtil.deleteTasks(queueName, tasks);
+//		    return;
+//		}
 		else
 		{
 		    
