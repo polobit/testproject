@@ -417,7 +417,7 @@ function showTextGravatar(selector, element)
 	});
 }
 
-function text_gravatar_initials(items)
+function text_gravatar_initials(items, char_count)
 {
 	if (items == undefined)
 		return;
@@ -477,6 +477,10 @@ function text_gravatar_initials(items)
 
 	if (name.length == 0)
 		name = "X";
+
+	if(!isNaN(char_count) && char_count < name.length){
+         name = name.substr(0, char_count);
+	}
 
 	return name;
 }

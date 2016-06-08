@@ -282,7 +282,7 @@ $(function()
 	 * @returns image link
 	 * 
 	 */
-	Handlebars.registerHelper('gravatarurl', function(items, width,type)
+	Handlebars.registerHelper('gravatarurl', function(items, width, char_count)
 	{
 
 		if (items == undefined)
@@ -302,7 +302,7 @@ $(function()
 		try
 		{
 			// if(!isIE())
-			initials = text_gravatar_initials(items);
+			initials = text_gravatar_initials(items, char_count);
 		}
 		catch (e)
 		{
@@ -375,13 +375,13 @@ $(function()
 	/**
 	 * To add data-name attribute to image tags
 	 */
-	Handlebars.registerHelper('dataNameAvatar', function(items)
+	Handlebars.registerHelper('dataNameAvatar', function(items, char_count)
 	{
 
 		if (items == undefined)
 			return;
 
-		return text_gravatar_initials(items);
+		return text_gravatar_initials(items, char_count);
 
 	});
 
@@ -1068,30 +1068,80 @@ $(function()
 		return logArray[0][name];
 	});
 
+	Handlebars.registerHelper('iscompactTabel', function(type , options)
+	{
+		var setCompactView = (type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
+
+		if(setCompactView)
+				return options.fn(this);
+
+		return options.inverse(this);
+	});
+
+	/**
+	 * contacts tabel new template  
+	 */
+
+	Handlebars.registerHelper('iscompactContactTabel', function(options)
+	{
+		
+			if(_agile_get_prefs("contactTabelView"))
+			return options.fn(this);
+
+			return options.inverse(this);
+		
+	});
 	/**
 	 * Returns table headings for custom contacts list view
 	 */
 	Handlebars.registerHelper('contactTableHeadings', function(item)
-	{
-
-		var el = "";
+  	{
+		var el = "", cls = ""; 
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
-		{
-			
-			if (element.indexOf("CUSTOM_") == 0) {
-				element = element.split("_")[1];
-				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+  		{
+  			if (element == "basic_info" || element == "image")
+  			{
+					
+					if(_agile_get_prefs("contactTabelView"))
+					{
+						// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+						if(element == "basic_info")
+							return ;
+	
+						if(element == "image")
+						{
+							element = "";
+							cls = "";
+						}
+							  
+					}
+					else
+					{
+						if(element == "image")
+						{
+							element = "";
+							cls = "compactcontact";
+						}
+					}
 			}
-			else {
-			element = element.replace("_", " ")
-			el = el.concat('<th>' + ucfirst(element) + '</th>');
-			}	
 
-		});
-
+		else if (element.indexOf("CUSTOM_") == 0) 
+		{
+  			element = element.split("_")[1];
+  			cls = "text-muted";
+  		}
+  		else 
+  		{
+			element = element.replace("_", " ");
+			cls = "";
+	 	}
+	 
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	  
+	 });
 		return new Handlebars.SafeString(el);
 	});
-
 	/**
 	 * Returns table headings for reports custom contacts list view
 	 */
@@ -3476,7 +3526,9 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
+
 						var default_return = "src='"+updateImageS3Path('img/building.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3491,7 +3543,9 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
+
 								error_fxn = "this.src='"+updateImageS3Path('img/building.png')+"'; this.onerror=null;";
+
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3504,6 +3558,7 @@ $(function()
 								// rest padding added
 
 								error_fxn = "this.src='"+updateImageS3Path("img/building.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -6541,21 +6596,57 @@ $(function()
 	Handlebars.registerHelper('companyTableHeadings', function(item)
 	{
 
-		var el = "";
+		var el = "" ,cls = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
-		{
-			if (element.indexOf("CUSTOM_") == 0) {
-				element = element.split("_")[1];
-				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
-			}
-			else {
-			element = element.replace("_", " ")
-			el = el.concat('<th>' + ucfirst(element) + '</th>');
-			}	
-		});
+  		{
 
+  			if (element == "basic_info" || element == "image")
+  			{
+					
+					if(_agile_get_prefs("companyTabelView"))
+					{
+						// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+						if(element == "basic_info")
+							return ;
+	
+						if(element == "image")
+						{
+							element = "";
+							cls = "";
+						}
+							  
+					}
+					else
+					{
+						if(element == "image")
+						{
+							element = "";
+							cls = "compactcontact";
+						}
+					}
+			}
+		else if(element == "url")
+		{
+			el = el.concat('<th class="'+ cls +'">' +"URL"+ '</th>');
+			return;
+		}
+		else if (element.indexOf("CUSTOM_") == 0) 
+		{
+  			element = element.split("_")[1];
+  			cls = "text-muted";
+  		}
+  		else 
+  		{
+			element = element.replace("_", " ");
+			cls = "";
+	 	}
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	  
+  		});
 		return new Handlebars.SafeString(el);
 	});
+	
 	
 	Handlebars
 	.registerHelper(
@@ -7090,7 +7181,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 								var properties = data.get(value).get("properties");
 								var img_path = "";
 								
-								var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+								var default_return = "src='"+updateImageS3Path('img/building.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 								var error_fxn = "";
 
@@ -7100,7 +7191,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 									{
 										default_return = "src='" + properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
 
-										error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
+										error_fxn = "this.src='"+updateImageS3Path('img/building.png')+"'; this.onerror=null;";
 
 										break;
 									}
@@ -7108,7 +7199,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 									{
 										default_return = "src='https://www.google.com/s2/favicons?domain=" + properties[i].value + "' " + "style='width:" + full_size + "px; height=" + full_size + "px; padding:" + size_diff + "px; " + additional_style + " ;'";
 
-										error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+										error_fxn = "this.src='"+updateImageS3Path("img/building.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 									}
 								}
 								img_path = new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");

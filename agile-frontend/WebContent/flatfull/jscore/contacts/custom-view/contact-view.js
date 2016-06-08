@@ -190,6 +190,8 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
+
+						
 						$(el).append($(template_ui));
 					}, null);
 				});
@@ -223,7 +225,14 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 	// Sets data to tr
 	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data(
 			base_model);
-	
+	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data();
+	var c  = $(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').find("tr:first").find("th:first").text()
+	if(c == "Basic info")
+	{
+		$(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').removeClass("contactsimage");
+		$(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').addClass("contactsimage");
+	}
+
 }
 
 // Check whether the given fields list has the property name.
@@ -351,6 +360,46 @@ function setUpContactSortFilters(el)
 		CUSTOM_SORT_VIEW.addAll(data);
 	})
 	
+}
+
+function setUpCompanyFields(el)
+{
+	var companyfields = [] ; 
+	$('#companies-static-fields-group', el).html(getTemplate("companies-custom-fields"));
+	$.ajax({ type : 'GET', url : '/core/api/custom-fields/', contentType : "application/json; charset=utf-8",
+				success : function(data)
+				{
+					console.log(data)
+					for(var i=0 ; i<data.length ;i++)
+					{
+						if(data[i].scope == 'COMPANY')
+						{
+						getTemplate("companies-custom-fields-append", data[i], undefined, function(template_ui){
+     							if(!template_ui)
+    					  		return;
+    						$("#custom-fields-group",el).append(template_ui);
+
+ 							});
+						}
+
+					}
+					$.ajax({
+					url : 'core/api/contact-view-prefs/company',
+					type : 'GET',
+					dataType : 'json',
+					
+					success : function(data)
+						{
+						var customfields = $("#companies-static-fields");
+						deserializecontactsForm(data.fields_set, customfields);
+						console.log(data);
+					}
+				});
+				}, dataType : 'json' });
+
+			
+
+
 }
 
 function addCustomFieldToSearch(base_model, scope)

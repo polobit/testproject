@@ -352,6 +352,7 @@ var ContactsRouter = Backbone.Router.extend({
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
 					loadPortlets('Contacts',cel);
+				
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
 						// Call to get Count 
@@ -1007,7 +1008,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			this.contact_custom_view = undefined;
 			CONTACTS_HARD_RELOAD = false;
 			view_data = undefined;
-			// App_Contacts.contactViewModel = undefined;
+			// ts.contactViewModel = undefined;
 		}
 
 		// If id is defined get the respective custom view object
@@ -1078,6 +1079,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
 			$("#contactsmenu").addClass("active");
+			 App_Contacts.contactsListView.delegateEvents();
 			return;
 		}
 
@@ -1115,7 +1117,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			custom_scrollable_element="#contacts-grid-table-model-list";
 		    }
 		}	
-		
+		that = this ;
 		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
@@ -1124,7 +1126,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 				contactListener();
 
-
+				
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
 				//setup_tags(el);
@@ -1140,6 +1142,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				setUpContactView(el,true);
 			    else
 				setUpContactView(el);
+
+				// Render Contact fields
+				setupContactFields(el);
 
 				abortCountQueryCall();
 				
@@ -1179,8 +1184,6 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					var $nextEle = $('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 					// $('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
 				}
-				
-
 				
 
 			}, appendItemCallback: function(el){
@@ -1369,9 +1372,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
-	}	
-	});
+	},
 
+	});
 
 
 function getAndUpdateCollectionCount(type, el, countFetchURL){
