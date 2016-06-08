@@ -87,6 +87,8 @@ public class SearchAPI
     public Collection searchAll(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
+    	if(count!=null && Integer.parseInt(count)<10)
+    		count = "10";
 
 	if (StringUtils.isEmpty(type)){
 		List<Object> searchResult =  (List<Object>)new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
