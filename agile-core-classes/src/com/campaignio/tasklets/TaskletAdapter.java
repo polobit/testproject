@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
-import com.agilecrm.util.email.HandlebarsUtil;
+import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -229,7 +229,7 @@ public class TaskletAdapter implements Tasklet
 	    return " ";
 
 	// Compile the template using Mustache
-	return HandlebarsUtil.compile(value, mergedJson);
+	return MustacheUtil.compile(value, mergedJson);
     }
 
     /**

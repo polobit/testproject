@@ -15,7 +15,6 @@ import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
-import com.agilecrm.util.email.HandlebarsUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -81,8 +80,8 @@ public class ContactBulkEmailUtil
 					if (subscriberJSON != null)
 					{
 						// Compiles subject and body mustache templates
-						String replacedSubject = HandlebarsUtil.compile(subject, subscriberJSON.getJSONObject("data"));
-						String replacedBody = HandlebarsUtil.compile(body, subscriberJSON.getJSONObject("data"));
+						String replacedSubject = MustacheUtil.compile(subject, subscriberJSON.getJSONObject("data"));
+						String replacedBody = MustacheUtil.compile(body, subscriberJSON.getJSONObject("data"));
 
 						long openTrackerId = System.currentTimeMillis();
 
