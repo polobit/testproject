@@ -2,8 +2,8 @@
     "name": "Voice Call",
     "thumbnail": "json/nodes/images/sms/sendmessage.png",
     "icon": "json/nodes/icons/sms/sendmessage.png",
-    "info": "Make a voice call",
-    "help": "You can enable SMS Gateway Integration from Admin settings -> preferences",
+    "info": "Call and Play an automated voice message to your contacts",
+    "help": "You can enable Twilio Call widget Integration from Admin settings -> preferences",
     "author": "Sonali",
     "company": "mantra",
     "language": "en",
@@ -25,13 +25,13 @@
                 }
             
         },{
-            "label": "Customer Number:",
+            "label": "Contact Number:",
             "required": "required", 
             "category": "Settings",
             "name": "phonenumber1",
             "id":"phonenumber1",
             "value":"{{phone}}",
-            "title": "Enter the recipient number or {{phone}}",
+            "title": "Enter the Recipient Number or {{phone}} to play the voice message.",
             "fieldType": "input",
             "type": "text",
             "style": {
@@ -40,7 +40,6 @@
         },
         {   
             "label": "Message",
-           "required": "required",
             "category": "Settings",
             "name": "message",
             "id": "message",
@@ -51,12 +50,11 @@
             "type": "textarea" 
          },
          {
-            "label": "Owner Number:",
-            "required": "required", 
+            "label": "Call Back Number:",
             "category": "Settings",
             "name": "phonenumber2",
             "id":"phonenumber2",
-            "title": "Enter the recipient number",
+            "title": "Enter the Number to be connected after Voice Message is played.",
             "fieldType": "input",
             "type": "text",
             "placeholder":"Enter your number",
@@ -66,7 +64,7 @@
         },
          
          {
-            "label": "Forwarding a voice call using to the contac.",
+            "label": "Call and Play an automated voice message to your contacts.Call Back Number allows contact to connect back with you.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

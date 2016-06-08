@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.resource.instance.Call;
 import com.twilio.sdk.verbs.Dial;
 import com.twilio.sdk.verbs.Gather;
 import com.twilio.sdk.verbs.Number;
@@ -66,27 +67,46 @@ public class VoiceCallTwilioServlet extends HttpServlet
 		Pause pause = new Pause();
 		pause.setLength(1);
 		twiml.append(pause);
-		Gather gather = new Gather();
-		String namespace = NamespaceManager.get();
-		gather.setAction("https://" + namespace
-			+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/Twiliovoicecall?Number2="
-			+ URLEncoder.encode(request.getParameter("number2"), "UTF-8"));
-		gather.setTimeout(20);
-		gather.setMethod("POST");
-		gather.setNumDigits(1);
-		Say say = new Say(request.getParameter("message"));
-		say.setVoice("woman");
-		say.setLanguage("en");
-		Say say1 = new Say("Please enter 1 for speaking with our agent . enter 2 for end the call.");
-		say1.setVoice("woman");
-		say1.setLanguage("en");
-		gather.append(say);
-		gather.append(say1);
-		Say finalmsg = new Say("Sorry We didn't receive any input from you .Goodbye!");
-		finalmsg.setVoice("woman");
-		finalmsg.setLanguage("en");
-		twiml.append(gather);
-		twiml.append(finalmsg);
+		
+		if (request.getParameter("number2").isEmpty() && !request.getParameter("message").isEmpty())
+		{
+		    Say say = new Say(request.getParameter("message"));
+		    say.setVoice("woman");
+		    say.setLanguage("en");
+		    twiml.append(say);
+		    
+		}
+		else if (!request.getParameter("number2").isEmpty() && request.getParameter("message").isEmpty())
+		{
+		    Dial dial = new Dial(URLEncoder.encode(request.getParameter("number2"), "UTF-8"));
+		    twiml.append(dial);
+		    
+		}
+		else
+		{
+		    
+		    Gather gather = new Gather();
+		    String namespace = NamespaceManager.get();
+		    gather.setAction("https://" + namespace
+			    + "-dot-sandbox-dot-agilecrmbeta.appspot.com/Twiliovoicecall?Number2="
+			    + URLEncoder.encode(request.getParameter("number2"), "UTF-8"));
+		    gather.setTimeout(20);
+		    gather.setMethod("POST");
+		    gather.setNumDigits(1);
+		    Say say = new Say(request.getParameter("message"));
+		    say.setVoice("woman");
+		    say.setLanguage("en");
+		    Say say1 = new Say("Please enter 1 to connect with us  . enter 2 for end the call.");
+		    say1.setVoice("woman");
+		    say1.setLanguage("en");
+		    gather.append(say);
+		    gather.append(say1);
+		    Say finalmsg = new Say("Sorry We didn't receive any input from you .Goodbye!");
+		    finalmsg.setVoice("woman");
+		    finalmsg.setLanguage("en");
+		    twiml.append(gather);
+		    twiml.append(finalmsg);
+		}
 		System.out.println(twiml.toXML());
 		response.setContentType("application/xml");
 		response.getWriter().print(twiml.toXML());
