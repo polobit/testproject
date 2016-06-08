@@ -20,7 +20,7 @@
 <br><br>
 <label class="email-field">
 <div class="email-div">Email address*</div>
-<input value="" name="email" type="text" id="email" onblur="validateEmail(this);">
+<input value="" name="email" type="text" id="email">
 <p id="wrong-email" style="color:#f05050; margin-left: 3px; display: inline;width: 50%;"></p>
 </label>
 <br><br>
@@ -136,12 +136,12 @@ function checkField(field){
   document.getElementById("agile_submit").style="margin-left: 126px;"
   return false;
   }
-}
-function validateEmail(email){
-  var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
-  if (!reg.test(email.value)){
-  document.getElementById('wrong-email').innerHTML = "please provide a valid email.";
-  return false;
+  else if(document.getElementById('email').value!=''){
+    var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+      if (!reg.test(email.value)){
+      document.getElementById('wrong-email').innerHTML = "please provide a valid email.";
+      return false;
+      }
   }
 }
 </script>
