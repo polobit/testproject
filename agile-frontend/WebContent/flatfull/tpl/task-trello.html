@@ -117,7 +117,7 @@
         </div>
 </div>
 <div class="pull-left text-center" style="width:80%;">  
-         <span class="m-r-xs text-ellipsis">{{get_normal_name heading}}
+         <span class="m-r-xs text-ellipsis font-bold" style="opacity:0.6;">{{get_normal_name heading}}
         <!-- <span id="task-count-{{heading}}-{{owner_id}}" class="badge bg-primary txt-mute"></span> -->
        <span id="task-count-{{heading}}-{{owner_id}}"  {{getthemecolor}} class="label  m-r-sm" style="vertical-align:middle; margin-top:2px; background-color:#cfdadd;">0</span></span>
 </div>
@@ -178,7 +178,7 @@
     <div class="task-left">  
 
       </div>
-<div class="pull-left task-content-view" style="width:100%;">
+<div class="pull-left task-content-view" style="width:100%; margin-bottom:5spx;">
 <div>
 <div class="">
 
@@ -266,7 +266,7 @@
 
      
 
-<p class="word-break-all white-space-normal text-xs m-b-none">{{taskDescription}}</p>
+<p class="word-break-all white-space-normal text-xs m-t-n-xs m-b-xs m-l">{{taskDescription}}</p>
 
 <div class="clearfix"></div>
     </div> <!--task-body--> 
@@ -282,7 +282,7 @@
     <div class="pull-right"> 
 <div class="new-task-owner  thumb-xxs avatar taskavatarimg p-b-sm">     
          {{#if taskOwner.pic}}
-          <img src="{{taskOwner.pic}}" style="height:25px;width:25px;" class="thumb-xxs m-r-sm r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
+          <img src="{{taskOwner.pic}}" style="height:20px;width:20px;margin-top:2px;" class="thumb-xxs m-r-sm r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{else}}
       <img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x m-r-sm" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{/if}}
