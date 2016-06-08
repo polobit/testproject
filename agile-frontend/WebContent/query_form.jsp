@@ -8,7 +8,7 @@
 <div class="header-div">
 <span class="label-header" >Leave us a message
 </span>
-<button class="close-tag">x</button>
+<button class="close-tag" onclick="parent.closeQueryIframe();">x</button>
 </div>
 </header>
 <div class="form-content ">
@@ -144,6 +144,8 @@ function checkField(field){
       }
   }
 }
+
+
 </script>
 </body>
 
