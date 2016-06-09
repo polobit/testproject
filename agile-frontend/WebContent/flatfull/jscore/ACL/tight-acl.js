@@ -115,10 +115,10 @@
 		if(tagsCollectionView){
 			if(tag.indexOf('[') < 0){
 				if(tagsCollectionView.collection.where({"tag":tag}).length == 0){
-					showAlertModal("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.", undefined, function(){
+					showAlertModal(" You don't have permissions to create a new tag.", undefined, function(){
 						if(errorCallback)
-							errorCallback("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
-					}, undefined, "Error");
+							errorCallback(" You don't have permissions to create a new tag.");
+					}, undefined, "Alert");
 					return;
 				}
 				else if(callback)
