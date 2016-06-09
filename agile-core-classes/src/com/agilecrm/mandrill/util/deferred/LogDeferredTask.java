@@ -19,7 +19,7 @@ public class LogDeferredTask implements DeferredTask
     public String message = null;
     public String logType = null;
     public String domain = null;
-    public String time = null;
+    public String timestamp = null;
     
     public LogDeferredTask(String campaignId, String subscriberId, String message, String logType, String domain,
 	    String time)
@@ -29,7 +29,7 @@ public class LogDeferredTask implements DeferredTask
 	this.message = message;
 	this.logType = logType;
 	this.domain = domain;
-	this.time = time;
+	this.timestamp = time;
     }
     
     @Override
@@ -53,7 +53,7 @@ public class LogDeferredTask implements DeferredTask
 	    
 	    // Insert to SQL
 	    CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
-		    subscriberId, message, logType);
+		    subscriberId, message, logType,timestamp);
 	    
 	    long processTime = System.currentTimeMillis() - startTime;
 	    System.out.println("Process time for adding log is " + processTime + "ms");

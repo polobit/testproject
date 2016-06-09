@@ -85,7 +85,7 @@ public class LogUtil
 	    long startTime = System.currentTimeMillis();
 	    // Insert to SQL
 	    CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
-		    subscriberId, message, logType);
+		    subscriberId, message, logType,null);
 	    System.out.println("Process time for adding log is " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 	else
