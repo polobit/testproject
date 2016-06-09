@@ -24,12 +24,14 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.BrainTreeUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.CustomWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactsImportUtil;
 
@@ -363,19 +365,46 @@ public class WidgetsAPI {
 		if (obj != null) {
 			JSONObject widgetObj = new JSONObject(obj);
 			String widgetName = widgetObj.getString("name");
-			JSONArray userArray = WidgetUtil.getWigetUsersList(widgetName);
 
+			// Deleting the widget.
 			String newUsersList = widgetObj.getString("listOfUsers");
-			String oldUsersList = userArray.toString();
-			// JSONArray removeWidgets = new JSONArray();
-
-			for (int i = 0; i < userArray.length(); i++) {
-				String oldUserID = userArray.getString(i);
-				if (!(newUsersList.contains(oldUserID))) {
-					Widget deleteWidget = WidgetUtil.getWidget(widgetName,
+			JSONArray finalUsers = new JSONArray();
+			JSONArray oldUserArray = WidgetUtil.getWigetUsersList(widgetName);
+			for (int i = 0; i < oldUserArray.length(); i++) {
+				String oldUserID = oldUserArray.getString(i);
+				if (!(newUsersList.contains(oldUserID))) {					
+					Widget widget = WidgetUtil.getWidget(widgetName,
 							Long.parseLong(oldUserID));
+					if (widget != null && widget.add_by_admin) {
+						WidgetUtil.deleteWidget(oldUserID, widgetName);
+					}
+				}else{
+					finalUsers.put(oldUserArray.get(i));
 				}
 			}
+
+			Widget widget = WidgetUtil.getWidget(widgetName);
+			// Creating new widget.
+			String oldUsersList = oldUserArray.toString();
+			JSONArray newUserArray = new JSONArray(newUsersList);
+			for (int i = 0; i < newUserArray.length(); i++) {
+				String newUserID = newUserArray.getString(i);
+				if (!(oldUsersList.contains(newUserID))) {
+					finalUsers.put(newUserID);
+					AgileUser agileUser = AgileUser.getCurrentAgileUser(Long
+							.parseLong(newUserID));
+					Key<AgileUser> userKey = AgileUser
+							.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+					widget.setUser(userKey);
+					widget.add_by_admin = true;
+					widget.listOfUsers = null;
+					widget.id = null;
+					widget.save();
+				}
+			}
+			widget = WidgetUtil.getWidget(widgetName);			
+			widget.listOfUsers = finalUsers.toString();
+			widget.save();
 
 		}
 	}

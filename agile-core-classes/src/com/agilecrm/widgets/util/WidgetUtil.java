@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -67,14 +66,12 @@ public class WidgetUtil {
 		for (Widget widget : widgets) {
 			for (Widget currentWidget : currentWidgets){
 				if (currentWidget.name.equals(widget.name)) {
-					if(dmu.is_admin){
-						try {
-							JSONArray userIDs = new JSONArray(currentWidget.listOfUsers);
-							userIDs.put(WidgetUtil.getWigetUsersList(widget.name));
-							widget.listOfUsers = userIDs.toString();
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					if(dmu.is_admin){												
+						JSONArray userArray = WidgetUtil.getWigetUsersList(widget.name);
+						if(userArray != null){
+							widget.listOfUsers = userArray.toString();
+							currentWidget.listOfUsers = userArray.toString();
+							currentWidget.save();							
 						}
 					}
 					// Setting true to know that widget is configured.
@@ -325,7 +322,7 @@ public class WidgetUtil {
 				AgileUser aUser = AgileUser.getCurrentAgileUserFromDomainUser(dUser.id);
 				Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
 				if(userWidget != null){
-					userIDs.put(userWidget.id);
+					userIDs.put(aUser.id);
 				}
 			}
 		//}

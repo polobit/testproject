@@ -55,6 +55,7 @@ function initializeWidgetSettingsListeners(){
 	 * add widget then navigates back to the contact-details page
 	 */
 	$('#prefs-tabs-content').off();
+	
 	$('#prefs-tabs-content .install-custom-widget').off('click');
 	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
@@ -131,7 +132,9 @@ function initializeWidgetSettingsListeners(){
 			result.data = data;
 
 			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
-  				$("#widget-acls-modal").html(template_ui).modal('show');  	
+  				$("#widget-acls-modal").html(template_ui).modal('show');  
+  				
+  				$('#widget-acls-modal').off();	
 
   				$('#widget-acls-modal .agileUserChk_all').off('click');
 				$('#widget-acls-modal').on('click', '.agileUserChk_all', function(e){

@@ -44,7 +44,6 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 @Cached
 public class Widget {
-	// Key
 	@Id
 	public Long id;
 
@@ -59,7 +58,6 @@ public class Widget {
 	 */
 	public String description = null;
 
-	// URL
 	/**
 	 * Url specifies the path of the widget script
 	 */
@@ -219,6 +217,10 @@ public class Widget {
 		this.user = new Key<AgileUser>(AgileUser.class,
 				AgileUser.getCurrentAgileUser().id);
 	}
+	
+	public void setUser(Key<AgileUser> userKey) {
+		this.user = userKey;
+	}
 
 	/**
 	 * Sets the position of the widget
@@ -246,20 +248,18 @@ public class Widget {
 		DomainUser domainUser = agileUser.getDomainUser();
 		boolean isAdmin = domainUser.is_admin;
 		JSONArray userList = new JSONArray();
-		if (isAdmin && this.id == null) {
+		if (isAdmin && this.id == null && !(this.add_by_admin)) {
 			userList.put(agileUser.id);
 			this.listOfUsers = userList.toString();
-			this.add_by_admin = isAdmin;
 		}
 
 		if (user == null) {
-			user = new Key<AgileUser>(AgileUser.class,
-					AgileUser.getCurrentAgileUser().id);
+			user = new Key<AgileUser>(AgileUser.class, agileUser.id);
 		}
 
 		dao.put(this);
 	}
-
+	
 	public void setOwner(Key<AgileUser> user) {
 		this.user = user;
 	}
