@@ -106,9 +106,18 @@ public class ContactMassDuplicateMerge implements DeferredTask
 							break;
 						}
 						//Contact oldContact = ContactUtil.getDuplicateContact(contact);
-
-						if (oldContact != null)
-							oldContact=ContactUtil.mergeContactFeilds(contact, oldContact);
+						
+						if(contact.updated_time!=0 || oldContact.updated_time!=0){
+							if(contact.updated_time>=oldContact.updated_time)
+							{
+								ContactUtil.getContact(Long.valueOf(oldContact.id)).delete();
+							}
+							else
+								ContactUtil.getContact(Long.valueOf(contact.id)).delete();
+						}
+						else{
+							
+		
 
 						try
 					    {
@@ -164,7 +173,7 @@ public class ContactMassDuplicateMerge implements DeferredTask
 						    cas.save();
 						}
 						
-						// merge Campaigns
+						/*// merge Campaigns
 						List<CampaignStatus> campaigns=contact.campaignStatus;
 						for (CampaignStatus campaign : campaigns)
 						{
@@ -189,7 +198,7 @@ public class ContactMassDuplicateMerge implements DeferredTask
 							System.out.println(ExceptionUtils.getFullStackTrace(e));
 							throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 									.build());
-						}
+						}*/
 						
 						//emails
 						List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmails(contact.id);
@@ -209,6 +218,7 @@ public class ContactMassDuplicateMerge implements DeferredTask
 					    {
 						e.printStackTrace();
 					    }
+						}
 					}
 				}
 			}while (fetcher.hasNextSet());
