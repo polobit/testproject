@@ -509,37 +509,26 @@ function showCalendar(users)
 								var eventModel = new Backbone.Model();
 								eventModel.url = 'core/api/events';
 
-								eventModel.save(event);
+								eventModel.save(event, { 
+									error : function(model, response){
+										showModalConfirmation("Update Event", 
+											response.responseText, 
+											function (){
+												revertFunc();
+											}, 
+											function(){
+												return;
+											},
+											function(){
+												return;
+											},
+											"Cancel"
+										);
+									} 
+								});
 							},function(){
 								revertFunc();
 							});
-
-							}
-							if(event.owner)
-							event.owner_id = event.owner.id;
-							delete event.contacts;
-							delete event.owner;
-							event
-							event.contacts = _contacts;
-							var eventModel = new Backbone.Model();
-							eventModel.url = 'core/api/events';
-
-							eventModel.save(event, { error : function(model, response)
-								{
-									showModalConfirmation("Update Event", 
-										response.responseText, 
-										function (){
-											revertFunc();
-										}, 
-										function(){
-											return;
-										},
-										function(){
-											return;
-										},
-										"Cancel"
-									);
-								} });
 						},
 						/**
 						 * Updates or deletes an event by clicking on it

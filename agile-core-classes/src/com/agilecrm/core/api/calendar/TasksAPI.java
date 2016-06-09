@@ -201,7 +201,7 @@ public class TasksAPI
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+		throw new AccessDeniedException("Task cannot be deleted because you do not have permission to update associated contact.");
 	}
 	try
 	{
@@ -245,7 +245,7 @@ public class TasksAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    	throw new AccessDeniedException("You do not have permission to update this contact.");
     }
 	task.save();
 	try
@@ -295,14 +295,14 @@ public class TasksAPI
         	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
         	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
         	{
-        		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+        		throw new AccessDeniedException("You do not have permission to update this contact.");
         	}
         }
     	List<String> conIds = task.contacts;
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    		throw new AccessDeniedException("You do not have permission to update this contact.");
     	}
     	  try {
 			if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())

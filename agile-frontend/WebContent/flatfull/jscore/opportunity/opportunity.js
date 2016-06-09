@@ -492,7 +492,11 @@ function setupContactTypeCustomFields(el, customfields, deals){
 					var contacts_data_array = [];
 					var contactIdsJSON = JSON.parse(field.value);
 					$.each(contactIdsJSON, function(index_1, val){
-						contacts_data_array.push(App_Deals.dealContactTypeCustomFields.collection.get(val).toJSON());
+						var con = App_Deals.dealContactTypeCustomFields.collection.get(val);
+						if(con)
+						{
+							contacts_data_array.push(con.toJSON());
+						}
 					});
 					//If same deal has two or more different contact type custom fields, 
 					//we will add them to contacts_data_json with deal id and custom field name
@@ -504,7 +508,11 @@ function setupContactTypeCustomFields(el, customfields, deals){
 					var companies_data_array = [];
 					var contactIdsJSON = JSON.parse(field.value);
 					$.each(contactIdsJSON, function(index_1, val){
-						companies_data_array.push(App_Deals.dealContactTypeCustomFields.collection.get(val).toJSON());
+						var comp = App_Deals.dealContactTypeCustomFields.collection.get(val);
+						if(comp)
+						{
+							companies_data_array.push(comp.toJSON());
+						}
 					});
 					//If same deal has two or more different company type custom fields, 
 					//we will add them to companies_data_json with deal id and custom field name
@@ -783,6 +791,24 @@ function deleteDeal(id, milestone, dealPipelineModel, el){
 		dealsLineChart();
 	}, error : function(err)
 	{
+		if(err && err.status == 403)
+		{
+			showModalConfirmation("Delete Deal", 
+				err.responseText, 
+				function (){
+					return;
+				}, 
+				function(){
+					return;
+				},
+				function(){
+					return;
+				},
+				"Cancel"
+			);
+			return;
+		}
+		
 		$('.error-status', $('#opportunity-listners')).html(err.responseText);
 		setTimeout(function()
 		{

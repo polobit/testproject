@@ -86,9 +86,28 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 
 			});
 			
+		},
+		error : function(model, response)
+		{
+			modelTaskList[0].get('taskCollection').add(new_task);
+			displayTimeAgo($(".task-trello-list"));
+			showModalConfirmation("Delete Task", 
+				response.responseText, 
+				function (){
+					getDetailsForCollection();
+				}, 
+				function(){
+					return;
+				},
+				function(){
+					return;
+				},
+				"Cancel"
+			);
 		} });
 	}
 	else
+	{
 		$.ajax({ type : "DELETE", url :'core/api/tasks/'+taskId, async : false, dataType : 'json', success : function()
 			{
 				App_Calendar.allTasksListView.collection.remove(taskId);
@@ -103,26 +122,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 				}
 			} 
 		});
-		
-	},
-	error : function(model, response)
-	{
-		modelTaskList[0].get('taskCollection').add(new_task);
-		displayTimeAgo($(".task-trello-list"));
-		showModalConfirmation("Delete Task", 
-			response.responseText, 
-			function (){
-				getDetailsForCollection();
-			}, 
-			function(){
-				return;
-			},
-			function(){
-				return;
-			},
-			"Cancel"
-		);
-	} });
+	}
 }
 
 /*

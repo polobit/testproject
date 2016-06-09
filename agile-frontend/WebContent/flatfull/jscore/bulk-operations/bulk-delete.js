@@ -83,7 +83,7 @@ $(function(){
 				if($(table).attr("id") == "document-list" && !hasScope("EDIT_CONTACT"))
 				{
 					showModalConfirmation("Bulk Delete", 
-						CONTACTS_ACLS_UPDATE_ERROR, 
+						DOCS_CONTACTS_BULK_DELETE_ERROR, 
 						function (){
 							bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
 						}, 
@@ -245,11 +245,21 @@ $(function(){
 			}
 		});
 		if(checked){
+			var err_msg = "";
 			
-			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			if((!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
+			{
+				err_msg = "You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?";
+			}
+			else if(!hasScope("EDIT_CONTACT"))
+			{
+				err_msg = DEALS_CONTACTS_BULK_DELETE_ERROR;
+			}
+
+			if((!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
 			{
 				showModalConfirmation("Bulk Delete", 
-						"You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?", 
+						err_msg, 
 						function (){
 					
 					// Customize the bulk delete operations

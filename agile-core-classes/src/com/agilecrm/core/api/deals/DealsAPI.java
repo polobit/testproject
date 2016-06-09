@@ -302,7 +302,7 @@ public class DealsAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    	throw new AccessDeniedException("You do not have permission to update this contact.");
     }
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
@@ -353,14 +353,14 @@ public class DealsAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    		throw new AccessDeniedException("You do not have permission to update this contact.");
     	}
     }
 	List<String> conIds = opportunity.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+		throw new AccessDeniedException("You do not have permission to update this contact.");
 	}
 	
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
@@ -405,7 +405,7 @@ public class DealsAPI
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+		throw new AccessDeniedException("Deal cannot be deleted because you do not have permission to update associated contact.");
 	}
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
 	if (opportunity != null)

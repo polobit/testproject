@@ -162,7 +162,7 @@ public class EventsAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    		throw new AccessDeniedException("Event cannot be deleted because you do not have permission to update associated contact.");
     	}
     	try
     	{
@@ -202,7 +202,7 @@ public class EventsAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    	throw new AccessDeniedException("You do not have permission to update this contact.");
     }
 	event.save();
 	try
@@ -248,14 +248,14 @@ public class EventsAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    		throw new AccessDeniedException("You do not have permission to update this contact.");
     	}
     }
 	List<String> conIds = event.contacts;
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+		throw new AccessDeniedException("You do not have permission to update this contact.");
 	}
     try {
 		if(oldEvent != null &&!(oldEvent.getDeal_ids()).isEmpty())

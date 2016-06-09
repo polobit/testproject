@@ -231,15 +231,19 @@ var Contact_Details_Tab_Actions = {
 				return;
 			}
 
-			if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !hasScope("EDIT_CONTACT")){
+			if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !hasScope("EDIT_CONTACT") && CURRENT_DOMAIN_USER.id != owner){
 		  		showModalConfirmation("Delete "+model.get("entity_type"), 
 					CONTACTS_ACLS_UPDATE_ERROR, 
 					function (){
-						modelDelete(model, targetEl);
+						return;
 					}, 
 					function(){
 						return;
-					}
+					},
+					function (){
+						return;
+					},
+					'Cancel'
 				);
 				return;
 		  	}
@@ -778,30 +782,7 @@ function modelDelete(model, targetEl, callback){
 		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
 
 	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-	{
-		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !response_data)
-		{
-			return;
-		}
-		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && response_data)
-		{
-			var can_edit = false;
-			$.each(response_data, function(index, contactId){
-				if(App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
-				{
-					can_edit = true;
-				}
-			});
-			if(!App_Contacts.contactDetailView.model.get("id"))
-			{
-				can_edit = true;
-			}
-			if(!can_edit)
-			{
-				return;
-			}
-		}
-		
+	{	
 		// Removes activity from list
 		$(that).parents(".activity").fadeOut(400, function()
 		{
