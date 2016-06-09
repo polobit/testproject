@@ -7497,3 +7497,10 @@ function getLastDateOfSubscription(customer){
 }
 
 
+Handlebars.registerHelper('validateSendgridWhitelabel', function(valid)
+{
+	if (valid)
+		return "<i class='fa fa-check icon-2x' style='color:green;'></i>";
+
+	return "<i class='fa fa-times icon-2x' style='color:red;'></i>";
+});
