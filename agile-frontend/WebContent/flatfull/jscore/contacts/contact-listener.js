@@ -29,7 +29,7 @@ var timer = undefined;
 				_agile_delete_prefs("contactTabelView");
 			else
 				_agile_set_prefs("contactTabelView","true");
-
+			CONTACTS_HARD_RELOAD = true;
 			App_Contacts.contacts();
 	});
 		$("body").on('click','#companiesTabelView',function(el){
@@ -39,6 +39,7 @@ var timer = undefined;
 		else
 			_agile_set_prefs("companyTabelView","true");
 
+		COMPANIES_HARD_RELOAD = true;
 		App_Companies.companies();
 		});
 
