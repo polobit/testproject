@@ -205,13 +205,14 @@
  <label class="icon icon-check m-r-xs" data-toggle="tooltip" style="float:left;font-size:15px;color:green;margin-top:3px;" data-placement="top" data-container="body" title="Completed"></label>
  {{/if_equals}}  
       {{#if is_complete}}
-         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full   activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject word-break-all white-space-normal w-full font-bold " style="opacity:0.75;top:0px;">{{safe_string subject}}
-         {{/is_link}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
+         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full   activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject word-break-all white-space-normal w-full font-bold " style="opacity:0.75;top:0px;">{{/is_link}}
+         {{safe_string subject}}
+         </span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;">{{safe_string subject}}{{/is_link}} </span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;">{{/is_link}}{{safe_string subject}} </span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
          {{else}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.75;top:0px;">{{safe_string subject}} {{/is_link}}</span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a> 
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.75;top:0px;">{{/is_link}} {{safe_string subject}} </span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a> 
          {{/if_equals}}       
       {{/if}}      
 </div>
