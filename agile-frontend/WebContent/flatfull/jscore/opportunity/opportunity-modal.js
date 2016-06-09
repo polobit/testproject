@@ -145,6 +145,7 @@ $(function()
 										// without reloading the app.
 										success : function(model, response)
 										{
+											IS_DEAL_ARCHIVED = true;
 											// For deal details page.
 											if (Current_Route != 'deals')
 											{
@@ -284,6 +285,7 @@ $(function()
 										// without reloading the app.
 										success : function(model, response)
 										{
+											IS_DEAL_RESTORED = true;
 											if (Current_Route != 'deals')
 											{
 												$("#deal_restore_confirm_modal").modal('hide');

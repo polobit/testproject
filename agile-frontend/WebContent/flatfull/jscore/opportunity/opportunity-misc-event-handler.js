@@ -446,6 +446,56 @@ function initializeDealListners(el){
         }
     });
 
+    $('#opportunity-listners').off('click', '.deal-track-close');
+	$('#opportunity-listners').on('click', '.deal-track-close', function(e) {
+		var heading = $("#moving-deal").attr("data-heading");
+		if(heading) {
+			heading = heading.replace(/ +/g, '');
+		}
+		//$("li.ui-sortable-placeholder").hide();
+
+		var pos = $("#moving-deal").attr("data-pos");
+
+		var deal_id = $("#moving-deal").find("div:first").attr("id");
+		var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
+
+		$("#new-track-list-paging").hide();
+		$("#new-opportunity-list-paging").show();
+
+		if(dealsCollection) {
+			var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
+			if($("#"+heading+"-list-container").find("ul").find("li:visible").length > 0) {
+				$("#"+heading+"-list-container").find("ul").find("li:visible").eq(pos).before("<li class='deal-color "+dealModel.get('colorName')+"' data-pos='"+pos+"'>"+$("#moving-deal").html()+"</li>");
+			}else {
+				$("#"+heading+"-list-container").find("ul").append("<li class='deal-color "+dealModel.get('colorName')+"'>"+$("#moving-deal > li").html()+"</li>");
+			}
+			$("#"+heading+"-list-container").find("ul").find("li").show();
+			$("#"+heading+"-list-container").find("ul").find("li.ui-sortable-helper").remove();
+		}
+    });
+
+    $('#opportunity-listners').off('click', '.update-drag-deal');
+	$('#opportunity-listners').on('click', '.update-drag-deal', function(e) {
+
+		var deal_id = $("#moving-deal").find("div:first").attr("id");
+		var heading = $("#moving-deal").attr("data-heading");
+		var track = $(this).find("div:first").attr("data-track");
+		var newMilestone = $(this).find("div:first").text().trim();
+		var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
+
+		if(dealsCollection) {
+			var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
+			if(dealModel) {
+				var old_milestone = dealModel.get("milestone");
+				dealModel.set({ "pipeline_id" : track }, { silent : true });
+				update_milestone(dealModel, deal_id, newMilestone, old_milestone, true, "", false);
+				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
+			}
+		}
+		$("#new-track-list-paging").hide();
+		$("#new-opportunity-list-paging").show();
+    });
+
 }
 
 function initializeMilestoneListners(el){

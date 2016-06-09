@@ -298,6 +298,7 @@ function setupDealsTracksList(cel){
 				$('#deals-tracks .filter-dropdown', $("#opportunity-listners")).append(Handlebars.compile('{{name}}')({name : track_name}));
 			}, 100);
 			startGettingDeals();
+			setupTracksAndMilestones($('#opportunity-listners'));
 
 			// Hide the track list if there is only one pipeline.
 			if(tracksArray.length<=1)
@@ -790,4 +791,109 @@ function deleteDeal(id, milestone, dealPipelineModel, el){
 		}, 2000);
 		console.log('-----------------', err.responseText);
 	} });
+}
+
+function setupTracksAndMilestones(el){
+	if(trackListView && trackListView.collection){
+		var tracks = trackListView.collection.models;
+
+		$.each(tracks, function(index, trackObj){
+			var track = trackObj.toJSON();
+			if(_agile_get_prefs("agile_deal_track") != track.id && track.milestones){
+				var style_class = "m-b-lg";
+				if(index == tracks.length-1)
+				{
+					style_class = "";
+				}
+				if(index == 0)
+				{
+					style_class += " m-t-sm";
+				}
+				$('#new-track-list-paging').find('#moving-tracks').append("<div class='"+style_class+" p-r'><div class='text-md m-b-xs'>"+track.name+"</div><div id='"+track.id+"' style='border: 1px solid #dee5e7;'></div></div>")
+				var milestones = track.milestones.split(",");
+				var milestone_width = 100 / milestones.length;
+				$.each(milestones, function(index_1, milestone_name){
+					var milestone_heading_class = "milestone-heading";
+					var span_html = "<span></span>";
+					var border_right_html = "";
+					if(index_1 == milestones.length - 1){
+						milestone_heading_class = "";
+						span_html = "";
+						border_right_html = "border-right:none!important;"
+					}
+					var milestone_html = 	'<div class="milestone-column panel m-b-none b-n r-n panel-default" style="width: '+milestone_width+'%;min-width:0px;'+border_right_html+'">'+
+											'<div class="dealtitle-angular panel-heading c-p b-n update-drag-deal" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="'+milestone_name+'">'+
+											'<div class="'+milestone_heading_class+' text-left text-ellipsis" data-track="'+track.id+'">'+
+											'<span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left">'+milestone_name+'</span></div>'+
+											''+span_html+'</div></div>';
+					$("#"+track.id, $('#new-track-list-paging')).append(milestone_html);
+					$("[data-toggle=tooltip").tooltip();
+				});
+			}
+		});
+	}
+}
+
+// Append sub collection and model
+function trackAppend(base_model)
+{
+	var ele = this.el;
+	tracksCollectionView(base_model, ele, function(){
+		milestonesFetch(base_model, ele);
+	});
+	
+}
+
+// Renders outer view of milestone view
+function tracksCollectionView(base_model, ele, callback)
+{
+	var dealsListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "tracks-by-paging-model", tagName : 'div',
+		className : "milestone-column panel m-b-none  b-n r-n panel-default" });
+
+	// Render model in main collection
+	var el = dealsListModel.render().el;
+
+	// Append model from main collection in UI
+	$('#tracks-by-paging-model-list > div.tracks-main', ele).append(el);
+	return callback();
+}
+
+
+/**
+ * Create sub collection, ad to model in main collection, fetch tasks from DB
+ * for sub collection and update UI.
+ */
+function milestonesFetch(base_model, ele)
+{
+	if (!base_model)
+		return;
+
+	var dealsTemplate = 'milestones-by-paging';
+
+	var milestones = base_model.get("milestones");
+
+	var track = base_model.get("id");
+
+	var milestonesJSON = {};
+
+	if(milestones)
+	{
+		milestonesJSON = milestones.split(",");
+	}
+
+	// Define sub collection
+	var dealCollection = new Base_Collection_View({ templateKey : dealsTemplate, individual_tag_name : 'li', 
+		sort_collection : false, postRenderCallback : function(el)
+		{   
+			$.each($(el).find("li"), function(){
+				$(this).addClass("update-drag-deal");
+			});
+		} });
+
+	$.each(milestonesJSON, function(index, val){
+		var model = { "milestone" : val, "track" : track };
+		dealCollection.collection.add(model);
+	});
+
+	$('#' + base_model.get("id") + '-list-container', ele).html(dealCollection.render(true).el);
 }

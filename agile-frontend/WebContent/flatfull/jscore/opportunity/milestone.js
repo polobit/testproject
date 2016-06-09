@@ -2,13 +2,57 @@
  * To perform actions on deals arranged in milestones 
  * using sortable.js when it is dropped in middle or dragged over.
  */
+var IS_DEAL_ARCHIVED = false;
+var IS_DEAL_RESTORED = false;
 function setup_deals_in_milestones(id){
+	var is_deal_drop_to_delete = false;
+	var is_deal_drop_to_archive = false;
+	var is_deal_drop_to_track = false;
+	var is_deal_drop_to_restore = false;
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestones').sortable({
 		      connectWith : "ul",
 		      cursor : "move",
-		      containment : "#" + id ,
+		      containment : "#content" ,
 		      scroll : false,
+		      tolerance: "intersect",
+		      start : function(event, ui) {
+		      	if($("#deals-tracks").is(":visible"))
+		      	{
+		      		$(".move-deal-action").show();
+		      	}
+		      	else
+		      	{
+		      		$(".move-deal-action").hide();
+		      	}
+		      	if($(ui.item).find(".archived-deal").attr("data-archive") == "true")
+		      	{
+		      		$(".restore-deal-action", $('#dealActions')).show();
+		      		$(".archive-deal-action", $('#dealActions')).hide();
+		      	}
+		      	else
+		      	{
+		      		$(".restore-deal-action", $('#dealActions')).hide();
+		      		$(".archive-deal-action", $('#dealActions')).show();
+		      	}
+		      	$('#dealActions').show();
+		      	is_deal_drop_to_delete = false;
+		      	is_deal_drop_to_archive = false;
+		      	is_deal_drop_to_track = false;
+		      	$("#moving-deal").attr("data-heading", $(ui.item).closest("ul").attr("milestone"));
+		      	$("#moving-deal").attr("data-pos", $(ui.item).attr("data-pos"));
+		      },
+		      stop : function(event, ui) {
+		      	if($("#deals-tracks").is(":visible"))
+		      	{
+		      		$(".move-deal-action").show();
+		      	}
+		      	else
+		      	{
+		      		$(".move-deal-action").hide();
+		      	}
+		      	$('#dealActions').hide();
+		      },
 		      // When deal is dragged to adjust the horizontal scroll
 		      change : function(event, ui){
 		    	  var width = $('#' + id + ' > div').width();
@@ -20,6 +64,10 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
+		      	  if(is_deal_drop_to_delete || is_deal_drop_to_archive || is_deal_drop_to_track || is_deal_drop_to_restore)
+		      	  {
+		      	  	return;
+		      	  }
 		      	  $('ul.milestones').sortable("disable");
 		      	  console.log(">>>>>>>>>>>>>>>>>> deals id");
 		    	  console.log(ui);
@@ -73,6 +121,173 @@ function setup_deals_in_milestones(id){
 					
 		        }
 	    });
+		
+		$('li.delete-deal-action').droppable({
+			accept: ".deal-color",
+			drop: function( event, ui ) {
+				$("li.ui-sortable-placeholder").hide();
+				$(ui.draggable).hide();
+				is_deal_drop_to_delete = true;
+				
+				var id = $(ui.draggable).find('.data').attr('id');
+				var milestone = ($(ui.draggable).closest('ul').attr("milestone")).trim();
+				var id_array = [];
+				var id_json = {};
+
+				// Create array with entity id.
+				id_array.push(id);
+
+				// Set entity id array in to json object with key ids,
+				// where ids are read using form param
+				id_json.ids = JSON.stringify(id_array);
+
+				var that = this;
+				$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function()
+				{
+					$("li.ui-sortable-placeholder").remove();
+					$(ui.draggable).remove();
+
+					// Remove the deal from the collection and remove the UI element.
+					var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+					if (!dealPipelineModel)
+						return;
+
+					var dealRemoveModel = dealPipelineModel[0].get('dealCollection').get(id);
+					
+					var dealRemoveValue = dealRemoveModel.attributes.expected_value;
+					
+					var removeDealValue = parseFloat($('#'+milestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealRemoveValue); 
+		            
+
+
+		            $('#'+milestone.replace(/ +/g, '')+'_totalvalue').text(portlet_utility.getNumberWithCommasAndDecimalsForPortlets(removeDealValue));
+		          
+		           	$('#'+ milestone.replace(/ +/g, '') + '_count').text(parseInt($('#' + milestone.replace(/ +/g, '') + '_count').text()) - 1);			
+		           
+
+					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+
+					// Shows Milestones Pie
+					pieMilestones();
+
+					// Shows deals chart
+					dealsLineChart();
+				} });
+			}
+		});
+		$('li.archive-deal-action').droppable({
+			accept: ".deal-color",
+			drop: function( event, ui ) {
+				$("li.ui-sortable-placeholder").hide();
+				$(ui.draggable).hide();
+
+				is_deal_drop_to_archive = true;
+				var temp = {};
+				temp.id = $(ui.draggable).find('.data').attr('id');
+				temp.milestone = ($(ui.draggable).closest('ul').attr("milestone")).trim();
+				$("#deal_archive_confirm_modal").html(getTemplate('archive-deal'));
+				$("#archived-deal-id", $("#deal_archive_confirm_modal")).val(temp.id);
+				$("#archived-deal-milestone", $("#deal_archive_confirm_modal")).val(temp.milestone);
+				$("#deal_archive_confirm_modal").modal('show');
+
+				var pos = $("#moving-deal").attr("data-pos");
+
+				$('#deal_archive_confirm_modal').on('hidden.bs.modal', function(){
+					if(!IS_DEAL_ARCHIVED)
+					{
+						var milestone_name = $(ui.draggable).find("div:first").attr("data");
+						if(milestone_name)
+						{
+							if($("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li:visible").length > 0)
+							{
+								$("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li:visible").eq(pos).before($(ui.draggable));
+							}
+							else
+							{
+								$("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").append($(ui.draggable));
+							}
+							$("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li").show();
+						}
+					}
+				});
+			}
+		});
+
+		$('li.restore-deal-action').droppable({
+			accept: ".deal-color",
+			drop: function( event, ui ) {
+				$("li.ui-sortable-placeholder").hide();
+				$(ui.draggable).hide();
+
+				is_deal_drop_to_restore = true;
+				var temp = {};
+				temp.id = $(ui.draggable).find('.data').attr('id');
+				temp.milestone = ($(ui.draggable).closest('ul').attr("milestone")).trim();
+				$("#deal_restore_confirm_modal").html(getTemplate('restore-deal'));
+				$("#restored-deal-id", $("#deal_restore_confirm_modal")).val(temp.id);
+				$("#restored-deal-milestone", $("#deal_restore_confirm_modal")).val(temp.milestone);
+				$("#deal_restore_confirm_modal").modal('show');
+
+				var pos = $("#moving-deal").attr("data-pos");
+
+				$('#deal_restore_confirm_modal').on('hidden.bs.modal', function(){
+					if(!IS_DEAL_RESTORED)
+					{
+						$(ui.draggable).find(".deal-options").find(".deal-edit").html("");
+						$(ui.draggable).find(".deal-options").find(".deal-delete").html("");
+						$(ui.draggable).find(".deal-options").find(".deal-archive").html("");
+						$(ui.draggable).find(".archived-deal").attr("data-archive", "false");
+						$(ui.draggable).find(".deal-options").append('<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>');
+					}
+					var milestone_name = $(ui.draggable).find("div:first").attr("data");
+					if(milestone_name)
+					{
+						if($("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li:visible").length > 0)
+						{
+							$("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li:visible").eq(pos).before($(ui.draggable));
+						}
+						else
+						{
+							$("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").append($(ui.draggable));
+						}
+						$("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li").show();
+					}
+					
+				});
+			}
+		});
+
+		$('li.move-deal-action').droppable({
+			accept: ".deal-color",
+			drop: function( event, ui ) {
+				is_deal_drop_to_track = true;
+				$("#new-track-list-paging").show();
+				$("#new-opportunity-list-paging").hide();
+				$("#moving-deal").html("<li>"+$(ui.draggable).html()+"</li>");
+				var heading = $("#moving-deal").attr("data-heading").replace(/ +/g, '');
+				var deal_id = $(ui.draggable).find("div:first").attr("id");
+				var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
+				if(dealsCollection)
+				{
+					var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
+					$("#moved-deal").html("<li><div class='text-ellipsis'>"+dealModel.get('name')+"</div></li>");
+				}
+				//$("#moved-deal").html(ui.draggable[0].outerHTML);
+				//$("#moved-deal > li").html(ui.draggable[0].innerHTML);
+				//$("#moved-deal > li").removeClass("ui-sortable-helper");
+				$(ui.draggable).remove();
+				$("li.ui-sortable-placeholder").remove();
+				if($("#deals-tracks").is(":visible"))
+		      	{
+		      		$(".move-deal-action").show();
+		      	}
+		      	else
+		      	{
+		      		$(".move-deal-action").hide();
+		      	}
+		      	$('#dealActions').hide();
+			}
+		});
 
 	});
 }
@@ -81,7 +296,7 @@ function setup_deals_in_milestones(id){
  * To change the milestone of the deal when it is 
  * dropped in other milestone columns and saves or updates deal object.
  */
-function update_milestone(data, id, newMilestone, oldMilestone, updateCollectionFlag, lost_reason_id){
+function update_milestone(data, id, newMilestone, oldMilestone, updateCollectionFlag, lost_reason_id, update_count){
 	
 	var DealJSON = data.toJSON();
 	
@@ -115,7 +330,7 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
 		success : function(model, response) {
 			console.log('moved deal----',model);
 			if (updateCollectionFlag) {
-				update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
+				update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone, update_count);
 			}
 			$('ul.milestones').sortable("enable");
 		},
@@ -144,7 +359,7 @@ function update_milestone(data, id, newMilestone, oldMilestone, updateCollection
  * @param oldMilestone 
  * 			milestone from user drag the deal.
  */
-function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
+function update_deal_collection(dealModel, id, newMilestone, oldMilestone, update_count) {
 	
 	// Remove the deal from the old milestone collection.
 	var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : oldMilestone });
@@ -153,7 +368,7 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 	try{
 
 
-        if(oldMilestone != newMilestone){
+        if(oldMilestone != newMilestone && update_count != false){
 	    var dealchangevalue = dealModel.expected_value;
         var olddealvalue = parseFloat($('#'+oldMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))-parseFloat(dealchangevalue); 
         var newdealvalue = parseFloat($('#'+newMilestone.replace(/ +/g, '')+'_totalvalue').text().replace(/\,/g,''))+parseFloat(dealchangevalue);
