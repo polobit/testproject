@@ -380,6 +380,9 @@ public class SendEmail extends TaskletAdapter
 	// Sleep till that day
 	// Add ourselves to Cron Queue
 	long timeout = calendar.getTimeInMillis();
+	long currentTime=System.currentTimeMillis()-20000;
+	if(timeout<currentTime)
+		timeout=timeout+(7*24*60*60*1000);
 	addToCron(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
     }
 
