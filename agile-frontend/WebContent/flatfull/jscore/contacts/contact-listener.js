@@ -39,8 +39,31 @@ var timer = undefined;
 		else
 			_agile_set_prefs("companyTabelView","true");
 
-		App_Companies.companies();
+		App_Companies.companies();"display:none"
 		});
+
+		 $("body").on("click", ".toggle-contact-filters", function(b) {
+            if (_agile_get_prefs("hide_contacts_lhs_filter")) {
+                _agile_delete_prefs("hide_contacts_lhs_filter");
+                $(this).attr("data-original-title", "Hide Filters").css("opacity", 1)
+            } else {
+                _agile_set_prefs("hide_contacts_lhs_filter", true);
+                $(this).attr("data-original-title", "Show Filters").css("opacity", 0.7)
+            }
+            
+        });
+
+		 $("body").on("click", ".toggle-company-filters", function(b) {
+            if (_agile_get_prefs("companiesFilterStatus") == "display:none") 
+            {
+                _agile_delete_prefs("companiesFilterStatus");
+                $(this).attr("data-original-title", "Hide Filters").css("opacity", 1)
+            } else {
+                _agile_set_prefs("companiesFilterStatus", "display:none");
+                $(this).attr("data-original-title", "Show Filters").css("opacity", 0.7)
+            }
+            
+        });
 
 
 			$('body').on('click','.companycoloumn',function(e){
@@ -110,6 +133,8 @@ var timer = undefined;
 		 	
 		 }, 1000);
 });
+
+
 
 	$('body').off('mouseout','.popover_contact');
 		$('body').on('mouseout','.popover_contact',function(e){
