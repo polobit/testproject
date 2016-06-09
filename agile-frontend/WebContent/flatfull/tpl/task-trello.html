@@ -209,7 +209,7 @@
          </span>{{/is_link}}<label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75"> </span{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;">{{safe_string subject}} </span{{/is_link}}><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75"> </span{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;">{{safe_string subject}} </span>{{/is_link}}<label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
          {{else}}
            {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.75"></span>{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.75;top:0px;">{{safe_string subject}}</span> {{/is_link}}<label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a> 
          {{/if_equals}}       
@@ -280,9 +280,9 @@
     <div class="pull-right"> 
 <div class="new-task-owner  thumb-xxs avatar taskavatarimg p-b-sm">     
          {{#if taskOwner.pic}}
-          <img src="{{taskOwner.pic}}" style="height:20px;width:20px;margin-top:2px;" class="thumb-xxs m-r-sm r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
+          <img src="{{taskOwner.pic}}" style="height:20px;width:20px;margin-top:2px;" class="thumb-xxs m-r-n-xs r r-2x" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{else}}
-      <img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x m-r-sm" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
+      <img src="{{defaultGravatarurl 50}}" class="thumb-xxs r r-2x m-r-n-xs" data-toggle="tooltip" data-placement="top" data-container="body" title="{{taskOwner.name}}"/>
        {{/if}}
       </div> 
   </div>  
