@@ -1378,7 +1378,7 @@ public class DealsAPI
     		}
     		try
     		{
-    		    ActivitySave.createDealEditActivity(opportunity);
+    			ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_DELETE, opportunity, "", tag, "tags", null);
     		}
     		catch (Exception e)
     		{
@@ -1400,7 +1400,7 @@ public class DealsAPI
     		Opportunity.updateDealTagsEntity(opportunity ,tag);
     		try
     		{
-    		    ActivitySave.createDealEditActivity(opportunity);
+    			ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_ADD, opportunity, tag, "", "tags", null);
     		}
     		catch (Exception e)
     		{

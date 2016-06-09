@@ -647,13 +647,13 @@ function populateDealSources(el, value){
 function fetchDealsList(data){
 	var filters_collection = data;
 	var dealTag = null ; 
-	if(filters_collection.dealToFilter){
-		dealTag = filters_collection.dealToFilter ;
-	}
     if(!filters_collection && App_Deals.deal_filters && App_Deals.deal_filters.collection)
     {
     	filters_collection = App_Deals.deal_filters.collection;
     }
+    if(filters_collection.dealToFilter){
+		dealTag = filters_collection.dealToFilter ;
+	}
     setNewDealFilters(filters_collection);
 	var query = ''
     if (_agile_get_prefs('deal-filters'))

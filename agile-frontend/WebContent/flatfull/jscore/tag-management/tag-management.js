@@ -528,7 +528,7 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 			})
 
 }
-function saveDealTag(tag) {
+function saveDealTag(tag,data) {
 	var flag ;
 	var fieldValue= tag ;
 	if (!isValidTag(fieldValue, true)) {
@@ -558,6 +558,10 @@ function saveDealTag(tag) {
 			// Adds tag to global connection
 			if(tagsCollection && tagsCollection.models)
 				tagsCollection.add(response.toJSON());
+			if(data && App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
+                App_Deal_Details.dealDetailView.model.set(data.toJSON(), {silent : true});
+                App_Deal_Details.dealDetailView.render(true);                   
+            }
 		}
 	});
 }

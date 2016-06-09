@@ -241,9 +241,7 @@ function setup_tags_typeahead(callback) {
         	    	
         			saveEntity(json, url ,  function(data) {
                      if(App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
-                        App_Deal_Details.dealDetailView.model.set(data.toJSON(), {silent : true});
-                        App_Deal_Details.dealDetailView.render(true);
-                        saveDealTag(tag);
+                            saveDealTag(tag ,data);
                         }
                         else{
         				// Updates to both model and collection
