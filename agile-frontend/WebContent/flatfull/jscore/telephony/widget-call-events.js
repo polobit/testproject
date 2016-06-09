@@ -229,10 +229,6 @@ function sendActionToClient(action){
 			return;
 		}
 		
-		if(dialled.using == "dialler"){
-			  $("#direct-dialler-div").show();
-			  dialled.using = "default";
-		 }
 		
 		if(client == "Bria"){
 			$('#briaInfoModal').html(getTemplate("briaInfoModal"));

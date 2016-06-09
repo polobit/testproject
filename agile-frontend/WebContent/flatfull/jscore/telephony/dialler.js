@@ -6,13 +6,10 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	
-				head.js(LIB_PATH + 'lib/jquery-ui.min.js',function()
-						{
 				  	getTemplate('dialler-page', {}, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						var x = 100;
-						//var y = $(window).height()/2;
 						var y = 100;
 						$('#direct-dialler-div').html($(template_ui));
 						$("#direct-dialler-div").css({'left':x,'top': y});
@@ -24,21 +21,28 @@ $(function()
 						
 						dialled.using = "default";
 						
-						$("#direct-dialler-div").draggable({
-							  stop: function( event, ui ) {
-								  var maxWidth = ($(window).width())-320;
-								  var maxHeight = $(window).height()-100;
-								  if(ui.position.left < 50 || ui.position.left > maxWidth || ui.position.top < 50 || ui.position.top > maxHeight){
-										var y = 100;
-										var x = 100;
-									  $("#direct-dialler-div").animate({ top: y, left:x }, 500);
-									  return;
-								  }
-							}
-						});
+						$("#direct-dialler-div").draggableTouch();
+						
+						$("#direct-dialler-div").bind("dragstart", function(e, pos) {
+							 flag = true;
+								//you can do anything related to move
+						    }).bind("dragend", function(e, pos) {
+						    	if(flag){
+						    		flag = false;
+						  		//  var maxWidth = ($(window).width())-190;
+						  		  var maxHeight = $(window).height()-100;
+						  		  var popup_position_top = $(this).css('top').split("px")[0];
+						  		 // var popup_position_left = $(this).css('left').split("px")[0];
+						  				var y = $(window).height()-200;
+						  				var x = 200;
+						  			  if( popup_position_top > maxHeight){
+						  				$("#direct-dialler-div").animate({ top: y, left:x }, 500);
+						  			  }
+						    	}
+						    });
+							
 						
 					}, "#direct-dialler-div");
-						});
 			});
 	
 	$('#agilecrm-container #direct-dialler-div').on('click', '.clear-dialler', function(e)
@@ -64,6 +68,12 @@ $(function()
 			  	dialled.using = "default";
 			});
 	
+	$('#agilecrm-container #direct-dialler-div').on('keydown', '#dail_phone_number', function(e) {
+    	if(e.which == 13 )
+    		{
+    			$(".dial-number").trigger('click');
+    		}
+	});
 	
 	$('#agilecrm-container #direct-dialler-div').on('click', '.dial-number', function(e)
 			{
@@ -73,16 +83,20 @@ $(function()
 			  	var widgetName = $("#dialler-widget-name-span").attr("value");
 			  	
 			  	if(!widgetName){
-			  		alert("Please select a widget to call");
+			  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
+			  		$(".dialler-modal-body").html("Please select a widget to call");
+			  		$("#diallerInfoModal").modal("show");
 			  		return;
 			  	}
 			  	if (to.length < 1){
-			  		alert("Please press number to dial");
+			  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
+			  		$(".dialler-modal-body").html("Please press number to dial");
+			  		$("#diallerInfoModal").modal("show");
 			  		return;
 			  	}
 			  		
 			  if(checkForActiveCall()){
-					alert("Already on call.");
+				  alert("Already on call.");
 					return;
 				}
 			  		
@@ -90,6 +104,12 @@ $(function()
 				  callToNumber(to,from,widgetName,responseJson,"dialler");
 			  });
 			});
+	
+	$('body').on('click', '#dialler_info_ok', function(e)
+			{
+			  	e.preventDefault();
+			  	$("#diallerInfoModal").modal("hide");
+	});
 	
 	
 	$('body #direct-dialler-div').on('click', '.dial0', function(e)
@@ -264,7 +284,6 @@ function dialFromBria(to,from,contact){
   	action['callId'] = "";
 	
 	try{
-		closeCallNoty(true);
 		resetglobalCallVariables();
 		resetglobalCallForActivityVariables();
 		globalCall.callStatus = "dialing";
@@ -285,8 +304,6 @@ function dialFromBria(to,from,contact){
 
 function dialFromSkype(to,from,contact){
 	
-  	e.preventDefault();
-	
   	if(checkForActiveCall()){
 		$('#skypeInfoModal').html(getTemplate("skypeCallStatusModal"));
 		$('#skypeInfoModal').modal('show');
@@ -299,7 +316,6 @@ function dialFromSkype(to,from,contact){
   	action['callId'] = "";
   	
 	try{
-		closeCallNoty(true);
 		resetglobalCallVariables();
 		resetglobalCallForActivityVariables();
 		globalCall.callStatus = "dialing";

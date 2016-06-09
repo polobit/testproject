@@ -103,6 +103,11 @@ function globalCallWidgetSet()
 							}
 						});
 
+						$.each(default_call_option.callOption, function(i, obj){
+							var name = widgetCallName[obj.name];
+							$(".dialler-widget-name-" + name).show();
+						});
+						
 						$('body').on({ mouseenter : function(e)
 						{
 							if (!Pubnub)
@@ -381,11 +386,6 @@ function handleCallRequest(message)
 			{
 			}
 			
-			if(dialled.using == "dialler"){
-				  $("#direct-dialler-div").show();
-				  dialled.using = "default";
-			  }
-			
 			return;
 		}
 		else if (message.state == "error")
@@ -393,11 +393,6 @@ function handleCallRequest(message)
 			closeCallNoty(true);
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
-			
-			if(dialled.using == "dialler"){
-				  $("#direct-dialler-div").show();
-				  dialled.using = "default";
-			  }
 			
 			return;
 		}
@@ -415,10 +410,6 @@ function handleCallRequest(message)
 				resetglobalCallForActivityVariables();
 			}
 			
-			if(dialled.using == "dialler"){
-				  $("#direct-dialler-div").show();
-				  dialled.using = "default";
-			  }
 			return;
 		}
 		showBriaCallNoty(message);
@@ -463,11 +454,6 @@ function handleCallRequest(message)
 			}
 			globalCallForActivity.requestedLogs = false;
 			
-			if(dialled.using == "dialler"){
-				  $("#direct-dialler-div").show();
-				  dialled.using = "default";
-			  }
-			
 			return;
 		}
 		else if (message.state == "error")
@@ -475,10 +461,7 @@ function handleCallRequest(message)
 			closeCallNoty(true);
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
-			if(dialled.using == "dialler"){
-				  $("#direct-dialler-div").show();
-				  dialled.using = "default";
-			  }
+
 			
 			return;
 		}
@@ -497,10 +480,6 @@ function handleCallRequest(message)
 				resetglobalCallForActivityVariables();
 			}
 			
-			if(dialled.using == "dialler"){
-				  $("#direct-dialler-div").show();
-				  dialled.using = "default";
-			  }
 			return;
 		}
 		showSkypeCallNoty(message);
@@ -553,6 +532,11 @@ function closeCallNoty(option){
 	}
 	$("#draggable_noty").hide();
 	$("#draggable_noty").removeClass("draggable-popup");
+	
+	 if(dialled.using == "dialler"){
+		  $("#direct-dialler-div").show();
+		  dialled.using = "default";
+	  }
 	
 }
 

@@ -979,11 +979,6 @@ function setUpGlobalTwilio()
 										  }
 								  	}	
 								
-								 if(dialled.using == "dialler"){
-									  $("#direct-dialler-div").show();
-									  dialled.using = "default";
-								  }
-								 
 								}
 				});			
 

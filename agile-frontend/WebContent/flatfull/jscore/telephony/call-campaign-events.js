@@ -22,10 +22,6 @@ $(function(){
 					  }
 				}
 			}
-			if(dialled.using == "dialler"){
-				  $("#direct-dialler-div").show();
-				  dialled.using = "default";
-			  }
 		}
 	});  
 	
@@ -45,10 +41,6 @@ $(function(){
 					  }
 				}
 			}
-			if(dialled.using == "dialler"){
-				  $("#direct-dialler-div").show();
-				  dialled.using = "default";
-			  }
 		}	
 		});  
 		
