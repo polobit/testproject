@@ -4,7 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
@@ -16,6 +20,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Contact.Type;
+import com.agilecrm.contact.email.ContactEmail;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
@@ -23,6 +29,9 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
@@ -154,6 +163,42 @@ public class ContactMassDuplicateMerge implements DeferredTask
 						    cas.addContactToCase(oldContact.id.toString());
 						    cas.save();
 						}
+						
+						// merge Campaigns
+						List<CampaignStatus> campaigns=contact.campaignStatus;
+						for (CampaignStatus campaign : campaigns)
+						{
+						    oldContact.campaignStatus.add(campaign);
+						}
+						
+						try
+						{
+							Map<String, Object> map = new HashMap<String, Object>();
+							map.put("contact_key", new Key<Contact>(Contact.class, contact.id));
+							
+							List<Tickets> tickets= Tickets.ticketsDao.listByProperty(map);
+							for (Tickets ticket : tickets)
+							{
+								ticket.contact_ids.add(oldContact.id);
+								//ticket.contactID
+								ticket.save();
+							}
+						}
+						catch (Exception e)
+						{
+							System.out.println(ExceptionUtils.getFullStackTrace(e));
+							throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+									.build());
+						}
+						
+						//emails
+						List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmails(contact.id);
+						for (ContactEmail contactEmail : contactEmails)
+						{
+							contactEmail.contact_id=oldContact.id;
+							contactEmail.save();
+						}
+						
 						// delete duplicated record
 						ContactUtil.getContact(Long.valueOf(contact.id)).delete();
 						// save master reccord
