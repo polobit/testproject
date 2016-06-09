@@ -3787,10 +3787,10 @@ div.addField div.controls div:first-child{
 {
   transform:rotate(-90deg);
 }
-.task-trello-list.expand .panel-default
+/*.task-trello-list.expand .panel-default
 {
   height:77vh;
-}
+}*/
 .task-trello-list.expand .pull-left.text-ellipsis
 {
   width:62%; 
