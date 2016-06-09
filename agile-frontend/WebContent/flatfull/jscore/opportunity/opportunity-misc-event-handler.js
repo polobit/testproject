@@ -4,6 +4,7 @@ $(function()
 	{
 		e.preventDefault();
 		show_deal();
+		setup_tags_typeahead();
 	});
 
  	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
@@ -398,6 +399,7 @@ function initializeDealListners(el){
 	{
 		e.preventDefault();
 		show_deal();
+		setup_tags_typeahead();
 	});
 
 	$('#opportunity-listners').off('change', '#pipeline_milestone');
