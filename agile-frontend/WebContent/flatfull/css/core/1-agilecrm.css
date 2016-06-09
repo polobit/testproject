@@ -3843,3 +3843,9 @@ div.list-tasks.panel-body:hover
  {
   overflow: auto;
 }
+#task-model-list .listed-task .task-content-view>a[target="_blank"]
+{
+  font-weight:700;
+  opacity:0.75;
+  top:0px;
+}
