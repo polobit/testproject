@@ -195,7 +195,7 @@
 	if($('#disable_new_tags').text().trim() == 'Enable Access')
 	{
 		$('#disable_new_tags').text("Disable Access");
-				//ACCOUNT_PREFS.tagsPermision=false;
+				
 		updateTagAcl(false);console.log(false);
 	}
 	else if($('#disable_new_tags').text().trim() == 'Disable Access')
