@@ -267,9 +267,9 @@ $(function()
 	Handlebars.registerHelper('hasTagPermission', function(options){
 
 	if(ACCOUNT_PREFS.tagsPermission)
-		return options.fn(this);
-
+		//return options.fn(this);
 	return options.inverse(this);
+	return options.fn(this);
 });
 
 	Handlebars.registerHelper('encodeString', function(url)
