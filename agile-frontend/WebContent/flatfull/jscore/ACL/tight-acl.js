@@ -196,13 +196,13 @@
 	{
 		$('#disable_new_tags').text("Disable Access");
 				
-		updateTagAcl(false);console.log(false);
+		updateTagAcl(true);console.log(false);
 	}
 	else if($('#disable_new_tags').text().trim() == 'Disable Access')
 	{
 		$('#disable_new_tags').text("Enable Access");
 		//ACCOUNT_PREFS.setTagPermission(true);
-		updateTagAcl(true);
+		updateTagAcl(false);
 		//$('#disable_new_tags').attr("option","");
 	}  
 	});
