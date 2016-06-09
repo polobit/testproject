@@ -135,7 +135,7 @@ public class CronDeferredTask implements DeferredTask
 			CampaignStatusUtil.setStatusOfCampaignWithName(AgileTaskletUtil.getId(subscriberJSON),
 					AgileTaskletUtil.getId(campaignJSON), "", Status.REMOVED);
 
-			npe.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(npe));
 		}
 		catch (Exception e)
 		{
