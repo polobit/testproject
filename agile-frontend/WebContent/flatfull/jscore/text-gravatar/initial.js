@@ -116,7 +116,7 @@ function is_agile_default_image_loaded(src){
     try{
         var image = document.createElement("img");
         image.src = src;
-        return (image.width == 9 && image.height == 9);    
+        return ((image.width == 9 && image.height == 9) || (image.width == 1 && image.height == 1));    
     }catch(e){}
     return true;
 }

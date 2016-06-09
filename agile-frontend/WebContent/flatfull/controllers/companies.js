@@ -205,6 +205,8 @@ var CompaniesRouter = Backbone.Router
 
 				setUpCompanySortFilters(el);
 
+				setUpCompanyFields(el)
+
 				abortCountQueryCall();
 				
 				if(is_lhs_filter) {
