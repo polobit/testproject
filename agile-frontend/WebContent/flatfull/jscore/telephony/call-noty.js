@@ -1,3 +1,4 @@
+
 /**
  * Telephony noty functions.
  */
@@ -212,87 +213,106 @@ function showMissedNotyPopUp(type, message,position,notyTimeout)
 			});		
 }
 
+
+function ShowWidgetCallNoty(message){
+	var state = message.state;
+	var number = message.number;
+	var callId = message.callId;
+	var displayName = message.displayName;
+	var widgetype = (message.callType).toLowerCase();
+
+	
+
+	
+	console.log("calling call noty");
+	
+if(message.state == "connected"){
+	
+	var btns = [];
+	if(widgetype !=  "skype"){
+		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","title":""});
+		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","title":""});
+	}
+	btns.push({"id":"", "class":"btn btn-sm btn-default noty_"+widgetype+"_dialpad icon-th","title":""});
+	btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":"Hangup"});
+	var json = {"callId": callId};
+	showDraggableNoty(widgetype, globalCall.contactedContact, "connected", globalCall.callNumber, btns,json);
+	
+}else if(message.state == "ringing"){
+	searchForContactImg(number, function(currentContact){
+		if(!currentContact){
+			globalCall.contactedContact = {};
+			globalCall.contactedId = "";
+		}else{
+			globalCall.contactedContact = currentContact;
+			globalCall.contactedId = currentContact.id;
+		}
+		var btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":"Ignore"}];
+		var json = {"callId": callId};
+		showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", number, btns,json);
+	});
+}else if(message.state == "missed"){
+	var btns = [];
+	showDraggableNoty(widgetype, globalCall.contactedContact , "missedCall", globalCall.callNumber, btns);
+	
+}else if(message.state == "connecting"){
+	
+	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":"Cancel"}];
+	var json = {"callId": callId};
+	showDraggableNoty(widgetype, globalCall.contactedContact , "outgoing", number, btns, json);
+	
+}else if(message.state == "failed"){
+	
+	var btns = [];
+	showDraggableNoty(widgetype, globalCall.contactedContact , "failed", globalCall.callNumber, btns);
+	
+}else if(message.state == "busy"){
+	
+	var btns = [];
+	showDraggableNoty(widgetype, globalCall.contactedContact , "busy", globalCall.callNumber, btns);
+	
+}else if(message.state == "ended" ||message.state == "refused" || message.state == "missed"){
+	closeCallNoty(true);
+}
+	
+	
+}
+
+
 // added by prakash for bria call notification
 function showBriaCallNoty(message){
 	
+
+	
+	var state = message.state;
+	var number = message.number;
+	var callId = message.callId;
+	var displayName = message.displayName;
+	
+		if(!globalCall.lastReceived){
+		}else{
 			if(globalCall.lastReceived == message.state){
 				console.log("duplicate message recived");
 				return;
 			}
+		}
+		globalCall.lastReceived =  message.state;
 
-					
-					globalCall.lastReceived =  message.state;
-			if(message.state == "ringing"){
+		if(message.state == "ringing"){
 				if(checkForActiveCall()){
 					sendCommandToClient("busy","Bria");
 					return;
 				}
-			}
-		_getMessageBria(message, function(data) {
-			
-			var messageHtml = data;
-			
-			
-			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomLeft.js',
-					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-					{
+		}else if(!globalCall.contactedContact){
+				console.log("contact or id not found to make popup..");
+				return;
+		}
 
-				
-				if (Bria_Call_Noty != undefined)
-					Bria_Call_Noty.close();
-				
-				if(message.state == "ringing"){
-
-					Bria_Call_Noty = noty({ text : messageHtml, type : "confirm", layout : "bottomLeft", buttons : [
-			{ addClass : 'btn btn-primary noty_bria_answer', text : 'Answer'}, 
-			{ addClass : 'btn btn-danger noty_bria_ignore', text : 'Ignore'}] });
-					
-					if (notification_prefs.notification_sound != 'no_sound')
-						play_sound(notification_prefs.notification_sound);
-					
-				}else if(message.state == "connected"){
-					
-					Bria_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
-		    { addClass : 'btn btn-sm btn-default noty_bria_mute', text : '<i class="fa fa-microphone"></i>' },
-		    { addClass : 'btn btn-sm btn-default noty_bria_unmute none', text : '<i class="fa fa-microphone-slash"></i>' },
-		    { addClass : 'btn btn-sm btn-default noty_bria_dialpad', text : '<i class="icon-th text-base" style="vertical-align: middle;"></i>' }, 
-					{ addClass : 'btn btn-sm btn-danger noty_bria_hangup', text : 'Hangup'}
-								] });
-					
-					var dialpad = $(getTemplate("briaDialpad"));
-					//$('.noty_buttons').prepend(dialpad);
-					$('#noty_bottomLeft_layout_container').prepend(dialpad);
-					
-					
-				}else if(message.state == "missed"){
-					
-					Bria_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft"});
-				
-					if (notification_prefs.notification_sound != 'no_sound')
-						play_sound(notification_prefs.notification_sound);
-				}else if(message.state == "connecting"){
-					
-					Bria_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
-		           { addClass : 'btn btn-danger btn-sm noty_bria_cancel', text : 'Cancel'}
-					] });
-					
-					if (notification_prefs.notification_sound != 'no_sound')
-						play_sound(notification_prefs.notification_sound);
-				
-				}else if(message.state == "failed"){
-					
-					Bria_Call_Noty = noty({ text : messageHtml, type : "error", layout : "bottomLeft"});
-					
-				}else if(message.state == "ended"){
-					
-					
-				}
-				
-					});
-		
-		
-		});
-
+		_getMessageBria(message);
+		ShowWidgetCallNoty(message);
+		return;
+			
+			// write new noty code here ...
 
 }
 
@@ -305,71 +325,17 @@ function showSkypeCallNoty(message){
 				sendCommandToClient("busy","Skype");
 				return;
 			}
+		}else if(!globalCall.contactedContact){
+			console.log("contact or id not found to make popup..");
+			return;
 		}
-		_getMessageSkype(message, function(data) {
-			
-			var messageHtml = data;
-			
-			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomLeft.js',
-					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-					{
-
-				
-				if (Skype_Call_Noty != undefined)
-					Skype_Call_Noty.close();
-				
-				if(message.state == "ringing"){
-
-					Skype_Call_Noty = noty({ text : messageHtml, type : "confirm", layout : "bottomLeft", buttons : [
-			{ addClass : 'btn btn-primary noty_skype_answer', text : 'Answer'}, 
-			{ addClass : 'btn btn-danger noty_skype_ignore', text : 'Ignore'}] });
-					
-					if (notification_prefs.notification_sound != 'no_sound')
-						play_sound(notification_prefs.notification_sound);
-					
-				}else if(message.state == "connected"){
-					
-					Skype_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
-		    { addClass : 'btn btn-sm btn-default noty_skype_dialpad', text : '<i class="icon-th text-base" style="vertical-align: middle;"></i>' }, 
-			{ addClass : 'btn btn-sm btn-danger noty_skype_hangup', text : 'Hangup'}
-								] });
-					
-					var dialpad = $(getTemplate("skypeDialpad"));
-					$('#noty_bottomLeft_layout_container').prepend(dialpad);
-					
-					
-				}else if(message.state == "connecting"){
-								
-					Skype_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
-		           { addClass : 'btn btn-danger btn-sm noty_skype_cancel', text : 'Cancel'}
-					] });
-					
-					if (notification_prefs.notification_sound != 'no_sound')
-						play_sound(notification_prefs.notification_sound);
-				
-				}else if(message.state == "busy"){	
-					
-					Skype_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft", timeout : 3000});
-			
-					
-				}else if(message.state == "failed"){
-					
-					Skype_Call_Noty = noty({ text : messageHtml, type : "error", layout : "bottomLeft", timeout : 3000});
-					
-				}else if(message.state == "ended" || message.state == "refused" || message.state == "missed"){
-					
-
-					
-				}
-				
-					});
 		
+		_getMessageSkype(message);
+		ShowWidgetCallNoty(message);
+		return;
 		
-		});
-
-
-
 }
+
 function showCallNotyMessage(message,type,position,timeout){
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
 			LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
@@ -377,3 +343,168 @@ function showCallNotyMessage(message,type,position,timeout){
 			noty({ text : message, type : "error", layout : "bottomRight", timeout : 3000});
 		});
 }
+
+function showDraggableNoty(widgetName, contact, status, number, btns, json){
+	var w = widgetName;
+	var c = contact;
+	var s = status;
+	var n = number;
+	var arr = btns;
+	if(!c){
+		c = {};
+	}
+	if(json){
+		c['callId'] = json.callId;
+	}
+	var txt = makeDraggableMessage(s);
+	c['phone'] = n;
+	var msg = {};
+	msg['buttons'] = arr;
+	c.msg = msg;
+	showDraggablePopup(c);
+	$("#noty_text_msg").html(txt);
+	if(s == "connected"){
+		if(widgetName == "Twilioio"){
+			makeDraggableVoicemail();
+			makeDraggableDialpad("twilioio-dialpad",{},$('.noty_buttons'));
+		}else if(widgetName == "bria" || widgetName == "skype"){
+			makeDraggableDialpad("bria-widgetdialpad",{},$('.noty_buttons'));
+		}
+	}
+	
+	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed"){
+		$("#draggable_noty").show().delay(5000).hide(1);
+	}
+}
+
+
+function showDraggablePopup(param){
+	
+	var position = _agile_get_prefs("dragableNotyPosition");
+	var flag = false;
+	var y = $(window).height()-200;
+	//var x = ($(window).width())-520;
+	var x = 200;
+	if(position){
+		var a = position.split("-");
+		x = a[0]*1;
+		y = a[1]*1;
+	}
+	var popup = $(getTemplate("call-noty",param));
+	$("#draggable_noty").html(popup);
+	$("#draggable_noty").css({'left':x,'top': y});
+	$("#draggable_noty").show();
+	$("#draggable_noty").draggableTouch();
+	
+
+	$("#draggable_noty").bind("dragstart", function(e, pos) {
+	 flag = true;
+		//you can do anything related to move
+    }).bind("dragend", function(e, pos) {
+    	if(flag){
+    		flag = false;
+            var position = _agile_get_prefs("dragableNotyPosition");
+  		  var maxWidth = ($(window).width())-190;
+  		  var maxHeight = $(window).height()-100;
+  		  var popup_position_top = $(this).css('top').split("px")[0];
+  		  var popup_position_left = $(this).css('left').split("px")[0];
+  		  if(popup_position_left < 50 || popup_position_left > maxWidth || popup_position_top < 50 || popup_position_top > maxHeight){
+  				//var y = $(window).height()-300;
+  				var y = $(window).height()-200;
+  				//var x = ($(window).width())-520;;
+  				var x = 200;
+  				if(position){
+  					var a = position.split("-");
+  					x = a[0]*1;
+  					y = a[1]*1;
+  				}
+  				
+  			  if( popup_position_top > maxHeight){
+  				$("#draggable_noty").animate({ top: y, left:x }, 500);
+  			  }
+  			  return;
+  		  }else{
+  			  _agile_set_prefs("dragableNotyPosition", popup_position_left+"-"+popup_position_top);
+  		  }
+    	}
+    });
+	
+	
+/*	$("#agilecrm-container").on("mousedown",".noty-heading",function(){
+		$("#draggable_noty").addClass("draggable-popup").parents().on("mousemove",function(e){
+			$(".draggable-popup").offset({
+				top:e.pageY - $(".drag-pop-div").outerHeight()/2,
+				left:e.pageX - $(".drag-pop-div").outerWidth()/2 
+			});
+		});
+	}).on("mouseup",".noty-heading",function(){
+		$("#draggable_noty").removeClass("draggable-popup");
+		 var position = _agile_get_prefs("dragableNotyPosition");
+		  var maxWidth = ($(window).width())-190;
+		  var maxHeight = $(window).height()-100;
+		  var popup_position_top = $("#draggable_noty").css('top').split("px")[0];
+		  var popup_position_left = $("#draggable_noty").css('left').split("px")[0];
+		  if(popup_position_left < 50 || popup_position_left > maxWidth || popup_position_top < 50 || popup_position_top > maxHeight){
+				//var y = $(window).height()-300;
+				var y = $(window).height()-200;
+				//var x = ($(window).width())-520;;
+				var x = 200;
+				if(position){
+					var a = position.split("-");
+					x = a[0]*1;
+					y = a[1]*1;
+				}
+			  $("#draggable_noty").animate({ top: y, left:x }, 500);
+			  return;
+		  }else{
+			  _agile_set_prefs("dragableNotyPosition", popup_position_left+"-"+popup_position_top);
+		  }
+	});*/
+	
+
+	
+}
+
+function makeDraggableMessage(status){
+	
+	if(status == "connecting" || status == "outgoing" ){
+		return "Calling";
+	}else if(status == "ringing" || status == "incoming"){
+		return "Incoming call";
+	}else if(status == "connected"){
+		return "On call";
+	}else if(status == "missedCall" || status == "missed"){
+		return "Missed call";
+	}else if(status == "failed"){
+		return "Call Failed";
+	}else if(status == "busy"){
+		return "Call Busy";
+	}else if(status == "dialing"){
+		return "Dialing <img src='/img/ajax-loader-cursor.gif' width='15px' height='5px'  style='margin-left:8px;margin-right:-3px;'></img>";
+	}else{
+		return "";
+	}
+}
+
+function makeDraggableDialpad(templateName, param, ele){
+	
+	// Add dialpad template in twilio content
+	getTemplate(templateName, param, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		ele.prepend($(template_ui));	
+	}, null);
+	
+}
+
+function makeDraggableVoicemail(widgetName){
+	
+	accessUrlUsingAjax("core/api/voicemails", function(resp){
+
+			$('#call-noty-l1').html($(getTemplate("twilioio-voicemail",resp)));
+
+	});
+	
+}
+
+

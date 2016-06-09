@@ -36,8 +36,8 @@
     <td class='data' data='{{id}}'>
     <div class="table-resp" style="overflow: inherit; width:100%;">
 	<div class="thumb-xs agile-img avatar" style="width:20px;">
-	   {{#if ownerPic}}
-        <img class="img-inital r r-2x" src="{{ownerPic}}"  title="{{name}}" style="width:20px; height:20px; border-radius:2px;" />
+	   {{#if pic}}
+        <img class="img-inital r r-2x" src="{{pic}}"  title="{{name}}" style="width:20px; height:20px; border-radius:2px;" />
 	   {{else}}
 		<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" style="width:20px; height:20px; border-radius:2px;" />
        {{/if}}
@@ -81,8 +81,13 @@
 	<td>
 		<div class="table-resp text-muted text-xs" style="margin-top:3px;">
 		<i class="fa fa-clock-o"></i>
+		{{#hasKey  info_json_string "updated_time"}}
+		<span><em>Modified</em>&nbsp;</span>
+		<time class="last-login-time" datetime="{{epochToDate info_json_string "updated_time"}}" >{{epochToDate info_json_string "updated_time"}}</time>
+		{{else}}
 		<span><em>Created</em>&nbsp;</span>
 		<time class="last-login-time" datetime="{{epochToDate info_json_string "created_time"}}" >{{epochToDate info_json_string "created_time"}}</time>
+		{{/hasKey}} 
 		</div>
 	</td>
 

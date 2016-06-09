@@ -267,7 +267,7 @@ public class DocumentsAPI
 		for (int i = 0; i < documentsJSONArray.length(); i++) {
 			try
 			   {
-				String eventId =  (String) documentsJSONArray.getString(i);
+				String eventId =  (String) documentsJSONArray.get(i);
 				Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
 				
 				List<String> conIds = doc.getContact_ids();
@@ -284,8 +284,7 @@ public class DocumentsAPI
 						oppr.save();
 					 }	
 				 }
-			  }
-			 catch (Exception e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

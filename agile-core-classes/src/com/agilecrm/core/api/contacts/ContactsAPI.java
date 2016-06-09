@@ -453,11 +453,9 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Contact getContact(@PathParam("contact-id") Long id) throws AccessDeniedException
     {
-	Contact contact = ContactUtil.getContact(id);
-
-	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
-
-	return contact;
+    	Contact contact = ContactUtil.getContact(id);
+    	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
+    	return contact;
     }
 
     @Path("related-entities/{contact-id}")

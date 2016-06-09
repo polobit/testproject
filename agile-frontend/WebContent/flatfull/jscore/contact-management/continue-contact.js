@@ -193,7 +193,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// Stores person's continue editing form template key
 		template = 'continue-contact';
 		obj.type = 'PERSON';
-
+        /*@priyanka
+        *saving first_name,last_name,picture and its TwitterId Pre-populate into the saving
+        * person model and continue saving it will also appers with same field
+        */
 		// Creates properties of contact (person)
 		if (isValidField(form_id + ' #fname'))
 			properties.push(property_JSON('first_name', form_id + ' #fname'));
@@ -205,7 +208,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// if(form_id == "personForm")
 		if (isValidField(form_id + ' #image'))
 			properties.push(property_JSON('image', form_id + ' #image'));
+        //checking the condition for the when tweeterId is saving into the datastore
+        if(isValidField(form_id +' #handle'))
+        	properties.push({ "name" : "website", "value" :$('#handle').val(), "subtype" : "TWITTER" })
 
+      
 		// /give preference to autofilled company, ignore any text in textfield
 		// for filling company name
 		var company_el = $("#" + form_id + " [name='contact_company_id']").find('li');
@@ -306,8 +313,25 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 				return false;
 			}
 		}
-
-		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+		if(obj.contact_company_id){
+			$.ajax({
+				url : "/core/api/contacts/"+obj.contact_company_id,
+				type: 'GET',
+				dataType: 'json',
+				success: function(company){
+					if(company){
+						contact_company = company ;
+						return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template , company);
+					}
+				},
+				error: function(){
+					console.log("company fetch failed.");
+					return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+				}
+			});
+		}
+		else
+			return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
 			   
 	}
 	else
@@ -362,12 +386,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 }
 
-function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template){
-
-
-		if (isValidField(form_id + ' #company_url'))
-			properties.push(property_JSON('url', form_id + ' #company_url'));
+function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template ,contact_company){
 		
+		if (isValidField(form_id + ' #company_url'))
+			properties.push(property_JSON('url', form_id + ' #company_url'));		
 		if (tagsSourceId === undefined || !tagsSourceId || tagsSourceId.length <= 0)
 			tagsSourceId = form_id;
 
@@ -474,7 +496,6 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				properties.push({ "name" : $(element).attr('data'), "value" : inputElement.val(), "subtype" : selectElement.val() })
 		}
 	});
-
 	/*
 	 * Check whether there are any properties in existing contact, which can get
 	 * lost in contact update form. There are chances user adds a property(may
@@ -511,10 +532,34 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 												{
 													properties.push(contact_property);
 												}
+											
 											});
 						});
 	}
-
+	if(contact_company){
+		var prop = null;
+		$.each(contact_company.properties , function(){
+			if(this.name == "address" && this.subtype == "office")
+				prop = this.value;
+			});
+		if(prop){
+			var addressFlag = false;
+			$.each(properties, function(key, value){
+		    console.log(key);
+		    	if(key == "address"){
+		    		addressFlag = true ;
+		    		return false;
+				}
+			});
+			if(!addressFlag){
+				var form_element = $(e.target).attr('id')
+				if(form_element == "person_validate" || form_element == "continue-contact"){						
+					console.log(prop);
+					properties.push({ "name" : "address", "value" : prop, "subtype" : "office"});
+				}
+			}
+		}
+	}
 	// Stores json object with "properties" as value
 	var propertiesList = [];
 	propertiesList.push({ "name" : "properties", "value" : properties });
@@ -731,6 +776,39 @@ function deserialize_contact(contact, template)
 					.html(
 							'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 			$("#content #contact_company").hide();
+			if(data){							
+				$.ajax({
+					url : "/core/api/contacts/"+data,
+					type: 'GET',
+					dataType: 'json',
+					success: function(company){
+						if(company){
+							console.log(company);
+							contact_company = company ;
+							var prop = null;
+							$.each(contact_company.properties , function(){
+								if(this.name == "address" && this.subtype == "office")
+									prop = JSON.parse(this.value);
+							});				
+							if(prop){
+								$("#content .address-type").val("office");
+								if(prop.address)
+									$("#content #address").val(prop.address);
+								if(prop.city)
+									$("#content #city").val(prop.city);
+								if(prop.state)
+									$("#content #state").val(prop.state);
+								if(prop.zip)
+									$("#content #zip").val(prop.zip);
+								if(prop.country)
+									$("#content #country").val(prop.country);
+							}
+
+						}
+
+					}
+				});
+			}
 		}
 		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
 
@@ -929,6 +1007,34 @@ $(function()
 	{
 		$("#content #contact_company").show();
 		$("#content [name='contact_company_id']").html('');
+		if(contact_company){
+			var flag = false ; var prop = null;
+			$.each(contact_company.properties , function(){
+				if(this.name == "address" && this.subtype == "office")
+					prop = JSON.parse(this.value);
+				});
+				if(prop){
+					if(prop.address && $("#content #address").val() && $("#content #address").val() != prop.address)
+						flag = true;
+					else if(prop.city && $("#content #city").val() && $("#content #city").val() != prop.city)
+						flag = true;
+					else if(prop.state && $("#content #state").val() && $("#content #state").val() != prop.state)
+						flag = true;
+					else if(prop.zip && $("#content #zip").val() && $("#content #zip").val() != prop.zip)
+						flag = true;
+					else if(prop.country && $("#content #country").val() && $("#content #country").val() != prop.country)
+						flag = true ;
+					if(!flag){
+						$("#content .address-type,#address,#city,#state,#zip,#country").val('');
+						/*$("#content #address").val('');
+						$("#content #city").val('');
+						$("#content #state").val('');
+						$("#content #zip").val('');
+						$("#content #country").val('');*/
+					}
+				}
+			}
+
 	})
 
 	// Clones multiple fields

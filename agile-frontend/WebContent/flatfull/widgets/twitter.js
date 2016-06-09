@@ -273,13 +273,13 @@ function getTwitterIdByUrl(web_url, callback, contact_id)
 		{
 			// Shows message that URL is invalid to the user
 			alert("URL provided for Twitter is not valid ");
+			showAlertModal("twitter_invalid_url", undefined, function(){
+				// Shows Twitter matching profiles based on contact name
+				getTwitterMatchingProfiles(contact_id);
 
-			// Shows Twitter matching profiles based on contact name
-			getTwitterMatchingProfiles(contact_id);
-
-			// Delete the Twitter URL associated with contact as it is incorrect
-			agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
-
+				// Delete the Twitter URL associated with contact as it is incorrect
+				agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
+			});
 			return;
 		}
 
@@ -293,12 +293,11 @@ function getTwitterIdByUrl(web_url, callback, contact_id)
 		console.log(data.responseText.substring(0, temp.length));
 		if (data.responseText.substring(0, temp.length) === temp)
 		{
-			alert(data.responseText);
-
-			console.log('Twitter URL ' + web_url);
-			// Delete the Twitter URL associated with contact as it is incorrect
-			agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url.toString());
-
+			showAlertModal(response.responseText, undefined, function(){
+				console.log('Twitter URL ' + web_url);
+				// Delete the Twitter URL associated with contact as it is incorrect
+				agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url.toString());
+			}, undefined, "Error");
 			return;
 		}
 

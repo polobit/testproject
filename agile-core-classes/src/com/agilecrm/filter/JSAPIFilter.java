@@ -73,12 +73,18 @@ public class JSAPIFilter implements Filter
 		        SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Get AgileUser
-		DomainUserPartial domainUser = APIKeyUtil.getAPIKeyDomainUser(agileId);
+		DomainUser domainUser = APIKeyUtil.getDomainUserRelatedToAPIKeyJS(agileId);
 
 		// Domain becomes null if user is deleted
 		if (domainUser != null)
 		    userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
 
+		if(userInfo != null){
+		    userInfo.setJsrestricted_propertiess(domainUser.jsrestricted_propertiess);
+		    userInfo.setJsrestricted_scopes(domainUser.jsrestricted_scopes);
+				    
+		}
+		
 		SessionManager.set(userInfo);
 		chain.doFilter(httpRequest, httpResponse);
 		return;
@@ -101,6 +107,12 @@ public class JSAPIFilter implements Filter
 		{
 		    UserInfo userInfo = new UserInfo("agilecrm.com/js", domainUser.email, domainUser.name);
 
+		    if(userInfo != null){
+			    userInfo.setJsrestricted_propertiess(domainUser.jsrestricted_propertiess);
+			    userInfo.setJsrestricted_scopes(domainUser.jsrestricted_scopes);
+					    
+		    }
+		    
 		    SessionManager.set(userInfo);
 		    chain.doFilter(httpRequest, httpResponse);
 		    return;

@@ -320,23 +320,28 @@
 <script id = "contacts-custom-view-popover-template" type="text/html">
        <div class="data panel-default" data={{id}} style="width:260px">
 	   
-       	<div class="text-cap panel-heading text-ellipsis">
+       <div class="text-cap panel-heading text-ellipsis">
          {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}}</div>{{/if_contact_type}}
              {{#if_contact_type "COMPANY"}}
              <div class="text-ellipsis inline-block" style="width:80%" title="{{getPropertyValue properties "name"}}">{{getPropertyValue properties "name"}}
             </div>{{/if_contact_type}}
 				 <div class="pull-left" style="width:75%"><div id='star' class="contact-star"></div></div>
-        		<div>
+        		<div style="height: 35px;">
 	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
 							<div  class="text-lg score-view">
 							<i class="icon-trophy" style="height: 6px; vertical-align: middle;font-size:14px;"></i>
-								<div class="inline-block v-middle text-ellipsis text-center" style="width:2em">
+							{{#canEditContact owner.id}}
+								<div class="inline-block v-middle text-ellipsis text-center" style="width:2em;margin-left: 2px;margin-right: -1px;">
 									{{#if lead_score}} <span title="{{lead_score}}" id="lead-score">{{lead_score}}</span>&nbsp;
 									{{else}} <span id="lead-score">0</span>&nbsp;
-									{{/if}}
+									 {{/if}}
+                                 <span class style="float:left; margin-top:-22px; margin-left: 3px;margin-right: 3px;">
+									<input type="text" maxlength="10" autofocus="true" class="hide  form-control" id="contactscorebox" style="margin-top: -1px; margin-bottom:2px; margin-right:6px; margin-left:-2px;">
+									</span>
+
 								</div>
-							{{#canEditContact owner.id}}
+							
 								<span class="contact-score-control m-l-sm">
 									<ul class="inline-block list-none m-n p-n">
 										<li style="height: 9px"><i class="icon-sort-up c-p" id="add-score"

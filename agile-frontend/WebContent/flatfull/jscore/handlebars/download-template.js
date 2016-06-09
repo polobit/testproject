@@ -31,7 +31,11 @@ function downloadTemplate(url, callback)
 		url = template_url + url;
 	}
 
-	url += "?_=" + _AGILE_VERSION;
+	// Extract the filename from the url
+	var fname = url.split("/");
+	fname = fname.length > 0 ? fname[fname.length - 1] : fname;
+	
+	url += "?_=" + _agile_get_file_hash(fname);
 	
 	// If callback is sent to this method then template is fetched synchronously
 	var is_async = false;

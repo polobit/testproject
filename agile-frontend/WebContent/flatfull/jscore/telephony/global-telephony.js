@@ -1,6 +1,6 @@
 var default_call_option = { "callOption" : [] };
 var callOptionDiv = "" ;
-var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "calledFrom":null, "contactedId":null};
+var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null}; 
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null };
@@ -308,7 +308,8 @@ function resetglobalCallVariables()
 	globalCall.callId = null;
 	globalCall.callNumber = null;
 	globalCall.lastReceived = null;
-	globalCall.calledFrom = null;
+	globalCall.lastSent = null;
+	//globalCall.calledFrom = null;
 	if (globalCall.timeObject != null)
 	{
 		clearTimeout(globalCall.timeObject);
@@ -374,15 +375,10 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "error")
 		{
-			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
-					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-					{
-						if (Bria_Call_Noty != undefined)
-							Bria_Call_Noty.close();
+			closeCallNoty(true);
 						try
 						{
-							$('#briaCallId').parents("ul").last().remove();
-							if(globalCall.calledFrom == "bria"){
+							if(globalCall.calledFrom == "Bria"){
 								resetglobalCallVariables();
 								resetglobalCallForActivityVariables();
 							}
@@ -390,7 +386,6 @@ function handleCallRequest(message)
 						catch (e)
 						{
 						}
-					});
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
 			return;
@@ -402,9 +397,9 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "closed")
 		{
-			if(globalCall.calledFrom == "bria"){
+			if(globalCall.calledFrom == "Bria"){
 				showCallNotyMessage("Bria is not running");
-				$('#briaCallId').parents("ul").last().remove();
+				closeCallNoty(true);
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
 			}
@@ -455,15 +450,10 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "error")
 		{
-			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
-					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-					{
-						if (Skype_Call_Noty != undefined)
-							Skype_Call_Noty.close();
+			closeCallNoty(true);
 						try
 						{
-							$('#skypeCallId').parents("ul").last().remove();
-							if(globalCall.calledFrom == "skype"){
+							if(globalCall.calledFrom == "Skype"){
 								resetglobalCallVariables();
 								resetglobalCallForActivityVariables();
 							}
@@ -471,10 +461,6 @@ function handleCallRequest(message)
 						catch (e)
 						{
 						}
-					});
-			resetglobalCallVariables();
-			resetglobalCallForActivityVariables();
-
 			console.log("error message received...");
 		}
 		else if (message.state == "logs")
@@ -484,8 +470,9 @@ function handleCallRequest(message)
 		}
 		else if (message.state == "closed")
 		{
-			if(globalCall.calledFrom == "skype"){
-				$('#skypeCallId').parents("ul").last().remove();
+			
+			if(globalCall.calledFrom == "Skype"){
+				closeCallNoty(true);
 				showCallNotyMessage("Skype is not running");
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
@@ -533,18 +520,39 @@ function checkForActiveCall()
 	return flag;
 }
 
+function closeCallNoty(option){
+	
+	if(!option){
+		if(checkForActiveCall()){
+			return;
+		}
+	}
+	$("#draggable_noty").hide();
+	$("#draggable_noty").removeClass("draggable-popup");
+	
+}
+
+
+
 function setTimerToCheckDialing(name)
 {
 	globalCall.timeObject = setTimeout(function()
 	{
 		if (globalCall.callStatus == "dialing")
 		{
-			$('#' + name + 'CallId').parents("ul").last().remove();
+			closeCallNoty(true);
+			var number = globalCall.contactedId ;
+			var cont = globalCall.contactedContact;
+			var previousCalledClient  = globalCall.calledFrom; 
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
+			globalCall.calledFrom = previousCalledClient;
+			globalCall.contactedId = number;
+			globalCall.contactedContact = cont;
 		}
 	}, 20000);
 }
+
 
 /**
  * It will return the phone and skype phone in array having more than one
@@ -592,3 +600,4 @@ function twilioIOSaveContactedTime(contactId)
 				console.log('Error - Results :' + data);
 			});
 }
+

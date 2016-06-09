@@ -33,7 +33,7 @@ function update_admin_settings_api_key_template(){
 }
 
 function regenerate_api_key(url) {
-    if (confirm("Resetting the API Key will break all existing integrations you may have setup using the current key. Are you sure you want to reset the API key?")) {
+    showAlertModal("regenerate_api_key", "confirm", function(){
         $.ajax({
             url: url,
             type: 'POST',
@@ -41,7 +41,7 @@ function regenerate_api_key(url) {
                 update_admin_settings_api_key_template();
             }
         })
-    } else return;
+    });
 }
 
 function prettify_api_add_events() {
@@ -67,6 +67,16 @@ $("#webhook_accordian").on('click', function(e) {
             return;
         setTimeout(function(){
              App_Admin_Settings.webhookSettings();
+        },500)
+       
+    });
+
+$("#js-security_accordian").on('click', function(e) {
+        e.preventDefault();
+        if($("#js-security-accordian-template").html() != "")
+            return;
+        setTimeout(function(){
+             App_Admin_Settings.jsSecuritySettings();
         },500)
        
     });

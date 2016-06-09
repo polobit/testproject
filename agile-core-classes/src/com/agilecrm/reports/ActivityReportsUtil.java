@@ -34,7 +34,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
-import com.agilecrm.util.email.MustacheUtil;
+import com.agilecrm.util.email.HandlebarsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -136,8 +136,8 @@ public class ActivityReportsUtil
 	    String format = "EEE, MMM d, yyyy HH:mm z";
 
 	    // Fill the map object with the required data.
-	    activityReports.put("start_time", MustacheUtil.convertDate(format, timeBounds.get("startTime")));
-	    activityReports.put("end_time", MustacheUtil.convertDate(format, timeBounds.get("endTime")));
+	    activityReports.put("start_time", HandlebarsUtil.convertDate(format, timeBounds.get("startTime")));
+	    activityReports.put("end_time", HandlebarsUtil.convertDate(format, timeBounds.get("endTime")));
 	    activityReports.put("report_name", report.name);
 
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
@@ -510,7 +510,7 @@ public class ActivityReportsUtil
 	    }
 	    for (Event event : events)
 	    {
-		event.color = MustacheUtil.convertDate("MMM dd HH:mm", event.start);
+		event.color = HandlebarsUtil.convertDate("MMM dd HH:mm", event.start);
 	    }
 	}
 	catch (Exception e)

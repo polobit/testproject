@@ -223,7 +223,7 @@ function setup_tags_typeahead(callback) {
                     
         			},function(model,response){
         				console.log(response);
-    	       			alert(response.responseText);
+    	       			showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
         			});
     			});
     			

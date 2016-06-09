@@ -13,7 +13,7 @@
             <div class="btn-group inline-block m-l-xs" id="deals-tracks">
 			</div>
 			<div id="deal-list-filters" class="btn-group inline-block m-l-xs">
-				
+							
 			</div>
 			<div class="btn-group inline-block m-l-xs" id="deals-view">
 					<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
@@ -164,7 +164,7 @@
 		</small>
 	</div>
 <div class="pull-right">
-<span class="right deal-options text-sm" style="visibility:hidden;">
+<span class="right deal-options vis-hide text-sm">
 			
 			{{#if_equals archived true}}
 			<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
@@ -285,7 +285,7 @@
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">
 <div class="btn-group"  id="pipeline-tour-step">
-	<button class="btn btn-sm btn-default filter-dropdown "><i class="icon-road m-r-xs"/></button>
+	<button class="btn btn-sm btn-default filter-dropdown " id="milestone-view-track"><i class="icon-road m-r-xs"/></button>
 	<button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
     	<span class="caret"></span>
   	</button>

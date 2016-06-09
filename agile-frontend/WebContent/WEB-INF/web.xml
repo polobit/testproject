@@ -1208,6 +1208,15 @@
 		<servlet-name>CompanyNameUpdate</servlet-name>
 		<url-pattern>/backend/cron/company-name-update</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CustomFieldDelete</servlet-name>
+		<servlet-class>com.agilecrm.CustomFieldDeletionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CustomFieldDelete</servlet-name>
+		<url-pattern>/backend/cron/delete-custom-field</url-pattern>
+	</servlet-mapping>
   
   	<!--  Helpcenter filter -->
   	<filter>

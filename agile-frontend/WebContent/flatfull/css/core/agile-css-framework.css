@@ -1336,5 +1336,20 @@ border-collapse: separate;
 .text-head-black{
 	color:#333;
 }
+.thumb-small {
+  display: inline-block;
+  width: 30px;
+}
+
+.thumb-small img {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.thumb-small img{
+  height: 30px;
+  width: 30px;
+}
 
 
