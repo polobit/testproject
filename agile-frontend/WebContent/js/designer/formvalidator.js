@@ -263,6 +263,6 @@ function isCheckFlagCallNode()
 function errorMessageCallNode(selector)
 {
 	if($('#phonenumber2').val() == "" && $('#message').val() == "")
-	   	selector.find("#errorsdiv").html("<p><strong>Message<strong> or <strong>Call Back Number<strong>-Please complete atleast one of this fields. </p>").addClass('ui-state-highlight');		       
+	   	selector.find("#errorsdiv").html("<p><strong>Message</strong> or <strong>Call Back Number</strong>-Please complete atleast one of this fields. </p>").addClass('ui-state-highlight');		       
 	        	
 }
