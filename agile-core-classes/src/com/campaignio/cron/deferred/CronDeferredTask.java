@@ -1,5 +1,6 @@
 package com.campaignio.cron.deferred;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.workflows.status.CampaignStatus.Status;
@@ -139,7 +140,7 @@ public class CronDeferredTask implements DeferredTask
 		catch (Exception e)
 		{
 			System.err.println("Exception occured in Cron " + e.getMessage());
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
 		NamespaceManager.set(oldNameSpace);
