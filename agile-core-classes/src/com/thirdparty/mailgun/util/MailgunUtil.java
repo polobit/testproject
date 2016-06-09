@@ -64,13 +64,13 @@ public class MailgunUtil {
 			 if(flag)
 			     formData.add(MailgunNew.MAILGUN_API_PARAM_HTML_BODY, "%recipient.html%");
 			
-			 String bcc=getMailgunBCCAddress(tasks);
+			 /*String bcc=getMailgunBCCAddress(tasks);
 			 if(!StringUtils.isEmpty(bcc))
 		    	   formData.add(MailgunNew.MAILGUN_API_PARAM_BCC, bcc);
 		       
 			 String cc=getMailgunCCAddress(tasks);
 		       if(!StringUtils.isEmpty(cc))
-		    	   formData.add(MailgunNew.MAILGUN_API_PARAM_CC, cc);
+		    	   formData.add(MailgunNew.MAILGUN_API_PARAM_CC, cc);*/
 		       
 		       String replyTo=getMailgunReplyToAddress(tasks);
 		       if(!StringUtils.isEmpty(replyTo))
