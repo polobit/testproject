@@ -135,10 +135,10 @@
 				});
 				
 				if(newTags.length > 0){
-					showAlertModal("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.", undefined, function(){
+					showAlertModal("You don't have permissions to create a new Tag.", undefined, function(){
 						if(errorCallback)
-							errorCallback("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.");
-					},undefined,"Error");
+							errorCallback("You don't have permissions to create a new Tag.");
+					},undefined,"Alert");
 					return;
 				}
 				else if(callback)
@@ -155,10 +155,13 @@
 					else
 						return result;
 				}, error: function(response){
+					if(response.responseText.indexOf("don't have permissions")  != -1){
+						response.responseText = "You don't have permissions to create a new Tag."
+					}
 					showAlertModal(response.responseText, undefined, function(){
 						if(errorCallback)
 							errorCallback(response.responseText);
-					},undefined, "Error");
+					},undefined, "Alert");
 					return;
 				}
 			});
