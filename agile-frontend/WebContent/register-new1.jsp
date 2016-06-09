@@ -178,7 +178,7 @@ if(isSafari && isWin)
 <input class="input-xlarge field required email form-control no-border"
 			id="login_email" name='email' type="email" required maxlength="50"
 			minlength="6" value="<%=email%>"  placeholder="Email Address (User ID)"
-			autocapitalize="off" autocomplete="off">
+			autocapitalize="off">
 </div>
 
 
