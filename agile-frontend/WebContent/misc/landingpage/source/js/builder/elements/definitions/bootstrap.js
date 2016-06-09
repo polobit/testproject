@@ -562,7 +562,31 @@ baseBuilderElements.push({
             onChange: function($scope, url) {
                 $scope.selected.node.src = url;
             }
-        }
+        },
+        link: {
+ 			text: true,
+ 			value: '',
+ 			onAssign: function($scope) {
+ 				if($scope.selected.node.parentNode.tagName==='A')
+ 					this.value = $scope.selected.node.parentNode.href;
+ 				else 
+ 					this.value='';
+ 			},
+ 			onChange: function($scope, link) {
+
+ 				$scope.selected.node.setAttribute('linkurl', link);
+ 				if($scope.selected.node.parentNode.tagName!=='A'){
+ 					$($scope.selected.node).wrap("<a target='_blank' ></a>");
+ 					$scope.selected.node.parentNode.href=$scope.selected.node.getAttribute('linkurl');
+ 				} 
+ 				else if($scope.selected.node.parentNode.tagName==='A'){
+ 					if($scope.selected.node.getAttribute('linkurl')==='')
+ 						$($scope.selected.node).unwrap();
+ 					else 
+ 						$scope.selected.node.parentNode.href=$scope.selected.node.getAttribute('linkurl');
+ 				}		
+ 			}
+ 		}
  	},
 });
 
