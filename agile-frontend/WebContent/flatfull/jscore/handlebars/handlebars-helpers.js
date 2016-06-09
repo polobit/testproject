@@ -6908,6 +6908,20 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		   return  _agile_get_prefs('companiesFilterStatus');
 		    
 			});
+	Handlebars.registerHelper('contact_filter_tooltip', function(options)
+			{	        
+		 	 if( _agile_get_prefs(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide")
+		 	 	return "Show Filters" ;
+		 	 else
+		 	 	return "Hide Filters" ;	
+			});
+	Handlebars.registerHelper('company_filter_tooltip', function(options)
+			{	        
+		 	 if( _agile_get_prefs('companiesFilterStatus') == "display:none")
+		 	 	return "Show Filters" ;
+		 	 else
+		 	 	return "Hide Filters" ;	
+			});
 
 	
 
