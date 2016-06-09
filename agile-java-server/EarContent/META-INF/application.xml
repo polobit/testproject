@@ -62,6 +62,12 @@
       <web-uri>agile-slow-tasks-handler.war</web-uri>
       <context-root>agile-slow-tasks-handler</context-root>
      </web>
+  </module>
+  <module>
+     <web>
+      <web-uri>agile-reports.war</web-uri>
+      <context-root>agile-reports</context-root>
+     </web>
   </module>-->
 
 </application>
