@@ -217,7 +217,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <li class="list-group-item" style="font-family:lucida sans unicode,lucida grande,sans-serif;">Lucida</li>
                                 <li class="list-group-item" style="font-family: Trebuchet MS,Helvetica, sans-serif">Trebuchet MS</li>
                                 <li class="list-group-item" style="font-family: Tahoma, Geneva, sans-serif;">Tahoma</li>
-                                <li class="list-group-item" style="font-family: Courier New,Courier, monospace">Courier New</li>
                                 <li class="list-group-item" style="font-family: Impact,Charcoal, sans-serif">Impact</li>
                                 <li class="list-group-item" style="font-family: Arial Black,Gadget, sans-serif">Arial Black</li>
                             </ul>
