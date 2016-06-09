@@ -80,35 +80,41 @@ $(function(){
 					return;
 				}
 
-				// customize delete confirmation message
-				if(!customize_delete_message(table))
-					return;
-				
 				// Customize the bulk delete operations
 				if(!customize_bulk_delete(id_array, data_array))
 					return;
+
+				// Default message for all tables
+				var confirm_msg = "Are you sure you want to delete?";
 				
+				// Appends campaign-name for active subscribers
+				if($(table).attr('id') === "active-campaign")
+					confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
+				var $that = $(this);
+				// Shows confirm alert, if Cancel clicked, return false
+				showAlertModal(confirm_msg, "confirm", function(){
+					$that.after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
-				$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
-				
-				var url = $(table).attr('url');
-				if(SELECT_ALL && SELECT_ALL == true)
-				{
-					if($(table).attr('id') == "contacts-table" || $(table).attr('id') == "companies" ) {
-						var dynamic_filter = getDynamicFilters();
-						if(dynamic_filter == null) {								
-							url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+					var url = $(table).attr('url');
+					if(SELECT_ALL && SELECT_ALL == true)
+					{
+						if($(table).attr('id') == "contacts-table" || $(table).attr('id') == "companies" ) {
+							var dynamic_filter = getDynamicFilters();
+							if(dynamic_filter == null) {								
+								url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+							}
 						}
 					}
-				}
+					
+					// For Active Subscribers table
+					if(SUBSCRIBERS_SELECT_ALL && SUBSCRIBERS_SELECT_ALL == true){
+						if($(table).attr('id') == "active-campaign")
+							url = url + "&filter=all-active-subscribers";
+					}
+					
+					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+				}, undefined, "Bulk Delete");
 				
-				// For Active Subscribers table
-				if(SUBSCRIBERS_SELECT_ALL && SUBSCRIBERS_SELECT_ALL == true){
-					if($(table).attr('id') == "active-campaign")
-						url = url + "&filter=all-active-subscribers";
-				}
-				
-				bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 			}
 						
 		}	
@@ -180,14 +186,14 @@ $(function(){
 				}
 			else
 				{
-					if(!confirm("Are you sure you want to delete?"))
-		    		return;
-					
-					// Customize the bulk delete operations
+					showAlertModal("bulk_delete", "confirm", function(){
+						// Customize the bulk delete operations
 						if(!customize_bulk_delete(id_array, data_array))
 							return;
 				
 						bulk_delete_operation($(table).attr('url'), id_array, index_array, table, true, data_array);
+					});
+					
 				}
 				
 				
@@ -373,6 +379,28 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				});
 				
 			}
+
+			if(url=='core/api/dashboards/bulk')
+			{
+				if(App_Dashboards.dashboards_collection_view && App_Dashboards.dashboards_collection_view.collection)
+				{
+					$.each(id_array, function(index, id_val){
+						App_Dashboards.dashboards_collection_view.collection.remove(id_val);
+					});
+				}
+				if(CURRENT_USER_DASHBOARDS && CURRENT_USER_DASHBOARDS.length > 0)
+				{
+					$.each(id_array, function(index, id_val){
+						$.each(CURRENT_USER_DASHBOARDS, function(index1, val)
+						{
+							if(id_val == this.id)
+							{
+								CURRENT_USER_DASHBOARDS.splice(index1, 1);
+							}
+						});
+					});
+				}
+			}
 			
 			$(".bulk-delete-loading").remove();	
 			if(url=='core/api/users/bulk' && !_billing_restriction.currentLimits.freePlan)
@@ -503,5 +531,6 @@ function customize_delete_message(table)
 	
 	// if OK clicked return true
 	return true;
+	
 	
 }

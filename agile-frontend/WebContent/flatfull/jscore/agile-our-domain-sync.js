@@ -22,7 +22,7 @@ function our_domain_set_account() {
 	if (LOCAL_SERVER)
 		
 		_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
-		//_agile.set_account('eh3iu6vvlgj159i3aq9gr8o20o', 'local'); // for testing purpose only.
+		//_agile.set_account('p62u9mnp5dirj1na66ccjuiqr9', 'myapps'); // for testing purpose only.
 
 	else
 		_agile.set_account('fdpa0sc7i1putehsp8ajh81efh', 'our');
@@ -332,14 +332,19 @@ function our_domain_sync() {
 			// Creates a new contact and assigns it to global value
 			var email = CURRENT_DOMAIN_USER['email'];
 			var emailType = email.split("@")[1].split(".")[0];
-			if(emailType != "yopmail")
-			{
-				_agile.create_contact({
+
+			var param = {
 					"email" : CURRENT_DOMAIN_USER['email'],
 					"first_name" : first_name,
-					"last_name" : last_name,
-					"phone" : CURRENT_DOMAIN_USER['phone']
-				}, function(data) {
+					"last_name" : last_name
+					};
+			if(CURRENT_DOMAIN_USER['phone']){
+				param['phone'] = CURRENT_DOMAIN_USER['phone'];
+			}
+			
+			if(emailType != "yopmail")
+			{
+				_agile.create_contact(param, function(data) {
 					Agile_Contact = data;
 					// Shows noty
 					// set_profile_noty();
@@ -519,6 +524,7 @@ function add_created_user_info_as_note_to_owner(owner, callback) {
 	}, owner['email']);
 
 }
+
 
 // add note to owner when subscription is cancelled
 function add_cancel_subscription_info_as_note_to_owner(cus_email, callback) {

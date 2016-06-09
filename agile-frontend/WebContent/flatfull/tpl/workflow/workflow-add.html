@@ -37,6 +37,11 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 									<input type="hidden" id="was-disabled" data = {{was_disabled}}>
 									{{#if is_new}}
 										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">Save Campaign</button>
+										<div class="right m-r-sm">
+						                    <label class="btn btn-default btn-sm m-l-xs" id="campaign_access_level"> 
+						                    		<span> Make {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
+						                    </label>
+										</div>
 									 <!--
 										{{#is_mobile}}
 
@@ -63,10 +68,18 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
 													</a>
 												</li>
+                                           <li>
+												<a href="javascript:void(0)" id="campaign_access_level">
+												<i class="" style="width:20px;">&nbsp;</i>
+
+												 <span></span></a>
+												</li>
 											</ul>
-                           				</div>                                        
+                           				</div> 
+                           				
+                           				                                       
                   <div id="disable-switch" data = "{{is_disabled}}" class="is-disabled-top">
-							<label class="r-switch m-t-xs m-r pull-right">
+							<label class="r-switch m-t-xs m-r-sm pull-right">
                           		{{#if_equals "true" is_disabled}}
                           			<input type="checkbox" id="disable-workflow" class="left"  name="disable-workflow" checked="checked">
                          	 	{{else}}
@@ -76,6 +89,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 							</label> 
 					</div>                     
                        {{/if}}
+ 
 							</div>
                            		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
 							</div>
@@ -165,33 +179,46 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 						<br/>
 						<br/>
                         <small>Unsubscribed contacts are not sent any further emails but other actions such as lead scoring will still continue to execute.</small>
+                        <br/>
+						<br/>
 					</div>
-                    <br />
-                    <br />
-                    
+
+					<div class="row">
+                     <div class="control-group form-group hidden">
+						<label class="control-label col-sm-2">
+							<b>Access Level:</b>
+						</label>
+						<div class="controls col-sm-4">
+							<select name="access_level" id="access_level" class="form-control">
+								<option value="1">Public</option>
+								<option value="{{getAccountOwnerId}}">Private</option>
+							</select>
+						</div>
+                	</div>
+                    </div>
+
                     {{#if is_new}}
 						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">Save Campaign</button>
 					{{else}}
 
-
-<div class="btn-group left m-r-xs">
-											<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</button>
-                            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
-            									<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu">
-												<li>
-													<a href="#" id="duplicate-workflow-top">
-														<i class="fa fa-clipboard"></i> Create a Copy
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
-														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
-													</a>
-												</li>
-											</ul>
-                           				</div>
+						<div class="btn-group left m-r-xs">
+							<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</button>
+            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#" id="duplicate-workflow-top">
+										<i class="fa fa-clipboard"></i> Create a Copy
+									</a>
+								</li>
+								<li>
+									<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
+										<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
+									</a>
+								</li>
+							</ul>
+           				</div>
 
                     {{/if}}
                     <div class="save-workflow-img inline-block"></div>

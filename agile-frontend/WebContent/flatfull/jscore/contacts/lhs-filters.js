@@ -190,7 +190,7 @@ function submitLhsFilter()
 		COMPANIES_HARD_RELOAD=true;
 		App_Companies.companies(undefined, undefined, undefined, true);
 	} else if(contact_type == 'VISITOR') {
-
+		_agile_delete_prefs('visitor_filter');
 		_agile_delete_prefs('dynamic_visitors_filter');
 		if (formData != null && formData.rules.length > 0)
 			_agile_set_prefs('dynamic_visitors_filter', JSON.stringify(formData));
@@ -287,6 +287,8 @@ $('#' + container_id).on('click', '#clear-lhs-segmentation-filters', function(e)
 	e.preventDefault();
 	_agile_delete_prefs('dynamic_visitors_filter');
 	_agile_delete_prefs('duration');
+	_agile_delete_prefs('visitor_filter');
+	_agile_delete_prefs("visitor_repeat_filter");
 	VISITORS_HARD_RELOAD=true;
 	 App_VisitorsSegmentation.visitorssegmentation();
 });
@@ -397,7 +399,8 @@ $('#' + container_id).on('click', '#remove_contact_in_lhs', function(e)
 });
 
 $('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date,.filters-tags-typeahead,.typeahead_contacts)', function(e)
-{
+{   
+	if(!$('#lhs_filters_segmentation #error-message').hasClass("hide")){$('#lhs_filters_segmentation #error-message').addClass("hide");}
 	console.log("I am in blur " + $(this).val());
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -670,6 +673,69 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
     				}
     				App_Contacts.contacts();
     	   });
+
+    $('#' + container_id).on('click', '#save-segment-filter', function(e)
+            {
+            	if(!_agile_get_prefs("dynamic_visitors_filter") && !_agile_get_prefs("visitor_filter")){
+            		$('#error-message').removeClass('hide'); 
+            		return;
+            	}
+                e.preventDefault();
+                var segmentView = new Base_Model_View({
+                template : "segment-save-filter-modal",
+                url : '/core/api/web-stats/filters',
+                postRenderCallback: function(
+                                el, collection) {
+                  
+                   addModalEvent("segmentsModal",collection);
+                    if(!collection[0]){ 
+                   	$("#saveSegmentFilterForm .choose-segment-filter").prop("disabled",true);
+               		$("#saveSegmentFilterForm .replace-segment label").css('cursor','default');
+               		$("#saveSegmentFilterForm .replace-segment label").css('color','grey');
+
+               		}           
+
+                 },
+
+                saveCallback: function(model){
+
+                    $('#segmentsModal').modal('hide');                   
+                    setupSegmentFilterList('',model.id);
+                    $('body').removeClass('modal-open').animate({ scrollTop: 0 }, "slow");
+                },
+                prePersist : function(model)
+                {
+                    var json = {};
+                    if(_agile_get_prefs("dynamic_visitors_filter"))
+                    	json.segmentConditions=_agile_get_prefs("dynamic_visitors_filter").toString();
+                    else if(_agile_get_prefs("visitor_filter")){
+                    	json.filter_id=_agile_get_prefs("visitor_filter");
+                    	_agile_set_prefs("visitor_repeat_filter",true);
+                    }
+                    var formJSON = model.toJSON();
+
+                    if(formJSON['save-type'] == 'replace'){
+                        json.id = $('[name="filter-collection"]').val();
+                        if(model.attributes.name == '')
+                        	model.attributes.name=$('[name="filter-collection"]').find('option:selected').text();
+
+                    }
+
+                    model.set(json, { silent : true });
+                }                       
+                            
+            });         
+
+            $('#segmentsModal').html(segmentView.render().el).modal('show');
+            
+        });
+	$('#content').on('change',"#tags-filter" , function() {
+	  	if(this.value == "DEFINED" || this.value == "NOT_DEFINED" ){
+	  		$(this).parent().removeAttr("style");
+	  	}else
+	  		$(this).parent().css("min-height","90px");
+
+	});
 
 }
 /**

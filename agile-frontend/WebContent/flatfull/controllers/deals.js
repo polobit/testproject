@@ -5,14 +5,18 @@
 var DealsRouter = Backbone.Router.extend({
 
 	routes : {
-
-	/* Deals/Opportunity */
-	"deals" : "deals", "import-deals" : "importDeals",
-	"deal-rc-0" : "dealsRightClick","deal-rc-1" : "dealsRightClick","deal-rc-2" : "dealsRightClick","deal-rc-3" : "dealsRightClick",
-	"deal-filters" : "dealFilters", 
-	"deal-filter-add" : "dealFilterAdd",
-	"deal-filter-edit/:id" : "dealFilterEdit",
-	"deal-filter/:id" : "dealFilter"},
+		/* Deals/Opportunity */
+		"deals" : "deals", 
+		"import-deals" : "importDeals",
+		"deal-rc-0" : "dealsRightClick",
+		"deal-rc-1" : "dealsRightClick",
+		"deal-rc-2" : "dealsRightClick",
+		"deal-rc-3" : "dealsRightClick",
+		"deal-filters" : "dealFilters", 
+		"deal-filter-add" : "dealFilterAdd",
+		"deal-filter-edit/:id" : "dealFilterEdit",
+		"deal-filter/:id" : "dealFilter"
+	},
 
 	/**
 	 * Fetches all the opportunities as list and also as milestone lists.
@@ -25,15 +29,7 @@ var DealsRouter = Backbone.Router.extend({
 		pipeline_id = 0;
 		if (_agile_get_prefs("agile_deal_track"))
 			pipeline_id = _agile_get_prefs("agile_deal_track");
-		/*var deal_filters = _agile_get_prefs('deal-filters');
-		if(deal_filters)
-		{
-			var filtersJSON = $.parseJSON(deal_filters);
-			if(filtersJSON && filtersJSON.pipeline_id)
-			{
-				pipeline_id = filtersJSON.pipeline_id;
-			}
-		}*/
+		
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
 		
 		//fix for mobile view showing only list view 
@@ -48,22 +44,14 @@ var DealsRouter = Backbone.Router.extend({
 			if (pipeline_id == 1)
 				pipeline_id = 0;
 
-			getTemplate("new-opportunity-header", {}, undefined, function(template_ui){
+			getTemplate("opportunities-header", {}, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$('#opportunity-listners').html($(template_ui));
 
-				// Add row-fluid if user prefs are set to fluid
-				if (IS_FLUID)
-				{
-					$('#opportunity-listners').find('div.row').removeClass('row').addClass('row');
-				}
-				pipeline_count = 0;
-				deal_fetching = false;
 				DEALS_LIST_COLLECTION = null;
 				setupDealsTracksList();
 				setupDealFilters();
-				//setupNewDealFilters();
 				initializeDealListners();
 				loadPortlets('Deals');
 				contactListener();
@@ -73,75 +61,17 @@ var DealsRouter = Backbone.Router.extend({
 		else
 		{
 			var that = this;
-			setupNewDealFilters(function(){
-				DEALS_LIST_COLLECTION = null;
-				getTemplate("opportunities-header-list", {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$('#opportunity-listners').html($(template_ui));
-				
-				var query = ''
-				if (_agile_get_prefs('deal-filters'))
-				{
-					query = '&filters=' + encodeURIComponent(getDealFilters());
-				}
-				// Fetches deals as list
-				that.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query,
-					templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
-					postRenderCallback : function(el)
-					{
-						if (pipeline_id == 1)
-							pipeline_id = 0;
-						var cel = App_Deals.opportunityCollectionView.el;
-						appendCustomfieldsHeaders(el);
-						appendCustomfields(el);
-						// Showing time ago plugin for close date
-						includeTimeAgo(el);
-						// Shows Milestones Pie
-						pieMilestonesByPipeline(pipeline_id);
-
-						var dealCount = new Base_Model_View({ url : 'core/api/opportunity/based/count?pipeline_id=' + pipeline_id + query, template : "" });
-
-						dealCount.model.fetch({ success : function(data)
-						{
-							var count = data.get("count") ? data.get("count") : 0;
-							if(count != undefined && count <= 1000)
-							{
-								// Shows deals chart
-								$("#total-pipeline-chart").show();
-								dealsLineChartByPipeline(pipeline_id);
-							}
-							else if(count != undefined && count > 1000){
-								$("#total-pipeline-chart").hide();
-							}
-							if(App_Deals.opportunityCollectionView.collection && App_Deals.opportunityCollectionView.collection.models[0])
-							{
-								App_Deals.opportunityCollectionView.collection.models[0].set({ "count" : count }, { silent : true })
-							}
-						} });
-						deal_bulk_actions.init_dom(el);
-						setupDealsTracksList(cel);
-						setupDealFilters(cel);
-						setNewDealFilters(App_Deals.deal_filters.collection);
-						initializeDealListners(el);
-						contactListener();
-						setTimeout(function(){
-							$('#delete-checked',el).attr("id","deal-delete-checked");
-						},500);
-					}, appendItemCallback : function(el)
-					{
-						appendCustomfields(el);
-
-						// To show timeago for models appended by infini scroll
-						includeTimeAgo(el);
-
-					} });
-				that.opportunityCollectionView.collection.fetch();
-
-				$('.new-collection-deal-list').html(that.opportunityCollectionView.render().el);
-				loadPortlets('Deals');
+			DEALS_LIST_COLLECTION = null;
+			setupDealFilters(function(data){
+				getTemplate("opportunities-header", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#opportunity-listners').html($(template_ui));
+					
+					loadPortlets('Deals');
+				});
+				fetchDealsList(data);
 			});
-});
 		}
 
 		$(".active").removeClass("active");
@@ -225,6 +155,17 @@ var DealsRouter = Backbone.Router.extend({
 	{
 		$('#content').html("<div id='opportunity-listners'></div>");
 		var deals_filter = new Base_Model_View({ url : '/core/api/deal/filters', template : "filter-deals", isNew : "true", window : "deal-filters",
+			prePersist : function(model){
+				model.set({ 
+						//	'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
+						//	'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
+						}, 
+						{ 
+							silent : true 
+						}); 
+						console.log('before persist');
+
+			},
 			postRenderCallback : function(el)
 			{
 				initializeDealListners();
@@ -263,8 +204,10 @@ var DealsRouter = Backbone.Router.extend({
 					}
 				});
 				$('input[name=name]').trigger('focus');
+				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
+				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
 			} });
-		$("#opportunity-listners").html(deals_filter.render().el);
+		$("#opportunity-listners").html(deals_filter.render().el);		
 	},
 
 	/**
@@ -283,11 +226,13 @@ var DealsRouter = Backbone.Router.extend({
 		var deal_filter = this.dealFiltersList.collection.get(id);
 		var deal_filter_json = deal_filter.toJSON();
 		var dealFilter = new Base_Model_View({ url : 'core/api/deal/filters', model : deal_filter, template : "filter-deals",
-			window : 'deal-filters', prePersist : function(model){
+			window : 'deal-filters', prePersist : function(model){ 
 				model.set({ 
 							'pipeline_id' : $('#filter_pipeline', $("#dealsFilterForm")).val(), 
 							'milestone' : $('#milestone', $("#dealsFilterForm")).val(),
 							'owner_id' : $('#owners-list-filters', $("#dealsFilterForm")).val() 
+						//	'close_date_start' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_start*1000)) / 1000 ,
+						//	'close_date_end' : getGMTEpochFromDateForCustomFilters(new Date(model.attributes.close_date_end*1000)) / 1000 
 						}, 
 						{ 
 							silent : true 
@@ -319,9 +264,9 @@ var DealsRouter = Backbone.Router.extend({
 						hideTransitionBar();
 						$('#value_filter').find('option').each(function(){
 				    		if($(this).val()==$('#value_filter').val()){
-				    			$('.'+$(this).val()).removeClass('hide');
+				    			$('.'+$(this).val(),$('#deal-value-filter')).removeClass('hide');
 				    		}else{
-				    			$('.'+$(this).val()).addClass('hide');
+				    			$('.'+$(this).val(),$('#deal-value-filter')).addClass('hide');
 				    		} 
 				    	});
 					}
@@ -371,6 +316,7 @@ var DealsRouter = Backbone.Router.extend({
 									
 									$('#milestone', el).parent().find('img').hide();
 									hideTransitionBar();
+									 
 								} 
 							});
 						}
@@ -378,12 +324,27 @@ var DealsRouter = Backbone.Router.extend({
 						{
 							$('#milestone', el).html('<option value="">Any</option>');
 						}
+						
 					}
 				});
+				if(deal_filter_json.close_date_filter == "BETWEEN"){
+					$('#deal-cd-rhs', el).parent().removeClass("hide");
+					$('#deal-cd-rhs-new', el).parent().removeClass("hide");
+					$('#cd-value', el).parent().addClass("hide");
+				}else if(deal_filter_json.close_date_filter == "ON" || (deal_filter_json.close_date_filter == "AFTER" || deal_filter_json.close_date_filter == "BEFORE")){
+					$('#deal-cd-rhs', el).parent().removeClass("hide");
+					$('#deal-cd-rhs-new', el).parent().addClass("hide");
+						$('#cd-value', el).parent().addClass("hide");
+				}else if(deal_filter_json.close_date_filter == "LAST" || deal_filter_json.close_date_filter == "NEXT" ){
+					$('#cd-value', el).parent().removeClass("hide");
+						$('#deal-cd-rhs-new', el).parent().addClass("hide");
+						$('#deal-cd-rhs', el).parent().addClass("hide");
+				}
+				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
+				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
 			} });
 
 		$("#opportunity-listners").html(dealFilter.render().el);
-
 	},
 
 	/**

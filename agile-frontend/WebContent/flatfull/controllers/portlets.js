@@ -40,7 +40,7 @@ var PortletsRouter = Backbone.Router
 										"userActivity" ];
 								$.each(array, function(i, item) {
 									if ($('#' + item).children().length == 0)
-										$('#' + item).parents('.wrapper-md')
+										$('#' + item).closest(".tab-container").find('.' + item+"-aclpermission")
 												.hide();
 								});
 
@@ -70,7 +70,7 @@ var PortletsRouter = Backbone.Router
 										updateImageS3Path('flatfull/img/dashboard_images/incoming-deals-new.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/lost-deal-analysis-new.png'),
 										updateImageS3Path('flatfull/img/dashboard_images/Average_deviation.png'),
-
+										updateImageS3Path('flatfull/img/dashboard_images/Refferalurl-Stats-new.png'),
 
 								]);
 								// Event initializers

@@ -112,6 +112,20 @@ function isValidForm(form) {
 		
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
 	}," This field is required.");
+
+	//IP validation
+	jQuery.validator.addMethod("ipValidation", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+
+		if(!value)
+			 return false;
+			
+		return is_valid_ip(value.trim());
+	
+	}," Please enter a valid IP Address.");
+
 	
 	jQuery.validator.addMethod("formulaData", function(value, element){
 		var source = $(element).val();
@@ -226,7 +240,7 @@ function isValidForm(form) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
 		}	
 	);
-
+    
 
 	// domain name validation
 	jQuery.validator.addMethod("domain_format", function(value, element){
@@ -234,6 +248,12 @@ function isValidForm(form) {
 		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
 	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
     
+
+    jQuery.validator.addMethod("customFieldSpecialCharacter", function(value, element){
+		
+		var custvals = /^\s*[a-zA-Z0-9\s]+\s*$/;
+		return custvals.test(value);
+	}," Label should not contain special characters");
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);
@@ -253,6 +273,15 @@ function isValidForm(form) {
 		}
 
 	},"<b>image</b> is a keyword in the system and it can't be added as a custom field.");
+
+	jQuery.validator.addMethod("verified-email", function(value, element){
+		if($(element).find("option").length !=0){
+ 				if(typeof($(element).find("option[value=\""+value+"\"]").attr("unverified")) == "undefined")
+ 					return true;
+ 				
+ 					return false;
+ 		}
+ 	}," From email is not verified. Please verify it.");
 
 	$(form).validate({
 		ignoreTitle: true,

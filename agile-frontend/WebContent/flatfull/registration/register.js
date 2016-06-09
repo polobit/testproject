@@ -82,7 +82,9 @@ function getRegisterURL(domain)
 
 //validates the form fields
 function isValid(form) {	
-
+	if (!($("#login_phone_number").intlTelInput("isValidNumber"))) {
+		return false;
+	}
 	var submit_button = $(form).find("[type='submit']");
 	// Return if action is already in process 
 	if($(submit_button).attr("disabled") || $(submit_button).attr("disabled"))
@@ -133,6 +135,13 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 						 	$(submit_button).removeAttr("disabled"); 
 							 submitForm(form, submit_button);
 							 $('.loading-image').removeClass("hide");
+							 var $frame = document.createElement('iframe');
+							 $frame.src = "https://www.agilecrm.com/registration-success";
+							 $frame.style.display = "none";
+							 document.body.appendChild($frame);
+    						 //$frame.attr("src", $frame.attr("data-source"));
+    						 //$('body').append($frame);
+
 						 }, function(error){
 						 	$('.loading-image').addClass("hide");
 						 	$(submit_button).removeAttr("disabled");

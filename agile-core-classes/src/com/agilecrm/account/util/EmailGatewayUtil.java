@@ -10,12 +10,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
-import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
@@ -32,14 +32,12 @@ import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
-import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
-import com.thirdparty.sendgrid.SendGrid;
-import com.thirdparty.sendgrid.lib.SendGridLib;
-import com.thirdparty.ses.util.AmazonSESUtil;
 import com.thirdparty.mandrill.Mandrill;
+import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.ses.util.AmazonSESUtil;
 
 /**
  * <code>EmailGatewayUtil</code> is the utility class for EmailGateway. It
@@ -128,6 +126,7 @@ public class EmailGatewayUtil
 	{
 	    Long start_time = System.currentTimeMillis();
 	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+//	    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
 	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
 	    System.out.println("Logs size : " + queryList.size());
 	}
@@ -395,12 +394,13 @@ public class EmailGatewayUtil
 	    	        fromName, to, cc, bcc, subject, replyTo, html, text, null, null, null);
 
 	    	// Add to pull queue with from email as Tag
-	    	PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
+	    	PullQueueUtil.addToPullQueue(AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
 	    }
 
 	}
 	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    System.err.println("Exception occured while sending emails through thirdparty email apis..."
 		    + e.getMessage());
 
@@ -458,9 +458,13 @@ public class EmailGatewayUtil
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
 		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
-
+	
 	// Add to pull queue with from email as Tag
+	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+		queueName = "amazon-ses-pull-queue";
+	}
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+	
     }
 
     /**
@@ -503,18 +507,49 @@ public class EmailGatewayUtil
     {
 	try
 	{
+		List<Object[]> queryList = new ArrayList<Object[]>();
+		Map<String, String> campaignNameMap = new HashMap<String, String>();
 	    for (MailDeferredTask mailDeferredTask : tasks)
 	    {
+	    	String campaignName = null;
+	    	if (!campaignNameMap.containsKey(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain))
+		    {
+			campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId);
+			campaignNameMap.put(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain, campaignName);
+		    }
+		    else
+		    {
+			campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
+		    }
+		    String oldNamespace = NamespaceManager.get();
+		    try{	    
+		    NamespaceManager.set(mailDeferredTask.domain);
+		    // For personal bulk emails, no need to add log
+		    if (StringUtils.isEmpty(mailDeferredTask.campaignId ) && StringUtils.isBlank(mailDeferredTask.subscriberId))
+		    {
+			continue;
+		    }
 
-		// For personal bulk emails, no need to add log
-		if (StringUtils.isBlank(mailDeferredTask.campaignId)
-			&& StringUtils.isBlank(mailDeferredTask.subscriberId))
-		    break;
+		    Object[] newLog = new Object[] { mailDeferredTask.domain,mailDeferredTask.campaignId, campaignName,mailDeferredTask.subscriberId,
+		    		GoogleSQL.getCurrentDate(), "Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString(),
+		    		 };
 
-		LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId,
-			"Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString());
+		    queryList.add(newLog);
+		    }
+		    finally{
+		    	NamespaceManager.set(oldNamespace);
+		    }
+		}
+		
+		if (queryList.size() > 0)
+		{
+		    Long start_time = System.currentTimeMillis();
+		    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+//		    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
+		    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
+		    System.out.println("Logs size : " + queryList.size());
+		}
 
-	    }
 	}
 	catch (Exception e)
 	{

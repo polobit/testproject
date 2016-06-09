@@ -78,7 +78,11 @@ public class WebCalendarEventUtil
 	{
 		DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
 		OnlineCalendarPrefs prefs = OnlineCalendarUtil.getCalendarPrefs(userid);
-		String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		//String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		String domainUser_timezone = null;
+		if(domain_user!=null){
+			domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		}
 		String business_hours = null;
 		if (prefs != null)
 		{
@@ -689,7 +693,7 @@ public class WebCalendarEventUtil
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static String createEvents(WebCalendarEvent wce, Contact contact) throws JSONException
+	public static void createEvents(WebCalendarEvent wce, Contact contact) throws Exception
 	{
 		System.out.println("In createEvents");
 
@@ -730,7 +734,7 @@ public class WebCalendarEventUtil
 
 		// If slots are not selected
 		if (wce.selectedSlotsString.isEmpty())
-			return "Slot is empty";
+			throw new Exception("Slot is empty");
 
 		// Selected slots in json array
 		JSONArray jsonArray = new JSONArray(wce.selectedSlotsString);
@@ -755,7 +759,7 @@ public class WebCalendarEventUtil
 
 		boolean isAvailable = checkSlotAvailability(wce, selected_slot);
 		if (!isAvailable)
-			return "slot booked";
+			throw new Exception("slot booked");
 
 		// Looping on list, Each selected slot will create new agile event.
 		for (List<Long> slot : wce.selectedSlots)
@@ -978,7 +982,6 @@ public class WebCalendarEventUtil
 					null, client_mail, null, null, null, null, attachments);
 
 		}
-		return "Done";
 	}
 
 	/**

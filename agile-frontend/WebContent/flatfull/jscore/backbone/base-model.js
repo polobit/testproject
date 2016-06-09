@@ -150,31 +150,31 @@ var Base_Model_View = Backbone.View
 				e.preventDefault();
 				
 				var deleteCallback = this.options.deleteCallback;
-				
-				if(!confirm("Are you sure you want to delete?"))
-		    		return false;
-				
-				/*
-				 * Sends delete request, and reloads view on success
-				 */
-				this.model.destroy({
-					success : function(model, response) {
-						
-						// Delete callback
-						if (deleteCallback && typeof (deleteCallback) === "function") {
+				var that = this;
+				showAlertModal("delete", "confirm", function(){
+					/*
+					 * Sends delete request, and reloads view on success
+					 */
+					that.model.destroy({
+						success : function(model, response) {
 							
-							console.log(response)
+							// Delete callback
+							if (deleteCallback && typeof (deleteCallback) === "function") {
+								
+								console.log(response)
+								
+								// execute the callback, passing parameters as necessary
+								deleteCallback(model, response);
+							}
 							
-							// execute the callback, passing parameters as necessary
-							deleteCallback(model, response);
-						}
-						
-						if(this.options.no_reload_on_delete)
-							  return;
+							if(this.options.no_reload_on_delete)
+								  return;
 
-						location.reload(true);
-					}
+							location.reload(true);
+						}
+					});
 				});
+				
 				
 			},
 			/**
@@ -463,7 +463,7 @@ var Base_Model_View = Backbone.View
 										// Hides the error message after 3
 										// seconds
 										if(response.status != 406)
-											$save_info.show().delay(3000).hide(1);
+											$save_info.show().delay(5000).hide(1);
 									}
 								}, { silent : true });
 			},

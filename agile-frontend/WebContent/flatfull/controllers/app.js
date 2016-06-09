@@ -41,9 +41,10 @@ $(function()
 	App_Datasync = new DataSyncRouter();
 	App_Ticket_Module = new TicketsUtilRouter();
 	App_LandingPageRouter = new LandingPageRouter();
+	App_Dashboards = new DashboardsRouter();
 	App_EmailBuilderRouter = new EmailBuilderRouter();
 	App_VisitorsSegmentation=new VisitorsSegmentationRouter();
-
+    App_Helpcenter_Module = new HelpcenterRouter();
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
 
@@ -174,3 +175,5 @@ $(document).ready(function(){
 
   setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
 });
+
+SUBSCRIBERS_SELECT_ALL = false;

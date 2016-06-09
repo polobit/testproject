@@ -12,6 +12,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.AllDomainStats;
@@ -37,6 +38,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
@@ -45,6 +47,12 @@ import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
+import com.agilecrm.knowledgebase.entity.Article;
+import com.agilecrm.knowledgebase.entity.Categorie;
+import com.agilecrm.knowledgebase.entity.Comment;
+import com.agilecrm.knowledgebase.entity.HelpcenterUser;
+import com.agilecrm.knowledgebase.entity.Section;
+import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.portlets.Portlet;
@@ -87,6 +95,7 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.templates.WorkflowTemplate;
 import com.agilecrm.workflows.triggers.Trigger;
+import com.analytics.VisitorFilter;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log;
 import com.campaignio.twitter.TwitterJobQueue;
@@ -251,6 +260,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(LandingPage.class);
 	ObjectifyService.register(LandingPageCNames.class);
 	ObjectifyService.register(Goals.class);
+	ObjectifyService.register(Dashboard.class);
 
 	ObjectifyService.register(Webhook.class);
 	
@@ -263,6 +273,17 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	//For deals update in textsearch
 	ObjectifyService.register(OpportunitySchemaUpdateStats.class);
+	ObjectifyService.register(VisitorFilter.class);
+	
+	//Knowledgebase entities
+	ObjectifyService.register(Categorie.class);
+	ObjectifyService.register(Section.class);
+	ObjectifyService.register(Article.class);
+	ObjectifyService.register(Comment.class);
+	ObjectifyService.register(HelpcenterUser.class);
+
+	ObjectifyService.register(IpAccess.class);
+
 
     }
 
@@ -331,6 +352,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	return key;
     }
+    
+    /**
+     * Stores an entity in database
+     * 
+     * @param entity
+     * @return Key of the saved entity
+     */
+    public Key<T> put(T entity, boolean force)
+    {
+    	return ofy().put(entity);
+    }
+
 
     /**
      * Stores multiple entities of same type
@@ -693,7 +726,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	if (!StringUtils.isEmpty(orderBy))
 	    query.order(orderBy);
-
+	
 	return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
     }
 
@@ -704,14 +737,25 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// entities he had created
 	System.out.println("check read query");
 	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+	int page_index_for_cursor = 0;
 
-	if (cursor != null)
-	    query.startCursor(Cursor.fromWebSafeString(cursor));
+	if (cursor != null){
+		
+		if(!cursor.startsWith("agile_cursor_"))
+			query.startCursor(Cursor.fromWebSafeString(cursor));
+		else {
+			page_index_for_cursor = Integer.parseInt(cursor.replace("agile_cursor_", "").split("-")[0]);
+			// query.limit(max);
+			query.offset(page_index_for_cursor * max);
+		}
+		
+	}
+	    
 
 	int index = 0;
+	
 	String newCursor = null;
 	List<T> results = new ArrayList<T>();
-
 	QueryResultIterator<T> iterator = query.iterator();
 	while (iterator.hasNext())
 	{
@@ -750,7 +794,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
 				    agileCursor.count, 1 * 60 * 60 * 1000);
 		    }
-
+		    
 		}
 	    }
 
@@ -761,7 +805,19 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (iterator.hasNext())
 		{
 		    Cursor cursorDb = iterator.getCursor();
-		    newCursor = cursorDb.toWebSafeString();
+		    try {
+		    	 newCursor = cursorDb.toWebSafeString();
+			} catch (NullPointerException e) {
+				/**
+				 * GAE Query not support cursor with inequality filters in the query.
+				 */
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				page_index_for_cursor++;
+				
+				newCursor = "agile_cursor_" + page_index_for_cursor + "-" + max;
+				
+			}
+		   
 
 		    // Store the cursor in the last element
 		    if (result instanceof com.agilecrm.cursor.Cursor)

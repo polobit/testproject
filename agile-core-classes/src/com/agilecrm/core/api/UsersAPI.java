@@ -1,6 +1,7 @@
 package com.agilecrm.core.api;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -167,7 +168,11 @@ public class UsersAPI
 				owner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
 
 			}
-			domainUser.save();
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		     System.out.println("current domain user = " + user);
+		     domainUser.pid = user.id;
+		     System.out.println("domainuser pid = "+domainUser.pid);
+		     domainUser.save();
 			if (owner != null && domainUser.id != null && !domainUser.id.equals(owner.id))
 			{
 				owner.is_account_owner = false;
@@ -224,6 +229,7 @@ public class UsersAPI
 			try
 			{
 				domainUser.setInfo("Ip_Address", request.getRemoteAddr()) ;
+				domainUser.setInfo("updated_time", new Long(System.currentTimeMillis() / 1000)) ;
 				ActivitySave.createUserEditActivity(domainUser);
 				ActivitySave.createOwnerChangeActivity(domainUser);
 			}
@@ -521,6 +527,7 @@ public class UsersAPI
 		return helpdeskSettings;
 	}
 
+
 	// Update ticket collection view in helpdesk settings
 	@POST
 	@Path("/helpdesk-settings/toggle-view")
@@ -544,4 +551,40 @@ public class UsersAPI
 			e.printStackTrace();
 		}
 	}
+	/*@POST
+
+	@Path("/fingerprintscanner")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void getFingerPrints(@QueryParam("result") String result,@FormParam("obj") String obj){
+		try{
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			String existingFingerprint = domainUser.finger_print;
+			
+			// Check with equality with present
+			if(StringUtils.isNotBlank(existingFingerprint) && !existingFingerprint.equals(result))
+			{
+				domainUser.finger_print=result;		
+				
+			}
+			String mail = domainUser.email;
+			domainUser.save();
+		}
+		catch(Exception e){
+			
+
+		} }*/
+		
+
+
+    
+    @Path("/parentId")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public DomainUser getDomainUserByID(@QueryParam("id") Long id)
+    {
+    	 DomainUser domainuser = DomainUserUtil.getDomainUser(id);
+    	 System.out.println("created user = "+domainuser);
+    	 return domainuser;
+    }
+
 }

@@ -9,6 +9,7 @@ CONTACTS_HARD_RELOAD = true;
 
 var import_tab_Id;
 var REFER_DATA;
+var contact_company ;
 
 var ContactsRouter = Backbone.Router.extend({
 
@@ -62,9 +63,9 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with only mobile number */
 			"contacts/call-lead/:mob" : "addMobLead",
 			
-			"call-contacts" : "callcontacts",
 
-		"refer-friends" : "referFriends"
+			"call-contacts" : "callcontacts"
+
 	},
 	
 	initialize : function()
@@ -93,7 +94,27 @@ var ContactsRouter = Backbone.Router.extend({
             return;
 		}
 
-		getTemplate('portlets', {}, undefined, function(template_ui){
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+
+		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
+
+		var dashboardJSON = {};
+		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
+			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
+				if(dashboard_name != "DashBoard" && value.id == dashboard_name) {
+					dashboardJSON["id"] = value.id;
+					dashboardJSON["name"] = value.name;
+					dashboardJSON["description"] = value.description;
+				}
+			});
+		}
+
+		if(!dashboardJSON["id"])
+		{
+			dashboard_name = "DashBoard";
+		}
+
+		getTemplate('portlets', dashboardJSON, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 
@@ -106,7 +127,7 @@ var ContactsRouter = Backbone.Router.extend({
 					$("#chrome-extension-button").removeClass('hide');
 				}
 
-				loadPortlets('DashBoard',el);
+				loadPortlets(dashboard_name,el);
 
 		}, "#content");
 
@@ -588,7 +609,19 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-
+			$(el).on('click',function(el){
+				var newId = el.target.id;
+				if(newId == "contact_name")
+					return ;
+				if(newId == "contactName")
+					return ;
+				if(newId == 'Contact-input-firstname' || newId == 'Contact-input-lastname')
+					return;
+				
+					inlineNameChange(el,newId);
+				
+			});
+		
 			//mobile tabs
 			 $('.content-tabs').tabCollapse(); 
 
@@ -644,7 +677,9 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-call",el).removeClass("c-progress");
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
-			} });
+			} 
+			
+		});
 
 		var el = this.contactDetailView.render(true).el;
 		$(el).find('.content-tabs').tabCollapse(); 
@@ -729,6 +764,19 @@ var ContactsRouter = Backbone.Router.extend({
 			} });
 
 			return;
+		}
+		if(contact.contact_company_id){							
+			$.ajax({
+				url : "/core/api/contacts/"+contact.contact_company_id ,
+				type: 'GET',
+				dataType: 'json',
+				success: function(company){
+					if(company){
+						console.log(company);
+						contact_company = company ;
+					}
+				}
+			});
 		}
 
 		// Contact Edit - take him to continue-contact form
@@ -892,7 +940,36 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		}
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
-	
+
+		var options = {
+		"+ Add new" : "verify_email"
+		};
+		
+		fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+			
+			var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+				
+				if(typeof(ownerEmail) == "undefined")
+				{
+				$select
+						.find("option:first")
+						.before(
+								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				}
+				else
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				rearrange_from_email_options($select, data);
+			});
 	},
 
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
@@ -1167,7 +1244,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLead : function(first, last){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 		});
@@ -1175,7 +1252,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLeadDirectly : function(first, last,mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 			$(this).find("#phone").val(mob);
@@ -1184,7 +1261,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 
 	addMobLead : function(mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
@@ -1215,6 +1292,39 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 								.html(
 										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 						$("#content #contact_company").hide();
+						if(data){							
+							$.ajax({
+								url : "/core/api/contacts/"+data,
+								type: 'GET',
+								dataType: 'json',
+								success: function(company){
+									if(company){
+										console.log(company);
+										contact_company = company ;
+										var prop = null;
+										$.each(contact_company.properties , function(){
+											if(this.name == "address" && this.subtype == "office")
+												prop = JSON.parse(this.value);
+										});
+										if(prop){
+											$("#content .address-type").val("office");
+											if(prop.address)
+												$("#content #address").val(prop.address);
+											if(prop.city)
+												$("#content #city").val(prop.city);
+											if(prop.state)
+												$("#content #state").val(prop.state);
+											if(prop.zip)
+												$("#content #zip").val(prop.zip);
+											if(prop.country)
+												$("#content #country").val(prop.country);
+										}
+
+									}
+
+								}
+							});
+						}
 					}
 					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
 
@@ -1259,16 +1369,10 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
-	},
-
-	referFriends : function()
-	{
-		var subject = "I am using Agile CRM and I really love it! Try it now.";
-		var body = "Hi,<br><br>I am using Agile CRM and I really love it!<br><br>It is a combination of important features like email marketing, call campaign, online scheduling, landing pages, Web rules and many others. This service is true value for money!<br><br>What to try it? Let's start by signing up with below link:<br>http://www.agilecrm.com/pricing?utm_source=affiliates&utm_medium=web&utm_campaign="+CURRENT_DOMAIN_USER.domain+"<br><br>Best Regards";
-		sendMail(undefined,subject,body,undefined,undefined,this);
-	}
-		
+	}	
 	});
+
+
 
 function getAndUpdateCollectionCount(type, el, countFetchURL){
 

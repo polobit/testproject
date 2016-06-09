@@ -6,12 +6,16 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.email.HandlebarsUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -54,7 +58,7 @@ public class ContactBulkEmailUtil
 			// Custom date labels to convert epoch to Date format
 			List<String> dateCustomFieldLabels = AgileTaskletUtil.getDateCustomLabelsFromCache();
 			String timezone = AccountPrefsUtil.getTimeZone();
-
+			
 			for (Contact contact : contactList)
 			{
 
@@ -77,8 +81,8 @@ public class ContactBulkEmailUtil
 					if (subscriberJSON != null)
 					{
 						// Compiles subject and body mustache templates
-						String replacedSubject = MustacheUtil.compile(subject, subscriberJSON.getJSONObject("data"));
-						String replacedBody = MustacheUtil.compile(body, subscriberJSON.getJSONObject("data"));
+						String replacedSubject = HandlebarsUtil.compile(subject, subscriberJSON.getJSONObject("data"));
+						String replacedBody = HandlebarsUtil.compile(body, subscriberJSON.getJSONObject("data"));
 
 						long openTrackerId = System.currentTimeMillis();
 
@@ -115,9 +119,12 @@ public class ContactBulkEmailUtil
 						// Agile label to outgoing emails
 						replacedBody = EmailUtil.appendAgileToHTML(replacedBody, "email", "Sent using",
 								emailSender.isEmailWhiteLabelEnabled());
-
+						String emailGatewayName = null;
+						if(emailSender!=null && emailSender.emailGateway!=null && emailSender.emailGateway.email_api!=null){
+							emailGatewayName = emailSender.emailGateway.email_api.name();
+						}
 						emailSender.addToQueue(len >= 200 ? AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE
-								: AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, null, null, null, domain, fromEmail,
+								: AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, emailGatewayName, null, null, domain, fromEmail,
 								fromName, email, null, null, replacedSubject, fromEmail, replacedBody, null, null,
 								null, null);
 						

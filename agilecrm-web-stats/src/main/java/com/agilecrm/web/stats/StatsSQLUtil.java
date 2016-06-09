@@ -667,4 +667,26 @@ public class StatsSQLUtil
     	}
     	
     }
+
+    public static void getRefferalUrlAndCountForDomain(HttpServletRequest req, HttpServletResponse res, String domain)
+    {
+		
+		String urlCountQuery = "SELECT ref_url ,count(sid) FROM page_visits WHERE domain = '"+domain +"' and ref_url!='' and ref_url!='null'  and stats_time between '" + req.getParameter("start_time") + "' and  '" + req.getParameter("end_time") +"' group by ref_url order by count(sid) desc limit 5 ;";
+			
+		System.out.println("URL count query is: " + urlCountQuery);
+	
+		try
+		{
+		    JSONArray result=StatsSQL.getJSONQuery(urlCountQuery);
+		    if (result != null)
+			StatsUtil.sendResponse(req, res, result.toString());
+		   
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		   
+		}
+		
+    }
 }

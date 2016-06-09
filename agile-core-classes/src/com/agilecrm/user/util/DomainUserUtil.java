@@ -8,14 +8,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.ipaccess.IpAccess;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -256,6 +257,19 @@ public class DomainUserUtil
 
 	return getDomainUserKey(info.getDomainId());
     }
+    
+    /**
+     * Get Current User key
+     */
+    public static Long getCurentUserId()
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return null;
+
+	return info.getDomainId();
+    }
+    
 
     /**
      * Gets current domain user using SessionManager
@@ -264,20 +278,25 @@ public class DomainUserUtil
      */
     public static DomainUser getCurrentDomainUser()
     {
-	// Get Current Logged In user
-	UserInfo userInfo = SessionManager.get();
-	if (userInfo == null)
-	    return null;
-	DomainUser user = getDomainUserFromEmail(userInfo.getEmail());
-
-	/*
-	 * try { user.postLoad(); } catch (DecoderException e) {
-	 * System.out.println("exception exception **************************");
-	 * // TODO Auto-generated catch block e.printStackTrace(); }
-	 * 
-	 * System.out.println("**************************" + user.menu_scopes);
-	 */
-	return user;
+    	//Check in cache. If user is present, return result.
+    	Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+    	if( obj != null && obj instanceof DomainUser )	return (DomainUser) obj;
+    	
+		// Get Current Logged In user
+		UserInfo userInfo = SessionManager.get();
+		if (userInfo == null)
+		    return null;
+		DomainUser user = getDomainUserFromEmail(userInfo.getEmail());
+	
+		/*
+		 * try { user.postLoad(); } catch (DecoderException e) {
+		 * System.out.println("exception exception **************************");
+		 * // TODO Auto-generated catch block e.printStackTrace(); }
+		 * 
+		 * System.out.println("**************************" + user.menu_scopes);
+		 */
+		SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, user);
+		return user;
     }
 
     /**
@@ -842,6 +861,23 @@ public class DomainUserUtil
 			System.err.println("NumberParseException was thrown: " + e.toString());
 		}
 		return false;
+	}
+	
+	  /** Check whether fingerprint present or not in list*/
+    public static  boolean isValidFingerPrint(DomainUser domainUser, HttpServletRequest request){
+    	
+    	// Get actual finger prints
+    	Set<String> finger_prints = domainUser.finger_prints;
+    	
+		// Checks the wheather fingerprintlist is null or not  
+		if(finger_prints == null || finger_prints.size() == 0)
+			 return true;
+		
+		// Gets the userfingerprint from request
+		String user_finger_print = request.getParameter("finger_print");
+		
+		// Checks the condition is userfingerprint present in the list or not
+		return finger_prints.contains(user_finger_print);
 	}
 	
 }

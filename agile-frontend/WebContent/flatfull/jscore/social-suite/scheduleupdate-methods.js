@@ -49,9 +49,10 @@ function isTimeInPast()
 	// Past Time
 	else
 	{
-		alert("Please select Date/Time in future.");
-		$("#send_tweet").attr("disabled", "disable");
-		Schedule_In_Future = false;
+		showAlertModal("future_date", undefined, function(){
+			$("#send_tweet").attr("disabled", "disable");
+			Schedule_In_Future = false;
+		});
 	}
 }
 

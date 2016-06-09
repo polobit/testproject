@@ -7,7 +7,7 @@
     "author": "Kona",
     "company": "mantra",
     "language": "en",
-    "branches": "yes,no",
+    "branches": "No,Yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.CheckCampaign",
     "category": "Utilities",
     "ui": [

@@ -36,7 +36,7 @@ public class BrainTreeWidgetAPI {
 				BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
 						privateKey);
 				JSONArray resultObj = null;
-				if (key.equals("email")) {
+				if (key == null || key.equals("email")) {
 					resultObj = bUtil.getTransactions(keyID);
 				} else {
 					resultObj = bUtil.getTransactionByID(keyID);

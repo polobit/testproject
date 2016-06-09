@@ -119,7 +119,11 @@ $(function(){
     */	
 	$('body').on('click', '.tbody_check', function(event){
 		event.stopPropagation();
-		
+		if (Current_Route == 'dashboards')
+		{
+			return;
+		}
+
 		if (Current_Route == 'deals')
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
 		/*else if(Current_Route=='contacts' && _agile_get_prefs("agile_contact_view"))
@@ -136,14 +140,14 @@ function append_checkboxes(el)
 	var checkbox_element = $('tr:last > td.select_checkbox', el);
 	if(checkbox_element.length != 0)
 	{
-		if(SELECT_ALL == true || (Current_Route == 'deals' && deal_bulk_actions.SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
+		if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
 		$('.tbody_check', checkbox_element).attr('checked', 'checked');
 		
 		return;
 	}
 
 	// If select all is chosen then all the upcomming models with in table should have checked checkboxes
-	if(SELECT_ALL == true || (Current_Route == 'deals' && deal_bulk_actions.SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
+	if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
 	{
 		$('tr:last', el).prepend('<td><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox" checked="checked"/><i></i></label></td>');
 		var grid_view_element = $(".grid-view-checkbox", el);

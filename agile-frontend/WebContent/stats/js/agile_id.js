@@ -20,6 +20,7 @@ var agile_id = {
 				return "http://localhost:8888/core/js/api";
 			else
 				return "https://" + this.namespace + ".agilecrm.com/core/js/api";
+				
 		}, getNamespace : function()
 		{
 			// Returns the namespace by id

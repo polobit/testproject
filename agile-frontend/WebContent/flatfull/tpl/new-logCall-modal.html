@@ -36,7 +36,7 @@
 
 
 	{{#if_equals num.length "0"}}
-		<span  title="Add Phone">
+		<span  title="Add Phone" class="add_logPhone_span">
 			<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> Add Phone</a>
         </span>
 	{{else}}
@@ -44,7 +44,7 @@
 			{{#if num.[0]}}
 				<span id="contact_logPhone_number" name="contact_logPhone_number" value="{{num.[0]}}" >{{num.[0]}}</span>
 			{{else}}
-				<span  title="Add Phone">
+				<span  title="Add Phone" class="add_logPhone_span">
 					<a id="contact_logPhone_number" class="contact_logPhone_number add_logPhone text-info text-l-none" name="contact_logPhone_number" value = ""> Add Phone</a>
         		</span>
 			{{/if}}
@@ -60,7 +60,11 @@
 						</ul>
 		{{/if_equals}}	
 	{{/if_equals}}	
-
+						<span id="contact-add-phone-span" class="none"> 
+								<input type="text" id="contact_phone" style="border: 1px solid #CFDADD;height:30px;" /> 
+								<a class= "btn btn-primary btn-sm contact_phone_add" style="height:30px;margin-top:-3px;"> Add </a>   
+						</span>
+						
 					</div>
 					<span id="logPhone_number_error" style="color:#d9534f;display:none;">Phone number required.</span>
                 </div>
@@ -121,6 +125,7 @@
                     </div>
 					<span id="logPhone_duration_error" style="color:#d9534f;display:none;">For minutes and seconds, please enter values between 0-59 only.</span>
 					<span id="logPhone_duration_error1" style="color:#d9534f;display:none;">Duration should be in positive values only.</span>
+					<span id="logPhone_duration_error2" style="color:#d9534f;display:none;">Duration cannot be zero for selected call status.</span>
                 </div>
                 
                 
@@ -133,9 +138,15 @@
                 
                 
                 <div class="control-group form-group">
-                    <label class="control-label col-lg-3 pull-left p-l-none"><b>Related To</b> </label>
-                     <div class="controls">
-                      <ul id="logPhone_relatedto_tag" name="contact_ids" class="contacts tags p-none"></ul>
+                    <label class="control-label pull-left p-l-none"><b>Related To</b><span class="field_req">*</span> </label>
+                    <div class="controls">
+                        <div>
+                     <input type="text" placeholder="Contact Name" id="call_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />
+                     <div class="controls" style="padding-top:1px">
+                      <ul id="logPhone_relatedto_tag" name="contact_ids" class="contacts tags tagsinput p-none"></ul>
+                     </div>
+                     <span id="log_relatedto_error" style="color:#d9534f;display:none;">Please relate the call to a contact.</span>
+                     </div>
                      </div>
                 </div>
             </fieldset>

@@ -42,7 +42,7 @@ function loadMiscScripts() {
     load_analytics_code();
 
     // Load agile web stats
-    load_urls_on_ajax_stop('stats/min/agile-min.js?_=' + _AGILE_VERSION, function(){
+    load_urls_on_ajax_stop('stats/min/agile-min.js?_=' + _agile_get_file_hash('agile-min.js'), function(){
 
     		initialize_agile_domain_sync();
     		_agile_execute_web_rules();

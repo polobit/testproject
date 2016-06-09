@@ -437,7 +437,24 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
-						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+						<div class="text-xlg calls_popover"  data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
+						        					<tr><td style="color:#27c24c">Answered:&nbsp</td><td>{{answered}}</td></tr>
+					        		              	<tr><td style="color:#23b7e5">Busy:&nbsp</td><td>{{busy}}</td></tr>
+					        		              	<tr><td style="color:#f05050">Failed:&nbsp</td><td>{{failed}}</td></tr>
+					        		              	<tr><td style="color:#7266ba">Voicemail:&nbsp</td><td>{{voiceMail}}</td></tr>
+					        		              	<tr><td style="color:#fad733">Missed:&nbsp</td><td>{{missed}}</td></tr>
+					        		              	<tr><td style="color:#FF9900">Inquiry:&nbsp</td><td>{{inquiry}}</td></tr>
+					        		              	<tr><td style="color:#7AF168">Interest:&nbsp</td><td>{{interest}}</td></tr>
+					        		              	<tr><td style="color:#167F80">No Interest:&nbsp</td><td>{{noInterest}}</td></tr>
+					        		              	<tr><td style="color:#0560A2">Incorrect Referral:&nbsp</td><td>{{incorrectReferral}}</td></tr>
+					        		              	<tr><td style="color:#D3E6C7">Meeting Scheduled:&nbsp</td><td>{{meetingScheduled}}</td></tr>
+					        		              	<tr><td style="color:#7798BF">New Opportunity:&nbsp</td><td>{{newOpportunity}}</td></tr>
+					        		              	
+					        		              	<tr><td style="color:#27c24c">Other:&nbsp</td><td>{{other}}</td></tr>
+					        		              
+					        		              <tr><td class="b-b-none">Total:</td>
+					        		        	  <td class="b-b-none">{{total}}</td></tr>
+					        		        	  </table></div>'>{{numberWithCommasForActivities answered}}/{{numberWithCommasForActivities total}}</div>
 					</div>
 				</div>
 			{{else}}
@@ -452,7 +469,24 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
-						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+						<div class="text-xlg calls_popover" data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
+						        					<tr><td style="color:#27c24c">Answered:&nbsp</td><td>{{answered}}</td></tr>
+					        		              	<tr><td style="color:#23b7e5">Busy:&nbsp</td><td>{{busy}}</td></tr>
+					        		              	<tr><td style="color:#f05050">Failed:&nbsp</td><td>{{failed}}</td></tr>
+					        		              	<tr><td style="color:#7266ba">Voicemail:&nbsp</td><td>{{voiceMail}}</td></tr>
+					        		              	<tr><td style="color:#fad733">Missed:&nbsp</td><td>{{missed}}</td></tr>
+					        		              	<tr><td style="color:#FF9900">Inquiry:&nbsp</td><td>{{inquiry}}</td></tr>
+					        		              	<tr><td style="color:#7AF168">Interest:&nbsp</td><td>{{interest}}</td></tr>
+					        		              	<tr><td style="color:#167F80">No Interest:&nbsp</td><td>{{noInterest}}</td></tr>
+					        		              	<tr><td style="color:#0560A2">Incorrect Referral:&nbsp</td><td>{{incorrectReferral}}</td></tr>
+					        		              	<tr><td style="color:#D3E6C7">Meeting Scheduled:&nbsp</td><td>{{meetingScheduled}}</td></tr>
+					        		              	<tr><td style="color:#7798BF">New Opportunity:&nbsp</td><td>{{newOpportunity}}</td></tr>
+					        		              	
+					        		              	<tr><td style="color:#27c24c">Other:&nbsp</td><td>{{other}}</td></tr>
+
+					        		              <tr><td class="b-b-none">Total:</td>
+					        		        	  <td class="b-b-none">{{total}}</td></tr>
+					        		        	  </table></div>'>{{numberWithCommasForActivities answered}}/{{numberWithCommasForActivities total}}</div>
 					</div>
 					</div>
 				</div>
@@ -1338,8 +1372,20 @@
     </a>
 	</span>	
 	{{else}}
-				<h1 class="m-n font-thin h3 text-black">Dashboard</h1>
-				<small class="text-muted">Welcome to Agile CRM</small>
+				<div class="btn-group">
+					<h1 class="m-n font-thin h3 text-black pull-left c-p" data-toggle="dropdown" data-value="{{#if id}}{{id}}{{/if}}" id="dashboard-name" title="{{#if name}}{{trim_space name}}{{/if}}">
+						{{#if name}}{{getTruncatedDashboardName name}}{{else}}Dashboard{{/if}}
+					</h1>
+					<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n p-l-xs" data-toggle="dropdown" aria-expanded="true">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						{{#getCurrentUserDashboards 'dashboard'}}{{/getCurrentUserDashboards}}
+					</ul>
+				</div>
+				<div class="text-ellipsis" style="max-width:300px;">
+					<small class="text-muted" id="dashboard-desc" title="{{#if description}}{{description}}{{/if}}">{{#if description}}{{description}}{{else}}Welcome to Agile CRM{{/if}}</small>
+				</div>
 		{{/is_mobile}}		
 			</div>
 			<div class="pull-right">
@@ -1354,7 +1400,10 @@
 				</a>-->
 				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> Add Dashlet
-				</a> 
+				</a>
+				<!-- <a href="#dashboards" id="dashboards" class="btn btn-default btn-sm btn-addon dashboards add-stream-tab pos-rlt">
+					<i class="icon icon-plus-sign"></i> Add/Edit Dashboard
+				</a> -->
 				
 			</div>
 			<div class="clearfix"></div>      	
@@ -1470,10 +1519,10 @@
 <div class="pos-rlt p-sm p-b-xs p-t-xs">
 	<div class="pull-left avatar thumb-xs m-r m-t-xs">
 
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg"  alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{#if domainUser}}
+				<img class="user-img ref-roundedimg"  alt="" src="{{domainUser.pic}}" title="{{domainUser.name}}">
 			{{else}}
-				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{domainUser.name}}" >
 			{{/if}}
 	</div>
 <div class="activity-tag p-l-xxl">
@@ -2633,4 +2682,26 @@ Deleted  {{custom1}} Campaigns<br/>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-Referralurl-stats-report-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis referralurl_stats_header" style="width:70%;">
+				Referral URL 
+				</span>
+				 <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small> 
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p fa fa-times {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+		
+    	<div class='referralurl-stats-portlet-body-{{column_position}}-{{row_position}}  panel-body p-n b-n' >
+        </div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>

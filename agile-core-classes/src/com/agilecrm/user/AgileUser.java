@@ -1,5 +1,6 @@
 package com.agilecrm.user;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -27,7 +29,7 @@ import com.googlecode.objectify.annotation.Cached;
  */
 @XmlRootElement
 @Cached
-public class AgileUser
+public class AgileUser implements Serializable
 {
 
     // Key
@@ -38,6 +40,9 @@ public class AgileUser
      * Associate outer domain user Id
      */
     public Long domain_user_id;
+    
+    
+    private DomainUser domainUser;
 
     // Dao
     private static ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(AgileUser.class);
@@ -47,6 +52,7 @@ public class AgileUser
      */
     public AgileUser()
     {
+    	this.domainUser = null;
     }
 
     /**
@@ -77,14 +83,21 @@ public class AgileUser
      */
     public static AgileUser getCurrentAgileUser()
     {
-	// Gets user from Domain_id
+    	// 	Gets user from Domain_id
     	System.out.println("User Info : ");
     	System.out.println(SessionManager.get().toString());
     	
     	System.out.println("Domain Info : ");
     	System.out.println(SessionManager.get().getDomainId());
     	
-	return getCurrentAgileUserFromDomainUser(SessionManager.get().getDomainId());
+    	AgileUser user = (AgileUser) SessionCache.getObject(SessionCache.CURRENT_AGILE_USER);
+    	if( user == null )
+    	{
+    		user = getCurrentAgileUserFromDomainUser(SessionManager.get().getDomainId());
+    		SessionCache.putObject(SessionCache.CURRENT_AGILE_USER, user);
+    	}
+    	
+    	return user;
     }
 
     /**
@@ -134,7 +147,6 @@ public class AgileUser
 	}
 	catch (EntityNotFoundException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
 	}
@@ -147,7 +159,18 @@ public class AgileUser
      */
     public DomainUser getDomainUser()
     {
-	return DomainUserUtil.getDomainUser(domain_user_id);
+    	if( this.domainUser == null )	this.domainUser = DomainUserUtil.getDomainUser(domain_user_id);
+    	
+    	return this.domainUser;
+    }
+    
+    /**
+     * Set the Domain User for this AgileUser
+     * @param domainUser
+     */
+    public void setDomainUser(DomainUser domainUser)
+    {
+    	this.domainUser = domainUser;
     }
 
     /**
@@ -155,7 +178,14 @@ public class AgileUser
      */
     public void save()
     {
-	dao.put(this);
+		dao.put(this);
+		
+		AgileUser user = (AgileUser) SessionCache.getObject(SessionCache.CURRENT_AGILE_USER);
+		
+		if( user != null && user.id.equals(this.id) )
+		{
+			SessionCache.putObject(SessionCache.CURRENT_AGILE_USER, this);
+		}
     }
 
     /**

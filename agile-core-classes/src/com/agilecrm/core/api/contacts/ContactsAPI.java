@@ -421,6 +421,8 @@ public class ContactsAPI
 		    && !("agilecrm.com/dev").equals(user_info.getClaimedId())
 		    && !("agilecrm.com/php").equals(user_info.getClaimedId()))
 	    {
+	    //Checking for contact delete permission
+	    UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.DELETE, true);
 		try
 		{
 		    if (contact.type.toString().equals(("PERSON")))
@@ -451,11 +453,9 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Contact getContact(@PathParam("contact-id") Long id) throws AccessDeniedException
     {
-	Contact contact = ContactUtil.getContact(id);
-
-	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
-
-	return contact;
+    	Contact contact = ContactUtil.getContact(id);
+    	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
+    	return contact;
     }
 
     @Path("related-entities/{contact-id}")
@@ -926,8 +926,23 @@ public class ContactsAPI
     public void deleteNotes(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray notesJSONArray = new JSONArray(model_ids);
-	Note.dao.deleteBulkByIds(notesJSONArray);
-    }
+	 if(notesJSONArray!=null && notesJSONArray.length()>0){
+		 for (int i = 0; i < notesJSONArray.length(); i++) {
+			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
+			 try {
+				List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
+				 for(Opportunity opp : deals){
+					opp.save();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 }
+		 
+	 }
+	 Note.dao.deleteBulkByIds(notesJSONArray);
+}
 
     /**
      * Deletes all selected deals of a particular contact
@@ -956,11 +971,16 @@ public class ContactsAPI
     @POST
     public void UpdateViewedTime(@PathParam("id") String id) throws JSONException
     {
-	Contact contact = ContactUtil.getContact(Long.parseLong(id));
-
-	contact.viewed_time = System.currentTimeMillis();
-
-	contact.save();
+    	try{
+    		Contact contact = ContactUtil.getContact(Long.parseLong(id));
+    		if(null == contact){
+    			return;
+    		}
+    		contact.viewed_time = System.currentTimeMillis();
+    		contact.save();
+    	}catch(Exception e){
+    		System.out.println("error occured in viewed-at rest link " + e.getMessage());
+    	}
     }
 
     /**

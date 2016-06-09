@@ -1,5 +1,4 @@
 var LandingPageRouter = Backbone.Router.extend({
-
 	routes : {
 	"landing-pages" : "getListOfLandingPages",
 	"landing-page-add" : "showLandingPageBuilder",
@@ -97,9 +96,10 @@ var LandingPageRouter = Backbone.Router.extend({
 
 	},
 
+    //remove pageId from here
     loadSavedLandingPage : function(pageId) {
         $('#content').html("<div id='landingpages-listeners'></div>");
-        initializeLandingPageListeners();
+        initializeLandingPageListeners(pageId);
 
         var data = {
             "templateId" : pageId,
@@ -113,14 +113,27 @@ var LandingPageRouter = Backbone.Router.extend({
 	$('html, body').animate({scrollTop: $('body').offset().top}, 500);
 	$(".active").removeClass("active");
 	$("#landing-pages-menu").addClass("active");
-        hideTransitionBar();
+
+    /*
+    *calling setInterval function for everey 5min 
+    *for the autoSave of the landing page
+    */
+    var lpAutoSaveRec = setInterval(function(){
+            if(Current_Route.indexOf("landing-page/") == -1) {
+                clearInterval(lpAutoSaveRec);
+            } else {
+                saveLandingPageToDataStore(true,pageId);
+            }              
+        },5*60*1000);
+    
+    hideTransitionBar();
 
     },
 
     pageSettings : function(pageId) {
 
         $('#content').html("<div id='landingpages-listeners'></div>");
-        initializeLandingPageListeners();
+        initializeLandingPageListeners(pageId);
 
         $.getJSON("core/api/landingpages/custom-domain/"+pageId, function(data){
             data = data || {};

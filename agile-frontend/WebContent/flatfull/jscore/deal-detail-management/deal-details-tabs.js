@@ -8,6 +8,41 @@
  * @author jagadeesh
  */
 
+	/*
+    get actual name and update the name of the deal
+    */
+ function inlineDealNameChange(e){
+
+    	
+    	var dealName = $("#inline-input").val();
+    	var lastname = $("#deals-inline").text();
+    	name = dealName.trim();
+
+
+    	if(!name)
+    	{
+    		$("#inline-input").addClass("error-inputfield");
+          	 return;
+    	}
+
+    	if(lastname != name)
+    	{
+    		name = name.trim();
+
+    		dealNameEdit(name);
+    	}
+
+    	else
+    	{
+    		$("#inline-input").addClass("hidden");
+			$("#deals-inline").removeClass("hidden");
+			return;
+    	}
+
+    	
+
+    }
+
 var deal_tab_position_cookie_name = "deal_tab_position";
 var id;
 
@@ -47,8 +82,34 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	'click .deal-add-event' : 'dealAddEvent',
     	'click .event-edit-deal-tab' : 'dealEditEvent',
 		'click .deal-event-delete' : 'dealEditDelete', 
-		'click .activity-delete' : 'deleteActivity',  	
-    	
+		'click .activity-delete' : 'deleteActivity',
+		//agile-x-edit
+		'click #deals-inline' : 'dealInlineEdit', 	
+    	'blur #inline-input' : 'dealinlineedit',
+    	'keydown #inline-input' : 'dealNameChange'
+    },
+    dealinlineedit : function(e){
+    	inlineDealNameChange();
+    },
+
+    dealNameChange : function(e)
+    {
+    	if(e.keyCode == 13)
+    	inlineDealNameChange();
+    },
+
+    
+    
+
+    /*deals inline edit function
+    shows and hides the inline input for editing
+    */
+    dealInlineEdit : function(e){
+    	e.preventDefault();
+    	$("#deals-inline").toggleClass("hidden");
+    	$("#inline-input").toggleClass("hidden");
+    	if(!$("#inline-input").hasClass("hidden"))
+			$("#inline-input").focus();
     },
 
 	/**
@@ -156,20 +217,19 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	{
 		e.preventDefault();
 
-		if (!confirm("Are you sure you want to delete?"))
-			return;
+		showAlertModal("delete_opportunity", "confirm", function(){
+			var targetEl = $(e.currentTarget);
+			var id = $(targetEl).closest('.deal_detail_delete').attr('data');
 
-		var targetEl = $(e.currentTarget);
-		var id = $(targetEl).closest('.deal_detail_delete').attr('data');
-
-		$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
-		{
-			Backbone.history.navigate("#deals", { trigger : true });
-		}, error : function(response)
-		{
-			//alert("some exception occured please try again");
-			alert(response.responseText);
-		} });
+			$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
+			{
+				Backbone.history.navigate("#deals", { trigger : true });
+			}, error : function(response)
+			{
+				//alert("some exception occured please try again");
+				showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
+			} });
+		});
 	},
 
 	dealNoteEdit:  function(e)
@@ -490,79 +550,23 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var model = $(targetEl).parents('li').data();
 
-		if (model && model.toJSON().type != "WEB_APPOINTMENT")
+		if (model && (model.toJSON().type != "WEB_APPOINTMENT" || parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000)))
 		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
-		}
-		else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
-		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
-		}
-
-		if (model && model.collection)
-		{
-			model.collection.remove(model);
-		}
-
-		// Gets the id of the entity
-		var entity_id = $(targetEl).attr('id');
-
-		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
-		{
-			web_event_title = model.toJSON().title;
-			if (model.toJSON().contacts.length > 0)
-			{
-				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
-				if (firstname == undefined)
-					firstname = "";
-				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
-				if (lastname == undefined)
-					lastname = "";
-				web_event_contact_name = firstname + " " + lastname;
-			}
-			$("#webEventCancelModel").modal('show');
-			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
-			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
-			return;
-		}
-
-		// Gets the url to which delete request is to be sent
-		var entity_url = $(targetEl).attr('url');
-
-		if (!entity_url)
-			return;
-
-		var id_array = [];
-		var id_json = {};
-
-		// Create array with entity id.
-		id_array.push(entity_id);
-
-		// Set entity id array in to json object with key ids,
-		// where ids are read using form param
-		id_json.ids = JSON.stringify(id_array);
-		var that = targetEl;
-
-		// Add loading. Adds loading only if there is no loaded image added
-		// already i.e.,
-		// to avoid multiple loading images on hitting delete multiple times
-		if ($(targetEl).find('.loading').length == 0)
-			$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
-
-		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-		{
-			// Removes activity from list
-			$(that).parents(".activity").parent().fadeOut(400, function()
-			{
-				$(targetEl).remove();
+			showAlertModal("delete", "confirm", function(){
+				modelDelete(model, targetEl, function(){
+					if(dealTasksView && dealTasksView.collection.length==0){
+						$('#dealtasks').html(dealTasksView.render(true).el);
+					}
+				});
 			});
-			if(dealTasksView && dealTasksView.collection.length==0)
-			{
+			return;
+		}
+		modelDelete(model, targetEl, function(){
+			if(dealTasksView && dealTasksView.collection.length==0){
 				$('#dealtasks').html(dealTasksView.render(true).el);
 			}
-		} });
+		});
+		
 	},
 
 	dealCompleteTask: function(e)
@@ -678,79 +682,20 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 			return;
 		}
 
-		if (model && model.toJSON().type != "WEB_APPOINTMENT")
+		if (model && (model.toJSON().type != "WEB_APPOINTMENT" || parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000)))
 		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
-		}
-		else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
-		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
-		}
-
-		if (model && model.collection)
-		{
-			model.collection.remove(model);
-		}
-
-		// Gets the id of the entity
-		var entity_id = $(targetEl).attr('id');
-
-		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
-		{
-			web_event_title = model.toJSON().title;
-			if (model.toJSON().contacts.length > 0)
-			{
-				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
-				if (firstname == undefined)
-					firstname = "";
-				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
-				if (lastname == undefined)
-					lastname = "";
-				web_event_contact_name = firstname + " " + lastname;
-			}
-			$("#webEventCancelModel").modal('show');
-			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
-			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
-			return;
-		}
-
-		// Gets the url to which delete request is to be sent
-		var entity_url = $(targetEl).attr('url');
-
-		if (!entity_url)
-			return;
-
-		var id_array = [];
-		var id_json = {};
-
-		// Create array with entity id.
-		id_array.push(entity_id);
-
-		// Set entity id array in to json object with key ids,
-		// where ids are read using form param
-		id_json.ids = JSON.stringify(id_array);
-		var that = targetEl;
-
-		// Add loading. Adds loading only if there is no loaded image added
-		// already i.e.,
-		// to avoid multiple loading images on hitting delete multiple times
-		if ($(targetEl).find('.loading').length == 0)
-			$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
-
-		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-		{
-			// Removes activity from list
-			$(that).parents(".activity").parent().fadeOut(400, function()
-			{
-				$(targetEl).remove();
+			showAlertModal("delete", "confirm", function(){
+				modelDelete(model, targetEl, function(){
+					if(dealEventsView && dealEventsView.collection.length==0)
+						$('#dealevents').html(dealEventsView.render(true).el);
+				});
 			});
+			return;
+		}
+		modelDelete(model, targetEl, function(){
 			if(dealEventsView && dealEventsView.collection.length==0)
-			{
 				$('#dealevents').html(dealEventsView.render(true).el);
-			}
-		} });
+		});
 	},
 
 });

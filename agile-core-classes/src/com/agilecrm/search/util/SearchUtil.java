@@ -24,6 +24,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.util.StringUtils2;
 import com.agilecrm.workflows.status.CampaignStatus;
@@ -667,6 +668,42 @@ public class SearchUtil
 			normalizedString += " " + normalizeTag(tag);
 		}
 		return normalizedString.trim();
+	}
+	public static List<Object> searchForCompanyResult(List<Object> searchResult){
+		try {
+			Set<String> set = new HashSet<String>(); 
+			int searchCount = 0;
+			for(Object m : searchResult){
+				if(m instanceof Contact){
+					Contact contact = (Contact) m;
+					set.add(contact.contact_company_id);
+					searchCount = searchCount+1;
+				}
+			}
+			if(searchCount == searchResult.size() && set.size()==1){
+				Iterator iterator = set.iterator();
+				if(iterator != null && iterator.hasNext()){
+					String id = iterator.next().toString();
+					Contact contact = ContactUtil.getContact(Long.parseLong(id));
+					if(contact != null){
+						searchResult.remove(9);
+						searchResult.add(contact);
+					}
+				}
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return searchResult;
 	}
 
 }

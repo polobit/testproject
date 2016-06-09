@@ -82,6 +82,13 @@
 			tight_acl.REPORTS_PER = true;
 			App_ACL.notAllowed(obj);
 		}
+		if(Current_Route.indexOf('tickets') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('HELPDESK') > -1))
+		{
+			obj.entity = 'Help Desk';
+			tight_acl.REPORTS_PER = true;
+			obj.ERR_CONTAINER = ".ticket-settings";
+			App_ACL.notAllowed(obj);
+		}
 	}
 	
 	/*
@@ -107,9 +114,11 @@
 		if(tagsCollectionView){
 			if(tag.indexOf('[') < 0){
 				if(tagsCollectionView.collection.where({"tag":tag}).length == 0){
-					alert("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
-					if(errorCallback)
-						errorCallback("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
+					showAlertModal("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.", undefined, function(){
+						if(errorCallback)
+							errorCallback("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
+					}, undefined, "Error");
+					return;
 				}
 				else if(callback)
 					callback(tagsCollectionView.collection.where({"tag":tag}).length > 0);
@@ -125,9 +134,11 @@
 				});
 				
 				if(newTags.length > 0){
-					alert("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.");
-					if(errorCallback)
-						errorCallback("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.");
+					showAlertModal("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.", undefined, function(){
+						if(errorCallback)
+							errorCallback("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.");
+					},undefined,"Error");
+					return;
 				}
 				else if(callback)
 					callback(true);
@@ -143,9 +154,11 @@
 					else
 						return result;
 				}, error: function(response){
-					alert(response.responseText);
-					if(errorCallback)
-						errorCallback(response.responseText);
+					showAlertModal(response.responseText, undefined, function(){
+						if(errorCallback)
+							errorCallback(response.responseText);
+					},undefined, "Error");
+					return;
 				}
 			});
 		}

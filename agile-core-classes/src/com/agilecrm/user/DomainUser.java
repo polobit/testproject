@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -25,9 +26,11 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.ticket.entitys.HelpdeskSettings;
+import com.agilecrm.user.access.JavaScriptUserAccess;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
@@ -188,12 +191,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public String gadget_id = null;
 
 	/**
-	 * Stores created time and logged_in time of the user
-	 */
-	@NotSaved
-	private JSONObject info_json = new JSONObject();
-
-	/**
 	 * schedule_id is nothing but name of the domain user at this time we are
 	 * not allowing user to change this but in future we give edit feature also
 	 */
@@ -218,6 +215,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	@NotSaved(IfDefault.class)
 	public String timezone = null;
+	
+	
+	/**
+	 * Parent Id for current domain user
+	 */
+	@NotSaved(IfDefault.class)
+	public Long  pid;
 
 	@NotSaved(IfDefault.class)
 	public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
@@ -232,6 +236,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 * Info Keys of the user
 	 */
 	public static final String CREATED_TIME = "created_time";
+	public static final String UPDATED_TIME = "updated_time";
 	public static final String LOGGED_IN_TIME = "logged_in_time";
 	public static final String LAST_LOGGED_IN_TIME = "last_logged_in_time";
 	public static final String COUNTRY = "country";
@@ -249,7 +254,39 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	@Embedded
 	public HelpdeskSettings helpdeskSettings = null;
+
+
+	/** Helpdesk settings */
 	
+
+	/** Browser Fingerprint */
+	public Set<String> finger_prints;
+	
+	@NotSaved(IfDefault.class)
+	public String generatedOTP;
+
+	/**Broswer Information*/
+	@NotSaved(IfDefault.class)
+	public String browser_os;
+	
+	@NotSaved(IfDefault.class)
+	public String browser_version;
+	
+	@NotSaved(IfDefault.class)
+	public String browser_name;
+	
+	@NotSaved(IfDefault.class)
+	public String owner_pic;
+	
+	@NotSaved(IfDefault.class)
+	public Boolean is_secure = true;
+	
+	@NotSaved(IfDefault.class)
+	public HashSet<String> jsrestricted_scopes = null;
+		
+	@NotSaved(IfDefault.class)
+	public HashSet<String> jsrestricted_propertiess = null;
+
 	// Dao
 	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
@@ -285,7 +322,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		this.name = name;
 		this.password = password;
 		this.is_admin = isAdmin;
-		this.is_account_owner = isAccountOwner;
+		this.is_account_owner = isAccountOwner;	
 	}
 
 	/**
@@ -541,10 +578,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			System.out.println("Domain empty - setting it to " + this.domain);
 		}
 
-		System.out.println("Creating or updating new user " + this);
-
 		// Check if user exists with this email
-
 		if (domainUser != null)
 		{
 			// If domain user exists, not allowing to create new user
@@ -568,6 +602,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			}
 
 			//sendPasswordChangedNotification(domainUser.encrypted_password);
+			
 		}
 		else if (id != null && !is_account_owner)
 		{
@@ -588,7 +623,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				throw new Exception("Domain is empty. Please login again & try.");
 			}
 
-		if(this.phone != null){
+		if(this.phone != null &&  !StringUtils.isEmpty(this.phone) ){
 			if(!DomainUserUtil.checkValidNumber(this.phone)){
 				throw new Exception("Phone number is not valid. Please enter a valid number and try again.");
 			}
@@ -604,18 +639,42 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			checkAdminDisabled();
 			sendWelcomeEmail();
 		}
+		
+		// Assigning Random avatar
+		if(pic == null && this.id != null && domainUser != null)
+			pic = domainUser.pic;
+		
+	    if (StringUtils.isBlank(pic))
+	    pic = new UserPrefs().chooseRandomAvatar();
 
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
 
 		try
 		{
-			// Assigning Random avatar
-			if (pic == null)
-				pic = new UserPrefs().chooseRandomAvatar();
-			
+
 			dao.put(this);
 
+			/*
+			 * Check if this user is currently logged in domain user.
+			 * If so, add the new Domain User to the session cache.
+			 */
+			Object obj = SessionCache.getObject(SessionCache.CURRENT_DOMAIN_USER);
+			if( obj != null && obj instanceof DomainUser && ((DomainUser)obj).id.equals(this.id) )
+				SessionCache.putObject(SessionCache.CURRENT_DOMAIN_USER, this);
+			
+			/*
+			 * Check if this user is same as the DomainUser in currently logged in AgileUser.
+			 * If yes, make a correction in the SessionCache for AgileUser
+			 */
+			obj = SessionCache.getObject(SessionCache.CURRENT_AGILE_USER);
+			if( obj != null && obj instanceof AgileUser && ((AgileUser)obj).domain_user_id.equals(this.id) )
+			{
+				((AgileUser)obj).setDomainUser(this);
+				SessionCache.putObject(SessionCache.CURRENT_AGILE_USER, obj);
+			}
+			
+			
 			/*
 			 * // Sets scopes when domain user is updated UserInfo info =
 			 * SessionManager.get(); if (info != null)
@@ -658,7 +717,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			return;
 		try
 		{
+			JSONObject info_json = fetchInfoJSON();
 			info_json.put(key, value);
+			info_json_string = info_json.toString();
 		}
 		catch (Exception e)
 		{
@@ -676,6 +737,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 		try
 		{
+			JSONObject info_json = fetchInfoJSON();
 			return info_json.getString(key);
 		}
 		catch (Exception e)
@@ -695,6 +757,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 		try
 		{
+			JSONObject info_json = fetchInfoJSON();
 			return info_json.has(key);
 		}
 		catch (Exception e)
@@ -716,6 +779,31 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		return StringUtils.isEmpty(encrypted_password);
 	}
 
+	private void resetMiscInfo(DomainUser dbDomainuser){
+		
+		try
+		{
+			JSONObject obj = new JSONObject(dbDomainuser.info_json_string);
+			JSONObject info_json = fetchInfoJSON();
+			
+			if(obj.has(CREATED_TIME) && !info_json.has(CREATED_TIME))
+				setInfo(CREATED_TIME, obj.getLong("created_time"));
+			if(obj.has(UPDATED_TIME) && !info_json.has(UPDATED_TIME)) 
+				setInfo(UPDATED_TIME, obj.getLong(UPDATED_TIME));
+			if (obj.has("logged_in_time") && !info_json.has("logged_in_time"))
+				setInfo(LOGGED_IN_TIME, obj.getLong("logged_in_time"));
+			if (obj.has("last_logged_in_time") && !info_json.has("last_logged_in_time"))
+				setInfo(LAST_LOGGED_IN_TIME, obj.getLong("last_logged_in_time"));
+
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	/**
 	 * Assigns values to info_json_string and for created time and encrypted
 	 * password based on their old values.
@@ -724,39 +812,20 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	private void PrePersist()
 	{
 		DomainUser domainuser = null;
-		// Stores created time in info_json
-		if (!hasInfo(CREATED_TIME))
-		{
-			if (info_json_string == null)
-				setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
-			else
-			{
-				try
-				{
-					JSONObject obj = new JSONObject(info_json_string);
-					setInfo(CREATED_TIME, obj.getLong("created_time"));
-					if (obj.has("logged_in_time"))
-						setInfo(LOGGED_IN_TIME, obj.getLong("logged_in_time"));
-					if (obj.has("last_logged_in_time"))
-						setInfo(LAST_LOGGED_IN_TIME, obj.getLong("last_logged_in_time"));
-
-				}
-				catch (JSONException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		}
-
 		if (this.id != null)
 		{
-
 			domainuser = DomainUserUtil.getDomainUser(id);
 			if (StringUtils.isBlank(this.schedule_id))
 				this.schedule_id = domainuser.schedule_id;
-
+			
+			// Reset Misc items
+			resetMiscInfo(domainuser);
+		}
+		
+		// Stores created time in info_json
+		if (this.id == null)
+		{
+			setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 		}
 
 		// Stores password
@@ -807,8 +876,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		setScopes();
 		setPerpersisMenuScopes();
 
-		info_json_string = info_json.toString();
-
 		// Lowercase
 		email = StringUtils.lowerCase(email);
 		domain = StringUtils.lowerCase(domain);
@@ -852,9 +919,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 			this.calendar_url = getCalendarURL();
 
-			if (info_json != null)
-				info_json = new JSONObject(info_json_string);
-
 			// If no scopes are set, then all scopes are added
 			loadScopes();
 
@@ -862,6 +926,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			
 			if(helpdeskSettings == null)
 				helpdeskSettings = new HelpdeskSettings().defaultSettings();
+			
+			//if no javascrupt permission set, load default
+			loadJavaScriptScope();
 		}
 		catch (Exception e)
 		{
@@ -1043,7 +1110,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public String toString()
 	{
 		return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-				+ this.id + " Name: " + this.name + "\n " + info_json;
+				+ this.id + " Name: " + this.name + "\n " + info_json_string;
 	}
 
 	/**
@@ -1055,11 +1122,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	@XmlElement
 	public String getOwnerPic()
 	{
+		if(StringUtils.isNotBlank(pic))
+			 return pic;
+		
 		AgileUser agileUser = null;
 		UserPrefs userPrefs = null;
 
 		try
 		{
+			if( pic != null )
+				return pic;
+			
 			// Get owner pic through agileuser prefs
 			if (id != null)
 				agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
@@ -1068,7 +1141,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 
 			if (userPrefs != null)
+			{
+				pic = userPrefs.pic;
 				return userPrefs.pic;
+			}
 		}
 		catch (Exception e)
 		{
@@ -1082,6 +1158,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 		try
 		{
+			JSONObject info_json = fetchInfoJSON();
 			Long created_time = info_json.getLong(DomainUser.CREATED_TIME);
 			return created_time;
 		}
@@ -1118,5 +1195,26 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		return calendar_url;
 
 	}
+	
+	 private void loadJavaScriptScope() {
+		    
+		if(jsrestricted_propertiess == null)
+		    jsrestricted_propertiess = new JavaScriptUserAccess().defaultPropertiesLoad();
+		    
+		if(jsrestricted_scopes == null)
+		    jsrestricted_scopes = new JavaScriptUserAccess().defaultJSScopeLoad();
+		    
+	}
 
+	
+	private JSONObject fetchInfoJSON()
+	{
+		if( info_json_string == null || ("").equalsIgnoreCase(info_json_string) )	return new JSONObject();
+			
+		try {
+			return new JSONObject(info_json_string);
+		} catch(JSONException e) {
+			return new JSONObject();
+		}
+	}
 }

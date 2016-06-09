@@ -616,7 +616,7 @@ function initializePortletsListeners() {
 						}, 500);
 
 						$('#' + portlet.get("id")).parent().remove();
-						if(portlet.get('portlet_route')!='DashBoard')
+						if(portlet.get('portlet_route')!='DashBoard' && isNaN(portlet.get('portlet_route')))
 						{
 							if ($('.gridster-portlets > div').length == 0)
 							$('#no-portlets').parents('.route_Portlet').hide();
@@ -868,12 +868,12 @@ $('.portlet_body')
 				}
 			});
 
-	$('.gridster-portlets')
+	$('.portlet_body')
 			.on(
 					"click",
 					'.portlets-tasks-select',
 					function(e) {
-
+						
 						e.stopPropagation();
 						if ($(this).is(':checked')) {
 
@@ -922,7 +922,52 @@ $('.portlet_body')
 				}
 			});
 	
+	$('#dashlet_heading .user-defined-dashboard').off("click");
+	$('#dashlet_heading').on("click", ".user-defined-dashboard", function(e){
+		e.preventDefault();
 
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+	    var id = $(this).attr("id");
+	    $('.user-defined-dashboard').parent().removeClass("active");
+	    $(this).parent().addClass("active");
+	    if(id != $('#dashboard-name').attr("data-value")){
+	    	App_Portlets.DashboardPortlets=new Array();
+		    if($(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != "Dashboard"){
+				e.preventDefault();
+				_agile_delete_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+				loadPortlets("DashBoard", $('#content'));
+		    }
+		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
+				e.preventDefault();
+				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
+				gridster = undefined;
+				loadPortlets(id, $('#content'));
+		    }
+		    else if(!$(this).hasClass("predefined-dashboard")){
+				e.preventDefault();
+				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
+				gridster = undefined;
+				loadPortlets(id, $('#content'));
+		    }
+		    $('#dashboard-name').text($(this).text());
+		    $('#dashboard-name').attr("data-value", id);
+		    $('#dashboard-name').attr("title", $(this).attr("title"));
+		    $.each(CURRENT_USER_DASHBOARDS, function(index, value){
+		    	if(id == this.id){
+		    		$('#dashboard-desc').text(this.description);
+		    		$('#dashboard-desc').attr("title", this.description);
+		    	}
+		    });
+		    if(id == "Dashboard")
+		    {
+		    	$('#dashboard-desc').text("Welcome to Agile CRM");
+		    	$('#dashboard-desc').attr("title", "");
+		    	$('#dashboard-name').attr("title", "");
+		    }
+	    }
+	});
+		
+			
 }
 
 /** 
@@ -967,6 +1012,7 @@ function initializeAddPortletsListeners() {
 							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis-new.png"),
 							"AverageDeviation" :  updateImageS3Path("flatfull/img/dashboard_images/Average_deviation.png"),
                             "WebstatVisits" : updateImageS3Path("flatfull/img/dashboard_images/Webstat-Visits.png"),
+							"Referralurlstats" : updateImageS3Path("flatfull/img/dashboard_images/Refferalurl-Stats-new.png"),
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",
@@ -977,7 +1023,8 @@ function initializeAddPortletsListeners() {
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
 							"Campaignstats" : "",
-							"LostDealAnalysis" : "left"
+							"LostDealAnalysis" : "left",
+							"Referralurlstats" :"left"
 						};
 						if (placements_json[p_name]) {
 							placement = "left";
@@ -1029,8 +1076,11 @@ $('.show_screeshot').off('click touchstart').on(
 					//var routes=route.split(',');
 		var portlet_type = $(this).attr("portlet_type");
 				var p_name = $(this).attr("portlet_name");
+
+				var dashlet_JSON = {};
+				dashlet_JSON["name"] = p_name;
 				
-				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo'));
+				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo', dashlet_JSON));
 				
 
 					  
@@ -1044,11 +1094,19 @@ $('.show_screeshot').off('click touchstart').on(
 						.addClass('multiSelect').attr("name", "route-list")
 						.attr("id", "route");
 				$('#ms-route-list .ms-selectable .ms-list').css(
-						"height", "105px");
+						"height", "200px");
 				$('#ms-route-list .ms-selection .ms-list').css(
-						"height", "105px");
-				$('#ms-route-list').addClass(
-						'portlet-category-ms-container');
+						"height", "200px");
+				/*$('#ms-route-list').addClass(
+						'portlet-category-ms-container');*/
+
+				/*$('#ms-dashboard-list' ).remove();
+				$('#dashboard-list' , $('#portletStreamModal')).multiSelect();
+				$('#ms-dashboard-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "dashboard-list").attr("id", "dashboard");
+				$('#ms-dashboard-list .ms-selectable .ms-list').css("height", "105px");
+				$('#ms-dashboard-list .ms-selection .ms-list').css("height", "105px");
+				$('#ms-dashboard-list').addClass('portlet-category-ms-container');*/
+
 			});
 				$(".add-portlet").attr('portlet_type',
 				portlet_type);
@@ -1127,6 +1185,30 @@ function insideAddListener()
 				clickfunction($(this),url,forAll,route);
 				
 			});
+
+	$('.modal-content').on(
+			"change",
+			'#route-list',
+			function() {
+				var is_add_for_all_disable = false;
+				$(this).parent().find('ul#route > li').each(function(){
+					if($(this).hasClass("ms-elem-selected") && $(this).hasClass("user-dashboard")) {
+						is_add_for_all_disable = true;
+					}
+				});
+
+				if(is_add_for_all_disable) {
+					$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", true);
+				}else {
+					$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", false);
+				}
+			});
+	$('.modal-content').on(
+			"click",
+			'ul[name="route-list"] > li',
+			function() {
+				$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", false);
+			});
 }
 function clickfunction(that,url,forAll,route){
 
@@ -1148,6 +1230,11 @@ function clickfunction(that,url,forAll,route){
 				obj.row_position = -1;
 				obj.size_x = 1;
 				obj.size_y = 1;
+
+				if(!isNaN(route)){
+					obj.column_position = -1;
+					obj.row_position = -1;
+				}
 
 				if (portlet_type == "RSS" && p_name == "Agile CRM Blog")
 					obj.size_y = 2;
@@ -1185,14 +1272,14 @@ function clickfunction(that,url,forAll,route){
 							$('#zero-portlets').hide();
 						if ($('#no-portlets').is(':visible'))
 							$('#no-portlets').hide();
-						if(data.toJSON().name=='Mini Calendar' || data.toJSON().name=='Agenda'){
-						App_Portlets.navigate("dashboard", {
-							trigger : true
-						});
-					}
+						/*if(data.toJSON().name=='Mini Calendar' || data.toJSON().name=='Agenda'){
+							App_Portlets.navigate("dashboard", {
+								trigger : true
+							});
+						}*/
 					},
 					error : function(model, response) {
-						alert("Failed to add.");
+						showAlertModal("add_error");
 					}
 				});
 			});

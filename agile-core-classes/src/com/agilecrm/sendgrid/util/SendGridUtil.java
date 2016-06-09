@@ -291,7 +291,7 @@ public class SendGridUtil
 			System.err.println("Exception occured while building SMTP JSON..." + e.getMessage());
 		}
     	
-    	SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, EmailUtil.getEmail(sendGridDeferred.to), EmailUtil.getEmail(sendGridDeferred.cc), EmailUtil.getEmail(sendGridDeferred.bcc), 
+    	SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc, 
     			sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString(), null, null, new String[]{});
     }
 

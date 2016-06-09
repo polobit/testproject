@@ -1,0 +1,103 @@
+<script id="report-campaign-search-model-template" type="text/html">
+    <td class="data" data="{{id}}">
+        <div  class="inline p-r-sm h-auto">
+            {{#if_contact_type "PERSON"}} <img class="thumbnail thumb-sm" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/> {{/if_contact_type}}
+            {{#if_contact_type "COMPANY"}} <img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
+        </div>
+        <div class="h-auto inline-block v-top text-ellipsis" style=" width: 12em;">
+            {{#if_contact_type "PERSON"}} <b> {{getPropertyValue properties
+            "first_name"}} {{getPropertyValue properties "last_name"}} </b> <br />
+            {{getPropertyValue properties "email"}} {{/if_contact_type}}
+            {{#if_contact_type "COMPANY"}} <b>{{getPropertyValue properties
+            "name"}}</b></br> {{getPropertyValue properties "url"}} {{/if_contact_type}}
+        </div>
+    </td>
+    <td>{{getPropertyValue properties "title"}}<br />
+        {{getPropertyValue properties "company"}}
+    </td>
+    <td>
+      <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;">    
+        {{#each tags}}
+            <span class="label">{{this}}</span> 
+        {{/each}}
+      </div>
+    </td>
+    <td>{{lead_score}}</td>
+</script>
+  <script id="report-campaign-search-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+        
+            
+            <h1 class="m-n font-thin h3 pull-left">Report Results  {{contacts_count}} </h1>
+            
+       <!--     <div class="btn-group right pos-rlt" id="view-list" style="top:-29px;">
+            </div>
+            <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px">     -->
+            <div class="clearfix"/>
+            
+        </div>
+    </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        {{#if this.length}}
+        <div class="data">
+            <div class="data-container">
+                <div class="btn-group right pos-rlt" id="bulk-actions" style="display: none">
+                    <button class="btn btn-sm btn-default">Bulk Actions</button>
+                    <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="view-actions">
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="view-actions">
+                        <li><a href="#" id="bulk-owner">Change owner</a></li>
+                        {{#hasMenuScope 'CAMPAIGN'}}
+                        <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
+                        {{/hasMenuScope}}
+                        <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
+                        <li><a href="#" id="bulk-tags">Add tags</a></li>
+                    </ul>
+                </div>
+                <div class="wrapper-md">
+                <div>
+                <div>
+                <div class="panel panel-default m-b-none">
+                <div class="panel-heading">Report Results List</div>
+                <div style="overflow-x:auto">
+                <div class="table-responsive">
+                <table id="contacts_search" class="table table-striped m-b-none agile-table panel onlySorting" url="core/api/contacts/bulk" style="table-layout:auto">
+                    <thead>
+                        <tr class="text-cap">
+                            {{reportsContactTableHeadings "fields_set"}}
+                        </tr>
+                    </thead>
+                    <tbody id="report-campaign-search-model-list" class="model-list-cursor" route="contact/" style="overflow: scroll;">
+                    </tbody>
+                </table>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        {{else}}
+            <div class="alert">
+                <div class="slate-content">
+                    <div class="box-left pull-left m-r-md">
+                        <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+                    </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">No results found !</h4>
+                    <div class="text">Your search criteria did not match any of your contacts.</div>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+        {{/if}}
+    </div>
+</div>
+</script>

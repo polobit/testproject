@@ -47,16 +47,18 @@
 							</form>
 						</div>
 
-						 <div class="pos-abs pos-r-0 m-t-sm isotope-item">
+						 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:14px;">
 
 						<div class="dropdown contact-detail-edit" >
 
 
-								<button href="#"class="dropdown-toggle bg-transparent b-n" data-toggle="dropdown" role="menu"><span class="caret" style="margin-top:-6px;"></span></button>
+								<button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+								<span class="caret m-l-none" style="margin-top:-11px;"></span>
+								</button>
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
                                    <li role="menuitem"><a href='#contact-edit'>
 
-                                     <div class="pull-left"><i class="fa fa-pencil-square"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
+                                     <div class="pull-left"><i class="fa fa-edit"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
                                      <div class='shortcuts pull-right'>Shift + E</div>
                                      {{/if_keyboard_shortcuts_enabled}}
                                      <div class="clearfix"></div>
@@ -66,7 +68,7 @@
                                      
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-note"><i
-											class="fa fa-file-text"></i> Add Note</a></li>
+											class="icon-note"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
 											class="icon-tasks"></i> Add Task</a></li>
 									{{#hasMenuScope 'DEALS'}}
@@ -79,10 +81,10 @@
 										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
 											to Campaign</a></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
-											class="fa fa-envelope"></i> Send Email</a></li>
+											class="icon-envelope"></i> Send Email</a></li>
 
 									<li class='divider'></li>
-									<li><a href='#contact-duplicate'><i class="fa fa-clipboard"></i>
+									<li><a href='#contact-duplicate'><i class="icon-docs"></i>
 											Duplicate</a></li>
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
@@ -93,7 +95,7 @@
 							{{#canDeleteContact owner.id}}
 									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
-											class="fa fa-trash"></i> Delete</a></li>
+											class="icon-trash"></i> Delete</a></li>
 							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
@@ -264,8 +266,8 @@
 
 							  		{{#canEditContact owner.id}}
 								<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
-									{{#if lead_score}}<span title="{{lead_score}}" id="lead-score"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
-									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+									{{#if lead_score}}<span title="{{lead_score}}" id="lead-contactscore"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
 										{{/if}}
 									</span>
 
@@ -277,13 +279,13 @@
 										<ul class="inline-block list-none m-n p-n">
 											<li style="height: 12px"><i class="icon-sort-up c-p" id="add" style="height: 6px;"></i></li>
 											<li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
-										</ul>
+										 </ul>
 								</span>
 								{{else}}
 								<span class="inline-block v-middle" style="margin-left:21px">
 
 									{{#if lead_score}} <span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
-									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+									{{else}} <span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
 									{{/if}}		
 								</span>
 								
@@ -652,12 +654,12 @@ class="icon-plus"></i> <span >Add</span></a>
 			<div class="clearfix"></div>
 
 			{{#property_is_exists "address" properties}} 
+			
+
+			{{#property_json_is_not_empty "address" properties}}
 			<div class=" wrapper text-left m-b-sm p-none">
 			<div class="panel panel-default m-b-none">
 			<div class="panel-body">
-
-
-			{{#property_json_is_not_empty "address" properties}}
 
 			<small class="text-base text-muted">Location</small>
 
@@ -671,11 +673,12 @@ class="icon-plus"></i> <span >Add</span></a>
 			</div>
 			</div> 
 			<div class="clearfix"></div> 
-			</div>                                       
+			</div>   
+			</div>
+			</div>
+			</div>                                      
 			{{/property_json_is_not_empty}}
-			</div>
-			</div>
-			</div>  
+			
 			{{/property_is_exists}}
 
 
@@ -740,14 +743,16 @@ class="icon-plus"></i> <span >Add</span></a>
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
 						</div>
-						 <div class="pos-abs pos-r-0 m-t-sm isotope-item">
+						 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:14px;">
 						<div>
 								
 								
-								<button class="dropdown-toggle bg-transparent b-n " data-toggle="dropdown"><span class="caret" style="margin-top:-6px;"></span></button>
+								<button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+								<span class="caret m-l-none" style="margin-top:-11px;"></span>
+								</button>
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
                                    <li><a href='#contact-edit'>
-                                     <div class="pull-left"><i class="fa fa-pencil-square"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
+                                     <div class="pull-left"><i class="fa fa-edit"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
                                      <div class='shortcuts pull-right'>Shift + E</div>
                                      {{/if_keyboard_shortcuts_enabled}}
                                      <div class="clearfix"></div>
@@ -757,7 +762,7 @@ class="icon-plus"></i> <span >Add</span></a>
                                      
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-note"><i
-											class="fa fa-file-text"></i> Add Note</a></li>
+											class="icon-note"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
 											class="icon-tasks"></i> Add Task</a></li>
 									{{#hasMenuScope 'DEALS'}}
@@ -770,10 +775,10 @@ class="icon-plus"></i> <span >Add</span></a>
 										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
 											to Campaign</a></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
-											class="fa fa-envelope"></i> Send Email</a></li>
+											class="icon-envelope"></i> Send Email</a></li>
 
 									<li class='divider'></li>
-									<li><a href='#contact-duplicate'><i class="fa fa-clipboard"></i>
+									<li><a href='#contact-duplicate'><i class="icon-docs"></i>
 											Duplicate</a></li>
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
@@ -784,7 +789,7 @@ class="icon-plus"></i> <span >Add</span></a>
 							{{#canDeleteContact owner.id}}
 									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i
-											class="fa fa-trash"></i> Delete</a></li>
+											class="icon-trash"></i> Delete</a></li>
 							{{/canDeleteContact}}		
 
                                     {{#property_is_exists "phone" properties}}
@@ -795,22 +800,25 @@ class="icon-plus"></i> <span >Add</span></a>
 								</ul>
 							</div>
                             </div>  
-					
-						<div class="w-full  m-t-xs  h3 font-thin hidden text-capitalize custom-color p-r-sm" style="padding-bottom:1px;" id="Contact-input">
-						<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs pull-left inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties
+					<div class="w-full  m-t-xs  h3 font-thin hidden text-capitalize custom-color p-r-sm" style="padding-bottom:1px;height:28px;" id="Contact-input">
+							<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties
 										"first_name"}} '>
-							<input type="text"id="Contact-input-lastname" class="m-l-xs m-n pull-left inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
+							<input type="text"id="Contact-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
 										"last_name"}}">
-							</div>
-					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:5px;" id ="contactName">
+					</div>
+					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="contactName">
 
-								<span class="text-capitalize " id="contact_name">{{getPropertyValue properties "first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
+								<span class="text-capitalize " id="contact_name">{{getPropertyValue properties
+										"first_name"}}</span> <span class="text-capitalize "> {{getPropertyValue properties "last_name"}}</span>
+
 
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
-								</div>
+						</div>
+						
 							<div class=" m-b-xs text-cap" style="padding-right:5px;">	
 
 						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
+
 
 									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
 								{{else}}
@@ -946,14 +954,14 @@ class="icon-plus"></i> <span >Add</span></a>
 
 							  		{{#canEditContact owner.id}}
 								<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
-									{{#if lead_score}}<span title="{{lead_score}}" id="lead-score"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
-									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+									{{#if lead_score}}<span title="{{lead_score}}" id="lead-contactscore"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
 										{{/if}}
 									</span>
 
 									<span class="inline-block v-middle">
 									<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control" id="scorebox">
-									</span>
+									 </span>
 									
 									<span class="contact-score-control m-l-xs" style="left:79px;position:absolute;top:5px;">
 										<ul class="inline-block list-none m-n p-n">
@@ -965,7 +973,7 @@ class="icon-plus"></i> <span >Add</span></a>
 								<span class="inline-block v-middle" style="margin-left:21px">
 
 									{{#if lead_score}} <span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
-									{{else}} <span title="0" id="lead-score"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+									{{else}} <span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
 									{{/if}}		
 								</span>
 								
@@ -1333,14 +1341,13 @@ class="icon-plus"></i> <span >Add</span></a>
 									
 									<div class="clearfix"></div>
 
-									{{#property_is_exists "address" properties}} 
-									<div class=" wrapper hidden-sm hidden-xs" style="padding-top:0px;">
-  									<div class="panel panel-default m-b-none">
-    								<div class="panel-body">
-
+			{{#property_is_exists "address" properties}} 
+				
 									
-									 {{#property_json_is_not_empty "address" properties}}
-
+				{{#property_json_is_not_empty "address" properties}}
+				 <div class=" wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  						<div class="panel panel-default m-b-none">
+    						<div class="panel-body">
 									<small class="text-base text-muted">Location</small>
 
 										<div>{{#address_Element properties}}{{/address_Element}}</div>
@@ -1353,11 +1360,12 @@ class="icon-plus"></i> <span >Add</span></a>
                                             </div>
 										</div> 
                            	            <div class="clearfix"></div> 
-                                     </div>                                       
-                                     {{/property_json_is_not_empty}}
+                                     </div>   
                                      </div>
 									 </div>
-									 </div>  
+									 </div>                                     
+                                     {{/property_json_is_not_empty}}
+                                      
 									{{/property_is_exists}}
 
 								
@@ -1411,6 +1419,7 @@ class="icon-plus"></i> <span >Add</span></a>
 				<li class=""><a data-toggle="tab" role="tab" href="#stats">Web Stats</a></li>
 				<li class=""><a data-toggle="tab" role="tab" href="#mail">Mail</a></li>
 				<li id="custom-contact-document" class=""><a data-toggle="tab" role="tab" href="#documents">Documents</a></li>
+				<li><a data-toggle="tab" role="tab" href="#tickets">Tickets</a></li>
               <!--  <li role="presentation" class="dropdown custom-contact-menu">
         <a id="drop6" href="#" class="dropdown-toggle" data-toggle="dropdown">
           
@@ -1457,7 +1466,7 @@ class="icon-plus"></i> <span >Add</span></a>
 					</div>
 
 					<div class="m-auto">
-						<div id="timeline" style="float:left; z-index:1;">
+						<div id="timeline" style="float:left;">
 							<div id="line-container">
 								<div id="line"></div>
 							</div>
@@ -1477,6 +1486,7 @@ class="icon-plus"></i> <span >Add</span></a>
 					<div id="mails"></div>
 			    </div>
 				<div class="tab-pane" id="documents"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="tickets"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
 			</div>
 		</div>
 	<!--  ending timeline view -->
@@ -1506,3 +1516,4 @@ class="icon-plus"></i> <span >Add</span></a>
  					</div>
  					</div>
 </script>
+

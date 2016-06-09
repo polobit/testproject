@@ -1,9 +1,7 @@
 package com.thirdparty.sendgrid.webhook;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
-import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.account.APIKey;
 import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -37,11 +34,21 @@ public class SendGridInboundWebhook extends HttpServlet
 	private static final long serialVersionUID = -7687844334096070601L;
 	private String ENVELOPE = "envelope";
 	private String FROM = "from";
+	
+	// Encoding type
+	private static final String ENCODING_TYPE = "UTF-8";
 
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		try
 		{
+			try {
+				request.setCharacterEncoding(ENCODING_TYPE);
+				response.setCharacterEncoding(ENCODING_TYPE);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 			JSONObject mailJSON = getJSONFromMIME(request);
 			
 			if(mailJSON == null)
@@ -49,10 +56,7 @@ public class SendGridInboundWebhook extends HttpServlet
 				System.err.println("SendGrid mailjson is null");
 				return;
 			}
-			
-			
-			System.out.println("MailJSON is " + mailJSON.toString());
-			
+						
 			MandrillWebhookTriggerInbound mwt = new MandrillWebhookTriggerInbound();
 			
 			String agileEmail = getAgileEmail(mailJSON);
@@ -157,7 +161,7 @@ public class SendGridInboundWebhook extends HttpServlet
 				 
 				 if(fieldName != null && !StringUtils.containsIgnoreCase(fieldName, "attachment"))
 				 {
-					 dataJSON.put(fieldName, IOUtils.toString(item.openStream()));
+					 dataJSON.put(fieldName, IOUtils.toString(item.openStream(), ENCODING_TYPE));
 				 }
 			}
 		}
