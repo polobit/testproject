@@ -53,6 +53,7 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
@@ -297,6 +298,12 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity createOpportunity(Opportunity opportunity)
     {
+	List<String> conIds = opportunity.getContact_ids();
+    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    {
+    	throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    }
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	// Some times milestone comes as null from client side, if it is null we
@@ -331,6 +338,31 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
+    Opportunity oldOpportunity = null;
+    try 
+    {
+    	oldOpportunity = OpportunityUtil.getOpportunity(opportunity.id);
+	} 
+    catch (Exception e) 
+    {
+		e.printStackTrace();
+	}
+    if(oldOpportunity != null)
+    {
+    	List<String> conIds = oldOpportunity.getContact_ids();
+    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    	{
+    		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    	}
+    }
+	List<String> conIds = opportunity.getContact_ids();
+	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	{
+		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+	}
+	
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
@@ -369,6 +401,12 @@ public class DealsAPI
 	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException, Exception
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+	List<String> conIds = opportunity.getContact_ids();
+	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	{
+		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+	}
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
 	if (opportunity != null)
 	{
@@ -392,11 +430,25 @@ public class DealsAPI
 	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException
     {
 	JSONArray opportunitiesJSONArray = new JSONArray(ids);
-	DealTriggerUtil.executeTriggerForDeleteDeal(opportunitiesJSONArray);
-	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
-	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray,
-		String.valueOf(opportunitiesJSONArray.length()), "");
-	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
+	JSONArray oppJSONArray = new JSONArray();
+	
+	List<Opportunity> opportunityList = OpportunityUtil.getOpportunitiesForBulkActions(ids, null, opportunitiesJSONArray.length());
+	
+	for(Opportunity opp : opportunityList)
+	{
+		List<String> conIds = opp.getContact_ids();
+		List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+		if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+		{
+			oppJSONArray.put(opp.id);
+		}
+	}
+	
+	DealTriggerUtil.executeTriggerForDeleteDeal(oppJSONArray);
+	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(oppJSONArray);
+	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, oppJSONArray,
+		String.valueOf(oppJSONArray.length()), "");
+	Opportunity.dao.deleteBulkByIds(oppJSONArray);
 
     }
 

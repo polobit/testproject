@@ -525,7 +525,18 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							}, "#content");
 						}
 						
-					} });
+					},
+					error : function(data, response){
+						if(response && response.status == 403)
+						{
+							enable_save_button($(saveBtn));
+							$('span.save-status', $("#"+modalId)).html("<i style='color:#B94A48;'>"+Handlebars.compile('{{name}}')({name : response.responseText})+"</i>");
+							setTimeout(function()
+							{
+								$('span.save-status', $("#"+modalId)).html('');
+							}, 4000);
+						}
+					}  });
 }
 
 /**

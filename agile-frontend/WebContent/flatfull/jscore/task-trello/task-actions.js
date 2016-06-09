@@ -89,6 +89,24 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 
 		});
 		
+	},
+	error : function(model, response)
+	{
+		modelTaskList[0].get('taskCollection').add(new_task);
+		displayTimeAgo($(".task-trello-list"));
+		showModalConfirmation("Delete Task", 
+			response.responseText, 
+			function (){
+				getDetailsForCollection();
+			}, 
+			function(){
+				return;
+			},
+			function(){
+				return;
+			},
+			"Cancel"
+		);
 	} });
 }
 

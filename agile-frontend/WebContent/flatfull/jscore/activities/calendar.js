@@ -513,7 +513,22 @@ function showCalendar(users)
 							var eventModel = new Backbone.Model();
 							eventModel.url = 'core/api/events';
 
-							eventModel.save(event);
+							eventModel.save(event, { error : function(model, response)
+								{
+									showModalConfirmation("Update Event", 
+										response.responseText, 
+										function (){
+											revertFunc();
+										}, 
+										function(){
+											return;
+										},
+										function(){
+											return;
+										},
+										"Cancel"
+									);
+								} });
 						},
 						/**
 						 * Updates or deletes an event by clicking on it

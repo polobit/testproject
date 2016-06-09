@@ -231,6 +231,19 @@ var Contact_Details_Tab_Actions = {
 				return;
 			}
 
+			if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !hasScope("EDIT_CONTACT")){
+		  		showModalConfirmation("Delete "+model.get("entity_type"), 
+					CONTACTS_ACLS_UPDATE_ERROR, 
+					function (){
+						activityDelete(targetEl);
+					}, 
+					function(){
+						return;
+					}
+				);
+				return;
+		  	}
+
 			if (model && model.toJSON().type != "WEB_APPOINTMENT")
 			{
 				if (!confirm("Are you sure you want to delete?"))
@@ -269,38 +282,7 @@ var Contact_Details_Tab_Actions = {
 				return;
 			}
 
-			// Gets the url to which delete request is to be sent
-			var entity_url = $(targetEl).attr('url');
-
-			if (!entity_url)
-				return;
-
-			var id_array = [];
-			var id_json = {};
-
-			// Create array with entity id.
-			id_array.push(entity_id);
-
-			// Set entity id array in to json object with key ids,
-			// where ids are read using form param
-			id_json.ids = JSON.stringify(id_array);
-			var that = targetEl;
-
-			// Add loading. Adds loading only if there is no loaded image added
-			// already i.e.,
-			// to avoid multiple loading images on hitting delete multiple times
-			if ($(targetEl).find('.loading').length == 0)
-				$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
-
-			$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-			{
-				// Removes activity from list
-				$(that).parents(".activity").fadeOut(400, function()
-				{
-					$(targetEl).remove();
-				});
-				removeItemFromTimeline($("#" + entity_id, $("#timeline")));
-			} });
+			activityDelete(targetEl);
 	  },
 
 	 
@@ -764,4 +746,65 @@ $('#send-email-listener-container').on('click', '#cc-link, #bcc-link', function(
 		return;
 	});
 
+}
+
+function activityDelete(targetEl)
+{
+	// Gets the id of the entity
+	var entity_id = $(targetEl).attr('id');
+
+	// Gets the url to which delete request is to be sent
+	var entity_url = $(targetEl).attr('url');
+
+	if (!entity_url)
+		return;
+
+	var id_array = [];
+	var id_json = {};
+
+	// Create array with entity id.
+	id_array.push(entity_id);
+
+	// Set entity id array in to json object with key ids,
+	// where ids are read using form param
+	id_json.ids = JSON.stringify(id_array);
+	var that = targetEl;
+
+	// Add loading. Adds loading only if there is no loaded image added
+	// already i.e.,
+	// to avoid multiple loading images on hitting delete multiple times
+	if ($(targetEl).find('.loading').length == 0)
+		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+
+	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function(response_data)
+	{
+		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !response_data)
+		{
+			return;
+		}
+		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && response_data)
+		{
+			var can_edit = false;
+			$.each(response_data, function(index, contactId){
+				if(App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				{
+					can_edit = true;
+				}
+			});
+			if(!App_Contacts.contactDetailView.model.get("id"))
+			{
+				can_edit = true;
+			}
+			if(!can_edit)
+			{
+				return;
+			}
+		}
+		// Removes activity from list
+		$(that).parents(".activity").fadeOut(400, function()
+		{
+			$(targetEl).remove();
+		});
+		removeItemFromTimeline($("#" + entity_id, $("#timeline")));
+	} });
 }

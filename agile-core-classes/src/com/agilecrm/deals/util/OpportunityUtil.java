@@ -1798,9 +1798,6 @@ public class OpportunityUtil
 		System.out.println("------------" + idsArray.length());
 	    }
 
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-
 	    if (idsArray != null && idsArray.length() > 0)
 	    {
 		List<Key<Opportunity>> dealIds = new ArrayList<Key<Opportunity>>();
@@ -1818,6 +1815,9 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		System.out.println("------------" + filterJSON.toString());
+		
 		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, count, null);
 		String cursor = deals.get(deals.size() - 1).cursor;
 		while (cursor != null)

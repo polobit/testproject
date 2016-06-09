@@ -80,6 +80,19 @@ $(function(){
 					return;
 				}
 
+				if($(table).attr("id") == "document-list" && !hasScope("EDIT_CONTACT"))
+				{
+					showModalConfirmation("Bulk Delete", 
+						CONTACTS_ACLS_UPDATE_ERROR, 
+						function (){
+							bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
+						}, 
+						function(){
+							return;
+						}
+					);
+				}
+
 				// customize delete confirmation message
 				if(!customize_delete_message(table))
 					return;
@@ -511,6 +524,10 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
  **/
 function customize_delete_message(table)
 {
+	if($(table).attr("id") == "document-list" && !hasScope("EDIT_CONTACT"))
+	{
+		return;
+	}
 	
 	// Default message for all tables
 	var confirm_msg = "Are you sure you want to delete?";

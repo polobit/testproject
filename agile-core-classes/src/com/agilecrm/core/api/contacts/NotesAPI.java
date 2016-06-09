@@ -22,6 +22,13 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
+import com.agilecrm.user.access.exception.AccessDeniedException;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.CallTriggerUtil;
 
 /**
@@ -52,6 +59,12 @@ public class NotesAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Note saveNote(Note note)
     {
+	List<String> conIds = note.contact_ids;
+    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    {
+    	throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    }
 	note.save();
 	try
 	{
@@ -77,6 +90,30 @@ public class NotesAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Note updateNote(Note note)
     {
+    Note oldNote = null;
+    try 
+    {
+		oldNote = NoteUtil.getNote(note.id);
+	} 
+    catch (Exception e) 
+    {
+		e.printStackTrace();
+	}
+    if(oldNote != null)
+    {
+    	List<String> conIds = oldNote.getContact_ids();
+    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    	{
+    		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+    	}
+    }
+	List<String> conIds = note.contact_ids;
+	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	{
+		throw new AccessDeniedException("Sorry, you have some related contacts without update permission for contacts.");
+	}
 	note.save();
 	return note;
     }

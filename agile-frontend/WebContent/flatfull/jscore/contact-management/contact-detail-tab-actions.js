@@ -314,6 +314,25 @@ var contact_details_documentandtasks_actions = {
 			{
 				documentsView.collection.remove(json);
 				documentsView.render(true);
+			},
+			error : function(model, response)
+			{
+				if(response && response.status == 403)
+				{
+					showModalConfirmation("Detach Document", 
+						response.responseText, 
+						function (){
+							return;
+						}, 
+						function(){
+							return;
+						},
+						function(){
+							return;
+						},
+						"Cancel"
+					);
+				}
 			} });
        },
 
@@ -415,7 +434,7 @@ function existing_document_attach(document_id, saveBtn)
 	if ((json.contact_ids).indexOf(contact_id) < 0)
 	{
 		json.contact_ids.push(contact_id);
-		saveDocument(null, null, saveBtn, false, json);
+		saveDocument(null, null, saveBtn, false, json, contact_id);
 	}
 	else
 	{

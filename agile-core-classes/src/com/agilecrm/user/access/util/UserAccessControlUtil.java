@@ -1,9 +1,14 @@
 package com.agilecrm.user.access.util;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.json.JSONArray;
+
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
@@ -170,6 +175,31 @@ public class UserAccessControlUtil
     public static boolean hasScope(UserAccessScopes scope)
     {
 	return getCurrentUserScopes().contains(scope);
+    }
+    
+    public static List<String> checkUpdateAndmodifyRelatedContacts(List<String> contact_ids)
+    {
+    	List<String> modifiedContactIds = new ArrayList<String>();
+    	try 
+    	{
+    		if(contact_ids != null && contact_ids.size() > 0)
+        	{
+        		List<Contact> contactsList = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+            	for(Contact contact : contactsList)
+            	{
+            		boolean can_update = UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.CREATE, false);
+            		if(can_update)
+            		{
+            			modifiedContactIds.add(String.valueOf(contact.id));
+            		}
+            	}
+        	}
+		} 
+    	catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+    	return modifiedContactIds;
     }
 
 }

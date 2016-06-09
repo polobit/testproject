@@ -4,3 +4,5 @@ var Template_Render_Image_Loader = '<img class="loading" style="padding-right:5p
 
 // Count XHR call
 var Count_XHR_Call;
+
+var CONTACTS_ACLS_UPDATE_ERROR = "You may have some related contacts without update permission for contacts.<br/><br/> Do you want to proceed?";

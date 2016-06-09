@@ -744,6 +744,23 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			dealsLineChart();
 		}, error : function(err)
 		{
+			if(err && err.status == 403)
+			{
+				showModalConfirmation("Delete Deal", 
+					err.responseText, 
+					function (){
+						return;
+					}, 
+					function(){
+						return;
+					},
+					function(){
+						return;
+					},
+					"Cancel"
+				);
+				return;
+			}
 			$('.error-status', $('#opportunity-listners')).html(err.responseText);
 			setTimeout(function()
 			{

@@ -925,12 +925,24 @@ public class ContactsAPI
     @Path("/notes/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteNotes(@FormParam("ids") String model_ids) throws JSONException
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> deleteNotes(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray notesJSONArray = new JSONArray(model_ids);
+	JSONArray notesArray = new JSONArray();
+	List<String> contactIdsList = new ArrayList<String>();
 	 if(notesJSONArray!=null && notesJSONArray.length()>0){
 		 for (int i = 0; i < notesJSONArray.length(); i++) {
 			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
+			
+			List<String> conIds = note.getContact_ids();
+	    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+	    	{
+	    		notesArray.put(notesJSONArray.getString(i));
+	    		contactIdsList.addAll(modifiedConIds);
+	    	}
+	    	
 			 try {
 				List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
 				 for(Opportunity opp : deals){
@@ -943,7 +955,8 @@ public class ContactsAPI
 		 }
 		 
 	 }
-	 Note.dao.deleteBulkByIds(notesJSONArray);
+	 Note.dao.deleteBulkByIds(notesArray);
+	 return contactIdsList;
 }
 
     /**
