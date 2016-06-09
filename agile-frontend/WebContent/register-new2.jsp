@@ -173,7 +173,6 @@ position:fixed!important;
 
 </style>
 
-<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 
@@ -357,7 +356,6 @@ $(document).ready(function(){
 
 	
 	// Pre load dashlet files when don is active
-	preload_dashlet_libs();
 	$('#account_timezone').val(jstz.determine().name());
 	var telInput = $("#login_phone_number"),
 	  errorMsg = $("#error-msg"),
@@ -392,5 +390,8 @@ function preload_dashlet_libs(){
 }
 
 </script>
+
+<!-- Preload JS files in separate iframe. Will throw errors. -->
+<iframe height="0" width="0" style="display:none; border: 0px;" src="preloadJSFiles.htm"></iframe>
 
 </body>
