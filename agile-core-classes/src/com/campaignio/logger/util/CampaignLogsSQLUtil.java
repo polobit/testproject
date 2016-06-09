@@ -71,7 +71,7 @@ public class CampaignLogsSQLUtil
 	}
 	catch (Exception e)
 	{
-	    System.out.println("Exception occured while adding campaign log " + e.getMessage());
+	    System.err.println("Exception occured while adding campaign log " + e.getMessage());
 	    e.printStackTrace();
 	}
     }
@@ -645,7 +645,7 @@ public class CampaignLogsSQLUtil
      */
     public static String getCampaignLogTimestamp(String timestamp)
     {
-	if(StringUtils.isNotBlank(timestamp))
+	if(StringUtils.isBlank(timestamp))
 	{
 	    timestamp = "NOW()";
 	}
