@@ -18,7 +18,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.agilecrm.Globals;
-import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
@@ -27,8 +26,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
-import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -45,7 +42,6 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * 
@@ -169,7 +165,6 @@ public class TicketNotesUtil
 			throw new Exception("No group found with id " + group.id + " or group has been deleted.");
 		}
 
-		
 		String groupName = group.group_name;
 		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
 
@@ -181,25 +176,8 @@ public class TicketNotesUtil
 		json.put("agent_name", agentName);
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
-		String domain = DomainUserUtil.getDomainUser(ticket.assigneeID).domain;
-		
-		Subscription subscription = new Subscription().getSubscriptionOfParticularDomain(domain);
-
-		String email_pan = SubscriptionUtil.getEmailPlan(subscription.plan.quantity);
-		json.put("subscription_email", email_pan);
-		
-		if(!email_pan.equalsIgnoreCase("email3"))
-		{
-			json.put("subscription_email", "");
-		}
-		
-		System.out.println(email_pan);		
-		
-		
-
 		String companyName = AccountPrefsUtil.getAccountPrefs().company_name;
-		
-				
+
 		if (companyName != null)
 			json.put("company_name", companyName);
 
