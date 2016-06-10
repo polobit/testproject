@@ -486,6 +486,18 @@ $(function()
 		$("#chrome-extension-modal").modal('show');
 	});
 
+	  $("body").on('click',".chromeExtension",function(e){
+	  	console.log("harsha");
+	  	console.log("before the chrome installation")
+      	chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
+        function(d){
+          console.log("installed")
+        },function(e){
+          console.log("not installed: "+ e)
+        });
+      console.log("after the chrome installation")
+	  })
+
 	/**
 	 * Sets the start time with current time and end time half an hour more than
 	 * start time, when they have no values by the time the modal is shown.
