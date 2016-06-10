@@ -2411,7 +2411,7 @@ li.error {
   /* right: 5px; */
   /* top: 25px; */
   float: left;
-  margin-right: 7px;
+  margin-right: 5px;
 }
 
 .shift-up {
@@ -3843,7 +3843,7 @@ div.list-tasks.panel-body:hover
  {
   overflow: auto;
 }
-#task-model-list .listed-task .task-content-view>a[target="_blank"]
+#task-model-list .listed-task .task-content-view a[target="_blank"]
 {
   font-weight:700;
   opacity:0.75;
