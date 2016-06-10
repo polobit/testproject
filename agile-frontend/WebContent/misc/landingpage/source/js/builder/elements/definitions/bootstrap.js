@@ -568,22 +568,25 @@ baseBuilderElements.push({
  			value: '',
  			onAssign: function($scope) {
  				if($scope.selected.node.parentNode.tagName==='A')
- 					this.value = $scope.selected.node.parentNode.href;
+ 					this.value = $($scope.selected.node.parentNode).attr("href");
  				else 
  					this.value='';
  			},
  			onChange: function($scope, link) {
 
- 				$scope.selected.node.setAttribute('linkurl', link);
+ 				if ( link!=='' && link.search(/^http[s]?\:\/\//) == -1)
+					{
+    					link = 'http://' + link;
+					}
  				if($scope.selected.node.parentNode.tagName!=='A'){
- 					$($scope.selected.node).wrap("<a target='_blank' ></a>");
- 					$scope.selected.node.parentNode.href=$scope.selected.node.getAttribute('linkurl');
+ 					$($scope.selected.node).wrap("<a target='_blank' ></a>"); 						
+ 					$($scope.selected.node.parentNode).attr("href",link)
  				} 
  				else if($scope.selected.node.parentNode.tagName==='A'){
- 					if($scope.selected.node.getAttribute('linkurl')==='')
+ 					if(link==='')
  						$($scope.selected.node).unwrap();
  					else 
- 						$scope.selected.node.parentNode.href=$scope.selected.node.getAttribute('linkurl');
+ 						$($scope.selected.node.parentNode).attr("href",link);
  				}		
  			}
  		}
