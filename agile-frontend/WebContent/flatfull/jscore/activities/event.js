@@ -480,6 +480,11 @@ $(function()
 	 		highlight_event();
 	  		
 	  });
+	  $("body").on('click','#chrome-extension',function(e){
+		
+		$("#chrome-extension-modal").html(getTemplate("chrome-modal"));
+		$("#chrome-extension-modal").modal('show');
+	});
 
 	/**
 	 * Sets the start time with current time and end time half an hour more than
