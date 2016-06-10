@@ -207,12 +207,12 @@
       {{#if is_complete}}
          {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full   activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject word-break-all white-space-normal w-full font-bold " style="opacity:0.75;top:0px;">{{/is_link}}
          {{safe_string subject}}
-         </span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
+         </span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;">{{/is_link}}{{safe_string subject}} </span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject font-bold w-full word-break white-space-normal  activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject font-bold word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;">{{/is_link}}{{safe_string subject}} </span></a>
          {{else}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.75;top:0px;">{{/is_link}} {{safe_string subject}} </span><label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label></a> 
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal font-bold w-full activate-link" style="opacity:0.75">{{else}}<a href="#task/{{id}}" style="display:table-cell;"><span class="new-task-subject word-break-all white-space-normal w-full  font-bold " style="opacity:0.75;top:0px;">{{/is_link}} {{safe_string subject}} </span></a> 
          {{/if_equals}}       
       {{/if}}      
 </div>
@@ -265,7 +265,7 @@
 
      
 
-<p class="word-break-all white-space-normal text-xs m-t-n-xs m-b-xs m-l">{{taskDescription}}</p>
+<p class="word-break-all white-space-normal text-xs m-r-sm m-t-n-xs m-b-xs m-l">{{taskDescription}}</p>
 
 <div class="clearfix"></div>
     </div> <!--task-body--> 
@@ -289,7 +289,7 @@
   </div>  
   
 <i class="fa fa-clock-o m-t-sm m-l-sm"></i>
-    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
+    <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time> <label class="label bg-light dk text-tiny m-l-xs" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
 
  <span class="task-actions tasktime" style="display: none;">
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
