@@ -2446,7 +2446,7 @@ li.error {
 
 .task-actions {
   color: #888;
-  visibility: hidden;
+ display:none;
   /*padding-right: 4px;*/
   /*float: right;*/
   cursor: pointer;
@@ -3830,7 +3830,7 @@ div.addField div.controls div:first-child{
 }
 .tasktime
 {
-  visibility:visible!Important;
+  
   position:relative;
   margin-left: 5px;
   top:2px;

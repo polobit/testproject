@@ -318,7 +318,7 @@ f/* ************* Task UI (Trello) CSS ***************** */
 
 .task-actions {
 	color: #888;
-	visibility: hidden;
+	display:none;
 	/*padding-right: 4px;*/
 	/*float: right;*/
 	cursor: pointer;

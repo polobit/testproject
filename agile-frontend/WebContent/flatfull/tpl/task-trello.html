@@ -291,7 +291,7 @@
 <i class="fa fa-clock-o m-t-sm m-l-sm"></i>
     <time class="new-task-due-time time-ago" data-toggle="tooltip" data-placement="top" data-container="body" title="Due date" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" due}}</time>
 
- <span class="task-actions tasktime">
+ <span class="task-actions tasktime" style="display: none;">
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
          <i class="task-action icon icon-check hide is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i> 
