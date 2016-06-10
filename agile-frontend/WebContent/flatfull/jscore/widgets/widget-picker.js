@@ -132,11 +132,9 @@ function initializeWidgetSettingsListeners(){
 			result.data = data;
 
 			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
-  				$("#widget-acls-modal").html(template_ui).modal('show');  
-  				
-  				$('#widget-acls-modal').off();	
+  				$("#widget-acls-modal").html(template_ui).modal('show');    					
 
-  				$('#widget-acls-modal .agileUserChk_all').off('click');
+  				$('#widget-acls-modal').off('click', '.agileUserChk_all');
 				$('#widget-acls-modal').on('click', '.agileUserChk_all', function(e){
 					if($(this).is(":checked")){
 						$('#widget-acls-modal .agileUserChk').prop('checked',true);
@@ -145,8 +143,8 @@ function initializeWidgetSettingsListeners(){
 					}					
 				});
 
-  				$('#widget-acls-modal .widget_acl_save').off('click');
-				$('#widget-acls-modal').on('click', '.widget_acl_save', function(e){
+  				$('#widget-acls-modal').off('click', '.widget_acl_save');
+				$('#widget-acls-modal').on('click', '.widget_acl_save', function(e){					
 					var widgetID = $(this).attr('widget-id');
 					var widget = result.widget;
 
