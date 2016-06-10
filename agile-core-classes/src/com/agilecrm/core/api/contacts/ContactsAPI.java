@@ -924,11 +924,10 @@ public class ContactsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<String> deleteNotes(@FormParam("ids") String model_ids) throws JSONException
+    public void deleteNotes(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray notesJSONArray = new JSONArray(model_ids);
 	JSONArray notesArray = new JSONArray();
-	List<String> contactIdsList = new ArrayList<String>();
 	 if(notesJSONArray!=null && notesJSONArray.length()>0){
 		 for (int i = 0; i < notesJSONArray.length(); i++) {
 			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
@@ -938,7 +937,6 @@ public class ContactsAPI
 	    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
 	    	{
 	    		notesArray.put(notesJSONArray.getString(i));
-	    		contactIdsList.addAll(modifiedConIds);
 	    	}
 	    	
 			 try {
@@ -954,7 +952,6 @@ public class ContactsAPI
 		 
 	 }
 	 Note.dao.deleteBulkByIds(notesArray);
-	 return contactIdsList;
 }
 
     /**

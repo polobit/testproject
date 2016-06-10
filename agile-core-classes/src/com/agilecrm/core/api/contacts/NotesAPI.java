@@ -63,7 +63,7 @@ public class NotesAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("You do not have permission to update this contact.");
+    	throw new AccessDeniedException("Note cannot be added because you do not have permission to update associated contact(s).");
     }
 	note.save();
 	try
@@ -105,14 +105,14 @@ public class NotesAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("You do not have permission to update this contact.");
+    		throw new AccessDeniedException("Note cannot be updated because you do not have permission to update associated contact(s).");
     	}
     }
 	List<String> conIds = note.contact_ids;
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("You do not have permission to update this contact.");
+		throw new AccessDeniedException("Note cannot be updated because you do not have permission to update associated contact(s).");
 	}
 	note.save();
 	return note;

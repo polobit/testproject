@@ -80,10 +80,15 @@ $(function(){
 					return;
 				}
 
-				if($(table).attr("id") == "document-list" && !hasScope("EDIT_CONTACT"))
+				var related_contacts_update_acl_error = DOCS_CONTACTS_BULK_DELETE_ERROR;
+				if($(table).attr("id") == "task-list")
+				{
+					related_contacts_update_acl_error = TASKS_CONTACTS_BULK_DELETE_ERROR;
+				}
+				if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
 				{
 					showModalConfirmation("Bulk Delete", 
-						DOCS_CONTACTS_BULK_DELETE_ERROR, 
+						related_contacts_update_acl_error, 
 						function (){
 							bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
 						}, 
@@ -544,7 +549,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
  **/
 function customize_delete_message(table)
 {
-	if($(table).attr("id") == "document-list" && !hasScope("EDIT_CONTACT"))
+	if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
 	{
 		return;
 	}

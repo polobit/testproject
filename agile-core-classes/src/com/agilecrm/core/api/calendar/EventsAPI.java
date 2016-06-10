@@ -202,7 +202,7 @@ public class EventsAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("You do not have permission to update this contact.");
+    	throw new AccessDeniedException("Event cannot be created because you do not have permission to update associated contact(s).");
     }
 	event.save();
 	try
@@ -248,14 +248,14 @@ public class EventsAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("You do not have permission to update this contact.");
+    		throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated contact(s).");
     	}
     }
 	List<String> conIds = event.contacts;
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("You do not have permission to update this contact.");
+		throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated contact(s).");
 	}
     try {
 		if(oldEvent != null &&!(oldEvent.getDeal_ids()).isEmpty())
@@ -309,13 +309,11 @@ public class EventsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({ MediaType.APPLICATION_JSON })
-    public List<String> deleteEvents(@FormParam("ids") String model_ids) throws JSONException
+    public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray eventsJSONArray = new JSONArray(model_ids);
 	JSONArray eventsArray = new JSONArray();
-	List<String> contactIdsList = new ArrayList<String>();
-    if(eventsJSONArray!=null && eventsJSONArray.length()>0){
+	if(eventsJSONArray!=null && eventsJSONArray.length()>0){
     	try {    		
     		for(int i = 0; i < eventsJSONArray.length(); i++) {
     			
@@ -333,7 +331,6 @@ public class EventsAPI
 				if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
 				{
 					eventsArray.put(eventsJSONArray.getString(i));
-					contactIdsList.addAll(modifiedConIds);
 				}
 				
 				if(!event.getDeal_ids().isEmpty()){
@@ -352,7 +349,6 @@ public class EventsAPI
 		String.valueOf(eventsArray.length()), "");
 
 	Event.dao.deleteBulkByIds(eventsArray);
-	return contactIdsList;
     }
 
     @Path("/future/list")

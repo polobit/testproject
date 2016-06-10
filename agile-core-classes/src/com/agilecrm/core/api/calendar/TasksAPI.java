@@ -245,7 +245,7 @@ public class TasksAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("You do not have permission to update this contact.");
+    	throw new AccessDeniedException("Task cannot be created because you do not have permission to update associated contact(s).");
     }
 	task.save();
 	try
@@ -295,14 +295,14 @@ public class TasksAPI
         	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
         	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
         	{
-        		throw new AccessDeniedException("You do not have permission to update this contact.");
+        		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated contact(s).");
         	}
         }
     	List<String> conIds = task.contacts;
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("You do not have permission to update this contact.");
+    		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated contact(s).");
     	}
     	  try {
 			if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())
@@ -351,12 +351,10 @@ public class TasksAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({ MediaType.APPLICATION_JSON })
-    public List<String> deleteContacts(@FormParam("ids") String model_ids) throws JSONException
+    public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	JSONArray tasksArray = new JSONArray();
-	List<String> contactIdsList = new ArrayList<String>();
 	 if(tasksJSONArray!=null && tasksJSONArray.length()>0){		 
 		 try {
 			for (int i = 0; i < tasksJSONArray.length(); i++) {
@@ -374,7 +372,6 @@ public class TasksAPI
 		    	 if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
 		    	 {
 		    		 tasksArray.put(tasksJSONArray.getString(i));
-		    		 contactIdsList.addAll(modifiedConIds);
 		    	 }
 				 
 				 if(!task.relatedDeals().isEmpty()){
@@ -391,7 +388,6 @@ public class TasksAPI
 	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksArray, String.valueOf(tasksArray.length()),
 		"");
 	Task.dao.deleteBulkByIds(tasksArray);
-	return contactIdsList;
     }
 
     /**

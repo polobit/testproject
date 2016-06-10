@@ -139,7 +139,7 @@ public class DocumentsAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("You do not have permission to update this contact.");
+    	throw new AccessDeniedException("Document cannot be created because you do not have permission to update associated contact(s).");
     }
     
     document.save();
@@ -196,14 +196,14 @@ public class DocumentsAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("You do not have permission to update this contact.");
+    		throw new AccessDeniedException("Document cannot be updated because you do not have permission to update associated contact(s).");
     	}
     }
 	List<String> conIds = document.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("You do not have permission to update this contact.");
+		throw new AccessDeniedException("Document cannot be updated because you do not have permission to update associated contact(s).");
 	}
     	
 	try
@@ -257,12 +257,10 @@ public class DocumentsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({ MediaType.APPLICATION_JSON })
-    public List<String> deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
+    public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray documentsJSONArray = new JSONArray(model_ids);
 	JSONArray docsJSONArray = new JSONArray();
-	List<String> contactIds = new ArrayList<String>();
 	if(documentsJSONArray!=null && documentsJSONArray.length()>0){
 		for (int i = 0; i < documentsJSONArray.length(); i++) {
 			try
@@ -275,7 +273,6 @@ public class DocumentsAPI
 		    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
 		    	{
 		    		docsJSONArray.put(documentsJSONArray.getString(i));
-		    		contactIds.addAll(modifiedConIds);
 		    	}
 				
 		    	if(!doc.getDeal_ids().isEmpty()){
@@ -294,7 +291,6 @@ public class DocumentsAPI
 		String.valueOf(docsJSONArray.length()), "documents deleted");
 
 	Document.dao.deleteBulkByIds(docsJSONArray);
-	return contactIds;
     }
 
     /**

@@ -94,7 +94,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 			showModalConfirmation("Delete Task", 
 				response.responseText, 
 				function (){
-					getDetailsForCollection();
+					return;
 				}, 
 				function(){
 					return;

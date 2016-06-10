@@ -147,9 +147,10 @@ $(function()
 		// Removes appended contacts from related-to field
 		$("#noteForm").find("li").remove();
 
-		// Remove value of input field
-		$("#from_task", "#noteForm").val("");
-		$("#task_form", "#noteForm").val("");
+		$("#noteForm", $('#noteModal')).each(function()
+		{
+			this.reset();
+		});
 		
 		// Removes validation error messages
 		remove_validation_errors('noteModal');

@@ -302,7 +302,7 @@ public class DealsAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("You do not have permission to update this contact.");
+    	throw new AccessDeniedException("Deal cannot be created because you do not have permission to update associated contact(s).");
     }
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
@@ -353,14 +353,14 @@ public class DealsAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("You do not have permission to update this contact.");
+    		throw new AccessDeniedException("Deal cannot be updated because you do not have permission to update associated contact(s).");
     	}
     }
 	List<String> conIds = opportunity.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("You do not have permission to update this contact.");
+		throw new AccessDeniedException("Deal cannot be updated because you do not have permission to update associated contact(s).");
 	}
 	
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
