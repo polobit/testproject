@@ -376,7 +376,7 @@ public class WidgetsAPI {
 					Widget widget = WidgetUtil.getWidget(widgetName,
 							Long.parseLong(oldUserID));
 					if (widget != null && widget.add_by_admin) {
-						WidgetUtil.deleteWidget(oldUserID, widgetName);
+						WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
 					}
 				}else{
 					finalUsers.put(oldUserArray.get(i));

@@ -384,6 +384,25 @@ public class WidgetUtil {
 		}
 	}
 	
+	
+	public static void deleteWidgetByUserID(String id, String name) {
+		Objectify ofy = ObjectifyService.begin();
+
+		// Creates Current AgileUser key
+		AgileUser agileUser = AgileUser.getCurrentAgileUser(Long.parseLong(id));
+		Key<AgileUser> userKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+
+		/*
+		 * Fetches list of widgets related to AgileUser key and adds is_added
+		 * field as true to default widgets if not present
+		 */
+		List<Widget> widgets = ofy.query(Widget.class)
+				.ancestor(userKey).filter("name", name).list();
+		for (Widget widget : widgets) {			
+			widget.delete();
+		}
+	}
+	
 	/**
 	 * 
 	 * 
