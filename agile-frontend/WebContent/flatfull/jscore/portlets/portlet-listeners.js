@@ -965,8 +965,8 @@ $('.portlet_body')
 		    	}
 		    });
 		    if(id== "MarketingDashboard"){
-		    	$('#dashboard-desc').text("Welcome to Agile CRM marketing automation.");
-		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM marketing automation.");
+		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
+		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
 		    }
 		    if(id == "Dashboard")
 		    {
