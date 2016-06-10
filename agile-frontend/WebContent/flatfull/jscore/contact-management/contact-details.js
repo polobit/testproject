@@ -677,27 +677,23 @@ show and hide the input for editing the contact name and saving that
     onChangeOwner : function(e){
          e.preventDefault();
          	var contact_owner = $(e.currentTarget).attr("data");
-         	var error_msg = "You do not have permission to update contacts.";
-         	if(Current_Route && Current_Route.indexOf("company/") == 0)
-         	{
-         		error_msg = "You do not have permission to update companies.";
-         	}
-			if(contact_owner != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
-			{
-				showModalConfirmation("Contact Update", 
-						error_msg, 
-						function (){
-							return;
-						}, 
-						function(){
-							return;
-						},
-						function() {
-							
-						},
-						"Cancel", "");
-				return;
-			}
+         	var error_msg = "You do not have permission to change owner.";
+    			if(!hasScope("EDIT_CONTACT"))
+    			{
+    				showModalConfirmation("Owner Change", 
+    						error_msg, 
+    						function (){
+    							return;
+    						}, 
+    						function(){
+    							return;
+    						},
+    						function() {
+    							
+    						},
+    						"Cancel", "");
+    				return;
+    			}
          fill_owners(undefined, undefined, function(){
 
 	    	$('#contact-owner').css('display', 'none');
