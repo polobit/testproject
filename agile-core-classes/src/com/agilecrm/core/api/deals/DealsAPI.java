@@ -1411,4 +1411,15 @@ public class DealsAPI
     	}
     	return null;
     }
+    @Path("/based/tags")
+    @GET
+    @Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getDealsByTags(@QueryParam("tag") String tag){
+    	List<Opportunity> deals = null;
+    	if(tag != null && tag != ""){
+    		deals = OpportunityUtil.getOpportunitiesbyTags(tag);
+    		return deals;
+    	}
+    	return null;
+    }
 }

@@ -3332,4 +3332,8 @@ public class OpportunityUtil
     	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("related_notes", new Key<Note>(Note.class,noteId) );
     	return dao.fetchAll(q);
     }
+    public static List<Opportunity> getOpportunitiesbyTags(String tag){
+    	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("tagsWithTime.tag = ", tag).limit(25);
+    	return dao.fetchAll(q);
+    }
 }

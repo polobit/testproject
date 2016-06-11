@@ -705,6 +705,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 		var deal = data.toJSON();
 
+		if(deal.tags && deal.tags.length)
+			saveDealTagsBulk(deal.tags);
+
 		add_recent_view(new BaseModel(deal));
 
 		// Updates data to timeline
