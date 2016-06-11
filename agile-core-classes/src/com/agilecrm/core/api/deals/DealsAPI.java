@@ -426,12 +426,13 @@ public class DealsAPI
      */
     @Path("/delete")
     @POST
-    public void quickDeleteOpportunity(@FormParam("ids") String ids)
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> quickDeleteOpportunity(@FormParam("ids") String ids)
 	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException
     {
 	JSONArray opportunitiesJSONArray = new JSONArray(ids);
 	JSONArray oppJSONArray = new JSONArray();
-	
+	List<String> contactIdsList = new ArrayList<String>();
 	List<Opportunity> opportunityList = OpportunityUtil.getOpportunitiesForBulkActions(ids, null, opportunitiesJSONArray.length());
 	
 	for(Opportunity opp : opportunityList)
@@ -441,6 +442,7 @@ public class DealsAPI
 		if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
 		{
 			oppJSONArray.put(opp.id);
+			contactIdsList.addAll(modifiedConIds);
 		}
 	}
 	
@@ -449,7 +451,7 @@ public class DealsAPI
 	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, oppJSONArray,
 		String.valueOf(oppJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(oppJSONArray);
-
+	return contactIdsList;
     }
 
     /**

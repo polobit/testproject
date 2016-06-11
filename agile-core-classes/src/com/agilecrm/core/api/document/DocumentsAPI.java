@@ -257,10 +257,12 @@ public class DocumentsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray documentsJSONArray = new JSONArray(model_ids);
 	JSONArray docsJSONArray = new JSONArray();
+	List<String> contactIdsList = new ArrayList<String>();
 	if(documentsJSONArray!=null && documentsJSONArray.length()>0){
 		for (int i = 0; i < documentsJSONArray.length(); i++) {
 			try
@@ -273,6 +275,7 @@ public class DocumentsAPI
 		    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
 		    	{
 		    		docsJSONArray.put(documentsJSONArray.getString(i));
+		    		contactIdsList.addAll(modifiedConIds);
 		    	}
 				
 		    	if(!doc.getDeal_ids().isEmpty()){
@@ -291,6 +294,7 @@ public class DocumentsAPI
 		String.valueOf(docsJSONArray.length()), "documents deleted");
 
 	Document.dao.deleteBulkByIds(docsJSONArray);
+	return contactIdsList;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -13,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Call;
@@ -22,13 +24,10 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
-import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.CallTriggerUtil;
 
 /**
@@ -187,5 +186,47 @@ public class NotesAPI
 
 	   return "";
 	}
+	
+	/**
+     * Deletes all selected notes of a particular contact.
+     * 
+     * @param model_ids
+     *            array of note ids as String
+     * @throws JSONException
+     */
+    @Path("/bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> deleteNotes(@FormParam("ids") String model_ids) throws JSONException
+    {
+		JSONArray notesJSONArray = new JSONArray(model_ids);
+		JSONArray notesArray = new JSONArray();
+		List<String> contactIdsList = new ArrayList<String>();
+		if(notesJSONArray!=null && notesJSONArray.length()>0){
+			for (int i = 0; i < notesJSONArray.length(); i++) {
+				Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
+				
+				List<String> conIds = note.getContact_ids();
+				List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+				if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+				{
+					notesArray.put(notesJSONArray.getString(i));
+					contactIdsList.addAll(modifiedConIds);
+				}
+				
+				try {
+					List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
+					for(Opportunity opp : deals){
+						opp.save();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		Note.dao.deleteBulkByIds(notesArray);
+		return contactIdsList;
+    }
   
 }

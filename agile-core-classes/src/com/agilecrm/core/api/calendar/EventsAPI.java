@@ -309,10 +309,12 @@ public class EventsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> deleteEvents(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray eventsJSONArray = new JSONArray(model_ids);
 	JSONArray eventsArray = new JSONArray();
+	List<String> contactIdsList = new ArrayList<String>();
 	if(eventsJSONArray!=null && eventsJSONArray.length()>0){
     	try {    		
     		for(int i = 0; i < eventsJSONArray.length(); i++) {
@@ -331,6 +333,7 @@ public class EventsAPI
 				if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
 				{
 					eventsArray.put(eventsJSONArray.getString(i));
+					contactIdsList.addAll(modifiedConIds);
 				}
 				
 				if(!event.getDeal_ids().isEmpty()){
@@ -349,6 +352,7 @@ public class EventsAPI
 		String.valueOf(eventsArray.length()), "");
 
 	Event.dao.deleteBulkByIds(eventsArray);
+	return contactIdsList;
     }
 
     @Path("/future/list")

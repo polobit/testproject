@@ -923,7 +923,6 @@ public class ContactsAPI
     @Path("/notes/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({ MediaType.APPLICATION_JSON })
     public void deleteNotes(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray notesJSONArray = new JSONArray(model_ids);

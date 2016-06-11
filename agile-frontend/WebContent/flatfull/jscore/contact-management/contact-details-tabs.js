@@ -231,23 +231,6 @@ var Contact_Details_Tab_Actions = {
 				return;
 			}
 
-			if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !hasScope("EDIT_CONTACT") && CURRENT_DOMAIN_USER.id != owner){
-		  		showModalConfirmation("Delete "+model.get("entity_type"), 
-					CONTACTS_ACLS_UPDATE_ERROR, 
-					function (){
-						return;
-					}, 
-					function(){
-						return;
-					},
-					function (){
-						return;
-					},
-					'Cancel'
-				);
-				return;
-		  	}
-
 			// Gets the id of the entity
 			var entity_id = $(targetEl).attr('id');
 			if (model && model.toJSON().type != "WEB_APPOINTMENT" || parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
@@ -781,8 +764,43 @@ function modelDelete(model, targetEl, callback){
 	if ($(targetEl).find('.loading').length == 0)
 		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
 
-	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
+	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function(response_data)
 	{	
+		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !response_data)
+		{
+			return;
+		}
+		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && response_data)
+		{
+			var can_edit = false;
+			$.each(response_data, function(index, contactId){
+				if(App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				{
+					can_edit = true;
+				}
+			});
+			if(!App_Contacts.contactDetailView.model.get("id"))
+			{
+				can_edit = true;
+			}
+			if(!can_edit)
+			{
+				showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+					'<span class="text-cap">'+model.get("entity_type")+'</span> '+CONTACTS_ACTIVITY_ACL_DELETE_ERROR, 
+					function (){
+						return;
+					}, 
+					function(){
+						return;
+					},
+					function (){
+						return;
+					},
+					'Cancel'
+				);
+				return;
+			}
+		}
 		// Removes activity from list
 		$(that).parents(".activity").fadeOut(400, function()
 		{

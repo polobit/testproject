@@ -19,10 +19,12 @@ var DEALS_CONTACTS_BULK_UPDATE_ERROR = "Deals will not be updated for contacts f
 
 var DEALS_CONTACTS_BULK_OWNER_CHANGE_ERROR = "Owner for deals will not be changed for contacts for which you do not have update permissions.<br/><br/> Do you want to proceed?";
 
-var DOCS_CONTACTS_BULK_DELETE_ERROR = "Documents will not be deleted for contacts for which you do not have update permissions.<br/><br/> Do you want to proceed?";
+var DOCS_CONTACTS_BULK_DELETE_ERROR = "Documents will not be deleted for contacts for which you do not have update permissions(s).<br/><br/> Do you want to proceed?";
 
-var DEALS_ARCHIVE_CONTACT_ACL_ERROR = "Deal cannot be archived because you do not have permission to update associated contact.";
+var DEALS_ARCHIVE_CONTACT_ACL_ERROR = "Deal cannot be archived because you do not have permission to update associated contact(s).";
 
-var DEALS_RESTORE_CONTACT_ACL_ERROR = "Deal cannot be restored because you do not have permission to update associated contact.";
+var DEALS_RESTORE_CONTACT_ACL_ERROR = "Deal cannot be restored because you do not have permission to update associated contact(s).";
 
 var TASKS_CONTACTS_BULK_DELETE_ERROR = "Tasks will not be deleted for contacts for which you do not have update permissions.<br/><br/> Do you want to proceed?";
+
+var CONTACTS_ACTIVITY_ACL_DELETE_ERROR = "cannot be deleted because you do not have permission to update associated contact(s).";
