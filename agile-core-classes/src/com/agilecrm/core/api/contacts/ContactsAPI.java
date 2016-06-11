@@ -78,6 +78,7 @@ import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -1834,16 +1835,21 @@ public class ContactsAPI
     @GET
     public List<Contact> getCustomfieldBasedContacts(@QueryParam("id") String id ,@QueryParam("type") String type)
     {
-    	List<String> customFieldNames = null;
-    	List<CustomFieldDef> customfields = CustomFieldDefUtil.getContactAndCompanyCustomFields();
-	    if(customfields != null && customfields.size() > 0){
-	    	for(CustomFieldDef c : customfields){
-	    		if(c.field_type.equals(type))
-	    			customFieldNames.add(c.field_label);
-	    	}
-	    }
-	    if(customFieldNames != null && customFieldNames.size() > 0 && id != null)
-	    	return ContactUtil.getContactsWithCustomFields(id,customFieldNames);
+    	try {
+			List<String> customFieldNames = new ArrayList<String>();
+			List<CustomFieldDef> customfields = CustomFieldDefUtil.getContactAndCompanyCustomFields();
+			if(customfields != null && customfields.size() > 0){
+				for(CustomFieldDef c : customfields){
+					if(c.field_type.equals(CustomFieldDef.Type.CONTACT) || c.field_type.equals(CustomFieldDef.Type.COMPANY))
+						customFieldNames.add(SearchUtil.normalizeTextSearchString(c.field_label));
+				}
+			}
+			if(customFieldNames != null && customFieldNames.size() > 0 && id != null)
+				return ContactUtil.getContactsWithCustomFields(id,customFieldNames);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    return null ; 
     }
 }

@@ -644,6 +644,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 			loadWidgets(el, contact.toJSON());
 			
+			if(contact)
+				addTypeCustomData(contact.get('id'));
 			
 			
 			/*
@@ -691,7 +693,6 @@ var ContactsRouter = Backbone.Router.extend({
 			}*/
 		// Check updates in the contact.
 		checkContactUpdated();
-
 
 		if(_agile_get_prefs('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -1612,4 +1613,19 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			
 			
 		}, "#send-email-listener-container"); 
+}
+function addTypeCustomData(contactId){
+	var customFieldsView = new Base_Collection_View({
+							url : 'core/api/contacts/getCustomfieldBasedContacts?id='+contactId+'&type=CONTACT',
+							sortKey : 'time',
+							descending : true,
+							templateKey : "contact-type-custom-fields",
+							cursor : true,
+							page_size : 20,
+							postRenderCallback : function(el){
+								
+							}
+						});
+	customFieldsView.collection.fetch();
+	$('#contacts-type-custom-fields').html(customFieldsView.render().el);
 }

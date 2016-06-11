@@ -2026,6 +2026,10 @@ public class ContactUtil
     	if(id != null && customField != null){
     		ContactFilter contact_filter = new ContactFilter();
     		SearchRule rule = new SearchRule();
+    		rule.LHS = "field_labels";
+    		rule.CONDITION = RuleCondition.NOTEQUALS;
+    		rule.RHS = null ;
+    		contact_filter.rules.add(rule);
     		for(String eachfield : customField){
 	    		rule.LHS = eachfield;
 	    		rule.CONDITION = RuleCondition.EQUALS;
