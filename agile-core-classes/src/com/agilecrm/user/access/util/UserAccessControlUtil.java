@@ -179,7 +179,6 @@ public class UserAccessControlUtil
     
     public static List<String> checkUpdateAndmodifyRelatedContacts(List<String> contact_ids)
     {
-    	List<String> modifiedContactIds = new ArrayList<String>();
     	try 
     	{
     		if(contact_ids != null && contact_ids.size() > 0)
@@ -188,9 +187,9 @@ public class UserAccessControlUtil
             	for(Contact contact : contactsList)
             	{
             		boolean can_update = UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.CREATE, false);
-            		if(can_update)
+            		if(!can_update)
             		{
-            			modifiedContactIds.add(String.valueOf(contact.id));
+            			contact_ids.remove(String.valueOf(contact.id));
             		}
             	}
         	}
@@ -199,7 +198,7 @@ public class UserAccessControlUtil
 		{
 			e.printStackTrace();
 		}
-    	return modifiedContactIds;
+    	return contact_ids;
     }
 
 }
