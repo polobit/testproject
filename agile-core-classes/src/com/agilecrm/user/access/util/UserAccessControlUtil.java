@@ -179,17 +179,19 @@ public class UserAccessControlUtil
     
     public static List<String> checkUpdateAndmodifyRelatedContacts(List<String> contact_ids)
     {
+    	List<String> modifiedContactIds = new ArrayList<String>();
     	try 
     	{
     		if(contact_ids != null && contact_ids.size() > 0)
         	{
+    			modifiedContactIds.addAll(contact_ids);
         		List<Contact> contactsList = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
             	for(Contact contact : contactsList)
             	{
             		boolean can_update = UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.CREATE, false);
             		if(!can_update)
             		{
-            			contact_ids.remove(String.valueOf(contact.id));
+            			modifiedContactIds.remove(String.valueOf(contact.id));
             		}
             	}
         	}
@@ -198,7 +200,7 @@ public class UserAccessControlUtil
 		{
 			e.printStackTrace();
 		}
-    	return contact_ids;
+    	return modifiedContactIds;
     }
 
 }
