@@ -336,7 +336,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			if(!modal_id)
 			{
 				hideTransitionBar();
-				enable_save_button(saveBtn);
+				enable_save_button($(saveBtn));
 				if(!modal_id && json && json.contact_ids)
 				{
 					// Removes the contact id from related to contacts
