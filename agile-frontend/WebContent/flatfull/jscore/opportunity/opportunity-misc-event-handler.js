@@ -461,6 +461,7 @@ function initializeDealListners(el){
 
 		$("#new-track-list-paging").hide();
 		$("#new-opportunity-list-paging").show();
+		$("#opportunities-header", $("#opportunity-listners")).show();
 
 		if(dealsCollection) {
 			var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
@@ -494,6 +495,7 @@ function initializeDealListners(el){
 		}
 		$("#new-track-list-paging").hide();
 		$("#new-opportunity-list-paging").show();
+		$("#opportunities-header", $("#opportunity-listners")).show();
     });
 
 }

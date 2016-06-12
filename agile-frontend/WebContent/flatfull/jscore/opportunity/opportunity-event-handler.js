@@ -375,6 +375,7 @@ var Deals_Track_Change_Events_Collection_View = Base_Collection_View.extend({
         pipeline_id = _agile_get_prefs("agile_deal_track");
         $("#milestone-view-track",$('#opportunity-listners')).html('<i class="icon-road m-r-xs"/>'+$(e.currentTarget).text());
         startGettingDeals();
+        setupTracksAndMilestones($('#opportunity-listners'));
     }
 });
 
@@ -421,6 +422,7 @@ var Deals_Filter_Change_Events_Collection_View = Base_Collection_View.extend({
                 $('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">My Deals</span><a class="close remove_deal_filter">×</a></div>');
             }
             startGettingDeals();
+            setupTracksAndMilestones($('#opportunity-listners'));
         }else{
             fetchDealsList();
         }
@@ -437,6 +439,7 @@ var Deals_Filter_Change_Events_Collection_View = Base_Collection_View.extend({
         $('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
         if (!_agile_get_prefs("agile_deal_view")){
             startGettingDeals();
+            setupTracksAndMilestones($('#opportunity-listners'));
         }else{
             fetchDealsList();
         }

@@ -734,6 +734,7 @@ function deleteDeal(id, milestone, dealPipelineModel, el){
 	var that = el;
 	$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function()
 	{
+		IS_DEAL_DELETED = true;
 		// Remove the deal from the collection and remove the UI element.
 		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
 		if (!dealPipelineModel)
@@ -796,18 +797,20 @@ function deleteDeal(id, milestone, dealPipelineModel, el){
 function setupTracksAndMilestones(el){
 	if(trackListView && trackListView.collection){
 		var tracks = trackListView.collection.models;
-
+		var is_first_track = true;
 		$.each(tracks, function(index, trackObj){
 			var track = trackObj.toJSON();
-			if(_agile_get_prefs("agile_deal_track") != track.id && track.milestones){
+			if(_agile_get_prefs("agile_deal_track") != track.id.toString() && track.milestones){
 				var style_class = "m-b-lg";
 				if(index == tracks.length-1)
 				{
 					style_class = "";
 				}
-				if(index == 0)
+				if(is_first_track)
 				{
+					$('#new-track-list-paging').find('#moving-tracks').html("");
 					style_class += " m-t-sm";
+					is_first_track = false;
 				}
 				$('#new-track-list-paging').find('#moving-tracks').append("<div class='"+style_class+" p-r'><div class='text-md m-b-xs'>"+track.name+"</div><div id='"+track.id+"' style='border: 1px solid #dee5e7;'></div></div>")
 				var milestones = track.milestones.split(",");
@@ -822,11 +825,13 @@ function setupTracksAndMilestones(el){
 						border_right_html = "border-right:none!important;"
 					}
 					var milestone_html = 	'<div class="milestone-column panel m-b-none b-n r-n panel-default" style="width: '+milestone_width+'%;min-width:0px;'+border_right_html+'">'+
-											'<div class="dealtitle-angular panel-heading c-p b-n update-drag-deal" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="'+milestone_name+'">'+
-											'<div class="'+milestone_heading_class+' text-left text-ellipsis" data-track="'+track.id+'">'+
-											'<span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left">'+milestone_name+'</span></div>'+
+											'<div class="dealtitle-angular panel-heading c-p b-n update-drag-deal" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{milestone_name}}">'+
+											'<div class="'+milestone_heading_class+' text-left text-ellipsis" data-track="{{track_id}}">'+
+											'<span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left">{{milestone_name}}</span></div>'+
 											''+span_html+'</div></div>';
-					$("#"+track.id, $('#new-track-list-paging')).append(milestone_html);
+					var milestone_tpl = Handlebars.compile(milestone_html);
+					var json = {"milestone_name" : milestone_name, "track_id" : track.id};
+					$("#"+track.id, $('#new-track-list-paging')).append(milestone_tpl(json));
 					$("[data-toggle=tooltip").tooltip();
 				});
 			}

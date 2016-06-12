@@ -3991,11 +3991,7 @@ border-bottom:1px solid #eee;
     right: 21px;
     bottom: -67px;
     height: 150px;
-    /*background-color: #f3f5f6;*/
     z-index: 100;
-    /*-webkit-box-shadow: 0 5px 40px rgba(0,0,0,0.4);
-    -moz-box-shadow: 0 5px 40px rgba(0,0,0,0.4);
-    box-shadow: 0 5px 40px rgba(0,0,0,0.4);*/
     -webkit-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
     -moz-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
     -ms-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;

@@ -2,7 +2,7 @@
 <div class="custom-animated custom-fadeInUp">
 	{{#is_mobile}}
 	{{else}}
-	<div class="wrapper-md lter bg-light b-b">
+	<div class="wrapper-md lter bg-light b-b" id="opportunities-header">
 		<div class="row">
 	    	<div class="col-md-12">
 	    		<h3 class="pull-left font-thin h3">Deals <small>Opportunities</small>
@@ -71,12 +71,12 @@
 					<img class="loading_img p-r-xs"  height="32px" width="32px" src= "{{getS3ImagePath 'img/21-0-new.gif'}}"></img>
 					<div id="opportunities-by-milestones-model-list"></div>
 				</div>
-				<div id="new-track-list-paging" class="bg-white wrapper-md" style="display:none;min-height:calc(100vh - 175px);">
+				<div id="new-track-list-paging" class="bg-white wrapper-md" style="display:none;min-height:calc(100vh - 90px);">
 					<div id="moving-deal" class="text-right hide"></div>
 					<div id="moved-deal" class="text-right"></div>
 					<i class="icon-close pull-right c-p m-r-n-sm text-md deal-track-close"></i>
 					<div class="m-l-n-md m-r-n-md m-t-xl b-b"></div>
-					<div id="moving-tracks" class="m-r-n-md" style="max-height:calc(100vh - 250px);;overflow-y:auto;"></div>
+					<div id="moving-tracks" class="m-r-n-md" style="max-height:calc(100vh - 175px);;overflow-y:auto;"></div>
 		        </div>
 			</div>
 		</div>
