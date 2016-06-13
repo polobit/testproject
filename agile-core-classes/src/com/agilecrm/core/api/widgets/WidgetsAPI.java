@@ -25,6 +25,7 @@ import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.BrainTreeUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -106,6 +107,10 @@ public class WidgetsAPI {
 			}
 
 			WidgetsAPI.checkValidDetails(widget);
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
+			widget.setOwner(currentUser);
+			
 			widget.save();
 			return widget;
 		}
@@ -369,7 +374,10 @@ public class WidgetsAPI {
 		if (obj != null) {
 			JSONObject widgetObj = new JSONObject(obj);
 			String widgetName = widgetObj.getString("name");
-
+			
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+			DomainUser domainUser = agileUser.getDomainUser();
+			
 			// Deleting the widget.
 			String newUsersList = widgetObj.getString("listOfUsers");
 			JSONArray finalUsers = new JSONArray();
@@ -379,7 +387,7 @@ public class WidgetsAPI {
 				if (!(newUsersList.contains(oldUserID))) {					
 					Widget widget = WidgetUtil.getWidget(widgetName,
 							Long.parseLong(oldUserID));
-					if (widget != null && widget.add_by_admin) {
+					if (widget != null && !domainUser.is_admin) {
 						WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
 					}
 				}else{
@@ -395,10 +403,10 @@ public class WidgetsAPI {
 				String newUserID = newUserArray.getString(i);
 				if (!(oldUsersList.contains(newUserID))) {
 					finalUsers.put(newUserArray.getLong(i));
-					AgileUser agileUser = AgileUser.getCurrentAgileUser(Long
+					AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long
 							.parseLong(newUserID));
 					Key<AgileUser> userKey = AgileUser
-							.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+							.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
 					widget.setOwner(userKey);
 					widget.add_by_admin = true;
 					widget.listOfUsers = null;
