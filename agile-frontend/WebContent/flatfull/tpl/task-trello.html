@@ -149,8 +149,8 @@
 
 <script id="task-collection-template" type="text/html">
 <div id="task-model-list" class="task-model-list ">
-{{#unless this.length}}
-            <div class="alert bg-white ui-state-disabled m-t-md m-l-sm" id="no_task" style="margin-right:10px;border:none;border-radius:0px;margin-bottom:0px;">
+
+            <div class="alert bg-white ui-state-disabled {{#unless this.length}} {{else}} hide {{/unless}} m-t-md m-l-sm" id="no_task" style="margin-right:10px;border:none;border-radius:0px;margin-bottom:0px;">
             <div class="slate-content " style="padding:18px;">
                 <div class="box-right pull-left">
                     <h4 class="text-lg" style="opacity:0.8;font-size:14px;">No Tasks Found</h4>
@@ -158,7 +158,7 @@
          <div class="clearfix"></div>
          </div>
          </div>
-  {{/unless}}  
+    
 </div>
 </script>
 

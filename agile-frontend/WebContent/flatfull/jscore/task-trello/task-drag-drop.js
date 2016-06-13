@@ -202,17 +202,28 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 		// Update task in UI
 		if (criteria == "OWNER")
 			$(".list-header[ownerID=" + newTaskListOwnerId + "]").parent().find("#" + taskId).parent().html(getTemplate('task-model', data.toJSON()));
-		else
+		else{
 			$("#" + newTaskListId).find("#" + taskId).parent().html(getTemplate('task-model', data.toJSON()));
+			$("#" + newTaskListId).find("#no_task").addClass("hide");
+		}
+			
 
 		// Maintain changes in UI
 		displaySettings();
 		if(oldTask.count == 0){
-			$("#no_task").removeClass("hide");
+			$("#no_task", $('#' + oldTask.taskListId)).removeClass("hide");
 		}
 		else{
-			$("#no_task").remove();
+			$("#no_task").addClass("hide");
 		}
+
+		// Get old task list
+		var modelOldTaskList = getTaskList(criteria, oldTask.taskListId, newTaskListOwnerId);
+		if(modelOldTaskList && modelOldTaskList[0].toJSON().taskCollection){
+			if(modelOldTaskList[0].toJSON().taskCollection.length == 0)
+				$("#no_task", $('#' + oldTask.taskListId)).removeClass("hide");
+		}
+		
 		// Get new task list
 		var modelNewTaskList = getTaskList(criteria, newTaskListId, newTaskListOwnerId);
 
