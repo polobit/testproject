@@ -268,6 +268,15 @@ function isValidForm(form) {
 
 	},"<b>image</b> is a keyword in the system and it can't be added as a custom field.");
 
+	jQuery.validator.addMethod("month_date", function(value, element){
+		if(value=="")
+			return true;
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectForMonthWithString(value));
+
+			
+	}," Please enter a valid date.");
+
 	$(form).validate({
 		ignoreTitle: true,
 		rules : {

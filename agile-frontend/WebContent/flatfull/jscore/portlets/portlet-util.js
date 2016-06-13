@@ -2693,8 +2693,8 @@ var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS
 			 	eventDate2 = new Date($('#end_date',elData).val());
 			if (ev.date.valueOf() > eventDate2.valueOf())
 			{
-				var en_value=ev.date.valueOf()+86400000;
-				$('#end_date',elData).val(new Date(en_value).format(CURRENT_USER_PREFS.dateFormat));
+				//var en_value=ev.date.valueOf();
+				$('#end_date',elData).val($('#start_date',elData).val());
 			}
 
 		});

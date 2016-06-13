@@ -807,3 +807,14 @@ function showAlertModal(json_key, type, confirm_callback, decline_callback,dynam
 		});
 	}, null);
 }
+
+function getFormattedDateObjectForMonthWithString(value){
+
+		if(!value)
+			   return new Date("");
+
+        value = value.replace(/\./g,'/');
+
+		return new Date(value);
+	
+}

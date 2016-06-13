@@ -1014,8 +1014,8 @@ $('.portlet_body')
 			 	eventDate2 = new Date($('#end_date',el).val());
 			if (ev.date.valueOf() > eventDate2.valueOf())
 			{
-				var en_value=ev.date.valueOf()+86400000;
-				$('#end_date',el).val(new Date(en_value).format(CURRENT_USER_PREFS.dateFormat));
+				var en_value=ev.date.valueOf();
+				$('#end_date',elData).val($('#start_date',elData).val());
 			}
 
 		});
@@ -1025,9 +1025,14 @@ $('.portlet_body')
 			}
 		}
 		else
-			$(el).find('.daterange').addClass('hide');
+			{$(el).find('.daterange').addClass('hide');
+		$('.daterange span:not(.field_req)',el).each(function(){
+				$(this).hide();
+			});
+	}
 			if($(el).find(".invalid-range").is(':visible'))
 								$(el).find(".invalid-range").parents('.form-group').hide();
+			
 		});
 
 }
@@ -1349,16 +1354,16 @@ function clickfunction(that,url,forAll,route){
 
 function is_valid_custom_range(startDate,endDate,modalName)
 {
-if (endDate - startDate >= 86400000)
+if (endDate - startDate >= 0)
 	{
 		return true;
 	}
-	else if (startDate >= endDate)
+	else if (startDate > endDate)
 	{
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater or equal to end date.</div>'
+					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date.</div>'
 						);
 				$('#' + modalName)
 				.find(".invalid-range").parents('.form-group').show();
