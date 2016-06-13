@@ -643,11 +643,7 @@ var ContactsRouter = Backbone.Router.extend({
 			load_contact_tab(el, contact.toJSON());
 
 			loadWidgets(el, contact.toJSON());
-			
-			if(contact)
-				addTypeCustomData(contact.get('id'));
-			
-			
+						
 			/*
 			 * // To get QR code and download Vcard
 			 * $.get('/core/api/VCard/' + contact.toJSON().id,
@@ -680,6 +676,9 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-call",el).removeClass("c-progress");
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
+			if(contact)
+				addTypeCustomData(contact.get('id'));
+
 			} 
 			
 		});

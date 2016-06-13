@@ -2036,7 +2036,8 @@ public class ContactUtil
 	    		rule.RHS = id ;
 	    		contact_filter.or_rules.add(rule);
     		}
-    		return new ArrayList<Contact>(contact_filter.queryContacts(50, null, "type"));
+    		List<Contact> contacts = new ArrayList<Contact>(contact_filter.queryContacts(50, null, "type"));
+    		return contacts;
     	}
     	return null;
     }
