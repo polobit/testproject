@@ -81,7 +81,7 @@ public class LogUtil
 	// running in backend
 	if (ModuleUtil.isDefaultModule() && isCampaignRunningInPushQueue())
 	{
-	    System.out.println("not using push queue for campaign logs");
+	    //System.out.println("not using push queue for campaign logs");
 	    long startTime = System.currentTimeMillis();
 	    // Insert to SQL
 	    CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
@@ -90,7 +90,7 @@ public class LogUtil
 	}
 	else
 	{
-	    System.out.println("using push queue for campaign logs");
+	    //System.out.println("using push queue for campaign logs");
 	    LogDeferredTask logDeferredTask = new LogDeferredTask(campaignId, subscriberId, message, logType, domain,
 		    GoogleSQL.getFutureDate());
 	   // Add to queue
