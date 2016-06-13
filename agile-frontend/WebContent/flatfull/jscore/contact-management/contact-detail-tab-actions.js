@@ -342,7 +342,7 @@ var contact_details_documentandtasks_actions = {
 				if(response && response.status == 403)
 				{
 					showModalConfirmation("Detach Document", 
-						'Document '+CONTACTS_ACTIVITY_ACL_DELETE_ERROR, 
+						DOC_ACL_DETACH_ERROR, 
 						function (){
 							return;
 						}, 

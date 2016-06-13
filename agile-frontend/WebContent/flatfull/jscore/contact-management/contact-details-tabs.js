@@ -761,8 +761,8 @@ function modelDelete(model, targetEl, callback){
 	// Add loading. Adds loading only if there is no loaded image added
 	// already i.e.,
 	// to avoid multiple loading images on hitting delete multiple times
-	if ($(targetEl).find('.loading').length == 0)
-		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+	/*if ($(targetEl).find('.loading').length == 0)
+		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));*/
 
 	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function(response_data)
 	{	

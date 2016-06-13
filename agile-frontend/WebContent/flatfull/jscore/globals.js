@@ -28,3 +28,5 @@ var DEALS_RESTORE_CONTACT_ACL_ERROR = "Deal cannot be restored because you do no
 var TASKS_CONTACTS_BULK_DELETE_ERROR = "Tasks will not be deleted for contacts for which you do not have update permissions.<br/><br/> Do you want to proceed?";
 
 var CONTACTS_ACTIVITY_ACL_DELETE_ERROR = "cannot be deleted because you do not have permission to update associated contact(s).";
+
+var DOC_ACL_DETACH_ERROR = "Document cannot be detached because you do not have permission to update associated contact(s).";
