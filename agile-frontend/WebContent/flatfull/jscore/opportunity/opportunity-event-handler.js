@@ -108,7 +108,12 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             if(!template_ui)
                   return;
 
-            $("#deal_owner_change_modal").html($(template_ui)).modal("show");
+            $("#deal_owner_change_modal").html($(template_ui));
+            if(!hasScope("EDIT_CONTACT"))
+            {
+                $("#owners", $("#deal_owner_change_modal")).parent().before("<div class='control-group form-group col-md-12'>"+DEALS_CONTACTS_BULK_OWNER_CHANGE_ERROR+"</div>");
+            }
+            $("#deal_owner_change_modal").modal("show");
             
             // Fills owner select element
             populateUsers("owners-list-bulk", $(template_ui), undefined, undefined, function(data, optionsHTML){
@@ -141,7 +146,12 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
                         });
             }else
             {
-                $("#deal_mile_change_modal").html($(template_ui)).modal("show");
+                $("#deal_mile_change_modal").html($(template_ui));
+                if(!hasScope("EDIT_CONTACT"))
+                {
+                    $("#bulk_mile_Form", $("#deal_mile_change_modal")).children(":first").before("<div class='control-group form-group'>"+DEALS_CONTACTS_BULK_UPDATE_ERROR+"</div>");
+                }
+                $("#deal_mile_change_modal").modal("show");
             }
             
             // Fills tracks
@@ -176,8 +186,12 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         getTemplate('deal-contact-add-tag-modal', {}, undefined, function(template_ui){
             if(!template_ui)
                   return;
-
-            $("#deal_contact_add_tag_modal").html($(template_ui)).modal("show");
+            $("#deal_contact_add_tag_modal").html($(template_ui));
+            if(!hasScope("EDIT_CONTACT"))
+            {
+                $("#dealContactTagsBulkForm", $("#deal_contact_add_tag_modal")).children(":first").before("<div class='control-group form-group col-md-12'>"+DEALS_CONTACTS_BULK_TAGS_ERROR+"</div>");
+            }
+            $("#deal_contact_add_tag_modal").modal("show");
 
             setup_tags_typeahead();
 
@@ -226,7 +240,12 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
                 $('#deal_bulk_archive_acl_modal').html($(template_ui)).modal("show");
             }else
             {
-                $('#deal_bulk_archive_modal').html($(template_ui)).modal("show");
+                $('#deal_bulk_archive_modal').html($(template_ui));
+                if(!hasScope("EDIT_CONTACT"))
+                {
+                    $(".modal-body", $('#deal_bulk_archive_modal')).html(DEALS_CONTACTS_BULK_ARCHIVE_ERROR);
+                }
+                $('#deal_bulk_archive_modal').modal("show");
             }
 
             $("#deal_bulk_archive_modal").off("click", "#deal-bulk-archive");
@@ -261,7 +280,12 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
                 $('#deal_bulk_restore_acl_modal').html($(template_ui)).modal("show");
             }else
             {
-                $('#deal_bulk_restore_modal').html($(template_ui)).modal("show");
+                $('#deal_bulk_restore_modal').html($(template_ui));
+                if(!hasScope("EDIT_CONTACT"))
+                {
+                    $(".modal-body", $('#deal_bulk_restore_modal')).html(DEALS_CONTACTS_BULK_RESTORE_ERROR);
+                }
+                $('#deal_bulk_restore_modal').modal("show");
             }
 
             $("#deal_bulk_restore_modal").off("click", "#deal-bulk-restore");
@@ -296,7 +320,12 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
                 $('#deal_bulk_delete_acl_modal').html($(template_ui)).modal("show");
             }else
             {
-                $('#deal_bulk_delete_modal').html($(template_ui)).modal("show");
+                $('#deal_bulk_delete_modal').html($(template_ui));
+                if(!hasScope("EDIT_CONTACT"))
+                {
+                    $(".modal-body", $('#deal_bulk_delete_modal')).html(DEALS_CONTACTS_BULK_DELETE_ERROR);
+                }
+                $('#deal_bulk_delete_modal').modal("show");
             }
 
             $("#deal_bulk_delete_modal").off("click", "#deal-bulk-delete");

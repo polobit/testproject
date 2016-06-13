@@ -259,7 +259,7 @@ public class Opportunity extends Cursor implements Serializable
     
     public Long updated_time = 0L;
 
-    /**
+	/**
      * ObjectifyDao of Opportunity.
      */
 
@@ -363,11 +363,13 @@ public class Opportunity extends Cursor implements Serializable
     @XmlElement(name = "contact_ids")
     public List<String> getContact_ids()
     {
-	contact_ids = new ArrayList<String>();
+    if((contact_ids != null && contact_ids.size() == 0) || contact_ids == null)
+    {
+    	contact_ids = new ArrayList<String>();
 
-	for (Key<Contact> contactKey : related_contacts)
-	    contact_ids.add(String.valueOf(contactKey.getId()));
-
+    	for (Key<Contact> contactKey : related_contacts)
+    	    contact_ids.add(String.valueOf(contactKey.getId()));
+    }
 	return contact_ids;
     }
 

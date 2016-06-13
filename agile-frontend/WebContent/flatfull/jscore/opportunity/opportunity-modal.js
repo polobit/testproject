@@ -215,6 +215,10 @@ $(function()
 
 										},error : function(model, err)
 										{
+											if(err && err.status == 403 && !hasScope("EDIT_CONTACT"))
+											{
+												err.responseText = DEALS_ARCHIVE_CONTACT_ACL_ERROR;
+											}
 											enable_save_button(that);
 											$("#deal_archive_confirm_modal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
 											setTimeout(function()
@@ -320,6 +324,10 @@ $(function()
 
 										},error : function(model, err)
 										{
+											if(err && err.status == 403 && !hasScope("EDIT_CONTACT"))
+											{
+												err.responseText = DEALS_RESTORE_CONTACT_ACL_ERROR;
+											}
 											enable_save_button(that);
 											$("#deal_restore_confirm_modal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
 											setTimeout(function()
