@@ -28,7 +28,7 @@
             "label": "Contact Number:",
             "required": "required", 
             "category": "Settings",
-            "name": "phonenumber1",
+            "name": "Contact Number",
             "id":"phonenumber1",
             "value":"{{phone}}",
             "title": "Enter the Recipient Number or {{phone}} to play the voice message.",

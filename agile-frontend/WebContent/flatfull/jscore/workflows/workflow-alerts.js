@@ -41,7 +41,7 @@ function campaignAlert(alertType)
 	if(alertType == "Unauthorised_Call_Widget")
 		{
 		alertJSON["title"]="Call Widget  not Configured";
-		alertJSON["message"]="You need to enable Twilio Call widget integration to use this option. Please enable it in Admin Settings -> Preferences -> Widgets";
+		alertJSON["message"]="You need to enable Twilio Call widget to use this option. Please enable it in Preferences -> Widgets";
 		templateName = "CallWidget-integration-alert-modal";
 		}
 

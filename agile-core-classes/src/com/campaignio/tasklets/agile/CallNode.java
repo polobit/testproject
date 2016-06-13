@@ -49,7 +49,7 @@ public class CallNode extends TaskletAdapter
     /**
      * Number to which 1st call is made
      */
-    public static String  TO_NUMBER1      = "phonenumber1";
+    public static String  TO_NUMBER1      = "Contact Number";
     
     /**
      * Number to which call is going when use enter 1 option(agent number in
