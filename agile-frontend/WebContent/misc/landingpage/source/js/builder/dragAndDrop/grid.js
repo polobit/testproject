@@ -361,14 +361,32 @@ angular.module('dragAndDrop')
 		applyPreset: function(preset) {
 			if (angular.isArray(preset) && this.active.row) {
 
-				this.active.row.html('');
+				var select_length=preset.length;
+				var actual_length=this.active.cols.length;
+				
+				/*for adding column*/
+				if(select_length > actual_length){
+					var extraAddColumn=select_length-actual_length;
+					for (var i = 1; i <= extraAddColumn; i++) {
+						grid.addColumnAfter($(grid.active.cols[actual_length-1]));
+					}
+				}
+				/*for deleting column*/
+				else if(select_length < actual_length){
+					var extraRemoveColumn=actual_length-select_length;
+					for (var i = 1; i <= extraRemoveColumn; i++) {
+						grid.deleteColumn($(grid.active.cols[actual_length-i]));
+					}
+				}
+				var child_column=$('#iframe').contents().find('.editing').children();				
+				/*for resizing column*/
+				if(child_column.length === select_length){						
+					for(var i=0; i < select_length;i++)	{
+						child_column[i].className="col-sm-"+preset[i];
+					}
+				}
 
-				for (var i = 0; i < preset.length; i++) {
-					this.active.row.append('<div class="col-sm-'+preset[i]+'"></div>');
-				};
-
-				this.active.cols = grid.active.row.children('[class^="col-"]').get();
-
+				this.active.cols=child_column;
 				this.redrawResizers();
 				this.redrawControls();
 				$rootScope.repositionBox('select');
