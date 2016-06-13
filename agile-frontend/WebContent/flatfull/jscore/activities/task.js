@@ -142,7 +142,7 @@ function initializeTasksListeners(){
 
 	 $('#tasks-list-template').on('mouseenter', '.task-striped', function(e)
 	{
-		$(this).closest(".task-striped").find(".task-actions").css("display", "inline-block");
+		$(this).closest(".task-striped").find(".task-actions").css("display", "table-cell");
 		$(this).closest(".task-striped ").find(".task-note-action").hide();
 	});
 
@@ -152,6 +152,11 @@ function initializeTasksListeners(){
 		$(this).closest(".task-striped ").find(".task-actions").css("display", "none");
 		$(this).closest(".task-striped ").find(".task-note-action").show();
 	});
+	 $('#tasks-list-template').on('click','.task-list-minimized',function(e)
+	 {
+	 	$(this).find(".expandbutton").trigger('click');
+	 	
+	 });
 
 	/*
 	 * Task Action: Delete task from UI as well as DB. Need to do this manually
@@ -190,8 +195,8 @@ function initializeTasksListeners(){
 
 	$('#tasks-list-template').on("click", ".expandbutton", function(e)
 	{	
+		e.stopPropagation();
 		taskAutoWidth(this);
-		
 	});	
 	/*$('#tasks-list-template').on("click", ".task-list-minimized", function(e)
 	{	

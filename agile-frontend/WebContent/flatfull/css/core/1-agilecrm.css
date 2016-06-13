@@ -2411,7 +2411,7 @@ li.error {
   /* right: 5px; */
   /* top: 25px; */
   float: left;
-  margin-right: 5px;
+  margin-right: 0px!Important;
 }
 
 .shift-up {
