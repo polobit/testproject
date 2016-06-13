@@ -4045,3 +4045,17 @@ padding-left:0px;
     margin-top: 0; 
  }
 
+.delete-checked-contacts .bulk-delete-loading
+{
+  padding-right: 5px;
+    margin-bottom: 15px;
+    position: absolute;
+    top: 7px;
+    z-index: 1000000;
+    right: -6px;
+    width: 20px
+}
+.delete-checked-contacts
+{
+  position:relative;
+}

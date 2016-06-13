@@ -93,7 +93,7 @@ $(function(){
 				var $that = $(this);
 				// Shows confirm alert, if Cancel clicked, return false
 				showAlertModal(confirm_msg, "confirm", function(){
-					$that.after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+					$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 					var url = $(table).attr('url');
 					if(SELECT_ALL && SELECT_ALL == true)
