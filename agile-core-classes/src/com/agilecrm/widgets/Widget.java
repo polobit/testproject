@@ -1,5 +1,7 @@
 package com.agilecrm.widgets;
 
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -13,6 +15,7 @@ import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.widgets.util.DefaultWidgets;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -217,10 +220,6 @@ public class Widget {
 		this.user = new Key<AgileUser>(AgileUser.class,
 				AgileUser.getCurrentAgileUser().id);
 	}
-	
-	public void setUser(Key<AgileUser> userKey) {
-		this.user = userKey;
-	}
 
 	/**
 	 * Sets the position of the widget
@@ -244,22 +243,42 @@ public class Widget {
 	 * differentiate widgets based on {@link AgileUser}
 	 */
 	public void save() {
-		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		AgileUser agileUser;
+		if(this.user == null){
+			agileUser = AgileUser.getCurrentAgileUser();
+		}else{
+			agileUser = AgileUser.getUser(this.user);
+		}
+		
 		DomainUser domainUser = agileUser.getDomainUser();
 		boolean isAdmin = domainUser.is_admin;
 		JSONArray userList = new JSONArray();
-		if (isAdmin && this.id == null && !(this.add_by_admin)) {
+		if (isAdmin && this.id == null) {
 			userList.put(agileUser.id);
+			this.add_by_admin = true;
 			this.listOfUsers = userList.toString();
+			dao.put(this);
+		} else if (isAdmin) {
+			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
+			List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
+			if (userWidgets != null) {
+				for (Widget widget : userWidgets) {					
+					widget.prefs = this.prefs;
+					dao.put(widget);
+				}
+			}
+		} else {
+			if (user == null) {
+				user = new Key<AgileUser>(AgileUser.class, agileUser.id);
+			}
+			dao.put(this);
 		}
-
-		if (user == null) {
-			user = new Key<AgileUser>(AgileUser.class, agileUser.id);
-		}
-
-		dao.put(this);
 	}
 	
+	public void updateUserList(){		
+		dao.put(this);
+	}
+
 	public void setOwner(Key<AgileUser> user) {
 		this.user = user;
 	}

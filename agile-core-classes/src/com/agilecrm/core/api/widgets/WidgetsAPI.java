@@ -161,6 +161,10 @@ public class WidgetsAPI {
 			}
 
 			WidgetsAPI.checkValidDetails(widget);
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
+			widget.setOwner(currentUser);
+			
 			widget.save();
 			return widget;
 		}
@@ -390,12 +394,12 @@ public class WidgetsAPI {
 			for (int i = 0; i < newUserArray.length(); i++) {
 				String newUserID = newUserArray.getString(i);
 				if (!(oldUsersList.contains(newUserID))) {
-					finalUsers.put(newUserID);
+					finalUsers.put(newUserArray.getLong(i));
 					AgileUser agileUser = AgileUser.getCurrentAgileUser(Long
 							.parseLong(newUserID));
 					Key<AgileUser> userKey = AgileUser
 							.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
-					widget.setUser(userKey);
+					widget.setOwner(userKey);
 					widget.add_by_admin = true;
 					widget.listOfUsers = null;
 					widget.id = null;
@@ -404,8 +408,7 @@ public class WidgetsAPI {
 			}
 			widget = WidgetUtil.getWidget(widgetName);			
 			widget.listOfUsers = finalUsers.toString();
-			widget.save();
-
+			widget.updateUserList();
 		}
 	}
 

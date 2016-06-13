@@ -70,8 +70,10 @@ public class WidgetUtil {
 						JSONArray userArray = WidgetUtil.getWigetUsersList(widget.name);
 						if(userArray != null){
 							widget.listOfUsers = userArray.toString();
-							currentWidget.listOfUsers = userArray.toString();
-							currentWidget.save();							
+							if(!widget.listOfUsers.equals(currentWidget.listOfUsers)){
+								currentWidget.listOfUsers = userArray.toString();
+								currentWidget.save();		
+							}
 						}
 					}
 					// Setting true to know that widget is configured.
@@ -329,6 +331,19 @@ public class WidgetUtil {
 			
 		return userIDs;
 	}
+	
+	public static List<Widget> getWigetUserListByAdmin(String name){
+		try {
+			Objectify ofy = ObjectifyService.begin();
+
+
+			// Queries on widget name, with current AgileUser Key
+			return ofy.query(Widget.class).filter("name", name).filter("add_by_admin", true).list();			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * Gets the widget based on the widget name and user id.
@@ -383,8 +398,7 @@ public class WidgetUtil {
 			widget.delete();
 		}
 	}
-	
-	
+		
 	public static void deleteWidgetByUserID(String id, String name) {
 		Objectify ofy = ObjectifyService.begin();
 
