@@ -2041,6 +2041,29 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
     	{
     	    return null;
     	}
-    	
+	}
+
+    /**
+     * Gets contacts and companies based on its email collection
+     * 
+     * @param emails
+     *            emails collection to get contacts and companies
+     * @return {@List} related to all emails
+     */
+    public static List<Contact> searchContactsAndCompaniesByEmailList(List<String> emails)
+    {
+	if (emails == null)
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value in", emails);
+
+	try
+	{
+	    return dao.fetchAll(q);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 }

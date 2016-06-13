@@ -344,8 +344,13 @@ function showLinkedinMatchingProfiles(data)
 				propertiesArray.push({ "name" : "title", "value" : summary });
 			}
 
-			// Add all the properties to contact at once
-			agile_crm_update_contact_properties(propertiesArray);
+			verifyUpdateImgPermission(function(can_update){
+				if(can_update)
+				{
+					// Add all the properties to contact at once
+					agile_crm_update_contact_properties(propertiesArray);
+				}
+			});
 
 			// show profile by id
 			showLinkedinProfile(Linkedin_id);
