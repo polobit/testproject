@@ -33,7 +33,11 @@ import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
@@ -42,7 +46,6 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
-import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 
@@ -581,4 +584,64 @@ public class EmailsAPI
 	
 	return scoreJson;
     }
+    
+    /**
+     * Returns sendgrid whitelabel host and key
+     * 
+     * @return String
+     * @throws Exception
+     */
+    @Path("/sendgrid/whitelabel")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getSendgridWhitelabelDomain(@QueryParam("emailDomain") String emailDomain) throws Exception
+    {
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	String domain = NamespaceManager.get();
+	
+	return SendGridUtil.addSendgridWhiteLabelDomain(emailDomain, emailGateway, domain);
+    }
+
+/**
+ * This method will validate  sendgrid whitelabel host and key
+ * 
+ * @return String
+ * @throws Exception
+ */
+@Path("/sendgrid/whitelabel/validate")
+@GET
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+public String validateSendgridWhitelabelDomain(@QueryParam("emailDomain") String emailDomain) throws Exception
+{
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	String domain = NamespaceManager.get();
+	
+	return SendGridUtil.validateSendgridWhiteLabelDomain(emailDomain, emailGateway, domain);
+}
+
+/**
+ * This method will validate  sendgrid whitelabel host and key
+ * 
+ * @return String
+ * @throws Exception
+ */
+@Path("/sendgrid/permission")
+@GET
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+public String getSendgridWhitelabelPermission() throws Exception
+{
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	JSONObject restriction=new JSONObject();
+	
+	if(emailGateway!=null)
+	   restriction.put("emailGateway", "gateway exist");
+	
+	if(SubscriptionUtil.isFreePlan())
+		restriction.put("plan", "Paid");
+	
+	return restriction.toString();
+	
+}
 }

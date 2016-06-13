@@ -240,9 +240,9 @@ function resubscribe()
 		e.preventDefault();
 
 		var $element = $(event.target);
-
+		var $that = $(this);
 		showAlertModal("Are you sure to resubscribe " + $(this).attr("contact_name") + " to " + $(this).attr("campaign_name") + " campaign?", "confirm", function(){
-			var campaign_id = $(this).attr('data');
+			var campaign_id = $that.attr('data');
 
 			var json = {};
 			json["id"] = App_Contacts.contactDetailView.model.get('id');
