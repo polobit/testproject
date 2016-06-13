@@ -378,7 +378,7 @@ angular.module('dragAndDrop')
 						grid.deleteColumn($(grid.active.cols[actual_length-i]));
 					}
 				}
-				var child_column=$('#iframe').contents().find('.editing').children();				
+				var child_column=grid.active.row.children('[class^="col-"]').get();				
 				/*for resizing column*/
 				if(child_column.length === select_length){						
 					for(var i=0; i < select_length;i++)	{
@@ -386,7 +386,7 @@ angular.module('dragAndDrop')
 					}
 				}
 
-				this.active.cols=child_column;
+				this.active.cols = child_column;
 				this.redrawResizers();
 				this.redrawControls();
 				$rootScope.repositionBox('select');
