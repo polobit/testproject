@@ -5,6 +5,8 @@
 var IS_DEAL_ARCHIVED = false;
 var IS_DEAL_RESTORED = false;
 var IS_DEAL_DELETED = false;
+var DEAL_DRAG_EVENT = "";
+var DEAL_DRAG_UI = "";
 function setup_deals_in_milestones(id){
 	var is_deal_drop_to_delete = false;
 	var is_deal_drop_to_archive = false;
@@ -166,7 +168,7 @@ function setup_deals_in_milestones(id){
 		                    }, function(){
 		                    	if(!IS_DEAL_DELETED)
 								{
-									revertDeal(event, ui);
+									revertDeal(event, ui, pos);
 								}
 		                    });
 		                    return;
@@ -179,7 +181,7 @@ function setup_deals_in_milestones(id){
 		                }, function(){
 		                	if(!IS_DEAL_DELETED)
 							{
-								revertDeal(event, ui);
+								revertDeal(event, ui, pos);
 							}
 		                });
 		                return;
@@ -192,7 +194,7 @@ function setup_deals_in_milestones(id){
 		            }, function(){
 		            	if(!IS_DEAL_DELETED)
 						{
-							revertDeal(event, ui);
+							revertDeal(event, ui, pos);
 						}
 		            });
 		            return;
@@ -220,7 +222,7 @@ function setup_deals_in_milestones(id){
 				$('#deal_archive_confirm_modal').on('hidden.bs.modal', function(){
 					if(!IS_DEAL_ARCHIVED)
 					{
-						revertDeal(event, ui);
+						revertDeal(event, ui, pos);
 					}
 				});
 			}
@@ -247,7 +249,7 @@ function setup_deals_in_milestones(id){
 				$('#deal_restore_confirm_modal').on('hidden.bs.modal', function(){
 					if(!IS_DEAL_RESTORED)
 					{
-						revertDeal(event, ui);
+						revertDeal(event, ui, pos);
 					}
 				});
 			}
@@ -257,6 +259,8 @@ function setup_deals_in_milestones(id){
 			accept: ".deal-color",
 			drop: function( event, ui ) {
 				is_deal_drop_to_track = true;
+				DEAL_DRAG_EVENT = event;
+				DEAL_DRAG_UI = ui;
 				$("#new-track-list-paging", $("#opportunity-listners")).show();
 				$("#new-opportunity-list-paging", $("#opportunity-listners")).hide();
 				$("#opportunities-header", $("#opportunity-listners")).hide();
@@ -527,14 +531,22 @@ function fill_ordered_milestone(formId){
 	});
 }
 
-function revertDeal(event, ui)
+function revertDeal(event, ui, pos)
 {
 	var milestone_name = $(ui.draggable).find("div:first").attr("data");
 	if(milestone_name)
 	{
-		if($("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li:visible").length > 0)
+		var $visibleLiEle = $("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li:visible");
+		if($visibleLiEle.length > 0)
 		{
-			$("#"+milestone_name.replace(/ +/g, '')+"-list-container").find("ul").find("li:visible").eq(pos).before($(ui.draggable));
+			if($visibleLiEle.length == parseInt(pos))
+			{
+				$visibleLiEle.eq(parseInt(pos) - 1).after($(ui.draggable));
+			}
+			else
+			{
+				$visibleLiEle.eq(parseInt(pos)).before($(ui.draggable));
+			}
 		}
 		else
 		{
