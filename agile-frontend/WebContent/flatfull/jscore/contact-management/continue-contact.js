@@ -102,11 +102,13 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	// Reads id, to update the contact
 	var id = $('#' + form_id + ' input[name=id]').val();
 
+    var man_delet  = $("#" + form_id + " #Manual_delete").val();
 	// Makes created time constant
 	var created_time = $('#' + form_id + ' input[name=created_time]').val();
 
 	// Object to save
 	var obj = {};
+	//to check if it manually added
 
 	// Stores all the property objects
 	var properties = [];
@@ -382,6 +384,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 		}		
 	}
+	if(man_delet)
+		obj.ismanuallydeleted = true;
 
 
 }
@@ -802,6 +806,7 @@ function deserialize_contact(contact, template)
 									$("#content #zip").val(prop.zip);
 								if(prop.country)
 									$("#content #country").val(prop.country);
+
 							}
 
 						}
