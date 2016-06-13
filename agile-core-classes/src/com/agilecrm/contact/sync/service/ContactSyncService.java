@@ -161,6 +161,13 @@ public abstract class ContactSyncService implements IContactSyncService
 	    // notes/tasks
 	    // and relating to newly created contact
 	    contactWrapper.saveCallback();
+	    System.out.println("Contact-------" + contact);
+	    
+	    if(contact.contact_company_id!=null){
+	    Contact related_company=ContactUtil.getContact(Long.parseLong(contact.contact_company_id));
+	    addTagToCompany(related_company);
+	    related_company.save();
+	    }
 	    return contact;
 
 	}
@@ -460,5 +467,22 @@ public abstract class ContactSyncService implements IContactSyncService
     protected boolean canSync()
     {
 	return contactRestriction.can_create();
+    }
+    
+    /**
+     * Adds the tag to contact.
+     * 
+     * @param contact
+     *            the contact
+     */
+    private void addTagToCompany(Contact contact)
+    {
+	String tag;
+	if (prefs.type == Type.GOOGLE)
+	    tag = "gmail company".toLowerCase();
+	else
+	    tag = prefs.type.toString().toLowerCase() + " company";
+
+	contact.tags.add(StringUtils.capitalize(tag));
     }
 }
