@@ -2079,6 +2079,7 @@ var portlet_utility = {
 	 */
 	addPortletSettingsModalContent : function(base_model, modal_id) {
 		$('#' + modal_id).modal('show');
+		$('.datepicker').hide();
 		$(
 				'#'
 						+ modal_id
@@ -2663,12 +2664,13 @@ function initializeCustomRangeInModal(base_model,elData)
 				$("#start_date", elData)
 					.val(
 							
-									stringToDate(base_model.get("settings")["start-date"]*1000,'mmm yyyy'));
+									stringToDate(base_model.get("settings")["start-date"]*1000,'mmm yyyy')).blur();
 					$("#end_date", elData)
 					.val(
 							
-									stringToDate(base_model.get("settings")["end-date"]*1000,'mmm yyyy'));
-				
+									stringToDate(base_model.get("settings")["end-date"]*1000,'mmm yyyy')).blur();
+				$('#start_date',elData).datepicker('remove');
+				$('#end_date',elData).datepicker('remove');
 				$('#start_date',elData).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
 				$('#end_date',elData).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
 	
@@ -2682,6 +2684,9 @@ function initializeCustomRangeInModal(base_model,elData)
 					.val(
 							
 									getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
+					$('#start_date',elData).datepicker('remove');
+				$('#end_date',elData).datepicker('remove');
+
 var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
 		{
 			// If event start date is changed and end date is less than start date,
@@ -2700,12 +2705,13 @@ var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS
 		});
 
 
-		$('#end_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#end_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY},'hide');
 		}
 	}
 		else
 			$(elData).find('.daterange').addClass('hide');
-								$(elData).find(".invalid-range").parents('.form-group').hide();
+			$(elData).find(".invalid-range").parents('.form-group').hide();
+
 }
 
 function stringToDate(date,format)
