@@ -100,7 +100,7 @@ public class DocumentsAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("Document cannot be deleted because you do not have permission to update associated contact.");
+    		throw new AccessDeniedException("Document cannot be detached because you do not have permission to update associated contact.");
     	}
     	
     	try
@@ -139,7 +139,7 @@ public class DocumentsAPI
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
-    	throw new AccessDeniedException("Document cannot be created because you do not have permission to update associated contact(s).");
+    	throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
     }
     
     document.save();
@@ -196,14 +196,14 @@ public class DocumentsAPI
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     	{
-    		throw new AccessDeniedException("Document cannot be updated because you do not have permission to update associated contact(s).");
+    		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
     	}
     }
 	List<String> conIds = document.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
-		throw new AccessDeniedException("Document cannot be updated because you do not have permission to update associated contact(s).");
+		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
 	}
     	
 	try
