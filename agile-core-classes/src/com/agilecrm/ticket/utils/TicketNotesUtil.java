@@ -210,7 +210,7 @@ public class TicketNotesUtil
 
 		String html = prepareHTML(group, json);
 		
-		System.out.println("HTML:");
+		System.out.println("HTML:"+html);
 		//System.out.println(html);
 		
 		String fromAddress = group.group_email;
