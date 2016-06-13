@@ -89,12 +89,12 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 		},
 		error : function(model, response)
 		{
-			modelTaskList[0].get('taskCollection').add(new_task);
-			displayTimeAgo($(".task-trello-list"));
+			updateTask(false, model, model.toJSON());
+			TASKS_LIST_COLLECTION.render(true);
 			showModalConfirmation("Delete Task", 
 				response.responseText, 
 				function (){
-					getDetailsForCollection();
+					return;
 				}, 
 				function(){
 					return;
