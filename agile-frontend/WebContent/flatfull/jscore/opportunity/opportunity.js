@@ -654,18 +654,30 @@ function populateDealSources(el, value){
  */
 function fetchDealsList(data){
 	var filters_collection = data;
+	var dealTag = null ; var url = null;
     if(!filters_collection && App_Deals.deal_filters && App_Deals.deal_filters.collection)
     {
     	filters_collection = App_Deals.deal_filters.collection;
     }
+    if(filters_collection.dealToFilter){
+		dealTag = filters_collection.dealToFilter ;
+	}
     setNewDealFilters(filters_collection);
 	var query = ''
     if (_agile_get_prefs('deal-filters'))
     {
-        query = '&filters=' + encodeURIComponent(getDealFilters());
-    }
+    	if(dealTag){
+    		url = "core/api/opportunity/based/tags?tag="+dealTag ;
+			$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n"><li class="inline-block tag btn btn-xs btn-primary" data='+dealTag+'><span>'+dealTag+'<a href="#deals" class="anchor close m-l-xs pull-right">×</a></span></li></ul>');
+		}
+		else{
+			query = '&filters=' + encodeURIComponent(getDealFilters());
+			url = 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query ;
+		}
+    }   	
+
     // Fetches deals as list
-    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query,
+    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : url,
         templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
         postRenderCallback : function(el)
         {

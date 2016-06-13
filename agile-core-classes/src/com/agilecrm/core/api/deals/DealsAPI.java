@@ -41,6 +41,7 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.CustomFieldData;
@@ -313,6 +314,9 @@ public class DealsAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Deal not saved properly.").build());
 	}
+	if(opportunity.tagsWithTime.size() > 0){
+		opportunity.updateDealTagsEntity(opportunity);
+	}
 	opportunity.save();
 	try
 	{
@@ -383,8 +387,11 @@ public class DealsAPI
 	{
 	    e.printStackTrace();
 	}
-
+	Opportunity oldDeal = OpportunityUtil.getOpportunity(opportunity.id);
+	Opportunity oppr = new Opportunity();
+	oppr.updateDealTagsEntity(oldDeal, opportunity);
 	opportunity.save();
+	
 	return opportunity;
     }
 
@@ -1388,6 +1395,18 @@ public class DealsAPI
 	dealsCountJSON.put("count", dealsCount);
 
 	return dealsCountJSON;
+    }    
+    @Path("/based/tags")
+    @GET
+    @Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON })
+    public String getDealsCountByTags(@QueryParam("tag") String tag){
+    	int dealCount = 0;
+    	if(tag != null && tag != ""){
+    		dealCount = OpportunityUtil.getDealsbyTags(tag);
+    	}
+    	if(dealCount > 0)
+    		return "success";
+    	return "fail";
     }
     @Path("/numberOfDeals")
     @GET
@@ -1397,5 +1416,64 @@ public class DealsAPI
     	if(dealCount > 0)
     		return "success";
     	return "fail";
+    }
+    @Path("/deleteDealTag")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity deleteDealTag(@QueryParam("tag") String tag,@QueryParam("id") Long id)
+    {
+    	if(id != null && tag != null){
+    		Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+    		for(int i=0;i<opportunity.tagsWithTime.size();i++){
+    			if(opportunity.tagsWithTime.get(i).tag.equals(tag)){
+    				opportunity.tagsWithTime.remove(i);
+    			}
+    		}
+    		try
+    		{
+    			ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_DELETE, opportunity, "", tag, "tags", null);
+    		}
+    		catch (Exception e)
+    		{
+    		    e.printStackTrace();
+    		}
+    		opportunity.save();
+    		return opportunity;
+    	}
+    	return null;
+    }
+    @Path("/AddDealTag")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity AddDealTag(@QueryParam("tag") String tag,@QueryParam("id") Long id)
+    {
+    	if(id != null && tag != null){
+    		Opportunity opportunity  = OpportunityUtil.getOpportunity(id);
+    		Opportunity.updateDealTagsEntity(opportunity ,tag);
+    		try
+    		{
+    			ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_ADD, opportunity, tag, "", "tags", null);
+    		}
+    		catch (Exception e)
+    		{
+    		    e.printStackTrace();
+    		}
+    		opportunity.save();
+    		return opportunity;
+    	}
+    	return null;
+    }
+    @Path("/based/tags")
+    @GET
+    @Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getDealsByTags(@QueryParam("tag") String tag){
+    	List<Opportunity> deals = null;
+    	if(tag != null && tag != ""){
+    		deals = OpportunityUtil.getOpportunitiesbyTags(tag);
+    		return deals;
+    	}
+    	return null;
     }
 }

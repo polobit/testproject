@@ -787,19 +787,28 @@ show and hide the input for editing the contact name and saving that
        				
        			// Updates to both model and collection
 	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
-	       			
-	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
-       				
-       				// Also deletes from Tag class if no more contacts are found with this tag
-       				$.ajax({
-       					url: 'core/api/tags/' + tag,
-       					type: 'DELETE',
-       					success: function()
-       					{
-       						if(tagsCollection)
-       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-       					}
-       				});
+            //  App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+              //Check if any deals are having the tag.If yes dont remove it from the app
+              $.ajax({
+                url: 'core/api/opportunity/based/tags?tag=' + tag,
+                type: 'GET',
+                success: function(data)
+                { 
+                  console.log(data);
+                  if(data == "fail"){
+                      // Also deletes from Tag class if no more contacts are found with this tag
+                    $.ajax({
+                      url: 'core/api/tags/' + tag,
+                      type: 'DELETE',
+                      success: function()
+                      {
+                      if(tagsCollection)
+                        tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+                      }
+                    });
+                  }
+                }
+              });
        			}
         });
 	
@@ -1155,6 +1164,8 @@ enterCompanyScore: function(e){
 	{
 		e.preventDefault();
 		contact_details_documentandtasks_actions.add_deal(e);
+		// To set typeahead for tags
+		setup_tags_typeahead(); 
 
 	},
 
@@ -1376,15 +1387,28 @@ enterCompanyScore: function(e){
 	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
        				
        				// Also deletes from Tag class if no more contacts are found with this tag
-       				$.ajax({
-       					url: 'core/api/tags/' + tag,
-       					type: 'DELETE',
-       					success: function()
-       					{
-       						if(tagsCollection)
-       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-       					}
-       				});
+
+       			 //Check if any deals are having the tag.If yes dont remove it from the app
+              $.ajax({
+                url: 'core/api/opportunity/based/tags?tag=' + tag,
+                type: 'GET',
+                success: function(data)
+                { 
+                  console.log(data);
+                  if(data == "fail"){
+                      // Also deletes from Tag class if no more contacts are found with this tag
+                    $.ajax({
+                      url: 'core/api/tags/' + tag,
+                      type: 'DELETE',
+                      success: function()
+                      {
+                      if(tagsCollection)
+                        tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+                      }
+                    });
+                  }
+                }
+              });
        			}
         });
 	},
