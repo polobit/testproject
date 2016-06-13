@@ -26,6 +26,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -145,10 +147,10 @@ public class TicketNotesUtil
 		// Converting contact object to json object
 		JSONObject json = AgileTaskletUtil.getSubscriberJSON(contact);
 		json = json.getJSONObject("data");
-		
+
 		System.out.println("json: " + json);
 
-		//JSONObject json = new JSONObject();
+		// JSONObject json = new JSONObject();
 
 		List<TicketNotes> notesList = getTicketNotes(ticket.id, "-created_time");
 
@@ -183,6 +185,22 @@ public class TicketNotesUtil
 
 		System.out.println("notesList.get(0).id): " + notesList.get(0).id);
 
+		String domain = DomainUserUtil.getDomainUser(ticket.assigneeID).domain;
+
+		Subscription subscription = new Subscription().getSubscriptionOfParticularDomain(domain);
+
+
+		int email_pan = subscription.plan.quantity;
+		
+		json.put("subscription_email", email_pan);
+
+		if (email_pan != 2)
+		{
+			json.put("subscription_email", "");
+		}
+
+		System.out.println(email_pan);
+
 		JSONArray notesArray = new JSONArray();
 
 		// Add all notes
@@ -209,10 +227,10 @@ public class TicketNotesUtil
 		System.out.println("notesArray: " + notesArray);
 
 		String html = prepareHTML(group, json);
-		
-		System.out.println("HTML:"+html);
-		//System.out.println(html);
-		
+
+		System.out.println("HTML:");
+		// System.out.println(html);
+
 		String fromAddress = group.group_email;
 
 		fromAddress = StringUtils.isNotBlank(group.send_as) ? group.send_as : fromAddress;
