@@ -12,9 +12,9 @@
   </queue>
   <queue>
     <name>campaign-log-queue</name>
-    <rate>40/s</rate>
-    <bucket-size>100</bucket-size>
-    <max-concurrent-requests>40</max-concurrent-requests>
+    <rate>400/s</rate>
+    <bucket-size>450</bucket-size>
+<!--     <max-concurrent-requests>40</max-concurrent-requests> -->
     <retry-parameters>
     <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
