@@ -28,6 +28,7 @@ import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -186,20 +187,21 @@ public class TicketNotesUtil
 		System.out.println("notesList.get(0).id): " + notesList.get(0).id);
 
 		String domain = DomainUserUtil.getDomainUser(ticket.assigneeID).domain;
-
-		Subscription subscription = new Subscription().getSubscriptionOfParticularDomain(domain);
-
-
-		int email_pan = subscription.plan.quantity;
-		
-		json.put("subscription_email", email_pan);
-
-		if (email_pan != 2)
-		{
-			json.put("subscription_email", "");
-		}
-
-		System.out.println(email_pan);
+		 		
+		 		Subscription subscription = new Subscription().getSubscriptionOfParticularDomain(domain);
+		 
+		 		Plan emailPlan = subscription.emailPlan;
+		 		System.out.println(emailPlan);
+		 		String email_pan = SubscriptionUtil.getEmailPlan(subscription.plan.quantity);
+		 		json.put("subscription_email", "");
+		 	
+		 		if(emailPlan == null)
+		 		{
+		 			json.put("subscription_email", "email_plan");
+		 		}
+		 		
+		 		System.out.println(email_pan);		
+		 	
 
 		JSONArray notesArray = new JSONArray();
 
