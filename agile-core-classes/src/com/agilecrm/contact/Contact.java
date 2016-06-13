@@ -525,7 +525,7 @@ public class Contact extends Cursor
 		|| (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false)
 		|| contact.campaignStatus.size() != campaignStatus.size()
 		|| contact.emailBounceStatus.size() != emailBounceStatus.size()
-		|| contact.updated_time != 0L
+		/*|| contact.updated_time != 0L*/
 		|| (contact.contact_company_key != null ? !contact.contact_company_key.equals(contact_company_key)
 			: false))
 
@@ -1182,8 +1182,8 @@ public class Contact extends Cursor
 	{
 	    created_time = System.currentTimeMillis() / 1000;
 	}
-	if(id != null)
-		updated_time = System.currentTimeMillis() / 1000;
+	/*if(id != null)
+		updated_time = System.currentTimeMillis() / 1000;*/
 
     }
 
