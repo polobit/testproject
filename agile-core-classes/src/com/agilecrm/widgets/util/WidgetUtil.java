@@ -77,22 +77,25 @@ public class WidgetUtil {
 
 						JSONArray userArray = WidgetUtil
 								.getWigetUsersList(widget.name);
-						if (userArray != null) {
-							if (oldUsersArray != null && !(oldUsersArray.contains(userID))) {
+
+						if (oldUsersArray != null
+								&& !(oldUsersArray.contains(userID))) {
+							if (userArray != null) {
 								for (int i = 0; i < userArray.length(); i++) {
 									try {
 										String tempID = userArray.getString(i);
-										if(!tempID.equals(userID)){
-											finalArray.put(userArray.getLong(i));
+										if (!tempID.equals(userID)) {
+											finalArray
+													.put(userArray.getLong(i));
 										}
 									} catch (JSONException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 								}
-							} else {
-								finalArray = userArray;
 							}
+						} else {
+							finalArray = userArray;
 						}
 
 						widget.listOfUsers = finalArray.toString();
@@ -340,9 +343,11 @@ public class WidgetUtil {
 		for (DomainUser dUser : users) {
 			AgileUser aUser = AgileUser
 					.getCurrentAgileUserFromDomainUser(dUser.id);
-			Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
-			if (userWidget != null) {
-				userIDs.put(aUser.id);
+			if (aUser != null) {
+				Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
+				if (userWidget != null) {
+					userIDs.put(aUser.id);
+				}
 			}
 		}
 		// }
@@ -421,17 +426,19 @@ public class WidgetUtil {
 
 		// Creates Current AgileUser key
 		AgileUser agileUser = AgileUser.getCurrentAgileUser(Long.parseLong(id));
-		Key<AgileUser> userKey = AgileUser
-				.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+		if (agileUser != null) {
+			Key<AgileUser> userKey = AgileUser
+					.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
 
-		/*
-		 * Fetches list of widgets related to AgileUser key and adds is_added
-		 * field as true to default widgets if not present
-		 */
-		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
-				.filter("name", name).list();
-		for (Widget widget : widgets) {
-			widget.delete();
+			/*
+			 * Fetches list of widgets related to AgileUser key and adds
+			 * is_added field as true to default widgets if not present
+			 */
+			List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+					.filter("name", name).list();
+			for (Widget widget : widgets) {
+				widget.delete();
+			}
 		}
 	}
 
