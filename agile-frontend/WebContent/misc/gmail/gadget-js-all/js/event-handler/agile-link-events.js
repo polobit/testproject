@@ -95,6 +95,7 @@ $(function()
 		//  ------ Build contact add template. ------ 
 		agile_build_form_template($(this), "gadget-add-contact", ".show-add-contact-form", function() {
 
+			$(this).find("i").removeClass("fa fa-plus").addClass("fa fa-minus");
 			$(".show-add-contact-form", el).toggle();
 			agile_gadget_adjust_height();
 			
@@ -136,7 +137,8 @@ $(function()
 
 			//  ------ Hide list view of contact. ------ 
 			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
-			$(".display-toggle i", el).removeClass("icon-plus").addClass("icon-minus");
+			$(".display-toggle i", el).removeClass("fa fa-plus-square").addClass("fa fa-minus-square-o ");
+			$(".display-toggle i", el).attr("title", "Hide Details");
 			$(".display-toggle span", el).text("Hide Details");
 			$(".display-toggle", el).next().hide();
 			
@@ -173,7 +175,8 @@ $(function()
 
 		//  ------ Show list view of contact. ------ 
 		$(".display-toggle", el).removeClass("hide-contact-summery").addClass("gadget-show-contact");
-		$(".display-toggle i", el).removeClass("icon-minus").addClass("icon-plus");
+		$(".display-toggle i", el).removeClass("fa fa-minus-square-o ").addClass("fa fa-plus-square");
+		$(".display-toggle i", el).attr("title", "Show Details");
 		$(".display-toggle span", el).text("Show");
 		$(".display-toggle", el).next().show();
 		

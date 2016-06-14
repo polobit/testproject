@@ -3,10 +3,10 @@
 {{#if this.response.length}}
 		{{#each this.response}}
 			{{#stringToJSON this ""}}
-<li style="margin:2px;">
+<li style="margin:2px;border-bottom:1px solid #F5F5F5">
 	<div style="display:block;">
 		<div id="campaigns" class="activity-text-block">
-			<span class="activity-block-owner pull-left" style=" margin-right: 5px;">
+			<span class="activity-block-owner pull-left" style=" margin-right: 5px;min-height: 37px;">
 				{{#if log_type}}
 					<img class="user-img" width="30" height="30" alt="" src="{{../../../lib_path}}img/campaigns/{{log_type}}.png">
 				{{else}}
@@ -14,20 +14,23 @@
 				{{/if}}
 			</span>
 			
-			<div class="edit-hover pull-right" style="margin-right: 12px;">Campaign - <a target="_blank" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a></div>
-			<div><a style="text-decoration: none"><b>{{titleFromEnums log_type}}</b></a></div>
+			<!--<div class="edit-hover pull-right" style="margin-right: 12px;">Campaign - <a target="_blank" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a></div>-->
+			<div><a style="text-decoration: none;text-transform: capitalize;"><b>{{titleFromEnums log_type}}</b></a></div>
 
- 			<p>{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</p>
+ 			<p style="color:#b2b0b1;">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</p>
 
-			<div class="edit-hover pull-right" style="margin-right: 10px; color:#b2b0b1;margin-top: -13px;">
-				<div class="pull-right">
+			<div class="edit-hover pull-right" style="margin-right: 10px; color:#b2b0b1;margin-top: -25px;">
+					<span>
 					<i class="fa fa-clock-o m-r-xs text-muted"></i>
 					<time class="log-created-time text-muted" datetime="{{epochToHumanDate "" time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-				</div>	
+					</span>
+					<span class="label label-info pull-right" style="margin-left:5px;">Campaign -<a target="_blank" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile" style="color:white;text-transform: capitalize;"> {{campaign_name}}</a>
+					</span>
+				
 			</div>	
 		</div>
 	</div>
-</li><hr style="border-top: 1px solid #DDDDDD;">
+</li>
 			{{/stringToJSON}}
 		{{/each}}
 	{{else}}
@@ -35,7 +38,8 @@
 			<div style="display:block;" class="activity">
 				<div id="notes" class="activity-text-block">
 					<p style="display:inline; margin-right:10px;">You have no campaigns for this contact.</p>
-					<a class="action-add-campaign" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:none; line-height:25px;"><i class="fa fa-plus-square" style="text-decoration:none; margin-right:2px;"></i><span>Add to Campaign</span></a>
+					<br>
+					<a class="action-add-campaign btn  btn-default btn-addon btn-sm" style="padding: 0;text-align: center;margin-top: 10px;margin-bottom: 10px;"><i  class="fa fa-plus-circle" style="border-right: 1px solid #ccc; padding: 6px;"></i><span style="padding: 5px;">Add to Campaign</span></a>
 				</div>
 			</div>
 		</li>

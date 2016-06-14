@@ -5,9 +5,9 @@
                 <input type="hidden" name="email" value='{{email}}' />
                 
                 <div class="control-group" style="margin:0px; padding-top:6px;">       
-                    <label class="control-label" for="campaign-select">Select campaign<span class="field_req">*</span></label>
+                    <label class="control-label" for="campaign-select">Select campaign<span class="field_req"> *</span></label>
                     <div class="controls">
-                        <select name="id" id="campaign-select" class="required" style="width:265px;">
+                        <select name="id" id="campaign-select" class="required" style="width:210px;display: block; height: 34px; padding: 6px 4px;font-size: 14px;line-height: 1.42857143;color: #555;background-color: #fff;background-image: none;border: 1px solid #ccc;border-radius: 4px;">
                             <option value="">Select..</option>
                             {{#if this.length}}
                                 {{#each this}}

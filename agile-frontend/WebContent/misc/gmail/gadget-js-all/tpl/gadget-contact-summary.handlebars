@@ -5,18 +5,18 @@
 	   					<div class="span12">
 	   						<div style="position: relative;margin-right: 16px;">
 	   						<div class="score-scope" unselectable="on" onselectstart="return false">
-	   							<span style="position: absolute;right: -10px;background-color: #27c24c;border-radius:10px;color: #fff;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top: 6px;">
+	   							<div style="position: absolute;right:7px;background-color: #27c24c;border-radius:10px;color: #fff;font-size: 12px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top:50px;">
 													{{#if lead_score}}
-													<div class="score-value inline-block font-bold" style="display:inline-block; font-size: 11px; vertical-align:middle; cursor:default; min-width:16px; text-align:center;"data-toggle="tooltip" data-placement="bottom" title="Score your leads to get high quality" onmouseover="cursor1.style.color='black';" onmouseout="cursor1.style.color='white';">
+													<div class="score-value inline-block font-bold" style="display:inline-block; font-size: 11px; vertical-align:middle; cursor:default;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;width:30px; text-align:center;"data-toggle="tooltip" data-placement="bottom" title="{{lead_score}}" onmouseover="cursor1.style.color='black';" onmouseout="cursor1.style.color='white';">
 														{{lead_score}}
 													</div>
 												{{else}}
-													<div class="score-value inline-block font-bold" style="display:inline-block; font-size: 11px; vertical-align:middle; cursor:default; min-width:16px; text-align:center;"data-toggle="tooltip" data-placement="bottom" title="Score your leads to get high quality" onmouseover="cursor1.style.color='black';" onmouseout="cursor1.style.color='white';">
+													<div class="score-value inline-block font-bold" style="display:inline-block; font-size: 11px; vertical-align:middle; cursor:default; min-width:16px; text-align:center;padding: 1px 1px 1px 1px;"data-toggle="tooltip" data-placement="bottom" title="Score your leads to get high quality" onmouseover="cursor1.style.color='black';" onmouseout="cursor1.style.color='white';">
 														0
 													</div>
 												{{/if}}
-								</span>
-								<span id="cursor1" style="position: absolute;right: -28px;border-radius:10px;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top: 6px;color:white;" onmouseover="this.style.color='black';" onmouseout="this.style.color='white';">				
+								</div>
+								<span id="cursor1" style="position: absolute;border-radius:10px;font-size: 12px;min-width: 10px;text-align: center;padding: 2px 5px;line-height: 1;display: inline-block;top:50px;color:white;right:-11px;" onmouseover="this.style.color='black';" onmouseout="this.style.color='white';">			
 												<ul style="margin:0; list-style-type:none; display:inline-block; vertical-align:middle;">
 													<input type="hidden" name="email" value="ghanshyam.agile@gmail.com">
 													<li style="line-height:7px;"><i class="icon-sort-up add-score" style="font-size:12px; cursor:pointer;" title="Add Score"></i></li>
@@ -25,21 +25,21 @@
 								</span>			
 							</div>
 
-    							<img  class='upload_pic imgholder submit w-full img-circle w-full img-circle b-2x b' src="{{gravatarurl properties 50}}" style="width:60px;height:49px;border: 2px solid #9CC96B" />
+    							<img  class='upload_pic imgholder submit w-full img-circle w-full img-circle b-2x b' src="{{gravatarurl properties 50}}" style="width:52px;height:40px;border: 2px solid #9CC96B" />
 		   					</div>
 		   				</div>
 					</div>
     			</div>
 
 <!-- 2nd coloum (conatct details) -->
-				<div class="span8" style="margin-left:7px;">
+				<div class="span8" style="margin-left:-6px;">
 <!-- First row (Name) - Starts -->
 					<div class="row-fluid">
 						<div style="display:inline-block; max-width: 16em; vertical-align:middle;">
 							<div>
-								<b>
+								
 									<font style="font-size: 14px;" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
-								</b>
+								
 							</div>
 						</div>
 						<a target="_blank" href="{{ac_path}}#contact/{{id}}" style="margin-left:6px; text-decoration:none; vertical-align:middle;"><i class="fa fa-external-link-square" title="Show contact in Agile"></i></a><br/>
@@ -57,7 +57,7 @@
 					{{/if_propertyName}}
 					</div>
 <!-- Second row (Title, Company) - Ends -->
-					<div class="row-fluid" style="margin-bottom: 1px;">
+					<div class="row-fluid" style="margin-bottom: 1px;color: #98a6ad;">
 					{{getPropertyValue properties "email"}}
 					</div>
 <!-- Third row (tags) - Starts -->					
@@ -68,8 +68,8 @@
 								<ul id="added_tags_ul" class="tagsinput">
 									<li class="tag" style="display: none; padding:1px 4px;">
 											<span>
-											<span class="anchor tag-name" style="float:left; cursor:default;">lead</span>
-											<a class="close remove-tag remove-tag-icon" style="float:left; line-height:16px;" title="Remove Tag">&times;</a>
+											<span class="anchor tag-name" style="float:left; cursor:default;padding: 1px 1px 1px 1px;">lead</span>
+											<a class="close remove-tag remove-tag-icon" style="float:left; line-height:18px;color: white;font-weight: normal;opacity:1;font-size:15px;" title="Remove Tag">&times;</a>
 										</span>
 									</li> 
 								</ul>
@@ -78,7 +78,7 @@
 										<div style="margin-bottom:0px;">
 											<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}'/>
 											<input class="tags-typeahead ignore-comma-keydown input-small" name="tags" type="text" id="tags" style="margin: 0px;" placeholder="Enter tag" autocomplete="off">
-											<a type="submit" class="btn" id="contact_add_tags" style="margin-left: 10px; padding: 1px 10px;">Add</a>
+											<a type="submit" class="btn btn-default" id="contact_add_tags" style="margin-left: 10px; padding: 5px 12px;">Add</a>
 										</div>
 									</form>
 									<img class="tag-waiting" style="display:none; width:16px; margin-top:6px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
@@ -97,8 +97,8 @@
 					<div class="row-fluid" >
 								<div class="btn-group row-fluid" style="display:inline-block; min-width:72px; margin-bottom:10px;">
 									<div class="pull-right" style="background-color: #F2F2F2;" onmouseover="this.style.backgroundColor ='#DBDBDB';" onmouseout="this.style.backgroundColor ='#F2F2F2';">
-										<a id="dropdown_switching" title="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> 
-											<i class="fa fa-ellipsis-h filter-ellip-menu-st b b-light" style="padding:2px 9px;cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Add"></i> </a>
+										<a id="dropdown_switching" title="" class="dropdown-toggle btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true"> 
+											<i class="fa fa-ellipsis-h filter-ellip-menu-st b b-light" style="cursor:pointer;" data-toggle="tooltip" data-placement="bottom" title="Add"></i> </a>
 										<ul class="dropdown-menu pull-right">
    											<!-- dropdown menu links -->
 											<li class="action-add-note"><a style="cursor:default;">Add Note</a></li>

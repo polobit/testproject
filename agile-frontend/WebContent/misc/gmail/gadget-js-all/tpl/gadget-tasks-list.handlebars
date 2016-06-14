@@ -1,9 +1,9 @@
 <!-- Tasks list tab -->
-<ul style="list-style-type:none; margin-right:25px;">
+<ul style="list-style-type:none; margin-right:25px;margin-left:10px;">
 {{#if this.length}}
 		{{#each this}}
 			{{#stringToJSON this ""}}
-<li style="padding:5px;margin:5px;border:1px solid #ddd;">
+<li style="margin:5px;border-bottom:1px solid #F5F5F5">
 	<div class="activity" style="display:block;">
 		{{#if is_complete}}
 			<div id="tasks" class="activity-text-block" style="background-color:#FFFAFA">
@@ -11,42 +11,50 @@
 			<div id="tasks" class="activity-text-block">
 		{{/if}}	
 			{{#if is_complete}}
-				<div style="margin-bottom: 10px;">
+				<div style="margin-bottom: 1px;">
 					<h4 class="task-subject" style="text-decoration:line-through;display:inline;">
 						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
-						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+						<!--<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>-->
 					</h4>
 				</div>
 			{{else}}
-				<div style="margin-bottom: 10px;">
+				<div style="margin-bottom: 1px;">
 					<h4 class="task-subject" style="display:inline;">
 						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
-						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>	
+						<!--<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>-->	
 					</h4>
 				</div>
 			{{/if}}
 			<div>
-				<p>
+				<p style="color:#b2b0b1;">
+					<span >Due: <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span><br>
 					<i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}
-					<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span>
+					
 				</p>
-				<div class="clear">
-					<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;"> 
+				<div class="clear pull-right" style="margin-top:-25px;">
+				<small class="edit-hover" style="margin-right:5px; color:#b2b0b1;"> 
 						<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-					</small>
+				</small>
+				{{#if is_complete}}
+					<span style="margin-right:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{else}}
+					<span style="margin-right:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{/if}}				
+					
 				</div>
 			</div>
 		</div>
 	</div>
 </li>
+
 			{{/stringToJSON}}
 		{{/each}}
 	{{else}}
 		<li>
 			<div style="display:block;" class="activity">
 				<div id="notes" class="activity-text-block">
-					<p style="display:inline; margin-right:10px;">You have no tasks for this contact.</p>
-					<a class="action-add-task" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Task</span></a>
+					<p style="display:inline; margin-right:10px;">You have no tasks for this contact.</p><br>
+					<a class="btn  btn-default btn-addon btn-sm action-add-task" style="padding: 0;text-align: center;margin-top: 10px;margin-bottom: 10px;"><i  class="fa fa-plus-circle" style="border-right: 1px solid #ccc; padding: 6px;"></i><span style="padding: 5px;">Add Task</span></a>
 				</div>
 			</div>
 		</li>
