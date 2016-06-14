@@ -677,7 +677,7 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
 			if(contact)
-				addTypeCustomData(contact.get('id'));
+				addTypeCustomData(contact.get('id') , el);
 
 			} 
 			
@@ -1613,7 +1613,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			
 		}, "#send-email-listener-container"); 
 }
-function addTypeCustomData(contactId){
+function addTypeCustomData(contactId, el){
 	var customFieldsView = new Base_Collection_View({
 							url : 'core/api/contacts/getCustomfieldBasedContacts?id='+contactId+'&type=CONTACT',
 							sortKey : 'time',
@@ -1626,5 +1626,5 @@ function addTypeCustomData(contactId){
 							}
 						});
 	customFieldsView.collection.fetch();
-	$('#contacts-type-custom-fields').html(customFieldsView.render().el);
+	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 }
