@@ -486,16 +486,23 @@ $(function()
 		$("#chrome-extension-modal").modal('show');
 	});
 
-	  $("body").on('click',".chromeExtension",function(e){
-	  	console.log("harsha");
-	  	console.log("before the chrome installation")
-      	chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
-        function(d){
-          console.log("installed")
-        },function(e){
-          console.log("not installed: "+ e)
-        });
-      console.log("after the chrome installation")
+	  $("#chrome-extension-modal").on('click',".chromeExtension",function(e){
+	  	// e.stopImmediatePropagation();
+	  	e.stopPropagation();
+
+	  	console.log("before the chrome installation");
+	  	try{
+	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
+		        function(d){
+		          console.log("installed")
+		        },function(e){
+		          console.log("not installed: "+ e)
+		        });
+	  	}catch(e){
+	  		console.log(e);
+	  	}
+      	
+      	console.log("after the chrome installation")
 	  })
 
 	/**
