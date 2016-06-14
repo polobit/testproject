@@ -15,6 +15,7 @@ import com.campaignio.twitter.TwitterJobQueue;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.campaignio.urlshortener.URLShortener.ShortenURLType;
 import com.google.appengine.api.NamespaceManager;
+import com.twilio.sdk.resource.instance.sip.Domain;
 
 /**
  * <code>TwitterSendMessage</code> is the base class for tweet node of
@@ -36,6 +37,9 @@ public class TwitterSendMessage extends TaskletAdapter
     public static String RATE_LIMIT_5 = "5";
     public static String RATE_LIMIT_10 = "10";
     public static String RATE_LIMIT_20 = "20";
+    
+    public static String TWEET_ID = "twitter_id";
+
 
     // Success Branch
     public static String SUCCESS_BRANCH = "success";
@@ -55,6 +59,7 @@ public class TwitterSendMessage extends TaskletAdapter
 	String message = getStringValue(nodeJSON, subscriberJSON, data, MESSAGE);
 	String rateLimit = getStringValue(nodeJSON, subscriberJSON, data, RATE_LIMIT);
 	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, SendEmail.TRACK_CLICKS);
+	String twitter_id=subscriberJSON.getJSONObject("data").getString("twitter_id");
 
 	try
 	{
@@ -84,11 +89,14 @@ public class TwitterSendMessage extends TaskletAdapter
 		  * then Simply this message will 
 		
 		  *shown into the screen  */
+		
+	
 	   try{
-		if(DomainLimitsUtil.checkDomainLimits(NamespaceManager.get()).getTweet_limit()  > 0)
+		if(DomainLimitsUtil.checkDomainLimits(NamespaceManager.get()).getTweet_limit()  > 0 && twitter_id!=null)
 		{	 
 		    TwitterJobQueueUtil.addToTwitterQueue(account, token, tokenSecret, message, rateLimit, subscriberJSON, campaignJSON);
 		    DomainLimitsUtil.decrementTweetLimit(NamespaceManager.get());
+		    
 		 }
 		else{
 			 LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "25 Tweets per day limit reached.",LogType.TWEET.toString()); 
