@@ -147,8 +147,9 @@ function deleteContactImage(){
 });
 }
 function deleteConfirmation() {
-    var x;
-    if (confirm("Are you sure to Delete?") == true) {
-        deleteContactImage();
-    } 
+    var x; 
+    showAlertModal("delete", "confirm", function(){
+    	deleteContactImage();
+	});
+
 }

@@ -26,98 +26,134 @@ public class DefaultWidgets {
 
 		widgets.add(new Widget(
 				"Twitter",
+				"Twitter",
 				" Twitter offers a great way of engaging with contacts in real time based on what they tweet.",
 				"/widgets/twitter.js", "/img/plugins/twitter.png",
 				"/widgets/twitter-logo-small.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
 				"Rapleaf",
+				"TowerData",
 				" Towerdata makes it incredibly easy for you to personalize content for your customers.",
 				"/widgets/rapleaf.js", "/img/plugins/towerdata.png",
 				"/widgets/towerdata-logo-small.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
+				"ClickDesk",
 				"ClickDesk",
 				"Convert chat sessions with potential customers into contacts in Agile along with the conversation.",
 				"/widgets/clickdesk.js", "/img/plugins/clickdesk-logo.png",
 				"/widgets/clickdesk-logo-small.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
 				"Zendesk",
+				"Zendesk",
 				"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",
 				"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png",
 				"/widgets/zendesk-logo-small.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
 				"Twilio",
+				"Twilio Call Log",
 				" This widget is now deprecated and a new improved Twilio widget is available.",
 				"/widgets/twilio.js", "/img/plugins/twilio.png",
 				"/widgets/twilio-small-logo.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
+				"FreshBooks",
 				"FreshBooks",
 				"FreshBooks enables the ability to create and manage invoices, estimates, expenses, and projects all in one place.",
 				"/widgets/freshbooks.js", "/img/plugins/freshbooks-logo.png",
 				"/widgets/freshbooks-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"Stripe",
+				"Stripe",
 				"Stripe enables individuals and businesses to accept payments over the internet.",
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"Braintree",
+				"Braintree",
 				"Braintree enables individuals and businesses to accept payments over the internet.",
 				"/widgets/braintree.js", "/img/plugins/braintree-lg-logo.png",
 				"/widgets/braintree-sm-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
-				"PayPal","PayPal is the faster, safer way for online invoicing  web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.",
+				"PayPal",
+				"PayPal",
+				"PayPal is the faster, safer way for online invoicing  web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.",
 				"/widgets/paypal.js", "/img/plugins/paypal_logo_png.png",
 				"/widgets/paypal_icon.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"HelpScout",
+				"Help Scout",
 				"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
 				"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png",
 				"/widgets/helpscout-logo-small.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
+				"Xero",
 				"Xero",
 				"Xero is an online accounting software for small business - Explore invoicing, reconciliation anytime, anywhere.",
 				"/widgets/xero.js", "/widgets/xero.png",
 				"/widgets/xero24x24.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"QuickBooks",
+				"QuickBooks",
 				"Run your whole business better with QuickBooks wherever you are. Automate your invoicing, billing and reporting and simplify your business for life!",
 				"/widgets/quickBooks.js", "/widgets/intuit-quickbooks.png",
 				"/widgets/quickbooks_small.jpg", null, WidgetType.BILLING));
 		widgets.add(new Widget(
+				"Facebook",
 				"Facebook",
 				"Facebook is a social utility that connects people with friends and others who work, study and live around them.",
 				"/widgets/facebook.js", "/widgets/facebook.png",
 				"/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
 				"Uservoice",
+				"Uservoice",
 				"UserVoice is a powerful tool that helps build better products and support integrating easy-to-use feedback and ideas from customers.",
 				"/widgets/uservoice.js", "/widgets/Uservoice_lg_logo.png",
 				"/widgets/UserVoice_md_logo.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
+				"Shopify",
 				"Shopify",
 				"Shopify is a powerful ecommerce solution that includes everything you need to create an online store.",
 				"/widgets/shopify.js", "/widgets/shopify.png",
 				"/widgets/shopifysm.png", null, WidgetType.ECOMMERCE));
 		widgets.add(new Widget(
 				"TwilioIO",
+				"Twilio",
 				"Make and receive calls from your contacts using your Twilio account.",
 				"/widgets/twilioio.js", "/img/plugins/twilio.png",
 				"/widgets/twilio-small-logo.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
+				"Sip",
 				"Sip",
 				"Make and receive calls from your contacts using any SIP account.",
 				"/widgets/sip.js", "/widgets/sip-logo-small.png",
 				"/widgets/sip-logo-small.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"GooglePlus",
+				"Google+",
 				"Keep tabs on your customers' activity on Google+ and engage with them better.",
 				"/widgets/googleplus.js", "/widgets/gplus.png",
 				"/widgets/gplusicon.png", null, WidgetType.SOCIAL));
-		widgets.add(new Widget("CallScript",
+		widgets.add(new Widget("CallScript", "Call Script",
 				"Shows you the script for a call based on your preset rules.",
 				"/widgets/callscript.js", "/widgets/call-script-logo-small.png",
-		        "/widgets/call-script-logo-small.png", null, WidgetType.CALL));
-
+				"/widgets/call-script-logo-small.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
+				"Bria",
+				"Bria",
+				"Make and receive calls from your contacts using your Bria Account.",
+				"/widgets/bria.js", "/img/plugins/bria-call.png",
+				"/img/plugins/bria-call.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
+				"Skype",
+				"Skype",
+				"Make and receive calls from your contacts using your Skype Account.",
+				"/widgets/skype.js", "/img/plugins/skype-call.png",
+				"/img/plugins/skype-call.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
+				"Custom",
+				"Custom",
+				"You can now develop your own custom widget in javascript or any backend server language.",
+				"/widgets/custom.js", "widgets/custom_widget.png",
+				"widgets/custom_widget.png", null, WidgetType.CUSTOM));
 
 		/*
 		 * widgets.add(new Widget( "Linkedin",
@@ -125,12 +161,6 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
-		
-		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
-		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
-		WidgetType.CALL));
-		widgets.add(new Widget("Skype", "Make and receive calls from your contacts using your Skype Account.",
-		"/widgets/skype.js", "/img/plugins/skype-call.png", "/img/plugins/skype-call.png", null,WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
@@ -153,8 +183,8 @@ public class DefaultWidgets {
 				.contains(widgetName)) {
 			return WidgetType.SUPPORT;
 		} else if (Arrays.asList(
-				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript", "Bria","Skype"})
-				.contains(widgetName)) {
+				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript",
+						"Bria", "Skype" }).contains(widgetName)) {
 			return WidgetType.CALL;
 		} else if (Arrays.asList(new String[] { "FreshBooks", "Stripe" })
 				.contains(widgetName)) {

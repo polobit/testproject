@@ -28,14 +28,25 @@
 				<div class="inline-block text-sm">
 					<div class="title_txt inline-block">
 						<a href="{{client.0.links.statement}}" target="_blank"><h4 class="text-u-c m-t-none text-sm text-info">
-							{{#if_equals client.0.first_name ""}}{{#if_equals client.0.last_name ""}}
-								{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
+							{{#if_equals client.0.first_name ""}}
+								{{#if_equals client.0.last_name ""}}
+									{{getCurrentContactProperty "first_name"}}
+									{{getCurrentContactProperty "last_name"}}
+								{{/if_equals}}
 							{{else}}
 								{{client.0.first_name}} {{client.0.last_name}}
 							{{/if_equals}}
 						</h4></a>
 					</div>
-					{{#if_equals client.0.organization ""}}<div></div>{{else}}, <div class="inline-block"><a href="{{client.0.links.view}}" target="_blank"><h4 class="text-u-c m-t-none text-sm text-info">{{client.0.organization}}</h4></a></div>{{/if_equals}}
+					{{#if_equals client.0.organization ""}}
+						<div></div>
+					{{else}}, 
+						<div class="inline-block">
+							<a href="{{client.0.links.view}}" target="_blank">
+								<h4 class="text-u-c m-t-none text-sm text-info">{{client.0.organization}}</h4>
+							</a>
+						</div>
+					{{/if_equals}}
 				</div>
 			{{/if}}
 			<p class="m-b-none text-sm">
@@ -67,7 +78,15 @@
 							{{/if_equals}}
 						</span></a>
 					</div>
-					{{#if_equals client.organization ""}}<div></div>{{else}}, <div class="inline-block text-base"><a href="{{client.links.view}}" target="_blank"><span class="text-u-c m-t-none">{{client.organization}}</span></a></div>{{/if_equals}}
+					{{#if_equals client.organization ""}}
+						<div></div>
+					{{else}}
+						<div class="text-xs">
+							<a href="{{client.links.view}}" target="_blank">
+								<span class="text-u-c m-t-none">{{client.organization}}</span>
+							</a>
+						</div>
+					{{/if_equals}}
 				</div>
 			{{/if}}
 			<p class="text-muted m-b-xs text-sm">
@@ -97,9 +116,7 @@
 		{{/isArray}}
 	</div>
 	<ul class="list-group m-b-none text-base" id="freshbooks_invoice_panel">
-		<li class="list-group-item r-none b-l-none b-r-none">
-			<center><img id="freshbooks_invoice_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t m-b-sm"></img></center>
-		</li>
+		<img id="freshbooks_invoice_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t m-b-sm"></img>
 	</ul>
 {{/if_equals}}
 </script>

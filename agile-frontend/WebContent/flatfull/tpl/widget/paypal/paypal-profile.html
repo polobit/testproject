@@ -12,7 +12,7 @@
 		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="clear">					
 				<a class="pull-left text-info" data-toggle="collapse" href="#collapse-{{id}}">
-					Invoice: {{number}}
+					Invoice: #{{number}}
 				</a>
 				<div class="pull-right font-bold">${{total_amount.value}}</div>	
 				<div class="clearfix"></div>
@@ -46,7 +46,12 @@
 					// {{/if_equals}}	         
 				{{/each}}
 			</div>
-			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}</time></small>
+			<small class="text-muted">
+				<i class="fa fa-clock-o m-r-xs"></i>
+				<time class="time-ago" datetime="{{paypalInvoiceDate "" invoice_date}}">					
+					{{paypalInvoiceDate "ddd mmm dd yyyy" invoice_date}}
+				</time>
+			</small>
 		</li>
 	{{/each}}
 {{else}}
@@ -59,7 +64,7 @@
 		<p>Reconfigure your PayPal business account to view your PayPal invoices in Agile.</p>
 	</div>
 	<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
-		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>
-		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">Cancel</a>
+		<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Paypal">Revoke Access</a>
+		<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Paypal">Cancel</a>
 	</div> 
 </script>

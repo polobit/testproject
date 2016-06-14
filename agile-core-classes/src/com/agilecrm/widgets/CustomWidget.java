@@ -1,5 +1,6 @@
 package com.agilecrm.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,7 +12,6 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Query;
 import com.googlecode.objectify.annotation.Cached;
 
 /**
@@ -31,13 +31,11 @@ public class CustomWidget extends Widget {
 		if (this.custom_isForAll) {
 			String domain = NamespaceManager.get();
 			System.out.println("*** domain " + domain);
-			if(domain != null){
+			if (domain != null) {
 				List<DomainUser> users = DomainUserUtil.getUsers(domain);
 				for (DomainUser domainUser : users) {
 					System.out.println("*** In For Loop " + domainUser.id);
-					// System.out.println("widiget data "+ this.name+ " "+
-					// AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id).id
-					// );
+					
 					AgileUser agileUsr = AgileUser
 							.getCurrentAgileUserFromDomainUser(domainUser.id);
 					if (agileUsr != null) {
@@ -64,12 +62,16 @@ public class CustomWidget extends Widget {
 		}
 	}
 
-	public static List<CustomWidget> getCurrentWidgets() {
+	public static List<Widget> getCurrentWidgets() {
 		// Creates Current AgileUser key
+		List<Widget> widgets = new ArrayList<Widget>();
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
 				AgileUser.getCurrentAgileUser().id);
-
-		return dao.ofy().query(CustomWidget.class).ancestor(userKey).list();
+		widgets.addAll(dao.ofy().query(Widget.class).ancestor(userKey)
+				.filter("widget_type", WidgetType.CUSTOM).list());
+		widgets.addAll(dao.ofy().query(CustomWidget.class).ancestor(userKey)
+				.list());
+		return widgets;
 	}
 
 	public static void deleteCustomWidget(String widgetName) {
@@ -77,7 +79,8 @@ public class CustomWidget extends Widget {
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
 				AgileUser.getCurrentAgileUser().id);
 
-		CustomWidget csWidget  = dao.ofy().query(CustomWidget.class).ancestor(userKey).filter("name", widgetName).get();
+		CustomWidget csWidget = dao.ofy().query(CustomWidget.class)
+				.ancestor(userKey).filter("name", widgetName).get();
 
 		csWidget.delete();
 	}

@@ -94,7 +94,7 @@ var TicketMacroRouter = Backbone.Router.extend({
 			model : macroModel,
 			window : "macros",
 			errorCallback : function(response) {
-				alert(response.responseText);
+				showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
 			},
 			postRenderCallback : function(el) {
 

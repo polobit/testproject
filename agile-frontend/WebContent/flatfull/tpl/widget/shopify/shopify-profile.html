@@ -68,28 +68,31 @@
 <div class="wrapper-sm b b-light b-r-none b-l-none">
 	<h4 class="h4 text-sm">Order Details</h4>
 </div>
+<ul class="m-b-none list-group text-base" id="shopify_orders_panel"></ul>
+</script>
+
+<script id="shopify-order-list-template" type="text/html">
 {{#each_index_slice this 1}}
-<ul class="m-b-none list-group text-base">
-<li class="list-group-item r-none b-l-none b-r-none">
-<div class="pull-left">
-	<a class="order c-p" data-target="collapse-{{this.id}}" data-toggle="collapse" data-placement="top" title= "Order" href="#" value="{{this.id}}">
-		<i class="icon icon-plus text-muted text-sm"></i> No #{{this.id}}
-	</a>
-</div> 
-<div class="pull-right">{{currency}}&nbsp;{{this.subtotal_price}}</div>
-<div class="clearfix"></div>
-<div id="collapse-{{this.id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);"></div>
-<div class="pull-left">
-	<small class="text-muted pull-left">
-		<i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{updated_at}}">{{iso_date_to_normalizeDate updated_at}}</time>
-	</small>
-</div>					
-<div class="pull-right">
-	<span class="label bg-light dk text-black">{{financial_status}}</span>
-</div>
-<div class="clearfix"></div>
-</li>
-</ul>
+	<li class="list-group-item r-none b-l-none b-r-none">
+		<div class="pull-left">
+			<a class="order c-p" data-target="collapse-{{this.id}}" data-toggle="collapse" data-placement="top" title= "Order" href="#" value="{{this.id}}">
+				<i class="icon icon-plus text-muted text-sm"></i>#{{this.id}}
+			</a>
+		</div> 
+		<div class="pull-right">{{currency}}&nbsp;{{this.subtotal_price}}</div>
+		<div class="clearfix"></div>
+		<div id="collapse-{{this.id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);"></div>
+		<div class="pull-left">
+			<small class="text-muted pull-left">
+				<i class="fa fa-clock-o m-r-xs"></i>
+				<time class="time-ago" datetime="{{updated_at}}">{{iso_date_to_normalizeDate updated_at}}</time>
+			</small>
+		</div>					
+		<div class="pull-right">
+			<span class="label bg-light dk text-black">{{financial_status}}</span>
+		</div>
+		<div class="clearfix"></div>
+	</li>
 {{/each_index_slice}}
 </script>
 
@@ -111,7 +114,6 @@
 </script>
 
 <script id="shopify-line-item-template" type="text/html">
-
 {{#each this}}
 <div class="wrapper-xs p-t-none text-sm b-b b-light">
 	<div class="row-fluid">

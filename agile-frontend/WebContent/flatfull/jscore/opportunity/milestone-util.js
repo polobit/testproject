@@ -169,8 +169,9 @@
 			var pipeId = $(this).parents(".milestones-table").attr('data');
 			var response = $.ajax({ type : "GET", url :'core/api/opportunity/numberOfDeals?id='+pipeId, async : false, dataType : 'json' }).responseText;
 			if(response == "success"){
-				alert("'Won' milestone cannot be changed now as the track already has deals.");
+				showAlertModal("won_milestone_delete_error");
 				return;
+				
 			}
 			if(!$(this).hasClass('disabled'))
 				setWonMilestone($(this));
@@ -182,7 +183,7 @@
 			var pipeId = $(this).parents(".milestones-table").attr('data');
 			var response = $.ajax({ type : "GET", url :'core/api/opportunity/numberOfDeals?id='+pipeId, async : false, dataType : 'json' }).responseText;
 			if(response == "success"){
-				alert("'Lost' milestone cannot be changed now as the track already has deals.");
+				showAlertModal("lost_milestone_delete_error");
 				return;
 			}
 			if(!$(this).hasClass('disabled'))

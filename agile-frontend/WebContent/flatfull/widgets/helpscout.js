@@ -344,14 +344,14 @@ function startHelpScoutWidget(contact_id){
 	showHelpScoutMails(contact_id);
 
 	// On click of add ticket, add ticket method is called
-    $("#widgets").off("click", "#add_conv");
-	$("#widgets").on("click", "#add_conv", function(e){
+    $("#"+WIDGET_PARENT_ID).off("click", "#add_conv");
+	$("#"+WIDGET_PARENT_ID).on("click", "#add_conv", function(e){
 		e.preventDefault();
 		addTicketToHelpScout(contact_id);
 	});
 
-    $("#widgets").off("click", "#help_show_more");
-	$("#widgets").on("click", "#help_show_more", function(e){
+    $("#"+WIDGET_PARENT_ID).off("click", "#help_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#help_show_more", function(e){
 		e.preventDefault();
 		var offSet = showMoreCount * 5;
 		showMailsInHelpScout(customerId, contact_id, offSet);

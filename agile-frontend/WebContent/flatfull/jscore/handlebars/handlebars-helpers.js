@@ -1360,6 +1360,12 @@ $(function()
 		return CURRENT_DOMAIN_USER.email;
 	});
 
+	//gets domainuser pic
+	Handlebars.registerHelper('get_current_domain_pic', function()
+	{
+		return CURRENT_DOMAIN_USER.pic;
+	});
+
 	Handlebars.registerHelper('get_current_domain_name', function()
 	{
 		var name =  CURRENT_DOMAIN_USER.name;
@@ -7346,6 +7352,15 @@ Handlebars.registerHelper('getSuggestionName', function(suggestionId){
 		}		
 });
 
+Handlebars.registerHelper('stringifyObject', function(data){
+	var obj ={};
+	obj.id = data.id;
+	obj.name = data.name;
+	obj.display_name = data.display_name;
+	obj.listOfUsers = data.listOfUsers;
+	return JSON.stringify(obj);
+});
+
 Handlebars.registerHelper('removeSpecialCharacter',function(value){
           var value = value.replace(/[^\w\s]/gi, '-');
           return value;
@@ -7398,5 +7413,3 @@ function getLastDateOfSubscription(customer){
 	}
 	return;
 }
-
-

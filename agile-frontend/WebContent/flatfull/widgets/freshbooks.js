@@ -22,8 +22,8 @@ function setUpFreshbooksAuth(contact_id)
 	$('#FreshBooks').html(getTemplate('freshbooks-login', {}));
 
 	// On click of save button, check input and save details
-    $("#widgets").off("click", "#freshbooks_save_token");
-	$("#widgets").on("click", "#freshbooks_save_token", function(e)
+    $("#"+WIDGET_PARENT_ID).off("click", "#freshbooks_save_token");
+	$("#"+WIDGET_PARENT_ID).on("click", "#freshbooks_save_token", function(e)
 	{
 		e.preventDefault();
 
@@ -48,7 +48,7 @@ function savefreshBooksPrefs(contact_id)
 	var freshbooks_prefs = {};
 	freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apiKey").val();
 	freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
-
+	
 	// Saves the preferences into widget with FreshBooks widget name
 	agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, JSON.stringify(freshbooks_prefs), function(data)
 	{
@@ -332,8 +332,8 @@ function startFreshBooksWidget(contact_id){
 	 * On click of add client button in FreshBooks, calls method to add a client
 	 * in FreshBooks with contact's first name, last name and email
 	 */
-	$("#widgets").off("click", "#freshbooks_add_client");
-	$("#widgets").on("click", "#freshbooks_add_client", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#freshbooks_add_client");
+	$("#"+WIDGET_PARENT_ID).on("click", "#freshbooks_add_client", function(e)
 	{
 		e.preventDefault();
 		addClientToFreshBooks(contact_id, first_name, last_name, Email);
@@ -344,8 +344,8 @@ function startFreshBooksWidget(contact_id){
 	 * On click of add client button in FreshBooks, calls method to add a client
 	 * in FreshBooks with contact's first name, last name and email
 	 */
-	$("#widgets").off("click", "#FBS_show_more");
-	$("#widgets").on("click", "#FBS_show_more", function(e)
+	$("#"+WIDGET_PARENT_ID).off("click", "#FBS_show_more");
+	$("#"+WIDGET_PARENT_ID).on("click", "#FBS_show_more", function(e)
 	{
 		e.preventDefault();
 		var offSet = FBSCount * 5;

@@ -24,12 +24,15 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.BrainTreeUtil;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.CustomWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactsImportUtil;
 
@@ -66,7 +69,7 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Widget> getWidgets() {
 		// Returns list of widgets saved by current user
-		return WidgetUtil.getAddedWidgetsForCurrentUser();
+		return WidgetUtil.getActiveWidgetsForCurrentUser();
 	}
 
 	/**
@@ -98,7 +101,16 @@ public class WidgetsAPI {
 	public Widget createWidget(Widget widget) throws Exception {
 		System.out.println("In widgets api create");
 		if (widget != null) {
+			if (widget.widget_type == WidgetType.CUSTOM) {
+				widget.display_name = widget.name;
+				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
+			}
+
 			WidgetsAPI.checkValidDetails(widget);
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
+			widget.setOwner(currentUser);
+			
 			widget.save();
 			return widget;
 		}
@@ -118,29 +130,19 @@ public class WidgetsAPI {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget createCustomWidget(CustomWidget customWidget) {
+	public Widget createCustomWidget(Widget widget) {
 		System.out.println("In custom widgets api create");
-		if (customWidget != null) {
-			customWidget.name = customWidget.name.replaceAll("[^a-zA-Z]+", "");
-			if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
-				return null;
+		if (widget != null) {
+			if (widget.widget_type == WidgetType.CUSTOM) {
+				widget.display_name = widget.name;
+				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
 			}
-
-			customWidget.save();
-
-			Widget widget = new Widget();
-			widget.isForAll = customWidget.custom_isForAll;
-			widget.script = customWidget.script;
-			widget.logo_url = customWidget.logo_url;
-			widget.fav_ico_url = customWidget.fav_ico_url;
-			widget.description = customWidget.description;
-			widget.name = customWidget.name;
-			widget.widget_type = customWidget.widget_type;
+			// if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
+			// return null;
+			// }
 			widget.save();
-
-			customWidget.is_added = true;
-
-			return customWidget;
+			widget.is_added = true;
+			return widget;
 		}
 		return null;
 	}
@@ -157,7 +159,17 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
+
+			if (widget.widget_type == WidgetType.CUSTOM) {
+				widget.name = widget.display_name.replaceAll("[^a-zA-Z0-9]+",
+						"");
+			}
+
 			WidgetsAPI.checkValidDetails(widget);
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
+			widget.setOwner(currentUser);
+			
 			widget.save();
 			return widget;
 		}
@@ -175,7 +187,12 @@ public class WidgetsAPI {
 	public void deleteWidget(@QueryParam("widget_name") String widget_name) {
 		// Deletes widget based on name
 		Widget widget = WidgetUtil.getWidget(widget_name);
+
 		if (widget != null) {
+			try {
+				CustomWidget.deleteCustomWidget(widget_name);
+			} catch (Exception e) {
+			}
 			// default widgets are removed from database on deletion
 			widget.delete();
 		}
@@ -342,6 +359,65 @@ public class WidgetsAPI {
 		 */
 
 		return widgets;
+	}
+
+	/**
+	 * Saves position of widget, used to show widgets in order according to
+	 * position ascending order
+	 * 
+	 * @param widgets
+	 *            {@link List} of {@link Widget}
+	 */
+	@Path("saveWidgetPrivilages")
+	@POST
+	public void saveWidgetPrivilages(String obj) throws Exception {
+		if (obj != null) {
+			JSONObject widgetObj = new JSONObject(obj);
+			String widgetName = widgetObj.getString("name");
+			
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+			DomainUser domainUser = agileUser.getDomainUser();
+			
+			// Deleting the widget.
+			String newUsersList = widgetObj.getString("listOfUsers");
+			JSONArray finalUsers = new JSONArray();
+			JSONArray oldUserArray = WidgetUtil.getWigetUsersList(widgetName);
+			for (int i = 0; i < oldUserArray.length(); i++) {
+				String oldUserID = oldUserArray.getString(i);
+				if (!(newUsersList.contains(oldUserID))) {					
+					Widget widget = WidgetUtil.getWidget(widgetName,
+							Long.parseLong(oldUserID));
+					if (widget != null && !domainUser.is_admin) {
+						WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
+					}
+				}else{
+					finalUsers.put(oldUserArray.get(i));
+				}
+			}
+
+			Widget widget = WidgetUtil.getWidget(widgetName);
+			// Creating new widget.
+			String oldUsersList = oldUserArray.toString();
+			JSONArray newUserArray = new JSONArray(newUsersList);
+			for (int i = 0; i < newUserArray.length(); i++) {
+				String newUserID = newUserArray.getString(i);
+				if (!(oldUsersList.contains(newUserID))) {
+					finalUsers.put(newUserArray.getLong(i));
+					AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long
+							.parseLong(newUserID));
+					Key<AgileUser> userKey = AgileUser
+							.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
+					widget.setOwner(userKey);
+					widget.add_by_admin = true;
+					widget.listOfUsers = null;
+					widget.id = null;
+					widget.save();
+				}
+			}
+			widget = WidgetUtil.getWidget(widgetName);			
+			widget.listOfUsers = finalUsers.toString();
+			widget.updateUserList();
+		}
 	}
 
 	public static void checkValidDetails(Widget widget) throws Exception {

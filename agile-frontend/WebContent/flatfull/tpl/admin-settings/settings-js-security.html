@@ -1,0 +1,107 @@
+<script id="admin-settings-js-security-template" type="text/html">
+            <div class="">
+                <!--<div class="panel-heading">Webhook URL </div>-->
+                <div class="panel-body">
+                    <form id="jsPrefs" class="form-horizontal">
+                        <fieldset>
+                            {{#if id}}
+                            <input name="id" class="form-control" type="hidden" value="">
+                            {{/if}}
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12 js-prev-lge">
+                                    <div style="margin-bottom: 3px;">Using Javascript may be insecure if you are using it in public sites. Select the permissions.</div>
+                                    <div class="form-group multiple-checkbox checkedMultiCheckbox" name="jsrestricted_scopes">
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="create_contact" ><i></i> 
+                                            Create Contact
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="update_contact" ><i></i> 
+                                            Update Contact
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4 hide">
+                                            <input type="checkbox" name="js-temp"  class="required" value="view_contact" ><i></i> 
+                                            View Contact
+                                        </label>                        
+                                    </div>
+                                    <div style="margin-bottom: 3px;margin-top: 21px;">Select properties to send using JS API.</div>
+                                    <div class="form-group multiple-checkbox checkedMultiCheckbox" name="jsrestricted_propertiess">
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp" class="required" value="first_name" ><i></i> 
+                                            First Name
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="last_name" ><i></i> 
+                                            Last Name
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp" class="required" value="email" ><i></i> 
+                                            Email
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="company" ><i></i> 
+                                            Company
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="title" ><i></i> 
+                                            Title
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="name" ><i></i> 
+                                            Name
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="url" ><i></i> 
+                                            URL
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="website" ><i></i> 
+                                            Website
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="address" ><i></i> 
+                                            Address
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="phone" ><i></i> 
+                                            Phone
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="skypePhone" ><i></i> 
+                                            Skype Phone
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="custom_field" ><i></i> 
+                                            Custom Fields
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="tags" ><i></i> 
+                                            Tags
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="owner" ><i></i> 
+                                            Owner
+                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox hide col-sm-4">
+                                            <input type="checkbox" name="js-temp"  class="required" value="image" ><i></i> 
+                                            Image
+                                        </label>                        
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div class="line ling-lg b-b"></div>
+                            <div class="row">
+                                <div class="col-md-7 col-xs-8">
+                                    <div>
+                                        <a href="#" type="submit" class="save btn btn-sm btn-primary">Submit</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+</script>

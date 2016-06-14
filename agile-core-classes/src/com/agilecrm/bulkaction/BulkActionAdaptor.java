@@ -16,6 +16,7 @@ import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.Key;
 
 public abstract class BulkActionAdaptor implements DeferredTask
@@ -33,6 +34,19 @@ public abstract class BulkActionAdaptor implements DeferredTask
 
     public void run()
     {
+    
+    try
+	{
+    	// Flushes any pending logs. Tasks were getting struck in queue, so added this line 
+    	// on suggestion of google support
+		ApiProxy.flushLogs();
+	}
+	catch (Exception e1)
+	{
+		System.err.println("Exception occurred while flushing logs..." + e1.getMessage());
+		e1.printStackTrace();
+	}
+    	
 	// TODO Auto-generated method stub
 	if (!isValidTask())
 	    return;

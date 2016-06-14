@@ -127,8 +127,7 @@
 				<p class="mb_0">
 					{{title}} <a href="{{url}}" target="_blank">view photo</a>
 				</p>
-			</div>
-			<small>{{verb}}ed</small> 
+			</div>			
 			<small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
 		{{else}}
 		{{#if_equals object.attachments.0.objectType "video"}}
@@ -137,16 +136,14 @@
 			 <p class="mb_0 word-break" style="word-break:normal;">
 				{{title}} <a href="{{url}}" target="_blank">view video</a>
 			 </p>			
-		    </div>
-			<small>{{verb}}ed</small>
+		    </div>			
 			<small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
 		{{else}}				
 			<div class="clear">	
 				<p class="mb_0 word-break" style="word-break:normal;">
 					{{title}} <a href="{{url}}" target="_blank">view more</a>
 				</p>
-			</div>
-			<small>{{verb}}ed</small>
+			</div>			
 			<small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>		
 		{{/if_equals}}{{/if_equals}}						
 	</li>
@@ -177,7 +174,6 @@
 		{{title}} <a href="{{url}}" class="text-info" target="_blank">view photo</a>
 	</p>
 </div>
-<small>{{verb}}ed</small>
 <small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
 {{else}}
 {{#if_equals object.attachments.0.objectType "video"}}
@@ -187,13 +183,11 @@
 		{{title}} <a href="{{url}}" class="text-info" target="_blank">view video</a>
 	</p>
 </div>
-<small>{{verb}}ed</small>
 <small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
 {{else}}
 <p class="mb_0 word-break" style="word-break:normal;">
 {{title}} <a href="{{url}}" class="text-info" target="_blank">view more</a>
 </p>
-<small>{{verb}}ed</small>
 <small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
 {{/if_equals}}{{/if_equals}}
 									
