@@ -137,7 +137,7 @@ angular.module('builder.elements', [])
                     link.setAttribute('href', theme.path);
                 });
 
-                head.append('<link rel="stylesheet" href="'+$scope.baseUrl+'/public/css/iframe.css">');
+                head.append('<link rel="stylesheet" href="'+$scope.baseUrl+'/public/css/iframe.css?v=2">');
 
                 customCss = $('<style id="custom-css"></style>').appendTo(head);
 

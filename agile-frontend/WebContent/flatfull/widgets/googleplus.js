@@ -405,7 +405,12 @@ function startGooglePlusWidget(contact_id) {
 			// var summary = $(this).attr("summary");
 			// propertiesArray.push({ "name" : "title", "value" : summary });
 			// }
-			agile_crm_update_contact_properties(propertiesArray);
+			verifyUpdateImgPermission(function(can_update){
+				if(can_update)
+				{
+					agile_crm_update_contact_properties(propertiesArray);
+				}
+			});
 
 			contactGooglePlusId = profileID;
 

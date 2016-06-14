@@ -9,22 +9,19 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-import net.sf.json.JSONException;
 
 import org.json.JSONArray;
 
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
-import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
-import com.google.appengine.api.NamespaceManager;
+
+import net.sf.json.JSONException;
 
 @Path("/api/webrule")
 public class WebRuleAPI
@@ -110,6 +107,9 @@ public class WebRuleAPI
 
 	    // Deletes reports associated with the ids sent in request
 	    WebRule.dao.deleteBulkByIds(webruleJSONArray);
+	    
+	    // Delete cache also
+	    WebRuleUtil.deleteRulesFromCache();
 
 	}
 	catch (org.json.JSONException e)

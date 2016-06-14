@@ -148,7 +148,12 @@ function showTwitterMatchingProfiles(data)
 
 				console.log(propertiesArray);
 
-				agile_crm_update_contact_properties(propertiesArray);
+				verifyUpdateImgPermission(function(can_update){
+					if(can_update)
+					{
+						agile_crm_update_contact_properties(propertiesArray);
+					}
+				});
 
 				// show twitter profile by id
 				showTwitterProfile(Twitter_id);

@@ -86,9 +86,28 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 
 			});
 			
+		},
+		error : function(model, response)
+		{
+			updateTask(false, model, model.toJSON());
+			TASKS_LIST_COLLECTION.render(true);
+			showModalConfirmation("Delete Task", 
+				response.responseText, 
+				function (){
+					return;
+				}, 
+				function(){
+					return;
+				},
+				function(){
+					return;
+				},
+				"Cancel"
+			);
 		} });
 	}
 	else
+	{
 		$.ajax({ type : "DELETE", url :'core/api/tasks/'+taskId, async : false, dataType : 'json', success : function()
 			{
 				App_Calendar.allTasksListView.collection.remove(taskId);
@@ -103,6 +122,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 				}
 			} 
 		});
+	}
 }
 
 /*

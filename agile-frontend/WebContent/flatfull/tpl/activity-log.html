@@ -351,6 +351,16 @@ Imported {{custom1}} Deals <br/>
 Exported {{custom1}} Deals <br/>	
 {{/if_equals}}
 
+{{#if_equals "DEAL_TAG_CHANGE" activity_type}}
+	<div>Deal Tags changed from {{custom2}} to {{custom1}}. </div>
+{{/if_equals}}
+{{#if_equals "DEAL_TAG_ADD" activity_type}}
+        <div>Deal Tags Added to deal are : {{custom1}}. </div>
+{{/if_equals}}
+{{#if_equals "DEAL_TAG_DELETE" activity_type}}
+        <div>Tags removed to deal are : {{custom2}}.</div>
+{{/if_equals}}
+
 
 {{#if_equals "DEAL_LOST" activity_type}}
 Lost Deal {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
@@ -1386,7 +1396,7 @@ Deleted  {{custom1}} Campaigns<br/>
                     {{/hasMenuScope}}
 					 <li><a href="EVENT">Events</a></li>
 					 <li><a href="TASK">Tasks</a></li>
-					 <li><a href="TICKET">Ticket</a></li>
+					 <li><a href="TICKET">Tickets</a></li>
 					<li><a href="USER">Users</a></li>
 					                    
                 </ul>

@@ -255,6 +255,38 @@
 </div>
 </script>
 
+<script id="deal-filter-list-collection-template" type="text/html">
+<div class="btn-group" id="filters-tour-step">
+	<button class="btn btn-default btn-sm filter-dropdown ">
+		<i class="icon-filter" style="margin-right:3px"></i>
+	</button>
+	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		<span class="caret"></span>
+		</button>
+	<ul id="deal-filter-list-model-list" class="pull-right dropdown-menu" role="menu">
+		<li>
+			<a href='javascript:void(0)' class='default_deal_filter'>All</a>
+		</li>
+		<li>
+			<a href='javascript:void(0)' class='deal-filter' id='my-deals'>My Deals</a>
+		</li>
+		<li class='divider'></li>
+		<li>
+			<a href='#deal-filters'>Add/Edit Filter&nbsp;&nbsp;
+				<span class='label bg-danger'>Beta</span>
+			</a>
+		</li>
+		{{#if this.length}}
+			<li class='divider'></li>
+		{{/if}}
+	</ul>
+</div>
+</script>
+
+<script id="deal-filter-list-model-template" type="text/html">
+<a href="javascript:void(0)" class="deal-filter" id="{{id}}">{{name}}</a>
+</script>
+
 <script id="deal-filter-collection-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 	<div class="row">

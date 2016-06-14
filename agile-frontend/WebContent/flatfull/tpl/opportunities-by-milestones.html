@@ -13,7 +13,7 @@
             <div class="btn-group inline-block m-l-xs" id="deals-tracks">
 			</div>
 			<div id="deal-list-filters" class="btn-group inline-block m-l-xs">
-				
+							
 			</div>
 			<div class="btn-group inline-block m-l-xs" id="deals-view">
 					<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
@@ -100,7 +100,7 @@
 </div></script>
 
 <script id="opportunities-by-paging-model-template" type="text/html">
-	<div class='dealtitle-angular panel-heading'>
+	<div class='dealtitle-angular panel-heading p-r-xs'>
 		<div class='milestone-heading text-left text-ellipsis'>
 		 <div class="pull-right">
 		    <div style="font-size:14px; float:left">
@@ -108,9 +108,9 @@
 			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="Deals with this milestone are considered as Lost." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="Deals with this milestone are considered as Won." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
 
-			<span id="{{remove_spaces heading}}_count" class="txt-mute badge m-t-xs"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="{{getS3ImagePath '/img/ajax-loader-cursor.gif'}}" width="12px"></span> </div>
+			<span id="{{remove_spaces heading}}_count" class="txt-mute badge"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="{{getS3ImagePath '/img/ajax-loader-cursor.gif'}}" width="12px"></span> </div>
 		</div>
-		 <span class="miltstone-title text-base text-ellipsis v-bottom">{{heading}}</span>
+		 <span class="miltstone-title text-base text-ellipsis">{{heading}}</span>
 		   </div>
 		<span></span>
 	</div>
@@ -164,7 +164,7 @@
 		</small>
 	</div>
 <div class="pull-right">
-<span class="right deal-options text-sm" style="visibility:hidden;">
+<span class="right deal-options vis-hide text-sm">
 			
 			{{#if_equals archived true}}
 			<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
@@ -285,7 +285,7 @@
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">
 <div class="btn-group"  id="pipeline-tour-step">
-	<button class="btn btn-sm btn-default filter-dropdown "><i class="icon-road m-r-xs"/></button>
+	<button class="btn btn-sm btn-default filter-dropdown " id="milestone-view-track"><i class="icon-road m-r-xs"/></button>
 	<button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
     	<span class="caret"></span>
   	</button>

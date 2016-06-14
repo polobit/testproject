@@ -79,7 +79,7 @@ public class UpdateCompanyName implements DeferredTask
     	 NamespaceManager.set(namespace);
     	 Map<String, Object> searchMap = new HashMap<String, Object>();
     	 searchMap.put("type", Type.COMPANY);
-		ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,"",0,200);
+    	 ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,null,200,Integer.MAX_VALUE);
  	// contacts = ContactUtil.getAllContacts(200,null);
 		//fetcher.fetchNextSet();
 		
