@@ -14,6 +14,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.deals.CustomFieldData;
@@ -72,6 +73,9 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		search_tokens.append(" ");
 		search_tokens.append(opportunity.name.replaceAll(" ", ""));
 		
+		doc.addField(Field.newBuilder().setName("name").setText(SearchUtil.normalizeString(opportunity.name.toLowerCase())));
+		fieldLabelsSet.add("name");
+		
 		doc.addField(Field.newBuilder().setName("name_start").setText(opportunity.name.substring(0, 1)));
 	}
 
@@ -119,7 +123,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 	doc.addField(Field.newBuilder().setName("created_time_epoch").setNumber(opportunity.created_time.doubleValue()));
 	
-	fieldLabelsSet.add("created_time_epoch");
+	fieldLabelsSet.add("created_time");
 	
 	// Describes milestone changed time document if milestone changed time is not 0.
 	if (opportunity.milestone_changed_time != null && opportunity.milestone_changed_time > 0)
@@ -130,7 +134,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 		doc.addField(Field.newBuilder().setName("milestone_changed_time_epoch").setNumber(opportunity.milestone_changed_time));
 		
-		fieldLabelsSet.add("milestone_changed_time_epoch");
+		fieldLabelsSet.add("milestone_changed_time");
 	}
 	
 	// Describes close time document if close time is not 0.
@@ -142,7 +146,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 		doc.addField(Field.newBuilder().setName("closed_time_epoch").setNumber(opportunity.close_date));
 		
-		fieldLabelsSet.add("closed_time_epoch");
+		fieldLabelsSet.add("closed_time");
 	}
 	
 	// Describes won date document if won date is not 0.
@@ -154,7 +158,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 		doc.addField(Field.newBuilder().setName("won_time_epoch").setNumber(opportunity.won_date));
 		
-		fieldLabelsSet.add("won_time_epoch");
+		fieldLabelsSet.add("won_time");
 	}
 	
 	Long updatedTime = opportunity.updated_time;
@@ -172,7 +176,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 	doc.addField(Field.newBuilder().setName("updated_time_epoch").setNumber(updatedTime));
 	
-	fieldLabelsSet.add("updated_time_epoch");
+	fieldLabelsSet.add("updated_time");
 	
 	doc.addField(Field.newBuilder().setName("archived").setText(String.valueOf(opportunity.archived)));
 	
@@ -232,6 +236,14 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		doc.addField(Field.newBuilder().setName("related_contacts").setText(StringUtils.join(contactIds, " ")));
 		
 		fieldLabelsSet.add("related_contacts");
+	}
+	
+	addTagFields(opportunity.getTagsList(), doc);
+	
+	if(opportunity.tagsWithTime != null && opportunity.tagsWithTime.size() > 0 && opportunity.tags != null)
+	{
+		doc.addField(Field.newBuilder().setName("tags").setText(StringUtils.join(opportunity.tags, " ")));
+		fieldLabelsSet.add("tags");
 	}
 	
 	/*
@@ -384,5 +396,59 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
 		}
 		return fieldsSet;
+	}
+	
+	/**
+	 * Add tag fields to document as <tagName>_time and it is saved as a date
+	 * field.
+	 * 
+	 * @param tags_json_string
+	 * @param doc
+	 */
+	private void addTagFields(ArrayList<Tag> tags, Document.Builder doc)
+	{
+		if (tags == null || tags.isEmpty())
+			return;
+
+		// Iterates through each tag and creates field for each tag i.e.,
+		// <tagName>_time.
+		for (Tag tag : tags)
+		{
+
+			System.out.println(tag);
+
+			// Tag value
+			String normalizedTag = SearchUtil.normalizeTextSearchString(tag.tag);
+
+			// Created time
+			Long TagCreationTimeInMills = tag.createdTime;
+
+			/*
+			 * Truncate date Document search date is without time component
+			 */
+
+			Date TagCreatedDate = DateUtils.truncate(new Date(TagCreationTimeInMills), Calendar.DATE);
+
+			// If tag doesn't satisfies the regular expression of field name in
+			// document search, field is not added to avoid exceptions while
+			// searching.
+			if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]*$"))
+				continue;
+
+			System.out.println(normalizedTag);
+
+			try
+			{
+				doc.addField(Field.newBuilder().setName(normalizedTag + "_time_epoch")
+						.setNumber(TagCreationTimeInMills.doubleValue() / 1000));
+			}
+			catch (IllegalArgumentException e)
+			{
+				// TODO: handle exception
+				e.printStackTrace();
+
+			}
+		}
+
 	}
 }
