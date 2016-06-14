@@ -104,7 +104,12 @@
 		{{else}}
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
-				{{#if_equals name "CallScript"}}					 
+				{{#if_equals name "CallScript"}}	
+					{{#isAdmin}}
+                           		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
+  									<i class="fa fa-users"></i>
+  				   		   		</a>
+  				   		    {{/isAdmin}}			 
                    <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>                   
                 {{else}}
 		                {{#if_equals name "Twilio"}}
