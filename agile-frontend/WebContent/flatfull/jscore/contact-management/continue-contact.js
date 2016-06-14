@@ -474,6 +474,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 					subtype = $(subelement).val();
 				else
 					addressJSON[$(subelement).attr('name')] = $(subelement).val();
+
+				if($(subelement).attr('name') == 'country')
+					addressJSON['countryname'] = $(subelement).find('option:selected').text();
 			});
 
 			if ($.isEmptyObject(addressJSON))
