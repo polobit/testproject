@@ -72,6 +72,8 @@ $(function()
     	if(e.which == 13 )
     		{
     			$(".dial-number").trigger('click');
+    			
+    			$("#dialler-phone-number-form").submit();
     		}
 	});
 	
@@ -94,7 +96,8 @@ $(function()
 			  		$("#diallerInfoModal").modal("show");
 			  		return;
 			  	}
-			  		
+			  
+			  	$("#dialler-phone-number-form").submit();
 			  if(checkForActiveCall()){
 				  alert("Already on call.");
 					return;

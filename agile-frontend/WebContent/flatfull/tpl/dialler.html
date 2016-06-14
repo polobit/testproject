@@ -61,8 +61,11 @@
 		<div  id="clear-dialler" style="float: right;height: 0px;top: 7px;position: relative;left: -5px;">
 			<span class="clear-dialler c-p">X</span>
 		</div>
-		<input type = "text" name="dail_phone_number" id="dail_phone_number" style="width: 100%;padding: 5px; border:none; border-bottom: 1px solid rgb(191, 200, 203);" />
 
+<iframe id="remember-dialler" name="remember-dialler" class="hidden" src=""></iframe>
+<form autocomplete="on" id="dialler-phone-number-form" action="/content/blank" method="post" target="remember-dialler">
+		<input type = "text" placeholder="Enter phone number" autocomplete="on" name="dail_phone_number" id="dail_phone_number" style="width: 100%;padding: 5px; border:none; border-bottom: 1px solid rgb(191, 200, 203);" />
+</form>
 		</div>	
 
 	<div style="font-size: 28px;">

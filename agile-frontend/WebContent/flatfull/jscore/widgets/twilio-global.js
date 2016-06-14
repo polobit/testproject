@@ -1385,6 +1385,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 function showNewContactModal(phoneNumber) {
 	$('#personModal').modal('show');
 	$("#personForm").find("#phone").val(phoneNumber);
+	$("#personForm").find("#phone").removeClass("phone"); 
 	return;
 }
 
