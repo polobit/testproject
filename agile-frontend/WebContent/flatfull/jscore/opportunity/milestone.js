@@ -271,7 +271,7 @@ function setup_deals_in_milestones(id){
 				if(dealsCollection)
 				{
 					var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
-					$("#moved-deal").html("<li><div class='text-ellipsis'>"+dealModel.get('name')+"</div></li>");
+					$("#moved-deal").html("<li>Deal:</li><li><div class='text-ellipsis'>"+dealModel.get('name')+"</div></li>");
 				}
 				$(ui.draggable).remove();
 				$("li.ui-sortable-placeholder").remove();

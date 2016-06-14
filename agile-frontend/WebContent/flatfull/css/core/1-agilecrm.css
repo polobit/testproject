@@ -4089,6 +4089,21 @@ border-bottom:1px solid #eee;
     text-overflow: ellipsis;
 }
 
+#moved-deal li:first-child {
+  list-style-type: none;
+  width: 200px;
+  z-index: 1000;
+  left: 22%;
+  float: right;
+  margin-top: -10px;
+  position: absolute;
+  padding-left: 10px;
+  padding-top: 10px;
+  background: none!important;
+  border: none!important;
+  font-weight: bold;
+}
+
 #moved-deal li {
   list-style-type: none;
     width: 200px;
