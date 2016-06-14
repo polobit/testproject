@@ -445,13 +445,12 @@ function showTwitterProfile(Twitter_id)
 			 		if(!template_ui)
 			    		return;
 			    	var element = $(template_ui);
-			    	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$(".time-ago", element).timeago();
-					});
 
 					// Template is populated with update details and shown
 					$('#twitter_social_stream').append(element);
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+						$(".time-ago", $('#twitter_social_stream')).timeago();
+					});
 
 					return;
 					

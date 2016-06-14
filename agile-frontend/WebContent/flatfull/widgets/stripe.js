@@ -156,14 +156,13 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	    		return;
 	    	
 	    	var stripe_template = $(template_ui);
-	    	// Load jquery time ago function to show time ago in invoices
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", stripe_template).timeago();
-			});
 
 			// Show the template in Stripe widget panel
 			$('#Stripe').html(stripe_template);
+			// Load jquery time ago function to show time ago in invoices
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+				$(".time-ago", $('#Stripe')).timeago();
+			});
 
 			stripeOBJ = {};
 			stripeINVCount = 1;

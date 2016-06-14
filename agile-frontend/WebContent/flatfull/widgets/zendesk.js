@@ -153,9 +153,8 @@ function loadZENTickets(offSet){
 		});
 		
 		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(template_ui)
-		{
-			$(".time-ago", template_ui).timeago();
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+			$(".time-ago", $('#all_tickets_panel')).timeago();
 		});
 	}else if(offSet > 0  && (offSet + 5) < ZENTickets.length){
 		var result = {};
@@ -164,11 +163,19 @@ function loadZENTickets(offSet){
 		console.log(result);
 		$('.zen_show_more').remove();
 		$('#all_tickets_panel').append(getTemplate('zendesk-ticket-stream', result)).append(showMoreHtmlZEN);
+		// Load jquery time ago function to show time ago in tickets
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+			$(".time-ago", $('#all_tickets_panel')).timeago();
+		});
 	}else{
 		var result = {};
 		result = ZENTickets.slice(offSet, ZENTickets.length);
 		$('.zen_show_more').remove();
 		$('#all_tickets_panel').append(getTemplate('zendesk-ticket-stream', result));
+		// Load jquery time ago function to show time ago in tickets
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+			$(".time-ago", $('#all_tickets_panel')).timeago();
+		});
 	}
 }
 

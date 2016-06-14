@@ -52,10 +52,9 @@ function showXeroClient(contact_id)
 		    		return;
 		    	var template = $('#Xero').html($(template_ui)); 
 				console.log("libpath is" + LIB_PATH);
-				console.log(template)
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".time-ago", template).timeago();
+				console.log(template);
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+					$(".time-ago", $('#Xero')).timeago();
 				});
 				loadInvoices(0);
 			}, "#Xero");

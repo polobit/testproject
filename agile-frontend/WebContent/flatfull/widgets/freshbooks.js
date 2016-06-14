@@ -192,7 +192,7 @@ function getInvoicesOfClient(client_id, offSet)
 			// Load jquery time ago function to show time ago in invoices
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
-				$(".time-ago", freshbooks_invoice_template).timeago();
+				$(".time-ago", $('#freshbooks_invoice_panel')).timeago();
 			});
 
 			$('#freshbooks_invoice_load').remove();

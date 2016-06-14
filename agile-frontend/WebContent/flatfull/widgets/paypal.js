@@ -21,9 +21,7 @@ function loadPaypalInvoices(offSet){
 		getTemplate('paypal-invoices', result, undefined, function(template_inv){						
 			$('#PayPal').html(template_inv);
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#PayPal')).each(function(){
-  					$(this).text(jQuery.timeago($(this).text()));
-				});							
+				$( ".time-ago", $('#PayPal')).timeago();
 			});
 		},null);
 
@@ -37,9 +35,10 @@ function loadPaypalInvoices(offSet){
 		getTemplate('paypal-invoices', result, undefined, function(template_inv){
 			$('#PayPal').apped(template_inv);
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#PayPal')).each(function(){
-  					$(this).text(jQuery.timeago($(this).text()));
-				});							
+				$( ".time-ago", $('#PayPal')).timeago();
+				// $( ".time-ago", $('#PayPal')).each(function(){
+  		// 			$(this).text(jQuery.timeago($(this).text()));
+				// });							
 			});
 			$('#PayPal').append(showMorePaypalINV);
 		});		
@@ -50,9 +49,7 @@ function loadPaypalInvoices(offSet){
 		getTemplate('paypal-invoices', result, undefined, function(template_inv){
 			$('#PayPal').append(template_inv);
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#PayPal')).each(function(){
-  					$(this).text(jQuery.timeago($(this).text()));
-				});							
+				$( ".time-ago", $('#PayPal')).timeago();						
 			});
 		});
 	}
