@@ -101,13 +101,12 @@ deleteItem : function(e)
 deleteModel : function(e)
 {
 	e.preventDefault();
-	if(!confirm("Are you sure you want to delete?"))
-		return false;
-
-	$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
-		location.reload(true);
-	}
-        });
+	showAlertModal("delete", "confirm", function(){
+		$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
+			location.reload(true);
+			}
+	    });
+	});
 	
 },
 

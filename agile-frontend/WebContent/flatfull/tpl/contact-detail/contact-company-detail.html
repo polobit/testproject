@@ -380,10 +380,11 @@
 
 
  									{{#property_is_exists "address" properties}}
- 									<div class="m-b-sm">
+ 									
+ 									{{#property_json_is_not_empty "address" properties}} 
+ 									  <div class="m-b-sm">
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
- 									  {{#property_json_is_not_empty "address" properties}}
 									<small class="text-base text-muted">Location</small>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
@@ -392,10 +393,11 @@
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
 											</div>
 										</div>
+										 </div>
+									 </div>
+									 </div>
 									  {{/property_json_is_not_empty}}
-									 </div>
-									 </div>
-									 </div>
+									
 									{{/property_is_exists}}
 <div class="clearfix"></div>
 <!-- ending funda for contact detail edit -->
@@ -430,7 +432,9 @@
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"
 									style='text-decoration: none;'> 
-								<img class='b-2x r-2x upload_pic imgholder submit' style="width:46px;height:57px" type="submit"
+
+								<img class='b-2x r-2x upload_pic imgholder submit' style="width:46px;height:46px" type="submit"
+
 									{{getCompanyImage "80" "display:inline;"}} /> 
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
@@ -777,12 +781,13 @@
 
 
 
- 									{{#property_is_exists "address" properties}}
- 									<div class="wrapper" style="padding-top:0px;">
+ 						{{#property_is_exists "address" properties}}
+ 									
+ 						  {{#property_json_is_not_empty "address" properties}}
+ 						  <div class="wrapper" style="padding-top:0px;">
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
- 									  {{#property_json_is_not_empty "address" properties}}
-									<small class="text-base text-muted">Location</small>
+								<small class="text-base text-muted">Location</small>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
@@ -790,10 +795,11 @@
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
 											</div>
 										</div>
+										 </div>
+									 </div>
+									 </div>
 									  {{/property_json_is_not_empty}}
-									 </div>
-									 </div>
-									 </div>
+									
 									{{/property_is_exists}}
 <div class="clearfix"></div>
 <!-- ending funda for contact detail edit -->

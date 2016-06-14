@@ -206,7 +206,7 @@ $(function(){
 
 		if (Twilio.Device.status() == "busy"  || checkForActiveCall())
 		{
-			alert("Already on call.");
+			showAlertModal("on_call");
 			return;
 		}
 
@@ -215,7 +215,7 @@ $(function(){
 		if(CALL_CAMPAIGN.start )
 			  {
 				if(CALL_CAMPAIGN.state == "PAUSE"){
-					alert("Already on call");
+					showAlertModal("on_call");
 					return;
 				}
 				CALL_CAMPAIGN.state = "PAUSE" ;
@@ -471,7 +471,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		// If no numbers
 		if (!twilioNumbers[0].PhoneNumber)
 		{
-			alert("You have no twilio numbers. Please buy or port a number in your Twilio account.");
+			showAlertModal("no_twilio_numbers");
 			return;
 		}
 
@@ -504,7 +504,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		// If no numbers
 		if (!verifiedNumbers[0].PhoneNumber)
 		{
-			alert("You have no verified numbers. Please verify number in your Twilio account.");
+			showAlertModal("no_verified_num");
 			return;
 		}
 
@@ -565,8 +565,10 @@ function setToValidate(data, showAlert)
 	console.log("Twilio error ");
 	console.log(data);
 
-	if (showAlert)
-		alert("Please enter valid details.");
+	if (showAlert){
+		showAlertModal("valid_details");
+		return;
+	}
 
 	// Reset form fields after sending email
 	$("#twilioio_login_form").each(function()
@@ -673,33 +675,35 @@ function createAppSid(twilioio_prefs, callback)
 	{
 		console.log("Twilio get app sid error ");
 		console.log(data);
+		var that = this;
+		showAlertModal("valid_details_try_again", undefined, function(){
+			$("#save_prefs").text("Save");
+			$("#save_prefs").attr("disabled", false);
+			$("#save_prefs").hide();
+			$("#validate_account").text("Validate");
+			$("#validate_account").attr("disabled", false);
+			$("#validate_account").show();
 
-		alert("Please try again with valid details.");
+			// Show twilio from numbers list
+			$("#twilio_from_numbers").hide();
 
-		$("#save_prefs").text("Save");
-		$("#save_prefs").attr("disabled", false);
-		$("#save_prefs").hide();
-		$("#validate_account").text("Validate");
-		$("#validate_account").attr("disabled", false);
-		$("#validate_account").show();
+			// Show twilio numbers list
+			$("#twilio_numbers").hide();
 
-		// Show twilio from numbers list
-		$("#twilio_from_numbers").hide();
-
-		// Show twilio numbers list
-		$("#twilio_numbers").hide();
-
-		// Hide record call option on form
-		//$("#twilio_recording").hide();
-		
-		// Hide twimlet url controls
-		//$("#twilio_twimlet_url_controls").hide();
-		
-		// Reset form fields after sending email
-		$("#twilioio_login_form").each(function()
-		{
-			this.reset();
+			// Hide record call option on form
+			//$("#twilio_recording").hide();
+			
+			// Hide twimlet url controls
+			//$("#twilio_twimlet_url_controls").hide();
+			
+			// Reset form fields after sending email
+			$("#twilioio_login_form").each(function()
+			{
+				that.reset();
+			});
 		});
+
+		
 	});
 }
 
@@ -780,7 +784,7 @@ function setUpGlobalTwilio()
 			if (Twilio.Device.status() == "busy")
 			{
 				if(!(CALL_CAMPAIGN.start && CALL_CAMPAIGN.call_from_campaign)){
-					alert("A connection is currently active.");
+					showAlertModal("active_connection");
 					return;
 				}
 			}

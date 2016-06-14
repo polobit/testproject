@@ -240,49 +240,50 @@ function resubscribe()
 		e.preventDefault();
 
 		var $element = $(event.target);
+		var $that = $(this);
+		showAlertModal("Are you sure to resubscribe " + $(this).attr("contact_name") + " to " + $(this).attr("campaign_name") + " campaign?", "confirm", function(){
+			var campaign_id = $that.attr('data');
 
-		if (!confirm("Are you sure to resubscribe " + $(this).attr("contact_name") + " to " + $(this).attr("campaign_name") + " campaign?"))
-			return;
-		
-		var campaign_id = $(this).attr('data');
+			var json = {};
+			json["id"] = App_Contacts.contactDetailView.model.get('id');
+			json["workflow-id"] = campaign_id;
 
-		var json = {};
-		json["id"] = App_Contacts.contactDetailView.model.get('id');
-		json["workflow-id"] = campaign_id;
-
-		if(campaign_id == "ALL")
-		{
-			var workflow_ids = [];
-
-			$.each(App_Contacts.contactDetailView.model.toJSON()["unsubscribeStatus"], function(index, value){
-               
-				workflow_ids.push(value.campaign_id);
-			});
-
-			json["workflow-id"] = workflow_ids.join(',');
-		}
-
-		$.ajax({
-			url: 'core/api/campaigns/resubscribe',
-			type: 'POST',
-			data: json,
-			success: function(data){
-				
-				// To update campaigns tab
-				unsubscribe_status_updated = true;
-
-				$element.closest('li').remove();
-
-				// Remove All option too
-				$('ul#added-tags-ul').find("a[data='ALL']").closest('li').remove();
-
-			},
-			error: function(response)
+			if(campaign_id == "ALL")
 			{
-				
+				var workflow_ids = [];
 
+				$.each(App_Contacts.contactDetailView.model.toJSON()["unsubscribeStatus"], function(index, value){
+	               
+					workflow_ids.push(value.campaign_id);
+				});
+
+				json["workflow-id"] = workflow_ids.join(',');
 			}
-		});
+
+			$.ajax({
+				url: 'core/api/campaigns/resubscribe',
+				type: 'POST',
+				data: json,
+				success: function(data){
+					
+					// To update campaigns tab
+					unsubscribe_status_updated = true;
+
+					$element.closest('li').remove();
+
+					// Remove All option too
+					$('ul#added-tags-ul').find("a[data='ALL']").closest('li').remove();
+
+				},
+				error: function(response)
+				{
+					
+
+				}
+			});
+		},undefined, "Resubscribe");
+		
+		
 
 	});
 

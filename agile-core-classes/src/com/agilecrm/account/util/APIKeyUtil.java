@@ -217,4 +217,26 @@ public class APIKeyUtil
     private static DatastoreService getDataStore(){
     	return CachingDatastoreServiceFactory.getDatastoreService();
     }
+    
+    /**
+     * Returns domain user related ot API key. Domain user key is stored in
+     * APIKey entity. Queries with APIKey and fetches domain user based on key
+     * saved in owner field
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static DomainUser getDomainUserRelatedToAPIKeyJS(String apiKey)
+    {
+	// Fetches APIKey object and returns domain user key.
+	
+	Key<DomainUser> userKey = getAPIKeyDomainOwnerKey(apiKey);
+
+	if (userKey == null)
+	    return null;
+
+	// Fetches domain user based on domainUser id
+	return DomainUserUtil.getDomainUser(userKey.getId());
+
+    }
 }

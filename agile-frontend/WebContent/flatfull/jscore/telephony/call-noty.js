@@ -350,6 +350,9 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var s = status;
 	var n = number;
 	var arr = btns;
+	if(!c){
+		c = {};
+	}
 	if(json){
 		c['callId'] = json.callId;
 	}

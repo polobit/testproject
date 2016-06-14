@@ -61,7 +61,7 @@
 			},
 			onChange: function(formated, dates){
 				$('#inputDate').val(formated);
-				if ($('#closeOnSelect input').attr('checked')) {
+				if ($('#closeOnSelect input').prop('checked')) {
 					$('#inputDate').DatePickerHide();
 				}
 			}

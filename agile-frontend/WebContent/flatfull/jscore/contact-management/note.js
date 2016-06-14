@@ -109,7 +109,7 @@ $(function()
 			return;
 		}
 		disable_save_button($(this));
-		
+			
 		// Shows loading symbol until model get saved
 		//$('#noteModal').find('span.save-status').html(getRandomLoadingImg());
 
@@ -147,9 +147,10 @@ $(function()
 		// Removes appended contacts from related-to field
 		$("#noteForm").find("li").remove();
 
-		// Remove value of input field
-		$("#from_task", "#noteForm").val("");
-		$("#task_form", "#noteForm").val("");
+		$("#noteForm", $('#noteModal')).each(function()
+		{
+			this.reset();
+		});
 		
 		// Removes validation error messages
 		remove_validation_errors('noteModal');
@@ -202,6 +203,12 @@ $(function()
 			 */
 			if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
 			{
+				var can_edit = false;
+				if(notesView && notesView.collection && note.contacts && note.contacts.length == 0)
+				{
+					notesView.collection.remove(note.id);
+					notesView.collection.sort();
+				}
 				$.each(note.contacts, function(index, contact)
 				{
 					if (contact.id == App_Contacts.contactDetailView.model.get('id'))
@@ -211,6 +218,7 @@ $(function()
 						// contact detail view
 						// activate_timeline_tab();
 						add_entity_to_timeline(data);
+						can_edit = true;
 						/*
 						 * If timeline is not defined yet, initiates with the
 						 * data else inserts
@@ -219,7 +227,40 @@ $(function()
 					}
 
 				});
+				if(!can_edit)
+				{
+					notesView.collection.remove(note.id);
+					notesView.collection.sort();
+				}
+			}
+		},
+		error : function(data, response){
+			if(response && response.status == 403)
+			{
+				enable_save_button($(element));
+				$('span.save-status', modal).html("<i style='color:#B94A48;'>"+Handlebars.compile('{{name}}')({name : response.responseText})+"</i>");
+				setTimeout(function()
+				{
+					$('span.save-status', modal).html('');
+				}, 4000);
 			}
 		} });
+	}
+
+	function disableBtnAndSaveNote(that)
+	{
+		disable_save_button($(that));
+			
+		// Shows loading symbol until model get saved
+		//$('#noteModal').find('span.save-status').html(getRandomLoadingImg());
+
+		var json = serializeForm("noteForm");
+
+		console.log(json.from_task);
+		
+		if(json.from_task == "true")
+			saveNoteOfTask($("#noteForm"), $("#noteModal"), that, json);
+		else		
+		    saveNote($("#noteForm"), $("#noteModal"), that, json);
 	}
 });

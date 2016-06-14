@@ -233,7 +233,7 @@ function qr_load(){
 		      alert('You have cancelled the saving of this file.');
 		    },*/
 		    onError: function(){ 
-		      alert('Error downloading a file!'); 
+          showAlertModal("download_error");
 		    },
 		    transparent: false,
 		    swf: 'media/downloadify.swf',
@@ -676,6 +676,24 @@ show and hide the input for editing the contact name and saving that
     // Change owner of the contact
     onChangeOwner : function(e){
          e.preventDefault();
+         	var contact_owner = $(e.currentTarget).attr("data");
+         	var error_msg = "You do not have permission to change owner.";
+    			if(!hasScope("EDIT_CONTACT"))
+    			{
+    				showModalConfirmation("Owner Change", 
+    						error_msg, 
+    						function (){
+    							return;
+    						}, 
+    						function(){
+    							return;
+    						},
+    						function() {
+    							
+    						},
+    						"Cancel", "");
+    				return;
+    			}
          fill_owners(undefined, undefined, function(){
 
 	    	$('#contact-owner').css('display', 'none');
@@ -729,13 +747,12 @@ show and hide the input for editing the contact name and saving that
     onContactDetailsDelete : function(e){
 
     	e.preventDefault();
-		if(!confirm("Do you want to delete the contact?"))
-    		return;
-		
-		App_Contacts.contactDetailView.model.url = "core/api/contacts/" + App_Contacts.contactDetailView.model.id;
-		App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
-			  Backbone.history.navigate("contacts",{trigger: true});
-		}});
+      showAlertModal("delete_contact", "confirm", function(){
+        App_Contacts.contactDetailView.model.url = "core/api/contacts/" + App_Contacts.contactDetailView.model.id;
+        App_Contacts.contactDetailView.model.destroy({success: function(model, response) {
+            Backbone.history.navigate("contacts",{trigger: true});
+        }});
+      });
 		
     },
 
@@ -770,19 +787,28 @@ show and hide the input for editing the contact name and saving that
        				
        			// Updates to both model and collection
 	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
-	       			
-	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
-       				
-       				// Also deletes from Tag class if no more contacts are found with this tag
-       				$.ajax({
-       					url: 'core/api/tags/' + tag,
-       					type: 'DELETE',
-       					success: function()
-       					{
-       						if(tagsCollection)
-       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-       					}
-       				});
+            //  App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+              //Check if any deals are having the tag.If yes dont remove it from the app
+              $.ajax({
+                url: 'core/api/opportunity/based/tags?tag=' + tag,
+                type: 'GET',
+                success: function(data)
+                { 
+                  console.log(data);
+                  if(data == "fail"){
+                      // Also deletes from Tag class if no more contacts are found with this tag
+                    $.ajax({
+                      url: 'core/api/tags/' + tag,
+                      type: 'DELETE',
+                      success: function()
+                      {
+                      if(tagsCollection)
+                        tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+                      }
+                    });
+                  }
+                }
+              });
        			}
         });
 	
@@ -877,7 +903,7 @@ show and hide the input for editing the contact name and saving that
 		       		},
 		       		error: function(model,response){
 		       			console.log(response);
-		       			alert(response.responseText);
+                showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
 		       		}
 		        });
 			});
@@ -1138,6 +1164,8 @@ enterCompanyScore: function(e){
 	{
 		e.preventDefault();
 		contact_details_documentandtasks_actions.add_deal(e);
+		// To set typeahead for tags
+		setup_tags_typeahead(); 
 
 	},
 
@@ -1359,15 +1387,28 @@ enterCompanyScore: function(e){
 	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
        				
        				// Also deletes from Tag class if no more contacts are found with this tag
-       				$.ajax({
-       					url: 'core/api/tags/' + tag,
-       					type: 'DELETE',
-       					success: function()
-       					{
-       						if(tagsCollection)
-       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-       					}
-       				});
+
+       			 //Check if any deals are having the tag.If yes dont remove it from the app
+              $.ajax({
+                url: 'core/api/opportunity/based/tags?tag=' + tag,
+                type: 'GET',
+                success: function(data)
+                { 
+                  console.log(data);
+                  if(data == "fail"){
+                      // Also deletes from Tag class if no more contacts are found with this tag
+                    $.ajax({
+                      url: 'core/api/tags/' + tag,
+                      type: 'DELETE',
+                      success: function()
+                      {
+                      if(tagsCollection)
+                        tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+                      }
+                    });
+                  }
+                }
+              });
        			}
         });
 	},
@@ -1391,19 +1432,19 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
-			alert("Please enter a valid number.");
-			scoreboxval=prvs;
+		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
+      showAlertModal("number_validation", undefined, function(){
+        scoreboxval=prvs;
+        setleadScoreStyles(scoreboxval);
+      });
+      return;
 		}
 		else{
 			if(scoreboxval== prvs){
 			scoreboxval=prvs;
 			}
 		}
-		$('#lead-contactscore').attr("data-original-title", scoreboxval);
-		$('#lead-contactscore').text(scoreboxval).removeClass("hide");
-	   	$("#scorebox").addClass("hide").val(scoreboxval);
-	   	$("#lead-contactscore").attr("title",scoreboxval);
+		setleadScoreStyles(scoreboxval);
 	},
 
 	updateCompanyScoreValue :function(){
@@ -1426,19 +1467,19 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)){
-			alert("Please enter a valid number.");
-			scoreboxval=prvs;
+		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
+      showAlertModal("number_validation", undefined, function(){
+        scoreboxval=prvs;
+        setleadScoreStyles(scoreboxval);
+      });
+      return;
 		}
 		else{
 			if(scoreboxval== prvs){
 				scoreboxval=prvs;
 			}
 		}
-		$('#lead-cscore').attr("data-original-title", scoreboxval);
-		$('#lead-cscore').text(scoreboxval).removeClass("hide");
-	   	$("#cscorebox").addClass("hide").val(scoreboxval);
-	   	$("#lead-cscore").attr("title",scoreboxval);
+		setleadScoreStyles(scoreboxval)
 	}
 });
 
@@ -1536,4 +1577,10 @@ function epochToHumanDate(format,date)
 
 		return d
 
+}
+function setleadScoreStyles(scoreboxval){
+  $('#lead-score').attr("data-original-title", scoreboxval);
+  $('#lead-score').text(scoreboxval).removeClass("hide");
+  $("#scorebox").addClass("hide").val(scoreboxval);
+  $("#lead-score").attr("title",scoreboxval);
 }
