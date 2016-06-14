@@ -77,7 +77,7 @@ public class CallNode extends TaskletAdapter
 	    if (StringUtils.isNullOrEmpty(firstCall) || StringUtils.isNullOrEmpty(from))
 	    {
 		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-			"Call failed", LogType.CALL_FAILED.toString());
+			"Call failed due to - Invalid phone number", LogType.CALL_FAILED.toString());
 		
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
