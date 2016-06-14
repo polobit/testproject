@@ -130,6 +130,9 @@ public class ContactFilterIdsResultFetcher
 	    }
 
 	}
+	
+	if (domainUserId != null)
+	    BulkActionUtil.setSessionManager(domainUserId);
 
 	if (this.filter != null)
 	{
@@ -144,9 +147,6 @@ public class ContactFilterIdsResultFetcher
 
 	    filter.rules.add(rule);
 	}
-
-	if (domainUserId != null)
-	    BulkActionUtil.setSessionManager(domainUserId);
 
     }
 

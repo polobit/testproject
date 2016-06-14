@@ -164,8 +164,6 @@ public class ContactFilterResultFetcher
 	    System.out.println("Exception while parsing dynamic filters for bulk operations : " + e);
 	}
 
-	//BulkActionUtil.setSessionManager(domainUserId);
-
 	setAvailableCount();
 
     }
