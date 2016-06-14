@@ -162,11 +162,11 @@ padding-left:10px!important;
 		function validateAndSubmit() {
 			var subdomain = $("#subdomain").val();
 			// validates the domain value
-			if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 20 
+			if(subdomain == null || subdomain == "" || subdomain.length < 2 || subdomain.length > 20 
 		        || !isAlphaNumeric(subdomain) || !isNotValid(subdomain))
 			{
 				//shows error message
-				if(!error)error = "Domain should be 4 to 20 characters."
+				if(!error)error = "Domain should be 2 to 20 characters."
 				$("#domain-error").html('<div class="alert alert-error domain-error">'
 						+ '<a class="close" data-dismiss="alert" href="#">&times</a>'+ error +'</div>');
 				error = "";
