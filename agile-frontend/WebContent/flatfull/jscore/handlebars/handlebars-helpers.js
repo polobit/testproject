@@ -7369,7 +7369,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 	Handlebars.registerHelper('is_acl_allowed', function(options)
 	{
-		if(_plan_restrictions.is_ACL_allowed[0]() || checkForSpecialUsers())
+		if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers())
 			return options.inverse(this);
 		else
 			return options.fn(this);
