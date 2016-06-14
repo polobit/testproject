@@ -808,13 +808,9 @@ function setupTracksAndMilestones(el){
 				}
 				if(is_first_track)
 				{
-					$('#new-track-list-paging').find('#moving-tracks').html("");
+					$('#new-track-list-paging').find('#moving-tracks').html("<div style='font-size:18px;' class='m-t-xs'>Tracks & Milestones</div>");
 					style_class += " m-t-sm";
 					is_first_track = false;
-				}
-				if(index == 0)
-				{
-					$("#moving-tracks", $('#new-track-list-paging')).append("<div style='font-size:18px;' class='m-t-xs'>Tracks & Milestones</div>");
 				}
 				$('#new-track-list-paging').find('#moving-tracks').append("<div class='"+style_class+" p-r'><div class='text-md m-b-xs'>"+track.name+"</div><div id='"+track.id+"' style='border: 1px solid #dee5e7;'></div></div>")
 				var milestones = track.milestones.split(",");
