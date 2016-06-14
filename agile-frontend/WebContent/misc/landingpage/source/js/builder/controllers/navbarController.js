@@ -71,9 +71,11 @@ angular.module('builder').controller('NavbarController', ['$scope', '$rootScope'
 		
 		//wait 400 ms till css transition ends so we can
 		//get an accurate offset
-		$timeout(function(){
+		// $timeout(function(){
 			$rootScope.frameOffset = $scope.frame.offset();
-		}, 450);
+		// }, 450);
+
+		console.log("offset"+ $scope.frame.offset());
 
 		$scope.selectBox.hide();
 		$scope.hoverBox.hide();
