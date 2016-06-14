@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.util.APIKeyUtil;
+import com.agilecrm.apilimitcheck.APILimitCheck;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -118,6 +119,10 @@ public class BasicAuthFilter implements Filter
 			try
 			{
 			    setUser(domainUser);
+			    
+			    // Validate with Agile API Limits
+			    APILimitCheck.checkAPILimit(domainUser.domain);
+			    
 			    chain.doFilter(httpRequest, httpResponse);
 			    return;
 			}
