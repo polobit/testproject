@@ -130,6 +130,11 @@ public class ContactFilterResultFetcher
 		getDomainUser());
 
 	System.out.println(access.getCurrentUserScopes());
+	
+	if(domainUserId != null)
+	{
+		BulkActionUtil.setSessionManager(domainUserId);
+	}
 
 	try
 	{
@@ -159,7 +164,7 @@ public class ContactFilterResultFetcher
 	    System.out.println("Exception while parsing dynamic filters for bulk operations : " + e);
 	}
 
-	BulkActionUtil.setSessionManager(domainUserId);
+	//BulkActionUtil.setSessionManager(domainUserId);
 
 	setAvailableCount();
 
