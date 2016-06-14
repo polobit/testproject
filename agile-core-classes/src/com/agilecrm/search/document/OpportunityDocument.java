@@ -242,8 +242,12 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	
 	if(opportunity.tagsWithTime != null && opportunity.tagsWithTime.size() > 0 && opportunity.tags != null)
 	{
-		doc.addField(Field.newBuilder().setName("tags").setText(StringUtils.join(opportunity.tags, " ")));
-		fieldLabelsSet.add("tags");
+		String tags = SearchUtil.normalizeTagsSet(opportunity.tags);
+		if(tags != null)
+		{
+			doc.addField(Field.newBuilder().setName("tags").setText(SearchUtil.normalizeTagsSet(opportunity.tags)));
+			fieldLabelsSet.add("tags");
+		}
 	}
 	
 	/*
@@ -338,9 +342,27 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 			    builder.setNumber(Double.valueOf(data.value));
 			    doc.addField(Field.newBuilder().setNumber(Double.valueOf(data.value)));
 			    
-			    fieldsSet.add(SearchUtil.normalizeTextSearchString(data.name) + "_time_epoch");
+			    fieldsSet.add(SearchUtil.normalizeTextSearchString(data.name) + "_time");
 			}
 			catch (NumberFormatException e)
+			{
+			    e.printStackTrace();
+			}
+		    }
+		    else if (fieldDef != null && fieldDef.field_type == CustomFieldDef.Type.NUMBER)
+		    {
+			try
+			{
+				if(StringUtils.isEmpty(data.value))
+				{
+					continue;
+				}
+				
+			    doc.addField(Field.newBuilder().setName(SearchUtil.normalizeTextSearchString(data.name) + "_number")
+				    .setNumber(Double.valueOf(data.value)));
+			    fieldsSet.add(SearchUtil.normalizeTextSearchString(data.name) + "_number");
+			}
+			catch (Exception e)
 			{
 			    e.printStackTrace();
 			}
