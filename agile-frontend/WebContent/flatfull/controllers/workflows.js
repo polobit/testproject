@@ -60,7 +60,7 @@ var WorkflowsRouter = Backbone.Router
 
 				var sortKey = _agile_get_prefs("workflow_sort_key");
 				if(sortKey == undefined || sortKey == null){
-					sortKey = "name";
+					sortKey = "name_dummy";
 					_agile_set_prefs("workflow_sort_key", sortKey);
 				}
 				this.workflow_list_view = new Workflow_Collection_Events({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,

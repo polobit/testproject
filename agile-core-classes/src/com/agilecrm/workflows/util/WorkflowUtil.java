@@ -112,7 +112,7 @@ public class WorkflowUtil
 			map.put("access_level in", set);
 		}
 		if(orderBy == null)
-			orderBy = "name";
+			orderBy = "name_dummy";
 		List<Workflow> list = dao.fetchAllByOrder(orderBy, map);
 		if(allowCampaign == null)
 			  return list;
@@ -163,7 +163,7 @@ public class WorkflowUtil
 	public static List<Workflow> getAllWorkflows(int max, String cursor, String orderBy)
 	{
 		if(orderBy == null)
-			orderBy = "name";
+			orderBy = "name_dummy";
 		Long userId = DomainUserUtil.getCurentUserId();
 		Map map = new HashMap();
 		
