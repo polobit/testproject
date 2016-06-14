@@ -1366,7 +1366,8 @@ function startTwitterWidget(contact_id){
     $("#"+WIDGET_PARENT_ID).off('click','#Twitter_plugin_delete');
 	$("#"+WIDGET_PARENT_ID).on('click','#Twitter_plugin_delete', function(e)
 	{
-		e.preventDefault();		
+		e.preventDefault();	
+		$('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);		
 		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', twitter_web_url, function(data){
 				console.log("In twitter delete callback");
 				getTwitterMatchingProfiles(contact_id);
