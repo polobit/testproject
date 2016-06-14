@@ -138,11 +138,11 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	{
 		Date closeDate = DateUtils.truncate(new Date(opportunity.close_date * 1000), Calendar.DATE);
 
-		doc.addField(Field.newBuilder().setName("close_time").setDate(closeDate));
+		doc.addField(Field.newBuilder().setName("closed_time").setDate(closeDate));
 
-		doc.addField(Field.newBuilder().setName("close_time_epoch").setNumber(opportunity.close_date));
+		doc.addField(Field.newBuilder().setName("closed_time_epoch").setNumber(opportunity.close_date));
 		
-		fieldLabelsSet.add("close_time_epoch");
+		fieldLabelsSet.add("closed_time_epoch");
 	}
 	
 	// Describes won date document if won date is not 0.
