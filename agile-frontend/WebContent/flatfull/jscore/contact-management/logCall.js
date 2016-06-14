@@ -452,7 +452,17 @@ function saveLogPhone(form, modal, element, logPhone)
 		
 		
 	},
-	  error: function(){
+	  error: function(model, response){
+	  	if(response && response.status == 403)
+	  	{
+	  		enable_save_button($(element));
+	  		$('span.save-status', modal).html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+Handlebars.compile('{{name}}')({name : response.responseText})+'</i></p></div>');
+			setTimeout(function()
+			{
+				$('span.save-status', modal).html('');
+			}, 2000);
+			return;
+	  	}
 		  $(".logPhone-save-status").html("Could not save. Please try again");
 		    console.log('error');
 		    enable_save_button($(element));

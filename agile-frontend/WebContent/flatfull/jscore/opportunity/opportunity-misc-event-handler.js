@@ -4,6 +4,7 @@ $(function()
 	{
 		e.preventDefault();
 		show_deal();
+		setup_tags_typeahead();
 	});
 
  	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
@@ -43,7 +44,68 @@ $(function()
 		var json = serializeForm(form_id);
 		json["custom_data"] = serialize_custom_fields(form_id);
 		json["colorName"]  = color[colorcode];
+		var tagsSourceId = 'tags_source_person_modal';          
+        if (tagsSourceId === undefined || !tagsSourceId || tagsSourceId.length <= 0)
+                tagsSourceId = form_id;
+        var tagobj = get_tags(tagsSourceId);
+        var i;
+        var tags;
+        for (i = 0; i < tagobj.length ; i++) {
+                        if(tagobj[i].value != "")
+                                tags = tagobj[i];
+		}   
+        if (tags != undefined && tags.length != 0)
+        {
+            json.tags = [];
+            var tags_valid = true;
+            if (!json['tagsWithTime'] || json['tagsWithTime'].length == 0)
+            {
+                $.each(tags.value, function(index, value)
+                {
+                    if(!isValidTag(value, false)) {
+                        tags_valid = false;
+                        return false;
+                    }
+                });
+                json['tagsWithTime'] = [];
+                $.each(tags.value, function(index, value)
+                {
+                    json.tagsWithTime.push({ "tag" : value });
+                });
+            }
+            else
+            {
+                var tag_objects_temp = [];
+                $.each(tags.value, function(index, value)
+                {
+                    var is_new = true;
+                    $.each(json['tagsWithTime'], function(index, tagObject)
+                    {
+                        if (value == tagObject.tag)
+                        {
+                                tag_objects_temp.push(tagObject);
+                                is_new = false
+                                return false;
+                        }
+                    });
 
+                    if (is_new) {
+                        tag_objects_temp.push({ "tag" : value });
+                        //check if tags are valid if they are newly adding to the contact.
+                        if(!isValidTag(value, false)) {
+                                tags_valid = false;
+                                return false;
+                        }
+                    }
+                });
+                json['tagsWithTime'] = tag_objects_temp;
+            }
+            if(!tags_valid) {
+                    $('.invalid-tags-person').show().delay(6000).hide(1);
+                    enable_save_button($(saveBtn));
+                    return false;
+            }
+        }
 		console.log(json);
 		if (form_id == "opportunityForm")
 			saveDeal(form_id, modal_id, this, json, false);
@@ -337,6 +399,7 @@ function initializeDealListners(el){
 	{
 		e.preventDefault();
 		show_deal();
+		setup_tags_typeahead();
 	});
 
 	$('#opportunity-listners').off('change', '#pipeline_milestone');

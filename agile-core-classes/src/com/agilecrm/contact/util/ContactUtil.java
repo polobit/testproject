@@ -1193,8 +1193,8 @@ public class ContactUtil
 	}
 
 	oldContact.tags.addAll(newContact.tags);
-
-	return oldContact;
+	newContact=oldContact;
+	return 	newContact;
     }
 
     public static Contact mergeCompanyFields(Contact newContact, Contact oldContact)
@@ -2013,5 +2013,57 @@ public class ContactUtil
 	    return null;
 	}
 
+    }
+    
+public static Contact searchMultipleContactByEmail(String email,Contact contact){
+    	
+    	if (StringUtils.isBlank(email))
+    	    return null;
+    	
+    	Map<String, Object> searchMap = new HashMap<String, Object>();
+    	searchMap.put("type", Type.PERSON);
+    	searchMap.put("properties.name", Contact.EMAIL);
+    	searchMap.put("properties.value", email.toLowerCase());
+
+    	try
+    	{
+    	   List<Contact> contacts=dao.listByProperty(searchMap);
+    	   if(contacts.size()>0){
+    	  for(Contact newcontact:contacts){
+    		  if(newcontact.id.equals(contact.id))
+    			  continue;
+    		  return newcontact;
+    	  }
+    	   }
+    	   return null;
+    	}
+    	catch (Exception e)
+    	{
+    	    return null;
+    	}
+	}
+
+    /**
+     * Gets contacts and companies based on its email collection
+     * 
+     * @param emails
+     *            emails collection to get contacts and companies
+     * @return {@List} related to all emails
+     */
+    public static List<Contact> searchContactsAndCompaniesByEmailList(List<String> emails)
+    {
+	if (emails == null)
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value in", emails);
+
+	try
+	{
+	    return dao.fetchAll(q);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 }

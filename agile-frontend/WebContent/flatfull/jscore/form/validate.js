@@ -294,6 +294,15 @@ function isValidForm(form) {
  		}
  	}," From email is not verified. Please verify it.");
 
+	jQuery.validator.addMethod("month_date", function(value, element){
+		if(value=="")
+			return true;
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectForMonthWithString(value));
+
+			
+	}," Please enter a valid date.");
+
 	$(form).validate({
 		ignoreTitle: true,
 		rules : {

@@ -478,7 +478,46 @@
     </div>
   </div>
   {{/if}}
+
+ <div class="hidden-sm hidden-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+
+<small class="text-muted text-base">Tags</small>
+            <div class="contact-tags m-b-xs m-t-xs">
+          <ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+              {{#if tagsWithTime.length}} 
+               {{#canEditContact owner.id}}  
+                {{#each tagsWithTime}}
+                    <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}"><span><a
+                class="anchor m-r-xs custom-color" style="color:#363f44" href="#filter/{{this.tag}}">{{this.tag}}</a><a
+                class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+                {{/each}}
+                {{else}}
+                  {{#each tagsWithTime}}
+                    <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+                      class="anchor deals-tag-view" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+                  {{/each}}
+               {{/canEditContact}}
+              {{/if}}
+          </ul>
+          <div class="inline-block m-t-xs">
+            <div id="addTagsForm" class="m-b-none hidden">
+              <div class="control-group save-tag m-b-none">
+                <input name="" type="text" id="addTags"
+                  class="tags-typeahead ignore-comma-keydown form-control inline-block"
+                  style="width: 60%" placeholder="Enter tag" />
+                <span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="deal-add-tags">Add</a></span>
+              </div>
+            </div>
+            <a  id="add-tags" rel="tooltip" data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i class="icon-plus"></i> <span>Add</span></a>
+            </div>
+        </div>
+    </div>
   </div>
+</div>
+
+</div>
 
 {{#if description}}
 <div class="" >
