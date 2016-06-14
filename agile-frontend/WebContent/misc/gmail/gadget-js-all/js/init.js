@@ -23,9 +23,12 @@ function agile_init_gadget() {
 		Is_Localhost = true;
 		
 		// Lib Path 
-		LIB_PATH = "http://localhost:8888/";
+		//LIB_PATH = "http://localhost:8888/";
 		
-		_agile.set_account('6hpprabae71jvh3s8cd7f1iq5t', 'localhost');	
+		//_agile.set_account('osrgf4f2r27u8a7l8aap05317d', 'localhost');	
+		LIB_PATH = "https://srija1.agilecrm.com/";
+		
+		_agile.set_account('qs0ug1e05olqjps6k0839b0qk0', 'srija1');	
 		
 		agile_user_associated();
 		
