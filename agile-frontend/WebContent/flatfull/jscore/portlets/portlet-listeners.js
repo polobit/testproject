@@ -954,9 +954,15 @@ $('.portlet_body')
 				_agile_delete_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 				loadPortlets("DashBoard", $('#content'));
 		    }
-		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
+		    else if(id=="MarketingDashboard"){
 				e.preventDefault();
 				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
+				gridster = undefined;
+				loadPortlets(id, $('#content'));
+		    }
+		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
+				e.preventDefault();
+				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);				
 				gridster = undefined;
 				loadPortlets(id, $('#content'));
 		    }
@@ -975,6 +981,10 @@ $('.portlet_body')
 		    		$('#dashboard-desc').attr("title", this.description);
 		    	}
 		    });
+		    if(id== "MarketingDashboard"){
+		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
+		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
+		    }
 		    if(id == "Dashboard")
 		    {
 		    	$('#dashboard-desc').text("Welcome to Agile CRM");
