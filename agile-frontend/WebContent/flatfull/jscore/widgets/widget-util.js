@@ -1,4 +1,14 @@
 //Helps to know that widget is for all users.
+var widgetDisplayname = {
+	Rapleaf : "TowerData",
+	Twilio : "Twilio Call Log",
+	HelpScout : "Help Scout",
+	TwilioIO : "Twilio",
+	GooglePlus : "Google+",
+	CallScript : "Call Script",	
+	Uservoice : "UserVoice"
+};
+
 var isForAll = false;
 
 function initializeTabListeners(localStorageItem, navigateURL){
@@ -51,10 +61,8 @@ function save_widget_prefs(pluginName, prefs, callback) {
 	console.log("In save_widget_prefs.");
 	
 	var msgType = "success";
-	var displayName = pluginName;
-	if(displayName=="TwilioIO")
-		displayName="Twilio";
-	var msg = displayName+" widget saved successfully";	
+	var displayName;
+	var msg;	
 
 	/*
 	 * Get widget model from collection based on the name attribute of the
@@ -88,15 +96,12 @@ function save_widget_prefs(pluginName, prefs, callback) {
 			models[0].set(data);
 			var widgetID = data.id;
 			
-			if(pluginName  == "Rapleaf"){
-				displayName = "Towerdata"
-			}else if(pluginName == "HelpScout"){
-				displayName = "Help Scout"
-			}else if(pluginName == "TwilioIO"){
-				displayName = "Twilio";
-			}else{
+			displayName = widgetDisplayname[pluginName];
+			if(!displayName){
 				displayName = pluginName;
 			}			
+
+			msg = displayName+" widget saved successfully";
 
 			if(widgetID){
 

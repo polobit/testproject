@@ -1296,7 +1296,7 @@ function startTwitterWidget(contact_id){
 	// Twitter update loading image declared as global
 	TWITTER_UPDATE_LOAD_IMAGE = "<div id='tweet_load'><center><img  src=\'img/ajax-loader-cursor.gif\'" + "style'=margin-top: 10px;margin-bottom: 14px;'></img></center></div>";
 
-	// Current contact user name in Twitter profile
+	// Current contact username in Twitter profile
 	Twitter_current_profile_user_name = "";
 	Twitter_current_update_id = "";
 	Twitter_current_profile_screen_name = "";

@@ -12,7 +12,7 @@ $(function()
 	// LinkedIn update loading image declared as global
 	LINKEDIN_UPDATE_LOAD_IMAGE = '<div id="status_load"><center><img  src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
 
-	// Current contact user name in LinkedIn profile
+	// Current contact username in LinkedIn profile
 	Linkedin_current_profile_user_name = "";
 
 	// Stores the initial update stream of the contact's LinkedIn profile

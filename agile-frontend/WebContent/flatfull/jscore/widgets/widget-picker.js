@@ -190,15 +190,12 @@ function initializeWidgetSettingsListeners(){
 		// If not confirmed to delete, return
 		var displayName;
 		
-		if(widget_name == "Rapleaf"){
-			displayName = "Towerdata";
-		}else if(widget_name == "TwilioIO"){
-			displayName = "Twilio";
-		}else{
+		displayName = widgetDisplayname[widget_name];
+		if(!displayName){
 			displayName = widget_name;
 		}
 
-		showAlertModal("Are you sure to delete " + displayName, "confirm", function(){
+		showAlertModal("Are you sure to delete " + displayName + "?", "confirm", function(){
 			delete_widget(widget_name);
 
 			if(widget_name == "Linkedin")
