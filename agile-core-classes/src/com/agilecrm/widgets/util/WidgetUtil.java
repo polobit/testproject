@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -59,22 +60,44 @@ public class WidgetUtil {
 	 * @return {@link List} of {@link Widget}
 	 */
 	public static List<Widget> setIsAddedStatus(List<Widget> widgets) {
-		
+
 		// Getting the list widget saved by the current user.
 		List<Widget> currentWidgets = getAddedWidgetsForCurrentUser();
-		DomainUser dmu = AgileUser.getCurrentAgileUser().getDomainUser();
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		DomainUser dmu = agileUser.getDomainUser();
+
 		for (Widget widget : widgets) {
-			for (Widget currentWidget : currentWidgets){
+			for (Widget currentWidget : currentWidgets) {
 				if (currentWidget.name.equals(widget.name)) {
-					if(dmu.is_admin){												
-						JSONArray userArray = WidgetUtil.getWigetUsersList(widget.name);
-						if(userArray != null){
-							widget.listOfUsers = userArray.toString();
-							if(!widget.listOfUsers.equals(currentWidget.listOfUsers)){
-								currentWidget.listOfUsers = userArray.toString();
-								currentWidget.save();		
+					if (dmu.is_admin) {
+						JSONArray finalArray = new JSONArray();
+
+						String userID = agileUser.id.toString();
+						String oldUsersArray = currentWidget.listOfUsers;
+
+						JSONArray userArray = WidgetUtil
+								.getWigetUsersList(widget.name);
+						if (userArray != null) {
+							if (oldUsersArray != null && !(oldUsersArray.contains(userID))) {
+								for (int i = 0; i < userArray.length(); i++) {
+									try {
+										String tempID = userArray.getString(i);
+										if(!tempID.equals(userID)){
+											finalArray.put(userArray.getLong(i));
+										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+							} else {
+								finalArray = userArray;
 							}
 						}
+
+						widget.listOfUsers = finalArray.toString();
+						currentWidget.listOfUsers = finalArray.toString();
+						currentWidget.save();
 					}
 					// Setting true to know that widget is configured.
 					widget.is_added = true;
@@ -83,7 +106,6 @@ public class WidgetUtil {
 				}
 			}
 		}
-
 		return widgets;
 	}
 
@@ -139,42 +161,37 @@ public class WidgetUtil {
 	 * @return {@link List} of {@link Widget}s
 	 */
 	public static List<Widget> getActiveWidgetsForCurrentUser() {
-		Objectify ofy = ObjectifyService.begin();
+		List<Widget> widgets = new ArrayList<Widget>();
 
-		// Creates Current AgileUser key
-		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-				AgileUser.getCurrentAgileUser().id);
+		AgileUser agileuser = AgileUser.getCurrentAgileUser();
 
-		/*
-		 * Fetches list of widgets related to AgileUser key and adds is_added
-		 * field as true to default widgets if not present
-		 */
-		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
-				.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
+		if (agileuser != null) {
+			DomainUser domainUser = agileuser.getDomainUser();
 
-		String userID = AgileUser.getCurrentAgileUser().domain_user_id
-				.toString();
-		for (int i = 0; i < widgets.size(); i++) {
-			Widget widget = widgets.get(i);
-			if (widget.add_by_admin
-					&& (widget.listOfUsers != null && userID != null && !widget.listOfUsers
-							.contains(userID))) {
-				widgets.remove(i);
+			// Creates Current AgileUser key
+			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+					agileuser.id);
+
+			/*
+			 * Fetches list of widgets related to AgileUser key and adds
+			 * is_added field as true to default widgets if not present
+			 */
+			Objectify ofy = ObjectifyService.begin();
+			widgets = ofy.query(Widget.class).ancestor(userKey)
+					.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
+			if (domainUser != null && domainUser.is_admin) {
+				String userID = agileuser.id.toString();
+				if (widgets != null) {
+					for (int i = 0; i < widgets.size(); i++) {
+						Widget widget = widgets.get(i);
+						if ((widget.listOfUsers != null && userID != null && !widget.listOfUsers
+								.contains(userID))) {
+							widgets.remove(i);
+						}
+					}
+				}
 			}
 		}
-
-		List<Widget> adminWidgets = ofy.query(Widget.class)
-				.filter("add_by_admin =", true).list();
-
-		for (int i = 0; i < adminWidgets.size(); i++) {
-			Widget widget = adminWidgets.get(i);
-			if (widget.listOfUsers != null && userID != null
-					&& !widget.listOfUsers.contains(userID)) {
-				adminWidgets.remove(i);
-			}
-		}
-
-		widgets.addAll(adminWidgets);
 
 		return widgets;
 	}
@@ -312,33 +329,34 @@ public class WidgetUtil {
 			return null;
 		}
 	}
-	
-	public static JSONArray getWigetUsersList(String name){
+
+	public static JSONArray getWigetUsersList(String name) {
 		JSONArray userIDs = new JSONArray();
 		String domain = NamespaceManager.get();
-		System.out.println("*** domain "+domain);		
-		
-		//if(domain != null){
-			List<DomainUser> users = DomainUserUtil.getUsers(domain);			
-			for (DomainUser dUser : users) {
-				AgileUser aUser = AgileUser.getCurrentAgileUserFromDomainUser(dUser.id);
-				Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
-				if(userWidget != null){
-					userIDs.put(aUser.id);
-				}
+		System.out.println("*** domain " + domain);
+
+		// if(domain != null){
+		List<DomainUser> users = DomainUserUtil.getUsers(domain);
+		for (DomainUser dUser : users) {
+			AgileUser aUser = AgileUser
+					.getCurrentAgileUserFromDomainUser(dUser.id);
+			Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
+			if (userWidget != null) {
+				userIDs.put(aUser.id);
 			}
-		//}
-			
+		}
+		// }
+
 		return userIDs;
 	}
-	
-	public static List<Widget> getWigetUserListByAdmin(String name){
+
+	public static List<Widget> getWigetUserListByAdmin(String name) {
 		try {
 			Objectify ofy = ObjectifyService.begin();
 
-
 			// Queries on widget name, with current AgileUser Key
-			return ofy.query(Widget.class).filter("name", name).filter("add_by_admin", true).list();			
+			return ofy.query(Widget.class).filter("name", name)
+					.filter("add_by_admin", true).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -381,42 +399,42 @@ public class WidgetUtil {
 		dao.deleteKeys(dao.listKeysByProperty("name", name));
 	}
 
-	
 	public static void deleteWidget(String id, String name) {
 		Objectify ofy = ObjectifyService.begin();
 
 		// Creates Current AgileUser key
-		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,id);
+		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, id);
 
 		/*
 		 * Fetches list of widgets related to AgileUser key and adds is_added
 		 * field as true to default widgets if not present
 		 */
-		List<Widget> widgets = ofy.query(Widget.class)
-				.ancestor(userKey).filter("name", name).list();
-		for (Widget widget : widgets) {			
+		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+				.filter("name", name).list();
+		for (Widget widget : widgets) {
 			widget.delete();
 		}
 	}
-		
+
 	public static void deleteWidgetByUserID(String id, String name) {
 		Objectify ofy = ObjectifyService.begin();
 
 		// Creates Current AgileUser key
 		AgileUser agileUser = AgileUser.getCurrentAgileUser(Long.parseLong(id));
-		Key<AgileUser> userKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+		Key<AgileUser> userKey = AgileUser
+				.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
 
 		/*
 		 * Fetches list of widgets related to AgileUser key and adds is_added
 		 * field as true to default widgets if not present
 		 */
-		List<Widget> widgets = ofy.query(Widget.class)
-				.ancestor(userKey).filter("name", name).list();
-		for (Widget widget : widgets) {			
+		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+				.filter("name", name).list();
+		for (Widget widget : widgets) {
 			widget.delete();
 		}
 	}
-	
+
 	/**
 	 * 
 	 * 
