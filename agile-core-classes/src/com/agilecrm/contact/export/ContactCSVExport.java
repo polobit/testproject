@@ -78,7 +78,7 @@ public class ContactCSVExport
     public static final String URL = "Url";
 
     //created time column added - 05.06 - prakash
-    public static final String CREATED_TIME = "Created time";
+    public static final String CREATED_TIME = "Created Date";
     private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     /**
      * Inserts contact properties into CSV w.r.t header name.
