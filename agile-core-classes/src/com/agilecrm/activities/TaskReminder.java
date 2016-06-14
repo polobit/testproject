@@ -38,7 +38,7 @@ public class TaskReminder
 	Queue queue = QueueFactory.getQueue("due-task-reminder");
 
 	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);
-	options.etaMillis(time * 1000);
+	// options.etaMillis(time * 1000);
 	queue.add(options);
     }
 

@@ -2,7 +2,9 @@ package com.agilecrm.activities.deferred;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -95,6 +98,11 @@ public class TaskReminderDeferredTask implements DeferredTask
 
 	    if (taskList.isEmpty())
 		return;
+	    
+	    // Update time with timezone
+	    for (Task task : taskList) {
+	    	task.timeFormatForEmail = DateUtil.getCalendarString(task.due, "hh:mm a", timezone);
+		}
 
 	    // Task stored as map like
 	    // map{"property":"value","property2":"value2",...}
@@ -125,6 +133,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("tasks", taskList);
+		map.put("tasksCount", taskList.size());
 
 		// Sends mail to the domain user.
 		SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
@@ -135,7 +144,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    for (int i = 0; i < taskList.size(); ++i)
 	    {
 		Map<String, Object> currentTask = taskListMap.get(i);
-		List<Contact> contactList = taskList.get(i).relatedContacts();
+		List<Contact> contactList = taskList.get(i).relatedContacts(); 
 		List<Map<String, Object>> contactListMap = new ArrayList<Map<String, Object>>();
 
 		// for each Contact add ContactField in ContactField.name
@@ -159,11 +168,13 @@ public class TaskReminderDeferredTask implements DeferredTask
 		// each task has related_contacts as
 		// [<contact1-map:<contact1.contactField.name:contact1.contactField>,<contact2-map>...]
 		currentTask.put("related_contacts", contactListMap);
+		
 	    }
 
 	    // Due tasks map
 	    HashMap<String, Object> map = new HashMap<String, Object>();
 	    map.put("tasks", taskListMap);
+	    map.put("tasksCount", taskList.size());
 
 	    // Sends mail to the domain user.
 	    SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);

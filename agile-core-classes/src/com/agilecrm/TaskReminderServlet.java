@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.activities.CreateTaskDeferredTask;
 import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.util.VersioningUtil;
 
 /**
  * <code>TaskReminderServlet</code> is the servlet for handling cron requests of
@@ -31,6 +32,11 @@ public class TaskReminderServlet extends HttpServlet
 	{
 		try
 		{
+			if(VersioningUtil.isDevelopmentEnv()){
+				CreateTaskDeferredTask.createTaskReminderDeferredTask("");
+				return;
+			}
+			
 			Set<String> domains = NamespaceUtil.getAllNamespaces();
 			// Start a task queue for each domain
 			for (String domain : domains)

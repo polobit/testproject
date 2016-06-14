@@ -221,6 +221,8 @@ public class Task extends Cursor
     private List<Key<Opportunity>> related_deals = new ArrayList<Key<Opportunity>>();
     /**************************************************************/
 
+    public String timeFormatForEmail = null;
+
     // Dao
     public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(Task.class);
 

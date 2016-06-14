@@ -118,6 +118,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
 		String errorString = errors.toString();
+		e.printStackTrace();
 
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception at taskreminder deferred task " + domain, null,
