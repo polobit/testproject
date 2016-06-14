@@ -2025,16 +2025,18 @@ public class ContactUtil
     	
     	if(id != null && customField != null){
     		ContactFilter contact_filter = new ContactFilter();
-    		SearchRule rule = new SearchRule();
-    		rule.LHS = "field_labels";
-    		rule.CONDITION = RuleCondition.NOTEQUALS;
-    		rule.RHS = null ;
-    		contact_filter.rules.add(rule);
+    		SearchRule andRule = new SearchRule();
+    		SearchRule orRule = null ;
+    		andRule.LHS = "field_labels";
+    		andRule.CONDITION = RuleCondition.NOTEQUALS;
+    		andRule.RHS = null ;
+    		contact_filter.rules.add(andRule);
     		for(String eachfield : customField){
-	    		rule.LHS = eachfield;
-	    		rule.CONDITION = RuleCondition.EQUALS;
-	    		rule.RHS = id ;
-	    		contact_filter.or_rules.add(rule);
+    			orRule  = new SearchRule();
+    			orRule.LHS = eachfield;
+    			orRule.CONDITION = RuleCondition.EQUALS;
+    			orRule.RHS = id ;
+	    		contact_filter.or_rules.add(orRule);
     		}
     		List<Contact> contacts = new ArrayList<Contact>(contact_filter.queryContacts(50, null, "type"));
     		return contacts;
