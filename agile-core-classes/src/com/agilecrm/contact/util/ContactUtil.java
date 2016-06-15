@@ -2055,15 +2055,21 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
     System.out.println("Emails in searchContactsAndCompaniesByEmailList---"+emails);
 	if (emails == null || (emails != null && emails.size() == 0))
 	    return null;
+	List<Key<Contact>> contactsKeyList = new ArrayList<Key<Contact>>();
 	if(emails != null)
 	{
 		System.out.println("Emails size in searchContactsAndCompaniesByEmailList---"+emails.size());
+		for(String email : emails)
+		{
+			Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value", email);
+			contactsKeyList.add(q.getKey());
+		}
 	}
-	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value in", emails);
-
+	if(contactsKeyList ==null || (contactsKeyList != null && contactsKeyList.size() == 0))
+		return null;
 	try
 	{
-	    return dao.fetchAll(q);
+	    return ContactUtil.dao.fetchAllByKeys(contactsKeyList);
 	}
 	catch (Exception e)
 	{
