@@ -38,6 +38,7 @@ function setup_deals_in_milestones(id){
 		      		$(".restore-deal-action", $('#dealActions')).hide();
 		      		$(".archive-deal-action", $('#dealActions')).show();
 		      	}
+		      	$(".delete-deal-action", $('#dealActions')).show();
 		      	$('#dealActions').show();
 		      	is_deal_drop_to_delete = false;
 		      	is_deal_drop_to_archive = false;
