@@ -208,6 +208,26 @@ function saveCallNoteSkype(){
 	if(direction == "Incoming"){
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
 	    	if(!responseJson){
+	resetCallLogVariables();
+	    		
+	    		if(callStatus == "Answered") {
+	    			var data = {};
+	    			data.url = "/core/api/widgets/skype/";
+	    			data.subject = noteSub;
+	    			data.number = number;
+	    			data.callType = "inbound";
+	    			data.status = "answered";
+	    			data.duration = duration;
+	    			data.contId = null;
+	    			data.contact_name = "";
+	    			data.widget = "Skype";
+	    			CallLogVariables.dynamicData = data;
+	    		}
+		    		CallLogVariables.callWidget = "Skype";
+		    		CallLogVariables.direction = "inbound";
+		    		CallLogVariables.phone = number;
+		    		CallLogVariables.duration = duration;
+		    		CallLogVariables.status = callStatus;
 	    		return showNewContactModal(number);
 	    	}
 	    	id = responseJson.id;
@@ -275,6 +295,28 @@ function saveCallNoteSkype(){
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number, "callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
+		}else{
+				resetCallLogVariables();
+				if(callStatus == "Answered") {
+    			var data = {};
+    			data.url = "/core/api/widgets/skype/";
+    			data.subject = noteSub;
+    			data.number = number;
+    			data.callType = "outbound-dial";
+    			data.status = "answered";
+    			data.duration = duration;
+    			data.contId = null;
+    			data.contact_name = "";
+    			data.widget = "Bria";
+    			CallLogVariables.dynamicData = data;
+    		}
+	    		CallLogVariables.callWidget = "Skype";
+	    		CallLogVariables.direction = "outbound-dial";
+	    		CallLogVariables.phone = number;
+	    		CallLogVariables.duration = duration;
+	    		CallLogVariables.status = callStatus;
+    		
+    		return showNewContactModal(number);
 		}
 	}
 }

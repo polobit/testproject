@@ -3,7 +3,7 @@ var callOptionDiv = "" ;
 var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null}; 
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
-var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null };
+var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "direction" : null};
 
 $(function()
 {
@@ -337,6 +337,8 @@ function resetCallLogVariables(){
 	CallLogVariables.phone = null;
 	CallLogVariables.url = null;
 	CallLogVariables.description = null;
+	CallLogVariables.dynamicData = null;
+	CallLogVariables.direction = null;
 }
 
 function handleCallRequest(message)
@@ -602,3 +604,13 @@ function twilioIOSaveContactedTime(contactId)
 			});
 }
 
+function newCallLogVariables (json){
+	if(!json.length > 0){
+		return;
+	}
+	$.each(json,function(i,obj){
+		if(CallLogVariables.contains(obj)){
+			CallLogVariables[obj.key] = obj.value;
+		}
+	});
+}
