@@ -233,7 +233,7 @@
   </div>-->
 
     <div class="clearfix"></div>
-      <!--{{#if contacts}}  
+      {{#if contacts}}  
          <div class="task-related-to task-related-contacts" title="Related To">
         	{{#each contacts}}
             {{#if_contact_type "PERSON"}}
@@ -245,7 +245,7 @@
             {{#if @last}} {{else}},{{/if}}
           {{/each}}
 		 </div> 
-      {{/if}}-->
+      {{/if}}
 
       <!-- <div class="pull-left w-full text-ellipsis text-muted">
      <i class="fa fa-clock-o text-muted" style="{{#unless due}}visibility: hidden;{{/unless}}"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time></div> -->
@@ -274,7 +274,7 @@
 
      
 
-<p class="word-break-all white-space-normal text-xs m-r-sm m-t-n-xs m-b-xs m-l">{{taskDescription}}</p>
+<p class="word-break-all white-space-normal text-xs m-r-sm m-t-n-sm m-b-xs m-l">{{taskDescription}}</p>
 
 <div class="clearfix"></div>
     </div> <!--task-body--> 
