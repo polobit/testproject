@@ -1534,13 +1534,17 @@ body {
     display: block;
     font-weight: normal;
   }
+  .app-aside-dock li.dropdownnavbar {
+
+        width: calc(100% - 67%);
+  }
   .app-aside-dock .app-aside .navi > ul > li .nav-sub {
     position: absolute;
     top: auto !important;
-    left: 0;
+    left: 50%;
     z-index: 1050;
     display: none;
-    width: 200px;
+    width: calc(100% - 50%);
     height: 0px !important;
     -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
