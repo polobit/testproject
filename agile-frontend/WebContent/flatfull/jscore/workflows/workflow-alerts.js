@@ -24,11 +24,25 @@ function campaignAlert(alertType)
 		templateName = "SMSGateway-integration-alert-modal";
 		}
 	
+	if(alertType == "Empty_Widget")
+		{
+		alertJSON["title"]="No Twilio Number";
+		alertJSON["message"]="The Twilio call widget you configured does not have a purchased number. Please purchase a number from Twilio to start calling.";
+		templateName = "CallWidget-integration-alert-modal";
+		}
+
 	if(alertType == "Unauthorised")
 		{
 		alertJSON["title"]="SMS Gateway not Configured";
 		alertJSON["message"]="You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations";
 		templateName = "SMSGateway-integration-alert-modal";
+		}
+
+	if(alertType == "Unauthorised_Call_Widget")
+		{
+		alertJSON["title"]="Call Widget  not Configured";
+		alertJSON["message"]="You need to enable Twilio Call widget to use this option. Please enable it in Preferences -> Widgets";
+		templateName = "CallWidget-integration-alert-modal";
 		}
 
 		getTemplate(templateName, alertJSON, undefined, function(template_ui){

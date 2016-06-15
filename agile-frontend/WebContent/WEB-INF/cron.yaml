@@ -131,3 +131,6 @@ cron:
   url: /_ah/sessioncleanup?clear
   schedule: every 1 mins
 
+- description: Bulk call Cron
+  url: /backend/cron/cron-pull?q=bulk-call-pull-queue
+  schedule: every 2 mins
