@@ -332,7 +332,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		    {
 			try
 			{
-				if(StringUtils.isEmpty(data.value))
+				if(StringUtils.isEmpty(data.name) || StringUtils.isEmpty(data.value))
 				{
 					continue;
 				}
@@ -353,7 +353,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		    {
 			try
 			{
-				if(StringUtils.isEmpty(data.value))
+				if(StringUtils.isEmpty(data.name) || StringUtils.isEmpty(data.value))
 				{
 					continue;
 				}
@@ -381,7 +381,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 			    }
 			    }
 				
-				if(StringUtils.isEmpty(contact_value))
+				if(StringUtils.isEmpty(contact_value) || StringUtils.isEmpty(data.name))
 				{
 					continue;
 				}
@@ -420,8 +420,14 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 					e.printStackTrace();
 				}
 		    }
-
-		    doc.addField(builder);
+		    
+		    try 
+		    {
+		    	doc.addField(builder);
+			} 
+		    catch (Exception e) {
+				e.printStackTrace();
+			}
 
 		}
 		return fieldsSet;
