@@ -32,7 +32,7 @@ $(function(){
 
 function uploadImage(id)
 {
-	var newwindow = window.open("flatfull/upload-flatfull.jsp?id=" + id,'name','height=310,width=500');
+	var newwindow = window.open("flatfull/upload-flatfull.jsp?id=" + id,'name','height=620,width=600');
 	if (window.focus)
 	{
 		newwindow.focus();
