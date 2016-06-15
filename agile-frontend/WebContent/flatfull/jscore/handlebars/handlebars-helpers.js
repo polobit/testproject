@@ -7539,3 +7539,10 @@ Handlebars.registerHelper('validateSendgridWhitelabel', function(valid)
 
 	return "<i class='fa fa-times icon-2x' style='color:red;'></i>";
 });
+Handlebars.registerHelper('scope_type', function(scope, options)
+	{
+		if(scope == "CONTACT" || scope == "COMPANY")
+			return options.fn(this);
+
+		return options.inverse(this);
+	});

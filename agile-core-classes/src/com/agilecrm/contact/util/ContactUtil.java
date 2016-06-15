@@ -33,6 +33,7 @@ import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
@@ -65,6 +66,7 @@ import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -2075,5 +2077,32 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	{
 	    return null;
 	}
+    }
+    public static Set<Contact> searchContactsByCustomFields(String id)
+    {
+    	Set<Contact> contacts = (HashSet<Contact>) dao.ofy().query(Contact.class).filter("Companytype = ", id);
+    	return contacts;
+    }
+    public static List<Contact> getContactsWithCustomFields(String id ,List<String> customField){
+    	
+    	if(id != null && customField != null){
+    		ContactFilter contact_filter = new ContactFilter();
+    		SearchRule andRule = new SearchRule();
+    		SearchRule orRule =  null;
+    		andRule.LHS = "field_labels";
+    		andRule.CONDITION = RuleCondition.NOTEQUALS;
+    		andRule.RHS = " " ;
+    		contact_filter.rules.add(andRule);
+    		for(String eachfield : customField){
+    			orRule = new SearchRule();
+    			orRule.LHS = eachfield;
+    			orRule.CONDITION = RuleCondition.EQUALS;
+    			orRule.RHS = id ;
+	    		contact_filter.or_rules.add(orRule);
+    		}
+    		List<Contact> contacts = new ArrayList<Contact>(contact_filter.queryContacts(50, null, null));
+    		return contacts;
+    	}
+    	return null;
     }
 }
