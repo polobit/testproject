@@ -97,7 +97,7 @@ public class WidgetUtil {
 
 						widget.listOfUsers = currentUsers.toString();
 						currentWidget.listOfUsers = currentUsers.toString();
-						currentWidget.save();
+						//currentWidget.save();
 					}
 					// Setting true to know that widget is configured.
 					widget.is_added = true;

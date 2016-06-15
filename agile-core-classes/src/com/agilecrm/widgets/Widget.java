@@ -192,7 +192,7 @@ public class Widget {
 		this.mini_logo_url = mini_logo;
 		this.widget_type = type;
 		this.user = new Key<AgileUser>(AgileUser.class,
-				AgileUser.getCurrentAgileUser().id);
+				AgileUser.getCurrentAgileUser().id);		
 	}
 
 	/**
@@ -266,6 +266,8 @@ public class Widget {
 					widget.prefs = this.prefs;
 					dao.put(widget);
 				}
+			}else{
+				dao.put(this);
 			}
 		} else {
 			if (user == null) {

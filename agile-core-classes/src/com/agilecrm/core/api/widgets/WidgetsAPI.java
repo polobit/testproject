@@ -391,9 +391,8 @@ public class WidgetsAPI {
 			for (int i = 0; i < oldUserArray.length(); i++) {
 				String oldUserID = oldUserArray.getString(i);
 				if (!(newUsersList.contains(oldUserID))) {
-					Widget widget = WidgetUtil.getWidget(widgetName,
-							Long.parseLong(oldUserID));
-					if (widget != null && !domainUser.is_admin) {
+					Widget widget = WidgetUtil.getWidget(widgetName, Long.parseLong(oldUserID));					
+					if (widget != null && domainUser.is_admin && !(agileUser.id.toString().equals(oldUserID))) {
 						WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
 					}
 				} else {
