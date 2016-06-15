@@ -86,7 +86,7 @@ public class WidgetUtil {
 						for (int i = 0; i < userArray.length(); i++) {
 							try {
 								String tempID = userArray.getString(i);
-								if (removeAdmin && !tempID.equals(userID)) {
+								if (!(removeAdmin && tempID.equals(userID))) {
 									currentUsers.put(userArray.getLong(i));
 								}
 							} catch (JSONException e) {
