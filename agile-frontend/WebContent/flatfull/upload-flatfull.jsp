@@ -43,6 +43,7 @@ angular.module('app', ['ngImgCrop'])
       .controller('Ctrl', function($scope) {
         $scope.myImage='';
         $scope.myCroppedImage='';
+        $scope.cropType="square";
 
         var handleFileSelect=function(evt) {
           var file=evt.currentTarget.files[0];
@@ -324,13 +325,22 @@ function reenableSave(){
 
 <div class="row m-n">
 	<div class="cropArea col-xs-8 col-sm-8 col-md-8">
-	    <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+	    <img-crop image="myImage" result-image="myCroppedImage" area-type="{{cropType}}"></img-crop>
 	</div>
 	<div class="col-xs-4 col-sm-4 col-md-4" id="preview">
 		<div>Cropped Image:</div>
 		<div><img ng-src="{{myCroppedImage}}" style="width: 100%;"/></div>
 	</div>
 </div>
+
+<!--
+<div class="btn-group m-t">
+      <label class="btn btn-default" ng-model="cropType" btn-radio="'circle'">Circle</label>
+      <label class="btn btn-default" ng-model="cropType" btn-radio="'square'">Square</label>
+</div>
+-->
+
+
 <br/>
 <input name="upload" value="Upload" class='submit btn btn-primary' type="submit" onclick="return false;"/> 
 </form> 
