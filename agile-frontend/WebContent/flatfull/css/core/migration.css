@@ -1980,6 +1980,8 @@ display: block!important;
 .company-details-mobile-view {
   width: 97.0vw;
   }
+.workflow-heading{ text-align: center; width: 100%; }
+.workflow-sortby{ float: none!important; }
 }
 
 @media all and (min-width: 768px) {

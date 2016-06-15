@@ -781,6 +781,7 @@ function sendEmail(json, callback){
 			});
 }
 
+
 function showAlertModal(json_key, type, confirm_callback, decline_callback,dynamic_title){
 	var data = {};
 	if(MODAL_MESSAGES[json_key] != undefined){
@@ -812,6 +813,10 @@ function showAlertModal(json_key, type, confirm_callback, decline_callback,dynam
 	}, null);
 }
 
+function printSortByName(name, el){
+	 $(el).find(".sort-field-txt").html(name);
+}
+
 function getFormattedDateObjectForMonthWithString(value){
 
 		if(!value)
@@ -821,4 +826,21 @@ function getFormattedDateObjectForMonthWithString(value){
 
 		return new Date(value);
 	
+}
+
+function updateSortKeyTemplate(sort_key, el) {
+	$('.sort-field-check', el).addClass('display-none');
+	$('.sort-by-check', el).addClass('display-none');
+	if(sort_key && sort_key != null) {
+		var sort = sort_key.split("-")
+		if(sort[0] == "")
+			$(".order-by[data='-']", el).find('i').removeClass('display-none');
+		else
+			$(".order-by[data='']", el).find('i').removeClass('display-none');
+		if(sort.length > 1)
+			sort_key = sort[1];
+		$(".sort-field[data='"+sort_key+"']", el).find('i').removeClass('display-none');
+		printSortByName($(".sort-field[data='"+sort_key+"']", el).attr("label_name"), el);
+		
+	}
 }
