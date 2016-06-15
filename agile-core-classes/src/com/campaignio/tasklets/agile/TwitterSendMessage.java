@@ -103,7 +103,7 @@ public class TwitterSendMessage extends TaskletAdapter
 		    
 		 }
 		else if(StringUtils.isBlank(twitter_id)){
-			 LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "person doesn't have tweeter_id",LogType.TWEET.toString()); 
+			 LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), " Tweet Failed.Contact doesn't have twitter id.",LogType.TWEET.toString()); 
 		}
 		else
 		{
