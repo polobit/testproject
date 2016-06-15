@@ -7,7 +7,7 @@
 <header class="form-header">
 <div class="header-div">
 <span class="label-header" >Leave us a message  
-<a class="close-tag" onclick="parent.closeQueryIframe();">&times;</a>
+<a class="close-tag" onclick="closeQueryIframe();">&times;</a>
 </span>
 </div>
 </header>
@@ -150,16 +150,16 @@ display: none;
 </style>
 <script type="text/javascript">
 function checkField(field){
-  if(document.getElementById('email').value=="" ){
-  document.getElementById('message').innerHTML = "Please fill email field."; 
-  document.getElementById('message').style="display: inline;"; 
-  document.getElementById("agile_submit").style="margin-left: 110px;"
+  if($('#email').val()=="" ){
+  $('#message').text("Please fill email field."); 
+  $('#message').css("display", "inline"); 
+  $('#agile_submit').css("margin-left", "110px");
   return false;
   }
-  else if(document.getElementById('querytext').value==""){
-  document.getElementById('message').innerHTML = "Please fill query  field.";
-  document.getElementById('message').style="display: inline;";
-  document.getElementById("agile_submit").style="margin-left: 110px;";
+  else if($('#querytext').val()==""){
+  $('#message').text("Please fill query  field.");
+  $('#message').css("display","inline");
+  $('#agile_submit').css("margin-left", "110px");
   return false;
   }
  $.ajax({
@@ -167,9 +167,10 @@ function checkField(field){
     type: "POST",
     data : {'name' :$('#name').val(),'email':$('#email').val(),'querytext':$('#querytext').val()},
     success:function(result){
+      parent._agile.set_email($('#email').val()); 
       $('.query-form-div').find('.form-content').html("Query has been submitted successfully.");
       $('.query-form-div').find('.form-content').css("margin-left", "85px");
-      $('.query-form-div').find('.form-content').css("color", "#146519");      
+      $('.query-form-div').find('.form-content').css("color", "#146519");           
     }  
   });
 
@@ -177,26 +178,28 @@ function checkField(field){
 }
 
 function invalidEmail(){
-  if(document.getElementById('email').value!=''){
+  if($('#email').val()!=''){
     var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
-      if (!reg.test(email.value)){
-         document.getElementById('wrong-email').innerHTML = "Please provide a valid email.";
-         document.getElementById('wrong-email').style='display: inline;';
+      if (!reg.test($('#email').val())){
+         $('#wrong-email').text("Please provide a valid email.");
+         $('#wrong-email').css('display', 'inline');
       }
       else{
-        document.getElementById('wrong-email').innerHTML="";
-        document.getElementById('wrong-email').style='display: none;';
+        $('#wrong-email').text("");
+        $('#wrong-email').css('display', 'none');
       }
   }
 }
 function disableErrorField(){
-  if(document.getElementById('message').innerHTML!==''){
-    document.getElementById('message').innerHTML='';
-    document.getElementById("agile_submit").style="margin-left: 272px;";
-    document.getElementById('message').style='display: none;';
+  if($('#message').text()!==''){
+    $('#message').text("");
+    $('#agile_submit').css("margin-left", "272px");
+    $('#message').css("display", "none");
   }
 }
-
+function closeQueryIframe(){
+  $('.query-form-div').remove();
+}
 </script>
 </body>
 
