@@ -3,6 +3,8 @@ package com.campaignio.cron.deferred;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -98,6 +100,9 @@ public class CronDeferredTask implements DeferredTask
 		JSONObject subscriberJSON = null;
 		try
 		{
+			//To fix session issue in campaigns - Setting the userinfo to null so that plan and ACL's comes from database.
+			SessionManager.set((UserInfo) null);
+			
 			// Gets workflow json from campaignId.
 			campaignJSON = WorkflowUtil.getWorkflowJSON(Long.parseLong(campaignId));
 
