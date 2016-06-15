@@ -70,34 +70,33 @@ public class WidgetUtil {
 			for (Widget currentWidget : currentWidgets) {
 				if (currentWidget.name.equals(widget.name)) {
 					if (dmu.is_admin) {
-						JSONArray finalArray = new JSONArray();
+						JSONArray currentUsers = new JSONArray();
 
 						String userID = agileUser.id.toString();
-						String oldUsersArray = currentWidget.listOfUsers;
-
-						JSONArray userArray = WidgetUtil
-								.getWigetUsersList(widget.name);
-						if (userArray != null) {
-							if (oldUsersArray != null && oldUsersArray.length() > 0 && !(oldUsersArray.contains(userID))) {
-								for (int i = 0; i < userArray.length(); i++) {
-									try {
-										String tempID = userArray.getString(i);
-										if (!tempID.equals(userID)) {
-											finalArray
-													.put(userArray.getLong(i));
-										}
-									} catch (JSONException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
+						String oldUsersArrayStr = currentWidget.listOfUsers;
+						JSONArray userArray = WidgetUtil.getWigetUsersList(widget.name);
+						boolean removeAdmin = false;
+						
+						if(oldUsersArrayStr == null){							
+							currentUsers.put(userID);
+						}else if(!(oldUsersArrayStr.contains(userID))){
+							removeAdmin = true;
+						}
+						
+						for (int i = 0; i < userArray.length(); i++) {
+							try {
+								String tempID = userArray.getString(i);
+								if (removeAdmin && !tempID.equals(userID)) {
+									currentUsers.put(userArray.getLong(i));
 								}
-							} else {
-								finalArray = userArray;
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
 						}
 
-						widget.listOfUsers = finalArray.toString();
-						currentWidget.listOfUsers = finalArray.toString();
+						widget.listOfUsers = currentUsers.toString();
+						currentWidget.listOfUsers = currentUsers.toString();
 						currentWidget.save();
 					}
 					// Setting true to know that widget is configured.
