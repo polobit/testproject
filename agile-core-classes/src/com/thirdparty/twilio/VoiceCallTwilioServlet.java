@@ -96,7 +96,7 @@ public class VoiceCallTwilioServlet extends HttpServlet
 		    Say say = new Say(request.getParameter("message"));
 		    say.setVoice("woman");
 		    say.setLanguage("en");
-		    Say say1 = new Say("Please enter 1 to connect with us  . enter 2 for end the call.");
+		    Say say1 = new Say("Please press 1 to continue  . press 2 for end the call.");
 		    say1.setVoice("woman");
 		    say1.setLanguage("en");
 		    gather.append(say);

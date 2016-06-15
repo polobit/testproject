@@ -2,7 +2,7 @@
     "name": "Call",
     "thumbnail": "json/nodes/images/callnode.png",
     "icon": "json/nodes/icons/sms/callnode.png",
-    "info": "Call and Play an automated voice message to your contacts",
+    "info": "Call and play an automated voice message",
     "help": "You can enable Twilio Call widget Integration from Admin settings -> preferences",
     "author": "Sonali",
     "company": "mantra",
@@ -25,10 +25,10 @@
                 }
             
         },{
-            "label": "Contact Number:",
+            "label": "Recipient Number:",
             "required": "required", 
             "category": "Settings",
-            "name": "Contact Number",
+            "name": "Recipient Number",
             "id":"phonenumber1",
             "value":"{{phone}}",
             "title": "Enter the Recipient Number or {{phone}} to play the voice message.",
@@ -50,21 +50,21 @@
             "type": "textarea" 
          },
          {
-            "label": "Call Back Number:",
+            "label": "Redirect Number:",
             "category": "Settings",
             "name": "phonenumber2",
             "id":"phonenumber2",
             "title": "Enter the Number to be connected after Voice Message is played.",
             "fieldType": "input",
             "type": "text",
-            "placeholder":"Enter your number",
+            "placeholder":"Enter redirect number",
             "style": {
                 "width": "64%"
             }
         },
          
          {
-            "label": "Call and Play an automated voice message to your contacts.Call Back Number allows contact to connect back with you.",
+            "label": "Call and play automated voice message. Press 1 and connect the Recipient Number with the Redirect Number. ",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
