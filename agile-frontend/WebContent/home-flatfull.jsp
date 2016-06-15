@@ -409,4 +409,1001 @@ function isIE() {
                 </div>
                 
                   </div>">
-                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class=
+                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
+                             </div>
+        <%
+          if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+       %>
+         <%
+              }else {
+           %>     <div style="position: fixed;left: 52%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);margin-left: 8px;" id="helpcontent_popover" class="hide need_help agile-feature-item-blink-new">
+                <div class="block menuHelpPopover" >
+                  <div class="helpmenupopup">
+                  </div>
+                  <div class="content p-sm">
+                    <p style="width : 200px;margin-bottom:0px;" class="menu_help_content"> Check our other feature sets by clicking this icon.
+                    </p>
+                    <a href="#" class="menugridhelpclose" data-dismiss="alert" aria-label="close"  style="position: absolute;top:5px;color:#6b6b6b !important;right:5px;font-size:20px;margin-right:5px;">×
+                    </a>
+                  </div>
+                </div>
+              </div> 
+          
+          <% } %>
+       
+<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
+<% 
+if(currentUserPrefs.menuPosition.equals("top")){
+  out.print("app-aside-dock ");
+}else if(currentUserPrefs.menuPosition.equals("leftcol")){
+  out.print("app-aside-folded ");
+  }
+/* if(currentUserPrefs.layout.equals("fixed")){
+  out.print("container ");
+  } */
+
+%>">
+
+<!-- Including header(Navigation Bar) page -->
+  <%@ include file="flatfull/header.html"%>
+
+ <aside id="aside" class="app-aside hidden-xs 
+ <%
+  switch (Integer.parseInt(currentUserPrefs.theme)) {
+    case 1:  out.print("bg-black ");
+           break;
+    case 2:  out.print("bg-black ");
+         break;
+    case 3:  out.print("bg-dark ");
+         break;
+    case 4:  out.print("bg-black ");
+         break;
+    case 5:  out.print("bg-dark ");
+         break;
+    case 6:  out.print("bg-dark ");
+         break;
+    case 7:  out.print("bg-white b-r ");
+         break;
+    case 8:  out.print("bg-light dker b-r ");
+         break;
+    case 9:  out.print("bg-dark ");
+         break;
+    case 10:  out.print("bg-black ");
+         break;
+    case 11:  out.print("bg-dark ");
+         break;
+    case 12:  out.print("bg-dark ");
+         break;
+    case 13:  out.print("bg-dark ");
+         break;
+    case 14:  out.print("bg-light ");
+         break;
+    default:
+            break;
+ 
+  }
+      
+ if ( "admin".equals(domainUser.domain))
+  {
+    out.print("hide adminPanel");
+  }
+  %>">
+          <div class="aside-wrap">
+        <div class="navi-wrap">
+  
+  <nav  class="navi clearfix" id="agile-menu-navigation-container">
+    <ul class="nav">
+    
+  <!-- Sales menu -->   
+  <%if(domainUser.role == ROLE.SALES){ %>
+   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+     <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
+   </li>
+   <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
+    </a>
+  </li>
+
+   <!-- <li id="leadsmenu">
+    <a  href="#leads">
+      <i class="icon icon-group"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-leads") %></span>
+    </a>
+  </li> -->
+        
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
+  <li id="contactsmenu">
+    <a  href="#contacts">
+      <i class="icon icon-user"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+
+  <li id="companiesmenu">
+    <a  href="#companies">
+      <i class="icon icon-building"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
+  %>
+   <li  id="dealsmenu">
+    <a  href="#deals">
+      <i class="fa fa-money"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-deals") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES) && domainUser.version == null){
+  %>
+  <li id="casesmenu">
+    <a  href="#cases">
+      <i class="icon icon-folder"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-cases") %></span>
+    </a>
+  </li> 
+  <%
+      }
+  %>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
+  %>
+  
+   <li id="documentsmenu">
+    <a  href="#documents">
+      <i class="icon icon-doc"></i>
+      <span class="leftcol-menu-folded"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-docs") %></span>
+      <span class="leftcol-menu-expanded"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-documents") %></span>
+      <%if(currentUserPrefs.menuPosition.equals("leftcol")){%>
+      <%}else {%>
+      <%}%>
+    </a>
+  </li>
+  <%
+        }
+  %>  
+  
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CALENDAR)){
+  %>
+  
+  <li id="calendarmenu">
+    <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
+      <i class="icon icon-calendar"></i> 
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "calendar") %></span> 
+    </a>
+  </li>
+  <%
+        }
+  %>  
+  
+  <li id="tasksmenu">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
+    </a>
+  </li>
+
+  <li id="schedulingmenu">
+    <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
+      <i class="icon-tag" data-original-title="" title=""></i>
+      <span>Online Calendar</span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
+    </a>
+  </li> 
+    <%
+          }
+    %> 
+  
+  <!-- End of Sales menu -->
+  <%} %>
+
+  
+  <!--  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li> -->
+  
+  <!-- Marketing menu -->   
+  <%if(domainUser.role == ROLE.MARKETING){ %>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+  </li>
+  <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
+    </a>
+  </li>
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
+  <li id="contactsmenu">
+    <a  href="#contacts">
+      <i class="icon icon-user"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
+   %>
+   <li id="workflowsmenu">
+    <a  href="#workflows">
+      <i class="icon icon-sitemap"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-campaigns") %></span>
+    </a>
+  </li>
+
+  <li id="triggersmenu">
+    <a  href="#triggers">
+      <i class="icon icon-magic-wand"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
+    </a>
+  </li>
+    <%
+        }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
+    %>
+   <li id="web-rules-menu">
+    <a  href="#web-rules">
+      <i class="icon icon-globe"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-web-rules") %></span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+     <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
+    %>
+   <li id="segmentationmenu">
+    <a  href="#visitors">
+       <i class="icon-eye"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
+    </a>
+  </li>
+   <%
+          }
+    %>
+     <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
+    %>
+  <li id="landing-pages-menu">
+    <a href="#landing-pages">
+      <i class="fa fa-file-code-o"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-landing-pages") %></span>
+    </a>
+  </li>
+  <%
+          }
+    %>
+
+  <%
+  if(domainUser.is_admin){
+  %>
+  <li id="formsmenu">
+    <a  href="#forms">
+       <i class="icon-large1 icon-docs"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
+    </a>
+  </li>
+  <%}%>
+  
+  <li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="icon-envelope-letter"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
+   %>
+   <li id="socialsuitemenu">
+    <a  href="#social">
+      <i class="icon-bubbles"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-social") %></span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <li id="push-notification-menu">
+    <a href="#push-notification">
+      <i class="fa fa-bell-o"></i>
+      <span>Push Notifications</span>
+    </a>
+  </li>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
+    </a>
+  </li> 
+  <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
+    </a>
+  </li>
+    <%
+          }
+    %> 
+    
+  <!-- End of Marketing menu -->
+  <%} %>
+  
+  <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
+  <!-- Service menu -->   
+  <%if(domainUser.role == ROLE.SERVICE){ %>
+  
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
+  </li>
+
+  <li id="home_dashboard">
+    <a  href="#">
+      <i class="icon icon-home"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
+    </a>
+  </li>
+
+
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
+  <li id="contactsmenu">
+    <a  href="#contacts">
+      <i class="icon icon-user"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+
+  
+  <li id="tickets">
+    <a href="#tickets">
+      <i class="icon icon-ticket"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help-desk") %></span>
+    </a>
+  </li>
+
+  <li id="tasksmenu" class="hide">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
+          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+      </span>
+    </a>
+  </li>
+
+  <%
+  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>          
+  <li id="ticketgroupsmenu">
+    <a href="#ticket-groups">
+      <i class="icon icon-users"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "groups") %></span>
+    </a>
+  </li>
+  <li id="ticketlabelsmenu">
+    <a href="#ticket-labels">
+      <i class="icon icon-flag"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "labels") %></span>
+    </a>
+  </li>
+  <li id="ticketcannedmessagesmenu">
+    <a href="#canned-responses">
+      <i class="icon icon-cursor"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "canned-responses") %></span>
+    </a>
+  </li>
+  <li id="ticketviewsmenu">
+    <a href="#ticket-views">
+      <i class="icon icon-directions"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
+    </a>
+  </li>
+  <li id="ticketknowledgebasemenu">
+    <a href="#knowledgebase">
+      <i class="fa fa-search"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
+    </a>
+  </li>
+   <%
+      }
+  %>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="feedbackactivitiesmenu">
+    <a  href="#ticket-feedback">
+      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+      <span>Feedback</span>
+    </a>
+  </li>
+    <%
+          }
+    %>  
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
+    </a>
+  </li> 
+    <%
+          }
+    %>
+
+
+ 
+  <!-- End of Service menu -->
+  <%} %>
+             
+  </ul>
+
+
+
+
+  </nav>
+
+  <div id="navbar" class="pos-rlt navbar-collapse visible-xs hidden-sm navbar-view-mobile">
+          <div class="nav navbar-nav hidden-xs">
+<a href="#" id="app-aside-folded" style="top:8px;" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
+            <i class="fa fa-dedent fa-fw text"></i>
+          <!--   <i class="fa fa-indent fa-fw text-active"></i> -->
+          </a>
+</div>
+
+            <ul class="nav navbar-nav agile-menu">
+              <li id="homemenu" class="active"></li>
+              <%
+                  if ("admin".equals(domainUser.domain)) 
+                  {
+                    
+                  out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");  
+               
+                    out.println("<ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'> <form id='domainSearchForm' class=' navbar-search'  style='margin: 5px;'> <input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'  data-provide='typeahead'    placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li>");
+                    if(domainUser.adminPanelAccessScopes !=null && domainUser.adminPanelAccessScopes.contains(AdminPanelAccessScopes.ADD_USER))
+                    {
+                      out.println("<li style='margin-top: 7px;'><div class='btn-group'><a href='#users-add' class='btn btn-default btn-sm ''><i class='icon-plus-sign'></i> Add User</a>");
+                      out.println("<button class='btn btn-default btn-sm dropdown-toggl' data-toggle='dropdown' style='background: transparent;border: 0px;'><span class='caret'></span></button><ul class='dropdown-menu pull-right' role='menu'><li><a href='#users'>All Users</a></li></ul>");
+                      out.println("</div></li>");
+                       out.println("<li><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li>");
+                    }
+                  
+                  } else {
+              %>
+              
+             <!--  <li class="line dk"></li>
+            <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span>More</span>
+              </li>
+                <li data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Calendar"><a href="#calendar"><i class="icon icon-calendar"></i> <span class="visible-xs"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "calendar") %></span> </a></li>
+                <li id="due_tasks"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tasks"><a class="pos-rlt" href="#tasks"><i class="icon-list"></i>
+                  <span class="visible-xs"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
+                      <span title="Tasks due" class="navbar_due_tasks pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li> -->
+            </ul>
+  
+      <ul class="nav  navbar-nav  navbar-right show_shortcuts"> 
+              <li rel="popover" data-trigger="click" class="need_help hidden-xs" screen_name='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "need-help") %>' data-content="<div class='row' id='need_help_header'  style='color:#7D7474'>
+                  <div class='col-md-12 text-sm p-b-xs'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "need-help") %></div>
+                </div>
+                <div class='row m-none' style='color:#7D7474'>
+                <div class='pull-left inline-block' style='width:50%;border-right: 1px solid #E2E4E4;'>
+                 <div class='p-r-none p-l-none'>
+                  <div class='text-center'>
+                   <div class='text-xs' style='margin-top:-2px;padding-bottom:2px;'><b><a href='https://our.agilecrm.com/calendar/Vikas,Mrudula,Shravi_Sharma,Bharat,Manish,Nick,Stephen' target='_blank' rep class='text-info'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></a></b>
+                   </div>
+                  </div> 
+                   </div>
+                  </div>
+                  <div class='pull-right' style='width:50%;border-left: 1px solid #FFFFFF;'>
+                 <div class='p-r-none p-l-none'>
+                  <div class=' text-center text-xs'  style='margin-top:-2px;padding-bottom:2px;'><b><a href='https://our.agilecrm.com/calendar/Haaris_farooqi,Khader' target='_blank' rep class='text-info'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "support") %></a></b>
+                  </div>
+                 </div>
+                </div><div class='clearfix'></div>
+                  </div>" data-original-title="" title="">
+                   <a href="#" onclick="return false;"><i class="fa fa-question-circle"></i></a>      
+                                                        </li>
+                   
+                  
+              
+             <%
+                               if(request.getHeader("User-Agent").indexOf("Mobile") == -1) {
+
+                        %>
+                             <li class="hidden-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Full Screen"><a  class="enable-element-full-screen"><span class="fa fa-arrows-alt"></span></a></li>
+                        <%
+                               }
+            %>
+            
+                  
+             
+
+                <li class="line dk"></li>
+                <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span>Profile</span>
+              </li>
+
+              <li id="fat-menu" class="mobile-fat-menu">
+              <a href='#user-prefs'>
+              <span><!-- <i
+                  class="agilecrm-profile-dropdown"></i> -->
+<span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm" style="margin-top:5px;">
+        <%  if (!StringUtils.isEmpty(currentUserPrefs.pic))
+              out.println("<img src='"
+              + currentUserPrefs.pic
+              + "' alt='...'  style='width:40px;height:40px;'></img>");
+          else
+              out.println("<img src='img/gravatar.png'  alt='...'></img>");
+        %>
+               
+               
+              </span>
+              <div class="text-ellipsis w-auto hidden-sm hidden-md" style="max-width:150px;"><span class="hidden-sm hidden-md"><%=SafeHtmlUtil.sanitize(domainUser.name)%></span></div>
+             <!-- <b class="caret"></b> -->   
+
+             <div  class="">
+                     <span class="text-sm m-r-md"> <%=SafeHtmlUtil.sanitize(user.getEmail())%></span>
+                  </div>
+                  </span>              
+                   </a>
+                </li>
+
+                  <li></li>
+
+                  <li><a href="#user-prefs"><!-- <i class="icon-cog"></i> -->
+
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preferences") %></div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
+
+                  <%
+                      if (domainUser != null && domainUser.is_admin)
+                      {
+                            out.print("<li><a href='#account-prefs'><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localeJSON, "admin-settings") + "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li>");
+                      }
+                  %>
+                  <li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "theme-and-layout") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
+                  
+                  <li><a href="#subscribe"><!-- <i class="icon-cog"></i> -->
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+                  <li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
+                  <li><a href="https://www.agilecrm.com/support" target="_blank"><!-- <i class="icon-off"></i> -->
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
+                  <li><a href="<%=logoutURL%>"><!-- <i class="icon-off"></i> -->
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "logout") %></div><div class='pull-right shortcuts'>Shift + G</div><div class="clearfix"></div></a></li>
+
+                </li>
+              <%
+                  }
+              %>
+            </ul>
+          </div>
+  </div>
+  </div>
+  </aside>
+<div class='app-content <%if("admin".equals(domainUser.domain)) out.print("adminPanelcontainer"); %>' id="agilecrm-container">
+<div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
+<div id="draggable_noty" style = "height:0px;position: absolute!important;"><div style="z-index: 10000;position: relative;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div><div class="draggable_noty_callScript" style="display:none;"></div></div></div>
+<div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
+<script type="text/javascript">
+// In mobile browsers, don't show animation bar
+if( (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) )
+{
+  document.write('<div class="butterbar" style="z-index:99;"><span class="bar"></span></div>');
+} else {
+  document.write('<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>');
+}
+</script>
+<div id="content" class="app-content-body">
+<!-- <img class="init-loading" style="padding-right: 5px"
+src="img/21-0.gif"></img> -->
+</div>
+</div>
+<div id="push"></div>
+
+<!-- Notifications -->
+<div class='notifications top-left'></div>
+<div class='notifications top-right'></div>
+<div class='notifications bottom-left'></div>
+<div class='notifications bottom-right'></div>
+
+<div id='templates'></div>
+
+<!-- Templates
+Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
+    
+  
+
+<!-- Determine Console.logging - we log in local boxes -->
+<%
+boolean debug = true;
+boolean production = false;
+boolean HANDLEBARS_PRECOMPILATION = false;
+if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+{
+    debug = false;
+    HANDLEBARS_PRECOMPILATION = true;
+    production = true;
+   
+}
+String tplFile = "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".html";
+// String tplFile = _LANGUAGE + ".html";
+try{
+  if(HANDLEBARS_PRECOMPILATION)
+    out.println(FileStreamUtil.readResource(application.getRealPath("/") + "/" + tplFile));  
+}catch(Exception e){
+  e.printStackTrace();
+}
+%>
+
+<!-- Including Template page -->
+
+<!-- Include bootstrap modal divs-->
+<%@ include file="flatfull/modals.html"%>
+
+</div>
+
+
+
+<!-- Including Footer page -->
+<jsp:include page="flatfull/footer.jsp" /> 
+
+
+
+<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
+<script src='<%=FLAT_FULL_PATH%>jscore/handlebars/download-template.js'></script>
+<script>
+
+var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
+
+var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
+//var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
+//var LIB_PATH = "//cdnapp.agilecrm.com/";
+var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';
+
+var FLAT_FULL_PATH = '<%=FLAT_FULL_PATH%>';
+
+// Target to cloudfront URL
+var LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH%>'
+
+var CLOUDFRONT_PATH = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>';
+
+var LOGIN_FROM_PANEL = '<%=panel%>';
+
+var CURRENTIP = '<%=clientIP%>';
+
+var FLAT_FULL_UI = "flatfull/";  
+
+var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
+
+var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
+
+var CSS_PATH = '<%=CSS_PATH%>';
+// var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+
+var IS_CONSOLE_ENABLED = <%=debug%>;
+var LOCAL_SERVER = <%=debug%>;
+var _IS_FREE_PLAN = <%=is_free_plan%>;
+
+var IS_NEW_USER = <%=is_first_time_user%>;
+
+var IS_FLUID = <%=is_fluid %>
+
+var CLICKDESK_CODE_LOADED = false;
+
+var _plan_on_signup = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(plan))%>;
+
+// Get current user prefs json
+var CURRENT_USER_PREFS = <%=SafeHtmlUtil.sanitize(UserPrefsUtil.getMapperString(currentUserPrefs))%>;
+
+//Get current user prefs json
+var ACCOUNT_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(accountPrefs))%>; 
+
+// Get current domain user json
+var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
+
+//Get current domain addon json
+var ADDON_INFO = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(addOn))%>;
+
+// Get current user dashboards
+var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
+// Get Current Agile User
+var CURRENT_AGILE_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(AgileUser.getCurrentAgileUser()))%>;
+
+// Get Contact Date Fields
+var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeDate")))%>;
+// Get Contact Date Fields
+var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeDate")))%>;
+
+// Get Lead Date Fields
+var LEADS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeDate")))%>;
+
+// Get Contact contact type custom fields
+var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeContact")))%>;
+// Get Contact company type custom fields
+var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeCompany")))%>;
+
+// Get Company contact type custom fields
+var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeContact")))%>;
+// Get Company company type custom fields
+var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeCompany")))%>;
+
+// Get Lead contact type custom fields
+var LEADS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeContact")))%>;
+// Get Lead company type custom fields
+var LEADS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeCompany")))%>;
+
+//online scheduling url will be filled  only when user goes to calendar route 
+var ONLINE_SCHEDULING_URL ="" ;
+
+var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
+
+// Billing Restriction
+var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
+var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
+
+try{if(!HANDLEBARS_PRECOMPILATION)console.time("startbackbone");}catch(e){}
+
+// Load language JSON
+var _LANGUAGE = "<%=_LANGUAGE%>";
+// var _Agile_Resources_Json = {};
+// head.js("locales/" + _LANGUAGE + "/" + _LANGUAGE + ".json?" + _agile_get_file_hash('lib-all-new-2.js'));
+head.load(  "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+      LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
+      "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
+      LIB_PATH + 'final-lib/min/backbone-min.js',
+      LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'),  
+      function(){
+        showVideoForRegisteredUser();
+        
+    });
+
+// head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
+
+if(HANDLEBARS_PRECOMPILATION)
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/" + _LANGUAGE + ".js" + "?_=" + _agile_get_file_hash(_LANGUAGE + '.js'));  
+
+var en;
+
+// Fetch/Create contact from our domain
+var Agile_Contact = {};
+
+
+// head.ready('library', function() {
+
+head.ready(function() {
+
+if(!HANDLEBARS_PRECOMPILATION){
+    head.js(HANDLEBARS_LIB, function()
+    {
+        downloadTemplate("tpl.js");
+        downloadTemplate("contact-view.js");
+    });
+}
+ 
+// Remove the loadinng
+$('body').css('background-image', 'none');
+//$('#content').html('ready');
+$("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
+
+head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'/js-all-min-1.js' + "?_=" + _agile_get_file_hash('js-all-min-1.js')}, 
+    {'js-core-2': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')}, 
+    {'js-core-3': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
+    {'js-core-4': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE +'/js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')}, 
+    CLOUDFRONT_PATH + "tpl/min/precompiled/locales/" + _LANGUAGE + "/contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
+      // console.log("All files loaded. Now continuing with script");
+      load_globalize();
+      try{
+        $('[data-toggle="tooltip"]').tooltip();  
+        //Code to display alerts of widgets.
+        showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+      } catch(e) {
+        //Do nothing
+      }
+       
+      //Resting the variables.
+      <% session.removeAttribute("widgetMsgType");
+      session.removeAttribute("widgetMsg"); 
+      %>
+      
+      try{
+        var sig = CURRENT_USER_PREFS.signature;
+        sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+        CURRENT_USER_PREFS.signature = sig;
+
+        // Dont sanitize domain name
+        CURRENT_DOMAIN_USER.domain = CURRENT_DOMAIN_USER.domain.replace(/&#x73;/g, "s");
+
+        //Turn off all animations if this is mobile
+        if( agile_is_mobile_browser() )
+        {
+          $("body")[0].addClass('disable-anim');
+        }
+
+      } catch(e) {
+        
+      }
+
+  });
+
+
+// Safari Browser Specific CSS
+
+function isSafari() {
+  return !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+}
+
+if(isSafari()){
+  head.load("/css/safari-only.css?_=<%=_AGILE_VERSION%>");
+}
+
+
+// head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
+
+}); //End of head.ready() function. Check above.
+
+
+function load_globalize()
+{
+
+  /*if (typeof Globalize != "function") {
+    setTimeout(function() {
+      load_globalize();
+    }, 100);
+    return;
+  } */
+
+  Globalize.load(Globalize_Main_Data);
+  en = Globalize("en");
+
+}
+
+function showVideoForRegisteredUser(){
+    // console.log("Ref = " + document.referrer);
+
+  if(!document.referrer || document.referrer.indexOf("invite-users") == -1)
+         return;
+
+      
+    var domainuser_video_cookie = CURRENT_DOMAIN_USER.domain+'_video_cookie';
+    if(!localStorage.getItem(domainuser_video_cookie))
+    {     
+       $("#dashboard_video").modal("show");
+       var $frame = $("#dashboard_video iframe");
+       $frame.attr("src", $frame.attr("data-source"));
+       
+    } 
+    
+    localStorage.setItem(domainuser_video_cookie,true);
+    
+}
+
+function closeVideo(){
+   $('#dashboard_video').on("click", ".close", function () {
+       $('#dashboard_video').modal("hide");
+        $('#dashboard_video iframe').removeAttr("src");
+    });
+}
+
+</script>
+
+
+<!-- ClickDesk Live Chat Service for websites -->
+<script type='text/javascript'>
+var _glc =_glc || []; _glc.push('all_ag9zfmNsaWNrZGVza2NoYXRyDgsSBXVzZXJzGKD0uQoM');
+var glcpath = (('https:' == document.location.protocol) ? 'https://my.clickdesk.com/clickdesk-ui/browser/' : 
+'http://my.clickdesk.com/clickdesk-ui/browser/');
+var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
+</script>
+<!-- End of ClickDesk -->
+
+ <!--video on dashboard -->
+ <div class="modal  fade hidden-xs" id="dashboard_video"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
+       <div class="modal-dialog" id="dashboard-video" >
+        <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" onClick="closeVideo()">&times;</button>
+          <h3 id="myModalLabel">Welcome to Agile CRM</h3>
+          <small>Here is a short video which explains the steps to get started with Agile. We recommend you watch it.</small>
+        </div>      
+        <div class="modal-body">
+              <div class="embed-responsive embed-responsive-16by9">
+                      <iframe class="embed-responsive-item" data-source="https://www.youtube.com/embed/9aH60N6HPcc?list=PLqZv4FUxASTctDCZmdVbheU75Y3Szk9Ny" frameborder="0" allowfullscreen></iframe>
+              </div> 
+
+              
+        </div>
+               
+        <div class="modal-footer">
+                 <a href="http://salescal.agilecrm.com/" target="_blank" class="btn btn-primary" id="schedule_demo" onclick="Agile_GA_Event_Tracker.track_event('Demo from Getting Started Video');">Schedule a Demo</a>
+        </div>                     
+                                 
+        </div>
+          
+        
+        </div>
+  </div>
+<div id="fb-root"></div>
+</body>
+</html>
