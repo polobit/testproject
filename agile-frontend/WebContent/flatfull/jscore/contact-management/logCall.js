@@ -453,6 +453,10 @@ function showDynamicCallLogs(data)
 		$('#phoneLogForm #callWidgetName').val(data.widget);
 		$('#phoneLogForm #saveActivity').val("true");
 		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ data.contId +'">'+data.contact_name+'</li>');
+		CallLogVariables.description = $("#agilecrm-container #call-noty-notes").val().trim();
+		if(CallLogVariables.description){
+			$("#phoneLogForm #description").val(CallLogVariables.description);
+		}
 		$("#phoneLogForm").find("#description").focus();
 		agile_type_ahead("call_related_to",  $("#phoneLogForm", '#logCallModal'), contacts_typeahead);
 		

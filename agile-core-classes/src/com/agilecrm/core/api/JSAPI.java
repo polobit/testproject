@@ -108,11 +108,18 @@ public class JSAPI
 	{
 	    // Search contact based on email, returns empty contact if contact
 	    // is not available with given email
+	    
+	    if(StringUtils.isNotBlank(email) && !email.contains("@"))
+		return JSAPIUtil.generateContactMissingError();
 
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
 	    if (contact == null)
 	    	return JSAPIUtil.generateContactMissingError();
+	    
+	    String contactEmail = contact.getContactFieldValue("EMAIL");
+	    if(!contactEmail.equalsIgnoreCase(email))
+		return JSAPIUtil.generateContactMissingError();
 	    
 	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
 	    

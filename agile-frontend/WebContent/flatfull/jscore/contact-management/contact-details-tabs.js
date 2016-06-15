@@ -217,12 +217,12 @@ var Contact_Details_Tab_Actions = {
 		  	}
 
 		  	if(!hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "deal"){
-		  		$('#deal_delete_privileges_error_modal').modal('show');
+		  		$('#deal_delete_privileges_error_modal').html(getTemplate("deal-delete-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
 
 		  	if(model.get("entity_type") && model.get("entity_type") == "note" && Current_Route.indexOf("deal/") == 0 && model.get("domainOwner") && !hasScope("MANAGE_DEALS") && (CURRENT_DOMAIN_USER.id != owner)){
-		  		$('#deal_update_privileges_error_modal').modal('show');
+		  		$('#deal_update_privileges_error_modal').html(getTemplate("deal-update-privileges-error-modal")).modal('show');
 		  		return;
 		  	}
 

@@ -162,7 +162,30 @@ function saveCallNoteBria(){
 	if(direction == "Incoming"){
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
 	    	if(!responseJson){
+	    		
+	    		resetCallLogVariables();
+	    		
+	    		if(callStatus == "Answered") {
+	    			var data = {};
+	    			data.url = "/core/api/widgets/bria/";
+	    			data.subject = noteSub;
+	    			data.number = number;
+	    			data.callType = "inbound";
+	    			data.status = "answered";
+	    			data.duration = duration;
+	    			data.contId = null;
+	    			data.contact_name = "";
+	    			data.widget = "Bria";
+	    			CallLogVariables.dynamicData = data;
+	    		}
+		    		CallLogVariables.callWidget = "Bria";
+		    		CallLogVariables.direction = "inbound";
+		    		CallLogVariables.phone = number;
+		    		CallLogVariables.duration = duration;
+		    		CallLogVariables.status = callStatus;
+	    		
 	    		return showNewContactModal(number);
+	    		
 	    	}
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
@@ -235,7 +258,28 @@ function saveCallNoteBria(){
 					autosaveNoteByUser(note);
 				}
 		}else{
-			return showNewContactModal(number);
+			resetCallLogVariables();
+    		
+    		if(callStatus == "Answered") {
+    			var data = {};
+    			data.url = "/core/api/widgets/bria/";
+    			data.subject = noteSub;
+    			data.number = number;
+    			data.callType = "outbound-dial";
+    			data.status = "answered";
+    			data.duration = duration;
+    			data.contId = null;
+    			data.contact_name = "";
+    			data.widget = "Bria";
+    			CallLogVariables.dynamicData = data;
+    		}
+	    		CallLogVariables.callWidget = "Bria";
+	    		CallLogVariables.direction = "outbound-dial";
+	    		CallLogVariables.phone = number;
+	    		CallLogVariables.duration = duration;
+	    		CallLogVariables.status = callStatus;
+    		
+    		return showNewContactModal(number);
 		}
 	}
 }
