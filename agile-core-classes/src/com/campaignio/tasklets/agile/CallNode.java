@@ -107,7 +107,7 @@ public class CallNode extends TaskletAdapter
 	    VoiceCallUtil.makeVoiceCall(CALL_ACCOUNT_ID, CALL_AUTH_TOKEN, from, firstCall, secondCall, message);
 	    
 	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    "voice call done ", LogType.CALL_DONE.toString());
+		    "Voice call done ", LogType.CALL_DONE.toString());
 	}
 	catch (Exception e)
 	{
