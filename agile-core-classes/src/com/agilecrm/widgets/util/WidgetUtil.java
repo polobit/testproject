@@ -77,10 +77,8 @@ public class WidgetUtil {
 
 						JSONArray userArray = WidgetUtil
 								.getWigetUsersList(widget.name);
-
-						if (oldUsersArray != null
-								&& !(oldUsersArray.contains(userID))) {
-							if (userArray != null) {
+						if (userArray != null) {
+							if (oldUsersArray != null && oldUsersArray.length() > 0 && !(oldUsersArray.contains(userID))) {
 								for (int i = 0; i < userArray.length(); i++) {
 									try {
 										String tempID = userArray.getString(i);
@@ -93,9 +91,9 @@ public class WidgetUtil {
 										e.printStackTrace();
 									}
 								}
+							} else {
+								finalArray = userArray;
 							}
-						} else {
-							finalArray = userArray;
 						}
 
 						widget.listOfUsers = finalArray.toString();
