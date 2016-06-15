@@ -2052,7 +2052,7 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
      */
     public static List<Contact> searchContactsAndCompaniesByEmailList(List<String> emails)
     {
-	if (emails == null)
+	if (emails == null || (emails != null && emails.size() == 0))
 	    return null;
 
 	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value in", emails);
