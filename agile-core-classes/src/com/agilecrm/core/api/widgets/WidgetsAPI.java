@@ -422,6 +422,7 @@ public class WidgetsAPI {
 				}
 			}
 			widget = WidgetUtil.getWidget(widgetName);
+			widget.add_by_admin = true;
 			widget.listOfUsers = finalUsers.toString();
 			widget.updateUserList();
 		}
