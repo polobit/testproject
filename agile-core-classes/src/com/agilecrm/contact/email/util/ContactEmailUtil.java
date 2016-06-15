@@ -236,6 +236,7 @@ public class ContactEmailUtil
 	public static void buildContactEmailAndSend(ContactEmailWrapper contactEmail) throws Exception
 	{
 		checkAndModifyToCcAndBccEmails(contactEmail);
+		System.out.println("After checkAndModifyToCcAndBccEmails in buildContactEmailAndSend");
 	    saveContactEmailAndSend(contactEmail);
 	}
 	
@@ -908,6 +909,11 @@ public class ContactEmailUtil
 		    }
 		    
 		    List<Contact> toEmailContacts = ContactUtil.searchContactsAndCompaniesByEmailList(toEmailsList);
+		    
+		    if(toEmailsList != null)
+		    {
+		    	System.out.println("toEmailContacts in getMailsAfterUpdateCheck---"+toEmailsList.size());
+		    }
 		    
 		    if(toEmailContacts != null && toEmailContacts.size() > 0)
 		    {

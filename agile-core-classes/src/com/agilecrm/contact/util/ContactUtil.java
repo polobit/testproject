@@ -2052,9 +2052,13 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
      */
     public static List<Contact> searchContactsAndCompaniesByEmailList(List<String> emails)
     {
+    System.out.println("Emails in searchContactsAndCompaniesByEmailList---"+emails);
 	if (emails == null || (emails != null && emails.size() == 0))
 	    return null;
-
+	if(emails != null)
+	{
+		System.out.println("Emails size in searchContactsAndCompaniesByEmailList---"+emails.size());
+	}
 	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value in", emails);
 
 	try
