@@ -673,6 +673,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </aside>
 <div class="app-content" id="agilecrm-container">
 <div id="draggable_noty" style = "height:0px;position: absolute!important;"></div>
+<div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
 <script type="text/javascript">
 // In mobile browsers, don't show animation bar
