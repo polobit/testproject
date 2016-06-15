@@ -118,83 +118,97 @@ $(function()
 	$('body #direct-dialler-div').on('click', '.dial0', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",0);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","0");
+			  	//var newText = appendToText("#dail_phone_number",0);
+			  	//$("#dail_phone_number").val(newText);
 			});
+	
 	
 	$('body #direct-dialler-div').on('click', '.dial1', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",1);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","1");
+			  	/*var newText = appendToText("#dail_phone_number",1);
+			  	$("#dail_phone_number").val(newText);*/
 			});
 	$('body #direct-dialler-div').on('click', '.dial2', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",2);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","2");
+			  	/*var newText = appendToText("#dail_phone_number",2);
+			  	$("#dail_phone_number").val(newText);*/
 			});
 	$('body #direct-dialler-div').on('click', '.dial3', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",3);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","3");
+			 /* 	var newText = appendToText("#dail_phone_number",3);
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 	$('body #direct-dialler-div').on('click', '.dial4', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",4);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","4");
+			  	/*var newText = appendToText("#dail_phone_number",4);
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 	$('body #direct-dialler-div').on('click', '.dial5', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",5);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","5");
+			/*  	var newText = appendToText("#dail_phone_number",5);
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 	$('body #direct-dialler-div').on('click', '.dial6', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",6);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","6");
+			  	/*var newText = appendToText("#dail_phone_number",6);
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 	$('body #direct-dialler-div').on('click', '.dial7', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",7);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","7");
+			  /*	var newText = appendToText("#dail_phone_number",7);
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 	$('body #direct-dialler-div').on('click', '.dial8', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",8);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","8");
+			  	/*var newText = appendToText("#dail_phone_number",8);
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 	$('body #direct-dialler-div').on('click', '.dial9', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number",9);
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","9");
+			  	/*var newText = appendToText("#dail_phone_number",9);
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 	$('body #direct-dialler-div').on('click', '.dial-star', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number","*");
-			  	$("#dail_phone_number").val(newText);
+			  	insertValueInAt("#dail_phone_number","*");
+			  	/*var newText = appendToText("#dail_phone_number","*");
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 	$('body #direct-dialler-div').on('click', '.dial-hash', function(e)
 			{
 			  	e.preventDefault();
-			  	var newText = appendToText("#dail_phone_number","#");
-			  	$("#dail_phone_number").val(newText);
+			  	
+			  	insertValueInAt("#dail_phone_number","#");
+			  	/*var newText = appendToText("#dail_phone_number","#");
+			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
 });
