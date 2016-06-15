@@ -812,7 +812,8 @@ function getFormattedDateObjectForMonthWithString(value){
 
 		if(!value)
 			   return new Date("");
-
+			if(window.navigator.userAgent.indexOf('Mozilla')!=-1 && window.navigator.userAgent.indexOf('Chrome')==-1) 
+					value="01 "+value;
         value = value.replace(/\./g,'/');
 
 		return new Date(value);
