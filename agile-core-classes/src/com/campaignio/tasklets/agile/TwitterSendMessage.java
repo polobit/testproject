@@ -1,9 +1,11 @@
 package com.campaignio.tasklets.agile;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.DomainLimitsUtil;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -59,7 +61,9 @@ public class TwitterSendMessage extends TaskletAdapter
 	String message = getStringValue(nodeJSON, subscriberJSON, data, MESSAGE);
 	String rateLimit = getStringValue(nodeJSON, subscriberJSON, data, RATE_LIMIT);
 	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, SendEmail.TRACK_CLICKS);
-	String twitter_id=subscriberJSON.getJSONObject("data").getString("twitter_id");
+	String twitter_id=null;
+	if(subscriberJSON.getJSONObject("data").has("twitter_id"))
+	      twitter_id=subscriberJSON.getJSONObject("data").getString("twitter_id");
 
 	try
 	{
@@ -92,14 +96,18 @@ public class TwitterSendMessage extends TaskletAdapter
 		
 	
 	   try{
-		if(DomainLimitsUtil.checkDomainLimits(NamespaceManager.get()).getTweet_limit()  > 0 && twitter_id!=null)
+		if(DomainLimitsUtil.checkDomainLimits(NamespaceManager.get()).getTweet_limit()  > 0 && !StringUtils.isBlank(twitter_id))
 		{	 
 		    TwitterJobQueueUtil.addToTwitterQueue(account, token, tokenSecret, message, rateLimit, subscriberJSON, campaignJSON);
 		    DomainLimitsUtil.decrementTweetLimit(NamespaceManager.get());
 		    
 		 }
-		else{
-			 LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "25 Tweets per day limit reached.",LogType.TWEET.toString()); 
+		else if(StringUtils.isBlank(twitter_id)){
+			 LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "person doesn't have tweeter_id",LogType.TWEET.toString()); 
+		}
+		else
+		{
+		  LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "25 Tweets per day limit reached.",LogType.TWEET.toString()); 
 
 		 }
 	   }catch(Exception e){
