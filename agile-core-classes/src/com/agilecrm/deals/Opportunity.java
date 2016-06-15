@@ -596,6 +596,8 @@ public class Opportunity extends Cursor implements Serializable
     public void delete()
     {
 	dao.delete(this);
+	
+	new AppengineSearch<Opportunity>(Opportunity.class).delete(id.toString());
     }
     /**
      * Retursn list of tags (list of {@link Tag}).
