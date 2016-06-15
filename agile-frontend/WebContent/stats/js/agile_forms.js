@@ -63,7 +63,7 @@ var _agile_synch_form_v4 = function()
 				agile_note.description = field_value;
 				agile_notes.push(agile_note);
 			}
-			else if(field_type == "checkbox")
+			else if(field_type == "Checkbox")
 			{
 				if (agile_multiple_checkbox)
 					agile_multiple_checkbox = agile_multiple_checkbox + ',' + field_value;
