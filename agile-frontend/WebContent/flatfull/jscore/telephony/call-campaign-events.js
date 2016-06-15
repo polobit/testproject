@@ -60,38 +60,7 @@ $(function(){
 				  }
 			}
 		}	
-	
-		if(CallLogVariables.callWidget){
-			if(CallLogVariables.dynamicData != null){
-				if(CallLogVariables.processed){
-					return;
-				}
-			}
-			try{
-				//if the data is not there - it means call status is not completed - so we log the activities of the call
-				var widgetType = CallLogVariables.callWidget.toLowerCase();
-				var direction = CallLogVariables.callType;
-				var phoneNumber = CallLogVariables.phone;
-				var status = CallLogVariables.status;
-				var duration = CallLogVariables.duration;
-				var url = "/core/api/widgets/" + widgetType + "/savecallactivity";
-				
-				
-				//url is : 
-				//1)twilio : /core/api/widgets/twilio/savecallactivity
-				//2)bria : /core/api/widgets/bria/savecallactivity
-				//3)skype: /core/api/widgets/skype/savecallactivity
-				
-				$.post( url,{
-				direction: direction, 
-				phone: phoneNumber, 
-				status : status,
-				duration : duration 
-				});
-				resetCallLogVariables();
-			}catch(e){
-			}
-		}
+			
 	});  
 
 //This method is called when the user click on select box for wrapup time in call-campaign setting page....
