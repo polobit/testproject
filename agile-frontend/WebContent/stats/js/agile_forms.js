@@ -25,7 +25,7 @@ var _agile_synch_form_v4 = function()
 
 	var agile_contact = {};
 	var agile_address = {};
-	var agile_multiple_checkbox=undefined;
+	var agile_multiple_checkbox = "";
 	var agile_tags = undefined;
 	var agile_notes = [];
 	var form_data = {};
@@ -63,12 +63,14 @@ var _agile_synch_form_v4 = function()
 				agile_note.description = field_value;
 				agile_notes.push(agile_note);
 			}
-			else if(field_type == "Checkbox")
-			{
+			else if(field_type == "checkbox")
+			   {
 				if (agile_multiple_checkbox)
 					agile_multiple_checkbox = agile_multiple_checkbox + ',' + field_value;
 				else
 					agile_multiple_checkbox = field_value;
+
+				  agile_contact[field_name] = agile_multiple_checkbox;  
 			}
 
 			else
