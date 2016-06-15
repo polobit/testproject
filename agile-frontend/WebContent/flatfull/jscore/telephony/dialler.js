@@ -86,13 +86,13 @@ $(function()
 			  	
 			  	if(!widgetName){
 			  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
-			  		$(".dialler-modal-body").html("Please select a widget to call");
+			  		$(".dialler-modal-body").html("Please select a widget from the dropdown to dial.");
 			  		$("#diallerInfoModal").modal("show");
 			  		return;
 			  	}
 			  	if (to.length < 1){
 			  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
-			  		$(".dialler-modal-body").html("Please press number to dial");
+			  		$(".dialler-modal-body").html("Please enter a number to dial.");
 			  		$("#diallerInfoModal").modal("show");
 			  		return;
 			  	}
