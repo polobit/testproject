@@ -1225,7 +1225,7 @@ public class Contact extends Cursor
 	{
 	    contact_company_id = String.valueOf(contact_company_key.getId());
 	    Contact companyContact;
-	    /*try
+	    try
 	    {
 		companyContact = dao.get(contact_company_key);
 		ContactField contactField = getContactField(COMPANY);
@@ -1258,7 +1258,7 @@ public class Contact extends Cursor
 	    }
 	    catch(Exception e){
 	    	System.out.println("exception found");	    	
-	    }*/
+	    }
 	}
 	else
 	{
