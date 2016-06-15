@@ -101,7 +101,8 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    
 	    // Update time with timezone
 	    for (Task task : taskList) {
-	    	task.timeFormatForEmail = DateUtil.getCalendarString(task.due, "hh:mm a", timezone);
+	    	if(task.due != null)
+	    		task.timeFormatForEmail = DateUtil.getCalendarString(task.due * 1000, "hh:mm a", timezone);
 		}
 
 	    // Task stored as map like
