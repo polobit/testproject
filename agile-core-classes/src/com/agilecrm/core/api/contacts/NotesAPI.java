@@ -58,6 +58,7 @@ public class NotesAPI
 		for(String s : contactIds){
 			try{			
 				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.forceSearch = true;
 				contact.save();		
 			}catch(Exception e){
 				e.printStackTrace();
@@ -95,6 +96,7 @@ public class NotesAPI
 				for(String s : contactIds){
 					try{			
 						Contact contact = ContactUtil.getContact(Long.parseLong(s));
+						contact.forceSearch = true;
 						contact.save();		
 					}catch(Exception e){
 						e.printStackTrace();
@@ -112,6 +114,7 @@ public class NotesAPI
 				for(String s : contactIds){
 					try{			
 						Contact contact = ContactUtil.getContact(Long.parseLong(s));
+						contact.forceSearch = true ;
 						contact.save();		
 					}catch(Exception e){
 						e.printStackTrace();

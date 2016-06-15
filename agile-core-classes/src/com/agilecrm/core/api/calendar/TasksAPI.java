@@ -252,6 +252,7 @@ public class TasksAPI
 		{
 			for(Contact c : task.relatedContacts())
 			{
+				c.forceSearch = true;
 				c.save();
 			}
 		}
@@ -285,8 +286,10 @@ public class TasksAPI
 					}
 				}
 			if(oldTask != null && oldTask.relatedContacts() != null && oldTask.relatedContacts().size() > 0){
-				for(Contact c : oldTask.relatedContacts())
+				for(Contact c : oldTask.relatedContacts()){
+					c.forceSearch = true ;
 					c.save();
+				}
 			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -302,8 +305,10 @@ public class TasksAPI
 			}
 		}
 		if(task.relatedContacts() != null && task.relatedContacts().size() > 0){
-			for(Contact c : task.relatedContacts())
+			for(Contact c : task.relatedContacts()){
+				c.forceSearch  = true;
 				c.save();
+			}
 		}
 	} catch (Exception e1) {
 		// TODO Auto-generated catch block
@@ -345,8 +350,10 @@ public class TasksAPI
 					 }
 				 }
 				 if(task.relatedContacts() != null && task.relatedContacts().size() > 0){
-					 for(Contact c : task.relatedContacts())
+					 for(Contact c : task.relatedContacts()){
+						 c.forceSearch = true ;
 						 c.save();
+					 }
 				 }
 			}
 		} catch (Exception e) {

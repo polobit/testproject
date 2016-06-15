@@ -206,6 +206,7 @@ public class EventsAPI
 		if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
 			for(Contact c : event.relatedContacts()){
 				try {
+					c.forceSearch = true;
 					c.save();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -251,6 +252,7 @@ public class EventsAPI
 		if(oldEvent.relatedContacts() != null && oldEvent.relatedContacts().size() > 0){
 			for(Contact c : oldEvent.relatedContacts()){
 				try {
+					c.forceSearch = true;
 					c.save();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -282,6 +284,7 @@ public class EventsAPI
 		if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
 			for(Contact c : event.relatedContacts()){
 				try {
+					c.forceSearch = true;
 					c.save();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -339,6 +342,7 @@ public class EventsAPI
 				if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
 					for(Contact c : event.relatedContacts()){
 						try {
+							c.forceSearch = true;
 							c.save();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block

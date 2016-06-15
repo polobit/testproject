@@ -321,6 +321,7 @@ public class DealsAPI
 		for(String s : contactIds){
 			try{
 				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.forceSearch = true;
 				contact.save();
 			}
 			catch(Exception e){
@@ -371,6 +372,7 @@ public class DealsAPI
 		for(String s : contactIds){
 			try{
 				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.forceSearch = true ;
 				contact.save();
 			}
 			catch(Exception e){
@@ -384,6 +386,7 @@ public class DealsAPI
 		for(String s : contactIds){
 			try{
 				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.forceSearch = true;
 				contact.save();
 			}
 			catch(Exception e){
@@ -415,6 +418,7 @@ public class DealsAPI
 			for(String s : contactIds){
 				try{
 					Contact contact = ContactUtil.getContact(Long.parseLong(s));
+					contact.forceSearch = true ; 
 					contact.save();
 				}
 				catch(Exception e){
@@ -450,8 +454,10 @@ public class DealsAPI
 		List<Opportunity> deals = OpportunityUtil.getDealsBulkbyIds(opportunityIds);
 		for(Opportunity oppr :deals){
 			if(oppr.relatedContacts() != null && oppr.relatedContacts().size() > 0){
-				for(Contact c : oppr.relatedContacts())
+				for(Contact c : oppr.relatedContacts()){
+					c.forceSearch = true;
 					c.save();
+				}
 			}
 		}
 	} catch (Exception e) {

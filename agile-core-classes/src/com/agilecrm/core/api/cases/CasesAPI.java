@@ -102,6 +102,7 @@ public class CasesAPI
 	try {
 		if(newCase.relatedContacts() != null && newCase.relatedContacts().size() > 0){
 			for(Contact con : newCase.relatedContacts()){
+				con.forceSearch = true;
 				con.save();
 			}
 		}
@@ -128,6 +129,7 @@ public class CasesAPI
 	try {
 		if(oldCase.relatedContacts() != null && oldCase.relatedContacts().size() > 0){
 			for(Contact con : oldCase.relatedContacts()){
+				con.forceSearch = true ;
 				con.save();
 			}
 		}
@@ -139,6 +141,7 @@ public class CasesAPI
 	try {
 		if(newCase.relatedContacts() != null && newCase.relatedContacts().size() > 0){
 			for(Contact con : newCase.relatedContacts()){
+				con.forceSearch = true ;
 				con.save();
 			}
 		}
@@ -162,8 +165,10 @@ public class CasesAPI
     Case c = CaseUtil.getCase(id);
     try {
 		if(c.relatedContacts() != null && c.relatedContacts().size() > 0){
-			for(Contact con : c.relatedContacts())
+			for(Contact con : c.relatedContacts()){
+				con.forceSearch = true ;
 				con.save();
+			}
 		}
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
@@ -187,11 +192,13 @@ public class CasesAPI
     	JSONArray caseJSONArray = new JSONArray(ids);    	 
 		try {
 			for (int i = 0; i < caseJSONArray.length(); i++) {
-				 String caseId =  (String) caseJSONArray.get(i);
+				 String caseId = caseJSONArray.getString(i);
 				 Case c = CaseUtil.getCase(Long.parseLong(caseId));
 				 if(c != null && c.relatedContacts() != null && c.relatedContacts().size() > 0){
-					 for(Contact con : c.relatedContacts())
+					 for(Contact con : c.relatedContacts()){
+						 con.forceSearch = true;
 						 con.save();
+					 }
 				 }
 			}
 		} catch (Exception e) {

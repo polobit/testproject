@@ -945,6 +945,7 @@ public class ContactsAPI
 					List<String>contactIds = note.getContact_ids();
 					for(String s : contactIds){
 						Contact c = ContactUtil.getContact(Long.parseLong(s));
+						c.forceSearch = true;
 						c.save();
 					}
 				 }

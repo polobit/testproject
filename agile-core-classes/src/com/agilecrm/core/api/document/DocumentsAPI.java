@@ -156,6 +156,7 @@ public class DocumentsAPI
 		{
 			for(Contact c : document.getrelatedContacts())
 			{
+				c.forceSearch = true ; 
 				c.save();		
 			}
 		}
@@ -206,6 +207,7 @@ public class DocumentsAPI
 		{
 			for(Contact c : oldDocument.getrelatedContacts())
 			{
+				c.forceSearch = true;
 				c.save();		
 			}
 		}
@@ -234,6 +236,7 @@ public class DocumentsAPI
 		{
 			for(Contact c : document.getrelatedContacts())
 			{
+				c.forceSearch = true;
 				c.save();		
 			}
 		}
@@ -273,6 +276,7 @@ public class DocumentsAPI
 				{
 					for(Contact c : doc.getrelatedContacts())
 					{
+						c.forceSearch = true ; 
 						c.save();		
 					}
 				}				
