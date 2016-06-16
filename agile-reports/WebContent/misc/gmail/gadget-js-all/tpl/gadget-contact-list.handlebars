@@ -1,0 +1,35 @@
+{{#if id}}
+<!-- contact exist -->			
+		<div class="contact-minified row-fluid">
+			<div style="max-width:95%; display:inline-block;">
+				<div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+					<a class="gadget-show-contact display-toggle" style="cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Show</span></a><span title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}} ({{email}})" style="cursor:default;"> {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}} ({{email}}) </span>
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid show-contact-summary" style="display:none; margin-top:10px;"> 
+  			
+		</div>
+
+   		<div class="option-tabs row-fluid" style="display:none;">
+
+		</div>
+	{{else}}
+<!--contact not exist, add contact -->
+		<div class="agile-no-contact row-fluid">	
+			<div class="contact-list-width" style="max-width:75%; display:inline-block;">
+				<div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+					{{#if fname}}
+						<a class="gadget-add-contact" style="cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a><span title="{{fname}} {{lname}} ({{email}})" style="cursor:default;"> {{fname}} {{lname}} ({{email}})</span> <span style="margin-left:10px;">in Agile Contacts</span></span>
+					{{else}}
+						<a class="gadget-add-contact" style="cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a><span title="{{email}}" style="cursor:default;"> {{email}} <span style="margin-left:10px;">in Agile Contacts</span></span>
+					{{/if}}
+				</div>
+			</div>
+			<i class="contact-search-status" style="color:indianred; margin-left:20px; position:absolute;">Contact not found</i>
+		</div>
+      	<div class="show-add-contact-form row-fluid" style="display:none;">
+			
+		</div>
+	{{/if}}
