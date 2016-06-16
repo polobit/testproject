@@ -7207,7 +7207,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 								var properties = data.get(value).get("properties");
 								var img_path = "";
 								
-								var default_return = "src='"+'img/com-default-img.png'+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+								var default_return = "src='"+updateImageS3Path('img/com-default-img.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 								var error_fxn = "";
 
@@ -7217,7 +7217,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 									{
 										default_return = "src='" + properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
 
-										error_fxn = "this.src='"+'img/com-default-img.png'+"'; this.onerror=null;";
+										error_fxn = "this.src='"+updateImageS3Path('img/com-default-img.png')+"'; this.onerror=null;";
 
 										break;
 									}
@@ -7225,7 +7225,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 									{
 										default_return = "src='https://www.google.com/s2/favicons?domain=" + properties[i].value + "' " + "style='width:" + full_size + "px; height=" + full_size + "px; padding:" + size_diff + "px; " + additional_style + " ;'";
 
-										error_fxn = "this.src='"+"img/com-default-img.png"+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+										error_fxn = "this.src='"+updateImageS3Path("img/com-default-img.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 									}
 								}
 								img_path = new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
