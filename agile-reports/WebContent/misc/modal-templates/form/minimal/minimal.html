@@ -1,0 +1,136 @@
+<html lang="en">
+   <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <title>Popup</title>
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,700" rel="stylesheet" type="text/css" />
+      <style>
+         body {
+         background: #333;
+         width: 600px;
+         height: 385px;
+         }
+         #popup {
+         background: #17aed9;
+         color: #fff!important;
+         font: 20px/26px 'Open Sans', Helvetica, Arial, sans-serif!important;
+         letter-spacing: 0;
+         position: fixed;
+         width: 600px;
+         }
+         #popup-body {
+         padding: 40px 30px 0px;
+         text-align: center;
+         }
+         #popup-content p  {
+         margin: 0 0 25px;
+         }
+         #popup-content p:first-child  {
+         font-size: 24px!important;
+         line-height: 30px!important;
+         margin: 0 0 15px;
+         text-transform: uppercase;
+         }
+         #popup-content p big  {
+         font-size: 38px!important;
+         font-weight: bold;
+         letter-spacing: -1px;
+         line-height: 44px!important;
+         text-transform: uppercase;
+         }
+         #popup-content p small  {
+         font-size: 15px!important;
+         line-height: 21px!important;
+         }
+         #popup-content  a {
+         color: #fff;
+         text-decoration: underline;
+         }
+         #popup-form {
+         background: #fff;
+         border: 2px solid #fff;
+         -webkit-border-radius: 3px;
+         -moz-border-radius: 3px;
+         border-radius: 3px;
+         height: 50px;
+         margin: 0 auto 80px;
+         width: 420px;
+         }
+         #popup-form input.popup-text {
+         background: #fff url('https://s3.amazonaws.com/PopupTemplates/form/minimal/images/popup-form-text.png') no-repeat 18px 17px;
+         border: 0;
+         float: left;
+         height: 50px;
+         font: 20px/28px 'Open Sans', Helvetica, Arial, sans-serif!important;
+         letter-spacing: -1px;
+         margin: 0;
+         padding: 12px 20px 10px 60px;
+         outline: 0;
+         width: 270px;
+         }
+         #popup-form input.popup-text.popup-text-error {
+         color: #c00;
+         }
+         #popup-form input.popup-button {
+         background: #eb504e;
+         border: 0;
+         -webkit-border-radius: 0 2px 2px 0;
+         -moz-border-radius: 0 2px 2px 0;
+         border-radius: 0 2px 2px 0;
+         color: #fff!important;
+         cursor: pointer;
+         float: left;
+         font: 600 20px/50px 'Open Sans', Helvetica, Arial, sans-serif!important;
+         line-height: 50px!important;
+         margin: 0;
+         outline: 0;
+         padding: 0;
+         text-transform: uppercase;
+         width: 150px;
+         height: 50px;
+         }
+         #popup-form input.popup-button:hover, #popup-form input.popup-button:focus {
+         background: #e72b2b;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="popup">
+         <div id="popup-body">
+            <div id="popup-content">
+               <p>Try Agile CRM</p>
+               <p><big>Sell like the Fortune 500</big></p>
+               <p><i>Free upto 2 users. Upgrade when you grow. </i></p>
+               <form id="popup-form">
+                  <input type="text" agile-field="email" name="email" class="popup-text" />
+                  <input type="submit" class="popup-button" value="Sign up" />
+               </form>
+               <p><small><a href="#">No thanks, I will come back later</a></p>
+               </small>
+            </div>
+         </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
+      <script type="text/javascript">
+      window.parent._agile_load_fields();
+      jQuery.validator.setDefaults({
+        debug: true,
+        success: "valid"
+      });
+      $("#popup-form").validate({
+        rules: {
+          email: {
+            required: true,
+            email: true
+          }
+        },
+        submitHandler: function(form) {
+          window.parent._agile_save_form(true, window.parent._agile.set_email(document.getElementsByName("email")[0].value));
+          form.submit();
+        },
+        errorPlacement: function(error, element) {}
+      });
+      </script>
+   </body>
+</html>

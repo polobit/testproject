@@ -37,7 +37,22 @@
     
     <datastore-index kind="Workflow" ancestor="false" source="manual">
         <property name="access_level" direction="asc"/>
-        <property name="name" direction="asc"/>
+        <property name="name_dummy" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Workflow" ancestor="false" source="manual">
+        <property name="access_level" direction="asc"/>
+        <property name="name_dummy" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="Workflow" ancestor="false" source="manual">
+        <property name="access_level" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Workflow" ancestor="false" source="manual">
+        <property name="access_level" direction="asc"/>
+        <property name="created_time" direction="desc"/>
     </datastore-index>
     
     <datastore-index kind="Opportunity" ancestor="false" source="manual">

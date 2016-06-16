@@ -30,6 +30,7 @@
     	<ant antfile="build.xml" target="create-target" dir="../agile-tasks-handler"/>
 	    <ant antfile="build.xml" target="create-target" dir="../agile-slow-tasks-handler"/>
         <ant antfile="build.xml" target="create-target" dir="../agile-campaigns-logs"/>
+	<ant antfile="build.xml" target="create-target" dir="../agile-reports"/>
     </target>
                                                                                                         
 </project>

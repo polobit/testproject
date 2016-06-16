@@ -673,6 +673,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </aside>
 <div class="app-content" id="agilecrm-container">
 <div id="draggable_noty" style = "height:0px;position: absolute!important;"></div>
+<div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
 <script type="text/javascript">
 // In mobile browsers, don't show animation bar
@@ -787,19 +788,19 @@ var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
 var CURRENT_AGILE_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(AgileUser.getCurrentAgileUser()))%>;
 
 // Get Contact Date Fields
-var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;
+var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeDate")))%>;
 // Get Contact Date Fields
-var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE")))%>;
+var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeDate")))%>;
 
 // Get Contact contact type custom fields
-var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "CONTACT")))%>;
+var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeContact")))%>;
 // Get Contact company type custom fields
-var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "COMPANY")))%>;
+var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeCompany")))%>;
 
 // Get Company contact type custom fields
-var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "CONTACT")))%>;
+var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeContact")))%>;
 // Get Company company type custom fields
-var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "COMPANY")))%>;
+var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeCompany")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
