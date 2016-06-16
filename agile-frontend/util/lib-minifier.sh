@@ -12,7 +12,7 @@ cat $(find ../WebContent/flatfull/final-lib/final-lib-2 -iname *.js  | sort) >..
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-new-1.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-new-1.js
 java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-new-2.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-new-2.js
-
+cp ../WebContent/flatfull/lib/backbone-min.js ../WebContent/flatfull/final-lib/min/
 rm -r ../WebContent/flatfull/css/min/*.css
 
 mkdir ../WebContent/flatfull/css/min
