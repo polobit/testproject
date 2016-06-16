@@ -105,24 +105,37 @@
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
 				{{#if_equals name "CallScript"}}	
-					{{#isAdmin}}
+							{{#isAdmin}}
                            		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
   									<i class="fa fa-users"></i>
   				   		   		</a>
   				   		    {{/isAdmin}}			 
                    <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>                   
                 {{else}}
-		                {{#if_equals name "Twilio"}}
+		                {{#if_equals name "TwilioIO"}}
 		                    <a></a>
+		                {{else}}
+		               	 {{#if_equals name "Bria"}}
+		               	  <a></a>
+		               	  {{else}}
+		               	 {{#if_equals name "Skype"}}
+		               	  <a></a>
+		               	  {{else}}
+		               	 {{#if_equals name "Sip"}}
+		               	  <a></a>
 		                {{else}}
 		                	{{#isAdmin}}
                            		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
   									<i class="fa fa-users"></i>
   				   		   		</a>
   				   		    {{/isAdmin}}
-				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>				          
-                        {{/if_equals}}
-                {{/if_equals}}               
+  				   		   {{/if_equals}}
+  				   		     {{/if_equals}}
+                {{/if_equals}}
+                  {{/if_equals}}
+               
+				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>	
+				            {{/if_equals}}			                       
 				<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>				
 				{{#if_equals name "Bria"}}
 					<div class="text-center m-t-sm ">
