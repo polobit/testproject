@@ -86,7 +86,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 						templateKey : "helpcenter-articles",
 						individual_tag_name : 'div',
 						postRenderCallback : function(el){
-						Helpcenter_Util.setBreadcrumbPath();
 						}
 					});
 
