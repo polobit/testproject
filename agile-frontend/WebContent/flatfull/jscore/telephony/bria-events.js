@@ -179,7 +179,7 @@ function saveCallNoteBria(){
 	    			CallLogVariables.dynamicData = data;
 	    		}
 		    		CallLogVariables.callWidget = "Bria";
-		    		CallLogVariables.direction = "inbound";
+		    		CallLogVariables.callType = "inbound";
 		    		CallLogVariables.phone = number;
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
@@ -274,7 +274,7 @@ function saveCallNoteBria(){
     			CallLogVariables.dynamicData = data;
     		}
 	    		CallLogVariables.callWidget = "Bria";
-	    		CallLogVariables.direction = "outbound-dial";
+	    		CallLogVariables.callType = "outbound-dial";
 	    		CallLogVariables.phone = number;
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;

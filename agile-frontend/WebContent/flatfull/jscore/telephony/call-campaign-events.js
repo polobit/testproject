@@ -49,12 +49,28 @@ $(function(){
 //This will check if the campaign is started and need to dial the next call....
 	$('#personModal').on('hidden.bs.modal', function (e) {
 			
-			
-		if(CallLogVariables.dynamicData == null){
+		if(CALL_CAMPAIGN.start){
+			if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
+				  CALL_CAMPAIGN.state = "START";
+				  if(CALL_CAMPAIGN.autodial){
+					  dialNextCallAutomatically();
+				  }else{
+					  dialNextCallManually();
+				  }
+			}
+		}
+		
+		if(CallLogVariables.callWidget){
+
+			if(CallLogVariables.dynamicData != null){
+				if(CallLogVariables.processed){
+					return;
+				}
+			}
 			try{
 				//if the data is not there - it means call status is not completed - so we log the activities of the call
 				var widgetType = CallLogVariables.callWidget.toLowerCase();
-				var direction = CallLogVariables.direction;
+				var direction = CallLogVariables.callType;
 				var phoneNumber = CallLogVariables.phone;
 				var status = CallLogVariables.status;
 				var duration = CallLogVariables.duration;
@@ -74,17 +90,6 @@ $(function(){
 				});
 				resetCallLogVariables();
 			}catch(e){
-			}
-		}
-		
-		if(CALL_CAMPAIGN.start){
-			if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
-				  CALL_CAMPAIGN.state = "START";
-				  if(CALL_CAMPAIGN.autodial){
-					  dialNextCallAutomatically();
-				  }else{
-					  dialNextCallManually();
-				  }
 			}
 		}	
 			

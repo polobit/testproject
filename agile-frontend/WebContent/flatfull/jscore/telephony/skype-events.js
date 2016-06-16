@@ -232,7 +232,7 @@ function saveCallNoteSkype(){
 	    			CallLogVariables.dynamicData = data;
 	    		}
 		    		CallLogVariables.callWidget = "Skype";
-		    		CallLogVariables.direction = "inbound";
+		    		CallLogVariables.callType = "inbound";
 		    		CallLogVariables.phone = number;
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
@@ -319,7 +319,7 @@ function saveCallNoteSkype(){
     			CallLogVariables.dynamicData = data;
     		}
 	    		CallLogVariables.callWidget = "Skype";
-	    		CallLogVariables.direction = "outbound-dial";
+	    		CallLogVariables.callType = "outbound-dial";
 	    		CallLogVariables.phone = number;
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;

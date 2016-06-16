@@ -662,6 +662,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		}
 
 		// Hides the modal
+		if(CallLogVariables.dynamicData != null){
+			CallLogVariables.processed = true;
+		}
 		$('#' + modal_id).modal('hide');
 
 		// Resets each element

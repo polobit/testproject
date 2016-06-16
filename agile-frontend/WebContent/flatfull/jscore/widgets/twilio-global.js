@@ -1374,7 +1374,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 		}
 		
 		CallLogVariables.callWidget = "Twilio";
-		CallLogVariables.direction = TWILIO_DIRECTION;
+		CallLogVariables.callType = TWILIO_DIRECTION;
 		CallLogVariables.phone = phoneNumber;
 		CallLogVariables.duration = callRespJson.duration;
 		CallLogVariables.status = callRespJson.status;
