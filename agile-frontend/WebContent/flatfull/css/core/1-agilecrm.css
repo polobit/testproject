@@ -3989,7 +3989,7 @@ border-bottom:1px solid #eee;
     position: fixed;
     left: 21px;
     right: 21px;
-    bottom: -67px;
+    bottom: 0;
     height: 150px;
     z-index: 100;
     -webkit-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
@@ -4001,7 +4001,6 @@ border-bottom:1px solid #eee;
 
 #dealActions.open {
     opacity: 1;
-    bottom: -10px;
     -webkit-transition: bottom 0.3s ease-in;
     -moz-transition: bottom 0.3s ease-in;
     -ms-transition: bottom 0.3s ease-in;
