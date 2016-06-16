@@ -32,7 +32,9 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -1125,6 +1127,8 @@ public class CSVUtil
 	    boolean wrongMilestone = false;
 	    ArrayList<CustomFieldData> customFields = new ArrayList<CustomFieldData>();
 	    List<Milestone> list = null;
+	    List<Category> source_list = null;
+	    List<Category> reason_list = null;
 	    for (int i = 0; i < dealPropValues.length; i++)
 	    {
 
@@ -1359,6 +1363,37 @@ public class CSVUtil
 			    note.description = dealPropValues[i];
 			    note.save();
 			}
+			else if(value.equalsIgnoreCase("dealSource"))
+			{
+				    String sourceName = dealPropValues[i];
+				    //trackFound = true;
+				    CategoriesUtil source= new CategoriesUtil();
+				    source_list = source.getCategoryByName(sourceName);
+				    if (source_list.size() > 0)
+				   
+				    {
+				    	for(Category cat:source_list){
+				    		opportunity.deal_source_id=cat.getId();
+				    	}
+					
+				    }
+
+			}
+			else if(value.equalsIgnoreCase("lossReason"))
+			{
+				    String lossReason = dealPropValues[i];
+				    //trackFound = true;
+				    CategoriesUtil reason= new CategoriesUtil();
+				    reason_list = reason.getCategoryByName(lossReason);
+				    if (reason_list.size() > 0)
+				    {
+				    	for(Category cat:reason_list){
+				    		opportunity.lost_reason_id=cat.getId();
+				    	}
+					
+				    }
+
+			}
 
 		    }
 		    else
@@ -1402,7 +1437,28 @@ public class CSVUtil
 		    opportunity.milestone = values[0];
 		}
 	    }
+	    
+	    //Remove Lost Reason if milestone is not lost
+	    
+		String lostMilestone = "Lost";
+		try
+		{
+			if(opportunity.pipeline_id!=0){
+				 Milestone mile = MilestoneUtil.getMilestone(opportunity.pipeline_id);
+				    if (mile.lost_milestone != null)
+					lostMilestone = mile.lost_milestone;
+			}
+		   
 
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    if(opportunity.milestone!=null && !opportunity.milestone.equalsIgnoreCase(lostMilestone))
+	    {
+	    	opportunity.lost_reason_id=null;
+	    }
 	    // add all custom field in deals
 	    opportunity.custom_data = customFields;
 	    try

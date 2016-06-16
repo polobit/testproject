@@ -78,7 +78,12 @@ function showFacebookMatchingProfile(contact_id, first_name)
 
 					console.log(propertiesArray);
 
-					agile_crm_update_contact_properties(propertiesArray);
+					verifyUpdateImgPermission(function(can_update){
+						if(can_update)
+						{
+							agile_crm_update_contact_properties(propertiesArray);
+						}
+					});
 
 					// show twitter profile by id
 					showFacebookProfile(Facebook_id, contact_id);
@@ -320,6 +325,7 @@ function startFacebookWidget(contact_id)
 	$("#"+WIDGET_PARENT_ID).on("click", "#Facebook_plugin_delete", function(e)
 	{
 		e.preventDefault();
+		$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);
 		facebook_web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
 		console.log('deleting facebook acct.',facebook_web_url);		
 		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', facebook_web_url, function(data){

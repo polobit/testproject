@@ -224,6 +224,7 @@ if (scheduleid != null && multiple_users){  %>
 <script type="text/javascript" src="../../lib/date-formatter.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
 <script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
+<script type="text/javascript" src="../../lib/web-calendar-event/bootstrap.v3.min.js"></script>
 
 <link rel="stylesheet" href="../../css/web-calendar-event/datepicker.css"
 	type="text/css" />
@@ -265,7 +266,7 @@ if (scheduleid != null && multiple_users){  %>
 		   %>
 		   <div class="fluidClass col-xs-12 text-center">
 		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
-		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title="<%=pr_name%>"/>
+		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" data-toggle="tooltip" data-placement="bottom" title="<%=pr_name%>"/>
 		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
 		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
 		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
@@ -1197,8 +1198,11 @@ var BUFFERTIME=null;
 		var Selected_Date = null;		
 
 		$(document).ready(
+
 				function()
 				{
+					//$('img#multi-user-avatar').tooltip();
+					$("img#multi-user-avatar").tooltip({placement:'bottom'});
 					if(User_Id == 0 && !multiple_schedule_ids )
 						return;
 					if(multiple_schedule_ids){

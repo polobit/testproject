@@ -70,34 +70,34 @@ public class WidgetUtil {
 			for (Widget currentWidget : currentWidgets) {
 				if (currentWidget.name.equals(widget.name)) {
 					if (dmu.is_admin) {
-						JSONArray finalArray = new JSONArray();
+						JSONArray currentUsers = new JSONArray();
 
 						String userID = agileUser.id.toString();
-						String oldUsersArray = currentWidget.listOfUsers;
-
-						JSONArray userArray = WidgetUtil
-								.getWigetUsersList(widget.name);
-						if (userArray != null) {
-							if (oldUsersArray != null && !(oldUsersArray.contains(userID))) {
-								for (int i = 0; i < userArray.length(); i++) {
-									try {
-										String tempID = userArray.getString(i);
-										if(!tempID.equals(userID)){
-											finalArray.put(userArray.getLong(i));
-										}
-									} catch (JSONException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
+						String oldUsersArrayStr = currentWidget.listOfUsers;
+						JSONArray userArray = WidgetUtil.getWigetUsersList(widget.name);
+						boolean removeAdmin = false;
+						
+						if(oldUsersArrayStr == null){							
+							currentUsers.put(userID);
+						}else if(!(oldUsersArrayStr.contains(userID))){
+							removeAdmin = true;
+						}
+						
+						for (int i = 0; i < userArray.length(); i++) {
+							try {
+								String tempID = userArray.getString(i);
+								if (!(removeAdmin && tempID.equals(userID))) {
+									currentUsers.put(userArray.getLong(i));
 								}
-							} else {
-								finalArray = userArray;
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
 						}
 
-						widget.listOfUsers = finalArray.toString();
-						currentWidget.listOfUsers = finalArray.toString();
-						currentWidget.save();
+						widget.listOfUsers = currentUsers.toString();
+						currentWidget.listOfUsers = currentUsers.toString();
+						//currentWidget.save();
 					}
 					// Setting true to know that widget is configured.
 					widget.is_added = true;
@@ -340,9 +340,11 @@ public class WidgetUtil {
 		for (DomainUser dUser : users) {
 			AgileUser aUser = AgileUser
 					.getCurrentAgileUserFromDomainUser(dUser.id);
-			Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
-			if (userWidget != null) {
-				userIDs.put(aUser.id);
+			if (aUser != null) {
+				Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
+				if (userWidget != null) {
+					userIDs.put(aUser.id);
+				}
 			}
 		}
 		// }
@@ -421,17 +423,19 @@ public class WidgetUtil {
 
 		// Creates Current AgileUser key
 		AgileUser agileUser = AgileUser.getCurrentAgileUser(Long.parseLong(id));
-		Key<AgileUser> userKey = AgileUser
-				.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+		if (agileUser != null) {
+			Key<AgileUser> userKey = AgileUser
+					.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
 
-		/*
-		 * Fetches list of widgets related to AgileUser key and adds is_added
-		 * field as true to default widgets if not present
-		 */
-		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
-				.filter("name", name).list();
-		for (Widget widget : widgets) {
-			widget.delete();
+			/*
+			 * Fetches list of widgets related to AgileUser key and adds
+			 * is_added field as true to default widgets if not present
+			 */
+			List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+					.filter("name", name).list();
+			for (Widget widget : widgets) {
+				widget.delete();
+			}
 		}
 	}
 

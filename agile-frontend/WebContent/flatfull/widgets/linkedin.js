@@ -12,7 +12,7 @@ $(function()
 	// LinkedIn update loading image declared as global
 	LINKEDIN_UPDATE_LOAD_IMAGE = '<div id="status_load"><center><img  src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
 
-	// Current contact user name in LinkedIn profile
+	// Current contact username in LinkedIn profile
 	Linkedin_current_profile_user_name = "";
 
 	// Stores the initial update stream of the contact's LinkedIn profile
@@ -344,8 +344,13 @@ function showLinkedinMatchingProfiles(data)
 				propertiesArray.push({ "name" : "title", "value" : summary });
 			}
 
-			// Add all the properties to contact at once
-			agile_crm_update_contact_properties(propertiesArray);
+			verifyUpdateImgPermission(function(can_update){
+				if(can_update)
+				{
+					// Add all the properties to contact at once
+					agile_crm_update_contact_properties(propertiesArray);
+				}
+			});
 
 			// show profile by id
 			showLinkedinProfile(Linkedin_id);

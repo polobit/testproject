@@ -51,8 +51,22 @@
 						<option value="1-week">Last 7 Days</option>
 						<option value="this-month" >This Month</option>
 						<option value="1-month">Last 30 Days</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -83,8 +97,22 @@
 						<option value="2-days">2 Days</option>
 						<option value="1-week">1 Week</option>
 						<option value="1-month">1 Month</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -144,8 +172,22 @@
 						<option value="yesterday">Yesterday</option> -->
 						<option value="1-week">Last 7 Days</option>
 						<option value="1-month">Last 30 Days</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -308,8 +350,22 @@
 						<option value="3-months">3 Months</option>
 						<option value="6-months">6 Months</option>
 						<option value="12-months">12 Months</option> 
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -373,133 +429,7 @@
 </div>
 </div>
 </div>
-<div class="modal  fade" id="portletsIncomingDealsSettingsModal">
-<div class="modal-dialog">
-    <div class="modal-content">
-	<div class="modal-header">
-		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
-	</div>
-	<div class="modal-body">
-		<input type="hidden" id="portlet-type" />
-		<input type="hidden" id="portlet-name" />
-		<form id="portletsIncomingDealsSettingssForm" name="portletsIncomingDealsSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
-			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Split by</label>
-				<div class="controls col-sm-7">
-					<select id="split-by-incoming-deals" name="type" class="form-control">
-						<option value="deals">Total Deals</option>
-                    	<option value="Revenue">Total Revenue</option>
-					</select>
-				</div>
-			</div>
-			<div class="control-group form-group" id="portletsIncomingDealsOwner">
-				<label class="control-label col-sm-3">Owner</label>
-				<div class="controls col-sm-7">
-					<select id="owner" name="owner" class="form-control">
-						
-					</select>
-					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
-				</div>
-			</div>
-			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Frequency</label>
-				<div class="controls col-sm-7">
-					<select id="frequency-incoming-deals" name="frequency" class="form-control">
-						<option value="daily">Daily</option>
-						<option value="weekly">Weekly</option>
-						<option value="monthly">Monthly</option>
-					</select>
-				</div>
-			</div>
-			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
-				<div class="controls col-sm-7">
-					<select id="duration-incoming-deals" name="duration" class="form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="1-month">Last 30 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="last-month" >Last Month</option>
-						<option value="this-quarter">This Quarter</option>
-						<option value="last-quarter">Last Quarter</option>
-						<option value="this-year">This Year</option>
-						<option value="last-year">Last Year</option>
-					</select>
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-	</div>
-</div>
-</div>
-</div>
-<div class="modal  fade" id="portletsLostDealAnalysisSettingsModal">
-<div class="modal-dialog">
-    <div class="modal-content">
-	<div class="modal-header">
-		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Dashlet Settings</h3>
-	</div>
-	<div class="modal-body">
-		<input type="hidden" id="portlet-type" />
-		<input type="hidden" id="portlet-name" />
-		<form id="portletsLostDealAnalysisSettingsForm" name="portletsLostDealAnalysisSettingsForm" method="post" class="form-horizontal" style="margin-top:15px;">
-			<div class="control-group form-group" id="portletsLostDealAnalysisOwner">
-				<label class="control-label col-sm-3">Owner</label>
-				<div class="controls col-sm-7">
-					<select id="owner-lost-deal-analysis" name="owner" class="form-control">
-						
-					</select>
-					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
-				</div>
-			</div>
-			<div class="control-group form-group" id="portletsLostDealAnalysisTrack">
-				<label class="control-label col-sm-3">Track</label>
-				<div class="controls col-sm-7">
-					<select id="track-lost-deal-analysis" name="track" class="form-control">
-						
-					</select>
-					<!-- <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img> -->
-				</div>
-			</div>
-			<div class="control-group form-group" id="portletsLostDealAnalysisSource">
-				<label class="control-label col-sm-3">Source</label>
-				<div class="controls col-sm-7">
-					<select id="source-lost-deal-analysis" name="source" class="form-control">
-						
-					</select>
-					<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"></img>
-				</div>
-			</div>
-			<div class="control-group form-group">
-				<label class="control-label col-sm-3">Duration</label>
-				<div class="controls col-sm-7">
-					<select id="duration-lost-deal-analysis" name="duration" class="form-control">
-						<option value="1-day" >Today</option>
-						<option value="yesterday" >Yesterday</option>
-						<option value="1-week">Last 7 Days</option>
-						<option value="1-month">Last 30 Days</option>
-						<option value="this-month" >This Month</option>
-						<option value="last-month" >Last Month</option>
-						<option value="this-quarter">This Quarter</option>
-						<option value="last-quarter">Last Quarter</option>
-						<option value="this-year">This Year</option>
-						<option value="last-year">Last Year</option>
-					</select>
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
-	</div>
-</div>
-</div>
-</div>
+
 <div id="portletsDealsAssignedSettingsModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -518,8 +448,22 @@
 						<option value="1-day" >1 Day</option>
 						<option value="1-week">1 Week</option>
 						<option value="1-month">1 Month</option>
+						<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -552,8 +496,22 @@
 						<option value="1-week">Last 7 Days</option>
 						<option value="this-month" >This Month</option>
 						<option value="1-month">Last 30 Days</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group">
 				<label class="control-label col-sm-3">Graph on</label>
@@ -639,8 +597,22 @@
 						<option value="1-week">Last 7 Days</option>
 						<option value="this-month" >This Month</option>
 						<option value="1-month">Last 30 Days</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group">
 				<label class="control-label col-sm-3">User</label>
@@ -689,8 +661,23 @@
 						<option value="this-month" >This Month</option>
 						<option value="last-month" >Last Month</option>
 						<option value="1-month">Last 30 Days</option>
+						<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<input type="hidden"></input>
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -721,8 +708,22 @@
 						<option value="this-week">This Week</option>
 						<option value="today-and-tomorrow">Today & Tomorrow</option>
 						<option value="1-day">Today</option>
+						<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -754,8 +755,22 @@
 						<option value="today-and-tomorrow">Today & Tomorrow</option>
 						<option value="1-day">Today</option>
 						<option value="all-over-due">All Over Due</option>
+						<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -824,9 +839,24 @@
 						<option value="last-month">Last Month</option>
 						<option value="this-week">This Week</option>
 						<option value="last-week">Last Week</option>
+						<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
 			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
+			</div>
+				  
 		</form>
 	</div>
 	<div class="modal-footer">
@@ -858,8 +888,22 @@
 						<option value="this-and-next-quarter">This & Next Quarter</option>
 						<option value="this-year">This Year</option>
 						<option value="next-year">Next Year</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group" id="portletsDealsRevenueGraphTrack">
 				<label class="control-label col-sm-3">Track</label>
@@ -922,9 +966,22 @@
 						<option value="this-month" >This Month</option>
 						<option value="last-month" >Last Month</option>
 						<option value="1-month">Last 30 Days</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
-					
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 			<div class="control-group form-group">
 				<label class="control-label col-sm-3">Campaign Type</label>
@@ -968,9 +1025,9 @@
 						<option value="this-month" >This Month</option>
 						<option value="1-month">Last 30 Days</option>
 					</select>
-					
 				</div>
 			</div>
+
 			<div class="control-group form-group">
 				<label class="control-label col-sm-3">Campaign Type</label>
 				<div class="controls col-sm-7">
@@ -1009,10 +1066,22 @@
 						<option value="last-month" >Last Month</option>
 						<option value="this-quarter">This Quarter</option>
 						<option value="this-year">This Year</option>
-
+<option value="Custom" class="Custom_range">Custom</option>
 					</select>
-					
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start month_date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end month_date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -1077,8 +1146,22 @@
 						<option value="last-quarter">Last Quarter</option>
 						<option value="this-year">This Year</option>
 						<option value="last-year">Last Year</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -1141,9 +1224,22 @@
 						<option value="last-quarter">Last Quarter</option>
 						<option value="this-year">This Year</option>
 						<option value="last-year">Last Year</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
-
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -1164,10 +1260,10 @@
 	<div class="modal-body">
 		<input type="hidden" id="portlet-type" />
 		<input type="hidden" id="portlet-name" />
-			<form id="portletsTaskClosureSettingsForm" name="portletsTaskClosureSettingsForm" method="post" >
+			<form id="portletsTaskClosureSettingsForm" name="portletsTaskClosureSettingsForm" method="post"  class="form-horizontal">
 			<div class="control-group form-group">
-				<label class="control-label">Duration</label>
-				<div class="controls">
+				<label class="control-label col-sm-3">Duration</label>
+				<div class="controls col-sm-7">
 					<select id="duration" name="duration" class="required form-control">
 						<option value="1-day" >Today</option>
 						<option value="yesterday" >Yesterday</option>
@@ -1176,9 +1272,22 @@
 						<option value="this-month" >This Month</option>
 						<option value="1-month">Last 30 Days</option>
 
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
-					
-</div>
+				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -1246,9 +1355,22 @@
 						<option value="last-quarter">Last Quarter</option>
 						<option value="this-year">This Year</option>
 						<option value="last-year">Last Year</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
-
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -1278,8 +1400,22 @@
 						<option value="24-hours" >Last 24 Hours</option>
 						<option value="this-week" >This Week</option>
 						<option value="1-week">Last 7 Days</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>
@@ -1312,9 +1448,22 @@
 						<option value="1-week">Last 7 Days</option>
 						<option value="this-month" >This Month</option>
 						<option value="1-month">Last 30 Days</option>
+					<option value="Custom" class="Custom_range">Custom</option>
 					</select>
-					
 				</div>
+			</div>
+
+				<div class="control-group form-group hide daterange">
+					<label class="control-label col-sm-3">Range<span class="field_req">*</span></label>
+					<div class="controls col-sm-8">
+					<div class="col-sm-5" style="padding:0px"><input type="text" id="start_date" name="start-date"  class="start date required form-control" placeholder="Start date"></input></div>  
+					<div class="col-sm-5" style="padding:0px;margin-left:12px"><input type="text" id="end_date" class="end date required form-control" name="end-date"  placeholder="End date"></input></div>
+				</div>
+				</div>
+				<div class="control-group form-group" style="display:none;margin-bottom:0px">
+					<div class="control-label col-sm-3"></div>
+					<div class="controls col-sm-8">
+				<div class="invalid-range"></div></div>
 			</div>
 		</form>
 	</div>

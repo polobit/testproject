@@ -18,9 +18,7 @@ function loadUservoiceComments(offSet){
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').html(template_inv);
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#uservoice-comments')).each(function(){
-  					$(this).text(jQuery.timeago($(this).attr('datetime')));
-				});							
+				$( ".time-ago", $('#uservoice-comments')).timeago();
 			});			
 		},null);
 
@@ -35,9 +33,7 @@ function loadUservoiceComments(offSet){
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').append(template_inv);
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#uservoice-comments')).each(function(){
-  					$(this).text(jQuery.timeago($(this).attr('datetime')));
-				});							
+				$( ".time-ago", $('#uservoice-comments')).timeago();
 			});
 			$('#uservoice-comments').append(showMoreUservoiceCommments);
 		},null);				
@@ -49,9 +45,7 @@ function loadUservoiceComments(offSet){
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').append(template_inv);
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#uservoice-comments')).each(function(){
-  					$(this).text(jQuery.timeago($(this).attr('datetime')));  					
-				});							
+				$( ".time-ago", $('#uservoice-comments')).timeago();
 			});
 		},null);
 	}

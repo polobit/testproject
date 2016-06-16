@@ -1,4 +1,4 @@
-<script id="block-user-template" type="text/html">
+<script id="block-payment-failed-user-template" type="text/html">
 	<div class="modal fade" id="user-blocked-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -15,9 +15,26 @@
 </div>
 </script>
 
+<script id="block-cancelled-user-template" type="text/html">
+	<div class="modal fade" id="user-blocked-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="panel text-center text-md m-b-none bg-light">
+					<div class="panel-body">
+						Your subscription was cancelled and your account has been locked. Please contact our Billing Team at billing@agilecrm.com or upgrade your subscription to any paid plan by clicking the 'Upgrade Subscription' button. 
+					<div class="p-t"><a class="btn btn-success btn-lg" href="#subscribe">Upgrade Subscription</a></div><span class="text-info text-xs"><a href="/login">Log out</a></span> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
 <script id="user-alert-template" type="text/html">
 	<div class="user-alert center-div">
- <div class="user-alert-message"><span class="pull-right" onclick="$('#alert-message').hide();">x</span><a href="#subscribe">{{message}}</a></div> 
+ <div class="user-alert-message"><span class="pull-right" onclick="$('#alert-message').hide();">&times</span><a href="#subscribe">Action Required! Your account has pending dues. Please update your credit card information immediately to pay the outstanding amount. Non payment of dues will lead to the suspension of your account.</a></div> 
   </div>
 </div>
 </script>
@@ -35,7 +52,7 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<div class="panel text-center text-md m-b-none bg-light">
-					<div class="panel-body">
+					<div class="panel-body" style="padding: 60px 30px 0 30px;">
 						<div style="padding: 0px 35px 25px 35px;">
 							<p>Your Agile CRM account has been paused.</p><p> To resume the services, please click below.</p>
 							<div class="p-t"><a id="account_resume" class="btn btn-success btn-lg" href="#">Resume</a></div> 

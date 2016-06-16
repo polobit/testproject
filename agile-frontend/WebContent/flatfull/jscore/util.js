@@ -36,7 +36,7 @@ var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 
 var AVOID_PAGEBLOCK_URL = [ "subscribe", "purchase-plan", "updateCreditCard" ];
 
-var PAGEBLOCK_REASON = [ "BILLING_FAILED_2", "BILLING_FAILED_3", "SUBSCRIPTION_DELETED" ];
+var PAGEBLOCK_REASON = [ "BILLING_FAILED_2", "BILLING_FAILED_3", "SUBSCRIPTION_DELETED", "SUB&#x73;criptION_DELETED"];
 
 var PAYMENT_FAILED_REASON = ["BILLING_FAILED_0", "BILLING_FAILED_1"];
 /**
@@ -417,7 +417,7 @@ function showTextGravatar(selector, element)
 	});
 }
 
-function text_gravatar_initials(items)
+function text_gravatar_initials(items, char_count)
 {
 	if (items == undefined)
 		return;
@@ -477,6 +477,10 @@ function text_gravatar_initials(items)
 
 	if (name.length == 0)
 		name = "X";
+
+	if(!isNaN(char_count) && char_count < name.length){
+         name = name.substr(0, char_count);
+	}
 
 	return name;
 }
@@ -715,17 +719,17 @@ function showPageBlockModal() {
 	else if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456803000)
 		return;
 	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
-		var expiry_date = (USER_BILLING_PREFS.updated_time+691200)*1000;
-		if(USER_BILLING_PREFS.status == "BILLING_FAILED_1")
-			expiry_date = (USER_BILLING_PREFS.updated_time+432000)*1000;
-		getTemplate("user-alert", {"message":"Action Required! Your account has dues. Please update your credit card information to pay your outstanding amount. Non-payment of the dues will lead to locking of your account on "+new Date(expiry_date).format('mmm dd, yyyy')+"."}, undefined, function(template_ui){
+		getTemplate("user-alert", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$("#alert-message").html(template_ui).show();
 		}, null);
 
-	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time != null && USER_BILLING_PREFS.updated_time != undefined && USER_BILLING_PREFS.updated_time > 1457494200){
-		getTemplate("block-user", {}, undefined, function(template_ui){
+	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time > 1457494200){
+		var template = "block-payment-failed-user";
+		if(USER_BILLING_PREFS.status == "SUBSCRIPTION_DELETED" || USER_BILLING_PREFS.status == "SUB&#x73;criptION_DELETED")
+			template = "block-cancelled-user";
+		getTemplate(template, {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$("body").append(template_ui);
@@ -806,4 +810,15 @@ function showAlertModal(json_key, type, confirm_callback, decline_callback,dynam
 	    		decline_callback();
 		});
 	}, null);
+}
+
+function getFormattedDateObjectForMonthWithString(value){
+
+		if(!value)
+			   return new Date("");
+
+        value = value.replace(/\./g,'/');
+
+		return new Date(value);
+	
 }

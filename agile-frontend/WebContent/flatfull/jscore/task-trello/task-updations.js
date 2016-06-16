@@ -237,5 +237,21 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 
 		// Maintain changes in UI
 		displaySettings();
+	},
+	error : function(model, response)
+	{
+		showModalConfirmation("Complete Task", 
+			response.responseText, 
+			function (){
+				return;
+			}, 
+			function(){
+				return;
+			},
+			function(){
+				return;
+			},
+			"Cancel"
+		);
 	} });
 }

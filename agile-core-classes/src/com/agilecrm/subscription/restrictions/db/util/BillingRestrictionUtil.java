@@ -286,6 +286,8 @@ public class BillingRestrictionUtil {
 
 			info.setPlan(plan.plan_type.toString());
 			info.setUsersCount(plan.quantity);
+			// Add API Limit
+			info.setAPICallsLimit(plan.getPlanName());
 		} finally {
 			NamespaceManager.set(oldNamespace);
 		}

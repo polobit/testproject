@@ -8,7 +8,7 @@
 	milestone_util.lostMsg = 'Deals with this milestone are considered as Lost.';
 	var milestoneMsg = "For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <i style='text-decoration:underline;'>Deal settings</i> page.";
 	milestone_util.isNotyVisible = true;
-	milestone_util.showMilestonePopup = function(track){
+	milestone_util.showMilestonePopup = function(track, callback){
 		
 		if(!(track.lost_milestone && track.won_milestone) || track.won_milestone.length == 0 || track.lost_milestone.length == 0){
 			setDefaultLostAndWon(track,function(newTrack){
@@ -16,7 +16,10 @@
 					milestone_util.showMilestoneNoty();
 					milestone_util.isNotyVisible = true;
 				}
-				return newTrack;
+				if(callback && typeof callback === "function")
+				{
+					return callback(newTrack);
+				}
 			});
 		}
 	};

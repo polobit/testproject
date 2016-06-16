@@ -27,7 +27,7 @@ function showQuickbooksContacts(contact_id)
 	    console.log(template)
 	    head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 	    {
-		$(".time-ago", template).timeago();
+			$(".time-ago", $('#' + QUICKBOOKS_PLUGIN_NAME)).timeago();
 	    });
 
 	}

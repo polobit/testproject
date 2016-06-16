@@ -148,7 +148,12 @@ function showTwitterMatchingProfiles(data)
 
 				console.log(propertiesArray);
 
-				agile_crm_update_contact_properties(propertiesArray);
+				verifyUpdateImgPermission(function(can_update){
+					if(can_update)
+					{
+						agile_crm_update_contact_properties(propertiesArray);
+					}
+				});
 
 				// show twitter profile by id
 				showTwitterProfile(Twitter_id);
@@ -445,13 +450,12 @@ function showTwitterProfile(Twitter_id)
 			 		if(!template_ui)
 			    		return;
 			    	var element = $(template_ui);
-			    	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$(".time-ago", element).timeago();
-					});
 
 					// Template is populated with update details and shown
 					$('#twitter_social_stream').append(element);
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+						$(".time-ago", $('#twitter_social_stream')).timeago();
+					});
 
 					return;
 					
@@ -1296,7 +1300,7 @@ function startTwitterWidget(contact_id){
 	// Twitter update loading image declared as global
 	TWITTER_UPDATE_LOAD_IMAGE = "<div id='tweet_load'><center><img  src=\'img/ajax-loader-cursor.gif\'" + "style'=margin-top: 10px;margin-bottom: 14px;'></img></center></div>";
 
-	// Current contact user name in Twitter profile
+	// Current contact username in Twitter profile
 	Twitter_current_profile_user_name = "";
 	Twitter_current_update_id = "";
 	Twitter_current_profile_screen_name = "";
@@ -1366,7 +1370,8 @@ function startTwitterWidget(contact_id){
     $("#"+WIDGET_PARENT_ID).off('click','#Twitter_plugin_delete');
 	$("#"+WIDGET_PARENT_ID).on('click','#Twitter_plugin_delete', function(e)
 	{
-		e.preventDefault();		
+		e.preventDefault();	
+		$('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);		
 		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', twitter_web_url, function(data){
 				console.log("In twitter delete callback");
 				getTwitterMatchingProfiles(contact_id);

@@ -108,11 +108,14 @@ public class WidgetsAPI {
 
 			WidgetsAPI.checkValidDetails(widget);
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
-			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
-			widget.setOwner(currentUser);
-			
-			widget.save();
-			return widget;
+			if (agileUser != null) {
+				Key<AgileUser> currentUser = new Key<AgileUser>(
+						AgileUser.class, agileUser.id);
+				widget.setOwner(currentUser);
+
+				widget.save();
+				return widget;
+			}
 		}
 
 		return null;
@@ -167,11 +170,14 @@ public class WidgetsAPI {
 
 			WidgetsAPI.checkValidDetails(widget);
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
-			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
-			widget.setOwner(currentUser);
-			
-			widget.save();
-			return widget;
+			if (agileUser != null) {
+				Key<AgileUser> currentUser = new Key<AgileUser>(
+						AgileUser.class, agileUser.id);
+				widget.setOwner(currentUser);
+
+				widget.save();
+				return widget;
+			}
 		}
 		return null;
 	}
@@ -374,23 +380,22 @@ public class WidgetsAPI {
 		if (obj != null) {
 			JSONObject widgetObj = new JSONObject(obj);
 			String widgetName = widgetObj.getString("name");
-			
+
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			DomainUser domainUser = agileUser.getDomainUser();
-			
+
 			// Deleting the widget.
 			String newUsersList = widgetObj.getString("listOfUsers");
 			JSONArray finalUsers = new JSONArray();
 			JSONArray oldUserArray = WidgetUtil.getWigetUsersList(widgetName);
 			for (int i = 0; i < oldUserArray.length(); i++) {
 				String oldUserID = oldUserArray.getString(i);
-				if (!(newUsersList.contains(oldUserID))) {					
-					Widget widget = WidgetUtil.getWidget(widgetName,
-							Long.parseLong(oldUserID));
-					if (widget != null && !domainUser.is_admin) {
+				if (!(newUsersList.contains(oldUserID))) {
+					Widget widget = WidgetUtil.getWidget(widgetName, Long.parseLong(oldUserID));					
+					if (widget != null && domainUser.is_admin && !(agileUser.id.toString().equals(oldUserID))) {
 						WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
 					}
-				}else{
+				} else {
 					finalUsers.put(oldUserArray.get(i));
 				}
 			}
@@ -403,18 +408,21 @@ public class WidgetsAPI {
 				String newUserID = newUserArray.getString(i);
 				if (!(oldUsersList.contains(newUserID))) {
 					finalUsers.put(newUserArray.getLong(i));
-					AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long
-							.parseLong(newUserID));
-					Key<AgileUser> userKey = AgileUser
-							.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
-					widget.setOwner(userKey);
-					widget.add_by_admin = true;
-					widget.listOfUsers = null;
-					widget.id = null;
-					widget.save();
+					AgileUser agileLocalUser = AgileUser
+							.getCurrentAgileUser(Long.parseLong(newUserID));
+					if (agileLocalUser != null) {
+						Key<AgileUser> userKey = AgileUser
+								.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
+						widget.setOwner(userKey);
+						widget.add_by_admin = true;
+						widget.listOfUsers = null;
+						widget.id = null;
+						widget.save();
+					}
 				}
 			}
-			widget = WidgetUtil.getWidget(widgetName);			
+			widget = WidgetUtil.getWidget(widgetName);
+			widget.add_by_admin = true;
 			widget.listOfUsers = finalUsers.toString();
 			widget.updateUserList();
 		}

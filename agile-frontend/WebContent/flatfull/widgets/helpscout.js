@@ -102,15 +102,15 @@ function showMailsInHelpScout(customerId, contact_id, offSet)
 			// Get and fill the template with tickets
 			$('#all_conv_panel').html(getTemplate('helpscout-conversation', result));
 
-			if(helpscoutmails.length > 5){			
-				$('#all_conv_panel').append(showMoreHtml);
-			}
-
 			// Load jquery time ago function to show time ago in tickets
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
-				$(".time-ago").timeago();
+				$(".time-ago", $('#all_conv_panel')).timeago();
 			});
+
+			if(helpscoutmails.length > 5){			
+				$('#all_conv_panel').append(showMoreHtml);
+			}
 		});
 	}else if(offSet > 0  && (offSet+5) < helpscoutmails.length){
 		var result = helpscoutmails.slice(offSet, (offSet+5));

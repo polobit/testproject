@@ -176,11 +176,11 @@ padding-left:10px!important;
 				
 				var subdomain = $("#subdomain").val();
 				// validates the domain value
-				if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 20 
+				if(subdomain == null || subdomain == "" || subdomain.length < 2 || subdomain.length > 20 
 			        || !isAlphaNumeric(subdomain) || !isNotValid(subdomain))
 				{
 					//shows error message
-					if(!error)error = "Domain should be 4 to 20 characters."
+					if(!error)error = "Domain should be 2 to 20 characters."
 					$("#domain-error").html('<div class="alert error alert-danger login-error m-b-none">'
 							+ '<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a>'+ error +'</div>');
 					error = "";

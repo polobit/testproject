@@ -215,5 +215,21 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 
 		});
 		
+	},
+	error : function(model, response)
+	{
+		showModalConfirmation("Update Task", 
+			response.responseText, 
+			function (){
+				getDetailsForCollection();
+			}, 
+			function(){
+				return;
+			},
+			function(){
+				return;
+			},
+			"Cancel"
+		);
 	} });
 }

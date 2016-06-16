@@ -453,11 +453,9 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Contact getContact(@PathParam("contact-id") Long id) throws AccessDeniedException
     {
-	Contact contact = ContactUtil.getContact(id);
-
-	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
-
-	return contact;
+    	Contact contact = ContactUtil.getContact(id);
+    	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
+    	return contact;
     }
 
     @Path("related-entities/{contact-id}")
@@ -928,9 +926,18 @@ public class ContactsAPI
     public void deleteNotes(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray notesJSONArray = new JSONArray(model_ids);
+	JSONArray notesArray = new JSONArray();
 	 if(notesJSONArray!=null && notesJSONArray.length()>0){
 		 for (int i = 0; i < notesJSONArray.length(); i++) {
 			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
+			
+			List<String> conIds = note.getContact_ids();
+	    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+	    	{
+	    		notesArray.put(notesJSONArray.getString(i));
+	    	}
+	    	
 			 try {
 				List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
 				 for(Opportunity opp : deals){
@@ -943,7 +950,7 @@ public class ContactsAPI
 		 }
 		 
 	 }
-	 Note.dao.deleteBulkByIds(notesJSONArray);
+	 Note.dao.deleteBulkByIds(notesArray);
 }
 
     /**

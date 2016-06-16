@@ -192,7 +192,7 @@ public class Widget {
 		this.mini_logo_url = mini_logo;
 		this.widget_type = type;
 		this.user = new Key<AgileUser>(AgileUser.class,
-				AgileUser.getCurrentAgileUser().id);
+				AgileUser.getCurrentAgileUser().id);		
 	}
 
 	/**
@@ -261,11 +261,24 @@ public class Widget {
 		} else if (isAdmin) {
 			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
 			List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
-			if (userWidgets != null) {
+			if (userWidgets != null && userWidgets.size() > 0) {
 				for (Widget widget : userWidgets) {					
 					widget.prefs = this.prefs;
+					widget.logo_url = this.logo_url;
+					widget.mini_logo_url = this.mini_logo_url;
+					widget.description = this.description;
+					widget.display_name = this.display_name;
+					widget.name = this.name;
+					widget.fav_ico_url = this.fav_ico_url;
+					widget.integration_type = this.integration_type;
+					widget.add_by_admin = this.add_by_admin;
+					widget.script = this.script;
+					widget.url = this.url;
 					dao.put(widget);
 				}
+			}else{
+				this.add_by_admin = true;
+				dao.put(this);
 			}
 		} else {
 			if (user == null) {

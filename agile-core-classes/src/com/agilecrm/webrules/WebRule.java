@@ -79,6 +79,16 @@ public class WebRule implements Serializable
 	dao.put(this);
 	WebRuleUtil.deleteRulesFromCache();
     }
+    public static String getPhoneNumber(WebRule webrule) 
+    {
+	String number=null;
+	for(int i=0;i<webrule.actions.size();i++){
+	    if(webrule.actions.get(i).action.toString().equals("CALL_POPUP"))
+		number= webrule.actions.get(i).RHS;
+	}
+	
+	return number;
+    }
 }
 
 @XmlRootElement
@@ -93,7 +103,7 @@ class WebRuleAction
 
     public enum Action
     {
-	POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY, NOTY, JAVA_SCRIPT, RUN_JAVASCRIPT, FORM;
+	POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY, NOTY, JAVA_SCRIPT, RUN_JAVASCRIPT, FORM,CALL_POPUP;
     }
 
     public Action action = null;

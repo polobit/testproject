@@ -104,7 +104,7 @@ public class DefaultWidgets {
 				"/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
 				"Uservoice",
-				"Uservoice",
+				"UserVoice",
 				"UserVoice is a powerful tool that helps build better products and support integrating easy-to-use feedback and ideas from customers.",
 				"/widgets/uservoice.js", "/widgets/Uservoice_lg_logo.png",
 				"/widgets/UserVoice_md_logo.png", null, WidgetType.SUPPORT));
@@ -129,7 +129,7 @@ public class DefaultWidgets {
 		widgets.add(new Widget(
 				"GooglePlus",
 				"Google+",
-				"Keep tabs on your customers' activity on Google+ and engage with them better.",
+				"Keep tabs on your customer's activity on Google+ and engage with them better.",
 				"/widgets/googleplus.js", "/widgets/gplus.png",
 				"/widgets/gplusicon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget("CallScript", "Call Script",

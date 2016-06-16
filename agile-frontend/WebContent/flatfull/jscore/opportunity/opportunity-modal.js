@@ -215,6 +215,10 @@ $(function()
 
 										},error : function(model, err)
 										{
+											if(err && err.status == 403 && !hasScope("EDIT_CONTACT"))
+											{
+												err.responseText = DEALS_ARCHIVE_CONTACT_ACL_ERROR;
+											}
 											enable_save_button(that);
 											$("#deal_archive_confirm_modal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
 											setTimeout(function()
@@ -320,6 +324,10 @@ $(function()
 
 										},error : function(model, err)
 										{
+											if(err && err.status == 403 && !hasScope("EDIT_CONTACT"))
+											{
+												err.responseText = DEALS_RESTORE_CONTACT_ACL_ERROR;
+											}
 											enable_save_button(that);
 											$("#deal_restore_confirm_modal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
 											setTimeout(function()
@@ -427,15 +435,23 @@ function updateDeal(ele, editFromMilestoneView)
 		               ,"ORANGE":"#ff6600","RED":"#ff0000","BLACK":"#000000","WHITE":"#ffffff","GREY":"#808080"};
 
     var colorcode = color[value.colorName];
-      if(!colorcode)
+    if(!colorcode)
       	  colorcode = "#808080";
-      $('#color1' , dealForm).attr('value', colorcode);
-      $('.colorPicker-picker', dealForm).css("background-color", colorcode);
-
-
-
+    $('#color1' , dealForm).attr('value', colorcode);
+    $('.colorPicker-picker', dealForm).css("background-color", colorcode);
+    $('#tags-new-person', dealForm).val('');
+     if (value.tagsWithTime && value.tagsWithTime.length)
+		{
+			var i;
+			for(i=0;i<value.tagsWithTime.length;i++){
+				var data =value.tagsWithTime[i].tag ; 
+				$('#tags_source_person_modal', dealForm)
+				.find(".tags")
+				.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag">&times</a></li>');
+			} 
+	}
+	
     $("#opportunityUpdateModal").modal('show');
-
 	// Hide archive button, if the is already archived.
 	if (value.archived)
 	{
@@ -538,6 +554,9 @@ function updateDeal(ele, editFromMilestoneView)
 	populateLostReasons(dealForm, value);
 
 	populateDealSources(dealForm, value);
+	// setup tags for the search 
+	setup_tags_typeahead();
+
 }
 
 /**
@@ -693,6 +712,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		});
 
 		var deal = data.toJSON();
+
+		if(deal.tags && deal.tags.length)
+			saveDealTagsBulk(deal.tags);
 
 		add_recent_view(new BaseModel(deal));
 
