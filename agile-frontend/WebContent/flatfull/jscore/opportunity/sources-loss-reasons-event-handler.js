@@ -289,6 +289,8 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
         var that=$(this);
         var goals_json=[];
         var d=$('#goal_duration span').html();
+        if(window.navigator.userAgent.indexOf("Mozilla") != -1 && window.navigator.userAgent.indexOf("Chrome")==-1)
+                            d="01 "+d;
         d=new Date(d);
         var start=getUTCMidNightEpochFromDate(d);
                     
