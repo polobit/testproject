@@ -20,6 +20,7 @@ function setup_deals_in_milestones(id){
 		      scroll : false,
 		      tolerance: "intersect",
 		      start : function(event, ui) {
+		      	$("#dealActions").css("top", ($(window).height() - $("#dealActions").height()) + "px");
 		      	if($("#deals-tracks").is(":visible"))
 		      	{
 		      		$(".move-deal-action").show();

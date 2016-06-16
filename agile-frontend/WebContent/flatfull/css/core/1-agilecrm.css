@@ -3989,7 +3989,6 @@ border-bottom:1px solid #eee;
     position: fixed;
     left: 21px;
     right: 21px;
-    bottom: 0;
     height: 150px;
     z-index: 999;
     -webkit-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
