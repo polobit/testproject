@@ -50,7 +50,7 @@ public class Portlet {
     
     public static enum PortletRoute
     {
-	Deals,Contacts,Tasks,Events,DashBoard
+	Deals,Contacts,Tasks,Events,DashBoard,MarketingDashboard
     };
     
     @Indexed

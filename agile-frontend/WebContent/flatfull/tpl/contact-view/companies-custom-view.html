@@ -39,7 +39,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="companies" class="table showCheckboxes no-sorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="companies" class="table showCheckboxes  no-sorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -77,27 +77,30 @@
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
 
-	    		<h3 class="inline-block m-n text-black font-thin">Companies<span id="contacts-count" class="m-l-xs">{{companies_count}}</span>
+	    		<h4 class="inline-block m-n">
+	    		Companies
+	    		<div class="inline-block" id="filter-list"></div>
+	    		<span id="contacts-count" class="">{{companies_count}}</span>
 
 	    			{{#is_mobile}}
 					{{else}}
-	    			<a id="companies-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-            			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+
+	    			<a id="companies-left-filters-toggle" class="m-l-xs text-lg toggle-company-filters" data-toggle="tooltip" data-placement="bottom" title="{{company_filter_tooltip}}" data-container="body" data-original-title="Filters">
+
+            			<i id="icon-filter" class="fa fa-filter text-base" style="color: rgb(88, 102, 110);"></i>
           			</a>
           			{{/is_mobile}}
 	    		</h3><br>
-				<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div> 
+				 
 
 			 </div>
 		  </div>
-	    	<div class="pull-right">
-			<div  class="btn-group pull-left m-r-xs" id="contact-sorter"></div>
-			<div class="btn-group pull-left m-r-xs" id="filter-list"></div>
+	    	<div class="pull-right pos-abs" style="right: 0; top: 5px;"> 
 			
             <div id="view-list" class="pull-left btn-group"></div>
             </div>
 	    </div>
-	    
+	<div  class="btn-group m-r-xs m-t-n-sm" id="contact-sorter"></div>
 	</div>
 	<div class="contacts-div">
 
@@ -110,18 +113,38 @@
 					    <button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >Export as CSV</button>
 					    {{/hasScope}}				    
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >Delete</button>
-				    </div>
-					
 
+				    
+					<div class="btn-group dropdown pull-right {{#iscompactTabel 'company'}} compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
+					    	<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-ellipsis-h {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
+							 <!--<button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="companies_columns"> 
+                    		<i class="caret" ></i>
+                			</button> -->
+                			<ul class="pull-right dropdown-menu  p-l"  role="menu">
+                			
+                			
+                			<form id="companies-static-fields" class="">
+                			<div class="multiple-checkbox" name="fields_set" id="companies-static-fields-group">
+                			</div>
+                			</form>
+                			
+                			</ul>
+
+
+                			</div>
+
+                							        </div>
+<div  class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:99%;padding:5px;"id="bulk-select"></div>
 	<div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
 				
+
 				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
 			    {{#unless this.length}}
 		        <div class="m-l-sm" id="slate">
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="companies" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="companies" class="table table-striped companies-custom tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -173,7 +196,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table table-striped  showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -193,4 +216,63 @@
 
 
 </script>
+
+
+<script id="companies-custom-fields-template" type="text/html">
+			
+				<li class="hide">
+	       		  	<a href="javascript:void(0);" class="p-b-none">
+						<label class="i-checks i-checks-sm companycoloumn "><input name="basic_info" value="basic_info"type="checkbox" checked="checked"  class="choose-column-chbx"><i></i></label>Basic info</a></li> 
+					<li class= "hide">
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="image" checked="checked"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
+				
+	                  <li>
+	       		  		<a href="javascript:void(0);" class="p-b-none">
+							<label class="i-checks i-checks-sm companycoloumn "><input name="name" value = "name"type="checkbox" class="choose-column-chbx"><i></i></label>Name</a></li>
+					<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="tags"value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>Tags</a></li>
+					  <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="url" value = "url"type="checkbox" class="choose-column-chbx"><i></i></label>URL</a></li>
+					 <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input  name="phone" value = "phone"type="checkbox" class="choose-column-chbx"><i></i></label>Phone</a></li>
+					<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="address"value="address"type="checkbox" class="choose-column-chbx"><i></i></label>Address</a></li> 
+					<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="website" value = "website"type="checkbox" class="choose-column-chbx"><i></i></label>Website</a></li>
+					<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="created_time"value ="created_time"type="checkbox" class="choose-column-chbx"><i></i></label>Created Date</a></li>
+					<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="updated_time"value = "updated_time"type="checkbox" class="choose-column-chbx"><i></i></label>Updated Date</a></li> 
+					<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="star_value"value = "star_value"type="checkbox" class="choose-column-chbx"><i></i></label>Star Value</a></li>
+					 <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input  name="lead_score"value = "lead_score"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Score</a></li>
+						<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="owner"value = "owner"type="checkbox" class="choose-column-chbx"><i></i></label>Owner</a></li>
+	                   <!-- <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn"><input name="image"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li> -->                 
+	                   <div id="custom-fields-group"class="" ></div>
+	                     
+	      			</script>
+<script id="companies-custom-fields-append-template" type="text/html">
+ <li>
+	<a href="javascript:void(0);" class="p-b-none">
+		<label class="i-checks i-checks-sm companycoloumn"><input name="CUSTOM_{{field_label}}" value="CUSTOM_{{field_label}}"type="checkbox" class="choose-column-chbx"><i></i></label>{{field_label}}</a></li>
+
+</script>
+
+
+
 

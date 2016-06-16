@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 
 import com.agilecrm.account.NavbarConstants;
+import com.agilecrm.apilimitcheck.APILimitCheck;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -65,6 +66,9 @@ public class UserInfo implements Serializable
     private HashSet<String> jsrestricted_scopes = null;
 	
     private HashSet<String> jsrestricted_propertiess = null;
+    
+    // APILimits
+    private Integer apiCallsLimit = 500;
     
     public UserInfo()
     {
@@ -235,5 +239,18 @@ public class UserInfo implements Serializable
 
     public void setJsrestricted_propertiess(HashSet<String> jsrestricted_propertiess) {
         this.jsrestricted_propertiess = jsrestricted_propertiess;
+    }
+    
+    public void setAPICallsLimit(String planName)
+    {
+	this.apiCallsLimit = APILimitCheck.getCountLimitByPlan(planName);
+    }
+    
+    public Integer getAPICallsLimit()
+    {
+	if(this.apiCallsLimit == null)
+	     this.apiCallsLimit = 500;
+	
+	return this.apiCallsLimit;
     }
 }

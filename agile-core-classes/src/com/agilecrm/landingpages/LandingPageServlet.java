@@ -55,7 +55,8 @@ public class LandingPageServlet extends HttpServlet {
 				throw new Exception("No landing page found.");
 				
 				String fullXHtml = landingPage.html;
-				fullXHtml = getResponsiveMediaIFrame(fullXHtml);
+				fullXHtml = getResponsiveMediaIFrame(fullXHtml);				
+				fullXHtml = getFormEmbedCode(fullXHtml,lpUtil.requestingDomain);
 				
 				String domainHost = "http://localhost:8888";
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
@@ -110,4 +111,23 @@ public class LandingPageServlet extends HttpServlet {
 		
 		return fullHtml;
 	}
+	
+	
+	private String getFormEmbedCode(String fullHtml, String domain) {
+		
+		String responsiveMediaIFrame = "<div id=\""+domain+"_%s\" class=\"agile_crm_form_embed form-embed-container\"></div>";
+		System.out.println(responsiveMediaIFrame);
+		Pattern p = Pattern.compile("<div data-embed-agile-form=\"(.*?)\" class=\"form-embed-container\"(?:[^>\"']|\"[^\"]*\"|'[^']*')*>(.*?)</div>",Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher m = p.matcher(fullHtml);
+		
+		while(m.find()){
+			System.out.println(m.group(0));
+			System.out.println(m.group(1));
+			fullHtml = fullHtml.replace(m.group(0), String.format(responsiveMediaIFrame, m.group(1)));
+		}
+		System.out.println(fullHtml);
+		return fullHtml;
+	}
+	
+	
 }

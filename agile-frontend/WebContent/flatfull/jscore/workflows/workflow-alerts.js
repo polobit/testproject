@@ -24,11 +24,25 @@ function campaignAlert(alertType)
 		templateName = "SMSGateway-integration-alert-modal";
 		}
 	
+	if(alertType == "Empty_Widget")
+		{
+		alertJSON["title"]="No Twilio Number";
+		alertJSON["message"]="The Twilio call widget you configured does not have a purchased number. Please purchase a number from Twilio to start calling.";
+		templateName = "CallWidget-integration-alert-modal";
+		}
+
 	if(alertType == "Unauthorised")
 		{
 		alertJSON["title"]="SMS Gateway not Configured";
 		alertJSON["message"]="You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations";
 		templateName = "SMSGateway-integration-alert-modal";
+		}
+
+	if(alertType == "Unauthorised_Call_Widget")
+		{
+		alertJSON["title"]="Call Widget  not Configured";
+		alertJSON["message"]="You need to enable Twilio Call widget to use this option. Please enable it in Preferences -> Widgets";
+		templateName = "CallWidget-integration-alert-modal";
 		}
 
 		getTemplate(templateName, alertJSON, undefined, function(template_ui){
@@ -240,48 +254,47 @@ function resubscribe()
 		e.preventDefault();
 
 		var $element = $(event.target);
+		if(!confirm("Are you sure to resubscribe " + $(this).attr("contact_name") + " to " + $(this).attr("campaign_name") + " campaign?"))
+			return;
+		var campaign_id = $(this).attr('data');
 
-		showAlertModal("Are you sure to resubscribe " + $(this).attr("contact_name") + " to " + $(this).attr("campaign_name") + " campaign?", "confirm", function(){
-			var campaign_id = $(this).attr('data');
+		var json = {};
+		json["id"] = App_Contacts.contactDetailView.model.get('id');
+		json["workflow-id"] = campaign_id;
 
-			var json = {};
-			json["id"] = App_Contacts.contactDetailView.model.get('id');
-			json["workflow-id"] = campaign_id;
+		if(campaign_id == "ALL")
+		{
+			var workflow_ids = [];
 
-			if(campaign_id == "ALL")
-			{
-				var workflow_ids = [];
-
-				$.each(App_Contacts.contactDetailView.model.toJSON()["unsubscribeStatus"], function(index, value){
-	               
-					workflow_ids.push(value.campaign_id);
-				});
-
-				json["workflow-id"] = workflow_ids.join(',');
-			}
-
-			$.ajax({
-				url: 'core/api/campaigns/resubscribe',
-				type: 'POST',
-				data: json,
-				success: function(data){
-					
-					// To update campaigns tab
-					unsubscribe_status_updated = true;
-
-					$element.closest('li').remove();
-
-					// Remove All option too
-					$('ul#added-tags-ul').find("a[data='ALL']").closest('li').remove();
-
-				},
-				error: function(response)
-				{
-					
-
-				}
+			$.each(App_Contacts.contactDetailView.model.toJSON()["unsubscribeStatus"], function(index, value){
+               
+				workflow_ids.push(value.campaign_id);
 			});
-		},undefined, "Resubscribe");
+
+			json["workflow-id"] = workflow_ids.join(',');
+		}
+
+		$.ajax({
+			url: 'core/api/campaigns/resubscribe',
+			type: 'POST',
+			data: json,
+			success: function(data){
+				
+				// To update campaigns tab
+				unsubscribe_status_updated = true;
+
+				$element.closest('li').remove();
+
+				// Remove All option too
+				$('ul#added-tags-ul').find("a[data='ALL']").closest('li').remove();
+
+			},
+			error: function(response)
+			{
+				
+
+			}
+		});
 		
 		
 

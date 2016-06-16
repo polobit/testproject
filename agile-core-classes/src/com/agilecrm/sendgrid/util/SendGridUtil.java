@@ -10,13 +10,13 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
-import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
@@ -45,6 +45,15 @@ public class SendGridUtil
     public static final String SENDGRID_TO_LIST = "to_list";
     public static final String SENDGRID_TEXT_LIST = "text_list";
     public static final String SENDGRID_HTML_LIST = "html_list";
+    
+
+	/**
+	 * Sendgrid whitelabel setting
+	 */
+	public static final String SENDGRID_DOMAIN = "domain";
+	public static final String SENDGRID_SUBDOMAIN = "subdomain";
+	public static final String SENDGRID_USERNAME = "username";
+	public static final String SENDGRID_AUTOMATIC_SECURITY = "automatic_security";
 
     /**
      * Substitution tags
@@ -397,8 +406,182 @@ public class SendGridUtil
 		}
     	
     	return credentials;
-    	
 	    
     } 
+    
+
+	
+	/**
+	 * 
+	 * @param emailDomain
+	 * @param gateway
+	 * @param domain
+	 * @return
+	 */
+	public static String addSendgridWhiteLabelDomain(String emailDomain, EmailGateway gateway, String domain){
+		String response=null;
+		
+		//if (StringUtils.isBlank(domain))
+		//	return null;
+		
+		String username = null, password = null;
+		
+		if (gateway != null)
+		{
+			username = gateway.api_user;
+			password = gateway.api_key;
+		}
+		
+		if(username == null || password == null)
+		{
+			username = Globals.SENDGRID_API_USER_NAME;
+			password = Globals.SENDGRID_API_KEY;
+		}
+		
+		response=createSendgridWhiteLabelDomain(emailDomain, username, password, domain);
+		
+		try
+		{
+			JSONObject data=new JSONObject(response);
+			response=data.getJSONObject("dns").toString();
+		}
+		catch (JSONException e)
+		{
+			System.out.println("Error occured while getting sendgrid whitelabel key json"+e.getMessage());
+		}
+		return response;
+	}
+	
+	
+	/**
+	 * This method will create sendgrid whitelabel json 
+	 * 
+	 * @param emailDomain
+	 * @param gateway
+	 * @return whitelabel string json
+	 */
+	public static String createSendgridWhiteLabelDomain(String emailDomain, String username, String password, String domain){
+		
+		
+		String subuserName=SendGridSubUser.getAgileSubUserName(domain);
+		String response = null, url = "https://api.sendgrid.com/v3/whitelabel/domains";
+		
+		response=getSendgridWhiteLabelDomain(emailDomain, username, password, domain);
+		
+		if(response.contains("id"))
+			return response;
+		
+		JSONObject data=new JSONObject();
+		try {
+				data.put(SENDGRID_DOMAIN, emailDomain);
+				data.put(SENDGRID_SUBDOMAIN, "email");
+				data.put(SENDGRID_USERNAME, subuserName);
+				data.put(SENDGRID_AUTOMATIC_SECURITY,false);
+					try
+					{
+						response = HTTPUtil.accessURLUsingAuthentication(url, username, password,
+								"POST", data.toString(), false, "application/json", "application/json");
+						return response;
+					} 
+					catch (Exception e) {						
+						System.out.println("Error occured while creating sendgrid whitelabel "+e.getMessage());
+					}
+				} 
+		catch (JSONException e) {
+			System.out.println("Error occured while creating sendgrid whitelabel "+e.getMessage());
+		}
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param emailDomain
+	 * @param username
+	 * @param password
+	 * @param domain
+	 * @return whitlabel json
+	 */
+public static String getSendgridWhiteLabelDomain(String emailDomain, String username, String password, String domain)
+{
+	String response = null, queryString="?domain="+emailDomain, url = "https://api.sendgrid.com/v3/whitelabel/domains";
+	try
+	 {
+	   response = HTTPUtil.accessURLUsingAuthentication(url+queryString, username, password,"GET", null, false, "application/json", "application/json");
+	   if(response.contains("id"))
+	        response=new JSONArray(response).getJSONObject(0).toString();
+	   return response;
+	 } 
+	catch (Exception e)
+	{						
+		System.out.println("Error occured while getting sendgrid whitelabel "+e.getMessage());
+	}
+		return null;
+}
+
+public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailGateway gateway, String domain){
+	String whitelabelDomainId=null, response=null;
+	
+	if (StringUtils.isBlank(domain))
+		return null;
+	
+	String username = null, password = null;
+	
+	if (gateway != null)
+	{
+		username = gateway.api_user;
+		password = gateway.api_key;
+	}
+	
+	if(username == null || password == null)
+	{
+		username = Globals.SENDGRID_API_USER_NAME;
+		password = Globals.SENDGRID_API_KEY;
+	}
+	
+	response=getSendgridWhiteLabelDomain(emailDomain, username, password, domain);
+	try
+	   {
+				if(response.contains("id")){
+				     JSONObject data=new JSONObject(response);
+				     whitelabelDomainId=data.getString("id");  
+				  }
+        } 
+	catch (Exception e)
+	{						
+		System.out.println("Error occured while getting sendgrid whitelabel "+e.getMessage());
+	}
+	
+		if(whitelabelDomainId==null)
+		    return null;
+		
+		String url="https://api.sendgrid.com/v3/whitelabel/domains/"+whitelabelDomainId+"/validate";
+		
+		try {
+			response=HTTPUtil.accessURLUsingAuthentication(url, username, password,"POST", null, false, "application/json", "application/json");
+		} 
+		catch (Exception e) {
+			System.out.println("Error occured while validating sendgrid whitelabel "+e.getMessage());
+		}
+		
+		
+		try
+		{
+			if(response.contains("validation_results")){
+			   JSONObject validate=new JSONObject(response);
+			   response=validate.getJSONObject("validation_results").toString();
+			}
+		}
+		catch (JSONException e) 
+		{
+			System.out.println("Error occured while gettingvalidate result of sendgrid whitelabel "+e.getMessage());
+		}
+		
+		return response;
+	
+}
+	
+	public static void main(String asd[]){
+		System.out.println(validateSendgridWhiteLabelDomain("batman1.com", null,"hi"));
+	}
     
 }

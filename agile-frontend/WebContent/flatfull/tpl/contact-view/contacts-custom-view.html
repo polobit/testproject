@@ -96,6 +96,7 @@
 
 <div class="dta-contatiner table-responsive b-n contacts-inner-div">
 				<div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
+
 			    {{#unless this.length}}
 		        <div class="m-l-sm" id="slate">
 		        </div>
@@ -139,24 +140,23 @@
 	style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 	    <div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
-	    		<h3 class="inline-block m-n text-black font-thin">Contacts<span id="contacts-count" class="m-l-xs">{{contacts_count}}</span>
+	    		<h4 class="inline-block m-n">
+	    		Contacts
+	    		<div class="inline-block" id="filter-list"></div>
+	    		<span id="contacts-count" class="">{{contacts_count}}</span>
 	    			 
-	    			<a id="contacts-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters" onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
-            			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+	    			<a id="contacts-left-filters-toggle" class="m-l-xs text-lg "  onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
+            			<i id="icon-filter" class="fa toggle-contact-filters fa-filter text-base" data-toggle="tooltip" data-container="body" data-placement="bottom" title="" data-original-title="{{contact_filter_tooltip}}" style="color: rgb(88, 102, 110);"></i>
           			</a>
-	    		</h3>
+	    		</h4>
 	    		<br>
-				<div class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
-    
-    
-
-
+			
 </div></div>
-	    	<div class="pull-right">
-	    	<div class="btn-group pull-left m-r-xs" id="contact-sorter"></div>
+	    	<div class="pull-right pos-abs" style="right: 0; top: 5px;">
+	    	
             <div class="btn-group pull-left m-r-xs" id="contacts-view-options" style="pointer-events: auto;"></div>
 
-			<div class="btn-group pull-left m-r-xs" id="filter-list"></div>
+			
 		
             <div id="view-list" class="pull-left btn-group"><div class="btn-group m-r-sm">
     	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
@@ -198,6 +198,7 @@
     	</ul>
     	
 	</div>
+	{{#hasRestrictedMenuScope 'CREATE_CONTACT'}} {{else}}
     <div class="btn-group">
 
         <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
@@ -208,10 +209,12 @@
 			<li><a href="#import">Import from Salesforce</a></li>
 			
 		</ul>
-	</div></div>
+	</div>
+	{{/hasRestrictedMenuScope}}
+	</div>
             </div>
 	    </div>
-	    
+	<div class="btn-group m-r-xs m-t-n-sm" id="contact-sorter"></div>
 	</div>
 	  <div class="route_Portlet b-b" style="display:none">
 	<div class="row">
@@ -223,7 +226,8 @@
 	</div>
 	</div>
 	<div class="contacts-div">
-<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);">
+<div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);position:relative;">
+				      	
 				      	
 					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Add Tags</button>
 					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">Remove Tags</button>
@@ -236,19 +240,42 @@
 					    {{#hasScope "EXPORT_CONTACTS"}}
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">Export as CSV</button>
 					    {{/hasScope}}
+					    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}} {{else}}
 					    <button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">Delete</button>
-					    
-				    </div>
 
+					     {{/hasRestrictedMenuScope}}
+
+					    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
+							<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
+							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
+							<!-- <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns" >
+                    		<i class="caret"></i>
+                			</button> -->
+                			<ul class="pull-right dropdown-menu  p-l"  role="menu">
+                			
+                			
+                			<form id="contact-static-fields" class="">
+                			<div class="multiple-checkbox" name="fields_set" id="contact-static-fields-group">
+                			</div>
+                			</form>
+                			
+                			</ul>
+
+				        </div>
+					    
+
+				    </div>
+</div>
 
 <div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
+<div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;padding:5px; background-color:#edf1f2;" id="bulk-select"></div>
 				<div class="panel panel-default" style="overflow-x:auto; border-left:none;">
 			    {{#unless this.length}}
 		        <div class="m-l-sm" id="slate">
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table contacts-custom noDelete   table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -297,13 +324,15 @@
 
 <!-- <div class="dta-contatiner table-responsive m-r-sm"> -->
 				<div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
+				
 			    {{#unless this.length}}
 		        <div class="m-l-sm" id="slate">
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table table-striped  no-sorting panel agile-table 
-                {{#is_mobile}} noDelete contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="ore/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+		        <div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;padding:5px;background-color:#edf1f2;" id="bulk-select"></div>
+                <table id="contacts-table" class="table table-striped    noDelete  no-sorting panel agile-table 
+                {{#is_mobile}}contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="ore/api/contacts/delete?action=DELETE" style="table-layout:auto">
 					<div class="filter-criteria">
 					
 					</div>
@@ -320,3 +349,74 @@
 				</div>
             <!-- </div> -->
 </script>
+<script id="contact-custom-fields-template" type="text/html">
+				
+				<li class ="hide">
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="basic_info"value = "basic_info"   type="checkbox" class="choose-column-chbx"><i></i></label>Basic Info</a></li>
+				<li class="hide">
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image" type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li>
+				
+				
+	       		  
+	                  <li>
+	       		  		<a href="javascript:void(0);" class="p-b-none">
+							<label class="i-checks i-checks-sm contactcoloumn "><input name="first_name" value = "first_name"type="checkbox" class="choose-column-chbx"><i></i></label>First Name</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn "><input name="last_name" value = "last_name"type="checkbox" class="choose-column-chbx"><i></i></label>Last Name</a></li>
+						<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn "><input name="email" value="email"type="checkbox" class="choose-column-chbx"><i></i></label>Email</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="company" value = "company"type="checkbox" class="choose-column-chbx"><i></i></label>Company</a></li>
+	                    
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="title"value="title"type="checkbox" class="choose-column-chbx"><i></i></label>Title</a></li>
+						<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input  name="tags" value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>Tags</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="phone" value = "phone"type="checkbox" class="choose-column-chbx"><i></i></label>Phone</a></li>
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="address"value ="address"type="checkbox" class="choose-column-chbx"><i></i></label>Address</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="website"value = "website"type="checkbox" class="choose-column-chbx"><i></i></label>Website</a></li> 
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="created_time"value = "created_time"type="checkbox" class="choose-column-chbx"><i></i></label>Created Date</a></li>
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="updated_time"value = "updated_time"type="checkbox" class="choose-column-chbx"><i></i></label>Updated Date</a></li>
+	                  <!-- <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="image"value = "image"type="checkbox" class="choose-column-chbx"><i></i></label>Image</a></li> -->
+	                    <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="star_value"value = "star_value"type="checkbox" class="choose-column-chbx"><i></i></label>Star value</a></li> 
+	                     <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input  name="lead_score"value = "lead_score"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Score</a></li>
+	                      <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="lead_owner"value = "lead_owner"type="checkbox" class="choose-column-chbx"><i></i></label>Lead Owner</a></li>
+	                     <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm contactcoloumn"><input name="last_contacted" value = "last_contacted"type="checkbox" class="choose-column-chbx"><i></i></label>Last Contacted</a></li>
+	                     <div id="custom-fields-group"class="" ></div>
+	                     
+	      			</script>
+<script id="contact-custom-fields-append-template" type="text/html">
+ <li>
+	<a href="javascript:void(0);" class="p-b-none">
+		<label class="i-checks i-checks-sm contactcoloumn"><input name="CUSTOM_{{field_label}}" value="CUSTOM_{{field_label}}"type="checkbox" class="choose-column-chbx"><i></i></label>{{field_label}}</a></li>
+
+</script>
+
+

@@ -562,7 +562,34 @@ baseBuilderElements.push({
             onChange: function($scope, url) {
                 $scope.selected.node.src = url;
             }
-        }
+        },
+        link: {
+ 			text: true,
+ 			value: '',
+ 			onAssign: function($scope) {
+ 				if($scope.selected.node.parentNode.tagName==='A')
+ 					this.value = $($scope.selected.node.parentNode).attr("href");
+ 				else 
+ 					this.value='';
+ 			},
+ 			onChange: function($scope, link) {
+
+ 				if ( link!=='' && link.search(/^http[s]?\:\/\//) == -1)
+					{
+    					link = 'http://' + link;
+					}
+ 				if($scope.selected.node.parentNode.tagName!=='A'){
+ 					$($scope.selected.node).wrap("<a target='_blank' ></a>"); 						
+ 					$($scope.selected.node.parentNode).attr("href",link)
+ 				} 
+ 				else if($scope.selected.node.parentNode.tagName==='A'){
+ 					if(link==='')
+ 						$($scope.selected.node).unwrap();
+ 					else 
+ 						$($scope.selected.node.parentNode).attr("href",link);
+ 				}		
+ 			}
+ 		}
  	},
 });
 

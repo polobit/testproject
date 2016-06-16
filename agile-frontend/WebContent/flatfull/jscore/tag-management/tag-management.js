@@ -528,3 +528,83 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 			})
 
 }
+function saveDealTag(tag,data) {
+	var flag ;
+	var fieldValue= tag ;
+	if (!isValidTag(fieldValue, true)) {
+		$(field).focus();
+		return;
+	}
+	if(TAGS){
+		var i;
+		for(i=0;i<TAGS.length ; i++){
+			if(TAGS[i].attributes.tag == fieldValue){
+				flag = 1;
+				break;
+			}
+		}
+	}
+	if(flag == 1) {
+		return;
+	}
+
+	var tagObject = {};
+	tagObject.tag = fieldValue.trim();
+
+	var model = new BaseModel(tagObject);
+	model.url = "core/api/tags";
+	model.save([], {
+		success : function(response) {
+			// Adds tag to global connection
+			if(tagsCollection && tagsCollection.models)
+				tagsCollection.add(response.toJSON());
+			if(data && App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id')){
+                App_Deal_Details.dealDetailView.model.set(data.toJSON(), {silent : true});
+                App_Deal_Details.dealDetailView.render(true);                   
+            }
+		}
+	});
+}
+function saveDealTagsBulk(tags){
+
+	var tags_array = [];var i ;var flag = false;var url ;
+	if(tags && tags.length){
+		for(i = 0 ; i<tags.length ; i++){
+			if(TAGS){
+				var j;
+				for(j=0;j<TAGS.length ; j++){
+					if(TAGS[j].attributes.tag == tags[i]){
+						flag = true ;
+					}
+				}
+				if(!flag)
+					tags_array.push(tags[i]);
+				else
+					flag = false;
+			}
+			else
+				tags_array = tags ;
+		}
+		var tagsArray = JSON.stringify(tags_array);
+		if(tagsArray){
+			var url = "core/api/tags/AddbulkTags" ;
+			 $.ajax({
+		      type: "POST",
+		      contentType: "application/json",
+		      url: url,
+		      data: tagsArray,
+		      dataType: "json" ,
+		      success : function(){
+		      	console.log(tagsArray);
+		      	if(TAGS){
+		      		var newTags = JSON.parse(tagsArray);
+		      		for(i = 0 ; i<newTags.length ; i++){
+		      			TAGS.push({ entity_type: 'tag', tag:newTags[i] });
+		      		}
+
+		      	}
+		      }
+		    });
+		}
+	}
+}

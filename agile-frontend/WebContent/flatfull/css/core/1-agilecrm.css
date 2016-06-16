@@ -3875,6 +3875,7 @@ li .segment-lilist:hover {
 	cursor: pointer;
 }
 
+
 .twilio-sound:hover  .options-record-twilio
 {
 	display : block;
@@ -3983,3 +3984,121 @@ border-bottom:1px solid #eee;
     margin-left: 0px;
     margin-right: 0px;
    }
+
+.tableNewView thead tr th:nth-child(n+3){
+padding-right:0px;
+padding-left:0px;
+}
+
+.tableNewView tbody tr td:nth-child(n+3){
+padding-right:0px;
+padding-left:0px;
+}
+.table.contacts-custom tbody tr td {
+      padding: 6px 15px;
+}
+.table.companies-custom thead tr th {
+      padding: 7px 15px;
+}
+.newcontacttabel thead tr th:nth-child(n+3){
+  display:none;
+}
+.contacts-custom.contactsimage .contactsnewimage{
+  display:none;
+}
+.contacts-custom .contactimageheader{
+  display:none;
+}
+.companies-custom.contactsimage .contactsnewimage{
+  display:none;
+}
+.companies-custom .companiesnewimage
+{
+  display:none;
+}
+.table.companies-custom tbody tr td {
+      padding: 6px 15px;
+}
+/*#contacts-table thead tr th:nth-child(3),#companies thead tr th:nth-child(3)
+{
+  padding:6px 0px;
+}
+.table.contacts-custom tbody tr td:nth-child(4),#companies thead tr td:nth-child(4)
+{
+  padding:6px 0px;
+}
+.companies-custom .contactsnewimage{
+   padding:2px 0px;
+}*/
+#contacts-table .compactcontact {
+  display:none;
+}
+#companies .compactcontact {
+  display:none;
+}
+#companies-custom-coloumns:hover.compact .dropdown-menu {
+    display: block;
+    margin-top: 0; 
+ }
+ div#contact-custom-coloumns:hover.compact .dropdown-menu{
+    display: block;
+    margin-top: 0; 
+ }
+
+.delete-checked-contacts .bulk-delete-loading
+{
+  padding-right: 5px;
+    margin-bottom: 15px;
+    position: absolute;
+    top: 7px;
+    z-index: 1000000;
+    right: -6px;
+    width: 20px
+}
+.delete-checked-contacts
+{
+  position:relative;
+}
+
+.dialler-1-r-1-c
+{
+	    border-radius: 5px;
+	border-top: 1px solid #98a6ad;
+    border-right: 1px solid #98a6ad;
+    border-left: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+
+.dialler-1-r-2-c
+{
+	    border-radius: 5px;
+	border-right: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+    border-top: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-2-r-1-c
+{
+	    border-radius: 5px;
+    border-right: 1px solid #98a6ad;
+    border-left: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-2-r-2-c
+{
+	    border-radius: 5px;
+	border-right: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-1-r-1-c:hover, .dialler-1-r-2-c:hover, .dialler-2-r-1-c:hover, .dialler-2-r-2-c:hover
+{
+background-color : #522E2E;
+}
+

@@ -1302,7 +1302,7 @@ top:117px;
 }
 
 /*hack for contact list second column spacing*/
-#contacts-table thead tr th:nth-child(2),#contacts-table tbody tr td:nth-child(2)
+#contacts-table thead tr th:nth-child(2),#contacts-table tbody tr td:nth-child(2),#companies thead tr th:nth-child(2),#companies tbody tr td:nth-child(2) 
 {
   padding-left:0px;
 }
@@ -1980,8 +1980,13 @@ display: block!important;
 .company-details-mobile-view {
   width: 97.0vw;
   }
+
 .goal-form-control{ width: 150px;}
 .goal-datepicker{ width: auto;}
+
+.workflow-heading{ text-align: center; width: 100%; }
+.workflow-sortby{ float: none!important; }
+
 }
 
 @media all and (min-width: 768px) {
@@ -2323,6 +2328,25 @@ color:#484848!important;
 /*end cases_custom_popover css code*/
 
 
+.dkim_spf::-webkit-scrollbar, .dkim_spf::-webkit-scrollbar, .dkim_spf::-webkit-scrollbar {
+ height: 7px;
+ margin-right: 4px !important;
+ background:lightgray;
+}
+
+.dkim_spf{
+  margin: 15px;
+  overflow: auto;
+  overflow-y:hidden;
+}
+
+.dkim_spf::-webkit-scrollbar-thumb,.dkim_spf::-webkit-scrollbar-thumb, .dkim_spf::-webkit-scrollbar-thumb {
+ -webkit-border-radius: 10px;
+ border-radius: 10px;
+ /*-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
+ background: gray;
+ 
+}
 /*end custom css code*/
 
 

@@ -841,7 +841,6 @@ function setUpGlobalTwilio()
 						//To_Number = globalconnection.parameters.From;
 						//To_Name = searchForContact(To_Number);
 						//Twilio_Call_Noty_IMG = addContactImg("Incoming");
-					  
 						console.log("calling call noty");
 						
 						var btns = [{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_mute icon-microphone","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_unmute icon-microphone-off","title":""},{"id":"", "class":"btn btn-xs btn-default noty_twilio_dialpad icon-th","title":""},{"id":"", "class":"btn btn-sm btn-danger noty_twilio_hangup","title":"Hangup"}];
@@ -954,7 +953,7 @@ function setUpGlobalTwilio()
 						}
 						
 							//if the call campaign is started then we try to make a next call from campaign
-								if(($("#noteModal").data('bs.modal') || {}).isShown != true){
+								if(($("#noteModal").data('bs.modal') || {}).isShown != true && ($("#logCallModal").data('bs.modal') || {}).isShown != true){
 								if(CALL_CAMPAIGN.start)
 								  {
 									if(CALL_CAMPAIGN.call_from_campaign ){
@@ -979,6 +978,7 @@ function setUpGlobalTwilio()
 											dialNextCallManually();
 										  }
 								  	}	
+								
 								}
 				});			
 
@@ -1135,7 +1135,7 @@ function setUpGlobalTwilio()
 		});
 	});
 }
-function twiliocall(phoneNumber, toName)
+function twiliocall(phoneNumber, toName,conferenceName, contact)
 {
 	// get the phone number to connect the call to
 	
@@ -1187,7 +1187,7 @@ function twiliocall(phoneNumber, toName)
 				showDraggableNoty("Twilioio", TWILIO_CONTACT, "outgoing", To_Number, btns);
 				
 				/*showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
-		});		
+		},contact);		
 	}	
 }
 
@@ -1385,6 +1385,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 function showNewContactModal(phoneNumber) {
 	$('#personModal').modal('show');
 	$("#personForm").find("#phone").val(phoneNumber);
+	$("#personForm").find("#phone").removeClass("phone"); 
 	return;
 }
 
@@ -1592,28 +1593,47 @@ function searchForContactImg(from, callback) {
 }
 
 // Add contact img in html for call noty text with contact url
-function addContactImg(callType, callback)
+function addContactImg(callType, callback, contact)
 {
 	var notyContactImg = "";
-	if(callType == "Outgoing")
-	  {
-		var currentContact = agile_crm_get_contact();
-		var contactImg = getGravatar(currentContact.properties, 40);
-		notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
-		return callback(notyContactImg);
-	  }
-	else
-	{
-		searchForContactImg(To_Number, function(contact){
-			var callingContact = contact;
-			if(callingContact != null)
-			{
-				var contactImg = getGravatar(callingContact.properties, 40);
-				notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';			
+	try{
+		if(callType == "Outgoing")
+		  {
+			var currentContact;
+			if(contact){
+				currentContact = contact;
+			}else{
+				try{
+					currentContact = agile_crm_get_contact();
+				}catch (e) {
+				}
 			}
+			
+			if(!currentContact){
+				return callback(notyContactImg);
+			}
+			
+			var contactImg = getGravatar(currentContact.properties, 40);
+			notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
 			return callback(notyContactImg);
-		});
-	} 
+		  }
+		else
+		{
+			searchForContactImg(To_Number, function(contact){
+				var callingContact = contact;
+				if(callingContact != null)
+				{
+					var contactImg = getGravatar(callingContact.properties, 40);
+					notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';			
+				}
+				return callback(notyContactImg);
+			});
+		}
+	}catch(e){
+		console.log("error occured in getting image " + e);
+		return callback(notyContactImg);
+	}
+ 
 }
 
 /**

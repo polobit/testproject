@@ -228,6 +228,8 @@ function sendActionToClient(action){
 			showCallNotyMessage("Executable file is not running");
 			return;
 		}
+		
+		
 		if(client == "Bria"){
 			$('#briaInfoModal').html(getTemplate("briaInfoModal"));
 			$('#briaInfoModal').modal('show');
