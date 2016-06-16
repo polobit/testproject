@@ -1279,4 +1279,14 @@
 		<url-pattern>/knowledgebase/*</url-pattern>
 	</servlet-mapping>
 	<!-- End of HelpCenter -->
+	<servlet>
+        <servlet-name>VoiceCallTwilioServlet</servlet-name>
+        <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>VoiceCallTwilioServlet</servlet-name>
+        <url-pattern>/twiliovoicecall</url-pattern>
+        <url-pattern>/Twiliovoicecall</url-pattern>
+    </servlet-mapping>
 </web-app>
