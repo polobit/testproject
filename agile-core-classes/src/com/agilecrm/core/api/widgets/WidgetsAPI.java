@@ -162,19 +162,12 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget) throws Exception {
 		if (widget != null) {
-
-			if (widget.widget_type == WidgetType.CUSTOM) {
-				widget.name = widget.display_name.replaceAll("[^a-zA-Z0-9]+",
-						"");
-			}
-
 			WidgetsAPI.checkValidDetails(widget);
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			if (agileUser != null) {
 				Key<AgileUser> currentUser = new Key<AgileUser>(
 						AgileUser.class, agileUser.id);
 				widget.setOwner(currentUser);
-
 				widget.save();
 				return widget;
 			}

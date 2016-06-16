@@ -244,25 +244,28 @@ public class Widget {
 	 */
 	public void save() {
 		AgileUser agileUser;
+		AgileUser currentUser = AgileUser.getCurrentAgileUser();
 		if(this.user == null){
-			agileUser = AgileUser.getCurrentAgileUser();
+			agileUser = currentUser;
 		}else{
 			agileUser = AgileUser.getUser(this.user);
 		}
 		
-		DomainUser domainUser = agileUser.getDomainUser();
+		DomainUser domainUser = currentUser.getDomainUser();
 		boolean isAdmin = domainUser.is_admin;
 		JSONArray userList = new JSONArray();
-		if (isAdmin && this.id == null) {
+		if (isAdmin && agileUser.id == currentUser.id && this.id == null) {
 			userList.put(agileUser.id);
 			this.add_by_admin = true;
 			this.listOfUsers = userList.toString();
 			dao.put(this);
-		} else if (isAdmin) {
-			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
+		} else if (isAdmin) {			
 			List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
-			if (userWidgets != null && userWidgets.size() > 0) {
-				for (Widget widget : userWidgets) {					
+			if (this.widget_type == WidgetType.CUSTOM) {
+				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
+			}
+			if (this.id != null && userWidgets != null && userWidgets.size() > 0) {
+				for (Widget widget : userWidgets) {						
 					widget.prefs = this.prefs;
 					widget.logo_url = this.logo_url;
 					widget.mini_logo_url = this.mini_logo_url;
@@ -271,7 +274,7 @@ public class Widget {
 					widget.name = this.name;
 					widget.fav_ico_url = this.fav_ico_url;
 					widget.integration_type = this.integration_type;
-					widget.add_by_admin = this.add_by_admin;
+					widget.add_by_admin = true;
 					widget.script = this.script;
 					widget.url = this.url;
 					dao.put(widget);
