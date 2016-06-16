@@ -62,6 +62,7 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dragged to adjust the horizontal scroll
 		      change : function(event, ui){
+		      	  $(ui.item).attr("z-index", "-1");
 		    	  var width = $('#' + id + ' > div').width();
 		    	  var scrollX = $('#' + id + ' > div').scrollLeft();
 		    	  if(event.pageX > (width * 0.9))
