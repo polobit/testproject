@@ -4089,9 +4089,9 @@ border-bottom:1px solid #eee;
 
 #moved-deal li:first-child {
   list-style-type: none;
-  width: 200px;
+  width: 50px;
   z-index: 999;
-  left: 22%;
+  left: calc(38% - 50px);
   float: right;
   margin-top: -10px;
   position: absolute;

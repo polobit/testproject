@@ -725,16 +725,6 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 </div>
 
-<!-- Deals track change, archive and delete icons -->
-<!-- <div id="dealActions" class="open" style="display:none;">
-  <ul class="closeDeal">
-    <li class="fa fa-file-archive-o customDrop archive-deal-action"></li>
-    <li class="icon-mail-reply customDrop restore-deal-action"></li>
-    <li class="icon-trash customDrop delete-deal-action"></li>
-    <li class="icon-road customDrop move-deal-action"></li>
-  </ul>
-</div> -->
-
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
 
