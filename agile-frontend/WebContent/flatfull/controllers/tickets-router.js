@@ -39,19 +39,19 @@
 		"ticket-reports" : "ticketReports",
 		"ticket-report/:report_type" : "ticketReport",
 	     
-				         /*Help center Routes*/
-						"knowledgebase" : "categories",
-				        "knowledgebase/:id/sections":"sections",  
-				       	"knowledgebase/articles/:id":"articles",
-						"knowledgebase/add-article" : "addArticle",
-						"knowledgebase/add-article/:id" : "addArticle",
-						"knowledgebase/section/:section_id/article/:article_id/edit-article" : "editArticle",	
-						"knowledgebase/section/:section_id/article/:id" : "showArticle",
-						"knowledgebase/add-section" : "addSection",
-						"knowledgebase/add-section/:id" : "addSection",
-						"knowledgebase/catogery/:categorie_id/section/:id/edit-section" : "editSection",	
-						"knowledgebase/add-category":"addCategory",
-						"knowledgebase/:id/edit-category":"editCategory",
+         /*Help center Routes*/
+		"knowledgebase" : "categories",
+        "knowledgebase/:id/sections":"sections",  
+       	"knowledgebase/articles/:id":"articles",
+		"knowledgebase/add-article" : "addArticle",
+		"knowledgebase/add-article/:id" : "addArticle",
+		"knowledgebase/section/:section_id/edit-article/:article_id" : "editArticle",	
+		"knowledgebase/section/:section_id/article/:id" : "showArticle",
+		"knowledgebase/add-section" : "addSection",
+		"knowledgebase/add-section/:id" : "addSection",
+		"knowledgebase/catogery/:categorie_id/section/:id/edit-section" : "editSection",	
+		"knowledgebase/add-category":"addCategory",
+		"knowledgebase/:id/edit-category":"editCategory",
 
 
 	},
@@ -1055,11 +1055,63 @@
 				templateKey : "ticket-helpcenter-sections",
 				individual_tag_name : 'tr',
 				sort_collection : true, 
-	 			sortKey : 'updated_time',
-	 			descending : true,
+	 			sortKey : 'order',
 				postRenderCallback : function(el, collection) {
 
                   //Helcenter_Events.sectionDelete(el);
+
+                  head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
+						$(el).find('tbody').each(function(index){
+							$(this).sortable({
+							      items:'tr',
+							      helper: function(e, tr){
+							          var $originals = tr.children();
+							          var $helper = tr.clone();
+							          $helper.children().each(function(index)
+							          {
+							            // Set helper cell sizes to match the original sizes
+							            $(this).width($originals.eq(index).width());
+							            console.log('-----------'+$originals.eq(index).width());
+							          });
+							          return $helper;
+							      },
+							      start: function(event, ui){
+							    	  $.each(ui.item.children(),function(index,ele){
+							    		  ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+							    	  });
+							    	  ui.helper.width(ui.helper.width());
+							      },
+							      sort: function(event, ui){
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							      },
+							      forceHelperSize:true,
+							      placeholder:'<tr><td></td></tr>',
+							      forcePlaceholderSize:true,
+							      handle: ".icon-move",
+							      cursor: "move",
+							      tolerance: "intersect",
+							      
+						    });
+						
+							$('#ticket-helpcenter-sections-model-list',$('#ticket-section-table')).on("sortstop",function(event, ui){
+								
+								var sourceIds = [];
+								$('#ticket-helpcenter-sections-model-list > tr').each(function(column){
+									sourceIds[column] = $(this).data().id;
+								});
+								// Saves new positions in server
+									$.ajax({ type : 'POST', url : '/core/api/knowledgebase/section/position', data : JSON.stringify(sourceIds),
+										contentType : "application/json; charset=utf-8", dataType : 'json', success : function(data){
+											$.each(sourceIds, function(index, val){
+												$('#dealSourcesForm_'+val).find('input[name="order"]').val(index);
+									
+											});
+									}});	
+								});
+							});	
+							
+
+						});
 				}
 			});
 
@@ -1085,12 +1137,64 @@
 				templateKey : "ticket-helpcenter-articles",
 				individual_tag_name : 'tr',
 				sort_collection : true, 
-	 			sortKey : 'updated_time',
-	 			descending : true,
+	 			sortKey : 'order',
 				postRenderCallback : function(el, collection) {
 
                   //Helcenter_Events.articleDelete(el);
 				
+                  head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
+						$(el).find('tbody').each(function(index){
+							$(this).sortable({
+							      items:'tr',
+							      helper: function(e, tr){
+							          var $originals = tr.children();
+							          var $helper = tr.clone();
+							          $helper.children().each(function(index)
+							          {
+							            // Set helper cell sizes to match the original sizes
+							            $(this).width($originals.eq(index).width());
+							            console.log('-----------'+$originals.eq(index).width());
+							          });
+							          return $helper;
+							      },
+							      start: function(event, ui){
+							    	  $.each(ui.item.children(),function(index,ele){
+							    		  ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+							    	  });
+							    	  ui.helper.width(ui.helper.width());
+							      },
+							      sort: function(event, ui){
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							      },
+							      forceHelperSize:true,
+							      placeholder:'<tr><td></td></tr>',
+							      forcePlaceholderSize:true,
+							      handle: ".icon-move",
+							      cursor: "move",
+							      tolerance: "intersect",
+							      
+						    });
+						
+							$('#ticket-helpcenter-articles-model-list',$('#ticket-article-table')).on("sortstop",function(event, ui){
+								
+								var sourceIds = [];
+								$('#ticket-helpcenter-articles-model-list > tr').each(function(column){
+									sourceIds[column] = $(this).data().id;
+								});
+								// Saves new positions in server
+									$.ajax({ type : 'POST', url : '/core/api/knowledgebase/article/position', data : JSON.stringify(sourceIds),
+										contentType : "application/json; charset=utf-8", dataType : 'json', success : function(data){
+											$.each(sourceIds, function(index, val){
+												$('#dealSourcesForm_'+val).find('input[name="order"]').val(index);
+									
+											});
+									}});	
+								});
+							});	
+							
+
+						});	
+
 
 				}
 			});

@@ -1,5 +1,6 @@
 package com.agilecrm.knowledgebase.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -22,10 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
-import com.agilecrm.knowledgebase.util.CategorieUtil;
 import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.googlecode.objectify.Key;
 
@@ -171,4 +170,54 @@ public class SectionAPI
 		}
 
 	}
+	/**
+	 * Save the section order based on the order of the section id's sent.
+	 * 
+	 * @param ids
+	 *            section ids.
+	 * @return successes message after saving or else error message.
+	 */
+	@Path("position")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String setSectionOrder(String ids)
+	{
+		System.out.println("-----------" + ids);
+		JSONObject result = new JSONObject();
+		try
+		{
+			JSONArray idsArray = null;
+			if (StringUtils.isNotEmpty(ids))
+			{
+				idsArray = new JSONArray(ids);
+				System.out.println("------------" + idsArray.length());
+				List<Long> catIds = new ArrayList<Long>();
+				for (int i = 0; i < idsArray.length(); i++)
+				{
+					catIds.add(Long.parseLong(idsArray.getString(i)));
+				}
+			SectionUtil.saveSectionOrder(catIds);
+				result.put("message", "Order changes sucessfully.");
+			}
+			return result.toString();
+		}
+		catch (Exception je)
+		{
+			je.printStackTrace();
+			try
+			{
+				result.put("error", "Unable to update the order. Please check the input.");
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(result).build());
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+
+
+
 }

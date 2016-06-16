@@ -24,7 +24,7 @@
                 </a>
             </div>
             <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/article/bulk" data-bulk-delete-title="Delete"
-                data-bulk-delete-msg="Are you sure you want to delete?">
+                data-bulk-delete-msg="Are you sure you want to delete?" id="ticket-article-table">
                     <thead>
                         <tr>
                             <th class="hide">Id</th>
@@ -33,7 +33,7 @@
                             <th style="width:40%"></th>
                         </tr>
                     </thead>
-                    <tbody id="ticket-helpcenter-articles-model-list"  class="c-p"> </tbody>
+                    <tbody id="ticket-helpcenter-articles-model-list" route = "knowledgebase/section{{#helpcenter_url_section}}{{/helpcenter_url_section}}/edit-article/"  class="c-p"> </tbody>
             </table>
         </div>
     </div>

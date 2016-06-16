@@ -6,7 +6,6 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 		/* Home routes */
 		"" : "categories",
-		"categories":"categories",
 		"section/:id" : "sectionArticles",
 		"categorie/:categorie_id" : "categorieSections",
 		"categorie/:categorie_id/section/:section_id" : "sectionArticles",
@@ -87,6 +86,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 						templateKey : "helpcenter-articles",
 						individual_tag_name : 'div',
 						postRenderCallback : function(el){
+						Helpcenter_Util.setBreadcrumbPath();
 						}
 					});
 

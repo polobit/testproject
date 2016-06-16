@@ -8,7 +8,6 @@ import java.util.Map;
 import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
-import com.agilecrm.ticket.entitys.Tickets;
 import com.googlecode.objectify.Key;
 
 /**
@@ -92,4 +91,56 @@ public class ArticleUtil
 		// Deleting section
 		Article.dao.deleteKey(new Key<Article>(Article.class, id));
 	}
+	
+	public static Article getArticle(Long id)
+    {
+	try
+	{
+	    return Article.dao.get(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return null;
+    }
+	
+	/**
+     * Save the categories a precise order.
+     * 
+     * @param catIds
+     *            List of id of the categories in a sequence which are to be
+     *            save in the same order.
+     */
+    public static void saveArticleOrder(List<Long> catIds)
+    {
+	for (int i = 0; i < catIds.size(); i++)
+	{
+		Article article = getArticle(catIds.get(i));
+		article.order=i;
+		updateArticle(article);
+	}
+	
+    }
+
+    /**
+     * Update the category. If the category name is not valid or id is null then
+     * return null.
+     * 
+     * @param category
+     *            category to be updated.
+     * @return updated category.
+     */
+    public static Article updateArticle(Article article)
+    {
+	
+    	Article oldarticle = getArticle(article.id);
+	if (oldarticle == null)
+	    return null;
+		
+	Article.dao.put(article);
+	
+	return article;
+    }    
+
 }

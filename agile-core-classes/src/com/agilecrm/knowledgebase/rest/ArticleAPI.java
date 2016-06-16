@@ -17,6 +17,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,10 +27,7 @@ import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.knowledgebase.util.ArticleUtil;
-import com.agilecrm.knowledgebase.util.SectionUtil;
 import com.agilecrm.search.document.HelpcenterArticleDocument;
-import com.agilecrm.ticket.entitys.TicketLabels;
-import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
 /**
@@ -115,6 +113,56 @@ public class ArticleAPI
 					.build());
 		}
 	}
+	
+	
+	/**
+	 * Save the article order based on the order of the article id's sent.
+	 * 
+	 * @param ids
+	 *            article ids.
+	 * @return successes message after saving or else error message.
+	 */
+	@Path("position")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String setArticleOrder(String ids)
+	{
+		System.out.println("-----------" + ids);
+		JSONObject result = new JSONObject();
+		try
+		{
+			JSONArray idsArray = null;
+			if (StringUtils.isNotEmpty(ids))
+			{
+				idsArray = new JSONArray(ids);
+				System.out.println("------------" + idsArray.length());
+				List<Long> catIds = new ArrayList<Long>();
+				for (int i = 0; i < idsArray.length(); i++)
+				{
+					catIds.add(Long.parseLong(idsArray.getString(i)));
+				}
+				ArticleUtil.saveArticleOrder(catIds);
+				result.put("message", "Order changes sucessfully.");
+			}
+			return result.toString();
+		}
+		catch (Exception je)
+		{
+			je.printStackTrace();
+			try
+			{
+				result.put("error", "Unable to update the order. Please check the input.");
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(result).build());
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+
 
 	/**
 	 * 
