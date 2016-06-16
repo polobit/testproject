@@ -102,6 +102,7 @@ public class ContactEmailUtil
 	 */
 	public static void saveContactEmailAndSend(ContactEmailWrapper contactEmailWrapper) throws Exception
 	{
+		System.out.println("saveContactEmailAndSend start---");
 		String to = contactEmailWrapper.getTo(), cc = contactEmailWrapper.getCc(), bcc = contactEmailWrapper.getBcc();
 		
 		// Removes traling commas if any
@@ -146,14 +147,14 @@ public class ContactEmailUtil
 		if (toEmailSet.size() == 1  && contactEmailWrapper.isTrack_clicks())
 		{
 			body = EmailUtil.appendTrackingImage(body, null, contactEmailWrapper.getTrackerId());
-
+			System.out.println("Start -- in saveContactEmailAndSend if toEmailSet size is 1-----");
 			// Get contactId for link tracking
 			for(String email: toEmailSet)
 				contact = ContactUtil.searchContactByEmail(EmailUtil.getEmail(email));
 			
 			if (contact != null)
 				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, contactEmailWrapper.getTrackerId(), contactEmailWrapper.getPush_param().toString());
-
+			System.out.println("End -- in saveContactEmailAndSend if toEmailSet size is 1-----");
 		}
 
 		// combined body and signature. Inorder to avoid link tracking in
@@ -236,6 +237,7 @@ public class ContactEmailUtil
 	public static void buildContactEmailAndSend(ContactEmailWrapper contactEmail) throws Exception
 	{
 		checkAndModifyToCcAndBccEmails(contactEmail);
+		System.out.println("After checkAndModifyToCcAndBccEmails in buildContactEmailAndSend");
 	    saveContactEmailAndSend(contactEmail);
 	}
 	
@@ -909,12 +911,25 @@ public class ContactEmailUtil
 		    
 		    List<Contact> toEmailContacts = ContactUtil.searchContactsAndCompaniesByEmailList(toEmailsList);
 		    
+		    if(toEmailsList != null)
+		    {
+		    	System.out.println("toEmailsList in getMailsAfterUpdateCheck---"+toEmailsList.size());
+		    }
+		    
+		    if(toEmailContacts != null)
+		    {
+		    	System.out.println("toEmailContacts in getMailsAfterUpdateCheck---"+toEmailContacts.size());
+		    }
+		    
 		    if(toEmailContacts != null && toEmailContacts.size() > 0)
 		    {
 		    	for(Contact con : toEmailContacts)
 		    	{
 		    		String email = con.getContactFieldValue(Contact.EMAIL);
+		    		System.out.println("email---"+email);
+		    		System.out.println("Before update check---");
 		    		boolean can_update = UserAccessControlUtil.check(Contact.class.getSimpleName(), con, CRUDOperation.CREATE, false);
+		    		System.out.println("After update check---");
 	    			if(!can_update)
 	    			{
 	    				toEmailsList.remove(email);

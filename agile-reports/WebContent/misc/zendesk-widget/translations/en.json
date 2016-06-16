@@ -1,0 +1,26 @@
+{
+    "app": {
+        "parameters": {
+         "domain": {
+                "label": "Domain:",
+                "placeholder": "*.agilecrm.com",
+                "helpText": "Domain you use to login to Agile CRM site"
+            },
+            "agile_email": {
+                "label": "Email:",
+                "placeholder": "example@gmail.com",
+                "helpText": "Email is your username"
+            },
+            "apikey": {
+                "label": "API Key:",
+                "placeholder": "2f452d12sdfa5afas2fas4fa51",
+                "helpText": "API key you find under admin settings"
+            }
+        }
+    },
+    "loading": "Agile CRM is loading...",
+    "error": {
+        "title": "An error has occurred",
+        "credentials": "Your credentials appear to be wrong. Please make sure they are correct in the settings page."
+    }
+}

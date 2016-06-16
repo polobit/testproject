@@ -201,7 +201,7 @@ function saveCallNoteBria(){
 		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
-					twilioIOSaveContactedTime();
+					twilioIOSaveContactedTime(cntId);
 					accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
 					var json = resp;
 					if(json == null) {
@@ -234,6 +234,8 @@ function saveCallNoteBria(){
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
+		}else{
+			return showNewContactModal(number);
 		}
 	}
 }
@@ -263,6 +265,16 @@ function saveCallActivityBria(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 
+	if(!globalCall.contactedId && dialled.using == "dialler"){
+		$.post( "/core/api/widgets/bria/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+		return;
+	}
+	
 	if(call.status == "Answered"){
 		return;
 	}

@@ -27,31 +27,29 @@
               <img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif">
             </div>
           </div>
+           <div class="control-group form-group" style="margin-bottom:0px;"> 
+           <label class="control-label col-sm-3">Value<span class="field_req">*</span></label> 
+           <div class="controls col-sm-7"> 
+            <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class="p-n"> 
+              <input type="text" name="expected_value" class="required  number form-control" min="0" max="1000000000000"
+                placeholder="Deal Value"   style="font-size:13px"/> 
+             </div> 
+            </div> 
+           </div> 
+          </div>    
 
-          <div class="row">
-                        <div class="col-sm-6">
-                        <div class="control-group form-group" style="margin-bottom:15px;">
-                            <label class="control-label col-sm-6">Value<span class="field_req">*</span></label>
-                            <div class="controls col-sm-5">
-                              <input type="text" name="expected_value"
-                class="required  number form-control" min="0" max="1000000000000"
-                placeholder="Deal Value"   style="font-size:13px"/>            
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-sm-6">
-                        <div class="control-group form-group" style="margin-bottom:15px;">
-                            <label class="control-label col-sm-5"  {{#is_mobile}} {{else}} style="padding-left:0px;"{{/is_mobile}}>Probability (%)<span class="field_req">*</span></label>
-                            <div class="controls col-sm-3 {{#is_mobile}} {{else}} p-l-none {{/is_mobile}}">
-                                <input type="text" id="probability"
-                name="probability" value="20" class=" required digits form-control" max="100"
-      placeholder="Probability %" title="Probability %" />      
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-
-        
+              <div class="control-group form-group" style="margin-bottom:0px;"> 
+           <label class="control-label col-sm-3">Probability <span class="field_req">*</span></label> 
+           <div class="controls col-sm-7"> 
+            <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class="col-md-10 p-n" style="width:92%"> 
+              <input type="text" value="20" class="form-control digits deal-pro required positive_number" id="probability" name="probability" placeholder="Probability " max="100" style="border-radius:2px 0px 0px 2px;"> 
+             </div> 
+             <span class="col-md-1 form-control input-group-addon" style="border-left:none;border-radius:0px 2px 2px 0px;padding-top:9px;"><span style="margin-left:-4px;">%</span></span> 
+            </div> 
+           </div> 
+          </div>
           <div class="control-group form-group">
             <label class="control-label col-sm-3">Milestone<span
               class="field_req">*</span></label>

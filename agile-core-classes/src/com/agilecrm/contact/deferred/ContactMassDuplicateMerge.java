@@ -85,7 +85,7 @@ public class ContactMassDuplicateMerge implements DeferredTask
     
     public static void mergeDuplicates(String namespace)
     {
-    	 //NamespaceManager.set(namespace);
+    	 NamespaceManager.set(namespace);
     	 Map<String, Object> searchMap = new HashMap<String, Object>();
     	 	searchMap.put("type",Contact.Type.PERSON);	
 		ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,null,200,Integer.MAX_VALUE);

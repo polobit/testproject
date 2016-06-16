@@ -109,7 +109,13 @@ var ContactsRouter = Backbone.Router.extend({
 			});
 		}
 
-		if(!dashboardJSON["id"])
+		if(dashboard_name==="MarketingDashboard"){
+
+			dashboardJSON["id"] = "MarketingDashboard";
+			dashboardJSON["name"] = "Marketing Dashboard";
+			dashboardJSON["description"] = "Welcome to Agile CRM Marketing Automation.";
+
+		}else if(!dashboardJSON["id"])
 		{
 			dashboard_name = "DashBoard";
 		}
@@ -643,9 +649,7 @@ var ContactsRouter = Backbone.Router.extend({
 			load_contact_tab(el, contact.toJSON());
 
 			loadWidgets(el, contact.toJSON());
-			
-			
-			
+						
 			/*
 			 * // To get QR code and download Vcard
 			 * $.get('/core/api/VCard/' + contact.toJSON().id,
@@ -678,6 +682,9 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-call",el).removeClass("c-progress");
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
+			if(contact)
+				addTypeCustomData(contact.get('id') , el);
+
 			} 
 			
 		});
@@ -691,7 +698,6 @@ var ContactsRouter = Backbone.Router.extend({
 			}*/
 		// Check updates in the contact.
 		checkContactUpdated();
-
 
 		if(_agile_get_prefs('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -1612,4 +1618,19 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			
 			
 		}, "#send-email-listener-container"); 
+}
+function addTypeCustomData(contactId, el){
+	var customFieldsView = new Base_Collection_View({
+							url : 'core/api/contacts/getCustomfieldBasedContacts?id='+contactId+'&type=CONTACT',
+							sortKey : 'time',
+							descending : true,
+							templateKey : "contact-type-custom-fields",
+							cursor : true,
+							page_size : 20,
+							postRenderCallback : function(el){
+								
+							}
+						});
+	customFieldsView.collection.fetch();
+	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 }

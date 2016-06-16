@@ -7273,6 +7273,9 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	Handlebars.registerHelper('getCurrentUserDashboards', function(type, options)
 	{
 		var options_el = "";
+		if(type == 'portlet'){
+			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing Dashboard</option>"; 
+		}
 		if(CURRENT_USER_DASHBOARDS)
 		{
 			CURRENT_USER_DASHBOARDS.sort(function(a,b){return a.name.trim() < b.name.trim() ? -1 : a.name.trim() > b.name.trim() ? 1 : 0;});
@@ -7285,10 +7288,11 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					is_active_added = true;
 				}
 			});
-
+			
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
 				if(type == 'portlet')
 				{
+							
 					var trim_name = this.name;
 					if(trim_name)
 					{
@@ -7322,17 +7326,18 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					{
 						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
 					}
+
 					if(selected_li_id == this.id)
 					{
 						options_el += "<li class='active'><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
-					}
+					}					
 					else
 					{
 						options_el += "<li><a id="+this.id+" title='"+this.name.trim()+"' class='user-defined-dashboard' href='#'>"+trim_name+"</a></li>";
 					}
-
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
+						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
 						options_el += "<li class='divider'></li>";
 						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
 					}
@@ -7340,10 +7345,14 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 				}
 
 			});
+
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
+				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
+				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
+				options_el += "<li class='divider'></li>";	
 				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
-			}
+			}			
 		}
 
 		return options_el;
@@ -7360,7 +7369,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 	Handlebars.registerHelper('is_acl_allowed', function(options)
 	{
-		if(_plan_restrictions.is_ACL_allowed[0]() || checkForSpecialUsers())
+		if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers())
 			return options.inverse(this);
 		else
 			return options.fn(this);
@@ -7530,3 +7539,10 @@ Handlebars.registerHelper('validateSendgridWhitelabel', function(valid)
 
 	return "<i class='fa fa-times icon-2x' style='color:red;'></i>";
 });
+Handlebars.registerHelper('scope_type', function(scope, options)
+	{
+		if(scope == "CONTACT" || scope == "COMPANY")
+			return options.fn(this);
+
+		return options.inverse(this);
+	});

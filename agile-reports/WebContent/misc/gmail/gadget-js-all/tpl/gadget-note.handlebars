@@ -1,0 +1,28 @@
+<!--  Add Note Form -->
+	<div class="gadget-note row-fluid">
+		<form class='gadget-note-form form-horizontal' name="gadget_note_form" method="post" style="margin:0px;">
+			<fieldset style="margin:0px;">
+                <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="subject"><b>Subject</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="subject" id="subject" placeholder="About" class="required" type="text" style="height: 24px;" />
+					</div>
+				</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="description"><b>Description</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<textarea name="description" id="description" rows="3" placeholder="Detailed Note..." class="required"></textarea> 
+					</div>
+				</div>
+
+                <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+                   	<a type="submit" class="btn btn-primary gadget-note-validate" style="padding:2px 6px 2px;">Add Note</a>
+	             	<a class="cancel btn" data-tab-identity="notes" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+                   	<img class="note-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+				</div>
+			</fieldset>
+		</form>
+	</div>

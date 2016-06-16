@@ -111,7 +111,7 @@ public class PHPAPI
 		JSAPIUtil.subscribeCampaigns(campaignIds, contact);
 	    
 	    // return mapper.writeValueAsString(contact);
-	    return JSAPIUtil.limitPropertiesInContactForJSAPI(contact);
+	    return mapper.writeValueAsString(contact);
 	}
 	catch (PlanRestrictedException e)
 	{

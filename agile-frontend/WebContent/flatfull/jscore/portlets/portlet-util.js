@@ -354,6 +354,7 @@ var portlet_utility = {
 			"Average Deviation" : "portlets-Tasks-Deviation",
 			"Webstat Visits" : "portlets-webstat-visits",
 			"Referralurl stats" : "portlets-Referralurl-stats-report",
+			"Marketing Onboarding" : "portlets-marketing-onboarding",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
