@@ -27,25 +27,25 @@ public class DefaultWidgets {
 		widgets.add(new Widget(
 				"Twitter",
 				"Twitter",
-				" Twitter offers a great way of engaging with contacts in real time based on what they tweet.",
+				"Engage your customers effectively through Twitter integration based on their Twitter activity.",
 				"/widgets/twitter.js", "/img/plugins/twitter.png",
 				"/widgets/twitter-logo-small.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
 				"Rapleaf",
 				"TowerData",
-				" Towerdata makes it incredibly easy for you to personalize content for your customers.",
+				"Leverage towerdata to personalize content for your customers based on their interests.",
 				"/widgets/rapleaf.js", "/img/plugins/towerdata.png",
 				"/widgets/towerdata-logo-small.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
 				"ClickDesk",
 				"ClickDesk",
-				"Convert chat sessions with potential customers into contacts in Agile along with the conversation.",
+				"Convert chat sessions to contacts, and manage chat and ticket history of your customers.",
 				"/widgets/clickdesk.js", "/img/plugins/clickdesk-logo.png",
 				"/widgets/clickdesk-logo-small.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
 				"Zendesk",
 				"Zendesk",
-				"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",
+				"Resolve issues, create tickets, and manage ticket history of your customers.",
 				"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png",
 				"/widgets/zendesk-logo-small.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
@@ -57,101 +57,101 @@ public class DefaultWidgets {
 		widgets.add(new Widget(
 				"FreshBooks",
 				"FreshBooks",
-				"FreshBooks enables the ability to create and manage invoices, estimates, expenses, and projects all in one place.",
+				"Create invoices, track payments, and manage invoice history of your customers.",
 				"/widgets/freshbooks.js", "/img/plugins/freshbooks-logo.png",
 				"/widgets/freshbooks-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"Stripe",
 				"Stripe",
-				"Stripe enables individuals and businesses to accept payments over the internet.",
+				"View subscription details, check payment history, 2-way sync, bring stripe events and create campaigns for your customers.",
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"Braintree",
 				"Braintree",
-				"Braintree enables individuals and businesses to accept payments over the internet.",
+				"View detailed transaction details, and track recurring billing of your customers.",
 				"/widgets/braintree.js", "/img/plugins/braintree-lg-logo.png",
 				"/widgets/braintree-sm-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"PayPal",
 				"PayPal",
-				"PayPal is the faster, safer way for online invoicing  web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.",
+				"View and track PayPal invoices of your customers using your PayPal account.",
 				"/widgets/paypal.js", "/img/plugins/paypal_logo_png.png",
 				"/widgets/paypal_icon.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"HelpScout",
 				"Help Scout",
-				"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
+				"Resolve issues, create conversations, and manage conversation history of your customers.",
 				"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png",
 				"/widgets/helpscout-logo-small.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
 				"Xero",
 				"Xero",
-				"Xero is an online accounting software for small business - Explore invoicing, reconciliation anytime, anywhere.",
+				"Manage invoices, track payments and see invoice history of your customers.",
 				"/widgets/xero.js", "/widgets/xero.png",
 				"/widgets/xero24x24.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"QuickBooks",
 				"QuickBooks",
-				"Run your whole business better with QuickBooks wherever you are. Automate your invoicing, billing and reporting and simplify your business for life!",
+				"Create invoices, track and receive payments, and see invoice history of your customers.",
 				"/widgets/quickBooks.js", "/widgets/intuit-quickbooks.png",
 				"/widgets/quickbooks_small.jpg", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"Facebook",
 				"Facebook",
-				"Facebook is a social utility that connects people with friends and others who work, study and live around them.",
+				"Engage your customers effectively through Facebook integration based on their Facebook activity.",
 				"/widgets/facebook.js", "/widgets/facebook.png",
 				"/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
 				"Uservoice",
 				"UserVoice",
-				"UserVoice is a powerful tool that helps build better products and support integrating easy-to-use feedback and ideas from customers.",
+				"Sync and manage feedback from your customers to provide improved customer experience.",
 				"/widgets/uservoice.js", "/widgets/Uservoice_lg_logo.png",
 				"/widgets/UserVoice_md_logo.png", null, WidgetType.SUPPORT));
 		widgets.add(new Widget(
 				"Shopify",
 				"Shopify",
-				"Shopify is a powerful ecommerce solution that includes everything you need to create an online store.",
+				"Provide online and offline engagement, sync data, bring shopify events, and create campaigns for your customers.",
 				"/widgets/shopify.js", "/widgets/shopify.png",
 				"/widgets/shopifysm.png", null, WidgetType.ECOMMERCE));
 		widgets.add(new Widget(
 				"TwilioIO",
 				"Twilio",
-				"Make and receive calls from your contacts using your Twilio account.",
+				"Make and receive calls, and send and receive text messages with your customers using Twilio account.",
 				"/widgets/twilioio.js", "/img/plugins/twilio.png",
 				"/widgets/twilio-small-logo.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"Sip",
 				"Sip",
-				"Make and receive calls from your contacts using any SIP account.",
+				"Make and receive calls with your customers using SIP account.",
 				"/widgets/sip.js", "/widgets/sip-logo-small.png",
 				"/widgets/sip-logo-small.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"GooglePlus",
 				"Google+",
-				"Keep tabs on your customer's activity on Google+ and engage with them better.",
+				"Engage your customers effectively through Google Plus  integration based on their Google Plus activity.",
 				"/widgets/googleplus.js", "/widgets/gplus.png",
 				"/widgets/gplusicon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget("CallScript", "Call Script",
-				"Shows you the script for a call based on your preset rules.",
+				"View context based call scripts based on preset rules for calls with your customers.",
 				"/widgets/callscript.js", "/widgets/call-script-logo-small.png",
 				"/widgets/call-script-logo-small.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"Bria",
 				"Bria",
-				"Make and receive calls from your contacts using your Bria Account.",
+				"Make and receive calls with your customers using Bria account.",
 				"/widgets/bria.js", "/img/plugins/bria-call.png",
 				"/img/plugins/bria-call.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"Skype",
 				"Skype",
-				"Make and receive calls from your contacts using your Skype Account.",
+				"Make and receive calls with your customers using Skype account.",
 				"/widgets/skype.js", "/img/plugins/skype-call.png",
 				"/img/plugins/skype-call.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"Custom",
 				"Custom",
-				"You can now develop your own custom widget in javascript or any backend server language.",
+				"Develop custom widget in javascript or any backend server language for your customers.",
 				"/widgets/custom.js", "widgets/custom_widget.png",
 				"widgets/custom_widget.png", null, WidgetType.CUSTOM));
 
