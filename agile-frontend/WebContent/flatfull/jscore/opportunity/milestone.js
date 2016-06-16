@@ -49,9 +49,6 @@ function setup_deals_in_milestones(id){
 				IS_DEAL_RESTORED = false;
 				IS_DEAL_DELETED = false;
 		      },
-		      sort : function(event, ui){
-		      	  $(ui.item).attr("z-index", "-1");
-		      },
 		      stop : function(event, ui) {
 		      	if($("#deals-tracks").is(":visible"))
 		      	{
@@ -65,6 +62,7 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dragged to adjust the horizontal scroll
 		      change : function(event, ui){
+		      	  $(ui.item).attr("z-index", "-1");
 		      	  var width = $('#' + id + ' > div').width();
 		    	  var scrollX = $('#' + id + ' > div').scrollLeft();
 		    	  if(event.pageX > (width * 0.9))
@@ -134,9 +132,6 @@ function setup_deals_in_milestones(id){
 		
 		$('li.delete-deal-action').droppable({
 			accept: ".deal-color",
-			over : function(event, ui){
-				$(ui.draggable).attr("z-index", "-1");
-			},
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder").hide();
 				$(ui.draggable).hide();
@@ -210,9 +205,6 @@ function setup_deals_in_milestones(id){
 		});
 		$('li.archive-deal-action').droppable({
 			accept: ".deal-color",
-			over : function(event, ui){
-				$(ui.draggable).attr("z-index", "-1");
-			},
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder", $("#opportunity-listners")).hide();
 				$(ui.draggable).hide();
@@ -240,9 +232,6 @@ function setup_deals_in_milestones(id){
 
 		$('li.restore-deal-action').droppable({
 			accept: ".deal-color",
-			over : function(event, ui){
-				$(ui.draggable).attr("z-index", "-1");
-			},
 			drop: function( event, ui ) {
 				$("li.ui-sortable-placeholder", $("#opportunity-listners")).hide();
 				$(ui.draggable).hide();
@@ -270,9 +259,6 @@ function setup_deals_in_milestones(id){
 
 		$('li.move-deal-action').droppable({
 			accept: ".deal-color",
-			over : function(event, ui){
-				$(ui.draggable).attr("z-index", "-1");
-			},
 			drop: function( event, ui ) {
 				is_deal_drop_to_track = true;
 				DEAL_DRAG_EVENT = event;
