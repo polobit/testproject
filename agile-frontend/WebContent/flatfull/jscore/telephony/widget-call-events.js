@@ -77,6 +77,20 @@ $(function()
 // }
 
 
+//call script button
+	$('body #wrap #agilecrm-container').on('click', '.noty_call_callScript', function(e)
+		{
+			e.preventDefault();
+			$("#draggable_noty").find(".draggable_noty_callScript").toggle();
+			
+			if($("#draggable_noty").find(".draggable_noty_callScript").is(':visible')){
+				$("#draggable_noty").find(".draggable_noty_callScript").html($(getTemplate("callScript")));	
+				var contact = $(this).data("contact");
+				showvalue(contact);
+				}
+	  });
+	
+	
 //answer the callT
 	$('body #wrap #agilecrm-container').on('click', '.noty_bria_answer, .noty_skype_answer', function(e)
 		{

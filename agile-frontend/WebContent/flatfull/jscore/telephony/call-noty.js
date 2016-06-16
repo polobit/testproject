@@ -370,6 +370,20 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		}else if(widgetName == "bria" || widgetName == "skype"){
 			makeDraggableDialpad("bria-widgetdialpad",{},$('.noty_buttons'));
 		}
+		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(c)){
+			$("#draggable_noty #call-noty-l2").find(".internal-col").prepend("<div id='' class='noty_call_callScript btn btn-sm btn-default p-xs'>CS</div>");
+			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
+		}
+		
+	}else if(s == "dialing"){
+		$("#draggable_noty .draggable_noty_notes").html("");
+		
+	}else if(s == "connecting" || s == "outgoing" || s == "ringing" || s == "incoming"){
+		$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
+		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(c)){
+			$("#draggable_noty #call-noty-l2").find(".internal-col").prepend("<div id='' class='noty_call_callScript btn btn-sm btn-default p-xs'>CS</div>");
+			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
+		}
 	}
 	
 	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed"){
@@ -391,7 +405,7 @@ function showDraggablePopup(param){
 		y = a[1]*1;
 	}
 	var popup = $(getTemplate("call-noty",param));
-	$("#draggable_noty").html(popup);
+	$("#draggable_noty .draggable_noty_info").html(popup);
 	$("#draggable_noty").css({'left':x,'top': y});
 	$("#draggable_noty").show();
 	$("#draggable_noty").draggableTouch();

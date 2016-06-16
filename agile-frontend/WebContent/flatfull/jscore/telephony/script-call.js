@@ -708,3 +708,112 @@ var _agile_rules = {
 	{
 		return true;
 	} };
+
+function GiveCallScriptName(contact){
+
+	_agile_contact = contact;
+	var array_callScript = [];
+	
+	CallScript_PLUGIN_NAME = "CallScript";
+
+	if(App_Widgets.Catalog_Widgets_View)
+		  var callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
+		else
+		// Following wont give current updated widget 
+		  var callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
+	
+	  if(callscript_widget){
+		  
+		  	if (callscript_widget.prefs == undefined || callscript_widget.prefs == "{}")
+			{
+				// show default text
+				console.log("no rule defined");
+				return;
+			}
+		}
+	  
+	  var callscript_prefs = JSON.parse(callscript_widget.prefs);
+	  var _agile_web_rules = callscript_prefs.csrules;
+	  
+		for ( var j = 0; j < _agile_web_rules.length; j++)
+		{
+
+				var name = _agile_web_rules[j].name;
+				array_callScript.push(name);
+				console.log("name is " + name);
+		}
+		
+		return array_callScript;
+}
+
+
+function GiveCallScriptText(name, contact){
+	if(!contact){
+		return "No text to display";
+	}
+	_agile_contact = contact;
+	var text = "No text to display";
+	CallScript_PLUGIN_NAME = "CallScript";
+
+	if(App_Widgets.Catalog_Widgets_View)
+		  var callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
+		else
+		// Following wont give current updated widget 
+		  var callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
+	
+	  if(callscript_widget){
+		  
+		  	if (callscript_widget.prefs == undefined || callscript_widget.prefs == "{}")
+			{
+				// show default text
+				console.log("no rule defined");
+				return text;
+			}
+		}
+	
+	  var callscript_prefs = JSON.parse(callscript_widget.prefs);
+	  var _agile_web_rules = callscript_prefs.csrules;
+	  
+		for ( var j = 0; j < _agile_web_rules.length; j++)
+		{
+
+			
+				var name1 = _agile_web_rules[j].name;
+				if(name1 == name){
+					var display = _agile_web_rules[j].displaytext;
+					var displayText = replaceMergeFields(display);
+					console.log ("display text - " + displayText);
+					text = displayText;
+				}
+					
+		}
+
+		return text;
+}
+
+
+function showvalue(contact){
+	if(!contact){
+		return;
+	}
+	
+	var nameArray = GiveCallScriptName(contact);
+	//option(name.value)
+
+	for(var i=0;i<nameArray.length;i++){
+		var $option = new Option(nameArray[i],nameArray[i]);
+		$("#callScriptForm #callScriptName").append($option);
+	}
+	
+	$("body").on("change", "#callScriptName", function(e){
+		
+		var rule = $("#callScriptName").val();
+		var contact = $(".noty_call_callScript","#draggable_noty").data("contact");
+		var textToDisplay = GiveCallScriptText(rule, contact);
+		console.log("textToDisplay" + textToDisplay)
+		$("#callScriptForm #callScriptText").val(textToDisplay);
+		
+	});
+		
+	
+}
