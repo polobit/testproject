@@ -1196,6 +1196,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					
 
 							var d=$('#goal_duration span').html();
+						if(window.navigator.userAgent.indexOf("Mozilla") != -1 && window.navigator.userAgent.indexOf("Chrome")==-1)
+							d="01 "+d;
 					d=new Date(d);
 					var start=getUTCMidNightEpochFromDate(d);
 
