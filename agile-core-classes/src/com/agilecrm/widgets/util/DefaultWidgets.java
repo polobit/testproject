@@ -63,13 +63,13 @@ public class DefaultWidgets {
 		widgets.add(new Widget(
 				"Stripe",
 				"Stripe",
-				"View subscription details, check payment history, 2-way sync, bring stripe events and create campaigns for your customers.",
+				"View subscription details, check payment history, get stripe events and create campaigns for your customers.",
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"Braintree",
 				"Braintree",
-				"View detailed transaction details, and track recurring billing of your customers.",
+				"View transaction details, and track recurring bills of your customers.",
 				"/widgets/braintree.js", "/img/plugins/braintree-lg-logo.png",
 				"/widgets/braintree-sm-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
@@ -111,7 +111,7 @@ public class DefaultWidgets {
 		widgets.add(new Widget(
 				"Shopify",
 				"Shopify",
-				"Provide online and offline engagement, sync data, bring shopify events, and create campaigns for your customers.",
+				"Provide online and offline engagement, get shopify events, and create campaigns for your customers.",
 				"/widgets/shopify.js", "/widgets/shopify.png",
 				"/widgets/shopifysm.png", null, WidgetType.ECOMMERCE));
 		widgets.add(new Widget(
