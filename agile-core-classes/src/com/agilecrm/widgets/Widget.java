@@ -244,13 +244,14 @@ public class Widget {
 	 */
 	public void save() {
 		AgileUser agileUser;
+		AgileUser currentUser = AgileUser.getCurrentAgileUser();
 		if(this.user == null){
-			agileUser = AgileUser.getCurrentAgileUser();
+			agileUser = currentUser;
 		}else{
 			agileUser = AgileUser.getUser(this.user);
 		}
 		
-		DomainUser domainUser = agileUser.getDomainUser();
+		DomainUser domainUser = currentUser.getDomainUser();
 		boolean isAdmin = domainUser.is_admin;
 		JSONArray userList = new JSONArray();
 		if (isAdmin && this.id == null) {
@@ -258,8 +259,7 @@ public class Widget {
 			this.add_by_admin = true;
 			this.listOfUsers = userList.toString();
 			dao.put(this);
-		} else if (isAdmin) {
-			Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
+		} else if (isAdmin) {			
 			List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
 			if (userWidgets != null && userWidgets.size() > 0) {
 				for (Widget widget : userWidgets) {					
