@@ -174,7 +174,6 @@ public class WidgetsAPI {
 				Key<AgileUser> currentUser = new Key<AgileUser>(
 						AgileUser.class, agileUser.id);
 				widget.setOwner(currentUser);
-
 				widget.save();
 				return widget;
 			}

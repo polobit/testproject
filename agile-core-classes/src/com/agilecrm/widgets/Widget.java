@@ -254,7 +254,7 @@ public class Widget {
 		DomainUser domainUser = currentUser.getDomainUser();
 		boolean isAdmin = domainUser.is_admin;
 		JSONArray userList = new JSONArray();
-		if (isAdmin && this.id == null) {
+		if (isAdmin && agileUser.id == currentUser.id && this.id == null) {
 			userList.put(agileUser.id);
 			this.add_by_admin = true;
 			this.listOfUsers = userList.toString();
@@ -271,7 +271,7 @@ public class Widget {
 					widget.name = this.name;
 					widget.fav_ico_url = this.fav_ico_url;
 					widget.integration_type = this.integration_type;
-					widget.add_by_admin = this.add_by_admin;
+					widget.add_by_admin = true;
 					widget.script = this.script;
 					widget.url = this.url;
 					dao.put(widget);
