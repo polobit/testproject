@@ -1207,13 +1207,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 							{
 								console.log(data);
 								var count=0,amount=0;
-								$('#deal-sources-table').find('td').each(function(index){
+								$("#deal-sources-table").find("tr").not(':first').each(function(index){
 									var that=$(this);
 									that.find('.count').val("");
 											that.find('.amount').val("");
 									$.each(data,function(index,jsond){
 										console.log(jsond);
-										if(jsond.domain_user_id==that.find('div').attr('id')){
+										if(jsond.domain_user_id==that.find(".goalid").attr("id")){
 											that.find('.count').val(jsond.count);
 											that.find('.amount').val(jsond.amount);
 											that.attr('id',jsond.id);
