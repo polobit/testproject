@@ -1,4 +1,9 @@
+
+
+ 
+
 var timeline_entity_loader = {
+
 
 	init : function(contact)
 	{
@@ -262,19 +267,16 @@ var timeline_entity_loader = {
 				$('#time-line', el).find('.loading-img-stats').remove();
 
 				// Checks whether data is empty or not.
-				//if (data.toJSON() && data.toJSON().length > 0)
-				if (/*data.toJSON() &&*/ data.toJSON().length > 0)
+				if (data.toJSON() && data.toJSON().length > 0)
 				{
 
 					// Gets address of the contact from its browsing history
 					var address = getPropertyValue(contact.properties, "address");
-					 //var man_delet  = $("#" + form_id + " #Manual_delete").val();
-					// var obj = {};
-					//to check if it manually added
-		//if(man_delet)
-	//	obj.ismanuallydeleted = true;
-
-					if (!address)
+					//var remote_addr= getPropertyValue(contact.properties, "remote_addr");
+					if(address){
+						var remote_addr=JSON.parse(address).remote_addr;
+					}
+					if (!address && remote_addr==false  )
 					{
 						var addressJSON = {};
 
