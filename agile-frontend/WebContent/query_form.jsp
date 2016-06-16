@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">  </script>
 <body>
 <form onsubmit="return checkField(this);">
 <div class="query-form-div">
@@ -148,6 +147,7 @@ color:#f05050;
 display: none;
 }
 </style>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">  </script>
 <script type="text/javascript">
 function checkField(field){
   if($('#email').val()=="" ){
@@ -163,7 +163,7 @@ function checkField(field){
   return false;
   }
  $.ajax({
-    url: "querysubmit",
+    url: "https://"+agile_id.namespace+"-dot-sandbox-dot-agilecrmbeta.appspot.com/querysubmit",
     type: "POST",
     data : {'name' :$('#name').val(),'email':$('#email').val(),'querytext':$('#querytext').val()},
     success:function(result){
