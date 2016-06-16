@@ -44,8 +44,8 @@ $(function()
 		var json = serializeForm(form_id);
 		json["custom_data"] = serialize_custom_fields(form_id);
 		json["colorName"]  = color[colorcode];
-		var tagsSourceId = 'tags_source_person_modal';          
-        if (tagsSourceId === undefined || !tagsSourceId || tagsSourceId.length <= 0)
+		var tagsSourceId ;          
+        if (!tagsSourceId)
                 tagsSourceId = form_id;
         var tagobj = get_tags(tagsSourceId);
         var i;
