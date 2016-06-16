@@ -49,6 +49,9 @@ function setup_deals_in_milestones(id){
 				IS_DEAL_RESTORED = false;
 				IS_DEAL_DELETED = false;
 		      },
+		      sort : function(event, ui){
+		      	  $(ui.item).attr("z-index", "-1");
+		      },
 		      stop : function(event, ui) {
 		      	if($("#deals-tracks").is(":visible"))
 		      	{
@@ -62,8 +65,7 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dragged to adjust the horizontal scroll
 		      change : function(event, ui){
-		      	  $(ui.item).attr("z-index", "-1");
-		    	  var width = $('#' + id + ' > div').width();
+		      	  var width = $('#' + id + ' > div').width();
 		    	  var scrollX = $('#' + id + ' > div').scrollLeft();
 		    	  if(event.pageX > (width * 0.9))
 		    		  $('#' + id + ' > div').scrollLeft(scrollX + 10);
