@@ -1131,7 +1131,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			$('.settings-lost-reasons').addClass('active');
 			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
-			$('.settings-lost-reasons').parent().removeClass('b-b-none');
+			//$('.settings-lost-reasons').parent().removeClass('b-b-none');
 
 		}, "#milestone-listner");
 	},
@@ -1168,7 +1168,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			$('.settings-deal-sources').addClass('active');
 			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
-			$('.settings-deal-sources').parent().removeClass('b-b-none');
+			//$('.settings-deal-sources').parent().removeClass('b-b-none'); 
 
 		}, "#milestone-listner");
 	},
@@ -1240,7 +1240,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			$('.settings-deal-goal').addClass('active');
 			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
-			$('.settings-deal-goal').parent().removeClass('b-b-none');
+			//$('.settings-deal-goal').parent().removeClass('b-b-none');
 
 		}, "#milestone-listner");
 	},
