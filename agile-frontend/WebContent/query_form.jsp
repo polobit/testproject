@@ -1,12 +1,130 @@
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Popup</title>
+<link
+  href="https://fonts.googleapis.com/css?family=Varela:400|Montserrat:700"
+  rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+  background: #fff;
+  width: 310px;
+  height: 210px;
+}
+#popup {
+  background: #FCFCFC;;
+    border: 1px solid #f6f6f6;
+  border-radius: 5px 5px 0 0;
+  color: #333 !important;
+  font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
+  letter-spacing: 0;
+  width: 302px;
+  position: fixed;
+  bottom: 0;
+}
+#popup-body {
+  border-radius: 8px;
+  margin: 25px;
+  padding: 20px 20px 20px;
+  position: relative;
+}
+#popup-close {
+  color: #848484;
+  cursor: pointer;
+  font: 28px/28px Arial, Helvetica, sans-serif !important;
+  opacity: .6;
+  position: absolute;
+  right: 15px;
+  top: 8px;
+  display: none;
+}
+#popup-close:hover {
+  opacity: 1;
+}
+#popup-title {
+  color: #505653 !important;
+  font: bold 20px/24px "Montserrat", Arial, Helvetica,
+    sans-serif !important;
+    padding-top: 5px;
+}
+#popup-body p {
+  margin: 15px 0;
+}
+#popup-content p:first-child {
+    font-size: 11px!important;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+#popup-content button:hover {
+  
+  background: rgba(23, 174, 217, 0.43);
+}
+#popup-footer {
+  color: #fff !important;
+  font: bold 10px/10px "Montserat", Arial, Helvetica,
+    sans-serif !important;
+  letter-spacing: 1px;
+  padding: 8px;
+  text-align: center;
+  text-transform: uppercase;
+  display: none;
+}
+#popup-footer a {
+  color: #fff;
+}
+#popup-content {
+   word-wrap : break-word;
+}
+.m-t-sm{
+  margin-top: 10px!important;
+  height: 5px;
+} .m-b-sm{
+margin-bottom: 5px!important;
+}
+#popup-content button {
+  background: #17aed9;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font: bold 13px/19px "Montserat", Arial, Helvetica,
+    sans-serif !important;
+  padding: 3px 12px;
+  text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 15px!important;
+}
+</style>
+</head>
+<body>
+<div id="opened">
+<div id="popup">
+<div id="popup-body">
+<div id="popup-title">Support</div>
+<div id="popup-content">
+<p>How can we help you ?</p>
+<button onclick="parent._agile_help_element(document.getElementById('agile-queryform'));">Support</button></div>
+<div id="popup-close">x</div>
+</div>
+<div id="popup-footer">Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE CRM</a></div>
+</div>
+</div>
+</body>
+<script type="text/html" id="agile-queryform">
 <!DOCTYPE html>
 <html>
 <body>
-<form onsubmit="return checkField(this);">
+<form   action="querysubmit" method="post"  onsubmit="return parent._agile_checkField(this);">
 <div class="query-form-div">
 <header class="form-header">
 <div class="header-div">
 <span class="label-header" >Leave us a message  
-<a class="close-tag" onclick="closeQueryIframe();">&times;</a>
+<a class="close-tag" onclick="parent._agile_closeQuery(this);">&times;</a>
 </span>
 </div>
 </header>
@@ -19,13 +137,13 @@
 <br><br>
 <label class="email-field">
 <div class="email-div">Email*</div>
-<input value="" name="email" type="text" id="email" onkeyup="disableErrorField();" onblur="invalidEmail();">
+<input value="" name="email" type="text" id="email" onkeyup="parent._agile_disableErrorField(this);" onblur="parent._agile_invalidEmail(this);">
 <p id="wrong-email"></p>
 </label>
 <br><br>
 <label class="query-field">
 <div class="query-div">How can we help you?*</div>
-<textarea id="querytext" name="querytext" onkeyup="disableErrorField();"></textarea></label>
+<textarea id="querytext" name="querytext" onkeyup="parent._agile_disableErrorField(this);"></textarea></label>
 </div>
 <br>
 <footer>
@@ -147,60 +265,7 @@ color:#f05050;
 display: none;
 }
 </style>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">  </script>
-<script type="text/javascript">
-function checkField(field){
-  if($('#email').val()=="" ){
-  $('#message').text("Please fill email field."); 
-  $('#message').css("display", "inline"); 
-  $('#agile_submit').css("margin-left", "110px");
-  return false;
-  }
-  else if($('#querytext').val()==""){
-  $('#message').text("Please fill query  field.");
-  $('#message').css("display","inline");
-  $('#agile_submit').css("margin-left", "110px");
-  return false;
-  }
- $.ajax({
-    url: "https://"+agile_id.namespace+"-dot-sandbox-dot-agilecrmbeta.appspot.com/querysubmit",
-    type: "POST",
-    data : {'name' :$('#name').val(),'email':$('#email').val(),'querytext':$('#querytext').val()},
-    success:function(result){
-      parent._agile.set_email($('#email').val()); 
-      $('.query-form-div').find('.form-content').html("Query has been submitted successfully.");
-      $('.query-form-div').find('.form-content').css("margin-left", "85px");
-      $('.query-form-div').find('.form-content').css("color", "#146519");           
-    }  
-  });
-
- return false; 
-}
-
-function invalidEmail(){
-  if($('#email').val()!=''){
-    var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
-      if (!reg.test($('#email').val())){
-         $('#wrong-email').text("Please provide a valid email.");
-         $('#wrong-email').css('display', 'inline');
-      }
-      else{
-        $('#wrong-email').text("");
-        $('#wrong-email').css('display', 'none');
-      }
-  }
-}
-function disableErrorField(){
-  if($('#message').text()!==''){
-    $('#message').text("");
-    $('#agile_submit').css("margin-left", "272px");
-    $('#message').css("display", "none");
-  }
-}
-function closeQueryIframe(){
-  $('.query-form-div').remove();
-}
-</script>
 </body>
-
+</html>
+</script>
 </html>
