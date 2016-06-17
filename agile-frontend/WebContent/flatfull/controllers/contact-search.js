@@ -17,7 +17,7 @@ var ContactSearchRouter = Backbone.Router.extend({
 	searchResults : function(query)
 	{
 		var searchResultsView = new Base_Collection_View({ url : "core/api/search?q=" + encodeURIComponent(query), templateKey : "search", individual_tag_name : 'tr', cursor : true,
-			data : QUERY_RESULTS, sort_collection : false, page_size : 15, postRenderCallback : function(el)
+			data : QUERY_RESULTS, sort_collection : false, page_size : 9, postRenderCallback : function(el)
 			{
 				// Shows the query string as heading of search results
 				if (searchResultsView.collection.length == 0)
