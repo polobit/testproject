@@ -267,7 +267,7 @@ public class DocumentsAPI
 		for (int i = 0; i < documentsJSONArray.length(); i++) {
 			try
 			   {
-				String eventId =  (String) documentsJSONArray.get(i);
+				String eventId =  documentsJSONArray.getString(i);
 				Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
 				
 				List<String> conIds = doc.getContact_ids();
