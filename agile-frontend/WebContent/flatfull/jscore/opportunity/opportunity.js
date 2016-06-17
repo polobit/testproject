@@ -60,7 +60,7 @@ function populateUsers(id, el ,value, key, callback) {
  * @param dealDetails - dealDetails value
  * @param value - Deal Object
  **/
-function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption, id){
+function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption, id, filter_el, field_name){
 var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	
 	// If id undefined
@@ -74,7 +74,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
-			if(jsonModel.length==1){
+			if(jsonModel.length==1 && !filter_el){
 				var mile = jsonModel[0];
 				$.each(mile.milestones.split(","), function(index,milestone){
 					var json = {id : mile.id, milestone : milestone};
@@ -86,13 +86,24 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 				if(mile.lost_milestone){
 					html += Handlebars.compile('<option value="{{id}}_{{lost_milestone}}" style="display:none;">{{lost_milestone}}</option>')({id : mile.id, lost_milestone : mile.lost_milestone});
 				}
-				$('#' + id, el).closest('.control-group').find('label').html('Milestone<span class="field_req">*</span>');
+				if(!filter_el)
+				{
+					$('#' + id, el).closest('.control-group').find('label').html('Milestone<span class="field_req">*</span>');
+				}
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
 					var array = [];
 					html+='<optgroup label="'+mile.name+'">';
+					if(filter_el && value && value.milestone == "ALL@MILESTONES")
+					{
+						html += Handlebars.compile('<option selected="selected" value="{{id}}_ALL@MILESTONES">{{name}} - All</option>')({id : mile.id, name : mile.name});
+					}
+					else if(filter_el)
+					{
+						html += Handlebars.compile('<option value="{{id}}_ALL@MILESTONES">{{name}} - All</option>')({id : mile.id, name : mile.name});
+					}
 					$.each(mile.milestones.split(","), function(index,milestone){
 						array.push($.trim(this));
 						var json = {id : mile.id, milestone : milestone, name : mile.name};
@@ -106,12 +117,24 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					}
 					html+='</optgroup>';
 				});
-				$('#' + id, el).closest('.control-group').find('label').html('Track & Milestone<span class="field_req">*</span>');
+				if(!filter_el)
+				{
+					$('#' + id, el).closest('.control-group').find('label').html('Track & Milestone<span class="field_req">*</span>');
+				}
 			}
 			
-			$('#' + id, el).html(html);
-			console.log('adding');
-			$('#' + id, el).closest('div').find('.loading-img').hide();
+			if(!filter_el)
+			{
+				$('#' + id, el).html(html);
+				console.log('adding');
+				$('#' + id, el).closest('div').find('.loading-img').hide();
+			}
+			else
+			{
+				$(filter_el).html("<select class='form-control required' name='"+field_name+"'>"+html+"</select>");
+				OPPORTUNITY_LHS_FILTER_CHANGE = true;
+			}
+			
 
 			// Hide loading bar
 			hideTransitionBar();
@@ -633,12 +656,19 @@ function fetchDealsList(data){
     }
     setNewDealFilters(filters_collection);
 	var query = ''
-    if (_agile_get_prefs('deal-filters'))
+	var url = 'core/api/deal/filters/query/list/'+_agile_get_prefs('deal-filter-name')+'?order_by='+getDealSortFilter();
+    /*if (_agile_get_prefs('deal-filters'))
     {
-        query = '&filters=' + encodeURIComponent(getDealFilters());
-    }
+    	var dealFilters = getDealFilters();
+    	var dealFilterJSON = JSON.parse(dealFilters);
+    	if(dealFilterJSON && (dealFilterJSON["rules"] || dealFilterJSON["or_rules"]))
+    	{
+    		url = 'core/api/deal/filters/query/list/'+_agile_get_prefs('deal-filter-name');
+    	}
+    	//query = '&filters=' + encodeURIComponent(getDealFilters());
+    }*/
     // Fetches deals as list
-    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query,
+    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : '' + url,
         templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
         postRenderCallback : function(el)
         {

@@ -1,22 +1,33 @@
 package com.agilecrm.core.api.deals;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import javax.mail.search.AndTerm;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.deals.filter.util.DealFilterUtil;
+import com.agilecrm.search.ui.serialize.SearchRule;
 
 @Path("/api/deal/filters")
 public class DealFilterAPI {
@@ -91,5 +102,41 @@ public class DealFilterAPI {
 
 	// Deletes all contact filters with ids specified in the list
 	DealFilter.dao.deleteBulkByIds(contactFiltersJSONArray);
+    }
+    
+    /**
+     * Returns {@link Contact}s list based on the {@link SearchRule} in the
+     * {@link ContactFilter} which is fetched by its id. It checks the type of
+     * request, whether filter is on custom built criteria or default filters,
+     * based on which results are returned returned
+     * 
+     * @param id
+     *            {@link ContactFilter} id
+     * @return {@link Collection} list of contact
+     */
+    @Path("/query/list/{filter_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getQueryResultsList(@PathParam("filter_id") String id, @QueryParam("page_size") String count,
+    	    @FormParam("cursor") String cursor, @QueryParam("order_by") String sortKey) throws JSONException
+    {
+	System.out.println("cursor : " + cursor);
+	if (!StringUtils.isEmpty(count))
+	    return DealFilterUtil.getDeals(id, Integer.parseInt(count), cursor, sortKey, null, null);
+
+	return DealFilterUtil.getDeals(id, null, null, sortKey, null, null);
+    }
+    
+    @Path("/query/grid/{filter_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getQueryResults(@PathParam("filter_id") String id, @QueryParam("page_size") String count, @FormParam("cursor") String cursor, 
+    		@QueryParam("order_by") String sortKey, @QueryParam("pipeline_id") String pipeline, @QueryParam("milestone") String milestone) throws JSONException
+    {
+	System.out.println("cursor : " + cursor);
+	if (!StringUtils.isEmpty(count))
+	    return DealFilterUtil.getDeals(id, Integer.parseInt(count), cursor, sortKey, pipeline, milestone);
+
+	return DealFilterUtil.getDeals(id, null, null, sortKey, pipeline, milestone);
     }
 }

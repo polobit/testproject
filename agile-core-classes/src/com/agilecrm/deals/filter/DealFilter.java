@@ -1,15 +1,22 @@
 package com.agilecrm.deals.filter;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.SearchFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.util.DealFilterUtil;
+import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
@@ -19,7 +26,7 @@ import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 @Cached
-public class DealFilter {
+public class DealFilter extends SearchFilter implements Serializable, Comparable<DealFilter>{
 	// Key
     @Id
     public Long id;
@@ -182,6 +189,24 @@ public class DealFilter {
 	return null;
     }
     
+    @Override
+    public int compareTo(DealFilter dealFilter)
+    {
+	if (this.name == null && dealFilter.name != null)
+	{
+	    return -1;
+	}
+	else if (this.name != null && dealFilter.name == null)
+	{
+	    return 1;
+	}
+	else if (this.name == null && dealFilter.name == null)
+	{
+	    return 0;
+	}
+	return this.name.compareToIgnoreCase(dealFilter.name);
+    }
+    
     /**
      * Assigns created time for the new one, creates filter with owner key.
      */
@@ -201,5 +226,25 @@ public class DealFilter {
 	    // Saves domain user key
 	    if (filter_owner_id != null)
 	    	owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(filter_owner_id));
+    }
+    
+    @PostLoad
+    private void postLoad()
+    {
+    	DealFilterUtil.setOldFiltersData(this);
+    }
+    
+    /**
+     * Queries deals based on {@link List} of {@link SearchRule} specified,
+     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+     * and returns search results using {@link AppengineSearch}.
+     * 
+     * @return {@link Collection}
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection queryDeals(Integer count, String cursor, String orderBy)
+    {
+
+	return new AppengineSearch<Opportunity>(Opportunity.class).getAdvacnedSearchResultsForFilter(this, count, cursor, orderBy);
     }
 }

@@ -419,10 +419,20 @@ function chainFiltersForContact(el, data, callback) {
  * 
  * @param el
  */
-function chainFilters(el, data, callback, is_webrules, is_company)
+function chainFilters(el, data, callback, is_webrules, is_company, is_opportunity)
 {
 	if(is_company) {
 		fillCompanyCustomFieldsInFilters(el, function(){
+			show_chained_fields(el, data, true);
+			if (callback && typeof (callback) === "function")
+			{
+				// execute the callback, passing parameters as necessary
+				callback();
+			}
+		});
+		return;
+	} else if(is_opportunity) {
+		fillOpportunityCustomFieldsInFilters(el, function(){
 			show_chained_fields(el, data, true);
 			if (callback && typeof (callback) === "function")
 			{
@@ -503,7 +513,6 @@ function show_chained_fields(el, data, forceShow)
 			$($('select[name="'+field_name+'"]', self)[0]).show();
 			$('select:not([name="'+field_name+'"])', self).remove();
 		}
-		
 		
 	});
 	condition.chained(LHS);

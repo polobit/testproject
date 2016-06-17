@@ -409,6 +409,7 @@ function deserializeChainedSelect(form, el, el_self)
 
 function deserializeChainedElement(data, rule_element)
 {
+	OPPORTUNITY_LHS_FILTER_CHANGE = false;
 	$(rule_element).removeClass('hide');
 	// hide campaign status filter.
 	/*
@@ -455,6 +456,30 @@ function deserializeChainedElement(data, rule_element)
 				return;
 			}
 			$(input_element).val(value);
+			return;
+		}
+
+		if ($(input_element).closest('td').siblings('td.lhs-block').find('option:selected').val() == "track_milestone" && data.LHS == "track_milestone")
+		{
+			var $rhs_ele = $(input_element).closest('td').siblings('td.rhs-block').find("#RHS");
+			var field_name = $rhs_ele.find("input").attr("name");
+			var temp = data.RHS;
+			var track = temp.substring(0, temp.indexOf('_'));
+			var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
+			var json = {};
+			json["pipeline_id"] = track;
+			json["milestone"] = milestone;
+			populateTrackMilestones(undefined, undefined, json, undefined, undefined, undefined, $rhs_ele, field_name);
+			return;
+		}
+
+		if ($(input_element).closest('td').siblings('td.lhs-block').find('option:selected').val() == "archived" && data.LHS == "archived")
+		{
+			var $rhs_ele = $(input_element).closest('td').siblings('td.rhs-block').find("#RHS");
+			var field_name = $rhs_ele.find("input").attr("name");
+			var archivedVal = data.RHS;
+			$rhs_ele.html("<select name='"+field_name+"' class='form-control'><option value='true'>Archived</option><option value='false'>Active</option><option value='all'>Any</option></select>");
+			$rhs_ele.find("option[value='"+archivedVal+"']").attr("selected", "selected");
 			return;
 		}
 

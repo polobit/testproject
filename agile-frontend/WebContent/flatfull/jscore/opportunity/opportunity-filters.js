@@ -226,3 +226,46 @@ function dealSourcesSorting()
 		});
 	});
 }
+
+/**
+ * Get the deal sort filters in the cookie.
+ * 
+ */
+function getDealSortFilter()
+{
+	var sortFilter = "-created_time";
+	if (_agile_get_prefs("deal_sort_field"))
+	{
+		sortFilter = _agile_get_prefs("deal_sort_field");
+	}
+
+	return sortFilter;
+}
+
+var DEAL_CUSTOM_SORT_VIEW = undefined;
+function setUpDealSortFilters(el)
+{
+	if(DEAL_CUSTOM_SORT_VIEW)
+	{
+		$("#deal-sorter", el).html(DEAL_CUSTOM_SORT_VIEW.render(true).el);
+		return;	
+	}
+
+	var view = DEAL_SORT_FIELDS_VIEW.view();
+	DEAL_CUSTOM_SORT_VIEW = new view ({
+		data : sort_deal_configuration.getDealSortableFields(),
+		templateKey : "contact-view-sort",
+		sortPrefsName : "deal_sort_field",
+		individual_tag_name : "li",
+		sort_collection : false,
+		postRenderCallback: function(el)
+		{
+			DEAL_CUSTOM_SORT_VIEW.postProcess();
+		}
+	});
+
+	
+	DEAL_CUSTOM_SORT_VIEW.init();
+	$("#deal-sorter", el).html(DEAL_CUSTOM_SORT_VIEW.render(true).el);
+	
+}
