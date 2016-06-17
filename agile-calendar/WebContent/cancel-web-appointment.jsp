@@ -318,7 +318,7 @@ a:link, a:active, a:visited, a {
 
 </style>
 <title>Online Appointment Cancellation - <%=user_name %></title>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js?_"></script>
 <script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 </head>
 <body>
@@ -385,7 +385,7 @@ a:link, a:active, a:visited, a {
 	
 <script type="text/javascript">
 var domain_user_name=<%=mapper.writeValueAsString(user_name)%>;
-$("#cancel_appointment_confirmation").die().live('click', function(e)
+$("body").on("click","#cancel_appointment_confirmation",function(e)
 {
 	e.preventDefault();
 	  var event_id=<%=event_id%>
@@ -409,5 +409,7 @@ $("#cancel_appointment_confirmation").die().live('click', function(e)
 			} });
 });
 </script>
+<script type="text/javascript" src="https://mctest.agilecrm.com/stats/min/agile-min.js"></script>
+<script type="text/javascript">_agile.set_account('fl5qv213433bpc32l2kbfe80s0','our');_agile.track_page_view();_agile_execute_web_rules();</script>
 </body>
 </html>

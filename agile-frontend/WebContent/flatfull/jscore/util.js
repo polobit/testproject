@@ -36,7 +36,7 @@ var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 
 var AVOID_PAGEBLOCK_URL = [ "subscribe", "purchase-plan", "updateCreditCard" ];
 
-var PAGEBLOCK_REASON = [ "BILLING_FAILED_2", "BILLING_FAILED_3", "SUBSCRIPTION_DELETED" ];
+var PAGEBLOCK_REASON = [ "BILLING_FAILED_2", "BILLING_FAILED_3", "SUBSCRIPTION_DELETED", "SUB&#x73;criptION_DELETED"];
 
 var PAYMENT_FAILED_REASON = ["BILLING_FAILED_0", "BILLING_FAILED_1"];
 /**
@@ -64,6 +64,8 @@ function getUrlVars()
 
 	return vars;
 }
+
+var _agile_owners_collection = null;
 
 /**
  * Creates a select fields with the options fetched from the url specified,
@@ -104,12 +106,29 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();
 
-	// On successful fetch of collection loading symbol is removed and options
-	// template is populated and appended in the selectId sent to the function
-	collection.fetch({ success : function()
+	// Check if owners are already fetched and stored in global variable.
+	// If yes, fill the select field directly otherwise, fetch from the server
+	if( url == '/core/api/users/partial' && _agile_owners_collection != null )
 	{
+		_fillSelectCallback(_agile_owners_collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption);
+	} else {
+		// On successful fetch of collection loading symbol is removed and options
+		// template is populated and appended in the selectId sent to the function
+		collection.fetch({success: function() {
+				_fillSelectCallback(collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption);
+				if( url == '/core/api/users/partial' )	_agile_owners_collection = collection;
+			} 
+		});
+	}
+}
 
-		// Remove loading
+/*
+ *	This function will remove the loading symbol, populate the options template
+ *	and append the options to the selectId sent to it
+ */
+function _fillSelectCallback(collection, selectId, callback, template, isUlDropdown, el, defaultSelectOption)
+{
+			// Remove loading
 		if ($("#" + selectId, el).next().hasClass("select-loading"))
 			$("#" + selectId, el).next().html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 		else
@@ -161,10 +180,9 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			// necessary
 			callback(collection, optionsHTML);
 		}
-	}
-
-	});
 }
+
+
 
 // Fill selects with tokenized data
 /**
@@ -399,7 +417,7 @@ function showTextGravatar(selector, element)
 	});
 }
 
-function text_gravatar_initials(items)
+function text_gravatar_initials(items, char_count)
 {
 	if (items == undefined)
 		return;
@@ -459,6 +477,10 @@ function text_gravatar_initials(items)
 
 	if (name.length == 0)
 		name = "X";
+
+	if(!isNaN(char_count) && char_count < name.length){
+         name = name.substr(0, char_count);
+	}
 
 	return name;
 }
@@ -697,17 +719,17 @@ function showPageBlockModal() {
 	else if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456803000)
 		return;
 	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
-		var expiry_date = (USER_BILLING_PREFS.updated_time+691200)*1000;
-		if(USER_BILLING_PREFS.status == "BILLING_FAILED_1")
-			expiry_date = (USER_BILLING_PREFS.updated_time+432000)*1000;
-		getTemplate("user-alert", {"message":"Action Required! Your account has dues. Please update your credit card information to pay your outstanding amount. Non-payment of the dues will lead to locking of your account on "+new Date(expiry_date).format('mmm dd, yyyy')+"."}, undefined, function(template_ui){
+		getTemplate("user-alert", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$("#alert-message").html(template_ui).show();
 		}, null);
 
-	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time != null && USER_BILLING_PREFS.updated_time != undefined && USER_BILLING_PREFS.updated_time > 1457494200){
-		getTemplate("block-user", {}, undefined, function(template_ui){
+	}else if($.inArray(USER_BILLING_PREFS.status, PAGEBLOCK_REASON) != -1 && USER_BILLING_PREFS.updated_time > 1457494200){
+		var template = "block-payment-failed-user";
+		if(USER_BILLING_PREFS.status == "SUBSCRIPTION_DELETED" || USER_BILLING_PREFS.status == "SUB&#x73;criptION_DELETED")
+			template = "block-cancelled-user";
+		getTemplate(template, {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$("body").append(template_ui);
@@ -757,4 +779,69 @@ function sendEmail(json, callback){
 				showNotyPopUp("warning", data.responseText, "top");
 			}
 			});
+}
+
+
+function showAlertModal(json_key, type, confirm_callback, decline_callback,dynamic_title){
+	var data = {};
+	if(MODAL_MESSAGES[json_key] != undefined){
+		data.title = MODAL_MESSAGES[json_key]['title'];
+		data.message = MODAL_MESSAGES[json_key]['message'];
+	}else{
+		data.title = dynamic_title;
+		data.message = json_key;
+	}
+	if(type == undefined)
+		type = "alert";
+	data.type = type;
+	getTemplate("modal-confirm", data, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		$("#alertModal").html($(template_ui)).modal('show');
+		$('#alertModal #success_callback').click(function (e) {
+			e.preventDefault();
+			$("#alertModal").modal('hide');
+	    	if(confirm_callback && typeof(confirm_callback === "function"))
+	    		confirm_callback();
+		});
+		$('#alertModal #decline_callback').click(function (e) {
+			e.preventDefault();
+			$("#alertModal").modal('hide');
+	    	if(decline_callback && typeof(decline_callback === "function"))
+	    		decline_callback();
+		});
+	}, null);
+}
+
+function printSortByName(name, el){
+	 $(el).find(".sort-field-txt").html(name);
+}
+
+function getFormattedDateObjectForMonthWithString(value){
+
+		if(!value)
+			   return new Date("");
+			if(window.navigator.userAgent.indexOf('Mozilla')!=-1 && window.navigator.userAgent.indexOf('Chrome')==-1) 
+					value="01 "+value;
+        value = value.replace(/\./g,'/');
+
+		return new Date(value);
+	
+}
+
+function updateSortKeyTemplate(sort_key, el) {
+	$('.sort-field-check', el).addClass('display-none');
+	$('.sort-by-check', el).addClass('display-none');
+	if(sort_key && sort_key != null) {
+		var sort = sort_key.split("-")
+		if(sort[0] == "")
+			$(".order-by[data='-']", el).find('i').removeClass('display-none');
+		else
+			$(".order-by[data='']", el).find('i').removeClass('display-none');
+		if(sort.length > 1)
+			sort_key = sort[1];
+		$(".sort-field[data='"+sort_key+"']", el).find('i').removeClass('display-none');
+		printSortByName($(".sort-field[data='"+sort_key+"']", el).attr("label_name"), el);
+		
+	}
 }

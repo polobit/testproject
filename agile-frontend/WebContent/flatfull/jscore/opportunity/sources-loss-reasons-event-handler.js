@@ -18,6 +18,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
         'click .goalSave' : 'goalSave',
         'keypress .count' : 'goalCount',
         'keypress .amount' : 'goalAmount',
+        'click .show_milestone_field' : 'showMilestoneField'
     },
 
     dealSourceAdd : function(e){
@@ -137,25 +138,23 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
     },
 
     dealSourceDelete : function(e){
-        if(!confirm("Are you sure you want to delete ?")){
-            return;
-        }
-
         e.preventDefault();
-        var that = $(e.currentTarget);
-        var obj = serializeForm($(e.currentTarget).closest('form').attr("id"));
-        var model = new BaseModel();
-        model.url = 'core/api/categories/'+obj.id;
-        model.set({ "id" : obj.id });
-        model.destroy({
-        success: function (data) {
-            var model = data.toJSON();
-            App_Admin_Settings.dealSourcesView.collection.remove(new BaseModel(model));
-            that.closest('tr').remove();
-        },
-        error: function (model, response) {
-        
-        }});
+        var $that = $(e.currentTarget);
+        showAlertModal("delete_deal_source", "confirm", function(){
+            var obj = serializeForm($that.closest('form').attr("id"));
+            var model = new BaseModel();
+            model.url = 'core/api/categories/'+obj.id;
+            model.set({ "id" : obj.id });
+            model.destroy({
+            success: function (data) {
+                var model = data.toJSON();
+              App_Admin_Settings.dealSourcesView.collection.remove(new BaseModel(model));
+              $that.closest('tr').remove();
+            },
+            error: function (model, response) {
+            
+            }});
+        });
     },
 
     lossReasonAdd : function(e){
@@ -264,25 +263,23 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
     },
 
     lossReasonDelete : function(e){
-        if(!confirm("Are you sure you want to delete ?")){
-            return;
-        }
-
         e.preventDefault();
-        var that = $(e.currentTarget);
-        var obj = serializeForm($(e.currentTarget).closest('form').attr("id"));
-        var model = new BaseModel();
-        model.url = 'core/api/categories/'+obj.id;
-        model.set({ "id" : obj.id });
-        model.destroy({
-        success: function (data) {
-            var model = data.toJSON();
-          App_Admin_Settings.dealLostReasons.collection.remove(new BaseModel(model));
-          that.closest('tr').remove();
-        },
-        error: function (model, response) {
-        
-        }});
+        var $that = $(e.currentTarget);
+        showAlertModal("delete_lost_reason", "confirm", function(){
+            var obj = serializeForm($that.closest('form').attr("id"));
+            var model = new BaseModel();
+            model.url = 'core/api/categories/'+obj.id;
+            model.set({ "id" : obj.id });
+            model.destroy({
+            success: function (data) {
+                var model = data.toJSON();
+              App_Admin_Settings.dealLostReasons.collection.remove(new BaseModel(model));
+              $that.closest('tr').remove();
+            },
+            error: function (model, response) {
+            
+            }});
+        });
     },
 
     goalSave : function(e){
@@ -292,10 +289,12 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
         var that=$(this);
         var goals_json=[];
         var d=$('#goal_duration span').html();
+        if(window.navigator.userAgent.indexOf("Mozilla") != -1 && window.navigator.userAgent.indexOf("Chrome")==-1)
+                            d="01 "+d;
         d=new Date(d);
         var start=getUTCMidNightEpochFromDate(d);
                     
-        $('#deal-sources-table').find('td').each(function(index){
+        $("#deal-sources-table").find("tr").not(':first').each(function(index){
             if(($(this).find('.amount').val().trim())!="" && ((parseFloat($(this).find('.amount').val().trim())<0) || !(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/).test($(this).find('.amount').val()))){
                 $(this).find('#goal_amount_error').show();
                 flag=false;
@@ -331,7 +330,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
                     console.log(e);
                     var count=0;
                     var amount=0;
-                    $('#deal-sources-table').find('td').each(function(index){
+                    $("#deal-sources-table").find("tr").not(':first').each(function(index){
                         var that=$(this);
                         $.each(e,function(index,jsond){
                             if(jsond.domain_user_id==that.find('div').attr('id')){
@@ -369,6 +368,15 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
 
     goalAmount : function(e){
         $(e.currentTarget).siblings('#goal_amount_error').hide();
+    },
+
+    showMilestoneField : function(e){
+        e.preventDefault();
+        var form = $(e.currentTarget).closest('form');
+        console.log('New Milestone to - ',form.attr('id'));
+        $(e.currentTarget).closest("div").css("display","none");
+        form.find('.show_field').css("display","block");
+        form.find(".add_new_milestone").focus();
     }
 
     

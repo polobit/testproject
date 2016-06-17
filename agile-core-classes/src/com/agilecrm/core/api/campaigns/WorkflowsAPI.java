@@ -76,13 +76,13 @@ public class WorkflowsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Workflow> getWorkflows(@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor, @QueryParam("allow_campaign") Long allow_campaign) {
+			@QueryParam("cursor") String cursor, @QueryParam("allow_campaign") Long allow_campaign, @QueryParam("global_sort_key") String orderBy) {
 		if (count != null) {
 			return WorkflowUtil
-					.getAllWorkflows(Integer.parseInt(count), cursor);
+					.getAllWorkflows(Integer.parseInt(count), cursor, orderBy);
 		}
 		
-		return WorkflowUtil.getAllWorkflows(allow_campaign);
+		return WorkflowUtil.getAllWorkflows(allow_campaign, orderBy);
 	}
 
 	/**
@@ -568,4 +568,22 @@ public class WorkflowsAPI {
 
 	}
 
+	/**
+	 * Returns count of workflow for all users.
+	 * 
+	 * @param workflowId
+	 *            - workflow id
+	 * @return
+	 */
+	@Path("count")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getWorkflowCount() {
+		try {
+			return  String.valueOf(WorkflowUtil.getAllWorkflows().size());
+		} catch (Exception e) {
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 }

@@ -318,6 +318,27 @@ function deserializeForm(data, form)
 					});
 }
 
+
+
+
+
+function deserializecontactsForm(data, form)
+{
+
+	$.each(data,function(i, el)
+					{
+						var fel = form.find('*[name="' + el + '"]'), type = "", tag = "";
+
+						// If Fields exist with the field name, process the
+						// fields to fill the data in the form
+						if (fel.length > 0)
+						{
+
+							$('input:checkbox[value="' + el + '"]', form).attr("checked", "checked");
+						}
+					});
+}
+
 // To deserialize multiple forms in content
 /**
  * Desrializes the multiple forms, It calls deserializeForm for each form in the

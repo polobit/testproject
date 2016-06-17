@@ -3,15 +3,14 @@ package com.agilecrm.webrules.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.webrules.WebRule;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.Query;
 
 public class WebRuleUtil
 {
@@ -90,5 +89,14 @@ public class WebRuleUtil
 	    }
 	}
 	return activeWebRules;
+    }
+    
+    public static String getPhoneNumberByWebruleId(Long wid)
+    {
+	Query<WebRule> query = WebRule.dao.ofy().query(WebRule.class);
+	query.filter("id", wid);
+	WebRule webrule = query.get();	
+	String number=  WebRule.getPhoneNumber(webrule);
+	return number;
     }
 }

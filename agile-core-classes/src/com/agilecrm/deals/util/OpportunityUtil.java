@@ -1073,8 +1073,6 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
-		sortField = "expected_value";
-
 		if (checkJsonString(filterJson, "value_start"))
 		{
 		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
@@ -1113,17 +1111,29 @@ public class OpportunityUtil
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, sortField));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
-	   
+	    
+	    //Add tag for the filter also
+	    if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+		{
+		    String tagCondition = filterJson.getString("dealTagCondition");
+		    String tagValue = filterJson.getString("dealTagName");
+		    if( tagCondition.equals("is"))
+		    	searchMap.put("tagsWithTime.tag = ", tagValue);
+		    }
+
 	    /*
 	     * Map<String, Object> customFilters =
 	     * getCustomFieldFilters(filterJson.getJSONObject("customFields"));
 	     * if (customFilters != null) searchMap.putAll(customFilters);
 	     */
 
-	    if (count != 0)
-		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
+	    if (count != 0){
+	    	List<Opportunity> dealList = new ArrayList<Opportunity>(dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField));
+	    	return dealList;
+	    }
 
-	    return dao.listByProperty(searchMap);
+	     List<Opportunity> dealList = new ArrayList<Opportunity>(dao.listByProperty(searchMap));
+	     return dealList;
 	}
 	catch (JSONException e)
 	{
@@ -1267,6 +1277,14 @@ public class OpportunityUtil
     		 KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId());
     		 query.addFilter("pipeline", FilterOperator.EQUAL, KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId()));
     		 
+    		 if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+    			{
+    			    String tagCondition = filterJson.getString("dealTagCondition");
+    			    String tagValue = filterJson.getString("dealTagName");
+    			    if( tagCondition.equals("is"))
+    			    	query.addFilter("tagsWithTime.tag",FilterOperator.EQUAL,tagValue);
+    				}
+
 		      System.out.println("hello n try block "+filterJson.getLong("pipeline_id"));
 		      System.out.println(sortField);
 		      query.addSort(sortField , SortDirection.ASCENDING);
@@ -1798,9 +1816,6 @@ public class OpportunityUtil
 		System.out.println("------------" + idsArray.length());
 	    }
 
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-
 	    if (idsArray != null && idsArray.length() > 0)
 	    {
 		List<Key<Opportunity>> dealIds = new ArrayList<Key<Opportunity>>();
@@ -1818,6 +1833,9 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		System.out.println("------------" + filterJSON.toString());
+		
 		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, count, null);
 		String cursor = deals.get(deals.size() - 1).cursor;
 		while (cursor != null)
@@ -3194,6 +3212,13 @@ public class OpportunityUtil
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
+	    if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+	  		{
+	  		    String tagCondition = filterJson.getString("dealTagCondition");
+	  		    String tagValue = filterJson.getString("dealTagName");
+	  		    if( tagCondition.equals("is"))
+	  		    	searchMap.put("tagsWithTime.tag", tagValue);
+	  		    }
 
 	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
 	}
@@ -3293,6 +3318,11 @@ public class OpportunityUtil
 	}
 	return null;
     }
+    public static int getDealsbyTags(String tag)
+    {
+		Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("tagsWithTime.tag = ", tag).limit(2);
+		return dao.getCount(q);
+    }
     /*
      * Author @sankar
      * date 1/apr/16
@@ -3300,6 +3330,10 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunitiesByNote(Long noteId)
     {
     	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("related_notes", new Key<Note>(Note.class,noteId) );
+    	return dao.fetchAll(q);
+    }
+    public static List<Opportunity> getOpportunitiesbyTags(String tag){
+    	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("tagsWithTime.tag = ", tag).limit(25);
     	return dao.fetchAll(q);
     }
 }

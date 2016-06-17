@@ -1,0 +1,67 @@
+<body>
+	<div>
+		<div
+			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
+			<div
+				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
+				<table style="width: 100%; background-color: #8A6086;">
+					<tbody>
+						<tr>
+							<td valign="middle" height="32px"
+								style="padding: 0; color: white">{{email_subject}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div
+				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px">
+					<tbody>
+						<tr>
+							<td
+								style="padding-right: 20px; padding-left: 20px; line-height: 20px; font-size: 14px; font-family: Lucida Grande, verdana">
+								<b>Total Contacts found: {{HashMap.TOTAL}} </b><br /> 
+								<b>Successfully Saved: {{HashMap.SAVED_CONTACTS}}</b> <br />
+								{{#HashMap.NEW_CONTACTS}}
+									&nbsp;- New Contacts: {{HashMap.NEW_CONTACTS}}
+									{{/HashMap.NEW_CONTACTS}}<br />
+									{{#HashMap.MERGED_CONTACTS}}
+									&nbsp;- Merged Contacts: {{HashMap.MERGED_CONTACTS}}
+									{{/HashMap.MERGED_CONTACTS}}<br />
+								 <b>Failed Contacts </b>
+								 {{#HashMap.EMAIL_REQUIRED}}
+									&nbsp;- Email missing: {{HashMap.EMAIL_REQUIRED}}<br />
+									{{/HashMap.EMAIL_REQUIRED}}
+								 {{#HashMap.LIMIT_REACHED}}
+									&nbsp;- Limit exceeded: {{HashMap.LIMIT_REACHED}}<br />
+									{{/HashMap.LIMIT_REACHED}}
+									{{#HashMap.ACCESS_DENIED}}
+									&nbsp;- Access denied to create/update: {{HashMap.ACCESS_DENIED}}<br />
+									{{/HashMap.ACCESS_DENIED}}
+									
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p style="font-weight: bold;">Have questions or need help?</p>
+				<p>Our customer service and support team is here to help you any
+					way we can. Please email us at care@agilecrm.com</p>
+				<p>Thanks for being a valued customer.</p>
+				<div style="height: 80px">
+				<div style="float:left">
+				<br /> Best Wishes, <br /> AgileCRM Support. <br />
+				http://www.agilecrm.com
+				</div>
+				<div style="text-align: right;float:right">
+					<a href="{{DomainUser.domain}}.agilecrm.com" target="_blank"> <img
+						style="border: 0; margin-top: 10px"
+						src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container"
+						alt="Logo for AgileCRM" />
+					</a>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>

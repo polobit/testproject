@@ -119,11 +119,11 @@
                                                  <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
                                                  <li><a href="#CallsbyUser" role="tab" data-toggle="tab"><i class="m-r-sm icon-call-end v-middle"></i>Calls by User</a></li>
 
-                                                 <li><a href="#Averagecall" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle"></i>Average call duration</a></li>
+                                                 <li><a href="#Averagecall" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle" style="float:left"></i><div style="display:table-cell">Average call duration</div></a></li>
                                                   <li><a href="#CallLogs" role="tab" data-toggle="tab"><i class="m-r-sm icon-list v-middle"></i>
                                                   Call Logs</a></li>
                                                    <li><a href="#CallOutcomes" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Call Outcomes</a></li>
-                                                    <li><a href="#CallReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle" style="float:left"></i><div style="display:-webkit-box">Call Report-Time Based</div></a></li>
+                                                    <li><a href="#CallReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle" style="float:left"></i><div style="display:table-cell">Call Report-Time Based</div></a></li>
                                                  </ul>
                                                    
                                             </li>
@@ -169,7 +169,7 @@
                                                 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
                                                  <li><a href="#Tickets" role="tab" data-toggle="tab"><i class="m-r-sm icon-tasks v-middle"></i>Tickets</a></li>
                                                  <li><a href="#SLAReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-check-square-o v-middle"></i>SLA Report</a></li>
-                                                  <li><a href="#PriorityReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-star v-middle" style="float:left"></i><div style="display:-webkit-box">Ticket Priority & Status Report</div></a></li>
+                                                  <li><a href="#PriorityReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-star v-middle" style="float:left"></i><div style="display:table-cell">Ticket Priority & Status Report</div></a></li>
                                                  <li><a href="#FirstResponse" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle"></i>First Response</a></li>
                                                  </ul>
                                             </li>
@@ -289,7 +289,7 @@
                 
              
             </div>
-            <div style="display:none;" class="activity-reports-upgrade m-t-sm" ><span class="text-danger">{{toSafeString message}}<span></div>
+            <div style="display:none;" class="activity-reports-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
                </div>   
             {{/isAllowedInCurrentPlan}}
    
@@ -417,7 +417,7 @@
             <img src='flatfull/img/reports_images/user-activities.png'></img>
             </div>
 
-            <div style="display:none;" class="activities-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
+            <div style="display:none;" class="activities-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
                </div>  
             {{/isAllowedInCurrentPlan}}
              <div class="clearfix"></div>
@@ -530,7 +530,7 @@
                     <a class=""  href="#activity-reports" id="activity-reports-upgrade">
 
                          <div class="wrapper text-center b-a" style="min-width:330px">
-                          <div class="m-b-sm" rel="tooltip" title="{{description}}">
+                          <div class="m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get a periodic  email digest of various activities by users in Agile.
             <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
         </div>
@@ -540,7 +540,7 @@
             {{else}}
                 <span class="disabled" >
                      <div class="wrapper text-center b-a" style="min-width:330px">
-                          <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+                          <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get a periodic  email digest of various activities by users in Agile.
             <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
         </div>
@@ -553,9 +553,9 @@
              <div class="wrapper text-center b-a" style="min-width:330px">
              <div class="_upgrade" id="activity-reports-upgrade">
             <!-- Description -->
-            <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+            <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get a periodic  email digest of various activities by users in Agile. </div></div>
-            <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
+            <div style="display:none;" class="activity-reports-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
             
              
              </div>
@@ -569,9 +569,8 @@
          <a class="report-go" href="#contact-reports">
                      <div class="wrapper text-center b-a" style="min-width:330px">
         
-        <br />
         <!-- Description -->
-        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+        <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
         </div>
  
@@ -583,9 +582,8 @@
          <a class="report-go" href="#campaign-reports">
                      <div class="wrapper text-center b-a" style="min-width:330px">
         
-        <br />
         <!-- Description -->
-        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+        <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
             Get a periodic email digest of various campaigns launched in Agile CRM. </div>
  
     </div>
@@ -673,5 +671,21 @@
 </div>
 </div>
 
+</div>
+</script>
+
+<script id="upgradeModal-template" type="text/html">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Upgrade</h3>
+	</div>
+	<div class="modal-body">
+               </div>  
+	<div class="modal-footer">
+		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">Ok</a>
+	</div>
+</div>
 </div>
 </script>

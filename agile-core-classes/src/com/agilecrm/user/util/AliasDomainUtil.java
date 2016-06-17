@@ -36,6 +36,7 @@ import com.google.appengine.api.datastore.PropertyProjection;
 public class AliasDomainUtil {
 
 	public static final String CACHED_ALIAS_KEY = "alias_domain_of_";
+	public static final String CACHED_ACTUAL_KEY = "actual_domain_of_";
 	
 	// Dao
     public static ObjectifyGenericDao<AliasDomain> dao = new ObjectifyGenericDao<AliasDomain>(AliasDomain.class);
@@ -83,15 +84,30 @@ public class AliasDomainUtil {
     }
     
 	public static String getDomainByAlias(String alias){
-    	String domain = null;
-    	List<Entity> aliaseNames = getAliasNames(alias);
-    	if(aliaseNames == null)
-    		return null;
-    	for (Entity aliaseName : aliaseNames) {
-    		domain = (String)aliaseName.getProperty("domain");
-    	}
-    	return domain;
+    	return getCachedActualDomainByAlias(alias);
     }
+	/**
+	 * Reset with new item value
+	 * @param domainName
+	 */
+	public static void setActualDomainNameCache(String aliasName, String domainName){
+		String keyName = CACHED_ACTUAL_KEY + aliasName;
+		
+		// Set in Cache
+    	CacheUtil.setCache(keyName, domainName);
+	}
+	
+	/**
+	 * Delete older one
+	 * @param domainName
+	 */
+	public static void deleteActualDomainNameCache(String aliasName){
+		String keyName = CACHED_ACTUAL_KEY + aliasName;
+		
+		// Set in Cache
+    	CacheUtil.deleteCache(keyName);
+	}
+
 	
 	public static boolean checkForAlias(){
 		return checkForAlias(NamespaceManager.get());
@@ -176,5 +192,37 @@ public class AliasDomainUtil {
     	return aliasName;
 	    	
 	 }
-
+		
+	/**
+	 * Returns actual domain name from alias. If not present returns the same
+	 * @param alias
+	 * @return
+	 */
+	private static String getCachedActualDomainByAlias(String alias) {
+		String keyName = CACHED_ACTUAL_KEY + alias;
+		
+		// Get from Cache
+		String cachedName = (String) CacheUtil.getCache(keyName);
+		if(StringUtils.isNotBlank(cachedName))
+			return cachedName;
+		
+		// If not there search in DB
+		List<Entity> aliaseNames = getAliasNames(alias);
+		if(aliaseNames != null){
+			for (Entity aliaseName : aliaseNames) {
+				cachedName = (String)aliaseName.getProperty("domain");
+			}
+		}
+		
+		// Not exists in Db set alias as same name
+		if(StringUtils.isBlank(cachedName))
+			cachedName = alias;
+		
+		// Set in Cache
+		setActualDomainNameCache(alias, cachedName);
+		
+		return cachedName;
+		
+	}
+		
 }

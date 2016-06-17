@@ -206,7 +206,7 @@ $(function(){
 
 		if (Twilio.Device.status() == "busy"  || checkForActiveCall())
 		{
-			alert("Already on call.");
+			showAlertModal("on_call");
 			return;
 		}
 
@@ -215,7 +215,7 @@ $(function(){
 		if(CALL_CAMPAIGN.start )
 			  {
 				if(CALL_CAMPAIGN.state == "PAUSE"){
-					alert("Already on call");
+					showAlertModal("on_call");
 					return;
 				}
 				CALL_CAMPAIGN.state = "PAUSE" ;
@@ -471,7 +471,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		// If no numbers
 		if (!twilioNumbers[0].PhoneNumber)
 		{
-			alert("You have no twilio numbers. Please buy or port a number in your Twilio account.");
+			showAlertModal("no_twilio_numbers");
 			return;
 		}
 
@@ -504,7 +504,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		// If no numbers
 		if (!verifiedNumbers[0].PhoneNumber)
 		{
-			alert("You have no verified numbers. Please verify number in your Twilio account.");
+			showAlertModal("no_verified_num");
 			return;
 		}
 
@@ -565,8 +565,10 @@ function setToValidate(data, showAlert)
 	console.log("Twilio error ");
 	console.log(data);
 
-	if (showAlert)
-		alert("Please enter valid details.");
+	if (showAlert){
+		showAlertModal("valid_details");
+		return;
+	}
 
 	// Reset form fields after sending email
 	$("#twilioio_login_form").each(function()
@@ -673,33 +675,35 @@ function createAppSid(twilioio_prefs, callback)
 	{
 		console.log("Twilio get app sid error ");
 		console.log(data);
+		var that = this;
+		showAlertModal("valid_details_try_again", undefined, function(){
+			$("#save_prefs").text("Save");
+			$("#save_prefs").attr("disabled", false);
+			$("#save_prefs").hide();
+			$("#validate_account").text("Validate");
+			$("#validate_account").attr("disabled", false);
+			$("#validate_account").show();
 
-		alert("Please try again with valid details.");
+			// Show twilio from numbers list
+			$("#twilio_from_numbers").hide();
 
-		$("#save_prefs").text("Save");
-		$("#save_prefs").attr("disabled", false);
-		$("#save_prefs").hide();
-		$("#validate_account").text("Validate");
-		$("#validate_account").attr("disabled", false);
-		$("#validate_account").show();
+			// Show twilio numbers list
+			$("#twilio_numbers").hide();
 
-		// Show twilio from numbers list
-		$("#twilio_from_numbers").hide();
-
-		// Show twilio numbers list
-		$("#twilio_numbers").hide();
-
-		// Hide record call option on form
-		//$("#twilio_recording").hide();
-		
-		// Hide twimlet url controls
-		//$("#twilio_twimlet_url_controls").hide();
-		
-		// Reset form fields after sending email
-		$("#twilioio_login_form").each(function()
-		{
-			this.reset();
+			// Hide record call option on form
+			//$("#twilio_recording").hide();
+			
+			// Hide twimlet url controls
+			//$("#twilio_twimlet_url_controls").hide();
+			
+			// Reset form fields after sending email
+			$("#twilioio_login_form").each(function()
+			{
+				that.reset();
+			});
 		});
+
+		
 	});
 }
 
@@ -780,7 +784,7 @@ function setUpGlobalTwilio()
 			if (Twilio.Device.status() == "busy")
 			{
 				if(!(CALL_CAMPAIGN.start && CALL_CAMPAIGN.call_from_campaign)){
-					alert("A connection is currently active.");
+					showAlertModal("active_connection");
 					return;
 				}
 			}
@@ -837,7 +841,6 @@ function setUpGlobalTwilio()
 						//To_Number = globalconnection.parameters.From;
 						//To_Name = searchForContact(To_Number);
 						//Twilio_Call_Noty_IMG = addContactImg("Incoming");
-					  
 						console.log("calling call noty");
 						
 						var btns = [{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_mute icon-microphone","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_unmute icon-microphone-off","title":""},{"id":"", "class":"btn btn-xs btn-default noty_twilio_dialpad icon-th","title":""},{"id":"", "class":"btn btn-sm btn-danger noty_twilio_hangup","title":"Hangup"}];
@@ -950,7 +953,7 @@ function setUpGlobalTwilio()
 						}
 						
 							//if the call campaign is started then we try to make a next call from campaign
-								if(($("#noteModal").data('bs.modal') || {}).isShown != true){
+								if(($("#noteModal").data('bs.modal') || {}).isShown != true && ($("#logCallModal").data('bs.modal') || {}).isShown != true){
 								if(CALL_CAMPAIGN.start)
 								  {
 									if(CALL_CAMPAIGN.call_from_campaign ){
@@ -975,6 +978,7 @@ function setUpGlobalTwilio()
 											dialNextCallManually();
 										  }
 								  	}	
+								
 								}
 				});			
 
@@ -1131,7 +1135,7 @@ function setUpGlobalTwilio()
 		});
 	});
 }
-function twiliocall(phoneNumber, toName)
+function twiliocall(phoneNumber, toName,conferenceName, contact)
 {
 	// get the phone number to connect the call to
 	
@@ -1183,7 +1187,7 @@ function twiliocall(phoneNumber, toName)
 				showDraggableNoty("Twilioio", TWILIO_CONTACT, "outgoing", To_Number, btns);
 				
 				/*showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
-		});		
+		},contact);		
 	}	
 }
 
@@ -1381,6 +1385,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 function showNewContactModal(phoneNumber) {
 	$('#personModal').modal('show');
 	$("#personForm").find("#phone").val(phoneNumber);
+	$("#personForm").find("#phone").removeClass("phone"); 
 	return;
 }
 
@@ -1588,28 +1593,47 @@ function searchForContactImg(from, callback) {
 }
 
 // Add contact img in html for call noty text with contact url
-function addContactImg(callType, callback)
+function addContactImg(callType, callback, contact)
 {
 	var notyContactImg = "";
-	if(callType == "Outgoing")
-	  {
-		var currentContact = agile_crm_get_contact();
-		var contactImg = getGravatar(currentContact.properties, 40);
-		notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
-		return callback(notyContactImg);
-	  }
-	else
-	{
-		searchForContactImg(To_Number, function(contact){
-			var callingContact = contact;
-			if(callingContact != null)
-			{
-				var contactImg = getGravatar(callingContact.properties, 40);
-				notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';			
+	try{
+		if(callType == "Outgoing")
+		  {
+			var currentContact;
+			if(contact){
+				currentContact = contact;
+			}else{
+				try{
+					currentContact = agile_crm_get_contact();
+				}catch (e) {
+				}
 			}
+			
+			if(!currentContact){
+				return callback(notyContactImg);
+			}
+			
+			var contactImg = getGravatar(currentContact.properties, 40);
+			notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
 			return callback(notyContactImg);
-		});
-	} 
+		  }
+		else
+		{
+			searchForContactImg(To_Number, function(contact){
+				var callingContact = contact;
+				if(callingContact != null)
+				{
+					var contactImg = getGravatar(callingContact.properties, 40);
+					notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';			
+				}
+				return callback(notyContactImg);
+			});
+		}
+	}catch(e){
+		console.log("error occured in getting image " + e);
+		return callback(notyContactImg);
+	}
+ 
 }
 
 /**

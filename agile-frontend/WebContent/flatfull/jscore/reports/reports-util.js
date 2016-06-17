@@ -740,27 +740,15 @@ getRepPerformanceLog : function(url) {
 				hideTransitionBar();
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				var tab_id=$('a[href="'+window.location.hash+'"]').parents('.tab-pane').attr('id');
+				if(tab_id!=undefined){
+						tab_id=$('a[href="#'+tab_id+'"]').parents('.maintab').find('a').attr("href").substring(1);
+						_agile_set_prefs('reports_tab', tab_id);
+					}
 				var reportsTab = _agile_get_prefs("reports_tab");
 				$('.sub-nav-tab',$('#reports-tab-container a[href="#'+reportsTab+'"]').parent()).show();
 				$('#reports-tab-container a[href="#'+reportsTab+'"]').parent().addClass('report-selected');
-				/*var reportsTab = _agile_get_prefs("reports_tab");
-				if(!reportsTab || reportsTab == null) {
-					var tabTemp;
-					if(islocalStorageHasSpace()){
-						if($("#dealstab").length>0)
-							tabTemp="deals-tab";
-						else
-							tabTemp="calls-tab";
-							_agile_set_prefs('reports_tab', tabTemp);	
-					}
-					reportsTab = tabTemp;
-				}*/
-				/*$('#reports-tab-container a[href="#'+reportsTab+'"]').tab('show');
-				$("#reports-tab-container ul li").off("click");
-				$("#reports-tab-container").on("click",".tab-container ul li",function(){
-					var temp = $(this).find("a").attr("href").split("#");
-					_agile_set_prefs('reports_tab', temp[1]);
-				});*/
+				
 
 					$('[data-toggle="tooltip"]').tooltip();
 					callback();

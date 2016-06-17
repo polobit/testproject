@@ -865,3 +865,41 @@ var contact_filters_util = {
 	},
 
 };
+
+function setupContactFields(el){
+		// Update el with default dropdown
+		$('#contact-static-fields-group', el).html(getTemplate("contact-custom-fields"));
+
+		get_custom_fields(function(data){
+		
+ 		for(i=0; i<data.length; i++){
+		getTemplate("contact-custom-fields-append", data[i], undefined, function(template_ui){
+     				if(!template_ui)
+    					  return;
+    		$("#custom-fields-group",el).append(template_ui);
+ 		});
+	}
+
+			$.ajax({
+					url : 'core/api/contact-view-prefs',
+					type : 'GET',
+					dataType : 'json',
+					
+					success : function(data)
+						{
+							console.log("")
+						var customfields = $("#contact-static-fields");
+						deserializecontactsForm(data.fields_set, customfields);
+						console.log(data);
+					}
+				});
+			
+		
+		});
+
+
+}
+
+
+
+	

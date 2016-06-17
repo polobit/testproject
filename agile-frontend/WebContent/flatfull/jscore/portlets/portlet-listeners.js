@@ -26,7 +26,24 @@ function initializePortletsListeners() {
 								.val();
 						var portletName = $('#portlet-name', $('#' + modal_id))
 								.val();
+
 						json = serializeForm(form_id);
+						if($('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id)!=null && $('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id).val()!='Custom')
+						{
+							delete json["start-date"];
+							delete json["end-date"];
+						}
+						if($('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id)!=null && $('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id).val()=='Custom')
+						{
+							if(!is_valid_custom_range(json["start-date"]*1000,json["end-date"]*1000,modal_id))
+								{
+									$(this).attr('disabled', false);
+        							$(this).text('Save');
+								return;
+							}
+						}
+							if($('#' + modal_id).find(".invalid-range").is(':visible'))
+								$('#' + modal_id).find(".invalid-range").parents('.form-group').hide();
 						if (portletType == "CONTACTS"
 								&& portletName == "Growth Graph") {
 							var tags = '';
@@ -937,9 +954,15 @@ $('.portlet_body')
 				_agile_delete_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 				loadPortlets("DashBoard", $('#content'));
 		    }
-		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
+		    else if(id=="MarketingDashboard"){
 				e.preventDefault();
 				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
+				gridster = undefined;
+				loadPortlets(id, $('#content'));
+		    }
+		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
+				e.preventDefault();
+				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);				
 				gridster = undefined;
 				loadPortlets(id, $('#content'));
 		    }
@@ -958,6 +981,10 @@ $('.portlet_body')
 		    		$('#dashboard-desc').attr("title", this.description);
 		    	}
 		    });
+		    if(id== "MarketingDashboard"){
+		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
+		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
+		    }
 		    if(id == "Dashboard")
 		    {
 		    	$('#dashboard-desc').text("Welcome to Agile CRM");
@@ -966,8 +993,58 @@ $('.portlet_body')
 		    }
 	    }
 	});
+		$('.modal-body').off('change','#duration,#duration-lost-deal-analysis,#duration-incoming-deals,#duration-user-activities');
 		
+		$('.modal-body').on('change','#duration,#duration-lost-deal-analysis,#duration-incoming-deals,#duration-user-activities',function(e){
+			var el = $(this).closest('form');
+		var duration = $(this, el).val();
+
+		if(duration=='Custom')
+		{
 			
+			$('#start_date',el).val("");
+			$('#end_date',el).val("");
+			$('.daterange',el).removeClass('hide');
+			
+			if(el.attr('id')=='portletsGoalsSettingsForm')
+			{
+				$('#start_date',el).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+				$('#end_date',el).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+	
+			}
+        else{
+			var eventDate = $('#start_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',el).val()));
+			else
+			 	eventDate2 = new Date($('#end_date',el).val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				var en_value=ev.date.valueOf();
+				$('#end_date',elData).val($('#start_date',elData).val());
+			}
+
+		});
+
+
+		$('#end_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+			}
+		}
+		else
+			{$(el).find('.daterange').addClass('hide');
+		$('.daterange span:not(.field_req)',el).each(function(){
+				$(this).hide();
+			});
+	}
+			if($(el).find(".invalid-range").is(':visible'))
+								$(el).find(".invalid-range").parents('.form-group').hide();
+			
+		});
+
 }
 
 /** 
@@ -1279,8 +1356,27 @@ function clickfunction(that,url,forAll,route){
 						}*/
 					},
 					error : function(model, response) {
-						alert("Failed to add.");
+						showAlertModal("add_error");
 					}
 				});
 			});
 				}
+
+function is_valid_custom_range(startDate,endDate,modalName)
+{
+if (endDate - startDate >= 0)
+	{
+		return true;
+	}
+	else if (startDate > endDate)
+	{
+		$('#' + modalName)
+				.find(".invalid-range")
+				.html(
+					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date.</div>'
+						);
+				$('#' + modalName)
+				.find(".invalid-range").parents('.form-group').show();
+		return false;
+	}
+}

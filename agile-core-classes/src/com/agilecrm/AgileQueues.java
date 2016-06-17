@@ -16,6 +16,7 @@ public class AgileQueues
     public static final String BULK_CAMPAIGN_QUEUE = "bulk-campaign-queue";
     public static final String NORMAL_CAMPAIGN_QUEUE = "normal-campaign-queue";
     public static final String UPDATE_WORKFLOWS_QUEUE = "update-workflows-queue";
+    public static final String JSONIO_NODE_QUEUE = "jsonio-node-queue";
 
     // Cron Push Queue
     public static final String CRON_QUEUE = "cron-queue";
@@ -84,4 +85,6 @@ public class AgileQueues
 	
 	//Queue to update name in companies
 	public static final String NAME_UPDATE_COMPANIES = "name-update-companies-queue";
+	public static final String BULK_CALL_PULL_QUEUE = "bulk-call-pull-queue";
+		
 }

@@ -15,7 +15,8 @@ var DealsRouter = Backbone.Router.extend({
 		"deal-filters" : "dealFilters", 
 		"deal-filter-add" : "dealFilterAdd",
 		"deal-filter-edit/:id" : "dealFilterEdit",
-		"deal-filter/:id" : "dealFilter"
+		"deal-filter/:id" : "dealFilter",
+		"filter/:tag" : "deals"
 	},
 
 	/**
@@ -25,7 +26,12 @@ var DealsRouter = Backbone.Router.extend({
 	 * fetches Milestones pie-chart and Details graph if deals exist.
 	 */
 	deals : function()
-	{
+	{	
+		var dealTag = null ;
+		if(window.location.hash.indexOf("filter")==1){
+       		dealTag = window.location.hash.substr(window.location.hash.lastIndexOf("/")+1);
+       		_agile_set_prefs("agile_deal_view", "list_view");
+  		}	
 		pipeline_id = 0;
 		if (_agile_get_prefs("agile_deal_track"))
 			pipeline_id = _agile_get_prefs("agile_deal_track");
@@ -64,6 +70,9 @@ var DealsRouter = Backbone.Router.extend({
 			var that = this;
 			DEALS_LIST_COLLECTION = null;
 			setupDealFilters(function(data){
+				if(dealTag){
+					data["dealToFilter"] = dealTag ;
+				}
 				getTemplate("opportunities-header", {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
@@ -219,6 +228,7 @@ var DealsRouter = Backbone.Router.extend({
 				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
 			} });
 		$("#opportunity-listners").html(deals_filter.render().el);
+		setup_tags_typeahead();
 	},
 
 	/**
@@ -254,6 +264,7 @@ var DealsRouter = Backbone.Router.extend({
 			} });
 
 		dealFilter.render();
+		setup_tags_typeahead();
 	},
 
 	/**

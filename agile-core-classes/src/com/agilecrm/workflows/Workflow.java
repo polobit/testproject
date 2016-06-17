@@ -66,6 +66,10 @@ public class Workflow extends Cursor {
 	 */
 	@Indexed
 	public String name;
+	
+	@Indexed
+	@JsonIgnore
+	public String name_dummy;
 
 	/**
 	 * Workflow created time (in epoch).
@@ -335,6 +339,11 @@ public class Workflow extends Cursor {
 				if(updated_time_update)
 					updated_time = System.currentTimeMillis() / 1000;
 			}
+		}
+		
+		// Save name to name_duplicate to avoid issue with orderby (A - a)
+		if(this.name != null){
+			this.name_dummy = this.name.trim().toLowerCase();
 		}
 	}
 

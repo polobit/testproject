@@ -1208,6 +1208,24 @@
 		<servlet-name>CompanyNameUpdate</servlet-name>
 		<url-pattern>/backend/cron/company-name-update</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CustomFieldDelete</servlet-name>
+		<servlet-class>com.agilecrm.CustomFieldDeletionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CustomFieldDelete</servlet-name>
+		<url-pattern>/backend/cron/delete-custom-field</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MassMergeDuplicates</servlet-name>
+		<servlet-class>com.agilecrm.ContactMassDuplicateMergeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MassMergeDuplicates</servlet-name>
+		<url-pattern>/backend/cron/mass-merge-duplicates</url-pattern>
+	</servlet-mapping>
   
   	<!--  Helpcenter filter -->
   	<filter>
@@ -1279,4 +1297,14 @@
 		<url-pattern>/knowledgebase/*</url-pattern>
 	</servlet-mapping>
 	<!-- End of HelpCenter -->
+	<servlet>
+        <servlet-name>VoiceCallTwilioServlet</servlet-name>
+        <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>VoiceCallTwilioServlet</servlet-name>
+        <url-pattern>/twiliovoicecall</url-pattern>
+        <url-pattern>/Twiliovoicecall</url-pattern>
+    </servlet-mapping>
 </web-app>
