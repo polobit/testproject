@@ -48,6 +48,9 @@ function loadTransaction(offSet){
 
 		getTemplate('braintree-transactions', result, undefined, function(template){					
 			$('#Braintree').html(template);
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+				$( ".time-ago", $('#Braintree')).timeago();
+			});
 		},null);
 
 		if(BrainTreeObj.transaction.length > 5){
@@ -58,11 +61,13 @@ function loadTransaction(offSet){
 		result.transaction = BrainTreeObj.transaction.slice(offSet, (offSet+5));
 		$('.braintree_trans_show_more').remove();
 		$('#Braintree').apped(getTemplate('braintree-transactions', result));
+		$( ".time-ago", $('#Braintree')).timeago();
 		$('#Braintree').append(showMoreBraintreeTrans);
 	}else{
 		var result = {};
 		result.transaction = BrainTreeObj.transaction.slice(offSet, BrainTreeObj.transaction.length);
 		$('.braintree_trans_show_more').remove();
+		$( ".time-ago", $('#Braintree')).timeago();
 		$('#Braintree').append(getTemplate('braintree-transactions', result));
 	}
 }

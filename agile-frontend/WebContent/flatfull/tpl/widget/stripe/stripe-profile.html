@@ -199,7 +199,7 @@
 <script id="stripe-custom-field-template" type="text/html">
 <div class="wrapper-sm">
 {{#if_equals this.custom_fields.length "0"}}
-	<p>Stripe uses Stripe ID stored in text custom field to fetch data. You have no custom fields. Please one.<a class="text-info" href="#custom-fields">create one</a>.</p>
+	<p>Stripe uses Stripe ID stored in text custom field to fetch data. You have no custom fields. Please <a class="text-info" href="#custom-fields">create one</a>.</p>
 {{else}}
 	<p>Stripe uses Stripe ID stored in text custom field to fetch data. Select the custom field to be used.</p>
 	<select name="stripe_field" id="stripe_custom_field_name" class="required form-control col-md-10 w-full">
