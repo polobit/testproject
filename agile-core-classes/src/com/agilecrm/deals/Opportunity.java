@@ -503,6 +503,8 @@ public class Opportunity extends Cursor implements Serializable
 		this.created_time = oldOpportunity.created_time;
 	    if (this.won_date == null && oldOpportunity.won_date != null)
 		this.won_date = oldOpportunity.won_date;
+	    if(!this.milestone.equalsIgnoreCase(wonMilestone) && this.won_date!=null)
+	    	this.won_date=null;
 	}
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
