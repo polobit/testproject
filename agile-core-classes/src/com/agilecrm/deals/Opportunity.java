@@ -521,7 +521,10 @@ public class Opportunity extends Cursor implements Serializable
 		this.won_date = System.currentTimeMillis() / 1000;
 		this.probability = 100;
 	    }
-
+	    if(!this.milestone.equals(oldOpportunity.milestone) && !this.milestone.equalsIgnoreCase(wonMilestone) && oldOpportunity.won_date!=null)
+	    {
+			this.won_date = null;
+	    }
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(lostMilestone))
 	    {
 		this.probability = 0;
