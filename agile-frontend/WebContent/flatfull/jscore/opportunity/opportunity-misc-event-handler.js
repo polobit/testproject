@@ -51,7 +51,7 @@ $(function()
         var i;
         var tags;
         for (i = 0; i < tagobj.length ; i++) {
-                        if(tagobj[i].value != "")
+                        if(tagobj[i].name == "tags" && tagobj[i].value != "")
                                 tags = tagobj[i];
 		}   
         if (tags != undefined && tags.length != 0)
