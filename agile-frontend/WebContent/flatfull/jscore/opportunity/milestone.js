@@ -63,7 +63,6 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dragged to adjust the horizontal scroll
 		      change : function(event, ui){
-		      	  $(ui.item).attr("z-index", "-1");
 		      	  var width = $('#' + id + ' > div').width();
 		    	  var scrollX = $('#' + id + ' > div').scrollLeft();
 		    	  if(event.pageX > (width * 0.9))
@@ -268,7 +267,7 @@ function setup_deals_in_milestones(id){
 				$("#new-opportunity-list-paging", $("#opportunity-listners")).hide();
 				$("#opportunities-header", $("#opportunity-listners")).hide();
 				$("#moving-deal", $("#opportunity-listners")).html("<li>"+$(ui.draggable).html()+"</li>");
-				var heading = $("#moving-deal").attr("data-heading").replace(/ +/g, '');
+				var heading = $("#moving-deal").attr("data-heading");
 				var deal_id = $(ui.draggable).find("div:first").attr("id");
 				var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
 				if(dealsCollection)
