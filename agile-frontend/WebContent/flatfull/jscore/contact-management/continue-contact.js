@@ -679,14 +679,18 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		// Removes tags list(remove them from new person modal)
 		$('.tagsinput', $("#" + modal_id)).empty();
 		
-		if(CallLogVariables.dynamicData != null){
-			var jsonData1 = data.toJSON();
-			var dynamicData = CallLogVariables.dynamicData;
-			dynamicData.contact_name = getContactName(jsonData1);
-			dynamicData.contId = jsonData1.id;
-			showDynamicCallLogs(dynamicData);
-		}
-		
+		try{
+			var clickButtonId = e.v.currentTarget.id;
+			if(clickButtonId != "continue-contact"){
+				if(CallLogVariables.dynamicData != null){
+					var jsonData1 = data.toJSON();
+					var dynamicData = CallLogVariables.dynamicData;
+					dynamicData.contact_name = getContactName(jsonData1);
+					dynamicData.contId = jsonData1.id;
+					showDynamicCallLogs(dynamicData);
+				}
+			}
+		}catch(e){}
 		
 		
 		//added for call campaign - functionality after updating fom call campaign
