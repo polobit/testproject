@@ -74,7 +74,7 @@ public class Widget {
 	public String listOfUsers = null;
 
 	public String display_name = null;
-
+	
 	@NotSaved
 	public boolean isForAll = false;
 
@@ -90,6 +90,9 @@ public class Widget {
 	/** script is saved for custom widgets **/
 	@NotSaved(IfDefault.class)
 	public String script;
+	
+	@NotSaved(IfDefault.class)
+	public String script_type = null;
 
 	/**
 	 * Contains type of widgets to categorize the widgets based on their type
@@ -276,6 +279,7 @@ public class Widget {
 					widget.integration_type = this.integration_type;
 					widget.add_by_admin = true;
 					widget.script = this.script;
+					widget.script_type = this.script_type;
 					widget.url = this.url;
 					dao.put(widget);
 				}

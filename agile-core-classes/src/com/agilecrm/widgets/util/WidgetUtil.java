@@ -103,6 +103,11 @@ public class WidgetUtil {
 					widget.is_added = true;
 					widget.id = currentWidget.id;
 					widget.prefs = currentWidget.prefs;
+					if(widget.script != null){
+						widget.script_type = "script";
+					}else if(widget.url != null){
+						widget.script_type = "url";
+					}
 				}
 			}
 		}

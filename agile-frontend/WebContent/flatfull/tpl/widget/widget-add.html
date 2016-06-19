@@ -599,19 +599,19 @@
 			<div class="control-group form-group">
 				<div class="controls">								
 					<select name="script_type" id="script_type" class="required form-control">
-						<option value="script">HTML</option> 
-						<option value="url">URL</option> 
+						<option value="script" {{#if_equals script_type "script"}}selected{{/if_equals}}>HTML</option> 
+						<option value="url" {{#if_equals script_type "url"}}selected{{/if_equals}}>URL</option> 
 					</select>
 				</div>
 			</div>
 			<div class="control-group form-group">
 				<div class="controls">
-					<span id="script_div">
+					<span id="script_div" {{#if_equals script_type "script"}}{{else}}style="display:none;"{{/if_equals}}>
 						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</b></a>
 						</span>
-						<textarea rows="4" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API">{{script}}</textarea>					
-					</span>
-					<span id="url_div" style="display:none;">
+						<textarea rows="4" class="required widget_input_box form-control" name="script" id="script" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API">{{script}}</textarea>											
+					</span>					
+					<span id="url_div" {{#if_equals script_type "url"}}{{else}}style="display:none;"{{/if_equals}}>
 						<span class="help-block"><b>Documentation for <a class="text-info" href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></b>
 						</span>
 						<input type="url" id="url" value="{{url}}" class="input-medium required widget_input_box form-control" placeholder="Webhook URL" name="url"/>					
