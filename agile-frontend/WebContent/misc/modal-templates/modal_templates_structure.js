@@ -320,6 +320,30 @@
                 }
                 
             ]
+        },
+
+        {
+            "label": "Service",
+            "category": "service",
+            "themes": [
+                {
+                    "label": "Help Desk",
+                    "title": "help desk",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/help/images/helppopup.png",
+                        "theme_big": "/misc/modal-templates/help/images/helppopup.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "help desk",
+                            "href": "/misc/modal-templates/help/images/helppopup.png",
+                            "link": "/misc/modal-templates/help/help-popup.html;"
+                        }
+                    ]
+                }
+                
+            ]
         }
+        
     ]
 }
