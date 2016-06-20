@@ -152,17 +152,20 @@ public class AppengineSearch<T>
 		if(queryList.size() == count){
 			Set<String> set = new HashSet<String>();
 			for (Contact  temp : queryList) {
-				if(temp.type.name().equals("PERSON")){
+				if(temp.type != null && temp.type.name().equals("PERSON") && temp.contact_company_id != null){
 					set.add(temp.contact_company_id);
 				}
 			}
 			Iterator iterator = set.iterator();
 			if (set.size() == 1 && iterator.hasNext())
 			{
-			    String id = iterator.next().toString();
-			    Contact contact = ContactUtil.getContact(Long.parseLong(id));
-			    queryList.remove(9);
-			    queryList.add(0, contact);
+				Object obj = iterator.next();
+				if(obj != null){
+					String id = obj.toString();
+				    Contact contact = ContactUtil.getContact(Long.parseLong(id));
+				    queryList.remove(9);
+				    queryList.add(0, contact);
+				}
 
 			}
 		}
