@@ -10,8 +10,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.AliasDomain;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.AliasDomainUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -50,6 +53,12 @@ public class AccountPrefs implements Serializable
 	public String timezone = "UTC";
 
 	public Boolean tagsPermission = true;
+	
+	/**
+	 * Type of Currency.
+	 */
+	@NotSaved(IfDefault.class)
+	public String currency_admin = null;
 
 	/**
 	 * AccountPrefs Dao.
@@ -105,6 +114,31 @@ public class AccountPrefs implements Serializable
 			return null;
 		return aliasDomain.getAlias();
 	}
+	
+	/**
+	 * Returns currency if exists, otherwise null.
+	 * 
+	 * @return currency.
+	 */
+	@XmlElement(name = "currency_admin")
+	public String  getAdminCurrency()
+	{
+		return UserPrefsUtil.getCurrentUserPrefs().currency;
+	}
+
+	public void saveCurrency(){
+		
+		String user_currency= UserPrefsUtil.getCurrentUserPrefs().currency;
+		if(user_currency != null){			
+			List<UserPrefs> userprefs = UserPrefsUtil.getAllUserPrefs();
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		    UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+		    userPrefs.currency = currency_admin;
+		    userPrefs.save();				
+		}
+	}
+	
+
 
 	/**
 	 * Saves AccountPrefs.

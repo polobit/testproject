@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -62,6 +64,8 @@ public class UserPrefsAPI
 		{
 			// Get UserPrefs of user who is logged in
 			UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+			AccountPrefs accountprefs =   AccountPrefsUtil.getAccountPrefs();
+			System.out.println("currency_admin="+accountprefs.currency_admin);
 
 	    userPrefs.name = prefs.name;
 	    userPrefs.pic = prefs.pic;
