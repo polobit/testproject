@@ -32,7 +32,8 @@
 			"label"   : "Or",
 			"category": "Settings",
 			"fieldType": "label",
-            "type": "label" 
+            "type": "label",
+            "inputType":"plaintext" 
         },
         {
             "label": "Owner Merge Field",
