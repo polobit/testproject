@@ -14,7 +14,9 @@ import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 
@@ -127,7 +129,19 @@ public class DealCSVExport
 		d.setTime(deal.created_time * 1000);
 		str[indexMap.get(CREATED_DATE)] = date.format(d);
 	    }
-	    if (deal.won_date != null)
+	    
+	    String wonMilestone = "Won";
+		try
+		{
+		    Milestone mile = MilestoneUtil.getMilestone(deal.pipeline_id);
+		    if (mile.won_milestone != null)
+			wonMilestone = mile.won_milestone;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	    if (deal.won_date != null && deal.milestone.equalsIgnoreCase(wonMilestone))
 	    {
 		Date d = new Date();
 		d.setTime(deal.won_date * 1000);
