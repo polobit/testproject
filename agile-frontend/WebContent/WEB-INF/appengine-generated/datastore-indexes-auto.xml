@@ -558,3 +558,4 @@
         <property name="close_date" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
+</datastore-indexes>
