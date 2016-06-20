@@ -49,13 +49,7 @@ public class APILimitCheck {
     {
     String domain = NamespaceManager.get();
     List<String> whiteList = new ArrayList<String>();
-    whiteList.add("narmada");
-    whiteList.add("daparthi");
-    whiteList.add("ghanshyam");
-    whiteList.add("testlive");
-    whiteList.add("nammu");
-    whiteList.add("retest");
-    whiteList.add("raga");
+    whiteList.add("our");
     
     if(!StringUtils.isEmpty(domain) && whiteList.contains(domain))
     	return true;
@@ -70,7 +64,7 @@ public class APILimitCheck {
      */
     public static void checkAPILimit(String namespace) throws Exception {
 
-	if(!isRequestFromSecurityLevelDomain())
+	if(isRequestFromSecurityLevelDomain())
 	    return;
 	// Get session info
 	UserInfo info = SessionManager.get();
@@ -108,7 +102,9 @@ public class APILimitCheck {
 	
 	boolean isSameDay = DateUtils.isSameDay(getTodaysStartCalTime(),
 		getCallWithGivenTime(namespaceName));
+	
 	System.out.println("Is call came for same day = " +isSameDay);
+	
 	if (!isSameDay) {
 	    System.out.println("This is not same day ");
 	    deleteUserCachedApiCallsCount(namespaceName);
@@ -163,6 +159,7 @@ public class APILimitCheck {
     }
 
     /**
+     * Set cache at delete point with count 1 and current time
      * 
      * @param namespaceName
      */
@@ -170,7 +167,7 @@ public class APILimitCheck {
 	int count = 1;
 	Long lastCallTime = System.currentTimeMillis();
 	ApiLimitCache alc = new ApiLimitCache(count,lastCallTime);
-	System.out.println(alc);
+	System.out.println("Setting new cache value = " +alc);
 	CacheUtil.setCache(namespaceName + API_LIMIT_CACHED_KEY, alc);
     }
 
