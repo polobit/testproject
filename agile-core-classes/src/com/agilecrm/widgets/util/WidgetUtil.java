@@ -188,22 +188,15 @@ public class WidgetUtil {
 					.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
 			if (domainUser != null && domainUser.is_admin) {
 				String userID = agileuser.id.toString();
-				if (widgets != null) {
-					boolean removeWidget = false;
-					for (int i = 0; i < widgets.size(); i++) {
-						removeWidget = false;
+				if (widgets != null) {					
+					for (int i = 0; i < widgets.size(); i++) {						
 						Widget widget = widgets.get(i);		
-						
 						if (widget.listOfUsers != null && userID != null) {
-							if(widget.listOfUsers.length() == 2) {							
-								removeWidget = true;
-							}else if(!widget.listOfUsers.contains(userID)){
-								removeWidget = true;
-							}
-							
-							if(!removeWidget){
+							if(widget.listOfUsers.contains(userID)){
 								finalWidgets.add(widget);
 							}
+						}else{
+							finalWidgets.add(widget);
 						}
 					}
 				}
