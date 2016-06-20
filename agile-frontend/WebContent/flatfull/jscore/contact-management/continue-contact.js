@@ -594,7 +594,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 
 	obj["created_time"] = created_time;
-
+	var clickButtonId = e.currentTarget.id; 
 	// Saves contact
 	var contactModel = new BaseModel();
 	contactModel.url = 'core/api/contacts';
@@ -680,6 +680,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		}
 
 		// Hides the modal
+		if(CallLogVariables.dynamicData != null){
+			CallLogVariables.processed = true;
+		}
 		$('#' + modal_id).modal('hide');
 
 		// Resets each element
@@ -690,6 +693,21 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 		// Removes tags list(remove them from new person modal)
 		$('.tagsinput', $("#" + modal_id)).empty();
+		
+		try{
+			
+			if(clickButtonId != "continue-contact"){
+				if(CallLogVariables.dynamicData != null){
+					var jsonData1 = data.toJSON();
+					var dynamicData = CallLogVariables.dynamicData;
+					dynamicData.contact_name = getContactName(jsonData1);
+					dynamicData.contId = jsonData1.id;
+					showDynamicCallLogs(dynamicData);
+				}
+			}
+		}catch(e){}
+		
+		
 		//added for call campaign - functionality after updating fom call campaign
 			if(CALL_CAMPAIGN.start ){
 				var id = $('#continueform input[name=id]').val();
@@ -715,6 +733,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				
 				
 			}
+			
+			
 	}, error : function(model, response)
 	{
 
