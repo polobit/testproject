@@ -9,20 +9,28 @@
 var opportunity_filter_name;
 var OPPORTUNITY_DYNAMIC_FILTER_COOKIE_STATUS = "toggle_dynamic_filter_" + CURRENT_DOMAIN_USER.id;
 var OPPORTUNITY_TRACK_MILESTONES;
-var OPPORTUNITY_LHS_FILTER_CHANGE = true;
 
 /**
  * Change name of input[name='temp'] to more random i.e. temp-<unique_number>.
  * This is necessary for showing correct validation errors when multiple entries with same field-name are on the page.
  * @param el
  */
-var scrambled_index=0;
-function scramble_input_names(el)
+function setOportunityChainFilterValidations(el)
 {
 	el.find("input").each(function(){
-		$(this).attr('name','temp-'+scrambled_index);
-		$(this).addClass('required');
-		scrambled_index+=1;
+		var selected_val = $(this).closest('td').siblings('td.lhs-block').find("select#LHS").val();
+
+		if (selected_val == "expected_value" || selected_val == "probability")
+		{
+			$(this).addClass("number");
+			$(this).attr("min", "0");
+			var max_val = "1000000000000";
+			if(selected_val == "probability")
+			{
+				max_val = "100";
+			}
+			$(this).attr("max", max_val);
+		}
 	});
 }
 SEARCHABLE_OPPORTUNITY_CUSTOM_FIELDS = undefined;
@@ -37,6 +45,8 @@ var Opportunity_Filters_Event_View = Base_Model_View.extend({
     	'click i.filter-opportunities-multiple-remove' : 'opportunitiesFilterRemove',
     	'click .filter-opportunities-multiple-add-or-rules' : 'opportunitiesFilterAddOrRules',
     	'change #LHS > select' : 'onLhsChanged',
+    	'change #condition > select' : 'onConditionChanged',
+    	'change .lhs_chanined_parent' : 'onParentLHSChanged'
     	
     },
 
@@ -58,7 +68,7 @@ var Opportunity_Filters_Event_View = Base_Model_View.extend({
 			scramble_input_names($(htmlContent));
 
 			// boolean parameter to avoid contacts/not-contacts fields in form
-			chainFilters(htmlContent, undefined, undefined, undefined, undefined, true);
+			chainDealFilters(htmlContent, undefined, undefined, undefined, undefined, true);
 
 			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 			
@@ -110,7 +120,7 @@ var Opportunity_Filters_Event_View = Base_Model_View.extend({
 
 		if (selected_val == "expected_value" || selected_val == "probability")
 		{
-			$rhs_ele.find("input").toggleClass("number");
+			$rhs_ele.find("input").addClass("number");
 			$rhs_ele.find("input").attr("min", "0");
 			var max_val = "1000000000000";
 			if(selected_val == "probability")
@@ -121,50 +131,83 @@ var Opportunity_Filters_Event_View = Base_Model_View.extend({
 		}
 		else
 		{
-			$rhs_ele.find("input").toggleClass("number");
+			$rhs_ele.find("input").removeClass("number");
 		}
 
-		if (selected_val == "track_milestone" && OPPORTUNITY_LHS_FILTER_CHANGE)
+		if (selected_val == "track_milestone")
 		{
+			$(targetEl).closest('td').siblings('td.track-milestone-error').removeClass("hide");
 			var field_name = $rhs_ele.find("input").attr("name");
 			populateTrackMilestones(undefined, undefined, undefined, undefined, undefined, undefined, $rhs_ele, field_name);
 		}
+		else
+		{
+			$(targetEl).closest('td').siblings('td.track-milestone-error').addClass("hide");
+		}
 
-		if(selected_val == "archived" && OPPORTUNITY_LHS_FILTER_CHANGE)
+		if(selected_val == "archived")
 		{
 			var field_name = $rhs_ele.find("input").attr("name");
 			$rhs_ele.html("<select name='"+field_name+"' class='form-control'><option value='true'>Archived</option><option value='false'>Active</option><option value='all'>Any</option></select>");
 		}
 	},
 
+	onConditionChanged : function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-	onRhsChanged : function(e)
-	{
+		if ($(targetEl).find("option:selected").hasClass('tags'))
+		{
+			var element = $(targetEl).parents().closest('tr').find('div#RHS');
+			addTagsDefaultTypeahead(element);
+		}
+
+		if ($(targetEl).closest('tr').find('td.lhs-block').find('option:selected').attr('field_type') == "CONTACT")
+		{
+			var that = targetEl;
+			var custom_contact_display = function(data, item)
+			{
+				setTimeout(function(){
+					$('input', $(that).closest('tr').find('td.rhs-block')).val(item);
+					$('input', $(that).closest('tr').find('td.rhs-block')).attr("data", data);
+				},10);
+				
+			}
+			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id", $(targetEl).closest('tr').find('td.lhs-block').find('option:selected').attr("id"));
+			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("placeholder", "Contact Name");
+			$('input', $(targetEl).closest('tr').find('td.rhs-block')).addClass("contact_custom_field");
+			agile_type_ahead($('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id"), $(targetEl).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_contact_display, 'type=PERSON');
+		}
+
+		if ($(targetEl).closest('tr').find('td.lhs-block').find('option:selected').attr('field_type') == "COMPANY")
+		{
+			var that = targetEl;
+			var custom_company_display = function(data, item)
+			{
+				setTimeout(function(){
+					$('input', $(that).closest('tr').find('td.rhs-block')).val(item);
+					$('input', $(that).closest('tr').find('td.rhs-block')).attr("data", data);
+				},10);
+				
+			}
+			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id", $(targetEl).closest('tr').find('td.lhs-block').find('option:selected').attr("id"));
+			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("placeholder", "Company Name");
+			$('input', $(targetEl).closest('tr').find('td.rhs-block')).addClass("company_custom_field");
+			agile_type_ahead($('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id"), $(targetEl).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
+		}
 		
+	},
+
+	onParentLHSChanged :  function(e)
+	{
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		if (($(targetEl).val()).indexOf('tags') != -1)
+		{
+			var element = $(targetEl).closest('tr').find('div#RHS');
+			addTagsDefaultTypeahead(element);
+		}
 	}
 	
 });
-
-function fillOpportunityCustomFieldsInFilters(el, callback)
-{
-	if(!OPPORTUNITY_CUSTOM_FIELDS)
-	{
-		$.getJSON("core/api/custom-fields/searchable/scope?scope=DEAL", function(fields){
-			console.log(fields);
-			OPPORTUNITY_CUSTOM_FIELDS = fields;
-			fillCustomFields(fields, el, callback, false);
-		});
-	} else {
-		fillCustomFields(OPPORTUNITY_CUSTOM_FIELDS, el, callback, false)
-	}
-}
-
-function chainFiltersForOpportunity(el, data, callback) {
-	if(data) {
-		chainFilters($(el).find('.chained-table.opportunity.and_rules'), data.rules, undefined, false, false, true);
-		chainFilters($(el).find('.chained-table.opportunity.or_rules'), data.or_rules, callback, false, false, true);
-	} else {
-		chainFilters($(el).find('.chained-table.opportunity.and_rules'), undefined, undefined, false, false, true);
-		chainFilters($(el).find('.chained-table.opportunity.or_rules'), undefined, callback, false, false, true);
-	}
-}

@@ -414,7 +414,14 @@ function deserializeChainedSelect(form, el, el_self)
 			 * Chains dependencies of input fields with jquery.chained.js based
 			 * on the rule element
 			 */
-			chainFilters(rule_element);
+			if($(form).hasClass("opportunity"))
+			{
+				chainDealFilters(rule_element);
+			}
+			else
+			{
+				chainFilters(rule_element);
+			}
 
 			$(parent_element).append(rule_element);
 			deserializeChainedElement(data, rule_element);
@@ -430,7 +437,6 @@ function deserializeChainedSelect(form, el, el_self)
 
 function deserializeChainedElement(data, rule_element)
 {
-	OPPORTUNITY_LHS_FILTER_CHANGE = false;
 	$(rule_element).removeClass('hide');
 	// hide campaign status filter.
 	/*
@@ -453,6 +459,20 @@ function deserializeChainedElement(data, rule_element)
 			// Fills date in to fields and initialize datepicker on the field
 			if ($(input_element).hasClass('date'))
 			{
+				//It is specific to deal closed time
+				if($(input_element).closest('td').siblings('td.lhs-block').find("select#LHS").val() != "closed_time" && !$(input_element).closest('tr').parent().parent().hasClass('opportunity'))
+				{
+					$(input_element).val(getDateInFormatFromEpoc(value));
+
+
+					$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+
+
+					$(input_element).datepicker('update');
+
+					return;
+				}
+
 			//	value = getLocalTimeFromGMTMilliseconds(value);
 
 				$(input_element).val(getDateInFormatFromEpocForContactFilters(value));

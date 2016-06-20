@@ -139,4 +139,17 @@ public class DealFilterAPI {
 
 	return DealFilterUtil.getDeals(id, null, null, sortKey, pipeline, milestone);
     }
+    
+    @Path("/query/list/tags/{tag_name}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getOpportubitiesListWithTags(@PathParam("tag_name") String tagName, @QueryParam("page_size") String count, @FormParam("cursor") String cursor, 
+    		@QueryParam("order_by") String sortKey) throws JSONException
+    {
+	System.out.println("cursor : " + cursor);
+	if (!StringUtils.isEmpty(count))
+	    return DealFilterUtil.getDealsWithTag(tagName, Integer.parseInt(count), cursor, sortKey);
+
+	return DealFilterUtil.getDealsWithTag(tagName, null, null, sortKey);
+    }
 }

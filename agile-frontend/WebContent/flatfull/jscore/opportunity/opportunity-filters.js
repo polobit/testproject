@@ -269,3 +269,53 @@ function setUpDealSortFilters(el)
 	$("#deal-sorter", el).html(DEAL_CUSTOM_SORT_VIEW.render(true).el);
 	
 }
+
+/**
+ * Chains fields using jquery.chained library. It deserialzed data into form
+ * 
+ * @param el
+ */
+function chainDealFilters(el, data, callback)
+{
+	if(!OPPORTUNITY_CUSTOM_FIELDS)
+	{			
+		fillOpportunityCustomFieldsInFilters(el, function(){
+			show_chained_fields(el, data, true);
+			if (callback && typeof (callback) === "function")
+			{
+				// execute the callback, passing parameters as necessary
+				callback();
+			}
+		})
+		return;
+	}
+	
+	fillCustomFields(OPPORTUNITY_CUSTOM_FIELDS, el, undefined, false)
+	
+	show_chained_fields(el, data);
+	if (callback && typeof (callback) === "function")
+	{
+		// execute the callback, passing parameters as necessary
+		callback();
+	}
+	
+}
+
+function fillOpportunityCustomFieldsInFilters(el, callback)
+{
+	$.getJSON("core/api/custom-fields/searchable/scope?scope=DEAL", function(fields){
+		console.log(fields);
+		OPPORTUNITY_CUSTOM_FIELDS = fields;
+		fillCustomFields(fields, el, callback, false);
+	});
+}
+
+function chainFiltersForOpportunity(el, data, callback) {
+	if(data) {
+		chainDealFilters($(el).find('.chained-table.opportunity.and_rules'), data.rules, undefined);
+		chainDealFilters($(el).find('.chained-table.opportunity.or_rules'), data.or_rules, callback);
+	} else {
+		chainDealFilters($(el).find('.chained-table.opportunity.and_rules'), undefined, undefined);
+		chainDealFilters($(el).find('.chained-table.opportunity.or_rules'), undefined, callback);
+	}
+}

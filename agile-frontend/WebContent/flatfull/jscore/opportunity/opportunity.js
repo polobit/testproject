@@ -132,7 +132,6 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			else
 			{
 				$(filter_el).html("<select class='form-control required' name='"+field_name+"'>"+html+"</select>");
-				OPPORTUNITY_LHS_FILTER_CHANGE = true;
 			}
 			
 
@@ -677,23 +676,24 @@ function populateDealSources(el, value){
  */
 function fetchDealsList(data){
 	var filters_collection = data;
+	var dealTag;
     if(!filters_collection && App_Deals.deal_filters && App_Deals.deal_filters.collection)
     {
     	filters_collection = App_Deals.deal_filters.collection;
     }
+    if(filters_collection.dealToFilter)
+    {
+		dealTag = filters_collection.dealToFilter ;
+	}
     setNewDealFilters(filters_collection);
 	var query = ''
 	var url = 'core/api/deal/filters/query/list/'+_agile_get_prefs('deal-filter-name')+'?order_by='+getDealSortFilter();
-    /*if (_agile_get_prefs('deal-filters'))
+    
+    if(dealTag)
     {
-    	var dealFilters = getDealFilters();
-    	var dealFilterJSON = JSON.parse(dealFilters);
-    	if(dealFilterJSON && (dealFilterJSON["rules"] || dealFilterJSON["or_rules"]))
-    	{
-    		url = 'core/api/deal/filters/query/list/'+_agile_get_prefs('deal-filter-name');
-    	}
-    	//query = '&filters=' + encodeURIComponent(getDealFilters());
-    }*/
+    	url = 'core/api/deal/filters/query/list/tags/'+dealTag+'?order_by='+getDealSortFilter();
+		$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n" style="margin-left:10px;"><li class="inline-block tag btn btn-xs btn-primary" data='+dealTag+'><span>'+dealTag+'<a href="#deals" class="anchor close m-l-xs pull-right">×</a></span></li></ul>');
+	}
     // Fetches deals as list
     App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : '' + url,
         templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,

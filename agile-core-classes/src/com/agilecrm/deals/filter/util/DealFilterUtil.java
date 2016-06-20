@@ -276,5 +276,35 @@ public class DealFilterUtil {
     	}
     	dealFilter.rules = andRules;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<Opportunity> getDealsWithTag(String tagName, Integer count, String cursor, String orderBy)
+	{
+		DealFilter filter = new DealFilter();
+		SearchRule rule = new SearchRule();
+	    rule.LHS = "type";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = "Opportunity";
+	    filter.rules.add(rule);
+	    
+	    rule = new SearchRule();
+	    rule.LHS = "tags";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = tagName;
+	    filter.rules.add(rule);
+
+	    // Sets ACL condition
+	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Opportunity.toString(), filter.rules, null);
+	    
+	    try
+	    {
+	    	return new ArrayList<Opportunity>(filter.queryDeals(count, cursor, orderBy));
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    	return null;
+	    }
+	}
 
 }

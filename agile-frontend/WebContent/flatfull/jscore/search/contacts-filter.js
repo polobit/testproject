@@ -419,20 +419,10 @@ function chainFiltersForContact(el, data, callback) {
  * 
  * @param el
  */
-function chainFilters(el, data, callback, is_webrules, is_company, is_opportunity)
+function chainFilters(el, data, callback, is_webrules, is_company)
 {
 	if(is_company) {
 		fillCompanyCustomFieldsInFilters(el, function(){
-			show_chained_fields(el, data, true);
-			if (callback && typeof (callback) === "function")
-			{
-				// execute the callback, passing parameters as necessary
-				callback();
-			}
-		});
-		return;
-	} else if(is_opportunity) {
-		fillOpportunityCustomFieldsInFilters(el, function(){
 			show_chained_fields(el, data, true);
 			if (callback && typeof (callback) === "function")
 			{
