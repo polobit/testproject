@@ -1021,8 +1021,7 @@ public class TaskUtil
 			String ids = json.getString("IdJson");
 			// Create Task and push it into Task Queue
 			Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TASK_CHANGE_STATUS);
-			TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).param("data", data)
-				    .header("Content-Type", "application/json").method(Method.POST);
+			TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).param("data", data).method(Method.POST);
 			queue.addAsync(taskOptions);
 			return;
 		} catch (Exception e) {
