@@ -252,7 +252,7 @@ public class WidgetsAPI {
 		System.out.println("In accessURLToReadScript");
 
 		// Deletes widget based on name
-		CustomWidget customWidget = CustomWidgets.getCustomWidget(widget_name);
+		Widget customWidget = WidgetUtil.getWidget(widget_name);
 		String data = "";
 
 		try {

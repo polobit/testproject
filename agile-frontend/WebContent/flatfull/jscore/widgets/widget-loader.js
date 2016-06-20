@@ -280,27 +280,21 @@ function setup_custom_widget(model, widgets_el)
 	}
 }
 
-function getScript(model, callback)
-{
-	try
-	{
+function getScript(model, callback){
+	try{
 		// Gets contact id, to save social results of a particular id
 		var contact_id = agile_crm_get_contact()['id'];
-
-		$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
-		{
+		$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data){
 
 			// If defined, execute the callback function
 			if (callback && typeof (callback) === "function")
 				callback(data);
-		}).error(function(data)
-		{
+		}).error(function(data){
+			$('#' + model.get('selector')).html(data.statusText);
 			console.log(data);
 			console.log(data.responseText);
 		});
-	}
-	catch (err)
-	{
+	}catch (err){
 		console.log(err);
 	}
 }

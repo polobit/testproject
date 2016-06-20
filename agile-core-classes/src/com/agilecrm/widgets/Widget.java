@@ -264,9 +264,9 @@ public class Widget {
 			dao.put(this);
 		} else if (isAdmin) {			
 			List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
-			if (this.widget_type == WidgetType.CUSTOM) {
-				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
-			}
+//			if (this.widget_type == WidgetType.CUSTOM) {
+//				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
+//			}
 			if (this.id != null && userWidgets != null && userWidgets.size() > 0) {
 				for (Widget widget : userWidgets) {						
 					widget.prefs = this.prefs;

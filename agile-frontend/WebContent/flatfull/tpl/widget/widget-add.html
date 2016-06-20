@@ -61,7 +61,7 @@
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if_equals name "Custom"}}
 			{{else}}
-				<center><h4 class="m-t-xxs">{{display_name}}</h4></center>
+				<center><h4 class="m-t-xxs">{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}</h4></center>
 			{{/if_equals}}
 		{{/if_equals}}
 		{{description}}
@@ -77,14 +77,13 @@
 	{{/if_equals}}
 	{{/if_equals}}
 		</div>
-    <div class="text-center">
-
+    <div class="text-center m-t-sm">
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if id}}
 				{{add_tag "Widgets"}}
 					<div class="btn-group inline-block">
 					{{#isAdmin}}
-						<a class="btn btn-sm btn-default m-r-sm acl_widget" widget-data="{{stringifyObject this}}">
+						<a class="btn btn-sm btn-default m-r-sm acl_widget" title="Edit users for widget" widget-data="{{stringifyObject this}}">
   							<i class="fa fa-users"></i>
   						</a>
   					{{/isAdmin}}
@@ -111,7 +110,7 @@
 		                    <a></a>
 		                {{else}}
 		                	{{#isAdmin}}
-                           		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
+                           		<a class="btn btn-sm btn-default acl_widget" title="Edit users for widget" widget-data="{{stringifyObject this}}">
   									<i class="fa fa-users"></i>
   				   		   		</a>
   				   		    {{/isAdmin}}
@@ -586,13 +585,13 @@
 			<input type="hidden" id="id" class="input-medium required widget_input_box form-control"value="{{id}}" name="id"/>		
 			<div class="control-group form-group">
 				<div class="controls">
-					<input type="text" id="display_name" value="{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="display_name">
+					<input type="text" id="display_name" value="{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}" class="input-medium required widget_input_box form-control" maxlength="14" placeholder="Widget name" name="display_name">
 					</input>				
 				</div>
 			</div>
 			<div class="control-group form-group">
 				<div class="controls">								
-					<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control"placeholder="Description" name="description">
+					<input type="text" id="description" value="{{description}}" class="input-medium required widget_input_box form-control" maxlength="110" placeholder="Description" name="description">
 					</input>
 				</div>
 			</div>
@@ -633,13 +632,13 @@
 		  {{else}}
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="name" class="input-medium required widget_input_box form-control" placeholder="Widget name" name="name">
+						<input type="text" id="name" class="input-medium required widget_input_box form-control" maxlength="14"placeholder="Widget name" name="name">
 						</input>				
 					</div>
 				</div>
 				<div class="control-group form-group">
 					<div class="controls">								
-						<input type="text" id="description" class="input-medium required widget_input_box form-control"placeholder="Description" name="description">
+						<input type="text" id="description" class="input-medium required widget_input_box form-control" maxlength="110" placeholder="Description" name="description">
 						</input>
 					</div>
 				</div>
