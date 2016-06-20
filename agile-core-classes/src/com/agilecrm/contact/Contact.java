@@ -1181,7 +1181,7 @@ public class Contact extends Cursor
 	{
 	    created_time = System.currentTimeMillis() / 1000;
 	}
-
+	
     }
 
     /**

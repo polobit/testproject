@@ -20,6 +20,8 @@ import org.json.JSONException;
 
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
@@ -166,6 +168,19 @@ public class DocumentsAPI
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	try {
+		if(!(document.getrelatedContacts()).isEmpty() && document.getrelatedContacts().size() > 0 )
+		{
+			for(Contact c : document.getrelatedContacts())
+			{
+				c.forceSearch = true ; 
+				c.save();		
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	return document;
     }
 
@@ -228,6 +243,19 @@ public class DocumentsAPI
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
+	try {
+		if(!(oldDocument.getrelatedContacts()).isEmpty() && oldDocument.getrelatedContacts().size() > 0 )
+		{
+			for(Contact c : oldDocument.getrelatedContacts())
+			{
+				c.forceSearch = true;
+				c.save();		
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	if(document.network_type.equals("GOOGLE"))
 		document.size = 0L;
 	document.save();
@@ -238,6 +266,19 @@ public class DocumentsAPI
 			{
 				Opportunity opp = Opportunity.dao.get(key);
 				opp.save();			
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	try {
+		if(!(document.getrelatedContacts()).isEmpty() && document.getrelatedContacts().size() > 0 )
+		{
+			for(Contact c : document.getrelatedContacts())
+			{
+				c.forceSearch = true;
+				c.save();		
 			}
 		}
 	} catch (Exception e) {
@@ -284,6 +325,14 @@ public class DocumentsAPI
 						oppr.save();
 					 }	
 				 }
+		    	if(!(doc.getrelatedContacts()).isEmpty() && doc.getrelatedContacts().size() > 0 )
+                {
+                    for(Contact c : doc.getrelatedContacts())
+                    {
+                        c.forceSearch = true ; 
+                        c.save();       
+                    }
+                }
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

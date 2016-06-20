@@ -933,7 +933,6 @@ public class ContactsAPI
 	 if(notesJSONArray!=null && notesJSONArray.length()>0){
 		 for (int i = 0; i < notesJSONArray.length(); i++) {
 			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
-			
 			List<String> conIds = note.getContact_ids();
 	    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
@@ -951,7 +950,6 @@ public class ContactsAPI
 				e.printStackTrace();
 			}
 		 }
-		 
 	 }
 	 Note.dao.deleteBulkByIds(notesArray);
 }
