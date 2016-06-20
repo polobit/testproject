@@ -259,6 +259,7 @@ function dialFromTwilio(to,from,contact){
 	
 	var name = "";
 	TWILIO_CONTACT_ID = null;
+	TWILIO_CONTACT  = null;
 	
 	if(contact){
 		name = 	getContactName(contact);
