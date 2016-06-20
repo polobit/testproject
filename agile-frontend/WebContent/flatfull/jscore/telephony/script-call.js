@@ -749,10 +749,10 @@ function GiveCallScriptName(contact){
 
 function GiveCallScriptText(name, contact){
 	if(!contact){
-		return "No text to display";
+		return "!@#";
 	}
 	_agile_contact = contact;
-	var text = "No text to display";
+	var text = "!@#";
 	CallScript_PLUGIN_NAME = "CallScript";
 
 	if(App_Widgets.Catalog_Widgets_View)
@@ -799,7 +799,10 @@ function showvalue(contact){
 	
 	var nameArray = GiveCallScriptName(contact);
 	//option(name.value)
-
+	if(nameArray.length == 0){
+		$("#callScriptForm #callScriptText").val("No call script to display.");
+	}
+	
 	for(var i=0;i<nameArray.length;i++){
 		var $option = new Option(nameArray[i],nameArray[i]);
 		$("#callScriptForm #callScriptName").append($option);
@@ -810,7 +813,9 @@ function showvalue(contact){
 		var rule = $("#callScriptName").val();
 		var contact = $(".noty_call_callScript","#draggable_noty").data("contact");
 		var textToDisplay = GiveCallScriptText(rule, contact);
-		console.log("textToDisplay" + textToDisplay)
+		if(textToDisplay == "!@#"){
+			textToDisplay = "Please select a call script to display.";
+		}
 		$("#callScriptForm #callScriptText").val(textToDisplay);
 		
 	});
