@@ -1307,4 +1307,14 @@
         <url-pattern>/twiliovoicecall</url-pattern>
         <url-pattern>/Twiliovoicecall</url-pattern>
     </servlet-mapping>
+    <!-- Push notification -->
+    <servlet>
+        <servlet-name>PushNotification</servlet-name>
+        <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>PushNotification</servlet-name>
+        <url-pattern>backend/push</url-pattern>
+    </servlet-mapping>
 </web-app>
