@@ -85,4 +85,6 @@ public class AgileQueues
 	
 	//Queue to update name in companies
 	public static final String NAME_UPDATE_COMPANIES = "name-update-companies-queue";
+	public static final String BULK_CALL_PULL_QUEUE = "bulk-call-pull-queue";
+		
 }

@@ -230,6 +230,7 @@ var Contact_Details_Tab_Actions = {
 				$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
 				return;
 			}
+
 			// Gets the id of the entity
 			var entity_id = $(targetEl).attr('id');
 			if (model && model.toJSON().type != "WEB_APPOINTMENT" || parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
@@ -583,6 +584,7 @@ function initializeSendEmailListeners(){
 						// Is valid
 						if (!isValidForm($form))
 							return;
+
 						var network_type = $('#attachment-select').find(":selected").attr('network_type');
 						// checking email attachment type , email doesn't allow
 						// google drive documents as attachments
@@ -597,6 +599,8 @@ function initializeSendEmailListeners(){
 
 						// serialize form.
 						var json = serializeForm("emailForm");
+						
+						json.from = $(".email").find(":selected").val();
 						if ((json.contact_to_ids).join())
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
@@ -622,43 +626,26 @@ function initializeSendEmailListeners(){
 						// Is valid
 						if (!isValidForm($('#emailForm')))
 							return;
+						var that =$(this);
 
-						// Disables send button and change text to Sending...
-						disable_send_button($(this));
-
-						// Navigates to previous page on sending email
-						$
-								.ajax({
-									type : 'POST',
-									data : JSON.stringify(json),
-									dataType: 'json',
-									contentType: "application/json",
-									url : 'core/api/emails/contact/send-email',
-									success : function()
-									{
-
-										// Enables Send Email button.
-										enable_send_button($('#sendEmail'));
-
-										window.history.back();
-
-									},
-									error : function(response)
-									{
-										enable_send_button($('#sendEmail'));
-
-										// Show cause of error in saving
-										$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
-
-										// Appends error info to form actions
-										// block.
-										$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
-
-										// Hides the error message after 3
-										// seconds
-										if (response.status != 406)
-											$save_info.show().delay(10000).hide(1);
-									} });
+						if(hasScope("EDIT_CONTACT"))
+						{
+							emailSend(that,json);
+						}
+						else
+						{
+							showModalConfirmation("Send Email", 
+								"You may not have the permission to send emails to some of the contacts selected. Email will be sent to only contacts with send email permissions.<br/><br/> Do you want to proceed?",
+								function (){
+									emailSend(that,json);
+								},
+								function(){
+									return;
+								},
+								function(){
+					
+								});
+						}
 
 					});
 
@@ -709,6 +696,49 @@ $('#send-email-listener-container').on('click', '#cc-link, #bcc-link', function(
 
 }
 
+/*
+ * Ajax call to send email
+ */
+function emailSend(ele,json)
+{
+	// Disables send button and change text to Sending...
+	disable_send_button(ele);
+
+	// Navigates to previous page on sending email
+	$.ajax({
+		type : 'POST',
+		data : JSON.stringify(json),
+		dataType: 'json',
+		contentType: "application/json",
+		url : 'core/api/emails/contact/send-email',
+		success : function()
+		{
+
+			// Enables Send Email button.
+			enable_send_button($('#sendEmail'));
+
+			window.history.back();
+
+		},
+		error : function(response)
+		{
+			enable_send_button($('#sendEmail'));
+
+			// Show cause of error in saving
+			$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+
+			// Appends error info to form actions
+			// block.
+			$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
+
+			// Hides the error message after 3
+			// seconds
+			if (response.status != 406)
+				$save_info.show().delay(10000).hide(1);
+		} 
+	});
+}
+
 function modelDelete(model, targetEl, callback){
 	if (model && model.collection)
 	{
@@ -757,11 +787,46 @@ function modelDelete(model, targetEl, callback){
 	// Add loading. Adds loading only if there is no loaded image added
 	// already i.e.,
 	// to avoid multiple loading images on hitting delete multiple times
-	if ($(targetEl).find('.loading').length == 0)
-		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+	/*if ($(targetEl).find('.loading').length == 0)
+		$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));*/
 
-	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-	{
+	$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function(response_data)
+	{	
+		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && !response_data)
+		{
+			return;
+		}
+		if((Current_Route.indexOf("contact/") == 0 || Current_Route.indexOf("company/") == 0) && response_data)
+		{
+			var can_edit = false;
+			$.each(response_data, function(index, contactId){
+				if(App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				{
+					can_edit = true;
+				}
+			});
+			if(!App_Contacts.contactDetailView.model.get("id"))
+			{
+				can_edit = true;
+			}
+			if(!can_edit)
+			{
+				showModalConfirmation("Delete <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+					'<span class="text-cap">'+model.get("entity_type")+'</span> '+CONTACTS_ACTIVITY_ACL_DELETE_ERROR, 
+					function (){
+						return;
+					}, 
+					function(){
+						return;
+					},
+					function (){
+						return;
+					},
+					'Cancel'
+				);
+				return;
+			}
+		}
 		// Removes activity from list
 		$(that).parents(".activity").fadeOut(400, function()
 		{

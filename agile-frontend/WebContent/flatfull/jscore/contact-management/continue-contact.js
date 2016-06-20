@@ -11,6 +11,7 @@
  * @param errorClass -
  *            class in which to fill error text, i.e. htmlText
  */
+ 
 function show_error(modalId, formId, errorClass, htmlText)
 {
 	var modal_elem = $('#' + modalId);
@@ -102,11 +103,19 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	// Reads id, to update the contact
 	var id = $('#' + form_id + ' input[name=id]').val();
 
+    var man_delet  = $("#" + form_id + " #Manual_delete").val();
 	// Makes created time constant
 	var created_time = $('#' + form_id + ' input[name=created_time]').val();
 
+	var city  = $("#" + form_id + " #city").val();
+	var state  = $("#" + form_id + " #state").val();
+	var country  = $("#" + form_id + " #country").val();
+	var zip  = $("#" + form_id + " #zip").val();
+
+
 	// Object to save
 	var obj = {};
+	//to check if it manually added
 
 	// Stores all the property objects
 	var properties = [];
@@ -382,12 +391,14 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 		}		
 	}
+	
+
 
 
 }
 
 function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template ,contact_company){
-		
+				
 		if (isValidField(form_id + ' #company_url'))
 			properties.push(property_JSON('url', form_id + ' #company_url'));		
 		if (tagsSourceId === undefined || !tagsSourceId || tagsSourceId.length <= 0)
@@ -464,16 +475,23 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		{
 			var addressJSON = {};
 			var subtype;
+			var remote_addr=false;
 			$.each($(element).find(":input,select"), function(index, subelement)
 			{
 
 				if ($(subelement).val() == undefined || $(subelement).val().length == 0)
-					return;
+					{  remote_addr =true;
+						addressJSON['remote_add'] = remote_addr;
+						return;}
 
 				if ($(subelement).attr('name') == 'address-type')
 					subtype = $(subelement).val();
+
 				else
 					addressJSON[$(subelement).attr('name')] = $(subelement).val();
+
+				if($(subelement).attr('name') == 'country')
+					addressJSON['countryname'] = $(subelement).find('option:selected').text();
 			});
 
 			if ($.isEmptyObject(addressJSON))
@@ -802,6 +820,7 @@ function deserialize_contact(contact, template)
 									$("#content #zip").val(prop.zip);
 								if(prop.country)
 									$("#content #country").val(prop.country);
+
 							}
 
 						}

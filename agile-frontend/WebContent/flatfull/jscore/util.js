@@ -417,7 +417,7 @@ function showTextGravatar(selector, element)
 	});
 }
 
-function text_gravatar_initials(items)
+function text_gravatar_initials(items, char_count)
 {
 	if (items == undefined)
 		return;
@@ -477,6 +477,10 @@ function text_gravatar_initials(items)
 
 	if (name.length == 0)
 		name = "X";
+
+	if(!isNaN(char_count) && char_count < name.length){
+         name = name.substr(0, char_count);
+	}
 
 	return name;
 }
@@ -715,10 +719,7 @@ function showPageBlockModal() {
 	else if ($.inArray(Current_Route, AVOID_PAGEBLOCK_URL) != -1 || USER_BILLING_PREFS == undefined || USER_BILLING_PREFS.status == undefined || USER_BILLING_PREFS.status == null || USER_BILLING_PREFS.updated_time == undefined || USER_BILLING_PREFS.updated_time == null || USER_BILLING_PREFS.updated_time < 1456803000)
 		return;
 	else if($.inArray(USER_BILLING_PREFS.status, PAYMENT_FAILED_REASON) != -1){
-		var expiry_date = (USER_BILLING_PREFS.updated_time+691200)*1000;
-		if(USER_BILLING_PREFS.status == "BILLING_FAILED_1")
-			expiry_date = (USER_BILLING_PREFS.updated_time+432000)*1000;
-		getTemplate("user-alert", {"message":"Action Required! Your account has dues. Please update your credit card information to pay your outstanding amount. Non-payment of the dues will lead to locking of your account on "+new Date(expiry_date).format('mmm dd, yyyy')+"."}, undefined, function(template_ui){
+		getTemplate("user-alert", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$("#alert-message").html(template_ui).show();
@@ -780,6 +781,7 @@ function sendEmail(json, callback){
 			});
 }
 
+
 function showAlertModal(json_key, type, confirm_callback, decline_callback,dynamic_title){
 	var data = {};
 	if(MODAL_MESSAGES[json_key] != undefined){
@@ -809,4 +811,37 @@ function showAlertModal(json_key, type, confirm_callback, decline_callback,dynam
 	    		decline_callback();
 		});
 	}, null);
+}
+
+function printSortByName(name, el){
+	 $(el).find(".sort-field-txt").html(name);
+}
+
+function getFormattedDateObjectForMonthWithString(value){
+
+		if(!value)
+			   return new Date("");
+			if(window.navigator.userAgent.indexOf('Mozilla')!=-1 && window.navigator.userAgent.indexOf('Chrome')==-1) 
+					value="01 "+value;
+        value = value.replace(/\./g,'/');
+
+		return new Date(value);
+	
+}
+
+function updateSortKeyTemplate(sort_key, el) {
+	$('.sort-field-check', el).addClass('display-none');
+	$('.sort-by-check', el).addClass('display-none');
+	if(sort_key && sort_key != null) {
+		var sort = sort_key.split("-")
+		if(sort[0] == "")
+			$(".order-by[data='-']", el).find('i').removeClass('display-none');
+		else
+			$(".order-by[data='']", el).find('i').removeClass('display-none');
+		if(sort.length > 1)
+			sort_key = sort[1];
+		$(".sort-field[data='"+sort_key+"']", el).find('i').removeClass('display-none');
+		printSortByName($(".sort-field[data='"+sort_key+"']", el).attr("label_name"), el);
+		
+	}
 }

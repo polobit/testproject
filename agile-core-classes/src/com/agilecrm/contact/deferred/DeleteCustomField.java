@@ -69,7 +69,7 @@ public class DeleteCustomField implements DeferredTask
     	 Map<String, Object> searchMap = new HashMap<String, Object>();
     	 	searchMap.put("type",type);	
     		searchMap.put("properties.name", customField);
-		ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,"",0,200);
+    		ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,null,200,Integer.MAX_VALUE);
     	// contacts = ContactUtil.getAllContacts(200,null);
 		//fetcher.fetchNextSet();
 		System.out.println("Fetcher"+ fetcher.getTotalFetchedCount());

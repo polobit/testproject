@@ -80,6 +80,28 @@ $(function(){
 					return;
 				}
 
+				var related_contacts_update_acl_error = DOCS_CONTACTS_BULK_DELETE_ERROR;
+				if($(table).attr("id") == "task-list")
+				{
+					related_contacts_update_acl_error = TASKS_CONTACTS_BULK_DELETE_ERROR;
+				}
+				if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
+				{
+					showModalConfirmation("Bulk Delete", 
+						related_contacts_update_acl_error, 
+						function (){
+							bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
+						}, 
+						function(){
+							return;
+						}
+					);
+				}
+
+				// customize delete confirmation message
+				if(!customize_delete_message(table))
+					return;
+				
 				// Customize the bulk delete operations
 				if(!customize_bulk_delete(id_array, data_array))
 					return;
@@ -90,10 +112,7 @@ $(function(){
 				// Appends campaign-name for active subscribers
 				if($(table).attr('id') === "active-campaign")
 					confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
-				var $that = $(this);
-				// Shows confirm alert, if Cancel clicked, return false
-				showAlertModal(confirm_msg, "confirm", function(){
-					$that.after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+					$(this).append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 					var url = $(table).attr('url');
 					if(SELECT_ALL && SELECT_ALL == true)
@@ -113,7 +132,6 @@ $(function(){
 					}
 					
 					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
-				}, undefined, "Bulk Delete");
 				
 			}
 						
@@ -228,11 +246,21 @@ $(function(){
 			}
 		});
 		if(checked){
+			var err_msg = "";
 			
-			if(!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS"))
+			if((!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
+			{
+				err_msg = "You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?";
+			}
+			else if(!hasScope("EDIT_CONTACT"))
+			{
+				err_msg = DEALS_CONTACTS_BULK_DELETE_ERROR;
+			}
+
+			if((!hasScope("MANAGE_DEALS") && hasScope("VIEW_DEALS")) || !hasScope("EDIT_CONTACT"))
 			{
 				showModalConfirmation("Bulk Delete", 
-						"You may not have permission to delete some of the deals selected. Proceeding with this operation will delete only the deals that you are permitted to delete.<br/><br/> Do you want to proceed?", 
+						err_msg, 
 						function (){
 					
 					// Customize the bulk delete operations
@@ -517,6 +545,10 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
  **/
 function customize_delete_message(table)
 {
+	if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
+	{
+		return;
+	}
 	
 	// Default message for all tables
 	var confirm_msg = "Are you sure you want to delete?";

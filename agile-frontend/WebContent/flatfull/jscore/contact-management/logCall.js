@@ -210,8 +210,11 @@ $(function()
 			logCallParam['action'] = "edit";
 			$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
 			deserializeForm(logPhone, $("#phoneLogForm", "#logCallModal"));
+			
 			$("#phoneLogForm #contact_logPhone_number").html(logPhone.phone);
 			$("#phoneLogForm #contact_logPhone_number").attr("value", logPhone.phone);
+			$("#phoneLogForm #contact_logPhone_number").removeClass("add_logPhone");
+			$("#phoneLogForm #contact_logPhone_number").css({"cursor": "auto","color":"#777"});
 			
 			$("#phoneLogForm #callStatus").attr("value", logPhone.status);
 			$("#phoneLogForm #callStatus").html(toTitleCase(logPhone.status));
@@ -288,8 +291,13 @@ $(function()
 	$('#logCallModal').on('click', '.add_logPhone', function(e)
 	{
 		e.preventDefault();
+		$(".add_logPhone_span","#phoneLogForm").hide();
+		$("#contact-add-phone-span", "#phoneLogForm").show();
+		
+		/*		
 		$("#logCallModal").modal('hide');
 		routeToPage("contact-edit");
+		
 		setTimeout(function()
 			{
 				if($("#continueform #phone:visible").length < 1){
@@ -299,9 +307,67 @@ $(function()
 							}, 2000);
 				}
 				$("#continueform #phone:visible").trigger('focus');
-			}, 1500);
+			}, 1500);*/
 		
 	});
+	
+	$('#logCallModal').on('click', '.contact_phone_add', function(e)
+			{
+				e.preventDefault();
+				var contact;
+				var is_person = false;
+				var phone = $("#phoneLogForm #contact_phone").val().trim();
+				if(!phone){
+					$("#phoneLogForm #logPhone_number_error").show().delay(5000).hide(1);
+					return;
+				}
+				var prop = property_JSON('phone', 'phoneLogForm #contact_phone');
+				prop['subtype'] = "";
+			if(company_util.isCompany()){
+				contact = App_Companies.companyDetailView.model.toJSON();
+			} else {
+				contact = App_Contacts.contactDetailView.model.toJSON();
+				is_person = true;
+			}
+			contact.properties.push(prop);
+			
+			var contactModel = new BaseModel();
+			contactModel.url = "core/api/contacts";
+			contactModel.save(contact,{success : function(data){
+				console.log("contact " + data);
+				$("#contact-add-phone-span").hide();
+				$("#contact_logPhone_number").attr("value",prop.value);
+				$(".add_logPhone_span","#phoneLogForm").show();
+				$("#contact_logPhone_number").html(prop.value);
+				if(is_person){
+					App_Contacts.contactDetailView.model = data;
+				}else{
+					App_Companies.companyDetailView.model = data;
+				}
+					
+				$("#phoneLogForm #contact_logPhone_number").removeClass("add_logPhone");
+				$("#phoneLogForm #contact_logPhone_number").css({"cursor": "auto","color":"#777"});
+			}
+			
+			})
+			
+				/*		
+				$("#logCallModal").modal('hide');
+				routeToPage("contact-edit");
+				
+				setTimeout(function()
+					{
+						if($("#continueform #phone:visible").length < 1){
+							setTimeout(function()
+									{
+										$("#continueform #phone:visible").trigger('focus');
+									}, 2000);
+						}
+						$("#continueform #phone:visible").trigger('focus');
+					}, 1500);*/
+				
+			});
+	
 	
 
 });
@@ -386,7 +452,17 @@ function saveLogPhone(form, modal, element, logPhone)
 		
 		
 	},
-	  error: function(){
+	  error: function(model, response){
+	  	if(response && response.status == 403)
+	  	{
+	  		enable_save_button($(element));
+	  		$('span.save-status', modal).html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+Handlebars.compile('{{name}}')({name : response.responseText})+'</i></p></div>');
+			setTimeout(function()
+			{
+				$('span.save-status', modal).html('');
+			}, 2000);
+			return;
+	  	}
 		  $(".logPhone-save-status").html("Could not save. Please try again");
 		    console.log('error');
 		    enable_save_button($(element));
@@ -464,7 +540,6 @@ function showDynamicCallLogs(data)
 		CallLogVariables.duration = data.duration;
 		CallLogVariables.phone = data.number;
 		CallLogVariables.url = data.url;
-		
 		
 	}catch(e){
 		$('#logCallModal').modal('hide');

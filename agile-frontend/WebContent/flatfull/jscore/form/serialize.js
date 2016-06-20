@@ -200,7 +200,13 @@ function serializeForm(form_id) {
 		};
 	}).get());
 
-
+	arr = arr.concat($('#' + form_id + ' input.month_date').map(function() {
+		
+			return {
+				"name" : this.name,
+				"value" : getFormattedDateObjectForMonthWithString(this.value).getTime() / 1000
+			};
+	}).get());
 
 	/*
 	 * Chained select, Chained select is used for filters, which uses logical

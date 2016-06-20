@@ -299,8 +299,8 @@ if (scheduleid != null && multiple_users){  %>
 		   <div style="display: inline-block;width: 160px;margin-right: 5px;">
 		   <img src="<%=pr_pic%>" id="multi-user-avatar" data-toggle="tooltip" data-placement="bottom" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title='<%=custom_message%>'/>
 		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" ><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
-		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" ><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
-		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" ><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
+		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:14px;" ><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
+		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:14px;" ><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
 		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" ><%=timezone %></span>
 		</div>
 		</div>
@@ -1350,6 +1350,8 @@ var BUFFERTIME=null;
 	</script>
 	<script src="//static.getclicky.com/js" type="text/javascript"></script>
 <script type="text/javascript">try{ clicky.init(100783726); }catch(e){}</script>
+<script type="text/javascript" src="https://mctest.agilecrm.com/stats/min/agile-min.js"></script>
+<script type="text/javascript">_agile.set_account('fl5qv213433bpc32l2kbfe80s0','our');_agile.track_page_view();_agile_execute_web_rules();</script>
 </body>
 
 </html>

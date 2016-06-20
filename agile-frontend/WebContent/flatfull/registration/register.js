@@ -82,7 +82,9 @@ function getRegisterURL(domain)
 
 //validates the form fields
 function isValid(form) {	
-
+	if (!($("#login_phone_number").intlTelInput("isValidNumber"))) {
+		return false;
+	}
 	var submit_button = $(form).find("[type='submit']");
 	// Return if action is already in process 
 	if($(submit_button).attr("disabled") || $(submit_button).attr("disabled"))

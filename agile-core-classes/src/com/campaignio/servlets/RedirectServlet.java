@@ -219,7 +219,7 @@ public class RedirectServlet extends HttpServlet
 		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.SMS))
 		    	{
 			    	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, workflow.name, subscriberId, "SMS link clicked " + originalURL + " of campaign " + workflow.name,
-			    	        LogType.SMS_LINK_CLICKED.toString());
+			    	        LogType.SMS_LINK_CLICKED.toString(),null);
 			    	
 					// Interrupt cron tasks of clicked.
 				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.SMS);
@@ -229,7 +229,7 @@ public class RedirectServlet extends HttpServlet
 		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.TWEET))
 		    	{
 		    		CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, workflow.name, subscriberId, "Tweet link clicked " + originalURL + " of campaign " + workflow.name,
-			    	        LogType.TWEET_LINK_CLICKED.toString());
+			    	        LogType.TWEET_LINK_CLICKED.toString(),null);
 			    	
 					// Interrupt cron tasks of clicked.
 				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.TWEET);

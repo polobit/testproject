@@ -654,12 +654,12 @@ class="icon-plus"></i> <span >Add</span></a>
 			<div class="clearfix"></div>
 
 			{{#property_is_exists "address" properties}} 
+			
+
+			{{#property_json_is_not_empty "address" properties}}
 			<div class=" wrapper text-left m-b-sm p-none">
 			<div class="panel panel-default m-b-none">
 			<div class="panel-body">
-
-
-			{{#property_json_is_not_empty "address" properties}}
 
 			<small class="text-base text-muted">Location</small>
 
@@ -673,11 +673,12 @@ class="icon-plus"></i> <span >Add</span></a>
 			</div>
 			</div> 
 			<div class="clearfix"></div> 
-			</div>                                       
+			</div>   
+			</div>
+			</div>
+			</div>                                      
 			{{/property_json_is_not_empty}}
-			</div>
-			</div>
-			</div>  
+			
 			{{/property_is_exists}}
 
 
@@ -1082,7 +1083,7 @@ class="icon-plus"></i> <span >Add</span></a>
 </div>				
 				<!--  starting section 5 -->		
 	
-					
+<div class="wrapper p-b-s" id="contacts-type-custom-fields" style="padding-top:10px;"></div>	
 		
 
 			 {{#property_is_exists "phone" properties}}
@@ -1340,14 +1341,13 @@ class="icon-plus"></i> <span >Add</span></a>
 									
 									<div class="clearfix"></div>
 
-									{{#property_is_exists "address" properties}} 
-									<div class=" wrapper hidden-sm hidden-xs" style="padding-top:0px;">
-  									<div class="panel panel-default m-b-none">
-    								<div class="panel-body">
-
+			{{#property_is_exists "address" properties}} 
+				
 									
-									 {{#property_json_is_not_empty "address" properties}}
-
+				{{#property_json_is_not_empty "address" properties}}
+				 <div class=" wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  						<div class="panel panel-default m-b-none">
+    						<div class="panel-body">
 									<small class="text-base text-muted">Location</small>
 
 										<div>{{#address_Element properties}}{{/address_Element}}</div>
@@ -1360,11 +1360,12 @@ class="icon-plus"></i> <span >Add</span></a>
                                             </div>
 										</div> 
                            	            <div class="clearfix"></div> 
-                                     </div>                                       
-                                     {{/property_json_is_not_empty}}
+                                     </div>   
                                      </div>
 									 </div>
-									 </div>  
+									 </div>                                     
+                                     {{/property_json_is_not_empty}}
+                                      
 									{{/property_is_exists}}
 
 								
@@ -1516,3 +1517,22 @@ class="icon-plus"></i> <span >Add</span></a>
  					</div>
 </script>
 
+<script id="contact-type-custom-fields-collection-template" type="text/html">
+{{#if this.length}}
+<div class="panel panel-default m-b-none">
+    <div class="panel-body">
+	    <div class="m-b-xs">
+     		<small class="text-base text-muted">Contact and Company Type</small>
+		</div>
+		{{#each this}}
+         	{{#if_contact_type "PERSON"}}
+      			<a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+          	{{/if_contact_type}}
+  			{{#if_contact_type "COMPANY"}}
+            	<a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs popover_contact" data="{{id}}"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+          	{{/if_contact_type}}
+		{{/each}}
+	</div>
+</div>
+{{/if}}
+</script>

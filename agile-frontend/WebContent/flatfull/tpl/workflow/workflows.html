@@ -54,41 +54,76 @@
 </script>
 <script id="workflows-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-        
+
+
+<div class="wrapper bg-light padder-md padder-v m-r-sm p-r-none" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+        <div class="btn-toolbar m-l-none">
+            <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
+                <div class="">
+
+                    <h4 class="inline-block m-n">
+                    Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h4>
+                    <br>
+                
+                </div>
+                <div class="btn-group m-r-xs p-t-n-sm workflow-sortby">
+                <div class="btn-group dropdown">
+                                <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
+                                        <span class="text-muted">Sort by </span>
+                                        <span class="sort-field-txt"></span>
+                                    </button>
+                                    <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+
+                                    <ul class="dropdown-menu " id="sort_menu" role="menu">
+                                        <li>
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name_dummy" label_name="Name">
+                                        Name
+                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
+                                            </a>
+                                    </li>
+                                    <li>
+                                        <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="created_time" label_name="Created Time">
+                                        Created Time
+                                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
+                                        </a>
+                                    </li>
+                                    <li class="divider" id="sort-divider"></li>
+                                            <li>
+                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  display-none"></i> </a>
+                                            </li>
+                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check display-none"></i> </a></li>
+                                    </ul>
+                                </div>
+            </div>
+            </div>
             
-                <h3 class="pull-left font-thin h3">Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h3>
             
-            <div class="pull-right">
-                <div class="btn-group right pos-rlt pull-right">
+                <div class="pull-right m-t-xs">
+            <div>
+                <a id="campaign_logs" class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left" href="#">Reports</a>
+
+                <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
+
+                <div class="btn-group right pos-rlt pull-left">
                     <a href="#workflow-templates" class="btn btn-default btn-sm" id="addWorkflow"><i class="icon-plus-sign"></i> Add Campaign</a>
                     <a id="campaign-stats" class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></a>
                     <ul class="dropdown-menu pull-right">
                         <li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
                     </ul>
 
-
-                   <!-- {{#is_mobile}}
-                    {{else}}
-                    <div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
-                         <button class="btn btn-default btn-sm m-l-xs fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
-                <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
-                {{/is_mobile}}
-                -->
-
                 </div>
-                <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-right btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
+                
+                
             </div>
-<div class="pull-right">
-<div><a id="campaign_logs" class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}}" href="#">Reports</a></div>
             </div>
             <div class="clearfix"></div>
-        
+            
+        </div>
+    
     </div>
-</div>
-</div>
+
 <div class="wrapper-md">
 <div class="row">
      
@@ -127,9 +162,11 @@
         </div>
         <!-- End of Pending Triggers Content -->
             <div class="panel panel-default">
-                <div class="panel-heading">Campaigns List</div>
+                <div class="panel-heading">Campaigns List
+                    
+                </div>
                 <div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/workflows/bulk" id="workflows-tour-step">
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view no-sorting" url="core/api/workflows/bulk" id="workflows-tour-step">
                     <thead>
                         <tr>
                             <th class="hide">Id</th>

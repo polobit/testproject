@@ -1,4 +1,9 @@
+
+
+ 
+
 var timeline_entity_loader = {
+
 
 	init : function(contact)
 	{
@@ -267,8 +272,11 @@ var timeline_entity_loader = {
 
 					// Gets address of the contact from its browsing history
 					var address = getPropertyValue(contact.properties, "address");
-
-					if (!address)
+					//var remote_addr= getPropertyValue(contact.properties, "remote_addr");
+					if(address){
+						var remote_addr=JSON.parse(address).remote_addr;
+					}
+					if (!address && remote_addr==false  )
 					{
 						var addressJSON = {};
 
