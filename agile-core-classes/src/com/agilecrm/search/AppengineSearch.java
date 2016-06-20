@@ -159,11 +159,13 @@ public class AppengineSearch<T>
 			Iterator iterator = set.iterator();
 			if (set.size() == 1 && iterator.hasNext())
 			{
-			    String id = iterator.next().toString();
-			    Contact contact = ContactUtil.getContact(Long.parseLong(id));
-			    queryList.remove(9);
-			    queryList.add(0, contact);
-
+				String id = "";
+				if(iterator.next()!=null){
+					id = iterator.next().toString();
+					Contact contact = ContactUtil.getContact(Long.parseLong(id));
+					queryList.remove(9);
+					queryList.add(0, contact);
+				}
 			}
 		}
 	    return queryList;
