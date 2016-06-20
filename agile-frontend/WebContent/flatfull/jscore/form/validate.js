@@ -21,6 +21,17 @@ function isValidForm(form) {
 			
 			return false;
 		}," This field is required.");
+	
+	// Internal regex of jQuery validator allows for special characters in e-mails for ticketing.
+	// This regex solves that, overriding 'email'
+	jQuery.validator.addMethod("tickets_email", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
+	}," Please enter a valid email.");
+
 
 	// Credit card validation to check card is valid for next 3 months
 	jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
@@ -240,7 +251,7 @@ function isValidForm(form) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
 		}	
 	);
-
+    
 
 	// domain name validation
 	jQuery.validator.addMethod("domain_format", function(value, element){
@@ -248,6 +259,12 @@ function isValidForm(form) {
 		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
 	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
     
+
+    jQuery.validator.addMethod("customFieldSpecialCharacter", function(value, element){
+		
+		var custvals = /^\s*[a-zA-Z0-9\s]+\s*$/;
+		return custvals.test(value);
+	}," Label should not contain special characters");
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);
@@ -267,6 +284,24 @@ function isValidForm(form) {
 		}
 
 	},"<b>image</b> is a keyword in the system and it can't be added as a custom field.");
+
+	jQuery.validator.addMethod("verified-email", function(value, element){
+		if($(element).find("option").length !=0){
+ 				if(typeof($(element).find("option[value=\""+value+"\"]").attr("unverified")) == "undefined")
+ 					return true;
+ 				
+ 					return false;
+ 		}
+ 	}," From email is not verified. Please verify it.");
+
+	jQuery.validator.addMethod("month_date", function(value, element){
+		if(value=="")
+			return true;
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectForMonthWithString(value));
+
+			
+	}," Please enter a valid date.");
 
 	$(form).validate({
 		ignoreTitle: true,

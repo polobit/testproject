@@ -356,8 +356,10 @@ public abstract class ContactSyncService implements IContactSyncService
 	{
 	    oldContact = Contact.dao.getByProperty(queryMap);
 	    if (oldContact != null)
-		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
-	    return contact;
+		{
+	    	contact = ContactUtil.mergeContactFeilds(contact, oldContact);
+	    	 return contact;
+		}
 	}
 
 	return ContactUtil.mergeContactFields(contact);

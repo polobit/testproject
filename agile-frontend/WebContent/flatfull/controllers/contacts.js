@@ -9,6 +9,7 @@ CONTACTS_HARD_RELOAD = true;
 
 var import_tab_Id;
 var REFER_DATA;
+var contact_company ;
 
 var ContactsRouter = Backbone.Router.extend({
 
@@ -108,7 +109,13 @@ var ContactsRouter = Backbone.Router.extend({
 			});
 		}
 
-		if(!dashboardJSON["id"])
+		if(dashboard_name==="MarketingDashboard"){
+
+			dashboardJSON["id"] = "MarketingDashboard";
+			dashboardJSON["name"] = "Marketing Dashboard";
+			dashboardJSON["description"] = "Welcome to Agile CRM Marketing Automation.";
+
+		}else if(!dashboardJSON["id"])
 		{
 			dashboard_name = "DashBoard";
 		}
@@ -351,6 +358,7 @@ var ContactsRouter = Backbone.Router.extend({
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
 					loadPortlets('Contacts',cel);
+				
 
 					if(collection.models.length > 0 && !collection.models[0].get("count")){
 						// Call to get Count 
@@ -641,9 +649,7 @@ var ContactsRouter = Backbone.Router.extend({
 			load_contact_tab(el, contact.toJSON());
 
 			loadWidgets(el, contact.toJSON());
-			
-			
-			
+						
 			/*
 			 * // To get QR code and download Vcard
 			 * $.get('/core/api/VCard/' + contact.toJSON().id,
@@ -676,6 +682,9 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-call",el).removeClass("c-progress");
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
+			if(contact)
+				addTypeCustomData(contact.get('id') , el);
+
 			} 
 			
 		});
@@ -689,7 +698,6 @@ var ContactsRouter = Backbone.Router.extend({
 			}*/
 		// Check updates in the contact.
 		checkContactUpdated();
-
 
 		if(_agile_get_prefs('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -763,6 +771,19 @@ var ContactsRouter = Backbone.Router.extend({
 			} });
 
 			return;
+		}
+		if(contact.contact_company_id){							
+			$.ajax({
+				url : "/core/api/contacts/"+contact.contact_company_id ,
+				type: 'GET',
+				dataType: 'json',
+				success: function(company){
+					if(company){
+						console.log(company);
+						contact_company = company ;
+					}
+				}
+			});
 		}
 
 		// Contact Edit - take him to continue-contact form
@@ -926,7 +947,36 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		}
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
-	
+
+		var options = {
+		"+ Add new" : "verify_email"
+		};
+		
+		fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+			
+			var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+				
+				if(typeof(ownerEmail) == "undefined")
+				{
+				$select
+						.find("option:first")
+						.before(
+								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				}
+				else
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+				rearrange_from_email_options($select, data);
+			});
 	},
 
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
@@ -964,7 +1014,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			this.contact_custom_view = undefined;
 			CONTACTS_HARD_RELOAD = false;
 			view_data = undefined;
-			// App_Contacts.contactViewModel = undefined;
+			// ts.contactViewModel = undefined;
 		}
 
 		// If id is defined get the respective custom view object
@@ -1035,6 +1085,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
 			$("#contactsmenu").addClass("active");
+			 App_Contacts.contactsListView.delegateEvents();
 			return;
 		}
 
@@ -1072,7 +1123,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			custom_scrollable_element="#contacts-grid-table-model-list";
 		    }
 		}	
-		
+		that = this ;
 		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
@@ -1081,7 +1132,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 				contactListener();
 
-
+				
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
 				//setup_tags(el);
@@ -1097,6 +1148,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 				setUpContactView(el,true);
 			    else
 				setUpContactView(el);
+
+				// Render Contact fields
+				setupContactFields(el);
 
 				abortCountQueryCall();
 				
@@ -1136,8 +1190,6 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					var $nextEle = $('<td><div class="text-md text-muted m-t contact-list-mobile"><i class="fa fa-angle-right"></i></div></td>');
 					// $('#contacts-table tbody tr .icon-append-mobile',el).after($nextEle);
 				}
-				
-
 				
 
 			}, appendItemCallback: function(el){
@@ -1201,7 +1253,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLead : function(first, last){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 		});
@@ -1209,7 +1261,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 	
 	addLeadDirectly : function(first, last,mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#fname").val(first);
 			$(this).find("#lname").val(last);
 			$(this).find("#phone").val(mob);
@@ -1218,7 +1270,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	},
 
 	addMobLead : function(mob){
-		$("#personModal").on("shown", function(){
+		$("#personModal").on("show.bs.modal", function(){
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
@@ -1249,6 +1301,39 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 								.html(
 										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 						$("#content #contact_company").hide();
+						if(data){							
+							$.ajax({
+								url : "/core/api/contacts/"+data,
+								type: 'GET',
+								dataType: 'json',
+								success: function(company){
+									if(company){
+										console.log(company);
+										contact_company = company ;
+										var prop = null;
+										$.each(contact_company.properties , function(){
+											if(this.name == "address" && this.subtype == "office")
+												prop = JSON.parse(this.value);
+										});
+										if(prop){
+											$("#content .address-type").val("office");
+											if(prop.address)
+												$("#content #address").val(prop.address);
+											if(prop.city)
+												$("#content #city").val(prop.city);
+											if(prop.state)
+												$("#content #state").val(prop.state);
+											if(prop.zip)
+												$("#content #zip").val(prop.zip);
+											if(prop.country)
+												$("#content #country").val(prop.country);
+										}
+
+									}
+
+								}
+							});
+						}
 					}
 					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
 
@@ -1293,9 +1378,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 
 
 
-	}	
-	});
+	},
 
+	});
 
 
 function getAndUpdateCollectionCount(type, el, countFetchURL){
@@ -1533,4 +1618,19 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			
 			
 		}, "#send-email-listener-container"); 
+}
+function addTypeCustomData(contactId, el){
+	var customFieldsView = new Base_Collection_View({
+							url : 'core/api/contacts/getCustomfieldBasedContacts?id='+contactId+'&type=CONTACT',
+							sortKey : 'time',
+							descending : true,
+							templateKey : "contact-type-custom-fields",
+							cursor : true,
+							page_size : 20,
+							postRenderCallback : function(el){
+								
+							}
+						});
+	customFieldsView.collection.fetch();
+	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 }

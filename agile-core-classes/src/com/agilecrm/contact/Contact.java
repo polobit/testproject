@@ -1256,6 +1256,9 @@ public class Contact extends Cursor
 		contact_company_key = null;
 		e.printStackTrace();
 	    }
+	    catch(Exception e){
+	    	System.out.println("exception found");	    	
+	    }
 	}
 	else
 	{

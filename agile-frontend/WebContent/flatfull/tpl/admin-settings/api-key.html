@@ -182,6 +182,48 @@
                         </div>
                         <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-webhook" aria-expanded="true">
                            <div id="webhook-accordian-template"></div></div></div></div>
+
+   <!-- Sendgrid white labled verification-->
+                   <div class="panel panel-default">
+                     <div id="">
+                        <div class="panel-heading" role="tab" id="">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-sendgrid-dkim"id="sendgrid-dkim_accordian">Email (DKIM & SPF) Settings<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">Beta</span></a>
+                           </div>
+                        </div>
+                        <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-sendgrid-dkim" aria-expanded="true"> <div class="row">
+                     <div class="col-md-12 col-xs-12" id="sendgrid-dkim-restriction-template"></div>
+                     <div class="col-md-12 col-xs-12" id="sendgrid-dkim-accordian-template"> <br> 
+                       <div class="control-group form-group">
+                           <label class="control-label col-sm-3 col-xs-3" style="margin-top: 2px;">Email Sending Domain<span class="field_req">*</span>
+                           </label> 
+                           <div class="controls col-sm-5 col-xs-5">
+                               <input name="whitelabel-domain" id="whitelabel-domain" class="input-medium required form-control" type="domain" value="" placeholder="Enter your Email Sending Domain" style="height: 31px;" title=" ex: if you are sending email from sender@domain.com then enter domain.com here.">
+                                <span id="empty_domain_message" class="text-danger hide text-sm">Please enter a valid domain name.</span>
+                           </div>
+                           <div>
+                               <a href="#analytics-code" class="btn btn-sm btn-primary" id="get_whitelabel_key">Get Settings</a>
+                               <a href="#analytics-code" class="btn btn-sm btn-success" style="margin-left: 3px;" id="validate_whitelabel">Verify</a>
+                           </div>
+                       </div>
+                       <div id="sendgrid-whitelabel-key-template"></div>
+                   </div>   
+                </div>  
+                  </div></div></div>
+
+                  <div class="panel panel-default">
+                     <div id="">
+                        <div class="panel-heading" role="tab" id="">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-js-security"id="js-security_accordian">JS API Security<span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">Beta</span></a>
+                           </div>
+                        </div>
+                        <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-js-security" aria-expanded="true">
+                        <div id="js-security-accordian-template"></div>
+                        </div>
+                     </div>
+                  </div>         
+                           
                </div>
             </div>
          </div>

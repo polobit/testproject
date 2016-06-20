@@ -19,20 +19,21 @@
 						<a href="#" id="route-select-none" class="text-info">Select none</a>
 					</span>
 					<select id="route-list" name="route-list" class="required form-control" multiple="multiple">
-						<option value="DashBoard">Dashboard</option>
+						 <option value="DashBoard">Dashboard</option>
 						{{#if_equals name "Mini Calendar"}}
 						{{else}}
 							{{#if_equals name "Agenda"}}
 							{{else}}
+							 
+							   {{#getCurrentUserDashboards 'portlet'}}{{/getCurrentUserDashboards}}
+						     
+							    <option value="Contacts">Contacts</option>
 								<option value="Deals">Deals</option>
-								<option value="Tasks">Tasks</option>
-								<option value="Contacts">Contacts</option>
 								<option value="Events">Events</option>
+								<option value="Tasks">Tasks</option>
 							{{/if_equals}}
 						{{/if_equals}}
-						<optgroup label="Custom Dashboards">
-							{{#getCurrentUserDashboards 'portlet'}}{{/getCurrentUserDashboards}}
-						</optgroup>
+						
 					</select>
 				</div> 
 				</div>       					   			  

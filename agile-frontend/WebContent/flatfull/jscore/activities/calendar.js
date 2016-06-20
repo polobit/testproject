@@ -482,38 +482,53 @@ function showCalendar(users)
 							}
 
 							// Confirm from the user about the change
-							if (!confirm("Are you sure about this change?"))
-							{
+							showAlertModal("event_drop", "confirm", function(){
+								event1 = revertEventColorBasedOnPriority(event1);
+								var event = $.extend(true, {}, event1);
+
+								// Update event if the user changes it in the
+								// calendar
+								event.start = new Date(event.start).getTime() / 1000;
+								event.end = new Date(event.end).getTime() / 1000;
+								if (event.end == null || event.end == 0)
+									event.end = event.start;
+
+								var jsoncontacts = event.contacts;
+								var _contacts = [];
+								for ( var i in jsoncontacts)
+								{
+									_contacts.push(jsoncontacts[i].id);
+
+								}
+								if(event.owner)
+								event.owner_id = event.owner.id;
+								delete event.contacts;
+								delete event.owner;
+								event
+								event.contacts = _contacts;
+								var eventModel = new Backbone.Model();
+								eventModel.url = 'core/api/events';
+
+								eventModel.save(event, { 
+									error : function(model, response){
+										showModalConfirmation("Update Event", 
+											response.responseText, 
+											function (){
+												revertFunc();
+											}, 
+											function(){
+												return;
+											},
+											function(){
+												return;
+											},
+											"Cancel"
+										);
+									} 
+								});
+							},function(){
 								revertFunc();
-								return;
-							}
-							event1 = revertEventColorBasedOnPriority(event1);
-							var event = $.extend(true, {}, event1);
-
-							// Update event if the user changes it in the
-							// calendar
-							event.start = new Date(event.start).getTime() / 1000;
-							event.end = new Date(event.end).getTime() / 1000;
-							if (event.end == null || event.end == 0)
-								event.end = event.start;
-
-							var jsoncontacts = event.contacts;
-							var _contacts = [];
-							for ( var i in jsoncontacts)
-							{
-								_contacts.push(jsoncontacts[i].id);
-
-							}
-							if(event.owner)
-							event.owner_id = event.owner.id;
-							delete event.contacts;
-							delete event.owner;
-							event
-							event.contacts = _contacts;
-							var eventModel = new Backbone.Model();
-							eventModel.url = 'core/api/events';
-
-							eventModel.save(event);
+							});
 						},
 						/**
 						 * Updates or deletes an event by clicking on it
@@ -843,90 +858,94 @@ function calendar_Popover(event,calendarView,that,popover_min_width,that_event,l
 										}
 										
 									}
-									else if (calendarView == "agendaWeek")
-									{
-										console.log("agendaWeek");
-										popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
-										var left = that_event.offsetLeft + that_event.offsetWidth + 10;
-										var top = that_event.offsetTop;
-										if ($('.fc-agenda-slots:visible').width() - left < popover_min_width)
-										{
-											left = that_event.offsetLeft - popover_min_width - 10;
-											leftorright = 'right';
-										}
+	else if (calendarView == "agendaWeek")
+			{
+			console.log("agendaWeek");
+popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
+	var left = that_event.offsetLeft + that_event.offsetWidth + 10;
+	var top = that_event.offsetTop;
+		if ($('.fc-agenda-slots:visible').width() - left < popover_min_width)
+			{
+			left = that_event.offsetLeft - popover_min_width - 10;
+			leftorright = 'right';
+			}
 
-										var eventJSON = {};
-										eventJSON.leftorright = leftorright;eventJSON.popover_min_width = popover_min_width;
-										eventJSON.left = left;eventJSON.top = top;
-										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
+	var eventJSON = {};
+	eventJSON.leftorright = leftorright;eventJSON.popover_min_width = popover_min_width;
+	eventJSON.left = left;eventJSON.top = top;
+	eventJSON.pullupornot = pullupornot;eventJSON.event = event;
 										
-										if(event.type == "officeCalendar"){
-											that.after(getTemplate("week-office-calendar-mouseover-popover", eventJSON));
-										}else{
-											that.after(getTemplate("week-calendar-mouseover-popover", eventJSON));
-										}
-										that.parent().find('.fc-overlayw').show();
-										that.find(".ui-resizable-handle").show();
+		if(event.type == "officeCalendar"){
+			that.after(getTemplate("week-office-calendar-mouseover-popover", eventJSON));
+			}else{
+			that.after(getTemplate("week-calendar-mouseover-popover", eventJSON));
+			}
+			that.parent().find('.fc-overlayw').show();
+			that.find(".ui-resizable-handle").show();
 										
-										if ($('.fc-agenda-slots:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw').height())
-										{
-											that.parent().find('.fc-overlayw').css("top",
-													top - that.parent().find('.fc-overlayw').height() + that_event.offsetHeight + 20 + "px");
-											that.parent().find('.fc-overlayw').find('.arrow').css("top", that.parent().find('.fc-overlayw').height() - 31 + "px");
-										}
-									}
-									else if (calendarView == "agendaDay")
-									{
-										console.log("agendaDay");
-										var left = that_event.offsetLeft;
-										var top = that_event.offsetTop + that_event.offsetHeight + 10;
-										leftorright = 'top';
-										if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
-										{
-											left = that_event.offsetLeft - that_event.offsetWidth - ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft - that_event.offsetWidth);
-										}
-										
-										var eventJSON = {};
-										eventJSON.leftorright = leftorright;eventJSON.popover_min_width = popover_min_width;
-										eventJSON.left = left;eventJSON.top = top;
-										eventJSON.pullupornot = pullupornot;eventJSON.event = event;
-										if(event.type == "officeCalendar"){
-											that.after(getTemplate("day-office-calendar-mouseover-popover", eventJSON));
-										}else{
-											try{
-												that.after(getTemplate("day-calendar-mouseover-popover", eventJSON));
-											}catch(e){}
-										}
-										that.parent().find('.fc-overlayw').show();
-										that.find(".ui-resizable-handle").show();
-										
-										that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
-										if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
-										{
-											that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
-										}
-										if ((that_event.offsetTop < that.parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
-												.height() - that_event.offsetHeight < that.parent().find('.fc-overlayw').height() + 10))
-										{
-											that.parent().find('.fc-overlayw').css("top", that_event.offsetTop + 40 + "px");
-										}
-										if ((that_event.offsetTop > that.parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
-												.height() - (that_event.offsetHeight + that_event.offsetTop) < that.parent().find(
-												'.fc-overlayw').height() + 10))
-										{
-											that.parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-											that.parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
-											that.parent().find('.fc-overlayw').css(
-													"top",
-													$('.fc-agenda-slots:visible').height() - that_event.offsetHeight -that.parent().find('.fc-overlayw')
-															.height() + 7 + "px");
-											if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
-											{
-												that.parent().find('.fc-overlayw')
-														.css(
-																"left",
-																that_event.offsetLeft - that_event.offsetWidth - ($('.fc-agenda-slots:visible')
-																		.width() - that_event.offsetLeft - that_event.offsetWidth) + "px");
+	if ($('.fc-agenda-slots:visible').height() - that_event.offsetTop < that.parent().find('.fc-overlayw').height())
+		{
+		that.parent().find('.fc-overlayw').css("top",
+		top - that.parent().find('.fc-overlayw').height() + that_event.offsetHeight + 20 + "px");
+		that.parent().find('.fc-overlayw').find('.arrow').css("top", that.parent().find('.fc-overlayw').height() - 31 + "px");
+		}
+			}
+else if (calendarView == "agendaDay")
+{
+console.log("agendaDay");
+var left = that_event.offsetLeft;
+var top = that_event.offsetTop + that_event.offsetHeight + 10;
+leftorright = 'top';
+if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
+	{
+	left = that_event.offsetLeft - that_event.offsetWidth - ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft - that_event.offsetWidth);
+	}
+								
+	var eventJSON = {};
+	eventJSON.leftorright = leftorright;
+	eventJSON.popover_min_width = popover_min_width;
+	eventJSON.left = left;
+	eventJSON.top = top;
+	eventJSON.pullupornot = pullupornot;
+	eventJSON.event = event;
+	if(event.type == "officeCalendar"){
+	that.after(getTemplate("day-office-calendar-mouseover-popover", eventJSON));
+	}else{
+	try{
+	that.after(getTemplate("day-calendar-mouseover-popover", eventJSON));
+	}catch(e){}
+	}
+	that.parent().find('.fc-overlayw').show();
+	that.find(".ui-resizable-handle").show();
+						
+     that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
+if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
+		{
+		that.parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
+		}
+if ((that_event.offsetTop < that.parent().find('.fc-overlayw').height() + 10) && 
+			($('.fc-agenda-slots:visible').height() - that_event.offsetHeight 
+				< that.parent().find('.fc-overlayw').height() + 10))
+			{
+			that.parent().find('.fc-overlayw').css("top", that_event.offsetTop + 40 + "px");
+			}
+if ((that_event.offsetTop > that.parent().find('.fc-overlayw').height() + 10) &&
+ ($('.fc-agenda-slots:visible').height() - (that_event.offsetHeight + that_event.offsetTop)
+  < that.parent().find('.fc-overlayw').height() + 10))
+{
+
+that.parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+    
+ that.parent().find('.fc-overlayw').css( "top", top - that.parent().find('.fc-overlayw') 
+    	.height() -37 + "px"); 
+    that.parent().find('.fc-overlayw').find('.arrow').css("top",that.parent()
+    	.find('.fc-overlayw') .height() -3 + "px"); 
+	
+	if ($('.fc-agenda-slots:visible').width() - that_event.offsetLeft < popover_min_width)
+	{
+	that.parent().find('.fc-overlayw')
+	.css("left",that_event.offsetLeft - that_event.offsetWidth - ($('.fc-agenda-slots:visible')
+	.width() - that_event.offsetLeft - that_event.offsetWidth) + "px");
 											}
 										}
 									}

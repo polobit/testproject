@@ -11,25 +11,7 @@ $(function(){
 				CALL_CAMPAIGN.last_clicked = null;
 				return;
 		}
-			
-		if(CALL_CAMPAIGN.start){
-			if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
-				  CALL_CAMPAIGN.state = "START";
-				  if(CALL_CAMPAIGN.autodial){
-					  dialNextCallAutomatically();
-				  }else{
-					  dialNextCallManually();
-				  }
-			}
-		}	
-			
-	});  
-	
-	// This method is called when the add-note modal is closed .....
-	//This will check if the campaign is started and need to dial the next call....
-		$('#logCallModal').on('hidden.bs.modal', function (e) {
-			console.log(CALL_CAMPAIGN.start +"  closeTwilioNoty "+CALL_CAMPAIGN.call_from_campaign);
-				
+		if(($("#logCallModal").data('bs.modal') || {}).isShown != true){
 			if(CALL_CAMPAIGN.start){
 				if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
 					  CALL_CAMPAIGN.state = "START";
@@ -39,8 +21,27 @@ $(function(){
 						  dialNextCallManually();
 					  }
 				}
-			}	
+			}
+		}
+	});  
+	
+	// This method is called when the add-note modal is closed .....
+	//This will check if the campaign is started and need to dial the next call....
+		$('#logCallModal').on('hidden.bs.modal', function (e) {
+			console.log(CALL_CAMPAIGN.start +"  closeTwilioNoty "+CALL_CAMPAIGN.call_from_campaign);
 				
+		if(($("#noteModal").data('bs.modal') || {}).isShown != true){
+			if(CALL_CAMPAIGN.start){
+				if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
+					  CALL_CAMPAIGN.state = "START";
+					  if(CALL_CAMPAIGN.autodial){
+						  dialNextCallAutomatically();
+					  }else{
+						  dialNextCallManually();
+					  }
+				}
+			}
+		}	
 		});  
 		
 	

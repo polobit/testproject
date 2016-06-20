@@ -3229,6 +3229,15 @@ table.hide-head-checkbox th label.i-checks {
 	left:26px;
 	font-size: 18px;
 }
+#contactscorebox{
+  text-align:center;
+  padding-bottom: 0;padding-left: 0px;
+  padding-right: 0px;padding-top: 0px;
+  border-top-width: 1px;     
+  height: auto;  
+  font-size: 18px;
+  }
+
 .well{
 
 	background: none!important;
@@ -3273,7 +3282,7 @@ background: none!important;
 
 /* account block model */
 #user-blocked-modal .panel-body{
-  padding: 60px 30px 0px 30px;
+  padding: 60px 30px;
   background-color: #edb25b;
   color: white;
 }
@@ -3292,26 +3301,35 @@ background: none!important;
     bottom: 0;
 }
 .user-alert .user-alert-message{
-  position: fixed;
-    width: 50%;
+    position: fixed;
+    width: 55%;
     margin: 25px auto;
     text-align: center;
     background: #f7ecc2!important;
-    border: 1px solid rgb(255, 194, 55);
+    border: 1px solid #ffc237;
     left: 0;
     right: 0;
     z-index: 99999;
     cursor: pointer;
-    padding: 5px;
+    padding: 9px;
     margin-top: 5px;
-    border-radius: 6px;
+    border-radius: 3px;
 }
 .user-alert .user-alert-message span{
-  background-color: #DCD1A5;
-    padding: 0px 6px 4px;
-  margin-left: 10px;
+    position: relative;
+    top: -6px;
+    padding: 0 6px 4px;
+    margin-left: 10px;
     margin-right: 5px;
-    font-size: 15px;
+    font-size: 20px;
+    opacity: 0.2;
+}
+.user-alert .user-alert-message span:hover{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: .5;
+
 }
 .companies_input{
   height:30px;
@@ -3348,8 +3366,7 @@ background: none!important;
 }
 
 #lhs_filters_conatiner .panel-body{
-  padding: 5px 15px;
-  min-height: 35px;
+  padding: 8px 15px;
 }
 #lhs_filters_conatiner #lhs-filters-header{
   font-size : 14px;
@@ -3728,6 +3745,33 @@ opacity: .3;
 #lhs_filters_segmentation #lhs-filters-header i{
 	top : 3px;
 }
+
+#reports-tab-container .nav-tabs>li{
+	float: none!important;
+}
+
+.reports_tab_content{
+	 padding : 10px!important;
+    left: 200px;
+    top: 0px;
+    position: absolute;
+    z-index: 1000;
+  	 box-shadow: 0px 5px 10px rgba(0,0,0,.2);
+    border-radius: 6px!important;
+   	border-top-width : 1px!important;
+   	border: 1px solid rgba(0,0,0,.2)!important;
+
+}
+
+.report-selected
+{
+	background-color: #e4eaec!important;
+}
+
+.sub-nav-tab li
+{
+	margin-left : 15px;
+}
 .dash_tabview .tab-content{
    border-color: none;
   border: none !important;
@@ -3831,6 +3875,7 @@ li .segment-lilist:hover {
 	cursor: pointer;
 }
 
+
 .twilio-sound:hover  .options-record-twilio
 {
 	display : block;
@@ -3856,12 +3901,12 @@ margin-left:27px;
     border: 1px solid #edf1f2;
     border-bottom: none;
 }
+
 .alias-icon{
     font-size: 11px;
   }
 
 .leaderboard_calls td{
-
 border-bottom:1px solid #eee;
 }
 
@@ -3877,3 +3922,183 @@ border-bottom:1px solid #eee;
 {
   display: none!important;
 }
+
+.milestones > li:hover .deal-options{
+  visibility: visible;
+}
+
+.p-8{
+	padding:8px;
+}
+
+ .draggable-noty:hover .move-icon{
+ display:block!important;
+ }
+ 
+
+.user_img{
+ display: inline-block !important;
+}
+.imgholder.user_img.thumb-wrapper.thumb-sm {
+  height: 36px;
+
+}
+.user_img_upload{
+  vertical-align: bottom;
+  display: inline-block !important;
+}
+.form-whitelabel-user-image{
+  border: 1px solid #e9e9e9;
+    padding: 10px;
+    width: 158px;
+    height: 65px;
+}
+.form-whitelabel-user-image img {
+    width: 100% !important;
+    height: 100% !important;
+}
+.company_logo_upload{
+    vertical-align: bottom;
+    display: inline-block !important;
+   
+}
+.company_logo{
+      display: inline-block !important;
+}
+.form-whitelabel-image {
+  border: 1px solid #e9e9e9;
+    padding: 10px;
+    width: 158px;
+    height: 65px;
+}
+.form-whitelabel-image img {
+    width: 100% !important;
+    height: 100% !important;
+
+  }
+
+  .alias-icon{
+    font-size: 11px;
+  }
+  .js-prev-lge .form-group {
+    margin-left: 0px;
+    margin-right: 0px;
+   }
+
+.tableNewView thead tr th:nth-child(n+3){
+padding-right:0px;
+padding-left:0px;
+}
+
+.tableNewView tbody tr td:nth-child(n+3){
+padding-right:0px;
+padding-left:0px;
+}
+.table.contacts-custom tbody tr td {
+      padding: 6px 15px;
+}
+.table.companies-custom thead tr th {
+      padding: 7px 15px;
+}
+.newcontacttabel thead tr th:nth-child(n+3){
+  display:none;
+}
+.contacts-custom.contactsimage .contactsnewimage{
+  display:none;
+}
+.contacts-custom .contactimageheader{
+  display:none;
+}
+.companies-custom.contactsimage .contactsnewimage{
+  display:none;
+}
+.companies-custom .companiesnewimage
+{
+  display:none;
+}
+.table.companies-custom tbody tr td {
+      padding: 6px 15px;
+}
+/*#contacts-table thead tr th:nth-child(3),#companies thead tr th:nth-child(3)
+{
+  padding:6px 0px;
+}
+.table.contacts-custom tbody tr td:nth-child(4),#companies thead tr td:nth-child(4)
+{
+  padding:6px 0px;
+}
+.companies-custom .contactsnewimage{
+   padding:2px 0px;
+}*/
+#contacts-table .compactcontact {
+  display:none;
+}
+#companies .compactcontact {
+  display:none;
+}
+#companies-custom-coloumns:hover.compact .dropdown-menu {
+    display: block;
+    margin-top: 0; 
+ }
+ div#contact-custom-coloumns:hover.compact .dropdown-menu{
+    display: block;
+    margin-top: 0; 
+ }
+
+.delete-checked-contacts .bulk-delete-loading
+{
+  padding-right: 5px;
+    margin-bottom: 15px;
+    position: absolute;
+    top: 7px;
+    z-index: 1000000;
+    right: -6px;
+    width: 20px
+}
+.delete-checked-contacts
+{
+  position:relative;
+}
+
+.dialler-1-r-1-c
+{
+	    border-radius: 5px;
+	border-top: 1px solid #98a6ad;
+    border-right: 1px solid #98a6ad;
+    border-left: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+
+.dialler-1-r-2-c
+{
+	    border-radius: 5px;
+	border-right: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+    border-top: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-2-r-1-c
+{
+	    border-radius: 5px;
+    border-right: 1px solid #98a6ad;
+    border-left: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-2-r-2-c
+{
+	    border-radius: 5px;
+	border-right: 1px solid #98a6ad;
+    border-bottom: 1px solid #98a6ad;
+	cursor:pointer;
+}
+
+.dialler-1-r-1-c:hover, .dialler-1-r-2-c:hover, .dialler-2-r-1-c:hover, .dialler-2-r-2-c:hover
+{
+background-color : #522E2E;
+}
+

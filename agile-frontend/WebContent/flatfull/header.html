@@ -400,6 +400,7 @@
 									<%if(domainUser.menu_scopes.contains(NavbarConstants.HELPDESK)){%>
 									  <li><a href="javascript:void(0);" onclick="App_Ticket_Module.renderNewTicketModalView();"> <div class="pull-left">Ticket</div><div class="clearfix"></div></a></li>
 								    <%}%>
+									<li><a href="#" class="show-dialler"> <div class="pull-left">Dial</div><div class='pull-right shortcuts'>Shift + I</div><div class="clearfix"></div></a></li>
 								</ul> <!-- 
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />
@@ -418,7 +419,7 @@
 <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
 				<%	if (!StringUtils.isEmpty(currentUserPrefs.pic))
 							out.println("<img src='"
-							+ currentUserPrefs.pic
+							+ domainUser.pic
 							+ "' alt='...'  style='width:40px;height:40px;'></img>");
 					else
 							out.println("<img src='img/gravatar.png'  alt='...'></img>");

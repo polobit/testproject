@@ -284,5 +284,25 @@ function onLandingPageSaved(landingPage) {
         },
     });
 
-    
+}
+
+function formEmbedIFrameLoaded(iFrameEl) {
+	if(iFrameEl) {
+	    // iFrameEl.height = "";
+	    // iFrameEl.height = iFrameEl.contentWindow.document.body.scrollHeight + "px";
+
+	    var formParentEl = iFrameEl.parentElement;
+	    if(formParentEl.className.indexOf("ui-draggable-dragging") == -1) {
+		    var formIframeDoc = iFrameEl.contentWindow.document;
+
+		    var afh = formIframeDoc.getElementById("agileFormHolder");
+		    afh.removeChild(formIframeDoc.getElementsByTagName("style")[0]);
+		    afh.removeChild(formIframeDoc.getElementsByTagName("script")[0]);		    
+
+		    var formCode = afh.innerHTML;
+		    formCode = formCode.replace('<div class="agile-custom-clear"></div>','');
+		    formParentEl.innerHTML = "";
+		    formParentEl.innerHTML = formCode;
+		}
+	}
 }
