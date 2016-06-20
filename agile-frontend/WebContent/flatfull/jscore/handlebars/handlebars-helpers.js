@@ -7482,7 +7482,11 @@ Handlebars.registerHelper('stringifyObject', function(data){
 	var obj ={};
 	obj.id = data.id;
 	obj.name = data.name;
-	obj.display_name = data.display_name;
+	if(data.display_name){
+		obj.display_name = data.display_name;
+	}else{
+		obj.display_name = data.name;
+	}
 	obj.listOfUsers = data.listOfUsers;
 	return JSON.stringify(obj);
 });
