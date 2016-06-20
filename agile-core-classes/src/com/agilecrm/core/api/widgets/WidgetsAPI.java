@@ -191,6 +191,7 @@ public class WidgetsAPI {
 			try {
 				CustomWidget.deleteCustomWidget(widget_name);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			// default widgets are removed from database on deletion
 			widget.delete();

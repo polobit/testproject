@@ -168,7 +168,7 @@ public class WidgetUtil {
 	 * @return {@link List} of {@link Widget}s
 	 */
 	public static List<Widget> getActiveWidgetsForCurrentUser() {
-		List<Widget> widgets = new ArrayList<Widget>();
+		List<Widget> finalWidgets = new ArrayList<Widget>();
 
 		AgileUser agileuser = AgileUser.getCurrentAgileUser();
 
@@ -184,23 +184,33 @@ public class WidgetUtil {
 			 * is_added field as true to default widgets if not present
 			 */
 			Objectify ofy = ObjectifyService.begin();
-			widgets = ofy.query(Widget.class).ancestor(userKey)
+			List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
 					.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
 			if (domainUser != null && domainUser.is_admin) {
 				String userID = agileuser.id.toString();
 				if (widgets != null) {
+					boolean removeWidget = false;
 					for (int i = 0; i < widgets.size(); i++) {
-						Widget widget = widgets.get(i);
-						if ((widget.listOfUsers != null && userID != null && !widget.listOfUsers
-								.contains(userID))) {
-							widgets.remove(i);
+						removeWidget = false;
+						Widget widget = widgets.get(i);		
+						
+						if (widget.listOfUsers != null && userID != null) {
+							if(widget.listOfUsers.length() == 2) {							
+								removeWidget = true;
+							}else if(!widget.listOfUsers.contains(userID)){
+								removeWidget = true;
+							}
+							
+							if(!removeWidget){
+								finalWidgets.add(widget);
+							}
 						}
 					}
 				}
 			}
 		}
 
-		return widgets;
+		return finalWidgets;
 	}
 
 	/**
