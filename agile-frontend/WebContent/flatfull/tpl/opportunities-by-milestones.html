@@ -97,7 +97,8 @@
 <script id="opportunities-by-paging-collection-template" type="text/html">
 <div id="opportunities-by-paging-model-list" style="overflow-x:auto">
 <div class="milestone-main"></div>
-</div></script>
+</div>
+</script>
 
 <script id="opportunities-by-paging-model-template" type="text/html">
 	<div class='dealtitle-angular panel-heading p-r-xs'>
@@ -115,6 +116,25 @@
 		<span></span>
 	</div>
 	<div id="{{remove_spaces heading}}-list-container" class='milestones panel-body p-n' milestone='{{heading}}'>
+		
+	</div>
+</script>
+
+<script id="tracks-by-paging-collection-template" type="text/html">
+<div id="tracks-by-paging-model-list">
+<div class="tracks-main">
+</div>
+<div id="moving-deal" class="text-right hide"></div>
+<div id="moved-deal" class="text-right"></div>
+</div>
+</script>
+
+<script id="tracks-by-paging-model-template" type="text/html">
+	<div class='dealtitle-angular panel-heading'>
+		<div class='text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="max-width:calc(100% - 125px);">{{name}}</span>
+		</div>
+	</div>
+	<div id="{{id}}-list-container" class='milestones panel-body p-n'>
 		
 	</div>
 </script>
@@ -167,14 +187,16 @@
 <span class="right deal-options vis-hide text-sm">
 			
 			{{#if_equals archived true}}
-			<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
+			<!-- <a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a> -->
+				<a class="archived-deal vis-hide" data-archive="true" />
 			{{/if_equals}}
 			{{#if_equals archived false}}
 			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
             {{/if_equals}}
-			<a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+			<!-- <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a> -->
 			{{#if_equals archived false}}
-			<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-file-archive-o"></i> </a>
+			<!-- <a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-file-archive-o"></i> </a> -->
+				<a class="archived-deal vis-hide" data-archive="false" />
 			{{/if_equals}}
         </span>
 </div>
@@ -256,14 +278,16 @@
 <span class="pull-right deal-options vis-hide text-sm">
 			
 			{{#if_equals archived true}}
-			<a title="Restore" class="deal-restore c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
+			<!-- <a title="Restore" class="deal-restore c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a> -->
+				<a class="archived-deal vis-hide" data-archive="true" />
 			{{/if_equals}}
 			{{#if_equals archived false}}
 			<a title="Edit" class="deal-edit c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-edit"></i> </a>
             {{/if_equals}}
-			<a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+			<!-- <a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="icon-trash"></i></a> -->
 			{{#if_equals archived false}}
-			<a title="Archive" class="deal-archive c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-file-archive-o"></i> </a>
+			<!-- <a title="Archive" class="deal-archive c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-file-archive-o"></i> </a> -->
+				<a class="archived-deal vis-hide" data-archive="false" />
 			{{/if_equals}}
 
         </span>
@@ -400,4 +424,14 @@
 	</div>
   </div>
 </div>
+</script>
+
+<script id="milestones-by-paging-collection-template" type="text/html">
+<ul id="milestones-by-paging-model-list" class="milestones p-n">
+</ul>
+</script>
+
+
+<script id="milestones-by-paging-model-template" type="text/html">
+<div class="data agile-overflow-ellipsis p-t-xs p-b-xs p-l c-p" data-track="{{track}}">{{milestone}}</div>
 </script>
