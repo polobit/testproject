@@ -251,8 +251,10 @@ public class WidgetsAPI {
 		Contact contact = ContactUtil.getContact(contactId);
 		System.out.println("In accessURLToReadScript");
 
-		// Deletes widget based on name
 		Widget customWidget = WidgetUtil.getWidget(widget_name);
+		if(customWidget == null || customWidget.url == null || customWidget.url.length() == 0){
+			customWidget = CustomWidgets.getCustomWidget(widget_name);
+		}
 		String data = "";
 
 		try {
@@ -262,6 +264,7 @@ public class WidgetsAPI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 		return HTTPUtil.accessURLToReadScript(customWidget.url, "POST", data);
 	}
