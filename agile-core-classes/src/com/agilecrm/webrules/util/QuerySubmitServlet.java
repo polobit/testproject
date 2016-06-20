@@ -21,6 +21,7 @@ import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -82,7 +83,8 @@ public class QuerySubmitServlet extends HttpServlet
 		    ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
 		    ticket.attachments_list, "", true);
 	    notes.save();
-	    
+	    TicketBulkActionsBackendsRest.publishNotification("Ticket #" + ticket.id + " has been created.");
+
 	    // Updating ticket count DB
 	    TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
 	    
