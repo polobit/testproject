@@ -149,9 +149,10 @@ function dealsFetch(base_model)
 	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li', 
 		sort_collection : false, cursor : true, page_size : 20, postRenderCallback : function(el)
 		{   
-			$(el).find('ul li').each(function(){
+			$(el).find('ul li').each(function(index){
 				$(this).addClass("deal-color");
 				$(this).addClass($(this).find("input").attr("class"));
+				$(this).attr("data-pos", index);
 			});
 			
 

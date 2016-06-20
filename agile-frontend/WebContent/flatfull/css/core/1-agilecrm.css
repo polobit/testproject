@@ -818,13 +818,13 @@ tbody a.no-style-a {
 
 /* For scroll in deals milestones */
 /* Vertical scroll */
-#opportunities-full-screen-model-list ::-webkit-scrollbar, #opportunities-by-milestones-model-list ::-webkit-scrollbar, #opportunities-by-paging-model-list ::-webkit-scrollbar {
+#opportunities-full-screen-model-list ::-webkit-scrollbar, #opportunities-by-milestones-model-list ::-webkit-scrollbar, #opportunities-by-paging-model-list ::-webkit-scrollbar, #tracks-by-paging-model-list ::-webkit-scrollbar, #moving-tracks::-webkit-scrollbar {
  width: 5px;
  margin-right: 4px !important;
  background:#eee;
 }
 /* Horizontal scroll */
-#opportunities-full-screen-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-milestones-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-paging-model-list ::-webkit-scrollbar {
+#opportunities-full-screen-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-milestones-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-paging-model-list ::-webkit-scrollbar, #tracks-by-paging-model-list ::-webkit-scrollbar, #moving-tracks::-webkit-scrollbar {
  height: 10px;
  background:#eee;
 }
@@ -836,7 +836,7 @@ tbody a.no-style-a {
  
 }
 /* Handle */
-#opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb, #opportunities-by-paging-model-list  ::-webkit-scrollbar-thumb {
+#opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb, #opportunities-by-paging-model-list  ::-webkit-scrollbar-thumb, #tracks-by-paging-model-list ::-webkit-scrollbar-thumb, #moving-tracks::-webkit-scrollbar-thumb {
  -webkit-border-radius: 10px;
  border-radius: 10px;
 /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
@@ -4102,3 +4102,141 @@ padding-left:0px;
 background-color : #522E2E;
 }
 
+#dealActions {
+    opacity: 0;
+    position: fixed;
+    left: 21px;
+    right: 21px;
+    height: 150px;
+    z-index: 999;
+    -webkit-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
+    -moz-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
+    -ms-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
+    -o-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
+    transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
+}
+
+#dealActions.open {
+    opacity: 1;
+    -webkit-transition: bottom 0.3s ease-in;
+    -moz-transition: bottom 0.3s ease-in;
+    -ms-transition: bottom 0.3s ease-in;
+    -o-transition: bottom 0.3s ease-in;
+    transition: bottom 0.3s ease-in;
+}
+
+#dealActions .closeDeal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 11px 0 12px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#dealActions .closeDeal li {
+    position: relative;
+    display: inline-block;
+    height: 120px;
+    width: 120px;
+    margin-left: 15%;
+    overflow: hidden;
+    vertical-align: top;
+    font-size: 20px;
+    line-height: 115px;
+    text-align: center;
+    color: rgba(0,0,0,0.5);
+    text-overflow: ellipsis;
+    background: #e0e4e7;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    border-radius: 60px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.3),0 2px 0 rgba(255,255,255,0.55);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.3),0 2px 0 rgba(255,255,255,0.55);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3),0 2px 0 rgba(255,255,255,0.55);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    background-clip: padding-box;
+    font-size: 30px;
+}
+
+#dealActions .closeDeal li:first-child {
+    margin-left: 0%;
+}
+
+#dealActions .closeDeal li.lose {
+    color: #fff;
+    background: #e84646;
+}
+
+#dealActions .closeDeal li.win {
+    color: #fff;
+    background: #43c35e;
+}
+
+#dealActions .closeDeal li.trash span {
+    background: url(../images/icons/pipeline-trash.png) no-repeat center center;
+    background-size: 32px;
+    width: 32px;
+    height: 44px;
+    display: inline-block;
+    opacity: 0.4;
+}
+
+#dealActions .closeDeal li span {
+    position: relative;
+    padding: 0 45px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#moved-deal li:first-child {
+  list-style-type: none;
+  width: 50px;
+  z-index: 999;
+  left: calc(38% - 50px);
+  float: right;
+  margin-top: -10px;
+  position: absolute;
+  padding-left: 10px;
+  padding-top: 10px;
+  background: none!important;
+  border: none!important;
+  font-weight: bold;
+}
+
+#moved-deal li {
+  list-style-type: none;
+    width: 200px;
+    z-index: 999;
+    left: 38%;
+    float: right;
+    background: #f6f8f8;
+    margin-top: -10px;
+    position: absolute;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-top: 10px;
+    border: 1px solid #edf1f2;
+}
+
+#moved-deal li div {
+  float: left;
+    padding-bottom: 10px;
+    max-width: 180px;
+}
