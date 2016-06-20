@@ -46,6 +46,9 @@ angular.module('app', ['ngImgCrop'])
         $scope.cropType="square";
 
         var handleFileSelect=function(evt) {
+          $("div.cropAreaContainer").show();
+          window.resizeTo(600, 670);
+
           var file=evt.currentTarget.files[0];
           var reader = new FileReader();
           reader.onload = function (evt) {
@@ -323,7 +326,7 @@ function reenableSave(){
 
 <p><input name="file" id='fileextension' type="file" /></p>
 
-<div class="row m-n">
+<div class="row m-n cropAreaContainer" style="display: none;">
 	<div class="cropArea col-xs-8 col-sm-8 col-md-8">
 	    <img-crop image="myImage" result-image="myCroppedImage" area-type="{{cropType}}"></img-crop>
 	</div>
