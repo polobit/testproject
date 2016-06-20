@@ -579,7 +579,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 
 	obj["created_time"] = created_time;
-
+	var clickButtonId = e.currentTarget.id; 
 	// Saves contact
 	var contactModel = new BaseModel();
 	contactModel.url = 'core/api/contacts';
@@ -680,7 +680,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		$('.tagsinput', $("#" + modal_id)).empty();
 		
 		try{
-			var clickButtonId = e.v.currentTarget.id;
+			
 			if(clickButtonId != "continue-contact"){
 				if(CallLogVariables.dynamicData != null){
 					var jsonData1 = data.toJSON();
