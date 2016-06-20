@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -21,6 +23,7 @@ import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.JSAPIUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -32,16 +35,19 @@ public class QuerySubmitServlet extends HttpServlet
 	 try
 	    {
 	     //checking for empty email and query
-	     if(request.getParameter("email").isEmpty())
+	     String email=request.getParameter("email");
+	     String query=request.getParameter("querytext");
+	     if(email.isEmpty())
      	    	throw new Exception("Please provide email address."); 
-     	     if(request.getParameter("querytext").isEmpty())
-     		throw new Exception("Please provide Query."); 
+     	     if(query.isEmpty())
+     		throw new Exception("Please provide Query.");  	     
+     	    
      	     
         	Tickets ticket =new Tickets();        	
-        	ticket.requester_email=request.getParameter("email");
+        	ticket.requester_email=email;
         	ticket.requester_name=request.getParameter("name");
-        	ticket.html_text=request.getParameter("querytext");
-        	ticket.subject=request.getParameter("querytext");
+        	ticket.html_text=query;
+        	ticket.subject=query;
         	ticket.assigned_to_group=true;
         	boolean attachmentExists = false;
         	List<String> cc_emails =new ArrayList<String>();
@@ -73,7 +79,13 @@ public class QuerySubmitServlet extends HttpServlet
             
             	// Updating ticket count DB
             	TicketStatsUtil.updateEntity(TicketStats.TICKETS_COUNT);
-        	 
+            	
+            	//run for campaign
+            	String campaign_id=request.getParameter("campaign");
+            	if (StringUtils.isNotBlank(campaign_id)){
+            	 Contact contact = ContactUtil.searchContactByEmail(email);            	
+    		 JSAPIUtil.subscribeCampaigns(campaign_id, contact);
+            	}
 	 
             	System.out.println("successfully save");
 	    }
