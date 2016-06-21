@@ -349,6 +349,25 @@
        <!--  <div class="title"><h3><span><a class="no-line"><i class="icon-phone"></i></a></span> Incoming Call</h3></div>-->
           <div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
+					{{#if_equals_lowerCase "Twilio" custom1}}
+							<img src='/widgets/twilio-small-logo.png' style="width: 15px; height: 15px; margin-right: 3px; position: relative; top: 2px;  float:left;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio'>
+						{{else}}
+							{{#if_equals "Bria" custom1}}
+								<img src='/img/plugins/bria-call.png' style="width: 15px; height: 15px; margin-right: 3px; position: relative; top: 2px; float:left;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria'>
+							{{else}}
+								{{#if_equals "Skype" custom1}}
+									<img src='/img/plugins/skype-call.png' style="width: 18px; height: 18px;position: relative; top: 2px; float:left;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype'>
+								{{else}}
+									{{#if_equals "SIP" custom1}}
+										<img src='/widgets/sip-logo-small.png' style="width: 15px; height: 15px; margin-right: 3px; position: relative; top: 2px; float:left;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype'>
+									{{else}}
+										{{#if_equals "Asterisk" custom1}}
+											<img src='' style="width: 15px; height: 15px; margin-right: 5px;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype'>
+										{{/if_equals}}
+									{{/if_equals}}
+								{{/if_equals}}
+							{{/if_equals}}
+						{{/if_equals_lowerCase}}
 					<i class="icon-phone text-muted p-r-xs"></i>Incoming Call
 				</div>
 			</div>
@@ -365,6 +384,25 @@
        <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-phone"></i></a></span> Outgoing Call</h3></div>-->
             <div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
+						{{#if_equals_lowerCase "Twilio" custom1}}
+							<img src='/widgets/twilio-small-logo.png' style="width: 15px; height: 15px; margin-right: 3px; position: relative; top: 2px;  float:left;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio'>
+						{{else}}
+							{{#if_equals "Bria" custom1}}
+								<img src='/img/plugins/bria-call.png' style="width: 15px; height: 15px; margin-right: 3px; position: relative; top: 2px; float:left;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria'>
+							{{else}}
+								{{#if_equals "Skype" custom1}}
+									<img src='/img/plugins/skype-call.png' style="width: 18px; height: 18px;position: relative; top: 2px; float:left;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype'>
+								{{else}}
+									{{#if_equals "SIP" custom1}}
+										<img src='/widgets/sip-logo-small.png' style="width: 15px; height: 15px; margin-right: 3px; position: relative; top: 2px; float:left;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype'>
+									{{else}}
+										{{#if_equals "Asterisk" custom1}}
+											<img src='' style="width: 15px; height: 15px; margin-right: 5px;" data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype'>
+										{{/if_equals}}
+									{{/if_equals}}
+								{{/if_equals}}
+							{{/if_equals}}
+						{{/if_equals_lowerCase}}
 					<i class="icon-phone text-muted p-r-xs"></i>Outgoing Call
 				</div>
 			</div>

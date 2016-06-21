@@ -483,6 +483,52 @@
   </div>
 </div>
 
+<div class="wrapper bg-light p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
+	Updated Date
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="updated_time_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="updated_time" class="form-control">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+		</select>
+		<div class="AFTER BEFORE ON condition_container m-t-xs">
+			<span id="RHS">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date text-xs" name="temp-8" id="temp-8" style="height:30px;">
+			</span>
+		</div>
+		<div class="LAST NEXT condition_container hide m-t-xs">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required text-xs" name="temp-9" id="temp-9" style="height:30px;">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide m-t-xs">
+			<div class="clear"></div>
+			<span id="RHS">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required text-xs" placeholder="{{dateFormat}}" name="temp-10" id="temp-10" style="height:30px;">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required text-xs" name="temp-11" id="temp-11" style="height:30px;">
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
+		<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+        
+     </div>
+  </div>
+</div>
+
 
 <div class="wrapper bg-light p-b-xs p-t-xs">
   <div class="panel panel-default m-b-none">
@@ -1060,6 +1106,52 @@
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
+		<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+        
+     </div>
+  </div>
+</div>
+
+<div class="wrapper bg-light p-b-xs p-t-xs">
+  <div class="panel panel-default m-b-none">
+      <div class="panel-body">
+        <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
+	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
+	Updated Date
+		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	<div class="controls m-t-xs hide" id="updated_time_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="updated_time" class="form-control">
+		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+		</select>
+		<div class="AFTER BEFORE ON condition_container m-t-xs">
+			<span id="RHS">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date text-xs" name="temp-8" id="temp-8" style="height:30px;">
+			</span>
+		</div>
+		<div class="LAST NEXT condition_container hide m-t-xs">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required text-xs" name="temp-9" id="temp-9" style="height:30px;">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide m-t-xs">
+			<div class="clear"></div>
+			<span id="RHS">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required text-xs" placeholder="{{dateFormat}}" name="temp-10" id="temp-10" style="height:30px;">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required text-xs" name="temp-11" id="temp-11" style="height:30px;">
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>

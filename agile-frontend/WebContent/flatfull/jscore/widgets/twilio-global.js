@@ -1237,24 +1237,60 @@ function showNoteAfterCall(callRespJson,messageObj)
 			getContactDetails();
 		}
 	}
+	var callStatus = callRespJson.status;
+	var noteStatus = "";
+	var noteSub = "";
+	var friendlyStatus = "";
+	var phoneNumber = "";
+	if(TWILIO_DIRECTION == "outbound-dial"){
+		phoneNumber = TWILIO_CALLED_NO;
+	}else{
+		phoneNumber = callRespJson.from;
+	}
+	
+	if(callStatus != 404 && typeof callRespJson.duration != "undefined") {
+		switch(callStatus) {
+	    case "canceled":
+	    	noteSub = TWILIO_CALLTYPE + " call - Declined";
+	    	friendlyStatus = "Declined";
+	    	noteStatus = "failed";
+	        break;
+	    case "completed":
+	    	noteSub = TWILIO_CALLTYPE + " call - Done";
+	    	friendlyStatus = "Done";
+	    	noteStatus = "answered";
+	    	break;
+	    case "busy":
+	    	noteSub = TWILIO_CALLTYPE + " call - Busy";
+	    	friendlyStatus = "Received busy tone on number "+ phoneNumber;
+	    	noteStatus = "busy";
+	    	break;
+	    case "failed":
+	    	noteSub = TWILIO_CALLTYPE + " call - Failed";
+	    	friendlyStatus = TWILIO_CALLTYPE + " call made to "+ phoneNumber +" has failed";
+	    	noteStatus = "failed";
+	    	break;
+	    case "no-answer":
+	    	noteSub = TWILIO_CALLTYPE + " call - No answer";
+	    	friendlyStatus = "No answer";
+	    	noteStatus = "busy";
+	    	break;
+	    default:
+	        return;
+		}
+	}else{
+		return;
+	}
+	
 	if(TWILIO_CONTACT_ID) {
 
 		accessUrlUsingAjax("core/api/contacts/"+TWILIO_CONTACT_ID, function(resp){
-
 			console.log(callRespJson);
 			var json = resp;
 			if(json == null) {
-				return showNewContactModal(messageObj);
+				return showNewContactModal(phoneNumber);
 			}
-
 			var contact_name = getContactName(json);
-			var noteSub = "";
-			var friendlyStatus = "";
-			var callStatus = callRespJson.status;
-
-			if(callStatus != 404 && typeof callRespJson.duration != "undefined") {
-			
-					var phoneNumber = "";
 					if(TWILIO_DIRECTION == "outbound-dial") {
 		//				phoneNumber = callRespJson.to;
 						phoneNumber = TWILIO_CALLED_NO;
@@ -1271,7 +1307,6 @@ function showNoteAfterCall(callRespJson,messageObj)
 						}
 					}else{
 						phoneNumber = callRespJson.from;
-						
 						if(callStatus != "completed") {
 							$.post( "/core/api/widgets/twilio/savecallactivity",{
 								direction: TWILIO_DIRECTION, 
@@ -1281,42 +1316,9 @@ function showNoteAfterCall(callRespJson,messageObj)
 								});
 						}
 					}
-						
-					
 
-					var noteStatus = "";
-					switch(callStatus) {
-				    case "canceled":
-				    	noteSub = TWILIO_CALLTYPE + " call - Declined";
-				    	friendlyStatus = "Declined";
-				    	noteStatus = "failed";
-				        break;
-				    case "completed":
-				    	noteSub = TWILIO_CALLTYPE + " call - Done";
-				    	friendlyStatus = "Done";
-				    	noteStatus = "answered";
-				    	break;
-				    case "busy":
-				    	noteSub = TWILIO_CALLTYPE + " call - Busy";
-				    	friendlyStatus = "Received busy tone on number "+ phoneNumber;
-				    	noteStatus = "busy";
-				    	break;
-				    case "failed":
-				    	noteSub = TWILIO_CALLTYPE + " call - Failed";
-				    	friendlyStatus = TWILIO_CALLTYPE + " call made to "+ phoneNumber +" has failed";
-				    	noteStatus = "failed";
-				    	break;
-				    case "no-answer":
-				    	noteSub = TWILIO_CALLTYPE + " call - No answer";
-				    	friendlyStatus = "No answer";
-				    	noteStatus = "busy";
-				    	break;
-				    default:
-				        return;
-					}
 				 	// Adds contact name to tags ul as li element
 					if(callStatus == "completed") {
-
 						var data = {};
 						data.url = "/core/api/widgets/twilio/";
 						data.subject = noteSub;
@@ -1351,34 +1353,43 @@ function showNoteAfterCall(callRespJson,messageObj)
 							duration: 0
 							});
 					}
-				}
 		});
 			
 	} else {
-		var phoneNumber = "";
-		if(TWILIO_DIRECTION == "outbound-dial"){
-			phoneNumber = callRespJson.to;
-/*			$.post( "/core/api/widgets/twilio/savecallactivityById",{
-				id:TWILIO_CONTACT_ID,
+		
+		resetCallLogVariables();
+		
+		if(callStatus == "completed") {
+			var data = {};
+			data.url = "/core/api/widgets/twilio/";
+			data.subject = noteSub;
+			data.number = phoneNumber;
+			data.callType = TWILIO_DIRECTION;
+			data.status = "answered";
+			data.duration = callRespJson.duration;
+			data.contId = null;
+			data.contact_name = "";
+			data.widget = "Twilio";
+			CallLogVariables.dynamicData = data;
+		}
+		
+		CallLogVariables.callWidget = "Twilio";
+		CallLogVariables.callType = TWILIO_DIRECTION;
+		CallLogVariables.phone = phoneNumber;
+		CallLogVariables.duration = callRespJson.duration;
+		CallLogVariables.status = callRespJson.status;
+		
+			/*$.post( "/core/api/widgets/twilio/savecallactivity",{
 				direction: TWILIO_DIRECTION, 
 				phone: phoneNumber, 
 				status : callRespJson.status,
 				duration : callRespJson.duration 
 				});*/
-		}else{
-			phoneNumber = callRespJson.from;
-		}
-			$.post( "/core/api/widgets/twilio/savecallactivity",{
-				direction: TWILIO_DIRECTION, 
-				phone: phoneNumber, 
-				status : callRespJson.status,
-				duration : callRespJson.duration 
-				});
-		
 
 		return showNewContactModal(phoneNumber);
 	}
 	
+	TWILIO_CONTACT_ID = null;
 }
 
 

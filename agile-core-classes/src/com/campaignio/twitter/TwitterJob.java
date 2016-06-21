@@ -6,8 +6,12 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.util.DomainLimitsUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.twitter.util.TwitterJobQueueUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * 
@@ -104,10 +108,20 @@ public class TwitterJob
 
 	    // System.out.println("Twitter Screename " +
 	    // twitter.getScreenName());
+	    if(DomainLimitsUtil.checkDomainLimits(NamespaceManager.get()).getTweet_limit()  > 0)
+		{	 
+		    //TwitterJobQueueUtil.addToTwitterQueue(account, token, tokenSecret, message, rateLimit, subscriberJSON, campaignJSON);
+		    DomainLimitsUtil.decrementTweetLimit(NamespaceManager.get());
+		 
+		
 
 	    Status status = twitter.updateStatus(tweet);
 	    LogUtil.addLogToSQL(campaign_id, subscriber_id, "Twitter - Successfully updated the status to [" + status.getText() + "].",
 		    LogType.TWEET.toString());
+		}else{
+			 LogUtil.addLogToSQL(campaign_id,subscriber_id , "25 Tweets per day limit reached.",LogType.TWEET.toString()); 
+
+		 }
 
 	    return true;
 
