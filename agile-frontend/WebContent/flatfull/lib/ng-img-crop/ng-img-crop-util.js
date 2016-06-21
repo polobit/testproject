@@ -6,7 +6,7 @@ angular.module('app', ['ngImgCrop'])
 
         var handleFileSelect=function(evt) {
 
-          if(disabledToCropImage)
+          if(!enabledToCropImage)
                return;
 
           $("div.cropAreaContainer").show();

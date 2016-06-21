@@ -32,9 +32,16 @@ $(function(){
 
 function uploadImage(id, parent_div)
 {
+	var allow_croper = ["contact/", "company/", "user-prefs"];
+	var allow_image_crop = false;
+	for (var i = 0; i < allow_croper.length; i++) {
+		if(window.location.href.indexOf(allow_croper[i]) > 0)
+				allow_image_crop = true;
+	}
+	
 	var windowURL = "flatfull/upload-flatfull.jsp?id=" + id;
-	if(parent_div && parent_div.hasClass("company_logo_upload"))
-		   windowURL += "&disable_crop=true";
+	if(allow_image_crop)
+		   windowURL += "&enable_crop=true";
 
 	var newwindow = window.open(windowURL,'name','height=310,width=500');
 	if (window.focus)

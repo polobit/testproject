@@ -21,9 +21,9 @@
 <!-- <script type="text/javascript" src="/lib/bootstrap.min.js"></script> -->
 
 <!-- Load angular file -->
+<%if(request.getParameter("enable_crop") != null) {%>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 <script type="text/javascript" src="/flatfull/lib/ng-img-crop/ng-img-crop.js"></script>
-<%if(request.getParameter("disable_crop") == null) {%>
 <script type="text/javascript" src="/flatfull/lib/ng-img-crop/ng-img-crop-util.js"></script>
 <%}%>
 <link rel="stylesheet" type="text/css" href="/flatfull/lib/ng-img-crop/ng-img-crop.css" />
@@ -46,7 +46,7 @@ jQuery.validator.setDefaults({
 <script type="text/javascript">
 //Get URL
 var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]) + "?id=" + unescape(getUrlVars()["id"]);
-var disabledToCropImage = <%=request.getParameter("disable_crop")%>;
+var enabledToCropImage = <%=request.getParameter("enable_crop")%>;
 
 // Get Id
 //Read a page's GET URL variables and return them as an associative array.
@@ -161,12 +161,12 @@ function agile_is_mobile_browser(){
 <br/>
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
  
- <%if(request.getParameter("disable_crop") != null){
+ <%if(request.getParameter("enable_crop") != null){
  %>
- 	<input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" />    
+ 	<input type="hidden" name="key" value="cd-uploaded-files/<%=new Date().getTime()%>" />  
  <%} else {
  %>
- 	<input type="hidden" name="key" value="cd-uploaded-files/<%=new Date().getTime()%>" />    
+ 	<input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" />      
  <%}%>
 
 <input type="hidden" name="acl" value="public-read" /> 
