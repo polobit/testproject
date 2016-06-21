@@ -112,6 +112,21 @@ angular.module('builder').controller('BuilderController', ['$scope', '$rootScope
     $rootScope.selectNode = function(node) {
         if ($scope.rowEditorOpen) { return true; }
 
+        //hide select-box for below elements
+        var inline_element=['U','S','B', 'BIG', 'I', 'SMALL','EM', 'KBD','STRONG', 'SAMP', 'TIME', 'VAR', 'BR', 'SPAN','SUB', 'SUP'];
+        
+        if(inline_element.includes(node.tagName)){
+            var k=0;
+            var i=node;
+            while(k==0){
+                if(!inline_element.includes(i.tagName)){
+                    node=i;
+                    k=1; 
+                } 
+                else 
+                  i=i.parentNode;
+            }
+        }              
         $scope.selecting = true;
 
         $scope.selected.previous = $scope.selected.node;
