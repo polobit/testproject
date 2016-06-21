@@ -125,8 +125,13 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	
 	fieldLabelsSet.add("created_time");
 	
+	if(opportunity.milestone_changed_time == null)
+	{
+		opportunity.milestone_changed_time = 0L;
+	}
+	
 	// Describes milestone changed time document if milestone changed time is not 0.
-	if (opportunity.milestone_changed_time != null && opportunity.milestone_changed_time > 0)
+	if (opportunity.milestone_changed_time != null)
 	{
 		Date milestoneChangedDate = DateUtils.truncate(new Date(opportunity.milestone_changed_time * 1000), Calendar.DATE);
 
@@ -137,8 +142,13 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		fieldLabelsSet.add("milestone_changed_time");
 	}
 	
+	if(opportunity.close_date == null)
+	{
+		opportunity.close_date = 0L;
+	}
+	
 	// Describes close time document if close time is not 0.
-	if (opportunity.close_date != null && opportunity.close_date > 0)
+	if (opportunity.close_date != null)
 	{
 		Date closeDate = DateUtils.truncate(new Date(opportunity.close_date * 1000), Calendar.DATE);
 
@@ -149,8 +159,13 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		fieldLabelsSet.add("closed_time");
 	}
 	
+	if(opportunity.won_date == null)
+	{
+		opportunity.won_date = 0L;
+	}
+	
 	// Describes won date document if won date is not 0.
-	if (opportunity.won_date != null && opportunity.won_date > 0)
+	if (opportunity.won_date != null)
 	{
 		Date wonDate = DateUtils.truncate(new Date(opportunity.won_date * 1000), Calendar.DATE);
 
