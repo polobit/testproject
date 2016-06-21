@@ -12,6 +12,9 @@
     pageSize = collection.length || 25;
 
     self.collection = collection;
+
+    //customized add event od backbone to reduce renderings by adding addAll
+    //addAll should be true to avoid firing add event by backbone. (Like set in new version of backbone)
     self.options = _.defaults(options, {
       success: function(){ },
       error: function(){ },
@@ -24,7 +27,7 @@
       pageSize: pageSize,
       scrollOffset: 100,
       add: true,
-      addAll: true,
+      addAll:true,
       strict: false,
       includePage: false
     });
