@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
@@ -156,13 +158,14 @@ public class DealFilterUtil {
 			else if(rule.LHS != null && rule.LHS.equalsIgnoreCase("track_milestone") && pipeline != null && milestone != null && !track_condition_exists)
 			{
 				setDeafultTrackMilestoneFilter(modifiedRules, pipeline, milestone);
+				track_condition_exists = true;
 			}
 			else
 			{
 				modifiedRules.add(rule);
 			}
 		}
-		if(!track_condition_exists)
+		if(!track_condition_exists && pipeline != null && milestone != null)
 		{
 			setDeafultTrackMilestoneFilter(modifiedRules, pipeline, milestone);
 		}
@@ -305,6 +308,26 @@ public class DealFilterUtil {
 	    	e.printStackTrace();
 	    	return null;
 	    }
+	}
+	
+	public static JSONObject getDealsCountBasedOnList(List<Opportunity> oppList, String milestone)
+	{
+		double total = 0d;
+		JSONObject countObj = new JSONObject();
+		countObj.put("milestone", milestone);
+		if(oppList != null && oppList.size() > 0)
+		{
+			for(Opportunity opp : oppList)
+			{
+				if(opp.expected_value != null)
+				{
+					total += opp.expected_value;
+				}
+			}
+		}
+		countObj.put("total", total);
+		
+		return countObj;
 	}
 
 }

@@ -300,17 +300,9 @@ console.log('------popover pipeline id-----', pipeline_id);
 	var milestones = currentTrack.milestones.split(',');
 	console.log(milestones);
 
-	// Url to call DB
-	var initialURL = '/core/api/opportunity/totalDealValue?pipeline_id=' + pipeline_id + '&order_by=close_date';
-
-	if (_agile_get_prefs('deal-filters'))
-	{
-		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
-	}
-
 	// Creates main collection with deals lists
 		var newDealList;
-			var url = initialURL + "&milestone=" + milestone;
+			var url = '/core/api/deal/filters/query/total/'+_agile_get_prefs('deal-filter-name')+'?pipeline_id=' + pipeline_id + '&order_by='+getDealSortFilter()+'&milestone='+milestone;
 			newDealList = { "heading" : milestone, "url" : url};
 			if(currentTrack.won_milestone == milestone)
 				newDealList.won_milestone = currentTrack.won_milestone;
