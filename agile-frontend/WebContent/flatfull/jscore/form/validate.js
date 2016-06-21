@@ -251,7 +251,7 @@ function isValidForm(form) {
 
     jQuery.validator.addMethod("customFieldSpecialCharacter", function(value, element){
 		
-		var custvals = /^\s*[a-zA-Z0-9\s]+\s*$/;
+		var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
 		return custvals.test(value);
 	}," Label should not contain special characters");
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
