@@ -53,6 +53,11 @@ function chainWebRules(el, data, isNew, actions)
 				}
 				self.find(".web-rule-preview").show();
 			return;
+			} else if(value == "SITE_BAR") {
+				loadSavedTemplate("bar/sitebar.html");
+				$("#tiny_mce_webrules_link", self).show();
+				self.find(".web-rule-preview").show();
+				return;
 			}
 		self.find(".web-rule-preview").hide();
 	});
@@ -160,7 +165,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 				e.preventDefault();
 
 				// If not empty, redirect to tinymce
-				if($('#tinyMCEhtml_email').val() !== "" && $('#action select').val()!='CALL_POPUP')
+				if(typeof $('#tinyMCEhtml_email').val() != "undefined" && $('#tinyMCEhtml_email').val() != "")
 				{
 					if($('.custom_html').length > 1){
 						showAlertModal("webrule_popup_limit", undefined, function(){
@@ -171,7 +176,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					loadTinyMCE("tinyMCEhtml_email");
 					return;
 
-				}else if($('#callwebrule-code').val() !== "" && $('#action select').val()=='CALL_POPUP'){
+				}else if($('#action select').val()=='CALL_POPUP'){
 
 					if($('.custom_html').length > 1){
 						showAlertModal("webrule_popup_limit", undefined, function() {
@@ -180,6 +185,9 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 						return;
 					}
 					loadTinyMCE("callwebrule-code");
+					return;
+				} else if($('#action select').val()=='SITE_BAR') {
+					loadTinyMCE("agile-bar-code");
 					return;
 				}
 				var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";

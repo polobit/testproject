@@ -257,6 +257,8 @@ function loadSavedTemplate(templateURL, callback){
 				}
 				if(templateUrl.includes("callpopup.html"))
 					$("#callwebrule-code").text(data);
+				else if(templateUrl.includes("sitebar.html"))
+					$("#agile-bar-code").text(data);
 				else
                 	$("#tinyMCEhtml_email").text(data);
 				
