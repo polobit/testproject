@@ -222,7 +222,7 @@ public class DealFilterUtil {
     	{
     		SearchRule rule = new SearchRule();
     		rule.LHS = "expected_value";
-    		if(dealFilter.value != null)
+    		if(StringUtils.isNotEmpty(dealFilter.value))
     		{
     			rule.CONDITION = SearchRule.RuleCondition.EQUALS;
     			rule.RHS = String.valueOf(dealFilter.value);
