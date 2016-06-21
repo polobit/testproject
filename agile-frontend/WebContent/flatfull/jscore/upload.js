@@ -2,7 +2,7 @@ $(function(){
 
 	$("body").on('click', ".upload_s3", function(e){
 		e.preventDefault();
-		uploadImage("upload-container");
+		uploadImage("upload-container", $(this).closest("div"));
 	});
 
 	//Upload contact image
@@ -30,9 +30,13 @@ $(function(){
 	
 });	
 
-function uploadImage(id)
+function uploadImage(id, parent_div)
 {
-	var newwindow = window.open("flatfull/upload-flatfull.jsp?id=" + id,'name','height=310,width=500');
+	var windowURL = "flatfull/upload-flatfull.jsp?id=" + id;
+	if(parent_div && parent_div.hasClass("company_logo_upload"))
+		   windowURL += "&disable_crop=true";
+
+	var newwindow = window.open(windowURL,'name','height=310,width=500');
 	if (window.focus)
 	{
 		newwindow.focus();

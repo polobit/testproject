@@ -46,6 +46,10 @@ angular.module('app', ['ngImgCrop'])
         $scope.cropType="square";
 
         var handleFileSelect=function(evt) {
+
+          if(disabledToCropImage)
+          	   return;
+
           $("div.cropAreaContainer").show();
           window.resizeTo(600, 670);
 
@@ -65,6 +69,8 @@ angular.module('app', ['ngImgCrop'])
 <script type="text/javascript">
 //Get URL
 var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]) + "?id=" + unescape(getUrlVars()["id"]);
+var disabledToCropImage = <%=request.getParameter("disable_crop")%>;
+
 // Get Id
 //Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -142,13 +148,18 @@ function isValid(){
     isValid();
   });
 
-	$("[name='upload']").click(function(e){
-		var data_url = $("div#preview img").attr("ng-src");
-		Cd_Add_Wesite_Screenshot.add_to_amazon_cloud(data_url, function(){
-			console.log("Hehe");
+   if(!disabledToCropImage){
+	   	$("[name='upload']").click(function(e){
+	   		e.preventDefault();
+	   		if(!isValid())
+	   			return;
+
+			var data_url = $("div#preview img").attr("ng-src");
+			Cd_Add_Wesite_Screenshot.add_to_amazon_cloud(data_url, function(){
+			});
+			disableSave();
 		});
-		disableSave();
-	});
+   }
 		});
 
 function agile_is_mobile_browser(){
@@ -281,11 +292,11 @@ var ClickDesk_File_Upload = {
 };
 
 function disableSave(){
-     $("[name='upload']").attr("disabled", "disabled");
+     $("[name='upload']").attr("disabled", "disabled").val("Uploading...");
 }
 
 function reenableSave(){
-	$("[name='upload']").removeAttr("disabled");
+	$("[name='upload']").removeAttr("disabled").val("Upload");
 }
 </script>
 <style>
@@ -310,9 +321,14 @@ function reenableSave(){
 
 <br/>
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
-
-	 <input type="hidden" name="key" value="cd-uploaded-files/<%=new Date().getTime()%>" /> 
-
+ 
+ <%if(request.getParameter("disable_crop") != null){
+ %>
+ 	<input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" />    
+ <%} else {
+ %>
+ 	<input type="hidden" name="key" value="cd-uploaded-files/<%=new Date().getTime()%>" />    
+ <%}%>
 
 <input type="hidden" name="acl" value="public-read" /> 
 <input type="hidden" name="content-type" value="image/*" />
@@ -345,7 +361,7 @@ function reenableSave(){
 
 
 <br/>
-<input name="upload" value="Upload" class='submit btn btn-primary' type="submit" onclick="return false;"/> 
+<input name="upload" value="Upload" class='submit btn btn-primary' type="submit"/> 
 </form> 
 </div>
 </div>
