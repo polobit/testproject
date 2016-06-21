@@ -575,7 +575,7 @@ var contacts_bulk_actions = {
 									}, function()
 									{
 										return;
-									},"Go To Campaign","Close");
+									},"Go to Campaign","Close");
 						}
 						else
 						{
