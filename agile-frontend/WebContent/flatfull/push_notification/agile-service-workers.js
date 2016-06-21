@@ -1,5 +1,6 @@
 
  var registration_id=null;
+ var url="https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/backend/push?id=";  
  self.addEventListener('push', function(event) 
  {
       self.registration.pushManager.getSubscription().then(function(subscription) {
@@ -9,7 +10,7 @@
  
     event.waitUntil(  
 
-    var url="https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/backend/push?id=";  
+    
       fetch(url+registration_id).then(function(response) {  
         if (response.status !== 200) {  
         // Either show a message to the user explaining the error    

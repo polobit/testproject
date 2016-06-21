@@ -19,16 +19,13 @@ function enablePushNotification()
 if(!contact)
     return;
 regiseterServiceWorkers();
-regiseterServiceWorkers();
-
-
 }
    
   function regiseterServiceWorkers()
    {
       if ('serviceWorker' in navigator) 
       {
-          navigator.serviceWorker.register('notification/agile-service-workers.js',{ scope: './'}).then(function (registration) 
+          navigator.serviceWorker.register('notification/agile-service-workers.js',{ scope: './notification/'}).then(function (registration) 
             {
                 var serviceWorker;             // Are Notifications supported in the service worker?  
                 if (!('showNotification' in ServiceWorkerRegistration.prototype)) {  
@@ -63,7 +60,7 @@ regiseterServiceWorkers();
                  
                  console.log("You already having subscription"+pushSubscription.endpoint);
            } 
-          else if (serviceWorker) 
+          else
            {
              registration.pushManager.subscribe({  userVisibleOnly: true }).then(function(sub)
               {
