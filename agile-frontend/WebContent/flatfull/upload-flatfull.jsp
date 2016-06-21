@@ -24,7 +24,7 @@
 <%if(request.getParameter("enable_crop") != null) {%>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 <script type="text/javascript" src="/flatfull/lib/ng-img-crop/ng-img-crop.js"></script>
-<script type="text/javascript" src="/flatfull/lib/ng-img-crop/ng-img-crop-util.js_=12"></script>
+<script type="text/javascript" src="/flatfull/lib/ng-img-crop/ng-img-crop-util.js?_=12"></script>
 <%}%>
 <link rel="stylesheet" type="text/css" href="/flatfull/lib/ng-img-crop/ng-img-crop.css" />
 <style>
