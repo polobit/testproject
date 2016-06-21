@@ -186,7 +186,10 @@ function initializeTasksListeners(){
 	});
 	$('#tasks-list-template').on('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status , #bulk-change-dueDate ', function(event)
 	{
-		task_ids = getTaskIds();
+		task_ids = null;
+		var tasksNumber = $('#tasks-list-template').find('#select_all_tasks').attr('data');
+		if(!tasksNumber)
+			task_ids = getTaskIds();
 		console.log(task_ids);
 		var taskAction = this.id ; 
 		if(taskAction == "bulk-change-status")
@@ -256,6 +259,7 @@ function initializeTasksListeners(){
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
 	{
 		var taskCount  = 0;
+		$('#tasks-list-template').find('#select_all_tasks').empty().removeAttr('data');
 		$.each($('.tbody_check'), function(index, element)
 			{
 				if($(element).is(':checked')){
@@ -264,25 +268,24 @@ function initializeTasksListeners(){
 			});
 		if(taskCount){
 			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
-			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' select <a id="select_total_tasks">all</a>').removeAttr('data');
 		}
 		else{			
 			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
-			$('#tasks-list-template').find('#select_all_tasks').empty().removeAttr('data');
 		}
 
 	});
-	$('#tasks-list-template').on('click', '.thead_check', function(event)
+	$('#tasks-list-template').on('click', '.thead_check , #select_chosen_tasks', function(event)
 	{
-		if(this.checked){
+		if(this.checked || this.id == 'select_chosen_tasks'){
 			var taskCount = 0 ;
+			var totalTasks = getSimpleCount(window.App_Calendar.allTasksListView.collection.toJSON()) ;
 			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
 			$.each($('.tbody_check'), function(index, element)
 				{
 					$(element).attr('checked', "checked");
 					taskCount = taskCount + 1;
 				});
-			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' select <a id="select_total_tasks">all</a>').removeAttr('data');
+			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' Tasks <a id="select_total_tasks" class="c-p text-info">Select all '+totalTasks+' tasks</a>').removeAttr('data');
 		}
 		else{
 			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
@@ -299,7 +302,7 @@ function initializeTasksListeners(){
 		$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
 		var taskCount = getSimpleCount(window.App_Calendar.allTasksListView.collection.toJSON()) ;
 		$('#tasks-list-template').find('.tbody_check').attr('checked', "checked");
-		$('#tasks-list-template').find('#select_all_tasks').empty().html('All '+taskCount+' tasks Selected').attr('data',taskCount);
+		$('#tasks-list-template').find('#select_all_tasks').empty().html('All '+taskCount+' tasks Selected <a id="select_chosen_tasks" class="c-p text-info">Select chosen tasks only</a>').attr('data',taskCount);
 	});
 	
 	
@@ -956,8 +959,8 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 			contentType: 'application/json', 
 			data : JSON.stringify(sendData),
 			success : function(data){				
-				showNotyPopUp('information', "Task scheduled", "top", 5000);
-				console.log(data);
+			//	showNotyPopUp('information', "Task scheduled", "top", 5000);
+			//	console.log(data);
 				for (var i in data) {
 					App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
 				}
