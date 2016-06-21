@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.AliasDomainUtil;
@@ -57,8 +57,8 @@ public class AccountPrefs implements Serializable
 	/**
 	 * Type of Currency.
 	 */
-	@NotSaved(IfDefault.class)
-	public String currency_admin = null;
+	@NotSaved
+	public String currency = null;
 
 	/**
 	 * AccountPrefs Dao.
@@ -120,31 +120,31 @@ public class AccountPrefs implements Serializable
 	 * 
 	 * @return currency.
 	 */
-	@XmlElement(name = "currency_admin")
-	public String  getAdminCurrency()
+	@XmlElement(name = "currency")
+	public String  getCurrency()
 	{
+		System.out.println("user_currency = "+UserPrefsUtil.getCurrentUserPrefs().currency);
 		return UserPrefsUtil.getCurrentUserPrefs().currency;
 	}
-
-	public void saveCurrency(){
-		
-		String user_currency= UserPrefsUtil.getCurrentUserPrefs().currency;
-		if(user_currency != null){			
-			List<UserPrefs> userprefs = UserPrefsUtil.getAllUserPrefs();
-			AgileUser agileUser = AgileUser.getCurrentAgileUser();
-		    UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-		    userPrefs.currency = currency_admin;
-		    userPrefs.save();				
+	
+	public void saveCurrency(){	
+		if(currency == null)
+			  return;	
+		// Get all Users prefs
+		List<UserPrefs> userPrefsList = UserPrefsUtil.getAllUserPrefs();
+		for (UserPrefs userPrefs : userPrefsList) {
+			userPrefs.currency = currency;
+			userPrefs.save();
 		}
 	}
 	
-
-
+	
 	/**
 	 * Saves AccountPrefs.
 	 */
 	public void save()
 	{
+		saveCurrency();
 		dao.put(this);
 	}
 }

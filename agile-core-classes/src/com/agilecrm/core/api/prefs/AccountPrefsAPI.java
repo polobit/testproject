@@ -39,7 +39,7 @@ public class AccountPrefsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public AccountPrefs getAccountPrefs()
     {
-	return AccountPrefsUtil.getAccountPrefs();
+    	return AccountPrefsUtil.getAccountPrefs();
     }
 
     /**
