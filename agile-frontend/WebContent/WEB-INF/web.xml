@@ -1307,6 +1307,7 @@
         <url-pattern>/twiliovoicecall</url-pattern>
         <url-pattern>/Twiliovoicecall</url-pattern>
     </servlet-mapping>
+    <servlet>
 		<servlet-name>QuerySubmitServlet</servlet-name>
 		<servlet-class>com.agilecrm.webrules.util.QuerySubmitServlet</servlet-class>
 	</servlet>
