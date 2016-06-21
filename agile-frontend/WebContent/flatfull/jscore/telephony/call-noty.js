@@ -346,7 +346,9 @@ function showCallNotyMessage(message,type,position,timeout){
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var w = widgetName;
-	var c = contact;
+	//var c = contact;
+	var c = {};
+	$.extend(c,contact);
 	var s = status;
 	var n = number;
 	var arr = btns;
