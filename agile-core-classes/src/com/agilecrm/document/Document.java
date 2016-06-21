@@ -147,7 +147,7 @@ public class Document extends Cursor
     @NotSaved(IfDefault.class)
     private Key<DomainUser> ownerKey = null;
 
-    /**
+	/**
      * ObjectifyDao of Document.
      */
     public static ObjectifyGenericDao<Document> dao = new ObjectifyGenericDao<Document>(Document.class);
@@ -226,10 +226,13 @@ public class Document extends Cursor
     @XmlElement(name = "contact_ids")
     public List<String> getContact_ids()
     {
-	contact_ids = new ArrayList<String>();
+    if((contact_ids != null && contact_ids.size() == 0) || contact_ids == null)
+    {
+    	contact_ids = new ArrayList<String>();
 
-	for (Key<Contact> contactKey : related_contacts)
-	    contact_ids.add(String.valueOf(contactKey.getId()));
+    	for (Key<Contact> contactKey : related_contacts)
+    	    contact_ids.add(String.valueOf(contactKey.getId()));
+    }
 
 	return contact_ids;
     }

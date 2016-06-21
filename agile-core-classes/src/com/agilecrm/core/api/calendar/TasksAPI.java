@@ -21,12 +21,15 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.simple.JSONObject;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
@@ -34,7 +37,11 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.user.access.exception.AccessDeniedException;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
@@ -182,21 +189,44 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void deleteTask(@PathParam("id") Long id)
     {
+	Task task = TaskUtil.getTask(id);
+    if (task != null)
+    {
+    List<ContactPartial> contList = task.getContacts();
+	List<String> conIds = new ArrayList<String>();
+	for(ContactPartial con : contList)
+	{
+		conIds.add(String.valueOf(con.id));
+	}
+	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	{
+		throw new AccessDeniedException("Task cannot be deleted because you do not have permission to update associated contact.");
+	}
 	try
 	{
-	    Task task = TaskUtil.getTask(id);
-	    if (task != null)
-	    {
 		ActivitySave.createTaskDeleteActivity(task);
 		if (!task.getNotes(id).isEmpty())
 		    NoteUtil.deleteBulkNotes(task.getNotes(id));
+		try {
+			if(!(task.relatedDeals()).isEmpty())
+			{
+				for(Opportunity oppr : task.relatedDeals())
+				{
+					oppr.save();
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		task.delete();
-	    }
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
+    }
     }
 
     /**
@@ -211,15 +241,32 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Task createTask(Task task)
     {
+	List<String> conIds = task.contacts;
+    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    {
+    	throw new AccessDeniedException("Task cannot be created because you do not have permission to update associated contact(s).");
+    }
 	task.save();
 	try
 	{
 	    ActivitySave.createTaskAddActivity(task);
 	}
-
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	}
+	try {
+		if(!(task.relatedDeals()).isEmpty())
+		{
+			for(Opportunity oppr : task.relatedDeals())
+			{
+				oppr.save();
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	return TaskUtil.getTask(task.id);
     }
@@ -236,6 +283,52 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Task updateTask(Task task)
     {
+    	Task oldTask = TaskUtil.getTask(task.id);
+        if(oldTask != null)
+        {
+        	List<ContactPartial> contList = oldTask.getContacts();
+        	List<String> conIds = new ArrayList<String>();
+        	for(ContactPartial con : contList)
+        	{
+        		conIds.add(String.valueOf(con.id));
+        	}
+        	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+        	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+        	{
+        		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated contact(s).");
+        	}
+        }
+    	List<String> conIds = task.contacts;
+    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    	{
+    		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated contact(s).");
+    	}
+    	  try {
+			if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())
+				{
+					for(Opportunity oppr : oldTask.relatedDeals())
+					{
+						oppr.save();
+					}
+				}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    task.save();
+    try {
+		if(!(task.relatedDeals()).isEmpty())
+		{
+			for(Opportunity oppr : task.relatedDeals())
+			{
+				oppr.save();
+			}
+		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 	try
 	{
 	    ActivitySave.createTaskEditActivity(task);
@@ -245,7 +338,6 @@ public class TasksAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	task.save();
 	return TaskUtil.getTask(task.id);
     }
 
@@ -259,12 +351,47 @@ public class TasksAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
-	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
+	JSONArray tasksArray = new JSONArray();
+	List<String> contactIdsList = new ArrayList<String>();
+	 if(tasksJSONArray!=null && tasksJSONArray.length()>0){		 
+		 try {
+			for (int i = 0; i < tasksJSONArray.length(); i++) {
+				 String taskId =  (String) tasksJSONArray.get(i);
+				 Task task = TaskUtil.getTask(Long.parseLong(taskId));
+				 
+				 List<ContactPartial> contactsList = task.getContacts();
+				 List<String> conIds = new ArrayList<String>();
+				 for(ContactPartial cont : contactsList)
+				 {
+					 conIds.add(String.valueOf(cont.id));
+				 }
+		    	 List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+		    	 
+		    	 if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+		    	 {
+		    		 tasksArray.put(tasksJSONArray.getString(i));
+		    		 contactIdsList.addAll(modifiedConIds);
+		    	 }
+				 
+				 if(!task.relatedDeals().isEmpty()){
+					 for(Opportunity oppr : task.relatedDeals()){
+						 oppr.save();
+					 }
+				 }
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     }
+	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksArray, String.valueOf(tasksArray.length()),
 		"");
-	Task.dao.deleteBulkByIds(tasksJSONArray);
+	Task.dao.deleteBulkByIds(tasksArray);
+	return contactIdsList;
     }
 
     /**

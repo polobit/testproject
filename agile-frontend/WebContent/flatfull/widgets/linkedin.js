@@ -344,8 +344,13 @@ function showLinkedinMatchingProfiles(data)
 				propertiesArray.push({ "name" : "title", "value" : summary });
 			}
 
-			// Add all the properties to contact at once
-			agile_crm_update_contact_properties(propertiesArray);
+			verifyUpdateImgPermission(function(can_update){
+				if(can_update)
+				{
+					// Add all the properties to contact at once
+					agile_crm_update_contact_properties(propertiesArray);
+				}
+			});
 
 			// show profile by id
 			showLinkedinProfile(Linkedin_id);
@@ -1059,17 +1064,16 @@ function getLinkedinIdByUrl(linkedin_web_url, callback)
 		if (!data)
 		{
 			// Shows message that URL is invalid to the user
-			alert("URL provided for linkedin is not valid ");
+			showAlertModal("linkedin_invalid_url", undefined, function(){
+				// Shows LinkedIn matching profiles based on contact name
+				getLinkedinMatchingProfiles();
 
-			// Shows LinkedIn matching profiles based on contact name
-			getLinkedinMatchingProfiles();
-
-			/*
-			 * Delete the LinkedIn URL associated with contact as it is
-			 * incorrect
-			 */
-			agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', linkedin_web_url);
-
+				/*
+				 * Delete the LinkedIn URL associated with contact as it is
+				 * incorrect
+				 */
+				agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', linkedin_web_url);
+			});
 			return;
 		}
 
@@ -1084,13 +1088,13 @@ function getLinkedinIdByUrl(linkedin_web_url, callback)
 		if (data.responseText.indexOf("Public profile URL is not correct") != -1)
 		{
 			// Shows error message to the user returned by LinkedIn
-			alert("URL provided for linkedin is not valid " + data.responseText);
-
-			/*
-			 * Delete the LinkedIn URL associated with contact as it is
-			 * incorrect
-			 */
-			agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', linkedin_web_url);
+			showAlertModal("URL provided for linkedin is not valid " + data.responseText, undefined, function(){
+				/*
+				 * Delete the LinkedIn URL associated with contact as it is
+				 * incorrect
+				 */
+				agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', linkedin_web_url);
+			},undefined, "Error");
 			return;
 		}
 

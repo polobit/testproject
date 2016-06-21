@@ -78,7 +78,12 @@ function showFacebookMatchingProfile(contact_id, first_name)
 
 					console.log(propertiesArray);
 
-					agile_crm_update_contact_properties(propertiesArray);
+					verifyUpdateImgPermission(function(can_update){
+						if(can_update)
+						{
+							agile_crm_update_contact_properties(propertiesArray);
+						}
+					});
 
 					// show twitter profile by id
 					showFacebookProfile(Facebook_id, contact_id);

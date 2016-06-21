@@ -2,6 +2,8 @@ package com.agilecrm.landingpages;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,6 +55,8 @@ public class LandingPageServlet extends HttpServlet {
 				throw new Exception("No landing page found.");
 				
 				String fullXHtml = landingPage.html;
+				fullXHtml = getResponsiveMediaIFrame(fullXHtml);				
+				fullXHtml = getFormEmbedCode(fullXHtml,lpUtil.requestingDomain);
 				
 				String domainHost = "http://localhost:8888";
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
@@ -61,8 +65,15 @@ public class LandingPageServlet extends HttpServlet {
 				}
 				
 				String formSubmitCode = "<script>(function(a){var b=a.onload,p=false;if(p){a.onload=\"function\"!=typeof b?function(){try{_agile_load_form_fields()}catch(a){}}:function(){b();try{_agile_load_form_fields()}catch(a){}}};a.document.forms[\"agile-form\"].onsubmit=function(a){a.preventDefault();try{_agile_synch_form_v3()}catch(b){this.submit()}}})(window);</script>";
+				
 				String analyticsCode = "<script src=\""+domainHost+"/stats/min/agile-min.js\"></script>"
-						+ "<script> _agile.set_account('%s', '"+lpUtil.requestingDomain+"'); _agile.track_page_view();</script>";
+						+ "<script> _agile.set_account('%s', '"+lpUtil.requestingDomain+"');";
+				
+				if (!lpUtil.cnameHost.isEmpty()) {
+					analyticsCode += "_agile.set_tracking_domain('"+lpUtil.cnameHost+"');";
+				}
+				
+				analyticsCode += " _agile.track_page_view();</script>";
 				
 				NamespaceManager.set(lpUtil.requestingDomain);
 				
@@ -72,6 +83,9 @@ public class LandingPageServlet extends HttpServlet {
 					analyticsCode = String.format(analyticsCode, apiKey.js_api_key);
 				}					
 				
+				if(landingPage.elements_css != null){
+					fullXHtml = fullXHtml.replace("</head>", "<style id=\"elements-css\">"+landingPage.elements_css+"</style></head>");	
+				}
 				fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
 				fullXHtml = fullXHtml.replace("</body>", formSubmitCode+"<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
 				
@@ -84,4 +98,36 @@ public class LandingPageServlet extends HttpServlet {
 		}
 		
 	}
+	
+	private String getResponsiveMediaIFrame(String fullHtml) {
+		
+		String responsiveMediaIFrame = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class=\"embed-responsive-item\" src=\"%s\"></iframe></div>";
+		Pattern p = Pattern.compile("<img[^>]*data-src=[\"]*([\\w\\s-.:\\/,]+)[\"]*[^>]*>",Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(fullHtml);
+		
+		while(m.find()){
+			fullHtml = fullHtml.replaceAll(m.group(0), String.format(responsiveMediaIFrame, m.group(1)));
+		}
+		
+		return fullHtml;
+	}
+	
+	
+	private String getFormEmbedCode(String fullHtml, String domain) {
+		
+		String responsiveMediaIFrame = "<div id=\""+domain+"_%s\" class=\"agile_crm_form_embed form-embed-container\"></div>";
+		System.out.println(responsiveMediaIFrame);
+		Pattern p = Pattern.compile("<div data-embed-agile-form=\"(.*?)\" class=\"form-embed-container\"(?:[^>\"']|\"[^\"]*\"|'[^']*')*>(.*?)</div>",Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher m = p.matcher(fullHtml);
+		
+		while(m.find()){
+			System.out.println(m.group(0));
+			System.out.println(m.group(1));
+			fullHtml = fullHtml.replace(m.group(0), String.format(responsiveMediaIFrame, m.group(1)));
+		}
+		System.out.println(fullHtml);
+		return fullHtml;
+	}
+	
+	
 }

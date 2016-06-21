@@ -39,78 +39,82 @@ function initializeActivitiesListner(el){
 	});
 
 
-
-	$("#activities-listners").on('click', '.activity-event-edit', function(e)
-	{
+$("#activities-listners").on('click', '.activity-event-edit', function(e) {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 
-	var currentevent = getEventObject(data);
-
-	update_event_activity(currentevent);
-
+	getEventObject(data, function(resp) {
+			update_event_activity(resp);
+		});
 });
 
-
-
-	$("#activities-listners").on('click', '.email-details', function(e) 
-{
+$("#activities-listners").on('click', '.email-details', function(e) {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 
-	var obj = getActivityObject(data);
-	console.log(obj);
+	getActivityObject(data, function(resp) {
+			console.log(resp);
 
-	getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
+			getTemplate("infoModal", resp, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				var emailinfo = $(template_ui);
+				emailinfo.modal('show');
+			}, null);
+		});
+
+});
+	/*Ticket related click event to show the modal when requester or assignee replies*/
+	$("#activities-listners").on('click', '.ticket-activity-notes', function(e) 
+{
+	e.preventDefault();
+   	var id = $(this).data("id");
+    
+    var activity_ticket_notes = activitiesview.collection.get(id).toJSON();
+
+    //console.log(activity_ticket_notes.entityObject);
+	getTemplate("ticket-activity-notes-modal", activity_ticket_notes, undefined, function(template_ui){
+
 		if(!template_ui)
 			  return;
+
 		var emailinfo = $(template_ui);
+
 		emailinfo.modal('show');
 	}, null);
 
 });
 
 }
-function getDealObject(id)
+
+function getEventObject(id, callback)
 {
-
-	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : true }).responseText;
-
+	
+	$.ajax({ 
+			type : "GET", 
+			url : 'core/api/events/getEventObject/' + id, 
+			success : function(response) {
+				if( callback && typeof(callback) === 'function' )	callback(response);
+			} 
+		});
 }
 
-function getEventObject(id)
+function getActivityObject(id, callback)
 {
-
-	return $.ajax({ type : "GET", url : 'core/api/events/getEventObject/' + id, async : false }).responseText;
-
-}
-
-function getTaskObject(id)
-{
-
-	return $.ajax({ type : "GET", url : 'core/api/tasks/getTaskObject/' + id, async : false }).responseText;
-
-}
-
-function getNoteObject(id)
-{
-
-	return $.ajax({ type : "GET", url : 'core/api/notes/' + id, async : false }).responseText;
-
-}
-
-function getActivityObject(id)
-{
-
-	return $.ajax({ type : "GET", url : 'core/api/activitylog/' + id, async : false }).responseText;
-
+	$.ajax({ 
+			type : "GET", 
+			url : 'core/api/activitylog/' + id, 
+			success : function(response) {
+				if( callback && typeof(callback) === 'function' )	callback(response);
+			} 
+		});
 }
 
 function update_event_activity(ele)
 {
 	$("#updateActivityModal").html(getTemplate("update-activity-modal"));
 	
-	var value = JSON.parse(ele);
+	var value = ele;
 	deserializeForm(value, $("#updateActivityForm"));
 	$('.update-start-timepicker').val(fillTimePicker(value.start));
 	$('.update-end-timepicker').val(fillTimePicker(value.end));

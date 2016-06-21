@@ -10,9 +10,11 @@ import net.sf.json.JSONObject;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.reports.Reports.ReportType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
@@ -36,14 +38,24 @@ public class Portlet {
     public String name = null;
     
     public static enum PortletType{
-    	CONTACTS, DEALS, TASKSANDEVENTS, USERACTIVITY, RSS, ACCOUNT 
+    	CONTACTS, DEALS, TASKSANDEVENTS, USERACTIVITY, RSS, ACCOUNT, WEBSTATS 
     };
+    
 
     /**
      * Portlet type which stores info to categorize the portlets
      */
     @Indexed
     public PortletType portlet_type = null;
+    
+    public static enum PortletRoute
+    {
+	Deals,Contacts,Tasks,Events,DashBoard,MarketingDashboard
+    };
+    
+    @Indexed
+    @NotSaved(IfDefault.class)
+    public String portlet_route = null;
     
     @NotSaved(IfDefault.class)
     public String prefs = null;
@@ -86,6 +98,9 @@ public class Portlet {
     @NotSaved
     public boolean is_added = false;
     
+    @NotSaved
+    public String is_routeadded = null;
+    
     // Dao
     private static ObjectifyGenericDao<Portlet> dao = new ObjectifyGenericDao<Portlet>(Portlet.class);
     
@@ -102,13 +117,14 @@ public class Portlet {
     	this.portlet_type=type;
     }
     
-    public Portlet(String name,PortletType type,int column_position,int row_position,int size_x,int size_y){
+    public Portlet(String name,PortletType type,int column_position,int row_position,int size_x,int size_y,String route){
     	this.name=name;
     	this.portlet_type=type;
     	this.column_position=column_position;
     	this.row_position=row_position;
     	this.size_x=size_x;
     	this.size_y=size_y;
+    	this.portlet_route=route;
     }
     
     public void save(){

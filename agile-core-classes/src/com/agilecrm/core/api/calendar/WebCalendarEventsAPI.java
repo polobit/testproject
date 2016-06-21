@@ -89,7 +89,7 @@ public class WebCalendarEventsAPI
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public String saveWebEvent(WebCalendarEvent wce)
+	public void saveWebEvent(WebCalendarEvent wce)
 	{
 		System.out.println(wce);
 
@@ -97,10 +97,9 @@ public class WebCalendarEventsAPI
 		String result;
 		try
 		{
-			result = WebCalendarEventUtil.createEvents(wce, contact);
-			return result;
+			WebCalendarEventUtil.createEvents(wce, contact);
 		}
-		catch (JSONException e)
+		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();

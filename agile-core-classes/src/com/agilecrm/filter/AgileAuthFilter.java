@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.LoginServlet;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -66,10 +68,12 @@ public class AgileAuthFilter implements Filter
 		|| httpRequest.getRequestURI().contains("/core/api/bulk-actions") || httpRequest.getRequestURI().contains("/core/api/opportunity/backend")
 		|| httpRequest.getRequestURI().contains("oauth") || httpRequest.getRequestURI().contains("/gmail")
 		|| httpRequest.getRequestURI().contains("/core/api/webevents")|| httpRequest.getRequestURI().contains("/core/hook")
-		|| httpRequest.getRequestURI().contains("/download-attachment") || httpRequest.getRequestURI().contains("/core/api/forms/form"))
+		|| httpRequest.getRequestURI().contains("/download-attachment") || httpRequest.getRequestURI().contains("/core/api/forms/form")
+		|| httpRequest.getRequestURI().contains("/helpcenterapi/api/knowledgebase"))
 	{
 	    System.out.println("JS API - ignoring filter");
 	    chain.doFilter(request, response);
+	    SessionCache.unsetSession();
 	    return;
 	}
 	// }
@@ -92,6 +96,9 @@ public class AgileAuthFilter implements Filter
 
 	// Add this in session manager
 	SessionManager.set((HttpServletRequest) request);
+	
+	// Set the session in SessionCache
+    SessionCache.setSession(httpRequest.getSession());
 
 	// For registering all entities - AgileUser is a just a random class we
 	// are using
@@ -136,8 +143,15 @@ public class AgileAuthFilter implements Filter
 	    httpRequest.getRequestDispatcher("/error/user-disabled.jsp").include(request, response);
 	    return;
 	}
+	
+	//Updates the login domain user update contacts scope with edit contacts and delete contacts
+	if (domainUser != null && domainUser.restricted_scopes != null && domainUser.restricted_scopes.contains(UserAccessScopes.DELETE_CONTACTS))
+	{
+		DomainUserUtil.setNewUpdateContactACLs(domainUser);
+	}
 
-	chain.doFilter(request, response);
+    chain.doFilter(httpRequest, httpResponse);
+    SessionCache.unsetSession();
 	return;
     }
 

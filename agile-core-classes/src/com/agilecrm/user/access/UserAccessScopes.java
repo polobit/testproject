@@ -15,7 +15,7 @@ public enum UserAccessScopes
 {
     IMPORT_CONTACTS, CREATE_CONTACT, UPDATE_CONTACT, VIEW_CONTACTS, RESTRICTED,
 
-    DEFAULT, EXPORT_CONTACTS, DELETE_CONTACTS, RESTRICTED_ACCESS, ADD_NEW_TAG, MANAGE_CALENDAR, VIEW_CALENDAR;
+    DEFAULT, EXPORT_CONTACTS, DELETE_CONTACTS, RESTRICTED_ACCESS, ADD_NEW_TAG, MANAGE_CALENDAR, VIEW_CALENDAR, MANAGE_DEALS, VIEW_DEALS, EDIT_CONTACT, DELETE_CONTACT;
 
     public static List<UserAccessScopes> customValues()
     {
@@ -23,6 +23,9 @@ public enum UserAccessScopes
 	defaultScopes.remove(UserAccessScopes.RESTRICTED_ACCESS);
 	defaultScopes.remove(UserAccessScopes.RESTRICTED);
 	defaultScopes.remove(UserAccessScopes.DEFAULT);
+	//In previous versions DELETE_CONTACTS is used for update contacts permission, 
+	//now update is split into update(EDIT_CONTACT) and delete(DELETE_CONTACT), so we are removing this
+	defaultScopes.remove(UserAccessScopes.DELETE_CONTACTS);
 
 	return defaultScopes;
     }

@@ -171,7 +171,7 @@ function pie(url, selector, name)
  * @param stacked -
  *            is stacked graph or bar graph? If bar graph, stacked is null.
  */
-function showBar(url, selector, name, yaxis_name, stacked)
+function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 {
 	var chart;
 
@@ -195,7 +195,10 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			if(selector!='calls-chart')
 				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
 			else
-				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'];
+				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF','#B72030'];
+			
+			colors = selected_colors || colors;
+			
 			var dataLength = 0;
 				var frequency= $("#frequency:visible").val();
 			// Data to map with X-axis and Y-axis.
@@ -204,7 +207,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			// Iterates through data and add all keys as categories
 			$.each(data, function(k, v)
 			{
-				if(selector!='calls-chart')
+				if(selector!='calls-chart' && selector!='tickets-chart')
 				  categories.push(k);
 
 				// Initializes series with names with the first
@@ -236,7 +239,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 	
 			});
 					var cnt=0;
-					if(selector=='calls-chart'){
+					if(selector=='calls-chart' || selector=='tickets-chart'){
 					$.each(data, function(k, v)
 			{
 						dateRangeonXaxis(tempcategories,categories,frequency,dataLength,cnt);
@@ -1597,7 +1600,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
     });
 }
 
-function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData,x_pos,y_pos){
+function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData,x_pos,y_pos,base_model){
 	if(x_pos == undefined)
 		x_pos = -10;
 	if(y_pos == undefined)
@@ -1606,9 +1609,21 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 chart: {
                     renderTo: selector,
                     type: 'area',
-                    marginRight: 130,
-                    marginBottom: 50
+                    marginRight: 50,
+                    marginBottom: 50,
+                    events: {
+			   		load: function(){
+			   			console.log("load");
+			   			if(base_model!=undefined)
+			   			portlet_utility.toggle_chart_legends(this, base_model);
+			   		}, redraw : function(){
+			   			console.log("redraw");
+			   			if(base_model!=undefined)
+			   			portlet_utility.toggle_chart_legends(this, base_model);
+			   		}
+			   },
                 },
+                
                 colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
                 title: {
                     text: name,
@@ -1642,7 +1657,17 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     verticalAlign: 'top',
                     x: x_pos,
                     y: y_pos,
-                    borderWidth: 0
+                    borderWidth: 0,
+                    labelFormatter : function() {
+														if (this.name.length > 12) {
+															return this.name
+																	.slice(0,
+																			12)
+																	+ '...';
+														} else {
+															return this.name;
+														}
+													}
                 },
                  plotOptions: {
                     area: {

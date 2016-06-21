@@ -20,6 +20,7 @@ import com.googlecode.objectify.Query;
 public class LandingPageUtil
 {
 	public String requestingDomain = NamespaceManager.get();
+	public String cnameHost = "";
 	
 	/**
 	 * ObjectifyDao of LandingPage.
@@ -70,6 +71,8 @@ public class LandingPageUtil
 						return null;
 					
 					requestingDomain = lpCNames.domain;
+					cnameHost = lpCNames.cname_host;
+					
 					NamespaceManager.set(lpCNames.domain);
 					return getLandingPage(lpCNames.landing_page_id);
 				}

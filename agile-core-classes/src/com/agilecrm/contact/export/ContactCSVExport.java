@@ -1,5 +1,8 @@
 package com.agilecrm.contact.export;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +77,9 @@ public class ContactCSVExport
     public static final String NAME = "Name";
     public static final String URL = "Url";
 
+    //created time column added - 05.06 - prakash
+    public static final String CREATED_TIME = "Created Date";
+    private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     /**
      * Inserts contact properties into CSV w.r.t header name.
      * 
@@ -262,6 +268,12 @@ public class ContactCSVExport
 	setFieldAtIndex(TAGS, tagWithTimes[0], str, indexMap);
 	setFieldAtIndex(TAGS_TIME, tagWithTimes[1], str, indexMap);
 
+	//Add creted time in MM/dd/yyyy format
+	Date date = new Date();
+	date.setTime(contact.created_time*1000);	
+	setFieldAtIndex(CREATED_TIME, dateFormat.format(date), str, indexMap);
+	// adding date in MM/dd/yyyy format done
+	
 	return str;
     }
 

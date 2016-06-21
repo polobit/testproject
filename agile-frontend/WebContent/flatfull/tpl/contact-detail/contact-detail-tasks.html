@@ -66,10 +66,10 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a  href="#contact/{{id}}" >{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+							<a  href="#contact/{{id}}" data="{{id}}" class="popover_contact text-capitalize">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a  href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        					<a  href="#company/{{id}}" data="{{id}}" class="text-capitalize popover_contact">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
@@ -84,9 +84,9 @@
 			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>
      </div>
-<div class="pull-right">
+<div class="pull-right icons-text-sm">
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
         </span>
         </div>

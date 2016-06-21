@@ -41,16 +41,48 @@
 	{{#if this.length}}
 		{{#each this}}          
 			<li class="list-group-item r-none b-l-none b-r-none">
-				{{#if_equals recording.total "0"}}
-					<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
-				{{else}}
-					<i class="icon pull-left icon-play m-r-xs m-t-xxs c-p r" id="record_sound_play" sound_url="{{recording.Recording.Uri}}" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;"></i>
-				{{/if_equals}}			
+			{{#if recording.Recording}}
+				{{#if_equals recording.Recording.total "0"}}
+				<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
 				<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
 				<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
 				<div class="clearfix"></div>
-				<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>
+				<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>	
+				{{else}}
+					<div class="twilio-sound">
+					<!-- <i class="icon pull-left icon-play m-r-xs m-t-xxs r" id="record_sound_play" sound_url="{{recording.Recording.Uri}}" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;"></i> -->
+					<div class = "text-inside-sound">
+					<i class="icon pull-left icon-play m-r-xs m-t-xxs r" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;"></i>
+					<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
+					<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
+					<div class="clearfix"></div>
+					<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>	
+					
+					<span class="actions text-sm options-record-twilio none" style="float: right;">
+						<a title="Play" class="c-p play-twilio-record"> <i class="icon-play" style="font-size: 14px;color: green;"></i> </a>
+						<a href="https://api.twilio.com{{recording.Recording.Uri}}" target="_blank" title="Download" class="c-p"> <i class="icon-download" style="font-size: 14px;color: gray;"></i> </a>
+					</span>
+					</div>
+
+					<div class="none audio-inside-sound">
+					<div class="pull-right close-twilio-record" style="cursor: pointer;height: 0px;position: relative;top: 5px;font-weight: bold">X</div>
+					<audio id="myAudio_twilio" class = "twilio_audio" controls preload='meta' style="display: block;width: calc(94%);">
+						<source src="https://api.twilio.com{{recording.Recording.Uri}}" type="audio/wav">  						
+						<source src="https://api.twilio.com{{recording.Recording.Uri}}" type="audio/mpeg">
+						<source src="https://api.twilio.com{{recording.Recording.Uri}}" type="audio/ogg">
+  						Your browser does not support the audio element.Please download the file to play.
+					</audio>
+					</div>
+					{{/if_equals}}			
+				{{else}}
+						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
+						<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unanswered{{else}}Call connected{{/if_equals}}</div>
+						<div class="pull-right">{{#is_string call.Duration}}{{toProperFormat call.Duration}}{{else}}0 s{{/is_string}}</div>
+						<div class="clearfix"></div>
+						<small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>
+				{{/if}}
 				<div class="clearfix"></div>
+					<div>
 			</li>
 		{{/each}}
 	{{else}}

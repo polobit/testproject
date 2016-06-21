@@ -678,9 +678,6 @@
 {
 	white-space:nowrap;
 }
-.space-normal {
-  white-space: normal;
-}
 
 .text-u-c {
   text-transform: uppercase;
@@ -916,6 +913,10 @@ display:flex;
 .w-x-half
 {
 	width:80%;
+}
+.w-xx-half
+{
+  width:85%;
 }
 .w-full {
   width: 100%;
@@ -1334,6 +1335,21 @@ border-collapse: separate;
 
 .text-head-black{
 	color:#333;
+}
+.thumb-small {
+  display: inline-block;
+  width: 30px;
+}
+
+.thumb-small img {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.thumb-small img{
+  height: 30px;
+  width: 30px;
 }
 
 

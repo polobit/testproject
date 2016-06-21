@@ -1,0 +1,9 @@
+<!-- Select Multiple -->
+<div class="agile-group">
+  <label class="agile-label" for="<%= id %>"><%= label %></label>
+  <div class="<%= inputsize %> agile-field">
+    <select id="<%= id %>" name="<%= agilefield %>" class="<%= inputheight %>" multiple="multiple"><% _.each(options, function(option) { %>
+      <option><%= option %></option><% }); %>
+    </select>
+  </div>
+</div>

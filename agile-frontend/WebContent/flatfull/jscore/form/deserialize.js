@@ -139,6 +139,7 @@ function deserializeForm(data, form)
 								});
 							}
 
+
 							/*
 							 * Deserialize tags, tags are represented by list
 							 * elements prepended the respective input field. If
@@ -283,6 +284,20 @@ function deserializeForm(data, form)
 								}
 							}
 
+							else if (fel.hasClass('multiple-checkbox-adminprefs'))
+							{
+
+								/*
+								 * Iterates through options of the select and
+								 * call multiSelect function to select the
+								 * option
+								 */
+								for (var i = 0; i < el.length; i++)
+								{
+									$('input:checkbox[value="' + el[i] + '"]', fel).attr("checked", "checked");
+								}
+							}
+
 							/*
 							 * Deserialize chained select, chained select is
 							 * used for creating filters. It is logical chaining
@@ -300,6 +315,27 @@ function deserializeForm(data, form)
 							}
 						}
 
+					});
+}
+
+
+
+
+
+function deserializecontactsForm(data, form)
+{
+
+	$.each(data,function(i, el)
+					{
+						var fel = form.find('*[name="' + el + '"]'), type = "", tag = "";
+
+						// If Fields exist with the field name, process the
+						// fields to fill the data in the form
+						if (fel.length > 0)
+						{
+
+							$('input:checkbox[value="' + el + '"]', form).attr("checked", "checked");
+						}
 					});
 }
 
@@ -688,7 +724,7 @@ function deserializeLhsFilters(element, data)
 		var RHS_NEW_ELEMENT = $(currentElemnt).find('.' + CONDITION).find('#RHS_NEW').children();
 		if ($(RHS_ELEMENT).hasClass("date"))
 		{
-			RHS_VALUE = getLocalTimeFromGMTMilliseconds(RHS_VALUE);
+			RHS_VALUE = getLocalTimeFromGMTMillisecondsforDynamicFilters(RHS_VALUE);
 
 			$(RHS_ELEMENT).val(getDateInFormatFromEpoc(RHS_VALUE));
 			$(RHS_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_VALUE));
@@ -701,7 +737,7 @@ function deserializeLhsFilters(element, data)
 		{
 			if ($(RHS_NEW_ELEMENT).hasClass("date"))
 			{
-				RHS_NEW_VALUE = getLocalTimeFromGMTMilliseconds(RHS_NEW_VALUE);
+				RHS_NEW_VALUE = getLocalTimeFromGMTMillisecondsforDynamicFilters(RHS_NEW_VALUE);
 
 				$(RHS_NEW_ELEMENT).val(getDateInFormatFromEpoc(RHS_NEW_VALUE));
 				$(RHS_NEW_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_NEW_VALUE));

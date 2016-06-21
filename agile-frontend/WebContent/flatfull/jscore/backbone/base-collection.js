@@ -85,6 +85,8 @@ initialize : function()
 	this.model.bind("destroy", this.close, this);
 
 	this.model.bind("change", this.render, this);
+	this.model.bind("popoverChange", this.test,this);
+
 },
 /*
  * On click on ".delete" model representing the view is deleted, and removed
@@ -99,13 +101,12 @@ deleteItem : function(e)
 deleteModel : function(e)
 {
 	e.preventDefault();
-	if(!confirm("Are you sure you want to delete?"))
-		return false;
-
-	$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
-		location.reload(true);
-	}
-        });
+	showAlertModal("delete", "confirm", function(){
+		$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
+			location.reload(true);
+			}
+	    });
+	});
 	
 },
 
@@ -166,7 +167,31 @@ edit : function(e)
 	 * template: this.model.get("edit_template") }); var el =
 	 * editView.render().el; $('#content').html(el); }
 	 */
-}, render : function(callback)
+}, 
+test : function(callback)
+{
+		var async = false;
+	// if(callback && typeof (callback) == "function")
+	// async = true;
+	if (async)
+	{
+		var that = this
+		// console.log(this.model.toJSON());
+		getTemplate(that.options.template, that.model.toJSON(), undefined, function(el)
+		{
+			$(that.el).html(el);
+			$(that.el).data(that.model);
+			console.log($(that.el));
+			callback(that.el);
+		});
+		return this;
+	}
+
+	$(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
+
+	return this;
+},
+render : function(callback)
 {
 	var async = false;
 	// if(callback && typeof (callback) == "function")
@@ -249,7 +274,7 @@ var Base_Collection_View = Backbone.View
 				    showTransitionBar();
 
 				// Binds functions to view
-				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI');
+				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'appendItemsOnAddEvent', 'buildCollectionUI');
 
 				if (this.options.data)
 				{
@@ -279,6 +304,7 @@ var Base_Collection_View = Backbone.View
 				 */
 				this.collection.bind('sync', this.appendItem);
 				this.collection.bind('add', this.appendItemOnAddEvent);
+				this.collection.bind('addAll', this.appendItemsOnAddEvent);
 
 				var that = this;
 
@@ -351,6 +377,13 @@ var Base_Collection_View = Backbone.View
 						 * view
 						 */
 						$(".scroll-loading", that.el).remove();
+
+						/**
+						 *callback to be fired when next set is fetched. Added by Sasi on Jan/18/2016.
+						 */
+						if (that.options.infini_scroll_cbk)
+							that.options.infini_scroll_cbk();
+
 					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size, target : this.options.scroll_target ? this.options.scroll_target: $(window),
 
 					/*
@@ -462,6 +495,7 @@ var Base_Collection_View = Backbone.View
 				return itemView
 			}, appendItemOnAddEvent : function(base_model)
 			{
+				//startFunctionTimer("appendItemOnAddEvent");
 				this.appendItem(base_model, true);
 				/*
 				 * if(this.collection && this.collection.length) {
@@ -479,7 +513,35 @@ var Base_Collection_View = Backbone.View
 					return;
 
 				append_checkboxes(this.model_list_element);
+				//endFunctionTimer("appendItemOnAddEvent");
+			},
 
+			appendItemsOnAddEvent : function(modalsArray)
+			{
+				//startFunctionTimer("appendItemsOnAddEvent");
+				this.model_list_element_fragment = document.createDocumentFragment();
+
+				this.model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
+
+
+				/*
+				 * Iterates through each model in the collection and creates a
+				 * view for each model and adds it to model-list
+				 */
+				 var that = this;
+				$.each(modalsArray, function(key, item)
+				{ // in case collection is not empty
+
+					that.appendItem(item);
+				});
+
+				$(this.model_list_element).append(this.model_list_element_fragment);
+				append_checkboxes(this.model_list_element);
+				var appendItemCallback = this.options.appendItemCallback;
+
+				if (appendItemCallback && typeof (appendItemCallback) === "function")
+					appendItemCallback($(this.el));
+				//endFunctionTimer("appendItemsOnAddEvent");
 			},
 			/**
 			 * Renders the collection to a template specified in options, uses
@@ -506,8 +568,11 @@ var Base_Collection_View = Backbone.View
 				// once collection is fetched, loading is removed by render and
 				// view gets populated with fetched collection.
 				if (force_render == undefined)
-				{
-					$(this.el).html("");
+				{	
+					//Included by Sasi for tickets
+					var html = (this.options.customLoader) ? getTemplate(this.options.customLoaderTemplate) : '';
+
+					$(this.el).html(html);
 					return this;
 				}
 

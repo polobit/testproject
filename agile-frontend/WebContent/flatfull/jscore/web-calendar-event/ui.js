@@ -13,10 +13,10 @@ $(function()
 
 		$("#details").empty();
 		Selected_Time = $(this).attr('data');
-		$(".show_slots").find('input:radio').attr('checked', false);
+		$(".show_slots").find('input:radio').prop('checked', false);
 		$(this, [
 			'input:radio'
-		]).attr('checked', true);
+		]).prop('checked', true);
 		appointmenttype = $('input[name="selected_meeting_time"]:checked').val();
 
 		$(".activemin").removeClass("activemin");
@@ -67,7 +67,7 @@ $(function()
 		$('.selected-slot').each(function()
 		{
 			if ($(this).attr('id') != currentId)
-				$(this).attr("checked", false);
+				$(this).prop("checked", false);
 		});
 
 		// Make next part enable
@@ -130,31 +130,12 @@ $(function()
 	{
 
 		SELECTED_TIMEZONE = $('#user_timezone').val();
-		$(".timezone1").text(SELECTED_TIMEZONE);
-		$('.timezone1').show();
-		$("#hidetimezone").addClass("hide");
 
 		if (!selecteddate || !Selected_Time)
 			return;
 		$("#current_local_time").html("Current Time: " + getConvertedTimeFromEpoch(new Date().getTime() / 1000));
 		$('.checkbox-main-grid').html('<img class="loading-img" src="'+updateImageS3Path("../../img/21-0.gif")+'" style="width: 40px;margin-left: 216px;"></img>');
 		get_slots(selecteddate, Selected_Time);
-	});
-
-	$('.timezone1').click(function()
-	{
-		$("#hidetimezone").removeClass("hide");
-		$('.timezone1').hide();
-	});
-
-	$('#user_timezone').blur(function()
-	{
-		if (SELECTED_TIMEZONE == $('#user_timezone').val())
-		{
-			$(".timezone1").text(SELECTED_TIMEZONE);
-			$('.timezone1').show();
-			$("#hidetimezone").addClass("hide");
-		}
 	});
 
 	function autoscrol(divclass)

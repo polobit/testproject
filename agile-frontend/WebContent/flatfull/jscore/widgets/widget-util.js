@@ -44,10 +44,18 @@ function update_collection_with_prefs(data) {
 		}
 
 	}
+
 }
 
 function save_widget_prefs(pluginName, prefs, callback) {
 	console.log("In save_widget_prefs.");
+	
+	var msgType = "success";
+	var displayName = pluginName;
+	if(displayName=="TwilioIO")
+		displayName="Twilio";
+	var msg = displayName+" widget saved successfully";	
+
 	/*
 	 * Get widget model from collection based on the name attribute of the
 	 * widget model
@@ -79,7 +87,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 			data.set('is_added', true);
 			models[0].set(data);
 			var widgetID = data.id;
-			var displayName;
+			
 			if(pluginName  == "Rapleaf"){
 				displayName = "Towerdata"
 			}else if(pluginName == "HelpScout"){
@@ -88,10 +96,7 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				displayName = "Twilio";
 			}else{
 				displayName = pluginName;
-			}
-
-			var msgType = "success";
-			var msg = displayName+" widget saved successfully";
+			}			
 
 			if(widgetID){
 
@@ -133,12 +138,17 @@ function save_widget_prefs(pluginName, prefs, callback) {
 
 			}else{
 				msgType = "error";
-				msg = ("Error occurred while saving "+displayName);
-				$('#stripe_url').removeAttr('disabled');
+
+				if(pluginName == "Braintree" || displayName == "Uservoice"){					
+					msg = "Invalid  "+displayName+" credentials";
+				}else{					
+					msg = ("Error occurred while saving "+displayName);
+				}				
 			}
 
 			// if (pluginName != "CallScript")
 			showNotyPopUp(msgType , msg, "bottomRight");
+			$('#stripe_url').removeAttr('disabled');
 
 			if (callback && typeof (callback) === "function") {
 				callback(data);
@@ -146,7 +156,19 @@ function save_widget_prefs(pluginName, prefs, callback) {
 
 		}, error : function(data){
 			console.log(data);
-			alert("error occurred"+data);
+
+			msgType = "error";			
+
+			if(pluginName == "Braintree" || pluginName == "Uservoice"){				
+				msg = "Invalid  "+pluginName+" credentials";					
+			}else{
+				msg = "Error occurred while saving "+pluginName;	
+			}
+
+			$('#stripe_url').removeAttr('disabled');
+			showNotyPopUp(msgType , msg, "bottomRight");
+			$('#save_prefs').removeAttr('disabled');
+
 		}
 	});
 }
@@ -354,15 +376,27 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			var widget_el = getTemplate("widget-settings", model);
 			$('#prefs-tabs-content').html(widget_el);
 
-			// Create a view modal for widgets
-			renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
-			
+			if(widgetName == "Braintree"){
+				// Retrieve all custom from Agile account
+				$.get("/core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data){
+					// Include 'stripe_field_name' to stripe_widget_prefs and save
+					model['custom_fields'] = data;
+					
+					renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
+
+				}, "json").error(function(data){
+					
+				});
+				
+			}else{
+				// Create a view modal for widgets
+				renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
+			}
+
 			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
-
 		});
-
 	});
 }
 

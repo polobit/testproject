@@ -59,7 +59,7 @@
 				{{#isDuplicateContactProperty properties "email"}}
 					{{else}}	
 						{{#if_contact_type "PERSON"}}
-						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+						<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
         				<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
@@ -70,8 +70,8 @@
        	{{/each}}
 		</div>
 		
-		<div class="actions pos-abs pos-r-0" style="bottom:-7px;">
-<a title="Edit"  data="{{id}}" data-toggle="modal" class="task-note-edit p-r-sm c-p text-l-none"> <i class="icon-pencil"></i> </a>
+		<div class="actions pos-abs pos-r-0 icons-text-sm" style="bottom:-7px;right:30px;">
+<a title="Edit"  data="{{id}}" data-toggle="modal" class="task-note-edit p-r-sm c-p text-l-none"> <i class="fa fa-edit"></i> </a>
             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
         </div>
 	</div>

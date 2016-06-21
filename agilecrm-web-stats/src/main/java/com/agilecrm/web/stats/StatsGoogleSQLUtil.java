@@ -1,5 +1,10 @@
 package com.agilecrm.web.stats;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -9,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class StatsGoogleSQLUtil
 {
+	
     /**
      * Append limit to query to retrieve recent results.
      * 
@@ -176,4 +182,21 @@ public class StatsGoogleSQLUtil
 	// Jan to Dec 01 to 31 Eg. Jan 04
 	return StatsGoogleSQLUtil.encodeSQLColumnValue("%b %d");
     }
+    
+    /**
+	 * Returns mysql NOW() date format; 
+	 * 
+	 * @param timestamp
+	 *            - epochtime
+	 * @param timeZoneOffset
+	 *            - timezone offset received from client.
+	 * @return String
+	 */
+	public static String getMySQLNowDateFormat(long timestamp, String timeZoneOffset)
+	{
+		Date date = new Date(timestamp);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		format.setTimeZone(TimeZone.getTimeZone("GMT"+timeZoneOffset));
+		return format.format(date);
+	}
 }

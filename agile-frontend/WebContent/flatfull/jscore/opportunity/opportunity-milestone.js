@@ -1,5 +1,5 @@
 // Before selecting proper type array from map, need to fill map with user's detail.
-function startGettingDeals(criteria, pending)
+function startGettingDeals()
 {
 	console.log('------started-----', pipeline_id);
 	var milestoneString = trackListView.collection.get(pipeline_id).toJSON().milestones;
@@ -19,17 +19,6 @@ function startGettingDeals(criteria, pending)
 	console.log(milestones);
 	createDealsNestedCollection(pipeline_id,milestones,currentTrack);
 	
-}
-
-// Decide which array to pass for creation of collection.
-function dealFiltersForCollection(criteria)
-{
-	if (criteria == "CATEGORY")
-		// Sort task list on count of task and then create collection
-		getArraySortOnCount(criteria, GROUPING_MAP[criteria].type, pending);
-	else
-		// Creates nested collection
-		createNestedCollection(criteria, GROUPING_MAP[criteria].type, pending);
 }
 
 // Creates nested collection
@@ -68,6 +57,9 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 		DEALS_LIST_COLLECTION.collection.add(newDealList);// main-collection
 	}
 
+	// Over write append function
+	DEALS_LIST_COLLECTION.appendItem = dealAppend;
+
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
 	initializeDealsListeners();
@@ -78,7 +70,7 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 function initDealListCollection(milestones)
 {
 	// Define main collection
-	DEALS_LIST_COLLECTION = new Base_Collection_View({ restKey : "deal", templateKey : "opportunities-by-paging", individual_tag_name : 'div',
+	DEALS_LIST_COLLECTION = new Deals_Milestone_Events_Collection_View({ restKey : "deal", templateKey : "opportunities-by-paging", individual_tag_name : 'div',
 		sort_collection : false, postRenderCallback : function(el)
 		{
 			// Remove loding imgs
@@ -96,6 +88,10 @@ function initDealListCollection(milestones)
 			{
 				if (_agile_get_prefs('deal-milestone-view') == "compact" && count > 8)
 					width = 100 / 8;
+				if (_agile_get_prefs('deal-milestone-view') == "fit")
+				{
+					$('#opportunities-by-paging-model-list', el).find('.milestone-column').css("min-width",0);
+				}
 			}
 			else if (count > 5)
 			{
@@ -106,9 +102,6 @@ function initDealListCollection(milestones)
 			$('.mark-won, .mark-lost',el).tooltip();
 			
 		} });
-
-	// Over write append function
-	DEALS_LIST_COLLECTION.appendItem = dealAppend;
 
 }
 
@@ -156,9 +149,10 @@ function dealsFetch(base_model)
 	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li', 
 		sort_collection : false, cursor : true, page_size : 20, postRenderCallback : function(el)
 		{   
-			$(el).find('ul li').each(function(){
+			$(el).find('ul li').each(function(index){
 				$(this).addClass("deal-color");
 				$(this).addClass($(this).find("input").attr("class"));
+				$(this).attr("data-pos", index);
 			});
 			
 
@@ -180,26 +174,16 @@ function dealsFetch(base_model)
 		$('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container').html(dealCollection.render(true).el)
 		console.log($('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
-		var heading =  base_model.get("heading");
-		try
-		{
-			var count = data.at(0) ? data.at(0).toJSON().count : 0;
-			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
-	     
-        }
-        catch (err)
-		{
-			console.log(err);
-		}  
+		var heading =  base_model.get("heading"); 
         
         $('a.deal-notes').tooltip();
-        	// Counter to fetch next sub collection
-		pipeline_count++;
-		setup_deals_in_milestones('opportunities-by-paging-model-list');
-		dealTotalCountForPopover(heading);
-				
-		
-		
+        setup_deals_in_milestones('opportunities-by-paging-model-list');
+		dealsCountFetch(base_model, function(deals_count){
+			if(deals_count <= 1000)
+			{
+				dealTotalCountForPopover(heading);
+			}
+		});
 	} });
 }
 
@@ -255,7 +239,7 @@ function initializeDealsListeners()
 	$("#opportunity-listners").off('mouseenter','.milestone-column > .dealtitle-angular');
 	$("#opportunity-listners").on('mouseenter','.milestone-column > .dealtitle-angular', function(){
     	var data = $(this).attr('data');
-		if(data){
+		if(data && $("#"+$(this).parent().attr("id")+"_count").text() != "1000+"){
 
 		var originalHeading = $(this).siblings().find('.milestones').attr('milestone');
 		var jsonDealData = JSON.parse(data);
@@ -348,4 +332,31 @@ console.log('------popover pipeline id-----', pipeline_id);
 			});
 	
 
+}
+
+function dealsCountFetch(base_model, callback)
+{
+	if (!base_model)
+		return;
+
+	// Define sub collection
+	var dealCount = new Base_Model_View({ url : base_model.get("url").replace("/based", "/based/count"), template : "", isNew : true });
+
+	dealCount.model.fetch({ success : function(data)
+	{
+		var count = data.get("count") ? data.get("count") : 0;
+		if(count > 1000)
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text((count-1)+"+");
+		}
+		else
+		{
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(count);
+		}
+		if(callback)
+		{
+			return callback(count);
+		}
+	} });
+	
 }

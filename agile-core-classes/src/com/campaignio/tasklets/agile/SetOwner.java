@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -99,7 +100,7 @@ public class SetOwner extends TaskletAdapter
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+	    System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    System.err.println("Exception occurred while setting owner in SetOwner " + e.getMessage());
 	}
 

@@ -75,6 +75,7 @@ function enableKeyboardShotcuts()
 		Mousetrap.bind('shift+d',function(){
 			if(!isModalVisible())
 				show_deal(); 
+				setup_tags_typeahead();
 		});
 
 		// New note
@@ -176,8 +177,10 @@ function enableKeyboardShotcuts()
 				addContactBasedOnCustomfields();
 			else if(isRoute('cases'))
 				showCases();
-			else if(isRoute('deals'))
+			else if(isRoute('deals')){
 				show_deal();
+				setup_tags_typeahead();
+			}
 			else if(isRoute('workflow'))
 				App_Workflows.navigate("workflow-add",{trigger:true});
 			else if(isRoute('report'))

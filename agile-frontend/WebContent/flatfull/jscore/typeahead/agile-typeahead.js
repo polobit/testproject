@@ -12,6 +12,9 @@ var TYPEHEAD_NAMES = {};
 
 var TYPEHEAD_TYPE = {};
 
+// Saves map of key: name and value: related contacts of a deal
+var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
+
 /**
  * This script file defines simple search keywords entered in input fields are
  * sent to back end as query through bootstrap typeahead. Methods render,
@@ -40,7 +43,7 @@ var TYPEHEAD_TYPE = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail)
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail, page_size)
 {
 
 	// Turn off browser default auto complete
@@ -49,6 +52,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 		url = "core/api/search/"
 
 	var CONTACTS = {};
+	if(!page_size)
+		page_size = 10;
 
 	var el_typeahead = $('#' + id, el)
 			.typeahead(
@@ -83,7 +88,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							// Sends search request and holds request object,
 							// which can be reference to cancel request if there
 							// is any new request
-							this.options.searchAJAXRequest = $.getJSON(url + "?q=" + encodeURIComponent(query) + "&page_size=10" + type_url, function(data)
+							this.options.searchAJAXRequest = $.getJSON(url + "?q=" + encodeURIComponent(query) + "&page_size=" + page_size + "" + type_url, function(data)
 							{
 
 								var current_query = $('#' + id, el).val();
@@ -159,6 +164,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 									TYPEHEAD_EMAILS[tag_name] = getContactEmail(item);
 
 									TYPEHEAD_NAMES[tag_name] = getContactName(item);
+
+									TYPEHEAD_DEAL_RELATED_CONTACTS[tag_name] = item.contacts;
 									
 									if(item.type == 'PERSON')
 										TYPEHEAD_TYPE[tag_name] = '#contact/';
@@ -178,7 +185,15 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 						{
 							self.$menu.empty();
 							/* Sets css to html data to be displayed */
-							self.$menu.css("width", 300);							
+							if(self.$element.attr("id") == "searchText")
+							{
+								self.$menu.css({"width" : 300, "max-height" : "calc(100vh - 50px)", "overflow-y" : "auto"});
+								self.$menu.addClass("dashboard-search-scroll-bar");	
+							}
+							else
+							{
+								self.$menu.css("width", 300);
+							}					
 
 							/*
 							 * Calls render because menu needs to be initialized
@@ -192,6 +207,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							 */
 							if (!$(self.$menu.find('li').last()).hasClass('loading-results'))
 							{
+								self.$menu
 								self.$menu.html('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
 								self.render();
 							}
@@ -225,6 +241,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								this.show();
 								return;
 							}
+			
 
 							// Stores all the matched elements (<li> drop down)
 							// in items
@@ -362,8 +379,42 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								});
 								// add tag
 								if (tag_not_exist)
+								{
+									var dealJSON = get_tag_item_json(items, items_temp, "deals");
+									var related_contact_ids = "";
+									var relatedContactsJOSN = dealJSON["related_contacts"];
+									$.each(relatedContactsJOSN, function(index, relContact){
+										var rel_contact_exist = true;
+										// If tag already exists returns
+										$.each($('ul.tags', el).children('li'), function(index, tag)
+										{
+											if ($(tag).attr('data') == relContact.id)
+											{
+												rel_contact_exist = false;
+												return;
+											}
+										});
+
+										if(rel_contact_exist)
+										{
+											related_contact_ids += relContact.id + " ";
+											var tplJSON = {};
+											tplJSON.email_item = relContact.id;
+											if(relContact.type == 'PERSON'){
+												tplJSON.type_item = '#contact/';
+											}
+											else if(relContact.type == 'COMPANY'){
+												tplJSON.type_item = '#company/';
+											}
+											tplJSON.tag_item = relContact.id;
+											tplJSON.item = getContactName(relContact);
+											$('ul.tags', el).append(getTemplate("tag-item-li", tplJSON));
+										}
+									});
+									dealJSON.related_contact_ids = related_contact_ids;
 									$('.deal_tags', el)
-											.append(getTemplate("tag-deal-item-li", get_tag_item_json(items, items_temp, "deals")));
+											.append(getTemplate("tag-deal-item-li", dealJSON));
+								}
 							}
 							else
 							{
@@ -582,7 +633,36 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 // Removes tags ("Related to" field contacts)
 $("body").on("click", '#remove_tag', function(event)
 {
-	event.preventDefault();
+	event.preventDefault();var company_name ;var prop = null;var flag = false;
+	if($(this).parent().attr("data-deal-related-contacts"))
+	{
+		var deal_related_contacts = $(this).parent().attr("data-deal-related-contacts").split(" ");
+		var el = $(this).closest("form");
+		$.each(deal_related_contacts, function(index, contact_id){
+			$("li[data="+contact_id+"]", el).remove();
+		});
+	}
+	if($(this).hasClass("companyAddress") && contact_company){
+		$.each(contact_company.properties , function(){
+			if(this.name == "address" && this.subtype == "office")
+				prop = JSON.parse(this.value);
+		});
+		if(prop){
+			if(prop.address && $("#content #address").val() && $("#content #address").val() != prop.address)
+				flag = true;
+			else if(prop.city && $("#content #city").val() && $("#content #city").val() != prop.city)
+				flag = true;
+			else if(prop.state && $("#content #state").val() && $("#content #state").val() != prop.state)
+				flag = true;
+			else if(prop.zip && $("#content #zip").val() && $("#content #zip").val() != prop.zip)
+				flag = true;
+			else if(prop.country && $("#content #country").val() && $("#content #country").val() != prop.country)
+				flag = true ;
+			if(!flag){
+				$("#content .address-type,#address,#city,#state,#zip,#country").val('');
+			}
+        }
+    }
 	$(this).parent().remove();
 });
 
@@ -798,6 +878,11 @@ function appendItemInResult(item)
 			$("#document-typeahead-heading", this.el).show();
 			$("#document-results", this.el).append(i);
 		}
+		if (type == "tickets")
+		{
+			$("#tickets-typeahead-heading", this.el).show();
+			$("#ticket-results", this.el).append(i);
+		}
 	}
 
 }
@@ -809,7 +894,11 @@ function get_tag_item_json(items, items_temp, type){
 	if(type == "email"){
 		tag_item_json.email_item = TYPEHEAD_EMAILS[items];
 		tag_item_json.type_item = TYPEHEAD_TYPE[items];
-	} else {
+	} else if(type == "deals") {
+		tag_item_json.email_item = TYPEHEAD_TAGS[items];
+		tag_item_json.type_item = TYPEHEAD_TYPE[items];
+		tag_item_json.related_contacts = TYPEHEAD_DEAL_RELATED_CONTACTS[items];
+	}else {
 		tag_item_json.email_item = TYPEHEAD_TAGS[items];
 		tag_item_json.type_item = TYPEHEAD_TYPE[items];
 	}

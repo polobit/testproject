@@ -3,9 +3,9 @@
   <div class="modal-dialog">
     <div class="modal-content" style="border-radius:0px;">
   <div class="modal-header">
-    <button class="close" data-dismiss="modal">x</button>
+    <button class="close" data-dismiss="modal">&times;</button>
     <h3 class="modal-title" style="font-size:18px;">
-      &nbsp;Add Deal
+      &nbsp;New Deal
     </h3>
   </div>
   <div class="modal-body">
@@ -16,7 +16,7 @@
               class="field_req">*</span></label>
             <div class="controls col-sm-7">
               <span><input id="name" name="name" type="text"
-                class=" required form-control" placeholder="Name of Deal" /></span>
+                class=" required form-control" placeholder="Deal Name" /></span>
             </div>
           </div>
           <div class="control-group form-group">
@@ -24,28 +24,32 @@
               class="field_req">*</span></label>
             <div class="controls col-sm-7" id="owners">
               <select id="owners-list" class="required form-control" name="owner_id"></select>
-              <img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
+              <img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif">
             </div>
           </div>
-          <div class="control-group form-group">
-            <label class="control-label col-sm-3">Value<span
-              class="field_req">*</span></label>
-            <div class="controls col-sm-7">
-              <span id="milestone_val"><input type="text" name="expected_value"
-                class="required  number form-control" min="0" max="1000000000000"
-                placeholder="Value of Deal" /></span>
-            </div>
+           <div class="control-group form-group" style="margin-bottom:0px;"> 
+           <label class="control-label col-sm-3">Value<span class="field_req">*</span></label> 
+           <div class="controls col-sm-7"> 
+            <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class="p-n"> 
+              <input type="text" name="expected_value" class="required  number form-control" min="0" max="1000000000000"
+                placeholder="Deal Value"   style="font-size:13px"/> 
+             </div> 
+            </div> 
+           </div> 
+          </div>    
+
+              <div class="control-group form-group" style="margin-bottom:0px;"> 
+           <label class="control-label col-sm-3">Probability <span class="field_req">*</span></label> 
+           <div class="controls col-sm-7"> 
+            <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class="col-md-10 p-n" style="width:92%"> 
+              <input type="text" value="20" class="form-control digits deal-pro required positive_number" id="probability" name="probability" placeholder="Probability " max="100" style="border-radius:2px 0px 0px 2px;"> 
+             </div> 
+             <span class="col-md-1 form-control input-group-addon" style="border-left:none;border-radius:0px 2px 2px 0px;padding-top:9px;"><span style="margin-left:-4px;">%</span></span> 
+            </div> 
+           </div> 
           </div>
-          <div class="control-group form-group">
-            <label class="control-label col-sm-3">Probability (%)<span
-              class="field_req">*</span></label>
-            <div class="controls col-sm-7">
-              <span><input type="text" id="probability"
-                name="probability" value="20" class=" required digits form-control" max="100"
-                placeholder="Probability %" /></span>
-            </div>
-          </div>
-        
           <div class="control-group form-group">
             <label class="control-label col-sm-3">Milestone<span
               class="field_req">*</span></label>
@@ -106,12 +110,36 @@
             </div>
           </div>
         </div>
+        <div class="control-group form-group" id='tags_source_deal_modal'>
+                      <label class="control-label col-sm-3">Tags</label>
+     
+                      <div class="controls col-sm-7">
+                          <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500" placeholder="Separate tags with commas"/>
+                          <div class="pull-left" style="margin-top: 1px;">
+                            <ul name="tags" class="tagsinput tags p-n" style="margin-bottom: 1px;">
+                            </ul>
+                        </div>
+              </div>
+         </div>
+         <div class="row invalid-tags-person" style="display:none;">
+                    <div class="col-sm-offset-3 col-sm-7">
+                        <div style="color:red;" class="text-sm">Tag name should start with an alphabet and cannot contain special characters other than underscore and space.</div>
+                    </div>
+                </div>
         <div class="control-group hidden">  
           <label class="i-checks i-checks-sm control-label">
           <input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i> Archive </label>
         </div>
         <div id="custom-field-deals"></div>
-          <div class="control-group form-group">
+
+        <div class="form-group m-b-none">
+                    <div class="col-sm-offset-3 col-sm-7 text-left">
+        <a href="javascript:;" id="addDescriptionLink" class="text-info"><i class="icon-plus"></i> Add Description</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+          <div class="control-group form-group" id="addDescriptionInfo">
             <label class="control-label col-sm-3">Description</label>
             <div class="controls col-sm-7">
               <textarea id="description" name="description" rows="3"

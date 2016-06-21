@@ -39,7 +39,8 @@ $(function(){
 	{
 		e.preventDefault();
 		var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-		save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
+		var currentDiv = $('#updateActivityModal').find("#current_div").val();
+		save_event('updateActivityForm', 'updateActivityModal', true, this,currentDiv, function(data)
 		{
 			console.log(data);
 			var eventModel = eventCollectionView.collection.get(eventId);
@@ -84,95 +85,104 @@ $("#updateActivityModal").on(
 
 						if ($(this).attr('disabled') == 'disabled')
 							return;
-
+						var save_button = $(this);
 						/**
 						 * Confirmation alert to delete an event
 						 */
-						if (!confirm("Are you sure you want to delete?"))
-							return;
+						showAlertModal("delete_event", "confirm", function(){
+							var event_id = $('#updateActivityForm input[name=id]').val();
+							
 
-						var event_id = $('#updateActivityForm input[name=id]').val();
-						var save_button = $(this);
-
-						disable_save_button(save_button);
-						/**
-						 * Shows loading symbol until model get saved
-						 */
-						// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
-						$
-								.ajax({
-									url : 'core/api/events/' + event_id,
-									type : 'DELETE',
-									success : function()
-									{
-										// if event deleted from today events
-										// portlet, we removed that event from
-										// portlet events collection
-										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+							disable_save_button(save_button);
+							/**
+							 * Shows loading symbol until model get saved
+							 */
+							// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
+							$
+									.ajax({
+										url : 'core/api/events/' + event_id,
+										type : 'DELETE',
+										success : function()
 										{
-											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
-													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
-
-											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
-
-										}	
-										else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
-									      {
-												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
-												a.setHours(0,0,0,0);
-												_agile_set_prefs("current_date_calendar",a);
-										       $('#calendar_container').fullCalendar( 'refetchEvents' );
-										       App_Portlets.refetchEvents = true;
-										       //_agile_delete_prefs('current_date_calendar');
-									      }
-										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
-										{
-
-											if (dealEventsView && dealEventsView.collection)
+											// if event deleted from today events
+											// portlet, we removed that event from
+											// portlet events collection
+											if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)])
 											{
-												if (dealEventsView.collection.get(event_id))
+												App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
+														.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
+
+												App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+											}	
+											else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
+										      {
+													var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
+													a.setHours(0,0,0,0);
+													_agile_set_prefs("current_date_calendar",a);
+											       $('.portlet_body_calendar').each(function(){
+											       	var that=$(this);
+											       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+											       	 App_Portlets.eventCalendar=that;
+											       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+
+											       App_Portlets.refetchEvents = true;
+											   }
+											       });
+											       
+											       //_agile_delete_prefs('current_date_calendar');
+										      }
+											else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
+											{
+
+												if (dealEventsView && dealEventsView.collection)
 												{
-													dealEventsView.collection.remove(event_id);
-													dealEventsView.render(true);
+													if (dealEventsView.collection.get(event_id))
+													{
+														dealEventsView.collection.remove(event_id);
+														dealEventsView.render(true);
+													}
 												}
 											}
-										}
-										else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
-										{
-											if (eventsView && eventsView.collection)
+											else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
 											{
-												if (eventsView.collection.get(event_id))
+												if (eventsView && eventsView.collection)
 												{
-													eventsView.collection.remove(event_id);
-													eventsView.render(true);
+													if (eventsView.collection.get(event_id))
+													{
+														eventsView.collection.remove(event_id);
+														eventsView.render(true);
+													}
 												}
 											}
-										}
 
-										// $('#updateActivityModal').find('span.save-status
-										// img').remove();
-										enable_save_button(save_button);
-										$("#updateActivityModal").modal('hide');
+											// $('#updateActivityModal').find('span.save-status
+											// img').remove();
+											enable_save_button(save_button);
+											$("#updateActivityModal").modal('hide');
 
-										var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-										$('#calendar_event').fullCalendar('removeEvents', eventId);
-									}, error : function(err)
-									{
-										enable_save_button(save_button);
-										$('#updateActivityModal').find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
-										setTimeout(function()
+											var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+											$('#calendar_event').fullCalendar('removeEvents', eventId);
+										}, error : function(err)
 										{
-											$('#updateActivityModal').find('span.error-status').html('');
-										}, 2000);
-										console.log('-----------------', err.responseText);
-									} });
-						if (_agile_get_prefs("agile_calendar_view"))
-						{
-							var eventModel = eventCollectionView.collection.get(event_id);
-							eventModel.set(eventModel, { remove : true });
-							document.location.reload();
+											enable_save_button(save_button);
+											$('#updateActivityModal').find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+											setTimeout(function()
+											{
+												$('#updateActivityModal').find('span.error-status').html('');
+											}, 2000);
+											console.log('-----------------', err.responseText);
+										} });
+							if (_agile_get_prefs("agile_calendar_view"))
+							{
+								var eventModel = eventCollectionView.collection.get(event_id);
+								eventModel.set(eventModel, { remove : true });
+								document.location.reload();
 
-						}
+							}
+						});
+
+						
 
 					});
 
@@ -216,7 +226,7 @@ $("#updateActivityModal").on(
 										// if event deleted from today events
 										// portlet, we removed that event from
 										// portlet events collection
-										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)])
 										{
 											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
 													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
@@ -485,8 +495,11 @@ $(function()
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-
-		$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+		var d1 = new Date ();
+		var d2 = new Date ( d1 );
+		d2.setHours(d1.getHours()+3)
+		
+		$('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false });
 		$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
 		{
 			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
@@ -847,7 +860,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
  *            or updating the existing one
  * 
  */
-function save_event(formId, modalName, isUpdate, saveBtn, callback)
+function save_event(formId, modalName, isUpdate, saveBtn, el,callback)
 {
 
 	// Returns, if the save button has disabled attribute
@@ -924,7 +937,41 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						// $('#calendar').fullCalendar( 'refetchEvents' );
 						var event = data.toJSON();
 						event = renderEventBasedOnOwner(event);
-						if (Current_Route == 'calendar' && !_agile_get_prefs("agile_calendar_view"))
+						if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar' && el == "Mini Calendar")
+					      {
+							
+						$('.portlet_body_calendar').each(function(){
+										       	var that=$(this);
+										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+										       	if($('.minical-portlet-event',that).attr('data-date')!=undefined){
+								var a=new Date(parseInt($('.minical-portlet-event',that).attr('data-date')));	
+								a.setHours(0,0,0,0);
+								_agile_set_prefs("current_date_calendar",a);
+							}
+							else{
+								var a=new Date(parseInt($('.minical-portlet-event-add',that).attr('data-date')));	
+								a.setHours(0,0,0,0);
+								_agile_set_prefs("current_date_calendar",a);
+							}
+										       	 App_Portlets.eventCalendar=that;
+										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+										       App_Portlets.refetchEvents = true;
+										   }
+										       });
+					      }
+
+					      else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && el == "Events Dashlet")
+						{
+							if (isUpdate)
+								App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+							// Updates events list view
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+						}
+						else if (Current_Route == 'calendar' && !_agile_get_prefs("agile_calendar_view"))
 						{
 
 							// When updating an event remove the old event from
@@ -992,8 +1039,6 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 							});
 						}
-
-
 						else if (App_Companies.companyDetailView && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'))
 						{
 

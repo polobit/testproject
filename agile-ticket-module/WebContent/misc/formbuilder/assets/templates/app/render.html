@@ -1,0 +1,10 @@
+<h6><strong>Note: </strong>You need to include your <a href="#" id="agile_analytics_code_page_url">analytics code</a> in the web page for the form to work.</h6>
+<h3>Rendered source of your form:</h3>
+<textarea id="render" class="col-md-6 form-control"></textarea>
+<script>
+	var agile_analytics_code_page_url = window.location.origin + "/#analytics-code/analytics";
+	document.getElementById("agile_analytics_code_page_url").onclick = function()
+	{
+		window.location.replace(agile_analytics_code_page_url);
+	}
+</script>

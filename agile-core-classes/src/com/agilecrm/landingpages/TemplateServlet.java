@@ -47,7 +47,7 @@ public class TemplateServlet extends HttpServlet
     	try {
 			
 	    	page.put("name", "index");
-	    	page.put("html", "");
+	    	page.put("html", readFile(templatesPath + "/default-template.html"));
 	    	page.put("css", "");
 	    	page.put("js", "");
 	    	

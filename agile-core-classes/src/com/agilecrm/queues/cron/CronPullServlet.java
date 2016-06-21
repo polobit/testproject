@@ -1,11 +1,14 @@
 package com.agilecrm.queues.cron;
 
+import java.util.concurrent.Future;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.taskqueue.Queue;
@@ -74,16 +77,23 @@ public class CronPullServlet extends HttpServlet
 	{
 	    System.out.println("Running " + queueName + " tasks in backend...");
 
-	    try
-	    {
-		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
+	    int count = tasksCount/500 + 1;
+	    
+	    while(count > 0){
+	    	try
+	    	{
+	    		long startTime = System.currentTimeMillis();
+	    		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
+	    		System.out.println("Took" +(System.currentTimeMillis()-startTime)+" milliseconds to process backendpullqueue ");
+	    	}
+	    	catch (Exception e)
+	    	{
+	    		System.out.println("exception raised to process task");
+	    		e.printStackTrace();
+	    	}
+	    	
+    	count--;
 	    }
-	    catch (Exception e)
-	    {
-		System.out.println("exception raised to process task");
-		e.printStackTrace();
-	    }
-
 	}
 	else
 	{

@@ -41,12 +41,12 @@ var _agile = {
 			   agile_getContact(email, callback);						// Get contact
 			});
 		},
-		delete_contact : function(email, callback)
+		/*delete_contact : function(email, callback)
 		{
 			_agile._filter(function(){
 			   agile_deleteContact(email, callback);					// Delete a contact
 			});
-		}, 
+		}, */
 		add_tag : function(tags, callback, email)
 		{
 			_agile._filter(function(){
@@ -113,7 +113,7 @@ var _agile = {
 			   agile_getNotes(callback, email);						// Get notes related to contact
 			});
 		},
-		get_tasks : function (callback, email)
+		/*get_tasks : function (callback, email)
 		{
 			_agile._filter(function(){
 			   agile_getTasks(callback, email);						//	Get tasks related to contact
@@ -124,7 +124,7 @@ var _agile = {
 			_agile._filter(function(){
 			   agile_getDeals(callback, email);						// Get deals related to contact
 			});
-		},
+		},*/ 
 		add_campaign : function (data, callback, email)
 		{
 			_agile._filter(function(){
@@ -180,13 +180,13 @@ var _agile = {
 			});
 			
 		},
-		create_company : function(data, callback)
+		/*create_company : function(data, callback)
 		{
 			_agile._filter(function(){
 			   agile_createCompany(data, callback);					// Create company
 			});
 			
-		},
+		},*/
 		get_property : function (name, callback, email)
 		{
 			_agile._filter(function(){
@@ -226,7 +226,7 @@ var _agile = {
 			});
 			
 		},
-		get_all_users : function(callback)
+		/*get_all_users : function(callback)
 		{
 			_agile._filter(function(){
 			   agile_getAllUsers(callback);							// Get string of allowed domains
@@ -245,7 +245,7 @@ var _agile = {
 			   agile_updateDeal(data, callback, email);				// Update deal of contact
 			});
 			
-		},
+		},*/
 		is_valid_call : function(){
 
 			// if(agile_id.getNamespace() == "our")

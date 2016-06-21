@@ -121,7 +121,7 @@ public class BillingRestriction
     public boolean isNewEmailPlanUpgrade = false;
 
     public Integer max_emails_count;
-
+    
     public Long email_pack_start_time = 0L;
 
     @NotSaved(IfDefault.class)

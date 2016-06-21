@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-12">
             <h3 class="font-thin h3 pull-left">Forms</h3>
-			<a target="_blank" href="formbuilder" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Form</a>
+			<a href="#form-builder-templates" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Form</a>
 			<div class="clearfix"></div> 
     </div>
 </div>
@@ -19,8 +19,11 @@
 				<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
 			</div>
 			<div class="box-right pull-left">
-				<h4 class="m-t-none">You do not have any Forms saved.</h4>
-				<a target="_blank" href="formbuilder" class="btn btn-default m-t-xs btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> Add Form</a>
+				<h4 class="m-t-none">You do not have any Forms currently.</h4>
+				<div class="text">
+				     Create and place the form on a website or landing page. Whenever a visitor fills the form, a contact is created automatically. 
+				</div>
+				<a href="#form-builder-templates" class="btn btn-default m-t-xs btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> Add Form</a>
 			</div>
 			<div class="clearfix">
 			</div>
@@ -33,16 +36,16 @@
 		<div class="data-container">
 			<div class="panel panel-default">
 			<div class="panel-heading">Forms List</div>
-			<table class="table table-bordered table-striped showCheckboxes c-p agile-table" url="core/api/forms/bulk">
+			<table class="table table-striped showCheckboxes c-p agile-table tableHeader tab-layout" url="core/api/forms/bulk" data-resizable-columns-id="form-template">
 				
 				<thead>
 					<tr>
-						<th style="width:50%">Form Title</th>
-						<th style="width:50%">Last Modified</th>
+						<th data-resizable-column-id="form_title" class="text-ellipsis">Form Title</th>
+						<th data-resizable-column-id="last_modified" class="text-ellipsis">Last Modified</th>
+						<th data-resizable-column-id="share" style="display:none"></th>
 					</tr>
 				</thead>
-				<tbody id="forms-model-list">
-				</tbody>
+				<tbody id="forms-model-list" class="c-p"></tbody>
 			</table>
 			</div>
 		</div>
@@ -78,6 +81,11 @@
 				</small>
 			</span>
 		</a>
+	</td>
+	<td>
+	    <div class="table-resp hide" id="formcode_manager">
+		<a class="codeshare" data-formid="{{id}}"><i class="fa icon-code" ></i><span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>
+		</div>
 	</td>
 	</br>
 </script>

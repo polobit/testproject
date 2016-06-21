@@ -95,6 +95,29 @@ function navigateToDetailsPage(data, name)
 		updateDocument(new BaseModel(model));
 		return;
 	}
+
+	if(model.entity_type == "tickets")
+	{
+		/*if(!tight_acl.checkPermission('DOCUMENT')){
+			var obj = {};
+			obj.entity = 'Documents';
+
+			getTemplate('no-permission',obj, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$(template_ui).modal('show');
+			}, null);
+
+			return;
+		}*/
+
+		var url = '#ticket/' +  model.id;
+
+		Backbone.history.navigate(url, {trigger : true});
+
+		return;
+	}
 		
 	if(!tight_acl.checkPermission('CASES')){
 		var obj = {};
@@ -122,7 +145,7 @@ $(function()
 	 * Enables typeahead in search field in top nav-bar, custom callback to
 	 * redefine events on dropdown, which takes to contact details page
 	 */
-	agile_type_ahead("searchText", undefined, contacts_typeahead, navigateToDetailsPage, undefined, undefined, 'core/api/search/all/keyword');
+	agile_type_ahead("searchText", undefined, contacts_typeahead, navigateToDetailsPage, undefined, undefined, 'core/api/search/all/keyword', undefined, undefined, undefined, 5);
 
 	/*
 	 * Click on search icon in search field top nav-bar, shows simple search

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
@@ -44,7 +45,7 @@ public class MailHandlerServlet extends HttpServlet
 	    System.out.println("Setting namespace " + subDomain);
 
 	    String apiKey = getAgileDetails(recepientAddresses, AgileDetail.API_KEY);
-	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	    Key<DomainUser> owner = APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey);
 	    System.out.println("API Key is " + apiKey);
 
 	    if (owner == null)

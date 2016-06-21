@@ -12,8 +12,6 @@
     <div class="panel-body">
         <form id='emailForm' name="emailForm" class="form-horizontal" accept-charset="UTF-8">
             <fieldset>
-                <input type="hidden"  name="from_name"/>
-                <input type="hidden"  id="from" name="from"/>
                 <input type="hidden"  id="agile_attachment_name" name="attachment_name"/>
                 <input type="hidden"  id="agile_attachment_url" name="attachment_url"/>
                  <input type="hidden"  id="contact_type"  name="contact_type" value="{{type}}"/>
@@ -24,7 +22,11 @@
                         <input type="text" placeholder="From Name" class="form-control b-r-none" id="from_name" name="from_name"/>
                     </div>
                     <div class="controls p-l-none col-sm-5 col-xs-6">
-                        <input type="text" placeholder="From Email" class="email required form-control" id="from_email" name="from" style="margin-left:-1px;" />
+                        <select class="email required form-control verified-email" id="from_email" 
+                            name="from" fieldType="dynamicselect"
+                            type="verified_email" onchange="openVerifyEmailModal(this)"
+                            style="margin-left:-1px;"><option value=""></option>
+                            <option value="verify_email">+ Add new</option></select>
                     </div>
                 </div>
 			<!--	<div class="control-group form-group">
@@ -107,7 +109,7 @@
                     
                 <div class="control-group form-group">
                     <label class="control-label col-sm-2">Message </label>
-                    <div class="controls col-sm-8">
+                    <div class="controls col-sm-8 email-editor-custom-scroll-bar">
                         <div id="loading-editor"></div>
                         <textarea class="form-control required" name="message" id="email-body" placeholder="Description" style="width: 75%; height: 45%; display: none;"></textarea>
                     </div>

@@ -23,12 +23,18 @@ import org.json.JSONException;
 
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.GoogleCalendarUtil;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.googlecode.objectify.Key;
@@ -145,20 +151,39 @@ public class EventsAPI
     {
     Event event = EventUtil.getEvent(id);
     UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.DELETE, true);
-	try
-	{
-	    if (event != null)
-	    {
-		ActivitySave.createEventDeleteActivity(event);
-		if (event.type.toString().equalsIgnoreCase("WEB_APPOINTMENT"))
-		    GoogleCalendarUtil.deleteGoogleEvent(event);
-		event.delete();
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+    if(event != null)
+    {
+    	List<ContactPartial> contList = event.getContacts();
+    	List<String> conIds = new ArrayList<String>();
+    	for(ContactPartial con : contList)
+    	{
+    		conIds.add(String.valueOf(con.id));
+    	}
+    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    	{
+    		throw new AccessDeniedException("Event cannot be deleted because you do not have permission to update associated contact.");
+    	}
+    	try
+    	{
+    	    ActivitySave.createEventDeleteActivity(event);
+    		if (event.type.toString().equalsIgnoreCase("WEB_APPOINTMENT"))
+    		    GoogleCalendarUtil.deleteGoogleEvent(event);
+    		  if(!(event.getDeal_ids()).isEmpty())
+    	    	{
+    	    		for(String oppr : event.getDeal_ids())
+    	    		{
+    	    			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr));
+    	    			opportuinty.save();
+    	    		}
+    	    	}
+    		event.delete();
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	}
+    }
     }
 
     /**
@@ -173,10 +198,24 @@ public class EventsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Event createEvent(Event event)
     {
+    List<String> conIds = event.contacts;
+    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    {
+    	throw new AccessDeniedException("Event cannot be created because you do not have permission to update associated contact(s).");
+    }
 	event.save();
 	try
 	{
 	    ActivitySave.createEventAddActivity(event);
+	    if(!(event.getDeal_ids()).isEmpty())
+    	{
+    		for(String oppr : event.getDeal_ids())
+    		{
+    			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
+    			opportuinty.save();
+    		}
+    	}
 	}
 	catch (Exception e)
 	{
@@ -197,7 +236,56 @@ public class EventsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Event updateEvent(Event event)
     {
+    Event oldEvent =EventUtil.getEvent(event.id);
+    if(oldEvent != null)
+    {
+    	List<ContactPartial> contactsList = oldEvent.getContacts();
+		List<String> conIds = new ArrayList<String>();
+		for(ContactPartial cont : contactsList)
+		{
+			conIds.add(String.valueOf(cont.id));
+		}
+    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    	{
+    		throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated contact(s).");
+    	}
+    }
+	List<String> conIds = event.contacts;
+	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	{
+		throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated contact(s).");
+	}
+    try {
+		if(oldEvent != null &&!(oldEvent.getDeal_ids()).isEmpty())
+		{
+			for(String oppr : oldEvent.getDeal_ids())
+			{
+				Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
+				opportuinty.save();
+			}
+		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
     UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.UPDATE, true);
+    event.save();
+    System.out.println(event.getDeal_ids());
+    try {
+		if(event != null &&!(event.getDeal_ids()).isEmpty())
+		{
+			for(String oppr : event.getDeal_ids())
+			{
+				Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
+				opportuinty.save();
+			}
+		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 	try
 	{
 	    ActivitySave.createEventEditActivity(event);
@@ -207,7 +295,7 @@ public class EventsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	event.save();
+	
 	return event;
     }
 
@@ -221,13 +309,50 @@ public class EventsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> deleteEvents(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray eventsJSONArray = new JSONArray(model_ids);
-	ActivitySave.createLogForBulkDeletes(EntityType.EVENT, eventsJSONArray,
-		String.valueOf(eventsJSONArray.length()), "");
+	JSONArray eventsArray = new JSONArray();
+	List<String> contactIdsList = new ArrayList<String>();
+	if(eventsJSONArray!=null && eventsJSONArray.length()>0){
+    	try {    		
+    		for(int i = 0; i < eventsJSONArray.length(); i++) {
+    			
+    			String eventId =  (String) eventsJSONArray.get(i);
+				Event event = EventUtil.getEvent(Long.parseLong(eventId));
+				
+				List<ContactPartial> contactsList = event.getContacts();
+				List<String> conIds = new ArrayList<String>();
+				for(ContactPartial cont : contactsList)
+				{
+					conIds.add(String.valueOf(cont.id));
+				}
+				List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+				
+				if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+				{
+					eventsArray.put(eventsJSONArray.getString(i));
+					contactIdsList.addAll(modifiedConIds);
+				}
+				
+				if(!event.getDeal_ids().isEmpty()){
+					for(String dealId : event.getDeal_ids()){
+						Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
+						oppr.save();
+					 }
+				 }
+    			}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+     }
+	ActivitySave.createLogForBulkDeletes(EntityType.EVENT, eventsArray,
+		String.valueOf(eventsArray.length()), "");
 
-	Event.dao.deleteBulkByIds(eventsJSONArray);
+	Event.dao.deleteBulkByIds(eventsArray);
+	return contactIdsList;
     }
 
     @Path("/future/list")
@@ -347,6 +472,14 @@ public class EventsAPI
     public List<Event> getNewEvent(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
 	return EventUtil.getEvents(Integer.parseInt(count));
+    }
+
+     @Path("/contacts-related")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getRelatedContactsToEvents(@QueryParam("id") Long id)
+    {
+	return EventUtil.getEventsRelatedContacts(id);
     }
 
 }
