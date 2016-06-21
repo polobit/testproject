@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.AliasDomain;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.AliasDomainUtil;
@@ -142,7 +141,6 @@ public class AccountPrefs implements Serializable
 	}
 	
 	
-
 	/**
 	 * Saves AccountPrefs.
 	 */
