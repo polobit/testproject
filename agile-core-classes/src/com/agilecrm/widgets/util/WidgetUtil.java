@@ -200,6 +200,8 @@ public class WidgetUtil {
 						}
 					}
 				}
+			}else{
+				finalWidgets = widgets;
 			}
 		}
 

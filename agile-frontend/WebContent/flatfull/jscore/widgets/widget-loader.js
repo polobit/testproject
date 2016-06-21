@@ -262,17 +262,26 @@ function set_up_widgets(el, widgets_el)
 
 function setup_custom_widget(model, widgets_el)
 {
-	try
-	{
+	try{
+
+		var customType;
 		// $('form', this).focus_first();
-		if (model.get('script'))
+		if(model && model.get('script_type')){
+			customType = model.get('script_type');
+		}else if(model.get('url')){
+			customType = 'url';
+		}else{
+			customType = 'script';
+		}
+
+		if (customType == 'script'){
 			$('#' + model.get('selector'), widgets_el).html(model.get('script'));
-		else
-			getScript(model, function(data)
-			{
+		}else if(customType == 'url') {
+			getScript(model, function(data){
 				console.log(data);
 				$('#' + model.get('selector'), widgets_el).html(data);
 			});
+		}
 	}
 	catch (err)
 	{
