@@ -101,7 +101,7 @@ var Opportunity_Filters_Event_View = Base_Model_View.extend({
 			scramble_input_names($(htmlContent));
 
 			// boolean parameter to avoid contacts/not-contacts fields in form
-			chainFilters(htmlContent, undefined, undefined, undefined, undefined, true);
+			chainDealFilters(htmlContent, undefined, undefined, undefined, undefined, true);
 
 			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 			

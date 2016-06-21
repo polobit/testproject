@@ -96,7 +96,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					console.log(mile.milestones,value);
 					var array = [];
 					html+='<optgroup label="'+mile.name+'">';
-					if(filter_el && value && value.milestone == "ALL@MILESTONES")
+					if(filter_el && value && mile.id == value.pipeline_id && value.milestone == "ALL@MILESTONES")
 					{
 						html += Handlebars.compile('<option selected="selected" value="{{id}}_ALL@MILESTONES">{{name}} - All</option>')({id : mile.id, name : mile.name});
 					}

@@ -126,13 +126,12 @@ public class DealFilterUtil {
 	{
 		List<SearchRule> andRules = filter.rules;
 		List<SearchRule> orRules = filter.or_rules;
-		filter.rules = modifyTrackAndMilestoneRules(andRules, pipeline, milestone);
-		filter.or_rules = modifyTrackAndMilestoneRules(orRules, pipeline, milestone);
+		filter.rules = modifyTrackAndMilestoneRules(andRules, pipeline, milestone, true);
+		filter.or_rules = modifyTrackAndMilestoneRules(orRules, pipeline, milestone, false);
 	}
 	
-	public static List<SearchRule> modifyTrackAndMilestoneRules(List<SearchRule> rules, String pipeline, String milestone)
+	public static List<SearchRule> modifyTrackAndMilestoneRules(List<SearchRule> rules, String pipeline, String milestone, boolean isAndRules)
 	{
-		boolean track_condition_exists = false;
 		List<SearchRule> modifiedRules = new ArrayList<SearchRule>();
 		for(SearchRule rule : rules)
 		{
@@ -140,7 +139,7 @@ public class DealFilterUtil {
 			{
 				String rhsVal = rule.RHS;
 				String pipeline_id = rhsVal.substring(0, rhsVal.indexOf("_"));
-				String milestoneName = rhsVal.substring(rhsVal.indexOf('_') + 1, rhsVal.length() + 1);
+				String milestoneName = rhsVal.substring(rhsVal.indexOf('_') + 1, rhsVal.length());
 				SearchRule newRule = new SearchRule();
 				newRule.LHS = "pipeline";
 				newRule.CONDITION = rule.CONDITION;
@@ -155,17 +154,16 @@ public class DealFilterUtil {
 					modifiedRules.add(newRule);
 				}
 			}
-			else if(rule.LHS != null && rule.LHS.equalsIgnoreCase("track_milestone") && pipeline != null && milestone != null && !track_condition_exists)
+			else if(rule.LHS != null && rule.LHS.equalsIgnoreCase("track_milestone") && pipeline != null && milestone != null)
 			{
-				setDeafultTrackMilestoneFilter(modifiedRules, pipeline, milestone);
-				track_condition_exists = true;
+				continue;
 			}
 			else
 			{
 				modifiedRules.add(rule);
 			}
 		}
-		if(!track_condition_exists && pipeline != null && milestone != null)
+		if(pipeline != null && milestone != null && isAndRules)
 		{
 			setDeafultTrackMilestoneFilter(modifiedRules, pipeline, milestone);
 		}
