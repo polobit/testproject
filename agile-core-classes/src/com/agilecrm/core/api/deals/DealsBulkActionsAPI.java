@@ -373,8 +373,14 @@ public class DealsBulkActionsAPI
 	    System.out.println("total deals -----" + deals.size());
 	    JSONArray dealIdsArray = new JSONArray();
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    List<Contact> contactSubList = new ArrayList<Contact>();
+	    List<Long> contactIds = new ArrayList<Long>();
 	    for (Opportunity deal : deals)
 	    {
+	    if(deal.getContact_ids() != null && deal.getContact_ids().size() > 0 ){
+	    	for(String s : deal.getContact_ids())
+	    		contactIds.add(Long.valueOf(s));
+	    }
 		dealIdsArray.put(deal.id);
 		subList.add(deal);
 		if (subList.size() >= 100)
@@ -399,8 +405,23 @@ public class DealsBulkActionsAPI
 		ActivitySave.createLogForBulkDeletes(EntityType.DEAL, dealIdsArray,
 			String.valueOf(dealIdsArray.length()), "");
 	    }
-
-	    BulkActionNotifications.publishNotification(deals.size() + " Deals are deleted.");
+		try {
+			if (contactIds != null && contactIds.size() > 0) {
+				int contacts_count = 0;
+				if(contacts_count < contactIds.size() && contacts_count+99 <= contactIds.size())
+				{				
+					List<Contact> ls = ContactUtil.getContactsBulk(contactIds.subList(contacts_count, contacts_count+99));
+					Contact.dao.putAll(ls);
+					contacts_count += 100;				
+				}
+				else
+					Contact.dao.putAll(ContactUtil.getContactsBulk(contactIds));				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 BulkActionNotifications.publishNotification(deals.size() + " Deals are deleted.");
 	}
 	catch (Exception je)
 	{

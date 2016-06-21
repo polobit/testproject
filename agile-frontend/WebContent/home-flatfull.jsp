@@ -672,8 +672,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </div>
   </aside>
 <div class="app-content" id="agilecrm-container">
-<div id="draggable_noty" style = "height:0px;position: absolute!important;"></div>
 <div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
+<div id="draggable_noty" style = "height:0px;position: absolute!important;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
 <script type="text/javascript">
 // In mobile browsers, don't show animation bar
@@ -814,7 +814,7 @@ var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subs
 head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
 			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
-			"https://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js",
+			LIB_PATH + 'final-lib/min/backbone-min.js',
 			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'), 
 			function(){
 		        load_globalize();

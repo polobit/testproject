@@ -112,10 +112,7 @@ $(function(){
 				// Appends campaign-name for active subscribers
 				if($(table).attr('id') === "active-campaign")
 					confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
-				var $that = $(this);
-				// Shows confirm alert, if Cancel clicked, return false
-				showAlertModal(confirm_msg, "confirm", function(){
-					$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+					$(this).append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 					var url = $(table).attr('url');
 					if(SELECT_ALL && SELECT_ALL == true)
@@ -135,7 +132,6 @@ $(function(){
 					}
 					
 					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
-				}, undefined, "Bulk Delete");
 				
 			}
 						

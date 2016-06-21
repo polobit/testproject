@@ -7539,6 +7539,7 @@ Handlebars.registerHelper('validateSendgridWhitelabel', function(valid)
 
 	return "<i class='fa fa-times icon-2x' style='color:red;'></i>";
 });
+
 Handlebars.registerHelper('scope_type', function(scope, options)
 	{
 		if(scope == "CONTACT" || scope == "COMPANY")
@@ -7546,3 +7547,28 @@ Handlebars.registerHelper('scope_type', function(scope, options)
 
 		return options.inverse(this);
 	});
+
+/**
+ * Compares the arguments (value and target) and executes the template based
+ * 
+ */
+Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options)
+{
+
+	/*
+	 * console.log("typeof target: " + typeof target + " target: " +
+	 * target); console.log("typeof value: " + typeof value + " value: " +
+	 * value);
+	 */
+	/*
+	 * typeof is used beacuse !target returns true if it is empty string,
+	 * when string is empty it should not go undefined
+	 */
+	if ((typeof target === "undefined") || (typeof value === "undefined"))
+		return options.inverse(this);
+
+	if (value.toString().trim().toLowerCase() == target.toString().trim().toLowerCase())
+		return options.fn(this);
+	else
+		return options.inverse(this);
+});

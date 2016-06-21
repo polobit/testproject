@@ -24,6 +24,7 @@
       pageSize: pageSize,
       scrollOffset: 100,
       add: true,
+      addAll: true,
       strict: false,
       includePage: false
     });
@@ -87,6 +88,7 @@
           success: self.fetchSuccess,
           error: self.fetchError,
           add: self.options.add,
+          addAll: self.options.addAll,
           data: $.extend(buildQueryParams(lastModel), self.options.extraParams)
         });
       }
