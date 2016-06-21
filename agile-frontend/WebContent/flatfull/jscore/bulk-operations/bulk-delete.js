@@ -558,8 +558,8 @@ function customize_delete_message(table)
 		confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
 
 	// Shows confirm alert, if Cancel clicked, return false
-	if(!confirm(confirm_msg))
-		return false;
+	//if(!confirm(confirm_msg))   //changed 21/6 adi
+	//	return false;
 	
 	// if OK clicked return true
 	return true;

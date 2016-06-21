@@ -305,10 +305,10 @@ public class DocumentsAPI
 	JSONArray docsJSONArray = new JSONArray();
 	List<String> contactIdsList = new ArrayList<String>();
 	if(documentsJSONArray!=null && documentsJSONArray.length()>0){
-		for (int i = 0; i < documentsJSONArray.length(); i++) {
+		for (int i = 0; i < documentsJSONArray.length(); i++) { 
 			try
 			   {
-				String eventId =  (String) documentsJSONArray.get(i);
+				String eventId =  documentsJSONArray.getString(i);
 				Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
 				
 				List<String> conIds = doc.getContact_ids();
