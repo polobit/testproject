@@ -14,6 +14,7 @@ import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.agile.PushNotification;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.google.appengine.api.NamespaceManager;
 
 public class PushNotificationServlet extends HttpServlet {
 
@@ -24,8 +25,13 @@ public class PushNotificationServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
 	    {
-		    String browser_id=request.getParameter("id");
+		 response.setHeader("Access-Control-Allow-Origin", "*");
+		
+			String browser_id=request.getParameter("id");
 		    System.out.println("Browser id :"+browser_id);
+		    
+		    String domainName=NamespaceManager.get();
+		    System.out.println("Domain name :"+domainName);
 		    
 		    if(StringUtils.isEmpty(browser_id))
 		    	return;
@@ -55,7 +61,6 @@ public class PushNotificationServlet extends HttpServlet {
 			}
 		    
 		    //sending the push notification mesage to the browser
-		    response.setHeader("Access-Control-Allow-Origin", "*");
 		    response.setContentType("application/json");
 		    response.getWriter().print(message);
 		

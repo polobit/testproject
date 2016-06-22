@@ -1312,9 +1312,17 @@
         <servlet-name>PushNotification</servlet-name>
         <servlet-class>com.agilecrm.notification.push.PushNotificationServlet</servlet-class>
     </servlet>  
- 
     <servlet-mapping>
         <servlet-name>PushNotification</servlet-name>
-        <url-pattern>backend/push</url-pattern>
+        <url-pattern>/push</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>PushNotificationDownload</servlet-name>
+        <servlet-class>com.agilecrm.notification.push.PushNotificationDownloadServlet</servlet-class>
+    </servlet>  
+    <servlet-mapping>
+        <servlet-name>PushNotificationDownload</servlet-name>
+        <url-pattern>/downloadpush</url-pattern>
     </servlet-mapping>
 </web-app>
