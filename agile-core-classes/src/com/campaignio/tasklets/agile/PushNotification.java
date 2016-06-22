@@ -107,7 +107,7 @@ public class PushNotification extends TaskletAdapter
 		    	//If contact doesn't having any id then add a logs
 		    	if(browser_id==null)
 		    	{
-		    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Contact doesn't subscribe a push notification.",
+		    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Contact didn't subscribe for push notification. ",
 		    				    LogType.PUSH_NOTIFICATION_SKIPPED.toString());
 		    		
 		    		// Execute Next One in Loop
@@ -135,12 +135,12 @@ public class PushNotification extends TaskletAdapter
 		    			System.out.println("success");
 		    			pushNotificationMessage.save();
 		    			
-		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push Notification successfully sent to Chrome Browser.",
+		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push notification sent successfully sent to the Chrome Browser.",
 		    				    LogType.PUSH_NOTIFICATION_SENT.toString());
 		    		}
 		    			
 		    		else
-		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subscriber block the push notification",
+		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), " Reasons: contact has blocked the notifications.",
 		    				    LogType.PUSH_NOTIFICATION_FAILED.toString());
 		    	}
 		    	else
@@ -149,13 +149,12 @@ public class PushNotification extends TaskletAdapter
 		    		{
 		    			System.out.println("success");
 		    			pushNotificationMessage.save();
-		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push Notification successfully sent to Mozilla Browser.",
+		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push notification sent successfully to the Mozilla Browser.",
 		    				    LogType.PUSH_NOTIFICATION_SENT.toString());
 		    		}
 		    			
 		    		else
-		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subscriber block the push notification.",
-		    				    LogType.PUSH_NOTIFICATION_FAILED.toString());
+		    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),"The browser is not open or contact has blocked the notifications. ", LogType.PUSH_NOTIFICATION_FAILED.toString());
 		    	}
 		    	
 		    }

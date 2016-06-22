@@ -1310,7 +1310,7 @@
     <!-- Push notification -->
     <servlet>
         <servlet-name>PushNotification</servlet-name>
-        <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
+        <servlet-class>com.agilecrm.notification.push.PushNotificationServlet</servlet-class>
     </servlet>  
  
     <servlet-mapping>

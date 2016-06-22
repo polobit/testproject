@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.datanucleus.util.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -42,7 +44,17 @@ public class PushNotificationServlet extends HttpServlet {
 		    pushNotificationMessage.delete();
 		    
 		    //Adding push notification shown log in campaign
-		    LogUtil.addLogToSQL(campaign_id, subscriber_id, "Push notification showm to subscriber",LogType.PUSH_NOTIFICATION_FAILED.toString());
+		    try
+		    {
+				JSONObject data= new JSONObject(message);
+				if(data.has(PushNotification.NOTIFICATION_TITLE_VALUE))
+				     LogUtil.addLogToSQL(campaign_id, subscriber_id, "Title : "+data.getString(PushNotification.NOTIFICATION_TITLE_VALUE),LogType.PUSH_NOTIFICATION_SHOWN.toString());
+			} catch (JSONException e) 
+			{
+				
+			}
+		    
+		    //sending the push notification mesage to the browser
 		    response.setHeader("Access-Control-Allow-Origin", "*");
 		    response.setContentType("application/json");
 		    response.getWriter().print(message);
