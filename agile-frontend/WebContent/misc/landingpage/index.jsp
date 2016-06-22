@@ -193,7 +193,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             </div>
 
                                             <div ng-controller="MediaManagerController">
-                                                <button ng-if="selected.isImage" ng-file-select="onFileSelect($files, 'src')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
+                                                <button id= "upload-image-lp" ng-if="selected.isImage" ng-file-select="onFileSelect($files, 'src')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
                                             </div>
                                         </div>
                                     </div>
