@@ -3,30 +3,30 @@
 {{#if this.length}}
 		{{#each this}}
 			{{#stringToJSON this ""}}
-<li style="margin:5px;border-bottom:1px solid #F5F5F5">
+<li style="margin:5px;border-bottom:1px solid #F5F5F5;padding-top: 5px;">
 	<div class="activity" style="display:block;">
 		{{#if is_complete}}
-			<div id="tasks" class="activity-text-block" style="background-color:#FFFAFA">
+			<div id="tasks" class="activity-text-block">
 		{{else}}
 			<div id="tasks" class="activity-text-block">
 		{{/if}}	
 			{{#if is_complete}}
 				<div style="margin-bottom: 1px;">
 					<h4 class="task-subject" style="text-decoration:line-through;display:inline;">
-						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
-						<!--<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>-->
+						<a style="text-decoration: none; margin:0px 5px 0px 0;"><b>{{ucfirst subject}}</b></a>
+						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 					</h4>
 				</div>
 			{{else}}
 				<div style="margin-bottom: 1px;">
 					<h4 class="task-subject" style="display:inline;">
-						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
-						<!--<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>-->	
+						<a style="text-decoration: none; margin:0px 5px 0px 0;"><b>{{ucfirst subject}}</b></a>
+						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>	
 					</h4>
 				</div>
 			{{/if}}
 			<div>
-				<p style="color:#b2b0b1;">
+				<p style="color: #909090;">
 					<span >Due: <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span><br>
 					<i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}
 					
@@ -35,11 +35,7 @@
 				<small class="edit-hover" style="margin-right:5px; color:#b2b0b1;"> 
 						<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 				</small>
-				{{#if is_complete}}
-					<span style="margin-right:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
-				{{else}}
-					<span style="margin-right:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
-				{{/if}}				
+							
 					
 				</div>
 			</div>

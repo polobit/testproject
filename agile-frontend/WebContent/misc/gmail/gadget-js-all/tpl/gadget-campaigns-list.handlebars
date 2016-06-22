@@ -3,7 +3,7 @@
 {{#if this.response.length}}
 		{{#each this.response}}
 			{{#stringToJSON this ""}}
-<li style="margin:2px;border-bottom:1px solid #F5F5F5">
+<li style="margin:2px;border-bottom:1px solid #F5F5F5;padding-top: 5px;">
 	<div style="display:block;">
 		<div id="campaigns" class="activity-text-block">
 			<span class="activity-block-owner pull-left" style=" margin-right: 5px;min-height: 37px;">
@@ -15,17 +15,20 @@
 			</span>
 			
 			<!--<div class="edit-hover pull-right" style="margin-right: 12px;">Campaign - <a target="_blank" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a></div>-->
-			<div><a style="text-decoration: none;text-transform: capitalize;"><b>{{titleFromEnums log_type}}</b></a></div>
+			<div><a style="text-decoration: none;text-transform: capitalize;"><b>{{titleFromEnums log_type}}</b></a>
+			<span class="label label-info " style="margin-left:5px;">Campaign -<a target="_blank" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile" style="color:white;text-transform: capitalize;"> {{campaign_name}}</a>
+					</span>
+			</div>
 
- 			<p style="color:#b2b0b1;">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</p>
+
+ 			<p style="color: #909090;">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</p>
 
 			<div class="edit-hover pull-right" style="margin-right: 10px; color:#b2b0b1;margin-top: -25px;">
 					<span>
 					<i class="fa fa-clock-o m-r-xs text-muted"></i>
 					<time class="log-created-time text-muted" datetime="{{epochToHumanDate "" time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 					</span>
-					<span class="label label-info pull-right" style="margin-left:5px;">Campaign -<a target="_blank" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile" style="color:white;text-transform: capitalize;"> {{campaign_name}}</a>
-					</span>
+					
 				
 			</div>	
 		</div>
