@@ -193,7 +193,7 @@ public class PushNotification extends TaskletAdapter
 				
 				response = HTTPUtil.accessURLWithHeaderUsingPost(NOTIFICATION_CHROME_URL, data.toString(), headers);
 				
-				System.out.println("Time in Milisecond After : "+ System.currentTimeMillis());
+				System.out.println("Time in Milisecond After : "+ System.currentTimeMillis()+response);
 				
 				data=new JSONObject(response);
 				
@@ -249,8 +249,8 @@ public class PushNotification extends TaskletAdapter
 		 int i=0;
 		 //String str="https://android.googleapis.com/gcm/send/zW1vgKGlds/:APA91bHrg6ULcPskmV58IkYsveZwjH97UYXGSNfoNb_k-q5N9rg4ELS_NR";
 		 //System.out.println(StringUtils.substringAfterLast(str, "/"));
-		 while(i<5){
-		 sendPushNotificationToChrome("dC9_eoPnfj4:APA91bGwS3RSdV61UW9GJa4Afd3NeRut16JTyPbbSHXJiWyJxIp-0PDeKPkhkHhU3SwdkMkZ3SHfOWeh1xo2qhk0oYRov7h75hOv7FFHqb5MTj-MHCmvBtzjSMkuUjI-k8l2spRcSbZo", null, null, null, null);
+		 while(i<1){
+		 sendPushNotificationToChrome("fkuvrfohmoo:APA91bH03B7yrlXsrTeulEpIErpULAHvjUhTlwEX5QZpnOIVuniBXDtQ0KvLHWe7Ba1xiWomLuRPfqIn1plbDGHynRJAggR9xiGgavldx-NxqFFNUMmvjQTn6pSe81AhJNnA_neNe5kQ", null, null, null, null);
 		 i++;}
 	 }
 }

@@ -20,7 +20,7 @@ public class PushNotificationServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1587951517703088575L;
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
 	    {
 		    String browser_id=request.getParameter("id");
 		    System.out.println("Browser id :"+browser_id);
