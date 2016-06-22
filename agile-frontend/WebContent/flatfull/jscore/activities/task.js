@@ -207,7 +207,7 @@ function initializeTasksListeners(){
 	});
 	$('#tasks-list-template').on('click', '#bulk-change-owner , #bulk-change-priority , #bulk-change-status , #bulk-change-dueDate ', function(event)
 	{
-		task_ids = null;
+		task_ids = null ;
 		var tasksNumber = $('#tasks-list-template').find('#select_all_tasks').attr('data');
 		if(!tasksNumber)
 			task_ids = getTaskIds();
@@ -279,7 +279,7 @@ function initializeTasksListeners(){
 	});
 	$('#tasks-list-template').on('click', '#bulk-delete-tasks', function(e)
 	{
-		task_ids = null; var priorityJson = null;
+		task_ids = null ; var priorityJson = null ;
 		var tasksNumber = $('#tasks-list-template').find('#select_all_tasks').attr('data');
 		if(!tasksNumber)
 			task_ids = getTaskIds();
