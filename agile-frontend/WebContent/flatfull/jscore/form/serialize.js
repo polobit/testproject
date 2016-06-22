@@ -257,13 +257,13 @@ function serializeChainedElement(element)
 
 		// If type of the field is "date" then return epoch time
 		if ($(data).hasClass("date")) {
-			if($(data).closest('td').find("select#LHS").val() == "closed_time" && $(data).closest('tr').parent().parent().hasClass('opportunity'))
+			if($(data).closest('td').siblings('td.lhs-block').find("select#LHS").val() == "closed_time" && $(data).closest('tr').parent().parent().hasClass('opportunity'))
 			{
 				var date = getFormattedDateObjectWithString($(data).val());
 
 				if(date)
 				{
-					value = date.getTime() / 1000;
+					value = date.getTime();
 				}
 			}
 			else

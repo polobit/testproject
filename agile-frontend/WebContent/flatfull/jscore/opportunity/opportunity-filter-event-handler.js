@@ -155,6 +155,7 @@ var Opportunity_Filters_Event_View = Base_Model_View.extend({
 	onConditionChanged : function(e){
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
+		var $rhs_ele = $(targetEl).closest('td').siblings('td.rhs-block').find("#RHS");
 
 		if ($(targetEl).find("option:selected").hasClass('tags'))
 		{
@@ -194,6 +195,13 @@ var Opportunity_Filters_Event_View = Base_Model_View.extend({
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("placeholder", "Company Name");
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).addClass("company_custom_field");
 			agile_type_ahead($('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id"), $(targetEl).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
+		}
+
+		if ($(targetEl).closest('td').siblings('td.lhs-block').find('select#LHS').val() == "track_milestone")
+		{
+			$(targetEl).closest('td').siblings('td.track-milestone-error').removeClass("hide");
+			var field_name = $rhs_ele.find("input").attr("name");
+			populateTrackMilestones(undefined, undefined, undefined, undefined, undefined, undefined, $rhs_ele, field_name);
 		}
 		
 	},

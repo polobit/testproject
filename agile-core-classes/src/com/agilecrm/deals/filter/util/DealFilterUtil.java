@@ -53,13 +53,14 @@ public class DealFilterUtil {
 	{
 	    System.out.println("cursor : " + cursor + ", count : " + count);
 	    
-	    if(id != null && !id.equalsIgnoreCase("my-deals") && !id.equalsIgnoreCase("null"))
+	    if(id != null && !id.equalsIgnoreCase("my-deals") && !id.equalsIgnoreCase("null") && StringUtils.isNotEmpty(id))
 	    {
 	    	filter = getDealFilter(Long.valueOf(id));
 	    	if(filter != null && filter.archived != null)
 	    	{
 	    		setOldFiltersData(filter);
 	    	}
+	    	changeStateFilter(filter);
 	    }
 	    else if(id != null && id.equalsIgnoreCase("my-deals"))
 	    {
@@ -73,7 +74,7 @@ public class DealFilterUtil {
 	    
 	    setTrackAndMilestoneFilters(filter, pipeline_id, milstone);
 	    
-	    if(id != null && (id.equalsIgnoreCase("my-deals") || id.equalsIgnoreCase("null")))
+	    if(id != null && (id.equalsIgnoreCase("my-deals") || id.equalsIgnoreCase("null") || StringUtils.isEmpty(id)))
 	    {
 	    	setDefaultState(filter);
 	    }
@@ -326,6 +327,44 @@ public class DealFilterUtil {
 		countObj.put("total", total);
 		
 		return countObj;
+	}
+	
+	public static void changeStateFilter(DealFilter filter)
+	{
+		List<SearchRule> andRules = new ArrayList<SearchRule>();
+		List<SearchRule> orRules = new ArrayList<SearchRule>();
+		
+		setStateFilterRules(filter.rules, andRules, orRules);
+		setStateFilterRules(filter.or_rules, andRules, orRules);
+		
+		filter.rules = andRules;
+		filter.or_rules = orRules;
+		
+	}
+	
+	public static void setStateFilterRules(List<SearchRule> rules, List<SearchRule> andRules, List<SearchRule> orRules)
+	{
+		for(SearchRule rule : rules)
+		{
+			if(rule.LHS != null && rule.LHS.equalsIgnoreCase("archived") && rule.RHS.equalsIgnoreCase("all"))
+			{
+				SearchRule newRule = new SearchRule();
+				newRule.LHS = rule.LHS;
+				newRule.CONDITION = rule.CONDITION;
+				newRule.RHS = "true";
+				orRules.add(newRule);
+				
+				newRule = new SearchRule();
+				newRule.LHS = rule.LHS;
+				newRule.CONDITION = rule.CONDITION;
+				newRule.RHS = "false";
+				orRules.add(newRule);
+			}
+			else
+			{
+				orRules.add(rule);
+			}
+		}
 	}
 
 }
