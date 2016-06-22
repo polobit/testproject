@@ -5966,6 +5966,8 @@ $(function()
 			portlet_name = "Visits";
 		else if(p_name=='Referralurl stats')
  			portlet_name = "Referral URL Stats";
+ 		else if (p_name == 'Lost Deal Analysis')
+			portlet_name = "Deals Lost by Reason";
 		else
 			portlet_name = p_name;
 		return portlet_name;
