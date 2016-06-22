@@ -1190,12 +1190,17 @@ public class ContactUtil
 
 	oldContact.tags.addAll(newContact.tags);
 	
-	//source of the contact
-	oldContact.source = "import" ;
-	System.out.println("old contact source = "+oldContact.source);
-	if(newContact.source != null){
-		oldContact.source = newContact.source ;
-		System.out.println("new contact source is "+newContact.source);
+	try {
+		//source of the contact
+		oldContact.source = "import" ;
+		System.out.println("old contact source = "+oldContact.source);
+		if(newContact.source != null){
+			oldContact.source = newContact.source ;
+			System.out.println("new contact source is "+newContact.source);
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		System.out.println(e.getMessage());
 	}
 	
 	
