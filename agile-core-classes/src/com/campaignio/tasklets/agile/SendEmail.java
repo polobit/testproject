@@ -243,7 +243,7 @@ public class SendEmail extends TaskletAdapter
     	String bcc = getStringValue(nodeJSON, subscriberJSON, data, BCC);
     	
     	
-    	if(!isVaildEmailAddress(to)){
+    	if(!isValidEmailAddress(to)){
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
     			    "Email skipped since \'To\' address is invalid.",
     			    LogType.EMAIL_SENDING_SKIPPED.toString());
@@ -253,7 +253,7 @@ public class SendEmail extends TaskletAdapter
     		return;
     	}
 
-    	if(!isVaildEmailAddress(cc)){
+    	if(!isValidEmailAddress(cc)){
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
     			    "Email skipped since \'CC\' address is invalid.",
     			    LogType.EMAIL_SENDING_SKIPPED.toString());
@@ -263,7 +263,7 @@ public class SendEmail extends TaskletAdapter
     		return;
     	}
 
-    	if(!isVaildEmailAddress(bcc)){
+    	if(!isValidEmailAddress(bcc)){
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
     			    "Email skipped since \'BCC\' address is invalid.",
     			    LogType.EMAIL_SENDING_SKIPPED.toString());
@@ -427,7 +427,7 @@ public class SendEmail extends TaskletAdapter
     }
     
     
-    private boolean isVaildEmailAddress(String emailAddresses){
+    private boolean isValidEmailAddress(String emailAddresses){
     	Set<String> emailAddress = EmailUtil.getStringTokenSet(emailAddresses,",");
     	Iterator<String> emailAddressIterator = emailAddress.iterator();
     	
