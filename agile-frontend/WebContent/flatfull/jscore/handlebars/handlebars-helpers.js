@@ -1854,7 +1854,7 @@ $(function()
 
 	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && Current_Route.indexOf("contact/") == 0)
 		{
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
 			var currentContactEntity = getPropertyValue(contact_properties, key);
@@ -1873,6 +1873,29 @@ $(function()
 			}
 
 			if (currentContactEntity == contactEntity)
+				return options.fn(this);
+
+			return options.inverse(this)
+		}
+		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model && Current_Route.indexOf("company/") == 0)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties');
+			var currentContactEntity = getPropertyValue(contact_properties, key);
+			var contactEntity = getPropertyValue(properties, key);
+
+			if (!currentContactEntity || !contactEntity)
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Companies.companyDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
+			}
+
+			if (currentContactEntity && contactEntity && currentContactEntity.toLowerCase() == contactEntity.toLowerCase())
 				return options.fn(this);
 
 			return options.inverse(this)
@@ -4017,33 +4040,6 @@ $(function()
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
 			console.log(App_Contacts.contactDetailView.model.toJSON());
 			return options.fn(getPropertyValue(contact_properties, value));
-		}
-	});
-
-	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
-	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-			var currentContactEntity = getPropertyValue(contact_properties, key);
-			var contactEntity = getPropertyValue(properties, key);
-
-			if (!currentContactEntity || !contactEntity)
-			{
-				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
-				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
-			}
-			
-			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
-			{
-				currentContactEntity = getPropertyValue(contact_properties, "name") ;
-				contactEntity = getPropertyValue(properties, "name");
-			}
-
-			if (currentContactEntity == contactEntity)
-				return options.fn(this);
-
-			return options.inverse(this)
 		}
 	});
 

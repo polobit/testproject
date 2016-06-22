@@ -1080,6 +1080,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, el,callback)
 												eventsView.collection.sort();
 											}
 										}
+										eventsView.render(true);
 									}
 
 									// Activates "Timeline" tab and its tab

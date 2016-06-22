@@ -859,12 +859,20 @@ function modelDelete(model, targetEl, callback){
 		{
 			var can_edit = false;
 			$.each(response_data, function(index, contactId){
-				if(App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				if(Current_Route.indexOf("contact/") == 0 && App_Contacts.contactDetailView.model.get("id") && contactId == App_Contacts.contactDetailView.model.get("id"))
+				{
+					can_edit = true;
+				}
+				else if(Current_Route.indexOf("company/") == 0 && App_Companies.companyDetailView.model.get("id") && contactId == App_Companies.companyDetailView.model.get("id"))
 				{
 					can_edit = true;
 				}
 			});
-			if(!App_Contacts.contactDetailView.model.get("id"))
+			if(Current_Route.indexOf("contact/") == 0 && !App_Contacts.contactDetailView.model.get("id"))
+			{
+				can_edit = true;
+			}
+			else if(Current_Route.indexOf("company/") == 0 && !App_Companies.companyDetailView.model.get("id"))
 			{
 				can_edit = true;
 			}
@@ -887,7 +895,7 @@ function modelDelete(model, targetEl, callback){
 			}
 		}
 		// Removes activity from list
-		$(that).parents(".activity").fadeOut(400, function()
+		$(that).parents(".activity").parent().fadeOut(400, function()
 		{
 			$(targetEl).remove();
 		});

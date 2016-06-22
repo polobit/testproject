@@ -511,6 +511,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 											tasksView.collection.add(new BaseModel(data), { sort : false });
 											tasksView.collection.sort();
 										}
+										tasksView.render(true);
 									}
 
 									// Activates "Timeline" tab and its tab
