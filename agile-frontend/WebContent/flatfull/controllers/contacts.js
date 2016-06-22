@@ -1288,7 +1288,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					// Add placeholder and date picker to date custom fields
 					$('.date_input').attr("placeholder", "Select Date");
 
-					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 					// To set typeahead for tags
 					setup_tags_typeahead();

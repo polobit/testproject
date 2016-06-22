@@ -213,8 +213,8 @@ var DealsRouter = Backbone.Router.extend({
 					}
 				});
 				$('input[name=name]').trigger('focus');
-				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
-				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
+				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , autoclose: true});
+				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , autoclose: true});
 			} });
 		$("#opportunity-listners").html(deals_filter.render().el);
 		setup_tags_typeahead();
@@ -350,8 +350,8 @@ var DealsRouter = Backbone.Router.extend({
 						$('#deal-cd-rhs-new', el).parent().addClass("hide");
 						$('#deal-cd-rhs', el).parent().addClass("hide");
 				}
-				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
-				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , });
+				$('#deal-cd-rhs .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , autoclose: true});
+				$('#deal-cd-rhs-new .date' , el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , autoclose: true});
 			} });
 
 		$("#opportunity-listners").html(dealFilter.render().el);
