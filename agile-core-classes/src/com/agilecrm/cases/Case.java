@@ -109,6 +109,10 @@ public class Case extends Cursor
      * Status of case , OPEN or CLOSE. Can be extended later
      * 
      */
+    public List<Contact> relatedContacts()
+    {
+	 return Contact.dao.fetchAllByKeys(this.related_contacts_key);
+    }
     public static enum Status
     {
 	OPEN, CLOSE

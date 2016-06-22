@@ -1,5 +1,8 @@
 package com.agilecrm.deals.filter;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -55,6 +58,18 @@ public class DealFilter {
     public String value_end = null;
     
     @NotSaved(IfDefault.class)
+    public String close_date_filter = null;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_start = 0L;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_end = 0L;
+    
+    @NotSaved(IfDefault.class)
+    public Long close_date_value = 0L;
+     
+    @NotSaved(IfDefault.class)
     public String archived = null;
     
     /**
@@ -73,6 +88,13 @@ public class DealFilter {
      * Created time of filter
      */
     public Long created_time = 0L;
+    
+    //deal tag filter added 
+    @NotSaved(IfDefault.class)
+    public String dealTagCondition = null;
+    
+    @NotSaved(IfDefault.class)
+    public String dealTagName = null;
     
     // Dao
     public static ObjectifyGenericDao<DealFilter> dao = new ObjectifyGenericDao<DealFilter>(DealFilter.class);
@@ -110,6 +132,22 @@ public class DealFilter {
     	this.value_start=value_start;
     	this.value_end=value_end;
     	this.archived=archived;
+    }
+    public DealFilter(String name, String view_type, Long owner_id, Long pipeline_id, String milestone, String value_filter, String value, String value_start, String value_end, String archived,String close_date_filter,Long close_date_start,Long close_date_end,Long close_date_value){
+    	this.name=name;
+    	this.view_type=view_type;
+    	this.owner_id=owner_id;
+    	this.pipeline_id=pipeline_id;
+    	this.milestone=milestone;
+    	this.value_filter=value_filter;
+    	this.value=value;
+    	this.value_start=value_start;
+    	this.value_end=value_end;
+    	this.archived=archived;
+    	this.close_date_filter = close_date_filter;
+    	this.close_date_start = close_date_start;
+    	this.close_date_end = close_date_end;
+    	this.close_date_value = close_date_value;
     }
     
     /**
@@ -171,6 +209,4 @@ public class DealFilter {
 	    if (filter_owner_id != null)
 	    	owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(filter_owner_id));
     }
-    
-
 }

@@ -11,11 +11,14 @@
   <target>agile-normal-bulk</target>
   </queue>
   <queue>
-    <name>campaign-log-pull-queue</name>
-    <mode>pull</mode>
+    <name>campaign-log-queue</name>
+    <rate>400/s</rate>
+    <bucket-size>450</bucket-size>
+<!--     <max-concurrent-requests>40</max-concurrent-requests> -->
     <retry-parameters>
     <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
+  <target>agile-campaigns-logs</target>
   </queue>
   <queue>
     <name>bulk-campaign-queue</name>
@@ -207,7 +210,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
-  <target>agile-normal-bulk</target>
+  <target>agile-tasks-handler</target>
   </queue>
   
    <queue>
@@ -216,8 +219,9 @@
     <bucket-size>40</bucket-size>
     <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
-    <task-retry-limit>2</task-retry-limit>
+    <task-retry-limit>5</task-retry-limit>
   </retry-parameters>
+  <target>agile-tasks-handler</target>
   </queue>
 
    <queue>
@@ -294,6 +298,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
+  <target>agile-tasks-handler</target>
   </queue>
   
   <queue>
@@ -314,6 +319,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
+  <target>agile-tasks-handler</target>
   </queue>
   
   <queue>
@@ -370,6 +376,19 @@
       <task-retry-limit>2</task-retry-limit>
     </retry-parameters>
     <target>agile-normal-bulk</target>
+  </queue>
+  
+  <queue>
+    <name>jsonio-node-queue</name>
+    <rate>10/s</rate>
+    <bucket-size>50</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+      <min-backoff-seconds>120</min-backoff-seconds>
+      <max-backoff-seconds>300</max-backoff-seconds>
+    </retry-parameters>
+    <target>agile-slow-tasks-handler</target>
   </queue>
   
   <!-- pull queues -->
@@ -433,6 +452,18 @@
       <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
+  
+  <queue>
+  <name>amazon-ses-pull-queue</name>
+  <mode>pull</mode>
+  <acl> 
+    <user-email>yaswanth@agilecrm.com</user-email>
+  </acl>
+  <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
 
 
   <queue>
@@ -596,5 +627,12 @@
   <target>agile-normal-bulk</target>
   </queue>
    
+  <queue>
+  <name>bulk-call-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+      <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
 
 </queue-entries>

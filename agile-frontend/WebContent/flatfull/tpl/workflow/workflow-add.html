@@ -68,13 +68,16 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
 													</a>
 												</li>
+                                           <li>
+												<a href="javascript:void(0)" id="campaign_access_level">
+												<i class="" style="width:20px;">&nbsp;</i>
+
+												 <span></span></a>
+												</li>
 											</ul>
                            				</div> 
-                           				<div class="right m-r-sm">
-						                    <label class="btn btn-default btn-sm m-l-xs" id="campaign_access_level"> 
-						                    		<span> Make {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
-						                    </label>
-										</div>                                       
+                           				
+                           				                                       
                   <div id="disable-switch" data = "{{is_disabled}}" class="is-disabled-top">
 							<label class="r-switch m-t-xs m-r-sm pull-right">
                           		{{#if_equals "true" is_disabled}}

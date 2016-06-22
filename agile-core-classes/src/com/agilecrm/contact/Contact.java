@@ -1181,7 +1181,7 @@ public class Contact extends Cursor
 	{
 	    created_time = System.currentTimeMillis() / 1000;
 	}
-
+	
     }
 
     /**
@@ -1255,6 +1255,9 @@ public class Contact extends Cursor
 		contact_company_id = null;
 		contact_company_key = null;
 		e.printStackTrace();
+	    }
+	    catch(Exception e){
+	    	System.out.println("exception found");	    	
 	    }
 	}
 	else

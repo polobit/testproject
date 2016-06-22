@@ -40,7 +40,7 @@ var PortletsRouter = Backbone.Router
 										"userActivity" ];
 								$.each(array, function(i, item) {
 									if ($('#' + item).children().length == 0)
-										$('#' + item).parents('.wrapper-md')
+										$('#' + item).closest(".tab-container").find('.' + item+"-aclpermission")
 												.hide();
 								});
 

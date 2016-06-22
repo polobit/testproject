@@ -5,34 +5,32 @@
 
 {{#if_equals entity_type "contact_entity"}}
     	<div class="thumb-sm agile-img m-r-xs">
-        	{{#if_contact_type "PERSON"}}
-        		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
-        	{{/if_contact_type}}
-        
-			{{#if_contact_type "COMPANY"}}
-        		<img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} />
-        	{{/if_contact_type}}
+        	<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
     	</div>
     	<div class="agile-thumb text-ellipsis">
-        	{{#if_contact_type "PERSON"}}
-        		<div class="text-cap">	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} 
-        		<div class="text-ellipsis text-lowercase">
-        		<small>{{getPropertyValue properties "email"}}</small>
-				</div>
-                <div class="text-ellipsis">
-				<small>{{getPropertyValue properties "company"}}</small>
-                </div>
-                </div>
-        	{{/if_contact_type}}
-        
-			{{#if_contact_type "COMPANY"}}
-        		<div class="text-cap">{{getPropertyValue properties "name"}}
-        		<div class="text-ellipsis text-lowercase">
-                <small>{{getPropertyValue properties "url"}}</small>
-                 </div>
-                </div>
-        	{{/if_contact_type}}
+        	<div class="text-cap"> {{getPropertyValue properties "first_name"}}
+            {{getPropertyValue properties "last_name"}} 
+            <div class="text-ellipsis text-lowercase">
+            <small>{{getPropertyValue properties "email"}}</small>
+            </div>
+            <div class="text-ellipsis">
+            <small>{{getPropertyValue properties "company"}}</small>
+            </div>
+            </div>
+		</div>
+		<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals entity_type "company_entity"}}
+    	<div class="thumb-sm agile-img m-r-xs">
+        	<img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} />
+    	</div>
+    	<div class="agile-thumb text-ellipsis">
+        	<div class="text-cap">{{getPropertyValue properties "name"}}
+    		<div class="text-ellipsis">
+            <small>{{getPropertyValue properties "url"}}</small>
+             </div>
+            </div>
 		</div>
 		<div class="clearfix"></div>
 {{/if_equals}}

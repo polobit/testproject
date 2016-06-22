@@ -13,10 +13,10 @@ $(function()
 
 		$("#details").empty();
 		Selected_Time = $(this).attr('data');
-		$(".show_slots").find('input:radio').attr('checked', false);
+		$(".show_slots").find('input:radio').prop('checked', false);
 		$(this, [
 			'input:radio'
-		]).attr('checked', true);
+		]).prop('checked', true);
 		appointmenttype = $('input[name="selected_meeting_time"]:checked').val();
 
 		$(".activemin").removeClass("activemin");
@@ -67,7 +67,7 @@ $(function()
 		$('.selected-slot').each(function()
 		{
 			if ($(this).attr('id') != currentId)
-				$(this).attr("checked", false);
+				$(this).prop("checked", false);
 		});
 
 		// Make next part enable

@@ -9,6 +9,7 @@ import org.codehaus.jettison.json.JSONObject;
 import com.agilecrm.RegistrationGlobals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -230,6 +231,7 @@ public class SubscriptionUtil
 	    return;
 
 	subscription.plan = null;
+	subscription.status = BillingStatus.SUBSCRIPTION_DELETED;
 	subscription.save();
     }
 

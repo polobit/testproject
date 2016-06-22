@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
+import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
@@ -306,8 +307,22 @@ public class SendEmail extends TaskletAdapter
 		return;
 	    }
 
-	}
+	    else if (subscriberJSON.getString("isBounce").equals(EmailBounceStatus.EmailBounceType.SPAM.toString()))
+	    {
+		// Add log
+		LogUtil.addLogToSQL(
+		        AgileTaskletUtil.getId(campaignJSON),
+		        AgileTaskletUtil.getId(subscriberJSON),
+		        "Campaign email was not sent due to spam complaint <br><br> Email subject: "
+		                + getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
+		        LogType.EMAIL_SENDING_SKIPPED.toString());
 
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+		return;
+	    }
+	}
+	
 	// Get Scheduled Time and Day
 	String on = getStringValue(nodeJSON, subscriberJSON, data, ON);
 	String at = getStringValue(nodeJSON, subscriberJSON, data, AT);
@@ -365,6 +380,13 @@ public class SendEmail extends TaskletAdapter
 	// Sleep till that day
 	// Add ourselves to Cron Queue
 	long timeout = calendar.getTimeInMillis();
+	long currentTime=System.currentTimeMillis()-20000;
+	if(timeout<currentTime){
+		timeout=timeout+(7*24*60*60*1000);
+		System.out.println("timeout:"+timeout+"currentTime:"+currentTime);
+		
+		
+	}
 	addToCron(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
     }
 
@@ -635,11 +657,26 @@ public class SendEmail extends TaskletAdapter
 	// Update campaign emailed time
 	ContactUtil.updateCampaignEmailedTime(Long.parseLong(subscriberId), System.currentTimeMillis()/1000, to);
 	
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	try{
+	
+	if(emailGateway!=null && emailGateway.email_api!=null && emailGateway.email_api.name()!=null && emailGateway.email_api.name().equalsIgnoreCase("SES")){
+ 		System.out.println("Sending mails through amazon pull queue");
+ 		EmailGatewayUtil.sendBulkEmail(
+ 		                 AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
+ 		        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+  	}else{
+	
 	// Send Email using email gateway
 	EmailGatewayUtil.sendBulkEmail(
 			Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
 	                : AgileQueues.NORMAL_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
 	        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+  	}
+	}catch(Exception e){
+		System.err.println("Error occured in sending email:"+e.getMessage());
+	}
 
     }
 

@@ -1,39 +1,53 @@
 <script id="contact-view-collection-template" type="text/html">
 
-	<div class="btn-group m-r-sm">
-	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
-    	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-    	{{#is_mobile}}
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu" role="menu">
-    	   	<li>
-            	<a href="#contact-view-prefs">Add/Remove Columns</a>
-        	</li>
-    	</ul>
-    	{{else}}
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
-        	<!--<li>
-            	<a href="#contacts" class="DefaultView">Default</a>
-				 a href="#contacts" class="GridView">Grid View</a 
-        	</li>
-			<li class="divider"></li>-->
+    <div class="btn-group m-r-sm">
+    <!--<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button> -->
+        {{#is_mobile}}
+        <ul id="contact-view-model-list" class="pull-right dropdown-menu" role="menu">
+            <li>
+                <a href="#contact-view-prefs">Add/Remove Columns</a>
+            </li>
+        </ul>
+        {{else}}
+        <ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
+            <!--<li>
+                <a href="#contacts" class="DefaultView">Default</a>
+                 a href="#contacts" class="GridView">Grid View</a 
+            </li>
+            <li class="divider"></li>-->
 
-        	<li>
-            	<a href="#contact-view-prefs">Add/Remove Columns</a>
-        	</li>
-    	</ul>
-    	{{/is_mobile}}
+            <li>
+                <a href="#contact-view-prefs">Add/Remove Columns</a>
+            </li>
+        </ul>
+        {{/is_mobile}}
 
-	</div>
+    </div>
+   {{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
+   <div class="btn-group">
 
-    <div class="btn-group">
-
-        <a href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
+        <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> Add Contact</button>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 
-		<ul class="dropdown-menu pull-right" role="menu">
-			<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
+        <ul class="dropdown-menu pull-right" role="menu">
+        {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
+            <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
+        {{/hasRestrictedMenuScope}}
             <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">Add Dashlet</a></li>
-		</ul>
+        </ul>
+    {{else}}
+    <div class="btn-group">
+
+        <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon-plus-sign"></i> Add Contact</button>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+
+        <ul class="dropdown-menu pull-right" role="menu">
+        {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
+            <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
+        {{/hasRestrictedMenuScope}}
+            <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">Add Dashlet</a></li>
+        </ul>
 <!--
 {{#is_mobile}}
 
@@ -43,67 +57,81 @@
 <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
 {{/is_mobile}}
 -->
-	</div>
+    </div>
 </div>
-	
-
-			
+    
+{{/hasRestrictedMenuScope}}
+            
 </script>
 
 <script id="company-view-collection-template" type="text/html">
-	<div class="btn-group m-r-xs">
-    	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
-    	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-	    
-    	
+    <div class="btn-group m-r-xs">
+    <!--    <button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button> -->
+        
+        
 {{#is_mobile}}
 
 
 
-<ul id="contact-view-model-list" class="pull-right dropdown-menu" role="menu">			
-			
-        	<li>
-            	<a href="#company-view-prefs">Add/Remove Columns</a>
-        	</li>
-    	</ul>
+<ul id="contact-view-model-list" class="pull-right dropdown-menu" role="menu">          
+            
+            <li>
+                <a href="#company-view-prefs">Add/Remove Columns</a>
+            </li>
+        </ul>
 
-    	{{else}}
-    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
- 	
+        {{else}}
+        <ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
+    
 
-        	<li>
-            	<a href="#company-view-prefs">Add/Remove Columns</a>
-        	</li>
-    	</ul>	
-    	{{/is_mobile}}
-    	
-	</div>
+            <li>
+                <a href="#company-view-prefs">Add/Remove Columns</a>
+            </li>
+        </ul>   
+        {{/is_mobile}}
+        
+    </div> 
+    {{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
+    <div class="btn-group">
+        <a href="#companyModal" class="btn btn-default btn-sm disabled" data-toggle="modal"><i class="icon-plus-sign"></i> Add Company</a>
+        <button class="btn btn-default btn-sm dropdown-toggle disabled" data-toggle="dropdown"><span class="caret"></span></button>
+        {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
+        <ul class="dropdown-menu pull-right" role="menu">
+         
+            <li><a href="#import">Import</a></li>
+            
+        </ul>
+        {{/hasRestrictedMenuScope}} 
+    {{else}}
     <div class="btn-group">
         <a href="#companyModal" class="btn btn-default btn-sm" data-toggle="modal"><i class="icon-plus-sign"></i> Add Company</a>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-		
-<ul class="dropdown-menu pull-right" role="menu">
-			<li><a href="#import">Import</a></li>
-			
-			
-		</ul>
+         {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
+        <ul class="dropdown-menu pull-right" role="menu">
 
-		<!--
+            <li><a href="#import">Import</a></li>
+               
+        </ul>
+        {{/hasRestrictedMenuScope}}  
 
-		{{#is_mobile}}
+        <!--
+
+        {{#is_mobile}}
 
 
-		{{else}}
-			<div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
-			<button class="btn btn-default btn-sm m-l-sm fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
-			<i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
-		{{/is_mobile}}
-		-->
-	
-	</div>
-	
-		</div>
+        {{else}}
+            <div class="btn-group pull-left m-l-xs" style="padding-left:3px;">
+            <button class="btn btn-default btn-sm m-l-sm fullscreenelement" style="height:30px;width:30px;" targetFullscreenElement="#content" >
+            <i id="toggle-screen-icon" class="fa fa-expand" style="margin-right:3px"></i></button></div>
+        {{/is_mobile}}
+        -->
+    
+    </div>
+    
+        </div>
+    {{/hasRestrictedMenuScope}}
 
-	
+    
 
 </script>

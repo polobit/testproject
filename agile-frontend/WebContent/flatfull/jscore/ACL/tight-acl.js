@@ -1,6 +1,7 @@
 /**
  * To implement ACL for all the modules.
  */
+ //ACCOUNT_PREFS.tag_disable=true;
 (function(tight_acl, $, undefined) {
 	
 	//Contants to denote the permission
@@ -114,9 +115,11 @@
 		if(tagsCollectionView){
 			if(tag.indexOf('[') < 0){
 				if(tagsCollectionView.collection.where({"tag":tag}).length == 0){
-					alert("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
-					if(errorCallback)
-						errorCallback("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
+					showAlertModal(" You don't have permissions to create a new tag.", undefined, function(){
+						if(errorCallback)
+							errorCallback(" You don't have permissions to create a new tag.");
+					}, undefined, "Alert");
+					return;
 				}
 				else if(callback)
 					callback(tagsCollectionView.collection.where({"tag":tag}).length > 0);
@@ -132,9 +135,11 @@
 				});
 				
 				if(newTags.length > 0){
-					alert("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.");
-					if(errorCallback)
-						errorCallback("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.");
+					showAlertModal("You don't have permissions to create a new Tag.", undefined, function(){
+						if(errorCallback)
+							errorCallback("You don't have permissions to create a new Tag.");
+					},undefined,"Alert");
+					return;
 				}
 				else if(callback)
 					callback(true);
@@ -150,9 +155,14 @@
 					else
 						return result;
 				}, error: function(response){
-					alert(response.responseText);
-					if(errorCallback)
-						errorCallback(response.responseText);
+					if(response.responseText.indexOf("don't have permissions")  != -1){
+						response.responseText = "You don't have permissions to create a new Tag."
+					}
+					showAlertModal(response.responseText, undefined, function(){
+						if(errorCallback)
+							errorCallback(response.responseText);
+					},undefined, "Alert");
+					return;
 				}
 			});
 		}
@@ -187,18 +197,16 @@
 	$('#disable_new_tags').on('click',function(e){
 	if($('#disable_new_tags').text().trim() == 'Enable Access')
 	{
-		
 		$('#disable_new_tags').text("Disable Access");
-		
+				
 		updateTagAcl(true);console.log(false);
 	}
 	else if($('#disable_new_tags').text().trim() == 'Disable Access')
 	{
 		$('#disable_new_tags').text("Enable Access");
-		
+		//ACCOUNT_PREFS.setTagPermission(true);
 		updateTagAcl(false);
 		//$('#disable_new_tags').attr("option","");
-
 	}  
 	});
 	/*	$('#new_tag_acl',el).off('change').on('change',function(){

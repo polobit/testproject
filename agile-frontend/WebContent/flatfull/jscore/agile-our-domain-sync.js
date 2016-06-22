@@ -332,6 +332,7 @@ function our_domain_sync() {
 			// Creates a new contact and assigns it to global value
 			var email = CURRENT_DOMAIN_USER['email'];
 			var emailType = email.split("@")[1].split(".")[0];
+
 			var param = {
 					"email" : CURRENT_DOMAIN_USER['email'],
 					"first_name" : first_name,
@@ -352,6 +353,7 @@ function our_domain_sync() {
 					initWebrules();
 				});
 			}
+
 		})
 		// Gets contact based on the the email of the user logged in
 
@@ -522,6 +524,7 @@ function add_created_user_info_as_note_to_owner(owner, callback) {
 	}, owner['email']);
 
 }
+
 
 // add note to owner when subscription is cancelled
 function add_cancel_subscription_info_as_note_to_owner(cus_email, callback) {

@@ -67,7 +67,7 @@ $(function()
 		// Check number is available.
 		if (phone == "" || phone == null)
 		{
-			alert(name + "'s contact number not added.");
+			showAlertModal(name + "'s contact number not added.", undefined, undefined, undefined, "Error");
 			return;
 		}
 

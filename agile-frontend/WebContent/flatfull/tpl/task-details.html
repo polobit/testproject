@@ -10,17 +10,20 @@
                   <div> 
                     <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block text-ellipsis" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span>
                     <span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis"
-                     style="max-width:200px;min-width:auto;vertical-align:bottom; font-size:12px;">{{task_property type}}</span>                  
-                    {{#if_not_equals priority_type "NORMAL" }}
+                     style="max-width:200px;min-width:auto;vertical-align:bottom; font-size:12px;">{{task_property type}}</span>                
+
+                    
                    <span class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
-                         {{/if_not_equals}}</div>
+                         </div>
                   </div>
 					
                  	<!--  starting rating,edit,owner -->
                    
 					<div class="pos-abs pos-r-xs pos-t">
 					   
-                        <a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
+                        <button class="dropdown-toggle bg-transparent editicon m-t-sm" data-toggle="dropdown">
+								<span class="caret m-l-none" style="margin-top:-11px;"></span>
+								</button>
                     	
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
 
@@ -106,10 +109,10 @@
 
 {{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		 <a href="#contact/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        			<a href="#company/{{id}}" class="activate-link thumb m-b-xs"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		 <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         		{{/if_contact_type}}
         	{{/each}}
 </div>
@@ -433,10 +436,10 @@
 	<div class="inline-block text-ellipsis" style="width:9em">
 	{{#each contacts}}
        {{#if_contact_type "PERSON"}}
-        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        <a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm popover_contact" data="{{id}}"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
        {{/if_contact_type}}
 	   {{#if_contact_type "COMPANY"}}
-        	<a href="#company/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        <a href="#company/{{id}}" class="activate-link hide-popover thumb-sm popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
        {{/if_contact_type}}
    {{/each}}
    </div>

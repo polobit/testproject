@@ -715,7 +715,7 @@ var portlet_graph_utility = {
 						       tooltip: {
 						        	formatter: function(){
 						        		var tt = '';
-						        		if(text=="Calls Duration (Mins)")
+						        		if(text=="Calls Duration (Sec)")
 						        			tt = '<table>' + 
 						        					'<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
@@ -723,7 +723,7 @@ var portlet_graph_utility = {
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
 					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
 					        		        	  '</table>';
-						        		else if(text=="Average Call Duration (Mins)"){
+						        		else if(text=="Average Call Duration (Sec)"){
 						        			
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
@@ -778,6 +778,10 @@ var portlet_graph_utility = {
 						        			if(this.points[10]!=undefined && this.points[10].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[10].series.color+';padding:0">'+this.points[10].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[10].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[11]!=undefined && this.points[11].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[11].series.color+';padding:0">'+this.points[11].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[11].point.y+'</b></td></tr>';
 						        			}
 						        			tt += '<tr><td>Total:&nbsp; </td><td class="b-b-none">'+totalCallsCountList[this.points[0].point.x]+'</td></tr></table>';
 						        		}

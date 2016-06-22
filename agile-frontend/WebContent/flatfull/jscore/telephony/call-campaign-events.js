@@ -11,6 +11,43 @@ $(function(){
 				CALL_CAMPAIGN.last_clicked = null;
 				return;
 		}
+		if(($("#logCallModal").data('bs.modal') || {}).isShown != true){
+			if(CALL_CAMPAIGN.start){
+				if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
+					  CALL_CAMPAIGN.state = "START";
+					  if(CALL_CAMPAIGN.autodial){
+						  dialNextCallAutomatically();
+					  }else{
+						  dialNextCallManually();
+					  }
+				}
+			}
+		}
+	});  
+	
+	// This method is called when the add-note modal is closed .....
+	//This will check if the campaign is started and need to dial the next call....
+		$('#logCallModal').on('hidden.bs.modal', function (e) {
+			console.log(CALL_CAMPAIGN.start +"  closeTwilioNoty "+CALL_CAMPAIGN.call_from_campaign);
+				
+		if(($("#noteModal").data('bs.modal') || {}).isShown != true){
+			if(CALL_CAMPAIGN.start){
+				if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
+					  CALL_CAMPAIGN.state = "START";
+					  if(CALL_CAMPAIGN.autodial){
+						  dialNextCallAutomatically();
+					  }else{
+						  dialNextCallManually();
+					  }
+				}
+			}
+		}	
+		});  
+		
+	
+//This method is called when the personmodal is closed....
+//This will check if the campaign is started and need to dial the next call....
+	$('#personModal').on('hidden.bs.modal', function (e) {
 			
 		if(CALL_CAMPAIGN.start){
 			if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
@@ -21,42 +58,38 @@ $(function(){
 					  dialNextCallManually();
 				  }
 			}
-		}	
-			
-	});  
-	
-	// This method is called when the add-note modal is closed .....
-	//This will check if the campaign is started and need to dial the next call....
-		$('#logCallModal').on('hidden.bs.modal', function (e) {
-			console.log(CALL_CAMPAIGN.start +"  closeTwilioNoty "+CALL_CAMPAIGN.call_from_campaign);
-				
-			if(CALL_CAMPAIGN.start){
-				if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
-					  CALL_CAMPAIGN.state = "START";
-					  if(CALL_CAMPAIGN.autodial){
-						  dialNextCallAutomatically();
-					  }else{
-						  dialNextCallManually();
-					  }
-				}
-			}	
-				
-		});  
+		}
 		
-	
-//This method is called when the personmodal is closed....
-//This will check if the campaign is started and need to dial the next call....
-	$('#personModal').on('hidden.bs.modal', function (e) {
-			
-			
-		if(CALL_CAMPAIGN.start){
-			if(CALL_CAMPAIGN.call_status == "DISCONNECTED"){
-				  CALL_CAMPAIGN.state = "START";
-				  if(CALL_CAMPAIGN.autodial){
-					  dialNextCallAutomatically();
-				  }else{
-					  dialNextCallManually();
-				  }
+		if(CallLogVariables.callWidget){
+
+			if(CallLogVariables.dynamicData != null){
+				if(CallLogVariables.processed){
+					return;
+				}
+			}
+			try{
+				//if the data is not there - it means call status is not completed - so we log the activities of the call
+				var widgetType = CallLogVariables.callWidget.toLowerCase();
+				var direction = CallLogVariables.callType;
+				var phoneNumber = CallLogVariables.phone;
+				var status = CallLogVariables.status;
+				var duration = CallLogVariables.duration;
+				var url = "/core/api/widgets/" + widgetType + "/savecallactivity";
+				
+				
+				//url is : 
+				//1)twilio : /core/api/widgets/twilio/savecallactivity
+				//2)bria : /core/api/widgets/bria/savecallactivity
+				//3)skype: /core/api/widgets/skype/savecallactivity
+				
+				$.post( url,{
+				direction: direction, 
+				phone: phoneNumber, 
+				status : status,
+				duration : duration 
+				});
+				resetCallLogVariables();
+			}catch(e){
 			}
 		}	
 			

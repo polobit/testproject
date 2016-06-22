@@ -19129,9 +19129,9 @@ function canRunBulkOperations()
 		if(tagsCollectionView){
 			if(tag.indexOf('[') < 0){
 				if(tagsCollectionView.collection.where({"tag":tag}).length == 0){
-					alert("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
+					alert("You don't have permissions to create a new tag.");
 					if(errorCallback)
-						errorCallback("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
+						errorCallback("You don't have permissions to create a new tag.");
 				}
 				else if(callback)
 					callback(tagsCollectionView.collection.where({"tag":tag}).length > 0);

@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.CacheUtil;
@@ -67,6 +69,7 @@ public class AliasDomain {
 		NamespaceManager.set("");
 		try
 		{
+			resetAliasCache();
 			dao.put(this);
 			
 			try {
@@ -92,6 +95,36 @@ public class AliasDomain {
 		}finally{
 			NamespaceManager.set(oldNamespace);
 		}
+	}
+	
+	/**
+	 * Reset cache
+	 */
+	private void resetAliasCache() {
+		// Get old entity and resave domain cache
+		AliasDomain oldAlias = null;
+		String oldAliasname = null;
+		if (this.id != null) {
+			oldAlias = AliasDomainUtil.getAliasDomainById(id);
+			if (oldAlias != null && oldAlias.alias != null && oldAlias.alias.size() > 0) {
+				oldAliasname = oldAlias.alias.get(0);
+			}
+		}
+
+		String newAliasName = null;
+		if (alias != null && alias.size() > 0) {
+			newAliasName = alias.get(0);
+		}
+
+		// Delete cache values
+		if (StringUtils.isNotBlank(oldAliasname) && StringUtils.isNotBlank(newAliasName)) {
+			if (!StringUtils.equalsIgnoreCase(oldAliasname, newAliasName)) {
+				// Remove older cache
+				AliasDomainUtil.deleteActualDomainNameCache(oldAliasname);
+			}
+		}
+
+		AliasDomainUtil.deleteActualDomainNameCache(newAliasName);
 	}
 
 }
