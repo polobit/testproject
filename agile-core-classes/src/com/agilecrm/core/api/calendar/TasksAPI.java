@@ -877,11 +877,11 @@ public class TasksAPI
             else if(formId.equalsIgnoreCase("bulkTaskOwnerForm")){
                 uri = uri + "/ChangeOwner" ;
             }
-            else if(formId.equalsIgnoreCase("bulkTaskDuedateForm")){
-                uri = uri + "/ChangeDuedate" ;
+            else if(formId.equalsIgnoreCase("bulkTaskDeleteForm")){
+                uri = uri + "/Delete" ;
             }
-            else{
-            	uri = uri + "/Delete" ;
+            else {
+            	uri = uri + "/ChangeDuedate" ;
             }
             TaskUtil.postDataToTaskBackend(uri,data);
         }
