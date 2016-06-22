@@ -52,7 +52,7 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
 		{
 			response.setHeader("Content-Disposition","attachment; filename=\"" + PUSH_NOTIFICATION_SERVICE_WORKERS + "\"");  
 			
-			fileContent = FileStreamUtil.readResource(SendMail.TEMPLATES_PATH+PUSH_NOTIFICATION_FILEPATH + PUSH_NOTIFICATION_SERVICE_WORKERS);
+			fileContent = FileStreamUtil.readResource(PUSH_NOTIFICATION_FILEPATH + PUSH_NOTIFICATION_SERVICE_WORKERS);
 		}
 			
 			out.write(fileContent);

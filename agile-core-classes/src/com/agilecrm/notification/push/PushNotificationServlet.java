@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.datanucleus.util.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,9 +36,16 @@ public class PushNotificationServlet extends HttpServlet {
 		    
 		    if(StringUtils.isEmpty(browser_id))
 		    	return;
-		    
-		    PushNotificationMessage pushNotificationMessage = PushNotificationMessageUtil.getPushNotificationMessage(browser_id);
-		    System.out.println("Message Created Time :"+pushNotificationMessage.created_time);
+		    PushNotificationMessage pushNotificationMessage =null;
+		    try
+		    {
+		    	pushNotificationMessage = PushNotificationMessageUtil.getPushNotificationMessage(browser_id);
+		    	System.out.println("Message Created Time :"+pushNotificationMessage.toString());
+		    } catch (Exception e) 
+			{
+		    	System.out.println(ExceptionUtils.getFullStackTrace(e));
+				System.out.println("Exception occured while gitting push message data from datastore : "+e.getMessage());
+			}
 		    
 		    if(pushNotificationMessage == null)
 		    	return;
@@ -57,7 +65,7 @@ public class PushNotificationServlet extends HttpServlet {
 				     LogUtil.addLogToSQL(campaign_id, subscriber_id, "Title : "+data.getString(PushNotification.NOTIFICATION_TITLE_VALUE),LogType.PUSH_NOTIFICATION_SHOWN.toString());
 			} catch (JSONException e) 
 			{
-				
+				System.out.println("Exception occured while gitting push message title for log : "+e.getMessage());
 			}
 		    
 		    //sending the push notification mesage to the browser
