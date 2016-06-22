@@ -60,6 +60,11 @@ public class DealFilterUtil {
 	    	{
 	    		setOldFiltersData(filter);
 	    	}
+	    	if(filter == null)
+	    	{
+	    		filter = new DealFilter();
+	    		id = "";
+	    	}
 	    	changeStateFilter(filter);
 	    }
 	    else if(id != null && id.equalsIgnoreCase("my-deals"))
