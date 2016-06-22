@@ -1540,7 +1540,7 @@ body {
   }
   .app-aside-dock li.dropdownnavbar {
 
-        width: calc(100% - 67%);
+        width: calc(100% - 75%);
   }
   .app-aside-dock .app-aside .navi > ul > li .nav-sub {
     position: absolute;
