@@ -216,7 +216,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             <button type="button" ng-file-select="onFileSelect($files, 'bg')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
                                         </div>
                                         <div id="texturePresets">
-                                            <h5>{{ 'textures' | translate }}</h5>
+                                            <!-- <h5 style="dispaly:none">{{ 'textures' | translate }}</h5> -->
                                             <ul class="img-presets-list" bl-pretty-scrollbar>
                                                 <li ng-repeat="texture in textures track by $index">
                                                     <div ng-click="selectPreset($event)" class="preset" ng-style="{ 'background-image': 'url(/public/images/textures/'+$index+'.png)' }"></div>
