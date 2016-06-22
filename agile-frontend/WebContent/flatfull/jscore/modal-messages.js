@@ -145,6 +145,10 @@ var MODAL_MESSAGES = {
 		"title": GLOBAL_MODAL_MESSAGES.global_validation_title,
 		"message" : "Please Enter Domain Name only"
 	},
+	"companies_merge_limit" : {
+		"title": "Merge Companies",
+		"message" : "You can merge maximum of 2 records at a time with master record."
+	},
 	"contacts_merge_limit" : {
 		"title": "Merge Contacts",
 		"message" : "You can merge maximum of 2 records at a time with master record."
