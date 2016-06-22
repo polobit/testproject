@@ -1353,6 +1353,8 @@ function showNoteAfterCall(callRespJson,messageObj)
 							duration: 0
 							});
 					}
+					
+					TWILIO_CONTACT_ID = null;
 		});
 			
 	} else {
@@ -1389,7 +1391,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 		return showNewContactModal(phoneNumber);
 	}
 	
-	TWILIO_CONTACT_ID = null;
+	
 }
 
 
