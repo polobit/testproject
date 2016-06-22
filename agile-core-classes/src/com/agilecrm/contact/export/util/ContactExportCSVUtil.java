@@ -87,7 +87,7 @@ public class ContactExportCSVUtil
 		ContactCSVExport.COUNTRY, ContactCSVExport.ZIP, ContactCSVExport.WEBSITE_DEFAULT,
 		ContactCSVExport.WEBSITE, ContactCSVExport.SKYPE, ContactCSVExport.TWITTER, ContactCSVExport.LINKEDIN,
 		ContactCSVExport.FACEBOOK, ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS,
-		ContactCSVExport.FLICKR, ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE };
+		ContactCSVExport.FLICKR, ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE, ContactCSVExport.CREATED_TIME };
 
 	return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.COMPANY));
     }

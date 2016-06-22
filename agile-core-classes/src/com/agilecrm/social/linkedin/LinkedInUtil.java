@@ -46,7 +46,7 @@ public class LinkedInUtil
 	 * As LinkedIn keeping on changing LinkedIn image URLs, we change the image
 	 * URLs into this format
 	 */
-	private static final String LINKEDIN_IMAGE_URL_FORMAT = "https://m3-s.licdn.com";
+	private static final String LINKEDIN_IMAGE_URL_FORMAT = "https://media.licdn.com";
 
 	/**
 	 * Creates a client to connect to LinkedIn using developers API key and

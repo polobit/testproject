@@ -44,14 +44,14 @@ $(function()
 		var json = serializeForm(form_id);
 		json["custom_data"] = serialize_custom_fields(form_id);
 		json["colorName"]  = color[colorcode];
-		var tagsSourceId = 'tags_source_person_modal';          
-        if (tagsSourceId === undefined || !tagsSourceId || tagsSourceId.length <= 0)
+		var tagsSourceId ;          
+        if (!tagsSourceId)
                 tagsSourceId = form_id;
         var tagobj = get_tags(tagsSourceId);
         var i;
         var tags;
         for (i = 0; i < tagobj.length ; i++) {
-                        if(tagobj[i].value != "")
+                        if(tagobj[i].name == "tags" && tagobj[i].value != "")
                                 tags = tagobj[i];
 		}   
         if (tags != undefined && tags.length != 0)
@@ -507,6 +507,40 @@ function initializeDealListners(el){
         }else{
             fetchDealsList();
         }
+    });
+
+    $('#opportunity-listners').off('click', '.deal-track-close');
+	$('#opportunity-listners').on('click', '.deal-track-close', function(e) {
+		var pos = $("#moving-deal").attr("data-pos");
+
+		$("#new-track-list-paging").hide();
+		$("#new-opportunity-list-paging").show();
+		$("#opportunities-header", $("#opportunity-listners")).show();
+
+		revertDeal(DEAL_DRAG_EVENT, DEAL_DRAG_UI, pos);
+    });
+
+    $('#opportunity-listners').off('click', '.update-drag-deal');
+	$('#opportunity-listners').on('click', '.update-drag-deal', function(e) {
+
+		var deal_id = $("#moving-deal").find("div:first").attr("id");
+		var heading = $("#moving-deal").attr("data-heading");
+		var track = $(this).find("div:first").attr("data-track");
+		var newMilestone = $(this).find("div:first").text().trim();
+		var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
+
+		if(dealsCollection) {
+			var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
+			if(dealModel) {
+				var old_milestone = dealModel.get("milestone");
+				dealModel.set({ "pipeline_id" : track }, { silent : true });
+				update_milestone(dealModel, deal_id, newMilestone, old_milestone, true, "", false);
+				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
+			}
+		}
+		$("#new-track-list-paging").hide();
+		$("#new-opportunity-list-paging").show();
+		$("#opportunities-header", $("#opportunity-listners")).show();
     });
 
 }

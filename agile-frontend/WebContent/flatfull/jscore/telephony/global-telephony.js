@@ -3,7 +3,8 @@ var callOptionDiv = "" ;
 var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null}; 
 var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
-var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null };
+var dialled = {"using" : "default"};
+var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 
 $(function()
 {
@@ -13,41 +14,50 @@ $(function()
 
 function getContactImage(number, type, callback)
 {
-	if (type)
-	{
-		if (type == "Outgoing")
+	try{
+		if (type)
 		{
-			var currentContact = agile_crm_get_contact();
-			getTemplate('contact-image', currentContact, undefined, function(image)
+			if (type == "Outgoing")
 			{
-				if (!image)
-					callback("");
-				callback(image);
-			});
-
-		}
-		else
-		{
-
-			searchForContactImg(number, function(currentContact)
-			{
-				if (!currentContact)
-				{
-					 callback("");
-					 return;
-				}
+				var currentContact = agile_crm_get_contact();
 				getTemplate('contact-image', currentContact, undefined, function(image)
 				{
-					if (!image){
+					if (!image)
 						callback("");
-						return;
-					}
 					callback(image);
 				});
-			});
-		}
-	}
 
+			}
+			else
+			{
+
+				searchForContactImg(number, function(currentContact)
+				{
+					if (!currentContact)
+					{
+						 callback("");
+						 return;
+					}
+					getTemplate('contact-image', currentContact, undefined, function(image)
+					{
+						if (!image){
+							callback("");
+							return;
+						}
+						callback(image);
+					});
+				});
+			}
+		}
+	}catch(e){
+		if (callback && typeof callback === "function"){
+			callback("");
+			return;
+		}else{
+			return "";
+		}
+			
+	}
 }
 
 function globalCallWidgetSet()
@@ -94,6 +104,11 @@ function globalCallWidgetSet()
 							}
 						});
 
+						$.each(default_call_option.callOption, function(i, obj){
+							var name = widgetCallName[obj.name];
+							$(".dialler-widget-name-" + name).show();
+						});
+						
 						$('body').on({ mouseenter : function(e)
 						{
 							if (!Pubnub)
@@ -336,6 +351,9 @@ function resetCallLogVariables(){
 	CallLogVariables.duration = null;
 	CallLogVariables.phone = null;
 	CallLogVariables.url = null;
+	CallLogVariables.description = null;
+	CallLogVariables.dynamicData = null;
+	CallLogVariables.processed = false;
 }
 
 function handleCallRequest(message)
@@ -371,23 +389,15 @@ function handleCallRequest(message)
 			catch (e)
 			{
 			}
+			
 			return;
 		}
 		else if (message.state == "error")
 		{
 			closeCallNoty(true);
-						try
-						{
-							if(globalCall.calledFrom == "Bria"){
-								resetglobalCallVariables();
-								resetglobalCallForActivityVariables();
-							}
-						}
-						catch (e)
-						{
-						}
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
+			
 			return;
 		}
 		else if (message.state == "logs")
@@ -403,6 +413,7 @@ function handleCallRequest(message)
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
 			}
+			
 			return;
 		}
 		showBriaCallNoty(message);
@@ -446,22 +457,17 @@ function handleCallRequest(message)
 			{
 			}
 			globalCallForActivity.requestedLogs = false;
+			
 			return;
 		}
 		else if (message.state == "error")
 		{
 			closeCallNoty(true);
-						try
-						{
-							if(globalCall.calledFrom == "Skype"){
-								resetglobalCallVariables();
-								resetglobalCallForActivityVariables();
-							}
-						}
-						catch (e)
-						{
-						}
-			console.log("error message received...");
+			resetglobalCallVariables();
+			resetglobalCallForActivityVariables();
+
+			
+			return;
 		}
 		else if (message.state == "logs")
 		{
@@ -477,6 +483,7 @@ function handleCallRequest(message)
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
 			}
+			
 			return;
 		}
 		showSkypeCallNoty(message);
@@ -529,6 +536,11 @@ function closeCallNoty(option){
 	}
 	$("#draggable_noty").hide();
 	$("#draggable_noty").removeClass("draggable-popup");
+	
+	 if(dialled.using == "dialler"){
+		  $("#direct-dialler-div").show();
+		  dialled.using = "default";
+	  }
 	
 }
 
@@ -601,3 +613,13 @@ function twilioIOSaveContactedTime(contactId)
 			});
 }
 
+function newCallLogVariables (json){
+	if(!json.length > 0){
+		return;
+	}
+	$.each(json,function(i,obj){
+		if(CallLogVariables.contains(obj)){
+			CallLogVariables[obj.key] = obj.value;
+		}
+	});
+}

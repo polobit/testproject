@@ -1,0 +1,60 @@
+<form class="gadget-contact-form form-horizontal" name="gadget_contact_form" method="post" style="margin:0px;">
+	<fieldset>
+		<div class="control-group" style="margin:0px; padding-top:10px; border-top:1px solid #e5e5e5;">
+			<label class="control-label" for="fname"><b>First Name</b><span class="field_req">*</span></label>
+  			<div class="controls">
+				{{#if fname}}
+	   				<input name="first_name" id="fname" placeholder="First name" value="{{fname}}" type="text" class="required" style="height: 24px;" />
+				{{else}}
+					<input name="first_name" id="fname" placeholder="First name" type="text" class="required" style="height: 24px;" />
+				{{/if}}
+			</div>
+		</div>
+		
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+    		<label class="control-label" for="lname"><b>Last Name</b><span class="field_req"></span></label>
+			<div class="controls">
+	    			{{#if lname}}
+		    			<input name="last_name" id="lname" placeholder="Last name" value="{{lname}}" class="required" type="text" style="height: 24px;" />
+					{{else}}
+						<input name="last_name" id="lname" placeholder="Last name" type="text" style="height: 24px;" />
+					{{/if}}	
+			</div>
+		</div>
+
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+			<label class="control-label" for="email"><b>Email</b></label>
+			<div class="controls">
+				 <input name="email" id="email" placeholder="Email" value="{{email}}" type="text" style="height: 24px;" />
+			</div>
+		</div>
+  		
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+       		<label class="control-label" for="tags"><b>Tags</b></label>
+			<div class="controls">
+				 <input name="tags" id="tags" placeholder="Tags" type="text" style="height: 24px;" />
+			</div>
+    	</div>
+	
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+			<label class="control-label" for="company"><b>Company</b></label>
+			<div class="controls">
+				<input name="company" id="company" placeholder="Company" type="text" style="height: 24px;" />
+			</div>
+  		</div>
+
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+       		<label class="control-label" for="title"><b>Job Description</b></label>
+			<div class="controls">
+				<input name="title" id="title" placeholder="Job title" type="text" style="height: 24px;" />
+			</div>
+	  	</div>
+	</div>
+	<div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+		<a type="submit" class="btn btn-primary gadget-contact-validate" style="padding:2px 6px 2px;">Add Contact</a>
+		<a class="cancel btn" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+		<img class="contact-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+		<i class="contact-add-status" style="color:indianred; margin-left:10px; display:none;">Contact not found.</i>
+	</div>
+</fieldset>
+</form>	

@@ -78,7 +78,7 @@
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
-  <target>agile-normal-bulk</target>
+  <target>agile-reports</target>
   </queue>
   <queue>
     <name>mandrill-queue</name>
@@ -595,6 +595,14 @@
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
   <target>agile-temp-bulk</target>
+  </queue>
+  
+  <queue>
+  <name>bulk-call-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+      <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
   </queue>
 
 </queue-entries>

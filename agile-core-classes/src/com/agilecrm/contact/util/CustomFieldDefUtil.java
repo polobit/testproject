@@ -284,5 +284,16 @@ public class CustomFieldDefUtil
 		}
     	return customFieldsList;
     }
+    public static List<CustomFieldDef> getContactAndCompanyCustomFields()
+    {
+		List<CustomFieldDef> contactCustomFields = new ArrayList<CustomFieldDef>();
+		for (CustomFieldDef field : dao.fetchAll())
+		{
+		    if (field.scope == null || field.scope == SCOPE.CONTACT || field.scope == SCOPE.PERSON || field.scope == SCOPE.COMPANY)
+			contactCustomFields.add(field);
+		}
+	
+		return contactCustomFields;
+    }
 
 }

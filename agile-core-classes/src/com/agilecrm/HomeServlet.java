@@ -1,7 +1,9 @@
 package com.agilecrm;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -16,6 +18,9 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.session.SessionCache;
@@ -252,7 +257,9 @@ public class HomeServlet extends HttpServlet
     	    }
 
     	    String old_ui = req.getParameter("old");
-    	     
+    	    
+    	    if( old_ui == null )	setCustomFields(req);
+    	    
     		req.getRequestDispatcher(old_ui != null ? "home.jsp" : "home-flatfull.jsp").forward(req, resp);
     	    return;
     	}
@@ -390,4 +397,48 @@ public class HomeServlet extends HttpServlet
 	return user;
     }
     
+    
+    /**
+     * Set the values for Custom Fields as request attributes to be used by home-flatfull.jsp file.
+     * @param request
+     */
+    private void setCustomFields(HttpServletRequest request)
+    {
+    	List<CustomFieldDef> contactFields = CustomFieldDefUtil.getCustomFieldsByScope(SCOPE.CONTACT);
+    	List<CustomFieldDef> companyFields = CustomFieldDefUtil.getCustomFieldsByScope(SCOPE.COMPANY);
+    	
+    	List<CustomFieldDef> customFieldsScopeContactTypeDate = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeContactTypeContact = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeContactTypeCompany = new ArrayList<>();
+
+    	List<CustomFieldDef> customFieldsScopeCompanyTypeDate = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeCompanyTypeContact = new ArrayList<>();
+    	List<CustomFieldDef> customFieldsScopeCompanyTypeCompany = new ArrayList<>();
+    	
+    	for(CustomFieldDef field : contactFields)
+    	{
+    		if( field.field_type.equals(CustomFieldDef.Type.DATE) )	customFieldsScopeContactTypeDate.add(field);
+
+    		if( field.field_type.equals(CustomFieldDef.Type.CONTACT) )	customFieldsScopeContactTypeContact.add(field);
+    		
+    		if( field.field_type.equals(CustomFieldDef.Type.COMPANY) )	customFieldsScopeContactTypeCompany.add(field);
+    	}
+    	
+    	for(CustomFieldDef field : companyFields)
+    	{
+    		if( field.field_type.equals(CustomFieldDef.Type.DATE) )	customFieldsScopeCompanyTypeDate.add(field);
+
+    		if( field.field_type.equals(CustomFieldDef.Type.CONTACT) )	customFieldsScopeCompanyTypeContact.add(field);
+    		
+    		if( field.field_type.equals(CustomFieldDef.Type.COMPANY) )	customFieldsScopeCompanyTypeCompany.add(field);
+    	}
+    	
+    	request.setAttribute("customFieldsScopeContactTypeDate", customFieldsScopeContactTypeDate);
+    	request.setAttribute("customFieldsScopeContactTypeContact", customFieldsScopeContactTypeContact);
+    	request.setAttribute("customFieldsScopeContactTypeCompany", customFieldsScopeContactTypeCompany);
+    	
+    	request.setAttribute("customFieldsScopeCompanyTypeDate", customFieldsScopeCompanyTypeDate);
+    	request.setAttribute("customFieldsScopeCompanyTypeContact", customFieldsScopeCompanyTypeContact);
+    	request.setAttribute("customFieldsScopeCompanyTypeCompany", customFieldsScopeCompanyTypeCompany);
+    }
 }

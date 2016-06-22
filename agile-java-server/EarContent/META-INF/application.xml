@@ -67,6 +67,12 @@
      <web>
       <web-uri>agile-campaigns-logs.war</web-uri>
       <context-root>agile-campaigns-logs</context-root>
+ </web>
+  </module>
+  <module>
+     <web>
+      <web-uri>agile-reports.war</web-uri>
+      <context-root>agile-reports</context-root>
      </web>
   </module>-->
 

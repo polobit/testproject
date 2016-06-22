@@ -7207,7 +7207,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 								var properties = data.get(value).get("properties");
 								var img_path = "";
 								
-								var default_return = "src='"+'img/com-default-img.png'+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+								var default_return = "src='"+updateImageS3Path('img/com-default-img.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 								var error_fxn = "";
 
@@ -7217,7 +7217,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 									{
 										default_return = "src='" + properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
 
-										error_fxn = "this.src='"+'img/com-default-img.png'+"'; this.onerror=null;";
+										error_fxn = "this.src='"+updateImageS3Path('img/com-default-img.png')+"'; this.onerror=null;";
 
 										break;
 									}
@@ -7225,7 +7225,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 									{
 										default_return = "src='https://www.google.com/s2/favicons?domain=" + properties[i].value + "' " + "style='width:" + full_size + "px; height=" + full_size + "px; padding:" + size_diff + "px; " + additional_style + " ;'";
 
-										error_fxn = "this.src='"+"img/com-default-img.png"+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+										error_fxn = "this.src='"+updateImageS3Path("img/com-default-img.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 									}
 								}
 								img_path = new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
@@ -7551,4 +7551,37 @@ Handlebars.registerHelper('validateSendgridWhitelabel', function(valid)
 		return "<i class='fa fa-check icon-2x' style='color:green;'></i>";
 
 	return "<i class='fa fa-times icon-2x' style='color:red;'></i>";
+});
+
+Handlebars.registerHelper('scope_type', function(scope, options)
+	{
+		if(scope == "CONTACT" || scope == "COMPANY")
+			return options.fn(this);
+
+		return options.inverse(this);
+	});
+
+/**
+ * Compares the arguments (value and target) and executes the template based
+ * 
+ */
+Handlebars.registerHelper('if_equals_lowerCase', function(value, target, options)
+{
+
+	/*
+	 * console.log("typeof target: " + typeof target + " target: " +
+	 * target); console.log("typeof value: " + typeof value + " value: " +
+	 * value);
+	 */
+	/*
+	 * typeof is used beacuse !target returns true if it is empty string,
+	 * when string is empty it should not go undefined
+	 */
+	if ((typeof target === "undefined") || (typeof value === "undefined"))
+		return options.inverse(this);
+
+	if (value.toString().trim().toLowerCase() == target.toString().trim().toLowerCase())
+		return options.fn(this);
+	else
+		return options.inverse(this);
 });

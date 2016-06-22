@@ -1,0 +1,77 @@
+<div style="margin-bottom:20px">
+	<div>
+		 {{#contact_campaigns this.response "campaignStatus"}}
+		 {{!-- Shows Active and Done campaigns like tags --}}
+         {{#if this}} 
+         
+		 {{#if this.done}}
+         <div>
+           <h3 style="display: inline-block; margin-right: 5px">Completed Campaigns: </h3> <ul class="tagsinput">
+                   {{#each this.done}}
+						<li class="tag" style="display:inline-block; background-color: gray; border-color: gray;" data="{{campaign_id}}"><span>
+						{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Done Campaign{{/if}}</span></li> 
+					{{/each}}
+                    </ul>
+         </div>
+         <br>
+         {{/if}}
+
+         {{#if this.active}}
+         <div>
+           <h3 id="contact-active-campaigns" style="display: inline-block; margin-right: 5px; ">Active Campaigns: </h3> 
+           <ul class="tagsinput active-campaigns">
+                   {{#each this.active}}
+						<li class="tag" style="display:inline-block; background-color: gray; border-color: gray;" data="{{campaign_id}}"><span>{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Active Campaign{{/if}}
+							<!-- <a class="close remove-active-campaign" campaign_name="{{campaign_name}}" title="Remove from Campaign">&times</a> --></span></li> 
+					{{/each}}
+                    </ul>
+         </div>
+         {{/if}}
+
+         {{/if}}
+         {{/contact_campaigns}}
+    </div>
+
+</div>
+
+<!-- Campaign logs tab -->
+<ul style="list-style-type:none; margin-right:25px;"> 
+{{#if this.response.length}}
+		{{#each this.response}}
+			{{#stringToJSON this ""}}
+<li style="padding:5px;margin:5px;border:1px solid #ddd;">
+	<div style="display:block;">
+		<div id="campaigns" class="activity-text-block">
+			<span class="activity-block-owner pull-right">
+				{{#if log_type}}
+					<img class="user-img" width="40" height="40" alt="" src="{{../../../lib_path}}img/campaigns/{{log_type}}.png">
+				{{else}}
+					<img class="user-img" width="40" height="40" src="https://d13pkp0ru5xuwf.cloudfront.net/css/images/user-default.png">
+				{{/if}}
+			</span>
+			
+
+			<h4><b>{{titleFromEnums log_type}}</b></h4></br>
+
+ 			<p>{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</p>
+
+			<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
+				<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+				<p class="pull-right">Campaign - <a target="_blank" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a></p>
+			</small>	
+		</div>
+	</div>
+</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4 style="display:inline; margin-right:10px;">You have no campaigns for this contact.</h4>
+					<a class="action-add-campaign" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add to Campaign</span></a>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>
