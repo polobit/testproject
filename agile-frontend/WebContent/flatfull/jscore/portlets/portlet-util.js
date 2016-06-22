@@ -2707,7 +2707,7 @@ var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS
 		});
 
 
-		$('#end_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY},'hide', autoclose: true);
+		$('#end_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true},'hide');
 		}
 	}
 		else
