@@ -104,6 +104,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	var id = $('#' + form_id + ' input[name=id]').val();
 
     var man_delet  = $("#" + form_id + " #Manual_delete").val();
+	//Surce of the contact
+	var contact_source = $('#' + form_id + ' input[name=source]').attr('data');
+
 	// Makes created time constant
 	var created_time = $('#' + form_id + ' input[name=created_time]').val();
 
@@ -206,6 +209,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         *saving first_name,last_name,picture and its TwitterId Pre-populate into the saving
         * person model and continue saving it will also appers with same field
         */
+		if(contact_source)
+			obj.source = contact_source ;
+
 		// Creates properties of contact (person)
 		if (isValidField(form_id + ' #fname'))
 			properties.push(property_JSON('first_name', form_id + ' #fname'));
