@@ -277,6 +277,24 @@ function initializeTasksListeners(){
 			saveBulkTaskAction(task_ids,priorityJson,form_id);
 		}
 	});
+	$('#tasks-list-template').on('click', '#bulk-delete-tasks', function(e)
+	{
+		task_ids = null; var priorityJson = null;
+		var tasksNumber = $('#tasks-list-template').find('#select_all_tasks').attr('data');
+		if(!tasksNumber)
+			task_ids = getTaskIds();
+		console.log(task_ids);
+		var form_id = "bulkTaskDeleteForm" ; 
+		var confirm_msg = "Are you sure you want to delete?";
+		showAlertModal(confirm_msg, "confirm", function(){
+			if(task_ids && task_ids.length < 50)
+				saveBulkTaskProperties(task_ids,priorityJson,form_id);
+			else{
+				saveBulkTaskAction(task_ids,priorityJson,form_id);
+			}
+								
+			}, undefined, "Bulk Task Delete");
+	});
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
 	{
 		var taskCount  = 0;
@@ -1006,7 +1024,10 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 					App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
 				}
 				App_Calendar.allTasksListView.render(true);
-				showTaskNotyMessage(""+data.length+" tasks are modified","information","bottomRight",5000);
+				if(data.length)
+					showTaskNotyMessage(""+data.length+" tasks are modified","information","bottomRight",5000);
+				else
+					showTaskNotyMessage("bulk tasks deleted","information","bottomRight",5000);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
   				console.log(textStatus, errorThrown);

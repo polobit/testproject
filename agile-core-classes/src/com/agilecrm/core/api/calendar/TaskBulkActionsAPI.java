@@ -38,8 +38,9 @@ public class TaskBulkActionsAPI {
 			String newProperty = priority.getString("status");
 			ArrayList<String> taskIdList = new ArrayList<String>();
 			List<Task> subList = new ArrayList<Task>();
-			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = json
-					.getJSONArray("IdJson");
+			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = null;
+			if(json.has("IdJson")&& !json.get("IdJson").equals(null) && !json.get("IdJson").equals("null") && json.get("IdJson") != "")		
+				taskIdArray = json.getJSONArray("IdJson");
 			if (taskIdArray != null) {
 				for (int i = 0; i < taskIdArray.length(); i++) {
 					try {
@@ -62,12 +63,13 @@ public class TaskBulkActionsAPI {
 				}
 
 			} else {
-				boolean pending = json.getBoolean("pending");
-				if (!json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
+				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
+				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
 					ownerId = json.getString("ownerId");
-
-				String criteria = json.getString("criteria");
-				String type = json.getString("type");
+				if (json.has("criteria") && !json.get("criteria").equals(null) && !json.get("criteria").equals("null"))
+					criteria = json.getString("criteria");
+				if (json.has("type") && !json.get("type").equals(null) && !json.get("type").equals("null"))
+					type = json.getString("type");
 				List<Task> tasks = TaskUtil.getTasksRelatedToOwnerOfType(
 						criteria, type, ownerId, pending, null, null);
 				for (Task task : tasks) {
@@ -104,7 +106,7 @@ public class TaskBulkActionsAPI {
 			ArrayList<String> taskIdList = new ArrayList<String>();
 			List<Task> subList = new ArrayList<Task>();
 			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = null;
-			if(json.has("IdJson"))		
+			if(json.has("IdJson")&& !json.get("IdJson").equals(null) && !json.get("IdJson").equals("null") && json.get("IdJson") != "")		
 				taskIdArray = json.getJSONArray("IdJson");
 			if (taskIdArray != null) {
 				for (int i = 0; i < taskIdArray.length(); i++) {
@@ -129,12 +131,12 @@ public class TaskBulkActionsAPI {
 				}
 
 			} else {
-				boolean pending = json.getBoolean("pending");String type = null;
-				if (!json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
+				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
+				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
 					ownerId = json.getString("ownerId");
-
-				String criteria = json.getString("criteria");
-				if(json.has("type"))
+				if (json.has("criteria") && !json.get("criteria").equals(null) && !json.get("criteria").equals("null"))
+					criteria = json.getString("criteria");
+				if (json.has("type") && !json.get("type").equals(null) && !json.get("type").equals("null"))
 					type = json.getString("type");
 				List<Task> tasks = TaskUtil.getTasksRelatedToOwnerOfType(
 						criteria, type, ownerId, pending, null, null);
@@ -170,8 +172,9 @@ public class TaskBulkActionsAPI {
 			String newOwnerId = priority.getString("owner_id");
 			ArrayList<String> taskIdList = new ArrayList<String>();
 			List<Task> subList = new ArrayList<Task>();
-			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = json
-					.getJSONArray("IdJson");
+			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = null;
+			if(json.has("IdJson")&& !json.get("IdJson").equals(null) && !json.get("IdJson").equals("null") && json.get("IdJson") != "")		
+				taskIdArray = json.getJSONArray("IdJson");
 			if (taskIdArray != null) {
 				for (int i = 0; i < taskIdArray.length(); i++) {
 
@@ -195,12 +198,13 @@ public class TaskBulkActionsAPI {
 				}
 
 			} else {
-				boolean pending = json.getBoolean("pending");
-				if (!json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
+				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
+				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
 					ownerId = json.getString("ownerId");
-
-				String criteria = json.getString("criteria");
-				String type = json.getString("type");
+				if (json.has("criteria") && !json.get("criteria").equals(null) && !json.get("criteria").equals("null"))
+					criteria = json.getString("criteria");
+				if (json.has("type") && !json.get("type").equals(null) && !json.get("type").equals("null"))
+					type = json.getString("type");
 				List<Task> tasks = TaskUtil.getTasksRelatedToOwnerOfType(
 						criteria, type, ownerId, pending, null, null);
 				for (Task task : tasks) {
@@ -237,8 +241,9 @@ public class TaskBulkActionsAPI {
 			Long newDue = priority.getLong("due");
 			ArrayList<String> taskIdList = new ArrayList<String>();
 			List<Task> subList = new ArrayList<Task>();
-			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = json
-					.getJSONArray("IdJson");
+			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = null;
+			if(json.has("IdJson")&& !json.get("IdJson").equals(null) && !json.get("IdJson").equals("null") && json.get("IdJson") != "")		
+				taskIdArray = json.getJSONArray("IdJson");
 			if (taskIdArray != null) {
 				for (int i = 0; i < taskIdArray.length(); i++) {
 					try {
@@ -261,12 +266,13 @@ public class TaskBulkActionsAPI {
 				}
 
 			} else {
-				boolean pending = json.getBoolean("pending");
-				if (!json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
+				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
+				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
 					ownerId = json.getString("ownerId");
-
-				String criteria = json.getString("criteria");
-				String type = json.getString("type");
+				if (json.has("criteria") && !json.get("criteria").equals(null) && !json.get("criteria").equals("null"))
+					criteria = json.getString("criteria");
+				if (json.has("type") && !json.get("type").equals(null) && !json.get("type").equals("null"))
+					type = json.getString("type");
 				List<Task> tasks = TaskUtil.getTasksRelatedToOwnerOfType(
 						criteria, type, ownerId, pending, null, null);
 				for (Task task : tasks) {
@@ -280,6 +286,68 @@ public class TaskBulkActionsAPI {
 				}
 				if (!subList.isEmpty()) {
 					Task.dao.putAll(subList);
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@Path("/Delete")
+	@POST
+	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED,
+			MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<Task> bulkTaskDelete(
+			@FormParam("data") String data) {
+		try {
+			String ownerId = null;
+			JSONObject json = new JSONObject(data);
+			ArrayList<String> taskIdList = new ArrayList<String>();
+			List<Task> subList = new ArrayList<Task>();
+			com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = null;
+			if(json.has("IdJson")&& !json.get("IdJson").equals(null) && !json.get("IdJson").equals("null") && json.get("IdJson") != "")		
+				taskIdArray = json.getJSONArray("IdJson");
+			if (taskIdArray != null) {
+				for (int i = 0; i < taskIdArray.length(); i++) {
+					try {
+						Task task = null;
+						Long id = taskIdArray.getLong(i);
+						task = TaskUtil.getTask(id);
+						subList.add(task);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (subList.size() >= 100) {
+						Task.dao.deleteAll(subList);
+						subList.clear();
+					}
+				}
+				if (!subList.isEmpty()) {
+					Task.dao.deleteAll(subList);
+				}
+
+			} else {
+				boolean pending = json.getBoolean("pending");String criteria = null ;String type = null;
+				if (json.has("ownerId") && !json.get("ownerId").equals(null) && !json.get("ownerId").equals("null") && json.get("ownerId") != "")
+					ownerId = json.getString("ownerId");
+				if (json.has("criteria") && !json.get("criteria").equals(null) && !json.get("criteria").equals("null"))
+					criteria = json.getString("criteria");
+				if (json.has("type") && !json.get("type").equals(null) && !json.get("type").equals("null"))
+					type = json.getString("type");
+				List<Task> tasks = TaskUtil.getTasksRelatedToOwnerOfType(
+						criteria, type, ownerId, pending, null, null);
+				for (Task task : tasks) {
+					subList.add(task);
+					if (subList.size() >= 100) {
+						Task.dao.deleteAll(subList);
+						subList.clear();
+					}
+				}
+				if (!subList.isEmpty()) {
+					Task.dao.deleteAll(subList);
 				}
 
 			}

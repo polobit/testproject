@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.json.simple.JSONArray;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Task;
@@ -996,7 +997,7 @@ public class TaskUtil
 					}
 				}
 			}
-			else {
+			else if (formId.equalsIgnoreCase("bulkTaskDuedateForm")) {
 				newProperty = priority.getString("due");
 				for(String taskId : taskIdList){
 					Task task = getTask(Long.parseLong(taskId));
@@ -1006,6 +1007,10 @@ public class TaskUtil
 						taskList.add(task);
 					}
 				}
+			}
+			else {
+				org.json.JSONArray taskId = new org.json.JSONArray(taskIdList);
+				Task.dao.deleteBulkByIds(taskId);
 			}
 			return taskList ;
 		} catch (Exception e) {

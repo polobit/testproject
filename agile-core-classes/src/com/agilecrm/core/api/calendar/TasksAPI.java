@@ -386,7 +386,7 @@ public class TasksAPI
 	 if(tasksJSONArray!=null && tasksJSONArray.length()>0){		 
 		 try {
 			for (int i = 0; i < tasksJSONArray.length(); i++) {
-				 String taskId =  (String) tasksJSONArray.get(i);
+				 String taskId = tasksJSONArray.getString(i);
 				 Task task = TaskUtil.getTask(Long.parseLong(taskId));
 				 List<ContactPartial> contactsList = task.getContacts();
 				 List<String> conIds = new ArrayList<String>();
@@ -831,11 +831,14 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Task> changeBulkTasksAction(String data) {
         try {
+        	com.google.appengine.labs.repackaged.org.json.JSONObject priority = new com.google.appengine.labs.repackaged.org.json.JSONObject();
+        	com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = new com.google.appengine.labs.repackaged.org.json.JSONArray();
         	com.google.appengine.labs.repackaged.org.json.JSONObject json = new com.google.appengine.labs.repackaged.org.json.JSONObject(data);
             System.out.println(json.toString());
-            com.google.appengine.labs.repackaged.org.json.JSONArray taskIdArray = json.getJSONArray("IdJson");
-            String formId =  (String) json.get("form_id");
-            com.google.appengine.labs.repackaged.org.json.JSONObject priority = json.getJSONObject("priority");
+            String formId =  json.getString("form_id");
+            taskIdArray = json.getJSONArray("IdJson");            
+            if(json.has("priority")&& !json.get("priority").equals(null))
+            	priority = json.getJSONObject("priority");
             ArrayList<String> taskIdList = new ArrayList<String>();
             if (taskIdArray != null) { 
                int len = taskIdArray.length();
@@ -874,8 +877,11 @@ public class TasksAPI
             else if(formId.equalsIgnoreCase("bulkTaskOwnerForm")){
                 uri = uri + "/ChangeOwner" ;
             }
-            else {
+            else if(formId.equalsIgnoreCase("bulkTaskDuedateForm")){
                 uri = uri + "/ChangeDuedate" ;
+            }
+            else{
+            	uri = uri + "/Delete" ;
             }
             TaskUtil.postDataToTaskBackend(uri,data);
         }
