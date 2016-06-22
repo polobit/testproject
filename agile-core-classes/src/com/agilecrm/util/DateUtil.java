@@ -71,6 +71,8 @@ public class DateUtil
 
 	private static final String CustomFieldCSVDateFormat = "dd/MM/yyyy";
 
+	public static final String EMAIL_TEMPLATE_DATE_FORMAT = "EEE, MMM d yyyy, hh:mm:ss [z]";
+
 	// dd/MM/yyyy
 	// ------------------------------------------------------------ Constructors
 
