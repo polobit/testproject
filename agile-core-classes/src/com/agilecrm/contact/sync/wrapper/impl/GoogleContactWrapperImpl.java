@@ -12,6 +12,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.contact.util.NoteUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.data.TextContent;
@@ -406,12 +407,25 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	TextContent content = null;
 	try
 	{
+		List<Note> notes=NoteUtil.getNotes(contact.id);
 	    content = entry.getTextContent();
+	    boolean New = true;
+	    for(Note note:notes)
+	    {
+	    	if(StringUtils.equalsIgnoreCase(entry.getTextContent().getContent().getPlainText(), note.description))
+	    			{
+	    				New=false;
+	    				break;
+	    			}
+	    }
+	    if(New)
+	    {
+	    	 Note note = new Note("Google Contact Notes", content.getContent().getPlainText());
 
-	    Note note = new Note("Google Contact Notes", content.getContent().getPlainText());
-
-	    note.addContactIds(String.valueOf(contact.id));
-	    note.save();
+	 	    note.addContactIds(String.valueOf(contact.id));
+	 	    note.save();
+	    }
+	   
 	}
 	catch (Exception e)
 	{

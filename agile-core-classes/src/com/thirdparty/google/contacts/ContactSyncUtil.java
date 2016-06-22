@@ -771,7 +771,7 @@ public class ContactSyncUtil
 			{
 				boolean isNew = true;
 				
-					if (StringUtils.equals(googleContactEntry.getTextContent().getContent().getPlainText(), note.description))
+					if (StringUtils.equalsIgnoreCase(googleContactEntry.getTextContent().getContent().getPlainText(), note.description))
 					{
 						isNew = false;
 						break;
