@@ -475,7 +475,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		{
 			var addressJSON = {};
 			var subtype;
-			var remote_addr=false;
+			var remote_addr=false;  
 			$.each($(element).find(":input,select"), function(index, subelement)
 			{
 

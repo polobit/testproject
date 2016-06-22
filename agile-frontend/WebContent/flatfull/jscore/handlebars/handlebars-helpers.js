@@ -1392,7 +1392,26 @@ $(function()
         	value = JSON.parse(value);
         }catch(e){}
 
-		if (value && Object.keys(value) && Object.keys(value).length > 0)
+		if (value && Object.keys(value) && Object.keys(value).length == 0)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+
+
+	Handlebars.registerHelper('property_json_is_remote_addr', function(name, properties, options)
+	{
+
+        var value = getPropertyValue(properties, name);
+        if(!value)
+        {
+        	return options.inverse(this);
+        }
+        try{
+        	value = JSON.parse(value);
+        }catch(e){}
+
+		if (value && Object.keys(value) && Object.keys(value).length == 1)
 			return options.fn(this);
 		
 		return options.inverse(this);
