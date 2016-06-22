@@ -1,9 +1,7 @@
 package com.thirdparty.sendgrid.deferred;
 
-import java.io.IOException;
 
 import com.agilecrm.sendgrid.util.SendGridUtil;
-import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**

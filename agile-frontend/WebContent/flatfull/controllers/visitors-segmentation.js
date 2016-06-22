@@ -47,7 +47,7 @@ var VisitorsSegmentationRouter = Backbone.Router
             head
                 .js(
                     LIB_PATH + 'lib/date-charts.js',
-                    LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION,
+                    LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'),
                     function() {
 
                         // first time entry

@@ -305,13 +305,13 @@ This is where you and your users will log in to your account
 <input
 											class="field form-control required tel-number"
 											id="login_phone_number" required name='phone_number' type="text"
-											placeholder="Phone Number" autocapitalize="off">
+											placeholder="Phone Number" autocapitalize="off" autocomplete="off">
 											<div class='custom-error'>Please enter valid number</div>
 </div>
 </div>
 
-<input type='hidden' id="login_email" name='email' value=<%=request.getParameter("email")%>></input>
-<input type='hidden' id="user_name" name='name' value=<%=request.getParameter("name")%>></input>
+<input type='hidden' id="login_email" name='email' value="<%=request.getParameter("email")%>"></input>
+<input type='hidden' id="user_name" name='name' value="<%=request.getParameter("name")%>"></input>
 <input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 <input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
 	<input type='hidden' name='type' value='agile'></input>
@@ -350,12 +350,18 @@ This is where you and your users will log in to your account
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 	$("#password").value = "<%=request.getParameter("password")%>"
+// Plan type
+var selected_plan_type = '<%=request.getParameter("plan_type")%>';
 </script>
 
 <script>
 $(document).ready(function(){
 
-	
+	// Set selected plan name
+	if(selected_plan_type){
+        $("select[name='plan_type']").val(selected_plan_type);
+	}
+
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
 	$('#account_timezone').val(jstz.determine().name());

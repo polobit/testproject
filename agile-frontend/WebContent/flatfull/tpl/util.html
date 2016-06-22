@@ -1,0 +1,23 @@
+<script id="modal-confirm-template" type="text/html">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+				
+				<h3>{{title}} </h3>
+			</div>
+			<div class="modal-body">
+				<div id="sms-integrations-message">
+					<p>  {{message}}</p>
+				</div>
+			</div>
+			<div class="modal-footer">
+			{{#if_equals type "alert"}}
+				<a href="#" id="success_callback" class="btn btn-sm btn-default">Ok</a>
+			{{else}}
+				<a href="#" id="decline_callback" class="btn btn-sm btn-default">No</a>
+				<a href="#" id="success_callback" class="btn btn-sm btn-primary">Yes</a>
+			{{/if_equals}}
+			</div>
+		</div>
+	</div>
+</script>

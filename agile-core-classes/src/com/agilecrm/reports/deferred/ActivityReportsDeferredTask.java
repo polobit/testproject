@@ -66,7 +66,12 @@ public class ActivityReportsDeferredTask implements DeferredTask
 			        report.activity_weekday, report.activity_day, report.report_timezone, duration);
 			try
 			  {
-			    ActivityReportDeferredTaskCreation.createDeferredTask(domain, report.id, time, report.report_timezone);
+				if(time!=null)
+					{
+					ActivityReportDeferredTaskCreation.createDeferredTask(domain, report.id, time, report.report_timezone);
+					}
+				else
+					System.out.println("Time in create create Activity report DeferredTask ============ " + time + "Domain:" + domain);
 			   }
 			catch (IOException e)
 			  {

@@ -2,6 +2,7 @@ package com.agilecrm.queues;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
@@ -58,6 +59,10 @@ public class PullScheduler
      * Started time
      */
     public long startTime = 0L;
+    
+    private int iteration = 0;
+    
+    private int ITERATIONS_LIMIT = 2;
 
     /**
      * Constructs a new {@link PullScheduler}
@@ -109,6 +114,9 @@ public class PullScheduler
      */
     public int getCountLimit(String queueName)
     {
+    	if(StringUtils.containsIgnoreCase(queueName, "campaign"))
+    		return 50;
+    		
 	return DEFAULT_COUNT_LIMIT;
     }
 
@@ -124,9 +132,8 @@ public class PullScheduler
 
 	try
 	{
-	    System.out.println("Infinite loop started at : " + System.currentTimeMillis());
 	    int i = 0;
-	    while (shouldContinue())
+	    while (shouldContinue(true))
 	    {
 		System.out.println("while loop started at :" + System.currentTimeMillis() + "iteration : " + i);
 		List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
@@ -157,9 +164,11 @@ public class PullScheduler
      * tasks are processing in frontend. Verifies backend instance shutting down
      * status while processing tasks in backend.
      * 
+     * @param doLimitIterations - flag to limit iterations of loop for leasing on backends
+     * 
      * @return boolean value
      */
-    public boolean shouldContinue()
+    public boolean shouldContinue(boolean doLimitIterations)
     {
 	System.out.println("isCron" + isCron);
 	// Verify request deadline - 10mins
@@ -185,15 +194,27 @@ public class PullScheduler
 	    // Verify backend instance shut down
 	    if (backendStatus)
 	    {
-		System.err.println("Backend instance is shutting down...");
-		return false;
+			System.err.println("Backend instance is shutting down...");
+			return false;
 	    }
 	    else
-		return true;
+	    {
+	    		
+	    	// To increase backend instances for accessing more requests
+	    	if(doLimitIterations)
+	    	{
+	    		iteration++;
+	    		
+	    		if(iteration > ITERATIONS_LIMIT)
+	    			return false;
+	    	}
+	    	
+	    	return true;
+		}
 	}
 
     }
-
+    
     /**
      * Process leased tasks
      * 
@@ -227,12 +248,12 @@ public class PullScheduler
 	{
 	    // Verifies backend shutdown or cron limit before processing each
 	    // one
-	    if (shouldContinue())
+	    if (shouldContinue(false))
 	    {
 		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
 		Boolean isMailDeferredTask = deferredTask instanceof MailDeferredTask;
-		Boolean isLogDeferredTask = deferredTask instanceof LogDeferredTask;
+//		Boolean isLogDeferredTask = deferredTask instanceof LogDeferredTask;
 		System.out.println("is instance of mail deferred task" + isMailDeferredTask);
 		if (isMailDeferredTask)
 		{
@@ -250,37 +271,36 @@ public class PullScheduler
 		    PullQueueUtil.deleteTasks(queueName, tasks);
 		    return;
 		}
-		else if(isLogDeferredTask){
-			try
-		    {
-			// System.out.println("Executing mandrill mail tasks...");
-			LogUtil.sendCampaignLogs(tasks);
-		    }
-		    catch (Exception e)
-		    {
-			e.printStackTrace();
-			System.err.println("Exception occured while runnning campaign deferred tasks..." + e.getMessage());
-		    }
-
-		    PullQueueUtil.deleteTasks(queueName, tasks);
-		    return;
-		}
+//		else if(isLogDeferredTask){
+//			try
+//		    {
+//			// System.out.println("Executing mandrill mail tasks...");
+//			LogUtil.sendCampaignLogs(tasks);
+//		    }
+//		    catch (Exception e)
+//		    {
+//			e.printStackTrace();
+//			System.err.println("Exception occured while runnning campaign deferred tasks..." + e.getMessage());
+//		    }
+//
+//		    PullQueueUtil.deleteTasks(queueName, tasks);
+//		    return;
+//		}
 		else
 		{
 		    
-			boolean deleted = false;
+			Future<Boolean> deleted = null;
 			
 			try
 		    {
 			deferredTask.run();
 
-			// Delete task from Queue
-			deleted = queue.deleteTask(taskHandle);
+			// Delete task from Queue async
+			deleted = queue.deleteTaskAsync(taskHandle);
 		    }
 		    catch(InternalFailureException fe)
 		    {
-		    	// Retries once again
-		    	if(!deleted)
+		    	if(deleted != null && deleted.isCancelled())
 		    		queue.deleteTask(taskHandle);
 		    }
 		    catch (Exception e)

@@ -57,6 +57,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
+import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.bulk.ContactsDeleteTask;
@@ -69,6 +70,7 @@ import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
 import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
@@ -76,6 +78,7 @@ import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -453,11 +456,9 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Contact getContact(@PathParam("contact-id") Long id) throws AccessDeniedException
     {
-	Contact contact = ContactUtil.getContact(id);
-
-	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
-
-	return contact;
+    	Contact contact = ContactUtil.getContact(id);
+    	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
+    	return contact;
     }
 
     @Path("related-entities/{contact-id}")
@@ -928,8 +929,30 @@ public class ContactsAPI
     public void deleteNotes(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray notesJSONArray = new JSONArray(model_ids);
-	Note.dao.deleteBulkByIds(notesJSONArray);
-    }
+	JSONArray notesArray = new JSONArray();
+	 if(notesJSONArray!=null && notesJSONArray.length()>0){
+		 for (int i = 0; i < notesJSONArray.length(); i++) {
+			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
+			List<String> conIds = note.getContact_ids();
+	    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+	    	{
+	    		notesArray.put(notesJSONArray.getString(i));
+	    	}
+	    	
+			 try {
+				List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
+				 for(Opportunity opp : deals){
+					opp.save();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 }
+	 }
+	 Note.dao.deleteBulkByIds(notesArray);
+}
 
     /**
      * Deletes all selected deals of a particular contact
@@ -1895,5 +1918,26 @@ public class ContactsAPI
 	    }
 	    contact.save();
 	}
+    }
+    @Path("/getCustomfieldBasedContacts")
+    @GET
+    public List<Contact> getCustomfieldBasedContacts(@QueryParam("id") String id ,@QueryParam("type") String type)
+    {
+    	try {
+			List<String> customFieldNames = new ArrayList<String>();
+			List<CustomFieldDef> customfields = CustomFieldDefUtil.getContactAndCompanyCustomFields();
+			if(customfields != null && customfields.size() > 0){
+				for(CustomFieldDef c : customfields){
+					if(c.field_type.equals(CustomFieldDef.Type.CONTACT) || c.field_type.equals(CustomFieldDef.Type.COMPANY))
+						customFieldNames.add(SearchUtil.normalizeTextSearchString(c.field_label));
+				}
+			}
+			if(customFieldNames != null && customFieldNames.size() > 0 && id != null)
+				return ContactUtil.getContactsWithCustomFields(id,customFieldNames);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return null ; 
     }
 }

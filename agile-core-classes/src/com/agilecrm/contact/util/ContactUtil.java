@@ -33,9 +33,12 @@ import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.queues.backend.ModuleUtil;
+import com.agilecrm.queues.backend.ModuleUtil.AgileModules;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -55,12 +58,15 @@ import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.modules.ModulesService;
+import com.google.appengine.api.modules.ModulesServiceFactory;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -147,7 +153,7 @@ public class ContactUtil
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+		e.printStackTrace();
 	    return null;
 	}
     }
@@ -1189,8 +1195,8 @@ public class ContactUtil
 	}
 
 	oldContact.tags.addAll(newContact.tags);
-
-	return oldContact;
+	newContact=oldContact;
+	return 	newContact;
     }
 
     public static Contact mergeCompanyFields(Contact newContact, Contact oldContact)
@@ -1856,8 +1862,11 @@ public class ContactUtil
     {
 	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
 		lastCampaignEmailed, toEmail);
+
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
-	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).etaMillis(System.currentTimeMillis() + 5000));
+	
+	// Add these tasks to run in Agile Tasks Handler backend
+	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask).header("Host", ModuleUtil.getModuleDefaultVersionHost(AgileModules.AGILE_TASKS_HANDLER.getModuleName())).etaMillis(System.currentTimeMillis() + 5000));
     }
 
     public static String getMD5EncodedImage(Contact contact)
@@ -2006,5 +2015,94 @@ public class ContactUtil
 	    return null;
 	}
 
+    }
+    
+public static Contact searchMultipleContactByEmail(String email,Contact contact){
+    	
+    	if (StringUtils.isBlank(email))
+    	    return null;
+    	
+    	Map<String, Object> searchMap = new HashMap<String, Object>();
+    	searchMap.put("type", Type.PERSON);
+    	searchMap.put("properties.name", Contact.EMAIL);
+    	searchMap.put("properties.value", email.toLowerCase());
+
+    	try
+    	{
+    	   List<Contact> contacts=dao.listByProperty(searchMap);
+    	   if(contacts.size()>0){
+    	  for(Contact newcontact:contacts){
+    		  if(newcontact.id.equals(contact.id))
+    			  continue;
+    		  return newcontact;
+    	  }
+    	   }
+    	   return null;
+    	}
+    	catch (Exception e)
+    	{
+    	    return null;
+    	}
+	}
+
+    /**
+     * Gets contacts and companies based on its email collection
+     * 
+     * @param emails
+     *            emails collection to get contacts and companies
+     * @return {@List} related to all emails
+     */
+    public static List<Contact> searchContactsAndCompaniesByEmailList(List<String> emails)
+    {
+    System.out.println("Emails in searchContactsAndCompaniesByEmailList---"+emails);
+	if (emails == null || (emails != null && emails.size() == 0))
+	    return null;
+	List<Key<Contact>> contactsKeyList = new ArrayList<Key<Contact>>();
+	if(emails != null)
+	{
+		System.out.println("Emails size in searchContactsAndCompaniesByEmailList---"+emails.size());
+		for(String email : emails)
+		{
+			Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name", Contact.EMAIL).filter("properties.value", email);
+			contactsKeyList.add(q.getKey());
+		}
+	}
+	if(contactsKeyList ==null || (contactsKeyList != null && contactsKeyList.size() == 0))
+		return null;
+	try
+	{
+	    return ContactUtil.dao.fetchAllByKeys(contactsKeyList);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+    public static Set<Contact> searchContactsByCustomFields(String id)
+    {
+    	Set<Contact> contacts = (HashSet<Contact>) dao.ofy().query(Contact.class).filter("Companytype = ", id);
+    	return contacts;
+    }
+    public static List<Contact> getContactsWithCustomFields(String id ,List<String> customField){
+    	
+    	if(id != null && customField != null){
+    		ContactFilter contact_filter = new ContactFilter();
+    		SearchRule andRule = new SearchRule();
+    		SearchRule orRule =  null;
+    		andRule.LHS = "field_labels";
+    		andRule.CONDITION = RuleCondition.NOTEQUALS;
+    		andRule.RHS = " " ;
+    		contact_filter.rules.add(andRule);
+    		for(String eachfield : customField){
+    			orRule = new SearchRule();
+    			orRule.LHS = eachfield;
+    			orRule.CONDITION = RuleCondition.EQUALS;
+    			orRule.RHS = id ;
+	    		contact_filter.or_rules.add(orRule);
+    		}
+    		List<Contact> contacts = new ArrayList<Contact>(contact_filter.queryContacts(50, null, null));
+    		return contacts;
+    	}
+    	return null;
     }
 }

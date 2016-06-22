@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +26,6 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
-import com.thirdparty.mandrill.MandrillSendDeferredTask;
 import com.thirdparty.sendgrid.deferred.SendGridAttachmentDeferredTask;
 import com.thirdparty.sendgrid.lib.SendGridLib;
 import com.thirdparty.sendgrid.lib.SendGridLib.Email;

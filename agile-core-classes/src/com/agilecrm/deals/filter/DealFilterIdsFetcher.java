@@ -9,6 +9,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessScopes;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 
 public class DealFilterIdsFetcher {
@@ -35,7 +36,12 @@ public class DealFilterIdsFetcher {
 			{
 				if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.MANAGE_DEALS) || isDealOwner(opportunity) ))
 		    	{
-					opportunityList.add(opportunity);
+					List<String> conIds = opportunity.getContact_ids();
+					List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+					if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+					{
+						opportunityList.add(opportunity);
+					}
 		    	}
 			}
 		} catch (Exception e) {

@@ -46,6 +46,27 @@ pageEncoding="UTF-8"%>
 <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
 
+<%
+	if( !(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) )
+	{
+%>
+<%@ include file="file-hash.json"%>
+<%
+	}
+%>
+<script type="text/javascript">
+	var _AGILE_FILE_HASH;
+	
+	function _agile_get_file_hash(filename)
+	{
+		if( !filename || filename == '' )	return _AGILE_VERSION;
+		
+		if( _AGILE_FILE_HASH && _AGILE_FILE_HASH[filename] )	return _AGILE_FILE_HASH[filename];
+		
+		return _AGILE_VERSION;
+	}
+</script>
+
 <!-- Include ios meta tags -->
 <%@ include file="ios-native-app-meta-tags.jsp"%>
 
@@ -63,13 +84,6 @@ return;
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 System.out.println("Domain user " + domainUser);
-
-DomainUserAddPicDeferredTask task = new DomainUserAddPicDeferredTask(domainUser.domain);
-
-// Add to queue
-Queue queue = QueueFactory.getDefaultQueue();
-queue.add(TaskOptions.Builder.withPayload(task));
-
 
 ObjectMapper mapper = new ObjectMapper();
 
@@ -267,59 +281,105 @@ if(currentUserPrefs.menuPosition.equals("top")){
               <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Sales</span>
               </li>
-              
+        
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
   <li id="contactsmenu">
     <a  href="#contacts">
       <i class="icon icon-user"></i>
       <span>Contacts</span>
     </a>
   </li>
+  <%
+      }
+  %>
+
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
       <span>Companies</span>
     </a>
   </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
+  %>
    <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
       <span>Deals</span>
     </a>
   </li>
+  <%
+      }
+  %>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES)){
+  %>
    <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
   </li>
+  <%
+      }
+  %>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
+  %>
+  
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
       <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
+  <%
+        }
+  %>  
+
   <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
+   <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
+   %>
    <li id="workflowsmenu">
     <a  href="#workflows">
       <i class="icon icon-sitemap"></i>
       <span>Campaigns</span>
     </a>
   </li>
+    <%
+        }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
+   %>
    <li id="socialsuitemenu">
     <a  href="#social">
       <i class="icon-bubbles"></i>
       <span>Social</span>
     </a>
   </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
+    %>
    <li id="web-rules-menu">
     <a  href="#web-rules">
       <i class="icon icon-globe"></i>
       <span>Web Rules</span>
     </a>
   </li>
+    <%
+          }
+    %>
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-large icon-screenshot"></i>
@@ -332,32 +392,51 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Landing Pages</span>
     </a>
   </li>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-speedometer icon-white"></i>
       <span>Activities</span>
     </a>
   </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
   <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
       <span>Reports</span>
     </a>
-  </li>  
+  </li> 
+    <%
+          }
+    %> 
   
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
   <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>Service</span>
   </li>
+  
   <li id="tickets">
     <a href="#tickets">
       <i class="icon icon-ticket"></i>
       <span style="padding-top: 9%;">Help Desk</span>
     </a>
-  </li>            
+  </li>
+  <%
+      }
+  %>             
   </ul>
 
 
@@ -593,8 +672,18 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </div>
   </aside>
 <div class="app-content" id="agilecrm-container">
+<div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
+<div id="draggable_noty" style = "height:0px;position: absolute!important;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
-<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>
+<script type="text/javascript">
+// In mobile browsers, don't show animation bar
+if( (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) )
+{
+	document.write('<div class="butterbar" style="z-index:99;"><span class="bar"></span></div>');
+} else {
+	document.write('<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>');
+}
+</script>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"
 src="img/21-0.gif"></img> -->
@@ -636,6 +725,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
  <%@ include file="flatfull/modals.html"%>
 
 </div>
+
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
 
@@ -698,19 +788,19 @@ var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
 var CURRENT_AGILE_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(AgileUser.getCurrentAgileUser()))%>;
 
 // Get Contact Date Fields
-var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE")))%>;
+var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeDate")))%>;
 // Get Contact Date Fields
-var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "DATE")))%>;
+var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeDate")))%>;
 
 // Get Contact contact type custom fields
-var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "CONTACT")))%>;
+var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeContact")))%>;
 // Get Contact company type custom fields
-var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "COMPANY")))%>;
+var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeCompany")))%>;
 
 // Get Company contact type custom fields
-var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "CONTACT")))%>;
+var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeContact")))%>;
 // Get Company company type custom fields
-var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY, "COMPANY")))%>;
+var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeCompany")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
@@ -721,15 +811,20 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
-head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION, function(){
-        load_globalize();
-        showVideoForRegisteredUser();
-});
+head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+			LIB_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _agile_get_file_hash('lib-all-new-1.js'),
+			"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
+			LIB_PATH + 'final-lib/min/backbone-min.js',
+			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js')+'_', 
+			function(){
+		        load_globalize();
+		        showVideoForRegisteredUser();
+		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);	
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _agile_get_file_hash('tpl.js'));	
 
 var en;
 
@@ -742,7 +837,7 @@ var Agile_Contact = {};
 head.ready(function() {
 
 if(!HANDLEBARS_PRECOMPILATION){
-    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
+    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _agile_get_file_hash('download-template.js'), function()
     {
         downloadTemplate("tpl.js");
         downloadTemplate("contact-view.js");
@@ -753,7 +848,7 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _AGILE_VERSION);
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _agile_get_file_hash('js-all-min.js')+"_"}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js'));
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
@@ -775,6 +870,12 @@ head.ready(["core"], function(){
       CURRENT_USER_PREFS.signature = sig;
 	}catch(e){}
 
+	//Turn off all animations if this is mobile
+	if( agile_is_mobile_browser() )
+	{
+		$("body")[0].addClass('disable-anim');
+	}
+	
 });
 
 });    

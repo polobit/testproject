@@ -1,11 +1,11 @@
 package com.agilecrm.user;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
-
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.Cached;
@@ -13,7 +13,7 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 @Cached
-public class Referer
+public class Referer implements Serializable
 {
 	@Id
 	public Long id;

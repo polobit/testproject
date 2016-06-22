@@ -91,12 +91,9 @@
 
 {{/if}}
 	</div>	
-	 	
-			
 		{{#each contacts}}
-
            	{{#if id}}
-				{{#isDuplicateContactProperty properties "email"}}
+				{{#isInCurrentView properties "email"}}
 					{{else}}	
 <div class="inline-block word-break-all">
 					{{#if_contact_type "PERSON"}}
@@ -106,7 +103,7 @@
         		<a class="text-info text-capitalize popover_contact" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         			{{/if_contact_type}}
 </div>
-				{{/isDuplicateContactProperty}}
+				{{/isInCurrentView}}
            		
            	{{/if}}
        	{{/each}}
@@ -129,7 +126,7 @@
 		<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note c-p text-l-none p-r-sm"> <i class="fa fa-edit"></i> </a>
 
 {{/if}}
-            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
+            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/notes/bulk"></span></a>
         </span>
 </div>
 </div>
