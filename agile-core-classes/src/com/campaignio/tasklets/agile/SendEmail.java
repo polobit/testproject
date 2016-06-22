@@ -3,7 +3,9 @@ package com.campaignio.tasklets.agile;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -237,7 +239,41 @@ public class SendEmail extends TaskletAdapter
     	// Get From, Message
     	String fromEmail = getStringValue(nodeJSON, subscriberJSON, data, FROM_EMAIL);
     	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
+    	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
+    	String bcc = getStringValue(nodeJSON, subscriberJSON, data, BCC);
     	
+    	
+    	if(!isVaildEmailAddress(to)){
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email skipped since \'To\' address is invalid.",
+    			    LogType.EMAIL_SENDING_SKIPPED.toString());
+
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    		return;
+    	}
+
+    	if(!isVaildEmailAddress(cc)){
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email skipped since \'CC\' address is invalid.",
+    			    LogType.EMAIL_SENDING_SKIPPED.toString());
+
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    		return;
+    	}
+
+    	if(!isVaildEmailAddress(bcc)){
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email skipped since \'BCC\' address is invalid.",
+    			    LogType.EMAIL_SENDING_SKIPPED.toString());
+
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    		return;
+    	}
+
+    	    	
     	data.remove(SendMessage.SMS_CLICK_TRACKING_ID);
     	data.remove(TwitterSendMessage.TWEET_CLICK_TRACKING_ID);
     	
@@ -388,6 +424,22 @@ public class SendEmail extends TaskletAdapter
 		
 	}
 	addToCron(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
+    }
+    
+    
+    private boolean isVaildEmailAddress(String emailAddresses){
+    	Set<String> emailAddress = EmailUtil.getStringTokenSet(emailAddresses,",");
+    	Iterator<String> emailAddressIterator = emailAddress.iterator();
+    	
+    	while(emailAddressIterator.hasNext()){
+    		String address =emailAddressIterator.next();
+    		if(!ContactUtil.isValidEmail(address)){
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+
     }
 
     /*
