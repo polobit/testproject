@@ -1384,7 +1384,7 @@ $(function()
         	value = JSON.parse(value);
         }catch(e){}
 
-		if (value && Object.keys(value) && Object.keys(value).length > 0)
+		if (value && Object.keys(value) && Object.keys(value).length > 1)
 			return options.fn(this);
 		
 		return options.inverse(this);
