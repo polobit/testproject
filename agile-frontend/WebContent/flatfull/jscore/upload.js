@@ -2,7 +2,7 @@ $(function(){
 
 	$("body").on('click', ".upload_s3", function(e){
 		e.preventDefault();
-		uploadImage("upload-container");
+		uploadImage("upload-container", $(this).closest("div"));
 	});
 
 	//Upload contact image
@@ -30,9 +30,20 @@ $(function(){
 	
 });	
 
-function uploadImage(id)
+function uploadImage(id, parent_div)
 {
-	var newwindow = window.open("flatfull/upload-flatfull.jsp?id=" + id,'name','height=310,width=500');
+	var allow_croper = ["contact/", "company/", "user-prefs"];
+	var allow_image_crop = false;
+	for (var i = 0; i < allow_croper.length; i++) {
+		if(window.location.href.indexOf(allow_croper[i]) > 0)
+				allow_image_crop = true;
+	}
+	
+	var windowURL = "flatfull/upload-flatfull.jsp?id=" + id;
+	if(allow_image_crop)
+		   windowURL += "&enable_crop=true";
+
+	var newwindow = window.open(windowURL,'name','height=310,width=500');
 	if (window.focus)
 	{
 		newwindow.focus();

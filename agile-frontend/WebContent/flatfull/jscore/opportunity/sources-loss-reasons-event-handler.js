@@ -289,10 +289,12 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
         var that=$(this);
         var goals_json=[];
         var d=$('#goal_duration span').html();
+        if(window.navigator.userAgent.indexOf("Mozilla") != -1 && window.navigator.userAgent.indexOf("Chrome")==-1)
+                            d="01 "+d;
         d=new Date(d);
         var start=getUTCMidNightEpochFromDate(d);
                     
-        $('#deal-sources-table').find('td').each(function(index){
+        $("#deal-sources-table").find("tr").not(':first').each(function(index){
             if(($(this).find('.amount').val().trim())!="" && ((parseFloat($(this).find('.amount').val().trim())<0) || !(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/).test($(this).find('.amount').val()))){
                 $(this).find('#goal_amount_error').show();
                 flag=false;
@@ -328,7 +330,7 @@ var Sources_Loss_Reasons_Events_Collection_View = Base_Collection_View.extend({
                     console.log(e);
                     var count=0;
                     var amount=0;
-                    $('#deal-sources-table').find('td').each(function(index){
+                    $("#deal-sources-table").find("tr").not(':first').each(function(index){
                         var that=$(this);
                         $.each(e,function(index,jsond){
                             if(jsond.domain_user_id==that.find('div').attr('id')){

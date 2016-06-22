@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="agile-normal-bulk">
+
+    <property environment="env"/>
+              	<property file="../agile-java-server/build.properties"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <path id="libpath">
+        <fileset dir="${LIB_DIR}" includes="*.jar"/>
+    </path>
+    <path id="appenginelibpath">
+        <pathelement location="${APPENGINE_DIR}/shared/servlet-api.jar"/>
+        <pathelement location="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-ant-launcher-1.7.1.jar"/>
+        <pathelement location="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-jasper-el-6.0.29.jar"/>
+        <pathelement location="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-tomcat-juli-6.0.29.jar"/>
+        <pathelement location="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-ant-1.7.1.jar"/>
+        <pathelement location="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-jasper-6.0.29.jar"/>
+        <pathelement location="${APPENGINE_DIR}/shared/jsp-api.jar"/>
+        <pathelement location="${APPENGINE_DIR}/shared/el-api.jar"/>
+        <pathelement location="${APPENGINE_DIR}/shared/appengine-local-runtime-shared.jar"/>
+        <pathelement location="${APPENGINE_DIR}/appengine-tools-api.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/appengine-api-labs/v1/appengine-api-labs.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/appengine-endpoints/v1/appengine-endpoints.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/appengine-endpoints/v1/appengine-endpoints-deps.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/jsr107/v1/jsr107cache-1.1.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/jsr107/v1/appengine-jsr107cache-1.9.18.jar"/>
+        <pathelement location="${APPENGINE_DIR}/user/appengine-api-1.0-sdk-1.9.18.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/datanucleus/v1/datanucleus-jpa-1.1.5.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/datanucleus/v1/datanucleus-appengine-1.0.10.final.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/datanucleus/v1/geronimo-jta_1.1_spec-1.1.1.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/datanucleus/v1/datanucleus-core-1.1.5.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/datanucleus/v1/geronimo-jpa_3.0_spec-1.1.1.jar"/>
+        <pathelement location="${APPENGINE_DIR}/opt/user/datanucleus/v1/jdo2-api-2.3-eb.jar"/>
+    </path>
+    <path id="project.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="libpath"/>
+        <path refid="appenginelibpath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="build/classes"/>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="build/classes"/>
+        <delete dir="${TARGET_DIR}/${ant.project.name}.war"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="1.7" target="1.7" nowarn="on">
+            <src path="src"/>
+        	<src path="../agile-core-classes/src" />
+            <classpath refid="project.classpath"/>
+        </javac>
+    </target>
+    <target depends="clean, build" name="create-target">
+        <!--Copy static content to target -->
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war">
+            <fileset dir="WebContent" />
+        </copy>
+        <!--Copy application libraries to target -->
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib">
+            <fileset dir="${LIB_DIR}" />
+        </copy>
+        <!--Copy appengine libraries to target -->
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/servlet-api.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-ant-launcher-1.7.1.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-jasper-el-6.0.29.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-tomcat-juli-6.0.29.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-ant-1.7.1.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/jsp/repackaged-appengine-jasper-6.0.29.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/jsp-api.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/el-api.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/shared/appengine-local-runtime-shared.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/appengine-tools-api.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/appengine-api-labs/v1/appengine-api-labs.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/appengine-endpoints/v1/appengine-endpoints.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/appengine-endpoints/v1/appengine-endpoints-deps.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/jsr107/v1/jsr107cache-1.1.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/jsr107/v1/appengine-jsr107cache-1.9.18.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/user/appengine-api-1.0-sdk-1.9.18.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/datanucleus/v1/datanucleus-jpa-1.1.5.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/datanucleus/v1/datanucleus-appengine-1.0.10.final.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/datanucleus/v1/geronimo-jta_1.1_spec-1.1.1.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/datanucleus/v1/datanucleus-core-1.1.5.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/datanucleus/v1/geronimo-jpa_3.0_spec-1.1.1.jar"/>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib" file="${APPENGINE_DIR}/opt/user/datanucleus/v1/jdo2-api-2.3-eb.jar"/>
+        <!--Copy compiled classes to target -->
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/classes">
+            <fileset dir="build/classes" />
+        </copy>
+    </target>
+</project>

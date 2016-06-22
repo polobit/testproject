@@ -145,6 +145,7 @@ $(function()
 										// without reloading the app.
 										success : function(model, response)
 										{
+											IS_DEAL_ARCHIVED = true;
 											// For deal details page.
 											if (Current_Route != 'deals')
 											{
@@ -288,6 +289,7 @@ $(function()
 										// without reloading the app.
 										success : function(model, response)
 										{
+											IS_DEAL_RESTORED = true;
 											if (Current_Route != 'deals')
 											{
 												$("#deal_restore_confirm_modal").modal('hide');
@@ -445,7 +447,7 @@ function updateDeal(ele, editFromMilestoneView)
 			var i;
 			for(i=0;i<value.tagsWithTime.length;i++){
 				var data =value.tagsWithTime[i].tag ; 
-				$('#tags_source_person_modal', dealForm)
+				$('#tags_source_deal_modal', dealForm)
 				.find(".tags")
 				.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag">&times</a></li>');
 			} 

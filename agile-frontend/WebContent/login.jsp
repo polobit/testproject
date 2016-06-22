@@ -248,8 +248,8 @@ if(isSafari && isWin)
                        {
                        %>
 
-                     <div style=" text-align:center;margin-left:120px; border:none;" class="imgholder thumb-wrapper thumb-lg">
-                   		<img class="company_logo w-full" style="background-color: white;padding: 5px;border-radius: 3px;"src="<%=logo_url%>" ></img>
+                     <div style="display:table; margin:0px auto; border:none; padding: 5px;" class="imgholder thumb-wrapper thumb-lg">
+                   		<img class="company_logo w-full" style="background-color: white;border-radius: 3px;"src="<%=logo_url%>" ></img>
                    	 </div>
                    <%
                    }

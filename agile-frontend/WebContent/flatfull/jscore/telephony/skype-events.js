@@ -155,6 +155,14 @@ function saveCallActivitySkype(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 	
+	if(!globalCall.contactedId && dialled.using == "dialler"){
+		$.post( "/core/api/widgets/skype/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+	}
 	if(call.status == "Answered"){
 		return;
 	}
@@ -208,6 +216,26 @@ function saveCallNoteSkype(){
 	if(direction == "Incoming"){
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
 	    	if(!responseJson){
+	resetCallLogVariables();
+	    		
+	    		if(callStatus == "Answered") {
+	    			var data = {};
+	    			data.url = "/core/api/widgets/skype/";
+	    			data.subject = noteSub;
+	    			data.number = number;
+	    			data.callType = "inbound";
+	    			data.status = "answered";
+	    			data.duration = duration;
+	    			data.contId = null;
+	    			data.contact_name = "";
+	    			data.widget = "Skype";
+	    			CallLogVariables.dynamicData = data;
+	    		}
+		    		CallLogVariables.callWidget = "Skype";
+		    		CallLogVariables.callType = "inbound";
+		    		CallLogVariables.phone = number;
+		    		CallLogVariables.duration = duration;
+		    		CallLogVariables.status = callStatus;
 	    		return showNewContactModal(number);
 	    	}
 	    	id = responseJson.id;
@@ -243,7 +271,7 @@ function saveCallNoteSkype(){
 		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
-					twilioIOSaveContactedTime();
+					twilioIOSaveContactedTime(cntId);
 					accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
 						var json = resp;
 						if(json == null) {
@@ -275,6 +303,28 @@ function saveCallNoteSkype(){
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number, "callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
+		}else{
+				resetCallLogVariables();
+				if(callStatus == "Answered") {
+    			var data = {};
+    			data.url = "/core/api/widgets/skype/";
+    			data.subject = noteSub;
+    			data.number = number;
+    			data.callType = "outbound-dial";
+    			data.status = "answered";
+    			data.duration = duration;
+    			data.contId = null;
+    			data.contact_name = "";
+    			data.widget = "Bria";
+    			CallLogVariables.dynamicData = data;
+    		}
+	    		CallLogVariables.callWidget = "Skype";
+	    		CallLogVariables.callType = "outbound-dial";
+	    		CallLogVariables.phone = number;
+	    		CallLogVariables.duration = duration;
+	    		CallLogVariables.status = callStatus;
+    		
+    		return showNewContactModal(number);
 		}
 	}
 }

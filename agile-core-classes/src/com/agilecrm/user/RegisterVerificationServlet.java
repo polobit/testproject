@@ -20,7 +20,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 public class RegisterVerificationServlet extends HttpServlet
 {
-    private static final ArrayList<String> invalid_domains = new ArrayList<String>();
+    /*private static final ArrayList<String> invalid_domains = new ArrayList<String>();
 
     static
     {
@@ -34,7 +34,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	invalid_domains.add("rossbergercom");
 	invalid_domains.add("fastmail");
 	invalid_domains.add("usa.gov");
-    }
+    }*/
 
     private static final ArrayList<String> IPlIST = new ArrayList<String>();
 
@@ -207,9 +207,9 @@ public class RegisterVerificationServlet extends HttpServlet
 	    if (StringUtils.isEmpty(emailDomain))
 				throw new Exception("Agile CRM needs your business email to signup");
 	    
-		if (invalid_domains.contains(emailDomain.toLowerCase())
+		/*if (invalid_domains.contains(emailDomain.toLowerCase())
 			|| invalid_domains.contains(emailDomainSubstring))
-			throw new Exception("Agile CRM needs your business email to signup");
+			throw new Exception("Agile CRM needs your business email to signup");*/
 		
 		
 		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);

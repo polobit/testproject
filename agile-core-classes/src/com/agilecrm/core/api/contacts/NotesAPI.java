@@ -65,6 +65,18 @@ public class NotesAPI
     	throw new AccessDeniedException("Note cannot be added because you do not have permission to update associated contact(s).");
     }
 	note.save();
+	if(note.getContact_ids() != null && note.getContact_ids().size() > 0){
+		List<String> contactIds = note.getContact_ids();
+		for(String s : contactIds){
+			try{			
+				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.forceSearch = true;
+				contact.save();		
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
 	try
 	{
 	    ActivitySave.createNoteAddActivity(note);
@@ -106,6 +118,19 @@ public class NotesAPI
     	{
     		throw new AccessDeniedException("Note cannot be updated because you do not have permission to update associated contact(s).");
     	}
+    	if(oldNote.getContact_ids() != null && oldNote.getContact_ids().size() > 0){
+			List<String> contactIds = oldNote.getContact_ids();
+			for(String s : contactIds){
+				try{			
+					Contact contact = ContactUtil.getContact(Long.parseLong(s));
+					contact.forceSearch = true;
+					contact.save();		
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+    	
     }
 	List<String> conIds = note.contact_ids;
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -114,6 +139,23 @@ public class NotesAPI
 		throw new AccessDeniedException("Note cannot be updated because you do not have permission to update associated contact(s).");
 	}
 	note.save();
+	try {
+		if(note.getContact_ids() != null && note.getContact_ids().size() > 0){
+			List<String> contactIds = note.getContact_ids();
+			for(String s : contactIds){
+				try{			
+					Contact contact = ContactUtil.getContact(Long.parseLong(s));
+					contact.forceSearch = true ;
+					contact.save();		
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	return note;
     }
 
@@ -222,6 +264,21 @@ public class NotesAPI
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+				if(conIds != null && conIds.size() > 0 ){
+					try{
+						List <Long> contactArray = new ArrayList<Long>() ; 
+						for(String s : conIds){
+							contactArray.add(Long.parseLong(s));
+						}
+						List<Contact> contacts = ContactUtil.getContactsBulk(contactArray);
+						for(Contact contact :contacts){
+							contact.forceSearch = true ;
+							contact.save();
+						}
+					}catch(Exception e){
+						System.out.println(e.getMessage());
+					}
 				}
 			}
 		}

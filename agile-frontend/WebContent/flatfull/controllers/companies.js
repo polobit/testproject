@@ -392,6 +392,8 @@ var CompaniesRouter = Backbone.Router
 
 				company_util.starify(el);
 				company_util.show_map(el);
+				if(company)
+				addTypeCustomData(company.get('id') , el);
 				// fill_owners(eidl, contact.toJSON());
 				// loadWidgets(el, contact.toJSON());
 

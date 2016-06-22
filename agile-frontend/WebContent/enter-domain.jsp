@@ -209,7 +209,7 @@ padding-left:10px!important;
 		function isAlphaNumeric(subdomain) {
 			subdomain = subdomain.toString();
 		  
-		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{3,20}$/);
+		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{1,20}$/);
 		  if(!regularExpression.test(subdomain)) {
 		        error = "Domain should start with alphabet and special characters not allowed.";
 				return false;
