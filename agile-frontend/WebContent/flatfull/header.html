@@ -220,12 +220,65 @@
 										
 										 <!-- <input id="search-results" 
 										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
-						<span class="input-group-btn">
+				</form>
+				<form id="advanced-search-filter" class="">
+
+                <span class="input-group-btn">
                 <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
+                <button class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter"></i></button>
+							<ul class="pull-right dropdown-menu animated fadeInRight">           			
+                			
+                			<div class="multiple-checkbox" name="fields_set" id="advanced-search-fields-group">
+                			<li>
+		       		  		<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "all" type="checkbox" class="choose-column-chbx"><i></i></label>All</a>
+							</li>
+	                   		<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label>Contact</a>
+							</li>
+                			</div>
+                			
+                			</ul>
               </span>
               </div>				
 								</form>
 							</li>
+
+							<!--Advanced seach filter dropdown
+							<li data-toggle="dropdown"><a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter"></i></a>
+							<ul class="pull-right dropdown-menu animated fadeInRight">           			
+                			<form id="advanced-search-filter" class="">
+                			<div class="multiple-checkbox" name="fields_set" id="advanced-search-fields-group">
+                			<!--<li>
+		       		  		<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm searchtype "><input name="all" value = "all" type="checkbox" class="choose-column-chbx"><i></i></label>All</a>
+							</li>
+	                   		<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label>Contact</a>
+							</li>
+							<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm searchtype "><input name="company" value="company" type="checkbox" class="choose-column-chbx"><i></i></label>Email</a>
+							</li>
+	                   		<li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm searchtype"><input name="deal" value = "deal" type="checkbox" class="choose-column-chbx"><i></i></label>Company</a>
+							</li>
+							 <li>
+	       		  		<a href="javascript:void(0);" class="p-b-none">
+							<label class="i-checks i-checks-sm searchtype "><input name="first_name" value = "first_name"type="checkbox" class="choose-column-chbx"><i></i></label>First Name</a></li>
+	                   <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm searchtype "><input name="last_name" value = "last_name"type="checkbox" class="choose-column-chbx"><i></i></label>Last Name</a></li>
+                			</div>
+                			</form>
+                			</ul>
+							 
+							</li>-->
+
+
 						 	<li id="homemenu" class="active"></li>
 							<%
 							    if ("admin".equals(domainUser.domain)) {
