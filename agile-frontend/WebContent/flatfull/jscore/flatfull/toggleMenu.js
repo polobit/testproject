@@ -312,15 +312,23 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	   $( event.target ).blur();
 	      
 	   console.log("options="+options );
+	   if($(".searchtypeall").find(".choose-column-chbx").prop("checked") == false)
+	   {
+	   	$(".searchtype").find(".choose-column-chbx").prop("checked",true);
+	   	$(".searchtypeall").find(".choose-column-chbx").prop("checked",true);
+	   }
+	   else{
+	   	 $(".searchtype").find(".choose-column-chbx").prop("checked",false);
+	   }
+	  
 	   var json = serializeForm("advanced-search-filter");
-	   console.log(json);
-	   return false;
+	   console.log("checked elements are = "+ json.toString());
+	   
 	   
 	});
 
-	$(".searchtypeall").on('click',function(e){
-		console.log("checked");
-		$(".searchtype").prop('checked', $(this).prop("checked"));
+	$(".searchtypeall").change(function(){
+		
 	});
 
 
