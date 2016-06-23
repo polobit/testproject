@@ -481,13 +481,13 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		{
 			var addressJSON = {};
 			var subtype;
-			var remote_addr=false;  
+			/*var remote_addr=false; */ 
 			$.each($(element).find(":input,select"), function(index, subelement)
 			{
 
 				if ($(subelement).val() == undefined || $(subelement).val().length == 0)
-					{  remote_addr =true;
-						addressJSON['remote_add'] = remote_addr;
+					{  /*remote_addr =true;
+						addressJSON['remote_add'] = remote_addr;*/
 						return;}
 
 				if ($(subelement).attr('name') == 'address-type')

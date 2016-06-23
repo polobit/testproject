@@ -1399,7 +1399,7 @@ $(function()
 	});
 
 
-	Handlebars.registerHelper('property_json_is_remote_addr', function(name, properties, options)
+	/*Handlebars.registerHelper('property_json_is_remote_addr', function(name, properties, options)
 	{
 
         var value = getPropertyValue(properties, name);
@@ -1415,7 +1415,7 @@ $(function()
 			return options.fn(this);
 		
 		return options.inverse(this);
-	});
+	});*/
 
 	/**
 	 * returns online scheduling url of current user
