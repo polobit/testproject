@@ -1,15 +1,11 @@
-
- var registration_id=null;
- var url="https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/backend/push?id=";  
+  var registration_id=null;
+ var url="https://"+domainName+"-dot-sandbox-dot-agilecrmbeta.appspot.com/push?id=";  
  self.addEventListener('push', function(event) 
  {
-      self.registration.pushManager.getSubscription().then(function(subscription) {
-        console.log("got subscription id: ", subscription.endpoint)
-        registration_id=subscription.endpoint
-      });
- 
     event.waitUntil(  
-
+        self.registration.pushManager.getSubscription().then(function(subscription) {
+              console.log("got subscription id: ", subscription.endpoint)
+              registration_id=subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
     
       fetch(url+registration_id).then(function(response) {  
         if (response.status !== 200) {  
@@ -19,12 +15,12 @@
         }
 
       // Examine the text in the response  
-      return response.json().then(function(data) {  
+      return response.json().then(function(dataJSON) {  
         
-        var title = data.title; 
-        var message = data.message;  
-        var icon = data.icon;  
-        var url = data.link;
+        var title = dataJSON.notification_title; 
+        var message = dataJSON.notification_message;  
+        var icon = dataJSON.notification_icon;  
+        var url = dataJSON.notification_url;
 
         return self.registration.showNotification(title, {  
           body: message,  
@@ -32,21 +28,15 @@
           data: {
             url: url
           }  
-        });  
-      });  
+        });  //end of notification
+      }).catch(function(err) {  
+          console.log('Data is not a JSON format', err);
+          )};
+
+        });
     }).catch(function(err) {  
       console.log('Unable to retrieve data', err);
-
-      var title = 'An error occurred';
-      var message = 'We were unable to get the information for this push message';  
-      var icon = 'img/design19.jpg';  
-      var notificationTag = 'notification-error';  
-      return self.registration.showNotification(title, {  
-          body: message,  
-          icon: icon,  
-          tag: notificationTag  
-        });  
-    })  
+    });  
   );  
 });
 

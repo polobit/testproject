@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.util.FileStreamUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 
 public class PushNotificationDownloadServlet extends HttpServlet {
 	
 	/**
 	 * Push notification service workers and manifest json file path
 	 */
-	private static final String PUSH_NOTIFICATION_FILEPATH = "/flatfull/push_notification/";
+	private static final String PUSH_NOTIFICATION_FILEPATH = "misc/notification/";
 	
 	/**
 	 * Manifest file name
@@ -50,9 +51,10 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
 		}
 		else if(fileType.equals("js"))
 		{
+			fileContent = "var domainName = "+NamespaceManager.get()+";\n";
 			response.setHeader("Content-Disposition","attachment; filename=\"" + PUSH_NOTIFICATION_SERVICE_WORKERS + "\"");  
 			
-			fileContent = FileStreamUtil.readResource(PUSH_NOTIFICATION_FILEPATH + PUSH_NOTIFICATION_SERVICE_WORKERS);
+			fileContent += FileStreamUtil.readResource(PUSH_NOTIFICATION_FILEPATH + PUSH_NOTIFICATION_SERVICE_WORKERS);
 		}
 			
 			out.write(fileContent);
