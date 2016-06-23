@@ -712,6 +712,7 @@ var _agile_rules = {
 function GiveCallScriptName(contact){
 	_agile_contact = contact;
 	CallScript_PLUGIN_NAME = "CallScript";
+	var callscript_widget = null;
 	if(App_Widgets.Catalog_Widgets_View){
 		  callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
 	}else{
@@ -727,7 +728,9 @@ function GiveCallScriptName(contact){
 			});
 		}
 	}
+	if(callscript_widget){
 	return GiveRulesInArray(callscript_widget);
+	}
 }
 
 function GiveRulesInArray(callscript_widget){
@@ -778,7 +781,9 @@ function GiveCallScriptText(name, contact){
 			});
 		}
 	}
-	return checkRuleAndDisplayValue(callscript_widget, name);
+	if(callscript_widget){
+		return checkRuleAndDisplayValue(callscript_widget, name);
+	}
 }
 
 
