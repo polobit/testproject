@@ -84,6 +84,7 @@ import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
+import com.thirdparty.sendgrid.SendGrid;
 
 @Path("/api/bulk-actions")
 public class BulkOperationsAPI
@@ -295,20 +296,19 @@ public class BulkOperationsAPI
 
 	try
 	{
-	    Mailgun.sendMail(
-		    "campaigns@agile.com",
-		    "Campaign Observer",
-		    "naresh@agilecrm.com",
-		    "prashannjeet@agilecrm.com",
-		    null,
-		    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
-		    null,
-		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
-			    + "<br><br>Dynamic Filter: " + dynamicFilter
-			    + "<br><br>User email: " + user.email
-			    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
-		    null);
+	    SendGrid.sendMail("campaigns@agile.com",
+			    "Campaign Observer",
+			    "dharmateja@agilecrm.com",
+			    "prashannjeet@agilecrm.com, naresh@agilecrm.com, rahul@agilecrm.com",
+			    null,
+			    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
+			    null,
+			    "Hi,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
+				    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
+				    + "<br><br>Dynamic Filter: " + dynamicFilter
+				    + "<br><br>User email: " + user.email
+				    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
+			    null);
 	}
 	catch (Exception e)
 	{
