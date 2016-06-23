@@ -56,6 +56,12 @@ public class MailgunUtil {
 		     
 		     JSONObject mailgunMessageJSON=getMailgunMailJson(tasks, emailSender);
 		     
+		     if(mailgunMessageJSON == null)
+		     {
+		    	 System.out.println("Bulk action not performed for mailgun");
+		    	 return;
+		     }
+		     
 			 formData.add(MailgunNew.MAILGUN_API_PARAM_FROM, getMailgunFromAddress(tasks) );
 			 
 			 formData.add(MailgunNew.MAILGUN_API_PARAM_TO,toAddress);
@@ -127,42 +133,6 @@ public class MailgunUtil {
 		return fromAddress;
 	}
 	
-	/**
-	 * 
-	 * @param MailDeferredTask
-	 * @return CC address for bulk email
-	 */
-	private static String getMailgunCCAddress(List<MailDeferredTask> task)
-	{
-		if(task.isEmpty())
-			return null;
-		
-		String ccAddress="";
-		for(MailDeferredTask mailDeferredTask : task)
-		{
-			ccAddress +=mailDeferredTask.cc+", ";
-			
-		}
-		return ccAddress;
-	}
-	/**
-	 * 
-	 * @param MailDeferredTask
-	 * @return BCC address for bulk email
-	 */
-	private static String getMailgunBCCAddress(List<MailDeferredTask> task)
-	{
-		if(task.isEmpty())
-			return null;
-		
-		String bccAddress="";
-		for(MailDeferredTask mailDeferredTask : task)
-		{
-			bccAddress +=mailDeferredTask.bcc+", ";
-			
-		}
-		return bccAddress;
-	}
 	
 	/**
 	 * 
