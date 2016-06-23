@@ -136,6 +136,8 @@ public class ActivityUtil
 		{
 			ContactField firstname = contact.getContactFieldByName("first_name");
 			ContactField lastname = contact.getContactFieldByName("last_name");
+			ContactField companyName = contact.getContactFieldByName("name");
+			
 			if (firstname != null)
 			{
 				contact_name += firstname.value;
@@ -144,6 +146,10 @@ public class ActivityUtil
 			{
 				contact_name += " ";
 				contact_name += lastname.value;
+			}
+			
+			if(companyName != null){
+				contact_name += companyName.value;	
 			}
 
 			activity.label = contact_name;
