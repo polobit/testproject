@@ -48,11 +48,7 @@ $(function(){
 	$('body').on('click', '#merge-companies-model', function(event){
 		event.preventDefault();
 		var confirm_message = "Selected data will be merged into master company record. Do you want to proceed?";
-		
-		var confirm_message = "Delete 1 duplicate contact and merge data to master record?"
-		if(dup_contacts1_array.length > 1)
-			confirm_message = "Delete " + dup_contacts1_array.length + " duplicate contacts and merge data to master record?";
-
+	
 		var $that = $(this);
 		showAlertModal(confirm_message, "confirm", function(){
 				$that.attr('disabled', 'disabled');
