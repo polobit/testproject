@@ -339,15 +339,15 @@ public class DealFilterUtil {
 		List<SearchRule> andRules = new ArrayList<SearchRule>();
 		List<SearchRule> orRules = new ArrayList<SearchRule>();
 		
-		setStateFilterRules(filter.rules, andRules, orRules);
-		setStateFilterRules(filter.or_rules, andRules, orRules);
+		setStateFilterRules(filter.rules, andRules, orRules, true);
+		setStateFilterRules(filter.or_rules, andRules, orRules, false);
 		
 		filter.rules = andRules;
 		filter.or_rules = orRules;
 		
 	}
 	
-	public static void setStateFilterRules(List<SearchRule> rules, List<SearchRule> andRules, List<SearchRule> orRules)
+	public static void setStateFilterRules(List<SearchRule> rules, List<SearchRule> andRules, List<SearchRule> orRules, boolean isAndRules)
 	{
 		for(SearchRule rule : rules)
 		{
@@ -367,7 +367,14 @@ public class DealFilterUtil {
 			}
 			else
 			{
+				if(isAndRules)
+				{
+					andRules.add(rule);
+					continue;
+				}
+
 				orRules.add(rule);
+				
 			}
 		}
 	}

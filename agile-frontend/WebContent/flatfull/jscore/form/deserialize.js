@@ -497,6 +497,7 @@ function deserializeChainedElement(data, rule_element)
 			json["pipeline_id"] = track;
 			json["milestone"] = milestone;
 			populateTrackMilestones(undefined, undefined, json, undefined, undefined, undefined, $rhs_ele, field_name);
+			$(input_element).find('option[value="'+data.CONDITION+'"]').attr("selected", "selected");
 			return;
 		}
 
