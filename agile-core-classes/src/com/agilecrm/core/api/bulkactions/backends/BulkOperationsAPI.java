@@ -65,6 +65,7 @@ import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
@@ -296,10 +297,12 @@ public class BulkOperationsAPI
 
 	try
 	{
-	    SendGrid.sendMail("campaigns@agile.com",
+	    // Notifies that campaigns initiated in Production
+		if(VersioningUtil.isProductionAPP())
+	    	SendGrid.sendMail("campaigns@agilecrm.com",
 			    "Campaign Observer",
-			    "dharmateja@agilecrm.com",
-			    "prashannjeet@agilecrm.com, naresh@agilecrm.com, rahul@agilecrm.com",
+			    "naresh@agilecrm.com",
+			    "prashannjeet@agilecrm.com, dharmateja@agilecrm.com, rahul@agilecrm.com",
 			    null,
 			    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
 			    null,
