@@ -147,7 +147,7 @@ var MODAL_MESSAGES = {
 	},
 	"companies_merge_limit" : {
 		"title": "Merge Companies",
-		"message" : "Maximum 2 Companies can only be merged."
+		"message" : "Maximum of 2 companies can be merged at a time."
 	},
 	"contacts_merge_limit" : {
 		"title": "Merge Contacts",

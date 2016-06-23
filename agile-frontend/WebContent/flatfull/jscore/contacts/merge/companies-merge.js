@@ -47,12 +47,13 @@ $(function(){
 	$('body').off('click', '#merge-companies-model');
 	$('body').on('click', '#merge-companies-model', function(event){
 		event.preventDefault();
-		var confirm_message = "Companies data will be merged";
+		var confirm_message = "Selected data will be merged into master company record. Do you want to proceed?";
 		var $that = $(this);
 		showAlertModal(confirm_message, "confirm", function(){
 				$that.attr('disabled', 'disabled');
 				$('#companies-merge-cancel').attr('disabled', 'disabled');
 				$('#companies-merge-cancel').after('<img class="companies-merge-loading p-r-xs m-b"  src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+				
 				var checked = false;
 				var selected_fields = [];
 				var table = $('body').find('#merge-companies-table');
@@ -143,7 +144,7 @@ $(function(){
 				var properties = master_record_dup.properties;
 				master_record.set({ "tags" : tags });
 				merge_duplicate_companies(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
-			}, undefined, "Detete duplicate Contacts");
+			}, undefined, "Detete duplicate Companies");
 		});	
 });
 
