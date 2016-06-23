@@ -57,6 +57,7 @@ public class AccountPrefs implements Serializable
 	/**
 	 * Type of Currency.
 	 */
+
 	@NotSaved
 	public String currency = null;
 
@@ -120,6 +121,7 @@ public class AccountPrefs implements Serializable
 	 * 
 	 * @return currency.
 	 */
+
 	@XmlElement(name = "currency")
 	public String  getCurrency()
 	{
