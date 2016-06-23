@@ -336,6 +336,15 @@ public class TasksAPI
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	  try
+		{
+		    ActivitySave.createTaskEditActivity(task);
+		}
+		catch (JSONException e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
     task.save();
     try {
 		if(!(task.relatedDeals()).isEmpty())
@@ -355,15 +364,7 @@ public class TasksAPI
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
-	try
-	{
-	    ActivitySave.createTaskEditActivity(task);
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+	
 	return TaskUtil.getTask(task.id);
     }
 

@@ -48,6 +48,10 @@ public class TaskBulkActionsAPI {
 						Long id = taskIdArray.getLong(i);
 						task = TaskUtil.getTask(id);
 						task.status = Task.Status.valueOf(newProperty);
+						if(task.status.equals(Task.Status.COMPLETED))
+							task.is_complete = true ; 
+						else
+							task.is_complete = false ;
 						subList.add(task);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -74,6 +78,10 @@ public class TaskBulkActionsAPI {
 						criteria, type, ownerId, pending, null, null);
 				for (Task task : tasks) {
 					task.status = Task.Status.valueOf(newProperty);
+					if(task.status.equals(Task.Status.COMPLETED))
+						task.is_complete = true ; 
+					else
+						task.is_complete = false ;
 					subList.add(task);
 					if (subList.size() >= 100) {
 						Task.dao.putAll(subList);

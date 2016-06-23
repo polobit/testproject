@@ -1205,8 +1205,11 @@ public class ActivityUtil
 
 				}
 			JSONObject js = new JSONObject(new Gson().toJson(obj));
-			JSONArray jsn = js.getJSONArray("contacts");
-			jsn = ActivitySave.getExistingContactsJsonArray(jsn);
+			JSONArray jsn = new JSONArray();
+			if(js.has("contacts") && !js.getJSONArray("contacts").equals(null) && !js.getJSONArray("contacts").equals("null")){		
+				jsn = js.getJSONArray("contacts");
+				jsn = ActivitySave.getExistingContactsJsonArray(jsn);
+			}
 
 			List<ContactPartial> contacts = oldobj.getContacts();
 			List<String> old_cont_ids = getContactIds(contacts);
