@@ -267,37 +267,22 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
 
    	   var $target = $( event.currentTarget ),
-       val = $target.attr( 'data-value' ),
-       $inp = $target.find( 'input' ),
-       idx;
-	   if ( ( idx = options.indexOf( val ) ) > -1 ) {
-	      options.splice( idx, 1 );
-	      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
-	   } else {
-	      options.push( val );
-	      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
-	   }
+       $inp = $target.find( 'input' );
+       $inp.prop( 'checked', !$inp.is(":checked") );
 
-	   $( event.target ).blur();
-	      
-	   console.log("options="+options );
-	   if($(".searchtypeall").find(".choose-column-chbx").prop("checked") == false)
-	   {
-	   	$(".searchtype").find(".choose-column-chbx").prop("checked",true);
-	   	$(".searchtypeall").find(".choose-column-chbx").prop("checked",true);
-	   }
-	   else{
-	   	 $(".searchtype").find(".choose-column-chbx").prop("checked",false);
-	   }
-	  
-	   var json = serializeForm("advanced-search-filter");
-	   console.log("checked elements are = "+ json.toString());
-	   
-	   
-	});
-
-	$(".searchtypeall").change(function(){
-		
+       if(!$inp.prop("value")){
+       	   var $inputs = $("#advanced-search-fields-group a input").not($inp),
+       	   $items = $inputs.closest("li"); 
+       	   if(!$inp.is(":checked")){
+       	   	   $items.removeClass("disabled");
+       	   }else {
+       	   	   $items.addClass("disabled");
+       	   	   $inputs.prop("checked", false);
+       	   }
+       }
+ 
+	   $( event.target ).blur();	      	   
+	   return false;
 	});
 
 
@@ -312,7 +297,6 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
     			   }); 
 
    });
-
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){
