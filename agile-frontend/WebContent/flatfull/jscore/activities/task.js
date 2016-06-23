@@ -297,15 +297,16 @@ function initializeTasksListeners(){
 	});
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
 	{
-		var taskCount  = 0;
+		var isChecked  = false;
 		$('#tasks-list-template').find('#select_all_tasks').empty().removeAttr('data');
-		$.each($('.tbody_check'), function(index, element)
+		$.each($('#tasks-list-template .tbody_check'), function(index, element)
 			{
 				if($(element).is(':checked')){
-					taskCount = taskCount + 1 ;
+					isChecked = true ; 
+					return ;
 				}
 			});
-		if(taskCount){
+		if(isChecked){
 			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
 		}
 		else{			
@@ -319,12 +320,13 @@ function initializeTasksListeners(){
 			var taskCount = 0 ;
 			var totalTasks = getSimpleCount(window.App_Calendar.allTasksListView.collection.toJSON()) ;
 			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
-			$.each($('.tbody_check'), function(index, element)
+			$.each($('#tasks-list-template .tbody_check'), function(index, element)
 				{
 					$(element).attr('checked', "checked");
 					taskCount = taskCount + 1;
 				});
-			$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' Tasks <a id="select_total_tasks" class="c-p text-info">Select all '+totalTasks+' tasks</a>').removeAttr('data');
+			if(taskCount && totalTasks && totalTasks > 25 && taskCount < totalTasks )
+				$('#tasks-list-template').find('#select_all_tasks').html('Selected '+taskCount+' Tasks <a id="select_total_tasks" class="c-p text-info">Select all '+totalTasks+' tasks</a>').removeAttr('data');
 		}
 		else{
 			$('#tasks-list-template').find('.task_bulk_action').addClass("disabled");
