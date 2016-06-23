@@ -710,39 +710,47 @@ var _agile_rules = {
 	} };
 
 function GiveCallScriptName(contact){
-
 	_agile_contact = contact;
-	var array_callScript = [];
-	
 	CallScript_PLUGIN_NAME = "CallScript";
-
-	if(App_Widgets.Catalog_Widgets_View)
-		  var callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
-		else
+	if(App_Widgets.Catalog_Widgets_View){
+		  callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
+	}else{
 		// Following wont give current updated widget 
-		  var callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
-	
+		if (window.location.hash.indexOf("#contact/") != -1)
+		{
+			callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
+		}else{
+			$.getJSON("/core/api/widgets/CallScript", function(CallScript_wid)
+			{
+				callscript_widget = CallScript_wid;
+				return GiveRulesInArray(callscript_widget);
+			});
+		}
+	}
+	return GiveRulesInArray(callscript_widget);
+}
+
+function GiveRulesInArray(callscript_widget){
+	var array_callScript = [];
 	  if(callscript_widget){
 		  
 		  	if (callscript_widget.prefs == undefined || callscript_widget.prefs == "{}")
 			{
 				// show default text
 				console.log("no rule defined");
-				return;
+				return array_callScript;
 			}
+		  	
+			  var callscript_prefs = JSON.parse(callscript_widget.prefs);
+			  var _agile_web_rules = callscript_prefs.csrules;
+			  
+				for ( var j = 0; j < _agile_web_rules.length; j++)
+				{
+						var name = _agile_web_rules[j].name;
+						array_callScript.push(name);
+						console.log("name is " + name);
+				}
 		}
-	  
-	  var callscript_prefs = JSON.parse(callscript_widget.prefs);
-	  var _agile_web_rules = callscript_prefs.csrules;
-	  
-		for ( var j = 0; j < _agile_web_rules.length; j++)
-		{
-
-				var name = _agile_web_rules[j].name;
-				array_callScript.push(name);
-				console.log("name is " + name);
-		}
-		
 		return array_callScript;
 }
 
@@ -752,16 +760,31 @@ function GiveCallScriptText(name, contact){
 		return "!@#";
 	}
 	_agile_contact = contact;
-	var text = "!@#";
-	CallScript_PLUGIN_NAME = "CallScript";
 
-	if(App_Widgets.Catalog_Widgets_View)
-		  var callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
-		else
+	CallScript_PLUGIN_NAME = "CallScript";
+	var callscript_widget = null;
+	if(App_Widgets.Catalog_Widgets_View){
+		  callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
+	}else{
 		// Following wont give current updated widget 
-		  var callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
-	
-	  if(callscript_widget){
+		if (window.location.hash.indexOf("#contact/") != -1)
+		{
+			callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
+		}else{
+			$.getJSON("/core/api/widgets/CallScript", function(CallScript_wid)
+			{
+				callscript_widget = CallScript_wid;
+				return checkRuleAndDisplayValue(callscript_widget, name);
+			});
+		}
+	}
+	return checkRuleAndDisplayValue(callscript_widget, name);
+}
+
+
+function checkRuleAndDisplayValue(callscript_widget, name){
+	var text = "!@#";
+	if(callscript_widget){
 		  
 		  	if (callscript_widget.prefs == undefined || callscript_widget.prefs == "{}")
 			{
@@ -769,28 +792,23 @@ function GiveCallScriptText(name, contact){
 				console.log("no rule defined");
 				return text;
 			}
-		}
-	
-	  var callscript_prefs = JSON.parse(callscript_widget.prefs);
-	  var _agile_web_rules = callscript_prefs.csrules;
-	  
-		for ( var j = 0; j < _agile_web_rules.length; j++)
-		{
-
-			
-				var name1 = _agile_web_rules[j].name;
-				if(name1 == name){
-					var display = _agile_web_rules[j].displaytext;
-					var displayText = replaceMergeFields(display);
-					console.log ("display text - " + displayText);
-					text = displayText;
+		  	
+			  var callscript_prefs = JSON.parse(callscript_widget.prefs);
+			  var _agile_web_rules = callscript_prefs.csrules;
+			  
+				for ( var j = 0; j < _agile_web_rules.length; j++)
+				{
+						var name1 = _agile_web_rules[j].name;
+						if(name1 == name){
+							var display = _agile_web_rules[j].displaytext;
+							var displayText = replaceMergeFields(display);
+							console.log ("display text - " + displayText);
+							text = displayText;
+						}
 				}
-					
 		}
-
 		return text;
 }
-
 
 function showvalue(contact){
 	if(!contact){
@@ -819,6 +837,11 @@ function showvalue(contact){
 		$("#callScriptForm #callScriptText").val(textToDisplay);
 		
 	});
-		
-	
+			
 }
+
+
+
+
+
+
