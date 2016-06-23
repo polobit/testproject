@@ -61,7 +61,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 
 					chainFilters(el, undefined, function()
@@ -103,7 +103,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				if (count > 0)
 					return;
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					chainFilters(el, webrule.toJSON(), function()
 					{
@@ -158,7 +158,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				if(path.includes("callpopup.html"))
 					el.find("#action select").val("CALL_POPUP");
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					chainFilters(el, undefined, function()
 					{
@@ -186,7 +186,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 
 					chainFilters(el, undefined, function()
