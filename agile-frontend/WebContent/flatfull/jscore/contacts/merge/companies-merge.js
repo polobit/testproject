@@ -47,11 +47,7 @@ $(function(){
 	$('body').off('click', '#merge-companies-model');
 	$('body').on('click', '#merge-companies-model', function(event){
 		event.preventDefault();
-		var confirm_message = "Delete 1 duplicate companies and merge data to master record?"
-
-		if (dup_companies_array.length > 1){
-			confirm_message = " Delete " + dup_companies_array.length + " duplicate companies and merge data to master record?";
-		}
+		var confirm_message = "Companies data will be merged";
 		var $that = $(this);
 		showAlertModal(confirm_message, "confirm", function(){
 				$that.attr('disabled', 'disabled');

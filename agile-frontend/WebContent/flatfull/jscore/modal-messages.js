@@ -147,7 +147,7 @@ var MODAL_MESSAGES = {
 	},
 	"companies_merge_limit" : {
 		"title": "Merge Companies",
-		"message" : "You can merge maximum of 2 records at a time with master record."
+		"message" : "Maximum 2 Companies can only be merged."
 	},
 	"contacts_merge_limit" : {
 		"title": "Merge Contacts",
