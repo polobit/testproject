@@ -47,6 +47,8 @@ public class MailgunWebhook extends HttpServlet
 
     public static final String METADATA = "metadata";
     public static final String METADATA_CAMPAIGN_ID = "campaign_id";
+    
+    public static final String ERROR_CODE = "code";
 
     public void doPost(HttpServletRequest req, HttpServletResponse res)
     {
@@ -58,6 +60,10 @@ public class MailgunWebhook extends HttpServlet
 		  
 		  String event = webhooksJSON.getString(EVENT);
 		  System.out.println("Mailgun Webhooks Event : "+event);
+		  
+		  String code = webhooksJSON.getString(ERROR_CODE);
+		  if(StringUtils.startsWith(code, "5"));
+		  	event=HARD_BOUNCE;
 	     
 	     String email=webhooksJSON.getString(EMAIL);
 	     System.out.println(email);

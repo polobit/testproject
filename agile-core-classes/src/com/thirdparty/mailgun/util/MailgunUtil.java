@@ -32,6 +32,8 @@ public class MailgunUtil {
 	
 	private static boolean flag=false;
 	private static final String SUBACCOUNT="subaccount";
+	private static String toAddress = "";
+	private static JSONObject metadata=null;
 	
 	/**
 	 * sendMailgunMails method is used for sending bulk emails and campaign emails
@@ -41,9 +43,10 @@ public class MailgunUtil {
 	
 	public static void sendMailgunMails(List<MailDeferredTask> tasks, EmailSender emailSender)
 	{
+		
 		try
 		 {
-			System.out.println("calling sendMilgunMails method for sending Bulk emails");
+			 System.out.println("calling sendMilgunMails method for sending Bulk emails");
 			 Client client = new Client();
 		     client.addFilter(new HTTPBasicAuthFilter(MailgunNew.MAILGUN_API_KEY,emailSender.emailGateway.api_key));
 		       
@@ -55,7 +58,7 @@ public class MailgunUtil {
 		     
 			 formData.add(MailgunNew.MAILGUN_API_PARAM_FROM, getMailgunFromAddress(tasks) );
 			 
-			 formData.add(MailgunNew.MAILGUN_API_PARAM_TO,getMailgunTo(tasks));
+			 formData.add(MailgunNew.MAILGUN_API_PARAM_TO,toAddress);
 			 
 			 formData.add(MailgunNew.MAILGUN_API_PARAM_SUBJECT, "%recipient.subject%");
 			 
@@ -63,14 +66,6 @@ public class MailgunUtil {
 			 			 
 			 if(flag)
 			     formData.add(MailgunNew.MAILGUN_API_PARAM_HTML_BODY, "%recipient.html%");
-			
-			 /*String bcc=getMailgunBCCAddress(tasks);
-			 if(!StringUtils.isEmpty(bcc))
-		    	   formData.add(MailgunNew.MAILGUN_API_PARAM_BCC, bcc);
-		       
-			 String cc=getMailgunCCAddress(tasks);
-		       if(!StringUtils.isEmpty(cc))
-		    	   formData.add(MailgunNew.MAILGUN_API_PARAM_CC, cc);*/
 		       
 		       String replyTo=getMailgunReplyToAddress(tasks);
 		       if(!StringUtils.isEmpty(replyTo))
@@ -81,7 +76,6 @@ public class MailgunUtil {
 		           formData.add(MailgunNew.MAILGUN_API_PARAM_METADATA, metadata.toString());
 			 
 			   formData.add("recipient-variables",mailgunMessageJSON.toString());
-				      // formData.add("o:testmode","true");
 			 
 			   
 				       
@@ -228,6 +222,18 @@ public class MailgunUtil {
 			JSONObject msgJSON=new JSONObject();
 			try 
 			{
+				if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
+						|| StringUtils.contains(toAddress, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
+					{
+					    sendWithoutMerging(mailDeferredTask, emailSender);
+					    continue;
+					}
+				
+				if(StringUtils.isEmpty(toAddress))
+					toAddress =mailDeferredTask.to;
+				else 
+					toAddress += ", "+mailDeferredTask.to;
+				
 				msgJSON.put(MailgunNew.MAILGUN_API_PARAM_SUBJECT, mailDeferredTask.subject);
 				msgJSON.put(MailgunNew.MAILGUN_API_PARAM_TEXT_BODY, mailDeferredTask.text);
 			
@@ -301,7 +307,12 @@ public class MailgunUtil {
 		}
 	    return null;
     }
-    
+    /**
+     * This method is used for checking Mailgun account
+     * @param apiKey
+     * @param domainName
+     * @return
+     */
     public static String checkMailgunAutorization(String apiKey, String domainName)
     {
     	   Client client = new Client();
@@ -312,5 +323,15 @@ public class MailgunUtil {
 	       return webResource.get(ClientResponse.class).toString();
 	    
     }
+    
+    /**
+     * this method is used for sending a mail one by one
+     */
+    public static void sendWithoutMerging(MailDeferredTask mailDeferredTask, EmailSender emailSender)
+    {
+    	
+    	MailgunNew.sendMail(emailSender.emailGateway.api_key, emailSender.emailGateway.api_user, mailDeferredTask.fromEmail, mailDeferredTask.fromName, mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject, mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text, mailDeferredTask.metadata, null, null);
+    }
+    
 	
 }

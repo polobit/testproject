@@ -246,7 +246,7 @@ public class MailgunNew
 
 	       FormDataMultiPart form = new FormDataMultiPart();
 	       
-	       if(fromName.isEmpty())
+	       if(!fromName.isEmpty())
 	    	   fromEmail = fromName + " <" + fromEmail + ">";
 	       
 	       form.field(MAILGUN_API_PARAM_FROM, fromEmail);
@@ -268,6 +268,9 @@ public class MailgunNew
 	       
 	       if(!StringUtils.isEmpty(html))
 	    	   form.field(MAILGUN_API_PARAM_HTML_BODY, html);
+	       
+	       if(!StringUtils.isEmpty(metadata))
+	    	   form.field(MAILGUN_API_PARAM_METADATA, metadata);
 	       return form;
     }
     
