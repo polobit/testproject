@@ -75,7 +75,7 @@ function deserializeForm(data, form)
 
 									}
 
-									fel.datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+									fel.datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 								}
 
@@ -457,7 +457,7 @@ function deserializeChainedElement(data, rule_element)
 				$(input_element).val(getDateInFormatFromEpocForContactFilters(value));
 
 
-				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true });
 
 
 				$(input_element).datepicker('update');

@@ -1,4 +1,8 @@
 cron:
+- description: TaskletCounter
+  url: /backend/cron/taskletcounter
+  schedule: every 30 mins
+
 - description: TaskletsTimer
   url: /backend/cron
   schedule: every 2 mins

@@ -287,6 +287,17 @@
 	</servlet-mapping>
 	-->
 	
+	
+	<servlet>
+		<servlet-name>TaskletCounter</servlet-name>
+		<servlet-class>com.agilecrm.queues.cron.TaskletCounterServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>TaskletCounter</servlet-name>
+		<url-pattern>/backend/cron/taskletcounter</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>Reports</servlet-name>
 		<servlet-class>com.agilecrm.reports.ReportServlet</servlet-class>
