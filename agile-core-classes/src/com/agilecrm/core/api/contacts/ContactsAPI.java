@@ -1291,8 +1291,11 @@ public class ContactsAPI
 	    }
 
 	}
-	if (contact.type.toString().equals(("PERSON")))
+	if (contact.type.toString().equals(("PERSON"))){
 	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
+	}else if(contact.type.toString().equals(("COMPANY"))){
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
+	}
 	// merge notes
 	return contact;
     }
