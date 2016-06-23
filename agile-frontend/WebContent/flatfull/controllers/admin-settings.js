@@ -126,6 +126,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
+				
+			},saveCallback : function(){
+				location.reload(true);
 			} });
 
 			
@@ -1379,3 +1382,5 @@ function getDomainFromURL(){
 		return "my";
 	return temp[0];
 }
+
+
