@@ -70,7 +70,8 @@
   </queue>
   <queue>
     <name>reports-queue</name>
-    <rate>10/s</rate>
+    <rate>80/s</rate>
+     <bucket-size>100</bucket-size>
      <acl> 
       <user-email>yaswanth@agilecrm.com</user-email>
     </acl>
