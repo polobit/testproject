@@ -305,9 +305,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
        	   var $inputs = $("#advanced-search-fields-group a input").not($inp),
        	   $items = $inputs.closest("li"); 
        	   if(!$inp.is(":checked")){
-       	   	   $items.removeClass("disabled");
+       	   	   $items.removeClass('disabled');
        	   }else {
-       	   	   $items.addClass("disabled");
+       	   	   $items.addClass('disabled');
        	   	   $inputs.prop("checked", false);
        	   }
        }
