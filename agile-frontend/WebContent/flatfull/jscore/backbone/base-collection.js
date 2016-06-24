@@ -536,11 +536,15 @@ var Base_Collection_View = Backbone.View
 				});
 
 				$(this.model_list_element).append(this.model_list_element_fragment);
-				append_checkboxes(this.model_list_element);
+				
 				var appendItemCallback = this.options.appendItemCallback;
 
 				if (appendItemCallback && typeof (appendItemCallback) === "function")
 					appendItemCallback($(this.el));
+				
+				if ($('table', this.el).hasClass('onlySorting'))
+					return;
+				append_checkboxes(this.model_list_element);
 				//endFunctionTimer("appendItemsOnAddEvent");
 			},
 			/**
