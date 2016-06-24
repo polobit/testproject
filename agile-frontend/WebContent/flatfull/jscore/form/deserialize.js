@@ -479,6 +479,16 @@ function deserializeChainedElement(data, rule_element)
 			return;
 		}
 
+		//For contact - Add / Edit Filters
+		if ($(input_element).closest('td').siblings('td.lhs-block').find('option:selected').val() == "country" && data.LHS == "country")
+  		{
+			var appenditem = $('#div_country_options').html();
+		    $(input_element).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
+			$(input_element).closest('td').siblings('td.rhs-block').find('div').find('select').find('option[value="'+data.RHS+'"]').attr("selected", "selected");
+		    $(input_element).find('option[value="'+data.CONDITION+'"]').attr("selected", "selected");
+		    return;
+		}
+		
 		// Gets related select field
 		var option_element = $("option", input_element);
 
