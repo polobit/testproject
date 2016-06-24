@@ -255,7 +255,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	
 	addTagFields(opportunity.getTagsList(), doc);
 	
-	if(opportunity.tagsWithTime != null && opportunity.tagsWithTime.size() > 0 && opportunity.tags != null)
+	if(opportunity.tags != null)
 	{
 		String tags = SearchUtil.normalizeTagsSet(opportunity.tags);
 		if(tags != null)
