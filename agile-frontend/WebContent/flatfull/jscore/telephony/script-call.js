@@ -760,7 +760,7 @@ function GiveRulesInArray(callscript_widget){
 }
 
 
-function GiveCallScriptText(name, contact){
+function GiveCallScriptText(name, contact, callback){
 	if(!contact){
 		return "!@#";
 	}
@@ -779,12 +779,14 @@ function GiveCallScriptText(name, contact){
 			$.getJSON("/core/api/widgets/CallScript", function(CallScript_wid)
 			{
 				callscript_widget = CallScript_wid;
-				return checkRuleAndDisplayValue(callscript_widget, name);
+				var rulesValue = checkRuleAndDisplayValue(callscript_widget, name);
+				callback(rulesValue);
 			});
 		}
 	}
 	if(callscript_widget){
-		return checkRuleAndDisplayValue(callscript_widget, name);
+		var rulesValue = checkRuleAndDisplayValue(callscript_widget, name);
+		callback(rulesValue);
 	}
 }
 
