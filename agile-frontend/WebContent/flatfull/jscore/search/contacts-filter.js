@@ -535,10 +535,12 @@ function show_chained_fields(el, data, forceShow)
 		e.preventDefault();
 		var value = $(this).val();
 
+		/*
 		if(value=="country"){
 			var appenditem = $('#div_country_options').html();
 			$(this).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
 		}
+		*/
 
 		if (value.indexOf('tags') != -1)
 		{
