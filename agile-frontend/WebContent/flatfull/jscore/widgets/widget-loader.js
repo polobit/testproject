@@ -77,7 +77,7 @@ function loadWidgets(el, contactObject, templateID)
 
 				$('#'+templateID, el).html(Widgets_View.render(true).el);
 				// Sets up widget
-				set_up_widgets(el, Widgets_View.el, contact.id);
+				set_up_widgets(el, Widgets_View.el, data.contact.id);
 
 			}
 			widgetBindingsLoader();
