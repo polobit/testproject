@@ -146,15 +146,16 @@ $(function()
 	 * redefine events on dropdown, which takes to contact details page
 	 */
 	agile_type_ahead("searchText", undefined, contacts_typeahead, navigateToDetailsPage, undefined, undefined, 'core/api/search/all/keyword', undefined, undefined, undefined, 5, function(){
+		  
 		  var filters = serializeForm("advanced-search-filter").fields_set;
-		  var filterCriteria = "";
+		  var filterCriteria = "type=";
 		  if(filters){
 		  	   for(var i =0; i<filters.length; i++){
 		  	   		filterCriteria += filters[i] + ",";
 		  	   }
 		  }
 
-	 	  console.log("checked elements  first are = "+ filterCriteria);
+	 	  console.log("checked elements  first are = "+ filters);
 
 	 	  return filterCriteria;	
 	});
