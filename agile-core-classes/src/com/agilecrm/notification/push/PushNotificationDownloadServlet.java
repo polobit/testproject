@@ -51,21 +51,13 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
 		}
 		else if(fileType.equals("js"))
 		{
-			fileContent = "var domainName = "+NamespaceManager.get()+";\n";
+			fileContent = "var domain = \""+NamespaceManager.get()+"\";\n";
 			response.setHeader("Content-Disposition","attachment; filename=\"" + PUSH_NOTIFICATION_SERVICE_WORKERS + "\"");  
 			
 			fileContent += FileStreamUtil.readResource(PUSH_NOTIFICATION_FILEPATH + PUSH_NOTIFICATION_SERVICE_WORKERS);
 		}
 			
 			out.write(fileContent);
-			  
-			/*FileInputStream fileInputStream = new FileInputStream(filepath + filename);  
-			            
-			int i;   
-			while ((i=fileInputStream.read()) != -1) {  
-			out.write(i);   
-			}   
-			fileInputStream.close();*/   
 			out.close();   
 }  
   

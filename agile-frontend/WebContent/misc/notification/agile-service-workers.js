@@ -1,11 +1,12 @@
-  var registration_id=null;
- var url="https://"+domainName+"-dot-sandbox-dot-agilecrmbeta.appspot.com/push?id=";  
+ var registration_id=null;
+ var url="https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/push?id=";  
  self.addEventListener('push', function(event) 
  {
     event.waitUntil(  
         self.registration.pushManager.getSubscription().then(function(subscription) {
               console.log("got subscription id: ", subscription.endpoint)
               registration_id=subscription.endpoint.substring(subscription.endpoint.lastIndexOf("/")+1)
+           
     
       fetch(url+registration_id).then(function(response) {  
         if (response.status !== 200) {  
@@ -28,21 +29,19 @@
           data: {
             url: url
           }  
-        });  //end of notification
+        });  
       }).catch(function(err) {  
-          console.log('Data is not a JSON format', err);
-          )};
-
-        });
+          console.log('Unable to retrieve data in json format', err); 
+      })  
+      });
     }).catch(function(err) {  
-      console.log('Unable to retrieve data', err);
-    });  
+      console.log('Unable to retrieve data', err); 
+    })  
   );  
 });
 
 // The user has clicked on the notification ...
-self.addEventListener('notificationclick', function(event) {  
-  console.log(event.notification.data.url);
+self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   // This looks to see if the current is already open and  
   // focuses if it is  
