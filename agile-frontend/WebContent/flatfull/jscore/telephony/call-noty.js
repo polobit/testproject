@@ -307,6 +307,14 @@ function showBriaCallNoty(message){
 				console.log("contact or id not found to make popup..");
 				return;
 		}
+		if(globalCall.callDirection && globalCall.callDirection == "Incoming"){
+			if(!globalCallForActivity.answeredByTab){
+				closeCallNoty(true);
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+				return;
+			}
+		}
 
 		_getMessageBria(message);
 		ShowWidgetCallNoty(message);
@@ -330,6 +338,14 @@ function showSkypeCallNoty(message){
 			return;
 		}
 		
+		if(globalCall.callDirection && globalCall.callDirection == "Incoming"){
+			if(!globalCallForActivity.answeredByTab){
+				closeCallNoty(true);
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+				return;
+			}
+		}
 		_getMessageSkype(message);
 		ShowWidgetCallNoty(message);
 		return;

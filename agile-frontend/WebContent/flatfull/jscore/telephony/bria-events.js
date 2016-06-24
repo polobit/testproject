@@ -234,6 +234,29 @@ function saveCallNoteBria(){
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
+		}else{
+			resetCallLogVariables();
+    		
+    		if(callStatus == "Answered") {
+    			var data = {};
+    			data.url = "/core/api/widgets/bria/";
+    			data.subject = noteSub;
+    			data.number = number;
+    			data.callType = "outbound-dial";
+    			data.status = "answered";
+    			data.duration = duration;
+    			data.contId = null;
+    			data.contact_name = "";
+    			data.widget = "Bria";
+    			CallLogVariables.dynamicData = data;
+    		}
+	    		CallLogVariables.callWidget = "Bria";
+	    		CallLogVariables.callType = "outbound-dial";
+	    		CallLogVariables.phone = number;
+	    		CallLogVariables.duration = duration;
+	    		CallLogVariables.status = callStatus;
+    		
+    		return showNewContactModal(number);
 		}
 	}
 }
@@ -266,11 +289,13 @@ function saveCallActivityBria(call){
 	if(call.status == "Answered"){
 		return;
 	}
+	
+	var callerObjectId = call.contactId;
+	if(!callerObjectId){
+		return;
+	}
+	
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
-		var callerObjectId = globalCall.contactedId;
-		if(!callerObjectId){
-			return;
-		}
 		$.post( "/core/api/widgets/bria/savecallactivityById",{
 			id:callerObjectId,
 			direction: call.direction, 

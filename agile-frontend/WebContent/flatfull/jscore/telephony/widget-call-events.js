@@ -81,10 +81,10 @@ $(function()
 	$('body #wrap #agilecrm-container').on('click', '.noty_bria_answer, .noty_skype_answer', function(e)
 		{
 			e.preventDefault();
-			
 			var json = {"command" : "answerCall"};
 		  	var action = makeCallAction(json);
 		  	sendActionToClient(action);
+		  	globalCallForActivity.answeredByTab = true;
 		  	play_sound("dtmf");
 	  });
 	  
@@ -95,6 +95,7 @@ $(function()
 			var json = {"command" : "ignoreCall"};
 		  	var action = makeCallAction(json);
 		  	sendActionToClient(action);
+		  	globalCallForActivity.answeredByTab = true;
 		  	play_sound("dtmf");
 	});
 
