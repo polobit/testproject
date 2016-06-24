@@ -145,7 +145,7 @@ $(function(){
 				var properties = master_record_dup.properties;
 				master_record.set({ "tags" : tags });
 				merge_duplicate_companies(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
-			}, undefined, "Detete duplicate Companies");
+			}, undefined, "Delete duplicate Companies");
 		});	
 });
 
