@@ -250,8 +250,9 @@ function initializeTasksListeners(){
 
 	});
 	$('#task-bulk-change-status').on("shown.bs.modal", function()
-	{
-		loadProgressSlider();
+	{	
+		var el = $('#bulkTaskStatusForm');
+		loadProgressSlider(el);
 		$("#task-bulk-change-status").find('#status').val('YET_TO_START');
 		$("#task-bulk-change-status").find('.progress-slider').css('display','none');
 	});
