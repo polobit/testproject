@@ -82,7 +82,7 @@ $(function()
 								var confirm_message = "Delete 1 duplicate contact and merge data to master record?"
 								if(dup_contacts1_array.length > 1)
 									confirm_message = "Delete " + dup_contacts1_array.length + " duplicate contacts and merge data to master record?";
-								var $that = $(this)
+								var $that = $(this);
 								showAlertModal(confirm_message, "confirm", function(){
 									$that.attr('disabled', 'disabled');
 									$('#contact-merge-cancel').attr('disabled', 'disabled');
@@ -194,7 +194,7 @@ $(function()
 									var properties = master_record_dup.properties;
 									master_record.set({ "tags" : tags });
 									merge_duplicate_contacts(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
-								},undefined, "Detete duplicate Contacts");
+								},undefined, "Delete duplicate Contacts");
 
 								
 				});
