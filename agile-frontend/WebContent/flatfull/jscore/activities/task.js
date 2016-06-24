@@ -214,7 +214,7 @@ function initializeTasksListeners(){
 		console.log(task_ids);
 		var taskAction = this.id ; 
 		if(taskAction == "bulk-change-status")
-			$("#task-bulk-change-status").modal('show');
+			$("#task-bulk-change-status").modal('show');			
 		else if(taskAction == "bulk-change-priority")
 			$("#task-bulk-change-priority").modal('show');
 		else if(taskAction == "bulk-change-owner"){
@@ -249,6 +249,12 @@ function initializeTasksListeners(){
 		}
 
 	});
+	$('#task-bulk-change-status').on("shown.bs.modal", function(el)
+	{
+		loadProgressSlider(el);
+		$("#task-bulk-change-status").find('#status').val('YET_TO_START');
+		$("#task-bulk-change-status").find('.progress-slider').css('display','none');
+	});
 	$('#task-bulk-change-owner, #task-bulk-change-status, #task-bulk-change-priority , #task-bulk-change-duedate').on('click', '#task_bulk_validate', function(e)
 	{
 		e.preventDefault();
@@ -268,6 +274,11 @@ function initializeTasksListeners(){
 		if(form_id == "bulkTaskDuedateForm"){
 			var startarray = (priorityJson.task_ending_time).split(":");
 			priorityJson.due = new Date((priorityJson.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+		}
+		else if(form_id == "bulkTaskStatusForm"){
+			var progress = $('#progress_slider').val() ; 
+			if(progress)
+				priorityJson['progress'] = $('#progress_slider').val() ;
 		}
 		enable_save_button($(this));
 		$('.bulk-task-action-model').modal('hide');

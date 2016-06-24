@@ -970,10 +970,13 @@ public class TaskUtil
 					Task task = getTask(Long.parseLong(taskId));
 					if(task != null && newProperty!= null){
 						task.status = Task.Status.valueOf(newProperty);
+						task.is_complete = false ;
 						if(task.status.equals(Task.Status.COMPLETED))
 							task.is_complete = true ; 
-						else
-							task.is_complete = false ;
+						else if(task.status.equals(Task.Status.IN_PROGRESS)){
+							if(priority.has("progress") && priority.get("progress")!= null)
+								task.progress = priority.getInt("progress") ;
+						}
 						task.save();
 						taskList.add(task);
 					}
