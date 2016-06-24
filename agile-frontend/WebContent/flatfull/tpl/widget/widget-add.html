@@ -59,7 +59,8 @@
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if_equals name "Custom"}}
 			{{else}}
-				<center><h4 class="m-t-xxs">{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}</h4></center>
+				<center><h4 class="m-t-xxs m-b-xxs">{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}</h4></center>
+				<center><span class="text-xs m-b-xs">{{name}}</span></center>
 			{{/if_equals}}
 		{{/if_equals}}
 		{{description}}

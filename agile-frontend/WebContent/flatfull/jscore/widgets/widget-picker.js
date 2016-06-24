@@ -119,16 +119,23 @@ function initializeWidgetSettingsListeners(){
 		var widgetData = $(this).attr('widget-data');		
 		var that = $(this);
 		$.getJSON( "core/api/users/agileusers", function(data){	
-			var result ={}; 
+			var result = {}; 
 			result.widget = JSON.parse(widgetData);							
-			var userList = JSON.stringify(result.widget.listOfUsers);
+			var userList = JSON.stringify(result.widget.listOfUsers);					
 			for(var i=0; i < data.length ; i++){	
-				var obj = data[i];						
-				if(userList.indexOf(obj.id) > 0){
-					obj.isChecked = true;
-					data[i] = obj;
-				}				
+				var obj = data[i];		
+				if(obj){
+					if(userList){
+						if(userList.indexOf(obj.id) > 0){
+							obj.isChecked = true;
+							data[i] = obj;
+					    } else {
+					    	data[i] = obj;
+					    }
+					}												
+				}		
 			}
+
 			result.data = data;
 
 			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
