@@ -40,6 +40,7 @@ var Report_Filters_Event_View = Base_Model_View.extend({
     	'click .default_filter' : 'defaultFilterResults',
 
     	'click #companies-filter' : 'companyFilterResults',
+
     	'change .lhs_chanined_parent' : 'onParentLHSChanged',
     	'change #condition > select' : 'onConditionChanged',
     	'change #contact_type' : 'onChangeContactType',
@@ -495,6 +496,7 @@ function show_chained_fields(el, data, forceShow)
 		{
 			$("input", self).attr("placeholder", placeholder);
 		}
+
 		if(field_type && field_type == 'LIST')
 		{
 			var field_name = $(selected_field).attr("field_name");
@@ -532,6 +534,13 @@ function show_chained_fields(el, data, forceShow)
 	{
 		e.preventDefault();
 		var value = $(this).val();
+
+		/*
+		if(value=="country"){
+			var appenditem = $('#div_country_options').html();
+			$(this).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
+		}
+		*/
 
 		if (value.indexOf('tags') != -1)
 		{

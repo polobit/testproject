@@ -107,10 +107,10 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <h3 class="accordion-heading">{{ 'layout' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
-                                <div class="elements-box accordion-item" id="components">
+                               <!--  <div class="elements-box accordion-item" id="components" style= "display: none;">
                                     <h3 class="accordion-heading">{{ 'components' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
-                                </div>
+                                </div> -->
                                 <div class="elements-box accordion-item" id="media">
                                     <h3 class="accordion-heading">{{ 'media' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
@@ -193,7 +193,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             </div>
 
                                             <div ng-controller="MediaManagerController">
-                                                <button ng-if="selected.isImage" ng-file-select="onFileSelect($files, 'src')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
+                                                <button id= "upload-image-lp" ng-if="selected.isImage" ng-file-select="onFileSelect($files, 'src')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
                                             </div>
                                         </div>
                                     </div>

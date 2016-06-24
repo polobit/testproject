@@ -535,6 +535,7 @@ function closeCallNoty(option){
 		}
 	}
 	$("#draggable_noty").hide();
+	$(".draggable_noty_callScript","#draggable_noty").html("");
 	$("#draggable_noty").removeClass("draggable-popup");
 	
 	 if(dialled.using == "dialler"){

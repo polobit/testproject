@@ -119,12 +119,11 @@ function agile_validations(){
 					continue;
 		}	
 
-				if(count != null){	// if form having spans 
+   		}
+   		
+			if(count != null){	// if form having spans 
 					isValid =false;
 				}
-
-   		}
-
    	}
 
 	return isValid;

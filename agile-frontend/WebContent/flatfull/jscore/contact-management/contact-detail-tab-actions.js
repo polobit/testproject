@@ -177,7 +177,7 @@ var contact_details_documentandtasks_actions = {
 
 				// Enable the datepicker
 
-				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 
 				var json = null;
