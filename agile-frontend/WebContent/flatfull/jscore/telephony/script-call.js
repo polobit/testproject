@@ -709,7 +709,7 @@ var _agile_rules = {
 		return true;
 	} };
 
-function GiveCallScriptName(contact){
+function GiveCallScriptName(contact, callback){
 	_agile_contact = contact;
 	CallScript_PLUGIN_NAME = "CallScript";
 	var callscript_widget = null;
@@ -724,12 +724,14 @@ function GiveCallScriptName(contact){
 			$.getJSON("/core/api/widgets/CallScript", function(CallScript_wid)
 			{
 				callscript_widget = CallScript_wid;
-				return GiveRulesInArray(callscript_widget);
+				var rules = GiveRulesInArray(callscript_widget);
+				return callback(rules);
 			});
 		}
 	}
 	if(callscript_widget){
-	return GiveRulesInArray(callscript_widget);
+		var rules = GiveRulesInArray(callscript_widget);
+		return callback(rules);
 	}
 }
 
@@ -820,28 +822,30 @@ function showvalue(contact){
 		return;
 	}
 	
-	var nameArray = GiveCallScriptName(contact);
-	//option(name.value)
-	if(nameArray.length == 0){
-		$("#callScriptForm #callScriptText").val("No call script to display.");
-	}
-	
-	for(var i=0;i<nameArray.length;i++){
-		var $option = new Option(nameArray[i],nameArray[i]);
-		$("#callScriptForm #callScriptName").append($option);
-	}
-	
-	$("body").on("change", "#callScriptName", function(e){
-		
-		var rule = $("#callScriptName").val();
-		var contact = $(".noty_call_callScript","#draggable_noty").data("contact");
-		var textToDisplay = GiveCallScriptText(rule, contact);
-		if(textToDisplay == "!@#"){
-			textToDisplay = "Please select a call script to display.";
+	GiveCallScriptName(contact, function(nameArray){
+		//option(name.value)
+		if(nameArray.length == 0){
+			$("#callScriptForm #callScriptText").val("No call script to display.");
 		}
-		$("#callScriptForm #callScriptText").val(textToDisplay);
 		
+		for(var i=0;i<nameArray.length;i++){
+			var $option = new Option(nameArray[i],nameArray[i]);
+			$("#callScriptForm #callScriptName").append($option);
+		}
+		
+		$("body").on("change", "#callScriptName", function(e){
+			
+			var rule = $("#callScriptName").val();
+			var contact = $(".noty_call_callScript","#draggable_noty").data("contact");
+			GiveCallScriptText(rule, contact, function(textToDisplay){
+				if(textToDisplay == "!@#"){
+					textToDisplay = "Please select a call script to display.";
+				}
+				$("#callScriptForm #callScriptText").val(textToDisplay);
+			});
+		});
 	});
+
 			
 }
 
