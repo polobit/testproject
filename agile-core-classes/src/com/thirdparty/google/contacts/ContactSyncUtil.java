@@ -758,7 +758,7 @@ public class ContactSyncUtil
 	{
 		
 		try{
-		List<Note> notesList = NoteUtil.getNotes(contact.id,"1",null);
+		
 				//contact.getContactPropertiesList(Contact.PHONE);
 		//List<Note> newNotes = new ArrayList<Note>();
 
@@ -766,12 +766,14 @@ public class ContactSyncUtil
 
 		if (!isNewContact)
 		{
-			// Sets Emails to contact
+			List<Note> notesList = NoteUtil.getNotes(contact.id);
+			// Sets notes to contact
 			for (Note note : notesList)
 			{
 				boolean isNew = true;
 				
-					if (StringUtils.equalsIgnoreCase(googleContactEntry.getTextContent().getContent().getPlainText(), note.description))
+				if(StringUtils.equalsIgnoreCase(googleContactEntry.getTextContent().getContent().getPlainText(), note.description) 
+		    			&& StringUtils.equalsIgnoreCase(note.subject,"Google Contact Notes"))
 					{
 						isNew = false;
 						break;
@@ -785,6 +787,7 @@ public class ContactSyncUtil
 		}
 		else
 		{
+			List<Note> notesList = NoteUtil.getNotes(contact.id,"1",null);
 			for (Note note : notesList)
 			{
 				googleContactEntry.setContent(new PlainTextConstruct(note.description));
