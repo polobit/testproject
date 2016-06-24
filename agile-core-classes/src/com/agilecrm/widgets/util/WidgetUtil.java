@@ -69,11 +69,12 @@ public class WidgetUtil {
 		for (Widget widget : widgets) {
 			for (Widget currentWidget : currentWidgets) {
 				if (currentWidget.name.equals(widget.name)) {
+					String userID = agileUser.id.toString();
+					String oldUsersArrayStr = currentWidget.listOfUsers;
+					
 					if (dmu.is_admin) {
 						JSONArray currentUsers = new JSONArray();
 
-						String userID = agileUser.id.toString();
-						String oldUsersArrayStr = currentWidget.listOfUsers;
 						JSONArray userArray = WidgetUtil.getWigetUsersList(widget.name);
 						boolean removeAdmin = false;
 						
@@ -104,13 +105,24 @@ public class WidgetUtil {
 					widget.id = currentWidget.id;
 					widget.prefs = currentWidget.prefs;
 					widget.script_type = currentWidget.script_type;
+					widget.url = currentWidget.url;
+					widget.script = currentWidget.script;
+					
 					if(widget.widget_type.equals(WidgetType.CUSTOM)){
-						if(widget.script_type == null){
-							if(widget.script != null){
+						Widget customWidget = WidgetUtil.getCustomWidget(currentWidget.name, Long.parseLong(userID));
+						if(widget.script_type == null){							
+							if(widget.script != null && widget.script.length() != 0){
 								widget.script_type = "script";
 							}else {
 								widget.script_type = "url";
+								if(customWidget != null && (widget.url == null || widget.url.length() == 0)){										
+										widget.url = customWidget.url;									
+								}
 							}
+						}	
+						
+						if(customWidget != null && (widget.mini_logo_url == null || widget.mini_logo_url.length() == 0)){
+							widget.mini_logo_url = customWidget.mini_logo_url;
 						}
 					}
 				}

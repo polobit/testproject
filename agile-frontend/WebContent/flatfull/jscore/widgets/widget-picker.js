@@ -189,14 +189,20 @@ function initializeWidgetSettingsListeners(){
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
+		var widgetNameDisplay = $(this).attr('widget-displayname');
 
 		// If not confirmed to delete, return
 		var displayName;
 		
-		displayName = widgetDisplayname[widget_name];
-		if(!displayName){
-			displayName = widget_name;
+		if(widgetNameDisplay){
+			displayName = widgetNameDisplay;
+		}else{
+			displayName = widgetDisplayname[widget_name];
+			if(!displayName){
+				displayName = widget_name;
+			}	
 		}
+		
 
 		showAlertModal("Are you sure to delete " + displayName + "?", "confirm", function(){
 			delete_widget(widget_name);

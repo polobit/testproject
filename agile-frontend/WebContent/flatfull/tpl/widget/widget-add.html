@@ -86,7 +86,7 @@
   						</a>
   					{{/isAdmin}}
   						<a class="btn btn-sm btn-default m-r-sm" href="#Custom-widget/{{id}}" widget-name="{{name}}" widget-type="{{widget_type}}">Edit</a>
-        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>  
+        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}" widget-displayname="{{display_name}}">Delete</a>  
         			</div>
 					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
@@ -115,7 +115,7 @@
 			           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>		 
                     {{/if_equals}}
                 {{/if_equals}}               
-				<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>				
+				<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}" widget-displayname="{{display_name}}">Delete</a>				
 				{{#if_equals name "Bria"}}
 					<div class="text-center m-t-sm ">
 							Download
