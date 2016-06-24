@@ -50,6 +50,7 @@ pageEncoding="UTF-8"%>
 	if( !(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) )
 	{
 %>
+<%@ include file="file-hash.json"%>
 <%
 	}
 %>
@@ -717,6 +718,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
+    <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
   <!-- Include bootstrap modal divs-->
  <%@ include file="flatfull/modals.html"%>
