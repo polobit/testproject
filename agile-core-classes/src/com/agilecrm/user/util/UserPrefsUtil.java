@@ -81,21 +81,32 @@ public class UserPrefsUtil
     {
 	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null, "pink", "", EmailUtil.getPoweredByAgileLink(
 		"email-signature", "Sent using"), true, false);
-	
-	// Get admin currency
-	List<DomainUser> adminUsers = DomainUserUtil.getAllAdminUsers(NamespaceManager.get());
-	if(adminUsers != null && adminUsers.size() > 0) {
-		DomainUser user = adminUsers.get(0);
-		AgileUser agileUser1 = AgileUser.getCurrentAgileUserFromDomainUser(user.id);
-		if(agileUser1 != null) {
-			UserPrefs agileUserPrefs = getUserPrefs(agileUser1);
-			if(agileUserPrefs != null)
-				userPrefs.currency = agileUserPrefs.currency;
-		}
-	}
+	userPrefs.currency = getDefaultCurrency(agileUser);
 	
 	userPrefs.save();
 	return userPrefs;
+    }
+    
+    private static String getDefaultCurrency(AgileUser agileUser){
+    	
+    	// Get admin currency
+    	List<Key<DomainUser>> adminUserKeys = DomainUserUtil.getAllAdminUsersKeys(NamespaceManager.get());
+    	if(adminUserKeys == null || adminUserKeys.isEmpty())
+    		  return UserPrefs.DEFAULT_CURRENCY;
+    	
+		for (Key<DomainUser> key : adminUserKeys) {
+			if(agileUser.domain_user_id.equals(key.getId()))
+				continue;
+			
+			AgileUser agileUser1 = AgileUser.getCurrentAgileUserFromDomainUser(key.getId());
+			UserPrefs agileUserPrefs = getUserPrefs(agileUser1);
+			if(agileUserPrefs == null)
+				continue;
+			
+			return agileUserPrefs.currency;
+		}
+		
+		return UserPrefs.DEFAULT_CURRENCY;
     }
 
     /**
