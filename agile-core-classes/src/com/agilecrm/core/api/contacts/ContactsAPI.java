@@ -1291,6 +1291,9 @@ public class ContactsAPI
 	    }
 
 	}
+	
+	System.out.println("Activity Type: "+contact.type.toString());
+	
 	if (contact.type.toString().equals(("PERSON"))){
 	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
 	}else if(contact.type.toString().equals(("COMPANY"))){
@@ -1375,8 +1378,10 @@ public class ContactsAPI
 	    }
 
 	}
-	if (contact.type.toString().equals(("COMPANY")))
-	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
+	System.out.println("Activity in companies: "+ contact.type.toString());
+	if (contact.type.toString().equals(("COMPANY"))){
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_COMPANY, contact, ids.length);
+	}
 	// merge notes
 	return contact;
     }
