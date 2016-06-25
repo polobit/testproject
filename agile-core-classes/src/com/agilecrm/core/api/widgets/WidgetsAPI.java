@@ -391,12 +391,8 @@ public class WidgetsAPI {
 					Widget widget = WidgetUtil.getWidget(widgetName, Long.parseLong(oldUserID));					
 					if (widget != null && domainUser.is_admin && !(agileUser.id.toString().equals(oldUserID))) {
 						WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
-						if(widget.widget_type.equals(WidgetType.CUSTOM)){
-							try {
-								CustomWidget.deleteCustomWidget(widgetName);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
+						if(widget.widget_type.equals(WidgetType.CUSTOM)){							
+							CustomWidget.deleteCustomWidgetByUserID(oldUserID, widgetName);							
 						}
 					}
 				} else {
