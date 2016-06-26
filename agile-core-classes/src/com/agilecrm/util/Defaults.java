@@ -316,26 +316,26 @@ public class Defaults
      */
     private void saveDefaultEvents()
     {
-	Event event = new Event();
-	event.title = "Gossip at water cooler";
-	event.color = "green";
-	event.allDay = false;
-	DateUtil date = new DateUtil().toMidnight().addDays(0).addMinutes(16 * 60);
-	event.start = date.getTime().getTime() / 1000;
-	event.end = date.getTime().getTime() / 1000 + 900;
-	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
-	    return;
-	event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
-	event.save();
-
-	Event event1 = new Event();
-	event1.title = "Discuss today's Dilbert strip";
-	event1.color = "blue";
-	event1.allDay = false;
-	DateUtil date1 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
-	event1.start = date1.getTime().getTime() / 1000;
-	event1.end = date1.getTime().getTime() / 1000 + 1800;
-	event1.save();
+		Event event = new Event();
+		event.title = "Gossip at water cooler";
+		event.color = "green";
+		event.allDay = false;
+		DateUtil date = new DateUtil().toMidnight().addDays(0).addMinutes(16 * 60);
+		event.start = date.getTime().getTime() / 1000;
+		event.end = date.getTime().getTime() / 1000 + 900;
+		if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
+		    return;
+		event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
+		event.save();
+	
+		Event event1 = new Event();
+		event1.title = "Discuss today's Dilbert strip";
+		event1.color = "blue";
+		event1.allDay = false;
+		DateUtil date1 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
+		event1.start = date1.getTime().getTime() / 1000;
+		event1.end = date1.getTime().getTime() / 1000 + 1800;
+		event1.save();
     }
 
     /**
@@ -343,39 +343,106 @@ public class Defaults
      */
     private void saveDefaultDeals()
     {
-	Milestone milestone = MilestoneUtil.getDefaultMilestones();
-	Opportunity deal = new Opportunity();
-	deal.name = "Nike Endorsement";
-	deal.description = "Advertisements and apparel for Nike";
-	deal.expected_value = 2000000d;
-	deal.probability = 98;
-	deal.pipeline_id = milestone.id;
-	deal.milestone = "Proposal";
-	DateUtil date = new DateUtil().toMidnight().addDays(20);
-	deal.close_date = date.getTime().getTime() / 1000;
-	/*
-	 * List<Contact> contacts = ContactUtil.getAllContacts(); for (Contact
-	 * contact : contacts) {
-	 * deal.contact_ids.add(String.valueOf(contact.id)); }
-	 */
-	if (ContactUtil.searchContactByEmail("sixfeetsix@nba.com") == null)
-	    return;
-	deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sixfeetsix@nba.com").id));
-	deal.save();
-
-	Opportunity deal1 = new Opportunity();
-	deal1.name = "Donuts!";
-	deal1.description = "Donut ingrediants for Homer's new shop he wants to setup. He is offering contracts for the raw products.";
-	deal1.expected_value = 10000d;
-	deal1.probability = 75;
-	deal1.pipeline_id = milestone.id;
-	deal1.milestone = "Won";
-	DateUtil date1 = new DateUtil().toMidnight().addDays(10);
-	deal1.close_date = date1.getTime().getTime() / 1000;
-	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
-	    return;
-	deal1.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
-	deal1.save();
+		Milestone milestone = MilestoneUtil.getDefaultMilestones();
+		
+		Opportunity deal = new Opportunity();
+		deal.name = "Donuts";
+		deal.description = "Deal for donuts - bulk buy for discounts!!!";
+		deal.expected_value = 55000d;
+		deal.probability = 20;
+		deal.pipeline_id = milestone.id;
+		deal.milestone = "New";
+		deal.colorName = Opportunity.Color.GREY;
+		DateUtil date = new DateUtil().toMidnight().addDays(20);
+		deal.close_date = date.getTime().getTime() / 1000;
+		
+		if (ContactUtil.searchContactByEmail("homer@snpp.com") == null)
+			return;
+		deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
+		deal.save();
+	
+		Opportunity deal1 = new Opportunity();
+		deal1.name = "Comic Film Direction";		
+		deal1.expected_value = 67000d;
+		deal1.probability = 80;
+		deal1.pipeline_id = milestone.id;
+		deal1.milestone = "Won";
+		deal1.colorName = Opportunity.Color.BLUE;
+		DateUtil date1 = new DateUtil().toMidnight().addDays(10);
+		deal1.close_date = date1.getTime().getTime() / 1000;		
+		deal1.save();
+		
+		Opportunity deal2 = new Opportunity();
+		deal2.name = "Nike Endorsement";	
+		deal2.description = "USD 100K per year for Nike endorsement";
+		deal2.expected_value = 100000d;
+		deal2.probability = 90;
+		deal2.pipeline_id = milestone.id;
+		deal2.milestone = "Proposal";
+		deal2.colorName = Opportunity.Color.ORANGE;
+		DateUtil date2 = new DateUtil().toMidnight().addDays(10);
+		deal2.close_date = date2.getTime().getTime() / 1000;
+		if (ContactUtil.searchContactByEmail("mj@nba.com") != null)
+		    return;
+		deal2.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
+		deal2.save();
+		
+		Opportunity deal3 = new Opportunity();
+		deal3.name = "Nike Air Material";	
+		deal3.description = "Raw material for Nike Air series shoes";		
+		deal3.expected_value = 150000d;
+		deal3.probability = 100;
+		deal3.pipeline_id = milestone.id;
+		deal3.milestone = "Won";
+		deal3.colorName = Opportunity.Color.YELLOW;
+		DateUtil date3 = new DateUtil().toMidnight().addDays(10);
+		deal3.close_date = date3.getTime().getTime() / 1000;		
+		deal3.save();
+		
+		Opportunity deal4 = new Opportunity();
+		deal4.name = "Springfield Nuclear Power Plant Inspection";	
+		deal4.description = "Lost inspection deal due to Homer's incompetence";		
+		deal4.expected_value = 56000d;
+		deal4.probability = 0;
+		deal4.pipeline_id = milestone.id;
+		deal4.milestone = "Lost";
+		deal4.colorName = Opportunity.Color.RED;
+		if (ContactUtil.searchContactByEmail("homer@snpp.com") != null)
+		    return;
+		deal4.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
+		DateUtil date4 = new DateUtil().toMidnight().addDays(10);
+		deal4.close_date = date4.getTime().getTime() / 1000;		
+		deal4.save();
+		
+		Opportunity deal5 = new Opportunity();
+		deal5.name = "Research Grant";	
+		deal5.description = "Research grant for particle physics research";		
+		deal5.expected_value = 75000d;
+		deal5.probability = 0;
+		deal5.pipeline_id = milestone.id;
+		deal5.milestone = "Lost";
+		deal5.colorName = Opportunity.Color.BLUE;
+		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") != null)
+		    return;
+		deal5.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
+		DateUtil date5 = new DateUtil().toMidnight().addDays(10);
+		deal5.close_date = date5.getTime().getTime() / 1000;		
+		deal5.save();
+		
+		Opportunity deal6 = new Opportunity();
+		deal6.name = "Open Science Grid Computer";	
+		deal6.description = "Kripke controls the open science grid computer at Caltech";		
+		deal6.expected_value = 45500d;
+		deal6.probability = 0;
+		deal6.pipeline_id = milestone.id;
+		deal6.milestone = "Lost";
+		deal6.colorName = Opportunity.Color.BLUE;
+		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") != null)
+		    return;
+		deal6.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
+		DateUtil date6 = new DateUtil().toMidnight().addDays(10);
+		deal6.close_date = date6.getTime().getTime() / 1000;		
+		deal6.save();
     }
 
     /**
