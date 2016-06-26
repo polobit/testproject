@@ -48,41 +48,45 @@ public class Defaults
     private void saveDefaultContacts()
     {
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
-	tags.add("Business guy");
-	tags.add("US");
-	tags.add("Donuts");
+	tags.add("Sample Contact");
+	tags.add("Comic");
 	List<ContactField> contactFields = new ArrayList<ContactField>();
-	contactFields.add(new ContactField(Contact.FIRST_NAME, "Homer", null));
-	contactFields.add(new ContactField(Contact.LAST_NAME, "Simpson", null));
-	contactFields.add(new ContactField(Contact.EMAIL, "homer@simpson.com", "work"));
-	contactFields.add(new ContactField(Contact.COMPANY, "Springfield Nuclear Power Plant", null));
-	contactFields.add(new ContactField(Contact.TITLE, "Nuclear Safety Inspector", null));
-	contactFields.add(new ContactField("website", "http://www.thesimpsons.com/", "URL"));
-	contactFields.add(new ContactField("phone", "+1-214-124-8756", ""));
+	contactFields.add(new ContactField(Contact.FIRST_NAME, "Charlie", null));
+	contactFields.add(new ContactField(Contact.LAST_NAME, "Chaplin", null));
+	contactFields.add(new ContactField(Contact.COMPANY, "Hollywood", null));
+	contactFields.add(new ContactField("Date of Birth", "-2231472600", null));
+	contactFields.add(new ContactField(Contact.TITLE, "Actor", null));
+	contactFields.add(new ContactField("website", "http://www.charliechaplin.com/", "URL"));
+	contactFields.add(new ContactField("phone", "", ""));
 	contactFields.add(new ContactField("address",
-		"{\"address\":\"742 Evergreen Terrace\",\"city\":\"Springfield\",\"country\":\"US\"}", "home"));
+		"{\"address\":\"\",\"city\":\"London\",\"country\":\"GB\"}", "home"));
 	contactFields.add(new ContactField("image",
 		"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1395904537756?id=contact-container", null));
 
 	Contact contact = new Contact(Contact.Type.PERSON, tags, contactFields);
-	contact.lead_score = 50;
-	contact.star_value = 4;
+	contact.lead_score = 1357;
+	contact.star_value = 5;
 	contact.save();
 
 	LinkedHashSet<String> tags1 = new LinkedHashSet<String>();
-	tags1.add("Sports");
+	tags1.add("Sample Contact");
+	tags1.add("SixFeetSix");
+	tags1.add("Chicago Bulls");
 	List<ContactField> contactFields1 = new ArrayList<ContactField>();
 	contactFields1.add(new ContactField(Contact.FIRST_NAME, "Michael", null));
 	contactFields1.add(new ContactField(Contact.LAST_NAME, "Jordan", null));
-	contactFields1.add(new ContactField(Contact.EMAIL, "sixfeetsix@nba.com", "work"));
+	contactFields1.add(new ContactField(Contact.EMAIL, "mj@nba.com", "work"));
 	contactFields1.add(new ContactField(Contact.COMPANY, "NBA", null));
-	contactFields1.add(new ContactField(Contact.TITLE, "Sports Legend", null));
+	contactFields1.add(new ContactField("website", "http://www.nba.com/history/legends/michael-jordan/", "URL"));
+	contactFields1.add(new ContactField(Contact.TITLE, "Basketball Player", null));
+	contactFields1.add(new ContactField("address",
+			"{\"address\":\"676 North Michigan Avenue, Suite 293\",\"city\":\"London\",\"country\":\"US\"}", "home"));
 	contactFields1.add(new ContactField("image",
 		"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1371205956656?id=contact-container", null));
 
 	Contact contact1 = new Contact(Contact.Type.PERSON, tags1, contactFields1);
-	contact1.star_value = 3;
-	contact1.lead_score = 10;
+	contact1.star_value = 5;
+	contact1.lead_score = 9851;
 	contact1.save();
 
 	List<ContactField> contactFields3 = new ArrayList<ContactField>();
