@@ -53,14 +53,14 @@
 		{{#if_equals name "Skype"}}
 			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{description}}">
 	 	{{else}}
-			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="{{description}}">
+			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip">
 		{{/if_equals}}
 	{{/if_equals}}
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if_equals name "Custom"}}
 			{{else}}
-				<center><h4 class="m-t-xxs m-b-xxs">{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}</h4></center>
-				<center><span class="text-xs m-b-xs">{{name}}</span></center>
+				<center title="Widget display name"><h4 class="m-t-xxs m-b-xxs">{{#if display_name}}{{display_name}}{{else}}{{name}}{{/if}}</h4></center>
+				<center title="Widget name"><span class="text-xs m-b-xs">{{name}}</span></center>
 			{{/if_equals}}
 		{{/if_equals}}
 		{{description}}
