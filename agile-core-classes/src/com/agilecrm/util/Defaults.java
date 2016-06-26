@@ -317,25 +317,60 @@ public class Defaults
     private void saveDefaultEvents()
     {
 		Event event = new Event();
-		event.title = "Gossip at water cooler";
-		event.color = "green";
+		event.title = "Week ahead";
+		event.color = "blue";
 		event.allDay = false;
 		DateUtil date = new DateUtil().toMidnight().addDays(0).addMinutes(16 * 60);
 		event.start = date.getTime().getTime() / 1000;
 		event.end = date.getTime().getTime() / 1000 + 900;
-		if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
-		    return;
-		event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
 		event.save();
+		
+//		if (ContactUtil.searchContactByEmail("mj@nba.com") == null)
+//		    return;
+//		event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 	
 		Event event1 = new Event();
-		event1.title = "Discuss today's Dilbert strip";
-		event1.color = "blue";
+		event1.title = "Water cooler discussion";
+		event1.color = "yellow";
 		event1.allDay = false;
 		DateUtil date1 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
 		event1.start = date1.getTime().getTime() / 1000;
 		event1.end = date1.getTime().getTime() / 1000 + 1800;
 		event1.save();
+		
+		Event event2 = new Event();
+		event2.title = "Lunch meeting with Kripke";
+		event2.color = "yellow";
+		event2.allDay = false;
+		DateUtil date2 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
+		event2.start = date2.getTime().getTime() / 1000;
+		event2.end = date2.getTime().getTime() / 1000 + 1800;
+		if (ContactUtil.searchContactByEmail("mj@nba.com") == null)
+			return;
+		event2.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
+		event2.save();
+		
+		Event event3 = new Event();
+		event3.title = "Power Plant Inspection";
+		event3.color = "red";
+		event3.allDay = false;
+		DateUtil date3 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
+		event3.start = date3.getTime().getTime() / 1000;
+		event3.end = date3.getTime().getTime() / 1000 + 1800;
+		if (ContactUtil.searchContactByEmail("homer@snpp.com") == null)
+			return;
+		event3.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
+		event3.save();
+		
+		Event event4 = new Event();
+		event4.title = "Review meeting blue";
+		event4.color = "blue";
+		event4.allDay = false;
+		DateUtil date4 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
+		event4.start = date4.getTime().getTime() / 1000;
+		event4.end = date4.getTime().getTime() / 1000 + 1800;		
+		event4.save();
+		
     }
 
     /**
