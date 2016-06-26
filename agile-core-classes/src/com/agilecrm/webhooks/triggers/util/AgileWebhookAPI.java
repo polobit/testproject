@@ -12,6 +12,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/webhooksregister")
@@ -36,12 +39,27 @@ public class AgileWebhookAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void saveWebhook(Webhook webhook)
     {
-	String domain = NamespaceManager.get();
-	webhook.domain = domain;
-
-	webhook.save();
-
-	Response.ok();
+    try{
+		String domain = NamespaceManager.get();
+		Subscription sub=SubscriptionUtil.getSubscription();
+		System.out.println("plan name = "+ sub.plan.getPlanName());
+		if(sub.plan.getPlanName().equals("ENTERPRISE") || sub.plan.getPlanName().equals("PRO")){
+			webhook.domain = domain;
+			
+			webhook.save();
+	
+			Response.ok();
+		}
+		else{
+			throw new Exception("Please upgrade to Enterprise plan to use this feature.");
+		}
+    	}
+    	catch (Exception e) {
+		e.printStackTrace();
+		throw new WebApplicationException(Response
+				.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+				.build());
+    	}	
     }
 
     /**

@@ -51,6 +51,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>
 
 <style>
+
 .mce-btn button {
     padding: 2px 4px !important;
 }
@@ -207,27 +208,17 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                         <div id="fontselector" class="hide" style="min-width: 200px">
                             <ul class="list-group" style="overflow: auto ;display: block;max-height: 200px" >
-                                <li class="list-group-item" style="font-family: arial">Arial</li>
-                                <li class="list-group-item" style="font-family: verdana">Verdana</li>
-                                <li class="list-group-item" style="font-family: helvetica">Helvetica</li>
-                                <li class="list-group-item" style="font-family: times">Times</li>
-                                <li class="list-group-item" style="font-family: georgia">Georgia</li>
-                                <li class="list-group-item" style="font-family: tahoma">Tahoma</li>
-                                <li class="list-group-item" style="font-family: pt sans">PT Sans</li>
-                                <li class="list-group-item" style="font-family: Source Sans Pro">Source Sans Pro</li>
-                                <li class="list-group-item" style="font-family: PT Serif">PT Serif</li>
-                                <li class="list-group-item" style="font-family: Open Sans">Open Sans</li>
-                                <li class="list-group-item" style="font-family: Josefin Slab">Josefin Slab</li>
-                                <li class="list-group-item" style="font-family: Lato">Lato</li>
-                                <li class="list-group-item" style="font-family: Arvo">Arvo</li>
-                                <li class="list-group-item" style="font-family: Vollkorn">Vollkorn</li>
-                                <li class="list-group-item" style="font-family: Abril Fatface">Abril Fatface</li>
-                                <li class="list-group-item" style="font-family: Playfair Display">Playfair Display</li>
-                                <li class="list-group-item" style="font-family: Yeseva One">Yeseva One</li>
-                                <li class="list-group-item" style="font-family: Poiret One">Poiret One</li>
-                                <li class="list-group-item" style="font-family: Comfortaa">Comfortaa</li>
-                                <li class="list-group-item" style="font-family: Marck Script">Marck Script</li>
-                                <li class="list-group-item" style="font-family: Pacifico">Pacifico</li>
+                                <li class="list-group-item" style="font-family:arial,helvetica,sans-serif;">Arial</li>
+                                <li class="list-group-item" style="font-family: Verdana, Geneva, sans-serif">Verdana</li>
+                                <li class="list-group-item" style="Times New Roman, Times, serif">Times New Roman</li>
+                                <li class="list-group-item" style="font-family: georgia,serif">Georgia</li>
+                                <li class="list-group-item" style="font-family:comic sans ms,marker felt-thin,arial,sans-serif;">Comic Sans MS</li>
+                                <li class="list-group-item" style="font-family:courier new,courier,monospace;">Courier New</li>
+                                <li class="list-group-item" style="font-family:lucida sans unicode,lucida grande,sans-serif;">Lucida</li>
+                                <li class="list-group-item" style="font-family: Trebuchet MS,Helvetica, sans-serif">Trebuchet MS</li>
+                                <li class="list-group-item" style="font-family: Tahoma, Geneva, sans-serif;">Tahoma</li>
+                                <li class="list-group-item" style="font-family: Impact,Charcoal, sans-serif">Impact</li>
+                                <li class="list-group-item" style="font-family: Arial Black,Gadget, sans-serif">Arial Black</li>
                             </ul>
                         </div>
                     </div>
@@ -258,6 +249,13 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                         <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
                                         <input type="text" id="image-link" class="form-control" placeholder="Link to Web Address(URL)" aria-describedby="basic-addon11" data-id="none">
                                     </div>
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-11">
+                                    <input type="text" id="image-alt-text" class="form-control" placeholder="Alternate Text" data-id="none">
                                     <br>
                                 </div>
                             </div>

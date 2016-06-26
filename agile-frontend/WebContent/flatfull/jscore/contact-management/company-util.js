@@ -67,11 +67,17 @@
 		}*/
 	};
 	
-	company_util.updateDealsList = function(deal,isCompany){
+	company_util.updateDealsList = function(deal,isCompany, isUpdate){
 		// Add model to collection. Disabled sort while adding and called
 		// sort explicitly, as sort is not working when it is called by add
 		// function
 		var current = App_Companies.companyDetailView.model.toJSON();
+
+		var owner = deal.owner_id;
+
+	  	if(!owner){
+	  		owner = deal.owner.id;
+	  	}
 
 		/*
 		 * Verifies whether the added deal is related to the contact in
@@ -82,28 +88,34 @@
 			if (contact.id == current.id) {
 				
 				
+				if(hasScope("VIEW_DEALS") || CURRENT_DOMAIN_USER.id == owner){
+					if (dealsView && dealsView.collection)
+					{
+						if(deal.archived == true)
+						{
+							dealsView.collection.remove(deal.id);
+							dealsView.collection.sort();
+						}
+						else if(dealsView.collection.get(deal.id))
+						{
+							dealsView.collection.get(deal.id).set(new BaseModel(deal));
+							$("#"+deal.id).closest("li").removeAttr("class");
+							$("#"+deal.id).closest("li").addClass("deal-color");
+							$("#"+deal.id).closest("li").addClass(deal.colorName);
 
-				if (dealsView && dealsView.collection)
-				{
-					if(deal.archived == true)
-					{
-						dealsView.collection.remove(deal.id);
-						dealsView.collection.sort();
-					}
-					else if(dealsView.collection.get(deal.id))
-					{
-						dealsView.collection.get(deal.id).set(new BaseModel(deal));
-						$("#"+deal.id).closest("li").removeAttr("class");
-						$("#"+deal.id).closest("li").addClass("deal-color");
-						$("#"+deal.id).closest("li").addClass(deal.colorName);
-
-					}
-					else
-					{
-						dealsView.collection.add(new BaseModel(deal), { sort : false });
-						dealsView.collection.sort();
+						}
+						else
+						{
+							dealsView.collection.add(new BaseModel(deal), { sort : false });
+							dealsView.collection.sort();
+						}
 					}
 				}
+				if(!hasScope("VIEW_DEALS") && CURRENT_DOMAIN_USER.id != owner && isUpdate){
+					dealsView.collection.remove(deal.id);
+					dealsView.collection.sort();
+				}
+				
 				
 				return false;
 			}
@@ -485,13 +497,12 @@
 	// Deletes a contact from database
 	company_detail_tab.deleteCurrentCompany = function(){
 		
-		if(!confirm("Do you want to delete the company?"))
-    		return;
-		
-		App_Companies.companyDetailView.model.url = "core/api/contacts/" + App_Companies.companyDetailView.model.id;
-		App_Companies.companyDetailView.model.destroy({success: function(model, response) {
-			  Backbone.history.navigate("companies",{trigger: true});
-		}});
+    	showAlertModal("delete_company", "confirm", function(){
+    		App_Companies.companyDetailView.model.url = "core/api/contacts/" + App_Companies.companyDetailView.model.id;
+			App_Companies.companyDetailView.model.destroy({success: function(model, response) {
+				  Backbone.history.navigate("companies",{trigger: true});
+			}});
+		});
 	};
 	
 	
@@ -552,6 +563,12 @@
 
 						 	// Adds contact name to tags ul as li element
 							$('#added-tags-ul').append(template({name : new_tags}));
+							$.each(data.get("tagsWithTime"), function(e, d) {
+        						if (d.tag == new_tags) {
+							            $('#added-tags-ul').find("li[data='"+new_tags+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+							        }
+								    }
+								    );
 
 		       			}
 		       			

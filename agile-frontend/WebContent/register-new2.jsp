@@ -2,8 +2,11 @@
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 
 <%
+
+
 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
 }
@@ -169,7 +172,8 @@ position:fixed!important;
 
 
 </style>
- 
+
+<!-- <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script> -->
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 
@@ -214,7 +218,7 @@ if(isSafari && isWin)
 </div>
 <div class="wrapper-md">
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3 col-sm-offset-3 col-sm-6 col-xs-12">
+		<div class="col-lg-6 col-lg-offset-3 col-sm-offset-1 col-sm-10 col-xs-12">
 	<form class="form-horizontal" method="post" onsubmit="return isValid(this);">
 <div class="panel panel-default">
 <div class="panel-heading text-center"> It's time to configure your account </div>
@@ -301,13 +305,13 @@ This is where you and your users will log in to your account
 <input
 											class="field form-control required tel-number"
 											id="login_phone_number" required name='phone_number' type="text"
-											placeholder="Phone Number" autocapitalize="off">
+											placeholder="Phone Number" autocapitalize="off" autocomplete="off">
 											<div class='custom-error'>Please enter valid number</div>
 </div>
 </div>
 
-<input type='hidden' id="login_email" name='email' value=<%=request.getParameter("email")%>></input>
-<input type='hidden' id="user_name" name='name' value=<%=request.getParameter("name")%>></input>
+<input type='hidden' id="login_email" name='email' value="<%=request.getParameter("email")%>"></input>
+<input type='hidden' id="user_name" name='name' value="<%=request.getParameter("name")%>"></input>
 <input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 <input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
 	<input type='hidden' name='type' value='agile'></input>
@@ -346,12 +350,18 @@ This is where you and your users will log in to your account
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 	$("#password").value = "<%=request.getParameter("password")%>"
+// Plan type
+var selected_plan_type = '<%=request.getParameter("plan_type")%>';
 </script>
 
 <script>
 $(document).ready(function(){
 
-	
+	// Set selected plan name
+	if(selected_plan_type){
+        $("select[name='plan_type']").val(selected_plan_type);
+	}
+
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
 	$('#account_timezone').val(jstz.determine().name());
@@ -374,9 +384,12 @@ $(document).ready(function(){
 			});
 	
 });
+
 function preload_dashlet_libs(){ 
-	setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
+	
+	setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
 }
+
 </script>
 
 </body>

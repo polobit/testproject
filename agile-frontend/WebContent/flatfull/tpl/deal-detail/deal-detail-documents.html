@@ -11,7 +11,7 @@
                     <div class="text">
                         You can add a document related to a Deal.
                     </div>
-                    <div class="btn-group">
+					<div class="btn-group">
 						        <a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
 						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
@@ -28,7 +28,6 @@
 									<span class="save-status"></span>
 								</span>
 						</div>
-					
 					{{/hasMenuScope}}
          			<!--<div class="btn-group" style="margin-top:12px;">
         				<a href="#" class="btn right deal-add-document m-t-xs"><i class="icon-plus-sign"></i> Add Document</a>
@@ -45,7 +44,6 @@
         {{#if this.length}}
 	<div  class="m-b-md m-t-md m-r-sm" align="right">
         <!--<div class="btn-group right">
-
         	<a href="#" class="btn btn-sm btn-default btn-addon  deal-add-document"><i class="icon-plus-sign"></i> Add Document</a>
         	<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 			<ul class="dropdown-menu pull-right">
@@ -53,7 +51,7 @@
 			</ul>
 		</div>-->
 		{{#hasMenuScope 'DOCUMENT'}}
-						<div class="btn-group">
+		<div class="btn-group">
 						        <a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
 						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
@@ -103,9 +101,9 @@
 	{{#if url}}
 		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank" class="pull-left"><i class="icon-external-link" title="Open Document"></i></a>{{/if}}	
 		<span class="pull-right">{{#is_mobile}}{{#hasMenuScope 'DOCUMENT'}}
-	  <div class="pos-abs pos-r-0 " >
+	  <div class="pos-abs pos-r-0 icons-text-sm" >
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="fa fa-edit"></i> </a>
 			{{#if url}}
 			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
 			{{/if}}	
@@ -122,10 +120,10 @@
 		{{#each contacts}}
            	{{#if id}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "name"}}</a>,
         				{{/if_contact_type}}
            		
            	{{/if}}
@@ -140,9 +138,9 @@
 		{{#is_mobile}}
 		{{else}}
 		{{#hasMenuScope 'DOCUMENT'}}
-	  <div class="pos-abs pos-r-0 pos-b-0" style="bottom:-7px">
+	  <div class="pos-abs pos-r-0 pos-b-0 icons-text-sm" style="bottom:-7px">
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="fa fa-edit"></i> </a>
 			{{#if url}}
 			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
 			{{/if}}	

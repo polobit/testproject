@@ -216,13 +216,13 @@ public class EventUtil
      * @link AgileUser
      * @return events list with respect to agileuser.
      */
-    public static List<Event> getEventsByAgileUser(AgileUser agileUser)
+    public static List<Event> getEventsByAgileUser(Long id)
     {
 
-	if (agileUser == null)
+	if (id == null)
 	    return null;
 
-	Key<AgileUser> owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	Key<AgileUser> owner = new Key<AgileUser>(AgileUser.class, id);
 
 	List<Event> events = dao.ofy().query(Event.class).filter("owner = ", owner).list();
 
@@ -672,5 +672,10 @@ public class EventUtil
     	    }
     	}
 		return filteredEvents;
+    }
+
+    public static List<Contact> getEventsRelatedContacts(Long id){
+    	Event event= getEvent(id);
+    	return event.relatedContacts();
     }
 }

@@ -229,6 +229,20 @@
 		<servlet-name>Jersey Developers REST Service</servlet-name>
 		<url-pattern>/dev/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Jersey Helpcenter REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/helpcenterapi</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Jersey Helpcenter REST Service</servlet-name>
+		<url-pattern>/helpcenterapi/*</url-pattern>
+	</servlet-mapping>
 
 
 
@@ -261,6 +275,7 @@
 		<url-pattern>/meeting</url-pattern>
 	</servlet-mapping>
 
+	<!--
 	<servlet>
 		<servlet-name>ActivityReports</servlet-name>
 		<servlet-class>com.agilecrm.reports.ActivityReportServlet</servlet-class>
@@ -269,6 +284,18 @@
 	<servlet-mapping>
 		<servlet-name>ActivityReports</servlet-name>
 		<url-pattern>/backend/cron/activity-reports/*</url-pattern>
+	</servlet-mapping>
+	-->
+	
+	
+	<servlet>
+		<servlet-name>TaskletCounter</servlet-name>
+		<servlet-class>com.agilecrm.queues.cron.TaskletCounterServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>TaskletCounter</servlet-name>
+		<url-pattern>/backend/cron/taskletcounter</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -280,6 +307,17 @@
 		<servlet-name>Reports</servlet-name>
 		<url-pattern>/backend/cron/reports/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CampaignReports</servlet-name>
+		<servlet-class>com.agilecrm.reports.CampaignReportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CampaignReports</servlet-name>
+		<url-pattern>/backend/cron/campaignReports/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>Triggers</servlet-name>
 		<servlet-class>com.agilecrm.workflows.triggers.TriggerServlet</servlet-class>
@@ -345,6 +383,16 @@
 		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
 		<url-pattern>/backend/domainuserdbupdate</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AgileDbUpdateServlet</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.cron.AgileDbUpdateServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AgileDbUpdateServlet</servlet-name>
+		<url-pattern>/backend/agiledbupdate</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Stripe Webhook</servlet-name>
@@ -385,6 +433,18 @@
 		<servlet-name>SendGrid Webhook</servlet-name>
 		<url-pattern>/backend/sendgridwebhook/*</url-pattern>
 	</servlet-mapping>
+	
+	 <!-- SendGrid Inbound -->
+	 <servlet>
+		<servlet-name>SendGridInboundWebhook</servlet-name>
+		<servlet-class>com.thirdparty.sendgrid.webhook.SendGridInboundWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SendGridInboundWebhook</servlet-name>
+		<url-pattern>/sendgrid/inbound/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>TwilioServlet</servlet-name>
 		<servlet-class>com.agilecrm.plugin.oauth.TwilioServlet</servlet-class>
@@ -620,6 +680,7 @@
 	<security-constraint>
 		<web-resource-collection>
 			<url-pattern>admin.*</url-pattern>
+			<url-pattern>/_ah/sessioncleanup</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>
@@ -718,6 +779,16 @@
 		<servlet-name>AgileFormRedirect</servlet-name>
 		<url-pattern>/agileformredirect</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>FormRenderingServlet</servlet-name>
+		<servlet-class>com.agilecrm.forms.FormRenderingServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FormRenderingServlet</servlet-name>
+		<url-pattern>/forms/*</url-pattern>
+	</servlet-mapping>
+	
 
 	<servlet>
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>
@@ -799,14 +870,14 @@
 		<url-pattern>/backend/cron/cron-pull/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- <servlet>
+	<servlet>
 		<servlet-name>BackendPullServlet</servlet-name>
 		<servlet-class>com.agilecrm.queues.backend.BackendPullServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>BackendPullServlet</servlet-name>
 		<url-pattern>/backend-pull</url-pattern>
-	</servlet-mapping> -->
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Unsubscribe</servlet-name>
@@ -975,6 +1046,41 @@
 		<servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>TicketWebhook</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketWebhook</servlet-name>
+		<url-pattern>/ticket-module/backend/webhook</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>TicketSendgridWebhook</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.SendgridInboundParser</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketSendgridWebhook</servlet-name>
+		<url-pattern>/ticket-module/backend/sendgrid_hook</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>TicketOpenServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketOpenServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketOpenServlet</servlet-name>
+		<url-pattern>/ticket-module/backend/open</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketSLAServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TicketSLAServlet</servlet-name>
+		<url-pattern>/backend/ticket/slacron</url-pattern>
+	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
@@ -1066,23 +1172,16 @@
         <servlet-name>TaskReminderUnitTest</servlet-name>
         <url-pattern>test/taskreminder/unit-test</url-pattern>
     </servlet-mapping>
-
-  <servlet>
-
-        <servlet-name>OpenDocumentViewer</servlet-name>
-
-        <jsp-file>/open-documentviewer.jsp</jsp-file>
-
-    </servlet>
-
-     <servlet-mapping>
-
-        <servlet-name>OpenDocumentViewer</servlet-name>
-
-        <url-pattern>/sendemail/*</url-pattern>
-
-    </servlet-mapping>
-<servlet>
+   <servlet>
+		<servlet-name>TicketsPdfServlet</servlet-name>
+		<servlet-class>com.agilecrm.ticket.servlets.TicketsPdfServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TicketsPdfServlet</servlet-name>
+		<url-pattern>/ticketsPdfServlet</url-pattern>
+	</servlet-mapping>
+	
+    <servlet>
     
         <servlet-name>AllDomainStatsServlet</servlet-name>
         <servlet-class>com.agilecrm.alldomainstats.util.AllDomainStatsServlet</servlet-class>
@@ -1092,8 +1191,148 @@
         <servlet-name>AllDomainStatsServlet</servlet-name>
         <url-pattern>/backend/stats-report</url-pattern>
     </servlet-mapping>
-  
-</web-app>
-
     
+    <servlet>
+		<servlet-name>OpportunitySchemaChange</servlet-name>
+		<servlet-class>com.agilecrm.OpportunitySchemaChangeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OpportunitySchemaChange</servlet-name>
+		<url-pattern>/backend/cron/opportunity-schema-change</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>_ah_sessioncleanup</servlet-name>
+		<servlet-class>com.google.apphosting.utils.servlet.SessionCleanupServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>_ah_sessioncleanup</servlet-name>
+		<url-pattern>/_ah/sessioncleanup</url-pattern>
+	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>CompanyNameUpdate</servlet-name>
+		<servlet-class>com.agilecrm.CompanyNameUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CompanyNameUpdate</servlet-name>
+		<url-pattern>/backend/cron/company-name-update</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CustomFieldDelete</servlet-name>
+		<servlet-class>com.agilecrm.CustomFieldDeletionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CustomFieldDelete</servlet-name>
+		<url-pattern>/backend/cron/delete-custom-field</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MassMergeDuplicates</servlet-name>
+		<servlet-class>com.agilecrm.ContactMassDuplicateMergeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MassMergeDuplicates</servlet-name>
+		<url-pattern>/backend/cron/mass-merge-duplicates</url-pattern>
+	</servlet-mapping>
+  
+  	<!--  Helpcenter filter -->
+  	<filter>
+		<filter-name>HelpcenterFilter</filter-name>
+		<filter-class>com.agilecrm.filter.KnowledgebaseAuthFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>HelpcenterFilter</filter-name>
+		<url-pattern>/helpcenter/*</url-pattern>
+		<url-pattern>/helpcenterapi/*</url-pattern>
+	</filter-mapping>
+  	<!-- Helpcenter filter -->
+  	
+  	<!-- HelpCenter -->
+	<servlet>
+		<servlet-name>HelpCenter</servlet-name>
+		<jsp-file>/helpcenter.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HelpCenter</servlet-name>
+		<url-pattern>/helpcenter</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>HelpCenterLogin</servlet-name>
+		<servlet-class>com.agilecrm.knowledgebase.servlets.KnowledgebaseLoginServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HelpCenterLogin</servlet-name>
+		<url-pattern>/helpcenter/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>HelpCenter</servlet-name>
+		<url-pattern>/helpcenter</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>HelpCenterRegister</servlet-name>
+		<servlet-class>com.agilecrm.knowledgebase.servlets.KnowledgebaseRegister</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HelpCenterRegister</servlet-name>
+		<url-pattern>/helpcenter/register</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HelpcenterVerifyEmail</servlet-name>
+		<jsp-file>/helpcenter/helpcenter_verify_from_email.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HelpcenterVerifyEmail</servlet-name>
+		<url-pattern>/helpcenter/verify_email</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Help Center Panel REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/knowledgebase</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Help Center Panel REST Service</servlet-name>
+		<url-pattern>/knowledgebase/*</url-pattern>
+	</servlet-mapping>
+	<!-- End of HelpCenter -->
+	<servlet>
+        <servlet-name>VoiceCallTwilioServlet</servlet-name>
+        <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>VoiceCallTwilioServlet</servlet-name>
+        <url-pattern>/twiliovoicecall</url-pattern>
+        <url-pattern>/Twiliovoicecall</url-pattern>
+    </servlet-mapping>
+    <servlet>
+		<servlet-name>QuerySubmitServlet</servlet-name>
+		<servlet-class>com.agilecrm.webrules.util.QuerySubmitServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QuerySubmitServlet</servlet-name>
+		<url-pattern>/querysubmit</url-pattern>
+	</servlet-mapping>
+	<servlet>
+        <servlet-name>OpenDocumentViewer</servlet-name>
+        <jsp-file>/open-documentviewer.jsp</jsp-file>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>OpenDocumentViewer</servlet-name>
+        <url-pattern>/sendemail/*</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -65,22 +67,24 @@ public class JSAPIFilter implements Filter
 	if (agileId != null)
 	{
 	    // Check if ApiKey
-	    if (APIKey.isValidJSKey(agileId) || APIKey.isPresent(agileId))
+	    if (APIKeyUtil.isValidJSOrRestAPIKey(agileId))
 	    {
 		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(
 		        SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Get AgileUser
-		DomainUser domainUser = null;
-		if (APIKey.isPresent(agileId))
-		    domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
-		if (APIKey.isValidJSKey(agileId))
-		    domainUser = APIKey.getDomainUserRelatedToJSAPIKey(agileId);
+		DomainUser domainUser = APIKeyUtil.getDomainUserRelatedToAPIKeyJS(agileId);
 
 		// Domain becomes null if user is deleted
 		if (domainUser != null)
 		    userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
 
+		if(userInfo != null){
+		    userInfo.setJsrestricted_propertiess(domainUser.jsrestricted_propertiess);
+		    userInfo.setJsrestricted_scopes(domainUser.jsrestricted_scopes);
+				    
+		}
+		
 		SessionManager.set(userInfo);
 		chain.doFilter(httpRequest, httpResponse);
 		return;
@@ -99,10 +103,16 @@ public class JSAPIFilter implements Filter
 	    {
 		// If domain user exists and the APIKey matches, request is
 		// given access
-		if (isValidPassword(password, domainUser) || APIKey.isPresent(password))
+		if (isValidPassword(password, domainUser) || APIKeyUtil.isPresent(password))
 		{
 		    UserInfo userInfo = new UserInfo("agilecrm.com/js", domainUser.email, domainUser.name);
 
+		    if(userInfo != null){
+			    userInfo.setJsrestricted_propertiess(domainUser.jsrestricted_propertiess);
+			    userInfo.setJsrestricted_scopes(domainUser.jsrestricted_scopes);
+					    
+		    }
+		    
 		    SessionManager.set(userInfo);
 		    chain.doFilter(httpRequest, httpResponse);
 		    return;

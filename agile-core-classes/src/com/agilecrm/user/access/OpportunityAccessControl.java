@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
@@ -62,11 +63,24 @@ public class OpportunityAccessControl extends UserAccessControl
     @Override
     public boolean canCreate()
     {
-	// If opportunity is defined, it checks for update operation if owner in
+    // If opportunity is defined, it checks for update operation if owner in
 	// the
 	// opportunity and current owner is different
-	return hasMenuScope(NavbarConstants.DEALS);
-
+    if(!isNew())
+    {
+    	if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.MANAGE_DEALS) || (isOldOwner() && checkOwner()) ))
+    	{
+    		return true;
+    	}
+    }
+    else
+    {
+    	if(hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.MANAGE_DEALS) || checkOwner()))
+    	{
+    		return true;
+    	}
+    }
+	return false;
     }
 
     @Override
@@ -74,12 +88,11 @@ public class OpportunityAccessControl extends UserAccessControl
     {
 	// Delete condition is checked only if current user is not owner of the
 	// opportunity
-	if (!isNew() && !checkOwner())
+	if(!isNew() && hasMenuScope(NavbarConstants.DEALS) && (hasScope(UserAccessScopes.MANAGE_DEALS) || checkOwner()))
 	{
-	    return hasMenuScope(NavbarConstants.DEALS);
+		return true;
 	}
-
-	return true;
+	return false;
     }
 
     @Override
@@ -97,7 +110,18 @@ public class OpportunityAccessControl extends UserAccessControl
     @Override
     public boolean canRead()
     {
-	return true;
+    if(hasMenuScope(NavbarConstants.DEALS))
+    {
+    	if(hasScope(UserAccessScopes.VIEW_DEALS))
+    	{
+    		return true;
+    	}
+    	else if((hasScope(UserAccessScopes.VIEW_DEALS) || checkOwner()) && opportunity != null && opportunity.id != null)
+    	{
+    		return true;
+    	}
+    }
+    return false;
     }
 
     public <T> Query<T> modifyDaoFetchQuery(Query<T> query)
@@ -142,11 +166,20 @@ public class OpportunityAccessControl extends UserAccessControl
 
 	try
 	{
-	    if (opportunity == null || opportunity.getOwner() == null)
+	    if (opportunity == null || (opportunity.owner_id == null && opportunity.getOwner() == null))
 		return true;
 	    // Gets current user id and opportunity owner id and checks for
 	    // equity
-	    Long currentOpportunityOwnerId = opportunity.getOwner().id;
+	    Long currentOpportunityOwnerId = 0L;
+	    if (opportunity.owner_id != null)
+	    {
+	    	currentOpportunityOwnerId = Long.valueOf(opportunity.owner_id);
+	    }
+	    if (opportunity.getOwner() != null)
+	    {
+	    	currentOpportunityOwnerId = opportunity.getOwner().id;
+	    }
+	    
 	    UserInfo info = SessionManager.get();
 
 	    if (info == null)
@@ -156,6 +189,46 @@ public class OpportunityAccessControl extends UserAccessControl
 
 	    if (info.getDomainId().equals(currentOpportunityOwnerId))
 		return true;
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return false;
+    }
+    
+    /**
+     * Checks old opportunity owner and saving opportunity owner is same or not
+     * 
+     * @return boolean
+     */
+    public boolean isOldOwner()
+    {
+
+	try
+	{
+	    if (opportunity == null || (opportunity.owner_id == null && opportunity.getOwner() == null))
+		return true;
+	    // Gets current user id and opportunity owner id and checks for
+	    // equity
+	    Long currentOpportunityOwnerId = 0L;
+	    if (opportunity.owner_id != null)
+	    {
+	    	currentOpportunityOwnerId = Long.valueOf(opportunity.owner_id);
+	    }
+	    if (opportunity.getOwner() != null)
+	    {
+	    	currentOpportunityOwnerId = opportunity.getOwner().id;
+	    }
+	    
+	    Opportunity oldOpportunity = OpportunityUtil.getOpportunity(opportunity.id);
+	    
+	    if (currentOpportunityOwnerId.equals(oldOpportunity.getOwner().id))
+	    {
+	    	return true;
+	    }
 	}
 	catch (Exception e)
 	{

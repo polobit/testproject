@@ -10,13 +10,14 @@
              <li><a href="#account-stats-new" data-toggle="tab" ><i class="icon-user-following"></i></a></li>
              <li><a href="#email-stats-new" data-toggle="tab" ><i class="icon-envelope"></i></a></li>
 			 <li><a href="#sms-stats-new" data-toggle="tab"><i class="icon-screen-smartphone"></i></a></li>
-
+			  <li><a href="#sync-stats-new" data-toggle="tab"><i class="icon-refresh"></i></a></li>
 			 {{else}}
 
 
              <li><a href="#account-stats-new" data-toggle="tab" >Account</a></li>
              <li><a href="#email-stats-new" data-toggle="tab" >Email</a></li>
 			 <li><a href="#sms-stats-new" data-toggle="tab">SMS</a></li>
+			 <li><a href="#sync-stats-new" data-toggle="tab">Sync</a></li>
 
 			 {{/is_mobile}}
            </ul>
@@ -25,6 +26,7 @@
  		<div class="tab-pane" id="account-stats-new"></div>
  		<div class="tab-pane" id="email-stats-new"></div>
  		<div class="tab-pane" id="sms-stats-new"></div>
+ 		<div class="tab-pane" id="sync-stats-new"></div>
  	</div>
 </div>
 
@@ -102,7 +104,38 @@
 		<div>
 		
 		{{#if_equals "SEND_GRID" _agile_email_gateway}}
-			<div class="text-md">SendGrid stats are shown <a class="text-info" style="color: #23b7e5 !important;" href="https://sendgrid.com/statistics" target="_blank">here</a></div><br/>
+			<div class="row">
+	        		<div class="col-md-6 b-light">
+	        		<div class="panel panel-default">
+	            		<div class="panel-heading">Emails Sent</div>
+	            	
+						<table class="table table-bordered table-hover">
+							<tbody>
+								<tr><td>Today</td><td>{{numberWithCommas dailyEmailSent}}</td></tr>
+								<tr><td>This Week</td><td>{{numberWithCommas weeklyEmailSent}}</td></tr>
+								<tr><td>This Month</td><td>{{numberWithCommas monthlyEmailSent}}</td></tr>
+								<tr><td>Overall</td><td>{{numberWithCommas allEmailSent}}</td></tr>
+							</tbody>
+						</table>
+					
+		        	</div>
+		        	</div>
+		        	<div class="col-md-6">
+		        	<div class="panel panel-default">
+		            	<div class="panel-heading">Bounces (Last 30 Days)</div>
+		            	
+						<table class="table table-bordered table-hover">
+							<tbody>
+								<tr><td>Hard Bounce</td><td>{{numberWithCommas hardBounce}}</td></tr>
+								<tr><td>Soft Bounce</td><td>{{numberWithCommas softBounce}}</td></tr>
+								<tr><td>Rejects</td><td>{{numberWithCommas rejected}}</td></tr>
+								<tr><td>Spam Complaints</td><td>{{numberWithCommas spamReported}}</td></tr>
+							</tbody>
+						</table>
+						
+		        	</div>
+		    	</div>
+		    	</div>
 		{{else}}
 			{{!--SES Stats--}}
 			{{#if_equals "SES" _agile_email_gateway}}
@@ -208,4 +241,19 @@
 		{{/if_equals}}
 		</div>
 
+</script>
+
+
+<script id="sync-stats-new-template" type="text/html">
+<div class="m-b-sm" id="sync-app-data">
+<!--<h4 class="h4 m-b-sm">Sync Data</h4>-->
+<div class="row">
+<div class="col-md-6 b-light" style="position:absolute;">
+<a onClick="syncAppData();" class="btn btn-sm btn-default sync-app-con">Update</a></div>
+<div style="position:relative;margin: 40px 0px 10px 15px;">
+    <p>Click <strong>Update</strong> to update all fields of contacts and companies.</p>
+   	<p>* Update can be used only once in a month</p>
+</div>
+</div>
+</div>
 </script>

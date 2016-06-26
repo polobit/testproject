@@ -27,7 +27,7 @@ function sipStart()
 
 				if (sip_widget.prefs != undefined)
 				{
-					head.js(LIB_PATH + 'lib/telephony/SIPml-api.js?_=v1', function()
+					head.js(LIB_PATH + 'lib/telephony/SIPml-api.js?_=v3', function()
 					{
 						// SIPml.setDebugLevel("error");
 

@@ -6322,3 +6322,6 @@ button.close {
     display: none !important;
   }
 }
+.border-color{
+  background-color: #edf1f2 !important;
+}

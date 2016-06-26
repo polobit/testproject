@@ -24,6 +24,9 @@ public class VersioningUtil
 
     private static final boolean IS_LOCAL_DEVELOPMENT_SERVER;
     private static final boolean IS_PRODUCTION_APP;
+    
+    public static final String APPENGINE_TASK_RETRY_COUNT = "X-AppEngine-TaskRetryCount";
+    public static final String APPENGINE_TASK_NAME = "X-AppEngine-TaskName";
 
     /**
      * Cloudfront paths
@@ -161,12 +164,9 @@ public class VersioningUtil
 	if (StringUtils.equals(applicationId, "agilecrmbeta"))
 	    return "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/";
 
-	if (StringUtils.equals(applicationId, "agilecrmbeta"))
-	    return "https://" + domain + "-dot-sandbox-dot-agilesanbox.appspot.com/";
-
 	return VersioningUtil.getDefaultLoginUrl(domain);
     }
-    
+
     public static String getBaseServerURL()
     {
 	return CLOUDFRONT_SERVER_URL;
@@ -196,7 +196,18 @@ public class VersioningUtil
 
 	return false;
     }
-
+    
+    public static String getCurrentModuleName()
+    {
+    	ModulesService service = ModulesServiceFactory.getModulesService();
+    	if (service == null)
+    	    return "";
+    	
+    	String moduleName = service.getCurrentModule();
+    	System.out.println("current module : " + moduleName);
+    	
+    	return moduleName;
+    }
     /**
      * Returns app release version
      * 
@@ -252,7 +263,39 @@ public class VersioningUtil
     {
 	return CLOUDFRONT_STATIC_FILES_PATH;
     }
+    
+    public static HttpServletRequest getQueueRequest() throws Exception
+    {
+    	HttpServletRequest request = DeferredTaskContext.getCurrentRequest();
+    	
+    	System.out.println("Queue Request " + request);
+    	
+    	if(request == null)
+    		throw new Exception("Not a DeferredTask Request");
+    	
+    	return request;
+    }
+    
+    public static String getQueueHeaderValue(String headerName) throws Exception
+    {
+    	return getQueueRequest().getHeader(headerName);
+    }
+    
+    public static boolean isTaskRetried() throws Exception
+    {
+    	String 	retryCount = getQueueHeaderValue(VersioningUtil.APPENGINE_TASK_RETRY_COUNT);
+		
+		System.out.println("Task retry count is " + retryCount);
+		
+		if(!"0".equalsIgnoreCase(retryCount))
+			return true;
+		
+		return false;
+    }
 
+    public static boolean isDevelopmentEnv(){
+    	return (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development);
+    }
     public static void main(String[] args)
     {
 	System.out.println(isBackgroundThread());

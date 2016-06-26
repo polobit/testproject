@@ -47,6 +47,8 @@ import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
 import com.agilecrm.contact.sync.SyncFrequency;
+import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -63,6 +65,7 @@ import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
@@ -75,12 +78,14 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.RetryOptions;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
+import com.thirdparty.sendgrid.SendGrid;
 
 @Path("/api/bulk-actions")
 public class BulkOperationsAPI
@@ -242,7 +247,10 @@ public class BulkOperationsAPI
 	{
 	    // To avoid running same bulk action twice
 	    if (!StringUtils.isEmpty(tracker) && BulkActionLog.checkAndSaveNewEntity(tracker))
-		return;
+		{
+	    	System.err.println("Avoiding running same campaign twice..." + tracker);
+	    	return;
+		}
 	}
 	catch (Exception e)
 	{
@@ -272,7 +280,9 @@ public class BulkOperationsAPI
 
 		// Add to queue
 		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
-		queue.add(TaskOptions.Builder.withPayload(task));
+		
+		// Added Retries 5 with 120 secs interval gap for next retry
+		queue.add(TaskOptions.Builder.withPayload(task).retryOptions(RetryOptions.Builder.withTaskRetryLimit(5).minBackoffSeconds(120).maxBackoffSeconds(300)));
 
 	    }
 	    catch (Exception e)
@@ -287,18 +297,21 @@ public class BulkOperationsAPI
 
 	try
 	{
-	    Mailgun.sendMail(
-		    "campaigns@agile.com",
-		    "Campaign Observer",
-		    "naresh@agilecrm.com",
-		    "bhasuri@invox.com",
-		    null,
-		    "Campaign Initiated in " + NamespaceManager.get(),
-		    null,
-		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
-			    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
-		    null);
+	    // Notifies that campaigns initiated in Production
+		if(VersioningUtil.isProductionAPP())
+	    	SendGrid.sendMail("campaigns@agilecrm.com",
+			    "Campaign Observer",
+			    "naresh@agilecrm.com",
+			    "prashannjeet@agilecrm.com, dharmateja@agilecrm.com, rahul@agilecrm.com",
+			    null,
+			    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
+			    null,
+			    "Hi,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
+				    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
+				    + "<br><br>Dynamic Filter: " + dynamicFilter
+				    + "<br><br>User email: " + user.email
+				    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
+			    null);
 	}
 	catch (Exception e)
 	{
@@ -434,11 +447,20 @@ public class BulkOperationsAPI
 	    }
 
 	}
+	if(idsFetcher.getCompanyCount()>0)
+	{
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.COMPANY_ADD_TAGS, Arrays.asList(tagsArray)
+				.toString(), String.valueOf(idsFetcher.getTotalCount()));
+
+			ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "companies", "");
+	}
+	if(idsFetcher.getContactCount()>0){
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
 		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "contacts", "");
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -505,11 +527,21 @@ public class BulkOperationsAPI
 	    }
 
 	}
+	
+	if(idsFetcher.getCompanyCount()>0)
+	{
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.COMPANY_REMOVE_TAGS, Arrays.asList(tagsArray)
+				.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
+			ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "companies", "");
+	}
+	
+	if(idsFetcher.getContactCount()>0){
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
 		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "contacts", "");
+	}
 
     }
 
@@ -533,10 +565,12 @@ public class BulkOperationsAPI
 	System.out.println(key);
 
 	DomainUser domainUser = null;
+	// Creates domain user key, which is set as a contact owner
+	Key<DomainUser> ownerKey = null;
 	try
 	{
 	    // Creates domain user key, which is set as a contact owner
-	    Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+	    ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
 	    System.out.println("setting domain user for key : " + ownerKey);
 
@@ -581,9 +615,13 @@ public class BulkOperationsAPI
 		// accessControl).createContactsFromCSV(blobStream, contact,
 		// ownerId);
 
+		ImportStatusDAO dao = new ImportStatusDAO(NamespaceManager.get(), ImportType.CONTACTS);
+
+		dao.createNewImportStatus(ownerKey, 0, key);
+
 		CSVImporter<Contact> importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey,
 			Long.parseLong(ownerId), new ObjectMapper().writeValueAsString(contact), Contact.class,
-			currentEntityCount);
+			currentEntityCount, dao);
 
 		PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
 
@@ -596,7 +634,9 @@ public class BulkOperationsAPI
 	    }
 	    else if (type.equalsIgnoreCase("companies"))
 	    {
-		new CSVUtil(restrictions, accessControl).createCompaniesFromCSV(blobStream, contact, ownerId, type);
+		ImportStatusDAO dao = new ImportStatusDAO(NamespaceManager.get(), ImportType.COMPANIES);
+		new CSVUtil(restrictions, accessControl, dao)
+			.createCompaniesFromCSV(blobStream, contact, ownerId, type);
 	    }
 
 	    ContactUtil.eraseContactsCountCache();
@@ -654,7 +694,9 @@ public class BulkOperationsAPI
 	    LinkedHashMap<String, Object> dealMap = (LinkedHashMap<String, Object>) deal;
 	    ArrayList<LinkedHashMap<String, String>> props = (ArrayList<LinkedHashMap<String, String>>) dealMap
 		    .get("properties");
-	    new CSVUtil(restrictions, accessControl).createDealsFromCSV(blobStream, props, ownerId);
+
+	    ImportStatusDAO importStatusDAO = new ImportStatusDAO(NamespaceManager.get(), ImportType.DEALS);
+	    new CSVUtil(restrictions, accessControl, importStatusDAO).createDealsFromCSV(blobStream, props, ownerId);
 
 	}
 	catch (IOException e)

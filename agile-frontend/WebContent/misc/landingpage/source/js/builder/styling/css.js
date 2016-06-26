@@ -91,7 +91,8 @@ angular.module('builder.styling')
 				css += "}\n\n";
 			}
 
-			var compiled = css+$rootScope.customCss.html().replace(/\/\*!(.|\n)+?\*\//, '').trim();
+			var compiled = $rootScope.customCss.html().replace(/\/\*!(.|\n)+?\*\//, '').trim();
+			compiled = compiled + css;
 			
 			return compiled;
 		},

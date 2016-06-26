@@ -72,7 +72,7 @@ public class Note extends Cursor
      * 
      */
     @NotSaved
-    private List<String> contact_ids = new ArrayList<String>();
+    public List<String> contact_ids = new ArrayList<String>();
 
     @NotSaved
     public List<String> deal_ids = new ArrayList<String>();
@@ -136,8 +136,14 @@ public class Note extends Cursor
 
     // Dao
     public static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(Note.class);
+    
+    
 
-    /**
+    public void setContact_ids(List<String> contact_ids) {
+		this.contact_ids = contact_ids;
+	}
+
+	/**
      * Default constructor
      */
     public Note()
@@ -286,10 +292,13 @@ public class Note extends Cursor
     @XmlElement(name = "contact_ids")
     public List<String> getContact_ids()
     {
-	contact_ids = new ArrayList<String>();
+    if((contact_ids != null && contact_ids.size() == 0) || contact_ids == null)
+    {
+    	contact_ids = new ArrayList<String>();
 
-	for (Key<Contact> contactKey : related_contacts)
-	    contact_ids.add(String.valueOf(contactKey.getId()));
+    	for (Key<Contact> contactKey : related_contacts)
+    	    contact_ids.add(String.valueOf(contactKey.getId()));
+    }
 
 	return contact_ids;
     }

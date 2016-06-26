@@ -18,26 +18,34 @@ $(function() {
 			function(e) {
 		e.preventDefault();
 		
-		var route = $('.agile-edit-row').attr('route');
-		
-		// Newly added code for displaying contacts and companies in same table with different routes.
-		if($(this).closest('tr').find('[route]').length != 0)
-			route = $(this).closest('tr').find('[route]').attr('route');
-		
-		var data = $(this).closest('tr').find('.data').attr('data');
+		var route = $(this).parents('.agile-edit-row').attr('route');
+		if (route != "task/"){
+			// Newly added code for displaying contacts and companies in same table with different routes.
+			if($(this).closest('tr').find('[route]').length != 0)
+				route = $(this).closest('tr').find('[route]').attr('route');
+			
+			var data = $(this).closest('tr').find('.data').attr('data');
+
+		// Open route in seperate window with CTRL + CLICK
+		if ((e.ctrlKey || e.metaKey) && (route != "workflow/" && route !=
+			"webrule-edit/" && route != "user-edit/" && route != "ticket-group/")) {
+            window.open("#" + route + data, '_blank');
+            return;
+        } 
 
 		if(route == "contact/" || route == "company/")
 			SCROLL_POSITION = window.pageYOffset;
 
-				if (route == "contact/")
-					SCROLL_POSITION = window.pageYOffset;
+					if (route == "contact/")
+						SCROLL_POSITION = window.pageYOffset;
 
-				console.log(data);
+					console.log(data);
 
-				if (data) {
-					Backbone.history.navigate(route + data, {
-						trigger : true
-					});
-				}
+					if (data) {
+						Backbone.history.navigate(route + data, {
+							trigger : true
+						});
+					}
+			}
 			});
 });

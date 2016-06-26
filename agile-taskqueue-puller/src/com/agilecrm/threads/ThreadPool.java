@@ -125,6 +125,17 @@ public class ThreadPool
 	poolExecutorTemp.execute(t);
     }
 
+    public static int totalTasksPool()
+    {
+	int totalcount = 0;
+	for (ThreadPoolExecutor executor : threadPoolMap.values())
+	{
+	    totalcount += executor.getQueue().size();
+	}
+
+	return totalcount;
+    }
+
     public static boolean isRunning()
     {
 

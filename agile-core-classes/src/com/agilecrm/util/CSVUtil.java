@@ -32,7 +32,9 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -40,6 +42,9 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
+import com.agilecrm.contact.upload.blob.status.specifications.StatusProcessor;
+import com.agilecrm.contact.upload.blob.status.specifications.StatusSender;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -91,14 +96,21 @@ public class CSVUtil
     private UserAccessControl accessControl = null;
     private GCSServiceAgile service;
     private CSVWriter failedContactsWriter = null;
+    private ImportStatusDAO importStatusDAO = null;
+    private StatusSender statusSender = null;
+
+    private StatusProcessor<?> statusProcessor = null;
 
     private CSVUtil()
     {
 
     }
 
-    public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl)
+    public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl,
+	    ImportStatusDAO importStatusDAO)
     {
+	int i = 0;
+
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
@@ -114,13 +126,15 @@ public class CSVUtil
 
 	this.accessControl = accessControl;
 
+	this.importStatusDAO = importStatusDAO;
+
     }
 
     public static enum ImportStatus
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG;
 
     }
 
@@ -197,7 +211,8 @@ public class CSVUtil
 	try
 	{
 	    data = reader.readAll();
-
+	    if (importStatusDAO != null && ownerKey != null)
+		importStatusDAO.createNewImportStatus(ownerKey, data.size(), null);
 	}
 	catch (IOException e)
 	{
@@ -223,6 +238,36 @@ public class CSVUtil
     }
 
     /**
+     * Status sender is injected to import instance
+     * 
+     * @param statusSender
+     */
+    public void setStatusSender(StatusSender statusSender)
+    {
+	this.statusSender = statusSender;
+    }
+
+    /**
+     * Status processor is injected to import instance
+     * 
+     * @param statusProcessor
+     */
+    public void setStatusProcessor(StatusProcessor<?> statusProcessor)
+    {
+	this.statusProcessor = statusProcessor;
+    }
+
+    private void reportStatus(int numberOfContacts)
+    {
+	if (statusSender != null && statusProcessor != null)
+	{
+	    System.out.println(statusProcessor);
+	    statusProcessor.setCount(numberOfContacts);
+	    statusSender.sendEmail(domainUser, statusProcessor);
+	}
+    }
+
+    /**
      * Creates contacts,companies from CSV string using a contact prototype
      * built from import page. It takes owner id to sent contact owner
      * explicitly instead of using session manager, as there is a chance of
@@ -238,14 +283,17 @@ public class CSVUtil
      * @param ownerId
      * @throws IOException
      */
+    private Key<DomainUser> ownerKey = null;
+    private DomainUser domainUser = null;
+
     public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
     {
 
 	// Creates domain user key, which is set as a contact owner
-	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+	this.ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
-	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+	domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
 
 	BulkActionUtil.setSessionManager(domainUser);
 
@@ -262,6 +310,7 @@ public class CSVUtil
 	List<FailedContactBean> failedContacts = new ArrayList<FailedContactBean>();
 
 	List<String[]> csvData = getCSVDataFromStream(blobStream, "UTF-8");
+	reportStatus(csvData.size());
 
 	if (csvData.isEmpty())
 	    return;
@@ -294,10 +343,31 @@ public class CSVUtil
 	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
 
 	/**
+	 * Processed contacts count.
+	 */
+	int processedContacts = 0;
+	int resettedProcessedcontacts = 0;
+	/**
 	 * Iterates through all the records from blob
 	 */
 	for (String[] csvValues : csvData)
 	{
+	    processedContacts++;
+	    resettedProcessedcontacts++;
+	    if (resettedProcessedcontacts >= 1000)
+	    {
+		try
+		{
+		    resettedProcessedcontacts = 0;
+		    importStatusDAO.updateStatus(processedContacts);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+
+	    }
+
 	    // Set to hold the notes column positions so they can be created
 	    // after a contact is created.
 	    Set<Integer> notes_positions = new TreeSet<Integer>();
@@ -440,11 +510,14 @@ public class CSVUtil
 		    }
 		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
 		    {
-			tempContact.properties.add(new ContactField(Contact.COMPANY, csvValues[j].trim().toLowerCase(),
+		    	String companyName = csvValues[j].trim();
+			tempContact.properties.add(new ContactField(Contact.COMPANY, companyName,
 				null));
 		    }
 
 		    tempContact.properties.add(field);
+		    tempContact.source = "import" ;
+		    System.out.println("temp contact source is "+tempContact.source);
 
 		}// end of inner for loop
 
@@ -464,7 +537,7 @@ public class CSVUtil
 
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
 		    accessControl.setObject(tempContact);
-		    if (!accessControl.canDelete())
+		    if (!accessControl.canCreate())
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
@@ -566,7 +639,18 @@ public class CSVUtil
 		e.printStackTrace();
 	    }
 
+	    processedContacts++;
+
 	}// end of for loop
+
+	try
+	{
+	    importStatusDAO.deleteStatus();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 
 	if (failedContacts.size() > 0)
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
@@ -657,6 +741,7 @@ public class CSVUtil
 	int accessDeniedToUpdate = 0;
 	int failedCompany = 0;
 	int nameMissing = 0;
+	int tagInvalid = 0;
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", type);
 
@@ -673,7 +758,7 @@ public class CSVUtil
 
 	    tempContact.properties = new ArrayList<ContactField>();
 	    String companyName = null;
-
+	    boolean canSave = true;
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
@@ -702,6 +787,37 @@ public class CSVUtil
 		// be trimmed for notes
 		csvValues[j] = checkAndTrimValue(csvValue);
 
+		if ("tags".equals(field.name))
+		{
+		    // Multiple tags are supported. Multiple tags are added
+		    // split at , or ;
+
+		    String[] tagsArray = csvValues[j].split("[,;]+");
+		    boolean isInvalid = false;
+		    System.out.println("number of tags : " + tagsArray.length);
+		    for (String tag : tagsArray)
+		    {
+			System.out.println("New tag : " + tag);
+			tag = tag.trim();
+			if (TagValidator.getInstance().validate(tag))
+			{
+			    tempContact.tags.add(tag);
+			}
+			else
+			{
+			    canSave = false;
+			    isInvalid = true;
+			    break;
+			}
+
+		    }
+		    if (isInvalid)
+		    {
+			tagInvalid++;
+			break;
+		    }
+		    continue;
+		}
 		if (Contact.ADDRESS.equals(field.name))
 		{
 		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
@@ -739,9 +855,9 @@ public class CSVUtil
 
 		if (field.name.equalsIgnoreCase(Contact.NAME))
 		{
-		    companyName = field.value = csvValues[j];
+		    companyName = field.value = csvValues[j].trim();
 		    // added company in new field in lower case
-		    tempContact.properties.add(new ContactField("company", companyName.trim().toLowerCase(), null));
+		    tempContact.properties.add(new ContactField("company", companyName, null));
 		}
 		else
 		{
@@ -786,6 +902,11 @@ public class CSVUtil
 	    else
 	    {
 		++nameMissing;
+		continue;
+	    }
+
+	    if (!canSave)
+	    {
 		continue;
 	    }
 
@@ -850,6 +971,10 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.NAME_MANDATORY, nameMissing);
 
 	}
+	if (tagInvalid > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.INVALID_TAG, tagInvalid);
+	}
 
 	if (limitExceeded > 0)
 	{
@@ -859,10 +984,10 @@ public class CSVUtil
 	{
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
-	if (failedCompany > 0 || nameMissing > 0 || accessDeniedToUpdate > 0 || limitExceeded > 0)
+	if (failedCompany > 0 || nameMissing > 0 || accessDeniedToUpdate > 0 || limitExceeded > 0 || tagInvalid > 0)
 	{
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany + nameMissing + accessDeniedToUpdate
-		    + limitExceeded);
+		    + limitExceeded + tagInvalid);
 	}
 
 	// avoid message of attached failed csv file add new property in map so
@@ -1004,6 +1129,8 @@ public class CSVUtil
 	    boolean wrongMilestone = false;
 	    ArrayList<CustomFieldData> customFields = new ArrayList<CustomFieldData>();
 	    List<Milestone> list = null;
+	    List<Category> source_list = null;
+	    List<Category> reason_list = null;
 	    for (int i = 0; i < dealPropValues.length; i++)
 	    {
 
@@ -1157,21 +1284,21 @@ public class CSVUtil
 			    String dealDate = dealPropValues[i];
 			    if (dealDate != null && !dealDate.isEmpty())
 			    {
-				// date is dd-MM-yyyy format
-				String[] data = dealDate.split("-");
+				// date is mm/dd/yyyy format
+				String[] data = dealDate.split("/");
 				if (data.length == 3)
 				{
 				    try
 				    {
 					Calendar c = Calendar.getInstance();
 					int year = Integer.parseInt(data[2].trim());
-					int month = Integer.parseInt(data[1].trim());
-					int day = Integer.parseInt(data[0].trim());
+					int month = Integer.parseInt(data[0].trim());
+					int day = Integer.parseInt(data[1].trim());
 					if (month > 0)
 					{
 					    month = month - 1;
 					}
-					c.set(year, month , day);
+					c.set(year, month, day);
 					Date date = c.getTime();
 					if (month > 11)
 					{
@@ -1238,6 +1365,37 @@ public class CSVUtil
 			    note.description = dealPropValues[i];
 			    note.save();
 			}
+			else if(value.equalsIgnoreCase("dealSource"))
+			{
+				    String sourceName = dealPropValues[i];
+				    //trackFound = true;
+				    CategoriesUtil source= new CategoriesUtil();
+				    source_list = source.getCategoryByName(sourceName);
+				    if (source_list.size() > 0)
+				   
+				    {
+				    	for(Category cat:source_list){
+				    		opportunity.deal_source_id=cat.getId();
+				    	}
+					
+				    }
+
+			}
+			else if(value.equalsIgnoreCase("lossReason"))
+			{
+				    String lossReason = dealPropValues[i];
+				    //trackFound = true;
+				    CategoriesUtil reason= new CategoriesUtil();
+				    reason_list = reason.getCategoryByName(lossReason);
+				    if (reason_list.size() > 0)
+				    {
+				    	for(Category cat:reason_list){
+				    		opportunity.lost_reason_id=cat.getId();
+				    	}
+					
+				    }
+
+			}
 
 		    }
 		    else
@@ -1281,7 +1439,28 @@ public class CSVUtil
 		    opportunity.milestone = values[0];
 		}
 	    }
+	    
+	    //Remove Lost Reason if milestone is not lost
+	    
+		String lostMilestone = "Lost";
+		try
+		{
+			if(opportunity.pipeline_id!=0){
+				 Milestone mile = MilestoneUtil.getMilestone(opportunity.pipeline_id);
+				    if (mile.lost_milestone != null)
+					lostMilestone = mile.lost_milestone;
+			}
+		   
 
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    if(opportunity.milestone!=null && !opportunity.milestone.equalsIgnoreCase(lostMilestone))
+	    {
+	    	opportunity.lost_reason_id=null;
+	    }
 	    // add all custom field in deals
 	    opportunity.custom_data = customFields;
 	    try
@@ -1632,14 +1811,4 @@ public class CSVUtil
 	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
     }
-
-    public static void main(String[] args)
-    {
-	String[] tagsArray = "salemslot,newtag, new tag".split("[,;]+");
-	for (int i = 0; i < tagsArray.length; i++)
-	{
-	    System.out.println(tagsArray[i]);
-	}
-    }
-
 }

@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -38,6 +39,8 @@ import com.googlecode.objectify.condition.IfDefault;
 @Cached
 public class UserPrefs
 {
+	public static final String DEFAULT_CURRENCY = "USD-$";
+	
 	/**
 	 * UserPrefs Id.
 	 */
@@ -97,7 +100,7 @@ public class UserPrefs
 	 * Type of Currency.
 	 */
 	@NotSaved(IfDefault.class)
-	public String currency = null;
+	public String currency = DEFAULT_CURRENCY;
 
 	/**
 	 * Signature.
@@ -236,10 +239,17 @@ public class UserPrefs
 		DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
 
 		// Assigning Random avatar
-		if (pic == null)
+		if (StringUtils.isBlank(pic) && currentDomainUser != null)
+			pic = currentDomainUser.pic;
+		
+		if(StringUtils.isBlank(pic))
 			pic = chooseRandomAvatar();
+		
+		boolean isDomainUserUpdated = false;
+		
 		try
 		{
+			
 			if ((currentDomainUser != null)
 					&& (currentDomainUser.name == null || !currentDomainUser.name.equals(this.name)))
 			{
@@ -249,6 +259,8 @@ public class UserPrefs
 				currentDomainUser.save();
 				
 				this.name = null;
+				isDomainUserUpdated = true;
+				
 			}
 		}
 		catch (Exception e)
@@ -256,6 +268,15 @@ public class UserPrefs
 			e.printStackTrace();
 		}
 
+		try {
+			if(!isDomainUserUpdated && !StringUtils.equals(currentDomainUser.pic, pic)){
+				// Add pic also
+				currentDomainUser.pic = pic;
+				currentDomainUser.save();
+			}
+		}catch(Exception e){}
+		
+		
 		dao.put(this);
 	}
 

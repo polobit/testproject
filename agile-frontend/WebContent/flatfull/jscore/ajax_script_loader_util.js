@@ -42,7 +42,7 @@ function loadMiscScripts() {
     load_analytics_code();
 
     // Load agile web stats
-    load_urls_on_ajax_stop('stats/min/agile-min.js?_=' + _AGILE_VERSION, function(){
+    load_urls_on_ajax_stop('stats/min/agile-min.js?_=' + _agile_get_file_hash('agile-min.js'), function(){
 
     		initialize_agile_domain_sync();
     		_agile_execute_web_rules();
@@ -111,4 +111,6 @@ function load_analytics_code(){
 	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	  ga('create', 'UA-44894190-1', 'auto');
 	  ga('send', 'pageview');
+	  ga('create', 'UA-75813054-1', {'name':'b'});
+	  ga('b.send', 'pageview');
 }

@@ -1,7 +1,10 @@
 package com.agilecrm.core.api.search;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,6 +22,7 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.Document;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
+import com.agilecrm.search.util.SearchUtil;
 
 /**
  * <code>SearchAPI</code> class is used to search contacts based on keywords and
@@ -51,7 +55,7 @@ public class SearchAPI
 	// condition is to use this call in the API calls.
 	if (StringUtils.isEmpty(count))
 	    count = "10";
-	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
+	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResultsWithCompany(keyword, Integer.parseInt(count),
 		cursor, type);
     }
 
@@ -83,9 +87,16 @@ public class SearchAPI
     public Collection searchAll(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
+    	if(count!=null && Integer.parseInt(count)<10)
+    		count = "10";
 
-	if (StringUtils.isEmpty(type))
-	    return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+	if (StringUtils.isEmpty(type)){
+		List<Object> searchResult =  (List<Object>)new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+		if(searchResult.size() == Integer.parseInt(count) ){
+				searchResult =  SearchUtil.searchForCompanyResult(searchResult);
+		}
+		return searchResult;
+	}
 
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
 		cursor, type);
@@ -110,9 +121,30 @@ public class SearchAPI
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
 
-	if (StringUtils.isEmpty(type))
-	    return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
-
+	if (StringUtils.isEmpty(type)){
+		List<Object> searchResult =  (List<Object>)new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+		if(searchResult.size() == Integer.parseInt(count) ){
+			Set<String> set = new HashSet<String>(); 
+			int searchCount = 0;
+			for(Object m : searchResult){
+				if(m instanceof Contact);
+					Contact contact = (Contact) m;
+					set.add(contact.contact_company_id);
+					searchCount = searchCount+1;
+			}
+			if(searchCount == Integer.parseInt(count) && set.size()==1){
+				Iterator iterator = set.iterator();
+				if(iterator.hasNext()){
+					String id = iterator.next().toString();
+					Contact contact = ContactUtil.getContact(Long.parseLong(id));
+					if(contact != null){
+						searchResult.remove(9);
+						searchResult.add(contact);
+					}
+				}
+			}
+		}
+	}
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
 		cursor, type);
     }
@@ -183,6 +215,51 @@ public class SearchAPI
 	}
 	return collection;
     }
+    
+    @Path("/duplicate-companies/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Collection getDuplicateCompanies(@PathParam("id") String id, @QueryParam("page_size") String count,
+    @QueryParam("cursor") String cursor){
+		Collection collection = null;
+		try{
+		    Contact contact = ContactUtil.getContact(Long.valueOf(id));
+	
+		    // getting search query for finding duplicate contacts
+		    String query = QueryDocumentUtil.constructDuplicateCompaniesQuery(contact);
+	
+		    int pageSize = Integer.parseInt(count) + 1;
+		    System.out.println(query);
+	
+		    AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
+		    collection = appEngineSearch.getSearchResults(query, pageSize, cursor);
+		    Iterator iterator = collection.iterator();
+		    int counter = 0;
+		    while (iterator.hasNext())
+		    {
+			Contact ctc = (Contact) iterator.next();
+			if (ctc.id.longValue() == contact.id.longValue()){
+			    if (counter == 0){
+					int collCount = ctc.count;
+					iterator.remove();
+					if (iterator.hasNext()){
+					    Contact ctc1 = (Contact) iterator.next();
+					    ctc1.count = collCount;
+					}
+					return collection;
+				}else{
+					iterator.remove();
+					return collection;
+			    }
+			}
+			counter++;
+		    }
+		    return collection;
+		}catch (Exception e){
+		    System.out.println(e.getMessage());
+		}
+		return collection;
+	}
 
     @Path("/deals")
     @GET

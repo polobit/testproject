@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -19,9 +20,15 @@ import org.json.JSONException;
 
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
-import com.agilecrm.contact.Note;
+import com.agilecrm.user.access.exception.AccessDeniedException;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>DocumentsAPI</code> includes REST calls to interact with
@@ -53,7 +60,6 @@ public class DocumentsAPI
 	return DocumentUtil.getDocuments();
     }
 
-    
     /**
      * Gets a document based on id
      * 
@@ -81,16 +87,42 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void deleteDocument(@PathParam("document-id") Long id)
     {
-	try
-	{
-	    Document document = DocumentUtil.getDocument(id);
-	    if (document != null)
-		document.delete();
+    Document document = null;
+    try 
+    {
+    	document = DocumentUtil.getDocument(id);
+	} 
+    catch (Exception e) 
+    {
+		e.printStackTrace();
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+    if(document != null)
+    {
+    	List<String> conIds = document.getContact_ids();
+    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    	{
+    		throw new AccessDeniedException("Document cannot be detached because you do not have permission to update associated contact.");
+    	}
+    	
+    	try
+    	{
+    		if(!(document.relatedDealKeys()).isEmpty())
+    		{
+    			for(Key<Opportunity> key : document.relatedDealKeys()) 
+    			{
+    				Opportunity opp = Opportunity.dao.get(key);
+    				opp.save();
+    			} 
+    		}
+    	}
+    	catch (Exception e) 
+    	{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+    	}
+    	document.delete();
+    }
     }
 
     /**
@@ -105,9 +137,14 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Document createDocument(Document document)
     {
-    	if(document!=null && document.network_type!=null && document.network_type.equals("GOOGLE"))
-    		document.size = 0L;
-    	document.save();
+	List<String> conIds = document.getContact_ids();
+    List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    {
+    	throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
+    }
+    
+    document.save();
 
 	try
 	{
@@ -117,6 +154,32 @@ public class DocumentsAPI
 	{
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	}
+	try {
+		if(!(document.relatedDealKeys()).isEmpty())
+		{
+			for(Key<Opportunity> key : document.relatedDealKeys())
+			{
+				Opportunity opp = Opportunity.dao.get(key);
+				opp.save();			
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	try {
+		if(!(document.getrelatedContacts()).isEmpty() && document.getrelatedContacts().size() > 0 )
+		{
+			for(Contact c : document.getrelatedContacts())
+			{
+				c.forceSearch = true ; 
+				c.save();		
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	return document;
     }
@@ -133,7 +196,31 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Document updateDocument(Document document)
     {
-
+    Document oldDocument = null;
+    try 
+    {
+    	oldDocument = DocumentUtil.getDocument(document.id);
+	} 
+    catch (Exception e) 
+    {
+		e.printStackTrace();
+	}
+    if(oldDocument != null)
+    {
+    	List<String> conIds = oldDocument.getContact_ids();
+    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+    	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+    	{
+    		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
+    	}
+    }
+	List<String> conIds = document.getContact_ids();
+	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
+	{
+		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated contact(s).");
+	}
+    	
 	try
 	{
 	    ActivitySave.createDocumentUpdateActivity(document);
@@ -143,9 +230,61 @@ public class DocumentsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	try {
+		if(oldDocument != null && !(oldDocument.relatedDealKeys()).isEmpty())
+		{
+			for(Key<Opportunity> key : oldDocument.relatedDealKeys())
+			{
+				Opportunity opp = Opportunity.dao.get(key);
+				opp.save();
+			}
+		}
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	try {
+		if(!(oldDocument.getrelatedContacts()).isEmpty() && oldDocument.getrelatedContacts().size() > 0 )
+		{
+			for(Contact c : oldDocument.getrelatedContacts())
+			{
+				c.forceSearch = true;
+				c.save();		
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	if(document.network_type.equals("GOOGLE"))
 		document.size = 0L;
 	document.save();
+	try {
+		if(!(document.relatedDealKeys()).isEmpty())
+		{
+			for(Key<Opportunity> key : document.relatedDealKeys())
+			{
+				Opportunity opp = Opportunity.dao.get(key);
+				opp.save();			
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	try {
+		if(!(document.getrelatedContacts()).isEmpty() && document.getrelatedContacts().size() > 0 )
+		{
+			for(Contact c : document.getrelatedContacts())
+			{
+				c.forceSearch = true;
+				c.save();		
+			}
+		}
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	return document;
     }
 
@@ -159,28 +298,52 @@ public class DocumentsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
-		JSONArray documentsJSONArray = new JSONArray(model_ids);
-		if (documentsJSONArray != null && documentsJSONArray.length() > 0)
-	    {
-			for (int i = 0; i <= documentsJSONArray.length() - 1; i++)
-			{
-				try{
-					
-					DocumentUtil.deleteDocumentNotes(documentsJSONArray.getString(i));
-				}
-				catch (Exception e)
-			    {
-					e.printStackTrace();
-			    }
-			}	
-	    }	
+	JSONArray documentsJSONArray = new JSONArray(model_ids);
+	JSONArray docsJSONArray = new JSONArray();
+	List<String> contactIdsList = new ArrayList<String>();
+	if(documentsJSONArray!=null && documentsJSONArray.length()>0){
+		for (int i = 0; i < documentsJSONArray.length(); i++) { 
+			try
+			   {
+				String eventId =  documentsJSONArray.getString(i);
+				Document doc = DocumentUtil.getDocument(Long.parseLong(eventId));
+				
+				List<String> conIds = doc.getContact_ids();
+		    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+		    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
+		    	{
+		    		docsJSONArray.put(documentsJSONArray.getString(i));
+		    		contactIdsList.addAll(modifiedConIds);
+		    	}
+				
+		    	if(!doc.getDeal_ids().isEmpty()){
+					for(String dealId : doc.getDeal_ids()){
+						Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
+						oppr.save();
+					 }	
+				 }
+		    	if(!(doc.getrelatedContacts()).isEmpty() && doc.getrelatedContacts().size() > 0 )
+                {
+                    for(Contact c : doc.getrelatedContacts())
+                    {
+                        c.forceSearch = true ; 
+                        c.save();       
+                    }
+                }
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+         }
+	  }
+	ActivitySave.createLogForBulkDeletes(EntityType.DOCUMENT, docsJSONArray,
+		String.valueOf(docsJSONArray.length()), "documents deleted");
 
-		ActivitySave.createLogForBulkDeletes(EntityType.DOCUMENT, documentsJSONArray,
-			String.valueOf(documentsJSONArray.length()), "documents deleted");
-	
-		Document.dao.deleteBulkByIds(documentsJSONArray);
+	Document.dao.deleteBulkByIds(docsJSONArray);
+	return contactIdsList;
     }
 
     /**

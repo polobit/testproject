@@ -87,16 +87,18 @@ public class CustomElementServlet extends HttpServlet
     	    List<Form> forms = FormUtil.getAllForms();
     	    
     	    String formConfig = "({name: '%s',nodes: ['form'],frameworks: ['bootstrap'],types: ['flow'],validChildren: ['flow'],previewScale: '0.25',category: 'agileforms',"
-    	    		+ "links: ['https://s3.amazonaws.com/agilecrm/landing/public/agileform.css'],"
+    	    		+ "links: ['https://s3.amazonaws.com/agilecrm/landing/public/agileformv3.css'],"
     	    		+ "icon: 'newspaper',description: 'Agile form'});";
     	    
     	    for(Form form : forms) {    	    	
     	    	if(form.formHtml != null) {
-    	    		form.formHtml = form.formHtml.replace("<div class=\"agile-custom-clear\"></div>", "");
+//    	    		form.formHtml = form.formHtml.replace("<div class=\"agile-custom-clear\"></div>", "");
+//    	    		form.formHtml = form.formHtml.replace("class=\"form-view\" id=\"agile-form\"", "class=\"form-view clearfix\" id=\"agile-form\"");
+    	    		
         	    	JSONObject formElement = new JSONObject();
         	    	formElement.put("css", "");      	    	
     	    		formElement.put("config", String.format(formConfig, form.formName));
-    	    		formElement.put("html", form.formHtml);
+    	    		formElement.put("html", "<div data-embed-agile-form=\""+form.id+"\" class=\"form-embed-container\"><iframe src=\"../../forms/"+form.id+"\" frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\" width=\"100%\" onload=\"parent.parent.formEmbedIFrameLoaded(this)\"></iframe></div>");
     	    		elementsJsonArray.put(formElement);
     	    	}
     	    }

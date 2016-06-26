@@ -29,16 +29,20 @@ function loadUserEventsfromGoogle(start, end, callback){
 
 function isDefined(x)
 {
-	var undefined;
-	return typeof x !== undefined;
+	 return typeof x !== "undefined"
 }
 
+var isSet1  =false;
 function _init_gcal_options(users)
 {
+	if(isSet1)
+		return ;
+
 	var fc = $.fullCalendar;
-	fc.sourceFetchers = [];
+	//fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
 	fc.sourceFetchers.push(_googleEventFetcher);
+	isSet1 =  true;
 }
 
 function _googleEventFetcher(sourceOptions, start, end, callback)
@@ -94,21 +98,28 @@ function agile_transform_options(sourceOptions, start, end)
 
 function _load_gapi(callback)
 {
-	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25', function()
+	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27', function()
 		{
 			setupGC(callback);
 		});
 }
 
+
+
 // Setup Google Calendar
 function setupGC(callback)
 {
-	console.log("Set up GC");
+	var helper = new gapi_helper_prototype();
+
+
 
 	// Configure Calendar
-	gapi_helper.configure({ scopes : 'https://www.googleapis.com/auth/calendar', services : { calendar : 'v3' } });
+	helper.configure({ scopes : 'https://www.googleapis.com/auth/calendar', services : { calendar : 'v3' } });
 
-	gapi_helper.when('calendarLoaded', callback);
+	/*if((gapi_helper.listeners.calendarLoaded))
+		callback();
+	else*/
+	helper.when('calendarLoaded', callback);
 }
 
 function _set_token_from_session(callback)
@@ -191,48 +202,63 @@ function _fetchGoogleCalendarList(callback, retryCount)
 
 function _fetchGCAndAddEvents(sourceOptions, start, end)
 {
-	console.log(sourceOptions);
-	// Set the access token
-	gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
+	head.js('flatfull/lib/web-calendar-event/moment.min.js', function(){
+		head.js('flatfull/lib/web-calendar-event/moment-timezone-with-data.js',function() {
+			console.log(sourceOptions);
+			// Set the access token
+			gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
 
-	if(!sourceOptions.calendarIds)
-	{
-		sourceOptions.calendarIds = ["primary"];
-	}
-
-	showLoadingOnCalendar(false);
-	$.each(sourceOptions.calendarIds, function(index, calendarId)
-	{
-		showLoadingOnCalendar(true);
-		// Retrieve the events from primary
-		var request = gapi.client.calendar.events.list({ 'calendarId' : calendarId, timeMin : ts2googleDate(start), timeMax : ts2googleDate(end),
-			maxResults : 10000, // max results causes problems: http://goo.gl/FqwIFh
-			singleEvents : true });
-
-		request.execute(function(resp)
-		{
-			var google_events = [];
-			for (var i = 0; i < resp.items.length; i++)
+			if(!sourceOptions.calendarIds)
 			{
-				var fc_event = google2fcEvent(resp.items[i]);
-
-				if (fc_event)
-					google_events.push(fc_event);
-				renderEventBasedOnOwner(fc_event);
-				//$('#calendar_event').fullCalendar('renderEvent', fc_event);		
+				sourceOptions.calendarIds = ["primary"];
 			}
 
-
-			//$('#calendar_event').fullCalendar('renderEvents', google_events);
-			addEventSourceToCalendar("google_" + calendarId, google_events);
 			showLoadingOnCalendar(false);
+			$.each(sourceOptions.calendarIds, function(index, calendarId)
+			{
+				showLoadingOnCalendar(true);
+				// Retrieve the events from primary
+				var request = gapi.client.calendar.events.list({ 'calendarId' : calendarId, timeMin : ts2googleDate(start), timeMax : ts2googleDate(end),
+					maxResults : 10000, // max results causes problems: http://goo.gl/FqwIFh
+					singleEvents : true });
 
-			
-			//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
-			// Add event
-			//$('#calendar_event').fullCalendar('renderEvents', google_events);
+				request.execute(function(resp)
+				{
+
+					var google_events = [];
+					for (var i = 0; i < resp.items.length; i++)
+					{
+						var fc_event = google2fcEvent(resp.items[i]);
+
+						
+						if (fc_event)
+						if(fc_event.allDay==false){	
+							var utcTime = new Date(fc_event.start).toUTCString();
+	    					var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+	      					fc_event.start = tz.format();
+	      					
+	      					utcTime = new Date(fc_event.end).toUTCString();
+	    					tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+	      					fc_event.end = tz.format();
+	      				}	
+							google_events.push(fc_event);
+						renderEventBasedOnOwner(fc_event);
+						//$('#calendar_event').fullCalendar('renderEvent', fc_event);		
+					}
+
+
+					//$('#calendar_event').fullCalendar('renderEvents', google_events);
+					addEventSourceToCalendar("google_" + calendarId, google_events);
+					showLoadingOnCalendar(false);
+
+					
+					//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
+					// Add event
+					//$('#calendar_event').fullCalendar('renderEvents', google_events);
+				});
+			});
 		});
-	})
+	});
 }
 
 // Convert a timestamp into google date format

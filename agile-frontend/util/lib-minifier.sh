@@ -5,14 +5,17 @@ rm -r ../WebContent/flatfull/final-lib/min
 mkdir ../WebContent/flatfull/final-lib/min
 
 # js lib files
-cat $(find ../WebContent/flatfull/final-lib/ -iname *.js ! -path ../WebContent/flatfull/final-lib/min/*.js | sort) >../WebContent/flatfull/final-lib/min/lib-all-min.js 
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-min.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-min.js
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-min.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-min-1.js
+cat $(find ../WebContent/flatfull/final-lib/final-lib-1 -iname *.js | sort) >../WebContent/flatfull/final-lib/min/lib-all-new-1.js 
 
+cat $(find ../WebContent/flatfull/final-lib/final-lib-2 -iname *.js  | sort) >../WebContent/flatfull/final-lib/min/lib-all-new-2.js 
+
+java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-new-1.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-new-1.js
+java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-new-2.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-new-2.js
+cp ../WebContent/flatfull/lib/backbone-min.js ../WebContent/flatfull/final-lib/min/
 rm -r ../WebContent/flatfull/css/min/*.css
 
-mkdir ../WebContent/flatfull/css/min/
+mkdir ../WebContent/flatfull/css/min
 
 ## CSS files
 cat ../WebContent/flatfull/css/final-lib/*.css > ../WebContent/flatfull/css/min/lib-all.css

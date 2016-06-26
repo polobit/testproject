@@ -229,6 +229,14 @@ public class EmailSender
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
 	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+	
+	System.out.println("Emailgatewaytype is:"+emailGatewayType);
+	
+	// Add to pull queue with from email as Tag
+	if(emailGatewayType!=null && emailGatewayType.equalsIgnoreCase("SES")){
+		queueName = "amazon-ses-pull-queue";
+		System.out.println("Sending mails through amazon pull queue");
+	}
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);

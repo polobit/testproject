@@ -22,12 +22,14 @@ import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.portlets.Portlet;
+import com.agilecrm.portlets.Portlet.PortletRoute;
 import com.agilecrm.portlets.util.PortletUtil;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>PortletsAPI</code> includes REST calls to interact with
@@ -52,6 +54,7 @@ public class PortletsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Portlet> getAvailablePortlets()throws Exception {
+	    	
 		return PortletUtil.getAvailablePortlets();
 	}
 	/**
@@ -61,9 +64,14 @@ public class PortletsAPI {
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Portlet> getPortlets()throws Exception{
-		// Returns list of portlets saved by current user
-		return PortletUtil.getAddedPortletsForCurrentUser();
+	public List<Portlet> getPortlets(@QueryParam("route") String route)throws Exception{
+			
+	    	    	
+	    	// Returns list of portlets saved by current user
+	    	if(!route.equalsIgnoreCase("MarketingDashboard"))
+	    	    return PortletUtil.getAddedPortletsForCurrentUser(route);
+	    	else 
+	    	    return PortletUtil.getAddedPortletsForMarketingDashboard(route);
 	}
 	/**
 	 * Adding of new portlet
@@ -79,12 +87,16 @@ public class PortletsAPI {
 	public Portlet createPortlet(Portlet portlet) {
 		try {
 			if(portlet!=null){	
+				/*if(portlet.portlet_route.equals(Portlet.PortletRoute.DashBoard))
+					portlet.portlet_route=null;*/
+				//for(Portlet portlet:portlets)
 				portlet.save();
 				
 				if(portlet.prefs!=null){
 					JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
 					portlet.settings=json;
 				}
+				//}
 				//PortletUtil.setPortletContent(portlet);
 			}
 		} catch (Exception e) {
@@ -105,17 +117,33 @@ public class PortletsAPI {
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Portlet createPortletforAll(Portlet portlet) {
 		try {
-			Portlet p=null;
+			List<Portlet> p=null;
+			
 			if(portlet!=null){
 				DomainUserUtil du=new DomainUserUtil();
 				List<DomainUser> domainusers=du.getUsers();
 				for(DomainUser domainuser:domainusers)	{
-					if(portlet.name.equalsIgnoreCase("Mini Calendar"))	{
-					  p=PortletUtil.getPortlet(portlet.name,AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id).id);
+					boolean flag=true;
+					/*if(portlet.name.equalsIgnoreCase("Mini Calendar"))	{
+						AgileUser aUser = AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
+						if(aUser!=null)
+					  p=PortletUtil.getPortlet(portlet.name,aUser.id);
 					  if(p==null)
 						  portlet.saveAll(domainuser);
+					  else{
+						  for(Portlet po:p){
+						  if(po.portlet_route==portlet.portlet_route)
+						  {
+							  flag=false;
+							  break;
+						  }
+						  }
+						  if(flag)
+							  portlet.saveAll(domainuser);  
+						  
+					  }
 					  continue;
-					}
+					}*/
 					portlet.saveAll(domainuser);
 				}
 				if(portlet.prefs!=null){
@@ -517,7 +545,7 @@ public class PortletsAPI {
 			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
 		else
 			json.put("user", null);
-		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		//PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletLeaderboardData(json);
 	}
 	/**
@@ -541,11 +569,15 @@ public class PortletsAPI {
 	@Path("/customer-activity")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Activity> getPortletActivityData(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)throws Exception {
+	public List<Activity> getPortletActivityData(@QueryParam("entity_type") String entitytype,
+	    @QueryParam("user_id") Long userid, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
+	    @QueryParam("end_time") Long endtime)throws Exception {
 		
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		if(count!=null){
-		return PortletUtil.getPortletActivitydata(Integer.parseInt(count), cursor);
+		return PortletUtil.getPortletActivitydata(entitytype, userid, Integer.parseInt(count), cursor,
+	        starttime, endtime);
 		}
 		else
 			return null;
@@ -593,13 +625,58 @@ public class PortletsAPI {
 		return PortletUtil.getGoalsAttainedData(owner_id, start_time, end_time);
 	}
 	
-	
+	/**
+	 * Gets Task Deviation portlet data
+	 * 
+	 * @return Json of Task deviated time.
+	 */
 	@Path("/averageDeviation")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public JSONObject getAverageTaskDeviation(@QueryParam("start-date") Long start_time,@QueryParam("end-date")Long end_time)
 	{
 		return PortletUtil.getAverageDeviationForTasks(start_time, end_time);
+	}
+
+	/**
+	 * Gets Incoming Deals portlet data
+	 * 
+	 * @return String of Deals
+	 */
+	@Path("incomingDeals/{owner-Id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getNewDeals(@PathParam("owner-Id") Long ownerId, @QueryParam("min") Long min,
+	    @QueryParam("max") Long max, @QueryParam("frequency") String frequency, @QueryParam("type") String type)
+    {
+	return OpportunityUtil.getIncomingDealsList(ownerId, min, max, frequency, type).toString();
+    }
+	
+	
+	/**
+	 * Gets Loss Reason portlet data
+	 * 
+	 * @return String of Deals 
+	 */
+	@Path("/lossReason/{owner-id}/{pipeline-id}/{source-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getDealsbyLossReason(@PathParam("owner-id") Long ownerId, @PathParam("pipeline-id") Long pipelineId,
+	    @PathParam("source-id") Long sourceId, @QueryParam("min") Long min, @QueryParam("max") Long max)
+    {
+	return OpportunityUtil.getDealswithLossReason(ownerId, pipelineId, sourceId, min, max).toString();
+    }
+	/**
+	 * Gets contacts count based on campaign status
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/campaign-graph")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getCampaignGraphForPortlets(@QueryParam("start-date") String startDate,@QueryParam("campaign_type") String campaignType) throws Exception {
+		
+		return PortletUtil.getCampaignStatsForPieChart(campaignType, Long.parseLong(startDate));
 	}
 	
 }

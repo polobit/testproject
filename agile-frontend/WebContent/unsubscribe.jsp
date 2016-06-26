@@ -9,8 +9,7 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.Base64Encoder"%>
 <%@page import="com.agilecrm.util.NamespaceUtil"%>
-<%@page import="com.agilecrm.account.AccountPrefs" %>
-<%@page import="com.agilecrm.account.util.AccountPrefsUtil" %>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 
 <%
     		String campaignId = request.getParameter("cid");
@@ -57,6 +56,14 @@
 				out.println("You are successfully unsubscribed. Thank you.");
 				return;
 			}
+			//Static images s3 path
+			String FLAT_FULL_PATH = "flatfull/";
+			String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+			String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+			
+			// Users can show their company logo on login page. 
+			AccountPrefs accountPrefs2 = AccountPrefsUtil.getAccountPrefs();
+			String logo_url = accountPrefs2.logo;
 %>
 
 <html>
@@ -374,6 +381,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 		box-sizing: border-box;
 	}
 }
+
 </style>
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
@@ -381,7 +389,21 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 
 <body>
 	<div class="wrapper rounded6" id="templateContainer">
-		<h1><%=company%></h1>
+		<!--<h1><%=company%></h1>-->
+		<div class="imgholder thumb-wrapper thumb-lg" style="border:none;text-align: center;">
+			<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
+	            {
+	        %>
+           <img class="company_logo w-full" src="<%=logo_url%>" style="width:120px;"></img>
+           <%
+           }else{
+           %>
+          
+           <img class="company_logo w-full" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png" style="width:120px;" ></img>
+           <%
+       			}
+            %>
+        </div>
 		<div id="templateBody" class="bodyContent rounded6">
 			<h2>Unsubscribe</h2>
 			<form id="unsubscribe-form" action="/confirmation" method="post" onsubmit="return isValid();" novalidate>

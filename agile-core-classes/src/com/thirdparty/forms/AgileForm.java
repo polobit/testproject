@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
@@ -40,7 +41,7 @@ import com.campaignio.servlets.util.TrackClickUtil;
 @SuppressWarnings("serial")
 public class AgileForm extends HttpServlet
 {
-    public static String[] authDetails = { "_agile_form_name", "_agile_domain", "_agile_api", "_agile_redirect_url" };
+    public static String[] authDetails = { "_agile_form_name", "_agile_domain", "_agile_api", "_agile_redirect_url"};
 
     public static Set<String> systemContactProperties = new HashSet<String>(Arrays.asList(new String[] {
 	    Contact.FIRST_NAME, Contact.LAST_NAME, Contact.EMAIL, Contact.COMPANY, Contact.TITLE, Contact.WEBSITE,
@@ -50,9 +51,9 @@ public class AgileForm extends HttpServlet
     {
 	try
 	{
+	    String agileFormId=new String();
 	    Map<String, String[]> formMap = request.getParameterMap();
 	    org.json.JSONObject formJson = convertFormMap(formMap);
-
 	    if (!validAuthDetails(formJson))
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid auth details");
@@ -63,6 +64,8 @@ public class AgileForm extends HttpServlet
 	    String agileDomain = formJson.getString("_agile_domain");
 	    String agileRedirectURL = formJson.getString("_agile_redirect_url");
 	    String agileFormName = formJson.getString("_agile_form_name");
+	    if(formJson.has("_agile_form_id"))
+		 agileFormId = formJson.getString("_agile_form_id");
 	    com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKeyFromInputKey(apiKey);
 
 	    org.json.JSONObject reqFormJson = getReqFormJson(formJson);
@@ -74,19 +77,30 @@ public class AgileForm extends HttpServlet
 
 	    contact.setContactOwner(owner);
 	    String[] tags = getContactTags(formJson);
+	    
+	    
 	    if (!ArrayUtils.isEmpty(tags))
 		contact.addTags(tags);
 	    else
 		contact.save();
 
-	    addNotesToContact(contact, owner, formJson);
-
-	    Form form = FormUtil.getFormByName(agileFormName);
+	    addNotesToContact(contact, owner, formJson);   	   
+	    
+	    Form form =null;
+	    if(!agileFormId.isEmpty()&& agileFormId.contains("[0-9]+"))
+		form = FormUtil.getFormById(Long.parseLong(agileFormId));
+	    else
+		form = FormUtil.getFormByName(agileFormName);	    
+	    
 	    if (form == null)
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
 		return;
 	    }
+	    //creating the emailNotification for the new contact  
+	    if(form.emailNotification && newContact)
+	    	 FormUtil.sendMailToContactOwner(contact, agileFormName);
+	    
 	    runFormTrigger(contact, newContact, form, formJson);
 
 	    try
@@ -383,11 +397,7 @@ public class AgileForm extends HttpServlet
 
     public static com.googlecode.objectify.Key<DomainUser> getDomainUserKeyFromInputKey(String key)
     {
-	if (APIKey.isPresent(key))
-	    return APIKey.getDomainUserKeyRelatedToAPIKey(key);
-	else if (APIKey.isValidJSKey(key))
-	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(key);
-	return null;
+    	return APIKeyUtil.getAPIKeyDomainOwnerKey(key);
     }
 
     public static ContactField buildCustomContactProperty(String name, String value, String subType)

@@ -52,8 +52,7 @@
 
 </script>
 <script id="documents-collection-template" type="text/html">
-
-        {{#unless this.length}}
+{{#unless this.length}}
         <div class="alert bg-white">
             <div class="slate-content  p-md">
                 <div class="box-left pull-left m-r-md">
@@ -90,12 +89,11 @@
                 </div>
             </div>
         {{/if}}
-
 </script>
 
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
-<div class="pull-left overflow-hidden line-clamp no-wrap"><a class="text-cap" href="#documents/{{id}}">{{name}}</a></div>
+<div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;"><a class="text-cap">{{name}}</a></div>
 <div class="pull-left m-l-xs">
 <b class="activate-link" style="display:none;">{{#if url}}<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/if}}</b>
 </div>
@@ -110,12 +108,11 @@
 <div  style="width:128px">
         {{#each contacts}}
             {{#if_contact_type "PERSON"}}
-                <a href="#contact/{{id}}" class="activate-link thumb-sm"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+                <a href="#contact/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
             {{/if_contact_type}}
             {{#if_contact_type "COMPANY"}}
-                <a href="#company/{{id}}" class="activate-link thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+                <a href="#company/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
             {{/if_contact_type}}
-
         {{/each}}
     </div>
 </div>
@@ -131,7 +128,7 @@
        {{#if owner.pic}}
         <img class="r r-2x" src="{{owner.pic}}"  title="{{owner.name}}" />
        {{else}}
-            <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;">{{owner.name}}</div>
+             <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;">{{owner.name}}</div>
        {{/if}}
     </div>
 </td>

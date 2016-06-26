@@ -47,7 +47,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 		var contacts_filter = new Report_Filters_Event_View({ url : 'core/api/filters', template : "filter-contacts", isNew : "true", window : "contact-filters",
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					chainFiltersForContactAndCompany(el, undefined, function()
 					{
@@ -81,7 +81,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 					$("#contact_type").trigger('change');
 				})
 				$("#content").html(LOADING_HTML);
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					$("#content").html(LOADING_HTML);
 					// setTimeout(function(){

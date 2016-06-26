@@ -3,10 +3,12 @@
  */
 package com.agilecrm.core.api;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,12 +18,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
@@ -31,14 +36,104 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.JSAPIUtil;
+import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.util.PHPAPIUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @Path("php/api")
 public class PHPAPI
 {
+    
+    /**
+     * Adds contact in the domain
+     * 
+     * <pre>
+     * var contact_json = {tags:[tag1, tag2, tag3], lead_score:100, 
+     * 	properties:[{name:first_name, type:person/company, value: harry},
+     * {name: first_name, type:person/company, value:harry}]
+     * }
+     * 
+     * (domain-name).agilecrm.com/js/api/contacts?contact=contact_json&callback=< function-name>
+     * </pre>
+     * 
+     * @param json
+     *            contact as json string
+     * @param jsoncallback
+     * @return {@link JSONWithPadding}, returns saved contact or null if contact
+     *         exists with sent email
+     */
+    @Path("contacts/gadget")
+    @GET
+    @Produces("application/x-javascript;charset=UTF-8;")
+    public String createContactGadget(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds,
+	    @QueryParam("id") String apiKey, @Context HttpServletRequest request)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Contact contact = mapper.readValue(json, Contact.class);
+	    System.out.println(mapper.writeValueAsString(contact));
+
+	    // Get Contact count by email
+	    String email = contact.getContactFieldValue(Contact.EMAIL);
+	    if (email != null)
+	    {
+		System.out.println(email.toLowerCase());
+	    }
+	    int count = ContactUtil.searchContactCountByEmail(email.toLowerCase());
+	    System.out.println("count = " + count);
+	    if (count != 0)
+	    {
+		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
+	    }
+
+	    String address = contact.getContactFieldValue(Contact.ADDRESS);
+	    System.out.println("Address = " + address);
+
+	    // Sets owner key to contact before saving
+	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+
+	    if (contact.tags.size() > 0)
+	    {
+		String[] tags = new String[contact.tags.size()];
+		contact.tags.toArray(tags);
+		contact.addTags(tags);
+	    }
+	    else
+	    {
+		// If zero, save it
+		contact.save();
+	    }
+	    if (StringUtils.isNotBlank(campaignIds))
+		JSAPIUtil.subscribeCampaigns(campaignIds, contact);
+	    
+	    // return mapper.writeValueAsString(contact);
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (PlanRestrictedException e)
+	{
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+	}
+	catch (WebApplicationException e)
+	{
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+	}
+	catch (IOException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    
     /**
      * Used to create contact based on data given
      * 
@@ -101,7 +196,7 @@ public class PHPAPI
 	    }
 
 	    // Set contact owner from API key and save contact
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.setContactOwner(APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apiKey));
 
 	    // Add properties list to contact properties
 	    contact.properties = properties;
@@ -253,7 +348,7 @@ public class PHPAPI
 	    task = mapper.readValue(obj.toString(), Task.class);
 
 	    // Set task owner
-	    task.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apikey));
+	    task.setOwner(APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apikey));
 	    task.contacts = new ArrayList<String>();
 
 	    // Save task to related contact
@@ -313,7 +408,7 @@ public class PHPAPI
 	    opportunity.addContactIds(contact.id.toString());
 
 	    // Set deal owner based on API key, save and return deal as String
-	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToAPIKey(apikey).getId());
+	    opportunity.owner_id = String.valueOf(APIKeyUtil.getDomainUserKeyRelatedToAPIKey(apikey).getId());
 	    opportunity.save();
 	    return mapper.writeValueAsString(opportunity);
 	}

@@ -16,11 +16,14 @@ import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.util.APIKeyUtil;
+import com.agilecrm.apilimitcheck.APILimitCheck;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.util.common.base.Charsets;
 
 /**
@@ -92,7 +95,7 @@ public class BasicAuthFilter implements Filter
 		    // Get AgileUser
 		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 
-		    if (domainUser == null)
+		    if (domainUser == null || !domainUser.domain.equals(NamespaceManager.get()))
 		    {
 			JSONObject duser = new JSONObject();
 
@@ -111,11 +114,15 @@ public class BasicAuthFilter implements Filter
 		    // If domain user exists and the APIKey matches, request
 		    // is
 		    // given access
-		    if (isValidPassword(password, domainUser) || isValidAPIKey(password, domainUser))
+		    if (isValidPassword(password, domainUser) || APIKey.isValidAPIKey(domainUser.id, password))
 		    {
 			try
 			{
 			    setUser(domainUser);
+			    
+			    // Validate with Agile API Limits
+			    APILimitCheck.checkAPILimit(domainUser.domain);
+			    
 			    chain.doFilter(httpRequest, httpResponse);
 			    return;
 			}
@@ -165,30 +172,6 @@ public class BasicAuthFilter implements Filter
 	UserInfo userInfo = new UserInfo("agilecrm.com/dev", domainUser.email, domainUser.name);
 
 	SessionManager.set(userInfo);
-    }
-
-    /**
-     * Checks if API key sent in request matches with user.
-     * 
-     * @param apiKey
-     * @param user
-     * @return
-     */
-    boolean isValidAPIKey(String apiKey, DomainUser user)
-    {
-	// Gets APIKey, to authenticate the user
-	APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
-
-	if (key == null)
-	    return false;
-
-	String apiKeyFromDB = key.api_key;
-
-	// Checks APIKey received in request and APIKey from DB
-	if (StringUtils.equals(apiKey, apiKeyFromDB))
-	    return true;
-
-	return false;
     }
 
     /**

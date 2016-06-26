@@ -72,16 +72,16 @@ function initializeCallScriptListeners(){
 	$('#prefs-tabs-content').on('click', '.delete-callscriptrule', function(e)
 	{
 		e.preventDefault();
-		
+		var $that = $(this);
 		// If not confirmed to delete, return
-		if (!confirm("Are you sure to delete a rule"))
-			return;
+		showAlertModal("delete_rule", "confirm", function(){
+			// Remove element
+			$that.closest("tr").remove();
 
-		// Remove element
-		$(this).closest("tr").remove();
+			// Delete rule from widget
+			deleteCallScriptRule($(this).attr("data"));
+		});
 
-		// Delete rule from widget
-		deleteCallScriptRule($(this).attr("data"))
 	});
 
 	// Display rule actions
@@ -399,7 +399,7 @@ function editCallScriptRule(ruleCount)
 		$("#prefs-tabs-content").html(LOADING_HTML);
 		initializeCallScriptListeners();
 		
-		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 		{
 					
 			getTemplate('callscript-rule', contact_fields, undefined, function(template_ui){
@@ -654,8 +654,10 @@ function build_custom_widget_form(el)
 
 				console.log(model);
 
-				if (model == null)
-					alert("A widget with this name exists already. Please choose a different name");
+				if (model == null){
+					showAlertModal("duplicate_widget");
+					return;
+				}
 
 				App_Widgets.Catalog_Widgets_View.collection.add(model);
 				$("#custom-widget").replaceWith(divClone);

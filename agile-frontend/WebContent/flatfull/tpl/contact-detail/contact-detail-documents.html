@@ -12,47 +12,41 @@
                         You can add a document related to a {{#isCompany}}company{{else}}contact{{/isCompany}}.
                     </div>
                     {{/hasMenuScope}}
-					<div>{{#hasMenuScope 'DOCUMENT'}}
+					
 						<div class="btn-group">
-						{{#isCompany}}
-					
-						        <a href="#" class="btn btn-default btn-sm add-company-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
-						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+						<div>{{#hasMenuScope 'DOCUMENT'}}
+							{{#isCompany}}
+							        <a href="#" class="btn btn-default btn-sm add-company-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+							        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
-								<ul class="dropdown-menu pull-right" style="margin-top:3px;">
-									<li style="padding:0px 0px;border:0px;"><a href="#" class="add-company-edocument-select">Add eDocument</a></li>
-								</ul>
-					
-					
+									<ul class="dropdown-menu pull-right" style="margin-top:3px;">
+										<li style="padding:0px 0px;border:0px;"><a href="#" class="add-company-edocument-select">Add eDocument</a></li>
+									</ul>
+							{{else}}					
+							        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
+							        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+
+									<ul class="dropdown-menu pull-right" style="margin-top:3px;">
+										<li style="padding:0px 0px;border:0px;"><a href="#" class="add-contact-edocument-select">Add eDocument</a></li>
+									</ul>
+							{{/isCompany}}
 						
-						{{else}}
-					
-						        <a href="#" class="btn btn-default btn-sm add-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
-						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
-
-								<ul class="dropdown-menu pull-right" style="margin-top:3px;">
-									<li style="padding:0px 0px;border:0px;"><a href="#" class="add-contact-edocument-select">Add eDocument</a></li>
-								</ul>
-					
-						{{/isCompany}}
+						{{/hasMenuScope}}
 						<span class="contact-document-select upload-doc-field" style="display:none;">
-
 							<select id="document-select" class="form-control inline-block w">
 								<option value="">Select...</option>
 							</select>
-	 					<div class="m-t-sm">
-							<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">Cancel</a>
-							{{#isCompany}}
-                    		<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
-                    		{{else}}	
-                    		<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
-							{{/isCompany}}
-							<span class="save-status"></span>
-						</span>
-					</div>	
-						
-						{{/hasMenuScope}}
-					</div>
+		 					<div class="m-t-sm">
+									<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">Cancel</a>
+		                    		{{#isCompany}}
+		                    		<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
+		                    		{{else}}	
+		                    		<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
+									{{/isCompany}}
+									<span class="save-status"></span>
+							</div>
+						</span>	
+						</div>	
 					</div>
          			<!--<div class="btn-group" style="margin-top:12px;">
         				<a href="#" class="btn btn-default btn-sm right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
@@ -78,7 +72,7 @@
 		</div>-->
 		<div>{{#hasMenuScope 'DOCUMENT'}}
 				<div class="btn-group">
-						{{#isCompany}}
+					{{#isCompany}}
 							
 						        <a href="#" class="btn btn-default btn-sm add-company-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Document</a>
 						        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
@@ -99,23 +93,21 @@
 					
 						
 						{{/isCompany}}
-						<span class="contact-document-select upload-doc-field" style="display:none;">
-							<select id="document-select" class="form-control inline-block m-r-sm p-t-xs w"> 
-								<option value="">Select...</option>
-							</select>
-							<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-							{{#isCompany}}
-							<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
-							{{else}}
-							<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
-							{{/isCompany}}
-			                <a href="#" class="btn btn-default btn-sm add-document-cancel">Cancel</a>
-							<span class="save-status"></span>
-						</span>
-					</div>
 
-						{{/hasMenuScope}}
-
+				{{/hasMenuScope}}
+			<span class="contact-document-select upload-doc-field" style="display:none;">
+				<select id="document-select" class="form-control inline-block m-r-sm p-t-xs w"> 
+					<option value="">Select...</option>
+				</select>
+				<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+	                {{#isCompany}}
+								<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">Add</a> 
+								{{else}}
+								<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">Add</a> 
+					{{/isCompany}}
+                <a href="#" class="btn btn-default btn-sm add-document-cancel">Cancel</a>
+				<span class="save-status"></span>
+			</span>
 		</div>
 	</div>
 			<ul id="contact-documents-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
@@ -143,10 +135,10 @@
 		</small>
 		</div>
 		<div class="clearfix"></div>
-    <div>	
+    <div>
     {{#if url}}
-		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document1"></i></a>{{/hasMenuScope}}
-	{{/if}}	
+		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>{{/hasMenuScope}}
+	{{/if}}		
 	</div>
 <div class="clearfix"></div>
 	
@@ -157,10 +149,10 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact text-capitalize">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        					<a href="#company/{{id}}" class="text-capitalize popover_contact" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
@@ -175,9 +167,9 @@
 		</div>
 	
 		
-		<div class="actions pull-right pos-abs pos-r-0 pos-b-0">
+		<div class="actions pull-right pos-abs pos-r-0 pos-b-0 icons-text-sm">
             {{#hasMenuScope 'DOCUMENT'}}
-            {{#isCompany}}
+			{{#isCompany}}
 			<a title="Edit"  data="{{id}}" href="#" href1="#documents/{{id}}" class="document-edit-company-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
 			{{else}}
 			<a title="Edit"  data="{{id}}" href="#" href1="#documents/{{id}}" class="document-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>

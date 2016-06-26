@@ -53,10 +53,10 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
+							<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        					<a href="#company/{{id}}" class="popover_contact" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
@@ -71,9 +71,9 @@
 			<i class="fa fa-clock-o m-r-xs"></i> <time class="event-created-time text-base" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>
 		</div>
-		<div class="pull-right pos-abs pos-r-0 pos-b-0 m-r-xs">
+		<div class="pull-right pos-abs pos-r-0 pos-b-0 m-r-xs icons-text-sm">
 		<span class="actions">
-			<a title="Edit"  data="{{id}}" class="c-p text-l-none event-edit-deal-tab p-r-sm"> <i class="icon-pencil"></i> </a>
+			<a title="Edit"  data="{{id}}" class="c-p text-l-none event-edit-deal-tab p-r-sm"> <i class="fa fa-edit"></i> </a>
             <a title="Delete" class="c-p text-l-none"><span class="deal-event-delete icon-trash" id="{{id}}" url="core/api/events/bulk"><i></i></span></a>
         </span>
         </div>        

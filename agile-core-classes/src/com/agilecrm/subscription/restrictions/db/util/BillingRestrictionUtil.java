@@ -22,7 +22,7 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -37,6 +37,7 @@ public class BillingRestrictionUtil {
 	 * @author yaswanth
 	 * 
 	 */
+	
 	public static enum ErrorMessages {
 		Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow(
 				"Campaigns limit reached"), REPORT(
@@ -180,7 +181,21 @@ public class BillingRestrictionUtil {
 	 */
 	public static BillingRestriction getInstance() {
 		UserInfo info = SessionManager.get();
-
+		
+		String moduleName = VersioningUtil.getCurrentModuleName();
+		
+		//Session.get() may return others session. To avoid we are explicitly setting current namespace billing info.
+		//Added by Sasi on Apr-8-2016 to avoid contact creation when new ticket is received.
+		if("agile-ticket-module".equalsIgnoreCase(moduleName)) {
+			
+			System.out.println("Current moduel is agile-ticket-module..");
+			
+			DomainUser domainOwner = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+			info =  new UserInfo("agilecrm.com", domainOwner.email, domainOwner.name);
+			
+			System.out.println("Info..." + info);
+		}
+		
 		if (info == null) {
 			System.out.println("UserInfo is null...");
 			return BillingRestriction.getInstance(null, null);
@@ -271,6 +286,8 @@ public class BillingRestrictionUtil {
 
 			info.setPlan(plan.plan_type.toString());
 			info.setUsersCount(plan.quantity);
+			// Add API Limit
+			info.setAPICallsLimit(plan.getPlanName());
 		} finally {
 			NamespaceManager.set(oldNamespace);
 		}
@@ -431,3 +448,4 @@ public class BillingRestrictionUtil {
 	}
 	
 }
+

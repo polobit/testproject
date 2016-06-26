@@ -9,7 +9,19 @@
       <context-root>agile-frontend</context-root>
     </web>
   </module>
-  <!-- <module>
+  <!--<module>
+    <web>
+      <web-uri>agile-normal-bulk.war</web-uri>
+      <context-root>agile-normal-bulk</context-root>
+    </web>
+  </module>-->
+     <!-- <module>
+    <web>
+      <web-uri>agile-campaigns-normal.war</web-uri>
+      <context-root>agile-campaigns-normal</context-root>
+    </web>
+  </module>
+  <module>
     <web>
       <web-uri>agile-calendar.war</web-uri>
       <context-root>agile-calendar</context-root>
@@ -29,12 +41,6 @@
   </module>
   <module>
     <web>
-      <web-uri>agile-campaigns-normal.war</web-uri>
-      <context-root>agile-campaigns-normal</context-root>
-    </web>
-  </module>
-  <module>
-    <web>
       <web-uri>agile-temp-bulk.war</web-uri>
       <context-root>agile-temp-bulk</context-root>
     </web>
@@ -44,5 +50,30 @@
       <web-uri>agile-sync.war</web-uri>
       <context-root>agile-sync</context-root>
     </web>
-  </module> -->
+  </module> 
+  <module>
+     <web>
+      <web-uri>agile-tasks-handler.war</web-uri>
+      <context-root>agile-tasks-handler</context-root>
+     </web>
+  </module>
+  <module>
+     <web>
+      <web-uri>agile-slow-tasks-handler.war</web-uri>
+      <context-root>agile-slow-tasks-handler</context-root>
+     </web>
+  </module>
+  <module>
+     <web>
+      <web-uri>agile-campaigns-logs.war</web-uri>
+      <context-root>agile-campaigns-logs</context-root>
+ </web>
+  </module>
+  <module>
+     <web>
+      <web-uri>agile-reports.war</web-uri>
+      <context-root>agile-reports</context-root>
+     </web>
+  </module>-->
+
 </application>

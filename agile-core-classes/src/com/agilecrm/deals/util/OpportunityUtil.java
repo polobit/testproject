@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
+
+import javax.xml.bind.annotation.XmlElement;
 
 import net.sf.json.JSONObject;
 
@@ -28,6 +31,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.CustomFieldDef.Type;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -42,6 +46,8 @@ import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -52,6 +58,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -294,8 +301,12 @@ public class OpportunityUtil
 	    try
 	    {
 		// Total and Pipeline (total * probability)
-		double total = opportunity.expected_value;
-		double pipeline = opportunity.expected_value * opportunity.probability / 100;
+		double total = 0D;
+        double pipeline = 0D;
+         if(opportunity.expected_value!=null){
+            total=opportunity.expected_value;
+            pipeline=opportunity.expected_value * opportunity.probability / 100;
+         }
 
 		/*
 		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
@@ -366,6 +377,12 @@ public class OpportunityUtil
     {
 	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime)
 		.filter("close_date <= ", maxTime).filter("milestone", milestone).order("close_date");
+	return dao.getCount(q);
+    }
+    
+    public static int getDealsbyMilestone(Long pipelineId)
+    {
+	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("pipeline",  new Key<Milestone>(Milestone.class, pipelineId)).limit(2);
 	return dao.getCount(q);
     }
 
@@ -870,8 +887,13 @@ public class OpportunityUtil
 		if (opportunity.milestone.equalsIgnoreCase(lostMilestone))
 		    opportunity.probability = 0;
 		// Total and Pipeline (total * probability)
-		double total = opportunity.expected_value;
-		double pipeline = opportunity.expected_value * opportunity.probability / 100;
+		double total = 0D;
+        double pipeline = 0D;
+         if(opportunity.expected_value!=null){
+            total=opportunity.expected_value;
+            pipeline=opportunity.expected_value * opportunity.probability / 100;
+         }
+		
 
 		/*
 		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
@@ -1051,8 +1073,6 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
-		sortField = "expected_value";
-
 		if (checkJsonString(filterJson, "value_start"))
 		{
 		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
@@ -1089,8 +1109,17 @@ public class OpportunityUtil
 		}
 	    }
 
-	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
+	    searchMap.putAll(getDateFilterCondition(filterJson, sortField));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
+	    
+	    //Add tag for the filter also
+	    if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+		{
+		    String tagCondition = filterJson.getString("dealTagCondition");
+		    String tagValue = filterJson.getString("dealTagName");
+		    if( tagCondition.equals("is"))
+		    	searchMap.put("tagsWithTime.tag = ", tagValue);
+		    }
 
 	    /*
 	     * Map<String, Object> customFilters =
@@ -1098,10 +1127,13 @@ public class OpportunityUtil
 	     * if (customFilters != null) searchMap.putAll(customFilters);
 	     */
 
-	    if (count != 0)
-		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
+	    if (count != 0){
+	    	List<Opportunity> dealList = new ArrayList<Opportunity>(dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField));
+	    	return dealList;
+	    }
 
-	    return dao.listByProperty(searchMap);
+	     List<Opportunity> dealList = new ArrayList<Opportunity>(dao.listByProperty(searchMap));
+	     return dealList;
 	}
 	catch (JSONException e)
 	{
@@ -1113,7 +1145,7 @@ public class OpportunityUtil
 
     
     // Total value count using projection query
-    public static Double getTotalValueOfDeals(org.json.JSONObject filterJson)
+    public static Double getTotalValueOfDeals(org.json.JSONObject filterJson) throws JSONException
     {
     com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query("Opportunity");
     DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
@@ -1122,6 +1154,7 @@ public class OpportunityUtil
 	double start_value = 0d;
 	double end_value = 0d;
 	String sortField = "close_date";
+	String fieldval = filterJson.getString("field");
 	try
 	{
 		
@@ -1171,28 +1204,45 @@ public class OpportunityUtil
 		    query.addFilter("probability",FilterOperator.LESS_THAN, probability);
 		}
 	    }
-	    if (checkJsonString(filterJson, "close_date")) {
-	    	    	 String fieldName = filterJson.getString("close_date");
+	    if (checkJsonString(filterJson, "close_date_filter")) {
+	    	    	 String fieldName = "close_date" ;
 		    if (checkJsonString(filterJson, fieldName + "_filter"))
 		    {
-			if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("equals")
-				&& checkJsonString(filterJson, fieldName))
+			if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("on")
+				&& checkJsonString(filterJson, fieldName + "_start"))
 			{
-			    long closeDate = Long.parseLong(filterJson.getString(fieldName));
+			    long closeDate = Long.parseLong(filterJson.getString(fieldName+"_start"));
 			    query.addFilter(fieldName,FilterOperator.EQUAL,closeDate );
 			}
+			else if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("before")
+					&& checkJsonString(filterJson, fieldName + "_start"))
+				{
+				    long closeDate = Long.parseLong(filterJson.getString(fieldName+"_start"));
+				    query.addFilter(fieldName,FilterOperator.LESS_THAN,closeDate );
+				}
+			else if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("after")
+					&& checkJsonString(filterJson, fieldName + "_start"))
+				{
+				    long closeDate = Long.parseLong(filterJson.getString(fieldName+"_start"));
+				    query.addFilter(fieldName,FilterOperator.GREATER_THAN,closeDate );
+				}
 			else
 			{
+				if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("between") ||( filterJson.getString(fieldName + "_filter").equalsIgnoreCase("last") || filterJson.getString(fieldName + "_filter").equalsIgnoreCase("next")) ){
 			    if (checkJsonString(filterJson, fieldName + "_start"))
 			    {
 				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_start"));
-				 query.addFilter(fieldName,FilterOperator.GREATER_THAN,closeDate );
+				if (filterJson.getString(fieldName + "_filter").equalsIgnoreCase("next"))
+					query.addFilter(fieldName,FilterOperator.GREATER_THAN,closeDate );
+				else
+					query.addFilter(fieldName,FilterOperator.GREATER_THAN_OR_EQUAL,closeDate );
 			    }
 			    if (checkJsonString(filterJson, fieldName + "_end"))
 			    {
 				long closeDate = Long.parseLong(filterJson.getString(fieldName + "_end"));
-				 query.addFilter(fieldName,FilterOperator.LESS_THAN,closeDate );
+				 query.addFilter(fieldName,FilterOperator.LESS_THAN_OR_EQUAL,closeDate );
 			    }
+			}
 			}
 		    }
 		
@@ -1227,7 +1277,17 @@ public class OpportunityUtil
     		 KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId());
     		 query.addFilter("pipeline", FilterOperator.EQUAL, KeyFactory.createKey(pipelinekey.getKind(), pipelinekey.getId()));
     		 
+    		 if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+    			{
+    			    String tagCondition = filterJson.getString("dealTagCondition");
+    			    String tagValue = filterJson.getString("dealTagName");
+    			    if( tagCondition.equals("is"))
+    			    	query.addFilter("tagsWithTime.tag",FilterOperator.EQUAL,tagValue);
+    				}
+
 		      System.out.println("hello n try block "+filterJson.getLong("pipeline_id"));
+		      System.out.println(sortField);
+		      query.addSort(sortField , SortDirection.ASCENDING);
 		      List<Entity> deals = dataStore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 		      System.out.println("deals size in projection query = "+deals.size());
 		      if (checkJsonString(filterJson, "value_filter")
@@ -1321,26 +1381,44 @@ public class OpportunityUtil
 	{
 	    if (checkJsonString(json, fieldName + "_filter"))
 	    {
-		if (json.getString(fieldName + "_filter").equalsIgnoreCase("equals")
-			&& checkJsonString(json, fieldName))
+		if (json.getString(fieldName + "_filter").equalsIgnoreCase("on")
+			&& checkJsonString(json, fieldName +"_start"))
 		{
-		    long closeDate = Long.parseLong(json.getString(fieldName));
-		    searchMap.put(fieldName, closeDate);
+		    long closeDateStart = Long.parseLong(json.getString(fieldName + "_start"));
+		    searchMap.put("close_date	" , closeDateStart);
+		    
 		}
+		else if (json.getString(fieldName + "_filter").equalsIgnoreCase("after")
+				&& checkJsonString(json, fieldName +"_start"))
+			{
+			    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
+			    searchMap.put("close_date	 >", closeDate);
+			}
+		else if (json.getString(fieldName + "_filter").equalsIgnoreCase("before")
+				&& checkJsonString(json, fieldName +"_start"))
+			{
+			    long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
+			    searchMap.put("close_date	 < ", closeDate);
+			}
 		else
-		{
-		    if (checkJsonString(json, fieldName + "_start"))
-		    {
-			long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-			searchMap.put(fieldName + " >", closeDate);
-		    }
-		    if (checkJsonString(json, fieldName + "_end"))
-		    {
-			long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
-			searchMap.put(fieldName + " <", closeDate);
-		    }
+		{ 
+			if (json.getString(fieldName + "_filter").equalsIgnoreCase("between") ||( json.getString(fieldName + "_filter").equalsIgnoreCase("last") || json.getString(fieldName + "_filter").equalsIgnoreCase("next")) ){
+			    if (checkJsonString(json, fieldName + "_start"))
+			    {
+				long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
+				if( json.getString(fieldName + "_filter").equalsIgnoreCase("next"))
+					searchMap.put("close_date	 > ", closeDate);
+				else
+					searchMap.put("close_date	 >= ", closeDate);
+			    }
+			    if (checkJsonString(json, fieldName + "_end"))
+			    {
+				long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
+				searchMap.put("close_date <= ", closeDate);
+			    }
+			}
 		}
-	    }
+	   }
 	}
 	catch (NumberFormatException e)
 	{
@@ -1738,9 +1816,6 @@ public class OpportunityUtil
 		System.out.println("------------" + idsArray.length());
 	    }
 
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-
 	    if (idsArray != null && idsArray.length() > 0)
 	    {
 		List<Key<Opportunity>> dealIds = new ArrayList<Key<Opportunity>>();
@@ -1758,6 +1833,9 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		System.out.println("------------" + filterJSON.toString());
+		
 		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, count, null);
 		String cursor = deals.get(deals.size() - 1).cursor;
 		while (cursor != null)
@@ -1840,7 +1918,27 @@ public class OpportunityUtil
 			    .filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
 		    ;
-		    List<Opportunity> list = dao.fetchAll(q);
+		    Query<Opportunity> timeChanged = dao.ofy().query(Opportunity.class)
+				    .filter("milestone", milestone.won_milestone).filter("milestone_changed_time >= ", minTime)
+				    .filter("milestone_changed_time <= ", maxTime).filter("archived", false)
+				    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("-milestone_changed_time");
+			 ;
+		    List<Opportunity> listWonDate = dao.fetchAll(q);
+		    List<Opportunity> listTimeChanged = dao.fetchAll(timeChanged);
+		    Map <Long, Opportunity> map = new HashMap<Long,Opportunity>();
+		    for(Opportunity oppr: listWonDate){
+		        map.put(oppr.id , oppr);
+		    }
+		    for(Opportunity oppr2: listTimeChanged){
+		    	if(map.get(oppr2.id) == null)
+		    	       map.put(oppr2.id , oppr2);
+		    }
+
+		    List<Opportunity> list = new ArrayList<Opportunity>(map.values());   
+		   
+		    for(Opportunity opp : list) 
+	            System.out.println(opp.id);
+	         
 		    if (list != null)
 		    {
 			ownDealsList.addAll(list);
@@ -1852,7 +1950,25 @@ public class OpportunityUtil
 			    .filter("won_date >= ", minTime).filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
 		    ;
-		    List<Opportunity> list = dao.fetchAll(q);
+		    Query<Opportunity> timeChanged = dao.ofy().query(Opportunity.class)
+				    .filter("milestone", "Won").filter("milestone_changed_time >= ", minTime)
+				    .filter("milestone_changed_time <= ", maxTime).filter("archived", false)
+				    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
+			 ;
+		    List<Opportunity> listWonDate = dao.fetchAll(q);
+		    List<Opportunity> listTimeChanged = dao.fetchAll(timeChanged);
+		    Map <Long, Opportunity> map = new HashMap<Long,Opportunity>();
+		    for(Opportunity oppr: listWonDate){
+		        map.put(oppr.id , oppr);
+		    }
+		    for(Opportunity oppr2: listTimeChanged){
+		    	if(map.get(oppr2.id) == null)
+		    	       map.put(oppr2.id , oppr2);
+		    }
+
+		    List<Opportunity> list = new ArrayList<Opportunity>(map.values());  
+		    for(Opportunity opp : list) 
+	            System.out.println(opp.id);
 		    if (list != null)
 		    {
 			ownDealsList.addAll(list);
@@ -1955,22 +2071,20 @@ public class OpportunityUtil
 	    {
 		if (milestone.won_milestone != null)
 		{
-		    Query<Opportunity> q = dao.ofy().query(Opportunity.class)
+		    count += dao.ofy().query(Opportunity.class)
 			    .filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
 			    .filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    ;
-		    count += dao.getCount(q);
+			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date").count();
+		   // count += dao.getCount(q);
 		}
 		else
 		{
-		    Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("milestone", "Won")
+		   count += dao.ofy().query(Opportunity.class).filter("milestone", "Won")
 			    .filter("won_date >= ", minTime).filter("won_date <= ", maxTime).filter("archived", false)
 			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    ;
-		    count += dao.getCount(q);
+			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date").count();
+		    //count += dao.getCount(q);
 		}
 	    }
 	}
@@ -2002,12 +2116,12 @@ public class OpportunityUtil
 	    {
 		if (milestone.won_milestone != null)
 		{
-		    Query<Opportunity> q = dao.ofy().query(Opportunity.class)
-			    .filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
-			    .filter("won_date <= ", maxTime).filter("archived", false)
-			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date");
-		    List<Opportunity> list = dao.fetchAll(q);
+		    List<Opportunity> list = dao.ofy().query(Opportunity.class)
+                .filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
+                .filter("won_date <= ", maxTime).filter("archived", false)
+                .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
+                .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("won_date").list();
+            //List<Opportunity> list = dao.fetchAll(q);
 		    if (list != null)
 		    {
 			ownDealsList.addAll(list);
@@ -2183,7 +2297,10 @@ public class OpportunityUtil
 		    if (type.equalsIgnoreCase("deals"))
 			count++;
 		    else
+            {
+                 if(revenue!=null)
 			count = count + revenue;
+        }
 		    sourcecount1.put(source_id.toString(), count);
 		    newDealsObject.put(createdtime, sourcecount1);
 		}
@@ -2225,7 +2342,6 @@ public class OpportunityUtil
      * 
      * @return List
      */
-
     public static List<Opportunity> getDealsWithOwnerandPipeline(Long ownerId, Long pipelineId, long minTime,
 	    long maxTime)
     {
@@ -2354,6 +2470,7 @@ public class OpportunityUtil
 		    int count = sourceObject.getInt("count");
 		    count++;
 		    Double total = sourceObject.getDouble("total");
+            if(value!=null)
 		    total = total + value;
 		    sourceObject.put("count", count);
 		    sourceObject.put("total", total);
@@ -2415,6 +2532,7 @@ public class OpportunityUtil
 	if (pipelineId != null)
 	{
 	    milestone1 = MilestoneUtil.getMilestone(pipelineId);
+	    if(milestone1!=null){
 	    if (milestone1.lost_milestone != null)
 	    {
 		conditionsMap.put("milestone", milestone1.lost_milestone);
@@ -2480,6 +2598,7 @@ public class OpportunityUtil
 			else
 				list2.add(list_it);
 		}
+	    }
 	    }
 	}
 	else
@@ -2627,6 +2746,7 @@ public class OpportunityUtil
 		    int count = sourceObject.getInt("count");
 		    count++;
 		    Double total = sourceObject.getDouble("total");
+            if(value!=null)
 		    total = total + value;
 		    sourceObject.put("count", count);
 		    sourceObject.put("total", total);
@@ -2968,7 +3088,10 @@ public class OpportunityUtil
 	   	
 	   	if(expectedValue.length()!=0 && expectedValue!=null)   
     		opportunityObj.expected_value=expectedValueD;
-    	
+	   	
+	   	System.out.println("updateDeal------------Checking ACLs for creating deal");
+	   	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunityObj, CRUDOperation.CREATE, true);
+	   	
     	opportunityObj.save();
 
     	return opportunityObj.name;
@@ -3003,5 +3126,226 @@ public class OpportunityUtil
 		    e.printStackTrace();
 		    return list;
 		}
+    }
+    
+    /**
+     * Get opportunities count based on the filter in the given filter JSON object.
+     * 
+     * @param filterJson
+     *            JSON object containing the fields.
+     * @param count
+     *            number of deals per page.
+     * @param cursor
+     *            cursor for the deals.
+     * @return deals list.
+     */
+    public static int getOpportunitiesCountByFilter(org.json.JSONObject filterJson, int count, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	try
+	{
+	    if (checkJsonString(filterJson, "pipeline_id"))
+	    {
+		searchMap.put("pipeline",
+			new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("pipeline_id"))));
+		if (checkJsonString(filterJson, "milestone"))
+		    searchMap.put("milestone", filterJson.getString("milestone"));
+	    }
+
+	    if (checkJsonString(filterJson, "owner_id"))
+		searchMap.put("ownerKey",
+			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
+
+	    if (checkJsonString(filterJson, "archived"))
+	    {
+		if (!filterJson.getString("archived").equals("all"))
+		    searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
+	    }
+
+	    if (checkJsonString(filterJson, "value_filter")
+		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
+	    {
+		if (checkJsonString(filterJson, "value"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value"));
+		    searchMap.put("expected_value", value);
+		}
+
+	    }
+	    else
+	    {
+		if (checkJsonString(filterJson, "value_start"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
+		    searchMap.put("expected_value >=", value);
+		}
+		if (checkJsonString(filterJson, "value_end"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
+		    searchMap.put("expected_value <=", value);
+		}
+	    }
+
+	    if (checkJsonString(filterJson, "probability_filter")
+		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
+	    {
+		if (checkJsonString(filterJson, "probability"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability").replace("%", ""));
+		    searchMap.put("probability", probability);
+		}
+
+	    }
+	    else
+	    {
+		if (checkJsonString(filterJson, "probability_start"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability_start").replace("%", ""));
+		    searchMap.put("probability >=", probability);
+		}
+		if (checkJsonString(filterJson, "probability_end"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
+		    searchMap.put("probability <=", probability);
+		}
+	    }
+
+	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
+	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
+	    if (checkJsonString(filterJson, "dealTagName") && checkJsonString(filterJson, "dealTagCondition") )
+	  		{
+	  		    String tagCondition = filterJson.getString("dealTagCondition");
+	  		    String tagValue = filterJson.getString("dealTagName");
+	  		    if( tagCondition.equals("is"))
+	  		    	searchMap.put("tagsWithTime.tag", tagValue);
+	  		    }
+
+	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
+	return 0;
+    }
+    
+    /**
+     * Returns count of opportunities. This method is called if TEXT_PLAIN is
+     * request.
+     * 
+     * @param ownerId
+     *            Owner of the deal.
+     * @param milestone
+     *            Deals Milestone.
+     * @param contactId
+     *            Id of the contact related to deal.
+     * @param fieldName
+     *            the name field to sort on.
+     * @param cursor
+     * @param pipelineId
+     *            the id of the pipeline the deal belongs to.
+     * @param count
+     *            page size.
+     * @return List of deals.
+     */
+    public static int getOpportunitiesCountByFilter(String ownerId, String milestone, String contactId,
+	    String fieldName, int max, String cursor, Long pipelineId)
+    {
+	if (pipelineId == null || pipelineId == 0L)
+	    pipelineId = MilestoneUtil.getMilestones().id;
+
+	return getOpportunitiesCountByFilterWithoutDefaultPipeLine(ownerId, milestone, contactId, fieldName, max, cursor,
+		pipelineId);
+
+    }
+    
+    public static int getOpportunitiesCountByFilterWithoutDefaultPipeLine(String ownerId, String milestone,
+    	    String contactId, String fieldName, int max, String cursor, Long pipelineId)
+        {
+    	try
+    	{
+    	    Map<String, Object> searchMap = new HashMap<String, Object>();
+
+    	    if (pipelineId != null && pipelineId != 1L)
+    	    {
+    		// If the track is deleted by the user, get the deals from the
+    		// default track.
+    		if (MilestoneUtil.getMilestone(pipelineId) == null)
+    		    pipelineId = MilestoneUtil.getMilestones().id;
+
+    		searchMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
+    	    }
+
+    	    if (StringUtils.isNotBlank(ownerId))
+    		searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId)));
+
+    	    if (StringUtils.isNotBlank(milestone))
+    		searchMap.put("milestone", milestone);
+
+    	    if (StringUtils.isNotBlank(contactId))
+    		searchMap.put("related_contacts", new Key<Contact>(Contact.class, Long.parseLong(contactId)));
+
+    	    if (!StringUtils.isNotBlank(fieldName))
+    		fieldName = "-created_time";
+
+    	    return dao.getCountByPropertyWithLimit(searchMap, 1001);
+
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    System.out.println(e.getMessage());
+    	    return 0;
+    	}
+
+        }
+    
+    public static Milestone getOpportunityPipeline(Opportunity opportunity) throws Exception
+    {
+    
+    Long id = opportunity.getPipeline_id();
+	if (id!= null && id != 0L)
+	{
+	    try
+	    {
+		// Gets Domain User Object
+		return MilestoneUtil.getMilestone(id);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
+    public static int getDealsbyTags(String tag)
+    {
+		Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("tagsWithTime.tag = ", tag).limit(2);
+		return dao.getCount(q);
+    }
+    /*
+     * Author @sankar
+     * date 1/apr/16
+     * */
+    public static List<Opportunity> getOpportunitiesByNote(Long noteId)
+    {
+    	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("related_notes", new Key<Note>(Note.class,noteId) );
+    	return dao.fetchAll(q);
+    }
+    public static List<Opportunity> getDealsBulkbyIds(List<Long> dealIds)
+    {
+	List<Key<Opportunity>> dealKeys = new ArrayList<Key<Opportunity>>();
+
+	for (Long id : dealIds)
+	{
+		dealKeys.add(new Key<Opportunity>(Opportunity.class, id));
+	}
+	System.out.println(dao.fetchAllByKeys(dealKeys));
+
+	return dao.fetchAllByKeys(dealKeys);
+    }
+    public static List<Opportunity> getOpportunitiesbyTags(String tag){
+    	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("tagsWithTime.tag = ", tag).limit(25);
+    	return dao.fetchAll(q);
     }
 }

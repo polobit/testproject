@@ -43,6 +43,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.search.SearchException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.annotation.AlsoLoad;
@@ -220,6 +221,10 @@ public class Contact extends Cursor
 
     @NotSaved
     public String entity_type = "contact_entity";
+    
+    @NotSaved(IfDefault.class)
+    @Indexed
+    public String source = null ;
 
     /**
      * related company key of this person, ignored for company entity, this is
@@ -481,6 +486,11 @@ public class Contact extends Cursor
 	    try
 	    {
 		search.add(this);
+	    }
+	    
+	    catch (SearchException se)
+	    {
+	    	search.addAsync(this);
 	    }
 	    catch (Exception e)
 	    {
@@ -773,6 +783,20 @@ public class Contact extends Cursor
 	TagUtil.deleteTags(tagslist);
 
     }
+    
+    /**
+     * Sets score to a contact
+     * 
+     * @param score
+     *            value of the score to be added
+     */
+    public void setScore(Integer score)
+    {
+
+	this.lead_score = score;
+	this.save();
+
+    }
 
     /**
      * Adds score to a contact
@@ -799,7 +823,7 @@ public class Contact extends Cursor
 
 	this.lead_score = this.lead_score - score;
 
-	if (this.lead_score >= 0)
+	//if (this.lead_score >= 0)
 	    this.save();
 
     }
@@ -1113,6 +1137,8 @@ public class Contact extends Cursor
 			Contact newCompany = new Contact();
 			newCompany.properties = new ArrayList<ContactField>();
 			newCompany.properties.add(new ContactField(Contact.NAME, contactField.value, null));
+			newCompany.properties.add(new ContactField("name_lower", contactField.value.toLowerCase(), null));			
+			newCompany.name = StringUtils.lowerCase(contactField.value);
 			newCompany.type = Type.COMPANY;
 
 			/*
@@ -1142,6 +1168,7 @@ public class Contact extends Cursor
 		ContactField nameField = this.getContactFieldByName(Contact.NAME);
 		this.name = nameField != null ? StringUtils.lowerCase(nameField.value) : "";
 	    }
+		
 	    // Company name lower case field used for duplicate check.
 	    ContactField nameLowerField = this.getContactFieldByName("name_lower");
 	    if (nameLowerField == null)
@@ -1158,7 +1185,7 @@ public class Contact extends Cursor
 	{
 	    created_time = System.currentTimeMillis() / 1000;
 	}
-
+	
     }
 
     /**
@@ -1173,6 +1200,17 @@ public class Contact extends Cursor
     @PostLoad
     private void postLoad()
     {
+/*    	if (this.type == Contact.Type.COMPANY)
+    	{
+    		if(this.name==""){
+    			if(getContactField(NAME)!=null)
+    				{
+    				this.name=getContactField(NAME).value.toLowerCase();
+    				save();
+    				}
+    		}
+    	}*/	
+    
 	tags = getContactTags();
 
 	ContactField field = this.getContactField("image");
@@ -1221,6 +1259,9 @@ public class Contact extends Cursor
 		contact_company_id = null;
 		contact_company_key = null;
 		e.printStackTrace();
+	    }
+	    catch(Exception e){
+	    	System.out.println("exception found");	    	
 	    }
 	}
 	else

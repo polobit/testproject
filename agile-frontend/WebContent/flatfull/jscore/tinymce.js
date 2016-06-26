@@ -17,7 +17,7 @@ var CONTACT_CUSTOM_FIELDS = undefined;
  */
 function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,merge_fields_values_callback)
 {
-
+	
 	var that=this;
 	that._merge_fields_values_callback	=merge_fields_values_callback;
 	// Id undefined
@@ -55,8 +55,10 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,me
 					console.log("Reloading script...");
 					
 					// Show confirmation for reload
+					
 					if(confirm("Unable to load editor. Click OK to Reload."))
 					  location.reload();
+
 					
 					return;
 				}
@@ -78,7 +80,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,me
 					extended_valid_elements : "*[*]", setup : function(editor)
 					{
 						console.log(that);
-						editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor,that._merge_fields_values_callback) });
+						editor.addButton('merge_fields', { type : 'menubutton', text : 'Merge Fields', icon : false, menu : set_up_merge_fields(editor,that._merge_fields_values_callback) });
 					}
 					});
 				
@@ -258,50 +260,60 @@ function set_up_merge_fields(editor,merge_fields_values_callback)
 		contact_json = get_contact_json_for_merge_fields();
 
 	// Iterates over merge fields and builds merge fields menu
-	$.each(get_merge_fields(), function(key, value)
-	{
+	//$.each(get_merge_fields(), function(key, value)
+	$.each(get_merge_field_objs(), function(key, value)
+	{	
+		var main_menu_item = {};
+		main_menu_item["text"] = key;
 
-		var menu_item = {};
+		var sub_menu = [];
 
-		menu_item["text"] = key;
-		menu_item["onclick"] = function()
+		$.each(value, function(key, value)
 		{
+			var menu_item = {};
 
-			// Insert value without compiling
-			if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 || Current_Route.indexOf('emailbuilder') != -1  || Current_Route.indexOf('document-template') != -1)
+			menu_item["text"] = key;
+			menu_item["onclick"] = function()
 			{
-				editor.insertContent(value);
-			}
-			else
-			{
-				var template = Handlebars.compile(value);
-				var compiled_template;
 
-				try
+				// Insert value without compiling
+				if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 || Current_Route.indexOf('emailbuilder') != -1  || Current_Route.indexOf('document-template') != -1)
 				{
-					if(_merge_fields_values_callback)
-						contact_json=_merge_fields_values_callback(contact_json);
-					compiled_template = template(contact_json);
+					editor.insertContent(value);
 				}
-				catch(err)
+				else
 				{
-					console.log("error.....");
+					var template = Handlebars.compile(value);
+					var compiled_template;
+
+					try
+					{
+						compiled_template = template(contact_json);
+					}
+					catch(err)
+					{
+						console.log("error.....");
+						
+						// Handlebars need [] if json keys have spaces
+						value = '{{['+key+']}}';
+						
+						template = Handlebars.compile(value);
+						compiled_template = template(contact_json);
+					}
 					
-					// Handlebars need [] if json keys have spaces
-					value = '{{['+key+']}}';
-					
-					template = Handlebars.compile(value);
-					compiled_template = template(contact_json);
+					editor.insertContent(compiled_template + '');
 				}
-				
-				editor.insertContent(compiled_template + '');
-			}
-		};
+			};
 
-		menu.push(menu_item);
+			sub_menu.push(menu_item);
+		});
 
+		main_menu_item['menu'] = sub_menu;
+
+		menu.push(main_menu_item);
 	});
-
+	
+	console.log(menu);
 	return menu;
 }
 
@@ -328,13 +340,13 @@ function get_merge_fields(callback)
 			"Calendar URL":"{{owner.calendar_url}}"
 			
 			}
-
+	
 	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
 	{
 		var document_options={"Pricing Table":"{{{pricing_table}}}"}
 		options = merge_jsons({}, options,document_options);
 	}
-	
+
 	if(!callback){
 		// Get Custom Fields in template format
 		var custom_fields = get_custom_merge_fields();
@@ -356,9 +368,62 @@ function get_merge_fields(callback)
 
 	}
 
-	// Merges options json and custom fields json
-	var merged_json = merge_jsons({}, options, custom_fields);
-	return merged_json;
+
+}
+
+/**
+ * Returns json object containing merge field object like contact, custom & ticket if exists.
+ * 
+ */
+function get_merge_field_objs()
+{
+	
+	var contact_merge_fields = {
+		"First Name": "{{first_name}}",
+		"Last Name": "{{last_name}}",
+		"Score": "{{score}}",
+		"Email": "{{email}}",
+		"Company": "{{company}}",
+		"Title": "{{title}}",
+		"Address": "{{location.address}}",
+		"City": "{{location.city}}",
+		"State":"{{location.state}}",
+		"Country":"{{location.country}}",
+		"Owner Name":"{{owner.name}}",
+		"Owner Email":"{{owner.email}}", 
+		"Calendar URL":"{{owner.calendar_url}}"
+	}
+	
+	// Get Custom Fields in template format
+	var custom_fields = get_custom_merge_fields();
+
+	var json = {Contact: contact_merge_fields};
+
+	if(custom_fields && !$.isEmptyObject(custom_fields))
+		json['Custom'] = custom_fields;
+
+	//Return json if path isn't email-template
+	if(Current_Route.indexOf('emailbuilder-add') == -1 && 
+		Current_Route.indexOf('email-template-add') == -1 &&
+		Current_Route.indexOf('emailbuilder/') == -1)
+		return json;
+
+	var ticket_merge_fields = {
+		"Ticket ID": "{{ticket_id}}",
+		"Subject": "{{subject}}",
+		"Requester Name": "{{requester_name}}",
+		"Requester Email": "{{requester_email}}",
+		"Priority": "{{priority}}",
+		"Status": "{{status}}",
+		"Ticket Comments": "{{{ticket_comments}}}",
+		"Footer": "{{{ticket_footer}}}",
+		"Group": "{{group_name}}",
+		"Assignee": "{{agent_name}}"
+	};
+
+	json['Ticket'] = ticket_merge_fields
+
+	return json;
 }
 
 /**
@@ -439,7 +504,7 @@ function merge_jsons(target, object1, object2)
  */
 function get_contact_json_for_merge_fields(contact_json)
 {
-	// Compile templates immediately in Send email but not for bulk contacts
+
 	if (contact_json==undefined && App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
 	{
 
@@ -447,8 +512,11 @@ function get_contact_json_for_merge_fields(contact_json)
 		contact_json = App_Contacts.contactDetailView.model.toJSON();
 		
 	}	
+	// Compile templates immediately in Send email but not for bulk contacts
 	if(contact_json!=undefined)
 	{
+
+		// Get Current Contact
 		var contact_property_json = get_property_JSON(contact_json);
 		try
 		{
@@ -473,8 +541,8 @@ function get_contact_json_for_merge_fields(contact_json)
 		}
 		
 		return merge_jsons({}, {"owner":contact_json.owner}, contact_property_json);
-	}
-	  
+		
+	}  
 }
 
 /**
@@ -571,4 +639,3 @@ function register_focus_on_tinymce(selector)
 		
 	});
 }
-

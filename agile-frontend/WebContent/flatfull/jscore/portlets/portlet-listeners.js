@@ -26,7 +26,24 @@ function initializePortletsListeners() {
 								.val();
 						var portletName = $('#portlet-name', $('#' + modal_id))
 								.val();
+
 						json = serializeForm(form_id);
+						if($('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id)!=null && $('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id).val()!='Custom')
+						{
+							delete json["start-date"];
+							delete json["end-date"];
+						}
+						if($('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id)!=null && $('#duration,#duration-incoming-deals,#duration-lost-deal-analysis,#duration-user-activities','#'+modal_id).val()=='Custom')
+						{
+							if(!is_valid_custom_range(json["start-date"]*1000,json["end-date"]*1000,modal_id))
+								{
+									$(this).attr('disabled', false);
+        							$(this).text('Save');
+								return;
+							}
+						}
+							if($('#' + modal_id).find(".invalid-range").is(':visible'))
+								$('#' + modal_id).find(".invalid-range").parents('.form-group').hide();
 						if (portletType == "CONTACTS"
 								&& portletName == "Growth Graph") {
 							var tags = '';
@@ -355,6 +372,11 @@ function initializePortletsListeners() {
 				$(this).find('.fc-button').css('visibility', 'hidden');
 			});
 
+	$('.portlet_body_calendar').on('click', '.fc-button-content',
+			function(e) {
+				App_Portlets.eventCalendar=$(this).parents('.portlet_body_calendar');
+			});
+
 	$('.events_show')
 			.off(
 					'click',
@@ -376,11 +398,7 @@ function initializePortletsListeners() {
 						if (id && !isNaN(id)) {
 							var events_array = $(
 									'#calendar_container',
-									$(this)
-											.parentsUntil('.mini-cal')
-											.eq(
-													$(this).parentsUntil(
-															'.mini-cal').length - 1))
+									$(this).parents('.portlet_body_calendar'))
 									.fullCalendar(
 											'clientEvents',
 											id,
@@ -417,7 +435,7 @@ function initializePortletsListeners() {
 												deserializeForm(
 														model,
 														$("#updateActivityForm"));
-
+												$('#current_div','#updateActivityModal').val("Mini Calendar");
 												$("#update-event-date-1").val(
 														getDateInFormat(start));
 												$("#update-event-date-2").val(
@@ -520,6 +538,8 @@ function initializePortletsListeners() {
 												// Show edit modal for the event
 												$("#updateActivityModal")
 														.modal('show');
+
+
 												$(
 														'#' + id,
 														$('#calendar_container'))
@@ -554,6 +574,8 @@ function initializePortletsListeners() {
 				$('#task-date-1').val(getDateInFormat(start));
 				$("#event-date-1").val(getDateInFormat(start));
 				$("#event-date-2").val(getDateInFormat(start));
+				$('#current_div','#activityModal').val("Mini Calendar");
+
 
 				// Set Time for Event
 				// if ((start.getHours() == 00) && (start.getHours() == 00) &&
@@ -611,7 +633,11 @@ function initializePortletsListeners() {
 						}, 500);
 
 						$('#' + portlet.get("id")).parent().remove();
-
+						if(portlet.get('portlet_route')!='DashBoard' && isNaN(portlet.get('portlet_route')))
+						{
+							if ($('.gridster-portlets > div').length == 0)
+							$('#no-portlets').parents('.route_Portlet').hide();
+						}
 						if ($('.gridster-portlets > div').length == 0)
 							$('#no-portlets').show();
 
@@ -747,6 +773,7 @@ $('.portlet_body')
 							var startDate = new Date(model.get('start') * 1000);
 							var endDate = new Date(model.get('end') * 1000)
 							// Set time for update Event
+							$('#current_div',"#updateActivityModal").val("Events Dashlet");
 							$('#update-event-time-1')
 									.val(
 											(startDate.getHours() < 10 ? "0"
@@ -858,12 +885,12 @@ $('.portlet_body')
 				}
 			});
 
-	$('.gridster-portlets')
+	$('.portlet_body')
 			.on(
 					"click",
 					'.portlets-tasks-select',
 					function(e) {
-
+						
 						e.stopPropagation();
 						if ($(this).is(':checked')) {
 
@@ -911,6 +938,112 @@ $('.portlet_body')
 							'.gs-resize-handle').remove();
 				}
 			});
+	
+	$('#dashlet_heading .user-defined-dashboard').off("click");
+	$('#dashlet_heading').on("click", ".user-defined-dashboard", function(e){
+		e.preventDefault();
+
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+	    var id = $(this).attr("id");
+	    $('.user-defined-dashboard').parent().removeClass("active");
+	    $(this).parent().addClass("active");
+	    if(id != $('#dashboard-name').attr("data-value")){
+	    	App_Portlets.DashboardPortlets=new Array();
+		    if($(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != "Dashboard"){
+				e.preventDefault();
+				_agile_delete_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+				loadPortlets("DashBoard", $('#content'));
+		    }
+		    else if(id=="MarketingDashboard"){
+				e.preventDefault();
+				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
+				gridster = undefined;
+				loadPortlets(id, $('#content'));
+		    }
+		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
+				e.preventDefault();
+				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);				
+				gridster = undefined;
+				loadPortlets(id, $('#content'));
+		    }
+		    else if(!$(this).hasClass("predefined-dashboard")){
+				e.preventDefault();
+				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
+				gridster = undefined;
+				loadPortlets(id, $('#content'));
+		    }
+		    $('#dashboard-name').text($(this).text());
+		    $('#dashboard-name').attr("data-value", id);
+		    $('#dashboard-name').attr("title", $(this).attr("title"));
+		    $.each(CURRENT_USER_DASHBOARDS, function(index, value){
+		    	if(id == this.id){
+		    		$('#dashboard-desc').text(this.description);
+		    		$('#dashboard-desc').attr("title", this.description);
+		    	}
+		    });
+		    if(id== "MarketingDashboard"){
+		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
+		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
+		    }
+		    if(id == "Dashboard")
+		    {
+		    	$('#dashboard-desc').text("Welcome to Agile CRM");
+		    	$('#dashboard-desc').attr("title", "");
+		    	$('#dashboard-name').attr("title", "");
+		    }
+	    }
+	});
+		$('.modal-body').off('change','#duration,#duration-lost-deal-analysis,#duration-incoming-deals,#duration-user-activities');
+		
+		$('.modal-body').on('change','#duration,#duration-lost-deal-analysis,#duration-incoming-deals,#duration-user-activities',function(e){
+			var el = $(this).closest('form');
+		var duration = $(this, el).val();
+
+		if(duration=='Custom')
+		{
+			
+			$('#start_date',el).val("");
+			$('#end_date',el).val("");
+			$('.daterange',el).removeClass('hide');
+			
+			if(el.attr('id')=='portletsGoalsSettingsForm')
+			{
+				$('#start_date',el).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+				$('#end_date',el).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+	
+			}
+        else{
+			var eventDate = $('#start_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',el).val()));
+			else
+			 	eventDate2 = new Date($('#end_date',el).val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				var en_value=ev.date.valueOf();
+				$('#end_date',elData).val($('#start_date',elData).val());
+			}
+
+		});
+
+
+		$('#end_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+			}
+		}
+		else
+			{$(el).find('.daterange').addClass('hide');
+		$('.daterange span:not(.field_req)',el).each(function(){
+				$(this).hide();
+			});
+	}
+			if($(el).find(".invalid-range").is(':visible'))
+								$(el).find(".invalid-range").parents('.form-group').hide();
+			
+		});
 
 }
 
@@ -918,6 +1051,9 @@ $('.portlet_body')
  *Listener function for Event handling
  */
 function initializeAddPortletsListeners() {
+
+	//$('#ms-category-list', elData).remove();
+
 
 	$('.col-md-3')
 			.on(
@@ -946,12 +1082,14 @@ function initializeAddPortletsListeners() {
 							"AccountDetails" : updateImageS3Path("flatfull/img/dashboard_images/account-information.png"),
 							"MiniCalendar" : updateImageS3Path("flatfull/img/dashboard_images/Mini-Calendar.jpg"),
 							"UserActivities" : updateImageS3Path("flatfull/img/dashboard_images/User-Activities.png"),
-							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats.jpg"),
+							"Campaignstats" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-stats-new.jpg"),
+							"Campaigngraph" : updateImageS3Path("flatfull/img/dashboard_images/Campaign-status.jpg"),
 							"DealGoals" : updateImageS3Path("flatfull/img/dashboard_images/Quota.png"),
 							"IncomingDeals" : updateImageS3Path("flatfull/img/dashboard_images/incoming-deals-new.png"),
 							"LostDealAnalysis" : updateImageS3Path("flatfull/img/dashboard_images/lost-deal-analysis-new.png"),
 							"AverageDeviation" :  updateImageS3Path("flatfull/img/dashboard_images/Average_deviation.png"),
-
+                            "WebstatVisits" : updateImageS3Path("flatfull/img/dashboard_images/Webstat-Visits.png"),
+							"Referralurlstats" : updateImageS3Path("flatfull/img/dashboard_images/Refferalurl-Stats-new.png"),
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",
@@ -962,7 +1100,8 @@ function initializeAddPortletsListeners() {
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
 							"Campaignstats" : "",
-							"LostDealAnalysis" : "left"
+							"LostDealAnalysis" : "left",
+							"Referralurlstats" :"left"
 						};
 						if (placements_json[p_name]) {
 							placement = "left";
@@ -983,27 +1122,175 @@ function initializeAddPortletsListeners() {
 						$(this).popover('show');
 					});
 
-		$('#portlets-add-listener').on(
+$('.show_screeshot').off('click touchstart').on(
+			"click touchstart",
+			'.add-portlet-direct',
+			function() {
+				var route=[];
+				var url='core/api/portlets/add';
+
+													route.push('DashBoard');
+												
+				var forAll=false;
+				clickfunction($(this),url,forAll,route);
+			});
+	$('.col-md-3').off('click touchstart').on('click touchstart',
+			'.add_to_all',
+			function() {
+				var route=[];
+			route.push('DashBoard');
+				var forAll=true;
+				var url='core/api/portlets/addforAll';
+				clickfunction($(this),url,forAll,route);
+				
+			});
+	
+	$('#portlets-add-listener').on('click','.configure-portlets',function(e){
+		e.preventDefault();
+		  
+					//var route=$(this).attr("route");
+					//route=route.substr(1,route.length-2);
+					//var routes=route.split(',');
+		var portlet_type = $(this).attr("portlet_type");
+				var p_name = $(this).attr("portlet_name");
+
+				var dashlet_JSON = {};
+				dashlet_JSON["name"] = p_name;
+				
+				$("#portletStreamModalNew").html(getTemplate('portletStreamModalInfo', dashlet_JSON));
+				
+
+					  
+					
+			
+
+				head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
+						$('#ms-route-list' ).remove();
+				$('#route-list' , $('#portletStreamModalNew')).multiSelect();
+				$('#ms-route-list .ms-selection').children('ul')
+						.addClass('multiSelect').attr("name", "route-list")
+						.attr("id", "route");
+				$('#ms-route-list .ms-selectable .ms-list').css(
+						"height", "200px");
+				$('#ms-route-list .ms-selection .ms-list').css(
+						"height", "200px");
+				/*$('#ms-route-list').addClass(
+						'portlet-category-ms-container');*/
+
+				/*$('#ms-dashboard-list' ).remove();
+				$('#dashboard-list' , $('#portletStreamModal')).multiSelect();
+				$('#ms-dashboard-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "dashboard-list").attr("id", "dashboard");
+				$('#ms-dashboard-list .ms-selectable .ms-list').css("height", "105px");
+				$('#ms-dashboard-list .ms-selection .ms-list').css("height", "105px");
+				$('#ms-dashboard-list').addClass('portlet-category-ms-container');*/
+
+			});
+				$(".add-portlet").attr('portlet_type',
+				portlet_type);
+		$(".add-portlet").attr('portlet_name',p_name);
+		$(".add_to_all").attr('portlet_type',
+				portlet_type);
+		$(".add_to_all").attr('portlet_name',p_name);
+		$("#portletStreamModalNew").modal('show');
+		
+	});
+
+	$('#portletStreamModalNew').on('shown.bs.modal', function(event){
+		insideAddListener();
+	});
+
+
+}
+
+function insideAddListener()
+{
+
+	 $('.modal-content').off('click', '#route-select-all');
+  $('.modal-content').on('click', '#route-select-all',
+      function(e) {
+        e.preventDefault();
+        $('#route-list').multiSelect('select_all');
+      });
+  $('.modal-content').off('click', '#route-select-none');
+  $('.modal-content').on('click', '#route-select-none',
+      function(e) {
+        e.preventDefault();
+        $('#route-list').multiSelect('deselect_all');
+      });
+  
+    $('.modal-content').off('click', '.add-portlet');
+		$('.modal-content').on(
 			"click",
 			'.add-portlet',
 			function() {
+				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
+				 if (!isValidForm("#" + id)) {
+           			 return false
+       			 }
+				var route=[];
 				var url='core/api/portlets/add';
+				$('#route-list', $(this).parents('.modal'))
+									.find('option')
+									.each(
+											function() {
+												if ($(this).is(':selected'))
+													route.push($(this).val());
+												
+											});
 				var forAll=false;
-				clickfunction($(this),url,forAll);
+				clickfunction($(this),url,forAll,route);
 			});
-	$('#portlets-add-listener').on(
-			"click touchstart",
+		
+	$('.modal-footer').off('click touchstart').on('click touchstart',
 			'.add_to_all',
 			function() {
+				var id=$(this).parents('.modal-footer').prev().find("form:visible").attr("id");
+				 if (!isValidForm("#" + id)) {
+           			 return false
+       			 }
+				var route=[];
+				$('#route-list', $(this).parents('.modal'))
+									.find('option')
+									.each(
+											function() {
+												if ($(this).is(':selected'))
+													route.push($(this).val());
+												
+											});
 				var forAll=true;
 				var url='core/api/portlets/addforAll';
-				clickfunction($(this),url,forAll);
+				clickfunction($(this),url,forAll,route);
 				
 			});
 
-}
-function clickfunction(that,url,forAll){
+	$('.modal-content').on(
+			"change",
+			'#route-list',
+			function() {
+				var is_add_for_all_disable = false;
+				$(this).parent().find('ul#route > li').each(function(){
+					if($(this).hasClass("ms-elem-selected") && $(this).hasClass("user-dashboard")) {
+						is_add_for_all_disable = true;
+					}
+				});
 
+				if(is_add_for_all_disable) {
+					$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", true);
+				}else {
+					$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", false);
+				}
+			});
+	$('.modal-content').on(
+			"click",
+			'ul[name="route-list"] > li',
+			function() {
+				$('.add_to_all',$('#portletStreamModalNew')).attr("disabled", false);
+			});
+}
+function clickfunction(that,url,forAll,route){
+
+	$("#portletStreamModalNew").modal('hide');
+	$('.modal-backdrop').hide();
 	var portlet_type = that.attr("portlet_type");
 				var p_name = that.attr("portlet_name");
 
@@ -1015,11 +1302,16 @@ function clickfunction(that,url,forAll){
 				var curDate = new Date();
 				obj.portlet_type = portlet_type;
 				var max_row_position = 0;
-				var next_position = gridster.next_position(1, 1);
-				obj.column_position = next_position.col;
-				obj.row_position = next_position.row;
-				obj.size_x = next_position.size_x;
-				obj.size_y = next_position.size_y;
+				//var next_position = gridster.next_position(1, 1);
+				obj.column_position = -1;
+				obj.row_position = -1;
+				obj.size_x = 1;
+				obj.size_y = 1;
+
+				if(!isNaN(route)){
+					obj.column_position = -1;
+					obj.row_position = -1;
+				}
 
 				if (portlet_type == "RSS" && p_name == "Agile CRM Blog")
 					obj.size_y = 2;
@@ -1034,15 +1326,20 @@ function clickfunction(that,url,forAll){
 						obj.row_position=obj.row_position+1;
 					}*/
 				}
-
-				var portlet = new BaseModel();
+				var models = [];
+				$.each(route,function(e){
+					var portlet = new BaseModel();
 				portlet.url = url;
 				portlet.set({
 					"prefs" : JSON.stringify(json),
-					"isForAll" : forAll
+					"isForAll" : forAll,
+
+					"portlet_route" : this.toString(),
 				}, {
 					silent : true
 				});
+
+				
 				var model;
 				var scrollPosition;
 				portlet.save(obj, {
@@ -1052,12 +1349,34 @@ function clickfunction(that,url,forAll){
 							$('#zero-portlets').hide();
 						if ($('#no-portlets').is(':visible'))
 							$('#no-portlets').hide();
-						App_Portlets.navigate("dashboard", {
-							trigger : true
-						});
+						/*if(data.toJSON().name=='Mini Calendar' || data.toJSON().name=='Agenda'){
+							App_Portlets.navigate("dashboard", {
+								trigger : true
+							});
+						}*/
 					},
 					error : function(model, response) {
-						alert("Failed to add.");
+						showAlertModal("add_error");
 					}
 				});
+			});
 				}
+
+function is_valid_custom_range(startDate,endDate,modalName)
+{
+if (endDate - startDate >= 0)
+	{
+		return true;
+	}
+	else if (startDate > endDate)
+	{
+		$('#' + modalName)
+				.find(".invalid-range")
+				.html(
+					'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date.</div>'
+						);
+				$('#' + modalName)
+				.find(".invalid-range").parents('.form-group').show();
+		return false;
+	}
+}

@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
@@ -457,4 +458,19 @@ public class TagsAPI
 
 	return null;
     }
+    @Path("/AddbulkTags")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void addBulkTags(String tags) throws Exception
+    {
+    	JSONArray tagsJSON = new JSONArray(tags);
+    	Set<String> tagsSet = new HashSet<String>();
+		for(int i=0;i<tagsJSON.length();i++){
+			tagsSet.add(tagsJSON.getString(i));
+		}	
+		// Update Tags - Create a deferred task
+		TagUtil.updateTags(tagsSet);
+    }
+    
 }

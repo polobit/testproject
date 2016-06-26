@@ -3,12 +3,15 @@ package com.agilecrm.deals;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -19,7 +22,9 @@ import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.util.MilestoneUtil;
@@ -40,6 +45,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -273,12 +279,34 @@ public class Opportunity extends Cursor implements Serializable
      */
     @NotSaved
     public Double total_deal_value = 0d;
+    
+    @JsonIgnore
+    @NotSaved
+    public String bulkActionTracker = "";
+    public Long updated_time = 0L;
 
-    /**
+	/**
      * ObjectifyDao of Opportunity.
      */
 
     public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
+    
+    /**
+     * Set of tags. Not saved in it, it is used to map tags from client
+     * requests, which are further processed in pre persist to save in
+     * tagsWithTime variable
+     */
+    @NotSaved
+    public LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
+    /**
+     * Stores tags with created time.
+     */
+    @NotSaved(IfDefault.class)
+    @Embedded
+    @Indexed
+    public ArrayList<Tag> tagsWithTime = new ArrayList<Tag>();
+
 
     /**
      * Default Constructor.
@@ -378,11 +406,13 @@ public class Opportunity extends Cursor implements Serializable
     @XmlElement(name = "contact_ids")
     public List<String> getContact_ids()
     {
-	contact_ids = new ArrayList<String>();
+    if((contact_ids != null && contact_ids.size() == 0) || contact_ids == null)
+    {
+    	contact_ids = new ArrayList<String>();
 
-	for (Key<Contact> contactKey : related_contacts)
-	    contact_ids.add(String.valueOf(contactKey.getId()));
-
+    	for (Key<Contact> contactKey : related_contacts)
+    	    contact_ids.add(String.valueOf(contactKey.getId()));
+    }
 	return contact_ids;
     }
 
@@ -391,25 +421,6 @@ public class Opportunity extends Cursor implements Serializable
 	if (pipeline != null)
 	    return pipeline.getId();
 	return 0L;
-    }
-
-    @XmlElement(name = "pipeline")
-    public Milestone getPipeline() throws Exception
-    {
-	if (pipeline != null)
-	{
-	    try
-	    {
-		// Gets Domain User Object
-		// return MilestoneUtil.getMilestone(pipeline.getId());
-	    	return null;
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	return null;
     }
 
     /**
@@ -537,6 +548,8 @@ public class Opportunity extends Cursor implements Serializable
 		this.created_time = oldOpportunity.created_time;
 	    if (this.won_date == null && oldOpportunity.won_date != null)
 		this.won_date = oldOpportunity.won_date;
+	    if(!this.milestone.equalsIgnoreCase(wonMilestone) && this.won_date!=null)
+	    	this.won_date=null;
 	}
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
@@ -555,7 +568,10 @@ public class Opportunity extends Cursor implements Serializable
 		this.won_date = System.currentTimeMillis() / 1000;
 		this.probability = 100;
 	    }
-
+	    if(!this.milestone.equals(oldOpportunity.milestone) && !this.milestone.equalsIgnoreCase(wonMilestone) && oldOpportunity.won_date!=null)
+	    {
+			this.won_date = null;
+	    }
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(lostMilestone))
 	    {
 		this.probability = 0;
@@ -602,7 +618,243 @@ public class Opportunity extends Cursor implements Serializable
     public void delete()
     {
 	dao.delete(this);
+	
+	new AppengineSearch<Opportunity>(Opportunity.class).delete(id.toString());
     }
+    /**
+     * Retursn list of tags (list of {@link Tag}).
+     * 
+     * JsonIgnore is used as get do not want to return this field with contact
+     * object
+     * 
+     * @return
+     */
+    @JsonIgnore
+    public ArrayList<Tag> getTagsList()
+    {
+	return tagsWithTime;
+    }
+    /**
+     * Adds tag(s) to a deal. It is mostly used from developer API call,
+     * where they try to add new tags to existing tags.
+     * 
+     * @param tags
+     */
+    
+    public void addTags(String... tags) throws WebApplicationException
+    {
+	int oldTagsCount = tagsWithTime.size();
+
+	// Iterates though each tag and checks if tag with the same name exists,
+	// add if it a new tag
+	for (String tag : tags)
+	{
+	    Tag tagObject = new Tag(tag);
+
+	    // Check whether tag already exists. Equals method is overridden in
+	    // Tag class to use this contains functionality
+	    if (!tagsWithTime.contains(tagObject))
+	    {
+		TagUtil.validateTag(tag);
+		tagsWithTime.add(tagObject);
+	    }
+	}
+
+	// Returns without saving if there is no change in tags list length
+	if (oldTagsCount == tagsWithTime.size())
+	    return;
+
+	this.save();
+
+    }
+    /**
+     * Tags tags to existing tags. As tags can either be added in tags or
+     * tagsWithTime object, this method takes array of tags object and adds to
+     * existing tags
+     * 
+     * @param tags
+     */
+    public void addTags(Tag[] tags)
+    {
+
+	int oldTagsCount = tagsWithTime.size();
+	for (Tag tag : tags)
+	{
+	    // Adds to list if there it is a new tag
+	    if (tagsWithTime.contains(tag))
+		continue;
+
+	    TagUtil.validateTag(tag.tag);
+
+	    tagsWithTime.add(tag);
+	}
+
+	// Contact is not saved if tags length is same before and after adding
+	// new tags
+	if (oldTagsCount == tagsWithTime.size())
+	    return;
+
+	this.save();
+    }
+
+    public boolean addTag(Tag tag)
+    {
+	// Adds to list if there it is a new tag
+	if (tagsWithTime.contains(tag))
+	    return false;
+	TagUtil.validateTag(tag.tag);
+	tagsWithTime.add(tag);
+
+	return true;
+    }
+
+    /**
+     * Removed tags from tagsWithTime object
+     * 
+     * @param tags
+     */
+    public void removeTags(Tag[] tags, boolean... deleteTags)
+    {
+	Set<String> tagslist = removeTagsWithoutSaving(tags);
+
+	this.save();
+
+	boolean isUpdateRequired = true;
+	if (deleteTags != null && deleteTags.length >= 1)
+	{
+	    isUpdateRequired = deleteTags[0];
+	}
+
+	if (isUpdateRequired)
+	    // Delete tags from Tag class
+	    TagUtil.deleteTags(tagslist);
+    }
+
+    public Set<String> removeTagsWithoutSaving(Tag[] tags)
+    {
+	Set<String> tagslist = new HashSet<String>();
+
+	/*
+	 * Removes tags from tagsWithTime field
+	 */
+	for (Tag tag : tags)
+	{
+	    this.tagsWithTime.remove(tag);
+
+	    tagslist.add(tag.tag);
+	}
+
+	// 'tags' field should be cleared as these two fields are compared. if
+	// there is an extra tag in 'tags' field, it gets added to tagsWithTime
+	// field
+	// before saving contact.
+	this.tags.clear();
+
+	return tagslist;
+    }
+
+    /**
+     * Removes tag(s) from a contact, and also from tags database, if no more
+     * contacts with that tag
+     * 
+     * @param tags
+     */
+    public void removeTags(String[] tags)
+    {
+	Set<String> tagslist = new HashSet<String>();
+	for (String tag : tags)
+	{
+	    tagsWithTime.remove(new Tag(tag));
+
+	    tagslist.add(tag);
+
+	}
+
+	this.tags.clear();
+	this.save();
+
+	// Delete tags from Tag class
+	TagUtil.deleteTags(tagslist);
+
+    }
+    
+    /**
+     * Returns tags
+     * 
+     * @return
+     */
+    @JsonIgnore
+    public LinkedHashSet<String> getDealTags()
+    {
+	LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
+	for (Tag tag : tagsWithTime)
+	{
+	    tags.add(tag.tag);
+	}
+
+	return tags;
+    }
+   
+    public static  void updateDealTagsEntity(Opportunity oldDeal, Opportunity updatedDeal)
+    {
+
+	try
+	{
+		List <Tag> oldtags = new ArrayList<Tag>(oldDeal.tagsWithTime);
+		List <Tag> newtags = new ArrayList<Tag>(updatedDeal.tagsWithTime);
+		if(oldtags != null && newtags != null){
+			for(Tag newTag : newtags){
+				for(Tag oldTag: oldtags){
+					if(newTag.equals(oldTag))
+						newTag.createdTime = oldTag.createdTime ;
+					else if (newTag.createdTime <= 0L)
+						newTag.createdTime = System.currentTimeMillis();						
+				}
+			}
+		}
+		else if(oldtags == null && newtags != null){
+			for (Tag newtag : newtags){
+				newtag.createdTime = System.currentTimeMillis();
+			}
+		}
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
+	}
+    
+   }
+    public  void updateDealTagsEntity(Opportunity opportunity)
+    {
+
+	try
+	{
+		List <Tag> dealTags = new ArrayList<Tag>(opportunity.tagsWithTime);
+		if(dealTags != null){
+			for(Tag tag : dealTags){
+					tag.createdTime = System.currentTimeMillis();
+			}
+		}
+	}
+	catch (Exception e)
+	{
+		e.printStackTrace();
+	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
+	}
+    
+   }
+    public static void updateDealTagsEntity(Opportunity opportunity,String tag)
+    {
+    	if(opportunity != null && tag != null){
+	    	Tag newTag = new Tag();
+			newTag.tag = tag;
+			newTag.createdTime = System.currentTimeMillis() ; 
+			opportunity.tagsWithTime.add(newTag);
+    	}
+    }
+
 
     /**
      * Sets created time, owner key and agile user. PrePersist is called each
@@ -618,6 +870,8 @@ public class Opportunity extends Cursor implements Serializable
 	// Initializes created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
+	
+	updated_time = System.currentTimeMillis() / 1000;
 
 	// Set Deal Pipeline.
 	if (pipeline_id != null && pipeline_id > 0)
@@ -754,7 +1008,12 @@ public class Opportunity extends Cursor implements Serializable
 
 	// Setting note_ids from api calls
 	setRelatedNotes();
-
+	if(this.tagsWithTime != null && this.tagsWithTime.size() > 0){
+		for(Tag tag : this.tagsWithTime){
+			this.tags.add(tag.tag);
+		}
+	}
+	
     }
 
     @XmlElement(name = "note_ids")

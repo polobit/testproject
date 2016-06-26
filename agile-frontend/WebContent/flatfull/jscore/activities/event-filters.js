@@ -474,7 +474,7 @@ function loadGoogleEventsandRender()
 		{
 			_agile_set_prefs('google_event_token', response.access_token);
 
-			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=25',
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js?t=27',
 					function()
 					{
 						setupGC(function()
@@ -663,10 +663,10 @@ function showLoadingOnCalendar(loading)
 		$("#user_calendars *").addClass('disable-cp');
 		$("#user_cal_sub *").addClass('disable-cp');
 
-		$('.fc-header-left').append(
+		$('.fc-header-left','#calendar_event').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
-		$('.fc-header-left').show();
+		$('.fc-header-left','#calendar_event').show();
 	}
 	else if(popLoading() <= 0)
 	{

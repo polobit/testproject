@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
 <%@page import="com.agilecrm.util.MathUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -7,13 +8,14 @@
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.MobileUADetector"%>
 <%
 /*
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
 */
 //flatfull path
 String flatfull_path="/flatfull";
-
+	
 
 
 // Gets User Name
@@ -26,6 +28,9 @@ email = email.toLowerCase();
 request.setAttribute("agile_email", email);
 
 }
+//Gets the Ip 
+
+
 	
 // Checks if it is being access directly and not through servlet
 /* if(request.getAttribute("javax.servlet.forward.request_uri") == null)
@@ -96,12 +101,13 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL();
 }
 
-// Users can show their logo on login page. 
+// Users can show their company logo on login page. 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
 // Bg Image
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
+
 
 %>
 <!DOCTYPE html>
@@ -124,8 +130,19 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
 <style>
 body {
+	
+	<% 
+	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 
-  background-image: url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-low.jpg');
+		background-color: #f0f3f4;
+	
+	<% }else {  %>
+
+background-image:url('<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high-prog.jpg');
+	
+		<%}%>
+  
+
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -135,7 +152,7 @@ body {
 
 .text-white
 {
-color:#fff!important;
+color:#fff !important;
 }
 input
 {
@@ -145,7 +162,9 @@ a:hover
 {
 text-decoration:underline;
 }
-
+#mobile .tags-color{
+color:#58666e !important;
+}
 .error {
 	color: white !important;
 	background-color: #c74949;
@@ -163,16 +182,6 @@ position: fixed;width: 100%;top: 0px;
 	#simple-modal {
 		display: none;
 	}
-}
-.overlay:before{
-  content: "";
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    background-color: black;
-    opacity: 0.25;
 }
 .view{
 	position: absolute;
@@ -220,14 +229,33 @@ if(isSafari && isWin)
 	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
-  			<div class="container w-xxl w-auto-xs view">
-				
-					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
+  			<div class="container w-xxl w-auto-xs view"
+  			<%
+  			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+		id="mobile"
+	<% }else {  %> <%}%>>
+	<%
+				if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+				<div >
+		<img class="block" style="margin:0px auto;" src="<%=S3_STATIC_IMAGE_PATH%>images/agile-crm-logo.png"  ></img></div>
+	<% }else {  %> 
+					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t tags-color text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
-				
+				<%}%>
 				<div>
-				
+					<% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
+                       {
+                       %>
+
+                     <div style="display:table; margin:0px auto; border:none; padding: 5px;" class="imgholder thumb-wrapper thumb-lg">
+                   		<img class="company_logo w-full" style="background-color: white;border-radius: 3px;"src="<%=logo_url%>" ></img>
+                   	 </div>
+                   <%
+                   }
+                   %>
+                  
+                   
 				<form id='oauth' name='oauth' method='post'>
               <%--      <div><h3>Sign In
                    
@@ -254,7 +282,7 @@ if(isSafari && isWin)
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 				</form>
 			<!-- 	<div class="clearfix"></div> -->
-				<div class="wrapper text-center text-white">
+				<div class="wrapper text-center tags-color text-white tags-color">
       				<strong>Sign in using your registered account</strong>
    				</div>
 				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isValid();">
@@ -278,7 +306,11 @@ if(isSafari && isWin)
 						<div class="block">
 							<input class="hide" id="location_hash" name="location_hash"></input>
 						</div>
-						
+						<input class="hide" id="finger_print" name="finger_print"></input>
+						<input class="hide" id="ip_validation" name="ip_validation"></input>
+						<input class="hide" id="browser_Name" name="browser_Name"></input>
+						<input class="hide" id="browser_version" name="browser_version"></input>
+						<input class="hide" id="browser_os" name="browser_os"></input>
 						</div>
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
@@ -290,14 +322,20 @@ if(isSafari && isWin)
 					
 				
 
-				
-		<div class="text-center text-white m-t m-b">
+		<div 		
+		
+		<%
+  			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+		id="mobile"
+	<% }else {  %> <%}%> >
+	<div class="text-center tags-color text-white m-t m-b" >
 		<small>Login with</small> 
-		<a title="Login with Google" data='google' href='#' class="openid_large_btn google text-white">Google</a>&nbsp|&nbsp
-		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo text-white">Yahoo</a><br/>	
-		<small>Do not have an account?</small> <a href="/register" class="text-white">Sign Up</a><br/>
-		<small>Forgot</small> <a href="/forgot-password" class="text-white">Password? </a><a href="/forgot-domain" class="text-white">Domain?</a>
+		<a title="Login with Google" data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
+		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
+		<small>Do not have an account?</small> <a href="/register" class="tags-color text-white">Sign Up</a><br/>
+		<small>Forgot</small> <a href="/forgot-password" class="tags-color text-white">Password? </a><a href="/forgot-domain" class="tags-color text-white">Domain?</a>
 		</div>
+	</div>
 		
 		</form>
 		</div>
@@ -314,6 +352,8 @@ if(isSafari && isWin)
 	
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/fingerprintjs2/1.1.2/fingerprint2.min.js"></script>
+
 	
 	<script type="text/javascript">
 		$(document).ready(function()
@@ -325,16 +365,17 @@ if(isSafari && isWin)
 			// Sets location hash in hidden fields
 			if(login_hash)
 				$("#location_hash").val(login_hash);
-        var newImg = new Image;
+        /*var newImg = new Image;
         newImg.onload = function() {
         
         $("body").css("background-image","url('"+this.src+"')");
        
-        }
 
-        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>images/login-<%=randomBGImageInteger%>-high.jpg';
+        }*/
 
-        // agile-login-page-high.png
+
+      	
+        	// agile-login-page-high.png
         	preload_login_pages();
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
@@ -369,7 +410,15 @@ if(isSafari && isWin)
 		}
 
 		function preload_dashlet_libs(){ 
-			setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
+
+			if ($.active > 0) {
+				setTimeout(function() {
+					preload_dashlet_libs();
+				}, 500);
+				return;
+			}
+
+			head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>');
 		}
 
 		function preload_login_pages(){
@@ -381,14 +430,162 @@ if(isSafari && isWin)
 				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-high.jpg',
 				}).appendTo('body');
 
-				$('<img/>', {
+				/*$('<img/>', {
 				    class: 'hide',
 				    src: '<%=S3_STATIC_IMAGE_PATH%>/images/login-' + i + '-low.jpg',
-				}).appendTo('body');
+				}).appendTo('body');*/
 
 			}
 		}
+		$(function(){
+			new Fingerprint2().get(function(result, components){
+					$("#finger_print").val(result);
+		  			console.log(result);
+
+				});
+		});
+		$(function(){
+			var BrowserDetect = {
+					init : function() {
+						this.browser = this.searchString(this.dataBrowser)
+								|| "An unknown browser";
+						this.version = this.searchVersion(navigator.userAgent)
+								|| this.searchVersion(navigator.appVersion)
+								|| this.searchMobileVersion(navigator.userAgent)
+								|| "An unknown version";
+						this.OS = this.searchString(this.dataOS) || "unknown";
+					},
+					searchString : function(data) {
+						for ( var i = 0; i < data.length; i++) {
+							var dataString = data[i].string;
+							var dataProp = data[i].prop;
+							var match = data[i].match;
+							this.versionSearchString = data[i].versionSearch
+									|| data[i].identity;
+
+							if (match && dataString.match(match))
+								return data[i].identity;
+
+							if (dataString) {
+								if (dataString.indexOf(data[i].subString) != -1)
+									return data[i].identity;
+							} else if (dataProp)
+								return data[i].identity;
+						}
+					},
+					searchMobileVersion : function(dataString) {
+
+						try {
+							match = dataString.match(/Mobile Safari\/([\d.]+)/);
+							if (match)
+								return parseFloat(match[1]);
+						} catch (e) {
+						}
+
+					},
+					searchVersion : function(dataString) {
+
+						var index = dataString.indexOf(this.versionSearchString);
+						if (index == -1)
+							return;
+						return parseFloat(dataString.substring(index
+								+ this.versionSearchString.length + 1));
+					},
+					dataBrowser : [ {
+						string : navigator.userAgent,
+						subString : "Chrome",
+						identity : "Chrome"
+					}, {
+						string : navigator.userAgent,
+						subString : "OmniWeb",
+						versionSearch : "OmniWeb/",
+						identity : "OmniWeb"
+					}, {
+						string : navigator.vendor,
+						subString : "Apple",
+						identity : "Safari",
+						versionSearch : "Version"
+					}, {
+						prop : window.opera,
+						identity : "Opera"
+					}, {
+						string : navigator.vendor,
+						subString : "iCab",
+						identity : "iCab"
+					}, {
+						string : navigator.vendor,
+						subString : "KDE",
+						identity : "Konqueror"
+					}, {
+						string : navigator.userAgent,
+						subString : "Firefox",
+						identity : "Firefox"
+					}, {
+						string : navigator.vendor,
+						subString : "Camino",
+						identity : "Camino"
+					}, { // for newer Netscapes (6+)
+						string : navigator.userAgent,
+						subString : "Netscape",
+						identity : "Netscape"
+					}, {
+						// For IE11
+						string : navigator.userAgent,
+						match : /Trident.*rv[ :]*11\./,
+						identity : "Explorer"
+					}, {
+						string : navigator.userAgent,
+						subString : "MSIE",
+						identity : "Explorer",
+					}, {
+						string : navigator.userAgent,
+						match : /Mobile Safari\/([\d.]+)/,
+						identity : "Mobile Safari",
+						versionSearch : "/AppleWebKit\/([\d.]+)/",
+					}, {
+						string : navigator.userAgent,
+						subString : "Gecko",
+						identity : "Mozilla",
+						versionSearch : "rv"
+					}, { // for older Netscapes (4-)
+						string : navigator.userAgent,
+						subString : "Mozilla",
+						identity : "Netscape",
+						versionSearch : "Mozilla"
+					} ],
+					dataOS : [ {
+						string : navigator.platform,
+						subString : "Win",
+						identity : "Windows"
+					}, {
+						string : navigator.platform,
+						subString : "Mac",
+						identity : "Mac"
+					}, {
+						string : navigator.userAgent,
+						match : /Android\s([0-9\.]*)/,
+						subString : "Android",
+						identity : "Android"
+					}, {
+						string : navigator.userAgent,
+						subString : "iPhone",
+						identity : "iPhone/iPod"
+					}, {
+						string : navigator.platform,
+						subString : "Linux",
+						identity : "Linux"
+					}
+
+					]
+
+				};
+				BrowserDetect.init();
+				$('#browser_os').val(BrowserDetect.OS);
+				$('#browser_Name').val(BrowserDetect.browser);
+				$('#browser_version').val(BrowserDetect.version);
+		});
 	</script>
+
 	<!-- Clicky code -->
  	<script src="//static.getclicky.com/js" type="text/javascript"></script>
 	<script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script> 

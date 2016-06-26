@@ -78,12 +78,13 @@ public class CampaignsAPI
 	List<Contact> contactList = new ArrayList<Contact>();
 	contactList.add(contact);
 
-	WorkflowSubscribeUtil.subscribeDeferred(contactList, workflowId);
+	//WorkflowSubscribeUtil.subscribeDeferred(contactList, workflowId);
+	WorkflowSubscribeUtil.subscribeDeferredCampaign(contactList, workflowId);
 	Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
 	ActivityUtil.createContactActivity(ActivityType.CAMPAIGN, contact, "", workflow.name, "");
 	// return "true";
     }
-
+    
     /**
      * Returns list of logs with respect to contact.
      * 

@@ -2,14 +2,24 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.POST;
+import javax.ws.rs.QueryParam;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.ipaccess.AllowAccessMailServlet;
+import com.agilecrm.ipaccess.IpAccess;
+import com.agilecrm.ipaccess.IpAccessUtil;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
@@ -19,11 +29,21 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.agilecrm.util.email.AppengineMail;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.utils.SystemProperty;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * <code>LoginServlet</code> class checks or validates the user who is
@@ -48,7 +68,12 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		if(request.getParameter("resendotp")!=null){
+			resendVerficationCode(request);
+			return;
+		}
 		doGet(request, response);
+		
 	}
 
 	/**
@@ -69,12 +94,25 @@ public class LoginServlet extends HttpServlet {
 		request.getSession().removeAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME);
 
+
 		// Check if this subdomain even exists or alias exist
+		// Delete Login Session
+		request.getSession().removeAttribute(
+				UserFingerPrintInfo.FINGER_PRINT_SESSION_NAME);
+
+		// Remove the attribute for the Session Cache when the user visits this page
+		request.getSession().removeAttribute(SessionCache.SESSION_ATTRIBUTE_NAME);
+
+		// Check if this subdomain even exists or alias exist
+
+		
+		// Check if this subdomain even exists
+
 		if (DomainUserUtil.count() == 0) {
 			response.sendRedirect(Globals.CHOOSE_DOMAIN);
 			return;
 		}
-
+					
 		// If request is due to multiple logins, page is redirected to error
 		// page
 		String multipleLogin = (String) request.getParameter("ml");
@@ -82,6 +120,7 @@ public class LoginServlet extends HttpServlet {
 
 		// Check the type of authentication
 		try {
+						
 			if (!StringUtils.isEmpty(multipleLogin)) {
 				handleMulipleLogin(response);
 				return;
@@ -115,7 +154,7 @@ public class LoginServlet extends HttpServlet {
 
 		// Return to Login Page
 		request.getRequestDispatcher("login.jsp").forward(request, response);
-
+		
 	}
 
 	/**
@@ -214,7 +253,11 @@ public class LoginServlet extends HttpServlet {
 		// Read Subdomain
 		String subdomain = NamespaceUtil.getNamespaceFromURL(request
 				.getServerName());
+
 		subdomain = AliasDomainUtil.getActualDomain(subdomain);
+
+		//subdomain = AliasDomainUtil.getActualDomain(subdomain);
+
 		if (!subdomain.equalsIgnoreCase(domainUser.domain))
 			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 				throw new Exception(
@@ -237,7 +280,28 @@ public class LoginServlet extends HttpServlet {
 			request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 		}
 
-		request.getSession().setAttribute("account_timezone", timezone);
+		request.getSession().setAttribute("account_timezone", timezone);	
+		
+		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
+		{
+			// Validate User finger print
+			UserFingerPrintInfo browser_auth = new UserFingerPrintInfo();
+			browser_auth.validateUserFingerPrint(domainUser, request);
+			
+			// Send email with code
+			if(!browser_auth.valid_finger_print || !browser_auth.valid_ip ){
+				
+				// Generate one finger print
+				browser_auth.generateOAuthToken(request);
+
+				// Set info in session for future usage 
+				browser_auth.addUserBrowserInfo(request, domainUser);
+				
+				// Send Sendgrid Email
+				sendOTPEmail(request, domainUser.email, false);
+				
+			}
+		}
 
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
@@ -260,16 +324,58 @@ public class LoginServlet extends HttpServlet {
 			return;
 		}
 
+		request.getSession().setAttribute("account_timezone", timezone);
+		
+
 		response.sendRedirect("/");
 
 	}
-
+	
+	
+	public void resendVerficationCode(HttpServletRequest request){
+		
+		UserFingerPrintInfo validFingerPrint = new UserFingerPrintInfo();
+		String email = ((UserInfo)request.getSession().getAttribute(
+				SessionManager.AUTH_SESSION_COOKIE_NAME)).getEmail();
+		
+		sendOTPEmail(request, email, true);
+		
+	}
+	
 	private void handleMulipleLogin(HttpServletResponse response)
 			throws Exception {
 		// response.sendRedirect("error/multiple-login.jsp");
 		throw new Exception("multi-login");
 
 	}
+
+	private void sendOTPEmail(HttpServletRequest request, String email, boolean resend) {
+
+		try {
+			UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(request);
+			Map data = info.info;
+			 
+			// Simulate template
+			String template = SendMail.ALLOW_IP_ACCESS;
+			String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
+			if(!info.valid_finger_print){
+				template = SendMail.OTP_EMAIL_TO_USER;
+				subject =  "New sign-in from " + data.get("browser_name") + " on " + data.get("browser_os"); 
+			}
+			
+			// if(resend)
+				AppengineMail.sendMail(email, subject, template, data);
+			// else 
+				// SendMail.sendMail(email, subject, template, data);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 
 	private void updateEntityStats() {
 		AccountLimitsRemainderDeferredTask stats = new AccountLimitsRemainderDeferredTask(
@@ -279,5 +385,4 @@ public class LoginServlet extends HttpServlet {
 		Queue queue = QueueFactory.getQueue("account-stats-update-queue");
 		queue.addAsync(TaskOptions.Builder.withPayload(stats));
 	}
-
 }

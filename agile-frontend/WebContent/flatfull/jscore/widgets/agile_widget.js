@@ -112,13 +112,7 @@ function agile_crm_get_contact_properties_list(propertyName)
 function agile_crm_update_contact(propertyName, value, callback)
 {
 	// Gets current contact model from the contactDetailView object
-	var contact_model = null;
-	
-	if(company_util.isCompany()){
-		contact_model = App_Companies.companyDetailView.model;
-	} else {
-		contact_model = App_Contacts.contactDetailView.model;
-	}
+	var contact_model = agile_crm_get_contact_model();
 
 	// Reads properties fied from the contact
 	var properties = contact_model.toJSON()['properties'];
@@ -140,6 +134,8 @@ function agile_crm_update_contact(propertyName, value, callback)
 		}
 	});
 
+
+
 	// If flag is false, given property is new then new field is created
 	if (!flag)
 		properties.push({ "name" : propertyName, "value" : value, "type" : "CUSTOM" });
@@ -157,8 +153,42 @@ function agile_crm_update_contact(propertyName, value, callback)
 	contact_model.set(model.toJSON(), { silent: true });
 
 	if (callback && typeof (callback) == "function")
-	callback();
+	callback(model.toJSON());
 	} }, { silent : true });
+}
+
+
+
+function agile_crm_get_contact_model(){
+	
+	if(company_util.isCompany()){
+		return App_Companies.companyDetailView.model;
+	} else {
+		return App_Contacts.contactDetailView.model;
+	}
+}
+
+function agile_crm_is_model_property_changed(propertyName, value){
+    var changed = true;
+
+  	var contact_model = agile_crm_get_contact_model();
+
+  	// Reads properties fied from the contact
+	var properties = contact_model.toJSON()['properties'];
+
+	/*
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and if match is found, updates
+	 * the value of it with the given value
+	 */
+	$.each(properties, function(index, property)
+	{
+		if (property.name == propertyName && property.value == value)
+			   changed = false;
+	});
+
+	return changed;
+
 }
 
 
@@ -185,7 +215,7 @@ function agile_crm_update_contact_properties(propertiesArray, callback)
 		var flag = false;
 
 		// Iterates through each property in contact properties
-		$.each(properties, function(index, property)
+$.each(properties, function(index, property)
 		{
 			/*
 			 * checks for the match with given property name in properties list
@@ -225,15 +255,32 @@ function agile_crm_update_contact_properties(propertiesArray, callback)
 
 	// If property is new then new field is created
 	contact_model.set({ "properties" : properties }, { silent : true });
-	contact_model.url = "core/api/contacts";
+	var model = new Backbone.Model();
+	model.url = "core/api/contacts";
+
 
 	// Save model
-	contact_model.save({ success : function(model, response)
+	model.save(contact_model.toJSON(), { success : function(model, response)
 	{
-		console.log('contact saving ');
+		contact_model.set(model.toJSON(), { silent: true });
 		if (callback && typeof (callback) == "function")
 			callback();
 	} }, { silent : true });
+	var properties = contact_model.get("properties");
+	var i;
+	for (i = 0; i < properties.length; i++) {
+			 if(properties[i].name == "image"){
+			 	var url = properties[i].value;
+			 	var id = "contact-container";
+			 	$('#' + id).find('.contact-image-view').html('');
+	            $('#' + id).find('.contact-image-view').html('<img src="' + url + '" class="upload_pic imgholder submit w-full img-circle" style="width:75px;height:75px;" type="submit" />');
+				if($(".toggle-contact-image .contact-delete-option").length == 0) {
+			 	$('#' + id).find('.toggle-contact-image').append('|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash" style="color:red"></i></a></div>');	
+				$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").removeAttr('style');
+				$('#' + id).find('.toggle-contact-image').find(".contact-edit-option").css("float","left");
+	}
+			 }
+	} 
 }
 
 /**
@@ -289,7 +336,7 @@ function agile_crm_get_widget(pluginName)
 	 * while loading plugins
 	 */
 	console.log($('#' + pluginName));
-	var model_data = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
+	var model_data = $('#' + pluginName, get_current_view_el()).data('model');
 
 	console.log(model_data);
 
@@ -308,7 +355,7 @@ function agile_crm_get_widget_prefs(pluginName)
 	pluginName = pluginName.replace(/ +/g, '');
 	console.log("in get widget prefs " + pluginName);
 	// Gets data attribute of from the plugin, and return prefs from that object
-	return $('#' + pluginName, App_Contacts.contactDetailView.el).data('model').toJSON().prefs;
+	return $('#' + pluginName, get_current_view_el()).data('model').toJSON().prefs;
 }
 
 /**
@@ -324,11 +371,11 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 	console.log(pluginName);
 	pluginName = pluginName.replace(/ +/g, '');
 
-	console.log(App_Contacts.contactDetailView.el);
-	console.log($('#' + pluginName, App_Contacts.contactDetailView.el));
+	console.log(get_current_view_el());
+	console.log($('#' + pluginName, get_current_view_el()));
 
 	// Get the model from the the element
-	var widget = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
+	var widget = $('#' + pluginName, get_current_view_el()).data('model');
 
 	console.log(widget);
 	// Set changed preferences to widget backbone model
@@ -347,7 +394,7 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 		console.log("Saved widget: " + data.toJSON());
 		
 		// Set the changed model data to respective plugin div as data
-		$('#' + pluginName, App_Contacts.contactDetailView.el).data('model', widget);
+		$('#' + pluginName, get_current_view_el()).data('model', widget);
 		
 		if (callback && typeof (callback) === "function")
 		{
@@ -641,5 +688,16 @@ function agile_crm_get_current_view()
 	if(App_Contacts.contactDetailView)
 		return App_Contacts.contactDetailView.el;
 	
+	return undefined;
+}
+
+function get_current_view_el()
+{
+	if(Current_Route.indexOf('contact') != -1 && App_Contacts.contactDetailView)
+		return App_Contacts.contactDetailView.el;
+	
+	if(Current_Route.indexOf('ticket') != -1 && App_Ticket_Module.ticketView)
+		return App_Ticket_Module.ticketView.el;
+
 	return undefined;
 }

@@ -103,8 +103,8 @@
 			<fieldset>
     		<div class="control-group m-b-none">  	 
                     <div id="milestone-values-{{id}}">
-					<table class="table table-hover  milestones-table bg-white table-hover m-b-none" >
-					<colgroup><col width="50%"><col width="8%"></colgroup>
+					<table class="table table-hover  milestones-table bg-white table-hover m-b-none" data="{{id}}" >
+					<colgroup><col width="45%"><col width="8%"></colgroup>
 					<tbody class="deal-tracks-tbody ui-sortable">
 					{{#milestone_ul this}}{{/milestone_ul}}
 					</tbody>
@@ -130,7 +130,7 @@
 </script>
 
 <script id="admin-settings-lost-reasons-collection-template" type="text/html">
-<div class="panel wrapper">
+<div class="col panel wrapper b-t">
 <form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> Add Reason</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -148,7 +148,14 @@
 		</table>
 	</div>
 	
-<div>
+</div>
+
+<!-- Help Text -->
+<div class="col w-md  wrapper pos-rlt track-milestone-text">
+	 
+</div>
+<!-- Help Text -->
+
 </script>
 
 <script id="admin-settings-lost-reasons-model-template" type="text/html">
@@ -165,10 +172,10 @@
 		<span id="lost_reason_existed_error_{{id}}" for="lost_reason_name" generated="true" class="help-inline" style="display:none;">Reason with this name already exists.</span>
 	</div>
 	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
-		<a class="lost-reason-edit c-p m-l-sm text-l-none text-xs hover-show" >
+		<a class="lost-reason-edit c-p m-l-sm text-l-none text-sm hover-show" >
 			<i title="Edit Reason" class="icon icon-edit"></i>
 		</a>
-		<a class="lost-reason-delete text-l-none-hover c-p text-xs m-l-sm hover-show">
+		<a class="lost-reason-delete text-l-none-hover c-p text-sm m-l-sm hover-show">
 			<i title="Delete Reason" class="icon-trash"></i>
 		</a>
 	</div>
@@ -178,7 +185,7 @@
 </script>
 
 <script id="admin-settings-deal-sources-collection-template" type="text/html">
-<div class="panel wrapper">
+<div class="panel wrapper col b-t">
 <form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> Add Source</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -196,7 +203,14 @@
 		</table>
 	</div>
 	
-<div>
+</div>
+
+<!-- Help Text -->
+<div class="col w-md  wrapper pos-rlt track-milestone-text">
+	 
+</div>
+<!-- Help Text -->
+
 </script>
 
 <script id="admin-settings-deal-sources-model-template" type="text/html">
@@ -213,13 +227,13 @@
 		<span id="deal_source_existed_error_{{id}}" for="deal_source_name" generated="true" class="help-inline" style="display:none;">Source with this name already exists.</span>
 	</div>
 	<div class="m-b-n-xs pull-right vis-hide lost-reason-icons">
-		<a class="deal-source-edit c-p m-l-sm text-l-none text-xs hover-show" >
+		<a class="deal-source-edit c-p m-l-sm text-l-none text-sm hover-show" >
 			<i title="Edit Source" class="icon icon-edit"></i>
 		</a>
-		<a class="deal-source-delete text-l-none-hover c-p text-xs m-l-sm hover-show">
+		<a class="deal-source-delete text-l-none-hover c-p text-sm m-l-sm hover-show">
 			<i title="Delete Source" class="icon-trash"></i>
 		</a>
-		<a class="deal-source-move text-l-none-hover c-p text-xs m-l-sm hover-show">
+		<a class="deal-source-move text-l-none-hover c-p text-sm m-l-sm hover-show">
 			<i title="Drag Source" class="icon-move"></i>
 		</a>
 	</div>
@@ -231,63 +245,100 @@
 
 <script id="admin-settings-deal-goals-collection-template" type="text/html">
 
-<div class="panel wrapper">
-	<div class="form-horizontal">
-	<div class="w-md pull-right">
-	<label>Duration</label>
-	<div id="goal_duration">
-				<span data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">{{currentDateInFormat 'mmmm yyyy'}}</span>
-			</div>
-			</div>
-		<!--	<div class="Goal_period"></div> -->
-	<div class="control-group form-group">
-               <div class="controls col-md-12 col-lg-8 col-sm-12 col-xs-12">
-		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
-				<thead class="panel-heading"><tr>
-					<th><div></div><div class="pull-right width-goal text-center m-r-lg">Value</div><div class="pull-right width-goal text-center" style="margin-right:80px">Count</div></th>
-				</tr></thead>
-				<tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list" style="word-break:normal!important;" >
-			</tbody>
-		</table>
-				
-			</div><!-- End of controls col-sm-6 -->
-	</div> <!-- End of control-group form-group -->
+<div class="panel wrapper col b-t goaltab-main">
+   <div class="text-right">
+      <ul class="list-inline text-sm m-b-xs">
+         <li>
+            Total Goals: 
+            <div class="Count_goal  text-right pull-right p-l-xs" value=0>0</div>
+         </li>
+         <li>
+            Total Goals Value: 
+            <div class="text-right pull-right p-l-xs">{{currencySymbol}}<label class="Amount_goal" value=0>0</label></div>
+         </li>
+      </ul>
+   </div>
+   <div class="panel panel-default">
+      <div class="panel-heading">
+         <div class="pull-left m-t-xs">Goals & Goal Value</div>
+         <div class="pull-right w-sm pos-rlt goal-datepicker">
+            <div id="goal_duration">
+               <i class="icon-calendar pos-abs goal-icon-calendar"></i>
+               <span data-date-format="{{dateFormat}}" prev-val="" class="date required p-l-lg form-control" 
+                  style="padding-top:4px; padding-bottom:3px; height:30px;" placeholder="{{dateFormat}}">{{currentDateInFormat 'mmmm yyyy'}}</span>
+            </div>
+         </div>
+         <div class="clearfix"></div>
+      </div>
+      <div class="row">
+         <div class="col-md-12 col-sm-12">
+            <div class=" table-responsive">
+               <table class="table table-striped agile-table panel table-layout-mob-view no-sorting" id="deal-sources-table">
+                  <thead>
+                     <tr>
+                        <th style="width:5%"></th>
+                        <th style="width:35%">User</th>
+                        <th style="width:30%">Goals</th>
+                        <th style="width:30%">Goal Value</th>
+                     </tr>
+                  </thead>
+                  <tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list">
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
 
-
-		<div class="control-group form-group  m-b-none">
-	
-                  <div class="col-md-12 col-lg-8 col-sm-12 col-xs-12"><label style="padding-left:20px">Total</label>
-  			<div class="width-goal text-center pull-right m-r-xxl" >{{currencySymbol}} <label class="Amount_goal" value=0>0</label></div>
-  		<div class="Count_goal width-goal text-center pull-right col-xs-offset-1" style="margin-right:65px" value=0>0</div>
-  		
-  		</div>
-  		<div class="col-sm-offset-3 col-sm-8 col-xs-offset-4 col-xs-8">
-            
-                <div><a class="btn btn-sm btn-primary goalSave pull-left">Save Changes</a></div>
-                <div class="Goals_message pull-left p-l-sm"></div>
-          
-           </div>
-	
- </div>
-</div>
-
+<div class="col-md-12" style="margin-left:40%;">
+   <div><a class="btn btn-sm btn-primary goalSave pull-left">Save Changes</a></div>
+   <div class="Goals_message pull-left p-l-sm"></div>
 </div>
 </div>
+<!-- Help Text -->
+<div class="col w-md  wrapper pos-rlt track-milestone-text">
+</div>
+<!-- Help Text -->
 </script>
 
 <script id="admin-settings-deal-goals-model-template" type="text/html">
-<td>
-	<div id={{id}} class="goal pull-left inline-block v-top text-ellipsis text-cap">{{name}}
-		
+
+	<td>
+	<div class="table-resp" style="overflow: inherit; width:100%;">
+	<div class="thumb-xs agile-img avatar" style="width:20px; margin-top:3px;">
+	{{#if pic}}
+		<img class="img-inital r r-2x" src="{{pic}}"  title="{{name}}" style="width:20px; height:20px; border-radius:2px;">
+	{{else}}
+		<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" title="{{name}}" style="width:20px; height:20px; border-radius:2px;">	
+	{{/if}}
 	</div>
-	<div class="pull-right input-group">
-		<span class="input-group-addon mozilla-addon" style="display:inline; padding:5px 3px 1px;">{{currencySymbol}}</span><input class="amount width-goal" type="text"><small class="amount_percent m-l-xs thumb-tiny"></small>
-		<span id="goal_amount_error"  generated="true" class="help-inline" style="display:none">Please enter a valid number.</span>
-		</div>
-		<div class="pull-right m-r-md input-group">
-		<input class="count width-goal" type="text"><small class="count_percent m-l-xs thumb-tiny"></small>
-		<span id="goal_count_error"  generated="true" class="help-inline" style="display:none;">Please enter a valid number.</span>
-		</div>
-	</form>
-</td>
+	</div>
+	</td>
+	<td>	
+	<div id={{id}} class="goal goalid agile-thumb agile-thumb-view" style="width: calc(100% - 0px); margin-top:3px;">
+	<span class="m-r-sm custom-link pull-left text-ellipsis w-auto" style="max-width:calc(100% - 1px);">{{name}}</span>
+	<div class="clearfix"></div>
+	</div>
+	</td>
+  
+	<td>   
+   <div class="input-group">
+      <input class="count goal-form-control w-full" type="text">
+	  <small class="count_percent m-l-xs thumb-tiny pos-abs" style="right:12px; top:5px;" ></small> 
+   </div>
+    <span id="goal_count_error"  generated="true" class="help-inline" style="display:none;">Please enter a valid number.</span>
+	   
+  
+	</td>
+
+	<td>
+   <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">{{currencySymbol}}</span>
+	  <input class="amount goal-form-control w-full" type="text" aria-describedby="basic-addon1"
+		style="border-top-left-radius: 0px; border-bottom-right-radius: 0px;">
+	 <small class="amount_percent m-l-xs thumb-tiny pos-abs" style="right:12px; top:5px;"></small>   
+   </div>
+   <span id="goal_amount_error"  generated="true" class="help-inline" style="display:none">Please enter a valid number.</span>
+	</td> 
+	 </form>
 </script>

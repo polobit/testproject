@@ -46,13 +46,9 @@
 						<label class="control-label col-sm-4">Avatar</label>
                 		<div id="upload-container" class="control-label text-left col-sm-8">
 							<a href="#choose-avatar-modal" data-toggle="modal" class="pull-left">
-								<div class="imgholder thumb-lg thumb-wrapper" style="width:50px;height:50px;">
-                                  {{#if pic}}
-                                    <img class="w-full" src="{{pic}}"  />
-                                  {{else}}
-                                    <img class="w-full"  src="{{getS3ImagePath '/images/pic.png'}}"  />
-                                  {{/if}}
-								</div>
+								<div class="imgholder user_img form-whitelabel-user-image thumb-wrapper thumb-lg" style="width:50px;height:50px;">
+							    <img class="w-full" src="{{get_current_domain_pic}}"  />
+						</div>
 							</a> 
 							<input type="hidden" id="upload_url" name="pic"/>     
                 		</div>
@@ -909,6 +905,7 @@
                         <option value="HNL-L">Honduran Lempira</option>
                         <option value="HKD-$">Hong Kong Dollar</option>
                         <option value="HUF-Ft">Hungarian Forint</option>
+                        <option value="ISK-ISK">Icelandic Krona</option>
                         <option value="INR-Rs">Indian Rupee</option>
                         <option value="IDR-Rp">Indonesian Rupiah</option>
                         <option value="ILS-&#8362;">Israeli New Sheqel</option>
@@ -968,6 +965,7 @@
                         <option value="AED-Dh">United Arab Emirates Dirham</option>
                         <option value="UYU-$U">Uruguayan Peso</option>
                         <option value="UZS-&#1083;&#1074;">Uzbekistan Som</option>
+                        <option value="VEF-VEF">Venezuelan Bolivar</option>
                         <option value="VND-&#8363;">Vietnamese Dong</option>
                         <option value="YER-YER">Yemeni Rial</option>
                         <option value="ZMK-ZK">Zambian Kwacha</option>

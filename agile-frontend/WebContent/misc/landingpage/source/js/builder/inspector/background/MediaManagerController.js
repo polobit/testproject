@@ -9,6 +9,8 @@ angular.module('builder.inspector')
 		//upload files to filesystem
         $scope.onFileSelect = function($files, replace) {
 
+          document.getElementById('upload-image-lp').textContent="Uploading...";
+          document.getElementById('upload-image-lp').style.backgroundColor="rgba(23, 158, 222, 0.58)";
           $rootScope.$$phase || $rootScope.$apply();
 
           var file = $files[0];
@@ -46,6 +48,9 @@ angular.module('builder.inspector')
               if (replace === 'bg') {
                 inspector.applyCss('background-image', 'url("'+data+'")', $scope.selected.getStyle('background-image'));
               }
+              document.getElementById('upload-image-lp').textContent="Upload Image";
+              document.getElementById('upload-image-lp').style.backgroundColor="#179ede";
+              
             },
             error: function (xhr, ajaxOptions, thrownError) {
               alertify.error("Error ! Try again.", 3000);

@@ -11,6 +11,7 @@
  * @param errorClass -
  *            class in which to fill error text, i.e. htmlText
  */
+ 
 function show_error(modalId, formId, errorClass, htmlText)
 {
 	var modal_elem = $('#' + modalId);
@@ -102,11 +103,22 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	// Reads id, to update the contact
 	var id = $('#' + form_id + ' input[name=id]').val();
 
+    var man_delet  = $("#" + form_id + " #Manual_delete").val();
+	//Surce of the contact
+	var contact_source = $('#' + form_id + ' input[name=source]').attr('data');
+
 	// Makes created time constant
 	var created_time = $('#' + form_id + ' input[name=created_time]').val();
 
+	var city  = $("#" + form_id + " #city").val();
+	var state  = $("#" + form_id + " #state").val();
+	var country  = $("#" + form_id + " #country").val();
+	var zip  = $("#" + form_id + " #zip").val();
+
+
 	// Object to save
 	var obj = {};
+	//to check if it manually added
 
 	// Stores all the property objects
 	var properties = [];
@@ -193,6 +205,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// Stores person's continue editing form template key
 		template = 'continue-contact';
 		obj.type = 'PERSON';
+        /*@priyanka
+        *saving first_name,last_name,picture and its TwitterId Pre-populate into the saving
+        * person model and continue saving it will also appers with same field
+        */
+		if(contact_source)
+			obj.source = contact_source ;
 
 		// Creates properties of contact (person)
 		if (isValidField(form_id + ' #fname'))
@@ -205,7 +223,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// if(form_id == "personForm")
 		if (isValidField(form_id + ' #image'))
 			properties.push(property_JSON('image', form_id + ' #image'));
+        //checking the condition for the when tweeterId is saving into the datastore
+        if(isValidField(form_id +' #handle'))
+        	properties.push({ "name" : "website", "value" :$('#handle').val(), "subtype" : "TWITTER" })
 
+      
 		// /give preference to autofilled company, ignore any text in textfield
 		// for filling company name
 		var company_el = $("#" + form_id + " [name='contact_company_id']").find('li');
@@ -306,8 +328,25 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 				return false;
 			}
 		}
-
-		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+		if(obj.contact_company_id){
+			$.ajax({
+				url : "/core/api/contacts/"+obj.contact_company_id,
+				type: 'GET',
+				dataType: 'json',
+				success: function(company){
+					if(company){
+						contact_company = company ;
+						return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template , company);
+					}
+				},
+				error: function(){
+					console.log("company fetch failed.");
+					return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+				}
+			});
+		}
+		else
+			return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
 			   
 	}
 	else
@@ -358,16 +397,16 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 		}		
 	}
+	
+
 
 
 }
 
-function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template){
-
-
+function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template ,contact_company){
+				
 		if (isValidField(form_id + ' #company_url'))
-			properties.push(property_JSON('url', form_id + ' #company_url'));
-		
+			properties.push(property_JSON('url', form_id + ' #company_url'));		
 		if (tagsSourceId === undefined || !tagsSourceId || tagsSourceId.length <= 0)
 			tagsSourceId = form_id;
 
@@ -442,16 +481,23 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		{
 			var addressJSON = {};
 			var subtype;
+			/*var remote_addr=false; */ 
 			$.each($(element).find(":input,select"), function(index, subelement)
 			{
 
 				if ($(subelement).val() == undefined || $(subelement).val().length == 0)
-					return;
+					{  /*remote_addr =true;
+						addressJSON['remote_add'] = remote_addr;*/
+						return;}
 
 				if ($(subelement).attr('name') == 'address-type')
 					subtype = $(subelement).val();
+
 				else
 					addressJSON[$(subelement).attr('name')] = $(subelement).val();
+
+				if($(subelement).attr('name') == 'country')
+					addressJSON['countryname'] = $(subelement).find('option:selected').text();
 			});
 
 			if ($.isEmptyObject(addressJSON))
@@ -474,15 +520,13 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				properties.push({ "name" : $(element).attr('data'), "value" : inputElement.val(), "subtype" : selectElement.val() })
 		}
 	});
-
 	/*
 	 * Check whether there are any properties in existing contact, which can get
 	 * lost in contact update form. There are chances user adds a property(may
-	 * be stripe id..) using developers API, in order not to loose them
-	 * following verification is done
+	 * be stripe id..) using developers API and contact image saved as CUSTOM type,
+	 * in order not to loose them following verification is done
 	 */
-	 //Not added custome field data which is not there in form
-	/*if (obj.properties)
+	if (obj.properties)
 	{
 		var properties_temp = properties;
 		$
@@ -508,14 +552,38 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 												// in new properties then
 												// preserving them.
 												else if (new_property_index == (properties_temp.length - 1) && custom_fields_in_template
-														.indexOf(contact_property.name) == -1 && contact_property.type == "CUSTOM")
+														.indexOf(contact_property.name) == -1 && contact_property.type == "CUSTOM" && contact_property.name == "image")
 												{
 													properties.push(contact_property);
 												}
+											
 											});
 						});
-	}*/
-
+	}
+	if(contact_company){
+		var prop = null;
+		$.each(contact_company.properties , function(){
+			if(this.name == "address" && this.subtype == "office")
+				prop = this.value;
+			});
+		if(prop){
+			var addressFlag = false;
+			$.each(properties, function(key, value){
+		    console.log(key);
+		    	if(key == "address"){
+		    		addressFlag = true ;
+		    		return false;
+				}
+			});
+			if(!addressFlag){
+				var form_element = $(e.target).attr('id')
+				if(form_element == "person_validate" || form_element == "continue-contact"){						
+					console.log(prop);
+					properties.push({ "name" : "address", "value" : prop, "subtype" : "office"});
+				}
+			}
+		}
+	}
 	// Stores json object with "properties" as value
 	var propertiesList = [];
 	propertiesList.push({ "name" : "properties", "value" : properties });
@@ -532,7 +600,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 
 	obj["created_time"] = created_time;
-
+	var clickButtonId = e.currentTarget.id; 
 	// Saves contact
 	var contactModel = new BaseModel();
 	contactModel.url = 'core/api/contacts';
@@ -618,6 +686,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		}
 
 		// Hides the modal
+		if(CallLogVariables.dynamicData != null){
+			CallLogVariables.processed = true;
+		}
 		$('#' + modal_id).modal('hide');
 
 		// Resets each element
@@ -628,6 +699,21 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 		// Removes tags list(remove them from new person modal)
 		$('.tagsinput', $("#" + modal_id)).empty();
+		
+		try{
+			
+			if(clickButtonId != "continue-contact"){
+				if(CallLogVariables.dynamicData != null){
+					var jsonData1 = data.toJSON();
+					var dynamicData = CallLogVariables.dynamicData;
+					dynamicData.contact_name = getContactName(jsonData1);
+					dynamicData.contId = jsonData1.id;
+					showDynamicCallLogs(dynamicData);
+				}
+			}
+		}catch(e){}
+		
+		
 		//added for call campaign - functionality after updating fom call campaign
 			if(CALL_CAMPAIGN.start ){
 				var id = $('#continueform input[name=id]').val();
@@ -653,6 +739,8 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				
 				
 			}
+			
+			
 	}, error : function(model, response)
 	{
 
@@ -707,7 +795,7 @@ function deserialize_contact(contact, template)
 		// Add placeholder and date picker to date custom fields
 		$('.date_input').attr("placeholder", "Select Date");
 
-		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 		// To set typeahead for tags
 		setup_tags_typeahead();
@@ -732,6 +820,40 @@ function deserialize_contact(contact, template)
 					.html(
 							'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 			$("#content #contact_company").hide();
+			if(data){							
+				$.ajax({
+					url : "/core/api/contacts/"+data,
+					type: 'GET',
+					dataType: 'json',
+					success: function(company){
+						if(company){
+							console.log(company);
+							contact_company = company ;
+							var prop = null;
+							$.each(contact_company.properties , function(){
+								if(this.name == "address" && this.subtype == "office")
+									prop = JSON.parse(this.value);
+							});				
+							if(prop){
+								$("#content .address-type").val("office");
+								if(prop.address)
+									$("#content #address").val(prop.address);
+								if(prop.city)
+									$("#content #city").val(prop.city);
+								if(prop.state)
+									$("#content #state").val(prop.state);
+								if(prop.zip)
+									$("#content #zip").val(prop.zip);
+								if(prop.country)
+									$("#content #country").val(prop.country);
+
+							}
+
+						}
+
+					}
+				});
+			}
 		}
 		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
 
@@ -930,6 +1052,34 @@ $(function()
 	{
 		$("#content #contact_company").show();
 		$("#content [name='contact_company_id']").html('');
+		if(contact_company){
+			var flag = false ; var prop = null;
+			$.each(contact_company.properties , function(){
+				if(this.name == "address" && this.subtype == "office")
+					prop = JSON.parse(this.value);
+				});
+				if(prop){
+					if(prop.address && $("#content #address").val() && $("#content #address").val() != prop.address)
+						flag = true;
+					else if(prop.city && $("#content #city").val() && $("#content #city").val() != prop.city)
+						flag = true;
+					else if(prop.state && $("#content #state").val() && $("#content #state").val() != prop.state)
+						flag = true;
+					else if(prop.zip && $("#content #zip").val() && $("#content #zip").val() != prop.zip)
+						flag = true;
+					else if(prop.country && $("#content #country").val() && $("#content #country").val() != prop.country)
+						flag = true ;
+					if(!flag){
+						$("#content .address-type,#address,#city,#state,#zip,#country").val('');
+						/*$("#content #address").val('');
+						$("#content #city").val('');
+						$("#content #state").val('');
+						$("#content #zip").val('');
+						$("#content #country").val('');*/
+					}
+				}
+			}
+
 	})
 
 	// Clones multiple fields
@@ -1011,6 +1161,8 @@ function add_contact_to_view(appView, model, isUpdate)
 
 	if (model.get('type') == 'COMPANY')
 	{
+		//Change the entity type to company
+		model.set({ "entity_type" : "company_entity" }, { silent : true });
 		if (appView.collection.get(model.id) != null) // update existing model
 			appView.collection.get(model.id).set(model);
 		else if (company_util.isCompany()) // add model only if its in

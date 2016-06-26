@@ -6,13 +6,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.queues.backend.ModuleUtil;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.deferred.NotificationsDeferredTask;
+import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -106,14 +110,63 @@ public class NotificationPrefsUtil
 	// If domain is empty return
 	if (StringUtils.isEmpty(domain) || json == null)
 	    return;
+	
+	// Verifies for duplicate notifications in Backend modules
+	if(!isValid(type, customValue, domain))
+		return;
 
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(domain, json.toString());
-	// PullQueueUtil.addToPullQueue(AgileQueues.NOTIFICATION_PULL_QUEUE,
-	// notificationsDeferredTask, null);
+	PullQueueUtil.addToPullQueue(AgileQueues.NOTIFICATION_PULL_QUEUE,
+	notificationsDeferredTask, null);
 
-	Queue queue = QueueFactory.getQueue("notification-queue");
-	queue.addAsync(TaskOptions.Builder.withPayload(notificationsDeferredTask));
+	//Queue queue = QueueFactory.getQueue("notification-queue");
+	//queue.addAsync(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
+
+	/**
+	 * Returns boolean value
+	 * 
+	 * @param type - Notification Type
+	 * @param customValue - custom json
+	 * @param domain - Domain
+	 * 
+	 * @return boolean
+	 */
+	private static boolean isValid(Type type, JSONObject customValue, String domain)
+	{
+		// If not frontend module
+//		if(ModuleUtil.isDefaultModule())
+//			return true;
+		
+		// If notifications are not Tag type, return true
+		if(type == null || !(type.equals(NotificationPrefs.Type.TAG_ADDED) || type.equals(NotificationPrefs.Type.TAG_DELETED)))
+			return true;
+		
+		try
+		{
+			if(customValue != null && customValue.has("custom_value"))
+			{
+				String key = domain + "_" + type + "_" + customValue.getString("custom_value");
+				
+				System.out.println("Custom value is " + customValue.getString("custom_value"));
+				System.out.println("Key is " + key);
+				
+				if(CacheUtil.getCache(key) != null)
+				{
+					System.err.println("Returning as it is duplicate notification.");
+					return false;
+				}
+				
+				CacheUtil.setCache(key, true, 5 * 60 * 1000);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
 
     /**
      * Optimizes object size that is sent in notification. PubNub restricts size

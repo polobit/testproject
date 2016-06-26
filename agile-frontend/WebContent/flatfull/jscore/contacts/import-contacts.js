@@ -1,17 +1,47 @@
 BLOB_KEY = undefined;
+
+var CONTACTS_IMPORT_VIEW = Base_Model_View.extend({
+	events : {
+		"click .upload-contacts-ele" :  "initializeImportButton",
+		"#import-cancel" : "importCancel"
+	},
+	initializeImportButton : function(e)
+	{
+		e.preventDefault();
+		var element = e.target;
+
+		// get hidden value file type
+		var type = $(element).parents('form').children("#type").val();
+
+		var newwindow = window.open("upload-contacts.jsp?type=" + type + "", 'name', 'height=310,width=500');
+
+		if (window.focus)
+		{
+			newwindow.focus();
+		}
+	},
+	importCancel : function(e)
+	{
+		// Sends empty JSON to remove
+		// contact uploaded
+		App_Contacts.importContacts.render(true);
+	}
+
+
+});
+
 function initializeImportEvents(id){
 
 if(!id)
 	  id = "content";
 
-$('#' + id  + " .upload").off('click');
-$('#' + id).on('click', '.upload', function(e)
+	$('#' + id  + " .upload").off('click');
+	$('#' + id).on('click', '.upload', function(e)
 	{
-
 		// get hidden value file type
 		var type = $(this).parents('form').children("#type").val();
-
 		e.preventDefault();
+
 		var newwindow = window.open("upload-contacts.jsp?type=" + type + "", 'name', 'height=310,width=500');
 
 		if (window.focus)
@@ -32,14 +62,7 @@ $('#' + id).on('click', '.upload', function(e)
 		// Sends empty JSON to remove
 		// contact uploaded
 		var $firstDiv = $('#content').children().first();
-		getTemplate('import-contacts', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$firstDiv.html($(template_ui));	
-					initializeImportEvents($firstDiv.attr('id'));
-
-				}, $firstDiv);
-		
+		App_Contacts.importContacts.render(true);
 	});
 	
 	// cancel option for deals import
@@ -215,6 +238,16 @@ $('#' + id).on('click', '#import-contacts', function(e)
 								// contact uploaded
 								var $firstDiv = $('#content').first();
 
+								App_Contacts.importContacts.model.fetch({
+									success : function(data)
+									{
+										showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
+										addTagAgile(IMPORT_TAG);
+										console.log(data);
+									}
+
+								})
+/*
 								getTemplate("import-contacts", {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
@@ -224,10 +257,10 @@ $('#' + id).on('click', '#import-contacts', function(e)
 									showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
 									addTagAgile(IMPORT_TAG);
 
-								}, $firstDiv);
+								}, $firstDiv);*/
 
 								
-							}, });
+							}});
 
 					})
 
@@ -243,8 +276,8 @@ $('#' + id).on('click', '#import-comp', function(e)
 						return;
 
 					var upload_valudation_errors = { "company_name_missing" : { "error_message" : "Company Name is mandatory. Please select Company name." },
-						"company_name_duplicated" : { "error_message" : "Company Name is Duplicated." }
-
+						"company_name_duplicated" : { "error_message" : "Company Name is Duplicated." },
+							"invalid_tag" : { "error_message" : "Tag name should start with an alphabet and can not contain special characters other than underscore and space." }
 					}
 					var models = [];
 
@@ -289,15 +322,6 @@ $('#' + id).on('click', '#import-comp', function(e)
 						return false;
 					}
 
-					$(this).attr('disabled', true);
-
-					/*
-					 * After validation checks are passed then loading is shown
-					 */
-					$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
-					$waiting.insertAfter($('#import-cancel'));
-
-					var properties = [];
 
 					/*
 					 * Iterates through all tbody tr's and reads the table
@@ -308,6 +332,46 @@ $('#' + id).on('click', '#import-comp', function(e)
 					var model = {};
 
 					// Add Tags
+					// Add Tags
+					var tags = get_tags('import-contact-tags');
+					console.log(tags);
+					var tags_valid = true;
+					if (tags != undefined)
+					{
+						$.each(tags[0].value, function(index, value)
+						{
+							if(!isValidTag(value, false)) {
+								tags_valid = false;
+								return false;
+							}
+							if (!model.tags)
+								model.tags = [];
+
+							console.log(model);
+
+							model.tags.push(value);
+						});
+					}
+					if(!tags_valid) {
+						getTemplate("import-contacts-validation-message", upload_valudation_errors.invalid_tag, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							$('#import-validation-error').html($(template_ui));	
+						}, "#import-validation-error");
+
+						return false;
+					}
+					
+
+					$(this).attr('disabled', true);
+
+					/*
+					 * After validation checks are passed then loading is shown
+					 */
+					$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
+					$waiting.insertAfter($('#import-cancel'));
+
+					var properties = [];
 
 					$('td.import-contact-fields').each(function(index, element)
 					{
@@ -401,14 +465,8 @@ $('#' + id).on('click', '#import-comp', function(e)
 							// contact uploaded
 							var $firstDiv = $('#content').first();
 
-							getTemplate("import-contacts", {}, undefined, function(template_ui){
-									if(!template_ui)
-										  return;
-									$firstDiv.html($(template_ui));
-									initializeImportEvents($firstDiv.attr('id'));
-									showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
-							}, $firstDiv);	
-
+							App_Contacts.importContacts.render(true);
+							showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
 						}, });
 
 				});

@@ -16,11 +16,11 @@
  * @param base_model
  */
 var CURRENT_VIEW_OBJECT;
-var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Starred","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
+var CONTACTS_SORT_LIST={"created_time":"Created Date","lead_score":"Score","star_value":"Star Value","first_name":"First Name","last_name":"Last Name","last_contacted":"Contacted Date",}
 
 
 var ifFromRender=false;
-function contactTableView(base_model,customDatefields,view) {
+function contactTableView(base_model,customDatefields,view,customContactfields,customCompanyfields) {
 	
 	var templateKey = 'contacts-custom-view-model';
 	var gridViewEl = _agile_get_prefs("agile_contact_view");
@@ -97,6 +97,82 @@ function contactTableView(base_model,customDatefields,view) {
 								$(el).append($(template_ui));
 							}, null);
 						}
+						else if(isContactTypeCustomField(customContactfields,property)){
+							var contactIdsJSON = JSON.parse(property.value);
+							var referenceContactIds = "";
+							$.each(contactIdsJSON, function(index, val){
+								referenceContactIds += val+",";
+							});
+							App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+							getTemplate('contacts-custom-view-custom-contact', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui).attr("contact_id", contact.id));
+							}, null);
+							App_Contacts.referenceContactsCollection.collection.fetch({
+								success : function(data){
+									if (data && data.length > 0)
+									{
+										getTemplate('contacts-custom-view-custom-contact', data.toJSON(), undefined, function(template_ui){
+											if(!template_ui)
+												  return;
+											$(el).find("td[contact_id="+contact.id+"]").html($(template_ui).html());
+											var ellipsis_required = false;
+											$(el).find("td[contact_id="+contact.id+"]").find(".contact-type-image").each(function(index, val){
+												if(index > 3)
+												{
+													ellipsis_required = true;
+													$(this).remove();
+												}
+											});
+											if(ellipsis_required)
+											{
+												$(el).find("td[contact_id="+contact.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
+											}
+										}, null);
+									}
+									hideTransitionBar();
+								}
+							});
+						}
+						else if(isCompanyTypeCustomField(customCompanyfields,property)){
+							var contactIdsJSON = JSON.parse(property.value);
+							var referenceContactIds = "";
+							$.each(contactIdsJSON, function(index, val){
+								referenceContactIds += val+",";
+							});
+							App_Contacts.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+							getTemplate('contacts-custom-view-custom-company', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui).attr("company_id", contact.id));
+							}, null);
+							App_Contacts.referenceContactsCollection.collection.fetch({
+								success : function(data){
+									if (data && data.length > 0)
+									{
+										getTemplate('contacts-custom-view-custom-company', data.toJSON(), undefined, function(template_ui){
+											if(!template_ui)
+												  return;
+											$(el).find("td[company_id="+contact.id+"]").html($(template_ui).html());
+											var ellipsis_required = false;
+											$(el).find("td[company_id="+contact.id+"]").find(".company-type-image").each(function(index, val){
+												if(index > 3)
+												{
+													ellipsis_required = true;
+													$(this).remove();
+												}
+											});
+											if(ellipsis_required)
+											{
+												$(el).find("td[company_id="+contact.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
+											}
+										}, null);
+									}
+									hideTransitionBar();
+								}
+							});
+						}
 						else
 						{
 							json = property;
@@ -114,6 +190,8 @@ function contactTableView(base_model,customDatefields,view) {
 					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
+
+						
 						$(el).append($(template_ui));
 					}, null);
 				});
@@ -147,7 +225,14 @@ function contactTableView(base_model,customDatefields,view) {
 	// Sets data to tr
 	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data(
 			base_model);
-	
+	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data();
+	var c  = $(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').find("tr:first").find("th:first").text()
+	if(c == "Basic info")
+	{
+		$(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').removeClass("contactsimage");
+		$(("#" + view.options.templateKey + "-model-list"), view.el).closest('table').addClass("contactsimage");
+	}
+
 }
 
 // Check whether the given fields list has the property name.
@@ -275,6 +360,46 @@ function setUpContactSortFilters(el)
 		CUSTOM_SORT_VIEW.addAll(data);
 	})
 	
+}
+
+function setUpCompanyFields(el)
+{
+	var companyfields = [] ; 
+	$('#companies-static-fields-group', el).html(getTemplate("companies-custom-fields"));
+	$.ajax({ type : 'GET', url : '/core/api/custom-fields/', contentType : "application/json; charset=utf-8",
+				success : function(data)
+				{
+					console.log(data)
+					for(var i=0 ; i<data.length ;i++)
+					{
+						if(data[i].scope == 'COMPANY')
+						{
+						getTemplate("companies-custom-fields-append", data[i], undefined, function(template_ui){
+     							if(!template_ui)
+    					  		return;
+    						$("#custom-fields-group",el).append(template_ui);
+
+ 							});
+						}
+
+					}
+					$.ajax({
+					url : 'core/api/contact-view-prefs/company',
+					type : 'GET',
+					dataType : 'json',
+					
+					success : function(data)
+						{
+						var customfields = $("#companies-static-fields");
+						deserializecontactsForm(data.fields_set, customfields);
+						console.log(data);
+					}
+				});
+				}, dataType : 'json' });
+
+			
+
+
 }
 
 function addCustomFieldToSearch(base_model, scope)
@@ -599,3 +724,22 @@ $(function() {
 
 
 });
+
+// Check whether the given fields list has the property name.
+function isContactTypeCustomField(customContactfields,property){
+	var count = 0;
+	$.each(customContactfields,function(index,field){
+		if(field.field_label==property.name && field.field_type == "CONTACT")
+			count++;
+	});
+	return count>0;
+}
+// Check whether the given fields list has the property name.
+function isCompanyTypeCustomField(customCompanyfields,property){
+	var count = 0;
+	$.each(customCompanyfields,function(index,field){
+		if(field.field_label==property.name && field.field_type == "COMPANY")
+			count++;
+	});
+	return count>0;
+}

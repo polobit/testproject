@@ -60,6 +60,11 @@ public class DefaultWidgets {
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
+				"Braintree",
+				"Braintree enables individuals and businesses to accept payments over the internet.",
+				"/widgets/braintree.js", "/img/plugins/braintree-lg-logo.png",
+				"/widgets/braintree-sm-logo.png", null, WidgetType.BILLING));
+		widgets.add(new Widget(
 				"PayPal","PayPal is the faster, safer way for online invoicing  web and mobile payments. Configure your PayPal business account to view your PayPal invoices in Agile.",
 				"/widgets/paypal.js", "/img/plugins/paypal_logo_png.png",
 				"/widgets/paypal_icon.png", null, WidgetType.BILLING));
@@ -84,6 +89,11 @@ public class DefaultWidgets {
 				"/widgets/facebook.js", "/widgets/facebook.png",
 				"/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
+				"Uservoice",
+				"UserVoice is a powerful tool that helps build better products and support integrating easy-to-use feedback and ideas from customers.",
+				"/widgets/uservoice.js", "/widgets/Uservoice_lg_logo.png",
+				"/widgets/UserVoice_md_logo.png", null, WidgetType.SUPPORT));
+		widgets.add(new Widget(
 				"Shopify",
 				"Shopify is a powerful ecommerce solution that includes everything you need to create an online store.",
 				"/widgets/shopify.js", "/widgets/shopify.png",
@@ -105,7 +115,9 @@ public class DefaultWidgets {
 				"/widgets/gplusicon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget("CallScript",
 				"Shows you the script for a call based on your preset rules.",
-				"/widgets/callscript.js", null, null, null, WidgetType.CALL));
+				"/widgets/callscript.js", "/widgets/call-script-logo-small.png",
+		        "/widgets/call-script-logo-small.png", null, WidgetType.CALL));
+
 
 		/*
 		 * widgets.add(new Widget( "Linkedin",
@@ -113,6 +125,7 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
+		
 		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
 		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
 		WidgetType.CALL));

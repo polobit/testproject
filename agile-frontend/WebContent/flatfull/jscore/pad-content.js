@@ -29,6 +29,11 @@ var CONTENT_JSON = {
 		//"modal_id" : "personModal",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"filter_results_segments" : {
+		"title" : "There are no contacts for the selected filter. Try refining the filters and the date range.",
+		"route" : "#",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	"filter_results_companies" : {
 		"title" : "No companies matching this criteria.",
 		//"learn_more" : "click here to learn more",
@@ -87,6 +92,14 @@ var CONTENT_JSON = {
 		"route" : "#activity-report-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"campaign-reports" : {
+		"title" : "You do not have any campaign reports currently.",
+		"description" : "Get a periodic  email digest of various campaign reports stats by users in Agile.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Report",
+		"route" : "#campaign-report-add",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	"contact-filters" : {
 		"title" : "You do not have any filters currently.",
 		"description" : "Filters are used to sort contacts with a specific criteria to find patterns.",
@@ -102,6 +115,18 @@ var CONTENT_JSON = {
 		"button_text" : "Add View",
 		"route" : "#contact-view-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
+	},
+	"no-tickets" : {
+		"title" : "You do not have any Tickets currently.",
+		"description" : "Tickets can be problem, incident, question or task escalated by your customers. Set up email forwarding to receive tickets.",
+		"button_text" : "Set up forwarding",
+		"route" : "#ticket-groups",
+		"image" : "/img/clipboard.png"
+	},
+	"no-ticket-filters" : {
+		"title" : "You do not have any Tickets Filters currently.",
+		"description" : "Tickets Filters are set of conditions to view Tickets which satisfies conditions.",
+		"image" : "/img/clipboard.png"
 	},
 	"dashboard" : {
 		"contacts" : {
@@ -183,6 +208,14 @@ var CONTENT_JSON = {
 		"route" : "#deal-filter-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	},
+	"dashboards" : {
+		"title" : "There are no user-defined dashboards.",
+		"description" : "User-defined dashboards allow users to configure multiple dashboards with different dashlets for various purposes.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Dashboard",
+		"route" : "#add-dashboard",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	/*"web-rules" : {/All_Activities
 		
 		"title" : "Engage visitors on website",
@@ -247,6 +280,15 @@ function getContactPadcontentKey(url)
 		return "filter_results";
 	
 	return "contacts";
+		
+}
+
+function getSegmentPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	return "filter_results_segments";
 		
 }
 

@@ -101,10 +101,98 @@ $(function(){
 	$("#content #cancel-account-request").off("click");
 	$('#content').on('click', '#cancel-account-request', function(e) {
 			e.preventDefault();
+			load_clickdesk_code();
 			
 			// Shows cancellation modal
-			$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			//$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			$("#send-cancellation").html(getTemplate('cancel-subscription-request', {'date':$(this).attr("data")})).modal('show');	
 			
+	});
+
+	$("#send-cancellation #cancel-account-request-proceed").off("click");
+	$('#send-cancellation').on('click', '#cancel-account-request-proceed', function(e) {
+			e.preventDefault();
+			
+			// Shows cancellation modal
+			//$("#send-cancellation").html(getTemplate('send-cancellation-request', {})).modal('show');	
+			getTemplate("send-cancellation-request",{} , undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$("#send-cancellation .modal-dialog").html($(template_ui));
+			}, null);
+			
+	});
+
+	$("#send-cancellation #account_cancel_chat_btn").off("click");
+	$('#send-cancellation').on('click', '#account_cancel_chat_btn', function(e) {
+			e.preventDefault();
+			$(this).closest(".modal").modal("hide");
+			CLICKDESK_LIVECHAT.show();
+			cancellationFeatureUsedMail("Chat");
+	});
+
+	$("#send-cancellation #account_cancel_support_btn").off("click");
+	$('#send-cancellation').on('click', '#account_cancel_support_btn', function(e) {
+			cancellationFeatureUsedMail("Schedule a Demo");
+	});
+
+	$("#send-cancellation #account_pause_btn").off("click");
+	$('#send-cancellation').on('click', '#account_pause_btn', function(e) {
+		e.preventDefault();
+		var period = $("#pause_count").html();
+		$.ajax({
+				url : 'core/api/subscription/pauseOrResumeSubscriptions?period='+period,
+				type : 'POST',
+				success : function(){
+					cancellationFeatureUsedMail("Account Pause");
+					location.reload(true);
+				},
+				error : function(response){
+					showNotyPopUp("warning", response.responseText, "top");
+				}
+			});
+			
+	});
+
+	$("#send-cancellation #add").off("click");
+	$('#send-cancellation').on('click', '#add', function(e) {
+			e.preventDefault();
+			var value = $("#pause_count").html();
+			if(value < 3)
+				value++;
+			$("#pause_count").html(value);
+			if(value > 1)
+				$("#send-cancellation #month_id").html("months");
+	});
+	$("#send-cancellation #minus").off("click");
+	$('#send-cancellation').on('click', '#minus', function(e) {
+			e.preventDefault();
+			var value = $("#pause_count").html();
+			if(value > 1)
+				value--;
+			$("#send-cancellation #pause_count").html(value);
+			if(value == 1)
+				$("#send-cancellation #month_id").html("month");
+			
+	});
+	$('body').on('click', '#account_resume', function(e) {
+		e.preventDefault();
+		$(this).attr("disabled","disabled").text("Resuming");
+		$that = $(this);
+		$.ajax({
+			url : 'core/api/subscription/pauseOrResumeSubscriptions?period=0',
+			type : 'POST',
+			success : function(){
+				showNotyPopUp("information", "Welcome back! We are resuming services for your account, please wait for few seconds while we re-activate it.", "top",30000);
+				setTimeout(function(){
+					window.location.reload(true);
+				},30000);
+			},
+			error : function(response){
+				$that.text("Resume").removeAttr("disabled");
+				showNotyPopUp("warning", response.responseText, "top");
+			}
+		});
 	});
 
 });
@@ -116,7 +204,6 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 
 		if($(this).attr('disabled'))
 	   	     return;
-		
 		// If not a valid form return else serialize form data to parse
 		if(!isValidForm($("#cancelation-request-form")))
 			return;
@@ -126,43 +213,73 @@ $('#send-cancellation').on('click', '#send-delete-request', function(e) {
 		
 		var json = serializeForm("cancelation-request-form");
 		
-		var info = json.account_cancel_reason;
-		
-		// Replace \r\n with <br> tags as email is sent as text/html
-		var reason = info.replace(/\r\n/g,"<br/>");
-		
+		var info = {};
+		info.reason_type = json.account_cancel_reason;
+		var cancel_reason = $("#account_cancel_reason").val();
+		if(cancel_reason == "Other")
+			info.reason = json.other_cancel_reason;
+		info.likes_in_agile = json.agile_pros;
+		info.advices = json.advices;
+		// Replace \r\n with <br> tags as emaaccount_cancel_reason;il is sent as text/html
+		var description = getTemplate("cancellation-description", info);
 		// Build url
+		var subject = "Cancellation Request";
+		if(cancel_reason == "Out of Business")
+			subject = subject + " (Subscription Cancelled)";
 		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
-		encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
-		encodeURIComponent(reason);
+		encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent(subject) + '&body=' + 
+		encodeURIComponent(description);
 
 		$.post(url,function(){
-
 			// Reset form fields after sending email
 			$("#cancelation-request-form").each(function () {
 				this.reset();
 			});
-			
+			// Enables Send Email button.
+			enable_send_button($('#send-delete-request'));
+			$("#send-cancellation").modal("hide");
+
 			// Adds "Cancellation Request" tag in "Our" domain
 			add_tag_our_domain("Cancellation Request");
 			
 			// Adds note in "Our" domain
 			var note = {};
 			note.subject = "Cancellation Request";
-			note.description = info;
+			note.description = description;
 			
 			agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
-								
-			$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());		    
-		    $("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
-			$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
 			
-			// Enables Send Email button.
-			enable_send_button($('#send-delete-request'));
-			$("#send-cancellation").modal("hide");
+			if(cancel_reason == "Out of Business")
+				$.ajax({
+					url : "core/api/subscription/cancel/subscription",
+					type : "GET",
+					success : function(data){
+						showNotyPopUp("information","Your subscription has been cancelled successfully.", "top");
+					}
+				});
+			else
+				showNotyPopUp("information","Your cancellation request has been sent successfully.", "top");
 		});
 		
 	});
+
+$('#send-cancellation').on('change', '#account_cancel_reason', function(e) {
+	$("#other_cancel_reason").text("").removeClass("required");
+	if($(this).val() == "Other"){
+		$("#other_cancel_container").show();
+		$("#other_cancel_reason").addClass("required");
+	}
+	else
+		$("#other_cancel_container").hide();
+	if($(this).val() == "Out of Business"){
+		$("#send-delete-request").text("Cancel Subscription");
+		$("#cancel_info_msg").show();
+	}
+	else{
+		$("#send-delete-request").text("Send Request");
+		$("#cancel_info_msg").hide();
+	}
+});
 
 $('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e) {
 		e.preventDefault();
@@ -214,4 +331,17 @@ $('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e
 $("#warning-deletion-feedback").on('hidden.bs.modal', function(){
 	ACCOUNT_DELETE_REASON_JSON = undefined;
 });
+
+function cancellationFeatureUsedMail(type){
+	if(!type)
+		return;
+	var json={};
+	json.from=CURRENT_DOMAIN_USER.email;
+	json.to="venkat@agilecrm.com";
+	json.cc="mogulla@agilecrm.com";
+	json.bcc="raja@agilecrm.com";
+	json.subject="Cancellation Process Feature Used";
+	json.body="Username: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain+"<br>Feature Used: "+type;
+	sendEmail(json);
+};
 				

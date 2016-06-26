@@ -58,11 +58,11 @@ function getCalendarView() {
 							{
 								pushLoading();
 								$("#loading_calendar_events").remove();
-								$('.fc-header-left')
+								$('.fc-header-left','#task-calendar-based-condition')
 										.append(
 												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 										.show();
-								$('.fc-header-left').show();
+								$('.fc-header-left','#task-calendar-based-condition').show();
 
 							}
 							else
@@ -133,15 +133,15 @@ function getCalendarView() {
 											
 									if (calendarView == "month")
 									{
-										popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
+										popover_min_width = $(this).parents('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
 										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
 										var top = jsEvent.currentTarget.offsetTop;
-										if ($('.fc-border-separate:visible').width() - left < popover_min_width)
+										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - left < popover_min_width)
 										{
 											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
 											leftorright = 'right';
 										}
-										if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
 										{
 											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
 											top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
@@ -163,18 +163,18 @@ function getCalendarView() {
 											$(this).after(popoverElement);
 										}
 										
-										if ($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
+										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
 												.height())
 										{
 											$(this).parent().find('.fc-overlayw').css("top",
 													top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
 											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
 										}
-										if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										if ($(this).parents('.fc-view-month').find('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
 										{
 											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
 										}
-										if (($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
+										if (($(this).parents('.fc-view-month').find('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
 												this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
 										{
 											$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
@@ -355,30 +355,30 @@ function getCalendarView() {
 						{
 
 							// Confirm from the user about the change
-							if (!confirm("Are you sure about this change?"))
-							{
+							showAlertModal("event_drop", "confirm", function(){
+								var task = $.extend(true, {}, task1);
+
+								// Update task if the user changes it in the
+								// calendar
+								task.due = new Date(task.start).getTime() / 1000;
+								var jsoncontacts = task.contacts;
+								var _contacts = [];
+								for ( var i in jsoncontacts)
+								{
+									_contacts.push(jsoncontacts[i].id);
+
+								}
+								if(task.taskOwner)
+								task.owner_id = task.taskOwner.id;
+								task.contacts = _contacts;
+								var taskModel = new Backbone.Model();
+								taskModel.url = 'core/api/tasks';
+
+								taskModel.save(task);
+							}, function(){
 								revertFunc();
-								return;
-							}
-							var task = $.extend(true, {}, task1);
-
-							// Update task if the user changes it in the
-							// calendar
-							task.due = new Date(task.start).getTime() / 1000;
-							var jsoncontacts = task.contacts;
-							var _contacts = [];
-							for ( var i in jsoncontacts)
-							{
-								_contacts.push(jsoncontacts[i].id);
-
-							}
-							if(task.taskOwner)
-							task.owner_id = task.taskOwner.id;
-							task.contacts = _contacts;
-							var taskModel = new Backbone.Model();
-							taskModel.url = 'core/api/tasks';
-
-							taskModel.save(task);
+							});
+							
 						},
 						/**
 						 * Updates or deletes a task by clicking on it

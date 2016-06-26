@@ -3,8 +3,8 @@
  <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
-        <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title">&nbsp;Add Contact</h3>
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title">&nbsp;New Contact</h3>
     </div>
     <div class="modal-body">
         <form id="personForm" name="personForm" method="post" class="form-horizontal">
@@ -47,7 +47,7 @@
 		                        <span><input name="email" class="email form-control field_length" max_len="500" type="text" id="email" placeholder="Email" /></span>
 		                    </div>
 		                </div>
-                <div class="row">
+		                <div class="row">
                     <div class="col-sm-offset-3 col-sm-7 p-l  duplicate-email"></div>
                 </div>
 	                <div class="control-group form-group">
@@ -70,7 +70,7 @@
 	                    </div>
 	            <div class="row invalid-tags-person" style="display:none;">
                     <div class="col-sm-offset-3 col-sm-7">
-                        <div style="color:red;" class="text-sm">Tag name should start with an alphabet and can not contain special characters otherthan underscore, space and hyphen.</div>
+                        <div style="color:red;" class="text-sm">Tag name should start with an alphabet and cannot contain special characters other than underscore and space.</div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -79,7 +79,27 @@
                     </div>
                     <div class="clearfix"></div>
                 </div> 
-            </fieldset>
+          <!--creating an hidden field for the TwitterId and picture@priyanka!-->
+		         <div class="span2" style="display:none;">     		                                       
+	                   <span id="pic" style="padding-left:20px;display:none;"></span>
+	                    	<input name="image" id="image" type="hidden" />
+	                    	<div id="network_handle" class="network-handle" style="left: 71px;">
+	                    	    <label class="control-label" ><b style="
+                                                                      margin-left: 77px;
+                                                                      margin-top: 6px;
+                                                                      margin-top: 19px;
+                                                               ">TwitterId</b> </label>
+		                    	<div class="controls">
+		                        <span><input name="handle" type="hidden" id="handle" style="
+                                   /* margin-left: -1px; */
+                                     margin-left: 148px;
+                                     margin-top: -33px;
+                                     margin-top: -24px;
+                                   " /></span>
+		                    	</div>
+	                    	</div> 
+	                <input type="hidden" name="source" value="manual" data="manual" class="contact-source">
+                </fieldset>
         </form>
     </div>
     <div class="modal-footer">

@@ -29,6 +29,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.DealFilterIdsFetcher;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
@@ -90,7 +91,9 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
@@ -148,7 +151,9 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
@@ -207,7 +212,9 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
@@ -273,7 +280,9 @@ public class DealsBulkActionsAPI
 	    JSONObject formJSON = new JSONObject(form);
 	    System.out.println("------------" + formJSON.toString());
 
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
 	    // Get Deal Milestone change triggers
@@ -358,12 +367,20 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    List<Opportunity> all_deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 	    JSONArray dealIdsArray = new JSONArray();
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    List<Contact> contactSubList = new ArrayList<Contact>();
+	    List<Long> contactIds = new ArrayList<Long>();
 	    for (Opportunity deal : deals)
 	    {
+	    if(deal.getContact_ids() != null && deal.getContact_ids().size() > 0 ){
+	    	for(String s : deal.getContact_ids())
+	    		contactIds.add(Long.valueOf(s));
+	    }
 		dealIdsArray.put(deal.id);
 		subList.add(deal);
 		if (subList.size() >= 100)
@@ -388,8 +405,23 @@ public class DealsBulkActionsAPI
 		ActivitySave.createLogForBulkDeletes(EntityType.DEAL, dealIdsArray,
 			String.valueOf(dealIdsArray.length()), "");
 	    }
-
-	    BulkActionNotifications.publishNotification(deals.size() + " Deals are deleted.");
+		try {
+			if (contactIds != null && contactIds.size() > 0) {
+				int contacts_count = 0;
+				if(contacts_count < contactIds.size() && contacts_count+99 <= contactIds.size())
+				{				
+					List<Contact> ls = ContactUtil.getContactsBulk(contactIds.subList(contacts_count, contacts_count+99));
+					Contact.dao.putAll(ls);
+					contacts_count += 100;				
+				}
+				else
+					Contact.dao.putAll(ContactUtil.getContactsBulk(contactIds));				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 BulkActionNotifications.publishNotification(deals.size() + " Deals are deleted.");
 	}
 	catch (Exception je)
 	{
