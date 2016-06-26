@@ -48,6 +48,124 @@ public class Defaults
      */
     private void saveDefaultContacts()
     {
+    	//Companies default.
+    	
+    	
+	    List<ContactField> companyFields = new ArrayList<ContactField>();
+		companyFields.add(new ContactField(Contact.NAME, "Agile CRM", null));
+		companyFields.add(new ContactField(Contact.URL, "http://www.agilecrm.com/", null));
+		companyFields.add(new ContactField(Contact.EMAIL, "care@agilecrm.com", "primary"));
+		companyFields.add(new ContactField("phone", "+1-800-980-0729", "primary"));
+		companyFields.add(new ContactField(Contact.EMAIL, "sales@agilecrm.com", "primary"));
+		companyFields
+			.add(new ContactField("address",
+				"{\"address\":\"Agile CRM, Vertex Corporate, Jubilee Enclave\",\"city\":\"HITEC City\",\"state\":\"Telangana\",\"zip\":\"500081\", \"country\":\"IN\"}",
+				"office"));
+		Contact company = new Contact();
+		company.type = Contact.Type.COMPANY;
+		company.properties = companyFields;
+		company.star_value = 0;
+		company.lead_score = 0;
+		company.save();
+	
+	
+	    List<ContactField> companyFields1 = new ArrayList<ContactField>();
+		companyFields1.add(new ContactField(Contact.NAME, "Hollywood", null));
+		Contact company1 = new Contact();
+		company1.type = Contact.Type.COMPANY;
+		company1.properties = companyFields1;
+		company1.star_value = 0;
+		company1.lead_score = 0;
+		company1.save();
+	
+	
+		List<ContactField> companyFields2 = new ArrayList<ContactField>();
+		companyFields2.add(new ContactField(Contact.NAME, "Apple Inc.", null));
+		companyFields2.add(new ContactField("image",
+			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462861685792?id=contact-container", null));
+		Contact company2 = new Contact();
+		company2.type = Contact.Type.COMPANY;
+		company2.properties = companyFields2;
+		company2.star_value = 5;
+		company2.lead_score = 1067;
+		company2.save();
+	
+		LinkedHashSet<String> companiesTags3 = new LinkedHashSet<String>();
+		companiesTags3.add("Sample Company");
+	
+		List<ContactField> companyFields3 = new ArrayList<ContactField>();
+		companyFields3.add(new ContactField(Contact.NAME, "Nike", null));
+	
+		companyFields3.add(new ContactField(Contact.URL, "http://www.nike.com", null));
+		companyFields3.add(new ContactField(Contact.EMAIL, "media.relations@nike.com", "primary"));
+		companyFields3.add(new ContactField(Contact.EMAIL, "pr@converse.com", "alternate"));
+		companyFields3.add(new ContactField("phone", "1-503-671-6453", "primary"));	
+		companyFields3.add(new ContactField("phone", "1-212-367-4447", "alternate"));	
+		companyFields3
+			.add(new ContactField("address",
+				"{\"address\":\"One Bowerman Drive\",\"city\":\"Beaverton\",\"state\":\"OR\",\"zip\":\"97005\", \"country\":\"US\"}",
+				"office"));
+		companyFields3.add(new ContactField("image",
+			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462862033186?id=contact-container", null));
+	
+		Contact company3 = new Contact(Contact.Type.COMPANY, companiesTags3, companyFields3);	
+		company3.star_value = 4;
+		company3.lead_score = 4578;
+		company3.save();
+	
+		LinkedHashSet<String> companiesTags4 = new LinkedHashSet<String>();
+		companiesTags4.add("Sample Company");
+	
+		List<ContactField> companyFields4 = new ArrayList<ContactField>();
+		companyFields4.add(new ContactField(Contact.NAME, "Springfield Nuclear Power Plant", null));	
+		companyFields4
+			.add(new ContactField("address",
+				"{\"address\":\"100 Industrial Way\",\"city\":\"Springfield\", \"country\":\"US\"}",
+				"office"));
+	
+		Contact company4 = new Contact(Contact.Type.COMPANY, companiesTags4, companyFields4);	
+		company4.star_value = 3;
+		company4.lead_score = 43;
+		company4.save();
+	
+		LinkedHashSet<String> companiesTags5 = new LinkedHashSet<String>();
+		companiesTags5.add("Sample Company");
+	
+		List<ContactField> companyFields5 = new ArrayList<ContactField>();
+		companyFields5.add(new ContactField(Contact.NAME, "NBA", null));
+	
+		companyFields5.add(new ContactField(Contact.URL, "http://www.nba.com/", null));
+		companyFields5.add(new ContactField("phone", "(212) 407-8000", "primary"));	
+		companyFields5.add(new ContactField("phone", "(212) 832-3861", "fax"));	
+		companyFields5
+			.add(new ContactField("address",
+				"{\"address\":\"Olympic Tower, 645 5th Ave\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10022\", \"country\":\"US\"}",
+				"office"));
+		companyFields5.add(new ContactField("image",
+			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462862094735?id=contact-container", null));
+	
+		Contact company5 = new Contact(Contact.Type.COMPANY, companiesTags5, companyFields5);	
+		company5.star_value = 5;
+		company5.lead_score = 749;
+		company5.save();
+	
+		LinkedHashSet<String> companiesTags6 = new LinkedHashSet<String>();
+		companiesTags5.add("Sample Company");
+		List<ContactField> companyFields6 = new ArrayList<ContactField>();
+		companyFields6.add(new ContactField(Contact.NAME, "Caltech", null));
+		companyFields6.add(new ContactField(Contact.URL, "https://www.caltech.edu/", null));
+		companyFields6.add(new ContactField(Contact.EMAIL, "mr@caltech.edu", "primary"));	
+		companyFields6.add(new ContactField("phone", "(626) 395-6811", "primary"));	
+		companyFields6.add(new ContactField("address",
+				"{\"address\":\"1200 EAST CALIFORNIA BOULEVARD\",\"city\":\"PASADENA\",\"state\":\"CALIFORNIA\",\"zip\":\"91125\", \"country\":\"US\"}",
+				"office"));
+		companyFields5.add(new ContactField("image",
+			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462862153566?id=contact-container", null));
+	
+		Contact company6 = new Contact(Contact.Type.COMPANY, companiesTags6, companyFields6);	
+		company6.star_value = 4;
+		company6.lead_score = 813;
+		company6.save();
     	
 	    //Contacts default.
 		LinkedHashSet<String> tags = new LinkedHashSet<String>();
@@ -135,129 +253,7 @@ public class Defaults
 		contact3.lead_score = 8734;
 		contact3.save();
 	
-		//Companies default.
 	
-	
-	    List<ContactField> companyFields = new ArrayList<ContactField>();
-		companyFields.add(new ContactField(Contact.NAME, "Agile CRM", null));
-		companyFields.add(new ContactField(Contact.URL, "http://www.agilecrm.com/", null));
-		companyFields.add(new ContactField(Contact.EMAIL, "care@agilecrm.com", "primary"));
-		companyFields.add(new ContactField("phone", "+1-800-980-0729", "primary"));
-		companyFields.add(new ContactField(Contact.EMAIL, "sales@agilecrm.com", "primary"));
-		companyFields
-			.add(new ContactField("address",
-				"{\"address\":\"Agile CRM, Vertex Corporate, Jubilee Enclave\",\"city\":\"HITEC City\",\"state\":\"Telangana\",\"zip\":\"500081\", \"country\":\"IN\"}",
-				"office"));
-		Contact company = new Contact();
-		company.type = Contact.Type.COMPANY;
-		company.properties = companyFields;
-		company.star_value = 0;
-		company.lead_score = 0;
-		company.save();
-	
-	
-	    List<ContactField> companyFields1 = new ArrayList<ContactField>();
-		companyFields1.add(new ContactField(Contact.NAME, "Hollywood", null));
-		Contact company1 = new Contact();
-		company1.type = Contact.Type.COMPANY;
-		company1.properties = companyFields1;
-		company1.star_value = 0;
-		company1.lead_score = 0;
-		company1.save();
-	
-	
-		List<ContactField> companyFields2 = new ArrayList<ContactField>();
-		companyFields2.add(new ContactField(Contact.NAME, "Apple Inc.", null));
-		companyFields2.add(new ContactField("image",
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462861685792?id=contact-container", null));
-		Contact company2 = new Contact();
-		company2.type = Contact.Type.COMPANY;
-		company2.properties = companyFields2;
-		company2.star_value = 5;
-		company2.lead_score = 1067;
-		company2.save();
-	
-		LinkedHashSet<String> companiesTags3 = new LinkedHashSet<String>();
-		companiesTags3.add("Sample Company");
-	
-		List<ContactField> companyFields3 = new ArrayList<ContactField>();
-		companyFields3.add(new ContactField(Contact.NAME, "Nike", null));
-	
-		companyFields3.add(new ContactField(Contact.URL, "http://www.nike.com", null));
-		companyFields3.add(new ContactField(Contact.EMAIL, "media.relations@nike.com", "primary"));
-		companyFields3.add(new ContactField(Contact.EMAIL, "pr@converse.com", "alternate"));
-		companyFields3.add(new ContactField("phone", "1-503-671-6453", "primary"));	
-		companyFields3.add(new ContactField("phone", "1-212-367-4447", "alternate"));	
-		companyFields3
-			.add(new ContactField("address",
-				"{\"address\":\"One Bowerman Drive\",\"city\":\"Beaverton\",\"state\":\"OR\",\"zip\":\"97005\", \"country\":\"US\"}",
-				"office"));
-		companyFields3.add(new ContactField("image",
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462862033186?id=contact-container", null));
-	
-		Contact company3 = new Contact(Contact.Type.COMPANY, companiesTags3, companyFields3);	
-		company3.star_value = 4;
-		company3.lead_score = 4578;
-		company3.save();
-	
-		LinkedHashSet<String> companiesTags4 = new LinkedHashSet<String>();
-		companiesTags4.add("Sample Company");
-	
-		List<ContactField> companyFields4 = new ArrayList<ContactField>();
-		companyFields4.add(new ContactField(Contact.NAME, "Springfield Nuclear Power Plant", null));	
-		companyFields4
-			.add(new ContactField("address",
-				"{\"address\":\"100 Industrial Way\",\"city\":\"Springfield\", \"country\":\"US\"}",
-				"office"));
-		companyFields4.add(new ContactField("image",
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462862033186?id=contact-container", null));
-	
-		Contact company4 = new Contact(Contact.Type.COMPANY, companiesTags4, companyFields4);	
-		company4.star_value = 3;
-		company4.lead_score = 43;
-		company4.save();
-	
-		LinkedHashSet<String> companiesTags5 = new LinkedHashSet<String>();
-		companiesTags5.add("Sample Company");
-	
-		List<ContactField> companyFields5 = new ArrayList<ContactField>();
-		companyFields5.add(new ContactField(Contact.NAME, "NBA", null));
-	
-		companyFields5.add(new ContactField(Contact.URL, "http://www.nba.com/", null));
-		companyFields5.add(new ContactField("phone", "(212) 407-8000", "primary"));	
-		companyFields5.add(new ContactField("phone", "(212) 832-3861", "fax"));	
-		companyFields5
-			.add(new ContactField("address",
-				"{\"address\":\"Olympic Tower, 645 5th Ave\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10022\", \"country\":\"US\"}",
-				"office"));
-		companyFields5.add(new ContactField("image",
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462862094735?id=contact-container", null));
-	
-		Contact company5 = new Contact(Contact.Type.COMPANY, companiesTags5, companyFields5);	
-		company5.star_value = 5;
-		company5.lead_score = 749;
-		company5.save();
-	
-		LinkedHashSet<String> companiesTags6 = new LinkedHashSet<String>();
-		companiesTags5.add("Sample Company");
-	
-		List<ContactField> companyFields6 = new ArrayList<ContactField>();
-		companyFields6.add(new ContactField(Contact.NAME, "Caltech", null));
-	
-		companyFields6.add(new ContactField(Contact.URL, "https://www.caltech.edu/", null));
-		companyFields6.add(new ContactField(Contact.EMAIL, "mr@caltech.edu", "primary"));	
-		companyFields6.add(new ContactField("phone", "(626) 395-6811", "primary"));	
-		companyFields6
-			.add(new ContactField("address",
-				"{\"address\":\"1200 EAST CALIFORNIA BOULEVARD\",\"city\":\"PASADENA\",\"state\":\"CALIFORNIA\",\"zip\":\"91125\", \"country\":\"US\"}",
-				"office"));
-		companyFields5.add(new ContactField("image",
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462862153566?id=contact-container", null));
-	
-		Contact company6 = new Contact(Contact.Type.COMPANY, companiesTags6, companyFields6);	
-		company6.star_value = 4;
-		company6.lead_score = 813;
-		company6.save();
     }
 
     /**
