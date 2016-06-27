@@ -526,7 +526,14 @@ show and hide the input for editing the contact name and saving that
 
 		var email_server = $(targetEl).attr('email-server');
 		var url = $(targetEl).attr('data-url');
-		$('#email-type-select', App_Contacts.contactDetailView.el).html($(targetEl).html());
+    if(Current_Route && Current_Route.indexOf("company/") == 0)
+    {
+      $('#email-type-select', App_Companies.companyDetailView.el).html($(targetEl).html());
+    }
+    else
+    {
+      $('#email-type-select', App_Contacts.contactDetailView.el).html($(targetEl).html());
+    }
 		// Here email_server_type means email/username of mail account
 		email_server_type = $(targetEl).attr('email-server-type');
 		if (email_server && url && (email_server != 'agile'))
@@ -534,7 +541,15 @@ show and hide the input for editing the contact name and saving that
 
 		var cookie_value = email_server_type + '|' + email_server;
 		save_email_server_type_in_cookie(cookie_value);
-		contact_details_tab.load_mail(url, email_server);
+		if(Current_Route && Current_Route.indexOf("company/") == 0)
+    {
+      company_detail_tab.load_company_mail(url, email_server);
+    }
+    else
+    {
+      contact_details_tab.load_mail(url, email_server);
+    }
+
 	},
 
 	

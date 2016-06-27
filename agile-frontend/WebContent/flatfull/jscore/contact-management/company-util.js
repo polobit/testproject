@@ -765,7 +765,7 @@
 				else
 				{
 					var email_accounts_model = mailAccountsView_company.model.toJSON();
-					fetchAllMails(company_detail_tab_scope,has_email_configured,email_accounts_model,email);
+					fetchAllCompanyMails(company_detail_tab_scope,has_email_configured,email_accounts_model,email);
 				}
 			}
 			else
@@ -818,7 +818,7 @@ function loadMailTabView_company(company_detail_tab_scope,email_server,mail_serv
 			}
 			//Fetching emails from All registered email accounts
 			if(email_server ==='all' || mail_server_url === 'all')
-				fetchAllMails(company_detail_tab_scope,has_email_configured,model,email)
+				fetchAllCompanyMails(company_detail_tab_scope,has_email_configured,model,email)
 			else
 				company_fetchMails(company_detail_tab_scope,has_email_configured,mail_server_url,email_server,email);
 			if(has_email_configured || has_shared_email_configured)
@@ -879,7 +879,7 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 	$('#company-mails', App_Companies.companyDetailView.el).html(mailsView.render().el);
 }
 
-function fetchAllMails(company_detail_tab_scope,has_email_configured,email_accounts_model,email)
+function fetchAllCompanyMails(company_detail_tab_scope,has_email_configured,email_accounts_model,email)
 {	
 	var all_emails = [];
 	var fetch_urls = email_accounts_model['fetchUrls'];
