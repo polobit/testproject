@@ -107,7 +107,8 @@ public class MergeFieldsUtil
 		try
 		{
 			lastName = subscriberJSON.getString("last_name");
-			if (lastName.equals("null"))
+			
+			if ( lastName==null  ||lastName.equals("null") )
 				return "";
 
 			return getUpperCase(getFirstWord(lastName));
