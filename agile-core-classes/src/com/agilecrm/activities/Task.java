@@ -357,16 +357,19 @@ public class Task extends Cursor
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
+	try{
 	if (this.id != null)
 	{
 	    Task oldtask = TaskUtil.getTask(this.id);
 	    task_start_time = oldtask.task_start_time;
+	    
 	    if (oldtask.progress == 0)
 	    {
 		if (this.progress > 0)
 		    task_start_time = System.currentTimeMillis() / 1000;
 	    }
 	}
+	}catch(NumberFormatException e){System.out.println(e.getMessage());}
 
 	if (this.contacts != null)
 	{
