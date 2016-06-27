@@ -309,7 +309,7 @@ function saveCallActivityBria(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 
-	if(!globalCall.contactedId && dialled.using == "dialler"){
+/*	if(!globalCall.contactedId && dialled.using == "dialler"){
 		$.post( "/core/api/widgets/bria/savecallactivity",{
 			direction: call.direction, 
 			phone: call.phone, 
@@ -317,16 +317,18 @@ function saveCallActivityBria(call){
 			duration : call.duration
 			});
 		return;
-	}
+	}*/
 	
 	if(call.status == "Answered"){
 		return;
 	}
+	
+	var callerObjectId = call.contactId;
+	if(!callerObjectId){
+		return;
+	}
+	
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
-		var callerObjectId = globalCall.contactedId;
-		if(!callerObjectId){
-			return;
-		}
 		$.post( "/core/api/widgets/bria/savecallactivityById",{
 			id:callerObjectId,
 			direction: call.direction, 
