@@ -4,13 +4,15 @@ var dealActivitiesView;
 var existingDealDocumentsView;
 var dealTasksView;
 var dealEventsView;
+var dealDetailMode = 'activity' ;
 
 var deal_details_tab = {
 		
 		
 		
 		loadDealRelatedContactsView : function()
-		{
+		{	
+			$('#deal-tab-content').find('.change-deal-activity').remove();
 			 var id = App_Deal_Details.dealDetailView.model.id;
 			 if(id){
 			dealrelatedView = new Base_Collection_View({
@@ -30,7 +32,8 @@ var deal_details_tab = {
 			 }
 		},
 		load_deal_notes : function()
-		{
+		{	
+			$('#deal-tab-content').find('.change-deal-activity').remove();
 		    var id = App_Deal_Details.dealDetailView.model.id;
 		    if(id){
 		    dealNotesView = new Base_Collection_View({
@@ -52,7 +55,8 @@ var deal_details_tab = {
 		},
 		
 		load_deal_docs : function()
-		{
+		{	
+			$('#deal-tab-content').find('.change-deal-activity').remove();
 			 var id = App_Deal_Details.dealDetailView.model.id;
 			 if(id){
 			 dealDocsView = new Base_Collection_View({
@@ -75,50 +79,57 @@ var deal_details_tab = {
 		
 		load_deal_activities : function()
 		{
-			$('#dealactivities').addClass('active');
-		    var id = App_Deal_Details.dealDetailView.model.id;
-		    if(id){
-
-		    if($("#timeline", App_Deal_Details.dealDetailView.el).hasClass('isotope'))
-		    {
-		    	$("#timeline", App_Deal_Details.dealDetailView.el).isotope('reloadItems');
-		    	return;
-		    }
-		    	
-			var builder = new GetTimelineBuilder("deal-timeline", App_Deal_Details.dealDetailView, App_Deal_Details.dealDetailView.model, "#timeline")
-
-			builder.timeline(id, function(){
-				$.getJSON('/core/api/opportunity/' + id + '/activities?page_size=100', function(data){
-					builder.addEntities(data);
-				})
-			});	
-		}
-
-		   // ('#timeline').html();
-
-/*
-		    dealActivitiesView = new Base_Collection_View({
-	            url: '/core/api/opportunity/' + id + "/activities",
-	            templateKey: "deal-detail-activities",
-	            individual_tag_name: 'li',
-	            scroll_symbol:'scroll',
-	            sortKey:"time",
-	            descending: true,
-	            cursor : true,
-	            page_size : 20,
-	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".note-created-time", el).timeago();
-	              	})
-	            }
-	        });
-		    dealActivitiesView.collection.fetch();
-	        $('#dealactivities').html(dealActivitiesView.el);
-		    }
-*/		},
+			
+			if(dealDetailMode && dealDetailMode == 'timeline'){
+				$('#deal-tab-content').find('.change-deal-activity').remove();
+				$('#dealactivities').empty();
+				$('#deal-tab-content').prepend('<button class="btn btn-default btn-sm change-deal-activity" data="activity" style="float:right">Activity Mode</button>');
+				$('#dealactivities').append('<div class="m-auto"><div id="timeline" style="float:left; z-index:1;"><div id="line-container"><div id="line"></div></div></div></div>');
+				$('#dealactivities').addClass('active');
+				var id = App_Deal_Details.dealDetailView.model.id;
+				if(id){
+				    if($("#timeline", App_Deal_Details.dealDetailView.el).hasClass('isotope'))
+				    {
+				    	$("#timeline", App_Deal_Details.dealDetailView.el).isotope('reloadItems');
+				    	return;
+				    }				    	
+					var builder = new GetTimelineBuilder("deal-timeline", App_Deal_Details.dealDetailView, App_Deal_Details.dealDetailView.model, "#timeline")
+					builder.timeline(id, function(){
+						$.getJSON('/core/api/opportunity/' + id + '/activities?page_size=100', function(data){
+							builder.addEntities(data);
+						})
+					});	
+				}
+			}
+			else{
+			    var id = App_Deal_Details.dealDetailView.model.id;
+			    $('#deal-tab-content').find('.change-deal-activity').remove();
+			    $('#deal-tab-content').prepend('<button class="btn btn-default btn-sm change-deal-activity" data="timeline" style="float:right">Timeline Mode</button>');
+			    if(id){
+			    dealActivitiesView = new Base_Collection_View({
+		            url: '/core/api/opportunity/' + id + "/activities",
+		            templateKey: "deal-detail-activities",
+		            individual_tag_name: 'li',
+		            scroll_symbol:'scroll',
+		            sortKey:"time",
+		            descending: true,
+		            cursor : true,
+		            page_size : 20,
+		            postRenderCallback: function(el) {
+		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+		            		 $(".note-created-time", el).timeago();
+		              	})
+		            }
+		        });
+			    dealActivitiesView.collection.fetch();
+		        $('#dealactivities').html(dealActivitiesView.el);
+			    }
+			}
+		},
 
 		load_deal_tasks : function()
-		{
+		{	
+			$('#deal-tab-content').find('.change-deal-activity').remove();
 			 var id = App_Deal_Details.dealDetailView.model.id;
 			 if(id){
 			 dealTasksView = new Base_Collection_View({
@@ -149,7 +160,8 @@ var deal_details_tab = {
 		},
 
 		load_deal_events : function()
-		{
+		{	
+			$('#deal-tab-content').find('.change-deal-activity').remove();
 			var id = App_Deal_Details.dealDetailView.model.id;
 			if(id){
 			dealEventsView = new Base_Collection_View({

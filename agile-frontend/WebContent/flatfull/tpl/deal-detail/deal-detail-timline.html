@@ -2,21 +2,21 @@
 {{#each this}}
 <div class="item post"> 
 {{#if_equals "DEAL_ADD" activity_type}}
-	<div class="inner">
-		<div class="timestamp">{{time}}</div>
-      <div class="text-md text-cap pull-left">	
-				<div class="contact-job-title text-base custom-color">
-					<i class="icon-tasks text-muted p-r-xs"></i>Deal {{label}} created
-				</div>
-		  </div>
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+      <div class="text-md text-cap pull-left">  
+        <div class="contact-job-title text-base custom-color">
+          <i class="icon-tasks text-muted p-r-xs"></i>Deal {{label}} created
+        </div>
+      </div>
       <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
-			  {{epochToHumanDate "hh:MM tt" time}}
+        {{epochToHumanDate "hh:MM tt" time}}
       </div>
       <div class="clearfix"></div>
       <div class="date">{{epochToTaskDate time}}</div>
-			<div class="body">
-			<span class="text-xs"><div>Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </div></span>
-	  </div>
+      <div class="body">
+      <span class="text-xs"><div>Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </div></span>
+    </div>
   </div>
 {{/if_equals}}
 {{#if_equals "DEAL_EDIT" activity_type}}
@@ -88,6 +88,60 @@
     <div class="date">{{epochToTaskDate time}}</div>
     <div class="body">
       <span class="text-xs"><div>Milestone changed from {{custom2}} to {{custom1}}.</div></span>
+    </div>
+  </div>
+{{/if_equals}}
+{{#if_equals "DEAL_TAG_ADD" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-list-alt text-muted p-r-xs"></i>Tags added.
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="body">
+      <span class="text-xs"><div>Tags Added to deal are : {{custom1}}.</div></span>
+    </div>
+  </div>
+{{/if_equals}}
+{{#if_equals "DEAL_TAG_DELETE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-list-alt text-muted p-r-xs"></i>Tags removed.
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="body">
+      <span class="text-xs"><div>Tags removed to deal are : {{custom2}}</div></span>
+    </div>
+  </div>
+{{/if_equals}}
+{{#if_equals "DEAL_TAG_CHANGE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-list-alt text-muted p-r-xs"></i>Tags Changed.
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date">{{epochToTaskDate time}}</div>
+    <div class="body">
+      <span class="text-xs"><div>Tags changed from {{custom2}} to {{custom1}}.</div></span>
     </div>
   </div>
 {{/if_equals}}
