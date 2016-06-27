@@ -154,7 +154,15 @@ angular.module('builder').controller('BuilderController', ['$scope', '$rootScope
         $scope.selected.locked = $scope.selected.node.className.indexOf('locked') > -1;
         $scope.selected.isImage = $scope.selected.node.nodeName == 'IMG' &&
         $scope.selected.node.className.indexOf('preview-node') === -1;
-
+          
+        //hide trash for column
+        var select_box_ele=$scope.selectBox.find('#select-box-actions');
+        if(select_box_ele.find('.element-tag').text()==="column"){
+            select_box_ele.find('.icon-trash').hide();
+        }
+        else{
+            select_box_ele.find('.icon-trash').show();
+        }
         //create an array from all parents of this node
         var parents = $($scope.selected.node).parentsUntil('body').toArray();
         parents.unshift($scope.selected.node);
