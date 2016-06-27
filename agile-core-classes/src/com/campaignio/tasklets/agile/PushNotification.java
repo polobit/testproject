@@ -141,7 +141,7 @@ public class PushNotification extends TaskletAdapter
 		    			
 		    		else
 		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), " Reasons: contact has blocked the notifications.",
-		    				    LogType.PUSH_NOTIFICATION_FAILED.toString());
+		    				    LogType.PUSH_NOTIFICATION_SENDING_FAILED.toString());
 		    	}
 		    	else
 		    	{
@@ -154,7 +154,7 @@ public class PushNotification extends TaskletAdapter
 		    		}
 		    			
 		    		else
-		    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),"The browser is not open or contact has blocked the notifications. ", LogType.PUSH_NOTIFICATION_FAILED.toString());
+		    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),"The browser is not open or contact has blocked the notifications. ", LogType.PUSH_NOTIFICATION_SENDING_FAILED.toString());
 		    	}
 		    	
 		    }
@@ -162,7 +162,7 @@ public class PushNotification extends TaskletAdapter
 		}
 		catch (Exception e)
 		{
-		    System.err.println("Exception occured in Score tasklet..." + e.getMessage());
+		    System.err.println("Exception occured while sending push notification" + e.getMessage());
 		    e.printStackTrace();
 		}
 
