@@ -925,8 +925,8 @@ public class PortletUtil {
 			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,1,1,1,2,Portlet.PortletRoute.DashBoard.toString());
 			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,2,1,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2,Portlet.PortletRoute.DashBoard.toString());
-			Portlet incomingDealsPortlet = new Portlet("Incoming Deals",PortletType.DEALS,2,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,1,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet incomingDealsPortlet = new Portlet("Incoming Deals",PortletType.DEALS,2,2,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,1,3,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,3,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet dealsByMilestonePortlet = new Portlet("Deals By Milestone",PortletType.DEALS,3,3,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,1,4,1,1,Portlet.PortletRoute.DashBoard.toString());
