@@ -99,23 +99,19 @@ function quedfunction(models)
 	});
 }
 
-function configure_timeline_comparator(collection, view)
+function configure_timeline_comparator(collection)
 {
 
-	if (!view)
-	{
-		view = timeline_collection_view;
-	}
 	// Override comparator to sort models on time base
 	collection.comparator = function(item)
 	{
 		var month_year = entity_created_month_year(item.toJSON());
 
 		if (month_year)
-			if (view && view.month_year_marker.indexOf(month_year) == -1)
+			if (timeline_collection_view && timeline_collection_view.month_year_marker.indexOf(month_year) == -1)
 			{
 
-				view.month_year_marker.push(month_year);
+				timeline_collection_view.month_year_marker.push(month_year);
 
 				var monthYear = month_year.split('-');
 				var timestamp = getTimestamp(monthYear[0], monthYear[1]) / 1000;
@@ -125,7 +121,7 @@ function configure_timeline_comparator(collection, view)
 				collection.add(context);
 
 				console.log(context);
-				view.month_year_marker_objects.push(context);
+				timeline_collection_view.month_year_marker_objects.push(context);
 			}
 
 		if (item.get('created_time') && item.get('entity_type') != "event")

@@ -68,7 +68,7 @@ function GetTimelineBuilder(templateKey, view, model, appendTo, comparatorFuncti
 
 				configure_timeline(view.el);
 
-			configure_timeline_comparator(timelineView.collection, timelineView);
+			configure_generic_timeline_comparator(timelineView.collection, timelineView);
 
 			timelineView.render(true);
 
@@ -99,7 +99,7 @@ var generic_timeline_view = Backbone.View.extend({ initialize : function(options
 	this.collection = new BaseCollection([], {});
 	this.month_year_marker = [];
 	this.month_year_marker_objects = [];
-	configure_timeline_comparator(this.collection);
+	configure_generic_timeline_comparator(this.collection);
 
 	this.timeline_config = this.options.timeline_config;
 
@@ -160,3 +160,61 @@ addToQueue : function(models)
 }
 
 });
+
+function configure_generic_timeline_comparator(collection, view)
+{
+
+	if (!view)
+	{
+		view = timeline_collection_view;
+	}
+	// Override comparator to sort models on time base
+	collection.comparator = function(item)
+	{
+		var month_year = entity_created_month_year(item.toJSON());
+
+		if (month_year)
+			if (view && view.month_year_marker.indexOf(month_year) == -1)
+			{
+
+				view.month_year_marker.push(month_year);
+
+				var monthYear = month_year.split('-');
+				var timestamp = getTimestamp(monthYear[0], monthYear[1]) / 1000;
+				var context = { year : monthArray[monthYear[0]].split(' ')[0], timestamp : timestamp, "entity_type" : "year-marker" };
+				if (!collection.where({ "year" : monthArray[monthYear[0]].split(' ')[0] })[0])
+					;
+				collection.add(context);
+
+				console.log(context);
+				view.month_year_marker_objects.push(context);
+			}
+
+		if (item.get('created_time') && item.get('entity_type') != "event")
+		{
+			return item.get('created_time');
+		}
+		if (item.get('entity_type') == "event")
+		{
+			return item.get('start');
+		}
+		else if (item.get('createdTime'))
+		{
+			return item.get('createdTime') / 1000;
+		}
+		else if (item.get('time'))
+		{
+			return item.get('time') / 1000;
+		}
+		else if (item.get('date_secs'))
+		{
+			return item.get('date_secs') / 1000;
+		}
+		else if (item.get('timestamp'))
+		{
+			return timestamp;
+		}
+
+		return item.get('id');
+	}
+}
