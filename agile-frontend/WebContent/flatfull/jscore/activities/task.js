@@ -228,12 +228,12 @@ function initializeTasksListeners(){
 		}
 		else {
 			$("#task-bulk-change-duedate").modal('show');
-			$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+			$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY , autoclose : true});
 			$('#task-date-1').datepicker('update');
 			var d1 = new Date ();
 			var d2 = new Date ( d1 );
 			d2.setHours(d1.getHours()+3)
-			$('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false });
+			$('.new-task-timepicker').timepicker({ defaultTime : d2.format("HH:MM") , showMeridian : false , autoclose : true });
 			$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
 			{
 			if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
@@ -1034,14 +1034,22 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 			success : function(data){				
 			//	showNotyPopUp('information', "Task scheduled", "top", 5000);
 			//	console.log(data);
-				for (var i in data) {
-					App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
+				if(data.length){
+					for (var i in data) {
+						App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
+					}
+					App_Calendar.allTasksListView.render(true);
+					showTaskNotyMessage(""+data.length+" task(s) are modified","information","bottomRight",5000);
 				}
-				App_Calendar.allTasksListView.render(true);
-				if(data.length)
-					showTaskNotyMessage(""+data.length+" tasks are modified","information","bottomRight",5000);
-				else
-					showTaskNotyMessage("bulk tasks deleted","information","bottomRight",5000);
+				else{
+					var i;
+					var t = task_ids.length ;
+					for(i=0;i<t;i++){
+						App_Calendar.allTasksListView.collection.remove(task_ids[i]);
+					}
+					App_Calendar.allTasksListView.render(true);
+					showTaskNotyMessage(""+t+" task(s) deleted","information","bottomRight",5000);
+				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
   				console.log(textStatus, errorThrown);
