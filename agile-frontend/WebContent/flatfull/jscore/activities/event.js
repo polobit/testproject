@@ -85,103 +85,104 @@ $("#updateActivityModal").on(
 
 						if ($(this).attr('disabled') == 'disabled')
 							return;
-
+						var save_button = $(this);
 						/**
 						 * Confirmation alert to delete an event
 						 */
-						if (!confirm("Are you sure you want to delete?"))
-							return;
+						showAlertModal("delete_event", "confirm", function(){
+							var event_id = $('#updateActivityForm input[name=id]').val();
+							
 
-						var event_id = $('#updateActivityForm input[name=id]').val();
-						var save_button = $(this);
-
-						disable_save_button(save_button);
-						/**
-						 * Shows loading symbol until model get saved
-						 */
-						// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
-						$
-								.ajax({
-									url : 'core/api/events/' + event_id,
-									type : 'DELETE',
-									success : function()
-									{
-										// if event deleted from today events
-										// portlet, we removed that event from
-										// portlet events collection
-										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)])
+							disable_save_button(save_button);
+							/**
+							 * Shows loading symbol until model get saved
+							 */
+							// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
+							$
+									.ajax({
+										url : 'core/api/events/' + event_id,
+										type : 'DELETE',
+										success : function()
 										{
-											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
-													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
-
-											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
-
-										}	
-										else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
-									      {
-												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
-												a.setHours(0,0,0,0);
-												_agile_set_prefs("current_date_calendar",a);
-										       $('.portlet_body_calendar').each(function(){
-										       	var that=$(this);
-										       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
-										       	 App_Portlets.eventCalendar=that;
-										       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
-
-										       App_Portlets.refetchEvents = true;
-										   }
-										       });
-										       
-										       //_agile_delete_prefs('current_date_calendar');
-									      }
-										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
-										{
-
-											if (dealEventsView && dealEventsView.collection)
+											// if event deleted from today events
+											// portlet, we removed that event from
+											// portlet events collection
+											if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)])
 											{
-												if (dealEventsView.collection.get(event_id))
+												App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
+														.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
+
+												App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+											}	
+											else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
+										      {
+													var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
+													a.setHours(0,0,0,0);
+													_agile_set_prefs("current_date_calendar",a);
+											       $('.portlet_body_calendar').each(function(){
+											       	var that=$(this);
+											       	if(that.parents('.gs-w').attr('data-col')+that.parents('.gs-w').attr('data-row')==App_Portlets.currentPosition){
+											       	 App_Portlets.eventCalendar=that;
+											       	$('#calendar_container',that).fullCalendar( 'refetchEvents' );
+
+											       App_Portlets.refetchEvents = true;
+											   }
+											       });
+											       
+											       //_agile_delete_prefs('current_date_calendar');
+										      }
+											else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
+											{
+
+												if (dealEventsView && dealEventsView.collection)
 												{
-													dealEventsView.collection.remove(event_id);
-													dealEventsView.render(true);
+													if (dealEventsView.collection.get(event_id))
+													{
+														dealEventsView.collection.remove(event_id);
+														dealEventsView.render(true);
+													}
 												}
 											}
-										}
-										else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
-										{
-											if (eventsView && eventsView.collection)
+											else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
 											{
-												if (eventsView.collection.get(event_id))
+												if (eventsView && eventsView.collection)
 												{
-													eventsView.collection.remove(event_id);
-													eventsView.render(true);
+													if (eventsView.collection.get(event_id))
+													{
+														eventsView.collection.remove(event_id);
+														eventsView.render(true);
+													}
 												}
 											}
-										}
 
-										// $('#updateActivityModal').find('span.save-status
-										// img').remove();
-										enable_save_button(save_button);
-										$("#updateActivityModal").modal('hide');
+											// $('#updateActivityModal').find('span.save-status
+											// img').remove();
+											enable_save_button(save_button);
+											$("#updateActivityModal").modal('hide');
 
-										var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-										$('#calendar_event').fullCalendar('removeEvents', eventId);
-									}, error : function(err)
-									{
-										enable_save_button(save_button);
-										$('#updateActivityModal').find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
-										setTimeout(function()
+											var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+											$('#calendar_event').fullCalendar('removeEvents', eventId);
+										}, error : function(err)
 										{
-											$('#updateActivityModal').find('span.error-status').html('');
-										}, 2000);
-										console.log('-----------------', err.responseText);
-									} });
-						if (_agile_get_prefs("agile_calendar_view"))
-						{
-							var eventModel = eventCollectionView.collection.get(event_id);
-							eventModel.set(eventModel, { remove : true });
-							document.location.reload();
+											enable_save_button(save_button);
+											$('#updateActivityModal').find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+err.responseText+'</i></p></div>');
+											setTimeout(function()
+											{
+												$('#updateActivityModal').find('span.error-status').html('');
+											}, 2000);
+											console.log('-----------------', err.responseText);
+										} });
+							if (_agile_get_prefs("agile_calendar_view"))
+							{
+								var eventModel = eventCollectionView.collection.get(event_id);
+								eventModel.set(eventModel, { remove : true });
+								document.location.reload();
 
-						}
+							}
+						});
+
+						
 
 					});
 
@@ -488,7 +489,7 @@ $(function()
 	{
 		// Show related to contacts list
 		var el = $("#activityForm");
-		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 		$('#task-date-1').datepicker('update');
 
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
@@ -600,7 +601,7 @@ $(function()
 		 * and activity-update modal
 		 */
 
-		var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
 		{
 			// If event start date is changed and end date is less than start date,
 			// change the value of the end date to start date.
@@ -617,8 +618,8 @@ $(function()
 		});
 
 
-		$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
-		$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+		$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+		$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
 
 		{
 			// If event start date is changed and end date is less than start date,
@@ -635,7 +636,7 @@ $(function()
 
 		});
 
-		$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+		$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true });
 
 
 		/**

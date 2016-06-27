@@ -58,16 +58,20 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-
-				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
-					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
+				var sortKey = _agile_get_prefs("workflow_sort_key");
+				if(sortKey == undefined || sortKey == null){
+					sortKey = "name_dummy";
+					_agile_set_prefs("workflow_sort_key", sortKey);
+				}
+				this.workflow_list_view = new Workflow_Collection_Events({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
+					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, global_sort_key : sortKey, postRenderCallback : function(el)
 					{
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time.campaign-created-time", el).timeago();
 
 						});
-
+						updateSortKeyTemplate(sortKey, el);
 						start_tour(undefined, el);
 
 						// If workflows not empty, show triggers
@@ -494,10 +498,28 @@ var WorkflowsRouter = Backbone.Router
 			triggers : function()
 			{
 				this.triggersCollectionView = new Base_Collection_View({
+						url : '/core/api/triggers', 
+						restKey : "triggers", 
+						templateKey : "triggers", 
+						individual_tag_name : 'tr', 
+						postRenderCallback : function(el, collection) {
+							// If there are form submit triggers, fetch their name and update UI.
+							// Iterate over the models in the collection
+							$.each(collection.models, function(index, model) {
+								var modelJSON = model.toJSON();
+								if( modelJSON.type == 'FORM_SUBMIT' && modelJSON.trigger_form_event && modelJSON.trigger_form_event != '' )
+								{
+									getFormNameForTrigger(modelJSON.trigger_form_event, function(formName) {
+										//Replace content in the table cell for the form name
+										$('#' + getFormNameCellIDForFormSubmitTriggers(modelJSON.trigger_form_event))
+												.parent()
+												.html(formName);
+									});
+								}
+							});
+						} 
+					});
 
-				url : '/core/api/triggers', restKey : "triggers", templateKey : "triggers", individual_tag_name : 'tr', postRenderCallback : function()
-				{
-				} });
 
 				this.triggersCollectionView.collection.fetch();
 
@@ -561,105 +583,99 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			triggerAdd : function(id,trigger_type)
 			{
+				//Set Global API Key before performing other operations
+				//API key is used for shopify trigger and inbound email trigger
+				setGlobalAPIKey(function() {
+					$('#content').html("<div id='trigger-selector'>&nbsp;</div>");
 
-				$('#content').html("<div id='trigger-selector'>&nbsp;</div>");
-
-				this.triggerModelview = new Base_Model_View({ url : 'core/api/triggers', template : "trigger-add", isNew : true, window : 'triggers',
-				/**
-				 * Callback after page rendered.
-				 * 
-				 * @param el
-				 *            el property of Backbone.js
-				 */
-				postRenderCallback : function(el)
-				{
-
-					initializeTriggerListEventListners(id,trigger_type);
-
-					// Loads jquery.chained.min.js
-					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-					{
-						var LHS, RHS;
-
-						// Assigning elements with ids LHS
-						// and RHS
-						// in trigger-add.html
-						LHS = $("#LHS", el);
-						RHS = $("#RHS", el);
-
-						CALL = $('#CALL', el);
-
-						// Chaining dependencies of input
-						// fields
-						// with jquery.chained.js
-						RHS.chained(LHS);
-
-						// Chain Call trigger options
-						CALL.chained(LHS);
-
-					});
-
-					var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
-
-					
-					/**
-					* Shows given values when trigger selected
-					*/
-
-					// To get the input values
-					var type = trigger_type;
-					var campaign_id = id;
-					
-					setTimeout(function(){
-							// Shows the Value field with given value
-						$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
-					}, 100);
-
-					
-						 
-						if (campaign_id)
-						{
-							fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
-							{
-								$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
-							}, optionsTemplate, false, el);
-
-						}
-						else
-						{
+					this.triggerModelview = new Base_Model_View({ 
+							url : 'core/api/triggers', 
+							template : "trigger-add", 
+							isNew : true, 
+							window : 'triggers',
 							/**
-							 * Fills campaign select with existing Campaigns.
+							 * Callback after page rendered.
 							 * 
-							 * @param campaign-select -
-							 *            Id of select element of Campaign
-							 * @param /core/api/workflows -
-							 *            Url to get workflows
-							 * @param 'workflow' -
-							 *            parse key
-							 * @param no-callback -
-							 *            No callback
-							 * @param optionsTemplate-
-							 *            to fill options with workflows
+							 * @param el
+							 *            el property of Backbone.js
 							 */
-							fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
-						}
+							postRenderCallback : function(el) {
 
+								initializeTriggerListEventListners(id,trigger_type);
+
+								// Loads jquery.chained.min.js
+								head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function() {
+									var LHS, RHS;
+
+									// Assigning elements with ids LHS
+									// and RHS
+									// in trigger-add.html
+									LHS = $("#LHS", el);
+									RHS = $("#RHS", el);
+
+									CALL = $('#CALL', el);
+
+									// Chaining dependencies of input
+									// fields
+									// with jquery.chained.js
+									RHS.chained(LHS);
+
+									// Chain Call trigger options
+									CALL.chained(LHS);
+
+								});
+
+								var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+
+								/**
+								* Shows given values when trigger selected
+								*/
+								// To get the input values
+								var type = trigger_type;
+								var campaign_id = id;
+
+								setTimeout(function() {
+										// Shows the Value field with given value
+									$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
+								}, 100);
+
+								if (campaign_id)
+								{
+									fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
+									{
+										$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
+									}, optionsTemplate, false, el);
+								}
+								else
+								{
+									/**
+									 * Fills campaign select with existing Campaigns.
+									 * 
+									 * @param campaign-select -
+									 *            Id of select element of Campaign
+									 * @param /core/api/workflows -
+									 *            Url to get workflows
+									 * @param 'workflow' -
+									 *            parse key
+									 * @param no-callback -
+									 *            No callback
+									 * @param optionsTemplate-
+									 *            to fill options with workflows
+									 */
+									fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
+								}
+							},
+							saveCallback : function() {
+								// To get newly added trigger in triggers list
+								App_Workflows.triggersCollectionView = undefined;
+							}
+						}); //End of declaration for this.triggerModelView
+
+						var view = this.triggerModelview.render();
+
+						$('#trigger-selector').html(view.el);
+					}); // End of setGlobalAPIKey call-back function
 				},
-
-				saveCallback : function()
-				{
-
-					// To get newly added trigger in triggers list
-					App_Workflows.triggersCollectionView = undefined;
-					
-				}
-
-				});
-
-				var view = this.triggerModelview.render();
-
-				$('#trigger-selector').html(view.el);
-			},
 
 			/**
 			 * Updates trigger.
@@ -688,7 +704,7 @@ var WorkflowsRouter = Backbone.Router
 						initializeTriggersListeners();
 
 						// Loads jquery.chained.min.js
-						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 						{
 							var LHS, RHS;
 

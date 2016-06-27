@@ -21,6 +21,7 @@ import com.agilecrm.OpportunitySchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.DomainLimits;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.MenuSetting;
 import com.agilecrm.account.VerifiedEmails;
@@ -47,6 +48,11 @@ import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
+import com.agilecrm.knowledgebase.entity.Article;
+import com.agilecrm.knowledgebase.entity.Categorie;
+import com.agilecrm.knowledgebase.entity.Comment;
+import com.agilecrm.knowledgebase.entity.HelpcenterUser;
+import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageCNames;
@@ -269,9 +275,21 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	//For deals update in textsearch
 	ObjectifyService.register(OpportunitySchemaUpdateStats.class);
 	ObjectifyService.register(VisitorFilter.class);
+	
+	//Knowledgebase entities
+	ObjectifyService.register(Categorie.class);
+	ObjectifyService.register(Section.class);
+	ObjectifyService.register(Article.class);
+	ObjectifyService.register(Comment.class);
+	ObjectifyService.register(HelpcenterUser.class);
 
 	ObjectifyService.register(IpAccess.class);
-
+    /**
+     * Registering the DomainLimits class into dataStore
+     * for tweet node in campaing an domain user can send
+     *  the maximum 25 tweet message in a day 
+     * */
+	ObjectifyService.register(DomainLimits.class);
 
     }
 

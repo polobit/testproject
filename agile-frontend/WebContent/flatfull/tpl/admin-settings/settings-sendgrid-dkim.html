@@ -1,0 +1,87 @@
+<script id="admin-setting-sendgrid-whitelabel-template" type="text/html">
+{{#if mail_server}}    
+<div class="controls dkim_spf">
+<label>Copy the below settings and update in your Web domain DNS. </label>   
+<div class="controls">  
+  <table class="table">
+    <thead>
+      <tr>
+       <th>TYPE</th>
+        <th>HOST</th>
+        <th>DATA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+      <td style="text-transform: uppercase;">{{mail_server.type}}</td>
+        <td>
+        <span class="prettyprint pull-left Api_span">{{mail_server.host}}</span>
+        </td>
+        <td><span class="prettyprint pull-left Api_span" >{{mail_server.data}}</span></td>
+      </tr>
+      <tr>
+      <td style="text-transform: uppercase;">{{subdomain_spf.type}}</td>
+        <td><span class="prettyprint pull-left Api_span" >{{subdomain_spf.host}}</span></td>
+        <td><span class="prettyprint pull-left Api_span" >{{subdomain_spf.data}}</span></td>
+      </tr>
+      <tr>
+      <td style="text-transform: uppercase;">{{dkim.type}}</td>
+        <td><span class="prettyprint pull-left Api_span" >{{dkim.host}}</span></td>
+        <td><span class="prettyprint pull-left Api_span" >{{dkim.data}}</span></td>
+      </tr>
+    </tbody>
+  </table>
+  {{else}}
+  <label>Try again</label>
+  {{/if}}
+</div>
+</div>
+</script>
+
+<script id="admin-setting-sendgrid-whitelabel-validate-template" type="text/html">
+{{#if mail_server}} 
+<div class="controls dkim_spf" >
+<div class="controls">          
+  <table class="table">
+    <thead>
+      <tr>
+       <th>VALID</th>
+        <th>REASON</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{{validateSendgridWhitelabel mail_server.valid}}}</td>
+        <td> <code class="prettyprint pull-left Api_span">{{#if mail_server.reason}}{{mail_server.reason}}{{else}} <span style="color:green;">Mail Server settings is verified successfully. {{/if}}</span> </code> </td>
+      </tr>
+      <tr>
+        <td>{{{validateSendgridWhitelabel subdomain_spf.valid}}}</td>
+        <td><code class="prettyprint pull-left Api_span" >{{#if subdomain_spf.reason}}{{subdomain_spf.reason}} {{else}}<span style="color:green;"> SPF settings is verified successfully. {{/if}}</span></code></td>
+      </tr>
+      <tr>
+        <td>{{{validateSendgridWhitelabel dkim.valid}}}</td>
+        <td><code class="prettyprint pull-left Api_span" >{{#if dkim.reason}} {{dkim.reason}}{{else}}<span style="color:green;"> DKIM settings is verified successfully. {{/if}}</span></code></td>
+       
+      </tr>
+    </tbody>
+  </table>
+  {{else}}
+  <label class="dkim_spf" style="color:red">Please click on Get Settings first to register your domain.</label>
+  {{/if}}
+</div>
+</div>
+</script>
+
+<script id="admin-setting-sendgrid-whitelabel-permission-template" type="text/html">
+{{#if plan}}
+ <div class="m-xs " style="text-align:center;font-size: 13px; margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <a href="#subscribe-plan" class="c-p text-info">upgrade</a> plan to use this feature. </span>
+ </div>
+ {{else}}
+    {{#if emailGateway}}
+     <div class="m-xs " style="text-align:center;font-size: 13px;margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> You are using your own Email Gateway </span>
+     </div>
+     {{else}}
+     undefined
+    {{/if}}
+ {{/if}}
+</script>

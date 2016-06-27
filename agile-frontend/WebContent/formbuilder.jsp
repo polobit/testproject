@@ -27,13 +27,14 @@ String template = request.getParameter("template");
    </head>
    <body>
       <div class="container">
+         <br>
          <div class="row">
             <!-- Building Form. -->
             <div class="col-md-6">
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
                   <input id="form-save" type="button" class="btn btn-info" value="Save Form">
-                  <hr>
+                  <hr style="margin-top: 30px;">
                   <div id="build">
                      <form id="target" class="form-horizontal">
                      </form>
@@ -63,6 +64,6 @@ String template = request.getParameter("template");
          </div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
    </body>
 </html>

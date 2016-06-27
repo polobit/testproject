@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.ipaccess.AllowAccessMailServlet;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.ipaccess.IpAccessUtil;
+import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
@@ -98,6 +99,9 @@ public class LoginServlet extends HttpServlet {
 		// Delete Login Session
 		request.getSession().removeAttribute(
 				UserFingerPrintInfo.FINGER_PRINT_SESSION_NAME);
+
+		// Remove the attribute for the Session Cache when the user visits this page
+		request.getSession().removeAttribute(SessionCache.SESSION_ATTRIBUTE_NAME);
 
 		// Check if this subdomain even exists or alias exist
 
@@ -359,10 +363,10 @@ public class LoginServlet extends HttpServlet {
 				subject =  "New sign-in from " + data.get("browser_name") + " on " + data.get("browser_os"); 
 			}
 			
-			if(resend)
+			// if(resend)
 				AppengineMail.sendMail(email, subject, template, data);
-			else 
-				SendMail.sendMail(email, subject, template, data);
+			// else 
+				// SendMail.sendMail(email, subject, template, data);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

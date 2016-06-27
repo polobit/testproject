@@ -86,7 +86,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
  	 $('.aside-wrap').off('ul li');
 	 if(agile_is_mobile_browser()){
 
-	 	$('body').on('click',function(e){
+	 /*	$('body').on('click',function(e){
 		setTimeout(function(){
 		if(e.target.id != 'searchText' && !$(e.target).closest('button').hasClass('search-menu-mobile'))  {
 		$('.search-mobile').addClass('hide');
@@ -94,7 +94,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$('.navbar-brand').removeClass('hide');
 		}
 		},500);
-	});
+	});*/
 
 	 	$('body').on('click','.add-modal-mobile',function(){
 	 		

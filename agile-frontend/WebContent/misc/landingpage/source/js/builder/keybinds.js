@@ -21,8 +21,22 @@ angular.module('builder')
 				        //dom.moveSelected('down');
 				   	} else if (e.which === 46) {
 				   		// del
-				   		//e.preventDefault();
-				        //dom.delete($rootScope.selected.node);
+				   		if($('#text-toolbar').hasClass('hidden')) {
+				   			e.preventDefault();
+				        	dom.delete($rootScope.selected.node);
+				   		}
+				   	} else if (e.which === 8) {
+				   		//backspace or mac fn+delete
+				   		if($('#text-toolbar').hasClass('hidden')) {
+					   		if(navigator.platform.indexOf("Mac") == -1) {
+					   			if(!confirm("It looks like you have been editing something. If you leave before saving, your changes will be lost. Are you sure ?")) {
+					   				e.preventDefault();
+					   			}
+					   		} else {
+					   			e.preventDefault();
+					        	dom.delete($rootScope.selected.node);
+					   		}
+				   		}
 				   	} else if (e.which === 67 && e.ctrlKey) {
 				   		// C + Ctrl
 				   		e.preventDefault();

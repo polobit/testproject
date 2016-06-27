@@ -2,8 +2,10 @@ package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -71,12 +73,14 @@ public class ActivityUtil
 			String old_data, String changed_field)
 	{
 		String contact_name = "";
+		String company_name = "";
 		Activity activity = new Activity();
 		if (contact != null)
 		{
 
 			ContactField firstname = contact.getContactFieldByName("first_name");
 			ContactField lastname = contact.getContactFieldByName("last_name");
+			ContactField companyName = contact.getContactFieldByName("name");
 			if (firstname != null)
 			{
 				contact_name += firstname.value;
@@ -85,6 +89,11 @@ public class ActivityUtil
 			{
 				contact_name += " ";
 				contact_name += lastname.value;
+			}
+			
+			if(companyName != null)
+			{
+			contact_name += companyName.value;	
 			}
 
 			activity.label = contact_name;
@@ -127,6 +136,8 @@ public class ActivityUtil
 		{
 			ContactField firstname = contact.getContactFieldByName("first_name");
 			ContactField lastname = contact.getContactFieldByName("last_name");
+			ContactField companyName = contact.getContactFieldByName("name");
+			
 			if (firstname != null)
 			{
 				contact_name += firstname.value;
@@ -135,6 +146,10 @@ public class ActivityUtil
 			{
 				contact_name += " ";
 				contact_name += lastname.value;
+			}
+			
+			if(companyName != null){
+				contact_name += companyName.value;	
 			}
 
 			activity.label = contact_name;
@@ -163,12 +178,14 @@ public class ActivityUtil
 			String old_data, String changed_field, String custom4)
 	{
 		String contact_name = "";
+		
 		Activity activity = new Activity();
 		if (contact != null)
 		{
 
 			ContactField firstname = contact.getContactFieldByName("first_name");
 			ContactField lastname = contact.getContactFieldByName("last_name");
+			ContactField company_name = contact.getContactFieldByName("name");
 			if (firstname != null)
 			{
 				contact_name += firstname.value;
@@ -177,6 +194,11 @@ public class ActivityUtil
 			{
 				contact_name += " ";
 				contact_name += lastname.value;
+			}
+			if (company_name != null)
+			{
+				contact_name += " ";
+				contact_name += company_name.value;
 			}
 
 			activity.label = contact_name;
@@ -805,6 +827,43 @@ public class ActivityUtil
 					mapvalue[2] = "description";
 					dealmap.put("description", mapvalue);
 				}
+			if(obj.tagsWithTime.size() ==0  &&  oldobj.tagsWithTime.size() >0 ){
+				Set <String> tagset = new HashSet<String>() ;
+				Object[] mapvalue = new Object[3];
+				for (int i= 0;i< oldobj.tagsWithTime.size();i++){
+					tagset.add(oldobj.tagsWithTime.get(i).tag);
+				}
+				mapvalue[1] = tagset ;
+				mapvalue[2] = "tags";
+				dealmap.put("tags", mapvalue);
+				
+				}
+			else if(obj.tagsWithTime.size() >0  &&  oldobj.tagsWithTime.size() ==0 ){
+				Set <String> tagset = new HashSet<String>() ;
+				Object[] mapvalue = new Object[3];
+				for (int i= 0;i< obj.tagsWithTime.size();i++){
+					tagset.add(obj.tagsWithTime.get(i).tag);
+				}
+				mapvalue[0] = tagset ;
+				mapvalue[2] = "tags";
+				dealmap.put("tags", mapvalue);
+				}
+			else if(obj.tagsWithTime.size() >0  &&  oldobj.tagsWithTime.size() >0 ) {
+				Set <String> tagset = new HashSet<String>() ;
+				Object[] mapvalue = new Object[3];
+				for (int i= 0;i< oldobj.tagsWithTime.size();i++){
+					tagset.add(oldobj.tagsWithTime.get(i).tag);
+				}
+				mapvalue[1] = tagset ;
+				 tagset = new HashSet<String>() ;
+				for (int i= 0;i< obj.tagsWithTime.size();i++){
+					tagset.add(obj.tagsWithTime.get(i).tag);
+				}
+				mapvalue[0] = tagset;
+				mapvalue[2] = "tags";
+				dealmap.put("tags", mapvalue);
+				}
+			
 			JSONObject js = new JSONObject(new Gson().toJson(obj));
 			JSONArray jsn = js.getJSONArray("contact_ids");
 			jsn = ActivitySave.getExistingContactsJsonArray(jsn);

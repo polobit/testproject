@@ -2,6 +2,8 @@
  * Creates backbone router to access preferences of the user (email templates,
  * email (gmail/IMAP), notifications and etc..).
  */
+
+ var templateUrl;
 var WebreportsRouter = Backbone.Router.extend({
 
 	routes : {
@@ -59,7 +61,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 
 					chainFilters(el, undefined, function()
@@ -101,7 +103,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				if (count > 0)
 					return;
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					chainFilters(el, webrule.toJSON(), function()
 					{
@@ -154,14 +156,17 @@ var WebreportsRouter = Backbone.Router.extend({
 		var web_reports_add = new Web_Rules_Event_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
+				if(path.includes("callpopup.html"))
+					el.find("#action select").val("CALL_POPUP");
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					chainFilters(el, undefined, function()
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
-						loadSavedTemplate(path);
-						$("#tiny_mce_webrules_link").trigger('click');
+						loadSavedTemplate(path, function(data) {
+							$("#tiny_mce_webrules_link").trigger('click');
+						});
 					}, true);
 				})
 				
@@ -181,7 +186,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_=1452593296', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 
 					chainFilters(el, undefined, function()
@@ -234,16 +239,15 @@ function show_fancy_box(content_array)
  	}); // End of fancybox
 }
 
-function loadSavedTemplate(templateURL){
-		
-		templateURL = "/misc/modal-templates/" + templateURL;
+function loadSavedTemplate(templateURL, callback){
+	
+	templateUrl=templateURL;
+	templateURL = "/misc/modal-templates/" + templateURL;
 
 	 $.ajax({
             url: templateURL,
-            async: false,
             data: {},
             success: function(data) {
-
             	data = data.trim();
 
             	if(isNotValid(data))
@@ -251,7 +255,12 @@ function loadSavedTemplate(templateURL){
 					showError("Please enter a valid html message");
 					return;
 				}
-                $("#tinyMCEhtml_email").text(data);
+				if(templateUrl.includes("callpopup.html"))
+					$("#callwebrule-code").text(data);
+				else
+                	$("#tinyMCEhtml_email").text(data);
+				
+				if( callback && typeof(callback) === 'function' )	callback(data);
             }
         });
 }
@@ -266,3 +275,4 @@ function isNotValid(value)
 	
 	return false;
 }
+

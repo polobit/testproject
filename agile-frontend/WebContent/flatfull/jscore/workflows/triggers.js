@@ -465,6 +465,181 @@ function initializeTriggerEventListners()
 
 }
 
+function openVerifyEmailModal(el) {
+	if (window.parent.$('#workflow-verify-email').size() != 0)
+		window.parent.$('#workflow-verify-email').remove();
+
+	var selected = $(el).find(':selected').val();
+
+	if (selected == 'verify_email')
+		window.parent.workflow_alerts("Verify a new From address", undefined,
+				"workflow-verify-email-modal"
+
+				, function(modal) {
+
+					// Focus on input
+					modal.on('shown.bs.modal', function() {
+						$(this).find('input').focus();
+
+						parent.send_verify_email();
+					});
+
+					// On hidden
+					modal.on('hidden.bs.modal', function(e) {
+
+						var given_email = $(this).find('input').val();
+
+						resetAndFillFromSelect(given_email);
+					});
+				});
+	
+		resetAndFillFromSelect(selected);
+}
+
+function rearrange_from_email_options($select, data) {
+
+	if (!data)
+		return;
+
+	var unverified = [];
+
+	/*for(var i=0; i<$($select[0]).find("option").length; i++){
+		for(var j=$($select[0]).find("option").length-1; j>i; j--){
+		if($($($select[0]).find("option")[i]).val() == $($($select[0]).find("option")[j]).val())
+			$($($select[0]).find("option")[i]).remove();
+		}
+	}*/
+
+	$.each(data, function(index, obj) {
+
+		if (obj.verified == "NO")
+			unverified.push(obj.email);
+
+	});
+
+	$select.find('option').each(function() {
+
+		var email = $(this).val();
+		
+		if (unverified.indexOf(email) != -1) {
+			$(this).attr('unverified', 'unverified');
+			$(this).text(email + ' (unverified)');
+		}
+		
+	});
+
+}
+
+function resetAndFillFromSelect(selected_val) {
+	// Make send email node from email empty
+	$('#from_email').empty();
+
+	var options = {
+		"+ Add new" : "verify_email"
+	};
+
+	fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+				var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+				if(typeof(ownerEmail) == "undefined")
+				{
+				$select
+						.find("option:first")
+						.before(
+								"<option value="+CURRENT_DOMAIN_USER.email+">"+CURRENT_DOMAIN_USER.email+"</option>");
+				}
+	
+				if (selected_val)
+					$select.val(selected_val).attr("selected", "selected");
+				else
+					$select.val(CURRENT_DOMAIN_USER.email).attr("selected", "selected");
+
+				rearrange_from_email_options($select, data);
+			});
+}
+
+
+function fetchAndFillSelect(url, keyField, valField, appendNameField, options, selectContainer, arrange_type, callback)
+{
+
+	var selectOptionAttributes ="";
+	
+	
+	// Populate Options - Naresh 23/04/2014
+	if(options !== undefined)
+	{
+		$.each(
+				options, function (key, value) {
+					
+					if(key.indexOf("*") == 0)
+					{
+						key  = key.substr(1);
+						selectOptionAttributes += "<option selected='selected' value='" + value + "'>" + key + "</option>";
+					}
+					else
+						selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
+				});
+	 }
+
+	$.ajax({
+		  url: url,
+		  async: false,
+		  dataType: "json",
+		  success: function(data)
+		  {	    			
+	    	$(selectContainer[0]).find('option').remove();
+			// Append given options
+			if(selectOptionAttributes !== undefined)
+	    	$(selectOptionAttributes).appendTo(selectContainer);
+	    
+		var array = eval (data);	      
+		$.each(array, function( index, json )
+		{				
+				var key = eval("json." + keyField);			
+				var value = eval("json." + valField);
+				
+				var appendName = eval("json."+ appendNameField);
+				
+				// Append name to email like Naresh <naresh@agilecrm.com    >
+				if(key!= undefined && appendName != undefined)
+					key = appendName + " &lt;"+key+"&gt;";
+				
+				if(key != undefined && value != undefined)
+				{
+					console.log(key); 
+					if(key.indexOf("*") == 0)
+					{
+						key  = key.substr(1);
+						
+						option = "<option selected value='" + value + "'>" + key + "</option>";
+    				}
+    				else
+    				    option = "<option value='" + value + "'>" + key + "</option>";
+        				
+    				if(arrange_type && arrange_type == "prepend")
+    					$(option).prependTo(selectContainer[0]);
+    				else
+    				{	
+    					// Append to container	
+        				$(option).appendTo(selectContainer[0]);	        				        								
+        			}
+				}											   	   	   	  	   	  				
+		});
+
+		  if(callback && typeof (callback) === "function")
+		  	callback(selectContainer, data);
+		  }
+	});
+}
+
+
 function initializeTriggerListEventListners(id,trigger_type)
 {
 
@@ -497,6 +672,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 			show_email_tracking_campaigns();
 		});
 
+	
 	$('#trigger-selector, #trigger-edit-selector').on('change', '#trigger-type', function(e)
 	{
 		e.preventDefault();
@@ -634,4 +810,54 @@ function initializeTriggerListEventListners(id,trigger_type)
 
 	});
 }
- 
+
+var _AGILE_API_KEY = "";
+
+function setGlobalAPIKey(callback)
+{
+	if( _AGILE_API_KEY && _AGILE_API_KEY != '' )
+	{
+		//If key is set, call the function directly.
+		if( callback && typeof(callback) === 'function')	callback();
+		return;
+	}
+	
+    $.ajax({ 
+    	type : 'GET', 
+        url : '/core/api/api-key', 
+        dataType : 'json',
+        success : function(resp) {
+            if( resp )
+            {
+                console.log("Setting API KEY: " + resp.api_key);
+                _AGILE_API_KEY = resp.api_key;
+				
+				if( callback && typeof(callback) === 'function' )
+				{
+					callback();
+				}
+            }
+        }
+    });
+}
+  
+function getFormNameForTrigger(formID, callback)
+{
+	if( !formID )	return false;
+
+	if( !callback || !(typeof(callback) === 'function'))	return false;
+	
+	$.ajax({
+		type : "GET",
+		url : '/core/api/forms/form?formId=' + formID,
+		dataType : 'json',
+		success : function(response) {
+			callback(response.formName);
+		}
+	});
+}
+
+function getFormNameCellIDForFormSubmitTriggers(formID)
+{
+	return formID + "_formNameField";
+}

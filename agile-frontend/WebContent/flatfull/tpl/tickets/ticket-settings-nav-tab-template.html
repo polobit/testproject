@@ -1,6 +1,18 @@
  <script id="ticket-settings-nav-tab-template" type="text/html">	
 	<div class="tab-container m-b-none">
-    	<ul class="nav nav-tabs b-b-none">
+    
+        <div class="pull-right col w-md">
+                <a href="#add-ticket-group" class="btn btn-sm btn-default btn-addon invisible">
+                    <span><i class="icon-plus-sign"></i></span> Add Group
+                </a>
+            </div>
+        <div class="pull-right invisible">
+                <a href="#helpcenter" class="btn btn-sm btn-default btn-addon">
+                    <span><i class="icon-settings"></i></span> Help Center
+                </a>
+            </div>
+    	
+        <ul class="nav nav-tabs b-b-none col">
         	<li {{#if groups}}class="active"{{/if}}>
          		<a href="#ticket-groups" class="b-l-none">
          			Groups

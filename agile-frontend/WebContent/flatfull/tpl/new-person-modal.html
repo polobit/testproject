@@ -47,7 +47,7 @@
 		                        <span><input name="email" class="email form-control field_length" max_len="500" type="text" id="email" placeholder="Email" /></span>
 		                    </div>
 		                </div>
-                <div class="row">
+		                <div class="row">
                     <div class="col-sm-offset-3 col-sm-7 p-l  duplicate-email"></div>
                 </div>
 	                <div class="control-group form-group">
@@ -79,7 +79,27 @@
                     </div>
                     <div class="clearfix"></div>
                 </div> 
-            </fieldset>
+          <!--creating an hidden field for the TwitterId and picture@priyanka!-->
+		         <div class="span2" style="display:none;">     		                                       
+	                   <span id="pic" style="padding-left:20px;display:none;"></span>
+	                    	<input name="image" id="image" type="hidden" />
+	                    	<div id="network_handle" class="network-handle" style="left: 71px;">
+	                    	    <label class="control-label" ><b style="
+                                                                      margin-left: 77px;
+                                                                      margin-top: 6px;
+                                                                      margin-top: 19px;
+                                                               ">TwitterId</b> </label>
+		                    	<div class="controls">
+		                        <span><input name="handle" type="hidden" id="handle" style="
+                                   /* margin-left: -1px; */
+                                     margin-left: 148px;
+                                     margin-top: -33px;
+                                     margin-top: -24px;
+                                   " /></span>
+		                    	</div>
+	                    	</div> 
+	                <input type="hidden" name="source" value="manual" data="manual" class="contact-source">
+                </fieldset>
         </form>
     </div>
     <div class="modal-footer">

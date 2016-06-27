@@ -30,12 +30,12 @@ $(function(){
 		// Add placeholder and date picker to date custom fields
 		$('.date_input').attr("placeholder","Select Date");
     	$('.date_input').datepicker({
-			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true,
 		});
 
 		// Enable the datepicker
 		$('#close_date').datepicker({
-			format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+			format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true,
 		});
 	
 	});
@@ -69,9 +69,11 @@ function initializeCasesListeners(el){
 	    		return;
 	    	var ele = $(template_ui);
 			$(that).popover(
-					{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+					{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "container" : 'body', "original-title" : currentCase.toJSON().name, "content" : ele,
 						"html" : true, });
 			$(that).popover('show');
+			var $this = $('.popover').find("#cases_detail_popover-div");
+      		$this.closest(".popover").addClass("cases_custom_popover");
 		}, null);
 
 	});

@@ -83,7 +83,7 @@ load_contacts : function(el)
 
 	}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
-	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 	{
 		scramble_input_names($(el).find('div#report-settings'));
 		chainFiltersForContact(el, undefined, function()
@@ -139,6 +139,7 @@ call_reports : function(url,reportType,graphOn){
 	var incorrectReferralCallsCountList= [];
 	var newOpportunityCallsCountList= [];
 	var meetingScheduledCallsCountList = [];
+	var queuedCallsCountList = [];
 	var callsDurationList=[];
 	var totalCallsCountList=[];
 	var domainUsersList=[];
@@ -167,12 +168,13 @@ call_reports : function(url,reportType,graphOn){
 		incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
 		meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
 		newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
+		queuedCallsCountList = data["queuedCallsCountList"];
 		callsDurationList=data["callsDurationList"];
 		totalCallsCountList=data["totalCallsCountList"];
 		domainUsersList=data["domainUsersList"];
 		domainUserImgList=data["domainUserImgList"];
 		pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
-		'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity'];
+		'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity','Other'];
 		
 		var series=[];
 		var text='';
@@ -234,11 +236,6 @@ call_reports : function(url,reportType,graphOn){
 			});
 			CompleteCallsCount.push(incorrectReferralCallsCount);
 
-			var newOpportunityCallsCount=0;
-			$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
-				newOpportunityCallsCount +=newOpportunityCall;
-			});
-			CompleteCallsCount.push(newOpportunityCallsCount);
 
 			var meetingScheduledCallsCount=0;
 			$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
@@ -246,7 +243,17 @@ call_reports : function(url,reportType,graphOn){
 			});
 			CompleteCallsCount.push(meetingScheduledCallsCount);
 
-			
+			var newOpportunityCallsCount=0;
+			$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
+				newOpportunityCallsCount +=newOpportunityCall;
+			});
+			CompleteCallsCount.push(newOpportunityCallsCount);
+
+			var queuedCallsCount=0;
+				$.each(queuedCallsCountList,function(index,queuedCall){
+					queuedCallsCount +=queuedCall;
+				});
+				CompleteCallsCount.push(queuedCallsCount);
 			
 			portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
 			return;
@@ -309,6 +316,12 @@ call_reports : function(url,reportType,graphOn){
 			tempData.name = "New Opportunity";
 			tempData.data = newOpportunityCallsCountList;
 			series[10] = tempData;
+
+				tempData = {};
+			tempData.name = "Other";
+			tempData.data = queuedCallsCountList;
+			series[11] = tempData;
+
 			text="Total Calls";
 			colors=['green','blue','red','violet'];
 		}
@@ -330,7 +343,7 @@ call_reports : function(url,reportType,graphOn){
 			    tempData.data=averageCallList;
 			    tempData.showInLegend=false;
 			    series[0]=tempData;
-			    text="Average Call Duration (Mins)";
+			    text="Average Call Duration (Sec)";
 			    colors=['green'];
 		}
 		else
@@ -349,7 +362,7 @@ call_reports : function(url,reportType,graphOn){
 			tempData.data=callsDurationInMinsList;
 			tempData.showInLegend=false;
 			series[0]=tempData;
-			text="Calls Duration (Mins)";
+			text="Calls Duration (Sec)";
 			colors=['green'];
 		}
 		
@@ -377,6 +390,7 @@ user_reports :function(callReportUrl){
 		var incorrectReferralCallsCountList= [];
 		var newOpportunityCallsCountList= [];
 		var meetingScheduledCallsCountList = [];
+		var queuedCallsCountList = [];
 		var callsDurationList=[];
 		var totalCallsCountList=[];
 		var domainUsersList=[];
@@ -409,12 +423,13 @@ user_reports :function(callReportUrl){
 			incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
 			meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
 			newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
+			queuedCallsCountList = data["queuedCallsCountList"];
 			callsDurationList=data["callsDurationList"];
 			totalCallsCountList=data["totalCallsCountList"];
 			domainUsersList=data["domainUsersList"];
 			domainUserImgList=data["domainUserImgList"];
 			pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls','Missed','Inquiry',
-			'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity'];
+			'Interest','No Interest','Incorrect Referral','Meeting Scheduled','New Opportunity','Other'];
 			
 			var series=[];
 			var text='';
@@ -474,18 +489,24 @@ user_reports :function(callReportUrl){
 				});
 				CompleteCallsCount.push(incorrectReferralCallsCount);
 
+				var meetingScheduledCallsCount=0;
+				$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
+					meetingScheduledCallsCount +=meetingScheduledCall;
+				});
+				CompleteCallsCount.push(meetingScheduledCallsCount);
+
 				var newOpportunityCallsCount=0;
 				$.each(newOpportunityCallsCountList,function(index,newOpportunityCall){
 					newOpportunityCallsCount +=newOpportunityCall;
 				});
 				CompleteCallsCount.push(newOpportunityCallsCount);
 
-				var meetingScheduledCallsCount=0;
-				$.each(meetingScheduledCallsCountList,function(index,meetingScheduledCall){
-					meetingScheduledCallsCount +=meetingScheduledCall;
+				var queuedCallsCount=0;
+				$.each(queuedCallsCountList,function(index,queuedCall){
+					queuedCallsCount +=queuedCall;
 				});
-				CompleteCallsCount.push(meetingScheduledCallsCount);
-				
+				CompleteCallsCount.push(queuedCallsCount);
+
 				if(callsDurationList[0]!=0)
 				   callsDurationAvg=callsDurationList[0]/answeredCallsCountList[0];
 
@@ -681,7 +702,60 @@ getRepPerformanceLog : function(url) {
 		});
 	
 
-}
+},
+ 
+ 	loadReportsTemplate : function(callback){
+ 		if (!tight_acl.checkPermission('REPORT'))
+					return;
+
+				//$("#content").html("<div id='reports-listerners-container'></div>");
+				getTemplate('report-categories', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
+
+						preloadImages([
+							'flatfull/img/reports_images/Growth-graph.png',
+							'flatfull/img/reports_images/ratio.png',
+							'flatfull/img/reports_images/funnel-graph.png',
+							'flatfull/img/reports_images/Campaign-stats.png',
+							'flatfull/img/reports_images/Calls-By-User.png',
+							'flatfull/img/reports_images/averageofcall.png',
+							'flatfull/img/reports_images/user-activities-call.png',
+							'flatfull/img/reports_images/Incoming-Deals.png',
+							'flatfull/img/reports_images/Lost-Deal-Analysis.png',
+							'flatfull/img/reports_images/Revenue.png',
+							'flatfull/img/reports_images/Sales-forecast.png',
+							'flatfull/img/reports_images/User-reports.png',
+							'flatfull/img/reports_images/Call-Outcomes.png',
+							'flatfull/img/reports_images/contact.png',
+							'flatfull/img/reports_images/user-activities.png',
+							'flatfull/img/reports_images/Daily-reports.png',
+							'flatfull/img/reports_images/Call_Report_Time.png',
+							'flatfull/img/reports_images/Rep_Performance.png',
+							'flatfull/img/reports_images/Comparison_Report.png',
+							]);
+				initializeReportsListeners();
+				hideTransitionBar();
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
+				var tab_id=$('a[href="'+window.location.hash+'"]').parents('.tab-pane').attr('id');
+				if(tab_id!=undefined){
+						tab_id=$('a[href="#'+tab_id+'"]').parents('.maintab').find('a').attr("href").substring(1);
+						_agile_set_prefs('reports_tab', tab_id);
+					}
+				var reportsTab = _agile_get_prefs("reports_tab");
+				$('.sub-nav-tab',$('#reports-tab-container a[href="#'+reportsTab+'"]').parent()).show();
+				$('#reports-tab-container a[href="#'+reportsTab+'"]').parent().addClass('report-selected');
+				
+
+					$('[data-toggle="tooltip"]').tooltip();
+					callback();
+
+				}, "#content");
+				
+ 	}
  };
 
 
@@ -689,7 +763,7 @@ getRepPerformanceLog : function(url) {
 function initReportLibs(callback)
 {
 
-	head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _AGILE_VERSION, function()
+	head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _agile_get_file_hash('date-range-picker.js'), function()
 	{
 		callback();
 

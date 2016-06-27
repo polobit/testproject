@@ -332,6 +332,7 @@ function our_domain_sync() {
 			// Creates a new contact and assigns it to global value
 			var email = CURRENT_DOMAIN_USER['email'];
 			var emailType = email.split("@")[1].split(".")[0];
+
 			var param = {
 					"email" : CURRENT_DOMAIN_USER['email'],
 					"first_name" : first_name,
@@ -352,6 +353,7 @@ function our_domain_sync() {
 					initWebrules();
 				});
 			}
+
 		})
 		// Gets contact based on the the email of the user logged in
 
@@ -523,6 +525,7 @@ function add_created_user_info_as_note_to_owner(owner, callback) {
 
 }
 
+
 // add note to owner when subscription is cancelled
 function add_cancel_subscription_info_as_note_to_owner(cus_email, callback) {
 	var note = {};
@@ -693,19 +696,18 @@ function update_contact_in_our_domain(user_email, response, callback){
 		return;
 	}
 
-	var phone = "";
-	if(response.phone){
-		phone = response.phone;
-	}
 	try{
+		var json = {
+		    "email": response.email,
+		}
+		if(response.phone){
+			json.phone = response.phone;
+		}
 
 		if (CURRENT_DOMAIN_USER.email != user_email)
 		   _agile.set_email(user_email);
 
-		_agile.update_contact({
-		    "email": response.email,
-		    "phone":phone
-		}, {
+		_agile.update_contact(json, {
 		    success: function (data) {
 		        console.log("success");
 		        processCallback(callback);

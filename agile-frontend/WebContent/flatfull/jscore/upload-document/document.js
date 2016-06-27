@@ -159,7 +159,7 @@ function saveDocumentURL(url, network, id)
  * @param update
  * @returns {Boolean}
  */
-function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
+function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 {
 	// Returns, if the save button has disabled attribute
 	if ($(saveBtn).attr('disabled'))
@@ -330,6 +330,33 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 					trigger : true
 				});
 			}
+		},
+		error : function(model, response)
+		{
+			if(!modal_id)
+			{
+				hideTransitionBar();
+				enable_save_button($(saveBtn));
+				if(!modal_id && json && json.contact_ids)
+				{
+					// Removes the contact id from related to contacts
+					json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
+				}
+				var $ele = saveBtn.parent().find(".save-status");
+				$ele.html("<i style='color:#B94A48;'>"+Handlebars.compile('{{name}}')({name : response.responseText})+"</i>");
+				setTimeout(function()
+				{
+					$ele.html('');
+				}, 2000);
+				return;
+			}
+			enable_save_button($(saveBtn));
+			var $ele = $(".save-status", $("#"+modal_id));
+			$ele.html("<i style='color:#B94A48;'>"+Handlebars.compile('{{name}}')({name : response.responseText})+"</i>");
+			setTimeout(function()
+			{
+				$ele.html('');
+			}, 2000);
 		}
 	});
 }

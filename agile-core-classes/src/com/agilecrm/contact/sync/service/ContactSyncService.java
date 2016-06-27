@@ -161,6 +161,13 @@ public abstract class ContactSyncService implements IContactSyncService
 	    // notes/tasks
 	    // and relating to newly created contact
 	    contactWrapper.saveCallback();
+	    System.out.println("Contact-------" + contact);
+	    
+	    if(contact.contact_company_id!=null){
+	    Contact related_company=ContactUtil.getContact(Long.parseLong(contact.contact_company_id));
+	    addTagToCompany(related_company);
+	    related_company.save();
+	    }
 	    return contact;
 
 	}
@@ -321,6 +328,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    
 
 	    int count = contact.dao.getCountByProperty(queryMap);
+	    System.out.println("Number of count of contact found for given querymap is " + count);
 	    if (count > 0)
 	    {
 		isDuplicate = isDuplicateById = true;
@@ -355,8 +363,10 @@ public abstract class ContactSyncService implements IContactSyncService
 	{
 	    oldContact = Contact.dao.getByProperty(queryMap);
 	    if (oldContact != null)
-		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
-	    return contact;
+		{
+	    	contact = ContactUtil.mergeContactFeilds(contact, oldContact);
+	    	 return contact;
+		}
 	}
 
 	return ContactUtil.mergeContactFields(contact);
@@ -377,14 +387,20 @@ public abstract class ContactSyncService implements IContactSyncService
 		queryMap = new HashMap<String , Object>();
     queryMap.put("properties.name", Contact.QUICKBOOK_SYNC);
     queryMap.put("properties.value", contact.getContactFieldValue(Contact.QUICKBOOK_SYNC));
+    
+    System.out.println("Quickbook id for the ongoing contact is "+ contact.getContactFieldValue(Contact.QUICKBOOK_SYNC) );
 	}
+	
+	
 	boolean isUpdated= findDuplicateAndMerge(contact,queryMap);
+	System.out.println("Is Contact duplicate  in contactsyncimpl is" + isUpdated);
 	if (isUpdated)
 	{
+		
 	    contact = mergeContacts(contact,queryMap);
 
 	    accessControl.setObject(contact);
-	    if (!accessControl.canDelete())
+	    if (!accessControl.canCreate())
 	    {
 		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
 		return contact;
@@ -394,8 +410,9 @@ public abstract class ContactSyncService implements IContactSyncService
 
 		contact.bulkActionTracker = bulk_action_tracker;
 		contact.save();
-
+		
 		syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
+		System.out.println("Total merged contact " + syncStatus.get(ImportStatus.MERGED_CONTACTS));
 	    }
 	    catch (AccessDeniedException e)
 	    {
@@ -420,6 +437,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	    }
 	    restriction.contacts_count++;
 	    syncStatus.put(ImportStatus.NEW_CONTACTS, syncStatus.get(ImportStatus.NEW_CONTACTS) + 1);
+	    System.out.println("Total created contact " + syncStatus.get(ImportStatus.MERGED_CONTACTS));
 	}
 	else
 	{
@@ -449,5 +467,22 @@ public abstract class ContactSyncService implements IContactSyncService
     protected boolean canSync()
     {
 	return contactRestriction.can_create();
+    }
+    
+    /**
+     * Adds the tag to contact.
+     * 
+     * @param contact
+     *            the contact
+     */
+    private void addTagToCompany(Contact contact)
+    {
+	String tag;
+	if (prefs.type == Type.GOOGLE)
+	    tag = "gmail company".toLowerCase();
+	else
+	    tag = prefs.type.toString().toLowerCase() + " company";
+
+	contact.tags.add(StringUtils.capitalize(tag));
     }
 }

@@ -1,11 +1,16 @@
 package com.agilecrm.contact.deferred;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Contact.Type;
+import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.util.MilestoneUtil;
@@ -70,12 +75,20 @@ public class UpdateCompanyName implements DeferredTask
     
     public void saveCompanywithName(String namespace)
     {
-    	List<Contact> companies; 
+    	
     	 NamespaceManager.set(namespace);
-		 companies = ContactUtil.getAllCompaniesByOrder("name");
-			for (Contact company : companies)
-			{
-				if(company.name=="")
+    	 Map<String, Object> searchMap = new HashMap<String, Object>();
+    	 searchMap.put("type", Type.COMPANY);
+    	 ContactFilterResultFetcher fetcher= new ContactFilterResultFetcher(searchMap,null,200,Integer.MAX_VALUE);
+ 	// contacts = ContactUtil.getAllContacts(200,null);
+		//fetcher.fetchNextSet();
+		
+		do
+		{
+			List<Contact> companies = fetcher.nextSet();
+				System.out.println("Fetcher"+ fetcher.getTotalFetchedCount());
+				for(Contact company :companies){
+					if(company.name=="")
 					{
 					if(company.getContactField(Contact.NAME)!=null)
     				{
@@ -83,6 +96,8 @@ public class UpdateCompanyName implements DeferredTask
 						company.save();
     				}
 					}
-			}
-    }
+				}
+			}while (fetcher.hasNextSet());
+ }
+		
 }

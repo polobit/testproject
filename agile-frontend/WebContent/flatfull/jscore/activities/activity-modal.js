@@ -44,7 +44,6 @@ $(function() {
 		console.log(this);
 		// Save functionality for task by checking task or not
 		if ($("#hiddentask").val() == "task") {
-
 			save_task('taskForm', 'activityTaskModal', false, this);
 		} else {
 			var currentDiv = $('#activityModal').find("#current_div").val();

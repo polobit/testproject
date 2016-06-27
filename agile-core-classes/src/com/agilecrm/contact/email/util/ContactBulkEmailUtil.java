@@ -6,7 +6,10 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
@@ -54,7 +57,7 @@ public class ContactBulkEmailUtil
 			// Custom date labels to convert epoch to Date format
 			List<String> dateCustomFieldLabels = AgileTaskletUtil.getDateCustomLabelsFromCache();
 			String timezone = AccountPrefsUtil.getTimeZone();
-
+			
 			for (Contact contact : contactList)
 			{
 
@@ -115,9 +118,12 @@ public class ContactBulkEmailUtil
 						// Agile label to outgoing emails
 						replacedBody = EmailUtil.appendAgileToHTML(replacedBody, "email", "Sent using",
 								emailSender.isEmailWhiteLabelEnabled());
-
+						String emailGatewayName = null;
+						if(emailSender!=null && emailSender.emailGateway!=null && emailSender.emailGateway.email_api!=null){
+							emailGatewayName = emailSender.emailGateway.email_api.name();
+						}
 						emailSender.addToQueue(len >= 200 ? AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE
-								: AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, null, null, null, domain, fromEmail,
+								: AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, emailGatewayName, null, null, domain, fromEmail,
 								fromName, email, null, null, replacedSubject, fromEmail, replacedBody, null, null,
 								null, null);
 						

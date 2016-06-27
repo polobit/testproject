@@ -251,11 +251,24 @@ var portlet_utility = {
 			durationJson['end_date_str'] = 'now';
 		} else if (duration == 'today' || duration == '1-day' || duration == '2-days' || duration == '1-week' || duration == '1-month' || duration == 'all-over-due') {
 			durationJson['end_date_str'] = 'TOMORROW';
-		} else {
+		}
+		else if(duration=='Custom'){
+			if(base_model.get('name')=='Deal Goals')
+			{
+				durationJson['start_date_str'] = 'custom-start-goals'
+				durationJson['end_date_str'] = 'custom-end-goals';
+			}
+			else{
+			durationJson['start_date_str'] = 'custom-start'
+				durationJson['end_date_str'] = 'custom-end';
+			}
+		} 
+		else {
 			durationJson['start_date_str'] = ''
 				+ base_model.get('settings').duration + '-start';
 			durationJson['end_date_str'] = '' + base_model.get('settings').duration + '-end';
 		}
+		
 
 		return callback(durationJson);
 	},
@@ -341,6 +354,7 @@ var portlet_utility = {
 			"Average Deviation" : "portlets-Tasks-Deviation",
 			"Webstat Visits" : "portlets-webstat-visits",
 			"Referralurl stats" : "portlets-Referralurl-stats-report",
+			"Marketing Onboarding" : "portlets-marketing-onboarding",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -503,10 +517,10 @@ var portlet_utility = {
 								+ base_model.get('settings').duration
 								+ '&start-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str)
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str),
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]),
 						templateKey : 'portlets-contacts-email-opens',
 						sort_collection : false,
 						individual_tag_name : 'tr',
@@ -538,9 +552,11 @@ var portlet_utility = {
 					+ row_position;
 			var url = '/core/api/portlets/emails-opened-pie-chart?duration='
 					+ base_model.get('settings').duration + '&start-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str);
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 			portlet_graph_data_utility.emailsOpenedGraphData(base_model,
 					selector, url);
 			setPortletContentHeight(base_model);
@@ -599,10 +615,10 @@ var portlet_utility = {
 								+ base_model.get('settings').duration
 								+ '&start_time='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str)
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end_time='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str),
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]),
 						templateKey : 'portlets-events',
 						sort_collection : false,
 						individual_tag_name : 'tr',
@@ -611,9 +627,9 @@ var portlet_utility = {
 							loadGoogleEventsForPortlets(
 									p_el,
 									portlet_utility
-											.getStartAndEndDatesOnDue(start_date_str),
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"]),
 									portlet_utility
-											.getStartAndEndDatesOnDue(end_date_str));
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]));
 							initializePortletsListeners();
 						}
 					});
@@ -629,10 +645,10 @@ var portlet_utility = {
 								+ base_model.get('settings').duration
 								+ '&start_time='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str)
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end_time='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str),
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]),
 						templateKey : 'portlets-tasks',
 						sort_collection : false,
 						individual_tag_name : 'tr',
@@ -655,10 +671,10 @@ var portlet_utility = {
 								+ base_model.get('settings').duration
 								+ '&start-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str)
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str)
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 								+ '&revenue='
 								+ leaderboardCate.revenue
 								+ '&dealsWon='
@@ -695,6 +711,17 @@ var portlet_utility = {
 																	+ ' > .portlet_body')
 															.width() * 100)
 													+ '%');
+							 $('.calls_popover',('#p-body-' + base_model.get('column_position') + '-'
+											+ base_model.get('row_position'))).tooltip(
+								{
+									
+									"html" : "true",
+									"placement" : "right",
+									"container" : "body",
+									"template": '<div class="tooltip leaderboard_calls"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+
+								});
+							
 						}
 					});
 			portlet_ele
@@ -733,9 +760,11 @@ var portlet_utility = {
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
 				url : '/core/api/portlets/customer-activity'+options
 				+ '&start_time='
-				+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+				+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end_time='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str),
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]),
 				sortKey : 'time',
 				descending : true,
 				templateKey : "portlets-activities-list-log",
@@ -769,9 +798,10 @@ var portlet_utility = {
 			emailsSpamCount, emailsSkippedCount, emailsHardBounceCount, emailsSoftBounceCount, that = portlet_ele;
 			var url = '/core/api/portlets/campaign-stats?duration='
 					+ base_model.get('settings').duration + '&start-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 					+ '&time_zone=' + (new Date().getTimezoneOffset())
 					+ '&campaign_type='
 					+ base_model.get('settings').campaign_type;
@@ -937,11 +967,10 @@ var portlet_utility = {
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ getUTCMidNightEpochFromDate(new Date(portlet_utility
-							.getStartAndEndDatesOnDue(base_model
-									.get('settings').duration) * 1000))
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"]) * 1000))
 					+ '&end-date='
 					+ getUTCMidNightEpochFromDate(new Date(portlet_utility
-							.getStartAndEndDatesOnDue("TOMORROW") * 1000));
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]) * 1000));
 			portlet_graph_data_utility.growthGraphData(base_model, selector,
 					url);
 			setPortletContentHeight(base_model);
@@ -982,9 +1011,11 @@ var portlet_utility = {
 			}
 			var url = '/core/api/portlets/calls-per-person?duration='
 					+ base_model.get('settings').duration + '&start-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 					+ '&user=' + users;
 			portlet_graph_data_utility.callsPerPersonGraphData(base_model,
 					selector, url);
@@ -1005,9 +1036,11 @@ var portlet_utility = {
 			var url = '/core/api/portlets/task-report?group-by='
 					+ base_model.get('settings')["group-by"] + '&split-by='
 					+ base_model.get('settings')["split-by"] + '&start-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 					+ '&tasks=' + base_model.get('settings').tasks + '&user='
 					+ users;
 			portlet_graph_data_utility.taskReportGraphData(base_model,
@@ -1024,9 +1057,11 @@ var portlet_utility = {
 			var url = 'core/api/opportunity/stats/details/'
 					+ pipeline_id
 					+ '?min='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&max='
-					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 					+ '';
 			portlet_graph_data_utility.revenueGraphData(base_model, selector,
 					url);
@@ -1040,9 +1075,11 @@ var portlet_utility = {
 			var newContactsurl = '/core/api/portlets/activity-overview-report?reportType=newContacts&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)
+					+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			setTimeout(
 					function() {
@@ -1068,9 +1105,9 @@ var portlet_utility = {
 			var wonDealsurl = '/core/api/portlets/activity-overview-report?reportType=wonDeals&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			setTimeout(
 					function() {
@@ -1104,9 +1141,9 @@ var portlet_utility = {
 			var newDealsurl = '/core/api/portlets/activity-overview-report?reportType=newDeals&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			setTimeout(
 					function() {
@@ -1140,9 +1177,9 @@ var portlet_utility = {
 			var campaignEmailsSentsurl = '/core/api/portlets/activity-overview-report?reportType=campaignEmailsSent&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&end-date='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			setTimeout(
 					function() {
@@ -1235,10 +1272,10 @@ var portlet_utility = {
 			var url = '/core/api/portlets/goals/'+CURRENT_DOMAIN_USER.id
 						+ '?start-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str)
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str);
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
 							url,
@@ -1266,10 +1303,9 @@ var portlet_utility = {
 			var url = 'core/api/portlets/incomingDeals/'
 					+ owner_id
 					+ '?min='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&max='
-					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1)
-					+ '&frequency='
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])					+ '&frequency='
 					+ base_model.get('settings').frequency
 					+ '&type='
 					+ base_model.get('settings').type;
@@ -1295,9 +1331,9 @@ var portlet_utility = {
 					+ track_id + '/'
 					+ source_id
 					+ '?min='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
+					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 					+ '&max='
-					+ (portlet_utility.getStartAndEndDatesOnDue(end_date_str) - 1);
+					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])
 
 			var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
 			var topPos = 50 * sizey;
@@ -1314,12 +1350,12 @@ var portlet_utility = {
 			break;
 		}
 			case "Average Deviation": {
-			var url = '/core/api/portlets/averageDeviation?start-date='
+			var url = '/core/api/portlets/averageDeviation?+start-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(start_date_str)
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])
 								+ '&end-date='
 								+ portlet_utility
-										.getStartAndEndDatesOnDue(end_date_str);
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]);
 			portlet_graph_data_utility.taskDeviationGraphData(base_model,
 					selector, url);
 			setPortletContentHeight(base_model);
@@ -1327,9 +1363,11 @@ var portlet_utility = {
 		}
 		case "Webstat Visits": {
 			var url = '/core/api/web-stats/reports?start_time='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
-					+ '&end_time='
-					+portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000;
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])*1000
+								+ '&end_time='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])*1000;
 			portlet_graph_data_utility.webstatVisitsGraphData(base_model,
 					selector, url);
 			setPortletContentHeight(base_model);
@@ -1346,9 +1384,11 @@ var portlet_utility = {
 			$('.'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+ topPos
 								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			var url = '/core/api/web-stats/refurl-stats?start_time='
-					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)*1000
-					+ '&end_time='
-					+ portlet_utility.getStartAndEndDatesOnDue(end_date_str)*1000
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])*1000
+								+ '&end_time='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"])*1000
 					+ '&time_zone=' + (new Date().getTimezoneOffset());
 			portlet_graph_data_utility.fetchPortletsGraphData(url,function(data) {
 				if(data.length==0){
@@ -1462,6 +1502,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Emails Sent": {
@@ -1473,6 +1514,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Growth Graph": {
@@ -1508,6 +1550,8 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
+
 			break;
 		}
 		case "Pending Deals": {
@@ -1680,6 +1724,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Deals Funnel": {
@@ -1727,6 +1772,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Calls Per Person": {
@@ -1744,6 +1790,7 @@ var portlet_utility = {
 					base_model, "calls-user-list", "calls-user", elData, function(){
 						that.addPortletSettingsModalContent(base_model, "portletsCallsPerPersonSettingsModal");
 					});
+				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Task Report": {
@@ -1774,6 +1821,7 @@ var portlet_utility = {
 					elData, function(){
 						that.addPortletSettingsModalContent(base_model, "portletsTaskReportSettingsModal");
 					});
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Stats Report": {
@@ -1785,6 +1833,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Agenda": {
@@ -1796,6 +1845,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Today Tasks": {
@@ -1807,6 +1857,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Leaderboard": {
@@ -1817,7 +1868,8 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-
+				
+				initializeCustomRangeInModal(base_model,elData);
 			if (leaderboardCate && leaderboardCate.revenue)
 				$("#category-list", elData).find('option[value=revenue]').attr(
 						"selected", "selected");
@@ -1887,6 +1939,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Campaign stats": {
@@ -1916,6 +1969,7 @@ var portlet_utility = {
 					$('.loading-img').hide();
 				}
 			});
+			initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 
@@ -1928,6 +1982,8 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Incoming Deals": {
@@ -1942,6 +1998,7 @@ var portlet_utility = {
 			$("#split-by-incoming-deals", elData).find('option[value='+ base_model.get("settings")["type"] + ']').attr("selected", "selected");
 			$("#frequency-incoming-deals", elData).find('option[value='+ base_model.get("settings")["frequency"] + ']').attr("selected", "selected");
 			portlet_utility.setOwners("owner", base_model, elData);
+			initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Lost Deal Analysis": {
@@ -1956,6 +2013,7 @@ var portlet_utility = {
 			portlet_utility.setOwners("owner-lost-deal-analysis", base_model, elData);
 			portlet_utility.setTracks("track-lost-deal-analysis", base_model, elData);
 			portlet_utility.setSources("source-lost-deal-analysis", base_model, elData);
+			initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 
@@ -1967,6 +2025,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 						break;
 		}
 
@@ -1979,6 +2038,7 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 					break;
 		}
 		case "Webstat Visits": {
@@ -1989,6 +2049,7 @@ var portlet_utility = {
 				               'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Referralurl stats": {
@@ -1998,6 +2059,7 @@ var portlet_utility = {
 				               'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+					initializeCustomRangeInModal(base_model,elData);
 			break;		
 			
 		}
@@ -2007,7 +2069,8 @@ var portlet_utility = {
 				|| base_model.get('name') == "Closures Per Person"
 				|| base_model.get('name') == "Deals Funnel") {
 			$('#due-date', elData).datepicker({
-				format : CURRENT_USER_PREFS.dateFormat
+				format : CURRENT_USER_PREFS.dateFormat,
+				autoclose: true
 			});
 		}
 	},
@@ -2018,6 +2081,7 @@ var portlet_utility = {
 	 */
 	addPortletSettingsModalContent : function(base_model, modal_id) {
 		$('#' + modal_id).modal('show');
+		$('.datepicker').hide();
 		$(
 				'#'
 						+ modal_id
@@ -2210,9 +2274,23 @@ var portlet_utility = {
 	/**
 	 * Get the start and end dates epoch based on duration.
 	 */
-	getStartAndEndDatesOnDue : function(duration) {
+	getStartAndEndDatesOnDue : function(duration,custom_date) {
 
 		var d = new Date();
+		if(duration=="custom-start" || duration=="custom-start-goals")
+			return custom_date;
+		if(duration=="custom-end")
+		{
+			custom_date=custom_date+(24*60*60)-1;
+			return custom_date;
+		}
+		if(duration=="custom-end-goals")
+		{
+			var month_end=new Date(custom_date*1000);
+			month_end.setMonth(month_end.getMonth()+1);
+			custom_date=(month_end.setMilliseconds(0)/1000)-1;
+			return custom_date;
+		}
 
 		// Last 24 Hrs
 		if (duration == "24-hours") {
@@ -2434,6 +2512,7 @@ var portlet_utility = {
 			d.setDate(1);
 		}
 
+
 		return (getGMTTimeFromDate(d) / 1000);
 	},
 
@@ -2576,3 +2655,68 @@ var portlet_utility = {
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
 	}
 };
+
+function initializeCustomRangeInModal(base_model,elData)
+{
+	if(base_model.get("settings").duration=='Custom'){
+					$('.daterange',elData).removeClass('hide');
+					
+	if(base_model.get('name')=='Deal Goals')
+			{
+				$("#start_date", elData)
+					.val(
+							
+									stringToDate(base_model.get("settings")["start-date"]*1000,'mmm yyyy')).blur();
+					$("#end_date", elData)
+					.val(
+							
+									stringToDate(base_model.get("settings")["end-date"]*1000,'mmm yyyy')).blur();
+				$('#start_date',elData).datepicker('remove');
+				$('#end_date',elData).datepicker('remove');
+				$('#start_date',elData).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+				$('#end_date',elData).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+	
+			}
+			else{
+				$("#start_date", elData)
+					.val(
+							
+									getDateInFormatFromEpoc(base_model.get("settings")["start-date"]));
+					$("#end_date", elData)
+					.val(
+							
+									getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
+					$('#start_date',elData).datepicker('remove');
+				$('#end_date',elData).datepicker('remove');
+
+var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
+		{
+			// If event start date is changed and end date is less than start date,
+			// change the value of the end date to start date.
+			var eventDate2;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',elData).val()));
+			else
+			 	eventDate2 = new Date($('#end_date',elData).val());
+			if (ev.date.valueOf() > eventDate2.valueOf())
+			{
+				//var en_value=ev.date.valueOf();
+				$('#end_date',elData).val($('#start_date',elData).val());
+			}
+
+		});
+
+
+		$('#end_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true},'hide');
+		}
+	}
+		else
+			$(elData).find('.daterange').addClass('hide');
+			$(elData).find(".invalid-range").parents('.form-group').hide();
+
+}
+
+function stringToDate(date,format)
+{
+	return new Date(date).format(format);
+}

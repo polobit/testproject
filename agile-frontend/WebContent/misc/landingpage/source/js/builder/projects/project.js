@@ -201,6 +201,12 @@ angular.module('builder.projects', [])
 
 			//get new html
 			if (what == 'all' || what.indexOf('html') > -1) {
+				var formEmbedEl = $rootScope.frameDoc.getElementsByClassName("form-embed-container")[0];
+      			if(typeof formEmbedEl != "undefined") {
+      				var formIdd = formEmbedEl.getAttribute("data-embed-agile-form");
+            	  	formEmbedEl.innerHTML = "";
+            	  	formEmbedEl.innerHTML = '<iframe src="../../forms/'+formIdd+'" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="100%" onload="parent.parent.formEmbedIFrameLoaded(this)"></iframe>';
+      			}
 				page.html = style_html(dom.getHtml());
 			}
 			
@@ -243,8 +249,6 @@ angular.module('builder.projects', [])
                       					$(".saveLandingPageButtonText",parent.document).html("Save Page");
                                   	}, 3000);
                         	  }else{
-                        		   
-
                                   
                                   var webPageObject = {
                       			  "name": landingPageName,
@@ -276,9 +280,11 @@ angular.module('builder.projects', [])
                                   	var returnDataFormat = {"pages": []};
                                   	returnDataFormat.pages[0] = data;
                                   	returnDataFormat.pages[0].name = "index";
-                      				project.active = returnDataFormat;
+                                  	// project.active = returnDataFormat;
 
-                      				$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
+                      				console.log("Requested method== "+reqMethod);
+                      				if(reqMethod==='POST')
+                      					$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
 
                       				$timeout(function() {
                                       	$(".saveLandingPageButton",parent.document).prop("disabled",false);

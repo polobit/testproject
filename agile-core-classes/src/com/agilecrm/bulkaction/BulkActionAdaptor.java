@@ -16,6 +16,7 @@ import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.Key;
 
 public abstract class BulkActionAdaptor implements DeferredTask
@@ -33,6 +34,19 @@ public abstract class BulkActionAdaptor implements DeferredTask
 
     public void run()
     {
+    
+    try
+	{
+    	// Flushes any pending logs. Tasks were getting struck in queue, so added this line 
+    	// on suggestion of google support
+		ApiProxy.flushLogs();
+	}
+	catch (Exception e1)
+	{
+		System.err.println("Exception occurred while flushing logs..." + e1.getMessage());
+		e1.printStackTrace();
+	}
+    	
 	// TODO Auto-generated method stub
 	if (!isValidTask())
 	    return;
@@ -88,18 +102,54 @@ public abstract class BulkActionAdaptor implements DeferredTask
 
 	    UserAccessControl access = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null, user);
 
-	    if (contacts != null && (!access.hasScope(UserAccessScopes.DELETE_CONTACTS) || !access.hasScope(UserAccessScopes.EDIT_CONTACT)))
+	    if (contacts != null && !access.hasScope(UserAccessScopes.EDIT_CONTACT))
 	    {
 		Iterator<Contact> contactIterator = contacts.iterator();
 		while (contactIterator.hasNext())
 		{
 		    Contact contact = contactIterator.next();
 		    access.setObject(contact);
-		    if (!access.canDelete())
+		    if (!access.canCreate())
 			contactIterator.remove();
 		}
 	    }
 
+	}
+
+	return contacts;
+
+    }
+    
+    protected List<Contact> fetchContactsForDelete()
+    {
+	if (contacts != null)
+	    return contacts;
+
+	try
+	{
+		UserAccessControl access = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null, user);
+		//Checking for contacts delete permission, if no permission will return empty list
+		if(!access.hasScope(UserAccessScopes.DELETE_CONTACT))
+		{
+			return new ArrayList<Contact>();
+		}
+	    contacts = Contact.dao.fetchAllByKeys(new ArrayList<Key<Contact>>(contactKeySet));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    contacts = new ArrayList<Contact>();
+	    for (Key<Contact> contactKey : contactKeySet)
+	    {
+		try
+		{
+		    contacts.add(Contact.dao.get(contactKey));
+		}
+		catch (Exception e1)
+		{
+		    e.printStackTrace();
+		}
+	    }
 	}
 
 	return contacts;

@@ -31,6 +31,7 @@ import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.JsonSyntaxException;
 import com.googlecode.objectify.Key;
@@ -129,6 +130,11 @@ public class ContactFilterResultFetcher
 		getDomainUser());
 
 	System.out.println(access.getCurrentUserScopes());
+	
+	if(domainUserId != null)
+	{
+		BulkActionUtil.setSessionManager(domainUserId);
+	}
 
 	try
 	{
@@ -157,8 +163,6 @@ public class ContactFilterResultFetcher
 	{
 	    System.out.println("Exception while parsing dynamic filters for bulk operations : " + e);
 	}
-
-	BulkActionUtil.setSessionManager(domainUserId);
 
 	setAvailableCount();
 
@@ -350,7 +354,6 @@ public class ContactFilterResultFetcher
 		System.out.println("info" + SessionManager.get());
 		if (access != null
 			&& !(access.hasScope(UserAccessScopes.VIEW_CONTACTS) && (access
-				.hasScope(UserAccessScopes.DELETE_CONTACTS) || access
 				.hasScope(UserAccessScopes.UPDATE_CONTACT) || access
 				.hasScope(UserAccessScopes.EDIT_CONTACT))))
 		{
@@ -360,7 +363,7 @@ public class ContactFilterResultFetcher
 		    {
 			Contact contact = iterator.next();
 			access.setObject(contact);
-			if (!access.canDelete())
+			if (!access.canCreate())
 			{
 			    System.out.println("Excluding contact " + contact.id);
 			    iterator.remove();
@@ -563,7 +566,7 @@ public class ContactFilterResultFetcher
 
     private void modifyDAOCondition()
     {
-	if (!hasScope(UserAccessScopes.UPDATE_CONTACT) && (!hasScope(UserAccessScopes.DELETE_CONTACTS) || !hasScope(UserAccessScopes.EDIT_CONTACT)))
+	if (!hasScope(UserAccessScopes.UPDATE_CONTACT) && !hasScope(UserAccessScopes.EDIT_CONTACT))
 	{
 	    if (domainUserId == null)
 		return;
@@ -575,8 +578,11 @@ public class ContactFilterResultFetcher
 
     private void modifyFilterCondition()
     {
+    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+    		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules, getDomainUser());
+    
 	if (hasScope(UserAccessScopes.VIEW_CONTACTS)
-		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.EDIT_CONTACT)))
+		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.EDIT_CONTACT)))
 	{
 	    if (domainUserId == null)
 		return;

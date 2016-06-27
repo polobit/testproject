@@ -270,46 +270,51 @@ var contact_details_tab = {
 		},
 		load_campaigns : function()
 		{
-			campaignsView = new Base_Collection_View({
-				url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
-	            restKey: "logs",
-	            templateKey: "campaigns",
-	            individual_tag_name: 'li',
-	            cursor : true,
-	            page_size : 20,
-	            sort_collection:false,
-	            postRenderCallback: function(el) {            	
+			// Show Loader
+			$('#campaigns', App_Contacts.contactDetailView.el).html("");
+			getCampaignContact(function(){
 
-	            	$('#unsubscribe-modal', el).off('click');
+				campaignsView = new Base_Collection_View({
+					url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
+		            restKey: "logs",
+		            templateKey: "campaigns",
+		            individual_tag_name: 'li',
+		            cursor : true,
+		            page_size : 20,
+		            sort_collection:false,
+		            postRenderCallback: function(el) {            	
 
-	            	$('#unsubscribe-modal', el).on('click', function(e){
-	            		e.preventDefault();	            	    
+		            	$('#unsubscribe-modal', el).off('click');
 
-						show_resubscribe_modal();
+		            	$('#unsubscribe-modal', el).on('click', function(e){
+		            		e.preventDefault();	            	    
 
-	            	});
+							show_resubscribe_modal();
 
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	              		 $("time.log-created-time", el).timeago();
-	              	});
-	            	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), campaignsView);
-	            },
-	            appendItemCallback : function(el)
-				{
-					includeTimeAgo(el);
-				} 
+		            	});
+
+		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+		              		 $("time.log-created-time", el).timeago();
+		              	});
+		            	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), campaignsView);
+		            },
+		            appendItemCallback : function(el)
+					{
+						includeTimeAgo(el);
+					} 
+		        });
+
+				campaignsView.collection.fetch({
+					success: function(){
+
+						// Verify whether contact updated or not
+						checkContactUpdated();
+					}
+
+				});	
+
+	            $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
 	        });
-
-			campaignsView.collection.fetch({
-				success: function(){
-
-					// Verify whether contact updated or not
-					checkContactUpdated();
-				}
-
-			});	
-
-	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
 		},
 		load_tickets: function(){
 			loadServiceLibrary(function(){
@@ -860,24 +865,23 @@ function show_resubscribe_modal(){
 											  }
 									});
 
-									
-									getTemplate('contact-detail-unsubscribe-campaigns-list', {}, undefined, function(campaigns_list_template){
+									getCampaignContact(function(contact_json){
 
-										$('#unsubscribe-campaigns-list', el).html(campaigns_list_template);
+										getTemplate('contact-detail-unsubscribe-campaigns-list', {}, undefined, function(campaigns_list_template){
 
-										$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
+											$('#unsubscribe-campaigns-list', el).html(campaigns_list_template);
+											$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
 
-										var $tooltip = $('[data-toggle="tooltip"]').tooltip();
+											var $tooltip = $('[data-toggle="tooltip"]').tooltip();
+											$tooltip.on('shown.bs.tooltip', function(){
+											$(this).next('.tooltip').css({'padding-right': '2px'});
 
-										$tooltip.on('shown.bs.tooltip', function(){
-											
-											 $(this).next('.tooltip').css({'padding-right': '2px'});
-
+											});
+										
 										});
-
+									});
 
 									
-									});
 									
 									// Unsubscribe
 									unsubscribe_contact();
@@ -930,3 +934,38 @@ function get_email_workflows(workflows){
     return email_workflows;
 
 }
+
+/**
+	 * Returns Active Campiagn ContactContact Model from contactDetailView collection
+	 * 
+	 */
+function getCampaignContact(callback){
+
+	    if(!(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model))
+	    	return;
+
+
+		// To show Active Campaigns list immediately after campaign
+		// assigned.
+		if (CONTACT_ASSIGNED_TO_CAMPAIGN)
+		{
+			CONTACT_ASSIGNED_TO_CAMPAIGN = false;
+
+			// fetches updated contact json
+			$.ajax({
+					 type : 'GET', 
+					 url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'),					
+					 dataType : 'json',
+					 success : function(response){
+					 	// Updates Contact Detail model
+						App_Contacts.contactDetailView.model.set(response);
+						callback(response);
+					}});
+			return;
+		}
+
+		// if simply Campaigns tab clicked, use current collection
+		callback(App_Contacts.contactDetailView.model.toJSON());
+			
+}
+

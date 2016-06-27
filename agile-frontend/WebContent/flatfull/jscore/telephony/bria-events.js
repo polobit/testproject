@@ -3,113 +3,21 @@
  * 
  *@author Prakash 
  */
- var Bria_Call_Noty;
- //callDirection : Incoming, Outgoing
- //callStatus :Ideal, Incoming,Missed,  Connecting,Connected,  Ended,Failed
-
- var displayName="";
  
 $(function()
 {
-	
-	$('body').on('click', '.contact-make-bria-call, .Bria_call', function(e)
-	{
-	  	e.preventDefault();
-		var command = "startCall";
-		var number =  $(this).closest(".contact-make-call").attr("phone");
-		var callId = "";
-		
-		if(checkForActiveCall()){
-			$('#briaInfoModal').html(getTemplate("briaCallStatusModal"));
-			$('#briaInfoModal').modal('show');
-			return;
-		}
-		
-		try{
-			 $('#skypeCallId').parents("ul").last().remove();
-				resetglobalCallVariables();
-				resetglobalCallForActivityVariables();
-		}catch(e){
-		}
-		
-		globalCall.callStatus = "dialing";
-		sendMessageToBriaClient(command,number,callId);
-		globalCall.calledFrom = "bria";
-		setTimerToCheckDialing("bria");
-		try{
-			var contactDetailsObj = agile_crm_get_contact();
-			globalCall.contactedId = contactDetailsObj.id;
-		}catch (e) {
-		}
-	});
-	
-// }
-
-
-//answer the callT
-	$('body').on('click', '.noty_bria_answer', function(e)
-		{
-			e.preventDefault();
-			var command = "answerCall";
-			var number =  $("#briaCallId").text();
-			var callId = $("#briaCallId").attr("value");
-			
-			sendMessageToBriaClient(command,number,callId);
-	  });
-	  
-//ignore the incoming call
-	$('body').on('click', '.noty_bria_ignore', function(e)
-		{
-			e.preventDefault();
-			var command = "ignoreCall";
-			var number =  $("#briaCallId").text();
-			var callId =  $("#briaCallId").attr("value");
-			
-			sendMessageToBriaClient(command,number,callId);
-
-	});
-
-
-//hang up the call	
-	$('body').on('click', '.noty_bria_hangup', function(e)
-		{
-		
-		e.preventDefault();
-		var command = "endCall";
-		var number =  $("#briaCallId").text();
-		var callId =  $("#briaCallId").attr("value");
-		
-		sendMessageToBriaClient(command,number,callId);
-
-	});
-
-
-//cancel the outgoing call	
-	$('body').on('click', '.noty_bria_cancel', function(e)
-	{
-		
-		e.preventDefault();
-		var command = "cancelCall";
-		var number =  $("#briaCallId").text();
-		var callId =  $("#briaCallId").attr("value");
-		
-		sendMessageToBriaClient(command,number,callId);
-	});
-
 	
 //mute the current call	
 	$('body').on('click', '.noty_bria_mute', function(e)
 	{
 		
 		e.preventDefault();
-		var command = "mute";
-		var number =  "";
-		var callId =  $("#briaCallId").attr("value");
-		
+		var json = {"command" : "mute"};
+	  	var action = makeCallAction(json);
+	  	sendActionToClient(action);
+		$('.noty_buttons').find('.noty_bria_unmute').css('display','inline');
 		$('.noty_buttons').find('.noty_bria_mute').toggle();
-		$('.noty_buttons').find('.noty_bria_unmute').toggle();
 		
-		sendMessageToBriaClient(command,number,callId);
 	});
 
 //unmute the call	
@@ -117,42 +25,16 @@ $(function()
 	{
 		
 		e.preventDefault();
-		var command = "unMute";
-		var number =  "";
-		var callId =  $("#briaCallId").attr("value");
-		
+		var json = {"command" : "unMute"};
+	  	var action = makeCallAction(json);
+	  	sendActionToClient(action);
+	  	
 		$('.noty_buttons').find('.noty_bria_unmute').toggle();
 		$('.noty_buttons').find('.noty_bria_mute').toggle();
-		sendMessageToBriaClient(command,number,callId);
 	});
 
 
 	
-//show dialpad	 ---note implemented
-	$('body').on('click', '.noty_bria_dialpad', function(e)
-	{
-	e.preventDefault();
-	e.stopPropagation();
-	$('#briaDialpad_btns').toggle();
-	});
-
-
-//this is to close the dialpad when clicked anywhere in screen
-	$(document).on('click', function(e){
-		if($('#briaDialpad_btns').length !=0){
-			$('#briaDialpad_btns').hide();
-		}
-		
-		
-	});	
-	
-// this is used to prevent dialpad from closing 	
-	$('body').on('click', '#briaDialpad_btns', function(e)	{
-		e.stopPropagation();
-	});
-	
-	
-
 //	This function is to hide the information shown to the client when the user is not running bria client
 	$('#briaInfoModal').on('click', '#bria_info_ok', function(e)	{
 		e.preventDefault();
@@ -170,64 +52,6 @@ $(function()
 
 	
 });
-
-//function for sending DTMF
-function briaSendDTMF(digit)
-{
-	if(digit){
-			play_sound("dtmf");
-			var command = "sendDTMF";
-			var number =  digit;
-			var callId =  "";
-			sendMessageToBriaClient(command,number,callId);
-			return;
-	}
-}
-
-// This function sends the command to local jar running in client side to make the call
-//{paramerters} -- command to execute, number to call and call id of the ingoing call if any
-function sendMessageToBriaClient(command, number, callid){
-	var domain = CURRENT_DOMAIN_USER['domain'];
-	var id = CURRENT_DOMAIN_USER['id'];
-	
-	if(command == "startCall"){
-		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
-				LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-				{
-			var msg = '<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Dialing<img src="/img/ajax-loader-cursor.gif" width="15px" height="5px"  style="margin-left:8px;margin-right:-3px;"></img> &nbsp;&nbsp;&nbsp;  </b>'+'<span id="briaCallId" class="text-xs" >' + number +'</span>'+'<br><br></span><div class="clearfix"></div>';
-					Bria_Call_Noty = noty({ text : msg, type : "confirm", layout : "bottomLeft",
-						callback: {
-							onCloseClick: function() {
-								sendMessageToBriaClient("endCurrentCall",number,"");
-							},
-						},
-					});
-				});
-	}
-	var image = new Image();
-	image.onload = function(png) {
-		console.log("bria sucess");
-		window.focus();
-	};
-	image.onerror= function(png) {
-		console.log("bria failure");
-		if (Bria_Call_Noty != undefined)
-			Bria_Call_Noty.close();
-		window.focus();
-		resetglobalCallVariables();
-		if(command == "getLogs"){
-			var message ={};
-			message["data"] = "";
-			handleLogsForBria(message);
-			showCallNotyMessage("Executable file is not running");
-			return;
-		}
-		$('#briaInfoModal').html(getTemplate("briaInfoModal"));
-		$('#briaInfoModal').modal('show');
-	};
-	
-	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Bria?";
-}
 
 /*
  * this wil create a dynamic message to show in noty - as per the current phhone status
@@ -250,34 +74,19 @@ function _getMessageBria(message, callback){
 	console.log("state--" + state + " number --" + number + "   briaCallId" + callId + "  displayName" + displayName);
 	
 	if (state == "ringing"){
-		getContactImage(number,"Incoming",function(contact_Image){
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Incoming Call &nbsp;&nbsp;&nbsp;  </b>'+'<span id="briaCallId" class="text-xs" value ='+callId+ '>' + number +'</span>'+'<br><br></span><div class="clearfix"></div>';
-			if(callback)
-				callback(message);
 			
 			globalCall.callDirection = "Incoming";
 			globalCall.callStatus = "Ringing";
-			
+			globalCall.calledFrom = "Bria";
 			globalCall.callId = callId;
 			globalCall.callNumber = number;
 			globalCallForActivity.justCalledId = callId;
-		});
 				
 	}else if(state == "connected"){
-		getContactImage(number,globalCall.callDirection,function(contact_Image){
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>On Call &nbsp;&nbsp;&nbsp; </b>'+'<span id="briaCallId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
-			if(callback)
-				callback(message);
 			globalCall.callStatus = "Connected";
-		});
-		
 	
 	}else if(state == "missed"){
 		//To_Number = number;
-		getContactImage(number,"Incoming",function(contact_Image){		
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Missed Call &nbsp;&nbsp;&nbsp;  </b>'+ '<span id="briaCallId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
-		if(callback)
-			callback(message);
 		
 		globalCall.callDirection = "Incoming";
 		globalCall.callStatus = "Missed";
@@ -285,17 +94,10 @@ function _getMessageBria(message, callback){
 		globalCall.callId = callId;
 		globalCall.callNumber = number;
 		globalCallForActivity.justCalledId = callId;
-		});
 		
 	}else if(state == "connecting"){
 		//var contactDetailsObj = agile_crm_get_contact();
 		//displayName = getContactName(contactDetailsObj);
-		
-		getContactImage(number,"Outgoing",function(contact_Image){		
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Calling... &nbsp;&nbsp;&nbsp; </b>'+'<span id="briaCallId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
-		if(callback)
-			callback(message);
-		});
 		
 		globalCall.callDirection = "Outgoing";
 		globalCall.callStatus = "Connecting";
@@ -305,18 +107,12 @@ function _getMessageBria(message, callback){
 		globalCallForActivity.justCalledId = callId;
 		
 	}else if(state == "failed"){
-		getContactImage(number,"Outgoing",function(contact_Image){		
-			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Call Failed &nbsp;&nbsp;&nbsp; </b>'+'<span id="briaCallId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
-		if(callback)
-			callback(message);
-		});
 		
 		globalCall.callStatus = "Failed";
 		globalCallForActivity.justCalledId = callId;
 
 	
 	}else if(state == "ended"){
-		callback("");
 		if(globalCall.callStatus && globalCall.callStatus == "Connected"){
 			globalCall.callStatus = "Answered"; //change form completed
 		}else if(globalCall.callStatus && globalCall.callStatus == "Connecting"){
@@ -325,16 +121,17 @@ function _getMessageBria(message, callback){
 			globalCall.callStatus = "Missed";
 		}
 		
+		number = globalCall.callNumber;
 		replicateglobalCallVariable();
 		resetglobalCallVariables();		
+		
 		
 		//this is called to save the call activity of the user after the call
 		if(!callId)
 			callId = "";
-		sendMessageToBriaClient("getLastCallDetail",number,callId);
-		
+		var action = {"command":  "getLastCallDetail", "number": number, "callId": callId};
+		sendActionToClient(action);
 	}
-	
 }
 
 /*
@@ -365,7 +162,30 @@ function saveCallNoteBria(){
 	if(direction == "Incoming"){
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
 	    	if(!responseJson){
+	    		
+	    		resetCallLogVariables();
+	    		
+	    		if(callStatus == "Answered") {
+	    			var data = {};
+	    			data.url = "/core/api/widgets/bria/";
+	    			data.subject = noteSub;
+	    			data.number = number;
+	    			data.callType = "inbound";
+	    			data.status = "answered";
+	    			data.duration = duration;
+	    			data.contId = null;
+	    			data.contact_name = "";
+	    			data.widget = "Bria";
+	    			CallLogVariables.dynamicData = data;
+	    		}
+		    		CallLogVariables.callWidget = "Bria";
+		    		CallLogVariables.callType = "inbound";
+		    		CallLogVariables.phone = number;
+		    		CallLogVariables.duration = duration;
+		    		CallLogVariables.status = callStatus;
+	    		
 	    		return showNewContactModal(number);
+	    		
 	    	}
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
@@ -404,7 +224,7 @@ function saveCallNoteBria(){
 		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
-					twilioIOSaveContactedTime();
+					twilioIOSaveContactedTime(cntId);
 					accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
 					var json = resp;
 					if(json == null) {
@@ -437,6 +257,29 @@ function saveCallNoteBria(){
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
 					autosaveNoteByUser(note);
 				}
+		}else{
+			resetCallLogVariables();
+    		
+    		if(callStatus == "Answered") {
+    			var data = {};
+    			data.url = "/core/api/widgets/bria/";
+    			data.subject = noteSub;
+    			data.number = number;
+    			data.callType = "outbound-dial";
+    			data.status = "answered";
+    			data.duration = duration;
+    			data.contId = null;
+    			data.contact_name = "";
+    			data.widget = "Bria";
+    			CallLogVariables.dynamicData = data;
+    		}
+	    		CallLogVariables.callWidget = "Bria";
+	    		CallLogVariables.callType = "outbound-dial";
+	    		CallLogVariables.phone = number;
+	    		CallLogVariables.duration = duration;
+	    		CallLogVariables.status = callStatus;
+    		
+    		return showNewContactModal(number);
 		}
 	}
 }
@@ -466,6 +309,16 @@ function saveCallActivityBria(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 
+	if(!globalCall.contactedId && dialled.using == "dialler"){
+		$.post( "/core/api/widgets/bria/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+		return;
+	}
+	
 	if(call.status == "Answered"){
 		return;
 	}
@@ -541,10 +394,11 @@ function getLogsForBria(num){
 			if(!logNumber){
 				logNumber = parameter['num'][0].value;
 			}
-			var command = "getLogs";
-			var number =  logNumber;
-			var callId = "";
-			sendMessageToBriaClient(command,number,callId);
+			var previousCalledClient  = globalCall.calledFrom;
+			var action = {"command":  "getLogs", "number": logNumber, "callId": ""};
+			globalCall.calledFrom = "Bria";
+			sendActionToClient(action);
+			globalCall.calledFrom = previousCalledClient;
 		}
 }
 

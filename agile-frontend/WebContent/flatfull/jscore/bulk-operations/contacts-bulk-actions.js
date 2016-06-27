@@ -560,22 +560,22 @@ var contacts_bulk_actions = {
 										return;
 									});
 						}
-						if (is_free_plan() && has_more_than_limit())
+						if (has_more_than_limit())
 						{
 							showModalConfirmation(
 									"Send Email",
-									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
-									function()
+									"You can apply this bulk action only on 25 contacts. Please create a campaign.",
+									 function()
 									{
-										Backbone.history.navigate("subscribe", { trigger : true });
-									}, function()
+										Backbone.history.navigate("workflows", { trigger : true })
+									},  function()
 									{
 										// No callback
 										return;
 									}, function()
 									{
 										return;
-									}, "Upgrade", "Close");
+									},"Go to Campaign","Close");
 						}
 						else
 						{
@@ -1232,10 +1232,7 @@ function show_bulk_owner_change_page()
 
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			if (form_json.from != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
-			{
-				form_json.from_name = "";
-			}
+
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 
 			var json = {};
@@ -1374,9 +1371,16 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		if (isBulk)
 		{
 			if(company_util.isCompany())
+			{
 				$("#bulk-action-btns button").addClass("disabled");
+				$("#companiesTabelView").removeClass("disabled");
+			}
 			else
+			{
 				$("#bulk-action-btns button").addClass("disabled");
+				$("#contactTabelView").removeClass("disabled");
+			}
+				
 			return;
 		}
 

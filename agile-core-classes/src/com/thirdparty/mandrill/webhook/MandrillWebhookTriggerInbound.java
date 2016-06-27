@@ -184,8 +184,10 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
 		Contact contact = null;
 
-		if (isNewContact)
+		if (isNewContact){
 			contact = new Contact();
+			contact.source = "Inbound Email" ;
+		}
 		else
 			contact = ContactUtil.searchContactByEmail(fromEmail);
 

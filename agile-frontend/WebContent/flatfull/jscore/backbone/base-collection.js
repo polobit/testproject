@@ -101,13 +101,12 @@ deleteItem : function(e)
 deleteModel : function(e)
 {
 	e.preventDefault();
-	if(!confirm("Are you sure you want to delete?"))
-		return false;
-
-	$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
-		location.reload(true);
-	}
-        });
+	showAlertModal("delete", "confirm", function(){
+		$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
+			location.reload(true);
+			}
+	    });
+	});
 	
 },
 
@@ -275,7 +274,7 @@ var Base_Collection_View = Backbone.View
 				    showTransitionBar();
 
 				// Binds functions to view
-				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI');
+				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'appendItemsOnAddEvent', 'buildCollectionUI');
 
 				if (this.options.data)
 				{
@@ -305,6 +304,7 @@ var Base_Collection_View = Backbone.View
 				 */
 				this.collection.bind('sync', this.appendItem);
 				this.collection.bind('add', this.appendItemOnAddEvent);
+				this.collection.bind('addAll', this.appendItemsOnAddEvent);
 
 				var that = this;
 
@@ -495,6 +495,7 @@ var Base_Collection_View = Backbone.View
 				return itemView
 			}, appendItemOnAddEvent : function(base_model)
 			{
+				//startFunctionTimer("appendItemOnAddEvent");
 				this.appendItem(base_model, true);
 				/*
 				 * if(this.collection && this.collection.length) {
@@ -512,7 +513,39 @@ var Base_Collection_View = Backbone.View
 					return;
 
 				append_checkboxes(this.model_list_element);
+				//endFunctionTimer("appendItemOnAddEvent");
+			},
 
+			appendItemsOnAddEvent : function(modalsArray)
+			{
+				//startFunctionTimer("appendItemsOnAddEvent");
+				this.model_list_element_fragment = document.createDocumentFragment();
+
+				this.model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
+
+
+				/*
+				 * Iterates through each model in the collection and creates a
+				 * view for each model and adds it to model-list
+				 */
+				 var that = this;
+				$.each(modalsArray, function(key, item)
+				{ // in case collection is not empty
+
+					that.appendItem(item);
+				});
+
+				$(this.model_list_element).append(this.model_list_element_fragment);
+				
+				var appendItemCallback = this.options.appendItemCallback;
+
+				if (appendItemCallback && typeof (appendItemCallback) === "function")
+					appendItemCallback($(this.el));
+				
+				if ($('table', this.el).hasClass('onlySorting'))
+					return;
+				append_checkboxes(this.model_list_element);
+				//endFunctionTimer("appendItemsOnAddEvent");
 			},
 			/**
 			 * Renders the collection to a template specified in options, uses

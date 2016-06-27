@@ -3,6 +3,7 @@ package com.agilecrm;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import com.agilecrm.ipaccess.IpAccessUtil;
@@ -58,7 +59,7 @@ public class UserFingerPrintInfo implements Serializable{
     	Set<String> finger_prints = domainUser.finger_prints;
     	
     	// Check null and proceed check with existing ones 
-		if(finger_prints != null && finger_prints.size() > 0 && !finger_prints.contains(browserFingerPrint))
+		if(domainUser.is_secure && finger_prints != null && finger_prints.size() > 0 && !finger_prints.contains(browserFingerPrint))
 			 valid_finger_print = false;
 		
 		finger_print = browserFingerPrint;
@@ -72,10 +73,14 @@ public class UserFingerPrintInfo implements Serializable{
 	}
 	
 	public void generateOAuthToken(HttpServletRequest request){
-		int randomNumber = (int)( Math.random() * 10000 );
+		/*int randomNumber = (int)( Math.random() * 10000 );
 		if(randomNumber < 1000)
-			randomNumber = randomNumber*10;
-		this.verification_code = randomNumber+"";
+			randomNumber = randomNumber*10;*/
+		Random r = new Random();
+		int Low = 1000;
+		int High = 9999;
+		int Result = r.nextInt(High-Low) + Low;
+		this.verification_code = Result+"";
 			
 		System.out.println("verification_code = " + verification_code);
 		// Resave

@@ -56,6 +56,7 @@ public class CallNotification extends HttpServlet
 	
 	Contact contact = null;
 	try{
+		phoneNumber = phoneNumber.trim();
 		contact = QueryDocumentUtil.getContactsByPhoneNumber(phoneNumber);
 	}catch(Exception e){
 	}

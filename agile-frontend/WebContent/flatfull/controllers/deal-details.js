@@ -43,15 +43,18 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 		} });
 		var that = this;
-		this.dealDetailView.model.fetch({success : function(data){
+
+		this.dealDetailView.model.fetch();//({success : function(data){
 			var ele = that.dealDetailView.render(true).el;
 			$("#deal-detail-page").html(getRandomLoadingImg());
 			$('#deal-detail-page').html(ele);
-		},error : function(data, response){
+			// To set typeahead for tags
+			setup_tags_typeahead();
+		/*},error : function(data, response){
 			hideTransitionBar();
 			if(response && response.status == '403')
 				$('#deal-detail-page').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; '+response.responseText+'</strong></h2>');
-		} })
+		} })*/
 
 	},
 
@@ -233,13 +236,13 @@ function deserialize_deal(value, template)
 		});
 
 		// Enable the datepicker
-		$('#close_date', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+		$('#close_date', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 		add_custom_fields_to_form(value, function(data)
 		{
 			var el = show_custom_fields_helper(data["custom_fields"], []);
 			$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
-			$('.date_input', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+			$('.date_input', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 		}, "DEAL")
 

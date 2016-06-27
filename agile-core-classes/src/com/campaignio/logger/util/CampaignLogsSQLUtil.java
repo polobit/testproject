@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,7 +48,7 @@ public class CampaignLogsSQLUtil
      *            - Log Type.
      */
     public static void addToCampaignLogs(String domain, String campaignId, String campaignName, String subscriberId,
-	    String message, String type)
+	    String message, String type, String timestamp)
     {
 	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES("
 		+ GoogleSQLUtil.encodeSQLColumnValue(domain)
@@ -57,7 +58,7 @@ public class CampaignLogsSQLUtil
 		+ GoogleSQLUtil.encodeSQLColumnValue(campaignName)
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
-		+ ",NOW(3)"
+		+ ","+getCampaignLogTimestamp(timestamp)
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(message) + "," + GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
 	
@@ -66,11 +67,11 @@ public class CampaignLogsSQLUtil
 	try
 	{
 	    GoogleSQL.executeNonQuery(insertToLogs);
-	    GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
+	    //GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
 	}
 	catch (Exception e)
 	{
-	    System.out.println("Exception occured while adding campaign log " + e.getMessage());
+	    System.err.println("Exception occured while adding campaign log " + e.getMessage());
 	    e.printStackTrace();
 	}
     }
@@ -627,7 +628,7 @@ public class CampaignLogsSQLUtil
     		
     		try
     		{
-    		   GoogleSQL.executeNonQueryInNewInstance(insertToLogs);
+    		   GoogleSQL.executeNonQuery(insertToLogs);
     		}
     		catch (Exception e)
     		{
@@ -636,4 +637,22 @@ public class CampaignLogsSQLUtil
     		}
     }
     
+    /**
+     * If campaign log already having timestamp it simply returns
+     * that timestamp else we mysql now() function.
+     * @param timestamp
+     * @return
+     */
+    public static String getCampaignLogTimestamp(String timestamp)
+    {
+	if(StringUtils.isBlank(timestamp))
+	{
+	    timestamp = "NOW()";
+	}
+	else
+	{
+	    timestamp = GoogleSQLUtil.encodeSQLColumnValue(timestamp);
+	}
+	return timestamp;
+    }
 }

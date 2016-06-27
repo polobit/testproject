@@ -614,6 +614,8 @@ public class SendgridInboundParser extends HttpServlet
 
 		Document doc = Jsoup.parseBodyFragment(htmlContent, "UTF-8");
 
+		System.out.println(doc);
+
 		Elements elements = doc.select("[title=agl_tckt_id]");
 
 		if (elements == null || elements.size() == 0)

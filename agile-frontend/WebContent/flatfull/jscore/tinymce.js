@@ -53,8 +53,10 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 					console.log("Reloading script...");
 					
 					// Show confirmation for reload
+					
 					if(confirm("Unable to load editor. Click OK to Reload."))
 					  location.reload();
+
 					
 					return;
 				}

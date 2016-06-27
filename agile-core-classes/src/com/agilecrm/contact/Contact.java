@@ -221,6 +221,10 @@ public class Contact extends Cursor
 
     @NotSaved
     public String entity_type = "contact_entity";
+    
+    @NotSaved(IfDefault.class)
+    @Indexed
+    public String source = null ;
 
     /**
      * related company key of this person, ignored for company entity, this is
@@ -1181,7 +1185,7 @@ public class Contact extends Cursor
 	{
 	    created_time = System.currentTimeMillis() / 1000;
 	}
-
+	
     }
 
     /**
@@ -1255,6 +1259,9 @@ public class Contact extends Cursor
 		contact_company_id = null;
 		contact_company_key = null;
 		e.printStackTrace();
+	    }
+	    catch(Exception e){
+	    	System.out.println("exception found");	    	
 	    }
 	}
 	else
