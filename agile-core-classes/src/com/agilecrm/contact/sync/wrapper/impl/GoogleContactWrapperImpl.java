@@ -412,8 +412,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	    boolean New = true;
 	    for(Note note:notes)
 	    {
-	    	if(StringUtils.equalsIgnoreCase(entry.getTextContent().getContent().getPlainText(), note.description) 
-	    			&& StringUtils.equalsIgnoreCase(note.subject,"Google Contact Notes"))
+	    	if(StringUtils.equalsIgnoreCase(entry.getTextContent().getContent().getPlainText(), note.description))
 	    			{
 	    				New=false;
 	    				break;

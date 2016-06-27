@@ -761,16 +761,17 @@ public class ContactSyncUtil
 		
 				//contact.getContactPropertiesList(Contact.PHONE);
 		//List<Note> newNotes = new ArrayList<Note>();
-
+/*
 		boolean isNewContact = StringUtils.isEmpty(googleContactEntry.getId());
 
 		if (!isNewContact)
 		{
 			List<Note> notesList = NoteUtil.getNotes(contact.id);
+			boolean isNew = true;
 			// Sets notes to contact
 			for (Note note : notesList)
 			{
-				boolean isNew = true;
+				
 				
 				if(StringUtils.equalsIgnoreCase(googleContactEntry.getTextContent().getContent().getPlainText(), note.description) 
 		    			&& StringUtils.equalsIgnoreCase(note.subject,"Google Contact Notes"))
@@ -779,21 +780,18 @@ public class ContactSyncUtil
 						break;
 					}
 					
-				if (isNew)
-				{
-					googleContactEntry.setContent(new PlainTextConstruct(note.description));
-				}
+				
 			}
 		}
 		else
-		{
+		{*/
 			List<Note> notesList = NoteUtil.getNotes(contact.id,"1",null);
 			for (Note note : notesList)
 			{
 				googleContactEntry.setContent(new PlainTextConstruct(note.description));
 				//googleContactEntry.getTextContent().getContent().setLang(note.description);
 			}
-		}
+		//}
 
 			
 		
