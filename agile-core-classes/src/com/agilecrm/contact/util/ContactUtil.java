@@ -378,6 +378,18 @@ public class ContactUtil
 	return dao.getByProperty(searchMap);
 
     }
+    
+    public static Contact searchContactByPesonName(String personName)
+    {
+		if (StringUtils.isBlank(personName))
+		    return null;
+	
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("properties.name", "name");
+		searchMap.put("properties.value", personName);
+		searchMap.put("type", Type.PERSON);
+		return dao.getByProperty(searchMap);
+    }
 
     public static Contact searchContactByPhoneNumber(String phoneNumber)
     {
