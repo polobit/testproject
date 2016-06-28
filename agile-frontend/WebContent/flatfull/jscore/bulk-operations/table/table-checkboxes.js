@@ -147,7 +147,7 @@ function append_checkboxes(el)
 	}
 
 	// If select all is chosen then all the upcomming models with in table should have checked checkboxes
-	if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
+	if(SELECT_ALL == true || (Current_Route == 'deals' && SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true || SELECT_ALL_TASKS)
 	{
 		$.each($('tr td:nth-child(1)').not(".checkbox"), function(key, value){
 			$(this).closest('tr').prepend('<td class="checkbox"><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox" checked="checked"/><i></i></label></td>');

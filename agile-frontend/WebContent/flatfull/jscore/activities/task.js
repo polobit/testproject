@@ -7,6 +7,7 @@
  * author: Rammohan
  */
 var task_ids;
+var SELECT_ALL_TASKS = false ;
 
 $( document ).ready(function() {
 	/**
@@ -310,6 +311,7 @@ function initializeTasksListeners(){
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)
 	{
 		var isChecked  = false;
+		$('#tasks-list-template .thead_check').removeProp('checked');
 		$('#tasks-list-template').find('#select_all_tasks').empty().removeAttr('data');
 		$.each($('#tasks-list-template .tbody_check'), function(index, element)
 			{
@@ -330,6 +332,7 @@ function initializeTasksListeners(){
 	{
 		if(this.checked || this.id == 'select_chosen_tasks'){
 			var taskCount = 0 ;
+			SELECT_ALL_TASKS = false ;
 			var totalTasks = getSimpleCount(window.App_Calendar.allTasksListView.collection.toJSON()) ;
 			$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
 			$.each($('#tasks-list-template .tbody_check'), function(index, element)
@@ -351,7 +354,8 @@ function initializeTasksListeners(){
 
 	});
 	$('#tasks-list-template').on('click', '#select_total_tasks', function(event)
-	{	
+	{
+		SELECT_ALL_TASKS = true ;	
 		$('#tasks-list-template').find('.task_bulk_action').removeClass("disabled");
 		var taskCount = getSimpleCount(window.App_Calendar.allTasksListView.collection.toJSON()) ;
 		$('#tasks-list-template').find('.tbody_check').attr('checked', "checked");
@@ -1034,6 +1038,7 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 			success : function(data){				
 			//	showNotyPopUp('information', "Task scheduled", "top", 5000);
 			//	console.log(data);
+			SELECT_ALL_TASKS = false ;
 				if(data.length){
 					for (var i in data) {
 						App_Calendar.allTasksListView.collection.get(data[i].id).set(data[i]);
@@ -1053,6 +1058,7 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
   				console.log(textStatus, errorThrown);
+  				SELECT_ALL_TASKS = false ;
        		} 
 		});
 	}
@@ -1084,9 +1090,11 @@ function saveBulkTaskAction(task_ids,priorityJson,form_id){
 				showNotyPopUp('information', "Task scheduled", "top", 5000);
 				console.log(data);
 				App_Calendar.allTasksListView.render(true);
+				SELECT_ALL_TASKS = false ;
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
   				console.log(textStatus, errorThrown);
+  				SELECT_ALL_TASKS = false ;
        		} 
 		});
 	}
