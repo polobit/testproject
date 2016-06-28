@@ -299,6 +299,23 @@ public class MailgunUtil {
      */
     public static void sendWithoutMerging(MailDeferredTask mailDeferredTask, EmailSender emailSender)
     {
+    	JSONObject metadata=null;
+    	try
+		{
+    		if(mailDeferredTask.metadata !=null)
+    		{
+	    		metadata=new JSONObject(mailDeferredTask.metadata);
+		    
+	    		String subAccount=NamespaceManager.get();
+	    		metadata.put(SUBACCOUNT, subAccount);
+	    		mailDeferredTask.metadata=metadata.toString();
+    		}    	    
+		} 
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+			System.err.print("Error occured in getting Mailgun Metadata json");
+		}
     	
     	MailgunNew.sendMail(emailSender.emailGateway.api_key, emailSender.emailGateway.api_user, mailDeferredTask.fromEmail, mailDeferredTask.fromName, mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject, mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text, mailDeferredTask.metadata, null, null);
     }
