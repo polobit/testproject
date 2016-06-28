@@ -930,8 +930,7 @@ public class PortletUtil {
 			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet dealsByMilestonePortlet = new Portlet("Deals By Milestone",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet lostDealAnalysisPortlet = new Portlet("Lost Deal Analysis",PortletType.DEALS,1,2,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,3,4,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet lostDealAnalysisPortlet = new Portlet("Lost Deal Analysis",PortletType.DEALS,1,2,1,1,Portlet.PortletRoute.DashBoard.toString());			
 			
 			JSONObject activitiesPortletJSON = new JSONObject();
 			activitiesPortletJSON.put("duration","this-month");
