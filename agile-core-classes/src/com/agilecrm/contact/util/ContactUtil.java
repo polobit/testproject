@@ -385,7 +385,7 @@ public class ContactUtil
 		    return null;
 	
 		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("properties.name", "name");
+		searchMap.put("properties.name", "first_name");
 		searchMap.put("properties.value", personName);
 		searchMap.put("type", Type.PERSON);
 		return dao.getByProperty(searchMap);

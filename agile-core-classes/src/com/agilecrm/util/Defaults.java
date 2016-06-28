@@ -295,9 +295,12 @@ public class Defaults
 		task.type = Type.TWEET.toString();
 		task.priority_type = PriorityType.HIGH;
 		task.status = Status.YET_TO_START;
-		DateUtil date = new DateUtil().addDays(15).toMidnight().addMinutes(16 * 60);
+		DateUtil date = new DateUtil().addDays(-15).toMidnight().addMinutes(16 * 60);
 		task.due = date.getTime().getTime() / 1000;
 		task.owner_id = String.valueOf(SessionManager.get().getDomainId());
+		if (ContactUtil.searchContactByPesonName("charlie") == null)
+			return;
+		task.addContacts(String.valueOf(ContactUtil.searchContactByPesonName("charlie").id));
 		task.save();
 	
 		Task task1 = new Task();
@@ -309,6 +312,9 @@ public class Defaults
 		DateUtil date1 = new DateUtil().addDays(1).toMidnight().addMinutes(16 * 60);
 		task1.due = date1.getTime().getTime() / 1000;
 		task1.owner_id = String.valueOf(SessionManager.get().getDomainId());
+		if (ContactUtil.searchContactByEmail("mj@nba.com") == null)
+			return;
+		task1.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		task1.save();
 	
 		Task task2 = new Task();
@@ -320,6 +326,9 @@ public class Defaults
 		DateUtil date2 = new DateUtil().addDays(2).toMidnight().addMinutes(16 * 60);
 		task2.due = date2.getTime().getTime() / 1000;
 		task2.owner_id = String.valueOf(SessionManager.get().getDomainId());
+		if (ContactUtil.searchContactByEmail("homer@snpp.com") == null)
+			return;
+		task2.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
 		task2.save();
 	
 		Task task3 = new Task();
@@ -328,9 +337,12 @@ public class Defaults
 		task3.type = Type.EMAIL.toString();
 		task3.priority_type = PriorityType.NORMAL;
 		task3.status = Status.YET_TO_START;
-		DateUtil date3 = new DateUtil().addMinutes(60);
+		DateUtil date3 = new DateUtil().addDays(15).toMidnight().addMinutes(16 * 60);
 		task3.due = date3.getTime().getTime() / 1000;
-		task3.owner_id = String.valueOf(SessionManager.get().getDomainId());
+		task3.owner_id = String.valueOf(SessionManager.get().getDomainId());		
+		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") == null)
+			return;
+		task3.addContacts(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
 		task3.save();
 		
     }
@@ -342,43 +354,45 @@ public class Defaults
     {
 		Event event = new Event();
 		event.title = "Week ahead";
-		event.color = "blue";
+		event.color = "#36C";
 		event.allDay = false;
 		DateUtil date = new DateUtil().toMidnight().addDays(0).addMinutes(16 * 60);
 		event.start = date.getTime().getTime() / 1000;
 		event.end = date.getTime().getTime() / 1000 + 900;
-		event.save();
-		
-//		if (ContactUtil.searchContactByEmail("mj@nba.com") == null)
-//		    return;
-//		event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
+		if (ContactUtil.searchContactByEmail("mj@nba.com") == null)
+		    return;
+		event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
+		event.save();		
 	
 		Event event1 = new Event();
 		event1.title = "Water cooler discussion";
-		event1.color = "yellow";
+		event1.color = "green";
 		event1.allDay = false;
 		DateUtil date1 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
 		event1.start = date1.getTime().getTime() / 1000;
 		event1.end = date1.getTime().getTime() / 1000 + 1800;
+		if (ContactUtil.searchContactByEmail("mj@nba.com") == null)
+		    return;
+		event1.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		event1.save();
 		
 		Event event2 = new Event();
 		event2.title = "Lunch meeting with Kripke";
-		event2.color = "yellow";
+		event2.color = "green";
 		event2.allDay = false;
-		DateUtil date2 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
+		DateUtil date2 = new DateUtil().toMidnight().addDays(2).addMinutes(18 * 60);
 		event2.start = date2.getTime().getTime() / 1000;
 		event2.end = date2.getTime().getTime() / 1000 + 1800;
-		if (ContactUtil.searchContactByEmail("mj@nba.com") == null)
+		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") == null)
 			return;
-		event2.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
+		event2.addContacts(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
 		event2.save();
 		
 		Event event3 = new Event();
 		event3.title = "Power Plant Inspection";
 		event3.color = "red";
 		event3.allDay = false;
-		DateUtil date3 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
+		DateUtil date3 = new DateUtil().toMidnight().addDays(3).addMinutes(18 * 60);
 		event3.start = date3.getTime().getTime() / 1000;
 		event3.end = date3.getTime().getTime() / 1000 + 1800;
 		if (ContactUtil.searchContactByEmail("homer@snpp.com") == null)
@@ -388,9 +402,9 @@ public class Defaults
 		
 		Event event4 = new Event();
 		event4.title = "Review meeting blue";
-		event4.color = "blue";
+		event4.color = "#36C";
 		event4.allDay = false;
-		DateUtil date4 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
+		DateUtil date4 = new DateUtil().toMidnight().addDays(4).addMinutes(18 * 60);
 		event4.start = date4.getTime().getTime() / 1000;
 		event4.end = date4.getTime().getTime() / 1000 + 1800;		
 		event4.save();
@@ -414,7 +428,6 @@ public class Defaults
 		deal.colorName = Opportunity.Color.GREY;
 		DateUtil date = new DateUtil().toMidnight().addDays(20);
 		deal.close_date = date.getTime().getTime() / 1000;
-		
 		if (ContactUtil.searchContactByEmail("homer@snpp.com") == null)
 			return;
 		deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
@@ -425,10 +438,13 @@ public class Defaults
 		deal1.expected_value = 67000d;
 		deal1.probability = 80;
 		deal1.pipeline_id = milestone.id;
-		deal1.milestone = "Won";
-		deal1.colorName = Opportunity.Color.BLUE;
+		deal1.milestone = "Prospect";
+		deal1.colorName = Opportunity.Color.INDIGO;
 		DateUtil date1 = new DateUtil().toMidnight().addDays(10);
-		deal1.close_date = date1.getTime().getTime() / 1000;		
+		deal1.close_date = date1.getTime().getTime() / 1000;
+		if (ContactUtil.searchContactByPesonName("Charlie") == null)
+			return;
+		deal1.addContactIds(String.valueOf(ContactUtil.searchContactByPesonName("Charlie").id));
 		deal1.save();
 		
 		Opportunity deal2 = new Opportunity();
@@ -441,7 +457,7 @@ public class Defaults
 		deal2.colorName = Opportunity.Color.ORANGE;
 		DateUtil date2 = new DateUtil().toMidnight().addDays(10);
 		deal2.close_date = date2.getTime().getTime() / 1000;
-		if (ContactUtil.searchContactByEmail("mj@nba.com") != null)
+		if (ContactUtil.searchContactByEmail("mj@nba.com") == null)
 		    return;
 		deal2.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		deal2.save();
@@ -455,7 +471,10 @@ public class Defaults
 		deal3.milestone = "Won";
 		deal3.colorName = Opportunity.Color.YELLOW;
 		DateUtil date3 = new DateUtil().toMidnight().addDays(10);
-		deal3.close_date = date3.getTime().getTime() / 1000;		
+		deal3.close_date = date3.getTime().getTime() / 1000;
+		if (ContactUtil.searchContactByCompanyName("nike") == null)
+		    return;
+		deal3.addContactIds(String.valueOf(ContactUtil.searchContactByCompanyName("nike").id));
 		deal3.save();
 		
 		Opportunity deal4 = new Opportunity();
@@ -466,7 +485,7 @@ public class Defaults
 		deal4.pipeline_id = milestone.id;
 		deal4.milestone = "Lost";
 		deal4.colorName = Opportunity.Color.RED;
-		if (ContactUtil.searchContactByEmail("homer@snpp.com") != null)
+		if (ContactUtil.searchContactByEmail("homer@snpp.com") == null)
 		    return;
 		deal4.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
 		DateUtil date4 = new DateUtil().toMidnight().addDays(10);
@@ -481,7 +500,7 @@ public class Defaults
 		deal5.pipeline_id = milestone.id;
 		deal5.milestone = "Lost";
 		deal5.colorName = Opportunity.Color.BLUE;
-		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") != null)
+		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") == null)
 		    return;
 		deal5.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
 		DateUtil date5 = new DateUtil().toMidnight().addDays(10);
@@ -496,7 +515,7 @@ public class Defaults
 		deal6.pipeline_id = milestone.id;
 		deal6.milestone = "Lost";
 		deal6.colorName = Opportunity.Color.BLUE;
-		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") != null)
+		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") == null)
 		    return;
 		deal6.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
 		DateUtil date6 = new DateUtil().toMidnight().addDays(10);
