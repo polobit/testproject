@@ -1003,7 +1003,6 @@ public class PortletUtil {
 			dealsByMilestonePortlet.save();
 			tasksPortlet.save();
 			lostDealAnalysisPortlet.save();
-			accountPortlet.save();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
