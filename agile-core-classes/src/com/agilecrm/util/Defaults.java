@@ -53,20 +53,6 @@ public class Defaults
     private void saveDefaultContacts()
     {
     	
-    	//Custom Fields.    	
-    	try {
-    		CustomFieldDef dobCF = new CustomFieldDef(CustomFieldDef.Type.DATE, "Date of Birth", "Date of Birth", "", false);
-    		dobCF.scope = SCOPE.CONTACT;
-    		dobCF.save();
-    		
-			CustomFieldDef founderCF = new CustomFieldDef(CustomFieldDef.Type.TEXT, "Company Founders", "Company Founders", "", false);
-			founderCF.scope = SCOPE.COMPANY;
-			founderCF.save();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
     	Contact searchedContacts = ContactUtil.searchContactByPesonName("Charlie");
     	if(searchedContacts != null){
     		System.out.println(searchedContacts.toString());
@@ -76,8 +62,7 @@ public class Defaults
 	    List<ContactField> companyFields = new ArrayList<ContactField>();
 		companyFields.add(new ContactField(Contact.NAME, "Agile CRM", null));
 		companyFields.add(new ContactField(Contact.URL, "http://www.agilecrm.com/", null));
-		companyFields.add(new ContactField(Contact.EMAIL, "care@agilecrm.com", "primary"));
-		companyFields.add(new ContactField("Company Founders", "Manohar Chapalamadugu", null));
+		companyFields.add(new ContactField(Contact.EMAIL, "care@agilecrm.com", "primary"));		
 		companyFields.add(new ContactField("phone", "+1-800-980-0729", "primary"));
 		companyFields.add(new ContactField(Contact.EMAIL, "sales@agilecrm.com", "primary"));
 		companyFields
@@ -120,8 +105,7 @@ public class Defaults
 		companyFields3.add(new ContactField(Contact.NAME, "Nike", null));
 	
 		companyFields3.add(new ContactField(Contact.URL, "http://www.nike.com", null));
-		companyFields3.add(new ContactField(Contact.EMAIL, "media.relations@nike.com", "primary"));
-		companyFields3.add(new ContactField("Company Founders", "Bill Bowerman, Phil Knight", null));		
+		companyFields3.add(new ContactField(Contact.EMAIL, "media.relations@nike.com", "primary"));		
 		companyFields3.add(new ContactField(Contact.EMAIL, "pr@converse.com", "alternate"));
 		companyFields3.add(new ContactField("phone", "1-503-671-6453", "primary"));	
 		companyFields3.add(new ContactField("phone", "1-212-367-4447", "alternate"));	
@@ -145,8 +129,7 @@ public class Defaults
 		companyFields4
 			.add(new ContactField("address",
 				"{\"address\":\"100 Industrial Way\",\"city\":\"Springfield\", \"country\":\"US\"}",
-				"office"));
-		companyFields4.add(new ContactField("Company Founders", "Mr. Burns", null));		
+				"office"));				
 	
 		Contact company4 = new Contact(Contact.Type.COMPANY, companiesTags4, companyFields4);	
 		company4.star_value = 3;
@@ -199,8 +182,7 @@ public class Defaults
 		List<ContactField> contactFields = new ArrayList<ContactField>();
 		contactFields.add(new ContactField(Contact.FIRST_NAME, "Charlie", null));
 		contactFields.add(new ContactField(Contact.LAST_NAME, "Chaplin", null));
-		contactFields.add(new ContactField(Contact.COMPANY, "Hollywood", null));
-		contactFields.add(new ContactField("Date of Birth", "-2231472600", null));
+		contactFields.add(new ContactField(Contact.COMPANY, "Hollywood", null));		
 		contactFields.add(new ContactField(Contact.TITLE, "Actor", null));
 		contactFields.add(new ContactField("website", "http://www.charliechaplin.com/", "URL"));	
 		contactFields.add(new ContactField("address",
@@ -221,8 +203,7 @@ public class Defaults
 		contactFields1.add(new ContactField(Contact.FIRST_NAME, "Michael", null));
 		contactFields1.add(new ContactField(Contact.LAST_NAME, "Jordan", null));
 		contactFields1.add(new ContactField(Contact.EMAIL, "mj@nba.com", "work"));
-		contactFields1.add(new ContactField(Contact.COMPANY, "NBA", null));		
-		contactFields1.add(new ContactField("Date of Birth", "-216883800", null));
+		contactFields1.add(new ContactField(Contact.COMPANY, "NBA", null));				
 		contactFields1.add(new ContactField("website", "http://www.nba.com/history/legends/michael-jordan/", "URL"));
 		contactFields1.add(new ContactField(Contact.TITLE, "Basketball Player", null));
 		contactFields1.add(new ContactField("address",
@@ -242,8 +223,7 @@ public class Defaults
 		contactFields2.add(new ContactField(Contact.FIRST_NAME, "Sheldon", null));
 		contactFields2.add(new ContactField(Contact.LAST_NAME, "Cooper", null));
 		contactFields2.add(new ContactField(Contact.EMAIL, "sheldon@caltech.com", "work"));
-		contactFields2.add(new ContactField(Contact.EMAIL, "sheldon@gmail.com", "home"));
-		contactFields2.add(new ContactField("Date of Birth", "320351400", null));		
+		contactFields2.add(new ContactField(Contact.EMAIL, "sheldon@gmail.com", "home"));			
 		contactFields2.add(new ContactField(Contact.COMPANY, "Caltech", null));
 		contactFields2.add(new ContactField("website", "http://the-big-bang-theory.com/characters.Sheldon/", "URL"));
 		contactFields2.add(new ContactField("website", "https://twitter.com/therealsheldonc", "TWITTER"));
