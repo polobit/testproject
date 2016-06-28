@@ -543,8 +543,7 @@
 										<td class="controls v-top">
 												<div id="noty-message" name="popup_text" class="p-t-sm">
  													<a href='#' id="tiny_mce_webrules_link" class="pull-right text-info" style="display:none">(Select a template / Edit in HTML editor)</a>
- 													<small id="twilio-info" style="display:none"><i class="icon-info-sign"></i> You need to setup <a href="#add-widget" class="text-info">Twilio account</a> .
- 													</small>
+ 													
 													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="Paste HTML context"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="callwebrule-code"  class="custom_html required CALL_POPUP w-full form-control" rows="10" ></textarea>
@@ -629,6 +628,7 @@
 			<div class="form-actions">
 				<a href="#web-rules" class="btn btn-sm btn-default">Close</a>
 				<a href="#" type="submit" class="save btn btn-sm btn-primary">Save</a> 
+				<span id="twilio_call_setup" style="color:red; display:none;">Currently you donot have any Twilio setup for making call.</span>
 			</div>
 </div>
 </div>

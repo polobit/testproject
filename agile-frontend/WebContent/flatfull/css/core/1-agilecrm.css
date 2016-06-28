@@ -4240,3 +4240,9 @@ background-color : #522E2E;
     padding-bottom: 10px;
     max-width: 180px;
 }
+#twilio_call_setup{
+
+  color:red; 
+  display:none;
+  margin-left: 31px;
+}

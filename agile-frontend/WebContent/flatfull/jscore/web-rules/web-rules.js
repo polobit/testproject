@@ -40,6 +40,7 @@ function chainWebRules(el, data, isNew, actions)
 	$("#noty-message", el).chained($("#action", el), function(select, self){
 		var value = $("select", select).val();					
 		$(self).show();
+		$('#twilio_call_setup').hide();
 		console.log(value);
 	
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value== "CALL_POPUP")
@@ -49,7 +50,16 @@ function chainWebRules(el, data, isNew, actions)
 
 				if(value=="CALL_POPUP"){
 					loadSavedTemplate("call/callpopup.html");
-					$('#twilio-info',self).show();
+					$.ajax({
+						url: '/core/api/sms-gateway/twilio',
+						type : 'GET',
+						success : function(data) {
+							App_WebReports.isTwilioSMS=data;
+						},
+						error : function(data) {
+							App_WebReports.isTwilioSMS=false;
+						}
+					});
 				}
 				self.find(".web-rule-preview").show();
 			return;
