@@ -51,11 +51,6 @@ public class Defaults
     private void saveDefaultContacts()
     {
     	
-    	Contact searchedContacts = ContactUtil.searchContactByPesonName("Charlie");
-    	if(searchedContacts != null){
-    		System.out.println(searchedContacts.toString());
-    	}
-    	
     	//Companies default.
 	    List<ContactField> companyFields = new ArrayList<ContactField>();
 		companyFields.add(new ContactField(Contact.NAME, "Agile CRM", null));
@@ -541,8 +536,8 @@ public class Defaults
 		deal.colorName = Opportunity.Color.GREY;
 		DateUtil date = new DateUtil().toMidnight().addDays(20);
 		deal.close_date = date.getTime().getTime() / 1000;
-		if (ContactUtil.searchContactByEmail("homer@snpp.com") != null){
-			deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
+		if (ContactUtil.searchContactByEmailID("homer@snpp.com") != null){
+			deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmailID("homer@snpp.com").id));
 		}					
 		deal.save();
 
@@ -562,8 +557,8 @@ public class Defaults
 		deal1.colorName = Opportunity.Color.INDIGO;
 		DateUtil date1 = new DateUtil().toMidnight().addDays(10);
 		deal1.close_date = date1.getTime().getTime() / 1000;
-		if (ContactUtil.searchContactByPesonName("Charlie") != null){
-			deal1.addContactIds(String.valueOf(ContactUtil.searchContactByPesonName("Charlie").id));
+		if (ContactUtil.searchContactByPesonName("charlie") != null){
+			deal1.addContactIds(String.valueOf(ContactUtil.searchContactByPesonName("charlie").id));
 		}					
 		deal1.save();
 		
@@ -584,8 +579,8 @@ public class Defaults
 		deal2.colorName = Opportunity.Color.ORANGE;
 		DateUtil date2 = new DateUtil().toMidnight().addDays(10);
 		deal2.close_date = date2.getTime().getTime() / 1000;
-		if (ContactUtil.searchContactByEmail("mj@nba.com") != null){
-			deal2.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
+		if (ContactUtil.searchContactByEmailID("mj@nba.com") != null){
+			deal2.addContactIds(String.valueOf(ContactUtil.searchContactByEmailID("mj@nba.com").id));
 		}		    		
 		deal2.save();
 		
@@ -626,8 +621,8 @@ public class Defaults
 		deal4.pipeline_id = milestone.id;
 		deal4.milestone = "Lost";
 		deal4.colorName = Opportunity.Color.RED;
-		if (ContactUtil.searchContactByEmail("homer@snpp.com") != null){
-			deal4.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
+		if (ContactUtil.searchContactByEmailID("homer@snpp.com") != null){
+			deal4.addContactIds(String.valueOf(ContactUtil.searchContactByEmailID("homer@snpp.com").id));
 		}		    
 		DateUtil date4 = new DateUtil().toMidnight().addDays(10);
 		deal4.close_date = date4.getTime().getTime() / 1000;		
@@ -648,8 +643,8 @@ public class Defaults
 		deal5.pipeline_id = milestone.id;
 		deal5.milestone = "Lost";
 		deal5.colorName = Opportunity.Color.BLUE;
-		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") != null){
-			deal5.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
+		if (ContactUtil.searchContactByEmailID("sheldon@caltech.com") != null){
+			deal5.addContactIds(String.valueOf(ContactUtil.searchContactByEmailID("sheldon@caltech.com").id));
 		}		    		
 		DateUtil date5 = new DateUtil().toMidnight().addDays(10);
 		deal5.close_date = date5.getTime().getTime() / 1000;		
@@ -670,8 +665,8 @@ public class Defaults
 		deal6.pipeline_id = milestone.id;
 		deal6.milestone = "Lost";
 		deal6.colorName = Opportunity.Color.BLUE;
-		if (ContactUtil.searchContactByEmail("sheldon@caltech.com") != null){
-			deal6.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
+		if (ContactUtil.searchContactByEmailID("sheldon@caltech.com") != null){
+			deal6.addContactIds(String.valueOf(ContactUtil.searchContactByEmailID("sheldon@caltech.com").id));
 		}		    		
 		DateUtil date6 = new DateUtil().toMidnight().addDays(10);
 		deal6.close_date = date6.getTime().getTime() / 1000;		
