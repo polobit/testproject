@@ -21,7 +21,7 @@ git stash
 
 git checkout sandbox_flatfull_modules
 
-git pull origin sandbox_flatfull_modules
+#git pull origin sandbox_flatfull_modules
 
 ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
