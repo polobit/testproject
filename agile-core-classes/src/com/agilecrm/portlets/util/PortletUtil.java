@@ -922,15 +922,15 @@ public class PortletUtil {
 			//Added dummy portlet for recognizing whether Agile CRM Blog 
 			//portlet is deleted by user or not
 			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,1,1,1,2,Portlet.PortletRoute.DashBoard.toString());
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,2,1,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,1,3,1,2,Portlet.PortletRoute.DashBoard.toString());
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,3,3,1,2,Portlet.PortletRoute.DashBoard.toString());
 			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2,Portlet.PortletRoute.DashBoard.toString());
 			Portlet incomingDealsPortlet = new Portlet("Incoming Deals",PortletType.DEALS,2,2,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,1,3,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,3,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet dealsByMilestonePortlet = new Portlet("Deals By Milestone",PortletType.DEALS,3,3,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,1,4,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet lostDealAnalysisPortlet = new Portlet("Lost Deal Analysis",PortletType.DEALS,2,4,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,2,3,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet dealsByMilestonePortlet = new Portlet("Deals By Milestone",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet lostDealAnalysisPortlet = new Portlet("Lost Deal Analysis",PortletType.DEALS,1,2,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,3,4,1,1,Portlet.PortletRoute.DashBoard.toString());
 			
 			JSONObject activitiesPortletJSON = new JSONObject();
