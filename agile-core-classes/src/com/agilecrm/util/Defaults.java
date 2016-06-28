@@ -60,7 +60,7 @@ public class Defaults
     		dobCF.save();
     		
 			CustomFieldDef founderCF = new CustomFieldDef(CustomFieldDef.Type.TEXT, "Company Founders", "Company Founders", "", false);
-			dobCF.scope = SCOPE.COMPANY;
+			founderCF.scope = SCOPE.COMPANY;
 			founderCF.save();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
