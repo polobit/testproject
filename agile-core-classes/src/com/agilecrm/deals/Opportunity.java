@@ -848,7 +848,7 @@ public class Opportunity extends Cursor implements Serializable
     {
 
 	if (colorName == null)
-	    colorName = Color.GREY;
+	    colorName = Color.WHITE;
 
 	// Initializes created Time
 	if (created_time == 0L)
