@@ -65,6 +65,8 @@ public class Widget {
 	 * Url specifies the path of the widget script
 	 */
 	public String url = null;
+	
+	public boolean isActive = false;
 
 	/** Logo URL of the widget to show it in add widget page */
 	public String logo_url = null;
