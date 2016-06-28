@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.json.JSONException;
+
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Status;
 import com.agilecrm.activities.Task.Type;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.CustomFieldDef;
-import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Milestone;
@@ -26,25 +27,22 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
-import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
-import com.amazonaws.services.route53domains.model.ContactType;
-import com.braintreegateway.CreditCard.CustomerLocation;
 
 public class Defaults
 {
     public Defaults()
     {
-	saveDefaultContacts();
-	saveDefaultTasks();
-	saveDefaultEvents();
-	saveDefaultDeals();
-	saveDefaultReports();
-	saveDefaultNotes();
-	TicketFiltersUtil.saveDefaultFilters();
-	//saveDefaultWorkflowsAndTriggers();
-	//TicketsUtil.createDefaultTicket();
+		saveDefaultContacts();
+		saveDefaultTasks();
+		saveDefaultEvents();
+		saveDefaultDeals();
+		saveDefaultReports();
+		saveDefaultNotes();
+		TicketFiltersUtil.saveDefaultFilters();
+		//saveDefaultWorkflowsAndTriggers();
+		//TicketsUtil.createDefaultTicket();
     }
 
 	/**
@@ -76,6 +74,12 @@ public class Defaults
 		company.lead_score = 0;
 		company.save();
 	
+		try {
+			ActivitySave.createTagAddActivity(company);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 	    List<ContactField> companyFields1 = new ArrayList<ContactField>();
 		companyFields1.add(new ContactField(Contact.NAME, "Hollywood", null));
@@ -85,7 +89,13 @@ public class Defaults
 		company1.star_value = 0;
 		company1.lead_score = 0;
 		company1.save();
-	
+		
+		try {
+			ActivitySave.createTagAddActivity(company1);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		List<ContactField> companyFields2 = new ArrayList<ContactField>();
 		companyFields2.add(new ContactField(Contact.NAME, "Apple Inc.", null));
@@ -97,6 +107,13 @@ public class Defaults
 		company2.star_value = 5;
 		company2.lead_score = 1067;
 		company2.save();
+		
+		try {
+			ActivitySave.createTagAddActivity(company2);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		LinkedHashSet<String> companiesTags3 = new LinkedHashSet<String>();
 		companiesTags3.add("Sample Company");
@@ -121,6 +138,13 @@ public class Defaults
 		company3.lead_score = 4578;
 		company3.save();
 	
+		try {
+			ActivitySave.createTagAddActivity(company3);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		LinkedHashSet<String> companiesTags4 = new LinkedHashSet<String>();
 		companiesTags4.add("Sample Company");
 	
@@ -135,6 +159,13 @@ public class Defaults
 		company4.star_value = 3;
 		company4.lead_score = 43;
 		company4.save();
+		
+		try {
+			ActivitySave.createTagAddActivity(company4);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		LinkedHashSet<String> companiesTags5 = new LinkedHashSet<String>();
 		companiesTags5.add("Sample Company");
@@ -156,6 +187,13 @@ public class Defaults
 		company5.star_value = 5;
 		company5.lead_score = 749;
 		company5.save();
+		
+		try {
+			ActivitySave.createTagAddActivity(company5);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		LinkedHashSet<String> companiesTags6 = new LinkedHashSet<String>();
 		companiesTags5.add("Sample Company");
@@ -174,6 +212,13 @@ public class Defaults
 		company6.star_value = 4;
 		company6.lead_score = 813;
 		company6.save();
+		
+		try {
+			ActivitySave.createTagAddActivity(company6);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
 	    //Contacts default.
 		LinkedHashSet<String> tags = new LinkedHashSet<String>();
@@ -194,6 +239,13 @@ public class Defaults
 		contact.lead_score = 1357;
 		contact.star_value = 5;
 		contact.save();
+		
+		try {
+			ActivitySave.createTagAddActivity(contact);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		LinkedHashSet<String> tags1 = new LinkedHashSet<String>();
 		tags1.add("Sample Contact");
@@ -215,6 +267,13 @@ public class Defaults
 		contact1.star_value = 5;
 		contact1.lead_score = 9851;
 		contact1.save();
+		
+		try {
+			ActivitySave.createTagAddActivity(contact1);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 	    LinkedHashSet<String> tags2 = new LinkedHashSet<String>();
 		tags2.add("Sample Contact");
@@ -238,6 +297,13 @@ public class Defaults
 		contact2.lead_score = 8734;
 		contact2.save();
 	
+		try {
+			ActivitySave.createTagAddActivity(contact2);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		LinkedHashSet<String> tags3 = new LinkedHashSet<String>();
 		tags3.add("Sample Contact");
 		tags3.add("Donuts");
@@ -261,6 +327,12 @@ public class Defaults
 		contact3.lead_score = 8734;
 		contact3.save();
 	
+		try {
+			ActivitySave.createTagAddActivity(contact3);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
     }
 
@@ -282,6 +354,13 @@ public class Defaults
 			return;
 		task.addContacts(String.valueOf(ContactUtil.searchContactByPesonName("charlie").id));
 		task.save();
+		
+		try {
+			ActivitySave.createTaskAddActivity(task);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	
 		Task task1 = new Task();
 		task1.subject = "<a href=\"https://www.facebook.com/crmagile\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.facebook.com/crmagile\">Like Agile on Facebook</a>";
@@ -297,6 +376,13 @@ public class Defaults
 		task1.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		task1.save();
 	
+		try {
+			ActivitySave.createTaskAddActivity(task1);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Task task2 = new Task();
 		task2.subject = "Give feedback about Agile";
 		task2.is_complete = false;
@@ -310,6 +396,13 @@ public class Defaults
 			return;
 		task2.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
 		task2.save();
+		
+		try {
+			ActivitySave.createTaskAddActivity(task2);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		Task task3 = new Task();
 		task3.subject = "Recommend Agile";
@@ -325,6 +418,12 @@ public class Defaults
 		task3.addContacts(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
 		task3.save();
 		
+		try {
+			ActivitySave.createTaskAddActivity(task3);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -343,7 +442,14 @@ public class Defaults
 		    return;
 		event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		event.save();		
-	
+		
+		try {
+			ActivitySave.createEventAddActivity(event);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Event event1 = new Event();
 		event1.title = "Water cooler discussion";
 		event1.color = "green";
@@ -355,6 +461,13 @@ public class Defaults
 		    return;
 		event1.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		event1.save();
+		
+		try {
+			ActivitySave.createEventAddActivity(event1);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Event event2 = new Event();
 		event2.title = "Lunch meeting with Kripke";
@@ -368,6 +481,13 @@ public class Defaults
 		event2.addContacts(String.valueOf(ContactUtil.searchContactByEmail("sheldon@caltech.com").id));
 		event2.save();
 		
+		try {
+			ActivitySave.createEventAddActivity(event2);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Event event3 = new Event();
 		event3.title = "Power Plant Inspection";
 		event3.color = "red";
@@ -380,6 +500,13 @@ public class Defaults
 		event3.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
 		event3.save();
 		
+		try {
+			ActivitySave.createEventAddActivity(event3);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Event event4 = new Event();
 		event4.title = "Review meeting blue";
 		event4.color = "#36C";
@@ -389,6 +516,12 @@ public class Defaults
 		event4.end = date4.getTime().getTime() / 1000 + 1800;		
 		event4.save();
 		
+		try {
+			ActivitySave.createEventAddActivity(event4);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -412,6 +545,13 @@ public class Defaults
 			return;
 		deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
 		deal.save();
+
+		try {
+			ActivitySave.createDealAddActivity(deal);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		Opportunity deal1 = new Opportunity();
 		deal1.name = "Comic Film Direction";		
@@ -426,6 +566,13 @@ public class Defaults
 			return;
 		deal1.addContactIds(String.valueOf(ContactUtil.searchContactByPesonName("Charlie").id));
 		deal1.save();
+		
+		try {
+			ActivitySave.createDealAddActivity(deal1);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Opportunity deal2 = new Opportunity();
 		deal2.name = "Nike Endorsement";	
@@ -442,6 +589,13 @@ public class Defaults
 		deal2.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		deal2.save();
 		
+		try {
+			ActivitySave.createDealAddActivity(deal2);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Opportunity deal3 = new Opportunity();
 		deal3.name = "Nike Air Material";	
 		deal3.description = "Raw material for Nike Air series shoes";		
@@ -456,6 +610,13 @@ public class Defaults
 		    return;
 		deal3.addContactIds(String.valueOf(ContactUtil.searchContactByCompanyName("nike").id));
 		deal3.save();
+		
+		try {
+			ActivitySave.createDealAddActivity(deal3);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Opportunity deal4 = new Opportunity();
 		deal4.name = "Springfield Nuclear Power Plant Inspection";	
@@ -472,6 +633,13 @@ public class Defaults
 		deal4.close_date = date4.getTime().getTime() / 1000;		
 		deal4.save();
 		
+		try {
+			ActivitySave.createDealAddActivity(deal4);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Opportunity deal5 = new Opportunity();
 		deal5.name = "Research Grant";	
 		deal5.description = "Research grant for particle physics research";		
@@ -487,6 +655,13 @@ public class Defaults
 		deal5.close_date = date5.getTime().getTime() / 1000;		
 		deal5.save();
 		
+		try {
+			ActivitySave.createDealAddActivity(deal5);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Opportunity deal6 = new Opportunity();
 		deal6.name = "Open Science Grid Computer";	
 		deal6.description = "Kripke controls the open science grid computer at Caltech";		
@@ -501,6 +676,13 @@ public class Defaults
 		DateUtil date6 = new DateUtil().toMidnight().addDays(10);
 		deal6.close_date = date6.getTime().getTime() / 1000;		
 		deal6.save();
+		
+		try {
+			ActivitySave.createDealAddActivity(deal6);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
