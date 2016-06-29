@@ -242,7 +242,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             </div>
                                         </div>
                                         <div id="gradientPresets">
-                                            <h5>{{ 'gradients' | translate }}</h5>
+                                            <!-- <h5>{{ 'gradients' | translate }}</h5> -->
                                             <ul class="img-presets-list" bl-pretty-scrollbar>
                                                 <li ng-repeat="gradient in gradients track by $index">
                                                     <div class="preset" ng-click="selectPreset($event)" ng-style="{ 'background-image': gradient }"></div>
