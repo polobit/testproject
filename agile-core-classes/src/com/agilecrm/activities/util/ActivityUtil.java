@@ -861,7 +861,8 @@ public class ActivityUtil
 				}
 				mapvalue[0] = tagset;
 				mapvalue[2] = "tags";
-				dealmap.put("tags", mapvalue);
+				if(!mapvalue[0].equals(mapvalue[1]))
+					dealmap.put("tags", mapvalue);
 				}
 			
 			JSONObject js = new JSONObject(new Gson().toJson(obj));
