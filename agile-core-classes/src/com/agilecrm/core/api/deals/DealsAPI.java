@@ -640,12 +640,6 @@ public class DealsAPI
 		System.out.println("------------" + idsArray.length());
 	    }
 
-	    if (StringUtils.isEmpty(filters))
-		filters = "{}";
-
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
-
 	    String uri = "/core/api/opportunity/backend/delete/" + SessionManager.get().getDomainId();
 
 	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);

@@ -1631,6 +1631,14 @@ function addTypeCustomData(contactId, el){
 								
 							}
 						});
-	customFieldsView.collection.fetch();
+	customFieldsView.collection.fetch({
+
+		success : function(data){
+			if(data.length){
+				$('#contacts-type-custom-fields' , el).removeClass('hidden');
+			}
+		}
+	});
 	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
+	
 }

@@ -1,12 +1,12 @@
 package com.agilecrm.search.document;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,8 +14,8 @@ import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.contact.CustomFieldDef;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
@@ -25,6 +25,8 @@ import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.StringUtils2;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Document.Builder;
@@ -353,13 +355,34 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 				}
 				
 			    builder.setName(SearchUtil.normalizeTextSearchString(data.name) + "_time_epoch");
+			    
+			    UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+			    
+			    String defaultFormat = "MM/dd/yyyy";
+			    
+			    if(userPrefs != null && userPrefs.dateFormat != null)
+			    {
+			    	defaultFormat = userPrefs.dateFormat.replaceAll("m", "M");
+			    }
+			    
+			    SimpleDateFormat sdf = new SimpleDateFormat(defaultFormat);
+			    
+			    Date cusDate = sdf.parse(data.value);
 
-			    builder.setNumber(Double.valueOf(data.value));
-			    doc.addField(Field.newBuilder().setNumber(Double.valueOf(data.value)));
+			    builder.setNumber(cusDate.getTime() / 1000);
+			    doc.addField(Field.newBuilder().setNumber(cusDate.getTime() / 1000));
 			    
 			    fieldsSet.add(SearchUtil.normalizeTextSearchString(data.name) + "_time");
 			}
 			catch (NumberFormatException e)
+			{
+			    e.printStackTrace();
+			}
+			catch (ParseException e)
+			{
+			    e.printStackTrace();
+			}
+			catch (Exception e)
 			{
 			    e.printStackTrace();
 			}

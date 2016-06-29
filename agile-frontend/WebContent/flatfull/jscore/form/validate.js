@@ -160,6 +160,15 @@ function isValidForm(form) {
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
 
+	//Positive Number validation which not accepts zero
+	jQuery.validator.addMethod("number_grater_than_zero", function(value, element){
+		
+		if(value=="" || (!isNaN(value) && parseFloat(value) == 0))
+			return false;
+		
+		return /^[0-9]+$/.test(value);
+	}," Please enter a valid number.");
+
 	//Positive Number validation
 	jQuery.validator.addMethod("positive_number", function(value, element){
 		
