@@ -394,6 +394,8 @@ public class WidgetsAPI {
 						if(widget.widget_type.equals(WidgetType.CUSTOM)){							
 							CustomWidget.deleteCustomWidgetByUserID(oldUserID, widgetName);							
 						}
+					}else{						
+						WidgetUtil.updateWidgetStatus(oldUserID, widgetName, false);
 					}
 				} else {
 					finalUsers.put(oldUserArray.get(i));
