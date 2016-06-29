@@ -33,7 +33,6 @@ public class MailgunUtil {
 	private static boolean flag=false;
 	private static final String SUBACCOUNT="subaccount";
 	private static String toAddress = "";
-	private static JSONObject metadata=null;
 	
 	/**
 	 * sendMailgunMails method is used for sending bulk emails and campaign emails
@@ -71,7 +70,10 @@ public class MailgunUtil {
 			 formData.add(MailgunNew.MAILGUN_API_PARAM_TEXT_BODY, "%recipient.text%");
 			 			 
 			 if(flag)
+			 {
 			     formData.add(MailgunNew.MAILGUN_API_PARAM_HTML_BODY, "%recipient.html%");
+			     flag=false;
+			 }
 		       
 		       String replyTo=getMailgunReplyToAddress(tasks);
 		       if(!StringUtils.isEmpty(replyTo))

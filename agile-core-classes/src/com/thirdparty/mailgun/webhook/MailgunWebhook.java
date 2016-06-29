@@ -49,6 +49,12 @@ public class MailgunWebhook extends HttpServlet
     public static final String METADATA_CAMPAIGN_ID = "campaign_id";
     
     public static final String ERROR_CODE = "code";
+    
+    public static final String REASON = "reason";
+    
+    public static final String REASON_OLD = "old";
+    
+    public static final String REASON_HARDFAIL = "hardfail";
 
     public void doPost(HttpServletRequest req, HttpServletResponse res)
     {
@@ -61,9 +67,24 @@ public class MailgunWebhook extends HttpServlet
 		  String event = webhooksJSON.getString(EVENT);
 		  System.out.println("Mailgun Webhooks Event : "+event);
 		  
-		  String code = webhooksJSON.getString(ERROR_CODE);
-		  if(StringUtils.startsWith(code, "5"));
-		  	event=HARD_BOUNCE;
+		  if(event.equals(HARD_BOUNCE))
+		  {
+			  String code = webhooksJSON.getString(ERROR_CODE);
+			  if(!StringUtils.startsWith(code, "5"));
+			  	  return; 	  
+		  }
+		  else if(event.equals(SOFT_BOUNCE))
+		  {
+			  String reason = webhooksJSON.getString(REASON);
+			  
+			  if(reason.equals(REASON_OLD))
+				  event = SOFT_BOUNCE;
+			  else if(reason.equals(REASON_HARDFAIL))
+				  event = HARD_BOUNCE;
+			  else return;
+		  }
+		  
+		 
 	     
 	     String email=webhooksJSON.getString(EMAIL);
 	     System.out.println(email);
