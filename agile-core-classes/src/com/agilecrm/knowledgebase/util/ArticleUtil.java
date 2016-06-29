@@ -74,9 +74,10 @@ public class ArticleUtil
 		{
 			private static final long serialVersionUID = 1L;
 
-			{
+			{	
 				put("categorie_key", new Key<>(Categorie.class, categorieID));
 				put("section_key", new Key<>(Section.class, sectionID));
+				put("is_article_published",Boolean.FALSE);
 			}
 		};
 

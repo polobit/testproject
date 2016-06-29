@@ -15,11 +15,13 @@ var HelpcenterRouter = Backbone.Router.extend({
 		"search-article/:search_term" : "searchArticle"  
 	},
 	categories: function(){
+		console.log("sreedevi");
 
-		
+		App_Helpcenter.renderHomeTemplate(function(){
+
 			//Initializing base collection with groups URL
 			App_Helpcenter.categoriesCollection = new Base_Collection_View({
-				url :KB_DOMAIN+'/helpcenterapi/api/knowledgebase/categorie',
+				url :'/helpcenterapi/api/knowledgebase/categorie',
 				templateKey : "helpcenter-categories",
 				individual_tag_name : 'div',
 				postRenderCallback : function(el, collection) {
@@ -32,7 +34,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 			App_Helpcenter.categoriesCollection.collection.fetch();
 
 			//Rendering template
-			$('#agile_kb_result_embed').html(App_Helpcenter.categoriesCollection.el);
+			$('#helpcenter-container').html(App_Helpcenter.categoriesCollection.el);
+		});
 	},
 
 	categorieSections: function(categorie_id){
@@ -42,14 +45,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 			var categorieView = new Base_Model_View({
 				isNew : false,
 				template : "categorie",
-				url : KB_DOMAIN+"/helpcenterapi/api/knowledgebase/categorie/" + categorie_id,
+				url : "/helpcenterapi/api/knowledgebase/categorie/" + categorie_id,
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('categorie-sections-breadcrumb', data);
 
 		        	//Initializing base collection with groups URL
 					App_Helpcenter.sectionsCollection = new Base_Collection_View({
-						url : KB_DOMAIN+'/helpcenterapi/api/knowledgebase/section/categorie/' + categorie_id,
+						url : '/helpcenterapi/api/knowledgebase/section/categorie/' + categorie_id,
 						templateKey : "helpcenter-sections",
 						individual_tag_name : 'div'
 					});
@@ -62,26 +65,25 @@ var HelpcenterRouter = Backbone.Router.extend({
 		        }
 			});
 
-	 		$('#agile_kb_result_embed').html(categorieView.render().el);
+	 		$('#helpcenter-container').html(categorieView.render().el);
 	 	});
 	},
 
 	sectionArticles: function(categorie_id, section_id){
 
-		App_Helpcenter.renderHomeTemplate(function(
-			){
+		App_Helpcenter.renderHomeTemplate(function(){
 
 			var sectionView = new Base_Model_View({
 				isNew : false,
 				template : "section",
-				url : KB_DOMAIN+"/helpcenterapi/api/knowledgebase/section?id=" + section_id,
+				url : "/helpcenterapi/api/knowledgebase/section?id=" + section_id,
 		        postRenderCallback: function(el, data){
 
 		        	Helpcenter_Util.setBreadcrumbPath('section-articles-breadcrumb', data);
 
 		        	//Initializing base collection with groups URL
 					App_Helpcenter.articlesCollection = new Base_Collection_View({
-						url : KB_DOMAIN+'/helpcenterapi/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
+						url : '/helpcenterapi/api/knowledgebase/article?section_id=' + section_id + '&categorie_id=' + categorie_id,
 						templateKey : "helpcenter-articles",
 						individual_tag_name : 'div',
 						postRenderCallback : function(el){
@@ -96,7 +98,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 		        }
 			});
 
-	 		$('#agile_kb_result_embed').html(sectionView.render().el);
+	 		$('#helpcenter-container').html(sectionView.render().el);
 	 	});
 	},
 
@@ -116,14 +118,14 @@ var HelpcenterRouter = Backbone.Router.extend({
 				}
 			});
 
-	 		$('#agile_kb_result_embed').html(articleView.render().el);
+	 		$('#helpcenter-container').html(articleView.render().el);
 	 	});
 	},
 
 	renderComment : function(el,article_id){
     	
     	App_Helpcenter.commentsCollection = new Base_Collection_View({
-			url : KB_DOMAIN+'/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
+			url : '/helpcenterapi/api/knowledgebase/comment?article_id=' + article_id ,
 			templateKey : "article-comments",
 			individual_tag_name : 'div',
 			sort_collection:"true",
@@ -149,7 +151,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 		var commentsView = new Base_Model_View({
 		isNew : true,
 		template : "add-newcomments",
-		url : KB_DOMAIN+"/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
+		url : "/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
     
         postRenderCallback : function(el){  		    
 	
@@ -173,7 +175,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 		    	e.preventDefault();
 		    	var id = $(this).data("id");
 		    	 $.ajax({
-		            url: KB_DOMAIN+'/helpcenterapi/api/knowledgebase/comment?id='+id,
+		            url: '/helpcenterapi/api/knowledgebase/comment?id='+id,
 		            type: 'DELETE',
 		            contentType : "application/json",
 		            success : function(response){
@@ -198,7 +200,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 					isNew : false,
 					template : "add-newcomments",
 					model : commentsModel,
-					url : KB_DOMAIN+"/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
+					url : "/helpcenterapi/api/knowledgebase/comment?article_id=" + article_id,
 			 		
 			 		postRenderCallback : function(el){  		    
 	
@@ -231,7 +233,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	},
 	renderHomeTemplate: function(callback){
 
-		if($('#agile_kb_result_embed').length)
+		if($('#helpcenter-container').length)
 		{
 			callback();
 			return;
@@ -242,7 +244,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 	 		if(!template_ui)
 	 			return;
 
-	 		$('#agile_kb_result_embed').html($(template_ui));
+	 		$('#content').html($(template_ui));
 
 	 		if(callback)
 	 			callback();
@@ -255,7 +257,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 
 			//Initializing base collection with groups URL
 			App_Helpcenter.articlesCollection = new Base_Collection_View({
-				url : KB_DOMAIN+'/helpcenterapi/api/knowledgebase/article/search/' + search_term,
+				url : '/helpcenterapi/api/knowledgebase/article/search/' + search_term,
 				templateKey : "helpcenter-search-articles",
 				individual_tag_name : 'div',
 				slateKey : 'articles',
@@ -269,7 +271,7 @@ var HelpcenterRouter = Backbone.Router.extend({
 			App_Helpcenter.articlesCollection.collection.fetch();
 
 			//Rendering template
-			$('#agile_kb_result_embed').html(App_Helpcenter.articlesCollection.el);
+			$('#helpcenter-container').html(App_Helpcenter.articlesCollection.el);
 		});
 	}
 
