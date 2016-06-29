@@ -148,7 +148,7 @@ function taskFetch(base_model)
 		url : base_model.get("url"),
 		templateKey : 'task',
 		individual_tag_name : 'div',
-		sort_collection : false,
+		sortKey : "-due",
 		cursor : true,
 		page_size : 20,
 		postRenderCallback : function(el)
