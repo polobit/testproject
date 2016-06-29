@@ -79,21 +79,21 @@ try{console.time("startbackbone");}catch(e){}
 
 var LOCAL_SERVER = <%=debug%>;
 
-var KB_DOMAIN = LOCAL_SERVER ?'':'<%=domain%>';
+var KB_DOMAIN = LOCAL_SERVER ? '':'<%=domain%>-dot-sandbox-dot-agilecrmbeta.appspot.com';
 
 var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
-var S3_STATIC_IMAGE_PATH = KB_DOMAIN+'<%=S3_STATIC_IMAGE_PATH%>';
+var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 
 
-var LIB_PATH = KB_DOMAIN+'<%=CLOUDFRONT_STATIC_FILES_PATH%>';
+var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';
 
 var FLAT_FULL_PATH = KB_DOMAIN+'<%=FLAT_FULL_PATH%>';
 
 // Target to cloudfront URL
-var LIB_PATH_FLATFULL = KB_DOMAIN+'<%=CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH%>'
+var LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH%>'
 
-var CLOUDFRONT_PATH = KB_DOMAIN+'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>';
+var CLOUDFRONT_PATH ='<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>';
 
 var FLAT_FULL_UI = KB_DOMAIN+"flatfull/";  
 
@@ -101,7 +101,7 @@ var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
-var CSS_PATH = KB_DOMAIN+'<%=CSS_PATH%>';
+var CSS_PATH = '<%=CSS_PATH%>';
 // var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 
 var IS_CONSOLE_ENABLED = <%=debug%>;
