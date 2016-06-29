@@ -114,7 +114,7 @@ public class DealFilterAPI {
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getQueryResultsList(@PathParam("filter_id") String id, @QueryParam("page_size") String count,
-    	    @FormParam("cursor") String cursor, @QueryParam("order_by") String sortKey) throws JSONException
+    		@QueryParam("cursor") String cursor, @QueryParam("order_by") String sortKey) throws JSONException
     {
 	System.out.println("cursor : " + cursor);
 	if (!StringUtils.isEmpty(count))
@@ -136,7 +136,7 @@ public class DealFilterAPI {
     @Path("/query/grid/{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Opportunity> getQueryResults(@PathParam("filter_id") String id, @QueryParam("page_size") String count, @FormParam("cursor") String cursor, 
+    public List<Opportunity> getQueryResults(@PathParam("filter_id") String id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor, 
     		@QueryParam("order_by") String sortKey, @QueryParam("pipeline_id") String pipeline, @QueryParam("milestone") String milestone) throws JSONException
     {
 	System.out.println("cursor : " + cursor);
@@ -159,7 +159,7 @@ public class DealFilterAPI {
     @Path("/query/list/tags/{tag_name}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Opportunity> getOpportubitiesListWithTags(@PathParam("tag_name") String tagName, @QueryParam("page_size") String count, @FormParam("cursor") String cursor, 
+    public List<Opportunity> getOpportubitiesListWithTags(@PathParam("tag_name") String tagName, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor, 
     		@QueryParam("order_by") String sortKey) throws JSONException
     {
 	System.out.println("cursor : " + cursor);
@@ -182,7 +182,7 @@ public class DealFilterAPI {
     @Path("/query/total/{filter_id}")
     @GET
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
-    public JSONObject getQueryResultsCount(@PathParam("filter_id") String id, @QueryParam("page_size") String count, @FormParam("cursor") String cursor, 
+    public JSONObject getQueryResultsCount(@PathParam("filter_id") String id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor, 
     		@QueryParam("order_by") String sortKey, @QueryParam("pipeline_id") String pipeline, @QueryParam("milestone") String milestone) throws JSONException
     {
     List<Opportunity> oppList = null;
