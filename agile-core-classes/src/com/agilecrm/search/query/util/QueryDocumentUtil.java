@@ -142,6 +142,8 @@ public class QueryDocumentUtil
 					// double quotes for exact match of value.
 					if ("tags".equals(lhs)) {
 						value = SearchUtil.normalizeTag(value);
+					} else if("milestone".equals(lhs)) {
+						value = rhs;
 					} else {
 						value = SearchUtil.normalizeString(value);
 					}
@@ -157,6 +159,8 @@ public class QueryDocumentUtil
 				{
 					if ("tags".equals(lhs)) {
 						value = SearchUtil.normalizeTag(value);
+					} else if("milestone".equals(lhs)) {
+						value = rhs;
 					} else {
 						value = SearchUtil.normalizeString(value);
 					}

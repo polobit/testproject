@@ -11,6 +11,8 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.SearchFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
@@ -238,7 +240,11 @@ public class DealFilter extends SearchFilter implements Serializable, Comparable
     @PostLoad
     private void postLoad()
     {
-    	DealFilterUtil.setOldFiltersData(this);
+    	try {
+    		DealFilterUtil.setOldFiltersData(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
     
     /**
