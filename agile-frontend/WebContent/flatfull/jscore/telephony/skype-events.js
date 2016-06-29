@@ -155,23 +155,26 @@ function saveCallActivitySkype(call){
 	}
 	globalCallForActivity.justSavedCalledIDForActivity = globalCallForActivity.justCalledId;
 	
-	if(!globalCall.contactedId && dialled.using == "dialler"){
+/*	if(!globalCall.contactedId && dialled.using == "dialler"){
 		$.post( "/core/api/widgets/skype/savecallactivity",{
 			direction: call.direction, 
 			phone: call.phone, 
 			status : call.status,
 			duration : call.duration
 			});
-	}
+	}*/
+	
 	if(call.status == "Answered"){
 		return;
 	}
 	
+	var callerObjectId = call.contactId;
+	if(!callerObjectId){
+		return;
+	}
+	
 	if(call.direction == "Outgoing" || call.direction == "outgoing"){
-		var callerObjectId = globalCall.contactedId;
-		if(!callerObjectId){
-			return;
-		}
+
 		$.post( "/core/api/widgets/skype/savecallactivityById",{
 			id:callerObjectId,
 			direction: call.direction, 
@@ -206,6 +209,7 @@ function saveCallNoteSkype(){
 	var number = globalCallForActivity.callNumber;
 	var callId = globalCallForActivity.callId;
 	var duration = globalCallForActivity.duration;
+	var cntId = globalCallForActivity.contactedId;
 	var contact;
 	var id;
 	var desc;
@@ -268,7 +272,6 @@ function saveCallNoteSkype(){
 	    	}
 	    });
 	}else{
-		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
 					twilioIOSaveContactedTime(cntId);
@@ -315,7 +318,7 @@ function saveCallNoteSkype(){
     			data.duration = duration;
     			data.contId = null;
     			data.contact_name = "";
-    			data.widget = "Bria";
+    			data.widget = "Skype";
     			CallLogVariables.dynamicData = data;
     		}
 	    		CallLogVariables.callWidget = "Skype";
@@ -325,7 +328,7 @@ function saveCallNoteSkype(){
 	    		CallLogVariables.status = callStatus;
     		
     		return showNewContactModal(number);
-		}
+	}
 	}
 }
 

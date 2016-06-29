@@ -112,6 +112,21 @@ angular.module('builder').controller('BuilderController', ['$scope', '$rootScope
     $rootScope.selectNode = function(node) {
         if ($scope.rowEditorOpen) { return true; }
 
+        //hide select-box for below elements
+        var inline_element=['U','S','B', 'BIG', 'I', 'SMALL','EM', 'KBD','STRONG', 'SAMP', 'TIME', 'VAR', 'BR', 'SPAN','SUB', 'SUP'];
+        
+        if(inline_element.includes(node.tagName)){
+            var k=0;
+            var i=node;
+            while(k==0){
+                if(!inline_element.includes(i.tagName)){
+                    node=i;
+                    k=1; 
+                } 
+                else 
+                  i=i.parentNode;
+            }
+        }              
         $scope.selecting = true;
 
         $scope.selected.previous = $scope.selected.node;
@@ -139,7 +154,15 @@ angular.module('builder').controller('BuilderController', ['$scope', '$rootScope
         $scope.selected.locked = $scope.selected.node.className.indexOf('locked') > -1;
         $scope.selected.isImage = $scope.selected.node.nodeName == 'IMG' &&
         $scope.selected.node.className.indexOf('preview-node') === -1;
-
+          
+        //hide trash for column
+        var select_box_ele=$scope.selectBox.find('#select-box-actions');
+        if(select_box_ele.find('.element-tag').text()==="column"){
+            select_box_ele.find('.icon-trash').hide();
+        }
+        else{
+            select_box_ele.find('.icon-trash').show();
+        }
         //create an array from all parents of this node
         var parents = $($scope.selected.node).parentsUntil('body').toArray();
         parents.unshift($scope.selected.node);

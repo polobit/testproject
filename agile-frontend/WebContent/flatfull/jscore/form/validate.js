@@ -160,6 +160,15 @@ function isValidForm(form) {
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
 
+	//Positive Number validation which not accepts zero
+	jQuery.validator.addMethod("number_grater_than_zero", function(value, element){
+		
+		if(value=="" || (!isNaN(value) && parseFloat(value) == 0))
+			return false;
+		
+		return /^[0-9]+$/.test(value);
+	}," Please enter a valid number.");
+
 	//Positive Number validation
 	jQuery.validator.addMethod("positive_number", function(value, element){
 		
@@ -256,8 +265,8 @@ function isValidForm(form) {
 	// domain name validation
 	jQuery.validator.addMethod("domain_format", function(value, element){
 		
-		return /^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$/.test(value);
-	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter.");
+		return /^[a-zA-Z][a-zA-Z0-9-_]{3,20}$/.test(value);
+	}," Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'.");
     
 
     jQuery.validator.addMethod("customFieldSpecialCharacter", function(value, element){

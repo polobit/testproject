@@ -1131,6 +1131,8 @@ $(function()
 							element = "";
 							cls = "compactcontact";
 						}
+						if(element == "basic_info")
+							element = "Basic Info";
 					}
 			}
 
@@ -6657,6 +6659,8 @@ $(function()
 							element = "";
 							cls = "compactcontact";
 						}
+						if(element == "basic_info")
+							element = "Basic Info";
 					}
 			}
 		else if(element == "url")
