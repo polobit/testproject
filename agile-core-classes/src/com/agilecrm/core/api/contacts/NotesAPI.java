@@ -194,7 +194,8 @@ public class NotesAPI
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String saveCallActivity(@FormParam("id") Long id, @FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,@FormParam("callWidget") String callWidget,@QueryParam("note_id") Long note_id) {		
+	public String saveCallActivity(@FormParam("id") Long id, @FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,@FormParam("callWidget") String callWidget,
+			@QueryParam("note_id") Long note_id) {		
 
 		Contact contact  = null;
 		

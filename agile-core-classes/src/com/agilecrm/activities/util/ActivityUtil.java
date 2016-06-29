@@ -1541,7 +1541,7 @@ public class ActivityUtil
 	 * @param callDuration
 	 */
 	public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
-			String callDuration,Long note_id)
+			String callDuration)
 	{
 
 		// Search contact
@@ -1583,7 +1583,6 @@ public class ActivityUtil
 				activity.label = calledToName;
 				activity.entity_type = EntityType.CONTACT;
 				activity.entity_id = contact.id;
-				activity.note_id_call=note_id.toString();
 				activity.save();
 			}
 			else
@@ -1597,7 +1596,6 @@ public class ActivityUtil
 				activity.label = toOrFromNumber;
 				activity.entity_type = null;
 				activity.entity_id = null;
-				activity.note_id_call=note_id.toString();
 				activity.save();
 			}
 		}
@@ -2182,6 +2180,82 @@ public class ActivityUtil
 		
 		
 		
+	}
+	
+	/**
+	 * creates log for each call activity i.e twillio or sip
+	 * 
+	 * @param serviceType
+	 *            {out going or incoming}
+	 * @param toOrFromNumber
+	 * @param callType
+	 *            {tw}
+	 * @param callStatus
+	 * @param callDuration
+	 */
+	public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
+			String callDuration,Long note_id)
+	{
+
+		// Search contact
+		if (toOrFromNumber != null)
+		{
+			Contact contact;
+			try
+			{
+				contact = QueryDocumentUtil.getContactsByPhoneNumber(toOrFromNumber);
+			}
+			catch (Exception e)
+			{
+				contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
+			}
+			System.out.println("contact: " + contact);
+			if (contact != null)
+			{
+				String calledToName = "";
+				List<ContactField> properties = contact.properties;
+				for (ContactField f : properties)
+				{
+					System.out.println("\t" + f.name + " - " + f.value);
+					if (f.name.equals(contact.FIRST_NAME))
+					{
+						calledToName += f.value;
+					}
+					if (f.name.equals(contact.LAST_NAME))
+					{
+						calledToName += " " + f.value;
+					}
+				}
+
+				Activity activity = new Activity();
+				activity.activity_type = ActivityType.CALL;
+				activity.custom1 = serviceType;
+				activity.custom2 = callType;
+				activity.custom3 = callStatus;
+				activity.custom4 = callDuration;
+				activity.label = calledToName;
+				activity.entity_type = EntityType.CONTACT;
+				activity.entity_id = contact.id;
+				if(note_id!=null)
+					activity.note_id_call=note_id.toString();
+				activity.save();
+			}
+			else
+			{
+				Activity activity = new Activity();
+				activity.activity_type = ActivityType.CALL;
+				activity.custom1 = serviceType;
+				activity.custom2 = callType;
+				activity.custom3 = callStatus;
+				activity.custom4 = callDuration;
+				activity.label = toOrFromNumber;
+				activity.entity_type = null;
+				activity.entity_id = null;
+				if(note_id!=null)
+					activity.note_id_call=note_id.toString();
+				activity.save();
+			}
+		}
 	}
 
 	private static List<Activity> getActivityBasedOnNoteId(String note_id)
