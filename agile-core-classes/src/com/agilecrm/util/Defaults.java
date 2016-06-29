@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.json.JSONException;
-
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Status;
 import com.agilecrm.activities.Task.Type;
-import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
@@ -52,29 +49,6 @@ public class Defaults
     {
     	
     	//Companies default.
-	    List<ContactField> companyFields = new ArrayList<ContactField>();
-		companyFields.add(new ContactField(Contact.NAME, "Agile CRM", null));
-		companyFields.add(new ContactField(Contact.URL, "http://www.agilecrm.com/", null));
-		companyFields.add(new ContactField(Contact.EMAIL, "care@agilecrm.com", "primary"));		
-		companyFields.add(new ContactField("phone", "+1-800-980-0729", "primary"));
-		companyFields.add(new ContactField(Contact.EMAIL, "sales@agilecrm.com", "primary"));
-		companyFields
-			.add(new ContactField("address",
-				"{\"address\":\"Agile CRM, Vertex Corporate, Jubilee Enclave\",\"city\":\"HITEC City\",\"state\":\"Telangana\",\"zip\":\"500081\", \"country\":\"IN\"}",
-				"office"));
-		Contact company = new Contact();
-		company.type = Contact.Type.COMPANY;
-		company.properties = companyFields;
-		company.star_value = 0;
-		company.lead_score = 0;
-		company.save();
-	
-		try {
-			ActivitySave.createTagAddActivity(company);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
 	    List<ContactField> companyFields1 = new ArrayList<ContactField>();
 		companyFields1.add(new ContactField(Contact.NAME, "Hollywood", null));
@@ -84,61 +58,6 @@ public class Defaults
 		company1.star_value = 0;
 		company1.lead_score = 0;
 		company1.save();
-		
-		try {
-			ActivitySave.createTagAddActivity(company1);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
-		List<ContactField> companyFields2 = new ArrayList<ContactField>();
-		companyFields2.add(new ContactField(Contact.NAME, "Apple Inc.", null));
-		companyFields2.add(new ContactField("image",
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462861685792?id=contact-container", null));
-		Contact company2 = new Contact();
-		company2.type = Contact.Type.COMPANY;
-		company2.properties = companyFields2;
-		company2.star_value = 5;
-		company2.lead_score = 1067;
-		company2.save();
-		
-		try {
-			ActivitySave.createTagAddActivity(company2);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
-		LinkedHashSet<String> companiesTags3 = new LinkedHashSet<String>();
-		companiesTags3.add("Sample Company");
-	
-		List<ContactField> companyFields3 = new ArrayList<ContactField>();
-		companyFields3.add(new ContactField(Contact.NAME, "Nike", null));
-	
-		companyFields3.add(new ContactField(Contact.URL, "http://www.nike.com", null));
-		companyFields3.add(new ContactField(Contact.EMAIL, "media.relations@nike.com", "primary"));		
-		companyFields3.add(new ContactField(Contact.EMAIL, "pr@converse.com", "alternate"));
-		companyFields3.add(new ContactField("phone", "1-503-671-6453", "primary"));	
-		companyFields3.add(new ContactField("phone", "1-212-367-4447", "alternate"));	
-		companyFields3
-			.add(new ContactField("address",
-				"{\"address\":\"One Bowerman Drive\",\"city\":\"Beaverton\",\"state\":\"OR\",\"zip\":\"97005\", \"country\":\"US\"}",
-				"office"));
-		companyFields3.add(new ContactField("image",
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1462862033186?id=contact-container", null));
-	
-		Contact company3 = new Contact(Contact.Type.COMPANY, companiesTags3, companyFields3);	
-		company3.star_value = 4;
-		company3.lead_score = 4578;
-		company3.save();
-	
-		try {
-			ActivitySave.createTagAddActivity(company3);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		LinkedHashSet<String> companiesTags4 = new LinkedHashSet<String>();
 		companiesTags4.add("Sample Company");
@@ -154,13 +73,6 @@ public class Defaults
 		company4.star_value = 3;
 		company4.lead_score = 43;
 		company4.save();
-		
-		try {
-			ActivitySave.createTagAddActivity(company4);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
 		LinkedHashSet<String> companiesTags5 = new LinkedHashSet<String>();
 		companiesTags5.add("Sample Company");
@@ -182,13 +94,6 @@ public class Defaults
 		company5.star_value = 5;
 		company5.lead_score = 749;
 		company5.save();
-		
-		try {
-			ActivitySave.createTagAddActivity(company5);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
 		LinkedHashSet<String> companiesTags6 = new LinkedHashSet<String>();
 		companiesTags5.add("Sample Company");
@@ -207,13 +112,6 @@ public class Defaults
 		company6.star_value = 4;
 		company6.lead_score = 813;
 		company6.save();
-		
-		try {
-			ActivitySave.createTagAddActivity(company6);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     	
 	    //Contacts default.
 		LinkedHashSet<String> tags = new LinkedHashSet<String>();
@@ -234,13 +132,6 @@ public class Defaults
 		contact.lead_score = 1357;
 		contact.star_value = 5;
 		contact.save();
-		
-		try {
-			ActivitySave.createTagAddActivity(contact);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
 		LinkedHashSet<String> tags1 = new LinkedHashSet<String>();
 		tags1.add("Sample Contact");
@@ -262,13 +153,6 @@ public class Defaults
 		contact1.star_value = 5;
 		contact1.lead_score = 9851;
 		contact1.save();
-		
-		try {
-			ActivitySave.createTagAddActivity(contact1);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
 	    LinkedHashSet<String> tags2 = new LinkedHashSet<String>();
 		tags2.add("Sample Contact");
@@ -291,13 +175,6 @@ public class Defaults
 		contact2.star_value = 5;
 		contact2.lead_score = 8734;
 		contact2.save();
-	
-		try {
-			ActivitySave.createTagAddActivity(contact2);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		LinkedHashSet<String> tags3 = new LinkedHashSet<String>();
 		tags3.add("Sample Contact");
@@ -308,7 +185,7 @@ public class Defaults
 		contactFields3.add(new ContactField(Contact.EMAIL, "homer@snpp.com", "work"));
 		contactFields3.add(new ContactField(Contact.EMAIL, "homer.simpson@yahoo.com", "home"));
 		companyFields6.add(new ContactField("phone", "1-888", "work"));	
-		contactFields3.add(new ContactField(Contact.COMPANY, "Caltech", null));
+		contactFields3.add(new ContactField(Contact.COMPANY, "Springfield Nuclear Power Plant", null));
 		contactFields3.add(new ContactField("website", "http://the-big-bang-theory.com/characters.Sheldon/", "URL"));
 		contactFields3.add(new ContactField("website", "https://twitter.com/therealsheldonc", "TWITTER"));
 		contactFields3.add(new ContactField(Contact.TITLE, "Safety Inspector", null));
@@ -321,13 +198,6 @@ public class Defaults
 		contact3.star_value = 5;
 		contact3.lead_score = 8734;
 		contact3.save();
-	
-		try {
-			ActivitySave.createTagAddActivity(contact3);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
     }
 
@@ -348,14 +218,7 @@ public class Defaults
 		if (ContactUtil.searchContactByPesonName("charlie") != null){			
 			task.addContacts(String.valueOf(ContactUtil.searchContactByPesonName("charlie").id));
 		}
-		task.save();
-		
-		try {
-			ActivitySave.createTaskAddActivity(task);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+		task.save();		
 	
 		Task task1 = new Task();
 		task1.subject = "<a href=\"https://www.facebook.com/crmagile\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.facebook.com/crmagile\">Like Agile on Facebook</a>";
@@ -370,13 +233,6 @@ public class Defaults
 			task1.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		}
 		task1.save();
-	
-		try {
-			ActivitySave.createTaskAddActivity(task1);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		Task task2 = new Task();
 		task2.subject = "Give feedback about Agile";
@@ -391,13 +247,6 @@ public class Defaults
 			task2.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@snpp.com").id));
 		}
 		task2.save();
-		
-		try {
-			ActivitySave.createTaskAddActivity(task2);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
 		Task task3 = new Task();
 		task3.subject = "Recommend Agile";
@@ -413,12 +262,6 @@ public class Defaults
 		}					
 		task3.save();
 		
-		try {
-			ActivitySave.createTaskAddActivity(task3);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 
     /**
@@ -438,13 +281,6 @@ public class Defaults
 		}
 		event.save();		
 		
-		try {
-			ActivitySave.createEventAddActivity(event);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		Event event1 = new Event();
 		event1.title = "Water cooler discussion";
 		event1.color = "green";
@@ -456,13 +292,6 @@ public class Defaults
 			event1.addContacts(String.valueOf(ContactUtil.searchContactByEmail("mj@nba.com").id));
 		}		    		
 		event1.save();
-		
-		try {
-			ActivitySave.createEventAddActivity(event1);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		Event event2 = new Event();
 		event2.title = "Lunch meeting with Kripke";
@@ -476,13 +305,6 @@ public class Defaults
 		}
 		event2.save();
 		
-		try {
-			ActivitySave.createEventAddActivity(event2);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		Event event3 = new Event();
 		event3.title = "Power Plant Inspection";
 		event3.color = "red";
@@ -495,13 +317,6 @@ public class Defaults
 		}
 		event3.save();
 		
-		try {
-			ActivitySave.createEventAddActivity(event3);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		Event event4 = new Event();
 		event4.title = "Review meeting blue";
 		event4.color = "#36C";
@@ -511,12 +326,6 @@ public class Defaults
 		event4.end = date4.getTime().getTime() / 1000 + 1800;		
 		event4.save();
 		
-		try {
-			ActivitySave.createEventAddActivity(event4);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 
     /**
@@ -540,13 +349,6 @@ public class Defaults
 			deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmailID("homer@snpp.com").id));
 		}					
 		deal.save();
-
-		try {
-			ActivitySave.createDealAddActivity(deal);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
 		Opportunity deal1 = new Opportunity();
 		deal1.name = "Comic Film Direction";		
@@ -561,13 +363,6 @@ public class Defaults
 			deal1.addContactIds(String.valueOf(ContactUtil.searchContactByPesonName("charlie").id));
 		}					
 		deal1.save();
-		
-		try {
-			ActivitySave.createDealAddActivity(deal1);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		Opportunity deal2 = new Opportunity();
 		deal2.name = "Nike Endorsement";	
@@ -584,35 +379,6 @@ public class Defaults
 		}		    		
 		deal2.save();
 		
-		try {
-			ActivitySave.createDealAddActivity(deal2);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Opportunity deal3 = new Opportunity();
-		deal3.name = "Nike Air Material";	
-		deal3.description = "Raw material for Nike Air series shoes";		
-		deal3.expected_value = 150000d;
-		deal3.probability = 100;
-		deal3.pipeline_id = milestone.id;
-		deal3.milestone = "Won";
-		deal3.colorName = Opportunity.Color.YELLOW;
-		DateUtil date3 = new DateUtil().toMidnight().addDays(10);
-		deal3.close_date = date3.getTime().getTime() / 1000;
-		if (ContactUtil.searchContactByCompanyName("nike") != null){
-			deal3.addContactIds(String.valueOf(ContactUtil.searchContactByCompanyName("nike").id));
-		}		    		
-		deal3.save();
-		
-		try {
-			ActivitySave.createDealAddActivity(deal3);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		Opportunity deal4 = new Opportunity();
 		deal4.name = "Springfield Nuclear Power Plant Inspection";	
 		deal4.description = "Lost inspection deal due to Homer's incompetence";		
@@ -627,13 +393,6 @@ public class Defaults
 		DateUtil date4 = new DateUtil().toMidnight().addDays(10);
 		deal4.close_date = date4.getTime().getTime() / 1000;		
 		deal4.save();
-		
-		try {
-			ActivitySave.createDealAddActivity(deal4);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		Opportunity deal5 = new Opportunity();
 		deal5.name = "Research Grant";	
@@ -650,20 +409,13 @@ public class Defaults
 		deal5.close_date = date5.getTime().getTime() / 1000;		
 		deal5.save();
 		
-		try {
-			ActivitySave.createDealAddActivity(deal5);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		Opportunity deal6 = new Opportunity();
 		deal6.name = "Open Science Grid Computer";	
 		deal6.description = "Kripke controls the open science grid computer at Caltech";		
 		deal6.expected_value = 45500d;
 		deal6.probability = 0;
 		deal6.pipeline_id = milestone.id;
-		deal6.milestone = "Lost";
+		deal6.milestone = "Won";
 		deal6.colorName = Opportunity.Color.BLUE;
 		if (ContactUtil.searchContactByEmailID("sheldon@caltech.com") != null){
 			deal6.addContactIds(String.valueOf(ContactUtil.searchContactByEmailID("sheldon@caltech.com").id));
@@ -671,13 +423,6 @@ public class Defaults
 		DateUtil date6 = new DateUtil().toMidnight().addDays(10);
 		deal6.close_date = date6.getTime().getTime() / 1000;		
 		deal6.save();
-		
-		try {
-			ActivitySave.createDealAddActivity(deal6);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 
     /**

@@ -6,10 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -34,9 +32,9 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.dashboards.Dashboard;
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.db.util.GoogleSQLUtil;
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -44,7 +42,6 @@ import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.portlets.Portlet;
-import com.agilecrm.portlets.Portlet.PortletRoute;
 import com.agilecrm.portlets.Portlet.PortletType;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
@@ -64,15 +61,10 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.Query;
-import com.agilecrm.db.util.GoogleSQLUtil;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.utils.SystemProperty;
 /**
  * <code>PortletUtil</code> is the utility class to fetch portlets with
  * respect to id, position.
@@ -921,21 +913,15 @@ public class PortletUtil {
 		try {
 			//Added dummy portlet for recognizing whether Agile CRM Blog 
 			//portlet is deleted by user or not
-			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,1,3,1,2,Portlet.PortletRoute.DashBoard.toString());
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,3,3,1,2,Portlet.PortletRoute.DashBoard.toString());
+			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());			
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,3,3,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2,Portlet.PortletRoute.DashBoard.toString());
 			Portlet incomingDealsPortlet = new Portlet("Incoming Deals",PortletType.DEALS,2,2,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,2,3,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet dealsByMilestonePortlet = new Portlet("Deals By Milestone",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,4,1,1,Portlet.PortletRoute.DashBoard.toString());
-			Portlet lostDealAnalysisPortlet = new Portlet("Lost Deal Analysis",PortletType.DEALS,1,2,1,1,Portlet.PortletRoute.DashBoard.toString());			
-			
-			JSONObject activitiesPortletJSON = new JSONObject();
-			activitiesPortletJSON.put("duration","this-month");
-			activitiesPortletJSON.put("activity_type","ALL");
-			activityPortlet.prefs = activitiesPortletJSON.toString();
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,1,3,1,1,Portlet.PortletRoute.DashBoard.toString());
+			Portlet lostDealAnalysisPortlet = new Portlet("Lost Deal Analysis",PortletType.DEALS,1,2,1,1,Portlet.PortletRoute.DashBoard.toString());						
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -993,8 +979,7 @@ public class PortletUtil {
 			lostDealAnalysisPortletJSON.put("duration","1-week");
 			lostDealAnalysisPortlet.prefs = lostDealAnalysisPortletJSON.toString();
 			
-			dummyPortlet.save();
-			activityPortlet.save();
+			dummyPortlet.save();			
 			filterBasedContactsPortlet.save();
 			onboardingPortlet.save();
 			incomingDealsPortlet.save();
