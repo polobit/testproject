@@ -249,52 +249,60 @@ public class Widget {
 	 */
 	public void save() {
 		AgileUser agileUser;
-		AgileUser currentUser = AgileUser.getCurrentAgileUser();
-		if(this.user == null){
-			agileUser = currentUser;
-		}else{
-			agileUser = AgileUser.getUser(this.user);
-		}
-		
-		DomainUser domainUser = currentUser.getDomainUser();
-		boolean isAdmin = domainUser.is_admin;
-		JSONArray userList = new JSONArray();
-		if (isAdmin && agileUser.id == currentUser.id && this.id == null) {
-			userList.put(agileUser.id);
-			this.add_by_admin = true;			
-			this.listOfUsers = userList.toString();
-			dao.put(this);
-		} else if (isAdmin) {			
-			List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
-//			if (this.widget_type == WidgetType.CUSTOM) {
-//				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
-//			}
-			if (this.id != null && userWidgets != null && userWidgets.size() > 0) {
-				for (Widget widget : userWidgets) {						
-					widget.prefs = this.prefs;
-					widget.logo_url = this.logo_url;
-					widget.mini_logo_url = this.mini_logo_url;
-					widget.description = this.description;
-					widget.display_name = this.display_name;
-					widget.name = this.name;
-					widget.fav_ico_url = this.fav_ico_url;
-					widget.integration_type = this.integration_type;
-					widget.add_by_admin = true;
-					widget.script = this.script;
-					widget.script_type = this.script_type;
-					widget.url = this.url;
-					dao.put(widget);
-				}
-			}else{
-				this.isActive = true;
-				this.add_by_admin = true;
-				dao.put(this);
-			}
-		} else {
+		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
+				agileUser = AgileUser.getCurrentAgileUser();
 			if (user == null) {
 				user = new Key<AgileUser>(AgileUser.class, agileUser.id);
 			}
 			dao.put(this);
+		}else{
+			AgileUser currentUser = AgileUser.getCurrentAgileUser();
+			if(this.user == null){
+				agileUser = currentUser;
+			}else{
+				agileUser = AgileUser.getUser(this.user);
+			}
+			
+			DomainUser domainUser = currentUser.getDomainUser();
+			boolean isAdmin = domainUser.is_admin;
+			JSONArray userList = new JSONArray();
+			if (isAdmin && agileUser.id == currentUser.id && this.id == null) {
+				userList.put(agileUser.id);
+				this.add_by_admin = true;			
+				this.listOfUsers = userList.toString();
+				dao.put(this);
+			} else if (isAdmin) {			
+				List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
+	//			if (this.widget_type == WidgetType.CUSTOM) {
+	//				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
+	//			}
+				if (this.id != null && userWidgets != null && userWidgets.size() > 0) {
+					for (Widget widget : userWidgets) {						
+						widget.prefs = this.prefs;
+						widget.logo_url = this.logo_url;
+						widget.mini_logo_url = this.mini_logo_url;
+						widget.description = this.description;
+						widget.display_name = this.display_name;
+						widget.name = this.name;
+						widget.fav_ico_url = this.fav_ico_url;
+						widget.integration_type = this.integration_type;
+						widget.add_by_admin = true;
+						widget.script = this.script;
+						widget.script_type = this.script_type;
+						widget.url = this.url;
+						dao.put(widget);
+					}
+				}else{
+					this.isActive = true;
+					this.add_by_admin = true;
+					dao.put(this);
+				}
+			} else {
+				if (user == null) {
+					user = new Key<AgileUser>(AgileUser.class, agileUser.id);
+				}
+				dao.put(this);
+			}
 		}
 	}
 	
