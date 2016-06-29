@@ -508,8 +508,8 @@ var portlet_utility = {
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(end_date_str),
 						templateKey : 'portlets-contacts-email-opens',
-						sort_collection:true,
-						sortKey : "-openedTime",
+						descending:false,
+						sortKey : "openedTime",
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
