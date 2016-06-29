@@ -522,7 +522,7 @@ var portlet_utility = {
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(end_date_str,base_model.get('settings')["end-date"]),
 						templateKey : 'portlets-contacts-email-opens',
-						descending:false,
+						descending:true,
 						sortKey : "openedTime",
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
