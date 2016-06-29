@@ -506,7 +506,6 @@ function show_chained_fields(el, data, forceShow)
 			$('select:not([name="'+field_name+'"])', self).remove();
 		}
 		
-		
 	});
 	condition.chained(LHS);
 	

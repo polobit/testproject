@@ -37,6 +37,7 @@ import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.filter.util.DealFilterUtil;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
@@ -1804,7 +1805,7 @@ public class OpportunityUtil
      *            deals filters.
      * @return list of deals.
      */
-    public static List<Opportunity> getOpportunitiesForBulkActions(String ids, String filters, int count)
+    public static List<Opportunity> getOpportunitiesForBulkActions(String ids, String filter, int count)
     {
 	List<Opportunity> deals = new ArrayList<Opportunity>();
 	try
@@ -1833,14 +1834,12 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-		System.out.println("------------" + filterJSON.toString());
-		
-		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, count, null);
+		deals = DealFilterUtil.getDeals(filter, count, null, "created_time", null, null);
+		Integer deals_count = deals.get(deals.size() - 1).count;
 		String cursor = deals.get(deals.size() - 1).cursor;
-		while (cursor != null)
+		while (deals_count != null && deals != null && deals_count != deals.size())
 		{
-		    deals.addAll(OpportunityUtil.getOpportunitiesByFilter(filterJSON, count, cursor));
+		    deals.addAll(DealFilterUtil.getDeals(filter, count, cursor, "created_time", null, null));
 		    cursor = deals.get(deals.size() - 1).cursor;
 		}
 	    }
