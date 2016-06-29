@@ -472,15 +472,13 @@ public class WidgetUtil {
 		// Creates Current AgileUser key
 		AgileUser agileUser = AgileUser.getCurrentAgileUser(Long.parseLong(id));
 		if (agileUser != null) {
-			Key<AgileUser> userKey = AgileUser
-					.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
+			Key<AgileUser> userKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileUser.domain_user_id);
 
 			/*
 			 * Fetches list of widgets related to AgileUser key and adds
 			 * is_added field as true to default widgets if not present
 			 */
-			Widget widget = ofy.query(Widget.class).ancestor(userKey)
-					.filter("name", name).get();
+			Widget widget = ofy.query(Widget.class).ancestor(userKey).filter("name", name).get();
 			if(widget != null){
 				widget.isActive = status;
 				widget.save();

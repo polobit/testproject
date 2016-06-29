@@ -261,7 +261,7 @@ public class Widget {
 		JSONArray userList = new JSONArray();
 		if (isAdmin && agileUser.id == currentUser.id && this.id == null) {
 			userList.put(agileUser.id);
-			this.add_by_admin = true;
+			this.add_by_admin = true;			
 			this.listOfUsers = userList.toString();
 			dao.put(this);
 		} else if (isAdmin) {			
@@ -286,6 +286,7 @@ public class Widget {
 					dao.put(widget);
 				}
 			}else{
+				this.isActive = true;
 				this.add_by_admin = true;
 				dao.put(this);
 			}
