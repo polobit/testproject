@@ -66,10 +66,10 @@ public class DocumentUtil
 	}
     }
 
-    public static List<Document> getDocuments(int max, String cursor)
+    public static List<Document> getDocuments(int max, String cursor , String order_by)
     {
 	if (max != 0)
-	    return dao.fetchAll(max, cursor);
+	    return dao.fetchAllByOrder(max, cursor, null, true, false, order_by);
 	return getDocuments();
     }
 

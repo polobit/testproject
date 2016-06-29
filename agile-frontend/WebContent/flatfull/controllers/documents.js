@@ -14,11 +14,27 @@ var DocumentsRouter = Backbone.Router.extend({
 	 */
 	documents : function()
 	{
+
+		var sortKey = _agile_get_prefs("Documentssort_Key");
+				if(sortKey == undefined || sortKey == null){
+					sortKey = "name";
+					_agile_set_prefs("Documentssort_Key", sortKey);
+				}
 		 // Fetches documents as list
-		this.DocumentCollectionView = new Document_Collection_Events({ url : 'core/api/documents', templateKey : "documents", cursor : true, page_size : 20,
-			individual_tag_name : 'tr', postRenderCallback : function(el)
+		this.DocumentCollectionView = new Document_Collection_Events({ url : 'core/api/documents', sort_collection : false ,templateKey : "documents", cursor : true, page_size : 20,
+			individual_tag_name : 'tr', order_by : sortKey ,  postRenderCallback : function(el)
 			{
 				includeTimeAgo(el);
+				updateSortKeyTemplate(sortKey, el);
+				var title = sortKey; 
+				if(title == "uploaded_time" || title == "-uploaded_time")
+				{
+					printSortByName("Uploaded Time",el);
+					return;
+				}
+				else
+					printSortByName("Name",el);
+
 				
 			}, appendItemCallback : function(el)
 			{
