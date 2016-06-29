@@ -151,7 +151,9 @@ $(function()
 		  var filterCriteria = "type=";
 		  if(filters){
 		  	   for(var i =0; i<filters.length; i++){
+		  	   	if(filters[i] != undefined && filters[i] != ""){
 		  	   		filterCriteria += filters[i] + ",";
+		  	   	}
 		  	   }
 		  }
 

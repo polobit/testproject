@@ -324,7 +324,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	$inputs = $("#advanced-search-fields-group a input");
 	if(!search_filters)
 		search_filters = [];
-	if(typeof(search_filters == "string"))
+	if(typeof(search_filters)== "string")
 		search_filters = JSON.parse(search_filters);
 	$.each(search_filters, function(index, data){
            $inputs.filter("[value='" + data + "']").prop("checked", true);
