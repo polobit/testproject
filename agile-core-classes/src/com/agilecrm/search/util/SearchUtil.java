@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -54,6 +55,8 @@ public class SearchUtil
 	// Map to store all the fields
 	Map<String, String> fields = new HashMap<String, String>();
 
+	Calendar cal = Calendar.getInstance();
+	
 	// Sets contactField objects in to map
 	for (ContactField contactField : contact.properties)
 	{
@@ -111,6 +114,21 @@ public class SearchUtil
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time_epoch")
 			    .setNumber(Double.valueOf(contactField.value)));
+		    
+		    try
+			{
+				cal.setTimeInMillis(Long.valueOf(contactField.value) * 1000);
+				
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "__dd__").setNumber(cal.get(Calendar.DATE)));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "__mm__").setNumber(cal.get(Calendar.MONTH)+ 1));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "__yy__").setNumber(cal.get(Calendar.YEAR)));
+			}
+			catch (Exception e)
+			{
+				System.err.println("Exception occured while splitting date values..." + e.getMessage());
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		    
 		    fields.put(normalizeTextSearchString(field_name) + "_time", contactField.value);
 		}
 		catch (NumberFormatException e)
