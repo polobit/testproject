@@ -71,7 +71,7 @@ public class Note extends Cursor
      * 
      */
     @NotSaved
-    public List<String> contact_ids = new ArrayList<String>();
+    private List<String> contact_ids = new ArrayList<String>(); //changed from public
 
     @NotSaved
     public List<String> deal_ids = new ArrayList<String>();
@@ -138,9 +138,9 @@ public class Note extends Cursor
     
     
 
-    public void setContact_ids(List<String> contact_ids) {
+   /* public void setContact_ids(List<String> contact_ids) {
 		this.contact_ids = contact_ids;
-	}
+	}*/      // changed ad
 
 	/**
      * Default constructor
