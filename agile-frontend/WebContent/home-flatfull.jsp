@@ -848,7 +848,7 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _agile_get_file_hash('js-all-min.js')+"_"}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js'));
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _agile_get_file_hash('js-all-min.js')+"_1"}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js'));
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
