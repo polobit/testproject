@@ -209,6 +209,7 @@ function saveCallNoteSkype(){
 	var number = globalCallForActivity.callNumber;
 	var callId = globalCallForActivity.callId;
 	var duration = globalCallForActivity.duration;
+	var cntId = globalCallForActivity.contactedId;
 	var contact;
 	var id;
 	var desc;
@@ -271,7 +272,6 @@ function saveCallNoteSkype(){
 	    	}
 	    });
 	}else{
-		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
 					twilioIOSaveContactedTime(cntId);
