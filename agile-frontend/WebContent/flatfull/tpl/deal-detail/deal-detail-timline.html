@@ -96,7 +96,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Tags added.
+        <i class="icon-tag text-muted p-r-xs"></i>Tags added - {{commaSeparateTags custom1}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -104,9 +104,6 @@
     </div>
     <div class="clearfix"></div>
     <div class="date">{{epochToTaskDate time}}</div>
-    <div class="body">
-      <span class="text-xs"><div>Tags '{{commaSeparateTags custom1}}' Added to deal</div></span>
-    </div>
   </div>
 {{/if_equals}}
 {{#if_equals "DEAL_TAG_DELETE" activity_type}}
@@ -114,7 +111,7 @@
     <div class="timestamp">{{time}}</div>
     <div class="text-md text-cap pull-left">  
       <div class="contact-job-title text-base custom-color">
-        <i class="icon-list-alt text-muted p-r-xs"></i>Tags removed.
+        <i class="icon-tag text-muted p-r-xs"></i>Tags removed - {{commaSeparateTags custom2}}
       </div>
     </div>
     <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
@@ -122,9 +119,6 @@
     </div>
     <div class="clearfix"></div>
     <div class="date">{{epochToTaskDate time}}</div>
-    <div class="body">
-      <span class="text-xs"><div>Tag(s) '{{custom2}}' removed to deal</div></span>
-    </div>
   </div>
 {{/if_equals}}
 {{#if_equals "DEAL_TAG_CHANGE" activity_type}}

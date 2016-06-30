@@ -79,10 +79,10 @@
         <div>Tags changed from {{custom2}} to {{custom1}}. </div>
      {{/if_equals}}
 {{#if_equals "DEAL_TAG_ADD" activity_type}}
-        <div>Tags Added to deal are : {{custom1}}. </div>
+        <div>Tags added - {{commaSeparateTags custom1}} </div>
      {{/if_equals}}
 {{#if_equals "DEAL_TAG_DELETE" activity_type}}
-        <div>Tags removed to deal are : {{custom2}}.</div>
+        <div>Tags  removed - {{commaSeparateTags custom2}} </div>
      {{/if_equals}}
 {{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
          {{#if related_contact_ids}}

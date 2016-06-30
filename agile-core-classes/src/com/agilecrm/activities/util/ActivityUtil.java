@@ -749,6 +749,9 @@ public class ActivityUtil
 	public static Map<String, Object[]> dealChangedFields(Opportunity obj) throws JSONException
 	{
 		Opportunity oldobj = OpportunityUtil.getOpportunity(obj.id);
+		JSONObject js = new JSONObject(new Gson().toJson(obj));
+		JSONArray jsn = js.getJSONArray("contact_ids");
+		jsn = ActivitySave.getExistingContactsJsonArray(jsn);
 		// getJsonCompares(obj, oldobj);
 
 		Map<String, Object[]> dealmap = new HashMap<String, Object[]>();
@@ -849,25 +852,30 @@ public class ActivityUtil
 				dealmap.put("tags", mapvalue);
 				}
 			else if(obj.tagsWithTime.size() >0  &&  oldobj.tagsWithTime.size() >0 ) {
-				Set <String> tagset = new HashSet<String>() ;
-				Object[] mapvalue = new Object[3];
+				Set <String> oldTagset = new HashSet<String>() ;
+				Set <String> newTagset = new HashSet<String>() ;
+				Set <String> deletedTags = new HashSet<String>() ;
+				Set <String> newlyAddedTags = new HashSet<String>() ;
 				for (int i= 0;i< oldobj.tagsWithTime.size();i++){
-					tagset.add(oldobj.tagsWithTime.get(i).tag);
+					oldTagset.add(oldobj.tagsWithTime.get(i).tag);
 				}
-				mapvalue[1] = tagset ;
-				 tagset = new HashSet<String>() ;
 				for (int i= 0;i< obj.tagsWithTime.size();i++){
-					tagset.add(obj.tagsWithTime.get(i).tag);
+					newTagset.add(obj.tagsWithTime.get(i).tag);
+				}	
+				for(String s :oldTagset){
+					if(!newTagset.contains(s))
+						deletedTags.add(s);
 				}
-				mapvalue[0] = tagset;
-				mapvalue[2] = "tags";
-				if(!mapvalue[0].equals(mapvalue[1]))
-					dealmap.put("tags", mapvalue);
+				for(String s :newTagset){
+					if(!oldTagset.contains(s))
+						newlyAddedTags.add(s);
 				}
+				if(deletedTags.size()>0)
+					createDealActivity(ActivityType.DEAL_TAG_DELETE, obj, "", deletedTags.toString(), "tags", jsn);
+				if(newlyAddedTags.size()>0)
+					createDealActivity(ActivityType.DEAL_TAG_ADD, obj, newlyAddedTags.toString(), "", "tags", jsn);			
+			}
 			
-			JSONObject js = new JSONObject(new Gson().toJson(obj));
-			JSONArray jsn = js.getJSONArray("contact_ids");
-			jsn = ActivitySave.getExistingContactsJsonArray(jsn);
 			List<ContactPartial> contacts = oldobj.getContacts();
 
 			if (obj.archived != oldobj.archived)
