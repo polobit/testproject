@@ -506,7 +506,17 @@ function show_chained_fields(el, data, forceShow)
 		
 		
 	});
-	condition.chained(LHS);
+	condition.chained(LHS, function(chained_el, self) {
+
+		var $month_children = $('optgroup[label="Month"]', self).children();
+		var $days_children = $('optgroup[label="Days"]', self).children();
+
+		if($month_children.length == 0)
+			$('optgroup[label="Month"]', self).remove();
+
+		if($days_children.length == 0)
+			$('optgroup[label="Days"]', self).remove();
+	});
 	
 	RHS_NEW.chained(condition);
 	NESTED_CONDITION.chained(LHS);
@@ -570,6 +580,14 @@ function show_chained_fields(el, data, forceShow)
 			$('input', $(this).closest('td').siblings('td.rhs-block')).attr("placeholder", "Company Name");
 			$('input', $(this).closest('td').siblings('td.rhs-block')).addClass("company_custom_field");
 			agile_type_ahead($('input', $(this).closest('td').siblings('td.rhs-block')).attr("id"), $(this).closest('td').siblings('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
+		}
+
+		if($(this).find('option:selected').attr("field_type") !== "DATE")
+		{
+			var $condition_block = $(this).closest('td').siblings('td.codition-block');
+			$condition_block.find('optgroup[label="Month"]').remove();
+			$condition_block.find('optgroup[label="Days"]').remove();
+
 		}
 
 	});
@@ -685,10 +703,12 @@ function fillCustomFields(fields, el, callback, is_webrules)
 	var condition = $("#condition > select", el);
 
 	var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
+
 	for(var i = 0; i < fields.length ; i++)
 	{
 		if(i == 0)
 			lhs_element.removeClass('hide');
+
 		var field = fields[i];
 
 		condition.append('<option value="EQUALS" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
@@ -696,15 +716,33 @@ function fillCustomFields(fields, el, callback, is_webrules)
 
 		if(field.field_type == "DATE")
 		{
+
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
+
 			//condition.find("option.created_time").addClass(field.field_label+'_time');
 			var element = condition.find("option.created_time"); 
 			add_custom_class_to_filter_elements(element, field.field_label+'_time');
 			$(element).addClass(field.field_label+'_time' + _AGILE_CUSTOM_DIVIDER_);
+			
 			if(!is_webrules)
 			{
 				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
 				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time																																				 '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+
+				if(($('#contact_type').val() == "PERSON") && (USER_BILLING_PREFS.planLimits.planName == "ENTERPRISE" || USER_BILLING_PREFS.planLimits.planName == "PRO"))
+				{
+
+					// For Date Fields
+					condition.append('<optgroup label="Month"><option value="BY_MONTH_ONLY" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">on</option></optgroup>');
+
+					condition.append('<optgroup label="Days">' + 
+						'<option value="IS_AFTER_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is after</option>'
+						+
+						'<option value="IS_BEFORE_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is before</option>'
+						+
+						'</optgroup>'
+						);
+			    }
 			}
 		} else if(field.field_type == "NUMBER")
 		{

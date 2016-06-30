@@ -119,9 +119,9 @@ public class SearchUtil
 			{
 				cal.setTimeInMillis(Long.valueOf(contactField.value) * 1000);
 				
-				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "__dd__").setNumber(cal.get(Calendar.DATE)));
-				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "__mm__").setNumber(cal.get(Calendar.MONTH)+ 1));
-				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "__yy__").setNumber(cal.get(Calendar.YEAR)));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__dd__").setNumber(cal.get(Calendar.DATE)));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__mm__").setNumber(cal.get(Calendar.MONTH)+ 1));
+				doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time__yy__").setNumber(cal.get(Calendar.YEAR)));
 			}
 			catch (Exception e)
 			{

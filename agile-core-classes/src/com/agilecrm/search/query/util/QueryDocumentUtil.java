@@ -17,6 +17,7 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -234,7 +235,10 @@ public class QueryDocumentUtil
 			// Queries on created or updated times
 			else if ((lhs.contains("last_contacted") || lhs.contains("time") || lhs.contains("last_emailed") || lhs.contains("last_called") || lhs.contains("last_campaign_emaild")) && !lhs.contains("tags"))
 			{
-				query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new, joinCondition);
+				if(SearchRule.RuleCondition.partialDateConditions.contains(condition))
+					query = createPartialDateQuery(query, lhs, condition, rhs, rhs_new, joinCondition);
+				else
+					query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new, joinCondition);
 			}
 
 			else if (lhs.contains("time") && lhs.contains("tags"))
@@ -585,7 +589,7 @@ public class QueryDocumentUtil
 			epochQuery = "(" + epochQuery + ")";
 			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
-
+		
 		return query;
 
 	}
@@ -769,5 +773,55 @@ public class QueryDocumentUtil
 			return contacts.get(0);
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns query string 
+	 * 
+	 * @param query - Query
+	 * @param lhs - Property key string
+	 * @param condition - comparator
+	 * @param rhs - First Value
+	 * @param rhs_new - Second Value
+	 * @param joinCondition - OR rules or AND rules
+	 * 
+	 * @return String
+	 */
+	public static String createPartialDateQuery(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
+			String rhs_new, String joinCondition)
+	{
+		if(!(SearchRule.RuleCondition.partialDateConditions.contains(condition)))
+			return query;
+		
+		int value = Integer.valueOf(rhs);
+		
+		lhs = SearchUtil.normalizeTextSearchString(lhs);
+		
+		if(condition.equals(RuleCondition.BY_MONTH_ONLY))
+		{
+			String partialDateQuery = lhs + "__mm__" + " = " + value;
+			
+			query = buildNestedCondition(joinCondition, query, partialDateQuery);
+		}
+		
+		if(condition.equals(RuleCondition.IS_AFTER_IN_DAYS) || condition.equals(RuleCondition.IS_BEFORE_IN_DAYS))
+		{
+			Calendar cal = Calendar.getInstance();
+			
+			// Add '-' to decrease days
+			if(condition.equals(RuleCondition.IS_BEFORE_IN_DAYS))
+				value = -value;
+			
+			cal.add(Calendar.DATE, value);
+			
+			String partialDateQuery = lhs + "__mm__" + " = " + (cal.get(Calendar.MONTH) + 1);
+			
+			partialDateQuery += " AND " +  lhs + "__dd__" + " = " + (cal.get(Calendar.DATE));
+			
+			query = buildNestedCondition(joinCondition, query, partialDateQuery);
+		}
+		
+		return query;
+		
 	}
 }
