@@ -14,6 +14,15 @@ $(function()
 						$('#direct-dialler-div').html($(template_ui));
 						$("#direct-dialler-div").css({'left':x,'top': y});
 						$("#direct-dialler-div").show();
+						
+						var selectedWidget = _agile_get_prefs("dial-default-widget");
+						if(selectedWidget){
+						  	var value = selectedWidget;
+						  	var html = getIcon(value);
+						  	$("#dialler-widget-name-span").html(html);
+						  	$("#dialler-widget-name-span").attr("value",value);
+						}
+						
 						$.each(default_call_option.callOption, function(i, obj){
 							var name = widgetCallName[obj.name];
 							$(".dialler-widget-name-" + name).show();
@@ -58,6 +67,8 @@ $(function()
 			  	var value = $(this).find("a").attr("value");
 			  	$("#dialler-widget-name-span").html(html);
 			  	$("#dialler-widget-name-span").attr("value",value);
+			  	
+			  	_agile_set_prefs("dial-default-widget", value);
 			});
 	
 	
@@ -382,14 +393,15 @@ function dialFromSip(to,from,contact){
 }
 
 function getIcon(widgetName){
-	
+	var icon = "";
 	if(widgetName == "Twilio"){
-		icon = "<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >";
+		icon = "<img src='/widgets/twilio-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Twilio' >Twilio";
 	}else if(widgetName == "Sip"){
-		icon = "<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >";
+		icon = "<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >SIP";
 	}else if(widgetName == "Bria"){
-		icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >";
+		icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >Bria";
 	}else if(widgetName == "Skype"){
-		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >";
+		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >Skype";
 	}
+	return icon;
 }
