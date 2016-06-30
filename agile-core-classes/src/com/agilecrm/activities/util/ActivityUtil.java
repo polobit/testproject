@@ -2123,7 +2123,7 @@ public class ActivityUtil
 					
 					String custom4 = "";
 					if(null != callType && null != toOrFromNumber && null != callStatus){
-						if(callType .equals("outbound-dial")){
+						if(callType.equalsIgnoreCase(("outbound-dial")) || callType.equalsIgnoreCase(("outgoing"))){
 							custom4 +=  "Outgoing call to " + toOrFromNumber + ", Status is "+ callStatus;
 						}else{
 							custom4 +=  "Incoming call from " + toOrFromNumber + ", Status is "+ callStatus;

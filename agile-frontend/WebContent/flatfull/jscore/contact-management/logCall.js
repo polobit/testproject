@@ -428,7 +428,7 @@ function saveLogPhone(form, modal, element, logPhone)
 				}
 				var data1 ={};
 				data1.url = "/core/api/notes/update_logPhoneActivity?note_id="+
-				logPhone.id+'?subject='+note.subject+;
+				logPhone.id+'&subject='+logPhone.subject;
 				data1.id = contactDetailsObj.id;
 				data1.callType = logPhone.callType;
 				data1.number = logPhone.phone;
