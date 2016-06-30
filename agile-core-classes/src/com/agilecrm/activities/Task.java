@@ -109,6 +109,12 @@ public class Task extends Cursor
      * Sets the priority as specified.
      */
     public PriorityType priority_type;
+    
+    /**
+     * only used for due task reminder email sending
+     */
+    @NotSaved
+    public String priority_type_string;
 
     /**
      * List of contact keys related to a task

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -23,6 +24,7 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -99,11 +101,17 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    if (taskList.isEmpty())
 		return;
 	    
+
 	    // Update time with timezone
-	    for (Task task : taskList) {
+	    for(Task task : taskList){
 	    	if(task.due != null)
 	    		task.timeFormatForEmail = DateUtil.getCalendarString(task.due * 1000, "hh:mm a", timezone);
-		}
+	    	
+	    	task.type = StringUtils.capitalize(StringUtils.lowerCase(task.type.toString()));
+	        if(task.priority_type != null){
+	        	task.priority_type_string = StringUtils.capitalize(StringUtils.lowerCase(task.priority_type.toString()));
+	        }
+	    }
 
 	    // Task stored as map like
 	    // map{"property":"value","property2":"value2",...}
@@ -135,6 +143,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("tasks", taskList);
 		map.put("tasksCount", taskList.size());
+		map.put("domain", domain);
 
 		// Sends mail to the domain user.
 		SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
@@ -176,6 +185,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    HashMap<String, Object> map = new HashMap<String, Object>();
 	    map.put("tasks", taskListMap);
 	    map.put("tasksCount", taskList.size());
+	    map.put("domain", domain);
 
 	    // Sends mail to the domain user.
 	    SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
