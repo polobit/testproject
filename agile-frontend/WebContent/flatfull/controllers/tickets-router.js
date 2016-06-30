@@ -11,6 +11,7 @@
 		"tickets/filter/:id" : "ticketsByFilter",
 		"tickets/filter/:id/ticket/:id" : "ticketDetailsByFilter",
 
+		/*Ticket details*/
 		"ticket/:id" : "ticketDetails",
 
 		/* Ticket bulk actions*/
