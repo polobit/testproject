@@ -20,6 +20,39 @@ jQuery.validator.addMethod("lpdirectorypath", function(value, element) {
  landing page and here one LandingPageId we are defining with empty  
  **/
 
+ var LandingPage_Collection_Events = Base_Collection_View.extend({
+    events: {
+        'click #landingpage_sort_menu > li': 'LandingpageSort',    
+    },
+    LandingpageSort : function(e){
+
+    	console.log("landing pages click events firing")
+		e.preventDefault();
+        var targetEl = $(e.currentTarget);
+        var ele = $(targetEl).find("a").attr("data");
+        if($(targetEl).find("a").hasClass("sort-field")){
+            $("#landingpage_sort_menu").find(".sort-field i").addClass("display-none");
+        }else{
+            $("#landingpage_sort_menu").find(".order-by i").addClass("display-none");
+        }
+        $(targetEl).find("i").removeClass("display-none");
+        var sort_key = $("#landingpage_sort_menu").find(".order-by i:not(.display-none)").closest(".order-by").attr("data");
+        sort_key = sort_key + $("#landingpage_sort_menu").find(".sort-field i:not(.display-none)").closest(".sort-field").attr("data");
+        var previous_sortKey = _agile_get_prefs("landingpage_sort_menu");
+        if(sort_key == previous_sortKey)
+            return;
+        _agile_set_prefs("landingpage_sort_menu", sort_key);
+        printSortByName($(".sort-field[data='"+sort_key+"']").attr("label_name"), $(targetEl).closest("#landingpages-listeners"));
+        App_LandingPageRouter.LandingPageCollectionView.collection.reset()
+        Backbone.history.loadUrl(Backbone.history.fragment);
+	
+
+    }});
+   
+		
+
+
+
 function saveLandingPageToDataStore(isAutoSaved,pageId) {
 
 	if (isValidForm('#landingPageBuilderForm')) {
@@ -118,6 +151,7 @@ function initializeLandingPageListeners(pageId) {
 		$("#builderPageOptions").slideToggle('fast');
 	});
 
+	
 	$('#landingpages-listeners').on('click', '#landingPageSettingBtn', function (e) {
 		e.preventDefault();
 

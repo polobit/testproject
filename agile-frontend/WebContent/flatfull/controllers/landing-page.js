@@ -12,11 +12,30 @@ var LandingPageRouter = Backbone.Router.extend({
 	getListOfLandingPages : function(){
 
         $('#content').html("<div id='landingpages-listeners'></div>");
-        
-        this.LandingPageCollectionView = new Base_Collection_View({ url : 'core/api/landingpages', templateKey : "landingpages", cursor : true, page_size : 20,
-            individual_tag_name : 'tr', postRenderCallback : function(el)
+
+        var sortKey = _agile_get_prefs("landingpage_sort_menu");
+                if(sortKey == undefined || sortKey == null){
+                    sortKey = "name";
+                    _agile_set_prefs("landingpage_sort_menu", sortKey);
+                }
+        this.LandingPageCollectionView = new LandingPage_Collection_Events({ url : 'core/api/landingpages',sort_collection : false, templateKey : "landingpages", cursor : true, page_size : 20,  
+            individual_tag_name : 'tr', global_sort_key : sortKey, postRenderCallback : function(el)
             {
                 includeTimeAgo(el);
+                updateSortKeyTemplate(sortKey, el);
+                var title = sortKey.replace("-" , "") ; 
+                if(title == "created_time" || title == undefined)
+                {
+                    printSortByName("Created Time",el);
+                    return;
+                }
+                if(title == "updated_time" || title == undefined)
+                {
+                    printSortByName("Updated Time",el);
+                    return;
+                }
+                else
+                    printSortByName("Name",el);
             },
             appendItemCallback : function(el)
             { 
