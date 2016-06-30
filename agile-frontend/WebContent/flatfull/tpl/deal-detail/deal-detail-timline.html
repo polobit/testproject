@@ -105,7 +105,7 @@
     <div class="clearfix"></div>
     <div class="date">{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>Tags Added to deal are : {{custom1}}.</div></span>
+      <span class="text-xs"><div>Tags '{{commaSeparateTags custom1}}' Added to deal</div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -123,7 +123,7 @@
     <div class="clearfix"></div>
     <div class="date">{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>Tags removed to deal are : {{custom2}}</div></span>
+      <span class="text-xs"><div>Tag(s) '{{custom2}}' removed to deal</div></span>
     </div>
   </div>
 {{/if_equals}}
