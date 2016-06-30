@@ -79,7 +79,7 @@ try{console.time("startbackbone");}catch(e){}
 
 var LOCAL_SERVER = <%=debug%>;
 
-var KB_DOMAIN = LOCAL_SERVER ? '':'<%=domain%>-dot-sandbox-dot-agilecrmbeta.appspot.com';
+var KB_DOMAIN = LOCAL_SERVER ? '://<%=domain%>-dot-sandbox-dot-agilecrmbeta.appspot.com';
 
 var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
