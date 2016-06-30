@@ -289,11 +289,6 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	options = getTwilioIncomingList("twilio_incoming_list");
     }
     
-    if(uiFieldDefinition.fieldType == "twilio_number")
-    {
-    	options = getTwilioNumber("twilio_number");
-    }
-    
     if(uiFieldDefinition.fieldType == "campaign_list")
     {
     	options = getCampaignList("campaign_list");
