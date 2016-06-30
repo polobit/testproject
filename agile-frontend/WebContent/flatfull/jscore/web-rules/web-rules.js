@@ -95,10 +95,13 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					var htmlContent = $(template_ui).find('.webrule-actions > div').clone();
 					var action_count=$('#action select').length;
 					for(var i=0;i<action_count;i++){
+						var actionSelected = $($('#action select')[i]).val();
 
-						if($($('#action select')[i]).val()==='CALL_POPUP' || $($('#action select')[i]).val()==='MODAL_POPUP'){
-							$($(htmlContent).find('#action select optgroup option')[0]).remove();
-							$($(htmlContent).find('#action select optgroup option')[1]).remove();
+						if(actionSelected === 'CALL_POPUP' || actionSelected === 'MODAL_POPUP' || actionSelected === 'SITE_BAR'){
+							var listOfOptions = $(htmlContent).find('#action select optgroup option');
+							listOfOptions[0].remove();//MODAL_POPUP
+							listOfOptions[2].remove();//CALL_POPUP
+							listOfOptions[3].remove();//SITE_BAR
 						}
 					}
 					chainWebRules($(htmlContent)[0], undefined, true);
@@ -176,7 +179,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					loadTinyMCE("tinyMCEhtml_email");
 					return;
 
-				}else if($('#action select').val()=='CALL_POPUP'){
+				}else if($('#callwebrule-code').val() !== "" && $('#action select').val() == 'CALL_POPUP'){
 
 					if($('.custom_html').length > 1){
 						showAlertModal("webrule_popup_limit", undefined, function() {
@@ -186,7 +189,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					}
 					loadTinyMCE("callwebrule-code");
 					return;
-				} else if($('#action select').val()=='SITE_BAR') {
+				} else if($('#agile-bar-code').val() !== "" && $('#action select').val()=='SITE_BAR') {
 					loadTinyMCE("agile-bar-code");
 					return;
 				}
