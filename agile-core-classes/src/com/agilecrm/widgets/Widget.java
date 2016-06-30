@@ -1,21 +1,16 @@
 package com.agilecrm.widgets;
 
-import java.util.List;
-
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.widgets.util.DefaultWidgets;
-import com.agilecrm.widgets.util.WidgetUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -66,13 +61,14 @@ public class Widget {
 	 */
 	public String url = null;
 	
-	public boolean isActive = false;
+	public boolean isActive = true;
 
 	/** Logo URL of the widget to show it in add widget page */
 	public String logo_url = null;
 
 	public boolean add_by_admin = false;
 
+	@NotSaved
 	public String listOfUsers = null;
 
 	public String display_name = null;
@@ -248,65 +244,31 @@ public class Widget {
 	 * differentiate widgets based on {@link AgileUser}
 	 */
 	public void save() {
-		AgileUser agileUser;
-		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
-				agileUser = AgileUser.getCurrentAgileUser();
-			if (user == null) {
-				user = new Key<AgileUser>(AgileUser.class, agileUser.id);
-			}
-			dao.put(this);
-		}else{
-			AgileUser currentUser = AgileUser.getCurrentAgileUser();
-			if(this.user == null){
-				agileUser = currentUser;
-			}else{
-				agileUser = AgileUser.getUser(this.user);
-			}
-			
-			DomainUser domainUser = currentUser.getDomainUser();
-			boolean isAdmin = domainUser.is_admin;
-			JSONArray userList = new JSONArray();
-			if (isAdmin && agileUser.id == currentUser.id && this.id == null) {
-				userList.put(agileUser.id);
-				this.add_by_admin = true;			
-				this.listOfUsers = userList.toString();
-				dao.put(this);
-			} else if (isAdmin) {			
-				List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
-	//			if (this.widget_type == WidgetType.CUSTOM) {
-	//				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
-	//			}
-				if (this.id != null && userWidgets != null && userWidgets.size() > 0) {
-					for (Widget widget : userWidgets) {						
-						widget.prefs = this.prefs;
-						widget.logo_url = this.logo_url;
-						widget.mini_logo_url = this.mini_logo_url;
-						widget.description = this.description;
-						widget.display_name = this.display_name;
-						widget.name = this.name;
-						widget.fav_ico_url = this.fav_ico_url;
-						widget.integration_type = this.integration_type;
-						widget.add_by_admin = true;
-						widget.script = this.script;
-						widget.script_type = this.script_type;
-						widget.url = this.url;
-						dao.put(widget);
-					}
-				}else{
-					this.isActive = true;
-					this.add_by_admin = true;
-					dao.put(this);
-				}
-			} else {
-				if (user == null) {
-					user = new Key<AgileUser>(AgileUser.class, agileUser.id);
-				}
-				dao.put(this);
-			}
+		// User is not added, Adding the Current user obj.
+		if (user == null) {
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+			user = new Key<AgileUser>(AgileUser.class, agileUser.id);
 		}
+		
+		dao.put(this);
+		
+//		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
+//			dao.put(this);
+//		}else{
+//			dao.put(this);
+//		}
+		
 	}
 	
-	public void updateUserList(){		
+	public void saveByUserKey(Key<AgileUser> userKey, Widget widget){
+		if(widget != null && userKey != null){
+			this.user = userKey;
+			dao.put(widget);
+		}		
+	}
+	
+	public void updateStatus(boolean status){
+		this.isActive = status;
 		dao.put(this);
 	}
 

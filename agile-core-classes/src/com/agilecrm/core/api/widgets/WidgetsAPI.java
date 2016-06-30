@@ -374,74 +374,91 @@ public class WidgetsAPI {
 	@Path("saveWidgetPrivilages")
 	@POST
 	public void saveWidgetPrivilages(String obj) throws Exception {
-		if (obj != null) {
-			JSONObject widgetObj = new JSONObject(obj);
-			String widgetName = widgetObj.getString("name");
-			
+		if (obj != null) {			
 			//Gets current agile user.
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			//Gets the current domain user.
-			DomainUser domainUser = agileUser.getDomainUser();
-			JSONArray finalUsers = new JSONArray();
-			
-			// Deleting the widget.
-			
-			//Checked users list from widget.
-			String newUsersList = widgetObj.getString("listOfUsers");	
-			//Fecting user ids from the db to know who are already configured.
-			JSONArray oldUserArray = WidgetUtil.getWigetUsersList(widgetName);
-			
-			//Looping to know the unchecked users.
-			for (int i = 0; i < oldUserArray.length(); i++) {
-				String oldUserID = oldUserArray.getString(i);
-				//Checking to know the old user is unchecked. 
-				if (!(newUsersList.contains(oldUserID))) {
-					 Widget widget = WidgetUtil.getWidget(widgetName, Long.parseLong(oldUserID));
-					 //&& !(agileUser.id.toString().equals(oldUserID))
-					 if(widget != null && domainUser.is_admin){
-						 //Deleting widget.
-						 WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
-						 
-						 //If it was custom widget we will delete custom widget.
-						 if(widget.widget_type.equals(WidgetType.CUSTOM)){							
-							 CustomWidget.deleteCustomWidgetByUserID(oldUserID, widgetName);							
-						 }
-					 }else{		
-						 widget.isActive = true;
-						 //WidgetUtil.updateWidgetStatus(oldUserID, widgetName, false);
-					 }
-				} else {
-					finalUsers.put(oldUserArray.get(i));
+			DomainUser domainUser = agileUser.getDomainUser();	
+			if(domainUser.is_admin){
+				
+				JSONObject widgetObj = new JSONObject(obj);
+				String widgetName = widgetObj.getString("name");
+				JSONArray finalUsers = new JSONArray();
+				
+				//Checked users list from widget.
+				String newUsersStr = widgetObj.getString("listOfUsers");
+				JSONArray newUserArray = new JSONArray(newUsersStr);
+				
+				//Fetching user ids from the DB to know who are already configured.
+				JSONArray oldUserArray = WidgetUtil.getWigdetsUsersList(widgetName);
+				String oldUsersStr = oldUserArray.toString();
+				
+				int newUserSize = newUserArray.length();
+				int oldUserSize = oldUserArray.length();
+				int loopSize = 0;
+				
+				if(newUserSize > oldUserSize){
+					loopSize = newUserSize;
+				}else{
+					loopSize = oldUserSize;
 				}
-			}
-
-			Widget widget = WidgetUtil.getWidget(widgetName);
-			// Creating new widget.
-			String oldUsersList = oldUserArray.toString();
-			JSONArray newUserArray = new JSONArray(newUsersList);
-			for (int i = 0; i < newUserArray.length(); i++) {
-				String newUserID = newUserArray.getString(i);
-				if (!(oldUsersList.contains(newUserID))) {
-					finalUsers.put(newUserArray.getLong(i));
-					AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long.parseLong(newUserID));
-					if (agileLocalUser != null) {
-						Key<AgileUser> userKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
-						DomainUser localDomainUser = agileLocalUser.getDomainUser();
-						if(localDomainUser != null && localDomainUser.is_admin){
-							widget.isActive = true;
+								
+				for (int i = 0; i < loopSize; i++) {
+					
+					// Deleting widget.
+					if(i < oldUserSize){
+						String oldUserID = oldUserArray.getString(i);				
+						//Checking to know the unchecked old users. 
+						if (!(newUsersStr.contains(oldUserID))) {
+							AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long.parseLong(oldUserID));
+							DomainUser oldDomainUser = agileLocalUser.getDomainUser();					
+							Widget widget = WidgetUtil.getWidget(widgetName, agileLocalUser.id);
+							if(widget != null){							
+								if(oldDomainUser.is_admin){
+									//If the user is admin, we are making him inactive.
+									widget.updateStatus(false);
+								}else{
+									WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
+									 //If it was custom widget we will delete custom widget.
+									 if(widget.widget_type.equals(WidgetType.CUSTOM)){							
+										 CustomWidget.deleteCustomWidgetByUserID(oldUserID, widgetName);							
+									 }
+								}
+							}
+						} else {
+							finalUsers.put(oldUserArray.get(i));
 						}
-						widget.setOwner(userKey);
-						widget.add_by_admin = true;
-						widget.listOfUsers = null;
-						widget.id = null;
-						widget.save();
 					}
+					
+					// Creating widget.
+					if(i < newUserSize){
+						String newUserID = newUserArray.getString(i);
+						//Checking to know the checked new users.
+						if (!(oldUsersStr.contains(newUserID))) {
+							finalUsers.put(newUserArray.getLong(i));
+							AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long.parseLong(newUserID));
+							if (agileLocalUser != null) {
+								Key<AgileUser> userKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
+								DomainUser localDomainUser = agileLocalUser.getDomainUser();
+								
+								//Making admin widget clone for new users.
+								Widget widget = WidgetUtil.getWidget(widgetName, agileUser.id);								
+								if(localDomainUser != null && localDomainUser.is_admin){
+									Widget adminWidget = WidgetUtil.getWidget(widgetName, agileLocalUser.id);
+									if(adminWidget != null){
+										adminWidget.updateStatus(true);
+										continue;
+									}
+								}
+								widget.setOwner(userKey);
+								widget.add_by_admin = true;										
+								widget.id = null;
+								widget.save();
+							}							
+						}
+					}					
 				}
-			}
-			widget = WidgetUtil.getWidget(widgetName);
-			widget.add_by_admin = true;
-			widget.listOfUsers = finalUsers.toString();
-			widget.updateUserList();
+			}			
 		}
 	}
 
