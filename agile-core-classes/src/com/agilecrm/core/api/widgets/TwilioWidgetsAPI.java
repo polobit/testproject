@@ -392,14 +392,15 @@ public class TwilioWidgetsAPI
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,
+			@FormParam("status") String status,@FormParam("duration") String duration,@QueryParam("note_id") Long note_id) {		
 	    
 	    	if (!(StringUtils.isBlank(phone))){
 	    		Contact contact = QueryDocumentUtil.getContactsByPhoneNumber(phone);
 
 	    		if (direction.equalsIgnoreCase("outbound-dial"))
 	    		{
-	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact,note_id);
 
 	    		    // Trigger for outbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact, Call.SERVICE_TWILIO, Call.OUTBOUND, status, duration);
@@ -407,7 +408,7 @@ public class TwilioWidgetsAPI
 
 	    		if (direction.equalsIgnoreCase("inbound"))
 	    		{
-	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact,note_id);
 
 	    		    // Trigger for inbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact,  Call.SERVICE_TWILIO, Call.INBOUND, status, duration);
@@ -427,7 +428,8 @@ public class TwilioWidgetsAPI
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String saveCallActivityById(@FormParam("id") Long id,@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+	public String saveCallActivityById(@FormParam("id") Long id,@FormParam("direction") String direction,
+			@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,@QueryParam("note_id") Long note_id) {		
 	    
 	    	if (null != id && !(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.getContact(id);
@@ -436,7 +438,7 @@ public class TwilioWidgetsAPI
 	    		}
 	    		if (direction.equalsIgnoreCase("outbound-dial"))
 	    		{
-	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact,note_id);
 
 	    		    // Trigger for outbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact, Call.SERVICE_TWILIO, Call.OUTBOUND, status, duration);
@@ -444,7 +446,7 @@ public class TwilioWidgetsAPI
 
 	    		if (direction.equalsIgnoreCase("inbound"))
 	    		{
-	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact,note_id);
 
 	    		    // Trigger for inbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact,  Call.SERVICE_TWILIO, Call.INBOUND, status, duration);

@@ -302,7 +302,7 @@ function autosaveNoteByUser(note,call,url){
 		if(!callerObjectId){
 			return;
 		}
-		$.post( url+"/savecallactivityById",{
+		$.post(url+"/savecallactivityById?note_id="+data.id,{
 			id:callerObjectId,
 			direction: call.direction, 
 			phone: call.phone, 
@@ -311,7 +311,7 @@ function autosaveNoteByUser(note,call,url){
 			});
 		
 	}else{
-		$.post( url+"/savecallactivity",{
+		$.post( url+"/savecallactivity?note_id="+data.id,{
 			direction: call.direction, 
 			phone: call.phone, 
 			status : call.status,

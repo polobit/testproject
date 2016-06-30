@@ -1642,7 +1642,7 @@ public class ActivityUtil
 	 * 
 	 */
 	public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
-			String callDuration, Contact contact)
+			String callDuration, Contact contact,Long note_id)
 	{
 
 		// Search contact
@@ -1676,6 +1676,8 @@ public class ActivityUtil
 					activity.custom4 = callDuration;
 					activity.label = calledToName;
 					activity.entity_type = EntityType.CONTACT;
+					if(note_id!=null)
+						activity.note_id_call=note_id.toString();
 					activity.entity_id = contact.id;
 					activity.save();
 				}
@@ -1689,6 +1691,8 @@ public class ActivityUtil
 					activity.custom4 = callDuration;
 					activity.label = toOrFromNumber;
 					activity.entity_type = null;
+					if(note_id!=null)
+						activity.note_id_call=note_id.toString();
 					activity.entity_id = null;
 					activity.save();
 				}
