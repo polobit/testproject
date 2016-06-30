@@ -372,8 +372,8 @@ function handleCallRequest(message)
 			var call = { "direction" : message.direction, "phone" : globalCallForActivity.callNumber, "status" : globalCallForActivity.callStatus,
 				"duration" : message.duration };
 			var num = globalCallForActivity.callNumber;
-			saveCallNoteBria();
-			saveCallActivityBria(call);
+			saveCallNoteBria(call);
+			//saveCallActivityBria(call);
 			try
 			{
 				var phone = $("#bria_contact_number").val();
@@ -435,8 +435,8 @@ function handleCallRequest(message)
 				"status" : globalCallForActivity.callStatus, "duration" : message.duration };
 			var num = globalCallForActivity.callNumber;
 			console.log("last called : " + call);
-			saveCallNoteSkype();
-			saveCallActivitySkype(call);
+			saveCallNoteSkype(call);
+			//saveCallActivitySkype(call);
 			try
 			{
 				

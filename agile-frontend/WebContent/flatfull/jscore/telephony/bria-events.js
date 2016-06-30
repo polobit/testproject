@@ -137,7 +137,7 @@ function _getMessageBria(message, callback){
 /*
  * This will show the note to the user after the call is completed sucessfully
  */
-function saveCallNoteBria(){
+function saveCallNoteBria(call){
 	
 	if(	globalCallForActivity.justCalledId == globalCallForActivity.justSavedCalledIDForNote){
 		return;
@@ -217,7 +217,7 @@ function saveCallNoteBria(){
 				
 	    	}else{
 	    		var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
-				autosaveNoteByUser(note);
+				autosaveNoteByUser(note,call,"/core/api/widgets/bria/");
 	    	}
 	    });
 	}else{
@@ -255,7 +255,7 @@ function saveCallNoteBria(){
 					});
 				}else{
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
-					autosaveNoteByUser(note);
+					autosaveNoteByUser(note,call,"/core/api/widgets/bria/");
 				}
 		}else{
 			resetCallLogVariables();
@@ -287,7 +287,7 @@ function saveCallNoteBria(){
 /*
  * This will save the note for the call
  */
-function autosaveNoteByUser(note){
+function autosaveNoteByUser(note,call,url){
 	$.post( "/core/api/widgets/twilio/autosavenote", {
 		subject: note.subject,
 		message: note.message,
@@ -296,6 +296,28 @@ function autosaveNoteByUser(note){
 		callType: note.callType,
 		status: note.status,
 		duration: note.duration
+		},success:function(data){
+			if(call.direction == "Outgoing" || call.direction == "outgoing"){
+		var callerObjectId = globalCall.contactedId;
+		if(!callerObjectId){
+			return;
+		}
+		$.post( url+"/savecallactivityById",{
+			id:callerObjectId,
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration 
+			});
+		
+	}else{
+		$.post( url+"/savecallactivity",{
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration
+			});
+	}
 		});
 }
 
@@ -322,27 +344,7 @@ function saveCallActivityBria(call){
 	if(call.status == "Answered"){
 		return;
 	}
-	if(call.direction == "Outgoing" || call.direction == "outgoing"){
-		var callerObjectId = globalCall.contactedId;
-		if(!callerObjectId){
-			return;
-		}
-		$.post( "/core/api/widgets/bria/savecallactivityById",{
-			id:callerObjectId,
-			direction: call.direction, 
-			phone: call.phone, 
-			status : call.status,
-			duration : call.duration 
-			});
-		
-	}else{
-		$.post( "/core/api/widgets/bria/savecallactivity",{
-			direction: call.direction, 
-			phone: call.phone, 
-			status : call.status,
-			duration : call.duration
-			});
-	}
+	
 }
 
 /*
