@@ -299,7 +299,8 @@ public class NotesAPI
    	@POST
    	@Produces(MediaType.TEXT_PLAIN)
        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-   	public String updateCallActivity(@FormParam("id") Long id, @FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,@FormParam("callWidget") String callWidget,@QueryParam("note_id") Long note_id) {		
+   	public String updateCallActivity(@FormParam("id") Long id, @FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration,
+   			@FormParam("callWidget") String callWidget,@QueryParam("note_id") Long note_id,@QueryParam("subject") String subject) {		
 
    		Contact contact  = null;
    		
@@ -317,12 +318,12 @@ public class NotesAPI
    		
    	    		if (direction.equalsIgnoreCase("outbound-dial") || direction.equalsIgnoreCase("Outgoing"))
    	    		{
-   	    			ActivityUtil.updateLogForCalls(callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration,note_id);
+   	    			ActivityUtil.updateLogForCalls(callWidget, phone, Call.OUTBOUND, status.toLowerCase(), duration,note_id,subject);
    	    		}
 
    	    		if (direction.equalsIgnoreCase("inbound") || direction.equalsIgnoreCase("Incoming"))
    	    		{
-   	    			 ActivityUtil.updateLogForCalls(callWidget, phone, Call.INBOUND, status.toLowerCase(), duration,note_id);
+   	    			 ActivityUtil.updateLogForCalls(callWidget, phone, Call.INBOUND, status.toLowerCase(), duration,note_id,subject);
 
    	    		}
 

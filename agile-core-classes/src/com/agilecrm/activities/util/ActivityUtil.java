@@ -2110,10 +2110,32 @@ public class ActivityUtil
 	}
 
 	public static void updateLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
-			String callDuration,Long note_id)
+			String callDuration,Long note_id,String subject)
 	{
 		// TODO Auto-generated method stub
 		
+		if(note_id!=null)
+		{
+			List<Activity> activities=ActivityUtil.getActivityBasedOnCustom3(note_id.toString());
+			if(activities!=null && activities.size()>0)
+			{
+				for(Activity activity:activities){
+					
+					String custom4 = "";
+					if(null != callType && null != toOrFromNumber && null != callStatus){
+						if(callType .equals("outbound-dial")){
+							custom4 +=  "Outgoing call to " + toOrFromNumber + ", Status is "+ callStatus;
+						}else{
+							custom4 +=  "Incoming call from " + toOrFromNumber + ", Status is "+ callStatus;
+						}
+					}
+					activity.custom4=custom4;
+					activity.custom1=subject;
+					activity.save();
+					
+				}
+			}
+		}
 		// Search contact
 				if (toOrFromNumber != null)
 				{
@@ -2149,7 +2171,6 @@ public class ActivityUtil
 						{
 							Activity activity= activityList.get(0);
 						activity.activity_type = ActivityType.CALL;
-						activity.custom1 = serviceType;
 						activity.custom2 = callType;
 						activity.custom3 = callStatus;
 						activity.custom4 = callDuration;
@@ -2166,7 +2187,6 @@ public class ActivityUtil
 						{
 							Activity activity= activityList.get(0);
 						activity.activity_type = ActivityType.CALL;
-						activity.custom1 = serviceType;
 						activity.custom2 = callType;
 						activity.custom3 = callStatus;
 						activity.custom4 = callDuration;
@@ -2196,7 +2216,7 @@ public class ActivityUtil
 	public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
 			String callDuration,Long note_id)
 	{
-
+		
 		// Search contact
 		if (toOrFromNumber != null)
 		{
@@ -2264,6 +2284,16 @@ public class ActivityUtil
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		if (note_id != null)
 			searchMap.put("note_id_call",note_id);
+
+		return dao.listByProperty(searchMap);
+	}
+	
+	private static List<Activity> getActivityBasedOnCustom3(String note_id)
+	{
+		// TODO Auto-generated method stub
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		if (note_id != null)
+			searchMap.put("custom3",note_id);
 
 		return dao.listByProperty(searchMap);
 	}
