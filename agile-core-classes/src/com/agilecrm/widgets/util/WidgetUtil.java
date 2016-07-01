@@ -560,7 +560,7 @@ public class WidgetUtil {
 	public static boolean checkIfWidgetNameExists(String name) {
 		if (name == null)
 			return false;
-
+		
 		for (Widget defaultWidget : DefaultWidgets.getAvailableDefaultWidgets())
 			if (defaultWidget.name.equals(name))
 				return true;

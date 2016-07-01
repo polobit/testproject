@@ -1,5 +1,7 @@
 package com.agilecrm.widgets;
 
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -10,7 +12,9 @@ import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.widgets.util.DefaultWidgets;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -245,19 +249,44 @@ public class Widget {
 	 */
 	public void save() {
 		// User is not added, Adding the Current user obj.
-		if (user == null) {
-			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		if (user == null) {			
 			user = new Key<AgileUser>(AgileUser.class, agileUser.id);
 		}
-		
-		dao.put(this);
-		
-//		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
-//			dao.put(this);
-//		}else{
-//			dao.put(this);
-//		}
-		
+
+		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
+			dao.put(this);
+		}else{
+			if (this.id ==null && this.widget_type == WidgetType.CUSTOM) {
+				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
+			}
+			
+			DomainUser domainUser = agileUser.getDomainUser();
+			boolean isAdmin = domainUser.is_admin;
+			if(isAdmin){
+				List<Widget> widgetList = WidgetUtil.getWigetUserListByAdmin(name);
+				if (widgetList != null && widgetList.size() > 0) {
+					for (Widget widget : widgetList) {						
+						widget.prefs = this.prefs;
+						widget.logo_url = this.logo_url;
+						widget.mini_logo_url = this.mini_logo_url;
+						widget.description = this.description;
+						widget.display_name = this.display_name;
+						widget.name = this.name;
+						widget.fav_ico_url = this.fav_ico_url;
+						widget.integration_type = this.integration_type;
+						widget.add_by_admin = true;
+						widget.script = this.script;
+						widget.script_type = this.script_type;
+						widget.url = this.url;
+						dao.put(widget);
+					}
+					return;
+				}	
+				this.add_by_admin = true;
+			}
+			dao.put(this);
+		}		
 	}
 	
 	public void saveByUserKey(Key<AgileUser> userKey, Widget widget){

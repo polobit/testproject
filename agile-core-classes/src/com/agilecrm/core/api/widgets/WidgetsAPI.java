@@ -140,9 +140,11 @@ public class WidgetsAPI {
 				widget.display_name = widget.name;
 				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
 			}
-			// if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
-			// return null;
-			// }
+			
+			if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
+			   return null;
+			}
+			
 			widget.save();
 			widget.is_added = true;
 			return widget;
@@ -165,8 +167,7 @@ public class WidgetsAPI {
 			WidgetsAPI.checkValidDetails(widget);
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			if (agileUser != null) {
-				Key<AgileUser> currentUser = new Key<AgileUser>(
-						AgileUser.class, agileUser.id);
+				Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
 				widget.setOwner(currentUser);
 				widget.save();
 				return widget;
@@ -449,11 +450,10 @@ public class WidgetsAPI {
 										adminWidget.updateStatus(true);
 										continue;
 									}
-								}
-								widget.setOwner(userKey);
+								}								
 								widget.add_by_admin = true;										
 								widget.id = null;
-								widget.save();
+								widget.saveByUserKey(userKey, widget);
 							}							
 						}
 					}					
