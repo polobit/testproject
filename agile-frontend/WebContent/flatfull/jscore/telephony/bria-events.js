@@ -298,7 +298,7 @@ function autosaveNoteByUser(note,call,url){
 		duration: note.duration,
 		function(data){
 			if(call.direction == "Outgoing" || call.direction == "outgoing"){
-		var callerObjectId = globalCall.contactedId;
+		var callerObjectId = call.contactId;
 		if(!callerObjectId){
 			return;
 		}
