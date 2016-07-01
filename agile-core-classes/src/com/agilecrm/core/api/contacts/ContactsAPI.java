@@ -1571,7 +1571,7 @@ public class ContactsAPI
 
 	// Iterate data by keys ignore email key value pair
 	Iterator<?> keys = obj.keys();
-
+	contact.contact_company_id = null;
 	while (keys.hasNext())
 	{
 	    String key = (String) keys.next();
@@ -1579,15 +1579,28 @@ public class ContactsAPI
 	    if (key.equals("properties"))
 	    {
 		JSONArray propertiesJSONArray = new JSONArray(obj.getString(key));
+		List<ContactField> input_properties = new ArrayList<ContactField>();
 		for (int i = 0; i < propertiesJSONArray.length(); i++)
 		{
 		    // Create and add contact field to contact
 		    JSONObject json = new JSONObject();
-		    json.put("name", propertiesJSONArray.getJSONObject(i).getString("name"));
-		    json.put("value", propertiesJSONArray.getJSONObject(i).getString("value"));
+		    JSONObject jsonArrData = new JSONObject();
+		    jsonArrData = propertiesJSONArray.getJSONObject(i);
+		    boolean isSubType = jsonArrData.has("subtype");
+		    if(isSubType){
+			json.put("name", jsonArrData.getString("name"));
+			json.put("value", jsonArrData.getString("value"));
+			json.put("subtype", jsonArrData.getString("subtype"));
+		    }else{
+			json.put("name", jsonArrData.getString("name"));
+			json.put("value", jsonArrData.getString("value"));
+		    }
 		    ContactField field = mapper.readValue(json.toString(), ContactField.class);
-		    contact.addProperty(field);
+		    input_properties.add(field);
+		    
 		}
+		// Partial update, send all properties
+		contact.addPropertiesData(input_properties);
 	    }
 	}
 
