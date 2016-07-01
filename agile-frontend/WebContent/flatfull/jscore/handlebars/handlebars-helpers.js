@@ -7299,7 +7299,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	{
 		var options_el = "";
 		if(type == 'portlet'){
-			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing Dashboard</option>"; 
+			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing</option>"; 
 		}
 		if(CURRENT_USER_DASHBOARDS)
 		{
@@ -7362,7 +7362,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
-						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
+						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
 						options_el += "<li class='divider'></li>";
 						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
 					}
@@ -7374,7 +7374,7 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
 				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
-				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
+				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
 				options_el += "<li class='divider'></li>";	
 				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
 			}			
