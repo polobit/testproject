@@ -296,7 +296,7 @@ function autosaveNoteByUser(note,call,url){
 		callType: note.callType,
 		status: note.status,
 		duration: note.duration
-		},success:function(data){
+		,success:function(data){
 			if(call.direction == "Outgoing" || call.direction == "outgoing"){
 		var callerObjectId = globalCall.contactedId;
 		if(!callerObjectId){
@@ -318,6 +318,7 @@ function autosaveNoteByUser(note,call,url){
 			duration : call.duration
 			});
 	}
+}
 		});
 }
 
