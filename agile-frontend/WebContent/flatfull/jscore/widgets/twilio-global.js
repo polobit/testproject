@@ -1350,18 +1350,17 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 							phone: phoneNumber,
 							callType: TWILIO_DIRECTION,
 							status: noteStatus,
-							duration: 0,
-							success:function(data){
+							duration: 0 },function(data){
 								if(TWILIO_DIRECTION == "outbound-dial") {
 						
 						if(callStatus != "completed") {
 							$.post( "/core/api/widgets/twilio/savecallactivityById?note_id="+
-											logPhone.id,{
+											data.id,{
 								id:TWILIO_CONTACT_ID,
-								direction: TWILIO_DIRECTION, 
-								phone: phoneNumber, 
-								status : callRespJson.status,
-								duration : callRespJson.duration 
+							direction: data.callType, 
+								phone: data.phone, 
+								status : data.status,
+								duration : data.duration 
 								});
 						}
 					}else{
@@ -1376,19 +1375,21 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 						}catch (e) {}
 
 						if(callStatus != "completed") {
-							$.post( "/core/api/widgets/twilio/savecallactivity",{
-								direction: TWILIO_DIRECTION, 
-								phone: phoneNumber, 
-								status : callRespJson.status,
-								duration : callRespJson.duration 
+							$.post( "/core/api/widgets/twilio/savecallactivity?note_id="+
+											data.id,{
+							direction: data.callType, 
+								phone: data.phone, 
+								status : data.status,
+								duration : data.duration 
 								});
 						}
 					}
-				}
-							});
+					TWILIO_CONTACT_ID = null;
+				});
+						
 					}
 					
-					TWILIO_CONTACT_ID = null;
+				
 		});
 			
 	} else {

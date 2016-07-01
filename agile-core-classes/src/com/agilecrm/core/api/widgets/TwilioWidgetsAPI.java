@@ -465,9 +465,9 @@ public class TwilioWidgetsAPI
 	 */
 	@Path("autosavenote")
 	@POST
-	@Produces(MediaType.TEXT_PLAIN)
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String autoSaveNote(@FormParam("subject") String subject, @FormParam("message") String message,
+	public Note autoSaveNote(@FormParam("subject") String subject, @FormParam("message") String message,
 			@FormParam("contactid") String contactid,@FormParam("phone") String phone,@FormParam("callType") String callType,@FormParam("status") String status, @FormParam("duration") String duration)
 	{
 		Long contactId = Long.parseLong(contactid);
@@ -480,7 +480,7 @@ public class TwilioWidgetsAPI
 			note.duration = Long.parseLong(duration);
 		}
 		note.save();
-		return "";
+		return note;
 	}
 	
 	/**

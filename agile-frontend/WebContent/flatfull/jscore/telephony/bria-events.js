@@ -295,8 +295,8 @@ function autosaveNoteByUser(note,call,url){
 		phone: note.phone,
 		callType: note.callType,
 		status: note.status,
-		duration: note.duration
-		,success:function(data){
+		duration: note.duration,
+		function(data){
 			if(call.direction == "Outgoing" || call.direction == "outgoing"){
 		var callerObjectId = globalCall.contactedId;
 		if(!callerObjectId){
