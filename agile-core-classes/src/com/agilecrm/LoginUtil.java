@@ -35,6 +35,9 @@ public class LoginUtil
 	public static void setMiscValuesAtLogin(HttpServletRequest request, DomainUser user)
 	{
 		try {
+
+			System.out.println("Setting Misc values for user: " + user.email + ", having id: " + user.id);
+			
 			// Set the UserInfo in the SessionManager. This is required because some of the operations
 			// in this method need UserInfo to be set in the SessionManager.
 			// This is safe because, at this point, the user is already authenticated
@@ -49,6 +52,8 @@ public class LoginUtil
 
 			// Save only if required
 			if( saveDomainUser )	user.save();
+
+			System.out.println("Values set for user: " + user.email + ", having id: " + user.id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -72,6 +77,7 @@ public class LoginUtil
 		    }
 		} catch (Exception e) {
 		    System.out.println("Exception in setting timezone in account prefs.");
+		    e.printStackTrace();
 		}
     }
 
@@ -92,6 +98,7 @@ public class LoginUtil
 		    }
 		} catch (Exception e) {
 		    System.out.println("Exception in setting timezone in user prefs.");
+		    e.printStackTrace();
 		}
     }
 
