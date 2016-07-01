@@ -195,16 +195,15 @@ public class WidgetUtil {
 	 * @return {@link List} of {@link Widget}s
 	 */
 	public static List<Widget> getActiveWidgetsForCurrentUser() {
+		
 		List<Widget> finalWidgets = new ArrayList<Widget>();
-
 		AgileUser agileuser = AgileUser.getCurrentAgileUser();
 
 		if (agileuser != null) {
 			DomainUser domainUser = agileuser.getDomainUser();
 
 			// Creates Current AgileUser key
-			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-					agileuser.id);
+			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileuser.id);
 
 			/*
 			 * Fetches list of widgets related to AgileUser key and adds
@@ -212,18 +211,14 @@ public class WidgetUtil {
 			 */
 			Objectify ofy = ObjectifyService.begin();
 			List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey).filter("widget_type !=", WidgetType.INTEGRATIONS).list();
-			if (domainUser != null && domainUser.is_admin) {
-				String userID = agileuser.id.toString();
+			
+			if (domainUser != null && domainUser.is_admin) {				
 				if (widgets != null) {					
 					for (int i = 0; i < widgets.size(); i++) {						
-						Widget widget = widgets.get(i);		
-						if (widget.listOfUsers != null && userID != null) {
-							if(widget.listOfUsers.contains(userID) && widget.isActive == true){
-								finalWidgets.add(widget);
-							}
-						}else{
+						Widget widget = widgets.get(i);								
+						if(widget.isActive){
 							finalWidgets.add(widget);
-						}
+						}						
 					}
 				}
 			}else{
@@ -368,7 +363,7 @@ public class WidgetUtil {
 		}
 	}
 
-	public static JSONArray getWigdetsUsersList(String name) {
+	public static JSONArray getWigdetsActiveUsersList(String name) {
 		JSONArray userIDs = new JSONArray();
 		String domain = NamespaceManager.get();
 		System.out.println("*** domain " + domain);
@@ -380,7 +375,7 @@ public class WidgetUtil {
 					.getCurrentAgileUserFromDomainUser(dUser.id);
 			if (aUser != null) {
 				Widget userWidget = WidgetUtil.getWidget(name, aUser.id);
-				if (userWidget != null) {
+				if (userWidget != null && userWidget.isActive) {
 					userIDs.put(aUser.id);
 				}
 			}

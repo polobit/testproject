@@ -390,7 +390,7 @@ public class WidgetsAPI {
 				JSONArray newUserArray = new JSONArray(newUsersStr);
 				
 				//Fetching user ids from the DB to know who are already configured.
-				JSONArray oldUserArray = WidgetUtil.getWigdetsUsersList(widgetName);
+				JSONArray oldUserArray = WidgetUtil.getWigdetsActiveUsersList(widgetName);
 				String oldUsersStr = oldUserArray.toString();
 				
 				int newUserSize = newUserArray.length();
