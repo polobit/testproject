@@ -726,21 +726,33 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			
 			if(!is_webrules)
 			{
-				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
-				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time																																				 '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+				var $month_optgroup = condition.find('optgroup[label="Month"]');
+
+				var $defined_options = '<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>' 
+									+
+								  '<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>';
+
+				// To prepend optgroup
+				if($month_optgroup.length != 0)
+					$month_optgroup.before($defined_options);
+				else
+					condition.append($defined_options);
 
 				if(($('#contact_type').val() == "PERSON") && (USER_BILLING_PREFS.planLimits.planName == "ENTERPRISE" || USER_BILLING_PREFS.planLimits.planName == "PRO"))
 				{
 
-					// For Date Fields
-					condition.append('<optgroup label="Month"><option value="BY_MONTH_ONLY" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">on</option></optgroup>');
+					if(condition.find('optgroup[label="Month"]').length == 0)
+					{
+						condition.append('<optgroup label="Month"></optgroup>');
+						condition.append('<optgroup label="Days"></optgroup>')
+					}
+					
+					condition.find('optgroup[label="Month"]').append('<option value="BY_MONTH_ONLY" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">on</option>');
 
-					condition.append('<optgroup label="Days">' + 
+					condition.find('optgroup[label="Days"]').append(
 						'<option value="IS_AFTER_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is after</option>'
 						+
 						'<option value="IS_BEFORE_IN_DAYS" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is before</option>'
-						+
-						'</optgroup>'
 						);
 			    }
 			}
