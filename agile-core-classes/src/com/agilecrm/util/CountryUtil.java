@@ -65,7 +65,6 @@ public class CountryUtil
 		countriesMap.put("CU", "Cuba");
 		countriesMap.put("CY", "Cyprus");
 		countriesMap.put("CZ", "Czech Republic");
-		//countriesMap.put("CI", "Côte d'Ivoire");
 		countriesMap.put("DK", "Denmark");
 		countriesMap.put("DJ", "Djibouti");
 		countriesMap.put("DM", "Dominica");
@@ -253,7 +252,7 @@ public class CountryUtil
 		countriesMap.put("YE", "Yemen");
 		countriesMap.put("ZM", "Zambia");
 		countriesMap.put("ZW", "Zimbabwe");
-		//countriesMap.put("AX", "Åland Islands");
+		
 		return countriesMap;
 	}
 	
