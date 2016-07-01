@@ -2,11 +2,15 @@ package com.agilecrm.forms;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.agilecrm.forms.util.FormUtil;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -40,11 +44,15 @@ public class FormRenderingServlet extends HttpServlet
 	    if (form == null)
 		throw new Exception("No form found.");
 	    String htmlBody = form.formHtml;
-	    String htmlHeading = "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<title>Form</title>\n</head>\n<body>\n<div id=\"agileFormHolder\" style=\"margin:0 auto;width:450px\">\n";
+	    /*String htmlHeading = "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<title>Form</title>\n</head>\n<body>\n<div id=\"agileFormHolder\" style=\"margin:0 auto;width:450px\">\n";
 	    String htmlButtom = "\n</div>\n</body>\n</html>";
 	    String fullHtml = htmlHeading + htmlBody + htmlButtom;
 	    
-	    out.write(fullHtml);
+	    out.write(fullHtml);*/
+	    request.setAttribute("formHtml", htmlBody);
+	    RequestDispatcher rd=request.getRequestDispatcher("/formrendering.jsp");  
+	    rd.include(request, response);
+	    
 	}
 	catch (Exception e)
 	{
