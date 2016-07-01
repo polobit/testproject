@@ -116,11 +116,13 @@ function showMailsInHelpScout(customerId, contact_id, offSet)
 		var result = helpscoutmails.slice(offSet, (offSet+5));
 		$('.helpscout_show_more').remove();
 		$('#all_conv_panel').append(getTemplate('helpscout-conversation', result));
+		$(".time-ago", $('#all_conv_panel')).timeago();
 		$('#all_conv_panel').append(showMoreHtml);
 	}else {
 		var result = helpscoutmails.slice(offSet, helpscoutmails.length);
 		$('.helpscout_show_more').remove();
 		$('#all_conv_panel').append(getTemplate('helpscout-conversation', result));
+		$(".time-ago", $('#all_conv_panel')).timeago();
 	}
 }
 

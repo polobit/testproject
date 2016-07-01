@@ -818,6 +818,33 @@ public class DomainUserUtil
 	}
     }
     
+    public static List<Key<DomainUser>> getAllAdminUsersKeys(String domain)
+    {
+	String oldnamespace = NamespaceManager.get();
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("is_admin", true);
+	    searchMap.put("domain", domain);
+
+	    return dao.listKeysByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting admin users..." + e.getMessage());
+	    return null;
+	}
+	finally
+	{
+
+	    NamespaceManager.set(oldnamespace);
+	}
+    }
+    
     /**
      * Updates the login domain user restricted scopes, if domain user contains DELETE_CONTACTS
      * 

@@ -99,22 +99,24 @@ $(function(){
 				}
 
 				// customize delete confirmation message
-				if(!customize_delete_message(table))
-					return;
+				/*if(!customize_delete_message(table))
+					return;*/
 				
 				// Customize the bulk delete operations
 				if(!customize_bulk_delete(id_array, data_array))
 					return;
 
+				if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
+					return;
+
 				// Default message for all tables
 				var confirm_msg = "Are you sure you want to delete?";
-				
+				var $that = $(this);
+				// Shows confirm alert, if Cancel clicked, return false
+ -				showAlertModal(confirm_msg, "confirm", function(){
 				// Appends campaign-name for active subscribers
 				if($(table).attr('id') === "active-campaign")
 					confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
-				var $that = $(this);
-				// Shows confirm alert, if Cancel clicked, return false
-				showAlertModal(confirm_msg, "confirm", function(){
 					$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 					var url = $(table).attr('url');
@@ -136,7 +138,6 @@ $(function(){
 					
 					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 				}, undefined, "Bulk Delete");
-				
 			}
 						
 		}	
@@ -562,8 +563,8 @@ function customize_delete_message(table)
 		confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
 
 	// Shows confirm alert, if Cancel clicked, return false
-	if(!confirm(confirm_msg))
-		return false;
+	//if(!confirm(confirm_msg))   //changed 21/6 adi
+	//	return false;
 	
 	// if OK clicked return true
 	return true;

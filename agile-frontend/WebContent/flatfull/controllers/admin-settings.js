@@ -126,6 +126,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
+				
+			},saveCallback : function(){
+				location.reload(true);
 			} });
 
 			
@@ -1131,7 +1134,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			$('.settings-lost-reasons').addClass('active');
 			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
-			$('.settings-lost-reasons').parent().removeClass('b-b-none');
+			//$('.settings-lost-reasons').parent().removeClass('b-b-none');
 
 		}, "#milestone-listner");
 	},
@@ -1168,7 +1171,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			$('.settings-deal-sources').addClass('active');
 			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
-			$('.settings-deal-sources').parent().removeClass('b-b-none');
+			//$('.settings-deal-sources').parent().removeClass('b-b-none'); 
 
 		}, "#milestone-listner");
 	},
@@ -1196,6 +1199,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					
 
 							var d=$('#goal_duration span').html();
+						if(window.navigator.userAgent.indexOf("Mozilla") != -1 && window.navigator.userAgent.indexOf("Chrome")==-1)
+							d="01 "+d;
 					d=new Date(d);
 					var start=getUTCMidNightEpochFromDate(d);
 
@@ -1205,13 +1210,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 							{
 								console.log(data);
 								var count=0,amount=0;
-								$('#deal-sources-table').find('td').each(function(index){
+								$("#deal-sources-table").find("tr").not(':first').each(function(index){
 									var that=$(this);
 									that.find('.count').val("");
 											that.find('.amount').val("");
 									$.each(data,function(index,jsond){
 										console.log(jsond);
-										if(jsond.domain_user_id==that.find('div').attr('id')){
+										if(jsond.domain_user_id==that.find(".goalid").attr("id")){
 											that.find('.count').val(jsond.count);
 											that.find('.amount').val(jsond.amount);
 											that.attr('id',jsond.id);
@@ -1240,7 +1245,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			$('.settings-deal-goal').addClass('active');
 			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
-			$('.settings-deal-goal').parent().removeClass('b-b-none');
+			//$('.settings-deal-goal').parent().removeClass('b-b-none');
 
 		}, "#milestone-listner");
 	},
@@ -1377,3 +1382,5 @@ function getDomainFromURL(){
 		return "my";
 	return temp[0];
 }
+
+

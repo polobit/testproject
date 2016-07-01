@@ -77,7 +77,7 @@ function loadWidgets(el, contactObject, templateID)
 
 				$('#'+templateID, el).html(Widgets_View.render(true).el);
 				// Sets up widget
-				set_up_widgets(el, Widgets_View.el, contact.id);
+				set_up_widgets(el, Widgets_View.el, data.contact.id);
 
 			}
 			widgetBindingsLoader();
@@ -262,17 +262,26 @@ function set_up_widgets(el, widgets_el)
 
 function setup_custom_widget(model, widgets_el)
 {
-	try
-	{
+	try{
+
+		var customType;
 		// $('form', this).focus_first();
-		if (model.get('script'))
+		if(model && model.get('script_type')){
+			customType = model.get('script_type');
+		}else if(model.get('url')){
+			customType = 'url';
+		}else{
+			customType = 'script';
+		}
+
+		if (customType == 'script'){
 			$('#' + model.get('selector'), widgets_el).html(model.get('script'));
-		else
-			getScript(model, function(data)
-			{
+		}else if(customType == 'url') {
+			getScript(model, function(data){
 				console.log(data);
 				$('#' + model.get('selector'), widgets_el).html(data);
 			});
+		}
 	}
 	catch (err)
 	{
@@ -280,27 +289,21 @@ function setup_custom_widget(model, widgets_el)
 	}
 }
 
-function getScript(model, callback)
-{
-	try
-	{
+function getScript(model, callback){
+	try{
 		// Gets contact id, to save social results of a particular id
 		var contact_id = agile_crm_get_contact()['id'];
-
-		$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
-		{
+		$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data){
 
 			// If defined, execute the callback function
 			if (callback && typeof (callback) === "function")
 				callback(data);
-		}).error(function(data)
-		{
+		}).error(function(data){
+			$('#' + model.get('selector')).html(data.statusText);
 			console.log(data);
 			console.log(data.responseText);
 		});
-	}
-	catch (err)
-	{
+	}catch (err){
 		console.log(err);
 	}
 }

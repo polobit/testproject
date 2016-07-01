@@ -287,6 +287,17 @@
 	</servlet-mapping>
 	-->
 	
+	
+	<servlet>
+		<servlet-name>TaskletCounter</servlet-name>
+		<servlet-class>com.agilecrm.queues.cron.TaskletCounterServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>TaskletCounter</servlet-name>
+		<url-pattern>/backend/cron/taskletcounter</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>Reports</servlet-name>
 		<servlet-class>com.agilecrm.reports.ReportServlet</servlet-class>
@@ -1297,4 +1308,23 @@
 		<url-pattern>/knowledgebase/*</url-pattern>
 	</servlet-mapping>
 	<!-- End of HelpCenter -->
+	<servlet>
+        <servlet-name>VoiceCallTwilioServlet</servlet-name>
+        <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>VoiceCallTwilioServlet</servlet-name>
+        <url-pattern>/twiliovoicecall</url-pattern>
+        <url-pattern>/Twiliovoicecall</url-pattern>
+    </servlet-mapping>
+    <servlet>
+		<servlet-name>QuerySubmitServlet</servlet-name>
+		<servlet-class>com.agilecrm.webrules.util.QuerySubmitServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QuerySubmitServlet</servlet-name>
+		<url-pattern>/querysubmit</url-pattern>
+	</servlet-mapping>
 </web-app>

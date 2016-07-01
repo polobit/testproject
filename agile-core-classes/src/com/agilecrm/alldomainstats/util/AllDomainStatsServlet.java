@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.AllDomainStats;
+import com.agilecrm.account.util.DomainLimitsUtil;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -29,6 +31,15 @@ import com.google.appengine.api.blobstore.BlobKey;
 public class AllDomainStatsServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
 	    {
+		   
+		
+		String tweetUpdate = request.getParameter("tweet_update");	
+
+		DomainLimitsUtil.resetDefaultsForAllDomains();
+
+		if(StringUtils.isNotBlank(tweetUpdate))
+			return;
+
 		   DateUtil dateUtil=new DateUtil();
 		   
 		 //yesterday mid night time in millisecond

@@ -650,8 +650,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 			loadWidgets(el, contact.toJSON(), "widgets");
 			
-			
-			
 			/*
 			 * // To get QR code and download Vcard
 			 * $.get('/core/api/VCard/' + contact.toJSON().id,
@@ -684,6 +682,9 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-call",el).removeClass("c-progress");
 				$(".contact-make-skype-call",el).removeClass("c-progress");
 			}
+			if(contact)
+				addTypeCustomData(contact.get('id') , el);
+
 			} 
 			
 		});
@@ -697,7 +698,6 @@ var ContactsRouter = Backbone.Router.extend({
 			}*/
 		// Check updates in the contact.
 		checkContactUpdated();
-
 
 		if(_agile_get_prefs('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
@@ -1288,7 +1288,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					// Add placeholder and date picker to date custom fields
 					$('.date_input').attr("placeholder", "Select Date");
 
-					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 					// To set typeahead for tags
 					setup_tags_typeahead();
@@ -1618,4 +1618,27 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			
 			
 		}, "#send-email-listener-container"); 
+}
+function addTypeCustomData(contactId, el){
+	var customFieldsView = new Base_Collection_View({
+							url : 'core/api/contacts/getCustomfieldBasedContacts?id='+contactId+'&type=CONTACT',
+							sortKey : 'time',
+							descending : true,
+							templateKey : "contact-type-custom-fields",
+							cursor : true,
+							page_size : 20,
+							postRenderCallback : function(el){
+								
+							}
+						});
+	customFieldsView.collection.fetch({
+
+		success : function(data){
+			if(data.length){
+				$('#contacts-type-custom-fields' , el).removeClass('hidden');
+			}
+		}
+	});
+	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
+	
 }

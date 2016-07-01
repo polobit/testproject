@@ -119,16 +119,23 @@ function initializeWidgetSettingsListeners(){
 		var widgetData = $(this).attr('widget-data');		
 		var that = $(this);
 		$.getJSON( "core/api/users/agileusers", function(data){	
-			var result ={}; 
+			var result = {}; 
 			result.widget = JSON.parse(widgetData);							
-			var userList = JSON.stringify(result.widget.listOfUsers);
+			var userList = JSON.stringify(result.widget.listOfUsers);					
 			for(var i=0; i < data.length ; i++){	
-				var obj = data[i];						
-				if(userList.indexOf(obj.id) > 0){
-					obj.isChecked = true;
-					data[i] = obj;
-				}				
+				var obj = data[i];		
+				if(obj){
+					if(userList){
+						if(userList.indexOf(obj.id) > 0){
+							obj.isChecked = true;
+							data[i] = obj;
+					    } else {
+					    	data[i] = obj;
+					    }
+					}												
+				}		
 			}
+
 			result.data = data;
 
 			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
@@ -189,14 +196,20 @@ function initializeWidgetSettingsListeners(){
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
+		var widgetNameDisplay = $(this).attr('widget-displayname');
 
 		// If not confirmed to delete, return
 		var displayName;
 		
-		displayName = widgetDisplayname[widget_name];
-		if(!displayName){
-			displayName = widget_name;
+		if(widgetNameDisplay){
+			displayName = widgetNameDisplay;
+		}else{
+			displayName = widgetDisplayname[widget_name];
+			if(!displayName){
+				displayName = widget_name;
+			}	
 		}
+		
 
 		showAlertModal("Are you sure to delete " + displayName + "?", "confirm", function(){
 			delete_widget(widget_name);

@@ -33,7 +33,7 @@
 {{else}}
 	<p>Shopify id for each contact is stored in a text custom field. Select the custom field to be used.</p>
 	<select name="shopify_field" id="shopify_custom_field_name" class="required form-control span10 w-full">
-     		<option class="default-select" value="">-Select-</option>
+     		<option class="default-select" value=""> Select </option>
 		{{#each this.custom_fields}}
 			<option value="{{field_label}}">{{field_label}} 
 			</option>

@@ -531,6 +531,8 @@ public class Opportunity extends Cursor implements Serializable
 		this.created_time = oldOpportunity.created_time;
 	    if (this.won_date == null && oldOpportunity.won_date != null)
 		this.won_date = oldOpportunity.won_date;
+	    if(!this.milestone.equalsIgnoreCase(wonMilestone) && this.won_date!=null)
+	    	this.won_date=null;
 	}
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
@@ -549,7 +551,10 @@ public class Opportunity extends Cursor implements Serializable
 		this.won_date = System.currentTimeMillis() / 1000;
 		this.probability = 100;
 	    }
-
+	    if(!this.milestone.equals(oldOpportunity.milestone) && !this.milestone.equalsIgnoreCase(wonMilestone) && oldOpportunity.won_date!=null)
+	    {
+			this.won_date = null;
+	    }
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(lostMilestone))
 	    {
 		this.probability = 0;
@@ -596,6 +601,8 @@ public class Opportunity extends Cursor implements Serializable
     public void delete()
     {
 	dao.delete(this);
+	
+	new AppengineSearch<Opportunity>(Opportunity.class).delete(id.toString());
     }
     /**
      * Retursn list of tags (list of {@link Tag}).

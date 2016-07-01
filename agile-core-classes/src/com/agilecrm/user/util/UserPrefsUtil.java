@@ -9,11 +9,14 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.core.api.prefs.UserPrefsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.EmailUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -78,8 +81,32 @@ public class UserPrefsUtil
     {
 	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null, "pink", "", EmailUtil.getPoweredByAgileLink(
 		"email-signature", "Sent using"), true, false);
+	userPrefs.currency = getDefaultCurrency(agileUser);
+	
 	userPrefs.save();
 	return userPrefs;
+    }
+    
+    private static String getDefaultCurrency(AgileUser agileUser){
+    	
+    	// Get admin currency
+    	List<Key<DomainUser>> adminUserKeys = DomainUserUtil.getAllAdminUsersKeys(NamespaceManager.get());
+    	if(adminUserKeys == null || adminUserKeys.isEmpty())
+    		  return UserPrefs.DEFAULT_CURRENCY;
+    	
+		for (Key<DomainUser> key : adminUserKeys) {
+			if(agileUser.domain_user_id.equals(key.getId()))
+				continue;
+			
+			AgileUser agileUser1 = AgileUser.getCurrentAgileUserFromDomainUser(key.getId());
+			UserPrefs agileUserPrefs = getUserPrefs(agileUser1);
+			if(agileUserPrefs == null)
+				continue;
+			
+			return agileUserPrefs.currency;
+		}
+		
+		return UserPrefs.DEFAULT_CURRENCY;
     }
 
     /**

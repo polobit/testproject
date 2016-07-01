@@ -107,10 +107,10 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <h3 class="accordion-heading">{{ 'layout' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
-                                <div class="elements-box accordion-item" id="components">
+                               <!--  <div class="elements-box accordion-item" id="components" style= "display: none;">
                                     <h3 class="accordion-heading">{{ 'components' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
-                                </div>
+                                </div> -->
                                 <div class="elements-box accordion-item" id="media">
                                     <h3 class="accordion-heading">{{ 'media' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
@@ -193,7 +193,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             </div>
 
                                             <div ng-controller="MediaManagerController">
-                                                <button ng-if="selected.isImage" ng-file-select="onFileSelect($files, 'src')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
+                                                <button id= "upload-image-lp" ng-if="selected.isImage" ng-file-select="onFileSelect($files, 'src')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +216,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             <button type="button" ng-file-select="onFileSelect($files, 'bg')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
                                         </div>
                                         <div id="texturePresets">
-                                            <h5>{{ 'textures' | translate }}</h5>
+                                            <!-- <h5 style="dispaly:none">{{ 'textures' | translate }}</h5> -->
                                             <ul class="img-presets-list" bl-pretty-scrollbar>
                                                 <li ng-repeat="texture in textures track by $index">
                                                     <div ng-click="selectPreset($event)" class="preset" ng-style="{ 'background-image': 'url(/public/images/textures/'+$index+'.png)' }"></div>
@@ -242,7 +242,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             </div>
                                         </div>
                                         <div id="gradientPresets">
-                                            <h5>{{ 'gradients' | translate }}</h5>
+                                            <!-- <h5>{{ 'gradients' | translate }}</h5> -->
                                             <ul class="img-presets-list" bl-pretty-scrollbar>
                                                 <li ng-repeat="gradient in gradients track by $index">
                                                     <div class="preset" ng-click="selectPreset($event)" ng-style="{ 'background-image': gradient }"></div>

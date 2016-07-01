@@ -696,19 +696,18 @@ function update_contact_in_our_domain(user_email, response, callback){
 		return;
 	}
 
-	var phone = "";
-	if(response.phone){
-		phone = response.phone;
-	}
 	try{
+		var json = {
+		    "email": response.email,
+		}
+		if(response.phone){
+			json.phone = response.phone;
+		}
 
 		if (CURRENT_DOMAIN_USER.email != user_email)
 		   _agile.set_email(user_email);
 
-		_agile.update_contact({
-		    "email": response.email,
-		    "phone":phone
-		}, {
+		_agile.update_contact(json, {
 		    success: function (data) {
 		        console.log("success");
 		        processCallback(callback);

@@ -32,20 +32,14 @@ function loadSHOPIFYTickets(offSet){
 		result = SHOPIFYTickets.slice(offSet, (offSet+5));		
 		console.log(result);
 		$('.shopify_show_more').remove();
-		$('#shopify_orders_panel').append(getTemplate('shopify-order-list', result)).append(showMoreSHOPIFY);
-		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			$(".time-ago", $('#shopify_orders_panel')).timeago();
-		});
+		$('#shopify_orders_panel').append(getTemplate('shopify-order-list', result)).append(showMoreSHOPIFY);		
+		$(".time-ago", $('#shopify_orders_panel')).timeago();		
 	}else{
 		var result = {};
 		result = SHOPIFYTickets.slice(offSet, SHOPIFYTickets.length);
 		$('.shopify_show_more').remove();
 		$('#shopify_orders_panel').append(getTemplate('shopify-order-list', result));
-		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			$(".time-ago", $('#shopify_orders_panel')).timeago();
-		});
+		$(".time-ago", $('#shopify_orders_panel')).timeago();
 	}
 }
 

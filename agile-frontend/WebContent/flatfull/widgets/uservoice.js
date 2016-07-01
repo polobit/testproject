@@ -31,10 +31,8 @@ function loadUservoiceComments(offSet){
 		$('.uservoice_show_more').remove();		
 
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
-			$('#uservoice-comments').append(template_inv);
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#uservoice-comments')).timeago();
-			});
+			$('#uservoice-comments').append(template_inv);			
+			$( ".time-ago", $('#uservoice-comments')).timeago();
 			$('#uservoice-comments').append(showMoreUservoiceCommments);
 		},null);				
 	}else{
@@ -44,9 +42,7 @@ function loadUservoiceComments(offSet){
 
 		getTemplate('uservoice-transactions', result, undefined, function(template_inv){						
 			$('#uservoice-comments').append(template_inv);
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-				$( ".time-ago", $('#uservoice-comments')).timeago();
-			});
+			$( ".time-ago", $('#uservoice-comments')).timeago();		
 		},null);
 	}
 }

@@ -1,4 +1,8 @@
 cron:
+- description: TaskletCounter
+  url: /backend/cron/taskletcounter
+  schedule: every 30 mins
+
 - description: TaskletsTimer
   url: /backend/cron
   schedule: every 2 mins
@@ -6,17 +10,17 @@ cron:
 - description: daily reports
   url: /backend/cron/reports?duration=DAILY
   schedule: every day 23:30
-  target: agile-normal-bulk
+  target: agile-reports
     
 - description: Monthly reports
   url: /backend/cron/reports?duration=MONTHLY
   schedule: 1st friday of month 23:45
-  target: agile-normal-bulk
+  target: agile-reports
   
 - description: Weekly reports
   url: /backend/cron/reports?duration=WEEKLY
   schedule: every friday 23:40 
-  target: agile-normal-bulk
+  target: agile-reports
 
 - description: Hourly triggers
   url: /backend/cron/triggers?period=HOURLY
@@ -131,3 +135,6 @@ cron:
   url: /_ah/sessioncleanup?clear
   schedule: every 1 mins
 
+- description: Bulk call Cron
+  url: /backend/cron/cron-pull?q=bulk-call-pull-queue
+  schedule: every 2 mins

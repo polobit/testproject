@@ -6,7 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.core.api.widgets.WidgetsAPI;
@@ -65,16 +64,19 @@ public class Widget {
 	 * Url specifies the path of the widget script
 	 */
 	public String url = null;
+	
+	public boolean isActive = true;
 
 	/** Logo URL of the widget to show it in add widget page */
 	public String logo_url = null;
 
 	public boolean add_by_admin = false;
 
+	@NotSaved
 	public String listOfUsers = null;
 
 	public String display_name = null;
-
+	
 	@NotSaved
 	public boolean isForAll = false;
 
@@ -90,6 +92,9 @@ public class Widget {
 	/** script is saved for custom widgets **/
 	@NotSaved(IfDefault.class)
 	public String script;
+	
+	@NotSaved(IfDefault.class)
+	public String script_type = null;
 
 	/**
 	 * Contains type of widgets to categorize the widgets based on their type
@@ -243,55 +248,56 @@ public class Widget {
 	 * differentiate widgets based on {@link AgileUser}
 	 */
 	public void save() {
-		AgileUser agileUser;
-		AgileUser currentUser = AgileUser.getCurrentAgileUser();
-		if(this.user == null){
-			agileUser = currentUser;
-		}else{
-			agileUser = AgileUser.getUser(this.user);
+		// User is not added, Adding the Current user obj.
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		if (user == null) {			
+			user = new Key<AgileUser>(AgileUser.class, agileUser.id);
 		}
-		
-		DomainUser domainUser = currentUser.getDomainUser();
-		boolean isAdmin = domainUser.is_admin;
-		JSONArray userList = new JSONArray();
-		if (isAdmin && agileUser.id == currentUser.id && this.id == null) {
-			userList.put(agileUser.id);
-			this.add_by_admin = true;
-			this.listOfUsers = userList.toString();
+
+		if(this.widget_type.equals(WidgetType.INTEGRATIONS)){
 			dao.put(this);
-		} else if (isAdmin) {			
-			List<Widget> userWidgets = WidgetUtil.getWigetUserListByAdmin(name);
-			if (this.widget_type == WidgetType.CUSTOM) {
+		}else{
+			if (this.id ==null && this.widget_type == WidgetType.CUSTOM) {
 				this.name = this.display_name.replaceAll("[^a-zA-Z0-9]+", "");
 			}
-			if (this.id != null && userWidgets != null && userWidgets.size() > 0) {
-				for (Widget widget : userWidgets) {						
-					widget.prefs = this.prefs;
-					widget.logo_url = this.logo_url;
-					widget.mini_logo_url = this.mini_logo_url;
-					widget.description = this.description;
-					widget.display_name = this.display_name;
-					widget.name = this.name;
-					widget.fav_ico_url = this.fav_ico_url;
-					widget.integration_type = this.integration_type;
-					widget.add_by_admin = true;
-					widget.script = this.script;
-					widget.url = this.url;
-					dao.put(widget);
-				}
-			}else{
+			
+			DomainUser domainUser = agileUser.getDomainUser();
+			boolean isAdmin = domainUser.is_admin;
+			if(isAdmin){
+				List<Widget> widgetList = WidgetUtil.getWigetUserListByAdmin(name);
+				if (widgetList != null && widgetList.size() > 0) {
+					for (Widget widget : widgetList) {						
+						widget.prefs = this.prefs;
+						widget.logo_url = this.logo_url;
+						widget.mini_logo_url = this.mini_logo_url;
+						widget.description = this.description;
+						widget.display_name = this.display_name;
+						widget.name = this.name;
+						widget.fav_ico_url = this.fav_ico_url;
+						widget.integration_type = this.integration_type;
+						widget.add_by_admin = true;
+						widget.script = this.script;
+						widget.script_type = this.script_type;
+						widget.url = this.url;
+						dao.put(widget);
+					}
+					return;
+				}	
 				this.add_by_admin = true;
-				dao.put(this);
-			}
-		} else {
-			if (user == null) {
-				user = new Key<AgileUser>(AgileUser.class, agileUser.id);
 			}
 			dao.put(this);
-		}
+		}		
 	}
 	
-	public void updateUserList(){		
+	public void saveByUserKey(Key<AgileUser> userKey, Widget widget){
+		if(widget != null && userKey != null){
+			this.user = userKey;
+			dao.put(widget);
+		}		
+	}
+	
+	public void updateStatus(boolean status){
+		this.isActive = status;
 		dao.put(this);
 	}
 

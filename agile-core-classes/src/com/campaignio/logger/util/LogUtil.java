@@ -94,7 +94,7 @@ public class LogUtil
 	    LogDeferredTask logDeferredTask = new LogDeferredTask(campaignId, subscriberId, message, logType, domain,
 		    GoogleSQL.getFutureDate());
 	   // Add to queue
-	   Queue queue = QueueFactory.getQueue("campaign-log-queue");
+	   Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_LOG_QUEUE);
 	   queue.add(TaskOptions.Builder.withPayload(logDeferredTask));
 	   System.out.println("task added to queue");
 	   // Add to pull queue with from email as Tag

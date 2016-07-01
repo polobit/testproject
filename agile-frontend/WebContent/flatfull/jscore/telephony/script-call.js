@@ -708,3 +708,145 @@ var _agile_rules = {
 	{
 		return true;
 	} };
+
+function GiveCallScriptName(contact, callback){
+	_agile_contact = contact;
+	CallScript_PLUGIN_NAME = "CallScript";
+	var callscript_widget = null;
+	if(App_Widgets.Catalog_Widgets_View){
+		  callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
+	}else{
+		// Following wont give current updated widget 
+		if (window.location.hash.indexOf("#contact/") != -1)
+		{
+			callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
+		}else{
+			$.getJSON("/core/api/widgets/CallScript", function(CallScript_wid)
+			{
+				callscript_widget = CallScript_wid;
+				var rules = GiveRulesInArray(callscript_widget);
+				return callback(rules);
+			});
+		}
+	}
+	if(callscript_widget){
+		var rules = GiveRulesInArray(callscript_widget);
+		return callback(rules);
+	}
+}
+
+function GiveRulesInArray(callscript_widget){
+	var array_callScript = [];
+	  if(callscript_widget){
+		  
+		  	if (callscript_widget.prefs == undefined || callscript_widget.prefs == "{}")
+			{
+				// show default text
+				console.log("no rule defined");
+				return array_callScript;
+			}
+		  	
+			  var callscript_prefs = JSON.parse(callscript_widget.prefs);
+			  var _agile_web_rules = callscript_prefs.csrules;
+			  
+				for ( var j = 0; j < _agile_web_rules.length; j++)
+				{
+						var name = _agile_web_rules[j].name;
+						array_callScript.push(name);
+						console.log("name is " + name);
+				}
+		}
+		return array_callScript;
+}
+
+
+function GiveCallScriptText(name, contact, callback){
+	if(!contact){
+		return "!@#";
+	}
+	_agile_contact = contact;
+	CallScript_PLUGIN_NAME = "CallScript";
+	var callscript_widget = null;
+	if(App_Widgets.Catalog_Widgets_View){
+		  callscript_widget = App_Widgets.Catalog_Widgets_View.collection.where({ name : CallScript_PLUGIN_NAME })[0].toJSON();
+	}else{
+		// Following wont give current updated widget 
+		if (window.location.hash.indexOf("#contact/") != -1)
+		{
+			callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
+		}else{
+			$.getJSON("/core/api/widgets/CallScript", function(CallScript_wid)
+			{
+				callscript_widget = CallScript_wid;
+				var rulesValue = checkRuleAndDisplayValue(callscript_widget, name);
+				callback(rulesValue);
+			});
+		}
+	}
+	if(callscript_widget){
+		var rulesValue = checkRuleAndDisplayValue(callscript_widget, name);
+		callback(rulesValue);
+	}
+}
+
+
+function checkRuleAndDisplayValue(callscript_widget, name){
+	var text = "!@#";
+	if(callscript_widget){
+		  
+		  	if (callscript_widget.prefs == undefined || callscript_widget.prefs == "{}")
+			{
+				// show default text
+				console.log("no rule defined");
+				return text;
+			}
+		  	
+			  var callscript_prefs = JSON.parse(callscript_widget.prefs);
+			  var _agile_web_rules = callscript_prefs.csrules;
+			  
+				for ( var j = 0; j < _agile_web_rules.length; j++)
+				{
+						var name1 = _agile_web_rules[j].name;
+						if(name1 == name){
+							var display = _agile_web_rules[j].displaytext;
+							var displayText = replaceMergeFields(display);
+							console.log ("display text - " + displayText);
+							text = displayText;
+						}
+				}
+		}
+		return text;
+}
+
+function showvalue(contact){
+	if(!contact){
+		return;
+	}
+	
+	GiveCallScriptName(contact, function(nameArray){
+		//option(name.value)
+		if(nameArray.length == 0){
+			$("#callScriptForm #callScriptText").val("No call script to display.");
+		}
+		
+		for(var i=0;i<nameArray.length;i++){
+			var $option = new Option(nameArray[i],nameArray[i]);
+			$("#callScriptForm #callScriptName").append($option);
+		}
+		
+		$("body").on("change", "#callScriptName", function(e){
+			
+			var rule = $("#callScriptName").val();
+			var contact = $(".noty_call_callScript","#draggable_noty").data("contact");
+			GiveCallScriptText(rule, contact, function(textToDisplay){
+				if(textToDisplay == "!@#"){
+					textToDisplay = "Please select a call script to display.";
+				}
+				$("#callScriptForm #callScriptText").val(textToDisplay);
+			});
+		});
+	});
+
+			
+}
+

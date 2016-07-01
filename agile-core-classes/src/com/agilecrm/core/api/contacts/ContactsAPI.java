@@ -57,6 +57,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
+import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.bulk.ContactsDeleteTask;
@@ -69,6 +70,7 @@ import com.agilecrm.contact.upload.blob.status.ImportStatus;
 import com.agilecrm.contact.upload.blob.status.ImportStatus.ImportType;
 import com.agilecrm.contact.upload.blob.status.dao.ImportStatusDAO;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
@@ -76,6 +78,7 @@ import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -930,7 +933,6 @@ public class ContactsAPI
 	 if(notesJSONArray!=null && notesJSONArray.length()>0){
 		 for (int i = 0; i < notesJSONArray.length(); i++) {
 			 Note note =  NoteUtil.getNote(Long.parseLong(notesJSONArray.get(i).toString()));
-			
 			List<String> conIds = note.getContact_ids();
 	    	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	    	if(conIds == null || modifiedConIds == null || conIds.size() == modifiedConIds.size())
@@ -948,7 +950,6 @@ public class ContactsAPI
 				e.printStackTrace();
 			}
 		 }
-		 
 	 }
 	 Note.dao.deleteBulkByIds(notesArray);
 }
@@ -1290,8 +1291,97 @@ public class ContactsAPI
 	    }
 
 	}
-	if (contact.type.toString().equals(("PERSON")))
+	
+	System.out.println("Activity Type: "+contact.type.toString());
+	
+	if (contact.type.toString().equals(("PERSON"))){
 	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_CONTACT, contact, ids.length);
+	}else if(contact.type.toString().equals(("COMPANY"))){
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_COMPANY, contact, ids.length);
+	}
+	// merge notes
+	return contact;
+    }
+    
+    @Path("companies/merge/{contactIds}")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact mergeCompanies(Contact contact, @PathParam("contactIds") String contactIds)
+    {
+	String[] ids = contactIds.split(",");
+	for (String id : ids)
+	{
+	    // update notes
+	    try
+	    {
+		List<Note> notes = NoteUtil.getNotes(Long.valueOf(id));
+
+		for (Note note : notes)
+		{
+		    note.addContactIds(contact.id.toString());
+		    note.owner_id = String.valueOf(note.getDomainOwner().id);
+		    note.save();
+		}
+
+		// update events
+
+		List<Event> events = EventUtil.getContactEvents(Long.valueOf(id));
+
+		for (Event event : events)
+		{
+		    event.addContacts(contact.id.toString());
+		    event.save();
+		}
+
+		// update task
+		List<Task> tasks = TaskUtil.getContactTasks(Long.valueOf(id));
+		for (Task task : tasks)
+		{
+		    task.addContacts(contact.id.toString());
+		    task.save();
+		}
+
+		// update deals
+		List<Opportunity> opportunities = OpportunityUtil.getAllOpportunity(Long.valueOf(id));
+		for (Opportunity opportunity : opportunities)
+		{
+		    opportunity.addContactIds(contact.id.toString());
+		    opportunity.save();
+		}
+
+		// merge document
+
+		List<Document> documents = DocumentUtil.getContactDocuments(Long.valueOf(id));
+		for (Document document : documents)
+		{
+		    document.getContact_ids().add(contact.id.toString());
+		    document.save();
+		}
+
+		// merge Case
+		List<Case> cases = CaseUtil.getCases(Long.valueOf(id));
+		for (Case cas : cases)
+		{
+		    cas.addContactToCase(contact.id.toString());
+		    cas.save();
+		}
+		// delete duplicated record
+		ContactUtil.getContact(Long.valueOf(id)).delete();
+		// save master reccord
+		contact.save();
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+	System.out.println("Activity in companies: "+ contact.type.toString());
+	if (contact.type.toString().equals(("COMPANY"))){
+	    ActivityUtil.mergeContactActivity(ActivityType.MERGE_COMPANY, contact, ids.length);
+	}
 	// merge notes
 	return contact;
     }
@@ -1836,5 +1926,26 @@ public class ContactsAPI
 	    }
 	    contact.save();
 	}
+    }
+    @Path("/getCustomfieldBasedContacts")
+    @GET
+    public List<Contact> getCustomfieldBasedContacts(@QueryParam("id") String id ,@QueryParam("type") String type)
+    {
+    	try {
+			List<String> customFieldNames = new ArrayList<String>();
+			List<CustomFieldDef> customfields = CustomFieldDefUtil.getContactAndCompanyCustomFields();
+			if(customfields != null && customfields.size() > 0){
+				for(CustomFieldDef c : customfields){
+					if(c.field_type.equals(CustomFieldDef.Type.CONTACT) || c.field_type.equals(CustomFieldDef.Type.COMPANY))
+						customFieldNames.add(SearchUtil.normalizeTextSearchString(c.field_label));
+				}
+			}
+			if(customFieldNames != null && customFieldNames.size() > 0 && id != null)
+				return ContactUtil.getContactsWithCustomFields(id,customFieldNames);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return null ; 
     }
 }

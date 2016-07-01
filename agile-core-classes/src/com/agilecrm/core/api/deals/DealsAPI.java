@@ -327,6 +327,19 @@ public class DealsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	if(opportunity != null &&(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0)){
+		List<String> contactIds = opportunity.getContact_ids();
+		for(String s : contactIds){
+			try{
+				Contact contact = ContactUtil.getContact(Long.parseLong(s));
+				contact.forceSearch = true;
+				contact.save();
+			}
+			catch(Exception e){
+				
+			}
+		}
+	}
 	return opportunity;
     }
 
@@ -390,7 +403,33 @@ public class DealsAPI
 	Opportunity oldDeal = OpportunityUtil.getOpportunity(opportunity.id);
 	Opportunity oppr = new Opportunity();
 	oppr.updateDealTagsEntity(oldDeal, opportunity);
+	if(oldDeal != null &&(oldDeal.getContact_ids()!= null && oldDeal.getContact_ids().size() > 0)){
+        List<String> contactIds = oldDeal.getContact_ids();
+        for(String s : contactIds){
+            try{
+                Contact contact = ContactUtil.getContact(Long.parseLong(s));
+                contact.forceSearch = true ;
+                contact.save();
+            }
+            catch(Exception e){
+                
+            }
+        }
+    }
 	opportunity.save();
+	if(opportunity != null &&(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0)){
+        List<String> contactIds = opportunity.getContact_ids();
+        for(String s : contactIds){
+            try{
+                Contact contact = ContactUtil.getContact(Long.parseLong(s));
+                contact.forceSearch = true;
+                contact.save();
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 	
 	return opportunity;
     }
@@ -417,6 +456,19 @@ public class DealsAPI
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
 	if (opportunity != null)
 	{
+		if(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0){
+			List<String> contactIds = opportunity.getContact_ids();
+			for(String s : contactIds){
+				try{
+					Contact contact = ContactUtil.getContact(Long.parseLong(s));
+					contact.forceSearch = true ; 
+					contact.save();
+				}
+				catch(Exception e){
+					
+				}
+			}
+		}
 	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
 		NoteUtil.deleteBulkNotes(opportunity.getNotes());
@@ -450,6 +502,17 @@ public class DealsAPI
 		{
 			oppJSONArray.put(opp.id);
 			contactIdsList.addAll(modifiedConIds);
+		}
+		if(opp.relatedContacts() != null && opp.relatedContacts().size() > 0){ 
+		    try {                
+		        for(Contact c : opp.relatedContacts()){
+		            c.forceSearch = true;
+		            c.save();
+		        }            
+		    } catch (Exception e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		    }
 		}
 	}
 	
@@ -576,12 +639,6 @@ public class DealsAPI
 		JSONArray idsArray = new JSONArray(ids);
 		System.out.println("------------" + idsArray.length());
 	    }
-
-	    if (StringUtils.isEmpty(filters))
-		filters = "{}";
-
-	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
-	    System.out.println("------------" + filterJSON.toString());
 
 	    String uri = "/core/api/opportunity/backend/delete/" + SessionManager.get().getDomainId();
 

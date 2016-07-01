@@ -58,16 +58,20 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-
-				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
-					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
+				var sortKey = _agile_get_prefs("workflow_sort_key");
+				if(sortKey == undefined || sortKey == null){
+					sortKey = "name_dummy";
+					_agile_set_prefs("workflow_sort_key", sortKey);
+				}
+				this.workflow_list_view = new Workflow_Collection_Events({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
+					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, global_sort_key : sortKey, postRenderCallback : function(el)
 					{
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time.campaign-created-time", el).timeago();
 
 						});
-
+						updateSortKeyTemplate(sortKey, el);
 						start_tour(undefined, el);
 
 						// If workflows not empty, show triggers
@@ -600,7 +604,7 @@ var WorkflowsRouter = Backbone.Router
 								initializeTriggerListEventListners(id,trigger_type);
 
 								// Loads jquery.chained.min.js
-								head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function() {
+								head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function() {
 									var LHS, RHS;
 
 									// Assigning elements with ids LHS
@@ -700,7 +704,7 @@ var WorkflowsRouter = Backbone.Router
 						initializeTriggersListeners();
 
 						// Loads jquery.chained.min.js
-						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 						{
 							var LHS, RHS;
 

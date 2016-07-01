@@ -13,7 +13,7 @@ public final class Call
 {
 
 	// Call service providers
-	public static final String SERVICE_TWILIO = "twilio";
+	public static final String SERVICE_TWILIO = "Twilio";
 
 	// Call direction
 	public static final String INBOUND = "incoming";

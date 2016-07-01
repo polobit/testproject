@@ -457,6 +457,12 @@
 									<li class='divider'></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
 											class="icon-envelope" style="margin-right:2px"></i> Send Email</a></li>
+									<li class="divider"></li>
+									<li>
+										<a href='#duplicate-company/{{id}}'>
+											<i class="icon-code-fork"></i>Merge Duplicates
+										</a>
+									</li>
 									<li class='divider'></li>
 									<li><a href='#' id='company-actions-delete'><i
 											class="icon-trash" style="margin-right:2px"></i> Delete</a></li>
@@ -632,7 +638,7 @@
 </div>
 </div>
 
-
+<div class="wrapper p-b-s hidden" id="contacts-type-custom-fields" style="padding-top:10px;  padding-bottom: 5px;"></div>
 <!-- funda for contact details edit -->
 
 {{#property_is_exists "phone" properties}}

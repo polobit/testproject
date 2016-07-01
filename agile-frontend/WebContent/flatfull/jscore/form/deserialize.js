@@ -75,7 +75,7 @@ function deserializeForm(data, form)
 
 									}
 
-									fel.datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+									fel.datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 								}
 
@@ -414,7 +414,14 @@ function deserializeChainedSelect(form, el, el_self)
 			 * Chains dependencies of input fields with jquery.chained.js based
 			 * on the rule element
 			 */
-			chainFilters(rule_element);
+			if($(form).hasClass("opportunity"))
+			{
+				chainDealFilters(rule_element);
+			}
+			else
+			{
+				chainFilters(rule_element);
+			}
 
 			$(parent_element).append(rule_element);
 			deserializeChainedElement(data, rule_element);
@@ -454,10 +461,10 @@ function deserializeChainedElement(data, rule_element)
 			{
 			//	value = getLocalTimeFromGMTMilliseconds(value);
 
-				$(input_element).val(getDateInFormatFromEpocForContactFilters(value));
+				$(input_element).val(getDateInFormatFromEpoc(value));
 
 
-				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true });
 
 
 				$(input_element).datepicker('update');
@@ -476,6 +483,31 @@ function deserializeChainedElement(data, rule_element)
 				return;
 			}
 			$(input_element).val(value);
+			return;
+		}
+
+		if ($(input_element).closest('td').siblings('td.lhs-block').find('option:selected').val() == "track_milestone" && data.LHS == "track_milestone")
+		{
+			var $rhs_ele = $(input_element).closest('td').siblings('td.rhs-block').find("#RHS");
+			var field_name = $rhs_ele.find("input").attr("name");
+			var temp = data.RHS;
+			var track = temp.substring(0, temp.indexOf('_'));
+			var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
+			var json = {};
+			json["pipeline_id"] = track;
+			json["milestone"] = milestone;
+			populateTrackMilestones(undefined, undefined, json, undefined, undefined, undefined, $rhs_ele, field_name);
+			$(input_element).find('option[value="'+data.CONDITION+'"]').attr("selected", "selected");
+			return;
+		}
+
+		if ($(input_element).closest('td').siblings('td.lhs-block').find('option:selected').val() == "archived" && data.LHS == "archived")
+		{
+			var $rhs_ele = $(input_element).closest('td').siblings('td.rhs-block').find("#RHS");
+			var field_name = $rhs_ele.find("input").attr("name");
+			var archivedVal = data.RHS;
+			$rhs_ele.html("<select name='"+field_name+"' class='form-control'><option value='true'>Archived</option><option value='false'>Active</option><option value='all'>Any</option></select>");
+			$rhs_ele.find("option[value='"+archivedVal+"']").attr("selected", "selected");
 			return;
 		}
 

@@ -48,6 +48,18 @@ public class CustomWidget extends Widget {
 
 		csWidget.delete();
 	}
+	
+	public static void deleteCustomWidgetByUserID(String userID, String widgetName) {
+		// Creates Current AgileUser key
+		if(userID != null){
+			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, Long.parseLong(userID));
+			CustomWidget csWidget = dao.ofy().query(CustomWidget.class)
+				.ancestor(userKey).filter("name", widgetName).get();
+			if(csWidget != null){
+				csWidget.delete();
+			}		
+		}
+	}
 
 	/**
 	 * Deletes the widget

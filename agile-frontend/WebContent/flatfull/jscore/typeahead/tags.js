@@ -379,7 +379,17 @@ function get_tags(form_id) {
     	if(tag_input)
     		{
     			tag_input = tag_input.trim();
-    			tags_json[0].value.push(tag_input);
+                if(form_id == "opportunityForm" || form_id == "opportunityUpdateForm"){
+                    var i;
+                    for(i =0 ; i<tags_json.length;i++){
+                        if(tags_json[i].name == "tags"){
+                            tags_json[i].value.push(tag_input);
+                            break;
+                        }
+                    }
+                }
+                else
+    			    tags_json[0].value.push(tag_input);
     		//	input_filed.val("");
     		}
     }

@@ -13,7 +13,7 @@ var deal_bulk_actions = {
 		var input = {};
 		if(!SELECT_ALL_DEALS)
 			input.ids = JSON.stringify(deal_bulk_actions.getDealsBulkIds());
-		input.filter = _agile_get_prefs('deal-filters');
+		input.filter = _agile_get_prefs('deal-filter-name');
 		if(form_id){
 			input.form = JSON.stringify(serializeForm(form_id));
 		}

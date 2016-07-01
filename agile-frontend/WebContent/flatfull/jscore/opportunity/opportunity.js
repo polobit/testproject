@@ -60,7 +60,7 @@ function populateUsers(id, el ,value, key, callback) {
  * @param dealDetails - dealDetails value
  * @param value - Deal Object
  **/
-function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption, id){
+function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption, id, filter_el, field_name){
 var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	
 	// If id undefined
@@ -74,7 +74,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
-			if(jsonModel.length==1){
+			if(jsonModel.length==1 && !filter_el){
 				var mile = jsonModel[0];
 				$.each(mile.milestones.split(","), function(index,milestone){
 					var json = {id : mile.id, milestone : milestone};
@@ -86,13 +86,24 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 				if(mile.lost_milestone){
 					html += Handlebars.compile('<option value="{{id}}_{{lost_milestone}}" style="display:none;">{{lost_milestone}}</option>')({id : mile.id, lost_milestone : mile.lost_milestone});
 				}
-				$('#' + id, el).closest('.control-group').find('label').html('Milestone<span class="field_req">*</span>');
+				if(!filter_el)
+				{
+					$('#' + id, el).closest('.control-group').find('label').html('Milestone<span class="field_req">*</span>');
+				}
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
 					var array = [];
 					html+='<optgroup label="'+mile.name+'">';
+					if(filter_el && value && mile.id == value.pipeline_id && value.milestone == "ALL@MILESTONES")
+					{
+						html += Handlebars.compile('<option selected="selected" value="{{id}}_ALL@MILESTONES">{{name}} - All</option>')({id : mile.id, name : mile.name});
+					}
+					else if(filter_el)
+					{
+						html += Handlebars.compile('<option value="{{id}}_ALL@MILESTONES">{{name}} - All</option>')({id : mile.id, name : mile.name});
+					}
 					$.each(mile.milestones.split(","), function(index,milestone){
 						array.push($.trim(this));
 						var json = {id : mile.id, milestone : milestone, name : mile.name};
@@ -106,12 +117,23 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					}
 					html+='</optgroup>';
 				});
-				$('#' + id, el).closest('.control-group').find('label').html('Track & Milestone<span class="field_req">*</span>');
+				if(!filter_el)
+				{
+					$('#' + id, el).closest('.control-group').find('label').html('Track & Milestone<span class="field_req">*</span>');
+				}
 			}
 			
-			$('#' + id, el).html(html);
-			console.log('adding');
-			$('#' + id, el).closest('div').find('.loading-img').hide();
+			if(!filter_el)
+			{
+				$('#' + id, el).html(html);
+				console.log('adding');
+				$('#' + id, el).closest('div').find('.loading-img').hide();
+			}
+			else
+			{
+				$(filter_el).html("<select class='form-control required' name='"+field_name+"'>"+html+"</select>");
+			}
+			
 
 			// Hide loading bar
 			hideTransitionBar();
@@ -298,6 +320,7 @@ function setupDealsTracksList(cel){
 				$('#deals-tracks .filter-dropdown', $("#opportunity-listners")).append(Handlebars.compile('{{name}}')({name : track_name}));
 			}, 100);
 			startGettingDeals();
+			setupTracksAndMilestones($('#opportunity-listners'));
 
 			// Hide the track list if there is only one pipeline.
 			if(tracksArray.length<=1)
@@ -654,30 +677,26 @@ function populateDealSources(el, value){
  */
 function fetchDealsList(data){
 	var filters_collection = data;
-	var dealTag = null ; var url = null;
+	var dealTag;
     if(!filters_collection && App_Deals.deal_filters && App_Deals.deal_filters.collection)
     {
     	filters_collection = App_Deals.deal_filters.collection;
     }
-    if(filters_collection.dealToFilter){
+    if(filters_collection.dealToFilter)
+    {
 		dealTag = filters_collection.dealToFilter ;
 	}
     setNewDealFilters(filters_collection);
 	var query = ''
-    if (_agile_get_prefs('deal-filters'))
+	var url = 'core/api/deal/filters/query/list/'+_agile_get_prefs('deal-filter-name')+'?order_by='+getDealSortFilter();
+    
+    if(dealTag)
     {
-    	if(dealTag){
-    		url = "core/api/opportunity/based/tags?tag="+dealTag ;
-			$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n" style="margin-left:10px;"><li class="inline-block tag btn btn-xs btn-primary" data='+dealTag+'><span>'+dealTag+'<a href="#deals" class="anchor close m-l-xs pull-right">×</a></span></li></ul>');
-		}
-		else{
-			query = '&filters=' + encodeURIComponent(getDealFilters());
-			url = 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query ;
-		}
-    }   	
-
+    	url = 'core/api/deal/filters/query/list/tags/'+dealTag+'?order_by='+getDealSortFilter();
+		$('#opportunity-listners').find("#opp-header").after('<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n" style="margin-left:10px;"><li class="inline-block tag btn btn-xs btn-primary" data='+dealTag+'><span>'+dealTag+'<a href="#deals" class="anchor close m-l-xs pull-right">×</a></span></li></ul>');
+	}
     // Fetches deals as list
-    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : url,
+    App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : '' + url,
         templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
         postRenderCallback : function(el)
         {
@@ -758,6 +777,7 @@ function deleteDeal(id, milestone, dealPipelineModel, el){
 	var that = el;
 	$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function()
 	{
+		IS_DEAL_DELETED = true;
 		// Remove the deal from the collection and remove the UI element.
 		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
 		if (!dealPipelineModel)
@@ -833,4 +853,49 @@ function deleteDeal(id, milestone, dealPipelineModel, el){
 		}, 2000);
 		console.log('-----------------', err.responseText);
 	} });
+}
+
+function setupTracksAndMilestones(el){
+	if(trackListView && trackListView.collection){
+		var tracks = trackListView.collection.models;
+		var is_first_track = true;
+		$.each(tracks, function(index, trackObj){
+			var track = trackObj.toJSON();
+			if(_agile_get_prefs("agile_deal_track") != track.id.toString() && track.milestones){
+				var style_class = "m-b-lg";
+				if(index == tracks.length-1)
+				{
+					style_class = "";
+				}
+				if(is_first_track)
+				{
+					$('#new-track-list-paging').find('#moving-tracks').html("<div style='font-size:18px;' class='m-t-xs'>Tracks & Milestones</div>");
+					style_class += " m-t-sm";
+					is_first_track = false;
+				}
+				$('#new-track-list-paging').find('#moving-tracks').append("<div class='"+style_class+" p-r'><div class='text-md m-b-xs'>"+track.name+"</div><div id='"+track.id+"' style='border: 1px solid #dee5e7;'></div></div>")
+				var milestones = track.milestones.split(",");
+				var milestone_width = 100 / milestones.length;
+				$.each(milestones, function(index_1, milestone_name){
+					var milestone_heading_class = "milestone-heading";
+					var span_html = "<span></span>";
+					var border_right_html = "";
+					if(index_1 == milestones.length - 1){
+						milestone_heading_class = "";
+						span_html = "";
+						border_right_html = "border-right:none!important;"
+					}
+					var milestone_html = 	'<div class="milestone-column panel m-b-none b-n r-n panel-default" style="width: '+milestone_width+'%;min-width:0px;'+border_right_html+'">'+
+											'<div class="dealtitle-angular panel-heading c-p b-n update-drag-deal" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{milestone_name}}">'+
+											'<div class="'+milestone_heading_class+' text-left text-ellipsis" data-track="{{track_id}}">'+
+											'<span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left">{{milestone_name}}</span></div>'+
+											''+span_html+'</div></div>';
+					var milestone_tpl = Handlebars.compile(milestone_html);
+					var json = {"milestone_name" : milestone_name, "track_id" : track.id};
+					$("#"+track.id, $('#new-track-list-paging')).append(milestone_tpl(json));
+					$("[data-toggle=tooltip").tooltip();
+				});
+			}
+		});
+	}
 }

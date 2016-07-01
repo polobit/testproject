@@ -140,9 +140,11 @@ public class WidgetsAPI {
 				widget.display_name = widget.name;
 				widget.name = widget.name.replaceAll("[^a-zA-Z]+", "");
 			}
-			// if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
-			// return null;
-			// }
+			
+			if (WidgetUtil.checkIfWidgetNameExists(widget.name)) {
+			   return null;
+			}
+			
 			widget.save();
 			widget.is_added = true;
 			return widget;
@@ -165,8 +167,7 @@ public class WidgetsAPI {
 			WidgetsAPI.checkValidDetails(widget);
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			if (agileUser != null) {
-				Key<AgileUser> currentUser = new Key<AgileUser>(
-						AgileUser.class, agileUser.id);
+				Key<AgileUser> currentUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
 				widget.setOwner(currentUser);
 				widget.save();
 				return widget;
@@ -191,6 +192,7 @@ public class WidgetsAPI {
 			try {
 				CustomWidget.deleteCustomWidget(widget_name);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			// default widgets are removed from database on deletion
 			widget.delete();
@@ -251,8 +253,10 @@ public class WidgetsAPI {
 		Contact contact = ContactUtil.getContact(contactId);
 		System.out.println("In accessURLToReadScript");
 
-		// Deletes widget based on name
-		CustomWidget customWidget = CustomWidgets.getCustomWidget(widget_name);
+		Widget customWidget = WidgetUtil.getWidget(widget_name);
+		if(customWidget == null || customWidget.url == null || customWidget.url.length() == 0){
+			customWidget = CustomWidgets.getCustomWidget(widget_name);
+		}
 		String data = "";
 
 		try {
@@ -262,6 +266,7 @@ public class WidgetsAPI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 		return HTTPUtil.accessURLToReadScript(customWidget.url, "POST", data);
 	}
@@ -370,54 +375,90 @@ public class WidgetsAPI {
 	@Path("saveWidgetPrivilages")
 	@POST
 	public void saveWidgetPrivilages(String obj) throws Exception {
-		if (obj != null) {
-			JSONObject widgetObj = new JSONObject(obj);
-			String widgetName = widgetObj.getString("name");
-
+		if (obj != null) {			
+			//Gets current agile user.
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
-			DomainUser domainUser = agileUser.getDomainUser();
-
-			// Deleting the widget.
-			String newUsersList = widgetObj.getString("listOfUsers");
-			JSONArray finalUsers = new JSONArray();
-			JSONArray oldUserArray = WidgetUtil.getWigetUsersList(widgetName);
-			for (int i = 0; i < oldUserArray.length(); i++) {
-				String oldUserID = oldUserArray.getString(i);
-				if (!(newUsersList.contains(oldUserID))) {
-					Widget widget = WidgetUtil.getWidget(widgetName, Long.parseLong(oldUserID));					
-					if (widget != null && domainUser.is_admin && !(agileUser.id.toString().equals(oldUserID))) {
-						WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
-					}
-				} else {
-					finalUsers.put(oldUserArray.get(i));
+			//Gets the current domain user.
+			DomainUser domainUser = agileUser.getDomainUser();	
+			if(domainUser.is_admin){
+				
+				JSONObject widgetObj = new JSONObject(obj);
+				String widgetName = widgetObj.getString("name");
+				JSONArray finalUsers = new JSONArray();
+				
+				//Checked users list from widget.
+				String newUsersStr = widgetObj.getString("listOfUsers");
+				JSONArray newUserArray = new JSONArray(newUsersStr);
+				
+				//Fetching user ids from the DB to know who are already configured.
+				JSONArray oldUserArray = WidgetUtil.getWigdetsActiveUsersList(widgetName);
+				String oldUsersStr = oldUserArray.toString();
+				
+				int newUserSize = newUserArray.length();
+				int oldUserSize = oldUserArray.length();
+				int loopSize = 0;
+				
+				if(newUserSize > oldUserSize){
+					loopSize = newUserSize;
+				}else{
+					loopSize = oldUserSize;
 				}
-			}
-
-			Widget widget = WidgetUtil.getWidget(widgetName);
-			// Creating new widget.
-			String oldUsersList = oldUserArray.toString();
-			JSONArray newUserArray = new JSONArray(newUsersList);
-			for (int i = 0; i < newUserArray.length(); i++) {
-				String newUserID = newUserArray.getString(i);
-				if (!(oldUsersList.contains(newUserID))) {
-					finalUsers.put(newUserArray.getLong(i));
-					AgileUser agileLocalUser = AgileUser
-							.getCurrentAgileUser(Long.parseLong(newUserID));
-					if (agileLocalUser != null) {
-						Key<AgileUser> userKey = AgileUser
-								.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
-						widget.setOwner(userKey);
-						widget.add_by_admin = true;
-						widget.listOfUsers = null;
-						widget.id = null;
-						widget.save();
+								
+				for (int i = 0; i < loopSize; i++) {
+					
+					// Deleting widget.
+					if(i < oldUserSize){
+						String oldUserID = oldUserArray.getString(i);				
+						//Checking to know the unchecked old users. 
+						if (!(newUsersStr.contains(oldUserID))) {
+							AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long.parseLong(oldUserID));
+							DomainUser oldDomainUser = agileLocalUser.getDomainUser();					
+							Widget widget = WidgetUtil.getWidget(widgetName, agileLocalUser.id);
+							if(widget != null){							
+								if(oldDomainUser.is_admin){
+									//If the user is admin, we are making him inactive.
+									widget.updateStatus(false);
+								}else{
+									WidgetUtil.deleteWidgetByUserID(oldUserID, widgetName);
+									 //If it was custom widget we will delete custom widget.
+									 if(widget.widget_type.equals(WidgetType.CUSTOM)){							
+										 CustomWidget.deleteCustomWidgetByUserID(oldUserID, widgetName);							
+									 }
+								}
+							}
+						} else {
+							finalUsers.put(oldUserArray.get(i));
+						}
 					}
+					
+					// Creating widget.
+					if(i < newUserSize){
+						String newUserID = newUserArray.getString(i);
+						//Checking to know the checked new users.
+						if (!(oldUsersStr.contains(newUserID))) {
+							finalUsers.put(newUserArray.getLong(i));
+							AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long.parseLong(newUserID));
+							if (agileLocalUser != null) {
+								Key<AgileUser> userKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
+								DomainUser localDomainUser = agileLocalUser.getDomainUser();
+								
+								//Making admin widget clone for new users.
+								Widget widget = WidgetUtil.getWidget(widgetName, agileUser.id);								
+								if(localDomainUser != null && localDomainUser.is_admin){
+									Widget adminWidget = WidgetUtil.getWidget(widgetName, agileLocalUser.id);
+									if(adminWidget != null){
+										adminWidget.updateStatus(true);
+										continue;
+									}
+								}								
+								widget.add_by_admin = true;										
+								widget.id = null;
+								widget.saveByUserKey(userKey, widget);
+							}							
+						}
+					}					
 				}
-			}
-			widget = WidgetUtil.getWidget(widgetName);
-			widget.add_by_admin = true;
-			widget.listOfUsers = finalUsers.toString();
-			widget.updateUserList();
+			}			
 		}
 	}
 

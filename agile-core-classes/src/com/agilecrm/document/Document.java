@@ -163,6 +163,10 @@ public class Document extends Cursor
     {
     	return ContactUtil.getPartialContacts(this.related_contacts);
     }
+    public List<Contact> getrelatedContacts()
+    {
+    	return Contact.dao.fetchAllByKeys(this.related_contacts);
+    }
 
     /**
      * While saving a document it contains list of case keys, but while

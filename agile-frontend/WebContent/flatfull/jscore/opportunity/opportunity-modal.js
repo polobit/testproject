@@ -22,7 +22,7 @@ $(function()
 		$('.date_input').attr("placeholder","Select Date");
     
 		$('.date_input').datepicker({
-			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true
 		}).datepicker('update');
 
 		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
@@ -54,7 +54,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityUpdateModal').on('hide.bs.modal', function()
+	$('#opportunityUpdateModal').on('hidden.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field
@@ -145,6 +145,7 @@ $(function()
 										// without reloading the app.
 										success : function(model, response)
 										{
+											IS_DEAL_ARCHIVED = true;
 											// For deal details page.
 											if (Current_Route != 'deals')
 											{
@@ -288,6 +289,7 @@ $(function()
 										// without reloading the app.
 										success : function(model, response)
 										{
+											IS_DEAL_RESTORED = true;
 											if (Current_Route != 'deals')
 											{
 												$("#deal_restore_confirm_modal").modal('hide');
@@ -445,7 +447,7 @@ function updateDeal(ele, editFromMilestoneView)
 			var i;
 			for(i=0;i<value.tagsWithTime.length;i++){
 				var data =value.tagsWithTime[i].tag ; 
-				$('#tags_source_person_modal', dealForm)
+				$('#tags_source_deal_modal', dealForm)
 				.find(".tags")
 				.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag">&times</a></li>');
 			} 
@@ -487,7 +489,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Enable the datepicker
 	$('#close_date', dealForm).datepicker("remove");
 	$('#close_date', dealForm).datepicker({
-		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true
 	});
 	
 	// Add notes in deal modal
@@ -636,7 +638,7 @@ function show_deal()
 	// Enable the datepicker
 	$('#close_date', el).datepicker("remove");
 	$('#close_date', el).datepicker({
-		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true
 	});
 }
 
