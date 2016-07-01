@@ -516,7 +516,7 @@ var SubscribeRouter = Backbone.Router
 							{
 								if(data && !USER_BILLING_PREFS.status){
 									var cus_id = JSON.parse(data.billingData).id;
-									var appendItem = '<img src="https://shareasale.com/sale.cfm?amount='+plan_json.cost+'&tracking='+cus_id+'&transtype=sale&merchantID=YOURMERCHANTID" width="1" height="1">'
+									var appendItem = '<img src="https://shareasale.com/sale.cfm?amount='+plan_json.cost+'&tracking='+cus_id+'&transtype=sale&merchantID=65450" width="1" height="1">'
 									$("body").append(appendItem);
 								}
 								window.navigate("subscribe", { trigger : true });
