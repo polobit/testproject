@@ -13,6 +13,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.util.CountryUtil;
 
 /**
  * @author jitendra
@@ -282,7 +283,16 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 
 		    if (billingAddrss.has("Country"))
 		    {
-			address.put("country", billingAddrss.getString("Country"));
+		    String qCountry = billingAddrss.getString("Country");
+		    //If we get country code directly, will put that code as it is, otherwise will put country code
+		    if(CountryUtil.hasCountryName(qCountry))
+		    {
+		    address.put("country", qCountry);
+		    }
+		    else
+		    {
+		   	address.put("country", CountryUtil.getCountryCode(qCountry));
+		    }
 		    }
 		    if (billingAddrss.has("CountrySubDivisionCode"))
 		    {

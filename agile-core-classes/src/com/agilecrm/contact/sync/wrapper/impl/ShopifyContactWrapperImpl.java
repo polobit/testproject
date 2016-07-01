@@ -12,6 +12,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.util.CountryUtil;
 import com.google.gdata.data.contacts.Website;
 
 /**
@@ -202,7 +203,18 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 		    address.put("state", defaultAddress.get("province"));
 
 		if (defaultAddress.containsKey("country"))
-		    address.put("country", defaultAddress.get("country"));
+		{
+			String sCountry = defaultAddress.get("country");
+			//If we get country code directly, will put that code as it is, otherwise will put country code
+		    if(CountryUtil.hasCountryName(sCountry))
+		    {
+		    	address.put("country", sCountry);
+		    }
+		    else
+		    {
+		    	address.put("country", CountryUtil.getCountryCode(sCountry));
+		    }
+		}
 
 		if (defaultAddress.containsKey("zip"))
 		    address.put("zip", defaultAddress.get("zip"));

@@ -22,6 +22,7 @@ import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.util.CountryUtil;
 import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -231,7 +232,18 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
     			json.put("state", entry.getString("MailingState"));
 
     		if (entry.has("MailingCountry"))
-    			json.put("country", entry.getString("MailingCountry"));
+    		{
+    			String sCountry = entry.getString("MailingCountry");
+    			//If we get country code directly, will put that code as it is, otherwise will put country code
+    		    if(CountryUtil.hasCountryName(sCountry))
+    		    {
+    		    	json.put("country", sCountry);
+    		    }
+    		    else
+    		    {
+    		    	json.put("country", CountryUtil.getCountryCode(sCountry));
+    		    }
+    		}
 
     		if (entry.has("MailingPostalCode"))
     			json.put("zip", entry.getString("MailingPostalCode"));
