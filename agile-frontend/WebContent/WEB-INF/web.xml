@@ -1327,4 +1327,13 @@
 		<servlet-name>QuerySubmitServlet</servlet-name>
 		<url-pattern>/querysubmit</url-pattern>
 	</servlet-mapping>
+	 <servlet>
+		<servlet-name>AmazonSESWebhook</servlet-name>
+		<servlet-class>com.thirdparty.ses.util.AmazonSESWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AmazonSESWebhook</servlet-name>
+		<url-pattern>/backend/amazonseswebhook</url-pattern>
+	</servlet-mapping>
 </web-app>
