@@ -169,7 +169,7 @@ public class Subscription {
 	void fillDefaultPlans() {
 
 		if (plan == null) {
-			plan = new Plan(PlanType.FREE.toString(), 2);
+			plan = new Plan(PlanType.FREE.toString(), Globals.TRIAL_USERS_COUNT);
 			gateway = Gateway.Stripe;
 			planLimits = PlanLimits.getPlanDetails(plan);
 		}
