@@ -69,6 +69,22 @@ public class UserPrefsUtil
 
 	return userPrefs;
     }
+    
+    /**
+     * Returns UserPrefs with respect to given AgileUser if exists, otherwise
+     * returns default UserPrefs.
+     * 
+     * @param agileUser
+     *            - AgileUser object.
+     * @return UserPrefs of given agile-user.
+     */
+    private static boolean isUserHavingPrefs(AgileUser agileUser)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
+
+	return (ofy.query(UserPrefs.class).ancestor(userKey).get() != null);
+    }
 
     /**
      * Returns default UserPrefs.
@@ -101,6 +117,9 @@ public class UserPrefsUtil
 				continue;
 			
 			AgileUser agileUser1 = AgileUser.getCurrentAgileUserFromDomainUser(key.getId());
+			if(!isUserHavingPrefs(agileUser1))
+				 continue;
+			
 			UserPrefs agileUserPrefs = getUserPrefs(agileUser1);
 			if(agileUserPrefs == null)
 				continue;
