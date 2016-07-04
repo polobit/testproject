@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -496,7 +497,7 @@ public class Subscription {
 	void PostLoad() {
 		try {
 			if (this.plan == null) {
-				plan = new Plan(PlanType.FREE.toString(), 2);
+				plan = new Plan(PlanType.FREE.toString(), Globals.TRIAL_USERS_COUNT);
 			}
 
 			planLimits = PlanLimits.getPlanDetails(plan);
