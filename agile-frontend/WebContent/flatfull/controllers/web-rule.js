@@ -158,6 +158,9 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				if(path.includes("callpopup.html"))
 					el.find("#action select").val("CALL_POPUP");
+				else if(path.includes("sitebar.html"))
+					el.find("#action select").val("SITE_BAR");
+				
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 				{
 					chainFilters(el, undefined, function()
