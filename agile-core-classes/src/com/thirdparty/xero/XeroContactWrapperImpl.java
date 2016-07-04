@@ -197,15 +197,7 @@ public class XeroContactWrapperImpl extends ContactWrapper
 			}
 			
 			if(!country.toString().isEmpty()){
-				//If we get country code directly, will put that code as it is, otherwise will put country code
-			    if(CountryUtil.hasCountryName(country.toString()))
-			    {
-			    	addressObject.put("country", country.toString());
-			    }
-			    else
-			    {
-			    	addressObject.put("country", CountryUtil.getCountryCode(country.toString()));
-			    }
+				CountryUtil.setCountryCode(addressObject, null, country.toString());
 			}
 		    }
 		}

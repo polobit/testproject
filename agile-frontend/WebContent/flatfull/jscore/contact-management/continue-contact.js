@@ -921,6 +921,8 @@ function deserialize_contact(contact, template)
 				}
 			}
 		});
+
+		initializeEditContactListeners($('form', $('#content')).attr("id"));
 		
 
 	}, "#content");
@@ -970,6 +972,12 @@ function fill_multi_options(field_element, element)
 			}*/
 			else
 				$(sub_field_element).val(json[name]);
+
+			if(name == 'country' && !$(sub_field_element).val())
+			{
+				var warning_msg_tpl = Handlebars.compile("<span class='country-mismatch-error' style='color:#B94A48; font-size:14px'><i>Country '{{country}}' doesn't match with our standard records. Please update the country using the dropdown.</i></span>");
+				$(sub_field_element).after(warning_msg_tpl(json));
+			}
 		});
 	}
 	else
@@ -1276,5 +1284,15 @@ function setReferenceContacts(name, ele, valJSON, referenceContactIds)
 			}
 			hideTransitionBar();
 		}
+	});
+}
+
+function initializeEditContactListeners(ele_id)
+{
+	$("#"+ele_id).on('change', '#country', function(e)
+	{
+		e.preventDefault();
+
+		$('.country-mismatch-error').hide();
 	});
 }

@@ -218,14 +218,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 							if(addressJSON != null && addressJSON.has("country"))
 							{
 								String contactCountry = addressJSON.getString("country");
-								if(CountryUtil.hasCountryName(contactCountry))
-							    {
-									addressJSON.put("country", contactCountry);
-							    }
-							    else
-							    {
-							    	addressJSON.put("country", CountryUtil.getCountryCode(contactCountry));
-							    }
+								CountryUtil.setCountryCode(addressJSON, null, contactCountry);
 							}
 						    addressField.value = addressJSON.toString();
 						}

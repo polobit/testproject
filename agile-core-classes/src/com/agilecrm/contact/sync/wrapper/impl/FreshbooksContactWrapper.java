@@ -245,15 +245,7 @@ public class FreshbooksContactWrapper extends ContactWrapper
 	    }
 	    if (!StringUtils.isEmpty(country) && !country.equals("undefined"))
 	    {
-	    //If we get country code directly, will put that code as it is, otherwise will put country code
-	    if(CountryUtil.hasCountryName(country))
-	    {
-	    address.put("country", country);
-	    }
-	    else
-	    {
-	    address.put("country", CountryUtil.getCountryCode(country));
-	    }
+	    CountryUtil.setCountryCode(address, null, country);
 	    }
 	    // check if primary address is null or empty then create alternative
 	    // address
@@ -291,15 +283,7 @@ public class FreshbooksContactWrapper extends ContactWrapper
 		}
 		if (!StringUtils.isEmpty(scountry) && !scountry.equals("undefined"))
 		{
-			//If we get country code directly, will put that code as it is, otherwise will put country code
-		    if(CountryUtil.hasCountryName(scountry))
-		    {
-		    	address.put("country", scountry);
-		    }
-		    else
-		    {
-		    	address.put("country", CountryUtil.getCountryCode(scountry));
-		    }
+			CountryUtil.setCountryCode(address, null, scountry);
 		}
 	    }
 

@@ -6,19 +6,16 @@ import java.util.List;
 import javax.persistence.Embedded;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.util.CountryUtil;
-import com.google.appengine.labs.repackaged.org.json.JSONException;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
-import com.google.gdata.data.contacts.Occupation;
 import com.google.gdata.data.contacts.Website;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.Im;
@@ -316,15 +313,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 			    if (address.hasCountry() && address.getCountry().hasValue())
 			    {
 			    	String gCountry = address.getCountry().getValue();
-			    	//If we get country code directly, will put that code as it is, otherwise will put country code
-			    	if(CountryUtil.hasCountryName(gCountry))
-			    	{
-			    		json.put("country", gCountry);
-			    	}
-			    	else
-			    	{
-			    		json.put("country", CountryUtil.getCountryCode(gCountry));
-			    	}
+			    	CountryUtil.setCountryCode(json, null, gCountry);
 			    }
 				
 	

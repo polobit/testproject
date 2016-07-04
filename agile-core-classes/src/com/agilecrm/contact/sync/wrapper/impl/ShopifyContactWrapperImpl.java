@@ -5,15 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.util.CountryUtil;
-import com.google.gdata.data.contacts.Website;
 
 /**
  * <code>ShopifyContactWrapperImple</code> Implements ContactWrapper This class
@@ -205,15 +204,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 		if (defaultAddress.containsKey("country"))
 		{
 			String sCountry = defaultAddress.get("country");
-			//If we get country code directly, will put that code as it is, otherwise will put country code
-		    if(CountryUtil.hasCountryName(sCountry))
-		    {
-		    	address.put("country", sCountry);
-		    }
-		    else
-		    {
-		    	address.put("country", CountryUtil.getCountryCode(sCountry));
-		    }
+			CountryUtil.setCountryCode(address, null, sCountry);
 		}
 
 		if (defaultAddress.containsKey("zip"))

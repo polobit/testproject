@@ -449,40 +449,15 @@ public class CSVUtil
 			    if (addressField != null && addressField.value != null)
 			    {
 				addressJSON = new JSONObject(addressField.value);
-				if("country".equals(field.value))
-				{
-					if(CountryUtil.hasCountryName(csvValues[j]))
-					{
-						addressJSON.put(field.value, csvValues[j]);
-					}
-					else
-					{
-						addressJSON.put(field.value, CountryUtil.getCountryCode(csvValues[j]));
-					}
-				}
-				else
-				{
-					addressJSON.put(field.value, csvValues[j]);
-				}
+				
+				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+				
 				addressField.value = addressJSON.toString();
 			    }
 			    else
 			    {
-			    	if("country".equals(field.value))
-					{
-						if(CountryUtil.hasCountryName(csvValues[j]))
-						{
-							addressJSON.put(field.value, csvValues[j]);
-						}
-						else
-						{
-							addressJSON.put(field.value, CountryUtil.getCountryCode(csvValues[j]));
-						}
-					}
-					else
-					{
-						addressJSON.put(field.value, csvValues[j]);
-					}
+			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+			    
 				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 					field.type.toString()));
 			    }
@@ -857,40 +832,12 @@ public class CSVUtil
 			if (addressField != null && addressField.value != null)
 			{
 			    addressJSON = new JSONObject(addressField.value);
-			    if("country".equals(field.value))
-				{
-					if(CountryUtil.hasCountryName(csvValues[j]))
-					{
-						addressJSON.put(field.value, csvValues[j]);
-					}
-					else
-					{
-						addressJSON.put(field.value, CountryUtil.getCountryCode(csvValues[j]));
-					}
-				}
-				else
-				{
-					addressJSON.put(field.value, csvValues[j]);
-				}
+			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
 			    addressField.value = addressJSON.toString();
 			}
 			else
 			{
-				if("country".equals(field.value))
-				{
-					if(CountryUtil.hasCountryName(csvValues[j]))
-					{
-						addressJSON.put(field.value, csvValues[j]);
-					}
-					else
-					{
-						addressJSON.put(field.value, CountryUtil.getCountryCode(csvValues[j]));
-					}
-				}
-				else
-				{
-					addressJSON.put(field.value, csvValues[j]);
-				}
+				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
 			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 				    field.subtype.toString()));
 			}

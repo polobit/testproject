@@ -4,11 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.agilecrm.contact.ContactField;
+
+/**
+ * <code>CountryUtil</code> class checks country names and codes when contacts
+ * are import or sync from google, shopify, stripe etc.
+ * 
+ * It provides country name as well as country code based on the parameter passed.
+ * 
+ * @author Subrahmanyam
+ * 
+ * @since July 2016
+ */
 public class CountryUtil 
 {
-	public static Map<String, String> getCountries()
+	static Map<String, String> countriesMap = new HashMap<String, String>();
+	
 	{
-		Map<String, String> countriesMap = new HashMap<String, String>();
 		countriesMap.put("AF", "Afghanistan");
 		countriesMap.put("AL", "Albania");
 		countriesMap.put("DZ", "Algeria");
@@ -65,6 +80,7 @@ public class CountryUtil
 		countriesMap.put("CU", "Cuba");
 		countriesMap.put("CY", "Cyprus");
 		countriesMap.put("CZ", "Czech Republic");
+		countriesMap.put("CI", "Cote d'Ivoire");
 		countriesMap.put("DK", "Denmark");
 		countriesMap.put("DJ", "Djibouti");
 		countriesMap.put("DM", "Dominica");
@@ -252,54 +268,119 @@ public class CountryUtil
 		countriesMap.put("YE", "Yemen");
 		countriesMap.put("ZM", "Zambia");
 		countriesMap.put("ZW", "Zimbabwe");
-		
+		countriesMap.put("AX", "Aland Islands");
+	}
+	
+	/**
+	 * Gives list of countries as <code>Map<code>.
+	 */
+	public static Map<String, String> getCountries()
+	{
 		return countriesMap;
 	}
 	
+	/**
+	 * Checks with country name in provided countries and return proper country code if exists, 
+	 * otherwise return country name which is passed as parameter.
+	 * 
+	 * @param countryName
+	 */
 	public static String getCountryCode(String countryName)
 	{
-		Map<String, String> countriesMap = getCountries();
+		if(countryName != null && "land Islands".equalsIgnoreCase(countryName.substring(1)))
+		{
+			return "AX";
+		}
 		
-		for (Entry<String, String> entry : countriesMap.entrySet()) {
-	        if (entry.getValue().equalsIgnoreCase(countryName)) {
+		if(countryName != null && "te d'Ivoire".equalsIgnoreCase(countryName.substring(2)))
+		{
+			return "CI";
+		}
+		
+		for (Entry<String, String> entry : countriesMap.entrySet()) 
+		{
+	        if (entry.getValue().equalsIgnoreCase(countryName)) 
+	        {
 	            return entry.getKey();
 	        }
 	    }
 		return countryName;
 	}
 	
+	/**
+	 * Checks with country code in provided countries and return proper country name if exists, 
+	 * otherwise return country code which is passed as parameter.
+	 * 
+	 * @param countryCode
+	 */
 	public static String getCountryName(String countryCode)
 	{
-		Map<String, String> countriesMap = getCountries();
-		
 		if(countryCode != null)
 		{
 			return countriesMap.get(countryCode);
 		}
-		return "";
+		return countryCode;
 	}
 	
+	/**
+	 * Checks with country name in provided countries and return true if exists, 
+	 * otherwise return false.
+	 * 
+	 * @param countryName
+	 */
 	public static boolean hasCountryCode(String countryName)
 	{
-		Map<String, String> countriesMap = getCountries();
+		if(countryName != null && "land Islands".equalsIgnoreCase(countryName.substring(1)))
+		{
+			return true;
+		}
 		
-		for (Entry<String, String> entry : countriesMap.entrySet()) {
-	        if (entry.getValue().equalsIgnoreCase(countryName)) {
-	            return true;
-	        }
-	    }
-		return false;
+		if(countryName != null && "te d'Ivoire".equalsIgnoreCase(countryName.substring(2)))
+		{
+			return true;
+		}
+		
+		return countriesMap.containsValue(countryName);
 	}
 	
+	/**
+	 * Checks with country code in provided countries and return true if exists, 
+	 * otherwise return false.
+	 * 
+	 * @param countryName
+	 */
 	public static boolean hasCountryName(String countryCode)
 	{
-		Map<String, String> countriesMap = getCountries();
-		
 		if(countryCode != null)
 		{
 			return countriesMap.containsKey(countryCode);
 		}
 		return false;
 		
+	}
+	
+	public static void setCountryCode(JSONObject addressJSON, ContactField field, String country) throws JSONException
+    {
+		if(field != null && field.value != null && !field.value.equals("country"))
+		{
+			addressJSON.put(field.value, country);
+			return;
+		}
+		
+		updateCountryCode(addressJSON, country);
+    }
+	
+	private static void updateCountryCode(JSONObject addressJSON, String country) throws JSONException
+	{
+		if(hasCountryName(country))
+	    {
+			addressJSON.put("country", country);
+			addressJSON.put("countryname", CountryUtil.getCountryName(country));
+	    }
+	    else
+	    {
+	    	addressJSON.put("country", CountryUtil.getCountryCode(country));
+	    	addressJSON.put("countryname", country);
+	    }
 	}
 }

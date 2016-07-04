@@ -106,15 +106,7 @@ public class StripeContactWrapperImpl extends ContactWrapper
 			if(card != null && card.getAddressCountry() != null)
 			{
 				String sCountry = card.getAddressCountry();
-				//If we get country code directly, will put that code as it is, otherwise will put country code
-			    if(CountryUtil.hasCountryName(sCountry))
-			    {
-			    	address.put("country", sCountry);
-			    }
-			    else
-			    {
-			    	address.put("country", CountryUtil.getCountryCode(sCountry));
-			    }
+				CountryUtil.setCountryCode(address, null, sCountry);
 			}
 			address.put("zip", card.getAddressZip());
 		}

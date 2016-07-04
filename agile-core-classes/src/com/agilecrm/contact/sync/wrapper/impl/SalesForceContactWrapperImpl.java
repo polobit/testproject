@@ -234,15 +234,7 @@ public class SalesForceContactWrapperImpl extends ContactWrapper
     		if (entry.has("MailingCountry"))
     		{
     			String sCountry = entry.getString("MailingCountry");
-    			//If we get country code directly, will put that code as it is, otherwise will put country code
-    		    if(CountryUtil.hasCountryName(sCountry))
-    		    {
-    		    	json.put("country", sCountry);
-    		    }
-    		    else
-    		    {
-    		    	json.put("country", CountryUtil.getCountryCode(sCountry));
-    		    }
+    			CountryUtil.setCountryCode(json, null, sCountry);
     		}
 
     		if (entry.has("MailingPostalCode"))
