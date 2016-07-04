@@ -203,7 +203,7 @@ public class HomeServlet extends HttpServlet
 
     	// If user is not new, it calls method to set logged in time in current
     	// domain user and forwards request to home.jsp
-    	if (!isNewUser())
+    	if (!isNewUser(req))
     	{
     		UserFingerPrintInfo browser_auth = UserFingerPrintInfo.getUserAuthCodeInfo(req);
     		if(!browser_auth.valid_finger_print || !browser_auth.valid_ip){
