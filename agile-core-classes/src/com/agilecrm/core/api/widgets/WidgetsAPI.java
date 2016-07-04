@@ -383,8 +383,7 @@ public class WidgetsAPI {
 			if(domainUser.is_admin){
 				
 				JSONObject widgetObj = new JSONObject(obj);
-				String widgetName = widgetObj.getString("name");
-				JSONArray finalUsers = new JSONArray();
+				String widgetName = widgetObj.getString("name");				
 				
 				//Checked users list from widget.
 				String newUsersStr = widgetObj.getString("listOfUsers");
@@ -396,12 +395,10 @@ public class WidgetsAPI {
 				
 				int newUserSize = newUserArray.length();
 				int oldUserSize = oldUserArray.length();
-				int loopSize = 0;
+				int loopSize = oldUserSize;
 				
 				if(newUserSize > oldUserSize){
 					loopSize = newUserSize;
-				}else{
-					loopSize = oldUserSize;
 				}
 								
 				for (int i = 0; i < loopSize; i++) {
@@ -426,8 +423,6 @@ public class WidgetsAPI {
 									 }
 								}
 							}
-						} else {
-							finalUsers.put(oldUserArray.get(i));
 						}
 					}
 					
@@ -435,8 +430,7 @@ public class WidgetsAPI {
 					if(i < newUserSize){
 						String newUserID = newUserArray.getString(i);
 						//Checking to know the checked new users.
-						if (!(oldUsersStr.contains(newUserID))) {
-							finalUsers.put(newUserArray.getLong(i));
+						if (!(oldUsersStr.contains(newUserID))) {							
 							AgileUser agileLocalUser = AgileUser.getCurrentAgileUser(Long.parseLong(newUserID));
 							if (agileLocalUser != null) {
 								Key<AgileUser> userKey = AgileUser.getCurrentAgileUserKeyFromDomainUser(agileLocalUser.domain_user_id);
