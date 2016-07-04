@@ -83,7 +83,7 @@ public class UserPrefsUtil
     
 	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null, "pink", "", EmailUtil.getPoweredByAgileLink(
 		"email-signature", "Sent using"), true, false);
-	// userPrefs.currency = getDefaultCurrency(agileUser);
+	userPrefs.currency = getDefaultCurrency(agileUser);
 	
 	userPrefs.save();
 	return userPrefs;
