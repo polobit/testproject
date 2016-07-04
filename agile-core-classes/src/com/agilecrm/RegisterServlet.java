@@ -35,6 +35,7 @@ import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.Referer;
 import com.agilecrm.user.RegisterVerificationServlet;
@@ -70,6 +71,12 @@ import com.thirdparty.sendgrid.subusers.SendGridSubUser;
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
 {
+	
+	/**
+	 * Request Attribute to flat newly registered user 
+	 */
+	public static final String IS_NEWLY_REGISTERED_USER_ATTR = "__agile_newly_registered_user";
+	
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
 	doGet(request, response);
@@ -261,6 +268,12 @@ public class RegisterServlet extends HttpServlet
 	String planValue = request.getParameter(RegistrationGlobals.PLAN_TYPE);
 	if(!planValue.equals("Free"))
 		redirectionURL+= "#subscribe";
+	
+	// Create new Agile User
+	new AgileUser(SessionManager.get().getDomainId()).save();
+	
+	// Identify this user as being a newly registered user in HomeServlet.java
+	request.setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
 	
 	// Set misc values at Register before sending user to home page.
 	LoginUtil.setMiscValuesAtLogin(request, domainUser);

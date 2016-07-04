@@ -64,8 +64,12 @@ public class HomeServlet extends HttpServlet
 	    return;
 	}
 
-	// Create New User - AgileUser (for this namespace)
-	new AgileUser(SessionManager.get().getDomainId()).save();
+	// Create new user only if this user is not newly registered user
+	if( req.getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR) == null )
+	{
+		// Create New User - AgileUser (for this namespace)
+		new AgileUser(SessionManager.get().getDomainId()).save();
+	}
 
 	req.setAttribute(FIRST_TIME_USER_ATTRIBUTE, true);
 
@@ -144,8 +148,15 @@ public class HomeServlet extends HttpServlet
      * 
      * @return
      */
-    public boolean isNewUser()
+    public boolean isNewUser(HttpServletRequest request)
     {
+    Boolean isNewUserAttr = (Boolean) request.getAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
+    
+    if( isNewUserAttr != null && isNewUserAttr.booleanValue() == true )
+    {
+    	return true;
+    }
+    
 	// Gets current AgileUser
 	return AgileUser.getCurrentAgileUser() == null;
     }
