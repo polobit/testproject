@@ -21,9 +21,13 @@ import com.agilecrm.contact.ContactField;
  */
 public class CountryUtil 
 {
-	static Map<String, String> countriesMap = new HashMap<String, String>();
-	
+	/**
+	 * Gives list of countries as <code>Map<code>.
+	 */
+	public static Map<String, String> getCountries()
 	{
+		Map<String, String> countriesMap = new HashMap<String, String>();
+		
 		countriesMap.put("AF", "Afghanistan");
 		countriesMap.put("AL", "Albania");
 		countriesMap.put("DZ", "Algeria");
@@ -269,13 +273,7 @@ public class CountryUtil
 		countriesMap.put("ZM", "Zambia");
 		countriesMap.put("ZW", "Zimbabwe");
 		countriesMap.put("AX", "Aland Islands");
-	}
-	
-	/**
-	 * Gives list of countries as <code>Map<code>.
-	 */
-	public static Map<String, String> getCountries()
-	{
+		
 		return countriesMap;
 	}
 	
@@ -297,6 +295,8 @@ public class CountryUtil
 			return "CI";
 		}
 		
+		Map<String, String> countriesMap = getCountries();
+		
 		for (Entry<String, String> entry : countriesMap.entrySet()) 
 		{
 	        if (entry.getValue().equalsIgnoreCase(countryName)) 
@@ -315,6 +315,8 @@ public class CountryUtil
 	 */
 	public static String getCountryName(String countryCode)
 	{
+		Map<String, String> countriesMap = getCountries();
+		
 		if(countryCode != null)
 		{
 			return countriesMap.get(countryCode);
@@ -340,6 +342,8 @@ public class CountryUtil
 			return true;
 		}
 		
+		Map<String, String> countriesMap = getCountries();
+		
 		return countriesMap.containsValue(countryName);
 	}
 	
@@ -351,6 +355,8 @@ public class CountryUtil
 	 */
 	public static boolean hasCountryName(String countryCode)
 	{
+		Map<String, String> countriesMap = getCountries();
+		
 		if(countryCode != null)
 		{
 			return countriesMap.containsKey(countryCode);
