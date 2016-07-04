@@ -78,7 +78,7 @@ public class LoginUtil
 		    }
 		} catch (Exception e) {
 		    System.out.println("Exception in setting timezone in account prefs.");
-		    e.printStackTrace();
+		    System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
     }
 

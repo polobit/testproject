@@ -270,7 +270,7 @@ public class RegisterServlet extends HttpServlet
 		redirectionURL+= "#subscribe";
 	
 	// Create new Agile User
-	new AgileUser(SessionManager.get().getDomainId()).save();
+	new AgileUser(domainUser.id).save();
 	
 	// Identify this user as being a newly registered user in HomeServlet.java
 	request.setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
