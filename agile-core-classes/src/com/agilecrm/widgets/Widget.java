@@ -298,6 +298,9 @@ public class Widget {
 	
 	public void updateStatus(boolean status){
 		this.isActive = status;
+		if(status){
+			this.add_by_admin = true;
+		}
 		dao.put(this);
 	}
 
