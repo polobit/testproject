@@ -33,7 +33,7 @@ String template = request.getParameter("template");
             <div class="col-md-6">
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
-                  <input id="form-preview" type="button"  onclick="formView()" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-top: -40px;margin-left: 300px;padding-right: 10px;"value="Preview Form">
+                  <input id="form-preview" type="button"  onclick="formView()" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-top: -40px;margin-left: 340px;padding-right: 10px;"value="Preview Form">
                   <input id="form-save" type="button" class="btn btn-info" value="Save Form">
                   <hr style="margin-top: 30px;">
                   <!--Adding content for formPreview-->
@@ -52,7 +52,7 @@ String template = request.getParameter("template");
                          function formView(){
                            if(document.getElementById("render")!=null){
                             var pContent=document.getElementById("render").value; 
-                           document.getElementById("formContent").innerHTML = pContent;
+                           document.getElementById("formContent").innerHTML = "<div style='margin:25px 50px;align:center;'>"+pContent+"</div>";
                           
                          }
                       }
