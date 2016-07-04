@@ -8,6 +8,7 @@ import java.util.HashSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.AccountPrefsUtil;
@@ -98,7 +99,7 @@ public class LoginUtil
 		    }
 		} catch (Exception e) {
 		    System.out.println("Exception in setting timezone in user prefs.");
-		    e.printStackTrace();
+		    System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
     }
 
