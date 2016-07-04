@@ -58,6 +58,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	$("#dail_phone_number").val("");
+			  	$("#clear-dialler").hide();
 			});
 	
 	$('#agilecrm-container #direct-dialler-div').on('click', '.dialler-widget-li', function(e)
@@ -86,6 +87,16 @@ $(function()
     			
     			$("#dialler-phone-number-form").submit();
     		}
+
+	});
+	
+	$('#agilecrm-container #direct-dialler-div').on('keyup', '#dail_phone_number', function(e) {
+    	var value = $("#dail_phone_number").val();
+    	if(!value){
+    		$("#clear-dialler").hide();
+    	}else{
+    		$("#clear-dialler").show();
+    	}
 	});
 	
 	$('#agilecrm-container #direct-dialler-div').on('click', '.dial-number', function(e)
@@ -130,6 +141,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","0");
+			  	$("#clear-dialler").show();
 			  	//var newText = appendToText("#dail_phone_number",0);
 			  	//$("#dail_phone_number").val(newText);
 			});
@@ -139,6 +151,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","1");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",1);
 			  	$("#dail_phone_number").val(newText);*/
 			});
@@ -146,6 +159,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","2");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",2);
 			  	$("#dail_phone_number").val(newText);*/
 			});
@@ -153,7 +167,8 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","3");
-			 /* 	var newText = appendToText("#dail_phone_number",3);
+			  	$("#clear-dialler").show();
+			  	/* 	var newText = appendToText("#dail_phone_number",3);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
@@ -161,6 +176,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","4");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",4);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -169,7 +185,8 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","5");
-			/*  	var newText = appendToText("#dail_phone_number",5);
+			  	$("#clear-dialler").show();
+			  	/*  	var newText = appendToText("#dail_phone_number",5);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
@@ -177,6 +194,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","6");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",6);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -185,7 +203,8 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","7");
-			  /*	var newText = appendToText("#dail_phone_number",7);
+			  	$("#clear-dialler").show();
+			  	/*	var newText = appendToText("#dail_phone_number",7);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
@@ -193,6 +212,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","8");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",8);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -201,6 +221,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","9");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number",9);
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -209,6 +230,7 @@ $(function()
 			{
 			  	e.preventDefault();
 			  	insertValueInAt("#dail_phone_number","*");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number","*");
 			  	$("#dail_phone_number").val(newText);*/
 			  	
@@ -218,6 +240,7 @@ $(function()
 			  	e.preventDefault();
 			  	
 			  	insertValueInAt("#dail_phone_number","#");
+			  	$("#clear-dialler").show();
 			  	/*var newText = appendToText("#dail_phone_number","#");
 			  	$("#dail_phone_number").val(newText);*/
 			  	
