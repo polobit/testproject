@@ -33,8 +33,40 @@ String template = request.getParameter("template");
             <div class="col-md-6">
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
+                  <input id="form-preview" type="button"  onclick="formView()" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-top: -40px;margin-left: 300px;padding-right: 10px;"value="Preview Form">
                   <input id="form-save" type="button" class="btn btn-info" value="Save Form">
                   <hr style="margin-top: 30px;">
+                  <!--Adding content for formPreview-->
+                   <div class="modal fade" id="myModal" role="dialog">
+                      <div class="modal-dialog">
+    
+                         <!-- Modal content-->
+                        <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">This is how your Form looks:</h4>
+                        </div>
+                        <div class="modal-body">
+                        <p  id="formContent" style="overflow: scroll;overflow-x: hidden;border: 1px solid #ccc;height: 450px;"></p>
+                         <script>
+                         function formView(){
+                           if(document.getElementById("render")!=null){
+                            var pContent=document.getElementById("render").value; 
+                           document.getElementById("formContent").innerHTML = pContent;
+                          
+                         }
+                      }
+
+                         </script>
+                        </div>
+                         <div class="modal-footer">
+                         <button type="button" class="btn btn-default" data-dismiss="modal" style="color:#fff;background-color:#7266ba">Close</button>
+                        </div>
+                        </div>
+      
+                     </div>
+                  </div>
+                  <!--Adding content for formPreview-->
                   <div id="build">
                      <form id="target" class="form-horizontal">
                      </form>

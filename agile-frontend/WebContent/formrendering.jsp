@@ -5,7 +5,7 @@
 <title>Form</title>
 </head>
 <body>
- <div id="agileFormHolder" style="margin:0 auto;width:450px">
+ <div id="agileFormHolder" style="margin-left: 360px;width:450px">
 <%=(String)request.getAttribute("formHtml") %>  
  <a class="powertiny" href="http://www.agilecrm.com/" title="Powered by Agile" style="display:block !important;visibility:visible !important;text-indent:0 !important;position:relative !important;height:auto !important;width:95px !important;overflow:visible !important;text-decoration:none;cursor:pointer !important;margin:0 auto !important">
 <img class="w-full" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" height="30" width="110" style="margin-left: 25px;">
