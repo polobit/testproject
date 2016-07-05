@@ -361,7 +361,7 @@ function dialFromSip(to,from,contact){
 	{
 		if(contact){
 			User_Name = getContactName(contact);
-			User_Number = removeBracesFromNumber(phone);
+			User_Number = removeBracesFromNumber(to);
 			User_Img = getGravatar(contact.properties, 40);
 			User_ID = contact.id;
 			SIP_Call_Noty_IMG = addSipContactImg();

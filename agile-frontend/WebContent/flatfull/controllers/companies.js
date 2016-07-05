@@ -386,7 +386,7 @@ var CompaniesRouter = Backbone.Router
 		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
 			postRenderCallback : function(el)
 			{
-				fill_company_related_contacts(id, 'company-contacts', el);
+				//fill_company_related_contacts(id, 'company-contacts', el);
 				// Clone contact model, to avoid render and
 				// post-render fell in to
 				// loop while changing attributes of contact
@@ -399,6 +399,8 @@ var CompaniesRouter = Backbone.Router
 
 				company_util.starify(el);
 				company_util.show_map(el);
+				load_company_tab(el, company.toJSON());
+
 				if(company)
 				addTypeCustomData(company.get('id') , el);
 				// fill_owners(eidl, contact.toJSON());

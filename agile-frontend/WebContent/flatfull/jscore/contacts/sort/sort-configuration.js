@@ -71,3 +71,26 @@ var sort_company_configuration = {
 
 	}
 };
+
+/**
+ * Deal sorting.
+ */
+var agile_deal_sort_configuration = [
+
+	buildProperty("Created Date", "created_time"),
+
+	buildProperty("Close Date", "closed_time"),
+
+	buildProperty("Value", "expected_value")
+];
+
+var sort_deal_configuration = {
+	getDealSortableFields : function()
+	{
+		return agile_deal_sort_configuration;
+	},
+	getCustomFieldSortableFields : function()
+	{
+
+	}
+};
