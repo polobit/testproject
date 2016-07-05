@@ -95,19 +95,50 @@ function globalCallWidgetSet()
 
 						callOptionDiv = callOptionDiv.concat("</span>");
 
+						// this is to get the name of widget stored in cache
+						var nameToStore = "";
+						var selectedWidget = _agile_get_prefs("dial-default-widget");
+						var alreadySetPrefs = false;
+						if(selectedWidget){
+							if(selectedWidget == "Twilio"){
+								selectedWidget = "TwilioIO";
+							}
+							var index = containsOption(default_call_option.callOption, "name", selectedWidget);
+							if( index == -1){
+								nameToStore = "";
+							}else{
+								alreadySetPrefs = true;
+								nameToStore = widgetCallName[selectedWidget];
+							}
+						}
+						
+						var flag = false;
 						$.each(default_call_option.callOption, function(i, obj)
 						{
-							if (obj.name == "Bria" || obj.name == "Skype")
-							{
-								sendTestCommand();
-								return false;
+							// this is to store twilio as default in localstorrage otherwise any
+							if(!alreadySetPrefs){
+								if(widgetCallName[obj.name] == "Twilio"){
+									nameToStore = "Twilio";
+								}else if(nameToStore != "Twilio" && obj.name != "CallScript"){
+									nameToStore = widgetCallName[obj.name];
+								}
 							}
-						});
 
-						$.each(default_call_option.callOption, function(i, obj){
+							//check whether executables are running or not
+							if ((obj.name == "Bria" || obj.name == "Skype" ) && !flag)
+							{
+								flag = true;
+								sendTestCommand();
+							}
+							
+							// this will show the option of widget to select in direct dial from new tab
 							var name = widgetCallName[obj.name];
 							$(".dialler-widget-name-" + name).show();
 						});
+						
+						// saving the name in local storage to show in direct dial 
+							_agile_set_prefs("dial-default-widget", nameToStore);
+
 						
 						$('body').on({ mouseenter : function(e)
 						{
