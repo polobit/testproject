@@ -254,6 +254,13 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 			$('input', $(targetEl).closest('tr').find('td.rhs-block')).addClass("company_custom_field");
 			agile_type_ahead($('input', $(targetEl).closest('tr').find('td.rhs-block')).attr("id"), $(targetEl).closest('tr').find('td.rhs-block'), contacts_typeahead, custom_company_display, 'type=COMPANY');
 		}
+
+		var value = $(targetEl).closest('td').siblings('td.lhs-block').find('div').find('select').find('option:selected').val();
+		if(value=="country"){
+			//var appenditem = $('#div_country_options').html();
+			var appenditem = getTemplate("country-list", {});
+			$(targetEl).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
+		}
 		
 	},
 	
@@ -536,7 +543,8 @@ function show_chained_fields(el, data, forceShow)
 
 		/*
 		if(value=="country"){
-			var appenditem = $('#div_country_options').html();
+			//var appenditem = $('#div_country_options').html();
+			var appenditem = getTemplate("country-list", {});
 			$(this).closest('td').siblings('td.rhs-block').find('div').html(appenditem);
 		}
 		*/
