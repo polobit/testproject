@@ -1317,7 +1317,7 @@ public class ContactUtil
 	if (field == null)
 	    field = contact.getContactFieldByName(Contact.COMPANY);
 
-	oldContact = ContactUtil.searchCompany(field.value);
+	oldContact = ContactUtil.searchCompany(field.value.toLowerCase());
 	if (oldContact != null)
 	    return mergeCompanyFields(contact, oldContact);
 
