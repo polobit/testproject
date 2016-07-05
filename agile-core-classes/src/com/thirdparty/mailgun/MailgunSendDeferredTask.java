@@ -66,8 +66,8 @@ public class MailgunSendDeferredTask implements DeferredTask
 	{
 	    try
 	    {
-	    	System.out.println("ppp calling sendMailMailgun");
-		sendMail2Mailgun();
+	    	System.out.println("Calling sendMail2Mailgun method...");
+		    sendMail2Mailgun();
 		break;
 	    }
 	    catch (Exception e)
@@ -93,7 +93,7 @@ public class MailgunSendDeferredTask implements DeferredTask
 		streamDataBodyPart.setMediaType(MediaType.APPLICATION_OCTET_STREAM_TYPE);
 		
 		BodyPart bodyPart = (BodyPart)streamDataBodyPart;
-		FormDataMultiPart form = MailgunNew.getMailgunMessage(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, " ", metadata);
+		FormDataMultiPart form = MailgunNew.getMailgunMessage(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata);
 	           
 		form.bodyPart(bodyPart);
 		

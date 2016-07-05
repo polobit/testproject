@@ -73,8 +73,21 @@ public class MailgunWebhookUtil {
 	       WebResource webResource = client.resource(MAILGUN_WEBHOOK_BASE_URl + domainName+ "/webhooks");
 
 		   MultivaluedMapImpl formData = new MultivaluedMapImpl();
-	       formData.add("id", "bounce");
+
 	       formData.add("url", AGILE_MAILGUN_WEBHOOK_URL);
+	       
+		   //This is for bounce events webhook
+	       formData.add("id", "bounce");
+	       webResource.type(MediaType.APPLICATION_FORM_URLENCODED). post(ClientResponse.class, formData).toString();
+	       
+	       //This for Dropped event webhooks
+	       formData.remove("id");
+	       formData.add("id", "drop");
+	       webResource.type(MediaType.APPLICATION_FORM_URLENCODED). post(ClientResponse.class, formData).toString();
+	       
+	     //This for Spam compaint event webhooks
+	       formData.remove("id");
+	       formData.add("id", "spam");
 	       return webResource.type(MediaType.APPLICATION_FORM_URLENCODED). post(ClientResponse.class, formData).toString();
 		}
 		catch (Exception e)
@@ -231,7 +244,7 @@ public class MailgunWebhookUtil {
 	
 	public static void main(String asd[]) throws IOException, JSONException
 	{
-	  System.out.println(MailgunUtil.checkMailgunAutorization("key-ca81c2c2b8f1ee11722c082c6f7fb287", "sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org"));
+	  System.out.println(MailgunWebhookUtil.addWebhook("key-ca81c2c2b8f1ee11722c082c6f7fb287", "sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org"));
 		//java.net.URL rul=new java.net.URL("https://api.mailgun.net/v3/sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org/log");
 		//System.out.println(MailgunUtil.checkMailgunAutorization("key-ca81c2c2b8f1ee11722c082c6f7fb28", "sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org"));
 	}

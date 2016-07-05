@@ -29,9 +29,20 @@ import javax.ws.rs.core.MediaType;
  */
 public class MailgunUtil {
 	
-	
+	/**
+	 * This flag variable is use for check html content exist or not.
+	 * If HTML content exist then only we are going to append html body.
+	 */
 	private static boolean flag=false;
+	
+	/**
+	 * This sub account is represent domain name key
+	 */
 	private static final String SUBACCOUNT="subaccount";
+	
+	/**
+	 * This toAddress variable store the all to email address for bulk emails
+	 */
 	private static String toAddress = "";
 	
 	/**
@@ -45,7 +56,7 @@ public class MailgunUtil {
 		
 		try
 		 {
-			 System.out.println("calling sendMilgunMails method for sending Bulk emails");
+			 System.out.println("calling sendMilgunMails method for sending Bulk emails via mailgun..");
 			 Client client = new Client();
 		     client.addFilter(new HTTPBasicAuthFilter(MailgunNew.MAILGUN_API_KEY,emailSender.emailGateway.api_key));
 		       
@@ -53,11 +64,14 @@ public class MailgunUtil {
 		       			
 		     MultivaluedMapImpl formData = new MultivaluedMapImpl();
 		     
+		     //Initialize toaddress valriable as a empty
+		      toAddress = "";
+		      flag=false;
+		     
 		     JSONObject mailgunMessageJSON=getMailgunMailJson(tasks, emailSender);
 		     
 		     if(mailgunMessageJSON == null)
 		     {
-		    	 System.out.println("Bulk action not performed for mailgun");
 		    	 return;
 		     }
 		     
@@ -89,6 +103,7 @@ public class MailgunUtil {
 				       
 		     ClientResponse response= webResource.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).
 				               post(ClientResponse.class, formData);
+		     
 		     System.out.println("Response is ; "+response.toString());
 		 }
     	catch(Exception e)
@@ -98,25 +113,7 @@ public class MailgunUtil {
     	}
 	}
 	
-	/**
-	 * 
-	 * @param MailDeferredTask
-	 * @return To Address of bulk email
-	 */
-	private static String getMailgunTo(List<MailDeferredTask> task)
-	{
-		if(task.isEmpty())
-			return null;
-		
-		String toAddress="";
-		//Concating all To address
-		for(MailDeferredTask mailDeferredTask : task)
-		{
-			toAddress +=mailDeferredTask.to+", ";
-			
-		}
-		return toAddress;
-	}
+	
 	
 	/**
 	 * 
@@ -150,7 +147,9 @@ public class MailgunUtil {
 		String fromAddress=message.replyTo;
 		return fromAddress;
 	}
+	
 	/**
+	 * This method will return Mailgun JSON which contains subject, text and html json for bulk emails
 	 * 
 	 * @param list of MailDeferredTask
 	 * @return json object of message
@@ -194,6 +193,8 @@ public class MailgunUtil {
 			JSONObject msgJSON=new JSONObject();
 			try 
 			{
+				//If mail contents cc and bcc then send mail individual
+				
 				if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
 						|| StringUtils.contains(toAddress, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 					{
@@ -206,6 +207,8 @@ public class MailgunUtil {
 				else 
 					toAddress += ", "+mailDeferredTask.to;
 				
+				//create Mailgun json where email id is key and html, subject and text is data
+				
 				msgJSON.put(MailgunNew.MAILGUN_API_PARAM_SUBJECT, mailDeferredTask.subject);
 				msgJSON.put(MailgunNew.MAILGUN_API_PARAM_TEXT_BODY, mailDeferredTask.text);
 			
@@ -216,8 +219,9 @@ public class MailgunUtil {
 	            
 				mailgunJSON.put(getToEmail(mailDeferredTask.to), msgJSON);
 			} 
-			catch (JSONException e) {
-				// TODO Auto-generated catch block
+			catch (JSONException e)
+			{
+				
 				e.printStackTrace();
 				System.err.print("Error occured in getting Mailgun Message json");
 			}
@@ -297,7 +301,9 @@ public class MailgunUtil {
     }
     
     /**
-     * this method is used for sending a mail one by one
+     * This method is used for sending a mail one by one if mail contains cc and bcc
+     * @param mailDeferredTask
+     * @param emailSender
      */
     public static void sendWithoutMerging(MailDeferredTask mailDeferredTask, EmailSender emailSender)
     {

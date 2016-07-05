@@ -133,7 +133,7 @@ public class MailgunNew
     	
     	  try
     	    {
-    		  System.out.println("mailgun calling sendmail method");
+    		    //checking attatchment type
     		    if (documentIds != null && documentIds.size() > 0)
     		      {
     		    	  sendDocumentAsMailAttachment(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata, documentIds.get(0), mailgunApikey, mailgunDomainName);
@@ -149,6 +149,7 @@ public class MailgunNew
     		    	 //Getting attachment as a BodyPart
     		    	 BodyPart attachmentBodyPart=getMailgunAttachment(attachments);
     		    	 
+    		    	 //If attachment part is not null then attach attachment..
     		    	 if(attachmentBodyPart != null)
     		    		 mailgunMessage.bodyPart(attachmentBodyPart);
     		    	 
@@ -166,6 +167,24 @@ public class MailgunNew
 			}
         }
     
+    /**
+     * This method will send email without email gateway. It will take global user id and password
+     * 
+     * @param fromEmail
+     * @param fromName
+     * @param to
+     * @param cc
+     * @param bcc
+     * @param subject
+     * @param replyTo
+     * @param html
+     * @param text
+     * @param metadata
+     * @param documentIds
+     * @param blobKeys
+     * @param attachments
+     * @return response
+     */
     public static String sendMail(String fromEmail, String fromName, String to, String cc, String bcc,
     	    String subject, String replyTo, String html, String text, String metadata, List<Long> documentIds,
     	    List<BlobKey> blobKeys, String... attachments)
@@ -174,13 +193,21 @@ public class MailgunNew
     		documentIds, blobKeys, attachments);
         }
     
-    
+    /**
+     * This method will send mail with attachment
+     * 
+     * @param form
+     * @param apiKey
+     * @param domainName
+     * @return
+     */
     
     public static ClientResponse sendMailWithAttachment(FormDataMultiPart form, String apiKey, String domainName)
 	{
 	
 	try
-	{ System.out.println("sendmailattachment");
+	{    System.out.println("Calling sendMailWithAttachment() through Mailgun");
+	
 		  ClientConfig clientConfig = new DefaultClientConfig();
 
 		  clientConfig.getClasses().add(MultiPartWriter.class);
@@ -192,6 +219,7 @@ public class MailgunNew
 	       
 	       WebResource webResource=client.resource(MAILGUN_API_POST_URL + domainName + "/messages");
 	      client.setReadTimeout(50000);      
+	      
 	        return webResource.type(MediaType.MULTIPART_FORM_DATA_TYPE).
 	               post(ClientResponse.class, form);
 	  }
@@ -239,6 +267,22 @@ public class MailgunNew
     	}
     	}
 		
+    /**
+     * This method will create email body for Mailgun. and it will return object of 
+     * FormDataMultiPart class
+     * 
+     * @param fromEmail
+     * @param fromName
+     * @param to
+     * @param cc
+     * @param bcc
+     * @param subject
+     * @param replyTo
+     * @param html
+     * @param text
+     * @param metadata
+     * @return FormDataMultiPart
+     */
     public static FormDataMultiPart getMailgunMessage(String fromEmail, String fromName, String to, String cc, String bcc,
     	    String subject, String replyTo, String html, String text, String metadata)
     {
@@ -274,6 +318,22 @@ public class MailgunNew
 	       return form;
     }
     
+    /**
+     * This method will send blob type attachment via Mailgun.
+     * @param fromEmail
+     * @param fromName
+     * @param to
+     * @param cc
+     * @param bcc
+     * @param subject
+     * @param replyTo
+     * @param html
+     * @param text
+     * @param metadata
+     * @param blobKey
+     * @param apiKey
+     * @param domainName
+     */
     private static void sendBlobAsMailAttachment( String fromEmail, String fromName, String to, String cc, String bcc,
     	    String subject, String replyTo, String html, String text, String metadata,BlobKey blobKey, String apiKey, String domainName)
     {
@@ -288,7 +348,8 @@ public class MailgunNew
     }
     
     /**
-     * This method is used for sendinng a mail with bolb attachment via mailgun
+     * This method is used for send a mail with Document type attachment via Mailgun.
+     * 
      * @param fromEmail
      * @param fromName
      * @param to

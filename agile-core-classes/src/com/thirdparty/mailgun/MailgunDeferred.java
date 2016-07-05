@@ -7,7 +7,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  * <code>MailgunDeferred</code> is the deferred task that handles send
  * email details of every task
  * 
- * @author Naresh
+ * @author Prashannjeet
  * 
  */
 @SuppressWarnings("serial")
