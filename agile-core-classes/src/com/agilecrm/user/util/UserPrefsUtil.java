@@ -118,7 +118,7 @@ public class UserPrefsUtil
 			
 			AgileUser agileUser1 = AgileUser.getCurrentAgileUserFromDomainUser(key.getId());
 			if(!isUserHavingPrefs(agileUser1))
-				 continue;
+				continue;
 			
 			UserPrefs agileUserPrefs = getUserPrefs(agileUser1);
 			if(agileUserPrefs == null)
