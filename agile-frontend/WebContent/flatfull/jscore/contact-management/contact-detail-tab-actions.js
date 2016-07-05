@@ -114,7 +114,7 @@ var contact_details_documentandtasks_actions = {
 			    	$('#color1', el).colorPicker();
 				}
 
-				var colorcode = "#808080";
+				var colorcode = "#FFFFFF";
 			    $('#color1' , el).attr('value', colorcode);
 			    $('.colorPicker-picker', el).css("background-color", colorcode); 
 			    // Disable color input field

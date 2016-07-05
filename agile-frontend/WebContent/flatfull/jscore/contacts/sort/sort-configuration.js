@@ -81,7 +81,10 @@ var agile_deal_sort_configuration = [
 
 	buildProperty("Close Date", "closed_time"),
 
+	buildProperty("Won Date", "won_time"), 
+
 	buildProperty("Value", "expected_value")
+
 ];
 
 var sort_deal_configuration = {
