@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
@@ -148,6 +150,9 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 String _VERSION_ID = VersioningUtil.getVersion();
 
 List<Dashboard> dashboardsList = DashboardUtil.getAddedDashboardsForCurrentUser();
+
+String _LANGUAGE = currentUserPrefs.language;
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application);
 %>
 
 
@@ -288,7 +293,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="contactsmenu">
     <a  href="#contacts">
       <i class="icon icon-user"></i>
-      <span>Contacts</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
     </a>
   </li>
   <%
@@ -298,7 +303,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
-      <span>Companies</span>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
     </a>
   </li>
 

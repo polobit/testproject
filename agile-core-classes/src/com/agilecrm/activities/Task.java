@@ -1,9 +1,13 @@
 package com.agilecrm.activities;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +19,10 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
@@ -582,4 +589,57 @@ public class Task extends Cursor
     }
 
     /***************************************************************************/
+    
+    public static void main(String[] args) {
+    	try {
+			
+    		JSONParser parser = new JSONParser();
+    		JSONObject obj = (JSONObject) parser.parse(new FileReader("/Users/govindchunchula/Desktop/i18/resources_en-4.json"));
+    		
+    		obj = (JSONObject) obj.get("en");
+    		
+    		PrintWriter pw = new PrintWriter(new File("test" + Calendar.getInstance().getTimeInMillis() + ".csv"));
+            StringBuilder sb = new StringBuilder();
+            sb.append("Key");
+            sb.append(',');
+            sb.append("Value");
+            sb.append('\n'); int i=0;
+            
+            Iterator iterator =  obj.keySet().iterator();
+            while (iterator.hasNext()) {
+				String key = (String) iterator.next();
+				System.out.println(key);
+				
+				JSONObject valueJSON = (JSONObject) obj.get(key);
+				Iterator valueIterator =  valueJSON.keySet().iterator();
+				while (valueIterator.hasNext()) {
+					String valueKey = (String) valueIterator.next();
+					
+					String encodedValueKey = encodeDelimeter(valueKey);
+		            String encodedVal = encodeDelimeter(valueJSON.get(valueKey).toString());
+		            
+		            sb.append(key + "." + encodedValueKey);
+		            sb.append(',');
+		            sb.append(encodedVal);
+		            
+		            sb.append('\n');
+				}
+			}
+            
+            pw.write(sb.toString());
+            pw.close(); 
+            System.out.println("done!" + i); 
+    		
+    		
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+    	
+	}
+    
+    public static String encodeDelimeter(String value){
+    	return StringUtils.replace(value, ",", "&#44;");
+    }
+    
 }
