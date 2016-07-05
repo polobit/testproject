@@ -6,6 +6,7 @@ import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -38,7 +39,9 @@ public class TaskReminder
 	Queue queue = QueueFactory.getQueue("due-task-reminder");
 
 	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);
-	options.etaMillis(time * 1000);
+	if(!VersioningUtil.isDevelopmentEnv())
+		options.etaMillis(time * 1000);
+	
 	queue.add(options);
     }
 
