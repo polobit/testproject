@@ -750,8 +750,14 @@ public class ActivityUtil
 	{
 		Opportunity oldobj = OpportunityUtil.getOpportunity(obj.id);
 		JSONObject js = new JSONObject(new Gson().toJson(obj));
-		JSONArray jsn = js.getJSONArray("contact_ids");
-		jsn = ActivitySave.getExistingContactsJsonArray(jsn);
+		JSONArray jsn = new JSONArray();
+		try {
+			jsn = js.getJSONArray("contact_ids");
+			jsn = ActivitySave.getExistingContactsJsonArray(jsn);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		// getJsonCompares(obj, oldobj);
 
 		Map<String, Object[]> dealmap = new HashMap<String, Object[]>();
