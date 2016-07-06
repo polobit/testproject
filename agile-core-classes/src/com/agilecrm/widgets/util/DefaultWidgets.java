@@ -136,7 +136,7 @@ public class DefaultWidgets {
 		widgets.add(new Widget("FullContact", 
 				"FullContact hepls to fetch the contact details based on email.",
 				"/widgets/fullcontact.js", "/img/plugins/fullcontact-lg-logo.png",
-				"/img/plugins/fullcontact-md-logo.png", null,WidgetType.SOCIAL));
+				"/img/plugins/fullcontact-sm-logo.png", null,WidgetType.SOCIAL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
