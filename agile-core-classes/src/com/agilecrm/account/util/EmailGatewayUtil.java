@@ -115,7 +115,7 @@ public class EmailGatewayUtil
 	    }
 
 	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
-		    mailDeferredTask.subscriberId, GoogleSQL.getFutureDate(), "Subject: " + mailDeferredTask.subject,
+		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + mailDeferredTask.subject,
 		    LogType.EMAIL_SENT.toString() };
 
 	    queryList.add(newLog);

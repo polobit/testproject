@@ -23,6 +23,7 @@ import com.google.api.services.taskqueue.Taskqueue;
 import com.google.api.services.taskqueue.TaskqueueRequest;
 import com.google.api.services.taskqueue.TaskqueueRequestInitializer;
 import com.google.api.services.taskqueue.TaskqueueScopes;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * @author yaswanth
@@ -30,70 +31,70 @@ import com.google.api.services.taskqueue.TaskqueueScopes;
  */
 public class Authorization
 {
-
+    
     /** Directory to store user credentials. */
     private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.dir"),
 	    ".store/beta/task_queue_sample");
-
+    
     private static FileDataStoreFactory dataStoreFactory;
-
+    
     private static HttpTransport httpTransport;
-
+    
     /** Global instance of the JSON factory. */
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
+    
     public static Credential credentials = null;
-
+    
     public static org.apache.log4j.Logger logger = AgileAPILogger.getLogger("initial");
-
+    
     static
     {
 	try
 	{
 	    dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
-
+	    
 	    httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 	}
 	catch (IOException | GeneralSecurityException e)
 	{
-
+	    
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-
+	
     }
-
+    
     /** Authorizes the installed application to access user's protected data. */
     private static Credential authorize() throws Exception
     {
 	logger.info(System.getProperty("user.dir"));
-
+	
 	logger.info(System.getProperty("user.dir") + "/credentials/beta/client_secrets.json");
-
+	
 	FileInputStream f = new FileInputStream(new File(System.getProperty("user.dir")
 		+ "/credentials/beta/client_secrets.json"));
 	logger.info(f.toString());
 	// load client secrets
 	GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(f));
-
+	
 	// set up authorization code flow
 	GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY,
 		clientSecrets, Collections.singleton(TaskqueueScopes.TASKQUEUE)).setDataStoreFactory(dataStoreFactory)
 		.setAccessType("offline").build();
-
+	
 	// GoogleCredential.fromStream(new FileInputStream(DATA_STORE_DIR));
 	// authorize
 	return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
     }
-
+    
     public static Credential getCredentials() throws Exception
     {
-
+	
 	if (credentials != null)
 	{
 	    if (credentials.getExpirationTimeMilliseconds() > (System.currentTimeMillis() - 120000))
 		return credentials;
-
+	    
 	    try
 	    {
 		logger.info("*************************************");
@@ -111,40 +112,40 @@ public class Authorization
 		e.printStackTrace();
 	    }
 	}
-
+	
 	return credentials = authorize();
     }
-
+    
     public static Taskqueue getTaskqeues(String taskName)
     {
 	try
 	{
 	    Credential cred = getCredentials();
-
+	    System.setProperty(SystemProperty.applicationId.key(), Globals.PROJECT_NAME);
 	    Taskqueue tq = new Taskqueue.Builder(httpTransport, JSON_FACTORY, cred)
 		    .setApplicationName(Globals.PROJECT_NAME)
 		    .setTaskqueueRequestInitializer(new TaskqueueRequestInitializer()
 		    {
-
+			
 			@Override
 			public void initializeTaskqueueRequest(TaskqueueRequest<?> request)
 			{
 			    request.setPrettyPrint(true);
 			}
 		    }).build();
-
+	    
 	    return tq;
-
+	    
 	}
 	catch (Exception e)
 	{
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-
+	
 	return null;
     }
-
+    
     public static void main(String[] args)
     {
 	try
@@ -155,6 +156,6 @@ public class Authorization
 	{
 	    e.printStackTrace();
 	}
-
+	
     }
 }
