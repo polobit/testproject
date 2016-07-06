@@ -9,7 +9,7 @@
 	</system-properties>
 	<!-- dfds-->
   <!--instance and scaling settings-->
-  <instance-class>B4</instance-class>
+  <instance-class>B8</instance-class>
   <basic-scaling>
     <max-instances>8</max-instances>
   </basic-scaling>
