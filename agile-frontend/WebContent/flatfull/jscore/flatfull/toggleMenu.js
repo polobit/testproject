@@ -298,8 +298,13 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 					container: 'body'
 				}).on("click", function(){
 						var $this = $('.popover').find("#need_help_header");
-						$this.closest(".popover").addClass("custom_popover");
-
+						$this.each(function(index, ele){
+							var popoverEle = $(ele);
+							if(popoverEle.hasClass("custom_menu_items_class"))
+								popoverEle.closest(".popover").addClass("grid_custom_popover");
+							else 
+								popoverEle.closest(".popover").addClass("custom_popover");
+						});
     			   }); 
 
    });
