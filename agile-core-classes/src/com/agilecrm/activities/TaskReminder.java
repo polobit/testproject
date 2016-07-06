@@ -1,6 +1,9 @@
 package com.agilecrm.activities;
 
 import java.io.IOException;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
 import com.agilecrm.user.AgileUser;
@@ -29,6 +32,8 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class TaskReminder
 {
+	public static final String queueName = "due-task-reminder";
+	
     public static void sendDailyTaskReminders(String domain, Long time, Long domainuserid, String timezone,
 	    String user_email) throws IOException
     {
@@ -36,13 +41,21 @@ public class TaskReminder
 	// Start a task queue for each domain
 	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time, domainuserid,
 	        timezone, user_email);
-	Queue queue = QueueFactory.getQueue("due-task-reminder");
+	Queue queue = QueueFactory.getQueue(TaskReminder.getTaskRemainderQueueName(domain));
 
 	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);
 	if(!VersioningUtil.isDevelopmentEnv())
 		options.etaMillis(time * 1000);
 	
 	queue.add(options);
+    }
+    
+    public static String getTaskRemainderQueueName(String domain){
+    	if(StringUtils.equalsIgnoreCase(domain, "narmada") || StringUtils.equalsIgnoreCase(domain, "vamshi"))
+    		 return "timeout-push-queue";
+    	
+    	return queueName;
+    	
     }
 
 }
