@@ -21,14 +21,14 @@ git checkout .
 
 git stash
 
-git checkout new-modals
+git checkout tasklist_ui_changes
 
-git pull origin new-modals
+git pull origin tasklist_ui_changes
 
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
 
-appcfg.sh -A agilecrmbeta -V "$2" update "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
+appcfg.sh --oauth2 --email=naresh@faxdesk.com -A agilecrmbeta -V "$2" update "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
 
 #cd ../
 
