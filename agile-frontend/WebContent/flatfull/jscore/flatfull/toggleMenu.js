@@ -17,12 +17,12 @@ $('#app-aside-folded').on('click', function(e) {
 		console.log("folded");
 		$("#app-aside-folded i").removeClass("fa-dedent");
 		$("#app-aside-folded i").addClass("fa-indent");
-		$(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
+		// $(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
 	}
 	else {
 		$("#app-aside-folded i").removeClass("fa-indent");
 		$("#app-aside-folded i").addClass("fa-dedent");
-		$(".navi > ul > li#documentsmenu > a span").text("Documents");
+		// $(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	
 	//contactInnerTabsInvoke();

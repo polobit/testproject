@@ -295,6 +295,8 @@
             "deal": "Deal",
             "email": "Email",
             "note": "Note",
+            "ticket": "Ticket",
+            "call": "Call",
             "preferences": "Preferences",
             "admin-settings": "Admin Settings",
             "theme-and-layout": "Theme & Layout",
