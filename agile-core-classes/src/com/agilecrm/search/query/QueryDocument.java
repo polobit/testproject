@@ -519,7 +519,7 @@ public class QueryDocument<T> implements QueryInterface
      * @param orderBy
      * @return
      */
-    private List<ScoredDocument> getDocuments(String query, String orderBy)
+    public List<ScoredDocument> getDocuments(String query, String orderBy)
     {
 	SortOptions sortOptions = null;
 	if (StringUtils.isNotBlank(orderBy))
