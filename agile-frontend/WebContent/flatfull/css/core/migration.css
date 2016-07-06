@@ -2361,4 +2361,8 @@ color:#484848!important;
 
 /*end goals tab css code*/
 
+.grid-sub-nav{ list-style: none;}
+.grid-sub-nav li{ width: 75px; margin-right: 2px;}
+.grid-sub-nav li.active, .grid-sub-nav li:hover{ background-color: #f6f8f8;}
+.grid-sub-nav i{ font-size: 40px; height: 45px; display: inline-block;}
 /*end custom css code*/

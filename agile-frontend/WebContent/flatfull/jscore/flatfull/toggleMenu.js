@@ -293,7 +293,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	    });
 	});
 	// initializing need help popover for header page
-   $(".need_help").popover({ placement : 'left',
+   $(".need_help").popover({ placement : $(this).attr("data-placement"),
 					html:true,
 					container: 'body'
 				}).on("click", function(){
