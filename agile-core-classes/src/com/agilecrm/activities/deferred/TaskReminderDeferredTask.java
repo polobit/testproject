@@ -14,6 +14,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -132,7 +133,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 
 		TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time, domainuserid,
 		        timezone, user_email);
-		Queue queue = QueueFactory.getQueue("due-task-reminder");
+		Queue queue = QueueFactory.getQueue(TaskReminder.getTaskRemainderQueueName(domain));
 		TaskOptions options = TaskOptions.Builder.withPayload(taskDeferredTask);
 		options.countdownMillis(40000);
 		queue.add(options);
@@ -199,7 +200,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 
 	    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time, domainuserid,
 		    timezone, user_email);
-	    Queue queue = QueueFactory.getQueue("due-task-reminder");
+	    Queue queue = QueueFactory.getQueue(TaskReminder.getTaskRemainderQueueName(domain));
 	    TaskOptions options = TaskOptions.Builder.withPayload(taskDeferredTask);
 	    options.countdownMillis(40000);
 	    queue.add(options);

@@ -103,7 +103,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		    "jagadeesh@invox.com", null, null, "transient exception " + domain, null, "execute task reminder",
 		    null, null, null, null);
 	    ExcecuteTaskDeferredTask task_deferred = new ExcecuteTaskDeferredTask(domain);
-	    Queue queue = QueueFactory.getQueue("due-task-reminder");
+	    Queue queue = QueueFactory.getQueue(TaskReminder.getTaskRemainderQueueName(domain));
 	    TaskOptions options = TaskOptions.Builder.withPayload(task_deferred);
 	    options.countdownMillis(40000);
 	    queue.add(options);
