@@ -18,6 +18,8 @@ var ContactsRouter = Backbone.Router.extend({
 		"" : "dashboard", 
 		
 		"dashboard" : "dashboard",
+
+		"navigate-dashboard" : "navigateDashboard", 
 		
 		// "dashboard-test": "dashboard",
 
@@ -82,10 +84,17 @@ var ContactsRouter = Backbone.Router.extend({
          App_Datasync.salesforce();
 	},
 
+	navigateDashboard : function(){
+		// Call dashboard route
+		Backbone.history.navigate("#", {
+            trigger: true
+        });
+	},
+
 	dashboard : function()
 	{
 		insidePopover=false;
-		$(".active").removeClass("active");
+		$("#agile-menu-navigation-container .active").removeClass("active");
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
 			Backbone.history.navigate("domainSearch" , {

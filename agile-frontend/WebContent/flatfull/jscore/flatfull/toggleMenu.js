@@ -300,10 +300,63 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 						var $this = $('.popover').find("#need_help_header");
 						$this.closest(".popover").addClass("custom_popover");
 
+						initRolehandlers();
+
     			   }); 
 
    });
 
+// Click handlers to role menu items
+function initRolehandlers(){
+
+	// Reset active state from DomainUser.role
+	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").closest("li").addClass("active");
+
+	// Menu Items select
+	$(".menu-service-select").unbind("click").click(function(e){
+ 			e.preventDefault();
+
+ 			var serviceName = $(this).attr("data-service-name");
+ 			if(!serviceName)
+ 				  return;
+
+ 			var dashboardName = $(this).attr("data-dashboard");
+ 			if(!dashboardName)
+ 				 dashboardName = "dashboard";
+
+ 			// Update user with the current service
+ 			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = serviceName;
+
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save( json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
+
+ 			// Update active class
+ 			var $liitems = $(".menu-service-select").closest("li");
+ 			$liitems.removeClass("active");
+ 			$liitems.find("a[data-service-name='" + serviceName + "']").closest("li").addClass("active");
+
+ 			// Update dashboard name here
+ 			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
+ 			
+ 			// Update UI
+ 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items"));
+
+ 			// Call dashboard route
+ 			Backbone.history.navigate("#navigate-dashboard", {
+                trigger: true
+            });
+	});
+}
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){
