@@ -50,7 +50,7 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
     static
     {
 	firstShardPattern = Pattern.compile("^[A-E a-e]");
-	secondShardPattern = Pattern.compile("^[F-N f-N]");
+	secondShardPattern = Pattern.compile("^[F-N f-n]");
 	thirdShardPattern = Pattern.compile("^[O-Z o-z]");
     }
     
@@ -158,9 +158,9 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	
 	if (StringUtils.isNotBlank(applicationId))
 	{
-	    if (StringUtils.equals(applicationId, "agile-crm-cloud"))
+	    if (StringUtils.equals(applicationId, CLOUD_APP_ID))
 		conn = getSqlConnection(domain);
-	    else if (StringUtils.equals(applicationId, "agilecrmbeta"))
+	    else if (StringUtils.equals(applicationId, SANDBOX_APP_ID))
 		conn = getSandboxSqlConnection();
 	    else
 		conn = getSqlConnection(domain);
