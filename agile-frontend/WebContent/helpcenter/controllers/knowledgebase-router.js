@@ -7,8 +7,8 @@ var HelpcenterRouter = Backbone.Router.extend({
 		/* Home routes */
 		"" : "categories",
 		"section/:id" : "sectionArticles",
-		"categorie/:categorie_id" : "categorieSections",
-		"categorie/:categorie_id/section/:section_id" : "sectionArticles",
+		"category/:categorie_id" : "categorieSections",
+		"category/:categorie_id/section/:section_id" : "sectionArticles",
 		"article/:article_id" : "viewArticle",
 
 		/*Search articles*/

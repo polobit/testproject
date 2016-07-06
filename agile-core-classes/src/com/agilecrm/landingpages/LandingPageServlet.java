@@ -98,7 +98,7 @@ public class LandingPageServlet extends HttpServlet {
 		
 	}
 	
-	private String getResponsiveMediaIFrame(String fullHtml) {
+	public String getResponsiveMediaIFrame(String fullHtml) {
 		
 		String responsiveMediaIFrame = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class=\"embed-responsive-item\" src=\"%s\"></iframe></div>";
 		Pattern p = Pattern.compile("<img[^>]*data-src=[\"]*([\\w\\s-.:\\/,]+)[\"]*[^>]*>",Pattern.CASE_INSENSITIVE);

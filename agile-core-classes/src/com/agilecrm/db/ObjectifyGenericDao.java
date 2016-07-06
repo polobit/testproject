@@ -51,6 +51,7 @@ import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.knowledgebase.entity.Categorie;
 import com.agilecrm.knowledgebase.entity.Comment;
 import com.agilecrm.knowledgebase.entity.HelpcenterUser;
+import com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase;
 import com.agilecrm.knowledgebase.entity.Section;
 import com.agilecrm.ipaccess.IpAccess;
 import com.agilecrm.landingpages.LandingPage;
@@ -281,6 +282,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Article.class);
 	ObjectifyService.register(Comment.class);
 	ObjectifyService.register(HelpcenterUser.class);
+	ObjectifyService.register(LandingPageKnowledgebase.class);
 
 	ObjectifyService.register(IpAccess.class);
 

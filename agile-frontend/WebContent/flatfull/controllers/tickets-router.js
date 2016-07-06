@@ -1031,6 +1031,45 @@
 							
 
 						});	
+								var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
+								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
+								function(){
+										kblpid =_agile_get_prefs("kbid");	
+									
+										if(kblpid){		
+											$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
+											$('#template_id',el).data('id',kblpid);
+										}
+								}, optionTemplate, false, el,"Select Landing Page");
+										
+							$('#template_id',el).on('change', function (e) {
+    							
+    							var optionSelected = $("#template_id :selected").val();
+								if(optionSelected == "" )
+									return;
+								
+								var kblp_json = {}; 
+								kblp_json.kbLandingpageid = optionSelected;					
+
+								kblp_json.id = kblpid ;
+								var type = "POST";
+								if($('#template_id',el).data('id'))	{
+									type = "PUT";
+								}	
+								$.ajax({ 
+									type : type, 
+									url : '/core/api/knowledgebase/KBlandingpage', 
+									data : JSON.stringify(kblp_json),
+									contentType : 'application/json',
+									dataType : 'json', 
+									success: function(data){
+										$('#template_id',el).data('id',data.id)
+										_agile_set_prefs('kbid',data.kbLandingpageid);
+										
+									}
+								});
+
+							});
 				}
 			});	
 			//Fetching groups collections
