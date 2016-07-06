@@ -2362,7 +2362,10 @@ color:#484848!important;
 /*end goals tab css code*/
 
 .grid-sub-nav{ list-style: none;}
-.grid-sub-nav li{ width: 75px; margin-right: 2px;}
+.grid-sub-nav li{ width: 100px; margin-right: 2px; margin-bottom: 10px;}
 .grid-sub-nav li.active, .grid-sub-nav li:hover{ background-color: #f6f8f8;}
-.grid-sub-nav i{ font-size: 40px; height: 45px; display: inline-block;}
+.grid-sub-nav i{height: 55px; display: inline-block;}
+.grid_custom_popover {max-width: 100%; position: fixed; border: 1px solid rgba(0, 0, 0, .1);}
+.grid_custom_popover .popover-content{ padding: 9px 20px;}
+.grid_custom_popover.bottom .arrow{border-bottom-color: #ccc;}
 /*end custom css code*/
