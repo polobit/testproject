@@ -23,7 +23,7 @@
 								<img class='b-2x r-2x upload_pic imgholder submit' style="width:46px;height:57px" type="submit"
 									{{getCompanyImage "80" "display:inline;"}} /> 
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
-								<a style="display: none;" class="save_img submit" type="submit">Save</a>
+								<a style="display: none;" class="save_img submit" type="submit">{{agile_translate "modals" "save"}}</a>
 							</form>
 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:13px;">
 <div>
@@ -32,24 +32,24 @@
 								<span class="caret m-l-none" style="margin-top:-11px;"></span>
 								</button>
 								<ul class="dropdown-menu pull-right text-sm">
-<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
+<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> {{agile_translate "contact-details" "edit"}}</a></li>
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-note"><i
-											class="fa fa-file-text"></i> Add Note</a></li>
+											class="fa fa-file-text"></i> {{agile_translate "deal-view" "add-note"}}</a></li>
 									<li><a href='#' class="contact-add-task"><i
-											class="icon-tasks"></i> Add Task</a></li>
+											class="icon-tasks"></i> {{agile_translate "contact-details" "add-task"}}</a></li>
 									<li><a href='#' class="contact-add-case"><i
-											class="icon-folder" style="margin-right:2px"></i> Add Case</a></li>
+											class="icon-folder" style="margin-right:2px"></i> {{agile_translate "contact-details" "add-case"}}</a></li>
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
-											Add Opportunity</a></li>
+											{{agile_translate "company-details" "add-opportunity"}}</a></li>
 									{{/hasMenuScope}}
 									<li class='divider'></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
-											class="icon-envelope" style="margin-right:2px"></i> Send Email</a></li>
+											class="icon-envelope" style="margin-right:2px"></i> {{agile_translate "contact-details" "send-email"}}</a></li>
 									<li class='divider'></li>
 									<li><a href='#' id='company-actions-delete'><i
-											class="icon-trash" style="margin-right:2px"></i> Delete</a></li>
+											class="icon-trash" style="margin-right:2px"></i> {{agile_translate "contact-details" "delete"}}</a></li>
 								</ul>
 </div>
 </div>
@@ -166,7 +166,7 @@
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 
-	<small class="text-muted text-base">Owner</small>				
+	<small class="text-muted text-base">{{agile_translate "contact-details" "owner"}}</small>				
 					<div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner text-xs" id="change-owner-element">
@@ -174,7 +174,7 @@
 			{{#if owner}}
         	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">Assign Owner</a></span>
+			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_translate "contact-details" "assign-owner"}}</a></span>
  			{{/if}}
         	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name">{{owner.name}}</a>
         
@@ -195,7 +195,7 @@
 <div class="m-b-sm">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-<small class="text-muted text-base">Tags</small>
+<small class="text-muted text-base">{{agile_translate "report-add" "tags"}}</small>
 						<div class="contact-tags m-b-xs m-t-xs">
 					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
 							{{#if tagsWithTime.length}} 
@@ -203,7 +203,7 @@
 								{{#each tagsWithTime}}
 										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
-								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
+								class="close remove-company-tags" tag="{{this.tag}}">&{{agile_translate "contact-details" "times"}}</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
@@ -221,13 +221,13 @@
 								<input name="" type="text" id="companyAddTags"
 									class="tags-typeahead ignore-comma-keydown form-control inline-block"
 									style="width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="company-add-tags">Add</a></span>
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="company-add-tags">{{agile_translate "other" "add"}}</a></span>
 							</div>
 						</div>
 						{{#canEditContact owner.id}}
 			<a href="#" id="add-tags" rel="tooltip"
 							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
-							class="icon-plus"></i> <span >Add</span></a>
+							class="icon-plus"></i> <span >{{agile_translate "other" "add"}}</span></a>
 						{{/canEditContact}}
 					</div>
 				</div>	
@@ -330,7 +330,7 @@
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
 <div class="clearfix"></div>
-<small class="text-base text-muted">Custom Info</small>
+<small class="text-base text-muted">{{agile_translate "contact-details" "custom-info"}}</small>
 
 								<div class="word-break-all">
 									{{#each_with_index this}}
@@ -389,7 +389,7 @@
  									  <div class="m-b-sm">
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
-									<small class="text-base text-muted">Location</small>
+									<small class="text-base text-muted">{{agile_translate "contact-details" "location"}}</small>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
@@ -441,7 +441,7 @@
 
 									{{getCompanyImage "80" "display:inline;"}} /> 
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
-								<a style="display: none;" class="save_img submit" type="submit">Save</a>
+								<a style="display: none;" class="save_img submit" type="submit">{{agile_translate "modals" "save"}}</a>
 							</form>
 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:13px;">
 <div>
@@ -450,26 +450,25 @@
 								</button>
 
 								<ul class="dropdown-menu pull-right text-sm"  role="menu">
-<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
+<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> {{agile_translate "contact-details" "edit"}}</a></li>
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-case"><i
-											class="icon-folder" style="margin-right:2px"></i> Add Case</a></li>
+											class="icon-folder" style="margin-right:2px"></i> {{agile_translate "contact-details" "add-case"}}</a></li>
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
-											Add Opportunity</a></li>
+											{{agile_translate "company-details" "add-opportunity"}}</a></li>
 									{{/hasMenuScope}}
 									<li class='divider'></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
-											class="icon-envelope" style="margin-right:2px"></i> Send Email</a></li>
+											class="icon-envelope" style="margin-right:2px"></i> {{agile_translate "contact-details" "send-email"}}</a></li>
 									<li class="divider"></li>
 									<li>
 										<a href='#duplicate-company/{{id}}'>
-											<i class="icon-code-fork"></i>Merge Duplicates
-										</a>
+											<i class="icon-code-fork"></i>{{agile_translate "contact-details" "merge-duplicates"}}</a>
 									</li>
 									<li class='divider'></li>
 									<li><a href='#' id='company-actions-delete'><i
-											class="icon-trash" style="margin-right:2px"></i> Delete</a></li>
+											class="icon-trash" style="margin-right:2px"></i> {{agile_translate "contact-details" "delete"}}</a></li>
 								</ul>
 </div>
 </div>
@@ -574,7 +573,7 @@
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
 
-	<small class="text-muted text-base">Owner</small>				
+	<small class="text-muted text-base">{{agile_translate "contact-details" "owner"}}</small>				
 					<div class="change-owner-succes"></div>
      <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner text-xs" id="change-owner-element">
@@ -582,7 +581,7 @@
 			{{#if owner}}
         	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">Assign Owner</a></span>
+			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_translate "contact-details" "assign-owner"}}</a></span>
  			{{/if}}
         	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name">{{owner.name}}</a>
         
@@ -602,7 +601,7 @@
 <div class="wrapper" style="padding-top:0px;">
   <div class="panel panel-default m-b-none">
     <div class="panel-body">
-<small class="text-muted text-base">Tags</small>
+<small class="text-muted text-base">{{agile_translate "report-add" "tags"}}</small>
 						<div class="contact-tags m-b-xs m-t-xs">
 					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
 							{{#if tagsWithTime.length}} 
@@ -610,7 +609,7 @@
 								{{#each tagsWithTime}}
 										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
-								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
+								class="close remove-company-tags" tag="{{this.tag}}">&{{agile_translate "contact-details" "times"}}</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
@@ -628,13 +627,13 @@
 								<input name="" type="text" id="companyAddTags"
 									class="tags-typeahead ignore-comma-keydown form-control inline-block"
 									style="width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="company-add-tags">Add</a></span>
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="company-add-tags">{{agile_translate "other" "add"}}</a></span>
 							</div>
 						</div>
 						{{#canEditContact owner.id}}
 			<a href="#" id="add-tags" rel="tooltip"
 							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
-							class="icon-plus"></i> <span >Add</span></a>
+							class="icon-plus"></i> <span >{{agile_translate "other" "add"}}</span></a>
 						{{/canEditContact}}
 					</div>
 				</div>	
@@ -738,7 +737,7 @@
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
 <div class="clearfix"></div>
-<small class="text-base text-muted">Custom Info</small>
+<small class="text-base text-muted">{{agile_translate "contact-details" "custom-info"}}</small>
 
 								<div class="word-break-all">
 									{{#each_with_index this}}
@@ -797,7 +796,7 @@
  						  <div class="wrapper" style="padding-top:0px;">
   									<div class="panel panel-default m-b-none">
     								<div class="panel-body">
-								<small class="text-base text-muted">Location</small>
+								<small class="text-base text-muted">{{agile_translate "contact-details" "location"}}</small>
 										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
@@ -827,14 +826,14 @@
 <div class="row-row" style="display:block">
 	<div class="tab-container">
 			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
-				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>
-				<li class=""><a data-toggle="tab" href="#company-deals">Deals</a></li>
-				<li class=""><a data-toggle="tab" href="#company-cases">Cases</a></li>
-                <li class=""><a data-toggle="tab" href="#company-notes">Notes</a></li>
-                <li class=""><a data-toggle="tab" role="tab" href="#company-events">Events</a></li>
-				<li class=""><a data-toggle="tab" role="tab" href="#company-tasks">Tasks</a></li>
-                <li class=""><a data-toggle="tab" href="#company-documents">Documents</a></li>
-                <li class=""><a data-toggle="tab" role="tab" href="#company-mail">Mail</a></li>				
+				<li class="active"><a data-toggle="tab" href="#company-contacts">{{agile_translate "companies-view" "Contacts"}}</a></li>
+				<li class=""><a data-toggle="tab" href="#company-deals">{{agile_translate "deal-view" "Deals?"}}</a></li>
+				<li class=""><a data-toggle="tab" href="#company-cases">{{agile_translate "contact-details" "cases"}}</a></li>
+                <li class=""><a data-toggle="tab" href="#company-notes">{{agile_translate "prefs-notifications" "notes"}}</a></li>
+                <li class=""><a data-toggle="tab" role="tab" href="#company-events">{{agile_translate "deal-view" "events"}}</a></li>
+				<li class=""><a data-toggle="tab" role="tab" href="#company-tasks">{{agile_translate "portlets" "tasks"}}</a></li>
+                <li class=""><a data-toggle="tab" href="#company-documents">{{agile_translate "deal-view" "documents"}}</a></li>
+                <li class=""><a data-toggle="tab" role="tab" href="#company-mail">{{agile_translate "contact-details" "mail"}}</a></li>				
 			</ul>
 			</div>
 			<div class="tab-content" id="contact-tab-content">
@@ -894,8 +893,7 @@
 {{#if this.length}}
 	<div align="right" class="m-b-md m-t-md m-r-sm">
 		<a href="#" class="contact-add-contact btn btn-default btn-sm btn-addon">
-			<span><i class="icon-plus-sign"></i></span> Add Contact
-		</a>
+			<span><i class="icon-plus-sign"></i></span> {{agile_translate "modals" "add-contact"}}</a>
 	</div>
 	
 		<div class="table-responsive">
@@ -904,10 +902,10 @@
 				<thead>
 					<tr>
 <th></th>
-						<th style="width:40%">Name</th>
-						<th style="width:20%">Work</th>
-						<th style="width:20%">Tags</th>
-						<th style="width:20%">Lead Score</th>
+						<th style="width:40%">{{agile_translate "deal-view" "name"}}</th>
+						<th style="width:20%">{{agile_translate "contact-details" "work"}}</th>
+						<th style="width:20%">{{agile_translate "report-add" "tags"}}</th>
+						<th style="width:20%">{{agile_translate "contacts-view" "Lead score"}}</th>
 					</tr>
 				</thead>
 				<tbody id="company-contacts-model-list" class="contacts-model-list"
@@ -924,13 +922,11 @@
                     	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
-                    	<h4 class="m-t-none">{{contactShortName}} is not associated with any person/contact. </h4>
+                    	<h4 class="m-t-none">{{contactShortName}} {{agile_translate "company-details" "is-not-associated-with-any-person"}}</h4>
                     	<div class="text">
-							All Contacts that have this company in the 'Organization' or 'Company' field are shown here.
-						</div>
+							{{agile_translate "company-details" "all-contacts-that-have-this-company-in"}}</div>
                     	<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs">
-								<i class="icon-plus-sign"></i> Add Contact
-							</a>
+								<i class="icon-plus-sign"></i> {{agile_translate "modals" "add-contact"}}</a>
                 	</div>
 					<div class="clearfix">
 					</div>

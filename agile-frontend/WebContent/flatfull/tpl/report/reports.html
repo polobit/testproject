@@ -4,8 +4,8 @@
 <div class="row">
     <div class="col-md-12">
        
-            <h3 class="pull-left font-thin h3">Email Reports</h3>
-            <a href="#report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  Add Report</a>
+            <h3 class="pull-left font-thin h3">{{agile_translate "report-view" "email-reports"}}</h3>
+            <a href="#report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  {{agile_translate "portlets" "reports-btn-text"}}</a>
             <div class="clearfix">
         </div>
    
@@ -19,14 +19,14 @@
         {{#if this.length}}
         <div class="col-md-9 col-sm-9">
         <div class="panel panel-default">
-        <div class="panel-heading">Email Reports List</div>
+        <div class="panel-heading">{{agile_translate "report-view" "email-reports-list"}}</div>
        <div class="table-responsive">
         <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Duration</th>
-                    <th>Fields</th>
+                    <th>{{agile_translate "deal-view" "name"}}</th>
+                    <th>{{agile_translate "portlets" "duration"}}</th>
+                    <th>{{agile_translate "report-add" "fields"}}</th>
                 </tr>
             </thead>
             <tbody id="report-model-list" route="report-edit/">
@@ -43,8 +43,7 @@
                 What are Email Reports?
             </h4>
           
-            <p>Customize your reports based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline. Use the information to improve lead nurturing and customer retention strategies.
-            </p>
+            <p>{{agile_translate "report-view" "what-email-reports-answer"}}</p>
         </div>
         </div>
     </div>
@@ -63,12 +62,12 @@
     <td><div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
     <td>
         <div class="table-resp">
-            <a href="#report-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">Show Results</a>             
+            <a href="#report-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">{{agile_translate "report-view" "show-results"}}</a>             
         </div>
     </td>
     <td>
         <div class="table-resp">
-            <a  data={{id}} class="text-info" id="reports-email-now" >Send Now</a>
+            <a  data={{id}} class="text-info" id="reports-email-now" >{{agile_translate "report-view" "send-now"}}</a>
         </div>
     </td>
 <br />
@@ -80,10 +79,10 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        <h3 class="pull-left font-thin h3">Reports</h3>
+        <h3 class="pull-left font-thin h3">{{agile_translate "campaigns" "reports"}}</h3>
 
         <div class="pull-right">
-            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block" onclick="Agile_GA_Event_Tracker.track_event('Configure Dashlet Reports')">Configure Dashlet Reports</a>
+            <a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block" onclick="Agile_GA_Event_Tracker.track_event('Configure Dashlet Reports')">{{agile_translate "tickets" "configure-dashlet-reports"}}</a>
             
         </div>
     </div>
@@ -100,75 +99,75 @@
        <ul class="nav nav-tabs" id="subTab">
                                             {{#hasMenuScope 'DEALS'}}
                                             <li role="presentation" data-tab="6" id="dealstab" class="maintab">
-                                                <a href="#deals-tab" role="tab" data-toggle="tab">Deals</a>
+                                                <a href="#deals-tab" role="tab" data-toggle="tab">{{agile_translate "deal-view" "Deals?"}}</a>
                                                  <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
-                                                 <li><a href="#IncomingDeals" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i> Incoming Deals</a></li>
-                                                 <li><a href="#LostDeal" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Deals Lost by Reason</a></li>
-                                                 <li><a href="#RevenuebySource" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Revenue by Source</a></li>
-                                                 <li><a href="#SalesForecast" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>Sales Forecast</a></li>
+                                                 <li><a href="#IncomingDeals" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i> {{agile_translate "report-view" "incoming-deals"}}</a></li>
+                                                 <li><a href="#LostDeal" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Deals Lost by {{agile_translate "widgets" "reason"}}</a></li>
+                                                 <li><a href="#RevenuebySource" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>{{agile_translate "report-view" "revenue-by-source"}}</a></li>
+                                                 <li><a href="#SalesForecast" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>{{agile_translate "report-view" "sales-forecast"}}</a></li>
 
-                                                 <li><a href="#UserReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>User Reports</a></li>
-                                                 <li><a href="#RepPerformance" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-user v-middle"></i>Rep Performance</a></li>
+                                                 <li><a href="#UserReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>{{agile_translate "report-view" "user-reports"}}</a></li>
+                                                 <li><a href="#RepPerformance" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-user v-middle"></i>{{agile_translate "report-view" "rep-performance"}}</a></li>
                                                  <li><a href="#ComparisonReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-users v-middle"></i>Comparison Report</a></li>
                                                  </ul>
                                                      
                                             </li>
                                             {{/hasMenuScope}}
                                              <li role="presentation" data-tab="5" id="callstab" class="maintab">
-                                                <a href="#calls-tab"   role="tab" data-toggle="tab" >Calls</a>
+                                                <a href="#calls-tab"   role="tab" data-toggle="tab" >{{agile_translate "report-view" "calls"}}</a>
                                                  <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
-                                                 <li><a href="#CallsbyUser" role="tab" data-toggle="tab"><i class="m-r-sm icon-call-end v-middle"></i>Calls by User</a></li>
+                                                 <li><a href="#CallsbyUser" role="tab" data-toggle="tab"><i class="m-r-sm icon-call-end v-middle"></i>{{agile_translate "report-view" "calls-by-user"}}</a></li>
 
-                                                 <li><a href="#Averagecall" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle" style="float:left"></i><div style="display:table-cell">Average call duration</div></a></li>
+                                                 <li><a href="#Averagecall" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle" style="float:left"></i><div style="display:table-cell">{{agile_translate "report-view" "average-call-duration"}}</div></a></li>
                                                   <li><a href="#CallLogs" role="tab" data-toggle="tab"><i class="m-r-sm icon-list v-middle"></i>
-                                                  Call Logs</a></li>
-                                                   <li><a href="#CallOutcomes" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>Call Outcomes</a></li>
-                                                    <li><a href="#CallReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle" style="float:left"></i><div style="display:table-cell">Call Report-Time Based</div></a></li>
+                                                  {{agile_translate "report-view" "call-logs"}}</a></li>
+                                                   <li><a href="#CallOutcomes" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>{{agile_translate "report-view" "call-outcomes"}}</a></li>
+                                                    <li><a href="#CallReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle" style="float:left"></i><div style="display:table-cell">{{agile_translate "report-view" "call-report-time-based"}}</div></a></li>
                                                  </ul>
                                                    
                                             </li>
                                             {{#hasMenuScope 'ACTIVITY'}}
                                              <li role="presentation" data-tab="4" class="maintab">
-                                                <a href="#activities-tab"  role="tab" data-toggle="tab" >Activities</a>
+                                                <a href="#activities-tab"  role="tab" data-toggle="tab" >{{agile_translate "portlets" "activities"}}</a>
                                                 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
-                                                 <li><a href="#UserActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>User Activities</a></li>
-                                                 <li><a href="#ContactActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>Contact Activities</a></li>
+                                                 <li><a href="#UserActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_translate "portlets" "user-activities"}}</a></li>
+                                                 <li><a href="#ContactActivities" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_translate "report-view" "contact-activities"}}</a></li>
                                                  </ul>
                                             </li>
                                             {{/hasMenuScope}}
                                               <li role="presentation" data-tab="2" class="maintab">
-                                                <a href="#graph-tab"  role="tab" data-toggle="tab">Growth Graphs</a>
+                                                <a href="#graph-tab"  role="tab" data-toggle="tab">{{agile_translate "report-view" "growth-graphs"}}</a>
                                                  <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
-                                                 <li><a href="#GrowthGraphs" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>Growth Graphs</a></li>
-                                                 <li><a href="#FunnelGraphs" role="tab" data-toggle="tab"><i class="m-r-sm icon-filter v-middle"></i>Funnel Graphs</a></li>
-                                                 <li><a href="#RatioReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-group v-middle"></i>Ratio Reports</a></li>
+                                                 <li><a href="#GrowthGraphs" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>{{agile_translate "report-view" "growth-graphs"}}</a></li>
+                                                 <li><a href="#FunnelGraphs" role="tab" data-toggle="tab"><i class="m-r-sm icon-filter v-middle"></i>{{agile_translate "report-view" "funnel-graphs"}}</a></li>
+                                                 <li><a href="#RatioReport" role="tab" data-toggle="tab"><i class="m-r-sm icon-group v-middle"></i>{{agile_translate "report-view" "ratio-reports"}}</a></li>
                                                  </ul>
 
 
                                             </li>
                                             <li role="presentation"  data-tab="1" class="maintab">
-                                                <a href="#email-tab" role="tab" data-toggle="tab" >Reports via Email</i></a>
+                                                <a href="#email-tab" role="tab" data-toggle="tab" >{{agile_translate "report-view" "reports-via-email"}}</i></a>
                                                 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
-                                                 <li><a href="#ContactReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-user v-middle"></i>Contact Reports</a></li>
+                                                 <li><a href="#ContactReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-user v-middle"></i>{{agile_translate "report-view" "contact-reports"}}</a></li>
                                                  {{#hasMenuScope 'ACTIVITY'}}
-                                                 <li><a href="#ActivityReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>Activity Reports</a></li>
+                                                 <li><a href="#ActivityReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-cogs v-middle"></i>{{agile_translate "report-view" "activity-reports"}}</a></li>
                                                  {{/hasMenuScope}}
-                                                 <li><a href="#CampaignReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-sitemap v-middle"></i>Campaign Reports</a></li>
+                                                 <li><a href="#CampaignReports" role="tab" data-toggle="tab"><i class="m-r-sm icon-sitemap v-middle"></i>Campaign {{agile_translate "campaigns" "reports"}}</a></li>
                                                  </ul>
                                             </li>
                                           
                                              <li role="presentation" data-tab="3" class="maintab">
-                                                <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
+                                                <a href="#campaign-tab" role="tab" data-toggle="tab">{{agile_translate "report-view" "campaigns"}}</a>
                                                 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
-                                                 <li><a href="#CampaignStats" role="tab" data-toggle="tab"><i class="m-r-sm icon-dashboard v-middle"></i>Campaign Stats</a></li>
-                                                 <li><a href="#CompareCampaigns" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>Compare Campaigns</a></li>
+                                                 <li><a href="#CampaignStats" role="tab" data-toggle="tab"><i class="m-r-sm icon-dashboard v-middle"></i>{{agile_translate "report-view" "campaign-stats"}}</a></li>
+                                                 <li><a href="#CompareCampaigns" role="tab" data-toggle="tab"><i class="m-r-sm icon-bar-chart v-middle"></i>{{agile_translate "report-view" "compare-campaigns"}}</a></li>
                                                  </ul>
                                             </li>
                                              <li role="presentation" data-tab="3" class="maintab">
-                                                <a href="#helpdesk-tab" role="tab" data-toggle="tab">Help Desk</a>
+                                                <a href="#helpdesk-tab" role="tab" data-toggle="tab">{{agile_translate "menu" "help-desk"}}</a>
                                                 <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
-                                                 <li><a href="#Tickets" role="tab" data-toggle="tab"><i class="m-r-sm icon-tasks v-middle"></i>Tickets</a></li>
-                                                 <li><a href="#SLAReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-check-square-o v-middle"></i>SLA Report</a></li>
+                                                 <li><a href="#Tickets" role="tab" data-toggle="tab"><i class="m-r-sm icon-tasks v-middle"></i>{{agile_translate "report-view" "tickets"}}</a></li>
+                                                 <li><a href="#SLAReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-check-square-o v-middle"></i>{{agile_translate "tickets" "sla-report"}}</a></li>
                                                   <li><a href="#PriorityReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-star v-middle" style="float:left"></i><div style="display:table-cell">Ticket Priority & Status Report</div></a></li>
                                                  <li><a href="#FirstResponse" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle"></i>First Response</a></li>
                                                  </ul>
@@ -183,8 +182,7 @@
                    <div class="text-center show_screenshot">
                    <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
-            See how your deal sources are performing over time.
-        </div>
+            {{agile_translate "report-view" "incoming-deals-reports-details"}}</div>
                    <img src='flatfull/img/reports_images/Incoming-Deals.png'></img>
         <br />
 
@@ -200,10 +198,7 @@
                  <div class="text-center show_screenshot">
 <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
-           Get insights into why deals were lost. Filter by owner, track and source.
-
-
-        </div>
+           {{agile_translate "report-view" "lost-deals-description"}}</div>
                  <img src='flatfull/img/reports_images/Lost-Deal-Analysis.png'></img>
            
              <br />
@@ -221,8 +216,7 @@
 
                    <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-           See how each source contributes to revenue. Know which owner converts from which source better.
-        </div><img src='flatfull/img/reports_images/Revenue.png'></img>
+           {{agile_translate "report-view" "source-contributes-details"}}</div><img src='flatfull/img/reports_images/Revenue.png'></img>
            <!-- Icon and Title -->
        
              <br />
@@ -237,8 +231,7 @@
                    <div class="text-center show_screenshot">
                    <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-         Know your revenue forecast based on your deals data.
-        </div>
+         {{agile_translate "report-view" "know-your-revenue-forecast"}}</div>
                    <img src='flatfull/img/reports_images/Sales-forecast.png'></img>
 
         <br />
@@ -254,8 +247,7 @@
                   <div class="text-center show_screenshot">
                   <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-        Analyze sales performance by user.
-        </div><img src='flatfull/img/reports_images/User-reports.png'></img>
+        {{agile_translate "report-view" "analyze-sales-performance-by-user"}}</div><img src='flatfull/img/reports_images/User-reports.png'></img>
      
         <br />
         
@@ -271,9 +263,7 @@
          <a class="btn btn-sm btn-default" href="#rep-reports">
         <div class="text-center show_screenshot">
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-         Know the performance by each user.
-        
-        </div>
+         {{agile_translate "report-view" "know-the-performance-by-each-user"}}</div>
         <img src='flatfull/img/reports_images/Rep_Performance.png' style="width:360px"></img></div>
          <div style="display:none;" class="activity-reports-upgrade m-t-sm" ><span class="text-danger">{{toSafeString message}}<span></div>
         </a>
@@ -282,8 +272,7 @@
             <div class="text-center show_screenshot">
             <!-- Description -->
             <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-             Know the performance by each user.
-            </div>
+             {{agile_translate "report-view" "know-the-performance-by-each-user"}}</div>
              <div class="_upgrade report-go" id="activity-reports-upgrade">
             <img src='flatfull/img/reports_images/Rep_Performance.png' style="width:360px"></img>
                 
@@ -301,8 +290,7 @@
                     <div class="text-center show_screenshot">
                     <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-        Compare the pipeline stages for each user.
-        </div>
+        {{agile_translate "report-view" "compare-the-pipeline-stages-for-each-user"}}</div>
         <img src='flatfull/img/reports_images/Comparison_Report.png' style="width:360px; height:230px"></img>
        
         <br />
@@ -315,9 +303,7 @@
                     <div class="text-center show_screenshot">
                     <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="See a report of total calls made or total time spent on calls by each user.">
-          See a report of total calls made or total time spent on calls by each user.
-          
-        </div>
+          {{agile_translate "report-view" "calls-reports-details"}}</div>
         <img src='flatfull/img/reports_images/Calls-By-User.png'></img>        
         <br />
         
@@ -336,8 +322,7 @@
                    <div class="text-center show_screenshot">
                     <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="Know the average time spent on a call by each user.">
-          Know the average time spent on a call by each user.
-        </div>
+          {{agile_translate "report-view" "average-call-reports-details"}}</div>
         <img src='flatfull/img/reports_images/averageofcall.png'></img>
         
         <br />
@@ -351,8 +336,7 @@
                    <div class="text-center show_screenshot">
                    <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="See a full call log of all users.">
-          Generate timelines of calls by user.
-        </div>
+          {{agile_translate "report-view" "generate-timelines-of-calls-by-user"}}</div>
         <img src='flatfull/img/reports_images/user-activities-call.png'></img>
         
         <br />
@@ -367,8 +351,7 @@
 <div class="text-center show_screenshot">
 <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="Know the calls made  by each user on a pie graph.">
-          Generate a pie graph with call outcomes.
-        </div><img src='flatfull/img/reports_images/Call-Outcomes.png'></img>
+          {{agile_translate "report-view" "generate-pie-graph-with-call-outcomes"}}</div><img src='flatfull/img/reports_images/Call-Outcomes.png'></img>
         <br />
         
     </div>
@@ -380,8 +363,7 @@
                       <div class="text-center show_screenshot">
                       <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="Generate a bar graph with calls based on time.">
-          Generate a bar graph with calls based on time.
-        </div>
+          {{agile_translate "report-view" "generate-bar-graph-description"}}</div>
         <img src='flatfull/img/reports_images/Call_Report_Time.png'></img>
        
         <br />
@@ -398,9 +380,7 @@
         <div class="text-center show_screenshot" >
         <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-          See a chronological activity report of your CRM users.
-          
-        </div>
+          {{agile_translate "report-view" "user-reports-details"}}</div>
         <img src='flatfull/img/reports_images/user-activities.png'></img>
         <div style="display:none;" class="activities-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
         </div>
@@ -410,9 +390,7 @@
             <div class="text-center show_screenshot" >
             <!-- Description -->
             <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-             See a chronological activity report of your CRM users.
-           
-            </div>
+             {{agile_translate "report-view" "user-reports-details"}}</div>
             <div class="_upgrade" id="activities-upgrade">
             <img src='flatfull/img/reports_images/user-activities.png'></img>
             </div>
@@ -429,8 +407,7 @@
 
                             <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-          See a chronological contact activity report of your CRM contacts.
-        </div>
+          {{agile_translate "report-view" "contact-reports-details"}}</div>
         <img src='flatfull/img/reports_images/contact.png'></img>
        
         <br />
@@ -445,8 +422,7 @@
 
                     <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-           Find out how a campaign is performing over a time period.
-        </div><img src='flatfull/img/reports_images/Daily-reports.png'>
+           {{agile_translate "report-view" "campaign-reports-details"}}</div><img src='flatfull/img/reports_images/Daily-reports.png'>
         </img>
        
         <br />
@@ -461,8 +437,7 @@
 
                     <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-            See how your campaigns fare against each other.
-        </div>
+            {{agile_translate "report-view" "compare-reports-details"}}</div>
         <img src='flatfull/img/reports_images/Campaign-stats.png'></img>
         
         <br />
@@ -495,8 +470,7 @@
 
                     <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
-            See a funnel graph of how leads are passing through various stages in your sales cycle.
-        </div>
+            {{agile_translate "report-view" "funnel-reports-details"}}</div>
         <img src='flatfull/img/reports_images/funnel-graph.png'></img>
        
         <br />
@@ -512,8 +486,7 @@
 
                     <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
-            See what percentage of leads are converting over time.
-        </div>
+            {{agile_translate "report-view" "ratio-reports-details"}}</div>
         <img src='flatfull/img/reports_images/ratio.png'></img>
         
         <br />
@@ -531,8 +504,7 @@
 
                          <div class="wrapper text-center b-a" style="min-width:330px">
                           <div class="m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
-            Get a periodic  email digest of various activities by users in Agile.
-            <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
+            {{agile_translate "portlets" "activity-reports-pad-content-desc"}}<div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
         </div>
         </div>
                     </a>
@@ -541,8 +513,7 @@
                 <span class="disabled" >
                      <div class="wrapper text-center b-a" style="min-width:330px">
                           <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
-            Get a periodic  email digest of various activities by users in Agile.
-            <div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
+            {{agile_translate "portlets" "activity-reports-pad-content-desc"}}<div style="display:none;" class="activity-reports-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
         </div>
         </div>
                 </span>
@@ -554,7 +525,7 @@
              <div class="_upgrade" id="activity-reports-upgrade">
             <!-- Description -->
             <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
-            Get a periodic  email digest of various activities by users in Agile. </div></div>
+            {{agile_translate "portlets" "activity-reports-pad-content-desc"}}</div></div>
             <div style="display:none;" class="activity-reports-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
             
              
@@ -571,8 +542,7 @@
         
         <!-- Description -->
         <div class=" m-b-sm m-t-sm" rel="tooltip" title="{{description}}">
-            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
-        </div>
+            {{agile_translate "tickets" "daily-tickets-reports-desc"}}</div>
  
     </div>
 </a>
@@ -596,8 +566,7 @@
 
                     <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
-            View new and closed tickets report for each day, week & month.
-        </div>
+            {{agile_translate "report-view" "view-new-and-closed-tickets-details"}}</div>
         <img src='flatfull/img/reports_images/new-tickets.png'  width='400px' height='212px'></img>
         
         <br />
@@ -613,8 +582,7 @@
                     <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
             
-        View tickets closed in < 2 hrs, between 2-6 hrs, between 6-12 hrs etc.  
-        </div>
+        {{agile_translate "report-view" "view-tickets-closed-description"}}</div>
         <img src='flatfull/img/reports_images/sla-report.png'  width='400px' height='212px'></img>
         
         <br />
@@ -630,8 +598,7 @@
                     <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
             
-        View tickets priority and status reports over the date ranges.
-        </div>
+        {{agile_translate "report-view" "view-tickets-priority-and-status-details"}}</div>
         <img src='flatfull/img/reports_images/status-report.png'  width='400px' height='212px'></img>
         
         <br />
@@ -647,9 +614,7 @@
                     <!-- Description -->
         <div class="m-b-sm" rel="tooltip" title="{{description}}">
             
-        View first response time over the date ranges.
-
-        </div>
+        {{agile_translate "report-view" "first-response-time-over-the-date-ranges"}}</div>
         <img src='flatfull/img/reports_images/first-response-time.png'  width='400px' height='212px'></img>
         
         <br />
@@ -679,7 +644,7 @@
     <div class="modal-content">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Upgrade</h3>
+		<h3 class="modal-title">{{agile_translate "portlets" "upgrade"}}</h3>
 	</div>
 	<div class="modal-body">
                </div>  

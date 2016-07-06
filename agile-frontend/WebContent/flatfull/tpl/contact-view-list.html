@@ -6,19 +6,19 @@
         {{#is_mobile}}
         <ul id="contact-view-model-list" class="pull-right dropdown-menu" role="menu">
             <li>
-                <a href="#contact-view-prefs">Add/Remove Columns</a>
+                <a href="#contact-view-prefs">{{agile_translate "contacts-view" "add/remove-columns"}}</a>
             </li>
         </ul>
         {{else}}
         <ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs" role="menu">
             <!--<li>
-                <a href="#contacts" class="DefaultView">Default</a>
-                 a href="#contacts" class="GridView">Grid View</a 
+                <a href="#contacts" class="DefaultView">{{agile_translate "report-chart-forms" "default"}}</a>
+                 a href="#contacts" class="GridView">{{agile_translate "tasks" "grid-view"}}</a 
             </li>
             <li class="divider"></li>-->
 
             <li>
-                <a href="#contact-view-prefs">Add/Remove Columns</a>
+                <a href="#contact-view-prefs">{{agile_translate "contacts-view" "add/remove-columns"}}</a>
             </li>
         </ul>
         {{/is_mobile}}
@@ -27,26 +27,26 @@
    {{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
    <div class="btn-group">
 
-        <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> Add Contact</button>
+        <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> {{agile_translate "modals" "add-contact"}}</button>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 
         <ul class="dropdown-menu pull-right" role="menu">
         {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
-            <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
+            <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_translate "contacts-view" "import"}}</a></li>
         {{/hasRestrictedMenuScope}}
-            <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">Add Dashlet</a></li>
+            <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">{{agile_translate "portlets" "add-dashlet"}}</a></li>
         </ul>
     {{else}}
     <div class="btn-group">
 
-        <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon-plus-sign"></i> Add Contact</button>
+        <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon-plus-sign"></i> {{agile_translate "modals" "add-contact"}}</button>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 
         <ul class="dropdown-menu pull-right" role="menu">
         {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
-            <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">Import</a></li>
+            <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_translate "contacts-view" "import"}}</a></li>
         {{/hasRestrictedMenuScope}}
-            <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">Add Dashlet</a></li>
+            <li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Contacts Add Dashlets')">{{agile_translate "portlets" "add-dashlet"}}</a></li>
         </ul>
 <!--
 {{#is_mobile}}
@@ -77,7 +77,7 @@
 <ul id="contact-view-model-list" class="pull-right dropdown-menu" role="menu">          
             
             <li>
-                <a href="#company-view-prefs">Add/Remove Columns</a>
+                <a href="#company-view-prefs">{{agile_translate "contacts-view" "add/remove-columns"}}</a>
             </li>
         </ul>
 
@@ -86,7 +86,7 @@
     
 
             <li>
-                <a href="#company-view-prefs">Add/Remove Columns</a>
+                <a href="#company-view-prefs">{{agile_translate "contacts-view" "add/remove-columns"}}</a>
             </li>
         </ul>   
         {{/is_mobile}}
@@ -94,23 +94,23 @@
     </div> 
     {{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
     <div class="btn-group">
-        <a href="#companyModal" class="btn btn-default btn-sm disabled" data-toggle="modal"><i class="icon-plus-sign"></i> Add Company</a>
+        <a href="#companyModal" class="btn btn-default btn-sm disabled" data-toggle="modal"><i class="icon-plus-sign"></i> {{agile_translate "report-chart-forms" "add-company"}}</a>
         <button class="btn btn-default btn-sm dropdown-toggle disabled" data-toggle="dropdown"><span class="caret"></span></button>
         {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
         <ul class="dropdown-menu pull-right" role="menu">
          
-            <li><a href="#import">Import</a></li>
+            <li><a href="#import">{{agile_translate "contacts-view" "import"}}</a></li>
             
         </ul>
         {{/hasRestrictedMenuScope}} 
     {{else}}
     <div class="btn-group">
-        <a href="#companyModal" class="btn btn-default btn-sm" data-toggle="modal"><i class="icon-plus-sign"></i> Add Company</a>
+        <a href="#companyModal" class="btn btn-default btn-sm" data-toggle="modal"><i class="icon-plus-sign"></i> {{agile_translate "report-chart-forms" "add-company"}}</a>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
          {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
         <ul class="dropdown-menu pull-right" role="menu">
 
-            <li><a href="#import">Import</a></li>
+            <li><a href="#import">{{agile_translate "contacts-view" "import"}}</a></li>
                
         </ul>
         {{/hasRestrictedMenuScope}}  

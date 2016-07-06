@@ -15,10 +15,10 @@
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
-			<option value="DEFINED">is defined</option>
-			<option value="NOT_DEFINED">is not defined</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
+			<option value="DEFINED">{{agile_translate "contacts-view" "is-defined"}}</option>
+			<option value="NOT_DEFINED">{{agile_translate "contacts-view" "is-not-defined"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
@@ -35,12 +35,12 @@
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}_number" />
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="EQUALS">equals</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="BETWEEN">between</option>
-			<option value="DEFINED">is defined</option>
-			<option value="NOT_DEFINED">is not defined</option>
+			<option value="EQUALS">{{agile_translate "contacts-view" "equals"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
+			<option value="DEFINED">{{agile_translate "contacts-view" "is-defined"}}</option>
+			<option value="NOT_DEFINED">{{agile_translate "contacts-view" "is-not-defined"}}</option>
 		</select>
 		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
@@ -66,14 +66,14 @@
 		<div class="lhs-contact-filter-row pos-rlt">
 	<input type="hidden" class="form-control" name="LHS" value="{{field_label}}_time" />
 	<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-		<option value="ON">on</option>
-		<option value="AFTER">is after</option>
-		<option value="BEFORE">is before</option>
-		<option value="BETWEEN">is between</option>
-		<option value="LAST">in last</option>
-		<option value="NEXT">in next</option>
-		<option value="DEFINED">is defined</option>
-		<option value="NOT_DEFINED">is not defined</option>
+		<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+		<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+		<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+		<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+		<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
+		<option value="NEXT">{{agile_translate "contacts-view" "in-next"}}</option>
+		<option value="DEFINED">{{agile_translate "contacts-view" "is-defined"}}</option>
+		<option value="NOT_DEFINED">{{agile_translate "contacts-view" "is-not-defined"}}</option>
 	</select>
 	<div class="AFTER BEFORE ON condition_container m-t-xs">
 		<span id="RHS">
@@ -104,15 +104,15 @@
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="{{field_label}}" />
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
-			<option value="DEFINED">is defined</option>
-			<option value="NOT_DEFINED">is not defined</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
+			<option value="DEFINED">{{agile_translate "contacts-view" "is-defined"}}</option>
+			<option value="NOT_DEFINED">{{agile_translate "contacts-view" "is-not-defined"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
 				<select id="{{replace_spaces field_label}}-values" prev-val="" class="required form-control text-xs" name="temp" style="height:30px;">
-					<option value="">Select value</option>
+					<option value="">{{agile_translate "contacts-view" "select-value"}}</option>
 					{{{buildOptions field_data}}}
 				</select>
 			</span>
@@ -127,9 +127,9 @@
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
 		<select id="between_filter" name="CONDITION" class="form-control" >
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
-			<option value="IN" >in</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
+			<option value="IN" >{{agile_translate "contacts-view" "in"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
@@ -153,9 +153,9 @@
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
 		<select id="between_filter" name="CONDITION" class="form-control" >
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
-			<option value="IN" >in</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
+			<option value="IN" >{{agile_translate "contacts-view" "in"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
@@ -193,15 +193,14 @@
     <div class="panel-body">
       <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
     <a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Tags
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "report-add" "tags"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="tags_div" style="position: relative;">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-tags-add-div pos-rlt m-t-xs">
 					<input class="form-control" type="hidden" name="LHS" value="tags">
 					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
+						<option value="EQUALS" class="tags">{{agile_translate "contacts-view" "is"}}</option>
+						<option value="NOTEQUALS" class="tags">{{agile_translate "contacts-view" "is-not"}}</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
@@ -218,10 +217,10 @@
 				<div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
 					<input type="hidden" name="LHS" value="tags">
 					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
-						<option value="DEFINED" class="tags">is defined</option>
-						<option value="NOT_DEFINED" class="tags">is not defined</option>
+						<option value="EQUALS" class="tags">{{agile_translate "contacts-view" "is"}}</option>
+						<option value="NOTEQUALS" class="tags">{{agile_translate "contacts-view" "is-not"}}</option>
+						<option value="DEFINED" class="tags">{{agile_translate "contacts-view" "is-defined"}}</option>
+						<option value="NOT_DEFINED" class="tags">{{agile_translate "contacts-view" "is-not-defined"}}</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
@@ -235,7 +234,7 @@
 
 		</div>	
 		<div class="m-t-xs">
-						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;font-weight: normal !important;" data-name="tags" id="addBtn"><i class="icon-plus"></i> Add</a>
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;font-weight: normal !important;" data-name="tags" id="addBtn"><i class="icon-plus"></i> {{agile_translate "other" "add"}}</a>
 					</div>
 	</div>
 </div>
@@ -252,15 +251,14 @@
         
 	<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Score
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "report-add" "score"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="lead_score_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" class="form-control" value="lead_score">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
@@ -295,15 +293,14 @@
       <div class="panel-body">
         <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
     <a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Star Value
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "contacts-view" "Star value"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="star_value">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
@@ -337,24 +334,23 @@
       <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
       
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Campaign Status
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "contacts-view" "campaign-status"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="campaign_status_div" style="position: relative;">
 		<div id="campaign_status-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-campaign_status-add-div pos-rlt m-t-xs">
 					<input type="hidden" class="form-control" name="LHS" value="campaign_status">
 				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-					<option value="NOT_ADDED">Never Added</option>
-					<option value="ACTIVE">Active</option>
-					<option value="DONE">Completed</option>
+					<option value="NOT_ADDED">{{agile_translate "contacts-view" "never-added"}}</option>
+					<option value="ACTIVE">{{agile_translate "deal-view" "active"}}</option>
+					<option value="DONE">{{agile_translate "portlets" "completed"}}</option>
 					<option value="REMOVED">Removed</option>
-					<option value="BOUNCED">Bounced</option>
-					<option value="UNSUBSCRIBED">Unsubscribed</option>
-					<option value="SPAM">Spam Reported</option>
+					<option value="BOUNCED">{{agile_translate "contacts-view" "bounced"}}</option>
+					<option value="UNSUBSCRIBED">{{agile_translate "contacts-view" "unsubscribed"}}</option>
+					<option value="SPAM">{{agile_translate "contacts-view" "spam-reported"}}</option>
 				</select>
 				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
-						<select id="campaign_select_master" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
+						<select id="campaign_select_master" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">{{agile_translate "contacts-view" "select"}}</option></select>
 					</span>
 				</div>
 					<div class="m-t-xs"><a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p" id="removeBtn"></i></a>
@@ -366,18 +362,18 @@
 				<div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
 					<input type="hidden" class="form-control" name="LHS" value="campaign_status">
 				<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-					<option value="NOT_ADDED">Never Added</option>
-					<option value="ACTIVE">Active</option>
-					<option value="DONE">Completed</option>
+					<option value="NOT_ADDED">{{agile_translate "contacts-view" "never-added"}}</option>
+					<option value="ACTIVE">{{agile_translate "deal-view" "active"}}</option>
+					<option value="DONE">{{agile_translate "portlets" "completed"}}</option>
 					<option value="REMOVED">Removed</option>
-					<option value="HARDBOUNCED">Hard Bounced</option>
-					<option value="SOFTBOUNCED">Soft Bounced</option>
-					<option value="UNSUBSCRIBED">Unsubscribed</option>
-					<option value="SPAM">Spam Reported</option>
+					<option value="HARDBOUNCED">{{agile_translate "contacts-view" "hard-bounced"}}</option>
+					<option value="SOFTBOUNCED">{{agile_translate "contacts-view" "soft-bounced"}}</option>
+					<option value="UNSUBSCRIBED">{{agile_translate "contacts-view" "unsubscribed"}}</option>
+					<option value="SPAM">{{agile_translate "contacts-view" "spam-reported"}}</option>
 				</select>
 					<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
-						<select id="campaign_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
+						<select id="campaign_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">{{agile_translate "contacts-view" "select"}}</option></select>
 					</span>
 					</div>
 					<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -389,7 +385,7 @@
 		</div>	
 
 		<div class="m-t-xs">
-						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="campaign_status" id="addBtn"><i class="icon-plus"></i> Add</a>
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="campaign_status" id="addBtn"><i class="icon-plus"></i> {{agile_translate "other" "add"}}</a>
 					</div>
 			
 	</div>
@@ -408,19 +404,18 @@
       <div class="panel-body">
         <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Owner
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "contact-details" "owner"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="owner_id">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="EQUALS">is</option>
-			<option value="NOTEQUALS">isn't</option>
+			<option value="EQUALS">{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS">{{agile_translate "contacts-view" "is-not"}}</option>
 		</select>
 		
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<select id="owner_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">Select...</option></select>
+				<select id="owner_select" class="required form-control text-xs" name="temp1" prev-val="" style="height:30px;"><option class="default-select" value="">{{agile_translate "contacts-view" "select"}}</option></select>
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -441,18 +436,17 @@
       <div class="panel-body">
         <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Created Date
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "tickets" "Created&nbsp;Date"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
-			<option value="NEXT">in next</option>
+			<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+			<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+			<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+			<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
+			<option value="NEXT">{{agile_translate "contacts-view" "in-next"}}</option>
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
@@ -488,17 +482,16 @@
       <div class="panel-body">
         <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-	Updated Date
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	{{agile_translate "contacts-view" "updated date"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="updated_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="updated_time" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
+			<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+			<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+			<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+			<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
@@ -535,17 +528,16 @@
       <div class="panel-body">
         <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Last Contacted
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "report-add" "last-contacted"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="last_contacted_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="last_contacted" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
+			<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+			<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+			<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+			<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
 			<option value="NOT_DEFINED">never</option>
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
@@ -582,16 +574,15 @@
       <div class="panel-body">
         <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Country
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "contacts-view" "country"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="country_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="country" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="EQUALS">is</option>
-			<option value="NOTEQUALS">isn't</option>
-			<option value="DEFINED">is defined</option>
-			<option value="NOT_DEFINED">is not defined</option>
+			<option value="EQUALS">{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS">{{agile_translate "contacts-view" "is-not"}}</option>
+			<option value="DEFINED">{{agile_translate "contacts-view" "is-defined"}}</option>
+			<option value="NOT_DEFINED">{{agile_translate "contacts-view" "is-not-defined"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS condition_container m-t-xs">
 			<span id="RHS">
@@ -600,250 +591,250 @@
  				-->
 				<select class="styled form-control m-b-sm required" prev-val="">
 		            <option value=""></option>
-		            <option value="AF">Afghanistan</option>
-		            <option value="AL">Albania</option>
-		            <option value="DZ">Algeria</option>
-		            <option value="AS">American Samoa</option>
-		            <option value="AD">Andorra</option>
-		            <option value="AO">Angola</option>
-		            <option value="AI">Anguilla</option>
-		            <option value="AQ">Antarctica</option>
-		            <option value="AG">Antigua and Barbuda</option>
-		            <option value="AR">Argentina</option>
-		            <option value="AM">Armenia</option>
-		            <option value="AW">Aruba</option>
-		            <option value="AU">Australia</option>
-		            <option value="AT">Austria</option>
-		            <option value="AZ">Azerbaijan</option>
-		            <option value="BS">Bahamas</option>
-		            <option value="BH">Bahrain</option>
-		            <option value="BD">Bangladesh</option>
-		            <option value="BB">Barbados</option>
-		            <option value="BY">Belarus</option>
-		            <option value="BE">Belgium</option>
-		            <option value="BZ">Belize</option>
-		            <option value="BJ">Benin</option>
-		            <option value="BM">Bermuda</option>
-		            <option value="BT">Bhutan</option>
-		            <option value="BO">Bolivia</option>
-		            <option value="BA">Bosnia and Herzegovina</option>
-		            <option value="BW">Botswana</option>
-		            <option value="BV">Bouvet Island</option>
-		            <option value="BR">Brazil</option>
-		            <option value="IO">British Indian Ocean Territory</option>
+		            <option value="AF">{{agile_translate "countries" "AF"}}</option>
+		            <option value="AL">{{agile_translate "countries" "AL"}}</option>
+		            <option value="DZ">{{agile_translate "countries" "DZ"}}</option>
+		            <option value="AS">{{agile_translate "countries" "AS"}}</option>
+		            <option value="AD">{{agile_translate "countries" "AD"}}</option>
+		            <option value="AO">{{agile_translate "countries" "AO"}}</option>
+		            <option value="AI">{{agile_translate "countries" "AI"}}</option>
+		            <option value="AQ">{{agile_translate "countries" "AQ"}}</option>
+		            <option value="AG">{{agile_translate "countries" "AG"}}</option>
+		            <option value="AR">{{agile_translate "countries" "AR"}}</option>
+		            <option value="AM">{{agile_translate "countries" "AM"}}</option>
+		            <option value="AW">{{agile_translate "countries" "AW"}}</option>
+		            <option value="AU">{{agile_translate "countries" "AU"}}</option>
+		            <option value="AT">{{agile_translate "countries" "AT"}}</option>
+		            <option value="AZ">{{agile_translate "countries" "AZ"}}</option>
+		            <option value="BS">{{agile_translate "countries" "BS"}}</option>
+		            <option value="BH">{{agile_translate "countries" "BH"}}</option>
+		            <option value="BD">{{agile_translate "countries" "BD"}}</option>
+		            <option value="BB">{{agile_translate "countries" "BB"}}</option>
+		            <option value="BY">{{agile_translate "countries" "BY"}}</option>
+		            <option value="BE">{{agile_translate "countries" "BE"}}</option>
+		            <option value="BZ">{{agile_translate "countries" "BZ"}}</option>
+		            <option value="BJ">{{agile_translate "countries" "BJ"}}</option>
+		            <option value="BM">{{agile_translate "countries" "BM"}}</option>
+		            <option value="BT">{{agile_translate "countries" "BT"}}</option>
+		            <option value="BO">{{agile_translate "countries" "BO"}}</option>
+		            <option value="BA">{{agile_translate "countries" "BA"}}</option>
+		            <option value="BW">{{agile_translate "countries" "BW"}}</option>
+		            <option value="BV">{{agile_translate "countries" "BV"}}</option>
+		            <option value="BR">{{agile_translate "countries" "BR"}}</option>
+		            <option value="IO">{{agile_translate "countries" "IO"}}</option>
 		            <option value="VG">British Virgin Islands</option>
 		            <option value="BN">Brunei</option>
-		            <option value="BG">Bulgaria</option>
-		            <option value="BF">Burkina Faso</option>
-		            <option value="BI">Burundi</option>
-		            <option value="KH">Cambodia</option>
-		            <option value="CM">Cameroon</option>
-		            <option value="CA">Canada</option>
-		            <option value="CV">Cape Verde</option>
-		            <option value="KY">Cayman Islands</option>
-		            <option value="CF">Central African Republic</option>
-		            <option value="TD">Chad</option>
-		            <option value="CL">Chile</option>
-		            <option value="CN">China</option>
-		            <option value="CX">Christmas Island</option>
+		            <option value="BG">{{agile_translate "countries" "BG"}}</option>
+		            <option value="BF">{{agile_translate "countries" "BF"}}</option>
+		            <option value="BI">{{agile_translate "countries" "BI"}}</option>
+		            <option value="KH">{{agile_translate "countries" "KH"}}</option>
+		            <option value="CM">{{agile_translate "countries" "CM"}}</option>
+		            <option value="CA">{{agile_translate "countries" "CA"}}</option>
+		            <option value="CV">{{agile_translate "countries" "CV"}}</option>
+		            <option value="KY">{{agile_translate "countries" "KY"}}</option>
+		            <option value="CF">{{agile_translate "countries" "CF"}}</option>
+		            <option value="TD">{{agile_translate "countries" "TD"}}</option>
+		            <option value="CL">{{agile_translate "countries" "CL"}}</option>
+		            <option value="CN">{{agile_translate "countries" "CN"}}</option>
+		            <option value="CX">{{agile_translate "countries" "CX"}}</option>
 		            <option value="CC">Cocos Islands</option>
-		            <option value="CO">Colombia</option>
-		            <option value="KM">Comoros</option>
-		            <option value="CG">Congo</option>
-		            <option value="CK">Cook Islands</option>
-		            <option value="CR">Costa Rica</option>
-		            <option value="HR">Croatia</option>
-		            <option value="CU">Cuba</option>
-		            <option value="CY">Cyprus</option>
-		            <option value="CZ">Czech Republic</option>
+		            <option value="CO">{{agile_translate "countries" "CO"}}</option>
+		            <option value="KM">{{agile_translate "countries" "KM"}}</option>
+		            <option value="CG">{{agile_translate "countries" "CG"}}</option>
+		            <option value="CK">{{agile_translate "countries" "CK"}}</option>
+		            <option value="CR">{{agile_translate "countries" "CR"}}</option>
+		            <option value="HR">{{agile_translate "countries" "HR"}}</option>
+		            <option value="CU">{{agile_translate "countries" "CU"}}</option>
+		            <option value="CY">{{agile_translate "countries" "CY"}}</option>
+		            <option value="CZ">{{agile_translate "countries" "CZ"}}</option>
 		            <option value="CI">C&#244;te d'Ivoire</option>
-		            <option value="DK">Denmark</option>
-		            <option value="DJ">Djibouti</option>
-		            <option value="DM">Dominica</option>
-		            <option value="DO">Dominican Republic</option>
-		            <option value="EC">Ecuador</option>
-		            <option value="EG">Egypt</option>
-		            <option value="SV">El Salvador</option>
-		            <option value="GQ">Equatorial Guinea</option>
-		            <option value="ER">Eritrea</option>
-		            <option value="EE">Estonia</option>
-		            <option value="ET">Ethiopia</option>
+		            <option value="DK">{{agile_translate "countries" "DK"}}</option>
+		            <option value="DJ">{{agile_translate "countries" "DJ"}}</option>
+		            <option value="DM">{{agile_translate "countries" "DM"}}</option>
+		            <option value="DO">{{agile_translate "countries" "DO"}}</option>
+		            <option value="EC">{{agile_translate "countries" "EC"}}</option>
+		            <option value="EG">{{agile_translate "countries" "EG"}}</option>
+		            <option value="SV">{{agile_translate "countries" "SV"}}</option>
+		            <option value="GQ">{{agile_translate "countries" "GQ"}}</option>
+		            <option value="ER">{{agile_translate "countries" "ER"}}</option>
+		            <option value="EE">{{agile_translate "countries" "EE"}}</option>
+		            <option value="ET">{{agile_translate "countries" "ET"}}</option>
 		            <option value="FK">Falkland Islands</option>
-		            <option value="FO">Faroe Islands</option>
-		            <option value="FJ">Fiji</option>
-		            <option value="FI">Finland</option>
-		            <option value="FR">France</option>
-		            <option value="GF">French Guiana</option>
-		            <option value="PF">French Polynesia</option>
-		            <option value="TF">French Southern Territories</option>
-		            <option value="GA">Gabon</option>
-		            <option value="GM">Gambia</option>
-		            <option value="GE">Georgia</option>
-		            <option value="DE">Germany</option>
-		            <option value="GH">Ghana</option>
-		            <option value="GI">Gibraltar</option>
-		            <option value="GR">Greece</option>
-		            <option value="GL">Greenland</option>
-		            <option value="GD">Grenada</option>
-		            <option value="GP">Guadeloupe</option>
-		            <option value="GU">Guam</option>
-		            <option value="GT">Guatemala</option>
-		            <option value="GG">Guernsey</option>
-		            <option value="GN">Guinea</option>
-		            <option value="GW">Guinea-Bissau</option>
-		            <option value="GY">Guyana</option>
-		            <option value="HT">Haiti</option>
+		            <option value="FO">{{agile_translate "countries" "FO"}}</option>
+		            <option value="FJ">{{agile_translate "countries" "FJ"}}</option>
+		            <option value="FI">{{agile_translate "countries" "FI"}}</option>
+		            <option value="FR">{{agile_translate "countries" "FR"}}</option>
+		            <option value="GF">{{agile_translate "countries" "GF"}}</option>
+		            <option value="PF">{{agile_translate "countries" "PF"}}</option>
+		            <option value="TF">{{agile_translate "countries" "TF"}}</option>
+		            <option value="GA">{{agile_translate "countries" "GA"}}</option>
+		            <option value="GM">{{agile_translate "countries" "GM"}}</option>
+		            <option value="GE">{{agile_translate "countries" "GE"}}</option>
+		            <option value="DE">{{agile_translate "countries" "DE"}}</option>
+		            <option value="GH">{{agile_translate "countries" "GH"}}</option>
+		            <option value="GI">{{agile_translate "countries" "GI"}}</option>
+		            <option value="GR">{{agile_translate "countries" "GR"}}</option>
+		            <option value="GL">{{agile_translate "countries" "GL"}}</option>
+		            <option value="GD">{{agile_translate "countries" "GD"}}</option>
+		            <option value="GP">{{agile_translate "countries" "GP"}}</option>
+		            <option value="GU">{{agile_translate "countries" "GU"}}</option>
+		            <option value="GT">{{agile_translate "countries" "GT"}}</option>
+		            <option value="GG">{{agile_translate "countries" "GG"}}</option>
+		            <option value="GN">{{agile_translate "countries" "GN"}}</option>
+		            <option value="GW">{{agile_translate "countries" "GW"}}</option>
+		            <option value="GY">{{agile_translate "countries" "GY"}}</option>
+		            <option value="HT">{{agile_translate "countries" "HT"}}</option>
 		            <option value="HM">Heard Island And McDonald Islands</option>
-		            <option value="HN">Honduras</option>
-		            <option value="HK">Hong Kong</option>
-		            <option value="HU">Hungary</option>
-		            <option value="IS">Iceland</option>
-		            <option value="IN">India</option>
-		            <option value="ID">Indonesia</option>
+		            <option value="HN">{{agile_translate "countries" "HN"}}</option>
+		            <option value="HK">{{agile_translate "countries" "HK"}}</option>
+		            <option value="HU">{{agile_translate "countries" "HU"}}</option>
+		            <option value="IS">{{agile_translate "countries" "IS"}}</option>
+		            <option value="IN">{{agile_translate "countries" "IN"}}</option>
+		            <option value="ID">{{agile_translate "countries" "ID"}}</option>
 		            <option value="IR">Iran</option>
-		            <option value="IQ">Iraq</option>
-		            <option value="IE">Ireland</option>
+		            <option value="IQ">{{agile_translate "countries" "IQ"}}</option>
+		            <option value="IE">{{agile_translate "countries" "IE"}}</option>
 		            <option value="IM">Isle Of Man</option>
-		            <option value="IL">Israel</option>
-		            <option value="IT">Italy</option>
-		            <option value="JM">Jamaica</option>
-		            <option value="JP">Japan</option>
-		            <option value="JE">Jersey</option>
-		            <option value="JO">Jordan</option>
-		            <option value="KZ">Kazakhstan</option>
-		            <option value="KE">Kenya</option>
-		            <option value="KI">Kiribati</option>
-		            <option value="KW">Kuwait</option>
-		            <option value="KG">Kyrgyzstan</option>
+		            <option value="IL">{{agile_translate "countries" "IL"}}</option>
+		            <option value="IT">{{agile_translate "countries" "IT"}}</option>
+		            <option value="JM">{{agile_translate "countries" "JM"}}</option>
+		            <option value="JP">{{agile_translate "countries" "JP"}}</option>
+		            <option value="JE">{{agile_translate "countries" "JE"}}</option>
+		            <option value="JO">{{agile_translate "countries" "JO"}}</option>
+		            <option value="KZ">{{agile_translate "countries" "KZ"}}</option>
+		            <option value="KE">{{agile_translate "countries" "KE"}}</option>
+		            <option value="KI">{{agile_translate "countries" "KI"}}</option>
+		            <option value="KW">{{agile_translate "countries" "KW"}}</option>
+		            <option value="KG">{{agile_translate "countries" "KG"}}</option>
 		            <option value="LA">Laos</option>
-		            <option value="LV">Latvia</option>
-		            <option value="LB">Lebanon</option>
-		            <option value="LS">Lesotho</option>
-		            <option value="LR">Liberia</option>
+		            <option value="LV">{{agile_translate "countries" "LV"}}</option>
+		            <option value="LB">{{agile_translate "countries" "LB"}}</option>
+		            <option value="LS">{{agile_translate "countries" "LS"}}</option>
+		            <option value="LR">{{agile_translate "countries" "LR"}}</option>
 		            <option value="LY">Libya</option>
-		            <option value="LI">Liechtenstein</option>
-		            <option value="LT">Lithuania</option>
-		            <option value="LU">Luxembourg</option>
-		            <option value="MO">Macao</option>
+		            <option value="LI">{{agile_translate "countries" "LI"}}</option>
+		            <option value="LT">{{agile_translate "countries" "LT"}}</option>
+		            <option value="LU">{{agile_translate "countries" "LU"}}</option>
+		            <option value="MO">{{agile_translate "countries" "MO"}}</option>
 		            <option value="MK">Macedonia</option>
-		            <option value="MG">Madagascar</option>
-		            <option value="MW">Malawi</option>
-		            <option value="MY">Malaysia</option>
-		            <option value="MV">Maldives</option>
-		            <option value="ML">Mali</option>
-		            <option value="MT">Malta</option>
-		            <option value="MH">Marshall Islands</option>
-		            <option value="MQ">Martinique</option>
-		            <option value="MR">Mauritania</option>
-		            <option value="MU">Mauritius</option>
-		            <option value="YT">Mayotte</option>
-		            <option value="MX">Mexico</option>
+		            <option value="MG">{{agile_translate "countries" "MG"}}</option>
+		            <option value="MW">{{agile_translate "countries" "MW"}}</option>
+		            <option value="MY">{{agile_translate "countries" "MY"}}</option>
+		            <option value="MV">{{agile_translate "countries" "MV"}}</option>
+		            <option value="ML">{{agile_translate "countries" "ML"}}</option>
+		            <option value="MT">{{agile_translate "countries" "MT"}}</option>
+		            <option value="MH">{{agile_translate "countries" "MH"}}</option>
+		            <option value="MQ">{{agile_translate "countries" "MQ"}}</option>
+		            <option value="MR">{{agile_translate "countries" "MR"}}</option>
+		            <option value="MU">{{agile_translate "countries" "MU"}}</option>
+		            <option value="YT">{{agile_translate "countries" "YT"}}</option>
+		            <option value="MX">{{agile_translate "countries" "MX"}}</option>
 		            <option value="FM">Micronesia</option>
 		            <option value="MD">Moldova</option>
-		            <option value="MC">Monaco</option>
-		            <option value="MN">Mongolia</option>
-		            <option value="ME">Montenegro</option>
-		            <option value="MS">Montserrat</option>
-		            <option value="MA">Morocco</option>
-		            <option value="MZ">Mozambique</option>
-		            <option value="MM">Myanmar</option>
-		            <option value="NA">Namibia</option>
-		            <option value="NR">Nauru</option>
-		            <option value="NP">Nepal</option>
-		            <option value="NL">Netherlands</option>
-		            <option value="AN">Netherlands Antilles</option>
-		            <option value="NC">New Caledonia</option>
-		            <option value="NZ">New Zealand</option>
-		            <option value="NI">Nicaragua</option>
-		            <option value="NE">Niger</option>
-		            <option value="NG">Nigeria</option>
-		            <option value="NU">Niue</option>
-		            <option value="NF">Norfolk Island</option>
+		            <option value="MC">{{agile_translate "countries" "MC"}}</option>
+		            <option value="MN">{{agile_translate "countries" "MN"}}</option>
+		            <option value="ME">{{agile_translate "countries" "ME"}}</option>
+		            <option value="MS">{{agile_translate "countries" "MS"}}</option>
+		            <option value="MA">{{agile_translate "countries" "MA"}}</option>
+		            <option value="MZ">{{agile_translate "countries" "MZ"}}</option>
+		            <option value="MM">{{agile_translate "countries" "MM"}}</option>
+		            <option value="NA">{{agile_translate "countries" "NA"}}</option>
+		            <option value="NR">{{agile_translate "countries" "NR"}}</option>
+		            <option value="NP">{{agile_translate "countries" "NP"}}</option>
+		            <option value="NL">{{agile_translate "countries" "NL"}}</option>
+		            <option value="AN">{{agile_translate "countries" "AN"}}</option>
+		            <option value="NC">{{agile_translate "countries" "NC"}}</option>
+		            <option value="NZ">{{agile_translate "countries" "NZ"}}</option>
+		            <option value="NI">{{agile_translate "countries" "NI"}}</option>
+		            <option value="NE">{{agile_translate "countries" "NE"}}</option>
+		            <option value="NG">{{agile_translate "countries" "NG"}}</option>
+		            <option value="NU">{{agile_translate "countries" "NU"}}</option>
+		            <option value="NF">{{agile_translate "countries" "NF"}}</option>
 		            <option value="KP">North Korea</option>
-		            <option value="MP">Northern Mariana Islands</option>
-		            <option value="NO">Norway</option>
-		            <option value="OM">Oman</option>
-		            <option value="PK">Pakistan</option>
-		            <option value="PW">Palau</option>
+		            <option value="MP">{{agile_translate "countries" "MP"}}</option>
+		            <option value="NO">{{agile_translate "countries" "NO"}}</option>
+		            <option value="OM">{{agile_translate "countries" "OM"}}</option>
+		            <option value="PK">{{agile_translate "countries" "PK"}}</option>
+		            <option value="PW">{{agile_translate "countries" "PW"}}</option>
 		            <option value="PS">Palestine</option>
-		            <option value="PA">Panama</option>
-		            <option value="PG">Papua New Guinea</option>
-		            <option value="PY">Paraguay</option>
-		            <option value="PE">Peru</option>
-		            <option value="PH">Philippines</option>
-		            <option value="PN">Pitcairn</option>
-		            <option value="PL">Poland</option>
-		            <option value="PT">Portugal</option>
-		            <option value="PR">Puerto Rico</option>
-		            <option value="QA">Qatar</option>
-		            <option value="RE">Reunion</option>
-		            <option value="RO">Romania</option>
+		            <option value="PA">{{agile_translate "countries" "PA"}}</option>
+		            <option value="PG">{{agile_translate "countries" "PG"}}</option>
+		            <option value="PY">{{agile_translate "countries" "PY"}}</option>
+		            <option value="PE">{{agile_translate "countries" "PE"}}</option>
+		            <option value="PH">{{agile_translate "countries" "PH"}}</option>
+		            <option value="PN">{{agile_translate "countries" "PN"}}</option>
+		            <option value="PL">{{agile_translate "countries" "PL"}}</option>
+		            <option value="PT">{{agile_translate "countries" "PT"}}</option>
+		            <option value="PR">{{agile_translate "countries" "PR"}}</option>
+		            <option value="QA">{{agile_translate "countries" "QA"}}</option>
+		            <option value="RE">{{agile_translate "countries" "RE"}}</option>
+		            <option value="RO">{{agile_translate "countries" "RO"}}</option>
 		            <option value="RU">Russia</option>
-		            <option value="RW">Rwanda</option>
-		            <option value="SH">Saint Helena</option>
-		            <option value="KN">Saint Kitts And Nevis</option>
-		            <option value="LC">Saint Lucia</option>
-		            <option value="PM">Saint Pierre And Miquelon</option>
+		            <option value="RW">{{agile_translate "countries" "RW"}}</option>
+		            <option value="SH">{{agile_translate "countries" "SH"}}</option>
+		            <option value="KN">Saint Kitts And Nev{{agile_translate "contacts-view" "is"}}</option>
+		            <option value="LC">{{agile_translate "countries" "LC"}}</option>
+		            <option value="PM">Saint Pierre And Miquel{{agile_translate "contacts-view" "on"}}</option>
 		            <option value="VC">Saint Vincent And The Grenadines</option>
-		            <option value="WS">Samoa</option>
-		            <option value="SM">San Marino</option>
+		            <option value="WS">{{agile_translate "countries" "WS"}}</option>
+		            <option value="SM">{{agile_translate "countries" "SM"}}</option>
 		            <option value="ST">Sao Tome And Principe</option>
-		            <option value="SA">Saudi Arabia</option>
-		            <option value="SN">Senegal</option>
-		            <option value="RS">Serbia</option>
-		            <option value="CS">Serbia and Montenegro</option>
-		            <option value="SC">Seychelles</option>
-		            <option value="SL">Sierra Leone</option>
-		            <option value="SG">Singapore</option>
-		            <option value="SK">Slovakia</option>
-		            <option value="SI">Slovenia</option>
-		            <option value="SB">Solomon Islands</option>
-		            <option value="SO">Somalia</option>
-		            <option value="ZA">South Africa</option>
+		            <option value="SA">{{agile_translate "countries" "SA"}}</option>
+		            <option value="SN">{{agile_translate "countries" "SN"}}</option>
+		            <option value="RS">{{agile_translate "countries" "RS"}}</option>
+		            <option value="CS">Serbia and {{agile_translate "countries" "ME"}}</option>
+		            <option value="SC">{{agile_translate "countries" "SC"}}</option>
+		            <option value="SL">{{agile_translate "countries" "SL"}}</option>
+		            <option value="SG">{{agile_translate "countries" "SG"}}</option>
+		            <option value="SK">{{agile_translate "countries" "SK"}}</option>
+		            <option value="SI">{{agile_translate "countries" "SI"}}</option>
+		            <option value="SB">{{agile_translate "countries" "SB"}}</option>
+		            <option value="SO">{{agile_translate "countries" "SO"}}</option>
+		            <option value="ZA">{{agile_translate "countries" "ZA"}}</option>
 		            <option value="GS">South Georgia And The South Sandwich Islands</option>
 		            <option value="KR">South Korea</option>
-		            <option value="ES">Spain</option>
-		            <option value="LK">Sri Lanka</option>
-		            <option value="SD">Sudan</option>
-		            <option value="SR">Suriname</option>
+		            <option value="ES">{{agile_translate "countries" "ES"}}</option>
+		            <option value="LK">{{agile_translate "countries" "LK"}}</option>
+		            <option value="SD">{{agile_translate "countries" "SD"}}</option>
+		            <option value="SR">{{agile_translate "countries" "SR"}}</option>
 		            <option value="SJ">Svalbard And Jan Mayen</option>
-		            <option value="SZ">Swaziland</option>
-		            <option value="SE">Sweden</option>
-		            <option value="CH">Switzerland</option>
+		            <option value="SZ">{{agile_translate "countries" "SZ"}}</option>
+		            <option value="SE">{{agile_translate "countries" "SE"}}</option>
+		            <option value="CH">{{agile_translate "countries" "CH"}}</option>
 		            <option value="SY">Syria</option>
-		            <option value="TW">Taiwan</option>
-		            <option value="TJ">Tajikistan</option>
+		            <option value="TW">{{agile_translate "countries" "TW"}}</option>
+		            <option value="TJ">{{agile_translate "countries" "TJ"}}</option>
 		            <option value="TZ">Tanzania</option>
-		            <option value="TH">Thailand</option>
-		            <option value="CD">The Democratic Republic Of Congo</option>
-		            <option value="TL">Timor-Leste</option>
-		            <option value="TG">Togo</option>
-		            <option value="TK">Tokelau</option>
-		            <option value="TO">Tonga</option>
-		            <option value="TT">Trinidad and Tobago</option>
-		            <option value="TN">Tunisia</option>
-		            <option value="TR">Turkey</option>
-		            <option value="TM">Turkmenistan</option>
+		            <option value="TH">{{agile_translate "countries" "TH"}}</option>
+		            <option value="CD">The Democratic Republic Of {{agile_translate "countries" "CG"}}</option>
+		            <option value="TL">{{agile_translate "countries" "TL"}}</option>
+		            <option value="TG">{{agile_translate "countries" "TG"}}</option>
+		            <option value="TK">{{agile_translate "countries" "TK"}}</option>
+		            <option value="TO">{{agile_translate "countries" "TO"}}</option>
+		            <option value="TT">{{agile_translate "countries" "TT"}}</option>
+		            <option value="TN">{{agile_translate "countries" "TN"}}</option>
+		            <option value="TR">{{agile_translate "countries" "TR"}}</option>
+		            <option value="TM">{{agile_translate "countries" "TM"}}</option>
 		            <option value="TC">Turks And Caicos Islands</option>
-		            <option value="TV">Tuvalu</option>
+		            <option value="TV">{{agile_translate "countries" "TV"}}</option>
 		            <option value="VI">U.S. Virgin Islands</option>
-		            <option value="UG">Uganda</option>
-		            <option value="UA">Ukraine</option>
-		            <option value="AE">United Arab Emirates</option>
-		            <option value="GB">United Kingdom</option>
-		            <option value="US">United States</option>
-		            <option value="UM">United States Minor Outlying Islands</option>
-		            <option value="UY">Uruguay</option>
-		            <option value="UZ">Uzbekistan</option>
-		            <option value="VU">Vanuatu</option>
+		            <option value="UG">{{agile_translate "countries" "UG"}}</option>
+		            <option value="UA">{{agile_translate "countries" "UA"}}</option>
+		            <option value="AE">{{agile_translate "countries" "AE"}}</option>
+		            <option value="GB">{{agile_translate "countries" "GB"}}</option>
+		            <option value="US">{{agile_translate "countries" "US"}}</option>
+		            <option value="UM">{{agile_translate "countries" "UM"}}</option>
+		            <option value="UY">{{agile_translate "countries" "UY"}}</option>
+		            <option value="UZ">{{agile_translate "countries" "UZ"}}</option>
+		            <option value="VU">{{agile_translate "countries" "VU"}}</option>
 		            <option value="VA">Vatican</option>
-		            <option value="VE">Venezuela</option>
+		            <option value="VE">{{agile_translate "countries" "VE"}}</option>
 		            <option value="VN">Vietnam</option>
 		            <option value="WF">Wallis And Futuna</option>
-		            <option value="EH">Western Sahara</option>
-		            <option value="YE">Yemen</option>
-		            <option value="ZM">Zambia</option>
-		            <option value="ZW">Zimbabwe</option>
+		            <option value="EH">{{agile_translate "countries" "EH"}}</option>
+		            <option value="YE">{{agile_translate "countries" "YE"}}</option>
+		            <option value="ZM">{{agile_translate "countries" "ZM"}}</option>
+		            <option value="ZW">{{agile_translate "countries" "ZW"}}</option>
 		            <option value="AX">&#197;land Islands</option>
 	        	</select>
 				 
@@ -865,8 +856,7 @@
 <div class="bg-light">
 		<span class="pull-left m-l-md">
 			<a href="#" id="clear-lhs-contact-filters" class="text-sm text-muted text-xs link-color" style="color: #23b7e5;">
-				 Clear
-			</a>
+				 {{agile_translate "deal-view" "clear"}}</a>
 		</span>
 		<div class="clearfix"></div>
 </div>
@@ -891,8 +881,7 @@
       
 
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Tags
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "report-add" "tags"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="tags_div" style="position: relative;">
 
 	
@@ -900,8 +889,8 @@
 				<div class="hide master-tags-add-div pos-rlt m-t-xs" style="margin-top:8px;">
 					<input class="form-control" type="hidden" name="LHS" value="tags">
 					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
+						<option value="EQUALS" class="tags">{{agile_translate "contacts-view" "is"}}</option>
+						<option value="NOTEQUALS" class="tags">{{agile_translate "contacts-view" "is-not"}}</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs companies_input">
 						<span id="RHS" class="no-filter-action">
@@ -917,10 +906,10 @@
 				<div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
 					<input type="hidden" name="LHS" value="tags">
 					<select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
-						<option value="DEFINED" class="tags">is defined</option>
-						<option value="NOT_DEFINED" class="tags">is not defined</option>
+						<option value="EQUALS" class="tags">{{agile_translate "contacts-view" "is"}}</option>
+						<option value="NOTEQUALS" class="tags">{{agile_translate "contacts-view" "is-not"}}</option>
+						<option value="DEFINED" class="tags">{{agile_translate "contacts-view" "is-defined"}}</option>
+						<option value="NOT_DEFINED" class="tags">{{agile_translate "contacts-view" "is-not-defined"}}</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
@@ -936,7 +925,7 @@
 		</div>	
 
 		<div class="m-t-xs">
-						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="tags" id="addBtn"><i class="icon-plus"></i> Add</a>
+						<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;" data-name="tags" id="addBtn"><i class="icon-plus"></i> {{agile_translate "other" "add"}}</a>
 					</div>
 			
 	</div>
@@ -953,15 +942,14 @@
         
 	<div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Score
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "report-add" "score"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="lead_score_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" class="form-control" value="lead_score">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
@@ -997,16 +985,15 @@
         <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Star Value
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "contacts-view" "Star value"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="star_value_div">
 
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="star_value">
 		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
@@ -1038,20 +1025,19 @@
         <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Owner
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "contact-details" "owner"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="owner_id_div">
 
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="owner_id">
 		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
-			<option value="EQUALS">is</option>
-			<option value="NOTEQUALS">isn't</option>
+			<option value="EQUALS">{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS">{{agile_translate "contacts-view" "is-not"}}</option>
 		</select>
 		
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
-				<select id="owner_select" class="required form-control companies_input" name="temp1" prev-val="" ><option class="default-select" value="">Select...</option></select>
+				<select id="owner_select" class="required form-control companies_input" name="temp1" prev-val="" ><option class="default-select" value="">{{agile_translate "contacts-view" "select"}}</option></select>
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs" style="opacity: 0.9;" ><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
@@ -1072,19 +1058,18 @@
         <div class="control-group  lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Created Date
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "tickets" "Created&nbsp;Date"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="created_time_div">
 
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control companies_input" >
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
-			<option value="NEXT">in next</option>
+			<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+			<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+			<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+			<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
+			<option value="NEXT">{{agile_translate "contacts-view" "in-next"}}</option>
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
@@ -1120,17 +1105,16 @@
       <div class="panel-body">
         <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-	Updated Date
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+	{{agile_translate "contacts-view" "updated date"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="updated_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="updated_time" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
+			<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+			<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+			<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+			<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
@@ -1169,15 +1153,14 @@
 <div class="control-group  lhs-row-filter p-n" style="border-bottom: solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;" >
 
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-		Name
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "deal-view" "name"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="name_div">
 
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="name" />
 		<select id="between_filter" name="CONDITION" class="form-control companies_input"  >
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
@@ -1201,16 +1184,15 @@
       <div class="panel-body">
         <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;font-size:10px;">
 	<a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover">
-		Country
-		<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
+		{{agile_translate "contacts-view" "country"}}<i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
 	<div class="controls m-t-xs hide" id="country_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="country" class="form-control">
 		<select id="between_filter" name="CONDITION" class="form-control text-xs" style="height:30px;">
-			<option value="EQUALS">is</option>
-			<option value="NOTEQUALS">isn't</option>
-			<option value="DEFINED">is defined</option>
-			<option value="NOT_DEFINED">is not defined</option>
+			<option value="EQUALS">{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS">{{agile_translate "contacts-view" "is-not"}}</option>
+			<option value="DEFINED">{{agile_translate "contacts-view" "is-defined"}}</option>
+			<option value="NOT_DEFINED">{{agile_translate "contacts-view" "is-not-defined"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS condition_container m-t-xs">
 			<span id="RHS">
@@ -1219,250 +1201,250 @@
  				-->
 				<select class="styled form-control m-b-sm required" prev-val="">
 		            <option value=""></option>
-		            <option value="AF">Afghanistan</option>
-		            <option value="AL">Albania</option>
-		            <option value="DZ">Algeria</option>
-		            <option value="AS">American Samoa</option>
-		            <option value="AD">Andorra</option>
-		            <option value="AO">Angola</option>
-		            <option value="AI">Anguilla</option>
-		            <option value="AQ">Antarctica</option>
-		            <option value="AG">Antigua and Barbuda</option>
-		            <option value="AR">Argentina</option>
-		            <option value="AM">Armenia</option>
-		            <option value="AW">Aruba</option>
-		            <option value="AU">Australia</option>
-		            <option value="AT">Austria</option>
-		            <option value="AZ">Azerbaijan</option>
-		            <option value="BS">Bahamas</option>
-		            <option value="BH">Bahrain</option>
-		            <option value="BD">Bangladesh</option>
-		            <option value="BB">Barbados</option>
-		            <option value="BY">Belarus</option>
-		            <option value="BE">Belgium</option>
-		            <option value="BZ">Belize</option>
-		            <option value="BJ">Benin</option>
-		            <option value="BM">Bermuda</option>
-		            <option value="BT">Bhutan</option>
-		            <option value="BO">Bolivia</option>
-		            <option value="BA">Bosnia and Herzegovina</option>
-		            <option value="BW">Botswana</option>
-		            <option value="BV">Bouvet Island</option>
-		            <option value="BR">Brazil</option>
-		            <option value="IO">British Indian Ocean Territory</option>
+		            <option value="AF">{{agile_translate "countries" "AF"}}</option>
+		            <option value="AL">{{agile_translate "countries" "AL"}}</option>
+		            <option value="DZ">{{agile_translate "countries" "DZ"}}</option>
+		            <option value="AS">{{agile_translate "countries" "AS"}}</option>
+		            <option value="AD">{{agile_translate "countries" "AD"}}</option>
+		            <option value="AO">{{agile_translate "countries" "AO"}}</option>
+		            <option value="AI">{{agile_translate "countries" "AI"}}</option>
+		            <option value="AQ">{{agile_translate "countries" "AQ"}}</option>
+		            <option value="AG">{{agile_translate "countries" "AG"}}</option>
+		            <option value="AR">{{agile_translate "countries" "AR"}}</option>
+		            <option value="AM">{{agile_translate "countries" "AM"}}</option>
+		            <option value="AW">{{agile_translate "countries" "AW"}}</option>
+		            <option value="AU">{{agile_translate "countries" "AU"}}</option>
+		            <option value="AT">{{agile_translate "countries" "AT"}}</option>
+		            <option value="AZ">{{agile_translate "countries" "AZ"}}</option>
+		            <option value="BS">{{agile_translate "countries" "BS"}}</option>
+		            <option value="BH">{{agile_translate "countries" "BH"}}</option>
+		            <option value="BD">{{agile_translate "countries" "BD"}}</option>
+		            <option value="BB">{{agile_translate "countries" "BB"}}</option>
+		            <option value="BY">{{agile_translate "countries" "BY"}}</option>
+		            <option value="BE">{{agile_translate "countries" "BE"}}</option>
+		            <option value="BZ">{{agile_translate "countries" "BZ"}}</option>
+		            <option value="BJ">{{agile_translate "countries" "BJ"}}</option>
+		            <option value="BM">{{agile_translate "countries" "BM"}}</option>
+		            <option value="BT">{{agile_translate "countries" "BT"}}</option>
+		            <option value="BO">{{agile_translate "countries" "BO"}}</option>
+		            <option value="BA">{{agile_translate "countries" "BA"}}</option>
+		            <option value="BW">{{agile_translate "countries" "BW"}}</option>
+		            <option value="BV">{{agile_translate "countries" "BV"}}</option>
+		            <option value="BR">{{agile_translate "countries" "BR"}}</option>
+		            <option value="IO">{{agile_translate "countries" "IO"}}</option>
 		            <option value="VG">British Virgin Islands</option>
 		            <option value="BN">Brunei</option>
-		            <option value="BG">Bulgaria</option>
-		            <option value="BF">Burkina Faso</option>
-		            <option value="BI">Burundi</option>
-		            <option value="KH">Cambodia</option>
-		            <option value="CM">Cameroon</option>
-		            <option value="CA">Canada</option>
-		            <option value="CV">Cape Verde</option>
-		            <option value="KY">Cayman Islands</option>
-		            <option value="CF">Central African Republic</option>
-		            <option value="TD">Chad</option>
-		            <option value="CL">Chile</option>
-		            <option value="CN">China</option>
-		            <option value="CX">Christmas Island</option>
+		            <option value="BG">{{agile_translate "countries" "BG"}}</option>
+		            <option value="BF">{{agile_translate "countries" "BF"}}</option>
+		            <option value="BI">{{agile_translate "countries" "BI"}}</option>
+		            <option value="KH">{{agile_translate "countries" "KH"}}</option>
+		            <option value="CM">{{agile_translate "countries" "CM"}}</option>
+		            <option value="CA">{{agile_translate "countries" "CA"}}</option>
+		            <option value="CV">{{agile_translate "countries" "CV"}}</option>
+		            <option value="KY">{{agile_translate "countries" "KY"}}</option>
+		            <option value="CF">{{agile_translate "countries" "CF"}}</option>
+		            <option value="TD">{{agile_translate "countries" "TD"}}</option>
+		            <option value="CL">{{agile_translate "countries" "CL"}}</option>
+		            <option value="CN">{{agile_translate "countries" "CN"}}</option>
+		            <option value="CX">{{agile_translate "countries" "CX"}}</option>
 		            <option value="CC">Cocos Islands</option>
-		            <option value="CO">Colombia</option>
-		            <option value="KM">Comoros</option>
-		            <option value="CG">Congo</option>
-		            <option value="CK">Cook Islands</option>
-		            <option value="CR">Costa Rica</option>
-		            <option value="HR">Croatia</option>
-		            <option value="CU">Cuba</option>
-		            <option value="CY">Cyprus</option>
-		            <option value="CZ">Czech Republic</option>
+		            <option value="CO">{{agile_translate "countries" "CO"}}</option>
+		            <option value="KM">{{agile_translate "countries" "KM"}}</option>
+		            <option value="CG">{{agile_translate "countries" "CG"}}</option>
+		            <option value="CK">{{agile_translate "countries" "CK"}}</option>
+		            <option value="CR">{{agile_translate "countries" "CR"}}</option>
+		            <option value="HR">{{agile_translate "countries" "HR"}}</option>
+		            <option value="CU">{{agile_translate "countries" "CU"}}</option>
+		            <option value="CY">{{agile_translate "countries" "CY"}}</option>
+		            <option value="CZ">{{agile_translate "countries" "CZ"}}</option>
 		            <option value="CI">C&#244;te d'Ivoire</option>
-		            <option value="DK">Denmark</option>
-		            <option value="DJ">Djibouti</option>
-		            <option value="DM">Dominica</option>
-		            <option value="DO">Dominican Republic</option>
-		            <option value="EC">Ecuador</option>
-		            <option value="EG">Egypt</option>
-		            <option value="SV">El Salvador</option>
-		            <option value="GQ">Equatorial Guinea</option>
-		            <option value="ER">Eritrea</option>
-		            <option value="EE">Estonia</option>
-		            <option value="ET">Ethiopia</option>
+		            <option value="DK">{{agile_translate "countries" "DK"}}</option>
+		            <option value="DJ">{{agile_translate "countries" "DJ"}}</option>
+		            <option value="DM">{{agile_translate "countries" "DM"}}</option>
+		            <option value="DO">{{agile_translate "countries" "DO"}}</option>
+		            <option value="EC">{{agile_translate "countries" "EC"}}</option>
+		            <option value="EG">{{agile_translate "countries" "EG"}}</option>
+		            <option value="SV">{{agile_translate "countries" "SV"}}</option>
+		            <option value="GQ">{{agile_translate "countries" "GQ"}}</option>
+		            <option value="ER">{{agile_translate "countries" "ER"}}</option>
+		            <option value="EE">{{agile_translate "countries" "EE"}}</option>
+		            <option value="ET">{{agile_translate "countries" "ET"}}</option>
 		            <option value="FK">Falkland Islands</option>
-		            <option value="FO">Faroe Islands</option>
-		            <option value="FJ">Fiji</option>
-		            <option value="FI">Finland</option>
-		            <option value="FR">France</option>
-		            <option value="GF">French Guiana</option>
-		            <option value="PF">French Polynesia</option>
-		            <option value="TF">French Southern Territories</option>
-		            <option value="GA">Gabon</option>
-		            <option value="GM">Gambia</option>
-		            <option value="GE">Georgia</option>
-		            <option value="DE">Germany</option>
-		            <option value="GH">Ghana</option>
-		            <option value="GI">Gibraltar</option>
-		            <option value="GR">Greece</option>
-		            <option value="GL">Greenland</option>
-		            <option value="GD">Grenada</option>
-		            <option value="GP">Guadeloupe</option>
-		            <option value="GU">Guam</option>
-		            <option value="GT">Guatemala</option>
-		            <option value="GG">Guernsey</option>
-		            <option value="GN">Guinea</option>
-		            <option value="GW">Guinea-Bissau</option>
-		            <option value="GY">Guyana</option>
-		            <option value="HT">Haiti</option>
+		            <option value="FO">{{agile_translate "countries" "FO"}}</option>
+		            <option value="FJ">{{agile_translate "countries" "FJ"}}</option>
+		            <option value="FI">{{agile_translate "countries" "FI"}}</option>
+		            <option value="FR">{{agile_translate "countries" "FR"}}</option>
+		            <option value="GF">{{agile_translate "countries" "GF"}}</option>
+		            <option value="PF">{{agile_translate "countries" "PF"}}</option>
+		            <option value="TF">{{agile_translate "countries" "TF"}}</option>
+		            <option value="GA">{{agile_translate "countries" "GA"}}</option>
+		            <option value="GM">{{agile_translate "countries" "GM"}}</option>
+		            <option value="GE">{{agile_translate "countries" "GE"}}</option>
+		            <option value="DE">{{agile_translate "countries" "DE"}}</option>
+		            <option value="GH">{{agile_translate "countries" "GH"}}</option>
+		            <option value="GI">{{agile_translate "countries" "GI"}}</option>
+		            <option value="GR">{{agile_translate "countries" "GR"}}</option>
+		            <option value="GL">{{agile_translate "countries" "GL"}}</option>
+		            <option value="GD">{{agile_translate "countries" "GD"}}</option>
+		            <option value="GP">{{agile_translate "countries" "GP"}}</option>
+		            <option value="GU">{{agile_translate "countries" "GU"}}</option>
+		            <option value="GT">{{agile_translate "countries" "GT"}}</option>
+		            <option value="GG">{{agile_translate "countries" "GG"}}</option>
+		            <option value="GN">{{agile_translate "countries" "GN"}}</option>
+		            <option value="GW">{{agile_translate "countries" "GW"}}</option>
+		            <option value="GY">{{agile_translate "countries" "GY"}}</option>
+		            <option value="HT">{{agile_translate "countries" "HT"}}</option>
 		            <option value="HM">Heard Island And McDonald Islands</option>
-		            <option value="HN">Honduras</option>
-		            <option value="HK">Hong Kong</option>
-		            <option value="HU">Hungary</option>
-		            <option value="IS">Iceland</option>
-		            <option value="IN">India</option>
-		            <option value="ID">Indonesia</option>
+		            <option value="HN">{{agile_translate "countries" "HN"}}</option>
+		            <option value="HK">{{agile_translate "countries" "HK"}}</option>
+		            <option value="HU">{{agile_translate "countries" "HU"}}</option>
+		            <option value="IS">{{agile_translate "countries" "IS"}}</option>
+		            <option value="IN">{{agile_translate "countries" "IN"}}</option>
+		            <option value="ID">{{agile_translate "countries" "ID"}}</option>
 		            <option value="IR">Iran</option>
-		            <option value="IQ">Iraq</option>
-		            <option value="IE">Ireland</option>
+		            <option value="IQ">{{agile_translate "countries" "IQ"}}</option>
+		            <option value="IE">{{agile_translate "countries" "IE"}}</option>
 		            <option value="IM">Isle Of Man</option>
-		            <option value="IL">Israel</option>
-		            <option value="IT">Italy</option>
-		            <option value="JM">Jamaica</option>
-		            <option value="JP">Japan</option>
-		            <option value="JE">Jersey</option>
-		            <option value="JO">Jordan</option>
-		            <option value="KZ">Kazakhstan</option>
-		            <option value="KE">Kenya</option>
-		            <option value="KI">Kiribati</option>
-		            <option value="KW">Kuwait</option>
-		            <option value="KG">Kyrgyzstan</option>
+		            <option value="IL">{{agile_translate "countries" "IL"}}</option>
+		            <option value="IT">{{agile_translate "countries" "IT"}}</option>
+		            <option value="JM">{{agile_translate "countries" "JM"}}</option>
+		            <option value="JP">{{agile_translate "countries" "JP"}}</option>
+		            <option value="JE">{{agile_translate "countries" "JE"}}</option>
+		            <option value="JO">{{agile_translate "countries" "JO"}}</option>
+		            <option value="KZ">{{agile_translate "countries" "KZ"}}</option>
+		            <option value="KE">{{agile_translate "countries" "KE"}}</option>
+		            <option value="KI">{{agile_translate "countries" "KI"}}</option>
+		            <option value="KW">{{agile_translate "countries" "KW"}}</option>
+		            <option value="KG">{{agile_translate "countries" "KG"}}</option>
 		            <option value="LA">Laos</option>
-		            <option value="LV">Latvia</option>
-		            <option value="LB">Lebanon</option>
-		            <option value="LS">Lesotho</option>
-		            <option value="LR">Liberia</option>
+		            <option value="LV">{{agile_translate "countries" "LV"}}</option>
+		            <option value="LB">{{agile_translate "countries" "LB"}}</option>
+		            <option value="LS">{{agile_translate "countries" "LS"}}</option>
+		            <option value="LR">{{agile_translate "countries" "LR"}}</option>
 		            <option value="LY">Libya</option>
-		            <option value="LI">Liechtenstein</option>
-		            <option value="LT">Lithuania</option>
-		            <option value="LU">Luxembourg</option>
-		            <option value="MO">Macao</option>
+		            <option value="LI">{{agile_translate "countries" "LI"}}</option>
+		            <option value="LT">{{agile_translate "countries" "LT"}}</option>
+		            <option value="LU">{{agile_translate "countries" "LU"}}</option>
+		            <option value="MO">{{agile_translate "countries" "MO"}}</option>
 		            <option value="MK">Macedonia</option>
-		            <option value="MG">Madagascar</option>
-		            <option value="MW">Malawi</option>
-		            <option value="MY">Malaysia</option>
-		            <option value="MV">Maldives</option>
-		            <option value="ML">Mali</option>
-		            <option value="MT">Malta</option>
-		            <option value="MH">Marshall Islands</option>
-		            <option value="MQ">Martinique</option>
-		            <option value="MR">Mauritania</option>
-		            <option value="MU">Mauritius</option>
-		            <option value="YT">Mayotte</option>
-		            <option value="MX">Mexico</option>
+		            <option value="MG">{{agile_translate "countries" "MG"}}</option>
+		            <option value="MW">{{agile_translate "countries" "MW"}}</option>
+		            <option value="MY">{{agile_translate "countries" "MY"}}</option>
+		            <option value="MV">{{agile_translate "countries" "MV"}}</option>
+		            <option value="ML">{{agile_translate "countries" "ML"}}</option>
+		            <option value="MT">{{agile_translate "countries" "MT"}}</option>
+		            <option value="MH">{{agile_translate "countries" "MH"}}</option>
+		            <option value="MQ">{{agile_translate "countries" "MQ"}}</option>
+		            <option value="MR">{{agile_translate "countries" "MR"}}</option>
+		            <option value="MU">{{agile_translate "countries" "MU"}}</option>
+		            <option value="YT">{{agile_translate "countries" "YT"}}</option>
+		            <option value="MX">{{agile_translate "countries" "MX"}}</option>
 		            <option value="FM">Micronesia</option>
 		            <option value="MD">Moldova</option>
-		            <option value="MC">Monaco</option>
-		            <option value="MN">Mongolia</option>
-		            <option value="ME">Montenegro</option>
-		            <option value="MS">Montserrat</option>
-		            <option value="MA">Morocco</option>
-		            <option value="MZ">Mozambique</option>
-		            <option value="MM">Myanmar</option>
-		            <option value="NA">Namibia</option>
-		            <option value="NR">Nauru</option>
-		            <option value="NP">Nepal</option>
-		            <option value="NL">Netherlands</option>
-		            <option value="AN">Netherlands Antilles</option>
-		            <option value="NC">New Caledonia</option>
-		            <option value="NZ">New Zealand</option>
-		            <option value="NI">Nicaragua</option>
-		            <option value="NE">Niger</option>
-		            <option value="NG">Nigeria</option>
-		            <option value="NU">Niue</option>
-		            <option value="NF">Norfolk Island</option>
+		            <option value="MC">{{agile_translate "countries" "MC"}}</option>
+		            <option value="MN">{{agile_translate "countries" "MN"}}</option>
+		            <option value="ME">{{agile_translate "countries" "ME"}}</option>
+		            <option value="MS">{{agile_translate "countries" "MS"}}</option>
+		            <option value="MA">{{agile_translate "countries" "MA"}}</option>
+		            <option value="MZ">{{agile_translate "countries" "MZ"}}</option>
+		            <option value="MM">{{agile_translate "countries" "MM"}}</option>
+		            <option value="NA">{{agile_translate "countries" "NA"}}</option>
+		            <option value="NR">{{agile_translate "countries" "NR"}}</option>
+		            <option value="NP">{{agile_translate "countries" "NP"}}</option>
+		            <option value="NL">{{agile_translate "countries" "NL"}}</option>
+		            <option value="AN">{{agile_translate "countries" "AN"}}</option>
+		            <option value="NC">{{agile_translate "countries" "NC"}}</option>
+		            <option value="NZ">{{agile_translate "countries" "NZ"}}</option>
+		            <option value="NI">{{agile_translate "countries" "NI"}}</option>
+		            <option value="NE">{{agile_translate "countries" "NE"}}</option>
+		            <option value="NG">{{agile_translate "countries" "NG"}}</option>
+		            <option value="NU">{{agile_translate "countries" "NU"}}</option>
+		            <option value="NF">{{agile_translate "countries" "NF"}}</option>
 		            <option value="KP">North Korea</option>
-		            <option value="MP">Northern Mariana Islands</option>
-		            <option value="NO">Norway</option>
-		            <option value="OM">Oman</option>
-		            <option value="PK">Pakistan</option>
-		            <option value="PW">Palau</option>
+		            <option value="MP">{{agile_translate "countries" "MP"}}</option>
+		            <option value="NO">{{agile_translate "countries" "NO"}}</option>
+		            <option value="OM">{{agile_translate "countries" "OM"}}</option>
+		            <option value="PK">{{agile_translate "countries" "PK"}}</option>
+		            <option value="PW">{{agile_translate "countries" "PW"}}</option>
 		            <option value="PS">Palestine</option>
-		            <option value="PA">Panama</option>
-		            <option value="PG">Papua New Guinea</option>
-		            <option value="PY">Paraguay</option>
-		            <option value="PE">Peru</option>
-		            <option value="PH">Philippines</option>
-		            <option value="PN">Pitcairn</option>
-		            <option value="PL">Poland</option>
-		            <option value="PT">Portugal</option>
-		            <option value="PR">Puerto Rico</option>
-		            <option value="QA">Qatar</option>
-		            <option value="RE">Reunion</option>
-		            <option value="RO">Romania</option>
+		            <option value="PA">{{agile_translate "countries" "PA"}}</option>
+		            <option value="PG">{{agile_translate "countries" "PG"}}</option>
+		            <option value="PY">{{agile_translate "countries" "PY"}}</option>
+		            <option value="PE">{{agile_translate "countries" "PE"}}</option>
+		            <option value="PH">{{agile_translate "countries" "PH"}}</option>
+		            <option value="PN">{{agile_translate "countries" "PN"}}</option>
+		            <option value="PL">{{agile_translate "countries" "PL"}}</option>
+		            <option value="PT">{{agile_translate "countries" "PT"}}</option>
+		            <option value="PR">{{agile_translate "countries" "PR"}}</option>
+		            <option value="QA">{{agile_translate "countries" "QA"}}</option>
+		            <option value="RE">{{agile_translate "countries" "RE"}}</option>
+		            <option value="RO">{{agile_translate "countries" "RO"}}</option>
 		            <option value="RU">Russia</option>
-		            <option value="RW">Rwanda</option>
-		            <option value="SH">Saint Helena</option>
-		            <option value="KN">Saint Kitts And Nevis</option>
-		            <option value="LC">Saint Lucia</option>
-		            <option value="PM">Saint Pierre And Miquelon</option>
+		            <option value="RW">{{agile_translate "countries" "RW"}}</option>
+		            <option value="SH">{{agile_translate "countries" "SH"}}</option>
+		            <option value="KN">Saint Kitts And Nev{{agile_translate "contacts-view" "is"}}</option>
+		            <option value="LC">{{agile_translate "countries" "LC"}}</option>
+		            <option value="PM">Saint Pierre And Miquel{{agile_translate "contacts-view" "on"}}</option>
 		            <option value="VC">Saint Vincent And The Grenadines</option>
-		            <option value="WS">Samoa</option>
-		            <option value="SM">San Marino</option>
+		            <option value="WS">{{agile_translate "countries" "WS"}}</option>
+		            <option value="SM">{{agile_translate "countries" "SM"}}</option>
 		            <option value="ST">Sao Tome And Principe</option>
-		            <option value="SA">Saudi Arabia</option>
-		            <option value="SN">Senegal</option>
-		            <option value="RS">Serbia</option>
-		            <option value="CS">Serbia and Montenegro</option>
-		            <option value="SC">Seychelles</option>
-		            <option value="SL">Sierra Leone</option>
-		            <option value="SG">Singapore</option>
-		            <option value="SK">Slovakia</option>
-		            <option value="SI">Slovenia</option>
-		            <option value="SB">Solomon Islands</option>
-		            <option value="SO">Somalia</option>
-		            <option value="ZA">South Africa</option>
+		            <option value="SA">{{agile_translate "countries" "SA"}}</option>
+		            <option value="SN">{{agile_translate "countries" "SN"}}</option>
+		            <option value="RS">{{agile_translate "countries" "RS"}}</option>
+		            <option value="CS">Serbia and {{agile_translate "countries" "ME"}}</option>
+		            <option value="SC">{{agile_translate "countries" "SC"}}</option>
+		            <option value="SL">{{agile_translate "countries" "SL"}}</option>
+		            <option value="SG">{{agile_translate "countries" "SG"}}</option>
+		            <option value="SK">{{agile_translate "countries" "SK"}}</option>
+		            <option value="SI">{{agile_translate "countries" "SI"}}</option>
+		            <option value="SB">{{agile_translate "countries" "SB"}}</option>
+		            <option value="SO">{{agile_translate "countries" "SO"}}</option>
+		            <option value="ZA">{{agile_translate "countries" "ZA"}}</option>
 		            <option value="GS">South Georgia And The South Sandwich Islands</option>
 		            <option value="KR">South Korea</option>
-		            <option value="ES">Spain</option>
-		            <option value="LK">Sri Lanka</option>
-		            <option value="SD">Sudan</option>
-		            <option value="SR">Suriname</option>
+		            <option value="ES">{{agile_translate "countries" "ES"}}</option>
+		            <option value="LK">{{agile_translate "countries" "LK"}}</option>
+		            <option value="SD">{{agile_translate "countries" "SD"}}</option>
+		            <option value="SR">{{agile_translate "countries" "SR"}}</option>
 		            <option value="SJ">Svalbard And Jan Mayen</option>
-		            <option value="SZ">Swaziland</option>
-		            <option value="SE">Sweden</option>
-		            <option value="CH">Switzerland</option>
+		            <option value="SZ">{{agile_translate "countries" "SZ"}}</option>
+		            <option value="SE">{{agile_translate "countries" "SE"}}</option>
+		            <option value="CH">{{agile_translate "countries" "CH"}}</option>
 		            <option value="SY">Syria</option>
-		            <option value="TW">Taiwan</option>
-		            <option value="TJ">Tajikistan</option>
+		            <option value="TW">{{agile_translate "countries" "TW"}}</option>
+		            <option value="TJ">{{agile_translate "countries" "TJ"}}</option>
 		            <option value="TZ">Tanzania</option>
-		            <option value="TH">Thailand</option>
-		            <option value="CD">The Democratic Republic Of Congo</option>
-		            <option value="TL">Timor-Leste</option>
-		            <option value="TG">Togo</option>
-		            <option value="TK">Tokelau</option>
-		            <option value="TO">Tonga</option>
-		            <option value="TT">Trinidad and Tobago</option>
-		            <option value="TN">Tunisia</option>
-		            <option value="TR">Turkey</option>
-		            <option value="TM">Turkmenistan</option>
+		            <option value="TH">{{agile_translate "countries" "TH"}}</option>
+		            <option value="CD">The Democratic Republic Of {{agile_translate "countries" "CG"}}</option>
+		            <option value="TL">{{agile_translate "countries" "TL"}}</option>
+		            <option value="TG">{{agile_translate "countries" "TG"}}</option>
+		            <option value="TK">{{agile_translate "countries" "TK"}}</option>
+		            <option value="TO">{{agile_translate "countries" "TO"}}</option>
+		            <option value="TT">{{agile_translate "countries" "TT"}}</option>
+		            <option value="TN">{{agile_translate "countries" "TN"}}</option>
+		            <option value="TR">{{agile_translate "countries" "TR"}}</option>
+		            <option value="TM">{{agile_translate "countries" "TM"}}</option>
 		            <option value="TC">Turks And Caicos Islands</option>
-		            <option value="TV">Tuvalu</option>
+		            <option value="TV">{{agile_translate "countries" "TV"}}</option>
 		            <option value="VI">U.S. Virgin Islands</option>
-		            <option value="UG">Uganda</option>
-		            <option value="UA">Ukraine</option>
-		            <option value="AE">United Arab Emirates</option>
-		            <option value="GB">United Kingdom</option>
-		            <option value="US">United States</option>
-		            <option value="UM">United States Minor Outlying Islands</option>
-		            <option value="UY">Uruguay</option>
-		            <option value="UZ">Uzbekistan</option>
-		            <option value="VU">Vanuatu</option>
+		            <option value="UG">{{agile_translate "countries" "UG"}}</option>
+		            <option value="UA">{{agile_translate "countries" "UA"}}</option>
+		            <option value="AE">{{agile_translate "countries" "AE"}}</option>
+		            <option value="GB">{{agile_translate "countries" "GB"}}</option>
+		            <option value="US">{{agile_translate "countries" "US"}}</option>
+		            <option value="UM">{{agile_translate "countries" "UM"}}</option>
+		            <option value="UY">{{agile_translate "countries" "UY"}}</option>
+		            <option value="UZ">{{agile_translate "countries" "UZ"}}</option>
+		            <option value="VU">{{agile_translate "countries" "VU"}}</option>
 		            <option value="VA">Vatican</option>
-		            <option value="VE">Venezuela</option>
+		            <option value="VE">{{agile_translate "countries" "VE"}}</option>
 		            <option value="VN">Vietnam</option>
 		            <option value="WF">Wallis And Futuna</option>
-		            <option value="EH">Western Sahara</option>
-		            <option value="YE">Yemen</option>
-		            <option value="ZM">Zambia</option>
-		            <option value="ZW">Zimbabwe</option>
+		            <option value="EH">{{agile_translate "countries" "EH"}}</option>
+		            <option value="YE">{{agile_translate "countries" "YE"}}</option>
+		            <option value="ZM">{{agile_translate "countries" "ZM"}}</option>
+		            <option value="ZW">{{agile_translate "countries" "ZW"}}</option>
 		            <option value="AX">&#197;land Islands</option>
 	        	</select>
 				 
@@ -1485,7 +1467,7 @@
 <div class="bg-light">
   <span class="pull-left m-l-md">
 
-	<a id="clear-lhs-company-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">Clear</a>
+	<a id="clear-lhs-company-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7!important;">{{agile_translate "deal-view" "clear"}}</a>
 	</span>
 <div class="clearfix"></div>
 

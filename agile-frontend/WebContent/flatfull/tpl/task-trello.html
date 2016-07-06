@@ -4,18 +4,18 @@
 <div class="row">  
 	<div class="col-md-12">
 		     
-			<h3 id="new-task-heading" class="task-heading pull-left font-thin h3">My Pending Tasks<small class="tasks-count"></small></h3>
+			<h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{agile_translate "tasks" "My Pending Tasks"}}<small class="tasks-count"></small></h3>
 		<div class="pull-right">
     <div class="inline-block m-r hide" id="calendarTasksButtons">
-      <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">Today</button>
+      <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">{{agile_translate "calendar" "Today"}}</button>
       <div class="btn-group m-l-xs">
-        <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >Day</button>
-        <!-- <button id="agendaWeek" class="btn btn-sm btn-default taskDayWeekMonth" >Week</button> -->
-        <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >Month</button>
+        <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_translate "calendar" "day"}}</button>
+        <!-- <button id="agendaWeek" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_translate "calendar" "week"}}</button> -->
+        <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_translate "calendar" "month"}}</button>
       </div>
     </div>
 		<div class="btn-group owner-task-button m-r">
-	            <button class="btn btn-default btn-sm selected_name">My Pending Tasks</button>
+	            <button class="btn btn-default btn-sm selected_name">{{agile_translate "tasks" "My Pending Tasks"}}</button>
 	            <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 	            <span class="caret"></span>
 	            </a>
@@ -25,31 +25,30 @@
           {{#is_mobile}}
           {{else}}
 			<div class="btn-group type-task-button c-p m-r">
-		        <button class="btn btn-default btn-sm selected_name">Due</button>
+		        <button class="btn btn-default btn-sm selected_name">{{agile_translate "contact-details" "due"}}</button>
 		        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 		        <span class="caret"></span>
 		        </button>
 		        <ul class="dropdown-menu main-menu" id="new-type-tasks" role="menu">
 		           <li class="dropdown-submenu do-onclick-nothing">
-		               <a data-toggle="dropdown">Group By</a>
+		               <a data-toggle="dropdown">{{agile_translate "tasks" "group-by"}}</a>
 		               <ul class="dropdown-menu w-xs" id="new-type-tasks" style="left:-159px">
-		                  <li><a href="CATEGORY" class="new-type-task">Category</a></li>
-		                  <li><a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">Owner</a></li>
-		                  <li><a href="DUE" class="new-type-task">Due</a></li>
-		                  <li><a href="PRIORITY" class="new-type-task">Priority</a></li>
-		                  <li><a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">Status</a></li>
+		                  <li><a href="CATEGORY" class="new-type-task">{{agile_translate "portlets" "category"}}</a></li>
+		                  <li><a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">{{agile_translate "contact-details" "owner"}}</a></li>
+		                  <li><a href="DUE" class="new-type-task">{{agile_translate "contact-details" "due"}}</a></li>
+		                  <li><a href="PRIORITY" class="new-type-task">{{agile_translate "widgets" "priority"}}</a></li>
+		                  <li><a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">{{agile_translate "widgets" "status"}}</a></li>
 		               </ul>
 		           </li>
 
-		           <li><a href="LIST" class="list-view new-type-task">List View</a></li>
-		           <li><a href="GroupView" class="group-view" style="display:none;">Group View</a></li>
-               <li><a href="CALENDAR" class="calendar-view new-type-task">Calendar View</a></li>                     
+		           <li><a href="LIST" class="list-view new-type-task">{{agile_translate "deal-view" "list-view"}}</a></li>
+		           <li><a href="GroupView" class="group-view" style="display:none;">{{agile_translate "tasks" "group-view"}}</a></li>
+               <li><a href="CALENDAR" class="calendar-view new-type-task">{{agile_translate "report-view" "calendar-view"}}</a></li>                     
 		        </ul>
 		    </div>
         <div class="btn-group type-task-button c-p pull-right">
         <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
-          <i class="icon icon-plus-sign"></i> Add Dashlet
-        </a>
+          <i class="icon icon-plus-sign"></i> {{agile_translate "portlets" "add-dashlet"}}</a>
         </div>
 	        {{/is_mobile}}		
 
@@ -105,7 +104,7 @@
         
      </div>  
      <div id="show_loader"></div>      
-     <div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> Add a task</a></div>     
+     <div class="list-bottom left add-task panel-footer" heading="{{heading}}" ownerID={{owner_id}}><a class="text-info" href="#"><i class="icon-plus" /> {{agile_translate "tasks" "add-a-task"}}</a></div>     
 </script>
 
 <script id="task-collection-template" type="text/html">

@@ -5,7 +5,7 @@
     <div class="modal-content" style="border-radius:0px;">
   <div class="modal-header">
     <button class="close" data-dismiss="modal">&times;</button>
-    <h3 class="modal-title" style="font-size:18px;">&nbsp;Edit Deal</h3>
+    <h3 class="modal-title" style="font-size:18px;">&nbsp;{{agile_translate "modals" "edit-deal"}}</h3>
   </div>
   <div class="modal-body">
     <form id="opportunityUpdateForm" name="opportunityUpdateForm" method="post" class="form-horizontal">
@@ -15,7 +15,7 @@
         <input name="won_date" type="hidden"/>
 
         <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Name<span
+                    <label class="control-label col-sm-3">{{agile_translate "deal-view" "name"}}<span
               class="field_req">*</span></label>
             <div class="controls col-sm-7">
               <span><input id="name" name="name" type="text"
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="control-group form-group">
-            <label class="control-label col-sm-3">Owner<span
+            <label class="control-label col-sm-3">{{agile_translate "contact-details" "owner"}}<span
               class="field_req">*</span></label>
             <div class="controls col-sm-7" id="owners">
               <select id="owners-list" class="required form-control" name="owner_id"></select>
@@ -34,7 +34,7 @@
         </div>
 
         <div class="control-group form-group" style="margin-bottom:0px;"> 
-           <label class="control-label col-sm-3">Value<span class="field_req">*</span></label> 
+           <label class="control-label col-sm-3">{{agile_translate "contacts-view" "value"}}<span class="field_req">*</span></label> 
            <div class="controls col-sm-7"> 
             <div class="form-group row" style="margin-left:0;margin-right:0"> 
              <div class="p-n"> 
@@ -46,7 +46,7 @@
           </div>    
 
               <div class="control-group form-group" style="margin-bottom:0px;"> 
-           <label class="control-label col-sm-3">Probability <span class="field_req">*</span></label> 
+           <label class="control-label col-sm-3">{{agile_translate "deal-view" "probability"}}<span class="field_req">*</span></label> 
            <div class="controls col-sm-7"> 
             <div class="form-group row" style="margin-left:0;margin-right:0"> 
              <div class="col-md-10 p-n" style="width:92%"> 
@@ -58,7 +58,7 @@
           </div>
 
           <div class="control-group form-group">
-            <label class="control-label col-sm-3">Milestone<span
+            <label class="control-label col-sm-3">{{agile_translate "admin-settings-tasks" "Milestone"}}<span
               class="field_req">*</span></label>
             <div class="controls col-sm-7">
               <span><select id="pipeline_milestone" name="pipeline_milestone"
@@ -69,7 +69,7 @@
         </div>
         <div>
             <div class="control-group form-group">
-                <label class="control-label col-sm-3">Close Date</label>
+                <label class="control-label col-sm-3">{{agile_translate "deal-view" "close-date"}}</label>
                 <div class="controls col-sm-7">
                   <span><input id="close_date" placeholder="Select Date" type="text" name="close_date"
                     class="input date form-control" /></span>
@@ -80,7 +80,7 @@
         </div>
 
         <div class="control-group form-group hidden" id="deal_deal_source">
-            <label class="control-label col-sm-3">Deal Source</label>
+            <label class="control-label col-sm-3">{{agile_translate "deal-view" "deal-source"}}</label>
             <div class="controls col-sm-7">
               <span><select id="deal_source" name="deal_source_id"
                 class="form-control">
@@ -89,7 +89,7 @@
             </div>
         </div>
         <div class="control-group form-group">
-            <label class="control-label col-sm-3">Type</label>
+            <label class="control-label col-sm-3">{{agile_translate "contacts-view" "type"}}</label>
             <div class="controls col-sm-7" style="height:32px;overflow:hidden;">
               <span><input type="text" id="color1" name="color1" value="#808080" class=" required form-control" />
                               
@@ -97,7 +97,7 @@
             </div>
         </div>
         <div class="control-group form-group  hidden" id="deal_lost_reason">
-            <label class="control-label col-sm-3">Loss Reason</label>
+            <label class="control-label col-sm-3">{{agile_translate "deal-view" "loss-reason"}}</label>
             <div class="controls col-sm-7">
               <span><select id="lost_reason" name="lost_reason_id"
                 class="form-control">
@@ -106,7 +106,7 @@
             </div>
         </div>
         <div class="control-group form-group" style="margin-bottom:3px;">
-          <label class="control-label col-sm-3">Related To</label>
+          <label class="control-label col-sm-3">{{agile_translate "deal-view" "related-to"}}</label>
           <div class="controls col-sm-7" id="contactTypeAhead">
             <div>
               <input type="text" id="relates_to" name="relates_to"
@@ -120,7 +120,7 @@
           </div>
         </div>
          <div class="control-group form-group" id='tags_source_deal_modal'>
-                      <label class="control-label col-sm-3">Tags</label>
+                      <label class="control-label col-sm-3">{{agile_translate "report-add" "tags"}}</label>
      
                       <div class="controls col-sm-7">
                           <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500" placeholder="Separate tags with commas"/>
@@ -132,21 +132,21 @@
          </div>
          <div class="row invalid-tags-person" style="display:none;">
                     <div class="col-sm-offset-3 col-sm-7">
-                        <div style="color:red;" class="text-sm">Tag name should start with an alphabet and cannot contain special characters other than underscore and space.</div>
+                        <div style="color:red;" class="text-sm">{{agile_translate "modals" "tag-name-description"}}</div>
                     </div>
                 </div>
         <div class="control-group hidden">  
           <label class="i-checks i-checks-sm control-label">
-          <input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i> Archive </label>
+          <input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i> {{agile_translate "deal-view" "archive"}}</label>
         </div>
         
         <div id="custom-field-deals"></div>
 
         <div class="control-group form-group">
-            <label class="control-label col-sm-3">Description</label>
+            <label class="control-label col-sm-3">{{agile_translate "other" "description"}}</label>
             <div class="controls col-sm-7">
               <textarea id="description" name="description" rows="3"
-                class="input col-md-8 form-control" placeholder="Add Comment"></textarea>
+                class="input col-md-8 form-control" placeholder="{{agile_translate "cases" "add-comment"}}</textarea>
             </div>
         </div>
         <div class="row">
@@ -162,8 +162,8 @@
     </div>
     <div class="modal-footer" id="deals-add-footer">
     <span class="error-status" style="color:red;"></span>
-    <a href="#" class="btn btn-sm btn-default" id="opportunity_archive" title="Archive deal">Archive</a>
-    <a href="#" class="btn btn-sm btn-default" id="opportunity_unarchive" title="Move Deal from Archive to Active state">Restore</a>
+    <a href="#" class="btn btn-sm btn-default" id="opportunity_archive" title="Archive deal">{{agile_translate "deal-view" "archive"}}</a>
+    <a href="#" class="btn btn-sm btn-default" id="opportunity_unarchive" title="Move Deal from Archive to Active state">{{agile_translate "deal-view" "restore"}}</a>
     <a href="#" class="btn btn-primary" id="opportunity_validate">Save
       Changes</a> <span class="save-status"></span>
   </div>

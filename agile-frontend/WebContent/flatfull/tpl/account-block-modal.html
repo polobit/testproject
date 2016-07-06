@@ -5,8 +5,8 @@
 			<div class="modal-body">
 				<div class="panel text-center text-md m-b-none bg-light">
 					<div class="panel-body">
-						Your account has dues and has been locked. Please contact our Billing Team at billing@agilecrm.com or update your credit card information by clicking the 'Update Card' button below. 
-					<div class="p-t"><a class="btn btn-success btn-lg" href="#updateCreditCard">Update Card</a></div><span class="text-info text-xs"><a href="/login">Log out</a></span> 
+						{{agile_translate "plan-and-upgrade" "update-card-header"}}
+					<div class="p-t"><a class="btn btn-success btn-lg" href="#updateCreditCard">{{agile_translate "plan-and-upgrade" "update-card"}}</a></div><span class="text-info text-xs"><a href="/login">{{agile_translate "plan-and-upgrade" "log-out"}}</a></span> 
 					</div>
 				</div>
 			</div>
@@ -22,8 +22,8 @@
 			<div class="modal-body">
 				<div class="panel text-center text-md m-b-none bg-light">
 					<div class="panel-body">
-						Your subscription was cancelled and your account has been locked. Please contact our Billing Team at billing@agilecrm.com or upgrade your subscription to any paid plan by clicking the 'Upgrade Subscription' button. 
-					<div class="p-t"><a class="btn btn-success btn-lg" href="#subscribe">Upgrade Subscription</a></div><span class="text-info text-xs"><a href="/login">Log out</a></span> 
+						{{agile_translate "plan-and-upgrade" "update-subscription-header"}} 
+					<div class="p-t"><a class="btn btn-success btn-lg" href="#subscribe">{{agile_translate "plan-and-upgrade" "update-subscription"}} </a></div><span class="text-info text-xs"><a href="/login">{{agile_translate "plan-and-upgrade" "log-out"}}</a></span> 
 					</div>
 				</div>
 			</div>
@@ -34,14 +34,14 @@
 
 <script id="user-alert-template" type="text/html">
 	<div class="user-alert center-div">
- <div class="user-alert-message"><span class="pull-right" onclick="$('#alert-message').hide();">&times</span><a href="#subscribe">Action Required! Your account has pending dues. Please update your credit card information immediately to pay the outstanding amount. Non payment of dues will lead to the suspension of your account.</a></div> 
+ <div class="user-alert-message"><span class="pull-right" onclick="$('#alert-message').hide();">&{{agile_translate "contact-details" "times"}}</span><a href="#subscribe">{{agile_translate "plan-and-upgrade" "account-alert"}}</a></div> 
   </div>
 </div>
 </script>
 
 <script id="free-user-alert-template" type="text/html">
 	<div class="user-alert center-div">
- <div class="free-user-alert-message"> <a class="text-info" href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">Upgrade Now</a></div> 
+ <div class="free-user-alert-message"> <a class="text-info" href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">{{agile_translate "plan-and-upgrade" "upgrade-now"}}</a></div> 
   </div>
 </div>
 </script>
@@ -54,11 +54,11 @@
 				<div class="panel text-center text-md m-b-none bg-light">
 					<div class="panel-body" style="padding: 60px 30px 0 30px;">
 						<div style="padding: 0px 35px 25px 35px;">
-							<p>Your Agile CRM account has been paused.</p><p> To resume the services, please click below.</p>
+							<p>{{agile_translate "plan-and-upgrade" "account-paused"}}</p><p> {{agile_translate "plan-and-upgrade" "account-resume"}}</p>
 							<div class="p-t"><a id="account_resume" class="btn btn-success btn-lg" href="#">Resume</a></div> 
-							<span class="text-info text-xs"><a href="/login">Log out</a></span>
+							<span class="text-info text-xs"><a href="/login">{{agile_translate "plan-and-upgrade" "log-out"}}</a></span>
 						</div>
-						<p class="text-sm p-l-xxl p-r-xxl">Please note that by clicking on 'Resume', your account services will be unlocked and you will be billed automatically.</p>
+						<p class="text-sm p-l-xxl p-r-xxl">{{agile_translate "plan-and-upgrade" "account-resume-note"}}</p>
 					</div>
 				</div>
 			</div>

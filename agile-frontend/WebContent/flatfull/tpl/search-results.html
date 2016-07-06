@@ -53,7 +53,7 @@
         <div class="data">
             <div class="data-container">
                 <div class="btn-group right" id="bulk-actions" style="position: relative; display: none">
-                    <button class="btn btn-sm btn-default">Bulk Actions</button>
+                    <button class="btn btn-sm btn-default">{{agile_translate "contacts-view" "bulk-actions"}}</button>
                     <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="view-actions">
                     <span class="caret"></span>
                     </button>
@@ -63,7 +63,7 @@
                         <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
 						{{/hasMenuScope}}
                         <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
-                        <li><a href="#" id="bulk-tags">Add tags</a></li>
+                        <li><a href="#" id="bulk-tags">Add {{agile_translate "web-rules" "tag"}}</a></li>
                     </ul>
                 </div>
                 <div class="table-responsive">
@@ -72,10 +72,10 @@
                     <thead>
                         <tr>
 							<th></th>
-                            <th style="width:35%">Name</th>
-                            <th style="width:20%">Work</th>
-                            <th style="width:35%">Tags</th>
-                            <th style="width:10%">Lead Score</th>
+                            <th style="width:35%">{{agile_translate "deal-view" "name"}}</th>
+                            <th style="width:20%">{{agile_translate "contact-details" "work"}}</th>
+                            <th style="width:35%">{{agile_translate "report-add" "tags"}}</th>
+                            <th style="width:10%">{{agile_translate "contacts-view" "Lead score"}}</th>
                         </tr>
                     </thead>
                     <tbody id="search-model-list" class="model-list-cursor" route="contact/">

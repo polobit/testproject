@@ -3,7 +3,7 @@
     <div class="modal-content">
     <div class="modal-header warning-header bg-danger">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 class="modal-title">Make sure you want to do this</h3>
+        <h3 class="modal-title">Make sure you want to do th{{agile_translate "contacts-view" "is"}}</h3>
     </div>
     <div class="modal-body">
         <div class="warning-dangerzone">
@@ -24,8 +24,8 @@
         </ul>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-sm btn-danger" data-dismiss="modal">Close</a>
-        <a href="#" id="confirm-delete-account" class="btn btn-sm btn-danger ">Delete Account</a>
+        <a href="#" class="btn btn-sm btn-danger" data-dismiss="modal">{{agile_translate "contact-details" "CLOSE"}}</a>
+        <a href="#" id="confirm-delete-account" class="btn btn-sm btn-danger ">Delete {{agile_translate "admin-settings-stats" "account"}}</a>
     </div>
 </div>
 </div>
@@ -36,7 +36,7 @@
     <div class="modal-content">
     <div class="modal-header warning-header bg-danger">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3  class="modal-title">Make sure you want to do this</h3>
+        <h3  class="modal-title">Make sure you want to do th{{agile_translate "contacts-view" "is"}}</h3>
     </div>
     <div class="modal-body">
             <p>
@@ -72,7 +72,7 @@
 				<li class="p-b-xs">
 					<label class="i-checks i-checks-sm">
 						<input type="radio" name="cancellation_reason" value="Other"  checked="checked" class="extra_info inline" /><i></i></label>
-				        <label for="Other" class="inline">Other</label>
+				        <label for="Other" class="inline">{{agile_translate "admin-settings-tasks" "Other"}}</label>
             	</li>
         	</ul>
 			<div  class="controls">
@@ -81,8 +81,8 @@
 		</form>
 	</div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a>
-        <a href="#" id="warning-feedback-save" class="btn btn-sm btn-danger ">Delete Account</a>
+        <a href="#" class="btn btn-default btn-sm" data-dismiss="modal">{{agile_translate "other" "cancel"}}</a>
+        <a href="#" id="warning-feedback-save" class="btn btn-sm btn-danger ">Delete {{agile_translate "admin-settings-stats" "account"}}</a>
     </div>
 </div>
 </div>
@@ -93,7 +93,7 @@
     <div class="modal-body">
      <button type="button" class="close pull-right m-r-xs" data-dismiss="modal" aria-hidden="true">&times;</button>
      <div class="display-center">
-        <h4>Request for Cancellation</h4>
+        <h4>Request for Cancellati{{agile_translate "contacts-view" "on"}}</h4>
             <p class="p-t-xs">
 			   Please tell us why you want to leave. Your feedback will help us to serve you better.
             </p>
@@ -101,17 +101,17 @@
       <div class="form-group">
         <label>What's the main reason for the cancellation?<span class="field_req">*</span></label>
         <select id="account_cancel_reason" name="account_cancel_reason" class="form-control required">
-          <option value="">-- Select --</option>
+          <option value="">-- {{agile_translate "contacts-view" "select"}}</option>
           <option value="Over Priced">Over Priced</option>
           <option value="Lack of Features">Lack of Features</option>
           <option value="Moving to a different competitor">Moving to a Different Competitor</option>
           <option value="Out of Business">Out of Business</option>
-          <option value="Lack of Good Support">Lack of Good Support</option>
-          <option value="Other">Other</option>
+          <option value="Lack of Good Support">Lack of Good {{agile_translate "menu" "support"}}</option>
+          <option value="Other">{{agile_translate "admin-settings-tasks" "Other"}}</option>
         </select>
       </div>
       <div id="other_cancel_container" class="form-group" style="display: none;">
-        <label>Reason<span class="field_req">*</span></label>
+        <label>{{agile_translate "widgets" "reason"}}<span class="field_req">*</span></label>
         <textarea name="other_cancel_reason" class="form-control w-full" id="other_cancel_reason" rows="3" ></textarea>
       </div>
       <div id="agile_pros_container" class="form-group">
@@ -146,7 +146,7 @@
 	</div>
     <div class="modal-footer">
        
-        <a href="#" class="btn btn-primary btn-sm" data-dismiss="modal">OK</a>
+        <a href="#" class="btn btn-primary btn-sm" data-dismiss="modal">{{agile_translate "admin-settings-integrations" "ok"}}</a>
     </div>
 </div>
 </div>
@@ -166,7 +166,7 @@
                               <div class="bg-box m-r m-l" style="background-color: #50c7a7;">
                                 <i class="fa fa-comment-o pos-rlt pos-t-xs"></i>
                               </div>
-                              <h4>Instant Help</h4>
+                              <h4>Instant {{agile_translate "menu" "help"}}</h4>
                               <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">We can help you to get more out of chat. Just ask us!</div>
                               <a id="account_cancel_chat_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Chat</a>
                             </div></div>
@@ -175,7 +175,7 @@
                               <div class="bg-box m-r m-l" style="background-color: #5fa2dd;">
                                 <i class="icon-support pos-rlt pos-t"></i>
                               </div>
-                              <h4>Schedule a Call</h4>
+                              <h4>{{agile_translate "help" "schedule-a-call"}}</h4>
                               <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">Schedule a slot & one of our product experts will call you for assistance.</div>
                               <a href="http://supportcal.agilecrm.com" target="_blank" id="account_cancel_support_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Schedule</a>
                             </div></div>
@@ -213,7 +213,7 @@
                     </div>
                     <div class="m-b-sm">
                     	<a href="#" id="cancel-account-request-proceed" class="btn btn-sm btn-default">Cancel My Subscription</a>
-                        <a href="#" onClick="$('#send-cancellation').modal('hide');" class="btn btn-sm m-l-sm" style="background-color: #50c7a7;color:white;">Back to Dashboard</a>
+                        <a href="#" onClick="$('#send-cancellation').modal('hide');" class="btn btn-sm m-l-sm" style="background-color: #50c7a7;color:white;">Back to {{agile_translate "portlets" "dashboard"}}</a>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 <div class="wrapper-md lter bg-light b-b">
 		<div class="row">
   			<div class="col-md-12">
-				<h3 class="pull-left h3 font-thin">Secure Payment</h3>
+				<h3 class="pull-left h3 font-thin">{{agile_translate "plan-and-upgrade" "secure-payment"}}</h3>
 			</div>
 		</div>
 </div>
@@ -14,12 +14,12 @@
 			<div class="panel-heading">Confirm your plan
 	{{#check_plan "FREE"}}
 	{{#is_not_allowed_trial}}
-	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 	{{else}}
-	<a href="#trial-subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	<a href="#trial-subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 	{{/is_not_allowed_trial}}
 	{{else}}
-	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 	{{/check_plan}}
 
 			</div>
@@ -32,21 +32,21 @@
 					<div class="alert alert-info hide"></div>
 					<div style="display: none;">
 						<div class="control-group form-group">
-							<label class="control-label col-sm-2">Plan<span class="field_req">*</span></label>
+							<label class="control-label col-sm-2">{{agile_translate "portlets" "plan"}}<span class="field_req">*</span></label>
 							<div class="controls col-sm-8">
 								<input type="text" name="plan_id" class="input form-control required"
 									value="{{plan_id}}" />
 							</div>
 						</div>
 						<div class="control-group form-group">
-							<label class="control-label col-sm-2">Plan<span class="field_req">*</span></label>
+							<label class="control-label col-sm-2">{{agile_translate "portlets" "plan"}}<span class="field_req">*</span></label>
 							<div class="controls col-sm-8">
 								<input type="text" name="plan_type" class="input required form-control"
 									value="{{plan_type}}" />
 							</div>
 						</div>
 						<div class="control-group form-group">
-							<label class="control-label">Quantity<span
+							<label class="control-label">{{agile_translate "plan-and-upgrade" "quantity"}}<span
 								class="field_req col-sm-2">*</span></label>
 							<div class="controls col-sm-8">
 								<input type="text" name="quantity"
@@ -54,7 +54,7 @@
 							</div>
 						</div>
 						<div class="control-group form-group">
-							<label class="control-label col-sm-2">Discount<span
+							<label class="control-label col-sm-2">{{agile_translate "plan-and-upgrade" "discount"}}<span
 								class="field_req">*</span></label>
 							<div class="controls col-sm-8">
 								<input type="text" name="discount" class="input required form-control"
@@ -62,7 +62,7 @@
 							</div>
 						</div>
 					<div class="control-group form-group">
-							<label class="control-label col-sm-2">coupon<span
+							<label class="control-label col-sm-2">{{agile_translate "plan-and-upgrade" "coupon"}}<span
 								class="field_req">*</span></label>
 							<div class="controls col-sm-8">
 								<input type="text" name="coupon" class="input required form-control"
@@ -159,7 +159,7 @@ Months
 {{#check_plan "FREE"}}
 {{#is_not_allowed_trial}}
 {{else}}
-{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day trial.</span></p>{{/if_equals}}
+{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> {{agile_translate "plan-and-upgrade" "selected-plan-desc"}}<span style="font-weight: 600;">{{agile_translate "plan-and-upgrade" "after-the-7day-trial"}}</span></p>{{/if_equals}}
 {{/is_not_allowed_trial}}
 {{else}}
 {{/check_plan}}	
@@ -184,7 +184,7 @@ Months
 			<fieldset>
 				
 					<div class="control-group form-group">
-						<label class="control-label col-sm-3">Card Number <span
+						<label class="control-label col-sm-3">{{agile_translate "plan-and-upgrade" "card-number"}}<span
 							class="field_req">*</span></label>
 						<div class="controls col-sm-6">
 							<input type="text" name="number" class="input required  digits form-control"
@@ -192,7 +192,7 @@ Months
 						</div>
 					</div>
 					<div class="control-group form-group">
-						<label class="control-label col-sm-3">Expiry<span
+						<label class="control-label col-sm-3">{{agile_translate "plan-and-upgrade" "expiry"}}<span
 							class="field_req">*</span></label>
 						<div class="controls col-sm-6">
 							<select name="exp_month" id="exp_month" class="input form-control exp_month inline-block" style="width: 50%;" placeholder="Expiry Month"></select>
@@ -201,7 +201,7 @@ Months
 					</div>
 				
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">CVC<span class="field_req">*</span></label>
+					<label class="control-label col-sm-3">{{agile_translate "plan-and-upgrade" "cvc"}}<span class="field_req">*</span></label>
 					<div class="controls col-sm-5">
 						<input type="text" name="cvc" class="input required  digits form-control"
 							placeholder="Card Security Code" />
@@ -212,17 +212,17 @@ Months
 				{{#check_plan "FREE"}}
 				{{#is_not_allowed_trial}}
 				{{else}}
-				{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day trial.</span></p>{{/if_equals}}
+				{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> {{agile_translate "plan-and-upgrade" "selected-plan-desc"}}<span style="font-weight: 600;">{{agile_translate "plan-and-upgrade" "after-the-7day-trial"}}</span></p>{{/if_equals}}
 				{{/is_not_allowed_trial}}
 				{{else}}
 				{{/check_plan}}	
 				<!-- <div class="control-group form-group">	
-                    <label class="control-label">Gateway<span class="field_req">*</span></label>
+                    <label class="control-label">{{agile_translate "plan-and-upgrade" "gateway"}}<span class="field_req">*</span></label>
                     <div class="controls">
                     			<select class="required form-control" name="gateway">
-                    		<option value="">select</option>
-                    		<option value="Stripe">Stripe</option>
-                    		<option value="Paypal">Paypal</option>
+                    		<option value="">{{agile_translate "plan-and-upgrade" "select"}}</option>
+                    		<option value="Stripe">{{agile_translate "campaigns" "stripe"}}</option>
+                    		<option value="Paypal">{{agile_translate "plan-and-upgrade" "paypal"}}</option>
                     	</select>
                     </div>
                     </div> -->
@@ -252,8 +252,7 @@ Pay Now
 <img src="{{getS3ImagePath '/flatfull/img/credit-cards.png'}}" style="width: 188px;opacity: 0.5;">
 </div>
 	<small class="help-block" id="subscribe_plan_tooltext">
-		<i class="fa fa-lock"></i> All transactions are secure and encrypted, and we never store your credit card information
-</small>
+		<i class="fa fa-lock"></i> {{agile_translate "plan-and-upgrade" "all-transactions-are-secure-and-encrypted"}}</small>
              </div>
 			</div>
 	<div class="span3">
@@ -271,7 +270,7 @@ Pay Now
 							<div class="panel text-center p-b" style="border: 0;">
 <div class="panel-body" style="background-color: #E0E0E0;">
                            <img src="{{getS3ImagePath '/flatfull/img/save-doller1.png'}}" height="110" width="132">
-  <h4>UPGRADE</h4>
+  <h4>{{agile_translate "plan-and-upgrade" "upgrade-cap"}}</h4>
                         </div>
 								
 								<p class="p-t-sm p-l-sm p-r-sm">
@@ -281,19 +280,19 @@ Pay Now
 								</p>
 	{{#check_plan "FREE"}}
 	{{#is_not_allowed_trial}}
-	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 	{{else}}
-	<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 	{{/is_not_allowed_trial}}
 	{{else}}
-	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 	{{/check_plan}}
 							</div>
 							{{/if_equals}} {{#if_equals "Yearly" cycle}}
 							<div class="panel text-center p-b" style="border: 0;">
 <div class="panel-body" style="background-color: #E0E0E0;">
                            <img src="{{getS3ImagePath '/flatfull/img/save-doller1.png'}}" height="110" width="132">
-  <h4>UPGRADE</h4>
+  <h4>{{agile_translate "plan-and-upgrade" "upgrade-cap"}}</h4>
                         </div>
 								
 								<p class="p-t-sm p-l-sm p-r-sm">
@@ -302,12 +301,12 @@ Pay Now
 								</p>
 {{#check_plan "FREE"}}
 {{#is_not_allowed_trial}}
-<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 {{else}}
-<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 {{/is_not_allowed_trial}}
 {{else}}
-<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">{{agile_translate "plan-and-upgrade" "change-plan"}}</a>
 {{/check_plan}}
 
 							</div>

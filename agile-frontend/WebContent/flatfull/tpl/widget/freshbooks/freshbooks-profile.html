@@ -2,14 +2,14 @@
 	<div>
 		<form id="freshbooks_login_form" name="freshbooks_login_form" method="post">
 	    	<fieldset>
-				<p>Create and manage customer invoices and track payments with Freshbooks. </p>
+				<p>{{agile_translate "widgets" "freshbooks-profile-desc"}}</p>
 				
 				<label>Enter your Freshbooks details: </label>
 				<div class="control-group form-group"><div class="controls"><input type="url" id="freshbooks_url" class="input-medium required form-control"  placeholder="https://company.freshbooks.com" value="" name="freshbooks_url"></input></div></div>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="freshbooks_apiKey" class="input-medium required form-control"  placeholder="API Token" value="" name="freshbooks_apiKey"></input></div></div>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="freshbooks_save_token" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+				<a href="#" id="freshbooks_save_token" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_translate "modals" "save"}}</a>
 				</div>
 			 </fieldset>
 	    </form>
@@ -18,8 +18,8 @@
 <script id="freshbooks-profile-template" type="text/html">
 {{#if_equals total "0"}}
 	<div class="wrapper-sm">
-		<div>No clients matching this contact.</div>
-		<a class="btn btn-xs btn-default m-t-sm c-p" id="freshbooks_add_client">Add client</a>
+		<div>{{agile_translate "widgets" "no-clients-matching-this-contact"}}</div>
+		<a class="btn btn-xs btn-default m-t-sm c-p" id="freshbooks_add_client">{{agile_translate "widgets" "add-client"}}</a>
 	</div>
 {{else}}
 	<div class="wrapper-sm">
@@ -91,9 +91,9 @@
 	</div>
 	<div class="wrapper-sm b-t b-light">
 		{{#isArray client}}
-			<a href="{{client.0.links.statement}}" target="_blank"><h4 class="h4 m-t-none m-b-none text-sm">Invoices</h4></a>
+			<a href="{{client.0.links.statement}}" target="_blank"><h4 class="h4 m-t-none m-b-none text-sm">{{agile_translate "plan-and-upgrade" "invoices"}}</h4></a>
 		{{else}}
-			<a href="{{client.links.statement}}" target="_blank"><h4 class="h4 m-t-none m-b-none text-sm">Invoices</h4></a>
+			<a href="{{client.links.statement}}" target="_blank"><h4 class="h4 m-t-none m-b-none text-sm">{{agile_translate "plan-and-upgrade" "invoices"}}</h4></a>
 		{{/isArray}}
 	</div>
 	<ul class="list-group m-b-none text-base" id="freshbooks_invoice_panel">
@@ -107,8 +107,7 @@
 <script id="freshbooks-invoice-template" type="text/html">
 	{{#if_equals total "0"}}
 		<li class="list-group-item r-none b-l-none b-r-none text-light">
-	    	No invoices			
-		</li>		
+	    	{{agile_translate "widgets" "no-invoices"}}</li>		
 	{{else}}
 		{{#isArray invoice}}
 			{{#each invoice}}
@@ -146,7 +145,7 @@
 							{{/if}}
 						{{/isArray}}
 						{{#if discount}}
-							<div class="pull-left">Discount</div>
+							<div class="pull-left">{{agile_translate "plan-and-upgrade" "discount"}}</div>
 							<div class="pull-right">{{discount}}%</div><br>
 						{{/if}}
 					</div>
@@ -188,7 +187,7 @@
 							{{/if}}
 						{{/isArray}}
 						{{#if invoice.discount}}
-							<div class="pull-left">Discount</div>
+							<div class="pull-left">{{agile_translate "plan-and-upgrade" "discount"}}</div>
 							<div class="pull-right">{{invoice.discount}}%</div><br>
 						{{/if}}
 					</div>
@@ -197,19 +196,18 @@
 		{{/isArray}}
 	{{/if_equals}}
 	<div class="widget_tab_footer freshdesk_show_more hide" align="center">
-		<a class="c-p text-info" id="freshdesk_show_more" rel="tooltip" title="Click to see more tickets">Show More</a>
+		<a class="c-p text-info" id="freshdesk_show_more" rel="tooltip" title="Click to see more tickets">{{agile_translate "widgets" "show-more"}}</a>
 	</div>
 </script>
 
 <script id="freshbooks-items-template" type="text/html">
 	{{#if_equals total "0"}}
 		<li class="list-group-item r-none b-l-none b-r-none text-light">
-	    	No Items available. Add an item in your account to generate invoice.
-		</li>		
+	    	{{agile_translate "widgets" "no-items-available"}}</li>		
 	{{else}}
 		<li class="list-group-item r-none b-l-none b-r-none">
-			<div class="pull-left">Item name</div>
-			<div class="pull-right text-right">Unit cost</div>
+			<div class="pull-left">{{agile_translate "web-rules" "item-name"}}</div>
+			<div class="pull-right text-right">{{agile_translate "widgets" "unit-cost"}}</div>
 			<div class="clearfix"></div>
 		</li>
 		{{#isArray item}}
@@ -254,13 +252,13 @@
 							<table id="invoice-table" class="table table-bordered w-auto" style="table-layout:fixed;">
 								<thead style="background: rgba(240, 240, 240, .2);">
 									<tr>
-									<th >Item</th>
-									<th >Description</th>
+									<th >{{agile_translate "widgets" "item"}}</th>
+									<th >{{agile_translate "other" "description"}}</th>
 									<th >Unit Cost</th>
-									<th >Quantity</th>
-									<th >Tax1</th>
-									<th >Tax2</th>
-									<th >Line Total</th>
+									<th >{{agile_translate "plan-and-upgrade" "quantity"}}</th>
+									<th >{{agile_translate "widgets" "tax1"}}</th>
+									<th >{{agile_translate "widgets" "tax2"}}</th>
+									<th >{{agile_translate "widgets" "line-total"}}</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -345,7 +343,7 @@
         </form>
     </div>
     <div class="modal-footer">
-       <a href="#" class="btn btn-sm btn-primary" id="send_request">Send</a>
+       <a href="#" class="btn btn-sm btn-primary" id="send_request">{{agile_translate "tasks" "Send"}}</a>
        <span class="save-status"></span>
     </div>
 </div>

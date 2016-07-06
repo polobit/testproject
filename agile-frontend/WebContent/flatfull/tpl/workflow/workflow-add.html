@@ -21,7 +21,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
             <form id="workflowform" >
                 <fieldset>
                     <div class="control-group form-group">
-                        <label class="control-label"><b>Name of campaign:</b> <span class="field_req">*</span></label>
+                        <label class="control-label"><b>{{agile_translate "campaigns" "name-of-campaign"}}</b> <span class="field_req">*</span></label>
                         <div class="controls">
 							<div class="row">
 
@@ -36,7 +36,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 									<a data-toggle="modal" id="workflow-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">Need help? Watch our tutorial.</a>
 									<input type="hidden" id="was-disabled" data = {{was_disabled}}>
 									{{#if is_new}}
-										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">Save Campaign</button>
+										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">{{agile_translate "campaigns" "save-campaign"}}</button>
 										<div class="right m-r-sm">
 						                    <label class="btn btn-default btn-sm m-l-xs" id="campaign_access_level"> 
 						                    		<span> Make {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
@@ -53,20 +53,18 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 										-->
 									{{else}}
 										<div class="btn-group right m-r-xs m-r-n-sm">									
-											<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</button>
+											<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_translate "campaigns" "save-campaign"}}</button>
                             				<button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
             									<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu">
 												<li>
 													<a href="#" id="duplicate-workflow-top">
-														<i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
-													</a>
+														<i class="fa fa-clipboard" style="width: 20px;"></i> {{agile_translate "campaigns" "create-a-copy"}}</a>
 												</li>
 												<li>
 													<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
-														<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
-													</a>
+														<i class="fa fa-share-alt" style="width: 20px;"></i> {{agile_translate "campaigns" "share-with"}}</a>
 												</li>
                                            <li>
 												<a href="javascript:void(0)" id="campaign_access_level">
@@ -102,8 +100,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     <br />
                     <div>
 						<a href="#" class="text-info" id="workflow-unsubscribe-option">
-							<i class="icon-plus"></i> Manage Unsubscription
-						</a>
+							<i class="icon-plus"></i> {{agile_translate "campaigns" "manage-unsubscription"}}</a>
 					</div>
 					<br/>
 					<div id="workflow-unsubscribe-block" style="display:none">
@@ -115,8 +112,8 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 							<div class="controls col-sm-4">
 								<select name="action" id="unsubscribe-action" class="form-control">
 									<option value="ASK_USER">Prompt User (Recommended)</option>
-									<option value="UNSUBSCRIBE_FROM_ALL">All Campaigns</option>
-                                    <option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">Current Campaign only</option>
+									<option value="UNSUBSCRIBE_FROM_ALL">{{agile_translate "campaigns" "all-campaigns"}}</option>
+                                    <option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">{{agile_translate "campaigns" "current-campaign-only"}}</option>
 								</select>
 							</div>
                     	</div>
@@ -134,7 +131,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 							</div>
                     	</div>
                         </div>
-						<div class="text-sm text-light">Agile can add the tags automatically when your contact unsubscribes. You can run more campaigns against this tag in future.</div>
+						<div class="text-sm text-light">{{agile_translate "campaigns" "agile-can-add-the-tags-desc"}}</div>
                         <br/>
                         <br>
 						<div class="row">
@@ -147,7 +144,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 							</div>
                     	</div>
                         </div>
-						<div class="text-sm text-light">When a contact unsubscribes from your campaign, this name will be displayed as campaign name in the confirmation screen.</div>
+						<div class="text-sm text-light">{{agile_translate "campaigns" "contact-unsubscribes-from-your-campaign-desc"}}</div>
 						
 
 						<br/>
@@ -162,23 +159,23 @@ To get the best experience, we recommend you to use <a href="https://support.goo
 							</div>
                     	</div>
                         </div>
-						<div class="text-sm text-light">When a contact unsubscribes from your campaign, a confirmation email is sent. The above given email address will be used as ‘From’ address for that email.</div>
+						<div class="text-sm text-light">{{agile_translate "campaigns" "when-a-contact-unsubscribes-from-your-campaign"}}</div>
 						<br/>
 						<br/>
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
-								<b>Unsubscribe Template</b>
+								<b>{{agile_translate "campaigns" "unsubscribe-template"}}</b>
 							</label>
 							<div class="controls col-sm-4">
-								<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="Fill from Template" name="unsubscribe_subject"><option class="default-select" value="">Default template</option></select>
+								<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="Fill from Template" name="unsubscribe_subject"><option class="default-select" value="">{{agile_translate "campaigns" "default-template"}}</option></select>
 							</div>
                     	</div>
                         </div>
-                        <div class="text-sm text-light"> When a contact unsubscribes from your campaign, a confirmation email is sent. The above given template will be used for that email.</div>
+                        <div class="text-sm text-light"> {{agile_translate "campaigns" "contact-unsubscribes-from-your-campaign-desc1"}}</div>
 						<br/>
 						<br/>
-                        <small>Unsubscribed contacts are not sent any further emails but other actions such as lead scoring will still continue to execute.</small>
+                        <small>{{agile_translate "campaigns" "unsubscribed-contacts-are-not-sent"}}</small>
                         <br/>
 						<br/>
 					</div>
@@ -198,24 +195,22 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     </div>
 
                     {{#if is_new}}
-						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">Save Campaign</button>
+						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">{{agile_translate "campaigns" "save-campaign"}}</button>
 					{{else}}
 
 						<div class="btn-group left m-r-xs">
-							<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</button>
+							<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_translate "campaigns" "save-campaign"}}</button>
             				<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu">
 								<li>
 									<a href="#" id="duplicate-workflow-top">
-										<i class="fa fa-clipboard"></i> Create a Copy
-									</a>
+										<i class="fa fa-clipboard"></i> {{agile_translate "campaigns" "create-a-copy"}}</a>
 								</li>
 								<li>
 									<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
-										<i class="fa fa-share-alt" style="width: 20px;"></i> Share with
-									</a>
+										<i class="fa fa-share-alt" style="width: 20px;"></i> {{agile_translate "campaigns" "share-with"}}</a>
 								</li>
 							</ul>
            				</div>

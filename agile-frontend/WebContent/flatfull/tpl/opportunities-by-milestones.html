@@ -4,10 +4,9 @@
 <div class="row">
     <div class="col-md-12">
         
-            <h3 class="pull-left font-thin h3">Deals <small>Opportunities</small>
+            <h3 class="pull-left font-thin h3">{{agile_translate "deal-view" "Deals"}}<small>{{agile_translate "deal-view" "opportunities"}}</small>
 			<div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="margin-left:100px;display:none;">
-  				For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">Deal settings</a> page.
-			</div>
+  				{{agile_translate "deal-view" "for-better-deal-reports-and-sales"}}<a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">{{agile_translate "deal-view" "deal-settings"}}</a> {{agile_translate "deal-view" "page"}}</div>
 			</h3>
 <div class="pull-right">
             <div class="btn-group inline-block m-l-xs" id="deals-tracks">
@@ -21,34 +20,33 @@
 						<span class="caret deals-view-caret"></span>
 					</a>
 					<ul class="dropdown-menu pull-right" role="menu">
-						<li><a href="#deal-rc-0" class="deals-list-view">List View</a></li>
-						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
+						<li><a href="#deal-rc-0" class="deals-list-view">{{agile_translate "deal-view" "list-view"}}</a></li>
+						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">{{agile_translate "deal-view" "milestone-view"}}</a>
 
 							<ul class="dropdown-menu" style="min-width:130px" role="menu">
-								<li><a href="#deal-rc-1" id="deal-milestone-regular">Relaxed</a></li>
-								<li><a href="#deal-rc-2" id="deal-milestone-compact">Compact</a></li>
-								<li><a href="#deal-rc-3" id="deal-milestone-fit">Fit</a></li>
+								<li><a href="#deal-rc-1" id="deal-milestone-regular">{{agile_translate "deal-view" "relaxed"}}</a></li>
+								<li><a href="#deal-rc-2" id="deal-milestone-compact">{{agile_translate "deal-view" "compact"}}</a></li>
+								<li><a href="#deal-rc-3" id="deal-milestone-fit">{{agile_translate "deal-view" "fit"}}</a></li>
 							</ul>
 						</li>
 					</ul>
 			</div>
 			<div class="btn-group inline-block m-l-xs" id="deals-action">
-					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> Add Deal
-					</a>
+					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')"><i class="icon-plus-sign" /> {{agile_translate "contact-details" "add-deal"}}</a>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
 					{{#hasScope "MANAGE_DEALS"}}
 
 					<ul class="dropdown-menu pull-right" role="menu">
-						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">Import</a></li>
-						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">Export</a></li>
-						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">Add Dashlet</a></li>
+						<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">{{agile_translate "contacts-view" "import"}}</a></li>
+						<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">{{agile_translate "deal-view" "export"}}</a></li>
+						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">{{agile_translate "portlets" "add-dashlet"}}</a></li>
 					</ul>
 
 					{{else}}
 					<ul class="dropdown-menu pull-right" role="menu">
-					<li><a href="#add-dashlet">Add Dashlet</a></li>
+					<li><a href="#add-dashlet">{{agile_translate "portlets" "add-dashlet"}}</a></li>
 					</ul>
 					{{/hasScope}}
 					<!--
@@ -322,7 +320,7 @@
 {{#if name}}
 <a id='{{id}}' class="pipeline c-p" data="{{name}}">{{name}}</a>
  {{else}}
-<a id='{{id}}' class="pipeline c-p" data="Default">Default</a>
+<a id='{{id}}' class="pipeline c-p" data="Default">{{agile_translate "report-chart-forms" "default"}}</a>
 {{/if}}
 </script>
 
@@ -382,20 +380,19 @@
     <div class="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Archive Deal</h3>
+    <h3>{{agile_translate "deal-view" "archive-deal"}}</h3>
   </div>
   <div class="modal-body">
     <div id="deal-bulk-confirm">
 		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
 		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
-		Deals can be archived and will not be shown. You can view them later by selecting 'All' in the filter.  
-		<br/> Are you sure to archive this deal?
+		{{agile_translate "deal-view" "deals-can-be-archived-desc"}}<br/> Are you sure to archive this deal?
 	</div>
   </div>
   <div class="modal-footer">
   	<span class="error-status text-danger"></span>
-	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">No</button>
-    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">Yes</a>
+	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">{{agile_translate "portlets" "no"}}</button>
+    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">{{agile_translate "portlets" "yes"}}</a>
   </div>
  </div>
   </div>
@@ -407,7 +404,7 @@
     <div class="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Restore Deal</h3>
+    <h3>{{agile_translate "deal-view" "restore-deal"}}</h3>
   </div>
   <div class="modal-body">
 	<input id="restored-deal-id" name="id" type="hidden"/>
@@ -418,8 +415,8 @@
   </div>
   <div class="modal-footer">
   	<span class="error-status"></span>
-	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">No</button>
-    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">Yes</a>
+	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">{{agile_translate "portlets" "no"}}</button>
+    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">{{agile_translate "portlets" "yes"}}</a>
   </div>
 	</div>
   </div>

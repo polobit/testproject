@@ -99,25 +99,25 @@
 	<div>
 		
 		<div class="pull-left">
-			<h3 class="m-n font-thin h3"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h3>
+			<h3 class="m-n font-thin h3"><span id="contact-heading">{{agile_translate "companies-view" "Contacts"}}</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h3>
 			<div class="btn-group m-l-md inline-block" id="bulk-actions"
 				style="display: none;">
-					<div class="btn btn-sm btn-default">Bulk Actions</div>
+					<div class="btn btn-sm btn-default">{{agile_translate "contacts-view" "bulk-actions"}}</div>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
+						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">{{agile_translate "contacts-view" "add-tags"}}</a></li>
+						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">{{agile_translate "contacts-view" "remove-tags"}}</a></li>
                         <li class='divider'></li>  
-						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
-						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
+						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">{{agile_translate "contacts-view" "add-to-campaign"}}</a></li>
+						<li><a href="#" id="bulk-email" class="_contact_bulk_action">{{agile_translate "contact-details" "send-email"}}</a></li>
                         <li class='divider'></li>
-						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
+						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">{{agile_translate "contacts-view" "change-owner"}}</a></li>
                         {{#hasScope "EXPORT_CONTACTS"}}
                         <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
                         {{/hasScope}}
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+						<li><a href="#" class="delete-checked-contacts">{{agile_translate "contact-details" "delete"}}</a></li>
 					</ul>
 					<div  class="btn-group p-l p-t-xs inline-block" style="display: none;" id="bulk-select"></div>
 					</div>
@@ -156,7 +156,7 @@
 			<div class="data-container"></div>
             <div class="table-responsive">
 			<div class="panel panel-default">
-			    <div class="panel-heading">Contacts List</div>
+			    <div class="panel-heading">{{agile_translate "contacts-view" "contacts-list"}}</div>
 			<table id="contacts-table" class="table table-striped showCheckboxes  no-sorting panel"
 				url="core/api/contacts/delete?action=DELETE">
 				
@@ -164,10 +164,10 @@
 				<thead>
 					<tr>
 						<th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
-						<th>Name</th>
-						<th>Work</th>
-						<th>Tags</th>
-						<th>Lead Score</th>
+						<th>{{agile_translate "deal-view" "name"}}</th>
+						<th>{{agile_translate "contact-details" "work"}}</th>
+						<th>{{agile_translate "report-add" "tags"}}</th>
+						<th>{{agile_translate "contacts-view" "Lead score"}}</th>
 					</tr>
 				</thead>
 				<tbody id="contacts-model-list" class="contacts-model-list"
@@ -242,19 +242,19 @@
 	<div class="col-md-12">
 		
 		<div class="pull-left">
-			<h3 class="inline-block font-thin h3"><span id="contact-heading">Companies</span><span id="contacts-count" class="m-l-xs"><small>{{count}}</small></span></h3>
+			<h3 class="inline-block font-thin h3"><span id="contact-heading">{{agile_translate "companies-view" "Companies"}}</span><span id="contacts-count" class="m-l-xs"><small>{{count}}</small></span></h3>
 			<div class="inline-block">
 			<div class="btn-group m-l-md inline-block" id="bulk-actions" style="display: none;">
-					<div class="btn btn-default btn-sm">Bulk Actions</div>
+					<div class="btn btn-default btn-sm">{{agile_translate "contacts-view" "bulk-actions"}}</div>
 					<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-email">Send Email</a></li>
+						<li><a href="#" id="bulk-email">{{agile_translate "contact-details" "send-email"}}</a></li>
                         <li class='divider'></li>
-						<li><a href="#" id="bulk-owner">Change Owner</a></li>
-						<li><a href="#" id="bulk-companies-export">Export Companies as CSV</a></li>
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+						<li><a href="#" id="bulk-owner">{{agile_translate "contacts-view" "change-owner"}}</a></li>
+						<li><a href="#" id="bulk-companies-export">{{agile_translate "companies-view" "export-companies-as-csv"}}</a></li>
+						<li><a href="#" class="delete-checked-contacts">{{agile_translate "contact-details" "delete"}}</a></li>
 					</ul>
 					<div  class="btn-group p-l p-t-xs inline-block" style="display: none;" id="bulk-select"></div>
 			</div>
@@ -290,7 +290,7 @@
 			<div class="data-container"></div>
 			<div class="table-responsive">
 			<div class="panel panel-default">
-			<div class="panel-heading">Companies List</div>
+			<div class="panel-heading">{{agile_translate "companies-view" "companies-list"}}</div>
 			<table id="companies" class="table table-striped showCheckboxes panel"
 				url="core/api/bulk/update?action_type=DELETE">
 				<div class="filter-criteria">
@@ -298,9 +298,9 @@
 				</div>
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Star Value</th>
-						<th>Owner</th>
+						<th>{{agile_translate "deal-view" "name"}}</th>
+						<th>{{agile_translate "contacts-view" "Star value"}}</th>
+						<th>{{agile_translate "contact-details" "owner"}}</th>
 					</tr>
 				</thead>
 				<tbody id="companies-model-list" class="companies-model-list"
@@ -325,7 +325,7 @@
 		<div class="data">
 			<div class="data-container"></div>
 			<div class="panel panel-default">
-			    <div class="panel-heading">Contacts List</div>
+			    <div class="panel-heading">{{agile_translate "contacts-view" "contacts-list"}}</div>
 			<table id="contacts-table" class="table table-striped showCheckboxes agile-ellipsis-dynamic no-sorting"
 				url="core/api/bulk/update?action_type=DELETE">
 				<col width="30px">
@@ -337,10 +337,10 @@
 				<thead>
 					<tr>
 						<th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
-						<th>Name</th>
-						<th>Work</th>
-						<th>Tags</th>
-						<th>Lead Score</th>
+						<th>{{agile_translate "deal-view" "name"}}</th>
+						<th>{{agile_translate "contact-details" "work"}}</th>
+						<th>{{agile_translate "report-add" "tags"}}</th>
+						<th>{{agile_translate "contacts-view" "Lead score"}}</th>
 					</tr>
 				</thead>
 				<tbody id="contacts-table-model-list" class="contacts-table-model-list"
@@ -363,7 +363,7 @@
 		<div class="data">
 			<div class="data-container"></div>
 			<div class="panel panel-default">
-			<div class="panel-heading">Companies List</div>
+			<div class="panel-heading">{{agile_translate "companies-view" "companies-list"}}</div>
 			<table id="companies" class="table table-striped showCheckboxes"
 				url="core/api/bulk/update?action_type=DELETE">
 				<div class="filter-criteria">
@@ -371,9 +371,9 @@
 				</div>
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Star Value</th>
-						<th>Owner</th>
+						<th>{{agile_translate "deal-view" "name"}}</th>
+						<th>{{agile_translate "contacts-view" "Star value"}}</th>
+						<th>{{agile_translate "contact-details" "owner"}}</th>
 					</tr>
 				</thead>
 				<tbody id="companies-table-model-list" class="companies-table-model-list"
@@ -398,8 +398,8 @@ class="c-p text-l-none text-l-none-hover" >
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="pull-left form-control">
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
@@ -416,10 +416,10 @@ class="c-p text-l-none text-l-none-hover" >
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}_number" />
 		<select id="between_filter" name="CONDITION" class="pull-left form-control">
-			<option value="EQUALS">equals</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="BETWEEN">between</option>
+			<option value="EQUALS">{{agile_translate "contacts-view" "equals"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
 		</select>
 		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
@@ -445,12 +445,12 @@ class="c-p text-l-none text-l-none-hover" >
 		<div class="lhs-contact-filter-row pos-rlt">
 	<input type="hidden" name="LHS" value="{{field_label}}_time" />
 	<select id="between_filter" name="CONDITION" class="pull-left form-control">
-		<option value="ON">on</option>
-		<option value="AFTER">is after</option>
-		<option value="BEFORE">is before</option>
-		<option value="BETWEEN">is between</option>
-		<option value="LAST">in last</option>
-		<option value="NEXT">in next</option>
+		<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+		<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+		<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+		<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+		<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
+		<option value="NEXT">{{agile_translate "contacts-view" "in-next"}}</option>
 	</select>
 	<div class="AFTER BEFORE ON condition_container">
 		<span id="RHS">
@@ -480,13 +480,13 @@ class="c-p text-l-none text-l-none-hover" >
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="pull-left form-control">
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<select id="{{replace_spaces field_label}}-values" prev-val="" class="required form-control" name="temp">
-					<option value="">Select value</option>
+					<option value="">{{agile_translate "contacts-view" "select-value"}}</option>
 					{{{buildOptions field_data}}}
 				</select>
 			</span>
@@ -503,7 +503,7 @@ class="c-p text-l-none text-l-none-hover" >
 <header>
 <div class="b-b b-light  wrapper">
 	<h4 class="m-t-none pull-left">
-		<span><span>Filter Contacts</span>
+		<span><span>{{agile_translate "contacts-view" "filter-contacts"}}</span>
 		</span>
 	</h4>
 	<span class="pull-right">
@@ -521,15 +521,14 @@ class="c-p text-l-none text-l-none-hover" >
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Tags
-		<i class="inline pos-abs fa fa-plus-square-o pos-r"></i></a>
+		{{agile_translate "report-add" "tags"}}<i class="inline pos-abs fa fa-plus-square-o pos-r"></i></a>
 	<div class="controls hide" id="tags_div">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-tags-add-div pos-rlt form-group">
 					<input type="hidden" name="LHS" value="tags" />
 					<select id="tags-filter" class="form-control" name="CONDITION">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
+						<option value="EQUALS" class="tags">{{agile_translate "contacts-view" "is"}}</option>
+						<option value="NOTEQUALS" class="tags">{{agile_translate "contacts-view" "is-not"}}</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container">
 						<span id="RHS">
@@ -541,8 +540,8 @@ class="c-p text-l-none text-l-none-hover" >
 				<div class="lhs-contact-filter-row pos-rlt">
 					<input type="hidden" name="LHS" value="tags" />
 					<select id="tags-filter" class="form-control" name="CONDITION">
-						<option value="EQUALS" class="tags">is</option>
-						<option value="NOTEQUALS" class="tags">isn't</option>
+						<option value="EQUALS" class="tags">{{agile_translate "contacts-view" "is"}}</option>
+						<option value="NOTEQUALS" class="tags">{{agile_translate "contacts-view" "is-not"}}</option>
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container">
 						<span id="RHS">
@@ -552,22 +551,21 @@ class="c-p text-l-none text-l-none-hover" >
 					<div class="pos-abs pos-r-0"><a><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></a></i></div>
 				</div>
 		</div>
-		<a href="#" class="filter-tags-multiple-add-lhs text-l-none m-t-xs"><i class="icon-plus"></i> Add</a>
+		<a href="#" class="filter-tags-multiple-add-lhs text-l-none m-t-xs"><i class="icon-plus"></i> {{agile_translate "other" "add"}}</a>
 	</div>
 </div>
 	
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Score
-		<i class="inline pos-abs fa fa-plus-square-o pos-r"></i></a>
+		{{agile_translate "report-add" "score"}}<i class="inline pos-abs fa fa-plus-square-o pos-r"></i></a>
 	<div class="controls hide" id="lead_score_div">
 		<div class="lhs-contact-filter-row pos-rlt form-group">
 		<input type="hidden" name="LHS" value="lead_score" />
 		<select id="between_filter" name="CONDITION" class="form-control">
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
@@ -590,15 +588,14 @@ class="c-p text-l-none text-l-none-hover" >
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Star Value
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		{{agile_translate "contacts-view" "Star value"}}<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
 	<div class="controls hide" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt form-group">
 		<input type="hidden" name="LHS" value="star_value" />
 		<select id="between_filter" name="CONDITION" class="form-control">
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
@@ -621,20 +618,19 @@ class="c-p text-l-none text-l-none-hover" >
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Owner
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		{{agile_translate "contact-details" "owner"}}<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
 	<div class="controls hide" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="owner_id" />
 		<select id="between_filter" name="CONDITION" class="form-control">
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
 		</select>
 		
 		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<select id="owner_select" class="required form-control" name="temp1" prev-val="">
-					<option value="">Select value</option>
+					<option value="">{{agile_translate "contacts-view" "select-value"}}</option>
 					
 				</select>
 			</span>
@@ -647,18 +643,17 @@ class="c-p text-l-none text-l-none-hover" >
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Created Date
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		{{agile_translate "tickets" "Created&nbsp;Date"}}<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
 	<div class="controls hide" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" />
 		<select id="between_filter" name="CONDITION" class="form-control">
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
-			<option value="NEXT">in next</option>
+			<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+			<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+			<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+			<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
+			<option value="NEXT">{{agile_translate "contacts-view" "in-next"}}</option>
 		</select>
 		<div class="AFTER BEFORE ON condition_container">
 			<span id="RHS">
@@ -696,7 +691,7 @@ class="c-p text-l-none text-l-none-hover" >
 <header>
 <div class="b-b b-light wrapper">
 	<h4 class="m-t-none pull-left">
-		<span><span>Filter Companies</span>
+		<span><span>{{agile_translate "companies-view" "filter-companies"}}</span>
 		</span>
 	</h4>
 	<span class="pull-right">
@@ -714,15 +709,14 @@ class="c-p text-l-none text-l-none-hover" >
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Star Value
-		<i class="inline pos-abs pos-r fa fa-plus-square-o"></i></a>
+		{{agile_translate "contacts-view" "Star value"}}<i class="inline pos-abs pos-r fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="star_value" />
 		<select id="between_filter" name="CONDITION" class="form-control" >
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="IS_GREATER_THAN">{{agile_translate "contacts-view" "greater-than"}}</option>
+			<option value="IS_LESS_THAN">{{agile_translate "contacts-view" "less-than"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "between"}}</option>
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
@@ -745,20 +739,19 @@ class="c-p text-l-none text-l-none-hover" >
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Owner
-		<i class="inline pos-abs pos-r fa fa-plus-square-o"></i></a>
+		{{agile_translate "contact-details" "owner"}}<i class="inline pos-abs pos-r fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="owner_id" />
 		<select id="between_filter" name="CONDITION" class="form-control" >
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
 		</select>
 		
 		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<select id="owner_select" class="required form-control" prev-val="" name="temp1">
-					<option value="">Select value</option>
+					<option value="">{{agile_translate "contacts-view" "select-value"}}</option>
 					
 				</select>
 			</span>
@@ -771,18 +764,17 @@ class="c-p text-l-none text-l-none-hover" >
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Created Date
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		{{agile_translate "tickets" "Created&nbsp;Date"}}<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
 	<div class="controls hide" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" />
 		<select id="between_filter" name="CONDITION" class="pull-left form-control" >
-			<option value="ON">on</option>
-			<option value="AFTER">is after</option>
-			<option value="BEFORE">is before</option>
-			<option value="BETWEEN">is between</option>
-			<option value="LAST">in last</option>
-			<option value="NEXT">in next</option>
+			<option value="ON">{{agile_translate "contacts-view" "on"}}</option>
+			<option value="AFTER">{{agile_translate "contacts-view" "is-after"}}</option>
+			<option value="BEFORE">{{agile_translate "contacts-view" "is-before"}}</option>
+			<option value="BETWEEN">{{agile_translate "contacts-view" "is-between"}}</option>
+			<option value="LAST">{{agile_translate "contacts-view" "in-last"}}</option>
+			<option value="NEXT">{{agile_translate "contacts-view" "in-next"}}</option>
 		</select>
 		<div class="AFTER BEFORE ON condition_container">
 			<span id="RHS">
@@ -810,14 +802,13 @@ class="c-p text-l-none text-l-none-hover" >
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
-		Name
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		{{agile_translate "deal-view" "name"}}<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
 	<div class="controls hide" id="name_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="name" />
 		<select id="between_filter" name="CONDITION" class="form-control" >
-			<option value="EQUALS" >is</option>
-			<option value="NOTEQUALS" >isn't</option>
+			<option value="EQUALS" >{{agile_translate "contacts-view" "is"}}</option>
+			<option value="NOTEQUALS" >{{agile_translate "contacts-view" "is-not"}}</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">

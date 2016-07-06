@@ -26,23 +26,23 @@
                    {{#each this.active}}
 						<span class="tag inline-block label bg-light" id='active-campaign' data="{{campaign_id}}"><span>
 								<a class="anchor pull-left m-t-xs m-r-xs" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Active Campaign{{/if}}</a>
-								<a class="close remove-active-campaign" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Remove from Campaign">&times</a>
+								<a class="close remove-active-campaign" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Remove from Campaign">&{{agile_translate "contact-details" "times"}}</a>
 							
 						</span></span> 
 					{{/each}}
                     </div>
 	       {{#canEditCurrentContact "1"}}
-                <a class="add-to-campaign space-normal"  href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+                <a class="add-to-campaign space-normal"  href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} {{agile_translate "contact-details" "to-campaign"}}</a>
 	        {{/canEditCurrentContact}}
             <form id="add-to-campaign-form" class="show_campaigns_list" style="display:none;">
             	<div class="control-group form-group">
                 	<div class="controls">
 			        	<select id="campaign-select" class="required form-control w inline-block" name="campaign_id">
-                        	<option value="">Select...</option>
+                        	<option value="">{{agile_translate "contacts-view" "select"}}</option>
                       	</select>
 						<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>						
-				  	  	<span class="m-l-xs"><a class="btn btn-sm btn-primary" id="add-to-campaign" href="#">Add</a></span>
-						<span class="m-l-xs"><a class="btn btn-default btn-sm" id="cancel-to-add-campaign" href="#">Cancel</a></span>
+				  	  	<span class="m-l-xs"><a class="btn btn-sm btn-primary" id="add-to-campaign" href="#">{{agile_translate "other" "add"}}</a></span>
+						<span class="m-l-xs"><a class="btn btn-default btn-sm" id="cancel-to-add-campaign" href="#">{{agile_translate "other" "cancel"}}</a></span>
                     </div> 
 			   </div>
             </form> 
@@ -50,17 +50,17 @@
          
          {{else}}
             {{#canEditCurrentContact "1"}}
-        	     <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+        	     <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} {{agile_translate "contact-details" "to-campaign"}}</a>
 		        {{/canEditCurrentContact}}
          	<form id="add-to-campaign-form" class="show_campaigns_list" style="display: none;">
 				<div class="control-group form-group">
                 	<div class="controls">
 			        	<select id="campaign-select" class="required form-control w inline-block" name="campaign_id">
-                        	<option value="">Select...</option>
+                        	<option value="">{{agile_translate "contacts-view" "select"}}</option>
                       	</select>	
 						<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>					
-				  	    <span class="m-l-xs"><a class="btn btn-sm btn-primary" id="add-to-campaign" href="#">Add</a></span>
-						<span class="m-l-xs"><a class="btn btn-sm btn-default" id="cancel-to-add-campaign" href="#">Cancel</a></span>
+				  	    <span class="m-l-xs"><a class="btn btn-sm btn-primary" id="add-to-campaign" href="#">{{agile_translate "other" "add"}}</a></span>
+						<span class="m-l-xs"><a class="btn btn-sm btn-default" id="cancel-to-add-campaign" href="#">{{agile_translate "other" "cancel"}}</a></span>
                     </div> 
 			    </div>
            </form> 
@@ -83,8 +83,7 @@
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">No campaign activity for {{contactShortName}}.</h4>
                     <div class="text">
-						Contact campaign activity like email opens and link clicks are shown here.
-					</div>
+						{{agile_translate "contact-details" "contact-campaign-activity-like"}}</div>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -93,8 +92,7 @@
         {{/unless}}
         {{#if this.length}}
           <div class="wrapper p-t-none">
-              <div class="text-md">Campaign Log
-              <span class="pull-right"><a href="#" id="unsubscribe-modal" class="btn btn-xs btn-default pos-rlt pull-left">Manage Subscriptions</a></span>
+              <div class="text-md">{{agile_translate "contact-details" "campaign-log"}}<span class="pull-right"><a href="#" id="unsubscribe-modal" class="btn btn-xs btn-default pos-rlt pull-left">{{agile_translate "contact-details" "manage-subscriptions"}}</a></span>
               </div>
           </div>                                
 		  <ul id="campaigns-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs  "></ul>

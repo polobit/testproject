@@ -47,7 +47,7 @@
         <div class="data">
             <div class="data-container">
                 <div class="btn-group right pos-rlt" id="bulk-actions" style="display: none">
-                    <button class="btn btn-sm btn-default">Bulk Actions</button>
+                    <button class="btn btn-sm btn-default">{{agile_translate "contacts-view" "bulk-actions"}}</button>
                     <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="view-actions">
                     <span class="caret"></span>
                     </button>
@@ -57,14 +57,14 @@
                         <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
                         {{/hasMenuScope}}
                         <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
-                        <li><a href="#" id="bulk-tags">Add tags</a></li>
+                        <li><a href="#" id="bulk-tags">Add {{agile_translate "web-rules" "tag"}}</a></li>
                     </ul>
                 </div>
                 <div class="wrapper-md">
                 <div>
                 <div>
                 <div class="panel panel-default m-b-none">
-                <div class="panel-heading">Report Results List</div>
+                <div class="panel-heading">Report Results {{agile_translate "admin-settings-custom-fields" "LIST"}}</div>
                 <div style="overflow-x:auto">
                 <div class="table-responsive">
                 <table id="contacts_search" class="table table-striped m-b-none agile-table panel onlySorting" url="core/api/contacts/bulk" style="table-layout:auto">

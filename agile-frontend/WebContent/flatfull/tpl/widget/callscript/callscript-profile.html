@@ -3,15 +3,13 @@
 	<form  id="callscript_login_form" name="callscript_login_form" method="post">
     	<fieldset>
               <p class="no-rule-added m-t" style='display:none;'>                   
-                   You have no script rules configured.
-              </p>
+                   {{agile_translate "widgets" "you-have-no-script-rules-configured"}}</p>
               <p class="rule-added" style='display:none;'>
-                   <span class="rule-count"> </span>  script rules configured.
-              </p> 
+                   <span class="rule-count"> </span>  {{agile_translate "widgets" "script-rules-configured"}}</p> 
 <div>
-			  <a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-              <a href="#callscript/add-rules" id="add_csrule" class="btn btn-sm btn-primary ml_5"><i class="icon-plus-sign m-r-xs"></i>Add Rule</a>
-              <a href="#callscript/rules" id="show_csrules" class="btn btn-sm btn-primary ml_5" style="display:none;">Show Rule</a>			  
+			  <a href="#add-widget" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+              <a href="#callscript/add-rules" id="add_csrule" class="btn btn-sm btn-primary ml_5"><i class="icon-plus-sign m-r-xs"></i>{{agile_translate "widgets" "add-rule"}}</a>
+              <a href="#callscript/rules" id="show_csrules" class="btn btn-sm btn-primary ml_5" style="display:none;">{{agile_translate "widgets" "show-rule"}}</a>			  
 </div>              
 		 </fieldset>
     </form>
@@ -22,9 +20,9 @@
     <div class="col-md-9 col-sm-9 col-xs-12">
 <div class="panel panel-default">
     <div class="panel-heading">      
-        <div class="pull-left m-t-xs">Call Script Rules</div>
+        <div class="pull-left m-t-xs">{{agile_translate "widgets" "call-script-rules"}}</div>
         <div class="pull-right">
-        <a href="#callscript/add-rules" class="btn btn-sm btn-default btn-addon" id="add_rule"><span><i class='icon-plus-sign m-r-xs'/></span>  Add Rule</a>
+        <a href="#callscript/add-rules" class="btn btn-sm btn-default btn-addon" id="add_rule"><span><i class='icon-plus-sign m-r-xs'/></span>  {{agile_translate "widgets" "add-rule"}}</a>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -35,8 +33,8 @@
             
             <thead>
                 <tr>
-                    <th style="width:42%">Name</th>
-                    <th style="width:42%">Script</th>
+                    <th style="width:42%">{{agile_translate "deal-view" "name"}}</th>
+                    <th style="width:42%">{{agile_translate "widgets" "script"}}</th>
                 </tr>
             </thead>
             <tbody class="csr-sortable">
@@ -62,9 +60,9 @@
     			<div class="slate-content">
         				<div class="box-left pull-left m-r-md"><img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}"></div>
 				        <div class="box-right pull-left">
-                            <h4 class="m-t-none">You do not have any call script rules currently.</h4>
-                            <div class="text">Call Script Rules are used to show you the script for the call base on predefined rules you have set.</div>
-                            <a href="#callscript/add-rules" class="m-t-xs btn btn-default btn-sm blue btn-slate-action"><i class="icon-plus-sign m-r-xs"></i>  Add Rule</a>
+                            <h4 class="m-t-none">{{agile_translate "widgets" "you-do-not-have-any-call-script-rules-currently"}}</h4>
+                            <div class="text">{{agile_translate "widgets" "no-script-rules-msg"}}</div>
+                            <a href="#callscript/add-rules" class="m-t-xs btn btn-default btn-sm blue btn-slate-action"><i class="icon-plus-sign m-r-xs"></i>  {{agile_translate "widgets" "add-rule"}}</a>
 				        </div>
 						<div class="clearfix">
 						</div>
@@ -101,21 +99,19 @@
 			{{#if ruleindex}} 
             	Edit Call Script Rule
             {{else}}
-            	<span class="addLable"><i class="icon-plus-sign m-r-xs"></i> Add Call Script Rule</span>
+            	<span class="addLable"><i class="icon-plus-sign m-r-xs"></i> {{agile_translate "widgets" "add-call-script-rule"}}</span>
             {{/if}}
          
 	</div>
 
 	<div class="panel-body">
 		<form id="callscriptruleForm" class="form-horizontal">
-			<div name="rules" class="formsection chainedSelect">             
-					 	
-                <fieldset>                    
+			<div name="rules" class="formsection chained{{agile_translate "contacts-view" "select"}}<fieldset>                    
                     <input type="hidden" id="position" name="position" value="" />
                     <input type="hidden" id="rulecount" name="rulecount" value="" />
 
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
+						<label class="control-label col-sm-2">{{agile_translate "deal-view" "name"}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-8">
 							<input type="text" id="name" name="name" class="required form-control" />
 						</div>
@@ -127,7 +123,7 @@
   						<div class="col-sm-8" style="background: gainsboro;margin-left: -5px;width: calc(67.8%);border: 2px solid gainsboro;">
 							<a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
 						    	<button style="float: right;margin: 0px;position: relative;left: 15px;">
-									<span>Agile Contact Fields</span><span class="caret"></span>
+									<span>{{agile_translate "widgets" "agile-contact-fields"}}</span><span class="caret"></span>
 								</button>
 							</a>
 								<ul class="dropdown-menu callscript-customField" style="left: calc(76%);">
@@ -138,14 +134,14 @@
 					{{/if}}
 
                     <div class="control-group form-group">
-						<label class="control-label col-sm-2">Call Script<span class="field_req">*</span></label>
+						<label class="control-label col-sm-2">{{agile_translate "widgets" "call-script"}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-8">
                             <textarea id="displaytext" name="displaytext" rows="5" class="input required form-control"></textarea>							
 						</div>
 					</div>
                        
 					<div class="control-group form-group" id="filter-settings">
-						<label class="control-label col-sm-2">Condition</label>
+						<label class="control-label col-sm-2">{{agile_translate "contacts-view" "condition"}}</label>
 						<div class="controls col-sm-8">
                             <div id="loading-img-for-table" style="display:none;"></div>
 							<table class="chained-table m-b-sm bg-transparent">
@@ -161,20 +157,20 @@
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs form-control" id="LHS">
 													<optgroup label="Tag">
-														<option value="tags" selected="selected">Tag</option>
-														<option value="tags_time">Tag And Created Date</option>
+														<option value="tags" selected="selected">{{agile_translate "contact-edit" "tag"}}</option>
+														<option value="tags_time">{{agile_translate "contacts-view" "tag-and-created-date"}}</option>
 													</optgroup>
 													<optgroup label="Date">
-														<option value="created_time">Created</option>														
+														<option value="created_time">{{agile_translate "contact-details" "created"}}</option>														
 													</optgroup>
  													<optgroup label="Properties">
-														<!--<option value="first_name">First Name</option>-->
-														<option value="email">Email Address</option>
-														<option value="company">Company</option>
-														<option value="title">Job Title</option>
-														<option value="phone">Phone Number</option>
-														<option value="lead_score">Score</option>
-														<option value="owner_id">Owner</option>
+														<!--<option value="first_name">{{agile_translate "modals" "first-name"}}</option>-->
+														<option value="email">{{agile_translate "contacts-view" "email-address"}}</option>
+														<option value="company">{{agile_translate "contacts-view" "Company"}}</option>
+														<option value="title">{{agile_translate "modals" "job-title"}}</option>
+														<option value="phone">{{agile_translate "widgets" "phone-number"}}</option>
+														<option value="lead_score">{{agile_translate "report-add" "score"}}</option>
+														<option value="owner_id">{{agile_translate "contact-details" "owner"}}</option>
 													</optgroup>
 												
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -186,28 +182,28 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="w-full form-control">
 													<option value="EQUALS"
-														class="first_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
-													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
-													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
+														class="first_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_translate "contacts-view" "is"}}</option>
+													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{agile_translate "contacts-view" "is"}}</option>
+													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">{{agile_translate "contacts-view" "is-not"}}</option>
 													<option value="NOTEQUALS"
-														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_translate "contacts-view" "is-not"}}</option>
 													
-													<option value="EQUALS" class="tags tags_time">is</option>
-													<option value="NOTEQUALS" class="tags">isn't</option>
+													<option value="EQUALS" class="tags tags_time">{{agile_translate "contacts-view" "is"}}</option>
+													<option value="NOTEQUALS" class="tags">{{agile_translate "contacts-view" "is-not"}}</option>
 
-													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
-													<option value="IS_LESS_THAN" class="lead_score">less than</option>
-													<option value="ON" class="updated_time created_time">on</option>
+													<option value="IS_GREATER_THAN" class="lead_score">{{agile_translate "contacts-view" "greater-than"}}</option>
+													<option value="IS_LESS_THAN" class="lead_score">{{agile_translate "contacts-view" "less-than"}}</option>
+													<option value="ON" class="updated_time created_time">{{agile_translate "contacts-view" "on"}}</option>
 													<option value="AFTER" class="created_time updated_time">is
 														after</option>
 													<option value="BEFORE" class="created_time updated_time">is
 														before</option>
 													<option value="BETWEEN" class="created_time updated_time">is
-														between</option>
+														{{agile_translate "contacts-view" "between"}}</option>
 													<option value="LAST" class="created_time updated_time">in
 														last</option>
-													<option value="EQUALS" class="tag org_tag">is</option>
-													<option value="ANYOF" class="tag">is any of</option>
+													<option value="EQUALS" class="tag org_tag">{{agile_translate "contacts-view" "is"}}</option>
+													<option value="ANYOF" class="tag">{{agile_translate "contacts-view" "is-any-of"}}</option>
 												</select>
 											</div>
 										</td>
@@ -241,12 +237,12 @@
 										<td class="nested-condition-block span2 v-top">
 											<div id="nested_condition" name="nested_condition">
 												<select name="temp" class="form-control w-full">
-													<option value="EQUALS" class="tags_time">on</option>
-													<option value="AFTER" class="tags_time">is after</option>
-													<option value="BEFORE" class="tags_time">is before</option>
+													<option value="EQUALS" class="tags_time">{{agile_translate "contacts-view" "on"}}</option>
+													<option value="AFTER" class="tags_time">{{agile_translate "contacts-view" "is-after"}}</option>
+													<option value="BEFORE" class="tags_time">{{agile_translate "contacts-view" "is-before"}}</option>
 													<option value="BETWEEN" class="tags_time">is
-														between</option>
-													<option value="LAST" class="tags_time">in last</option>
+														{{agile_translate "contacts-view" "between"}}</option>
+													<option value="LAST" class="tags_time">{{agile_translate "contacts-view" "in-last"}}</option>
 											</div>
 										</td>
 										<td class="controls span2 v-top">
@@ -276,7 +272,7 @@
 								
 								</tbody>
 							</table>
-								<a href="#" class="callscript-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add</a>
+								<a href="#" class="callscript-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{agile_translate "other" "add"}}</a>
 						</div>
 					</div>
 			</div>
@@ -285,9 +281,9 @@
 			{{/if}}
 			<div class="form-actions">
 				<div class="col-sm-offset-2">
-                <a href="#callscript/rules" class="btn btn-sm btn-default redirect-to-showrules">Close</a>
-                <a href="#add-widget" style="display:none;" class="btn btn-danger btn-sm redirect-to-addwidget">Close</a>
-				<a href="#" class="btn btn-primary btn-sm save-agile-widget" id="save_prefs">Save</a> 
+                <a href="#callscript/rules" class="btn btn-sm btn-default redirect-to-showrules">{{agile_translate "contact-details" "CLOSE"}}</a>
+                <a href="#add-widget" style="display:none;" class="btn btn-danger btn-sm redirect-to-addwidget">{{agile_translate "contact-details" "CLOSE"}}</a>
+				<a href="#" class="btn btn-primary btn-sm save-agile-widget" id="save_prefs">{{agile_translate "modals" "save"}}</a> 
 				</div>
 			</div>
 			</fieldset>
@@ -314,8 +310,8 @@
 			{{/if_equals}}
 		</div>
 		<div class="row-fluid">
-			<a href="#call" class="btn btn-sm btn-default pull-right" id="twilioio_call" style="display:none;"><i class="icon-phone"></i>Call</a>			
-			<a href="#note" class="right contact-add-note m-xs" id="twilioio_note">Add Note</a>
+			<a href="#call" class="btn btn-sm btn-default pull-right" id="twilioio_call" style="display:none;"><i class="icon-phone"></i>{{agile_translate "admin-settings-tasks" "call"}}</a>			
+			<a href="#note" class="right contact-add-note m-xs" id="twilioio_note">{{agile_translate "deal-view" "add-note"}}</a>
 		</div>
  	</div>	
 </script>

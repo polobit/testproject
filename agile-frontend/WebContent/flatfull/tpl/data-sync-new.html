@@ -2,7 +2,7 @@
         
     <div class="tab-container m-b-none">
        <ul class="nav nav-tabs">
-         <li><a href="#salesforce-tab" data-toggle="tab"  class="b-l-none">Salesforce</a></li>
+         <li><a href="#salesforce-tab" data-toggle="tab"  class="b-l-none">{{agile_translate "prefs-data-sync" "salesforce"}}</a></li>
        </ul>
 	</div>
 
@@ -19,7 +19,7 @@
 <script id="data-import-settings-template" type="text/html">
 	<div class="tab-container m-b-none widgets_inner">
        <ul class="nav nav-tabs">
-         <li><a href="#salesforce-tab" data-toggle="tab"  class="b-l-none">Salesforce</a></li>
+         <li><a href="#salesforce-tab" data-toggle="tab"  class="b-l-none">{{agile_translate "prefs-data-sync" "salesforce"}}</a></li>
        </ul>
 	</div>
 
@@ -40,11 +40,11 @@
          <li><a href="#accounting-tab" data-toggle="tab"><i class="icon icon-calculator"></i></a></li>
 
        {{else}}
-         <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">Google</a></li>
-         <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
-         <li><a href="#office365-tab" data-toggle="tab">Office 365</a></li>
-         <li><a href="#payment-tab" data-toggle="tab">Payment</a></li>
-         <li><a href="#accounting-tab" data-toggle="tab">Accounting</a></li>
+         <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">{{agile_translate "contact-edit" "google-plus"}}</a></li>
+         <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_translate "campaigns" "ecommerce"}}</a></li>
+         <li><a href="#office365-tab" data-toggle="tab">{{agile_translate "prefs-data-sync" "Office-365"}}</a></li>
+         <li><a href="#payment-tab" data-toggle="tab">{{agile_translate "prefs-data-sync" "payment"}}</a></li>
+         <li><a href="#accounting-tab" data-toggle="tab">{{agile_translate "prefs-data-sync" "accounting"}}</a></li>
         {{/is_mobile}}
        </ul>
 	</div>
@@ -88,11 +88,11 @@
 <script id="data-sync-settings-template" type="text/html">
 	<div class="tab-container m-b-none widgets_inner">
        <ul class="nav nav-tabs">
-         <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">Google</a></li>
-         <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
-         <li><a href="#office365-tab" data-toggle="tab">Office 365</a></li>
-         <li><a href="#payment-tab" data-toggle="tab">Payment</a></li>
-         <li><a href="#accounting-tab" data-toggle="tab">Accounting</a></li>
+         <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">{{agile_translate "contact-edit" "google-plus"}}</a></li>
+         <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_translate "campaigns" "ecommerce"}}</a></li>
+         <li><a href="#office365-tab" data-toggle="tab">{{agile_translate "prefs-data-sync" "Office-365"}}</a></li>
+         <li><a href="#payment-tab" data-toggle="tab">{{agile_translate "prefs-data-sync" "payment"}}</a></li>
+         <li><a href="#accounting-tab" data-toggle="tab">{{agile_translate "prefs-data-sync" "accounting"}}</a></li>
        </ul>
 	</div>
 
@@ -131,15 +131,15 @@
     		{{#if_equals type "GOOGLE"}}
 			{{#if id}}
 				<div class="m-t-md">
-    				<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
-					<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    				<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_translate "web-rules" "disable"}}</a>
+					<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "preferences" "settings"}}</a>
 				</div>
     		{{else}}
 				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block m-t-md" sync_type="{{type}}" id="data-sync-type">Enable</div>
+    					<div class="btn btn-sm btn-default inline-block m-t-md" sync_type="{{type}}" id="data-sync-type">{{agile_translate "prefs-email" "enable"}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block m-t-md" disabled>Enable</span>
-						<span class="m-l-xs m-t-md"><i>Needs import privilege.</i></span>
+						<span class="btn btn-sm btn-primary inline-block m-t-md" disabled>{{agile_translate "prefs-email" "enable"}}</span>
+						<span class="m-l-xs m-t-md"><i>{{agile_translate "prefs-data-sync" "needs-import-privilege"}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}
@@ -147,14 +147,14 @@
 
     		{{#if_equals type "STRIPE"}}
 			{{#if id}}
-    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
-				<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_translate "web-rules" "disable"}}</a>
+				<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "preferences" "settings"}}</a>
     		{{else}}
 				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_translate "prefs-email" "enable"}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
-						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+						<span class="btn btn-sm btn-primary inline-block" disabled>{{agile_translate "prefs-email" "enable"}}</span>
+						<span class="m-l-xs"><i>{{agile_translate "prefs-data-sync" "needs-import-privilege"}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}
@@ -162,66 +162,66 @@
 
     		{{#if_equals type "SHOPIFY"}}
 			{{#if id}}
-    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
-				<a href="#sync/shopify" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_translate "web-rules" "disable"}}</a>
+				<a href="#sync/shopify" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "preferences" "settings"}}</a>
     		{{else}}
 				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_translate "prefs-email" "enable"}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
-						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+						<span class="btn btn-sm btn-primary inline-block" disabled>{{agile_translate "prefs-email" "enable"}}</span>
+						<span class="m-l-xs"><i>{{agile_translate "prefs-data-sync" "needs-import-privilege"}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}
 
     		{{#if_equals type "OFFICE365"}}
 			{{#if id}}
-    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
-				<a href="#sync/officeCalendar" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_translate "web-rules" "disable"}}</a>
+				<a href="#sync/officeCalendar" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "preferences" "settings"}}</a>
     		{{else}}
 				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_translate "prefs-email" "enable"}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
-						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+						<span class="btn btn-sm btn-primary inline-block" disabled>{{agile_translate "prefs-email" "enable"}}</span>
+						<span class="m-l-xs"><i>{{agile_translate "prefs-data-sync" "needs-import-privilege"}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}
 
     		{{#if_equals type "FRESHBOOKS"}}
 			{{#if id}}
-    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
-				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_translate "web-rules" "disable"}}</a>
+				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "preferences" "settings"}}</a>
     		{{else}}
 				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_translate "prefs-email" "enable"}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
-						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+						<span class="btn btn-sm btn-primary inline-block" disabled>{{agile_translate "prefs-email" "enable"}}</span>
+						<span class="m-l-xs"><i>{{agile_translate "prefs-data-sync" "needs-import-privilege"}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}
 
     		{{#if_equals type "QUICKBOOK"}}
 			{{#if id}}
-    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
-				<a href="#sync/quickbook" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_translate "web-rules" "disable"}}</a>
+				<a href="#sync/quickbook" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "preferences" "settings"}}</a>
     		{{else}}
 				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">{{agile_translate "prefs-email" "enable"}}</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
-						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+						<span class="btn btn-sm btn-primary inline-block" disabled>{{agile_translate "prefs-email" "enable"}}</span>
+						<span class="m-l-xs"><i>{{agile_translate "prefs-data-sync" "needs-import-privilege"}}</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}
 
     		{{#if_equals type "SALESFORCE"}}
 			{{#if id}}
-    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
-    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >{{agile_translate "web-rules" "disable"}}</a>
+    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "preferences" "settings"}}</a>
     		{{else}}
-    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">Enable</a>
+    			<a href="#sync/salesforce" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "prefs-email" "enable"}}</a>
     		{{/if}}
     		
 

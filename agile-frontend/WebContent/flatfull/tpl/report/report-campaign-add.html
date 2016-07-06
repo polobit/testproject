@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
        
-            <h3 class="pull-left font-thin h3">Campaign Reports</h3>
+            <h3 class="pull-left font-thin h3">Campaign {{agile_translate "campaigns" "reports"}}</h3>
             
        
     </div>
@@ -24,7 +24,7 @@
 				<div class="panel-body">
 				<fieldset>
 					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
+						<label class="control-label col-sm-2">{{agile_translate "deal-view" "name"}}<span class="field_req">*</span></label>
 						<div class="controls col-sm-8">
 							<input type="text" name="name" class="required form-control" />
 						</div>
@@ -32,7 +32,7 @@
 
 				<div class="control-group form-group">         
                     
-                    <label class="control-label col-sm-2">Select campaign <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{agile_translate "contact-details" "select-campaign"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-8">
                         <select class="campaign-select required form-control" name="campaignId" id='campaign-select'>
                             <option value="">Select..</option>
@@ -40,31 +40,31 @@
                     </div>
                 </div>	
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Send Report To<span
+				<label class="control-label col-sm-2">{{agile_translate "report-add" "send-report-to"}}<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
 					<input type="text" name="sendTo" class="required multipleEmails form-control" placeholder="Email addresses separated by comma"/>
 				</div>
 			</div>
 			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Duration<span
+				<label class="control-label col-sm-2">{{agile_translate "portlets" "duration"}}<span
 					class="field_req">*</span></label>
 				<div class="controls col-sm-8">
 					<select class="required form-control" name="duration" id="duration">
-					<option value="DAILY">Daily</option>
-						<option value="WEEKLY">Weekly</option>
-						<option value="MONTHLY">Monthly</option>
+					<option value="DAILY">{{agile_translate "report-add" "daily"}}</option>
+						<option value="WEEKLY">{{agile_translate "report-add" "weekly"}}</option>
+						<option value="MONTHLY">{{agile_translate "plan-and-upgrade" "monthly"}}</option>
 					</select>
 				</div>
 			</div>			
 <div class="control-group form-group">
-				<label class="control-label col-sm-2" ><a href="" id="report_advanced" data-toggle="collapse" data-target="#report-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;Advanced</a></label>
+				<label class="control-label col-sm-2" ><a href="" id="report_advanced" data-toggle="collapse" data-target="#report-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;{{agile_translate "report-add" "advanced"}}</a></label>
 			</div>
 			<div class="row">
 			<div class="collapse col-sm-12" id="report-advanced-block">
 
 <div class="control-group form-group">
-						<label class="control-label col-sm-2">Time Zone</label>
+						<label class="control-label col-sm-2">{{agile_translate "report-add" "time-zone"}}</label>
 						<div class="controls col-sm-8">
 							<select name="report_timezone" id="report_timezone" class="form-control">
 					         <option value="Africa/Abidjan">
@@ -97,7 +97,7 @@
 								<option value="Africa/Dar_es_Salaam">
 									Africa/Dar es Salaam</option>
 								<option value="Africa/Djibouti">
-									Africa/Djibouti</option>
+									Africa/{{agile_translate "countries" "DJ"}}</option>
 
 								<option value="Africa/El_Aaiun"> Africa/El
 									Aaiun</option>
@@ -127,7 +127,7 @@
 
 								<option value="Africa/Monrovia">
 									Africa/Monrovia</option>
-								<option value="Africa/Maputo"> Africa/Maputo</option>
+								<option value="Africa/Maputo"> Africa/Mapu{{agile_translate "contacts-view" "to"}}</option>
 								<option value="Africa/Maseru"> Africa/Maseru</option>
 								<option value="Africa/Mbabane">
 									Africa/Mbabane</option>
@@ -148,7 +148,7 @@
 									Africa/Porto-Novo</option>
 								<option value="Africa/Sao_Tome"> Africa/Sao
 									Tome</option>
-								<option value="Africa/Tunis"> Africa/Tunis</option>
+								<option value="Africa/Tunis"> Africa/Tun{{agile_translate "contacts-view" "is"}}</option>
 								<option value="Africa/Tripoli">
 									Africa/Tripoli</option>
 								<option value="Africa/Windhoek">
@@ -162,10 +162,10 @@
 								<option value="America/Atikokan">
 									America/Atikokan</option>
 								<option value="America/Anguilla">
-									America/Anguilla</option>
+									America/{{agile_translate "countries" "AI"}}</option>
 								<option value="America/Antigua">
 									America/Antigua</option>
-								<option value="America/Aruba"> America/Aruba</option>
+								<option value="America/Aruba"> America/{{agile_translate "countries" "AW"}}</option>
 								<option value="America/Araguaina">
 									America/Araguaina</option>
 								<option value="America/Argentina/Buenos_Aires">
@@ -187,24 +187,24 @@
 								<option value="America/Argentina/San_Juan">
 									America/Argentina/San Juan</option>
 								<option value="America/Argentina/San_Luis">
-									America/Argentina/San Luis</option>
+									America/Argentina/San Lu{{agile_translate "contacts-view" "is"}}</option>
 								<option value="America/Argentina/Tucuman">
 									America/Argentina/Tucuman</option>
 								<option value="America/Argentina/Ushuaia">
 									America/Argentina/Ushuaia</option>
 								<option value="America/Asuncion">
-									America/Asuncion</option>
+									America/Asunci{{agile_translate "contacts-view" "on"}}</option>
 								<option value="America/Boise"> America/Boise</option>
 								<option value="America/Bogota">
 									America/Bogota</option>
 								<option value="America/Bahia_Banderas">
 									America/Bahia Banderas</option>
 								<option value="America/Belize">
-									America/Belize</option>
+									America/{{agile_translate "countries" "BZ"}}</option>
 								<option value="America/Barbados">
-									America/Barbados</option>
+									America/{{agile_translate "countries" "BB"}}</option>
 								<option value="America/Blanc-Sablon">
-									America/Blanc-Sablon</option>
+									America/Blanc-Sabl{{agile_translate "contacts-view" "on"}}</option>
 								<option value="America/Boa_Vista">
 									America/Boa Vista</option>
 								<option value="America/Bahia"> America/Bahia</option>
@@ -214,13 +214,13 @@
 								<option value="America/Chicago">
 									America/Chicago</option>
 								<option value="America/Costa_Rica">
-									America/Costa Rica</option>
+									America/{{agile_translate "countries" "CR"}}</option>
 								<option value="America/Cambridge_Bay">America/Cambridge
 									Bay</option>
 								<option value="America/Chihuahua">
 									America/Chihuahua</option>
 								<option value="America/Creston">
-									America/Creston</option>
+									America/Crest{{agile_translate "contacts-view" "on"}}</option>
 								<option value="America/Cayman">
 									America/Cayman</option>
 								<option value="America/Caracas">
@@ -236,25 +236,25 @@
 								<option value="America/Dawson_Creek">
 									America/Dawson Creek</option>
 								<option value="America/Dawson">
-									America/Dawson</option>
+									America/Daws{{agile_translate "contacts-view" "on"}}</option>
 								<option value="America/Denver">
 									America/Denver</option>
 								<option value="America/Detroit">
 									America/Detroit</option>
 								<option value="America/Dominica">
-									America/Dominica</option>
+									America/{{agile_translate "countries" "DM"}}</option>
 								<option value="America/Danmarkshavn">
 									America/Danmarkshavn</option>
 								<option value="America/Edmonton">
-									America/Edmonton</option>
+									America/Edmont{{agile_translate "contacts-view" "on"}}</option>
 								<option value="America/El_Salvador">
-									America/El Salvador</option>
+									America/{{agile_translate "countries" "SV"}}</option>
 								<option value="America/Eirunepe">
 									America/Eirunepe</option>
 								<option value="America/Fortaleza">
 									America/Fortaleza</option>
 								<option value="America/Guatemala">
-									America/Guatemala</option>
+									America/{{agile_translate "countries" "GT"}}</option>
 								<option value="America/Grand_Turk">
 									America/Grand Turk</option>
 								<option value="America/Guayaquil">
@@ -264,11 +264,11 @@
 								<option value="America/Goose_Bay">
 									America/Goose Bay</option>
 								<option value="America/Grenada">
-									America/Grenada</option>
+									America/{{agile_translate "countries" "GD"}}</option>
 								<option value="America/Guadeloupe">
-									America/Guadeloupe</option>
+									America/{{agile_translate "countries" "GP"}}</option>
 								<option value="America/Guyana">
-									America/Guyana</option>
+									America/{{agile_translate "countries" "GY"}}</option>
 								<option value="America/Godthab">
 									America/Godthab</option>
 								<option value="America/Hermosillo">
@@ -282,9 +282,9 @@
 								<option value="America/Indiana/Knox">
 									America/Indiana/Knox</option>
 								<option value="America/Indiana/Tell_City">
-									America/Indiana/Tell City</option>
+									America/Indiana/Tell {{agile_translate "contact-edit" "city"}}</option>
 								<option value="America/Indiana/Indianapolis">
-									America/Indiana/Indianapolis</option>
+									America/Indiana/Indianapol{{agile_translate "contacts-view" "is"}}</option>
 								<option value="America/Indiana/Marengo">
 									America/Indiana/Marengo</option>
 								<option value="America/Indiana/Petersburg">
@@ -300,7 +300,7 @@
 								<option value="America/Juneau">
 									America/Juneau</option>
 								<option value="America/Jamaica">
-									America/Jamaica</option>
+									America/{{agile_translate "countries" "JM"}}</option>
 								<option value="America/Kentucky/Louisville">
 									America/Kentucky/Louisville</option>
 								<option value="America/Kentucky/Monticello">
@@ -327,7 +327,7 @@
 								<option value="America/Merida">
 									America/Merida</option>
 								<option value="America/Mexico_City">
-									America/Mexico City</option>
+									America/Mexico {{agile_translate "contact-edit" "city"}}</option>
 								<option value="America/Monterrey">
 									America/Monterrey</option>
 								<option value="America/Montreal">
@@ -335,17 +335,17 @@
 								<option value="America/Maceio">
 									America/Maceio</option>
 								<option value="America/Miquelon">
-									America/Miquelon</option>
+									America/Miquel{{agile_translate "contacts-view" "on"}}</option>
 								<option value="America/Manaus">
 									America/Manaus</option>
 								<option value="America/Marigot">
 									America/Marigot</option>
 								<option value="America/Martinique">
-									America/Martinique</option>
+									America/{{agile_translate "countries" "MQ"}}</option>
 								<option value="America/Moncton">
-									America/Moncton</option>
+									America/Monct{{agile_translate "contacts-view" "on"}}</option>
 								<option value="America/Montserrat">
-									America/Montserrat</option>
+									America/{{agile_translate "countries" "MS"}}</option>
 								<option value="America/Montevideo">
 									America/Montevideo</option>
 								<option value="America/Nome"> America/Nome</option>
@@ -354,7 +354,7 @@
 								<option value="America/North_Dakota/Beulah">
 									America/North Dakota/Beulah</option>
 								<option value="America/North_Dakota/Center">
-									America/North Dakota/Center</option>
+									America/North Dakota/{{agile_translate "web-rules" "center"}}</option>
 								<option value="America/North_Dakota/New_Salem">
 									America/North Dakota/New Salem</option>
 								<option value="America/Nassau">
@@ -362,25 +362,25 @@
 								<option value="America/New_York"> America/New
 									York</option>
 								<option value="America/Nipigon">
-									America/Nipigon</option>
+									America/Nipig{{agile_translate "contacts-view" "on"}}</option>
 								<option value="America/Ojinaga">
 									America/Ojinaga</option>
 								<option value="America/Phoenix">
 									America/Phoenix</option>
 								<option value="America/Panama">
-									America/Panama</option>
+									America/{{agile_translate "countries" "PA"}}</option>
 								<option value="America/Pangnirtung">
 									America/Pangnirtung</option>
 								<option value="America/Port-au-Prince">
 									America/Port-au-Prince</option>
 								<option value="America/Port_of_Spain">
-									America/Port of Spain</option>
+									America/Port of {{agile_translate "countries" "ES"}}</option>
 								<option value="America/Porto_Velho">
 									America/Porto Velho</option>
 								<option value="America/Paramaribo">
 									America/Paramaribo</option>
 								<option value="America/Puerto_Rico">
-									America/Puerto Rico</option>
+									America/{{agile_translate "countries" "PR"}}</option>
 								<option value="America/Rainy_River">
 									America/Rainy River</option>
 								<option value="America/Rankin_Inlet">
@@ -433,7 +433,7 @@
 								<option value="America/Thunder_Bay">
 									America/Thunder Bay</option>
 								<option value="America/Toronto">
-									America/Toronto</option>
+									America/Toron{{agile_translate "contacts-view" "to"}}</option>
 								<option value="America/Thule"> America/Thule</option>
 								<option value="America/Tortola">
 									America/Tortola</option>
@@ -454,11 +454,11 @@
 
 
 								<option value="Antarctica/Davis">
-									Antarctica/Davis</option>
+									Antarctica/Dav{{agile_translate "contacts-view" "is"}}</option>
 								<option value="Antarctica/DumontDUrville">
 									Antarctica/DumontDUrville</option>
 
-								<option value="Antarctica/Mawson">Antarctica/Mawson</option>
+								<option value="Antarctica/Mawson">Antarctica/Maws{{agile_translate "contacts-view" "on"}}</option>
 								<option value="Antarctica/Macquarie">
 									Antarctica/Macquarie</option>
 								<option value="Antarctica/McMurdo">
@@ -488,7 +488,7 @@
 								<option value="Asia/Almaty"> Asia/Almaty</option>
 								<option value="Asia/Anadyr"> Asia/Anadyr</option>
 								<option value="Asia/Baghdad"> Asia/Baghdad</option>
-								<option value="Asia/Bahrain"> Asia/Bahrain</option>
+								<option value="Asia/Bahrain"> Asia/{{agile_translate "countries" "BH"}}</option>
 								<option value="Asia/Beirut"> Asia/Beirut</option>
 								<option value="Asia/Baku"> Asia/Baku</option>
 								<option value="Asia/Bishkek"> Asia/Bishkek</option>
@@ -510,11 +510,11 @@
 
 
 								<option value="Asia/Gaza"> Asia/Gaza</option>
-								<option value="Asia/Hebron"> Asia/Hebron</option>
+								<option value="Asia/Hebron"> Asia/Hebr{{agile_translate "contacts-view" "on"}}</option>
 								<option value="Asia/Hovd"> Asia/Hovd</option>
 								<option value="Asia/Ho_Chi_Minh"> Asia/Ho Chi
 									Minh</option>
-								<option value="Asia/Harbin"> Asia/Harbin</option>
+								<option value="Asia/Harbin"> Asia/Harb{{agile_translate "contacts-view" "in"}}</option>
 								<option value="Asia/Hong_Kong"> Asia/Hong
 									Kong</option>
 
@@ -524,7 +524,7 @@
 									Asia/Jerusalem</option>
 								<option value="Asia/Jakarta"> Asia/Jakarta</option>
 								<option value="Asia/Jayapura"> Asia/Jayapura</option>
-								<option value="Asia/Kuwait"> Asia/Kuwait</option>
+								<option value="Asia/Kuwait"> Asia/{{agile_translate "countries" "KW"}}</option>
 								<option value="Asia/Kabul"> Asia/Kabul</option>
 								<option value="Asia/Karachi"> Asia/Karachi</option>
 								<option value="Asia/Kolkata"> Asia/Kolkata</option>
@@ -559,18 +559,18 @@
 									Asia/Pontianak</option>
 								<option value="Asia/Pyongyang">
 									Asia/Pyongyang</option>
-								<option value="Asia/Qatar"> Asia/Qatar</option>
+								<option value="Asia/Qatar"> Asia/{{agile_translate "countries" "QA"}}</option>
 								<option value="Asia/Qyzylorda">
 									Asia/Qyzylorda</option>
 								<option value="Asia/Riyadh"> Asia/Riyadh</option>
-								<option value="Asia/Rangoon"> Asia/Rangoon</option>
+								<option value="Asia/Rangoon"> Asia/Rango{{agile_translate "contacts-view" "on"}}</option>
 								<option value="Asia/Samarkand">
-									Asia/Samarkand</option>
+									Asia/Samark{{agile_translate "contacts-view" "and"}}</option>
 								<option value="Asia/Shanghai"> Asia/Shanghai</option>
 								<option value="Asia/Singapore">
-									Asia/Singapore</option>
+									Asia/{{agile_translate "countries" "SG"}}</option>
 								<option value="Asia/Seoul"> Asia/Seoul</option>
-								<option value="Asia/Sakhalin"> Asia/Sakhalin</option>
+								<option value="Asia/Sakhalin"> Asia/Sakhal{{agile_translate "contacts-view" "in"}}</option>
 								<option value="Asia/Tashkent"> Asia/Tashkent</option>
 								<option value="Asia/Tokyo"> Asia/Tokyo</option>
 								<option value="Asia/Taipei"> Asia/Taipei</option>
@@ -600,7 +600,7 @@
 								<option value="Australia/Currie">
 									Australia/Currie</option>
 								<option value="Australia/Darwin">
-									Australia/Darwin</option>
+									Australia/Darw{{agile_translate "contacts-view" "in"}}</option>
 								<option value="Australia/Eucla">
 									Australia/Eucla</option>
 								<option value="Australia/Hobart">
@@ -618,9 +618,9 @@
 								<option value="Atlantic/Azores">
 									Atlantic/Azores</option>
 								<option value="Atlantic/Bermuda">
-									Atlantic/Bermuda</option>
+									Atlantic/{{agile_translate "countries" "BM"}}</option>
 								<option value="Atlantic/Cape_Verde">
-									Atlantic/Cape Verde</option>
+									Atlantic/{{agile_translate "countries" "CV"}}</option>
 								<option value="Atlantic/Canary">
 									Atlantic/Canary</option>
 								<option value="Atlantic/Faroe">
@@ -632,7 +632,7 @@
 								<option value="Atlantic/Reykjavik">
 									Atlantic/Reykjavik</option>
 								<option value="Atlantic/South_Georgia">
-									Atlantic/South Georgia</option>
+									Atlantic/South {{agile_translate "countries" "GE"}}</option>
 								<option value="Atlantic/Stanley">
 									Atlantic/Stanley</option>
 
@@ -646,9 +646,9 @@
 								<option value="Canada/Eastern">
 									Canada/Eastern</option>
 								<option value="Canada/Mountain">
-									Canada/Mountain</option>
+									Canada/Mounta{{agile_translate "contacts-view" "in"}}</option>
 								<option value="Canada/Newfoundland">
-									Canada/Newfoundland</option>
+									Canada/Newfoundl{{agile_translate "contacts-view" "and"}}</option>
 								<option value="Canada/Pacific">
 									Canada/Pacific</option>
 
@@ -656,11 +656,11 @@
 								<option value="Europe/Amsterdam">
 									Europe/Amsterdam</option>
 								<option value="Europe/Andorra">
-									Europe/Andorra</option>
+									Europe/{{agile_translate "countries" "AD"}}</option>
 								<option value="Europe/Athens"> Europe/Athens</option>
 								<option value="Europe/Belgrade">
 									Europe/Belgrade</option>
-								<option value="Europe/Berlin"> Europe/Berlin</option>
+								<option value="Europe/Berlin"> Europe/Berl{{agile_translate "contacts-view" "in"}}</option>
 								<option value="Europe/Bratislava">
 									Europe/Bratislava</option>
 								<option value="Europe/Brussels">
@@ -675,37 +675,37 @@
 									Europe/Copenhagen</option>
 								<option value="Europe/Chisinau">
 									Europe/Chisinau</option>
-								<option value="Europe/Dublin"> Europe/Dublin</option>
+								<option value="Europe/Dublin"> Europe/Dubl{{agile_translate "contacts-view" "in"}}</option>
 								<option value="Europe/Guernsey">
-									Europe/Guernsey</option>
+									Europe/{{agile_translate "countries" "GG"}}</option>
 								<option value="Europe/Gibraltar">
-									Europe/Gibraltar</option>
+									Europe/{{agile_translate "countries" "GI"}}</option>
 								<option value="Europe/Helsinki">
 									Europe/Helsinki</option>
 
 								<option value="Europe/Isle_of_Man">
-									Europe/Isle of Man</option>
+									Europe/{{agile_translate "countries" "IM"}}</option>
 								<option value="Europe/Istanbul">
 									Europe/Istanbul</option>
-								<option value="Europe/Jersey"> Europe/Jersey</option>
+								<option value="Europe/Jersey"> Europe/{{agile_translate "countries" "JE"}}</option>
 								<option value="Europe/Kaliningrad">
 									Europe/Kaliningrad</option>
 								<option value="Europe/Kiev"> Europe/Kiev</option>
-								<option value="Europe/Lisbon"> Europe/Lisbon</option>
-								<option value="Europe/London"> Europe/London</option>
+								<option value="Europe/Lisbon"> Europe/Lisb{{agile_translate "contacts-view" "on"}}</option>
+								<option value="Europe/London"> Europe/Lond{{agile_translate "contacts-view" "on"}}</option>
 								<option value="Europe/Ljubljana">
 									Europe/Ljubljana</option>
 								<option value="Europe/Luxembourg">
-									Europe/Luxembourg</option>
+									Europe/{{agile_translate "countries" "LU"}}</option>
 								<option value="Europe/Madrid"> Europe/Madrid</option>
-								<option value="Europe/Malta"> Europe/Malta</option>
-								<option value="Europe/Monaco"> Europe/Monaco</option>
+								<option value="Europe/Malta"> Europe/{{agile_translate "countries" "MT"}}</option>
+								<option value="Europe/Monaco"> Europe/{{agile_translate "countries" "MC"}}</option>
 								<option value="Europe/Mariehamn">
 									Europe/Mariehamn</option>
 								<option value="Europe/Minsk"> Europe/Minsk</option>
 								<option value="Europe/Moscow"> Europe/Moscow</option>
 								<option value="Europe/Oslo"> Europe/Oslo</option>
-								<option value="Europe/Paris"> Europe/Paris</option>
+								<option value="Europe/Paris"> Europe/Par{{agile_translate "contacts-view" "is"}}</option>
 								<option value="Europe/Podgorica">
 									Europe/Podgorica</option>
 								<option value="Europe/Prague"> Europe/Prague</option>
@@ -755,18 +755,18 @@
 								<option value="Indian/Kerguelen">
 									Indian/Kerguelen</option>
 								<option value="Indian/Mayotte">
-									Indian/Mayotte</option>
+									Indian/{{agile_translate "countries" "YT"}}</option>
 								<option value="Indian/Mahe"> Indian/Mahe</option>
 								<option value="Indian/Mauritius">
-									Indian/Mauritius</option>
+									Indian/{{agile_translate "countries" "MU"}}</option>
 								<option value="Indian/Maldives">
-									Indian/Maldives</option>
+									Indian/{{agile_translate "countries" "MV"}}</option>
 								<option value="Indian/Reunion">
-									Indian/Reunion</option>
+									Indian/{{agile_translate "countries" "RE"}}</option>
 
 
 								<option value="Pacific/Auckland">
-									Pacific/Auckland</option>
+									Pacific/Auckl{{agile_translate "contacts-view" "and"}}</option>
 								<option value="Pacific/Apia"> Pacific/Apia</option>
 
 
@@ -780,7 +780,7 @@
 									Pacific/Enderbury</option>
 
 
-								<option value="Pacific/Fiji"> Pacific/Fiji</option>
+								<option value="Pacific/Fiji"> Pacific/{{agile_translate "countries" "FJ"}}</option>
 								<option value="Pacific/Funafuti">
 									Pacific/Funafuti</option>
 								<option value="Pacific/Fakaofo">
@@ -790,18 +790,18 @@
 									Pacific/Galapagos</option>
 								<option value="Pacific/Gambier">
 									Pacific/Gambier</option>
-								<option value="Pacific/Guam"> Pacific/Guam</option>
+								<option value="Pacific/Guam"> Pacific/{{agile_translate "countries" "GU"}}</option>
 								<option value="Pacific/Guadalcanal">
 									Pacific/Guadalcanal</option>
 								<option value="Pacific/Honolulu">
 									Pacific/Honolulu</option>
 								<option value="US/Hawaii"> US/Hawaii</option>
 								<option value="Pacific/Johnston">
-									Pacific/Johnston</option>
+									Pacific/Johnst{{agile_translate "contacts-view" "on"}}</option>
 								<option value="Pacific/Kosrae">
 									Pacific/Kosrae</option>
 								<option value="Pacific/Kwajalein">
-									Pacific/Kwajalein</option>
+									Pacific/Kwajale{{agile_translate "contacts-view" "in"}}</option>
 								<option value="Pacific/Kiritimati">
 									Pacific/Kiritimati</option>
 
@@ -814,22 +814,22 @@
 									Pacific/Midway</option>
 								<option value="Pacific/Majuro">
 									Pacific/Majuro</option>
-								<option value="Pacific/Niue"> Pacific/Niue</option>
+								<option value="Pacific/Niue"> Pacific/{{agile_translate "countries" "NU"}}</option>
 
 
 								<option value="Pacific/Noumea">
 									Pacific/Noumea</option>
 								<option value="Pacific/Norfolk">
 									Pacific/Norfolk</option>
-								<option value="Pacific/Nauru"> Pacific/Nauru</option>
+								<option value="Pacific/Nauru"> Pacific/{{agile_translate "countries" "NR"}}</option>
 
 								<option value="Pacific/Pitcairn">
-									Pacific/Pitcairn</option>
+									Pacific/{{agile_translate "countries" "PN"}}</option>
 								<option value="Pacific/Pago_Pago">
 									Pacific/Pago Pago</option>
-								<option value="Pacific/Palau"> Pacific/Palau</option>
+								<option value="Pacific/Palau"> Pacific/{{agile_translate "countries" "PW"}}</option>
 								<option value="Pacific/Port_Moresby">
-									Pacific/Port Moresby</option>
+									Pacific/Port Mores{{agile_translate "contact-details" "by"}}</option>
 								<option value="Pacific/Pohnpei">
 									Pacific/Pohnpei</option>
 
@@ -845,12 +845,12 @@
 									Pacific/Tongatapu</option>
 								<option value="Pacific/Wake"> Pacific/Wake</option>
 								<option value="Pacific/Wallis">
-									Pacific/Wallis</option>
+									Pacific/Wall{{agile_translate "contacts-view" "is"}}</option>
 								<option value="US/Arizona"> US/Arizona</option>
 								<option value="US/Pacific"> US/Pacific</option>
 								<option value="US/Central"> US/Central</option>
 								<option value="US/Alaska"> US/Alaska</option>
-								<option value="US/Mountain"> US/Mountain</option>
+								<option value="US/Mountain"> US/Mounta{{agile_translate "contacts-view" "in"}}</option>
 								<option value="US/Eastern"> US/Eastern</option>
 
 
@@ -861,7 +861,7 @@
 						</div>
 					</div>
             <div class="control-group form-group" id="contact_report_day" style="display:none;">
-				<label class="control-label col-sm-2">Day of Month</label>
+				<label class="control-label col-sm-2">{{agile_translate "report-add" "day-of-month"}}</label>
 				<div class="controls col-sm-8">
 					<select name="activity_day" class="form-control"> 
                     <option value="1">1</option>
@@ -899,21 +899,21 @@
 				</div>
 			</div>
             <div class="control-group form-group" id="contact_report_weekday" style="display:none;">
-				<label class="control-label col-sm-2">Day</label>
+				<label class="control-label col-sm-2">{{agile_translate "calendar" "day"}}</label>
 				<div class="controls col-sm-8">
 					<select name="activity_weekday" class="form-control"> 
-						<option value="2">Monday</option>
-					    <option value="3">Tuesday</option>
-					    <option value="4">Wednesday</option>
-						<option value="5">Thursday</option>
-						<option value="6">Friday</option>
-						<option value="7">Saturday</option>
-                        <option value="1">Sunday</option>						
+						<option value="2">{{agile_translate "prefs-settings" "monday"}}</option>
+					    <option value="3">{{agile_translate "calendar" "tuesday"}}</option>
+					    <option value="4">{{agile_translate "calendar" "wednesday"}}</option>
+						<option value="5">{{agile_translate "calendar" "thursday"}}</option>
+						<option value="6">{{agile_translate "calendar" "friday"}}</option>
+						<option value="7">{{agile_translate "calendar" "saturday"}}</option>
+                        <option value="1">{{agile_translate "prefs-settings" "sunday"}}</option>						
                    </select>
 				</div>
 			</div>	
 			<div class="control-group form-group" id="contact_report_time">
-				<label class="control-label col-sm-2">Time</label>
+				<label class="control-label col-sm-2">{{agile_translate "report-add" "time"}}</label>
 				<div class="controls col-sm-8">
 					 <input type="text" name="activity_time" class="report_time_timepicker input-small form-control" id="activity_time"  placeholder="time" />
 				</div>
@@ -931,8 +931,8 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-8">
 			<div class="form-actions">
-				<a href="#campaign-reports" class="btn btn-sm btn-default">Close</a>
-				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a>
+				<a href="#campaign-reports" class="btn btn-sm btn-default">{{agile_translate "contact-details" "CLOSE"}}</a>
+				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">{{agile_translate "modals" "save"}}</a>
 			</div>
 </div>
 </div>

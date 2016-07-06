@@ -39,7 +39,7 @@
 <div class="wrapper-md lter bg-light b-b">
 	<div class="row">
 		<div class="col-md-12">
-			<h3 class="font-thin h3"><span id="contact-heading">List of Duplicates</span><small>{{duplicate_contacts_count}}</small></h3>
+			<h3 class="font-thin h3"><span id="contact-heading">{{agile_translate "other" "list-of-duplicates"}}</span><small>{{duplicate_contacts_count}}</small></h3>
 		</div>
 	</div>
 </div>
@@ -53,7 +53,7 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">No duplicate records for this contact.</h4>
+                    <h4 class="m-t-none">{{agile_translate "other" "no-duplicate-records-for-this-contact"}}</h4>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -69,10 +69,10 @@
 	<thead>
 	<tr>
 	<th style="width:5%;"><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
-	<th style="width:35%;">Name</th>
-	<th style="width:25%;">Work</th>
-	<th style="width:20%;">Phone</th>
-	<th style="width:20%;">Created Time</th>
+	<th style="width:35%;">{{agile_translate "deal-view" "name"}}</th>
+	<th style="width:25%;">{{agile_translate "contact-details" "work"}}</th>
+	<th style="width:20%;">{{agile_translate "contacts-view" "Phone"}}</th>
+	<th style="width:20%;">{{agile_translate "other" "created-time"}}</th>
 	</tr>
 	</thead>
 	<tbody id="duplicate-contacts-model-list">
@@ -82,8 +82,8 @@
 	<div class="col-md-6  select-none">
 	</div>
 	</div>
-	<a href="#contacts" class="btn btn-default btn-sm m-b pos-rlt" id="duplicate-contacts-cancel"> Cancel</a>
-	<a href="#merge-contacts" class="btn btn-sm left btn-primary m-b pos-rlt" id="duplicate-contacts-checked-grid"> Next</a>
+	<a href="#contacts" class="btn btn-default btn-sm m-b pos-rlt" id="duplicate-contacts-cancel"> {{agile_translate "other" "cancel"}}</a>
+	<a href="#merge-contacts" class="btn btn-sm left btn-primary m-b pos-rlt" id="duplicate-contacts-checked-grid"> {{agile_translate "other" "next"}}</a>
 	</div>
 	</div>
 	{{/if}}

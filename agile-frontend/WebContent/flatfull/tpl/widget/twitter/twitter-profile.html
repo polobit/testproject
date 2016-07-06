@@ -6,9 +6,9 @@
 		<small class="block text-muted">{{location}}</small>
 		<small class="block text-muted">{{show_link_in_statement summary}}</small>
 		<div>
-			<a href="#" class="btn btn-xs btn-default m-t-xs" id="twitter_follow" style="display:none;" name="{{name}}">Follow</a>
-			<a href="#" class="btn btn-xs btn-default m-t-xs" id="twitter_unfollow" name="{{name}}" style="display:none;">Following</a>
-			<a href="#" class="btn btn-xs btn-default m-t-xs" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet">Tweet</a>
+			<a href="#" class="btn btn-xs btn-default m-t-xs" id="twitter_follow" style="display:none;" name="{{name}}">{{agile_translate "widgets" "follow"}}</a>
+			<a href="#" class="btn btn-xs btn-default m-t-xs" id="twitter_unfollow" name="{{name}}" style="display:none;">{{agile_translate "widgets" "following"}}</a>
+			<a href="#" class="btn btn-xs btn-default m-t-xs" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet">{{agile_translate "admin-settings-tasks" "Tweet"}}</a>
 			{{#if is_followed_by_target}}
 				<a href="#" class="btn btn-xs btn-default m-t-xs icon-envelope" id="twitter_message" rel="tooltip" title="Send Direct Message"></a>
 			{{/if}}
@@ -21,9 +21,9 @@
 </div>
 <div class="nav-tabs-alt">
 	<ul class="nav nav-tabs text-base twitter-tabs" id="myTab">
-		<li class="text-center m-l-xs active" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#tweets"><h4 class="text-base m-n">{{tweet_count}}</h4><small>Tweets</small></a></li>
-		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#followers" id="twitter_followers"><h4 class="text-base m-n">{{num_connections}}</h4><small>Followers</small></a></li>
-		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#following" id="twitter_following"><h4 class="text-base m-n">{{friends_count}}</h4><small>Following</small></a></li>
+		<li class="text-center m-l-xs active" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#tweets"><h4 class="text-base m-n">{{tweet_count}}</h4><small>{{agile_translate "widgets" "tweets"}}</small></a></li>
+		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#followers" id="twitter_followers"><h4 class="text-base m-n">{{num_connections}}</h4><small>{{agile_translate "widgets" "followers"}}</small></a></li>
+		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#following" id="twitter_following"><h4 class="text-base m-n">{{friends_count}}</h4><small>{{agile_translate "widgets" "following"}}</small></a></li>
 	</ul>
 </div>
 <div class="tab-content text-sm" id="myTabContent">
@@ -51,8 +51,8 @@
 		<div class="clearfix" id="tweet-error-panel" style="display:none;">
 		</div>
 		<div class="widget_tab_footer" align="center">
-			<a href="#more" class="twitter_stream text-info" id="twitter_stream" rel="tooltip" title="Click to see more tweets">Show More</a>
-			<a href="#less" data-toggle="collapse" data-target="#twitter_social_stream" id="twitter_less" style="display:none">Show Less..</a>
+			<a href="#more" class="twitter_stream text-info" id="twitter_stream" rel="tooltip" title="Click to see more tweets">{{agile_translate "widgets" "show-more"}}</a>
+			<a href="#less" data-toggle="collapse" data-target="#twitter_social_stream" id="twitter_less" style="display:none">{{agile_translate "widgets" "show-less"}}</a>
 			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-tweets" style="display:none;"></img>			
 		</div>
 	</div>
@@ -63,7 +63,7 @@
 		<div id="follower-error-panel" style="display:none;" >
 		</div>
 		<div class="widget_tab_footer" align="center">
-			<a href="#more" class="text-info" id="more_followers" rel="tooltip" title="Click to see more persons">Show More</a>
+			<a href="#more" class="text-info" id="more_followers" rel="tooltip" title="Click to see more persons">{{agile_translate "widgets" "show-more"}}</a>
 			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-followers" style="display:none;"></img>
 		</div>
 	</div>
@@ -74,7 +74,7 @@
 		<div id="following-error-panel" style="display:none;" >
 		</div>
 		<div class="widget_tab_footer" align="center">
-			<a href="#more" id="more_following" class="text-info" rel="tooltip" title="Click to see more persons">Show More</a>
+			<a href="#more" id="more_following" class="text-info" rel="tooltip" title="Click to see more persons">{{agile_translate "widgets" "show-more"}}</a>
 			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-following" style="display:none;"></img>
 		</div>
 	</div>
@@ -110,14 +110,14 @@
 							{{else}}
 	                        	<textarea rows="4" class="required form-control twit-message-limit" placeholder="Detailed Message" name="message" id="twit-message" data-provide="limit" data-counter="#counter" maxlength="125" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></textarea>
 							{{/if_equals}}  
-							<div class="right"><small style="font-style: italic;">Characters Left <em id="twitter-counter" class="m-r-xs">125</em></small></div>
+							<div class="right"><small style="font-style: italic;">{{agile_translate "widgets" "characters-left"}}<em id="twitter-counter" class="m-r-xs">125</em></small></div>
 	                    </div>
 	                </div>
 	            </fieldset>
 	        </form>
 	    </div>
 	<div class="modal-footer">
-	        <a href="#" class="btn btn-sm btn-primary" id="send_request">Send</a>
+	        <a href="#" class="btn btn-sm btn-primary" id="send_request">{{agile_translate "tasks" "Send"}}</a>
 	    </div>
 	</div>
 </div>
@@ -151,7 +151,7 @@
 		{{/each}}
 	</div>
 {{else}}
-		<li class="text-light text-base">This person does not share his/her tweets</li>
+		<li class="text-light text-base">{{agile_translate "widgets" "person-does-not-share-his-her-tweets"}}</li>
 {{/if}}
 </script>
 
@@ -182,18 +182,17 @@
   <div class="modal-content"> 
 	<div class="modal-header" >
     	<a href="#" data-dismiss="modal" class="close">&times;</a>
-		<h3>Add Profile</h3></div>
+		<h3>{{agile_translate "widgets" "add-profile"}}</h3></div>
         <div class="modal-body" >
 		<p>Associate Twitter profile to contact?</p>
         <p>
 			<label class="i-checks i-checks-sm">
 			<input type="checkbox" name="add-image" id="save_twitter_image" checked="checked"/><i></i></label>
-			Add Twitter image to contact
-		</p>
+			{{agile_translate "widgets" "add-twitter-image-to-contact"}}</p>
 	</div>
 	<div class="modal-footer" >
-		<a href="#" class="btn btn-sm btn-default close save-twitter-profile" resp="no">No</a>
-		<a href="#" class="btn btn-sm btn-primary save-twitter-profile" resp="yes">Yes</a>
+		<a href="#" class="btn btn-sm btn-default close save-twitter-profile" resp="no">{{agile_translate "portlets" "no"}}</a>
+		<a href="#" class="btn btn-sm btn-primary save-twitter-profile" resp="yes">{{agile_translate "portlets" "yes"}}</a>
 	</div>
 </div>
 </div>
@@ -221,9 +220,9 @@
 	</div>
 <div class='clearfix'></div>
       <div class='row p-b-sm p-t-sm'>
-            <div class='col-md-4 text-center'>Tweets<p>{{tweet_count}}</p></div>
-            <div class='col-md-4 text-center b-l'>Followers<p>{{num_connections}}</p></div>
-            <div class='col-md-4 text-center b-l'>Follows<p>{{friends_count}}</p></div>
+            <div class='col-md-4 text-center'>{{agile_translate "widgets" "tweets"}}<p>{{tweet_count}}</p></div>
+            <div class='col-md-4 text-center b-l'>{{agile_translate "widgets" "followers"}}<p>{{num_connections}}</p></div>
+            <div class='col-md-4 text-center b-l'>{{agile_translate "widgets" "follows"}}<p>{{friends_count}}</p></div>
       </div>" 
 ></img></a>
 {{/each}}
@@ -233,10 +232,10 @@
 	<div class="inline word-break" style="line-height:12px;">
 		<form class="wrapper-sm b-b-none text-base" id="twitter-search_form" name="twitter-search_form" method="get">
 	    	<fieldset>
-				<p><label>Enter search details</label></p>
+				<p><label>{{agile_translate "widgets" "enter-search-details"}}</label></p>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="twitter_keywords" class="input-medium required widget_input_box form-control"  placeholder="Key Words" value="{{keywords}}" name="keywords" onkeydown="if (event.keyCode == 13) { getModifiedTwitterMatchingProfiles({{plugin_id}}); return false; }" maxlength="40"></input></div></div>
-				<a href="#" id="twitter_search_btn" class="btn btn-sm btn-primary text-l-none">Search</a>
-				<a href="#" id="twitter_search_close" class="btn btn-sm btn-default m-l-xs">Close</a>
+				<a href="#" id="twitter_search_btn" class="btn btn-sm btn-primary text-l-none">{{agile_translate "menu" "search"}}</a>
+				<a href="#" id="twitter_search_close" class="btn btn-sm btn-default m-l-xs">{{agile_translate "contact-details" "CLOSE"}}</a>
 				<span><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-twitter-search" style="display:none;"></img></span>
 			 </fieldset>
 	    </form>
@@ -246,9 +245,8 @@
 
 <script id="twitter-login-template" type="text/html">
 <div class="m-t">
-	Engage with contacts in real time based on what they tweet.	
-<br>
-		<center><a class='btn btn-sm btn-primary text-l-none m-t' href="{{url}}">Link your Twitter</a>	</center>
+	{{agile_translate "widgets" "twitter-profile-desc"}}<br>
+		<center><a class='btn btn-sm btn-primary text-l-none m-t' href="{{url}}">Link your {{agile_translate "widgets" "Twitter"}}</a>	</center>
 </div>
 </script>
 
@@ -264,12 +262,12 @@
 			<p class="word-break" style="word-break:normal;">{{show_link_in_statement profile.summary}}</p>
 		</div>
 	{{else}}
-		<div class="wrapper-sm"><p>Please reconfigure your Twitter widget</p></div>
+		<div class="wrapper-sm"><p>{{agile_translate "widgets" "please-reconfigure-your-twitter-widget"}}</p></div>
 	{{/if}}
 	<div class="clearfix"></div>
 	<div class="m-t-md text-center">
-			<a class='btn revoke-widget btn-sm btn-danger text-l-none' widget-name="Twitter">Revoke Access</a>
-			<a href="#add-widget" class='btn btn-default btn-sm ml_5 text-l-none' widget-name="Twitter">Cancel</a>
+			<a class='btn revoke-widget btn-sm btn-danger text-l-none' widget-name="Twitter">{{agile_translate "widgets" "revoke-access"}}</a>
+			<a href="#add-widget" class='btn btn-default btn-sm ml_5 text-l-none' widget-name="Twitter">{{agile_translate "other" "cancel"}}</a>
 	</div>
 </div>
 </script>

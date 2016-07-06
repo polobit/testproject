@@ -10,8 +10,7 @@
             </div>
             <div>
                 <a href="#add-ticket-label" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                   <span><i class="icon-plus-sign"></i></span> Add Label
-                </a>
+                   <span><i class="icon-plus-sign"></i></span> {{agile_translate "tickets" "add-label"}}</a>
             </div>
         </div>
     </div>
@@ -21,15 +20,14 @@
     <div class="panel panel-default">
         <div class="pull-right m-b-2">
             <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon"
-                style="margin-top:20px;margin-right:20px"><span><i class="icon-plus-sign"></i></span> Add Label
-            </a>
+                style="margin-top:20px;margin-right:20px"><span><i class="icon-plus-sign"></i></span> {{agile_translate "tickets" "add-label"}}</a>
         </div>
         <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal tableHeader tab-layout tickets-border" url="core/api/tickets/labels/bulk" data-bulk-delete-title="Delete"
             data-bulk-delete-msg="Are you sure you want to delete?" data-resizable-columns-id="tickets-labels">
                 <thead>
                     <tr>
-                        <th data-resizable-column-id="hide" class="hide">Id</th>
-                        <th data-resizable-column-id="label">Label</th>
+                        <th data-resizable-column-id="hide" class="hide">{{agile_translate "tickets" "id"}}</th>
+                        <th data-resizable-column-id="label">{{agile_translate "contacts-view" "label"}}</th>
                         <th data-resizable-column-id="">&nbsp;</th>
                     </tr>
                 </thead>
@@ -62,15 +60,14 @@
         <div class="col-md-10">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    {{#if id}}Edit{{else}}Add{{/if}} Ticket Label
-                </div>
+                    {{#if id}}Edit{{else}}Add{{/if}} {{agile_translate "tickets" "ticket-label"}}</div>
                 <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
                     {{#if id}}
                         <input type="text" name="id" class="hide" value={{id}} >
                     {{/if}}
                     <fieldset class="wrapper"><br/>
                         <div class="control-group form-group">
-                            <label class="control-label col-md-3" for="label">Label <span class="field_req">*</span></label> 
+                            <label class="control-label col-md-3" for="label">{{agile_translate "contacts-view" "label"}}<span class="field_req">*</span></label> 
                             <div class="col-md-6">
                                 <div class="controls">
                                      <input type="text" name="label" id="label" value="{{label}}" placeholder="Label" class="required form-control" maxlength="15">
@@ -83,8 +80,8 @@
                         <div class="form-group">
                             <div class="form-actions col-sm-offset-3 col-md-9">
                                 <div class="form-actions">
-                                    <a type="reset" href='#ticket-labels' class="btn btn-default btn-sm">Cancel</a>
-                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">Save Changes</button>
+                                    <a type="reset" href='#ticket-labels' class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+                                    <button type="submit" class="save btn btn-sm btn-primary m-l-xs">{{agile_translate "prefs-settings" "save-changes"}}</button>
                                     <div class="text-base error_message_label inline-block err-msg-color">
                                     </div>
                                 </div>

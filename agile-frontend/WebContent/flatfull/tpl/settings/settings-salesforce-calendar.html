@@ -15,39 +15,36 @@
                              <input type ="hidden" name="type" value = "SALESFORCE" name ="id">
                           
                         <div class="form-group">
-                            <label for="username">Username</label>
+                            <label for="username">{{agile_translate "admin-settings-integrations" "username"}}</label>
                             <input type="text" required="required" class="form-control" id="username" name="userName" placeholder="Email" value="{{username}}">
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <label for="password">{{agile_translate "prefs-settings" "password"}}</label>
                             <input type="password" required="required" class="form-control" id="password" name="password" placeholder="Password" value="{{password}}">
                         </div>
                         <div class="form-group">
-                            <label for="apiKey">API Token</label>
+                            <label for="apiKey">{{agile_translate "prefs-data-sync" "api-token"}}</label>
                             <input id="apiKey" required="required" name="apiKey" class="form-control"  type="text" placeholder="API Key" value="{{apiKey}}">
                         </div>
 
                         <div class="control-group form-group multiple-checkbox" name="importOptions">
-                            <label class="control-label">Import Options</label>
+                            <label class="control-label">{{agile_translate "admin-settings-integrations" "import-options"}}</label>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="accounts" type="checkbox" value="accounts" {{#unless id}}checked="checked"{{/unless}}><i></i> Accounts
-                                    </label>
+                                    <input id="accounts" type="checkbox" value="accounts" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_translate "admin-settings-integrations" "accounts"}}</label>
                                 </div>       
                             </div>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="contacts" type="checkbox" value="contacts" {{#unless id}}checked="checked"{{/unless}}><i></i> Contacts
-                                    </label>
+                                    <input id="contacts" type="checkbox" value="contacts" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_translate "companies-view" "Contacts"}}</label>
                                 </div>       
                             </div>
                             <div class="controls">
                                 <div class="checkbox">
                                     <label class="i-checks i-checks-sm">
-                                    <input id="tasks" type="checkbox" value="tasks" {{#unless id}}checked="checked"{{/unless}}><i></i> Tasks
-                                    </label>
+                                    <input id="tasks" type="checkbox" value="tasks" {{#unless id}}checked="checked"{{/unless}}><i></i> {{agile_translate "portlets" "tasks"}}</label>
                                 </div>       
                             </div>
                         </div>
@@ -55,8 +52,8 @@
 
                 </form>
                 <div class="form-actions text-center">
-                    <a type="reset" class="btn btn-default btn-sm" href="#importcrm">Cancel</a>
-                    <a type="submit" class="save btn btn-sm btn-primary">Import</a>
+                    <a type="reset" class="btn btn-default btn-sm" href="#importcrm">{{agile_translate "other" "cancel"}}</a>
+                    <a type="submit" class="save btn btn-sm btn-primary">{{agile_translate "contacts-view" "import"}}</a>
                 </div>  
             </div>
         </div>

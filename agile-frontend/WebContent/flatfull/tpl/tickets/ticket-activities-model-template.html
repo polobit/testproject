@@ -80,27 +80,27 @@
 		  	{{/if_equals}}
 
 		  	{{#if_equals activity_type 'TICKET_ASSIGNED'}}
-		        Ticket assigned to <span>{{custom2}}</span>
+		        {{agile_translate "tickets" "ticket-assigned-to"}}<span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_ASSIGNEE_CHANGED'}}
-	        	Ticket assignee changed to <span>{{custom2}}</span>
+	        	{{agile_translate "tickets" "ticket-assignee-changed-to"}}<span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_GROUP_CHANGED'}}
-	                Ticket group changed to <span>{{custom2}}</span>
+	                {{agile_translate "tickets" "ticket-group-changed-to"}}<span>{{custom2}}</span>
 		    {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_STATUS_CHANGE'}}
-	            Status changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
+	            Status changed {{agile_translate "contacts-view" "to"}}<span class="first-letter-cap inline-block">{{custom2}}</span>
 	        {{/if_equals}}
 
 	        {{#if_equals activity_type 'TICKET_PRIORITY_CHANGE'}}
-	           Priority changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
+	           Priority changed {{agile_translate "contacts-view" "to"}}<span class="first-letter-cap inline-block">{{custom2}}</span>
 	        {{/if_equals}}
 
 		    {{#if_equals activity_type 'TICKET_TYPE_CHANGE'}}
-	            Type changed to <span class="first-letter-cap inline-block">{{custom2}}</span>
+	            Type changed {{agile_translate "contacts-view" "to"}}<span class="first-letter-cap inline-block">{{custom2}}</span>
 	         {{/if_equals}}
 		                        
 	        {{#if_equals activity_type 'TICKET_LABEL_ADD'}}

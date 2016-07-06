@@ -26,8 +26,8 @@
 {{/if}}
 	
 		<div class="m-t-md text-center">
-			<a class='btn btn-sm btn-danger revoke-widget' widget-name="GooglePlus">Revoke Access</a>
-			<a href="#add-widget" class='btn btn-default btn-sm m-l-xs'  widget-name="GooglePlus">Cancel</a>
+			<a class='btn btn-sm btn-danger revoke-widget' widget-name="GooglePlus">{{agile_translate "widgets" "revoke-access"}}</a>
+			<a href="#add-widget" class='btn btn-default btn-sm m-l-xs'  widget-name="GooglePlus">{{agile_translate "other" "cancel"}}</a>
 		</div>
 	</div>
 </script>
@@ -67,10 +67,10 @@
 	<div class="inline l-h-xs word-break">
 		<form class="panel-body b-b-none text-base" id="gpsearchform" name="gpsearchform" method="get">
 	    	<fieldset>
-				<p><label>Enter search details</label></p>
+				<p><label>{{agile_translate "widgets" "enter-search-details"}}</label></p>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="searchkeywords" class="input-medium required widget_input_box form-control"  placeholder="Key Words" value="{{keywords}}" name="keywords" maxlength="40" required></input></div></div>
-				<a href="#" id="gpsearchbtn" class="btn btn-sm btn-primary text-l-none">Search</a>				
-				<a href="#" id="gpsearchclose" class="btn btn-sm m-l-xs btn-default">Close</a>
+				<a href="#" id="gpsearchbtn" class="btn btn-sm btn-primary text-l-none">{{agile_translate "menu" "search"}}</a>				
+				<a href="#" id="gpsearchclose" class="btn btn-sm m-l-xs btn-default">{{agile_translate "contact-details" "CLOSE"}}</a>
 				<span><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-search" style="display:none;"></img></span>
 			 </fieldset>
 	    </form>
@@ -125,7 +125,7 @@
 			<a href="{{url}}" class="thumb-sm m-t-xs m-r-xs pull-left" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"/></a>
 			<div class="clear">							
 				<p class="mb_0">
-					{{title}} <a href="{{url}}" target="_blank">view photo</a>
+					{{title}} <a href="{{url}}" target="_blank">{{agile_translate "widgets" "view-photo"}}</a>
 				</p>
 			</div>
 			<small>{{verb}}ed</small> 
@@ -135,7 +135,7 @@
 		    <a href="{{url}}" class="thumb-sm m-r-xs m-t-xs pull-left" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"/></a>
 			<div class="clear">							
 			 <p class="mb_0 word-break" style="word-break:normal;">
-				{{title}} <a href="{{url}}" target="_blank">view video</a>
+				{{title}} <a href="{{url}}" target="_blank">{{agile_translate "widgets" "view-video"}}</a>
 			 </p>			
 		    </div>
 			<small>{{verb}}ed</small>
@@ -143,7 +143,7 @@
 		{{else}}				
 			<div class="clear">	
 				<p class="mb_0 word-break" style="word-break:normal;">
-					{{title}} <a href="{{url}}" target="_blank">view more</a>
+					{{title}} <a href="{{url}}" target="_blank">{{agile_translate "widgets" "view-more"}}</a>
 				</p>
 			</div>
 			<small>{{verb}}ed</small>
@@ -157,7 +157,7 @@
 <!--<div style="font-size: 16px;padding: 5px;"><small>No posts.</small></div>-->
 {{else}}
 		<div class="widget_tab_footer" align="center">
-			<a href="#" class="gplus_stream text-info" id="gplusstreammore" rel="tooltip" ntoken="{{nextPageToken}}" title="Click to see more posts">Show More</a>
+			<a href="#" class="gplus_stream text-info" id="gplusstreammore" rel="tooltip" ntoken="{{nextPageToken}}" title="Click to see more posts">{{agile_translate "widgets" "show-more"}}</a>
 			<span id="spinnerspan" style="display:none;"><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-gplus"></img><span>
 		</div>
 {{/if_equals}}
@@ -174,7 +174,7 @@
 <a href="{{url}}" class="thumb pull-left m-r-xs" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"></a>
 <div class="clear">
 	<p class="mb_0 word-break" style="word-break:normal;">
-		{{title}} <a href="{{url}}" class="text-info" target="_blank">view photo</a>
+		{{title}} <a href="{{url}}" class="text-info" target="_blank">{{agile_translate "widgets" "view-photo"}}</a>
 	</p>
 </div>
 <small>{{verb}}ed</small>
@@ -184,14 +184,14 @@
 <a href="{{url}}" class="thumb pull-left m-r-xs" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"></a>
 <div class="clear">
 	<p class="mb_0 word-break" style="word-break:normal;">
-		{{title}} <a href="{{url}}" class="text-info" target="_blank">view video</a>
+		{{title}} <a href="{{url}}" class="text-info" target="_blank">{{agile_translate "widgets" "view-video"}}</a>
 	</p>
 </div>
 <small>{{verb}}ed</small>
 <small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
 {{else}}
 <p class="mb_0 word-break" style="word-break:normal;">
-{{title}} <a href="{{url}}" class="text-info" target="_blank">view more</a>
+{{title}} <a href="{{url}}" class="text-info" target="_blank">{{agile_translate "widgets" "view-more"}}</a>
 </p>
 <small>{{verb}}ed</small>
 <small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>

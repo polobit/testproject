@@ -5,8 +5,7 @@
     <td class="workflow-triggers" workflow-id={{id}}>
         <div class="table-resp">
             <a href="#trigger-add/{{id}}" class="stop-propagation">
-                <i class="icon-plus text-xs" style="margin-right:3px"></i>Add
-            </a>
+                <i class="icon-plus text-xs" style="margin-right:3px"></i>{{agile_translate "other" "add"}}</a>
         </div>  
     </td>
 
@@ -15,7 +14,7 @@
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
                 <i class="fa fa-clock-o m-r-xs"></i>
-                <span><em>Modified</em>&nbsp;</span>
+                <span><em>{{agile_translate "campaigns" "modified"}}</em>&nbsp;</span>
                 <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
             </small>
         </div>
@@ -23,7 +22,7 @@
         <div>
             <small class="edit-hover text-muted"> 
                 <i class="fa fa-clock-o m-r-xs"></i>
-               <span><em>Created</em>&nbsp;</span>
+               <span><em>{{agile_translate "contact-details" "created"}}</em>&nbsp;</span>
                <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
             </small>
         </div>
@@ -32,7 +31,7 @@
     <td>
     <div>
     {{#if is_disabled}}
-            <div><label class="label label-danger m-b-none">Disabled</label></div>
+            <div><label class="label label-danger m-b-none">{{agile_translate "campaigns" "disabled"}}</label></div>
             {{/if}}
      </div>
     </td>
@@ -62,14 +61,14 @@
                 <div class="">
 
                     <h4 class="inline-block m-n">
-                    Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h4>
+                    {{agile_translate "report-view" "campaigns"}}<small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h4>
                     <br>
                 
                 </div>
                 <div class="btn-group m-r-xs p-t-n-sm workflow-sortby">
                 <div class="btn-group dropdown">
                                 <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
-                                        <span class="text-muted">Sort by </span>
+                                        <span class="text-muted">Sort {{agile_translate "contact-details" "by"}}</span>
                                         <span class="sort-field-txt"></span>
                                     </button>
                                     <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs" data-toggle="dropdown" aria-expanded="false">
@@ -79,21 +78,19 @@
                                     <ul class="dropdown-menu " id="sort_menu" role="menu">
                                         <li>
                                         <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="name_dummy" label_name="Name">
-                                        Name
-                                            <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
+                                        {{agile_translate "deal-view" "name"}}<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
                                             </a>
                                     </li>
                                     <li>
                                         <a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="created_time" label_name="Created Time">
-                                        Created Time
-                                        <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
+                                        {{agile_translate "other" "created-time"}}<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check  display-none"></i> 
                                         </a>
                                     </li>
                                     <li class="divider" id="sort-divider"></li>
                                             <li>
-                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">Ascending <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  display-none"></i> </a>
+                                                <a class="order-by pos-rlt" data="" href="javascript:void(0);">{{agile_translate "contacts-view" "ascending"}}<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check  display-none"></i> </a>
                                             </li>
-                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">Descending  <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check display-none"></i> </a></li>
+                                            <li><a class="order-by pos-rlt" data="-" href="javascript:void(0);">{{agile_translate "contacts-view" "descending"}}<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-by-check display-none"></i> </a></li>
                                     </ul>
                                 </div>
             </div>
@@ -102,19 +99,19 @@
             
                 <div class="pull-right m-t-xs">
             <div>
-                <a id="campaign_logs" class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left" href="#">Reports</a>
+                <a id="campaign_logs" class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left" href="#">{{agile_translate "campaigns" "reports"}}</a>
                 
-                 <a href="#email-templates" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon"><i class="icon-cog"></i> Manage Email Templates</a>
+                 <a href="#email-templates" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon"><i class="icon-cog"></i> Manage {{agile_translate "preferences" "email-templates"}}</a>
 
-                <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon" id="add-trigger"><i class="icon-cog"></i> Manage Triggers</a>
+                <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon" id="add-trigger"><i class="icon-cog"></i> {{agile_translate "campaigns" "manage-triggers"}}</a>
                
 
 
                 <div class="btn-group right pos-rlt pull-left">
-                    <a href="#workflow-templates" class="btn btn-default btn-sm" id="addWorkflow"><i class="icon-plus-sign"></i> Add Campaign</a>
+                    <a href="#workflow-templates" class="btn btn-default btn-sm" id="addWorkflow"><i class="icon-plus-sign"></i> {{agile_translate "campaigns" "add-campaign"}}</a>
                     <a id="campaign-stats" class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></a>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
+                        <li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> {{agile_translate "report-view" "compare-campaigns"}}</a></li>
                     </ul>
 
                 </div>
@@ -157,26 +154,23 @@
             <div class="alert danger info-block alert-warning text-black">
                 <div>
                     <i class="icon-warning-sign"></i>
-                    <strong>PENDING TRIGGERS. 
-                        <!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
+                    <strong>{{agile_translate "campaigns" "pending-triggers"}}<!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
                     </strong>
-                    <p>You have at least one campaign but no triggers yet. <br></p>
-                    <p>Campaigns can be manually run on contact(s) or you can setup a trigger to run the campaign automatically based on certain conditions. <a href="#trigger-add" class="block">Setup a new trigger.</a></p>
+                    <p>{{agile_translate "campaigns" "you-have-at-least-one-campaign"}}<br></p>
+                    <p>Campaigns can be manually run on contact(s) or you can setup a trigger to run the campaign automatically based on certain conditions. <a href="#trigger-add" class="block">{{agile_translate "campaigns" "setup-a-new-trigger"}}</a></p>
                 </div>
             </div>
         </div>
         <!-- End of Pending Triggers Content -->
             <div class="panel panel-default">
-                <div class="panel-heading">Campaigns List
-                    
-                </div>
+                <div class="panel-heading">{{agile_translate "campaigns" "campaigns-list"}}</div>
                 <div class="table-responsive">
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view no-sorting" url="core/api/workflows/bulk" id="workflows-tour-step">
                     <thead>
                         <tr>
-                            <th class="hide">Id</th>
-                            <th style="width:30%">Name</th>
-                            <th style="width:20%">Triggers</th>
+                            <th class="hide">{{agile_translate "tickets" "id"}}</th>
+                            <th style="width:30%">{{agile_translate "deal-view" "name"}}</th>
+                            <th style="width:20%">{{agile_translate "campaigns" "triggers"}}</th>
                             <th style="width:23%">&nbsp;</th>
                             <th style="width:9%">&nbsp;</th>
                             <th style="width:9%">&nbsp;</th>
@@ -196,12 +190,9 @@
             </h4>
             
             <p>
-                Workflow is a smart sales & marketing automation process to send your contacts the relevant information at just the right time. Leverage on it to automate most of your follow-up activities.
-
-            </p>
+                {{agile_translate "campaigns" "workflow-automation-desc-1"}}</p>
             <p>
-                eg: You can send an email to all contacts who have signed up on your website. Then, based on their behaviour in the control panel, you can nurture them with targeted messages periodically.
-            </p>
+                {{agile_translate "campaigns" "workflow-automation-desc-2"}}</p>
             <br>
             {{#if this.length}}
              <p>
@@ -216,11 +207,9 @@
             </h4>
             
             <p>
-                Triggers are pre-defined conditions set up by you. If a condition is satisfied, you can choose an action to follow using workflow automation.
-            </p>
+                {{agile_translate "campaigns" "triggers-desc-1"}}</p>
             <p>
-                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
-            </p>
+                {{agile_translate "campaigns" "triggers-desc-2"}}</p>
         
     </div>
 </div>

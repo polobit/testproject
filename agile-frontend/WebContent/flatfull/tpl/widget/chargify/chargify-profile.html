@@ -4,16 +4,16 @@
 	    	<fieldset>
 				<p>Chargify simplifies recurring billing for Web 2.0 and SaaS companies. Build innovative web apps without worrying how to bill your customers. </p>
 				<p>
-				<label>Enter your API key</label>
+				<label>{{agile_translate "widgets" "enter-your-api-key"}}</label>
 				<div class="control-group m-b-none"><div class="controls"><input type="text" id="chargify_api_key" class="input-medium form-control required" placeholder="API Key" value="" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
 				</p>
 				<p>
-				<label>Enter your SubDomain</label>
+				<label>Enter your Sub{{agile_translate "prefs-settings" "domain"}}</label>
 				<div class="control-group m-b-none"><div class="controls"><input type="text" id="chargify_subdomain" class="input-medium form-control required" placeholder="chargify SubDomain" value="" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
 				</p>
-				<a href="#add-widget" class="btn btn-default btn-sm text-l-none">Cancel</a>
-				<a href="#" id="chargify_save_api_key" class="btn btn-sm btn-primary text-l-none ml_5">Save</a>
-				<p class="l-h-lg p-xs">Don't have an API key? <a href="http://chargify.com/" target="_blank"> SignUp </a></p></div>
+				<a href="#add-widget" class="btn btn-default btn-sm text-l-none">{{agile_translate "other" "cancel"}}</a>
+				<a href="#" id="chargify_save_api_key" class="btn btn-sm btn-primary text-l-none ml_5">{{agile_translate "modals" "save"}}</a>
+				<p class="l-h-lg p-xs">Don't have an API key? <a href="http://chargify.com/" target="_blank"> {{agile_translate "widgets" "signup"}}</a></p></div>
 			</fieldset>
 	    </form>
 	</div>
@@ -34,7 +34,7 @@
 <script id="chargify-profile-addcontact-template" type="text/html">
 <div class="widget_content">
 		<div>{{{message}}}</div>
-		<a class="btn btn-sm btn-default m-t-sm c-p" id="chargify_add_contact"><i class="icon-plus"></i>Add Contact</a>
+		<a class="btn btn-sm btn-default m-t-sm c-p" id="chargify_add_contact"><i class="icon-plus"></i>{{agile_translate "modals" "add-contact"}}</a>
 	</div>
 </script>
 <script id="chargify-profile-template" type="text/html"> 
@@ -72,7 +72,7 @@
 		{{/if}}
 	</div>
 	<div>
-		<a class="btn btn-sm btn-default m-t-sm c-p" id="chargify_add_subscription" href="https://agilecrm.chargify.com/subscriptions/new" target="_blank"><i class="icon-plus"></i>Add Subscription</a>
+		<a class="btn btn-sm btn-default m-t-sm c-p" id="chargify_add_subscription" href="https://agilecrm.chargify.com/subscriptions/new" target="_blank"><i class="icon-plus"></i>Add Subscripti{{agile_translate "contacts-view" "on"}}</a>
 	</div>
 </div>
 	{{#if subscriptions}}
@@ -99,32 +99,28 @@
 					</div>
 				</li>
 				<li class="row">	
-					<div class="col-md-5">Start Date
-						<div class="pull-right">:</div>
+					<div class="col-md-5">{{agile_translate "tasks" "start-date"}}<div class="pull-right">:</div>
 					</div>
 					<div class="col-md-6 m-l-sm text-muted">
 						<i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{subscription.current_period_started_at}}">{{subscription.current_period_started_at}}</time>
 					</div>
 				</li>
 				<li class="row">	
-					<div class="col-md-5">End Date
-						<div class="pull-right">:</div>
+					<div class="col-md-5">{{agile_translate "tasks" "end-date"}}<div class="pull-right">:</div>
 					</div>
 					<div class="col-md-6 m-l-sm text-muted">
 						<i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{subscription.current_period_ends_at}}">{{subscription.current_period_ends_at}}</time>
 					</div>
 				</li>
 				<li class="row">	
-					<div class="col-lg-5">Interval
-						<div class="pull-right">:</div>
+					<div class="col-lg-5">{{agile_translate "widgets" "interval"}}<div class="pull-right">:</div>
 					</div>
 					<div class="col-lg-6 m-l-sm">
 						{{subscription.product.expiration_interval}}{{subscription.product.expiration_interval_unit}}
 					</div>
 				</li>
 				<li class="row">	
-					<div class="col-lg-5">Amount
-						<div class="pull-right">:</div>
+					<div class="col-lg-5">{{agile_translate "plan-and-upgrade" "amount"}}<div class="pull-right">:</div>
 					</div>
 							
 					<div class="col-lg-6 m-l-sm">
@@ -139,7 +135,7 @@
 
 {{#if invoices}}
 	<div class="sub_header">
-		<a href="https://agilecrm.chargify.com/invoices" target="_blank"><h4>Invoices</h4></a>
+		<a href="https://agilecrm.chargify.com/invoices" target="_blank"><h4>{{agile_translate "plan-and-upgrade" "invoices"}}</h4></a>
 	</div>
 	{{#isArray invoices}}
 	{{#each invoices}}

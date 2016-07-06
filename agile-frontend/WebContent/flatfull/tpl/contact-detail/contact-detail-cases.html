@@ -6,12 +6,11 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{contactShortName}} is not associated with any cases. </h4>
+                    <h4 class="m-t-none">{{contactShortName}} {{agile_translate "contact-details" "is-not-associated-with-any-cases"}}</h4>
                     <div class="text">
-						All Cases that have this {{#isCompany}}company{{else}}contact{{/isCompany}} in the 'Related to' field are shown here.
-                    </div>
+						All Cases that have this {{#isCompany}}company{{else}}contact{{/isCompany}} {{agile_translate "contact-details" "in-the-related-to-field-are-shown-here"}}</div>
 					{{#hasMenuScope 'CASES'}}
-                    <a href="#" class="contact-add-case btn btn-default btn-addon btn-sm blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Case</a>
+                    <a href="#" class="contact-add-case btn btn-default btn-addon btn-sm blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{agile_translate "contact-details" "add-case"}}</a>
 					{{/hasMenuScope}}
                 </div>
 				<div class="clearfix">
@@ -23,7 +22,7 @@
 {{#if this.length}}
 <div class="m-b-md m-t-md m-r-sm" align="right">
 {{#hasMenuScope 'CASES'}}
-   		<a href="#" class="contact-add-case btn btn-default btn-sm  btn-addon"><span><i class='icon-plus-sign'/></span> Add Case</a> 
+   		<a href="#" class="contact-add-case btn btn-default btn-sm  btn-addon"><span><i class='icon-plus-sign'/></span> {{agile_translate "contact-details" "add-case"}}</a> 
 	{{/hasMenuScope}}
 </div>
 	<ul id="cases-contact-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>

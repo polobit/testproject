@@ -378,19 +378,19 @@
 		{{#if owner}}
         	<a id="contact-owner-popover" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</a>
         	{{else}}
-        		<a id="contact-owner-popover" class="custom-color" >Assign Owner</a>
+        		<a id="contact-owner-popover" class="custom-color" >{{agile_translate "contact-details" "assign-owner"}}</a>
         		{{/if}}
         	
         	{{else}}
         		{{#if owner}}
         		<span id="contact-owner-static" class="custom-color" data={{owner.id}} title="{{owner.name}}">{{owner.name}}</span>
         		{{else}}
-        			<span id="contact-owner-static" class="custom-color" >Assign Owner</span>
+        			<span id="contact-owner-static" class="custom-color" >{{agile_translate "contact-details" "assign-owner"}}</span>
         		{{/if}}
         {{/canEditContact}}
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul-popover"  style="display: none">
-        		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+        		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">{{agile_translate "contacts-view" "change-owner"}}<span class="caret"></span></a>
         		 <ul id='contact-detail-owner-popover' class="dropdown-menu"></ul>
         	</div> 
 			{{/canEditContact}}
@@ -472,12 +472,12 @@
 								<input name="" type="text" id="addTagsOnPopover"
 									class="tags-typeahead ignore-comma-keydown form-control inline-block"
 									style="width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags-popover">Add</a></span>
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags-popover">{{agile_translate "other" "add"}}</a></span>
 							</div>
 						</div>
 						{{#canEditContact owner.id}}
 			<div class="pull-left"><a href="#" id="add-tags-popover" rel="tooltip"
-							data-original-title="addtag" data-placement="top" class="text-xs  pull-left" style="padding:.2em"> <i class="fa fa-plus" style="font-size:8px; padding-right:2px"></i><span>Tag</span></a></div>
+							data-original-title="addtag" data-placement="top" class="text-xs  pull-left" style="padding:.2em"> <i class="fa fa-plus" style="font-size:8px; padding-right:2px"></i><span>{{agile_translate "contact-edit" "tag"}}</span></a></div>
 						{{/canEditContact}}
 
 						

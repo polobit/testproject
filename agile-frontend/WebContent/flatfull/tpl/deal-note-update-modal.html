@@ -4,7 +4,7 @@
 <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-plus-sign"></i>&nbsp;Edit Note</h3>
+        <h3><i class="icon-plus-sign"></i>&nbsp;{{agile_translate "modals" "edit-note"}}</h3>
     </div>
     <div class="modal-body">
         <form id="dealnoteUpdateForm" name="dealnoteUpdateForm" method="post">
@@ -15,21 +15,21 @@
                  <input name="created_time" id="created_time" type="hidden" value="{{created_time}}" />
                 	            
                 <div class="control-group">
-                    <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
+                    <label class="control-label"><b>{{agile_translate "widgets" "subject"}}</b> <span class="field_req">*</span></label>
                     <div class="controls">
                         <input type="text" placeholder="About" name="subject" id="subject" class="required form-control" />
                     </div>
                 </div>
                 <div class="row-fluid">
 	                <div class="control-group">
-	                    <label class="control-label"><b>Description</b></label>
+	                    <label class="control-label"><b>{{agile_translate "other" "description"}}</b></label>
 	                    <div class="controls">
 	                        <textarea rows="3" class="input form-control" placeholder="Detailed Note" name="description" id="description" style="max-width:400px;"></textarea> 
 	                    </div>
 	                </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label"><b>Related To</b></label>
+                    <label class="control-label"><b>{{agile_translate "deal-view" "related-to"}}</b></label>
                     <div class="controls">
                         <div>
                             <div class="pull-left">
@@ -43,8 +43,7 @@
     </div>
     <div class="modal-footer" id="deal-note-update-footer">
         <span class="error-status"></span>
-        <a href="#" class="btn btn-sm btn-primary" id="dealnote_update">Save
-        </a>
+        <a href="#" class="btn btn-sm btn-primary" id="dealnote_update">{{agile_translate "modals" "save"}}</a>
         <span class="save-status"></span>
     </div>
 </div>

@@ -32,7 +32,7 @@
     </tbody>
   </table>
   {{else}}
-  <label>Try again</label>
+  <label>{{agile_translate "widgets" "try-again"}}</label>
   {{/if}}
 </div>
 </div>
@@ -74,11 +74,11 @@
 
 <script id="admin-setting-sendgrid-whitelabel-permission-template" type="text/html">
 {{#if plan}}
- <div class="m-xs " style="text-align:center;font-size: 13px; margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <a href="#subscribe-plan" class="c-p text-info">upgrade</a> plan to use this feature. </span>
+ <div class="m-xs " style="text-align:center;font-size: 13px; margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_translate "contact-details" "please"}}<a href="#subscribe-plan" class="c-p text-info">{{agile_translate "widgets" "upgrade"}}</a> plan to use this feature. </span>
  </div>
  {{else}}
     {{#if emailGateway}}
-     <div class="m-xs " style="text-align:center;font-size: 13px;margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> You are using your own Email Gateway </span>
+     <div class="m-xs " style="text-align:center;font-size: 13px;margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> You are using your own Email {{agile_translate "plan-and-upgrade" "gateway"}}</span>
      </div>
      {{else}}
      undefined

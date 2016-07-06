@@ -8,22 +8,20 @@
 	 <div class="panel-body">
 	   <div class="line-clamp-6 " style="min-height:80px">
 	{{#if id}}
-		Your Google Calendar is now synced with Agile  
- <a href="#calendar" class="text-info">calendar</a>.
+		Your Google Calendar is now synced with {{agile_translate "contact-details" "agile"}}<a href="#calendar" class="text-info">calendar</a>.
 	{{else}}
-			Authorize your Google Calendar to sync the events with Agile
- <a href="#calendar" class="text-info">calendar</a>.
+			Authorize your Google Calendar to sync the events with {{agile_translate "contact-details" "agile"}}<a href="#calendar" class="text-info">calendar</a>.
 	{{/if}}
 	<br/>
-	<div>You can also <a href="#icalModal" id="subscribe-ical" data-toggle="modal" class="text-info" >setup Agile calendar inside Google</a>.</div> 
+	<div>You can also <a href="#icalModal" id="subscribe-ical" data-toggle="modal" class="text-info" >setup Agile calendar inside {{agile_translate "contact-edit" "google-plus"}}</a>.</div> 
 
 		</div>
 	    <div class="m-t-md text-center">
 				{{#if id}}
-	    			<a class="btn btn-sm btn-danger" id="sync-google-calendar-delete">Disable</a>
-	    			<a href="#sync/calendar-setup" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+	    			<a class="btn btn-sm btn-danger" id="sync-google-calendar-delete">{{agile_translate "web-rules" "disable"}}</a>
+	    			<a href="#sync/calendar-setup" class="btn btn-sm btn-default" id="setting-widget">{{agile_translate "preferences" "settings"}}</a>
 	    		{{else}}
-	    				<a class="btn btn-sm btn-default" id="sync-google-calendar">Enable</a>
+	    				<a class="btn btn-sm btn-default" id="sync-google-calendar">{{agile_translate "prefs-email" "enable"}}</a>
 	    		{{/if}}
 		</div>
 	</div>
@@ -38,7 +36,7 @@
 
 <div class="col-md-6 col-sm-6 col-xs-12">
 	<div class="panel panel-default" >
- 	<!-- <legend>Contacts <span class="label label-danger m-b-sm">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
+ 	<!-- <legend>{{agile_translate "companies-view" "Contacts"}}<span class="label label-danger m-b-sm">{{agile_translate "deal-view" "beta"}}</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
 	<div class="panel-heading">
    <center> <img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-calendar-sync.png" /></center>
 	</div>
@@ -52,7 +50,7 @@
     <form id="google-contacts-import-form" name="prefs">
         <fieldset>
             <div class="control-group form-group">
-				<label class="control-label">Select Calendars To Display</label> 
+				<label class="control-label">{{agile_translate "prefs-data-sync" "select-calendars-to-display"}}</label> 
 			</div>
 
         	<div class="control-group form-group" id="sync_from_group_controlgroup">
@@ -63,8 +61,8 @@
 		</div>
         </fieldset>
           <div class="form-actions col-md-7 text-right">
-			<a href="#sync" class="btn btn-default btn-sm ml_5 m-r-xs">Cancel</a>
-			<div class="btn btn-sm btn-primary save inline-block">Save</div>
+			<a href="#sync" class="btn btn-default btn-sm ml_5 m-r-xs">{{agile_translate "other" "cancel"}}</a>
+			<div class="btn btn-sm btn-primary save inline-block">{{agile_translate "modals" "save"}}</div>
 		</div>
 
     </form>
@@ -78,7 +76,7 @@
 <select multiple id="multi-select-calendars" name="fields" class="multi-select required"> 
 	{{#each items}}
 		{{#if primary}}
-				<option value={{id}}>Primary</option>	
+				<option value={{id}}>{{agile_translate "companies-edit" "primary"}}</option>	
 			{{else}}
 				<option value={{id}}>{{summary}}</option>			
 		{{/if}}

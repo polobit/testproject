@@ -12,8 +12,7 @@
         
             <h3 class="font-thin h3">List of Automations</h3>
             <a href="#automation-add" class="btn btn-sm btn-default right m-t-n-lg pos-rlt" id="addAutomation">
-				<i class="icon-plus-sign"></i> Add Automation
-			</a>
+				<i class="icon-plus-sign"></i> Add Automati{{agile_translate "contacts-view" "on"}}</a>
         
     </div>
 </div>
@@ -32,8 +31,7 @@
                         You can define a automations to start execution of a campaign. But please make sure to create atleast one campaign before creating automation.
                     </div>
                     <a href="#automation-add" class="btn btn-default btn-sm blue btn-slate-action m-t-xs">
-						<i class="icon-plus-sign"></i>  Add Automation 
-					</a>
+						<i class="icon-plus-sign"></i>  Add Automati{{agile_translate "contacts-view" "on"}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -46,10 +44,10 @@
                 <table class="table table-striped showCheckboxes" url="core/api/automations/bulk">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>{{agile_translate "deal-view" "name"}}</th>
                             <th>Period</th>
-                            <th>Contact Filter</th>
-                            <th>Campaign</th>
+                            <th>Contact {{agile_translate "portlets" "filter"}}</th>
+                            <th>{{agile_translate "contact-details" "campaign"}}</th>
                         </tr>
                     </thead>
                     <tbody id="automations-model-list" route="automation/"> </tbody>
@@ -68,8 +66,7 @@
                 Automations are pre-defined conditions set up by you. If the condition is satisfied, you can choose an action to follow using workflow automation.
             </p>
             <p>
-                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
-            </p>
+                {{agile_translate "campaigns" "triggers-desc-2"}}</p>
         </div>
     </div>
 </div>

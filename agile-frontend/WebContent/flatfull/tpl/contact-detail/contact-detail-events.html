@@ -10,7 +10,7 @@
                     <div class="text">
                         You can add an event related to a {{#isCompany}}companies{{else}}contacts{{/isCompany}}
                     </div>
-                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm m-t-xs contact-add-event"><i class="icon-plus-sign"></i>  Add Event</a>
+                    <a href="#" class="btn blue btn-slate-action btn-default btn-sm m-t-xs contact-add-event"><i class="icon-plus-sign"></i>  {{agile_translate "deal-view" "add-event"}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -19,7 +19,7 @@
         {{/unless}}
         {{#if this.length}}
 	<div class="m-b-md m-t-md m-r-sm" align="right">
-		<a href="#" class="btn btn-sm btn-default contact-add-event pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> Add Event</a>
+		<a href="#" class="btn btn-sm btn-default contact-add-event pos-rlt btn-addon"><span><i class='icon-plus-sign'/></span> {{agile_translate "deal-view" "add-event"}}</a>
 	</div>
 			<ul id="contact-events-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs"></ul>
 		{{/if}} 

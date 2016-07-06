@@ -13,12 +13,12 @@
 				<li><a href="#meeting-types-tab" data-toggle="tab"><i class="icon icon-users"></i></a></li>
 				<li><a href="#advanced-tab" data-toggle="tab"><i class="icon icon-magnifier"></i></a></li>
 				{{else}}
-				<li><a href="#calendar-tab" class="b-l-none"  data-toggle="tab">Calendar</a></li>
+				<li><a href="#calendar-tab" class="b-l-none"  data-toggle="tab">{{agile_translate "portlets" "calendar"}}</a></li>
 				<li><a href="#businesshours-tab" data-toggle="tab">Business
-						Hours</a></li>
+						{{agile_translate "prefs-online-calendar" "hours"}}</a></li>
 				<li><a href="#meeting-types-tab" data-toggle="tab">Meeting
-						Types</a></li>
-				<li><a href="#advanced-tab" data-toggle="tab">Advanced</a></li>
+						{{agile_translate "prefs-online-calendar" "types"}}</a></li>
+				<li><a href="#advanced-tab" data-toggle="tab">{{agile_translate "report-add" "advanced"}}</a></li>
 				{{/is_mobile}}
 
 			</ul>
@@ -35,7 +35,7 @@
 
 										<div class="row control-group form-group m-b-n-xs">
 											<label class="control-label col-sm-3"><b>Scheduling
-													URL </b></label>
+													{{agile_translate "widgets" "url"}}</b></label>
 											<div class="col-sm-9">
 
 												<div
@@ -60,7 +60,7 @@
 												<div class="clearfix"></div>
 												<div class="tip">
 													<p class="text-muted">Put this link in the signature or
-														in your automated emails</p>
+														in your automated {{agile_translate "plan-and-upgrade" "emails"}}</p>
 												</div>
 											</div>
 										</div>
@@ -90,8 +90,7 @@
 												<div>
 													<a
 														class="onlineCalendarAddToSite btn btn-default btn-sm btn-addon">
-														<i class="icon icon-plus-sign"></i> Add to Site
-													</a>
+														<i class="icon icon-plus-sign"></i> {{agile_translate "prefs-online-calendar" "add-to-site"}}</a>
 												</div>
 												<div>
 													<span class="text-muted help-block m-b-none"><span>Get
@@ -107,7 +106,7 @@
 										<div class="col-sm-offset-3 col-sm-9 m-t-xs">
 											<button type="submit"
 												class="btnSerialize btn-sm btn btn-primary no-outline"
-												id="btnSerialize">Save</button>
+												id="btnSerialize">{{agile_translate "modals" "save"}}</button>
 											<span class="m-l-sm text-danger" id="error_message"></span>
 										</div>
 									</div>-->
@@ -131,7 +130,7 @@
 									<fieldset>
 										<div class="control-group form-group">
 											<label class="control-label col-sm-3" for="cname">Business
-												Hours</label>
+												{{agile_translate "prefs-online-calendar" "hours"}}</label>
 											<div class="controls col-sm-9 m-t-xs">
 												<div id="define-business-hours"></div>
 											</div>
@@ -139,7 +138,7 @@
 											<div class="col-md-9 m-t-xs col-xs-12">
 												<span class="text-muted">For more granularity in
 													business hours, please configure them in your associated
-													Google Calendar </span>
+													Google {{agile_translate "portlets" "calendar"}}</span>
 											</div>
 
 										</div>
@@ -149,7 +148,7 @@
 											<div class="col-sm-offset-3 col-sm-9 m-t-xs">
 												<button type="submit"
 													class="btnSerialize btn-sm btn btn-primary no-outline"
-													id="btnSerialize">Save</button>
+													id="btnSerialize">{{agile_translate "modals" "save"}}</button>
 												<span class="m-l-sm text-danger" id="error_message"></span>
 											</div>
 										</div>
@@ -178,8 +177,7 @@
 
 										<div class="control-group form-group">
 
-											<label class="control-label col-sm-3" for="cname">Location
-											</label>
+											<label class="control-label col-sm-3" for="cname">{{agile_translate "contact-details" "location"}}</label>
 											<div class="controls col-sm-9 ">
 												<input class="input-xlarge form-control" type="text"
 													id="meeting_types" name="meeting_types"
@@ -198,8 +196,7 @@
 
 										{{#stringToJSON this "meeting_durations"}}
 										<div class="control-group form-group">
-											<label class="control-label col-sm-3" for="cname">Types
-											</label>
+											<label class="control-label col-sm-3" for="cname">{{agile_translate "prefs-online-calendar" "types"}}</label>
 
 											<div class="controls col-sm-9">
 												<div class="row m-b-sm">
@@ -213,7 +210,7 @@
 													<div class="col-sm-4 text-right">
 														<div>
 															<div class="m-t-xs">
-																<span>Slot </span> <span
+																<span>{{agile_translate "prefs-online-calendar" "slot"}}</span> <span
 																	class="text-sm online-meeting-padding online-padding">15
 																	Mins</span>
 															</div>
@@ -231,7 +228,7 @@
 													<div class="col-sm-4 text-right">
 														<div>
 															<div class="m-t-xs">
-																<span>Slot</span> <span
+																<span>{{agile_translate "prefs-online-calendar" "slot"}}</span> <span
 																	class="text-sm online-meeting-padding online-padding">30
 																	Mins</span>
 															</div>
@@ -250,7 +247,7 @@
 													<div class="col-sm-4 text-right">
 														<div>
 															<div class="m-t-xs">
-																<span>Slot </span><span
+																<span>{{agile_translate "prefs-online-calendar" "slot"}}</span><span
 																	class="text-sm online-meeting-padding online-padding">60
 																	Mins</span>
 															</div>
@@ -271,7 +268,7 @@
 											<div class="col-sm-offset-3 col-sm-9 m-t-xs">
 												<button type="submit"
 													class="btnSerialize btn-sm btn btn-primary no-outline"
-													id="btnSerialize">Save</button>
+													id="btnSerialize">{{agile_translate "modals" "save"}}</button>
 												<span class="m-l-sm text-danger" id="error_message"></span>
 											</div>
 										</div>
@@ -309,7 +306,7 @@
 													<div class="control-group form-group">
 
 														<label class="control-label col-sm-3" for="cname">Buffer
-															Time</label>
+															{{agile_translate "report-add" "time"}}</label>
 														<div class="controls col-sm-9">
 															<div class="row m-b-sm">
 
@@ -321,8 +318,8 @@
 																<div class="col-sm-3 m-t-xs">
 																	<select class="form-control" id="bufferTimeUnit"
 																		name="bufferTimeUnit">
-																		<option value="minutes">Minutes</option>
-																		<option value="hours">Hours</option>
+																		<option value="minutes">{{agile_translate "web-rules" "minutes"}}</option>
+																		<option value="hours">{{agile_translate "prefs-online-calendar" "hours"}}</option>
 																	</select>
 																</div>
 															</div>
@@ -340,8 +337,7 @@
 											
 										<div class="control-group form-group">
 
-											<label class="control-label col-sm-3" for="cname">Message
-											</label>
+											<label class="control-label col-sm-3" for="cname">{{agile_translate "other" "message"}}</label>
 											<div class="controls col-sm-9 ">
 												<div class="online_summer_note"></div>
 												<span class="text-muted help-block m-b-none">This message will appear on your appointment scheduling page</span>
@@ -352,7 +348,7 @@
 												<div class="col-sm-offset-3 col-sm-9 m-t-xs">
 													<button type="submit"
 														class="btnSerialize btn-sm btn btn-primary no-outline"
-														id="btnSerialize">Save</button>
+														id="btnSerialize">{{agile_translate "modals" "save"}}</button>
 													<span class="m-l-sm text-danger" id="error_message"></span>
 												</div>
 											</div>
@@ -369,7 +365,7 @@
 	<div class="word-break-full col-sm-12 col-lg-3">
 		<div class="data-block">
 			<div class="p-l p-r">
-				<h4 class="m-t-none">Online Appointment Scheduling</h4>
+				<h4 class="m-t-none">{{agile_translate "prefs-online-calendar" "online-appointment-scheduling"}}</h4>
 
 				<p>Scheduling meetings over email or phone is tedious. Share
 					your Scheduling URL with your prospects so that they can schedule
@@ -379,7 +375,7 @@
 		</div>
 		<div class="data-block">
 			<div class="p-l p-r">
-				<h4 class="m-t-none">Group Calendar</h4>
+				<h4 class="m-t-none">{{agile_translate "prefs-online-calendar" "group-calendar"}}</h4>
 
 				<p>The group calendar schedule makes it easy for your customers
 					to see the calendar slots of some/all of your team members or

@@ -7,14 +7,13 @@
     </div>
     <div class="panel-body">
         <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.">
-            By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.
-        </div>
+            {{agile_translate "prefs-data-sync" "Office365-calendar-desc"}}</div>
     <div class="text-center"> 
         {{#if id}}
-            <a class="btn btn-sm btn-danger delete" id="office-calendar-sync-delete">Disable</a>            
-            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar">Settings</a>
+            <a class="btn btn-sm btn-danger delete" id="office-calendar-sync-delete">{{agile_translate "web-rules" "disable"}}</a>            
+            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar">{{agile_translate "preferences" "settings"}}</a>
         {{else}}
-            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar" id="data-sync-type">Enable</a> 
+            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar" id="data-sync-type">{{agile_translate "prefs-email" "enable"}}</a> 
         {{/if}}            
     </div>
     </div>
@@ -38,23 +37,23 @@
                 </form>
                 <form id="calendar-office365-prefs" name="prefs">
                 <div class="form-group">
-                            <label for="office365-calendar-usrname">Username</label>
+                            <label for="office365-calendar-usrname">{{agile_translate "admin-settings-integrations" "username"}}</label>
                             <input type="text" required="required" class="form-control" id="office365-calendar-usrname" name="office365-calendar-usrname" placeholder="Email" value="{{username}}">
                         </div>
                         <div class="form-group">
-                            <label for="office365-calendar-pwd">Password</label>
+                            <label for="office365-calendar-pwd">{{agile_translate "prefs-settings" "password"}}</label>
                             <input type="password" required="required" class="form-control" id="office365-calendar-pwd" name="office365-calendar-pwd" placeholder="Password" value="{{password}}">
                         </div>
                         <div class="form-group">
-                            <label for="office365-calendar-outlook-url">Outlook URL</label>
+                            <label for="office365-calendar-outlook-url">{{agile_translate "prefs-settings" "outlook-url"}}</label>
                             <input id="office365-calendar-outlook-url" required="required" name="office365-calendar-outlook-url" class="form-control isHttpsURL"  type="text" placeholder="https://outlook.office365.com" value="{{serverUrl}}">
                         </div>
 
                 </form>
-                   <!-- <a href ="#" id ="office365-calendar-save" class="btn btn-sm btn-primary m-t save">Save</a> -->
+                   <!-- <a href ="#" id ="office365-calendar-save" class="btn btn-sm btn-primary m-t save">{{agile_translate "modals" "save"}}</a> -->
                     <div class="form-actions text-center">
-                        <a type="reset" class="btn btn-default btn-sm" href="#sync">Cancel</a>
-                        <a type="submit" class="save btn btn-sm btn-primary">Save</a>
+                        <a type="reset" class="btn btn-default btn-sm" href="#sync">{{agile_translate "other" "cancel"}}</a>
+                        <a type="submit" class="save btn btn-sm btn-primary">{{agile_translate "modals" "save"}}</a>
                     </div>  
             </div>
         </div>

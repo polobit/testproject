@@ -4,8 +4,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12" style="padding-bottom:8px">
             <div class="col-md-4 col-sm-6">
-            <h3 class="font-thin h3">User Performance
-            </h3>
+            <h3 class="font-thin h3">{{agile_translate "report-view" "user-performance"}}</h3>
       
            </div>    
             <div class="clearfix"></div> 
@@ -60,12 +59,12 @@
                     
               <div class="col padder-v text-muted b-r b-light text-ellipsis">
                 <div class="h4">{{currencySymbol}}{{numberWithCommasForActivities sales}}</div>
-                <span>Total Sales </span>
+                <span>{{agile_translate "report-view" "total-sales"}}</span>
                 {{#if Rank}}<div> Rank: {{Rank}} in the team {{#if Team_Revenue}}(Team: {{currencySymbol}}{{numberWithCommasForActivities Team_Revenue}}){{/if}}</div>{{/if}}
               </div>
               <div class="col padder-v text-muted b-r b-light text-ellipsis">
                 <div class="h4">{{numberWithCommasForActivities soldDeals}}</div>
-                <span>Won Deals </span>
+                <span>{{agile_translate "portlets" "won-deals"}}</span>
                 {{#if won_Rank}} <div> Rank: {{won_Rank}} in the team {{#if Team_Revenue}}(Team: {{numberWithCommasForActivities Team_Deals}}){{/if}}</div>{{/if}}
               </div>
               <div class="col padder-v text-muted text-ellipsis">
@@ -82,7 +81,7 @@
 <div class="row">
         <div class="col-sm-4">
 			<div class="p-sm bg-primary lt">
-                <span class="h4 text-white">Loss Reasons</span>
+                <span class="h4 text-white">{{agile_translate "admin-settings-deals" "loss-reasons"}}</span>
               </div>
 
         <div class="panel wrapper">
@@ -91,7 +90,7 @@
 		</div>
 		 <div class="col-sm-8">
 		<div class="p-sm bg-primary lt">
-                <span class="h4 text-white">Goals Attainment</span>
+                <span class="h4 text-white">{{agile_translate "report-view" "goals-attainment"}}</span>
               </div>
         <div>
         <div class="w-half pull-left panel wrapper">
@@ -109,7 +108,7 @@
            <div class="row wrapper">
 
       <div class="p-sm bg-primary lt" style="display:none">
-                <span class="h4 text-white">Pipeline Conversions</span>
+                <span class="h4 text-white">{{agile_translate "report-view" "pipeline-conversions"}}</span>
               </div>
                <div>
               <div class="converionsPipeline"></div>

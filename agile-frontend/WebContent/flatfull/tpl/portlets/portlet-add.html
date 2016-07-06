@@ -14,39 +14,39 @@
 				<!-- {{#if_equals "Mini Calendar" name}}
 					{{#isAdmin}}
 				<div class="btn-group  m-l-n-lg">
-  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_translate "other" "add"}}</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
+    									<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   									</ul>
 								</div>
 					{{else}}
-					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_translate "other" "add"}}</a></div>
 					  {{/isAdmin}}
 				{{else}}
 				 	 {{#if_equals "Agenda" name}} 
 				 	 {{#isAdmin}}
 				<div class="btn-group  m-l-n-lg">
-  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_translate "other" "add"}}</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
+    									<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   									</ul>
 								</div>
 					{{else}}
-					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet-direct" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_translate "other" "add"}}</a></div>
 					  {{/isAdmin}}
 					  {{else}}
-				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_translate "other" "add"}}</a>
 				{{/if_equals}}
 				{{/if_equals}} -->
-				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+				<a type="button" class="btn btn-sm btn-default configure-portlets" route="{{is_routeadded}}" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_translate "other" "add"}}</a>
 				
 		</div> 
 		</div>
@@ -54,7 +54,7 @@
 </script>
 <script id="portlets-add-collection-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
-<h3 class="m-n font-thin h3">Dashlets </h3>
+<h3 class="m-n font-thin h3">{{agile_translate "portlets" "dashlets"}}</h3>
 </div>
 
 
@@ -64,19 +64,19 @@
   	<ul class="nav nav-tabs ">
 
         <li class="p-none active">
-        <a  href="#contacts_dashlet" class="b-l-none" data-toggle="tab" >Contacts</a></li>
+        <a  href="#contacts_dashlet" class="b-l-none" data-toggle="tab" >{{agile_translate "companies-view" "Contacts"}}</a></li>
         <li class="p-none deals-aclpermission">
-        <a   href="#deals_dashlet" data-toggle= "tab">Deals</a></li>
+        <a   href="#deals_dashlet" data-toggle= "tab">{{agile_translate "deal-view" "Deals?"}}</a></li>
         <li class="p-none taksAndEvents-aclpermission">
-        <a   href="#calendar_dashlet" data-toggle= "tab">Calendar</a></li>
+        <a   href="#calendar_dashlet" data-toggle= "tab">{{agile_translate "portlets" "calendar"}}</a></li>
         <li class="p-none userActivity-aclpermission">
-        <a   href="#activity_dashlet" data-toggle= "tab">Activity</a></li>
+        <a   href="#activity_dashlet" data-toggle= "tab">{{agile_translate "deal-view" "activity"}}</a></li>
         <li class="p-none">
-        <a   href="#rss_dashlet" data-toggle="tab"> RSS Feed</a></li>
+        <a   href="#rss_dashlet" data-toggle="tab"> {{agile_translate "portlets" "rss-feed"}}</a></li>
         <li class="p-none">
-        <a   href="#account_Info_dashlet" data-toggle= "tab">Account Info</a></li>
+        <a   href="#account_Info_dashlet" data-toggle= "tab">{{agile_translate "portlets" "account-info"}}</a></li>
         <li class="p-none">
-        <a  href="#webstats_dashlet" data-toggle= "tab">Visitors</a></li>
+        <a  href="#webstats_dashlet" data-toggle= "tab">{{agile_translate "menu" "menu-visitors"}}</a></li>
 
    </ul>
    </div>

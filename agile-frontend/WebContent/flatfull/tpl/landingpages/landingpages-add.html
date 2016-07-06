@@ -21,7 +21,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
             <form id="landingPageBuilderForm">
                 <fieldset>
                      <div class="control-group form-group">
-                        <label class="control-label"><b>Name of page:</b> <span class="field_req">*</span></label>
+                        <label class="control-label"><b>Name of {{agile_translate "deal-view" "page"}}</b> <span class="field_req">*</span></label>
                         <div class="controls">
                         <div class="row">
                         <div class="col-md-5 col-sm-4">
@@ -34,7 +34,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                 <div class="col-md-4 col-sm-5">
                                     {{#if_equals action "edit"}}
                                         <div class="btn-group right m-r-xs m-r-n-sm">                                   
-                                            <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">Save Page</span>
+                                            <button class="btn btn-primary btn-sm btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">{{agile_translate "landing-pages" "save-page"}}</span>
                                             </button>
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
                                                 <span class="caret"></span>
@@ -42,13 +42,12 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                             <ul class="dropdown-menu landingpage-copy">
                                                 <li>
                                                     <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
-                                                        <i class="fa fa-clipboard" style="width: 20px;"></i> Create a Copy
-                                                    </a>
+                                                        <i class="fa fa-clipboard" style="width: 20px;"></i> {{agile_translate "campaigns" "create-a-copy"}}</a>
                                                 </li>                                       
                                             </ul>
                                         </div> 
                                         <div class="m-r-sm pull-right">
-                                         <a href="#forms" class="btn btn-default btn-sm btn-addon">Create Form</a>
+                                         <a href="#forms" class="btn btn-default btn-sm btn-addon">{{agile_translate "landing-pages" "create-form"}}</a>
                                         </div>
                                          <!--
                                         {{#is_mobile}}
@@ -60,12 +59,12 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                         {{/is_mobile}}
                                         -->
                                          {{else}}
-                                        <button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" ><span class="saveLandingPageButtonText">Save Page</span>
+                                        <button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" ><span class="saveLandingPageButtonText">{{agile_translate "landing-pages" "save-page"}}</span>
                                         </button> 
                                     {{/if_equals}}                                       
                   <div class="lpPreviewView" data-trigger="#landingpageFullPreview">
                             <label class="m-t-xs m-r-sm pull-right">
-                                <a href="#"><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a>
+                                <a href="#"><i class="fa fa-eye fa-lg"></i> <span>{{agile_translate "web-rules" "preview"}}</span></a>
                             </label> 
                     </div>
                     </div>
@@ -77,9 +76,9 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     <div class="row">
                         <div class="col-md-12" id="landingPageBuilderMenuNav" style="display:none;">
             <ul class="nav nav-tabs lp-menu-nav">
-                <li class="lpBuilderMenuItem" id="elementsBuilderMenuItem" data-id="elements"><a href="#"><i class="fa fa-plus"></i> Elements</a></li>
-                <li class="lpBuilderMenuItem" id="inspectorBuilderMenuItem" data-id="inspector"><a href="#"><i class="fa fa-cog"></i> Advanced</a></li>
-                <li class="lpCodeEditorMenuItem"><a href="#" ><i class="fa fa-code"></i> Code Editor</a></li>
+                <li class="lpBuilderMenuItem" id="elementsBuilderMenuItem" data-id="elements"><a href="#"><i class="fa fa-plus"></i> {{agile_translate "landing-pages" "elements"}}</a></li>
+                <li class="lpBuilderMenuItem" id="inspectorBuilderMenuItem" data-id="inspector"><a href="#"><i class="fa fa-cog"></i> {{agile_translate "report-add" "advanced"}}</a></li>
+                <li class="lpCodeEditorMenuItem"><a href="#" ><i class="fa fa-code"></i> {{agile_translate "landing-pages" "code-editor"}}</a></li>
 
 
             
@@ -90,7 +89,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
             <li class="lpDeviceView" data-trigger="#deviceSwitcherMobile" data-deviceclass="xs-width"><a href="#" ><i class="fa fa-mobile fa-lg"></i> </a></li>
             
             <!--
-            <li class="lpPreviewView" data-trigger="#landingpageFullPreview"><a href="#" ><i class="fa fa-eye fa-lg"></i> <span>Preview</span></a></li>
+            <li class="lpPreviewView" data-trigger="#landingpageFullPreview"><a href="#" ><i class="fa fa-eye fa-lg"></i> <span>{{agile_translate "web-rules" "preview"}}</span></a></li>
             -->
             </ul>
 
@@ -107,8 +106,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     <br />
                     <div>
                         <a id="builderPageOptionsLink" href="#" class="text-info">
-                            <i class="icon-plus"></i> Page Options
-                        </a>
+                            <i class="icon-plus"></i> {{agile_translate "landing-pages" "page-options"}}</a>
                     </div>
                     <br/>
                     <div id="builderPageOptions" style="display:none;">
@@ -161,7 +159,7 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                     <br />
                     <div class="btn-group left m-r-xs m-r-n-xs">
                     {{#if_equals action "edit"}}
-                    <button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">Save Page</span>
+                    <button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><i class="icon-plus-sign"></i><span class="saveLandingPageButtonText">{{agile_translate "landing-pages" "save-page"}}</span>
                     </button>
                      <button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
                                                 <span class="caret"></span>
@@ -169,12 +167,12 @@ To get the best experience, we recommend you to use <a href="https://support.goo
                                 <ul class="dropdown-menu" style="min-width:0px;">
                                             <li>
                                                 <a href="#landing-page-copy/{{templateId}}" id="duplicate-landingpage-top">
-                                                    <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy</a>
+                                                    <i class="fa fa-clipboard" style="width: 20px;"></i>{{agile_translate "campaigns" "create-a-copy"}}</a>
                                             </li>
                                 </ul>
                     </button>
                     {{else}}
-                    <button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><span class="saveLandingPageButtonText">Save Page</span>
+                    <button class="btn btn-sm btn-primary btn-addon saveLandingPageButton" ><span class="saveLandingPageButtonText">{{agile_translate "landing-pages" "save-page"}}</span>
                     </button>
                     {{/if_equals}}
                     </div>                    

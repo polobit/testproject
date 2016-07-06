@@ -3,8 +3,8 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12" id="document-add">
-            <h3 class="pull-left font-thin h3">Documents </h3>
-            <a href="#documents-add" class="documents-add btn btn-default btn-addon pull-right btn-sm"><i class="fa fa-plus-circle" /> Add Document</a>
+            <h3 class="pull-left font-thin h3">{{agile_translate "deal-view" "documents"}}</h3>
+            <a href="#documents-add" class="documents-add btn btn-default btn-addon pull-right btn-sm"><i class="fa fa-plus-circle" /> {{agile_translate "contact-details" "add-document"}}</a>
 			<div class="clearfix"></div>
     </div>
 </div>
@@ -19,11 +19,10 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">There are no documents </h3>
+                    <h4 class="m-t-none">{{agile_translate "documents" "there-are-no-documents"}}</h3>
                     <div class="text">
-						You can add document by clicking the button below or the one on the right side of the page.
-                    </div>
-                    <a href="#" class="documents-add btn btn-default btn-sm m-t-xs"><i class="fa fa-plus-circle"></i>  Add Document</a>
+						{{agile_translate "documents" "you-can-add-document-by-clicking"}}</div>
+                    <a href="#" class="documents-add btn btn-default btn-sm m-t-xs"><i class="fa fa-plus-circle"></i>  {{agile_translate "contact-details" "add-document"}}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -34,15 +33,15 @@
         {{#if this.length}}
           <div class="col-md-9">
 			<div class="panel panel-default">
-			    <div class="panel-heading"> Documents List</div>
+			    <div class="panel-heading"> {{agile_translate "documents" "documents-list"}}</div>
                 <div class="table-responsive">
                 <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view" url="core/api/documents/bulk" id="document-list">
                     <thead>
                         <tr>
-                            <th style="width:30%">Title</th>
-                            <th style="width:30%">Related Contacts</th>
-                            <th style="width:20%">Uploaded Date</th>
-							<th style="width:20%">Owner</th>
+                            <th style="width:30%">{{agile_translate "report-add" "title"}}</th>
+                            <th style="width:30%">{{agile_translate "documents" "related-contacts"}}</th>
+                            <th style="width:20%">{{agile_translate "documents" "uploaded-date"}}</th>
+							<th style="width:20%">{{agile_translate "contact-details" "owner"}}</th>
                         </tr>
                     </thead>
                     <tbody id="documents-model-list" class="c-p">
@@ -58,7 +57,7 @@
                 <h4 class="m-t-none m-b-sm h4">
                     How to use Documents?
                 </h4>                
-                <p>Documents add more context to Contacts or Deals. To add documents, upload them from your computer or append them from a cloud storage like Google Drive.</p>
+                <p>{{agile_translate "documents" "documents-desc"}}</p>
             
         </div>
     </div>

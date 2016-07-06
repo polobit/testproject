@@ -3,8 +3,8 @@
 <div class="row">
     <div class="col-md-12">
         
-            <h3 class="pull-left font-thin h3">Filters</h3>
-            <a href="#contact-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+            <h3 class="pull-left font-thin h3">{{agile_translate "deal-view" "filters"}}</h3>
+            <a href="#contact-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  {{agile_translate "portlets" "contact-filters-btn-text"}}</a>
             <div class="clearfix"></div>
            
         </div>
@@ -20,7 +20,7 @@
         <table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/filters/bulk" id="contact-filter-list">  
             <thead>
                 <tr>   
-                    <th style="width:50%">Name</th>
+                    <th style="width:50%">{{agile_translate "deal-view" "name"}}</th>
                     <th style="width:50%"></th>
                 </tr>
             </thead>
@@ -35,7 +35,7 @@
              <h4 class="m-t-none m-b-sm">
               What are Filters?
              </h4>
-            <p>Filters are used to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter</p>
+            <p>{{agile_translate "contacts-view" "filters-desc"}}</p>
         </div>
     </div>
 </div>
@@ -51,7 +51,7 @@
 <td> 
   {{#if created_time}}
       <div>
-         Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+         {{agile_translate "contact-details" "created"}}<i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
       </div>
   {{/if}}
 </td>
@@ -61,8 +61,8 @@
 <div class="row">
     <div class="col-md-12">
         
-            <h3 class="pull-left font-thin h3">Filters</h3>
-            <a href="#contact-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+            <h3 class="pull-left font-thin h3">{{agile_translate "deal-view" "filters"}}</h3>
+            <a href="#contact-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  {{agile_translate "portlets" "contact-filters-btn-text"}}</a>
             <div class="clearfix"></div>
            
         </div>
@@ -78,7 +78,7 @@
         <table class="table table-bordered showCheckboxes agile-table panel" url="core/api/filters/bulk" id="company-filter-list">  
             <thead>
                 <tr>   
-                    <th style="width:50%">Name</th>
+                    <th style="width:50%">{{agile_translate "deal-view" "name"}}</th>
                     <th style="width:50%"></th>
                 </tr>
             </thead>
@@ -93,7 +93,7 @@
              <h4 class="m-t-none m-b-sm">
               What are Filters?
              </h4>
-            <p>Filters are used to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter</p>
+            <p>{{agile_translate "contacts-view" "filters-desc"}}</p>
         </div>
     </div>
 </div>
@@ -109,7 +109,7 @@
 <td> 
   {{#if created_time}}
       <div>
-         Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+         {{agile_translate "contact-details" "created"}}<i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
       </div>
   {{/if}}
 </td>

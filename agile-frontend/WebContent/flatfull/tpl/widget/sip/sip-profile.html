@@ -13,8 +13,7 @@
 	<form class="p-xs" id="sip_login_form" name="sip_login_form" method="post">
     	<fieldset>
 		      <p class="m-t-sm">
-                   Make and receive calls from your contacts using any SIP account.
-              </p>
+                   {{agile_translate "widgets" "sip-desc"}}</p>
 			  
 				<label><b>Enter your Sip details </b></label>
                 <label id="sip_reg_status"></label>
@@ -40,17 +39,15 @@
                 </div>
 <div class="checkbox">
 <label class="i-checks i-checks-sm">
-              <input type="checkbox" id="sip_wsenable" name="sip_wsenable" title="Websocket URL"></input><i></i> Enable SIP Legacy Mode
-</label>
+              <input type="checkbox" id="sip_wsenable" name="sip_wsenable" title="Websocket URL"></input><i></i> {{agile_translate "widgets" "enable-sip-legacy-mode"}}</label>
 </div>
               <div class="text-center">
-			  <a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+			  <a href="#add-widget" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_translate "modals" "save"}}</a>
 </div>
               
               <p class="m-t-sm m-b-none">
-                  Don't have an SIP account? 
-                  <a href="http://www.voip-info.org/wiki/view/Sip+Trunking+Providers" target="_blank" class="text-info"> SignUp </a>
+                  Don't have an SIP {{agile_translate "contact-details" "account"}}<a href="http://www.voip-info.org/wiki/view/Sip+Trunking+Providers" target="_blank" class="text-info"> {{agile_translate "widgets" "signup"}}</a>
               </p>
 		 </fieldset>
     </form>

@@ -7,14 +7,12 @@
             <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
        <div class="box-right pull-left">
-            <h4 class="m-t-none">You have not associated any social accounts currently.</h4>
+            <h4 class="m-t-none">{{agile_translate "social" "social-suite-not-associated"}}</h4>
             <div class="text">
-                Track relevant conversations and participate. Import prospective customers and run multichannel campaigns.  
-            </div>
-              Get started by adding a social stream.<br>
+                {{agile_translate "social" "social-suite-not-associated-desc-1"}}</div>
+              {{agile_translate "social" "social-suite-not-associated-desc-2"}}<br>
                 <a id="add-stream" class="add-stream add-stream-tab btn btn-default btn-sm m-t-xs">
-              <i class="icon icon-plus-sign"></i> Add Stream
-            </a> 
+              <i class="icon icon-plus-sign"></i> {{agile_translate "social" "add-stream"}}</a> 
       </div>
     <div class="clearfix">
     </div>    
@@ -54,13 +52,13 @@
     </span>        
   <h4 class="column-title txt-ellipsis m-t-none"> 
       {{#if_equals stream_type "All_Updates"}}    
-          <span>All Updates</span>
+          <span>{{agile_translate "social" "all-updates"}}</span>
       {{else}} 
         {{#if_equals stream_type "DM_Inbox"}}
-           <span>DM Inbox</span>
+           <span>{{agile_translate "social" "DM Inbox"}}</span>
         {{else}} 
            {{#if_equals stream_type "DM_Outbox"}}
-               <span>DM Outbox</span>
+               <span>{{agile_translate "social" "DM Outbox"}}</span>
            {{else}}
              <span>{{stream_type}}</span>
            {{/if_equals}}
@@ -172,7 +170,7 @@
                                 <li role="presentation"><a href="#social" class="reply-message" role="menuitem">Tweet to @{{user.screen_name}}</a></li>               
                             {{#if deletable_tweet}}
                                 <li class="divider"></li>
-                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem">Delete</a></li>                                
+                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem">{{agile_translate "contact-details" "delete"}}</a></li>                                
                             {{/if}}
                </ul>
                     </li>  

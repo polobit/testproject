@@ -6,7 +6,7 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-plus-sign"></i>&nbsp;Add Track</h3>
+        <h3><i class="icon-plus-sign"></i>&nbsp;{{agile_translate "admin-settings-deals" "add-track"}}</h3>
     </div>
     <div class="modal-body" style="max-height:420px !important;">
         <form id="pipelineForm" name="pipelineForm" method="post">
@@ -19,13 +19,13 @@
 				<input type="checkbox" name="isDefault" id="is_default" style="display:none;"/><i></i>
 </label> -->
                 <div class="control-group form-group">
-                    <label class="control-label"><b>Track Name</b> <span class="field_req">*</span></label><br>
+                    <label class="control-label"><b>Track {{agile_translate "deal-view" "name"}}</b> <span class="field_req">*</span></label><br>
                     <div class="controls">
                         <input name="name" type="text" field="pipeline" class="required form-control" id="pipline_name" placeholder="Track" />
                     </div>
                 </div>
                 <div class="control-group hide">
-					<label class="control-label"><b>Milestones</b> <span class="field_req">*</span></label>
+					<label class="control-label"><b>{{agile_translate "deal-view" "milestones"}}</b> <span class="field_req">*</span></label>
                     <div class="controls">
                         <input class="input-large" name="milestones" class="required form-control" type="text" id="milestones" value="New,Prospect,Proposal,Won,Lost" />
                     </div>
@@ -35,8 +35,7 @@
     </div>
     <div class="modal-footer">
 		<span class="save-status"></span>
-        <a href="#" class="save btn btn-primary" id="pipeline_validate">Save
-        </a>
+        <a href="#" class="save btn btn-primary" id="pipeline_validate">{{agile_translate "modals" "save"}}</a>
     </div>
 </div>
 </div>
@@ -50,7 +49,7 @@
     <div class="modal-content">
 	<div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3>Add Milestone</h3>
+        <h3>{{agile_translate "admin-settings-deals" "add-milestone"}}</h3>
     </div>
 	<div class="modal-body">
         <p><i class="icon-exclamation-sign" style="font-size: 25px;vertical-align: middle;padding-right: 5px;"></i>Special characters are not allowed except space and underscore</p>
@@ -69,7 +68,7 @@
     <div class="modal-content">
 	<div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3>Delete Track</h3>
+        <h3>{{agile_translate "admin-settings-deals" "delete-track"}}</h3>
     </div>
 	<div class="modal-body">
         <div id="deals-export-csv-detail">
@@ -79,8 +78,8 @@
     </div>
     <div class="modal-footer">
     <span class="pipeline-delete-message" style="margin-right:5px;color:red;"></span>
-    <a  href="#" class="btn close" data-dismiss="modal" style="opacity:0.5;">No</a>
-	<a href="#" id="pipeline-delete-confirm" class="btn btn-primary">Yes</a>
+    <a  href="#" class="btn close" data-dismiss="modal" style="opacity:0.5;">{{agile_translate "portlets" "no"}}</a>
+	<a href="#" id="pipeline-delete-confirm" class="btn btn-primary">{{agile_translate "portlets" "yes"}}</a>
     </div>
 </div>
 </div>

@@ -5,12 +5,10 @@
             <div class="text-center padder-v">
                 <h4 class="m-t-none m-b-xs">You don&#39;t have any canned responses</h4>
                 <div class="m-b-xs">
-                    Create frequently type messages as canned responses. Choose the required canned response when sending reply to without typing the same message again.
-                </div>
+                    {{agile_translate "tickets" "tickets-canned-responses-desc"}}</div>
                 <div>
                     <a href="#add-canned-response" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                        Add Canned Response
-                    </a>
+                        {{agile_translate "tickets" "add-canned-response"}}</a>
                 </div>
             </div>
         </div>
@@ -21,16 +19,15 @@
         <div class="hbox h-auto m-b-sm">
             <div class="pull-right">
                 <a href="#add-canned-response" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-plus-sign"></i></span> Add Canned Response
-                </a>
+                    <span><i class="icon-plus-sign"></i></span> {{agile_translate "tickets" "add-canned-response"}}</a>
             </div>
             <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/canned-messages/bulk" data-bulk-delete-title="Delete" data-bulk-delete-msg="Are you sure you want to delete?">
                     <thead>
                         <tr>
-                            <th class="hide">Id</th>
-                            <th style="width:33%">Title</th>
-                            <th style="width:30%">Message</th>
-                             <!--<th style="width:30%">Labels</th> -->
+                            <th class="hide">{{agile_translate "tickets" "id"}}</th>
+                            <th style="width:33%">{{agile_translate "report-add" "title"}}</th>
+                            <th style="width:30%">{{agile_translate "other" "message"}}</th>
+                             <!--<th style="width:30%">{{agile_translate "tickets" "labels"}}</th> -->
                             <th style="width:36%">&nbsp;</th>
                         </tr>
                     </thead>
@@ -43,8 +40,7 @@
             <div class="p-l p-r">
                 <h4 class="m-t-none">What are Recommendations?</h4>           
                 <p>
-                    Get automated smart recommendations based on canned responses and ticket labels.
-                </p>
+                    {{agile_translate "tickets" "get-recommendations-desc"}}</p>
                 <br/>
                 <p>
                     <iframe width="254" height="142" src="https://www.youtube.com/embed/I4mj_MpQsUI" frameborder="0" allowfullscreen></iframe>

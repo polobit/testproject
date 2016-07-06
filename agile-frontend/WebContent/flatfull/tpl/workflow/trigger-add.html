@@ -2,9 +2,9 @@
 <div class="wrapper-md bg-light lter b-b">
 
   {{#if id}}
-                       <h3 class="h3 font-thin">Edit Trigger</h3>
+                       <h3 class="h3 font-thin">{{agile_translate "campaigns" "edit-trigger"}}</h3>
                     {{else}}
-                        <h3 class="h3 font-thin"><i class="icon-plus-sign"></i> Add Trigger</h3>
+                        <h3 class="h3 font-thin"><i class="icon-plus-sign"></i> {{agile_translate "campaigns" "add-trigger"}}</h3>
                     {{/if}} 
 </div>
 <div class="wrapper-md">
@@ -18,65 +18,64 @@
 					{{/if}}
                     <fieldset>
                         <div class="control-group form-group">
-                            <label class="control-label col-sm-4">Name 
-								<span class="field_req">*</span>
+                            <label class="control-label col-sm-4">{{agile_translate "deal-view" "name"}}<span class="field_req">*</span>
 							</label>
                             <div class="controls col-sm-8">
                                 <input type="text" id="name" class="required form-control w-md" name="name" />
                             </div>
                         </div>
                         <div class="control-group form-group new-trigger-hidden">
-                            <label class="control-label col-sm-4">When this happens <span class="field_req">*</span></label>
+                            <label class="control-label col-sm-4">{{agile_translate "campaigns" "when-this-happens"}}<span class="field_req">*</span></label>
                             <div id="LHS" name="LHS" class="col-sm-8">
                                   <div class="controls">
                                     <select id="trigger-type" name="type" class="required form-control w-md">		
  										<option></option>
                                         <optgroup label="Tag">
-										<option value="TAG_IS_ADDED">Tag is added</option>
-                                        <option value="TAG_IS_DELETED">Tag is deleted</option>
+										<option value="TAG_IS_ADDED">{{agile_translate "campaigns" "tag-is-added"}}</option>
+                                        <option value="TAG_IS_DELETED">{{agile_translate "campaigns" "tag-is-deleted"}}</option>
 										<optgroup label="Contact">
-                                        <option value="CONTACT_IS_ADDED">Contact is added</option>
+                                        <option value="CONTACT_IS_ADDED">{{agile_translate "campaigns" "contact-is-added"}}</option>
                                         <option value="ADD_SCORE" id="add-score">Contact Score (>=)</option>
                                         <optgroup label="Deal">
-                                        <option value="DEAL_IS_ADDED">Deal is added</option>
-                                        <option value="DEAL_IS_DELETED">Deal is deleted</option>
-                                        <option value="DEAL_MILESTONE_IS_CHANGED">Deal milestone is changed</option>
+                                        <option value="DEAL_IS_ADDED">{{agile_translate "campaigns" "deal-is-added"}}</option>
+                                        <option value="DEAL_IS_DELETED">{{agile_translate "campaigns" "deal-is-deleted"}}</option>
+                                        <option value="DEAL_MILESTONE_IS_CHANGED">{{agile_translate "campaigns" "deal-milestone-is-changed"}}</option>
 										<optgroup label="Timer">
 										{{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
-										<option value="RUNS_HOURLY">Hourly</option>
+										<option value="RUNS_HOURLY">{{agile_translate "report-add" "hourly"}}</option>
 										{{/isAllowedInCurrentPlan}}
-										<option value="RUNS_DAILY">Daily</option>
-                                        <option value="RUNS_WEEKLY">Weekly</option>
-                                        <option value="RUNS_MONTHLY">Monthly</option>
+										<option value="RUNS_DAILY">{{agile_translate "report-add" "daily"}}</option>
+                                        <option value="RUNS_WEEKLY">{{agile_translate "report-add" "weekly"}}</option>
+                                        <option value="RUNS_MONTHLY">{{agile_translate "plan-and-upgrade" "monthly"}}</option>
 										<optgroup label="Payments">
-										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
+										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">{{agile_translate "campaigns" "stripe-event"}}</option>
 										<optgroup label="Email Event">
-										<option value="INBOUND_MAIL_EVENT" id="inbound-mail-event">New Email</option>
-										<option value="EMAIL_OPENED">Email Opened</option>
-										<option value="EMAIL_LINK_CLICKED">Email Link Clicked</option>
-										<option value="UNSUBSCRIBED">Unsubscribed</option>
-										<option value="SOFT_BOUNCE">Soft Bounce</option>
-										<option value="HARD_BOUNCE">Hard Bounce</option>
-										<option value="SPAM_REPORT">Spam Report</option>
+										<option value="INBOUND_MAIL_EVENT" id="inbound-mail-event">{{agile_translate "campaigns" "new-email"}}</option>
+										<option value="EMAIL_OPENED">{{agile_translate "contact-details" "email-opened"}}</option>
+										<option value="EMAIL_LINK_CLICKED">{{agile_translate "campaigns" "email-link-clicked"}}</option>
+										<option value="UNSUBSCRIBED">{{agile_translate "contacts-view" "unsubscribed"}}</option>
+										<option value="SOFT_BOUNCE">{{agile_translate "campaigns" "soft-bounce"}}</option>
+										<option value="HARD_BOUNCE">{{agile_translate "campaigns" "hard-bounce"}}</option>
+										<option value="SPAM_REPORT">{{agile_translate "campaigns" "spam-report"}}</option>
 										<optgroup label="Calendar">
-										<option value="EVENT_IS_ADDED">Event is added</option>
+										<option value="EVENT_IS_ADDED">{{agile_translate "campaigns" "event-is-added"}}</option>
 										<optgroup label="Call">
-										<option value="INBOUND_CALL">Inbound Call</option>
-										<option value="OUTBOUND_CALL">Outbound Call</option>
+										<option value="INBOUND_CALL">{{agile_translate "campaigns" "inbound-call"}}</option>
+										<option value="OUTBOUND_CALL">{{agile_translate "campaigns" "outbound-call"}}</option>
 										<optgroup label="Ecommerce">
-										<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
+										<option value="SHOPIFY_EVENT" id="shopify-event">{{agile_translate "campaigns" "shopify-event"}}</option>
 										<optgroup label="Form">
-										<option value="FORM_SUBMIT" id="form-event">Form Submit</option>
+										<option value="FORM_SUBMIT" id="form-event">{{agile_translate "campaigns" "form-submit"}}</option>
 
 										<optgroup label="Ticket">
-										<option value="NEW_TICKET_IS_ADDED">New ticket is added</option>
-										<option value="TICKET_NOTE_ADDED_BY_USER">Note is added by user</option>
-										<option value="TICKET_NOTE_ADDED_BY_CUSTOMER">Note is added by customer</option>
-										<option value="TICKET_IS_CLOSED">Ticket is closed</option>
-										<option value="TICKET_SLA_REACHED">SLA reached</option>
-										<option value="TICKET_ASSIGNEE_CHANGED">Ticket assignee changed</option>
-										<option value="TICKET_LABEL_IS_ADDED">Ticket label is added</option>
-										<option value="TICKET_LABEL_IS_DELETED">Ticket label is deleted</option>
+										<option value="NEW_TICKET_IS_ADDED">{{agile_translate "campaigns" "new-ticket-is-added"}}</option>
+										<option value="TICKET_NOTE_ADDED_BY_USER">{{agile_translate "campaigns" "note-is-added-by-user"}}</option>
+										<option value="TICKET_NOTE_ADDED_BY_CUSTOMER">{{agile_translate "campaigns" "note-is-added-by-customer"}}</option>
+										<option value="TICKET_IS_CLOSED">{{agile_translate "campaigns" "ticket-is-closed"}}</option>
+										<option value="TICKET_SLA_REACHED">{{agile_translate "campaigns" "sla-reached"}}</option>
+										<option value="TICKET_ASSIGNEE_CHANGED">{{agile_translate "campaigns" "ticket-assignee-changed"}}</option>
+										<option value="TICKET_LABEL_IS_ADDED">{{agile_translate "campaigns" "ticket-label-is-added"}}</option>
+										<option value="TICKET_LABEL_IS_DELETED">{{agile_translate "campaigns" "ticket-label-is-deleted"}}</option>
 										<!-- <option value="SLA_CROSSED">SLA crossed</option> --> 
 
 									</select>
@@ -87,7 +86,7 @@
 						<div class="control-group form-group" style="display:none;">
 							<div class="controls col-sm-offset-4 col-sm-8">
                             <select id="contact-filter" name="contact_filter_id" class="required form-control w-md">
-                                    <option value="">Select...</option>
+                                    <option value="">{{agile_translate "contacts-view" "select"}}</option>
                                 </select>
 							</div>
                         </div>
@@ -108,20 +107,20 @@
 								<label class="control-label INBOUND_CALL OUTBOUND_CALL"></label>
 								<div class="controls col-sm-offset-4 col-sm-8">	
 									<select name="call_disposition" class="required form-control w-md">
-										<option value="" class="INBOUND_CALL OUTBOUND_CALL">Select call status</option>
-										<option value="ALL" class="INBOUND_CALL OUTBOUND_CALL">All</option>			
-										<option value="answered" class="INBOUND_CALL OUTBOUND_CALL">Answered</option>
-										<!--<option value="no-answer" class="INBOUND_CALL OUTBOUND_CALL">No Answer</option>-->
-										<option value="busy" class="INBOUND_CALL OUTBOUND_CALL">Busy</option>
-										<option value="failed" class="OUTBOUND_CALL">Failed</option>
-										<option value="missed" class="INBOUND_CALL">Missed</option>										
-										<option value="inquiry" class="INBOUND_CALL OUTBOUND_CALL">Inquiry</option>
-										<option value="interest" class="INBOUND_CALL OUTBOUND_CALL">Interest</option>
-										<option value="no interest" class="INBOUND_CALL OUTBOUND_CALL">No Interest</option>
-										<option value="incorrect referral" class="INBOUND_CALL OUTBOUND_CALL">Incorrect Referral</option>
-										<option value="meeting scheduled" class="INBOUND_CALL OUTBOUND_CALL">Meeting Scheduled</option>
-										<option value="new opportunity" class="INBOUND_CALL OUTBOUND_CALL">New Opportunity</option>
-										<option value="voicemail" class="OUTBOUND_CALL">Voicemail</option>
+										<option value="" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "select-call-status"}}</option>
+										<option value="ALL" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "portlets" "All"}}</option>			
+										<option value="answered" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "answered"}}</option>
+										<!--<option value="no-answer" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "no-answer"}}</option>-->
+										<option value="busy" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "busy"}}</option>
+										<option value="failed" class="OUTBOUND_CALL">{{agile_translate "campaigns" "failed"}}</option>
+										<option value="missed" class="INBOUND_CALL">{{agile_translate "campaigns" "missed"}}</option>										
+										<option value="inquiry" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "inquiry"}}</option>
+										<option value="interest" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "interest"}}</option>
+										<option value="no interest" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "no-interest"}}</option>
+										<option value="incorrect referral" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "incorrect-referral"}}</option>
+										<option value="meeting scheduled" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "meeting-scheduled"}}</option>
+										<option value="new opportunity" class="INBOUND_CALL OUTBOUND_CALL">{{agile_translate "campaigns" "new-opportunity"}}</option>
+										<option value="voicemail" class="OUTBOUND_CALL">{{agile_translate "campaigns" "voicemail"}}</option>
 									</select>
 								</div>
 							</div>
@@ -130,7 +129,7 @@
 						<div class="control-group form-group" style="display:none;">
 							<div class="controls col-sm-offset-4 col-sm-8">
                             <select id="trigger-deal-milestone" name="trigger_deal_milestone" class="required form-control w-md">
-                                    <option value="">Select...</option>
+                                    <option value="">{{agile_translate "contacts-view" "select"}}</option>
                                 </select>
 							</div>
                         </div>
@@ -138,32 +137,32 @@
 						 <div class="control-group form-group" style="display:none;">
 							<div class="controls col-sm-offset-4 col-sm-8">
                             <select id="event-type" name="event_type" class="required form-control w-md">
-									<option value="">Select Event Type</option>
-                                    <option value="ANY">Any Event</option>
-									<option value="WEB_APPOINTMENT">Online Appointment</option>
+									<option value="">{{agile_translate "campaigns" "select-event-type"}}</option>
+                                    <option value="ANY">{{agile_translate "campaigns" "any-event"}}</option>
+									<option value="WEB_APPOINTMENT">{{agile_translate "campaigns" "online-appointment"}}</option>
                                 </select>
 							</div>
                         </div>
 						 <div class="control-group form-group" style="display:none;">
 							<div class="controls col-sm-offset-4 col-sm-8">
                             <select id="event-owner-id" name="event_owner_id" class="required form-control w-md">
-                                    <option value="">Select...</option>
+                                    <option value="">{{agile_translate "contacts-view" "select"}}</option>
                                 </select>
 							</div>
                         </div>
 						<div class="control-group form-group" style="display:none;">
 							<div class="controls col-sm-offset-4 col-sm-8">
 							<select id="trigger-stripe-event" name="trigger_stripe_event" class="required form-control w-md">
-									<option value="">Select Stripe Event</option>
-									<option value="CHARGE_SUCCEEDED" id="charge-succeeded">Charge succeeded</option>
-									<option value="CHARGE_FAILED" id="charge-failed">Charge failed</option>
-									<option value="CHARGE_REFUNDED" id="charge-refunded">Charge refunded</option>
-									<option value="CHARGE_CAPTURED" id="charge-captured">Charge captured</option>
-									<option value="CHARGE_UPDATED" id="charge-updated">Charge updated</option>
-									<option value="CUSTOMER_DELETED" id="customer-deleted">Customer deleted</option>
+									<option value="">{{agile_translate "campaigns" "select-stripe-event"}}</option>
+									<option value="CHARGE_SUCCEEDED" id="charge-succeeded">{{agile_translate "campaigns" "charge-succeeded"}}</option>
+									<option value="CHARGE_FAILED" id="charge-failed">{{agile_translate "campaigns" "charge-failed"}}</option>
+									<option value="CHARGE_REFUNDED" id="charge-refunded">{{agile_translate "campaigns" "charge-refunded"}}</option>
+									<option value="CHARGE_CAPTURED" id="charge-captured">{{agile_translate "campaigns" "charge-captured"}}</option>
+									<option value="CHARGE_UPDATED" id="charge-updated">{{agile_translate "campaigns" "charge-updated"}}</option>
+									<option value="CUSTOMER_DELETED" id="customer-deleted">{{agile_translate "campaigns" "customer-deleted"}}</option>
 							</select>
 							<div class="m-t-xs">
-							<small>You need to <a href="https://stripe.com/docs/webhooks#configuring-your-webhook-settings" target="_blank" class="text-info">setup webhooks</a> in your stripe account for this</small>
+							<small>{{agile_translate "campaigns" "you-need-to"}}<a href="https://stripe.com/docs/webhooks#configuring-your-webhook-settings" target="_blank" class="text-info">{{agile_translate "campaigns" "setup-webhooks"}}</a> {{agile_translate "campaigns" "in-your-stripe-account-for-this"}}</small>
 							</div>
 							</div>
 						</div>
@@ -171,9 +170,9 @@
 						<div class="control-group form-group" style="display:none;">
 							<div class="controls col-sm-offset-4 col-sm-8">
 									<select id="email-tracking-type" name="email_tracking_type" class="required form-control w-md">
-										<option value="ANY">Personal or Campaign emails</option>
-										<option value="PERSONAL">Personal emails only</option>
-										<option value="CAMPAIGNS">Campaign emails only</option>
+										<option value="ANY">{{agile_translate "campaigns" "personal-or-campaign-emails"}}</option>
+										<option value="PERSONAL">{{agile_translate "campaigns" "personal-emails-only"}}</option>
+										<option value="CAMPAIGNS">{{agile_translate "campaigns" "campaign-emails-only"}}</option>
 									</select>
 							</div>
 						</div>
@@ -181,7 +180,7 @@
                             <label class="control-label col-sm-4" ></label>
                             <div class="controls col-sm-8">
                                 <select id="email-tracking-campaign-id" name="email_tracking_campaign_id" class="required form-control w-md">
-                                    <option value="">Select...</option>
+                                    <option value="">{{agile_translate "contacts-view" "select"}}</option>
                                 </select>
                             </div>
                         </div>
@@ -196,35 +195,35 @@
 						<div class="control-group form-group" style="display:none;">
 							<div class="controls col-sm-offset-4 col-sm-8">
 							<select id="trigger-shopify-event" name="trigger_shopify_event" class="required form-control w-md">
-									<option value="">Select Shopify Event</option>
-									<option value="CUSTOMERS_CREATE">Customer created</option>
-									<option value="CUSTOMERS_UPDATE">Customer updated</option>
-									<option value="ORDERS_CREATE">Order created</option>
-									<option value="ORDERS_UPDATED">Order updated</option>
-									<option value="ORDERS_PAID">Order payment</option>
-									<option value="ORDERS_DELETE">Order deleted</option>
-									<option value="ORDERS_FULFILLED">Order fulfilled</option>
-									<option value="ORDERS_CANCELLED">Order cancelled</option>
-									<option value="CHECKOUTS_CREATE">Checkout created</option>
-									<option value="CHECKOUTS_UPDATE">Checkout updated</option>
-									<option value="CHECKOUTS_DELETE">Checkout deleted</option>
+									<option value="">{{agile_translate "campaigns" "select-shopify-event"}}</option>
+									<option value="CUSTOMERS_CREATE">{{agile_translate "campaigns" "customer-created"}}</option>
+									<option value="CUSTOMERS_UPDATE">{{agile_translate "campaigns" "customer-updated"}}</option>
+									<option value="ORDERS_CREATE">{{agile_translate "campaigns" "order-created"}}</option>
+									<option value="ORDERS_UPDATED">{{agile_translate "campaigns" "order-updated"}}</option>
+									<option value="ORDERS_PAID">{{agile_translate "campaigns" "order-payment"}}</option>
+									<option value="ORDERS_DELETE">{{agile_translate "campaigns" "order-deleted"}}</option>
+									<option value="ORDERS_FULFILLED">{{agile_translate "campaigns" "order-fulfilled"}}</option>
+									<option value="ORDERS_CANCELLED">{{agile_translate "campaigns" "order-cancelled"}}</option>
+									<option value="CHECKOUTS_CREATE">{{agile_translate "campaigns" "checkout-created"}}</option>
+									<option value="CHECKOUTS_UPDATE">{{agile_translate "campaigns" "checkout-updated"}}</option>
+									<option value="CHECKOUTS_DELETE">{{agile_translate "campaigns" "checkout-deleted"}}</option>
 							</select>
 							<div class="m-t">
-								<small><i class="icon-info-sign"></i> You need to setup Webhooks in your Shopify account for this. In your stores Admin panel, go to Settings, Notifications, Webhooks, and create a webhook for the desired event with the below URL. <br> <a class="inbound-help-text">{{shopifyWebhook}}</a></small>
+								<small><i class="icon-info-sign"></i> {{agile_translate "campaigns" "trigger-shopify-webhook"}}<br> <a class="inbound-help-text">{{shopifyWebhook}}</a></small>
 							</div>
 							</div>	
 						</div>
 						<div class="control-group form-group" style="display:none;">
 							<div class="controls col-sm-offset-4 col-sm-8">
 							<select id="trigger-form-event" name="trigger_form_event" class="required form-control w-md">
-								<option value="">Select...</option>
+								<option value="">{{agile_translate "contacts-view" "select"}}</option>
 							</select>
 							</div>
 						</div>
 						<div id="trigger-inbound-mail-event" style="display:none;">
 						<div class="control-group form-group">
 							<div class="controls col-sm-offset-4 col-sm-8">
-								<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. When there is a new email to this address, the From address will be added to your Contacts and to the Campaign (in case it is a new Contact).</small>								
+								<small><i class="icon-info-sign"></i> For Agile CRM {{agile_translate "campaigns" "to-recognize-your-emails-please-setup"}}<a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. When there is a new email to this address, the From address will be added to your Contacts and to the Campaign (in case it is a new Contact).</small>								
 							</div>
                 		</div>
 						</div>
@@ -234,7 +233,7 @@
                                 <div class="checkbox">
                               <label class="i-checks i-checks-sm">
                                <input type="checkbox"  name="trigger_run_on_new_contacts"><i></i>
-	                            Run only on new Contacts</label>
+	                            {{agile_translate "campaigns" "run-only-on-new-contacts"}}</label>
                                </div>
 								</div>
 							</div>
@@ -245,24 +244,24 @@
                                 <div class="checkbox">
                                  <label class="i-checks i-checks-sm">
 									<input type="checkbox"  name="new_email_trigger_run_on_new_contacts" checked="true"><i></i>
-									Run only for new Contacts</label>
+									{{agile_translate "campaigns" "run-only-for-new-contacts"}}</label>
                                   </div>
 								</div>
 							</div>
 						</div>
                         <div id="trigger-filter-condition" style="display:none;"></div>
                         <div class="control-group form-group">
-                            <label class="control-label col-sm-4">Run this Campaign on the Contact <span class="field_req">*</span></label>
+                            <label class="control-label col-sm-4">{{agile_translate "campaigns" "run-this-campaign-on-the-contact"}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-8">
                                 <select id="campaign-select" name="campaign_id" class="required form-control w-md inline-block">
-                                    <option value="">Select...</option>
+                                    <option value="">{{agile_translate "contacts-view" "select"}}</option>
                                 </select>
                             </div>
                         </div>
 						<div class="line line-bg b-b"></div>
                         <div class="form-actions col-sm-offset-4 col-sm-8">          							
-                            <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-primary">Save</a>
-							<a href="#" id="trigger-cancel" class="btn btn-default btn-sm">Cancel</a>
+                            <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-primary">{{agile_translate "modals" "save"}}</a>
+							<a href="#" id="trigger-cancel" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
                         </div>
                     </fieldset>
                 </form>
@@ -271,10 +270,9 @@
         <div class="col-md-3">
             <div class="wrapper">
                 <h4 class="m-t-none font-thin">
-                    Triggers
-                </h4>
+                    {{agile_translate "campaigns" "triggers"}}</h4>
                 
-                <p> Give your trigger a name and choose a condition to be satisfied. Immediately link your trigger to the appropriate campaign, for an action to follow.</p>
+                <p> {{agile_translate "campaigns" "add-triggers-desc"}}</p>
             </div>
         </div>
     </div>
@@ -286,7 +284,7 @@
     <div class="wrapper-md lter bg-light b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <h3 class="pull-left font-thin h3">Triggers</h3>
+                <h3 class="pull-left font-thin h3">{{agile_translate "campaigns" "triggers"}}</h3>
                 <div class="">
                     <input id="campaign-id" class="hide">
                 </div>
@@ -300,33 +298,33 @@
 <!-- Tabs for Triggers -->
 <ul class="nav nav-tabs" id="subTab">
 										    <li role="presentation" class="active" data-tab="1">
-												<a href="#contact" role="tab" name="tab1" data-toggle="tab" aria-control="tab1" id="tab1">Contact</a>
+												<a href="#contact" role="tab" name="tab1" data-toggle="tab" aria-control="tab1" id="tab1">{{agile_translate "contact-details" "Contact"}}</a>
 											</li>
 											<li role="presentation" data-tab="2">
-												<a href="#deal" name="tab2" aria-control="tab2" role="tab" data-toggle="tab" id="tab2">Deal</a>
+												<a href="#deal" name="tab2" aria-control="tab2" role="tab" data-toggle="tab" id="tab2">{{agile_translate "deal-view" "Deals?"}}</a>
 											</li>
 											<li role="presentation" data-tab="3">
-												<a href="#emailEvent" role="tab" name="tab3" data-toggle="tab" aria-control="tab3" id="tab3">Email Event</a>
+												<a href="#emailEvent" role="tab" name="tab3" data-toggle="tab" aria-control="tab3" id="tab3">{{agile_translate "campaigns" "email-event"}}</a>
 											</li>
 											<li role="presentation" data-tab="4">
-												<a href="#call" role="tab" name="tab4" data-toggle="tab" aria-control="tab4" id="tab4">Call</a>
+												<a href="#call" role="tab" name="tab4" data-toggle="tab" aria-control="tab4" id="tab4">{{agile_translate "admin-settings-tasks" "call"}}</a>
 											</li>
 											<li role="presentation" data-tab="5">
-												<a href="#calendar" name="tab6" aria-control="tab5" role="tab" data-toggle="tab" id="tab5">Calendar</a>
+												<a href="#calendar" name="tab6" aria-control="tab5" role="tab" data-toggle="tab" id="tab5">{{agile_translate "portlets" "calendar"}}</a>
 											</li>
 											<li role="presentation" data-tab="6">
-												<a href="#timer" role="tab" name="tab6" data-toggle="tab" aria-control="tab6" id="tab6">Timer</a>
+												<a href="#timer" role="tab" name="tab6" data-toggle="tab" aria-control="tab6" id="tab6">{{agile_translate "campaigns" "timer"}}</a>
 											</li>
 											<li role="presentation" data-tab="7">
-												<a href="#thirdPartyint" name="tab7" aria-control="tab7" role="tab" data-toggle="tab" id="tab7">Third Party Integrations</a>
+												<a href="#thirdPartyint" name="tab7" aria-control="tab7" role="tab" data-toggle="tab" id="tab7">{{agile_translate "campaigns" "third-party-integrations"}}</a>
 											</li>
 
 											<li role="presentation" data-tab="8">
-												<a href="#form" name="tab8" aria-control="tab8" role="tab" data-toggle="tab" id="tab8">Form</a>
+												<a href="#form" name="tab8" aria-control="tab8" role="tab" data-toggle="tab" id="tab8">{{agile_translate "campaigns" "form"}}</a>
 											</li>
 
 											<li role="presentation" data-tab="9">
-												<a href="#service" name="tab9" aria-control="tab9" role="tab" data-toggle="tab" id="tab9">Service</a>
+												<a href="#service" name="tab9" aria-control="tab9" role="tab" data-toggle="tab" id="tab9">{{agile_translate "campaigns" "service"}}</a>
 											</li>
 </ul>
 
@@ -342,15 +340,14 @@
                         <div>
                             <i class="icon-user icon-3x"></i>
                         </div>
-                        <b>Contact Added</b> 
+                        <b>{{agile_translate "campaigns" "contact-added"}}</b> 
                     </div>
                     <br>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-						 Add contact to a campaign as soon as the contact is created.
-                    </div>
+						 {{agile_translate "campaigns" "contact-added-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "CONTACT_IS_ADDED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "CONTACT_IS_ADDED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -361,15 +358,14 @@
                         <div>
                              <i class="icon-fire icon-3x"></i>
                         </div>
-                        <b>Score Increased</b>
+                        <b>{{agile_translate "campaigns" "score-increased"}}</b>
                     </div>
                     <br>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-						Add contact to a campaign when the score crosses a given limit.
-                    </div>
+						{{agile_translate "campaigns" "score-increased-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "ADD_SCORE"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "ADD_SCORE"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -380,16 +376,15 @@
                         <div>
                             <i class="fa-tags icon-3x"></i>
                         </div>
-                        <b>Tag Added</b>
+                        <b>{{agile_translate "contact-details" "tag-added"}}</b>
                     </div>
                     <br/>
                     <div class="m-b-md" rel="tooltip">
-						 Add contact to a campaign when a specified tag is added.
-                    </div>
+						 {{agile_translate "campaigns" "tag-added-desc"}}</div>
 					<br>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "TAG_IS_ADDED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "TAG_IS_ADDED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -400,16 +395,15 @@
                         <div>
                             <i class="fa-tags icon-3x"></i>
                         </div>
-                        <b>Tag Removed</b>
+                        <b>{{agile_translate "campaigns" "tag-removed"}}</b>
                     </div>
                     <br/>
                     <div class="m-b-md" rel="tooltip">
-						Add contact to a campaign when a specified tag is removed.
-                    </div>
+						{{agile_translate "campaigns" "tag-removed-desc"}}</div>
 					<br>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "TAG_IS_DELETED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "TAG_IS_DELETED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -428,15 +422,14 @@
                         <div>
                             <i class="fa fa-dollar icon-3x"></i>
                         </div>
-                        <b>Added to Deal</b> 
+                        <b>{{agile_translate "campaigns" "added-to-deal"}}</b> 
                     </div>
                     <br>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-						 Add contact to a campaign when the contact is attached to a deal.
-                    </div>
+						 {{agile_translate "campaigns" "added-to-deal-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_IS_ADDED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_IS_ADDED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -447,15 +440,14 @@
                         <div>
                             <i class="fa fa-dollar icon-3x"></i>
                         </div>
-                        <b>Removed from Deal</b> 
+                        <b>{{agile_translate "campaigns" "removed-from-deal"}}</b> 
                     </div>
                     <br>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-						Add contact to a campaign when the contact is removed from a deal.
-                    </div>
+						{{agile_translate "campaigns" "removed-from-deal-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_IS_DELETED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_IS_DELETED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -466,15 +458,14 @@
                         <div>
                             <i class="fa fa-money icon-3x"></i>
                         </div>
-                        <b>Deal Milestone Changed</b>
+                        <b>{{agile_translate "campaigns" "deal-milestone-changed"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-						Add all the contacts attached to a deal to a campaign when the deal milestone is changed.						
-                    </div>
+						{{agile_translate "campaigns" "deal-milestone-changed-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_MILESTONE_IS_CHANGED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "DEAL_MILESTONE_IS_CHANGED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -492,7 +483,7 @@
                         <div>
                             <i class="icon-time icon-3x"></i>
                         </div>
-                        <b>Hourly</b>
+                        <b>{{agile_translate "report-add" "hourly"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
@@ -500,7 +491,7 @@
                     </div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_HOURLY"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_HOURLY"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -513,15 +504,14 @@
                         <div>
                             <i class="icon-time icon-3x"></i>
                         </div>
-                        <b>Daily</b>
+                        <b>{{agile_translate "report-add" "daily"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a filtered list of contacts every day.
-                    </div>
+                        {{agile_translate "campaigns" "daily-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_DAILY"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_DAILY"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -532,15 +522,14 @@
                         <div>
                             <i class="icon-calendar icon-3x"></i>
                         </div>
-                        <b>Weekly</b>
+                        <b>{{agile_translate "report-add" "weekly"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a filtered list of contacts every week.
-                    </div>
+                        {{agile_translate "campaigns" "weekly-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_WEEKLY"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_WEEKLY"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -551,15 +540,14 @@
                         <div>
                             <i class="fa-calendar icon-3x"></i>
                         </div>
-                        <b>Monthly</b>
+                        <b>{{agile_translate "plan-and-upgrade" "monthly"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a filtered list of contacts every month.
-                    </div>
+                        {{agile_translate "campaigns" "monthly-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_MONTHLY"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "RUNS_MONTHLY"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -576,15 +564,14 @@
                         <div>
                             <i class="fa-cc-stripe icon-3x"></i>
                         </div>
-                        <b>Stripe</b>
+                        <b>{{agile_translate "campaigns" "stripe"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-						Run a campaign on a contact when a specified Stripe event is performed by the contact.
-                    </div>
+						{{agile_translate "campaigns" "stripe-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "STRIPE_CHARGE_EVENT"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "STRIPE_CHARGE_EVENT"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -595,15 +582,14 @@
                         <div>
                             <i class="fa-shopping-cart icon-3x"></i>
                         </div>
-                        <b>Shopify</b>
+                        <b>{{agile_translate "widgets" "Shopify"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-						 Run a campaign on a contact when a specified Shopify event is performed by the contact.
-                    </div>
+						 {{agile_translate "campaigns" "shopify-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "SHOPIFY_EVENT"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "SHOPIFY_EVENT"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -621,15 +607,14 @@
                         <div>
                             <i class="fa-envelope icon-3x"></i>
                         </div>
-                        <b>New Email</b>
+                        <b>{{agile_translate "campaigns" "new-email"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                         Run a campaign on a contact when a new email is received.
-                    </div>
+                         {{agile_translate "campaigns" "new-email-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "INBOUND_MAIL_EVENT" >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "INBOUND_MAIL_EVENT" >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -640,15 +625,14 @@
                         <div>
                             <i class="fa-envelope-o icon-3x"></i>
                         </div>
-                        <b>Email Opened</b>
+                        <b>{{agile_translate "contact-details" "email-opened"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                         Run a campaign on a contact when they open an email.
-                    </div>
+                         {{agile_translate "campaigns" "email-opened-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "EMAIL_OPENED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "EMAIL_OPENED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -659,15 +643,14 @@
                         <div>
                             <i class="fa-link icon-3x"></i>
                         </div>
-                        <b>Email Link Clicked</b>
+                        <b>{{agile_translate "campaigns" "email-link-clicked"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a contact when an email link is clicked.
-                    </div>
+                        {{agile_translate "campaigns" "email-link-clicked-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "EMAIL_LINK_CLICKED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "EMAIL_LINK_CLICKED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -678,15 +661,14 @@
                         <div>
                             <i class="icon-minus-sign icon-3x"></i>
                         </div>
-                        <b>Unsubscribed</b>
+                        <b>{{agile_translate "contacts-view" "unsubscribed"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a contact when they unsubscribe.
-                    </div>
+                        {{agile_translate "campaigns" "unsubscribed-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "UNSUBSCRIBED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "UNSUBSCRIBED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -697,7 +679,7 @@
                         <div>
                             <i class="fa-share-square-o  icon-3x"></i>
                         </div>
-                        <b>Soft Bounce</b>
+                        <b>{{agile_translate "campaigns" "soft-bounce"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
@@ -705,7 +687,7 @@
                     </div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "SOFT_BOUNCE"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "SOFT_BOUNCE"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -716,7 +698,7 @@
                         <div>
                             <i class="fa-share-square-o  icon-3x"></i>
                         </div>
-                        <b>Hard Bounce</b>
+                        <b>{{agile_translate "campaigns" "hard-bounce"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
@@ -724,7 +706,7 @@
                     </div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "HARD_BOUNCE"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "HARD_BOUNCE"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -735,15 +717,14 @@
                         <div>
                             <i class="icon-ban-circle icon-3x"></i>
                         </div>
-                        <b>Spam Report</b>
+                        <b>{{agile_translate "campaigns" "spam-report"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a contact when they report spam.
-                    </div>
+                        {{agile_translate "campaigns" "spam-report-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger"  data = "SPAM_REPORT" >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger"  data = "SPAM_REPORT" >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -761,15 +742,14 @@
                         <div>
                             <i class="glyphicon glyphicon-calendar" style="font-size: 3em;"></i>
                         </div>
-                        <b>Event Added</b>
+                        <b>{{agile_translate "campaigns" "event-added"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-						 Run a campaign on a contact when they are added to an event.
-                    </div>
+						 {{agile_translate "campaigns" "event-added-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "EVENT_IS_ADDED"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "EVENT_IS_ADDED"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -787,15 +767,14 @@
                         <div>
                             <i class="icon-call-in icon-3x"></i>
                         </div>
-                        <b>Inbound Call</b>
+                        <b>{{agile_translate "campaigns" "inbound-call"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a contact when they call your Twilio number.
-                    </div>
+                        {{agile_translate "campaigns" "inbound-call-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "INBOUND_CALL"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "INBOUND_CALL"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -806,15 +785,14 @@
                         <div>
                             <i class="icon-call-out icon-3x"></i>
                         </div>
-                        <b>Outbound Call</b>
+                        <b>{{agile_translate "campaigns" "outbound-call"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a contact when you receive a call from your Twilio number.
-                    </div>
+                        {{agile_translate "campaigns" "outbound-call-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "OUTBOUND_CALL"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "OUTBOUND_CALL"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -832,15 +810,14 @@
                         <div>
                             <i class="fa-list-alt icon-3x"></i>
                         </div>
-                        <b>Form Submit</b>
+                        <b>{{agile_translate "campaigns" "form-submit"}}</b>
                     </div>
                     <br/>
                     <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                        Run a campaign on a contact when they submit an Agile form on your website.
-                    </div>
+                        {{agile_translate "campaigns" "form-submit-desc"}}</div>
                     <!-- Add button -->
                     <div>
-                        <a class="btn btn-sm btn-default add-trigger" data = "FORM_SUBMIT"  >Go</a>
+                        <a class="btn btn-sm btn-default add-trigger" data = "FORM_SUBMIT"  >{{agile_translate "campaigns" "go"}}</a>
                     </div>
                 </div>
             </div>
@@ -861,15 +838,14 @@
 			                        <div>
 			                            <i class="fa-ticket icon-3x"></i>
 			                        </div>
-			                        <b>Ticket Added</b>
+			                        <b>{{agile_translate "campaigns" "ticket-added"}}</b>
 			                    </div>
 			                    <br/>
 			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-			                        Runs a Campaign on a contact When new ticket is added.
-			                    </div>
+			                        {{agile_translate "campaigns" "tickets-desc"}}</div>
 			                    <!-- Add button -->
 			                    <div>
-			                        <a class="btn btn-sm btn-default add-trigger" data="NEW_TICKET_IS_ADDED">Go</a>
+			                        <a class="btn btn-sm btn-default add-trigger" data="NEW_TICKET_IS_ADDED">{{agile_translate "campaigns" "go"}}</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -881,15 +857,14 @@
 			                        <div>
 			                            <i class="fa-folder icon-3x"></i>
 			                        </div>
-			                        <b>Ticket Closed</b>
+			                        <b>{{agile_translate "campaigns" "ticket-closed"}}</b>
 			                    </div>
 			                    <br/>
 			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-			                        Runs a Campaign on a contact When ticket is closed.
-			                    </div>
+			                        {{agile_translate "campaigns" "ticket-closed-desc"}}</div>
 			                    <!-- Add button -->
 			                    <div>
-			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_IS_CLOSED">Go</a>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_IS_CLOSED">{{agile_translate "campaigns" "go"}}</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -901,15 +876,14 @@
 			                        <div>
 			                            <i class="fa-user icon-3x"></i>
 			                        </div>
-			                        <b>Note Added by User</b>
+			                        <b>{{agile_translate "campaigns" "note-added-by-user"}}</b>
 			                    </div>
 			                    <br/>
 			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-			                        Runs a Campaign on a contact When new note is added by user.
-			                    </div>
+			                        {{agile_translate "campaigns" "ticket-note-desc"}}</div>
 			                    <!-- Add button -->
 			                    <div>
-			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_NOTE_ADDED_BY_USER">Go</a>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_NOTE_ADDED_BY_USER">{{agile_translate "campaigns" "go"}}</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -921,15 +895,14 @@
 			                        <div>
 			                            <i class="fa-users icon-3x"></i>
 			                        </div>
-			                        <b>Note Added by Customer</b>
+			                        <b>{{agile_translate "campaigns" "note-added-by-customer"}}</b>
 			                    </div>
 			                    <br/>
 			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-			                        Runs a Campaign on a contact When new note is added by customer.
-			                    </div>
+			                        {{agile_translate "campaigns" "ticket-note-cust"}}</div>
 			                    <!-- Add button -->
 			                    <div>
-			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_NOTE_ADDED_BY_CUSTOMER">Go</a>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_NOTE_ADDED_BY_CUSTOMER">{{agile_translate "campaigns" "go"}}</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -945,11 +918,10 @@
 			                    </div>
 			                    <br/>
 			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-			                        Runs a Campaign on a contact When ticket SLA Reached.
-			                    </div>
+			                        {{agile_translate "campaigns" "tickets-sla-desc"}}</div>
 			                    <!-- Add button -->
 			                    <div>
-			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_SLA_REACHED">Go</a>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_SLA_REACHED">{{agile_translate "campaigns" "go"}}</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -962,15 +934,14 @@
 			                        <div>
 			                            <i class="fa-user icon-3x"></i>
 			                        </div>
-			                        <b>Assignee Changed</b>
+			                        <b>{{agile_translate "campaigns" "assignee-changed"}}</b>
 			                    </div>
 			                    <br/>
 			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-			                        Runs a Campaign on a contact When ticket assignee is changed.
-			                    </div>
+			                        {{agile_translate "campaigns" "tickets-assignee-changed-desc"}}</div>
 			                    <!-- Add button -->
 			                    <div>
-			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_ASSIGNEE_CHANGED">Go</a>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_ASSIGNEE_CHANGED">{{agile_translate "campaigns" "go"}}</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -983,15 +954,14 @@
 			                        <div>
 			                            <i class="fa-tag icon-3x"></i>
 			                        </div>
-			                        <b>Label Added</b>
+			                        <b>{{agile_translate "campaigns" "label-added"}}</b>
 			                    </div>
 			                    <br/>
 			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-			                        Runs a Campaign on a contact When ticket label is added.
-			                    </div>
+			                        {{agile_translate "campaigns" "tickets-label-added-desc"}}</div>
 			                    <!-- Add button -->
 			                    <div>
-			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_ADDED">Go</a>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_ADDED">{{agile_translate "campaigns" "go"}}</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -1003,15 +973,14 @@
 			                        <div>
 			                            <i class="fa-tag icon-3x"></i>
 			                        </div>
-			                        <b>Label Deleted</b>
+			                        <b>{{agile_translate "campaigns" "label-deleted"}}</b>
 			                    </div>
 			                    <br/>
 			                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
-			                        Runs a Campaign on a contact When ticket label is deleted.
-			                    </div>
+			                        {{agile_translate "campaigns" "tickets-label-deleted-desc"}}</div>
 			                    <!-- Add button -->
 			                    <div>
-			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_DELETED">Go</a>
+			                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_DELETED">{{agile_translate "campaigns" "go"}}</a>
 			                    </div>
 			                </div>
 			            </div>

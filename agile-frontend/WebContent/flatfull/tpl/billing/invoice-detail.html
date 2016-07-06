@@ -18,7 +18,7 @@
         <tbody>
             <tr style="background: whitesmoke;">
                <td class="p-l">
-                  <div class="p-t-xs m-t-sm" style="font-size:22px">INVOICE</div>
+                  <div class="p-t-xs m-t-sm" style="font-size:22px">{{agile_translate "plan-and-upgrade" "invoice-cap"}}</div>
                </td>
                <td class="text-right">
   			<div class="m-r-md p-t-xs m-t-sm"><img src="{{getS3ImagePath 'img/crm-plugins/formbuilder.png'}}" height="25" width="120"></div></td>
@@ -52,7 +52,7 @@
                         <td>{{invoice.id}}</td>
                      </tr>
                      <tr>
-                        <td class="pull-right"><strong>Date</strong></td>
+                        <td class="pull-right"><strong>{{agile_translate "contacts-view" "date"}}</strong></td>
                         <td>{{epochToHumanDate "mm/dd/yyyy" invoice.date}}</td>
                      </tr>
                      <tr>
@@ -61,7 +61,7 @@
                      </tr>
                      {{#if_not_equals company.company_name "My company"}}
                             <tr>
-                            <td class="pull-right"><strong>Company</strong></td>
+                            <td class="pull-right"><strong>{{agile_translate "contacts-view" "Company"}}</strong></td>
                             <td>{{company.company_name}}</td></tr>
                      {{/if_not_equals}}</tbody>
                 </table>
@@ -77,9 +77,9 @@
                <table class="table">
                   <thead>
                      <tr>
-                        <th>Plan</th>
-						<th>Description</th>
-                        <th>Amount</th>
+                        <th>{{agile_translate "portlets" "plan"}}</th>
+						<th>{{agile_translate "other" "description"}}</th>
+                        <th>{{agile_translate "plan-and-upgrade" "amount"}}</th>
                      </tr>
                   </thead>
                   <tbody>
@@ -100,8 +100,7 @@
 			<td>
       {{#if this.plan}}
 				{{#containString "Email" plan.name}}
-				{{numeric_operation this.quantity 1000 "*"}} Emails
-				<br>
+				{{numeric_operation this.quantity 1000 "*"}} {{agile_translate "portlets" "emails"}}<br>
        			 <small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
         		{{else}} 
 				{{#if description}}

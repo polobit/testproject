@@ -4,7 +4,7 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title">&nbsp;New Note</h3>
+        <h3 class="modal-title">&nbsp;{{agile_translate "prefs-settings" "new-note"}}</h3>
     </div>
     <div class="modal-body">
         <form id="noteForm" name="noteForm" method="post" class="form-horizontal">
@@ -13,21 +13,21 @@
                 <input name="task_form" id="task_form" type="hidden" value="" />
                 	            
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Subject<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "widgets" "subject"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
                         <input type="text" placeholder="About" name="subject" id="subject" class="required form-control" />
                     </div>
                 </div>
                 
 	                <div class="control-group form-group">
-	                    <label class="control-label col-sm-3">Description</label>
+	                    <label class="control-label col-sm-3">{{agile_translate "other" "description"}}</label>
 	                    <div class="controls col-sm-7">
 	                        <textarea rows="3" class="form-control-F-width form-control" placeholder="Detailed Note" name="description" id="description"></textarea> 
 	                    </div>
 	                </div>
                 
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Related To<span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "deal-view" "related-to"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
                         <div>
                             <input type="text" placeholder="Contact Name" id="note_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />
@@ -36,7 +36,7 @@
                                 <ul id="note_relatedto_tag" name="contact_ids" class="contacts tags tagsinput p-none m-n"></ul>
                             </div>
                             <div class="clearfix"></div>
-                            <span id="note_relatedto_error" style="color:#d9534f;display:none;">Please relate the note to a contact.</span>
+                            <span id="note_relatedto_error" style="color:#d9534f;display:none;">{{agile_translate "contacts-view" "relate-contact-desc"}}</span>
                         </div>
                     </div>
                 </div>
@@ -44,8 +44,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-sm btn-primary pull-right" id="note_validate">Save
-        </a>
+        <a href="#" class="btn btn-sm btn-primary pull-right" id="note_validate">{{agile_translate "modals" "save"}}</a>
         <span class="save-status"></span>
     </div>
     </div>

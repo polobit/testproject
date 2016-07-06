@@ -5,13 +5,13 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_translate "admin-settings-custom-fields" "add-custom-field"}}</h3>
     </div>
     <div class="modal-body">
         <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <label class="control-label col-sm-3">{{agile_translate "contacts-view" "label"}}<span class="field_req">*</span></label> 
                     <div class="controls col-sm-7">
 					{{#if id}}
                         <input type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" value="{{../field_label}}" disabled / >
@@ -22,18 +22,18 @@
                     </div>
                 </div>
   				<div class="control-group form-group">
-                    <label class="control-label col-sm-3">Type <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "contacts-view" "type"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
 						 <select name="field_type" id="custom-field-type" class="form-control">
-							<option value="TEXT">Text Field</option>
-							<option value="TEXTAREA">Text Area</option>
-							<option value="DATE">Date Field</option>
-							<option value="CHECKBOX">Checkbox</option>
-							<option value="LIST">List</option>
-							<option value="NUMBER">Number</option>
-							<option value="FORMULA">Formula</option>
-                            <option value="CONTACT">Contact</option>
-                            <option value="COMPANY">Company</option>
+							<option value="TEXT">{{agile_translate "admin-settings-custom-fields" "TEXT"}}</option>
+							<option value="TEXTAREA">{{agile_translate "admin-settings-custom-fields" "TEXTAREA"}}</option>
+							<option value="DATE">{{agile_translate "admin-settings-custom-fields" "DATE"}}</option>
+							<option value="CHECKBOX">{{agile_translate "admin-settings-custom-fields" "CHECKBOX"}}</option>
+							<option value="LIST">{{agile_translate "admin-settings-custom-fields" "LIST"}}</option>
+							<option value="NUMBER">{{agile_translate "admin-settings-custom-fields" "NUMBER"}}</option>
+							<option value="FORMULA">{{agile_translate "admin-settings-custom-fields" "FORMULA"}}</option>
+                            <option value="CONTACT">{{agile_translate "contact-details" "Contact"}}</option>
+                            <option value="COMPANY">{{agile_translate "contacts-view" "Company"}}</option>
 						</select>
                         <span style="color:#B94A48;" id="duplicate-custom-field-type-err" class="hide text-base"></span>
                     </div>
@@ -41,33 +41,32 @@
                 <input class="hide form-control" name="scope" type="text" placeholder="Label" value="{{scope}}" />
 				<input class="hide form-control" name="position" type="text" placeholder="Label" value="{{position}}" />
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "other" "description"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
                         <input name="field_description" type="text" id="field_description" placeholder="Description" class="required form-control" />
                     </div>
                 </div>
 				<div id="custom-field-custom-info"></div>
 				 <div class="control-group form-group" id="custom-field-list-values" style="display:none">
-                    <label class="control-label col-sm-3">List Values <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "list-values"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
                         <input name="field_data" type="text" id="listvalues" placeholder="Enter values separated by semicolon" class="required form-control" />
                     </div>
                 </div>
 			    <div class="control-group form-group" id="custom-field-data" style="display:none">
-                    <label class="control-label col-sm-3">Number of Lines <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "number-of-lines"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7"> 
                         <input name="field_data" type="text" id="arearows" placeholder="Rows" class="required digits form-control" max="10" min="2" />
                     </div>
                 </div>
 				<div class="control-group form-group" id="custom-field-formula-data" style="display:none">
-                    <label class="control-label col-sm-3">Formula <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "FORMULA"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-7"> 
                         <textarea name="field_data" id="formulaData" placeholder="Ex: \{{number1}}*(\{{number2}}+\{{number3}})" class="formulaData required" style="width:100%;" rows="3" />
                      <div class="tip controls">
                         <p class="text-muted">
                             <i class="icon-lightbulb text-md"></i> 
-                            An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. <a class="text-info" href="http://mustache.github.io/" target="_blank">Mustache conditions</a> can be used here.
-                        </p>
+                            An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. <a class="text-info" href="http://mustache.github.io/" target="_blank">Mustache conditions</a> can be used {{agile_translate "widgets" "here"}}</p>
                     </div>   
                     </div>
 					
@@ -78,7 +77,7 @@
                     <div class="row">
                     <div class="col-sm-offset-3 col-sm-7 col-xs-12">
                     <div class="col-sm-6 col-xs-6">
-                        <label class="control-label pull-left m-r-sm">Required </label>
+                        <label class="control-label pull-left m-r-sm">{{agile_translate "admin-settings-custom-fields" "required"}}</label>
                         <div class="controls checkbox checkbox-mobile-view">
 
                         <label class="i-checks i-checks-sm">
@@ -88,7 +87,7 @@
                     </div>
                     
                     <div class="col-sm-6 col-xs-6">
-                        <label class="control-label pull-left m-r-sm">Searchable </label>
+                        <label class="control-label pull-left m-r-sm">{{agile_translate "admin-settings-custom-fields" "searchable"}}</label>
                         <div class="controls checkbox checkbox-mobile-view">
                             <label class="i-checks i-checks-sm"> 
                             <input name="searchable" type="checkbox" id="searchable" /><i></i>
@@ -99,12 +98,11 @@
                     </div>
                     <div class="col-sm-offset-3 col-sm-7 m-t-md">
                       <div class="alert alert-warning m-b-none" role="alert">
-                         For the custom field to be sortable, searchable checkbox must be selected.
-                      </div>
+                         {{agile_translate "admin-settings-custom-fields" "custom-field-cond-desc"}}</div>
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3 hide">Validation Rule <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3 hide">{{agile_translate "admin-settings-custom-fields" "validation-rule"}}<span class="field_req">*</span></label>
                     <div class="controls"> 
                         <input name="validationRule" type="hidden" id="validationRule" placeholder="Validation Rule" class="required form-control" value="*" />
                     </div>
@@ -117,7 +115,7 @@
     </div>
     <div class="modal-footer form-actions">
         <span style="color:#B94A48;" id="duplicate-custom-field-err" class="hide text-base"></span>
-        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">Save Changes</a>
+        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">{{agile_translate "prefs-settings" "save-changes"}}</a>
     </div>
 </div>
 </div>
@@ -131,38 +129,38 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_translate "admin-settings-custom-fields" "add-custom-field"}}</h3>
     </div>
     <div class="modal-body">
         <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3  ">Label <span class="field_req">*</span></label> 
+                    <label class="control-label col-sm-3  ">{{agile_translate "contacts-view" "label"}}<span class="field_req">*</span></label> 
                     <div class="controls">
                         <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length  localFieldLabel" max_len="500" />
                     </div>
                 </div>
                 <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="TEXT" />
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "other" "description"}}<span class="field_req">*</span></label>
                     <div class="controls">
                         <input name="field_description" type="text" id="field_description" placeholder="Description" class="required form-control" />
                     </div>
                 </div>
 			     <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "scope"}}<span class="field_req">*</span></label>
                     <div class="controls">
 						 <select name="scope" class="form-control">
-							<option value="PERSON">Contact</option>
-							<option value="COMPANY">Company</option>
-							<option value="DEAL">Deals</option>
-							<option value="CASE">Cases</option>
+							<option value="PERSON">{{agile_translate "contact-details" "Contact"}}</option>
+							<option value="COMPANY">{{agile_translate "contacts-view" "Company"}}</option>
+							<option value="DEAL">{{agile_translate "deal-view" "Deals?"}}</option>
+							<option value="CASE">{{agile_translate "contact-details" "cases"}}</option>
 						</select>
                     </div>
                 </div>
                
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Required </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "required"}}</label>
                         <div class="controls checkbox">
                         <label class="i-checks i-checks-sm">
                             <input name="is_required" type="checkbox" id="required" /><i></i>
@@ -170,7 +168,7 @@
                         </div>
                     </div>
                     <div class="control-group form-group m-l-md span4">
-                        <label class="control-label col-sm-3">Searchable </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "searchable"}}</label>
                         <div class="controls checkbox">
                         <label class="i-checks i-checks-sm"> 
                             <input name="searchable" type="checkbox" id="searchable" /><i></i>
@@ -178,10 +176,9 @@
                         </div>
                     </div>
                     <div class="alert alert-warning" role="alert">
-                        For the custom field to be sortable, searchable checkbox must be selected.
-                    </div>              
+                        {{agile_translate "admin-settings-custom-fields" "custom-field-cond-desc"}}</div>              
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3 hide">Validation Rule <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3 hide">{{agile_translate "admin-settings-custom-fields" "validation-rule"}}<span class="field_req">*</span></label>
                     <div class="controls"> 
                         <input name="validationRule" type="hidden" id="validationRule" placeholder="Validation Rule" class="required form-control" value="*" />
                     </div>
@@ -191,7 +188,7 @@
         </form>
     </div>
     <div class="modal-footer form-actions">
-        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">Save Changes</a>
+        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">{{agile_translate "prefs-settings" "save-changes"}}</a>
     </div>
   </div>
   </div>
@@ -206,38 +203,38 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_translate "admin-settings-custom-fields" "add-custom-field"}}</h3>
     </div>
     <div class="modal-body">
         <form id="dateModalForm" name="dateModalForm" method="post" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <label class="control-label col-sm-3">{{agile_translate "contacts-view" "label"}}<span class="field_req">*</span></label> 
                     <div class="controls">
                         <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="DATE" />
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "other" "description"}}<span class="field_req">*</span></label>
                     <div class="controls"> 
                         <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
                     </div>
                 </div>
 	    	 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "scope"}}<span class="field_req">*</span></label>
                     <div class="controls">
 						<select name="scope" class="form-control">
-							<option value="PERSON">Contact</option>
-							<option value="COMPANY">Company</option>
-							<option value="DEAL">Deals</option>
-							<option value="CASE">Cases</option>
+							<option value="PERSON">{{agile_translate "contact-details" "Contact"}}</option>
+							<option value="COMPANY">{{agile_translate "contacts-view" "Company"}}</option>
+							<option value="DEAL">{{agile_translate "deal-view" "Deals?"}}</option>
+							<option value="CASE">{{agile_translate "contact-details" "cases"}}</option>
 						</select>
                     </div>
                 </div>
                 
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Required </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "required"}}</label>
                         <div class="controls checkbox">
                         <label class="i-checks i-checks-sm">
                             <input name="is_required" type="checkbox" id="required" /><i></i>
@@ -245,7 +242,7 @@
                         </div>
                     </div>
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Searchable </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "searchable"}}</label>
                         <div class="controls checkbox">
                           <label class="i-checks i-checks-sm"> 
                             <input name="searchable" type="checkbox" id="searchable" /><i></i>
@@ -253,12 +250,12 @@
                              </div>
                     
                 </div>
-				<p>Note : For date custom fields, the field value if provided using the API, should be an epoch number.</p>
+				<p>{{agile_translate "admin-settings-custom-fields" "note-for-date-custom-fields"}}</p>
             </fieldset>
         </form>
     </div>
     <div class="modal-footer form-actions">
-        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">{{agile_translate "prefs-settings" "save-changes"}}</a>
     </div>
   </div>
   </div>
@@ -273,44 +270,44 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_translate "admin-settings-custom-fields" "add-custom-field"}}</h3>
     </div>
     <div class="modal-body">
         <form id="listModalForm" name="listModalForm" method="post" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <label class="control-label col-sm-3">{{agile_translate "contacts-view" "label"}}<span class="field_req">*</span></label> 
                     <div class="controls">
                         <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="LIST" />
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "other" "description"}}<span class="field_req">*</span></label>
           <div class="controls"> 
                         <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">List Values <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "list-values"}}<span class="field_req">*</span></label>
                     <div class="controls"> 
                         <input name="field_data" type="text" id="listvalues" placeholder="Enter values separated by semicolon" class="required form-control" />
                     </div>
                 </div>
 	     		<div class="control-group form-group">
-                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "scope"}}<span class="field_req">*</span></label>
                     <div class="controls">
 						<select name="scope" class="form-control">
-							<option value="PERSON">Contact</option>
-							<option value="COMPANY">Company</option>
-							<option value="DEAL">Deals</option>
-							<option value="CASE">Cases</option>
+							<option value="PERSON">{{agile_translate "contact-details" "Contact"}}</option>
+							<option value="COMPANY">{{agile_translate "contacts-view" "Company"}}</option>
+							<option value="DEAL">{{agile_translate "deal-view" "Deals?"}}</option>
+							<option value="CASE">{{agile_translate "contact-details" "cases"}}</option>
 						</select>
                     </div>
                 </div>
                 
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Required </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "required"}}</label>
                         <div class="controls checkbox">
                         <label class="i-checks i-checks-sm">
                             <input name="is_required" type="checkbox" id="required" /><i></i>
@@ -318,7 +315,7 @@
                         </div>
                     </div>
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Searchable </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "searchable"}}</label>
                         <div class="controls checkbox"> 
                         <label class="i-checks i-checks-sm"> 
                             <input name="searchable" type="checkbox" id="searchable" /><i></i>
@@ -330,7 +327,7 @@
         </form>
     </div>
     <div class="modal-footer form-actions">
-        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">{{agile_translate "prefs-settings" "save-changes"}}</a>
     </div>
 </div>
 </div>
@@ -345,38 +342,38 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_translate "admin-settings-custom-fields" "add-custom-field"}}</h3>
     </div>
     <div class="modal-body">
         <form id="checkboxModalForm" name="checkboxModalForm" method="post" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <label class="control-label col-sm-3">{{agile_translate "contacts-view" "label"}}<span class="field_req">*</span></label> 
                     <div class="controls">
                         <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="CHECKBOX"  />
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "other" "description"}}<span class="field_req">*</span></label>
                     <div class="controls"> 
                         <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
                     </div>
                 </div>
 	    	 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "scope"}}<span class="field_req">*</span></label>
                     <div class="controls">
 						<select name="scope" class="form-control">
-							<option value="PERSON">Contact</option>
-							<option value="COMPANY">Company</option>
-							<option value="DEAL">Deals</option>
-							<option value="CASE">Cases</option>
+							<option value="PERSON">{{agile_translate "contact-details" "Contact"}}</option>
+							<option value="COMPANY">{{agile_translate "contacts-view" "Company"}}</option>
+							<option value="DEAL">{{agile_translate "deal-view" "Deals?"}}</option>
+							<option value="CASE">{{agile_translate "contact-details" "cases"}}</option>
 						</select>
                     </div>
                 </div>
                 
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Required </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "required"}}</label>
                         <div class="controls checkbox">
                          <label class="i-checks i-checks-sm">
                             <input name="is_required" type="checkbox" id="required" /><i></i>
@@ -384,7 +381,7 @@
                         </div>
                     </div>
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Searchable </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "searchable"}}</label>
                         <div class="controls checkbox"> 
                         <label class="i-checks i-checks-sm">
                             <input name="searchable" type="checkbox" id="searchable" /><i></i>
@@ -396,7 +393,7 @@
         </form>
     </div>
     <div class="modal-footer form-actions">
-        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">{{agile_translate "prefs-settings" "save-changes"}}</a>
     </div>
 </div>
 </div>
@@ -411,44 +408,44 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_translate "admin-settings-custom-fields" "add-custom-field"}}</h3>
     </div>
     <div class="modal-body">
         <form id="textareaModalForm" name="textareaModalForm" method="post" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <label class="control-label col-sm-3">{{agile_translate "contacts-view" "label"}}<span class="field_req">*</span></label> 
                     <div class="controls">
                         <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="TEXTAREA" />
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "other" "description"}}<span class="field_req">*</span></label>
                     <div class="controls"> 
                         <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Number of Lines <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "number-of-lines"}}<span class="field_req">*</span></label>
                     <div class="controls"> 
                         <input name="field_data" type="text" id="arearows" placeholder="Rows" class="required digits form-control" max="10" min="2" />
                     </div>
                 </div>
 	    	 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "scope"}}<span class="field_req">*</span></label>
                     <div class="controls">
 						<select name="scope" class="form-control">
-							<option value="PERSON">Contact</option>
-							<option value="COMPANY">Company</option>
-							<option value="DEAL">Deals</option>
-							<option value="CASE">Cases</option>
+							<option value="PERSON">{{agile_translate "contact-details" "Contact"}}</option>
+							<option value="COMPANY">{{agile_translate "contacts-view" "Company"}}</option>
+							<option value="DEAL">{{agile_translate "deal-view" "Deals?"}}</option>
+							<option value="CASE">{{agile_translate "contact-details" "cases"}}</option>
 						</select>
                     </div>
                 </div>
                 
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Required </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "required"}}</label>
                         <div class="controls checkbox">
                          <label class="i-checks i-checks-sm">
                             <input name="is_required" type="checkbox" id="required" /><i></i>
@@ -456,7 +453,7 @@
                         </div>
                     </div>
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Searchable </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "searchable"}}</label>
                         <div class="controls checkbox">
                           <label class="i-checks i-checks-sm"> 
                             <input name="searchable" type="checkbox" id="searchable" /><i></i>
@@ -468,7 +465,7 @@
         </form>
     </div>
     <div class="modal-footer form-actions">
-        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">{{agile_translate "prefs-settings" "save-changes"}}</a>
     </div>
 </div>
 </div>
@@ -484,44 +481,44 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3 class="modal-title"><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+        <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_translate "admin-settings-custom-fields" "add-custom-field"}}</h3>
     </div>
     <div class="modal-body">
         <form id="linkModalForm" name="linkModalForm" method="post" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
+                    <label class="control-label col-sm-3">{{agile_translate "contacts-view" "label"}}<span class="field_req">*</span></label> 
                     <div class="controls">
                         <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="LINK" />
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Description <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "other" "description"}}<span class="field_req">*</span></label>
                     <div class="controls"> 
                         <input name="field_description" type="text" id="description" placeholder="Description" class="required form-control" />
                     </div>
                 </div>
                 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Link Definition <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "link-definition"}}<span class="field_req">*</span></label>
                     <div class="controls">
                         <input name="listvalues" type="text" id="listvalues" placeholder="e.g. http://example.com?emailAddress={email}" class="required form-control" />
                     </div>
                 </div>
 	    	 <div class="control-group form-group">
-                    <label class="control-label col-sm-3">Scope <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "scope"}}<span class="field_req">*</span></label>
                     <div class="controls">
 						<select name="scope" class="form-control">
-							<option value="PERSON">Contact</option>
-							<option value="COMPANY">Company</option>
-							<option value="DEAL">Deals</option>
-							<option value="CASE">Cases</option>
+							<option value="PERSON">{{agile_translate "contact-details" "Contact"}}</option>
+							<option value="COMPANY">{{agile_translate "contacts-view" "Company"}}</option>
+							<option value="DEAL">{{agile_translate "deal-view" "Deals?"}}</option>
+							<option value="CASE">{{agile_translate "contact-details" "cases"}}</option>
 						</select>
                     </div>
                 </div>
                 
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Required </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "required"}}</label>
                         <div class="controls checkbox">
                         <label class="i-checks i-checks-sm">
                             <input name="is_required" type="checkbox" id="required" /><i></i>
@@ -529,7 +526,7 @@
                         </div>
                     </div>
                     <div class="control-group form-group span4">
-                        <label class="control-label col-sm-3">Searchable </label>
+                        <label class="control-label col-sm-3">{{agile_translate "admin-settings-custom-fields" "searchable"}}</label>
                         <div class="controls checkbox"> 
                         <label class="i-checks i-checks-sm">
                             <input name="searchable" type="checkbox" id="searchable" /><i></i>
@@ -541,7 +538,7 @@
         </form>
     </div>
     <div class="modal-footer form-actions">
-        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">Save Changes</a>
+        <a href="#" type="submit" class="save btn-sm btn btn-primary" id="customfield_validate">{{agile_translate "prefs-settings" "save-changes"}}</a>
     </div>
 </div>
 </div>

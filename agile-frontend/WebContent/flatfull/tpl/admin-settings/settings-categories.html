@@ -13,7 +13,7 @@
 		<div id="{{id}}-deal-track" class="accordion-group overflow-hidden">
 		<div class="panel-heading pos-rlt" role="tab" id="headingOne">
 		<div class="accordion-heading">
-			<div class="panel-title">Categories</div>
+			<div class="panel-title">{{agile_translate "admin-settings-tasks" "categories"}}</div>
 			<div class="clearfix"></div>
 			</div>
 		</div>
@@ -30,10 +30,10 @@
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> Add Category </a></div>
+					<div class="p-l p-t p-b"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> {{agile_translate "admin-settings-tasks" "add-category"}}</a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
 						<input id="add_new_task_category" class="add_new_category form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Category ">
-						<a class="btn btn-info btn-addon btn-sm add_task_category" data-toggle="modal" id="add_task_category" href="#">Add</a>
+						<a class="btn btn-info btn-addon btn-sm add_task_category" data-toggle="modal" id="add_task_category" href="#">{{agile_translate "other" "add"}}</a>
 						<span class="save-status"></span>
 					</div>
     				<div class="hidden"><input name="milestones" type="text" class="required form-control" value="{{milestones}}"/></div>
@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		<!-- <div class="form-actions">
-    		<a href="#" class="save-pipelines btn btn-primary">Save</a>
+    		<a href="#" class="save-pipelines btn btn-primary">{{agile_translate "modals" "save"}}</a>
     	</div> -->
 	</div>
 	</div>
@@ -70,19 +70,19 @@
     <div class="modal-content">
 	<div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3>Delete Category</h3>
+        <h3>{{agile_translate "admin-settings-tasks" "delete-category"}}</h3>
     </div>
 	<div class="modal-body">
         <div id="delete-category-confirm-dialog">
 			<input type="hidden" name="id"></input>
              <p>Are you sure you want to delete Category - <span id="category-name"></span> ? </p>
-			<p>All existing tasks in this category can be accessed from the Tasks list view.</p>
+			<p>{{agile_translate "admin-settings-tasks" "all-existing-tasks-desc"}}</p>
         </div>
     </div>
     <div class="modal-footer">
     <span class="category-delete-message" style="margin-right:5px;color:red;"></span>
-	<a href="#" id="category-delete-confirm" class="btn btn-primary">Yes</a>
-	<a  href="#" class="btn btn-default" data-dismiss="modal">No</a>
+	<a href="#" id="category-delete-confirm" class="btn btn-primary">{{agile_translate "portlets" "yes"}}</a>
+	<a  href="#" class="btn btn-default" data-dismiss="modal">{{agile_translate "portlets" "no"}}</a>
     </div>
 </div>
 </div>

@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
        
-            <h3 class="pull-left font-thin h3">Graphs</h3>
+            <h3 class="pull-left font-thin h3">{{agile_translate "report-chart-forms" "graphs"}}</h3>
             
        
     </div>
@@ -15,19 +15,18 @@
 <div class="col-sm-9 col-md-9 col-xs-12">
     <div class="panel panel-default">
 	<div class="panel-heading">
-		<i class="icon-filter p-r-sm p-l-none"></i>Funnel graph
-	</div>
+		<i class="icon-filter p-r-sm p-l-none"></i>{{agile_translate "report-chart-forms" "funnel-graph"}}</div>
 	<div class="panel-body">
         <form id="funnel-graph" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">  
-					  <label class="control-label col-sm-2">Tags <span class="field_req">*</span></label>       
+					  <label class="control-label col-sm-2">{{agile_translate "report-add" "tags"}}<span class="field_req">*</span></label>       
                     <div class="controls col-sm-8">
                         <div class="pull-left">
                         	<ul name="tags" class="tagsinput tags p-l-none"></ul>
                         </div>              
                         <input name="tags" type="text" id="addBulkTags multi-tags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma">
-						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+						<span class="error-tags text-danger" style="display:none;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
 						<input class="hide form-control" name="report_chart_type" value="FUNNEL">      
               		</div>
                 </div>
@@ -36,7 +35,7 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
 				  <div class="form-actions">          
-                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">Show</a>
+                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">{{agile_translate "widgets" "show"}}</a>
                     <span class="save-status"></span>
                 </div>
 </div>
@@ -72,7 +71,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
        
-            <h3 class="pull-left font-thin h3">Graphs</h3>
+            <h3 class="pull-left font-thin h3">{{agile_translate "report-chart-forms" "graphs"}}</h3>
             
        
     </div>
@@ -83,19 +82,18 @@
 <div class="col-sm-9 col-md-9 col-xs-12">
     <div class="panel panel-default">
 	<div class="panel-heading">
-		<i class="icon-bar-chart p-r-sm"></i>Growth graph
-	</div>
+		<i class="icon-bar-chart p-r-sm"></i>{{agile_translate "report-chart-forms" "growth-graph"}}</div>
 	<div class="panel-body">
         <form id="growth-graph" class="form-horizontal">
             <fieldset>
                 <div class="form-group control-group">  
-					  <label class="control-label col-sm-2">Tags <span class="field_req">*</span></label>       
+					  <label class="control-label col-sm-2">{{agile_translate "report-add" "tags"}}<span class="field_req">*</span></label>       
                     <div class="controls col-sm-8">
                         <div class="pull-left">
                         	<ul name="tags" class="tagsinput tags p-l-none"></ul>
                         </div>              
                         <input name="tags" type="text" id="addBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma">
-						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+						<span class="error-tags text-danger" style="display:none;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
 						<input class="hide form-control" name="report_chart_type" value="GROWTH">      
               		</div>
                 </div>
@@ -104,7 +102,7 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-8">
  				 <div class="form-actions">          
-                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">Show</a>
+                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">{{agile_translate "widgets" "show"}}</a>
                     <span class="save-status"></span>
                 </div>
 </div>
@@ -122,7 +120,7 @@
             </h4>
             
             <p>
-				Growth graphs allow you to see how Contacts/leads with particular Tags are getting added over time. <br><br>
+				{{agile_translate "report-chart-forms" "growth-graphs-allow-desc"}}<br><br>
 
 				For example, if you are adding a 'Lead' tag to all leads/contacts that you add (or get pushed via API), then you can create a Growth Graph on that tag, to see how many leads you get daily/weekly/monthly over time. <br><br>
 You can apply additional Filters when you see the graph. Say you have a filter defined for all leads from a particular source (they may have a particular Tag or custom filed value). You can apply that filter on the graph and see how leads from the source are growing. 
@@ -142,7 +140,7 @@ You can apply additional Filters when you see the graph. Say you have a filter d
 <div class="row">
     <div class="col-sm-12 col-md-12">
        
-            <h3 class="pull-left font-thin h3">Graphs</h3>
+            <h3 class="pull-left font-thin h3">{{agile_translate "report-chart-forms" "graphs"}}</h3>
             
        
     </div>
@@ -153,23 +151,23 @@ You can apply additional Filters when you see the graph. Say you have a filter d
 <div class="col-sm-9 col-md-9 col-xs-12">
     <div class="panel panel-default">
 <div class="panel-heading">
-<i class="icon-group p-r-sm"></i>Ratio graph</div>
+<i class="icon-group p-r-sm"></i>{{agile_translate "report-chart-forms" "ratio-graph"}}</div>
 <div class="panel-body">
         <form id="icon-dashboard" class="form-horizontal">
             <fieldset>
                 <div class="control-group form-group">  
-					  <label class="control-label col-sm-2">Tag 1<span class="field_req">*</span></label>       
+					  <label class="control-label col-sm-2">{{agile_translate "report-chart-forms" "tag-1"}}<span class="field_req">*</span></label>       
                     <div class="controls col-sm-10" id="tags-reports">
                         <input name="tag1" type="text" id="addBulkTags1" class="tags-typeahead-one required form-control" placeholder="Enter Tag">
-						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+						<span class="error-tags text-danger" style="display:none;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
 						<input class="hide form-control" name="report_chart_type" value="RATIO">      
               		</div>
               		</div>
 				 <div class="control-group form-group">  
-					  <label class="control-label col-sm-2">Tag 2<span class="field_req">*</span></label>       
+					  <label class="control-label col-sm-2">{{agile_translate "report-chart-forms" "tag-2"}}<span class="field_req">*</span></label>       
                     <div class="controls col-sm-10" id="tags-reports">
                         <input name="tag2" type="text" id="addBulkTags2" class="tags-typeahead-one required form-control" placeholder="Enter Tag">
-						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+						<span class="error-tags text-danger" style="display:none;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
               		</div>
                 </div>
             </fieldset>
@@ -177,7 +175,7 @@ You can apply additional Filters when you see the graph. Say you have a filter d
 <div class="row">
 <div class="col-sm-offset-2 col-sm-8">
 				  <div class="form-actions">          
-                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">Show</a>
+                     <a href="#" type="submit" class="btn btn-sm btn-primary report-chorts">{{agile_translate "widgets" "show"}}</a>
                     <span class="save-status"></span>
                 </div>
 </div>

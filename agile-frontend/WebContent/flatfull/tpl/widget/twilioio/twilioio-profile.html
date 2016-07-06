@@ -21,8 +21,8 @@
 <div class="nav-tabs-alt">
 
 <ul class="nav nav-tabs twilioTab text-base" id="myTwilioTab">
-	<li class="text-center active twilio_outgoing_logs c-p" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab"  aria-expanded="false"><h4 class="h4 text-base">Outgoing</h4><small></small></a></li>
-	<li class="text-center twilio_incoming_logs c-p" style="width:48%;" align="center"><a data-toggle="tab" aria-expanded="true"><h4 class="h4 text-base">Incoming</h4><small></small></a></li>
+	<li class="text-center active twilio_outgoing_logs c-p" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab"  aria-expanded="false"><h4 class="h4 text-base">{{agile_translate "widgets" "outgoing"}}</h4><small></small></a></li>
+	<li class="text-center twilio_incoming_logs c-p" style="width:48%;" align="center"><a data-toggle="tab" aria-expanded="true"><h4 class="h4 text-base">{{agile_translate "widgets" "incoming"}}</h4><small></small></a></li>
 </ul>
 </div>
 <div id="outgoing_log_details">
@@ -49,8 +49,7 @@
     	<fieldset>
               <input type="hidden" id="twilio_number_sid" value="" name="twilio_number_sid"></input>
 		      <p class="m-t-sm">
-                   Make and receive calls from your contacts using your Twilio account.
-              </p>
+                   {{agile_translate "prefs-data-sync" "widget-twitter-desc"}}</p>
 			  
 				<label><b>Enter your Twilio details </b>
                        <span>         
@@ -69,8 +68,7 @@
                 </div>            
 
                 <div class="control-group form-group" id="twilio_numbers" style="display:none;">
-				    <label class="control-label">Twilio Numbers
-                          <span class="v-top">         
+				    <label class="control-label">{{agile_translate "widgets" "twilio-numbers"}}<span class="v-top">         
        				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag"  rel="popover" data-trigger="hover" data-placement="right" data-content="To receive incoming calls in Agile, you need to select a Twilio number. A Twilio number is one that you have purchased through Twilio. This number will also be the caller ID for outgoing calls  (unless you select a different caller ID from the option below)." id="element-title" data-trigger="hover" data-original-title="What is this?">
         			      </span>
                     </label>
@@ -80,8 +78,7 @@
 			    </div>     
 
                 <div class="control-group form-group" id="twilio_from_numbers" style="display:none;">
-				    <label class="control-label">Verified Caller IDs
-                         <span class="v-top">         
+				    <label class="control-label">{{agile_translate "widgets" "verified-caller-ids"}}<span class="v-top">         
        				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="A verified phone number is one that you can use as your Caller ID when making outbound calls with Twilio. Agile will use this number as the Caller ID. Incoming calls on this number will NOT come to Agile." id="element-title" data-trigger="hover" data-original-title="What is this?">
         			     </span>
                     </label>
@@ -90,11 +87,10 @@
   			        </div> 
 			    </div>  
                 
-                <a href="#" class="twilioio-advance-settings"><i class="icon-minus-sign twilioio-advance-settings-hide" style="display:none;"></i><i class="icon-plus-sign twilioio-advance-settings-show"></i> Advanced Settings</a>
+                <a href="#" class="twilioio-advance-settings"><i class="icon-minus-sign twilioio-advance-settings-hide" style="display:none;"></i><i class="icon-plus-sign twilioio-advance-settings-show"></i> {{agile_translate "widgets" "advanced-settings"}}</a>
 
                 <div class="control-group form-group m-t-sm" id="twilio_twimlet_url_controls" style="display:none;">
-				    <label class="control-label">Redirect Twimlet Url
-                        <span class="v-top m-l-n-xs">         
+				    <label class="control-label">{{agile_translate "widgets" "redirect-twimlet-url"}}<span class="v-top m-l-n-xs">         
        				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top" style="height: 8px;margin: 2px;" rel="popover" data-placement="right" data-content="This Twimlet URL will be called when you are not available. Twimlets allow you to setup Forwarding, Voicemail etc." id="element-title" data-trigger="hover" data-original-title="What is this?">
         			      </span>
                     </label>
@@ -106,21 +102,20 @@
                 <span id="twilio_recording" style="display:none;">
 <div class="checkbox">
 <label class="i-checks i-checks-sm">
-<input type="checkbox" id="twilio_record" name="twilio_record" title="Record Calls"></input><i></i> Record Calls
-</label>
+<input type="checkbox" id="twilio_record" name="twilio_record" title="Record Calls"></input><i></i> {{agile_translate "widgets" "record-calls"}}</label>
 </div>
 </span>                         
               
                  
-              <span id="error-number-not-selected" class="help-inline text-danger" style="display:none;">Please select either Twilio number or Verified Caller ID.</span>
+              <span id="error-number-not-selected" class="help-inline text-danger" style="display:none;">{{agile_translate "widgets" "please-select-twilio-number"}}</span>
               <span id="note-number-not-available" class="help-inline text-danger" style="display:none;"></span>
 <div class="m-t text-center">
-              <a href="#" id="validate_account" class="btn btn-sm btn-primary">Validate</a>
-			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary" style="display:none;">Save</a>
-			  <a href="#add-widget" class="btn btn-default btn-sm ml_5">Cancel</a>
+              <a href="#" id="validate_account" class="btn btn-sm btn-primary">{{agile_translate "widgets" "validate"}}</a>
+			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary" style="display:none;">{{agile_translate "modals" "save"}}</a>
+			  <a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_translate "other" "cancel"}}</a>
 </div>              
 		 </fieldset>
-<br><a href="#voicemail" class="text-info">Manage voicemails</a>
+<br><a href="#voicemail" class="text-info">{{agile_translate "widgets" "manage-voicemails"}}</a>
     </form>
 </div>
 </script>
@@ -160,7 +155,7 @@
 <script id="twilioio-voicemail-template" type="text/html">
 {{#if this}}
 <div class="btn-group dropup pull-left">
-<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">Leave Voicemail</button>
+<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">{{agile_translate "widgets" "leave-voicemail"}}</button>
 {{#ifCond length "greaterthan" 1}}
 <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
 <ul class="dropdown-menu text-left text-base">

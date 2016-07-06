@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">IP Address</h4>
+          <h4 class="modal-title">IP {{agile_translate "contact-details" "address"}}</h4>
         </div>
         <div class="modal-body">
         <!--{{#if position}}
@@ -14,7 +14,7 @@
          <p style=" padding-left: 9px;">Add an IP address to allow access</p>
         {{/if}}-->
             <div class="control-group form-group">
-                    <label class="control-label col-sm-3">IP Address</label>
+                    <label class="control-label col-sm-3">IP {{agile_translate "contact-details" "address"}}</label>
                     <div class="controls col-sm-7">
                         <input type="text" id="iplist"  class="form-control input-sm ipValidation required" placeholder="IP address" value="{{ip}}">
                     </div>
@@ -33,7 +33,7 @@
         
         <div class="modal-footer">
          
-          <a  type="submit" {{#if position}}data-position="{{position}}"{{/if}} id="ip-add" class="save  btn btn-sm btn-primary " style="margin-top:-1px;" >Save</a>
+          <a  type="submit" {{#if position}}data-position="{{position}}"{{/if}} id="ip-add" class="save  btn btn-sm btn-primary " style="margin-top:-1px;" >{{agile_translate "modals" "save"}}</a>
         </div>
       </div>
     </div>

@@ -135,7 +135,7 @@
 		
     	<div class="btn-toolbar m-l-none pos-rlt">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"><div class="">
-	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);"><div>Contacts <div class="inline-block" id="filter-list"></div><span id="contacts-count" class="">{{contacts_count}}</span>
+	    		<div class="inline-block" style="font-size: 18px;color: rgb(88, 102, 110);"><div>{{agile_translate "companies-view" "Contacts"}}<div class="inline-block" id="filter-list"></div><span id="contacts-count" class="">{{contacts_count}}</span>
 	    			<a id="contacts-left-filters-toggle" class="" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters" onclick="Agile_GA_Event_Tracker.track_event('Hide/Expand Filters')">
             			<i id="icon-filter" class="fa fa-filter icon-white text-base" style="color: rgb(88, 102, 110);"></i>
           			</a>
@@ -178,18 +178,18 @@
 				          </label></span>
 				  		{{/if}}
 				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Remove Tags</button>
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "add-tags"}}</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "remove-tags"}}</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add to Campaign</button>
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "add-to-campaign"}}</button>
 					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Change Owner</button>
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "start-call-campaign"}}</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contact-details" "send-email"}}</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "change-owner"}}</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
 					    {{/hasScope}}
-					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Delete</button>
+					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_translate "contact-details" "delete"}}</button>
 				    </div>
 
       <div class="m-l-sm filter-criteria"></div>
@@ -219,18 +219,18 @@
 				                <i></i>                
 				          </label></span>
 				  		{{/if}}
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add Tags</button>
-					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Remove Tags</button>
+					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "add-tags"}}</button>
+					    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "remove-tags"}}</button>
 					    {{#hasMenuScope 'CAMPAIGN'}}
-					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Add to Campaign</button>
+					    <button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "add-to-campaign"}}</button>
 					    {{/hasMenuScope}}
-					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Start Call Campaign</button>
-					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Send Email</button>
-					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Change Owner</button>
+					    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "start-call-campaign"}}</button>
+					    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contact-details" "send-email"}}</button>
+					    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">{{agile_translate "contacts-view" "change-owner"}}</button>
 					    {{#hasScope "EXPORT_CONTACTS"}}
 					    <button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled" style="font-size:10px">Export Contacts as CSV</button>
 					    {{/hasScope}}
-					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">Delete</button>
+					    <button id="delete-checked-grid" class="btn btn-default bulk-action-btn btn-sm disabled" style="font-size:10px">{{agile_translate "contact-details" "delete"}}</button>
 				    </div> -->
       <div class="m-l-sm filter-criteria"></div>
       {{#unless this.length}}

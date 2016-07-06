@@ -6,28 +6,27 @@
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
-                    <h4 class="m-t-none">You have no documents for this Deal.</h4>
+                    <h4 class="m-t-none">{{agile_translate "deal-view" "no-documents-for-deal"}}</h4>
 					{{#hasMenuScope 'DOCUMENT'}}
                     <div class="text">
-                        You can add a document related to a Deal.
-                    </div>
-					<div><a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs"><i class='icon-plus-sign'/></i> Add Document</a>
+                        {{agile_translate "deal-view" "save-specific-document-information"}}</div>
+					<div><a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs"><i class='icon-plus-sign'/></i> {{agile_translate "contact-details" "add-document"}}</a>
 						<span class="deal-document-select upload-doc-field" style="display:none;">
 							<select class="form-control m-b-sm inline-block w m-r-sm" id="document-select">
-								<option value="">Select...</option>
+								<option value="">{{agile_translate "contacts-view" "select"}}</option>
 							</select>
 							<div class="clearfix"></div>
-                    		<a href="#" class="btn btn-primary btn-sm add-deal-document-confirm">Add</a> 
-                   			<a href="#" class="btn btn-default btn-sm add-deal-document-cancel">Cancel</a>
+                    		<a href="#" class="btn btn-primary btn-sm add-deal-document-confirm">{{agile_translate "other" "add"}}</a> 
+                   			<a href="#" class="btn btn-default btn-sm add-deal-document-cancel">{{agile_translate "other" "cancel"}}</a>
 							<span class="save-status"></span>
 						</span>
 					</div>
 					{{/hasMenuScope}}
          			<!--<div class="btn-group" style="margin-top:12px;">
-        				<a href="#" class="btn right deal-add-document m-t-xs"><i class="icon-plus-sign"></i> Add Document</a>
+        				<a href="#" class="btn right deal-add-document m-t-xs"><i class="icon-plus-sign"></i> {{agile_translate "contact-details" "add-document"}}</a>
         				<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
-							<li><a href="#" class="document-exist">Existing Document</a></li>
+							<li><a href="#" class="document-exist">Existing {{agile_translate "contacts-view" "document"}}</a></li>
 						</ul>
 					</div>-->
                 </div>
@@ -38,21 +37,21 @@
         {{#if this.length}}
 	<div  class="m-b-md m-t-md m-r-sm" align="right">
         <!--<div class="btn-group right">
-        	<a href="#" class="btn btn-sm btn-default btn-addon  deal-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        	<a href="#" class="btn btn-sm btn-default btn-addon  deal-add-document"><i class="icon-plus-sign"></i> {{agile_translate "contact-details" "add-document"}}</a>
         	<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 			<ul class="dropdown-menu pull-right">
-				<li><a href="#" class="document-exist">Existing Document</a></li>
+				<li><a href="#" class="document-exist">Existing {{agile_translate "contacts-view" "document"}}</a></li>
 			</ul>
 		</div>-->
 		{{#hasMenuScope 'DOCUMENT'}}
-		<div><a href="#" class="btn btn-sm btn-default btn-addon add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
+		<div><a href="#" class="btn btn-sm btn-default btn-addon add-deal-document-select"><i class='icon-plus-sign'/></i> {{agile_translate "contact-details" "add-document"}}</a>
 			<span class="deal-document-select" style="display:none;">
 				<select class="form-control w m-r-sm p-t-xs inline-block" id="document-select">
-					<option value="">Select...</option>
+					<option value="">{{agile_translate "contacts-view" "select"}}</option>
 				</select>
 				<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <a href="#" class="btn btn-sm btn-primary add-deal-document-confirm">Add</a> 
-                <a href="#" class="btn btn-default btn-sm add-deal-document-cancel">Cancel</a>
+                <a href="#" class="btn btn-sm btn-primary add-deal-document-confirm">{{agile_translate "other" "add"}}</a> 
+                <a href="#" class="btn btn-default btn-sm add-deal-document-cancel">{{agile_translate "other" "cancel"}}</a>
 				<span class="save-status"></span>
 			</span>
 		</div>

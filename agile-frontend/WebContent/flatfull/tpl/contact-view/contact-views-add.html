@@ -1,6 +1,6 @@
 <script id="contact-view-template" type="text/html">
 <div class="wrapper-md bg-light lter b-b">
-<h3 class="font-thin m-none h3">Select Columns</h3>
+<h3 class="font-thin m-none h3">{{agile_translate "companies-view" "select-columns"}}</h3>
 </div>
 <div class="wrapper-md">
 <div class="row">
@@ -10,29 +10,29 @@
                 <fieldset>
                     <input name="id" type="hidden" value="{{id}}" />
 					<div class="control-group form-group">
-                        <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3">Select Contact fields to view</div>
+                        <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3">{{agile_translate "companies-view" "select-contact-fields-to-view"}}</div>
                     </div>
                     <div class="control-group form-group">
                         <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3" id="contactTypeAhead">
                             <select id="multipleSelect" class="required form-control" multiple="multiple">
 							<optgroup label='Contact Fields'>
-                                <option value="basic_info">Basic Info</option>
-								<option value="first_name">First Name</option>
-                                <option value="last_name">Last Name</option>
-                                <option value="email">Email</option>
-                                <option value="company">Company</option>
-                                <option value="tags">Tags</option>
-                                <option value="title">Title</option>
-								<option value="phone">Phone</option>
-								<option value="address">Address</option>
-								<option value="website">Website</option>
-                                <option value="created_time">Created Date</option>
-                                <option value="updated_time">Updated Date</option>
-								<option value="image">Image</option>
-								<option value="star_value">Star Value</option>
-								<option value="lead_score">Lead Score</option>
-                                <option value="lead_owner">Lead Owner</option>
-                                <option value="last_contacted">Last Contacted</option>
+                                <option value="basic_info">{{agile_translate "contacts-view" "Basic info"}}</option>
+								<option value="first_name">{{agile_translate "modals" "first-name"}}</option>
+                                <option value="last_name">{{agile_translate "modals" "last-name"}}</option>
+                                <option value="email">{{agile_translate "modals" "email"}}</option>
+                                <option value="company">{{agile_translate "contacts-view" "Company"}}</option>
+                                <option value="tags">{{agile_translate "report-add" "tags"}}</option>
+                                <option value="title">{{agile_translate "report-add" "title"}}</option>
+								<option value="phone">{{agile_translate "contacts-view" "Phone"}}</option>
+								<option value="address">{{agile_translate "contact-details" "address"}}</option>
+								<option value="website">{{agile_translate "other" "website"}}</option>
+                                <option value="created_time">{{agile_translate "tickets" "Created&nbsp;Date"}}</option>
+                                <option value="updated_time">{{agile_translate "contacts-view" "updated date"}}</option>
+								<option value="image">{{agile_translate "report-add" "image"}}</option>
+								<option value="star_value">{{agile_translate "contacts-view" "Star value"}}</option>
+								<option value="lead_score">{{agile_translate "contacts-view" "Lead score"}}</option>
+                                <option value="lead_owner">{{agile_translate "contacts-view" "Lead owner"}}</option>
+                                <option value="last_contacted">{{agile_translate "report-add" "last-contacted"}}</option>
 							</optgroup>
 							<optgroup id="custom-fields-optgroup" label='Custom Fields'>
 							
@@ -43,8 +43,8 @@
 <div class="line line-bg b-b"></div>
 <div class="row">
                     <div class="form-actions col-sm-offset-2 col-sm-10 col-xs-offset-3">          
-						<a href="#contacts" class="btn btn-default btn-sm">Cancel</a>
-                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="contactView">Save Changes</a>
+						<a href="#contacts" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="contactView">{{agile_translate "prefs-settings" "save-changes"}}</a>
                     </div>
 </div>
                 </fieldset>
@@ -57,7 +57,7 @@
 
 <script id="company-view-template" type="text/html">
 <div class="wrapper-md bg-light lter b-b">
-<h3 class="font-thin m-none h3">Select Columns</h3>
+<h3 class="font-thin m-none h3">{{agile_translate "companies-view" "select-columns"}}</h3>
 </div>
 <div class="wrapper-md">
 <div class="row">
@@ -67,25 +67,25 @@
                 <fieldset>
                     <input name="id" type="hidden" value="{{id}}" />
 					<div class="control-group form-group">
-                        <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3">Select Company fields to view</div>
+                        <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3">{{agile_translate "companies-view" "select-company-fields-to-view"}}</div>
                     </div>
                     <div class="control-group form-group">
                         <div class="controls col-sm-offset-2 col-sm-10 col-xs-offset-3">
                             <select id="multipleSelect" class="required form-control" multiple="multiple">
 							<optgroup label='Company Fields'>
-								<option value="basic_info">Basic Info</option>
-								<option value="name">Name</option>
-                                <option value="tags">Tags</option>
-								<option value="url">URL</option>
-								<option value="phone">Phone</option>
-								<option value="address">Address</option>
-								<option value="website">Website</option>
-                                <option value="created_time">Created Date</option>
-                                <option value="updated_time">Updated Date</option>
-								<option value="image">Image</option>
-								<option value="star_value">Star Value</option>
-                                <option value="lead_score">Lead Score</option>
-                                <option value="owner">Owner</option>
+								<option value="basic_info">{{agile_translate "contacts-view" "Basic info"}}</option>
+								<option value="name">{{agile_translate "deal-view" "name"}}</option>
+                                <option value="tags">{{agile_translate "report-add" "tags"}}</option>
+								<option value="url">{{agile_translate "widgets" "url"}}</option>
+								<option value="phone">{{agile_translate "contacts-view" "Phone"}}</option>
+								<option value="address">{{agile_translate "contact-details" "address"}}</option>
+								<option value="website">{{agile_translate "other" "website"}}</option>
+                                <option value="created_time">{{agile_translate "tickets" "Created&nbsp;Date"}}</option>
+                                <option value="updated_time">{{agile_translate "contacts-view" "updated date"}}</option>
+								<option value="image">{{agile_translate "report-add" "image"}}</option>
+								<option value="star_value">{{agile_translate "contacts-view" "Star value"}}</option>
+                                <option value="lead_score">{{agile_translate "contacts-view" "Lead score"}}</option>
+                                <option value="owner">{{agile_translate "contact-details" "owner"}}</option>
 
 							</optgroup>
 							<optgroup id="custom-fields-optgroup" label='Custom Fields'>
@@ -97,8 +97,8 @@
 <div class="line line-bg b-b"></div>
 <div class="row">
                     <div class="form-actions col-sm-offset-2 col-sm-10 col-xs-offset-3">          
-						<a href="#companies" class="btn btn-default btn-sm">Cancel</a>
-                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="companyView">Save Changes</a>
+						<a href="#companies" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="companyView">{{agile_translate "prefs-settings" "save-changes"}}</a>
                     </div>
 </div>
                 </fieldset>

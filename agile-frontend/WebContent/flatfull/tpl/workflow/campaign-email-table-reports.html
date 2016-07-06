@@ -3,8 +3,8 @@
 	<table class="table table-bordered table-layout-mob-view">
 		<tbody>
 			<tr>
-				<th>Emails Sent</th>
-				<th>Emails Skipped<span
+				<th>{{agile_translate "portlets" "emails-sent"}}</th>
+				<th>Emails {{agile_translate "admin-settings-stats" "skipped"}}<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
@@ -12,7 +12,7 @@
 							data-title:" data-content="Total email skipped recorded & unique skipped."
 							id="element" data-trigger="hover" />
 						</span></th>
-				<th>Emails Opened<span
+				<th>{{agile_translate "portlets" "emails-opened"}}<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
@@ -21,29 +21,27 @@
 							id="element" data-trigger="hover" />
 						</span></th>
 				
-				<th>Clicks<span
+				<th>{{agile_translate "campaigns" "clicks"}}<span
 							style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
 							style="height: 6px; vertical-align: top" rel="popover"
 							data-placement="right"
 							data-title:" data-content="Total email link clicks recorded & unique clicks"
 							id="element" data-trigger="hover" /></th>
-				<th>Unsubscriptions</th>
-				<th>Hard Bounces 
-					<span class="v-top m-l-n-xs">
+				<th>{{agile_translate "campaigns" "unsubscriptions"}}</th>
+				<th>{{agile_translate "campaigns" "hard-bounces"}}<span class="v-top m-l-n-xs">
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}"	class="v-top" style="height: 6px;" rel="popover"
 							data-placement="right" data-title:" data-content="A hard bounce occurs when the recipient's email is invalid."
 							id="element" data-trigger="hover" />
 					</span>
 				</th>
-				<th>Soft Bounces 
-					<span class="v-top m-l-n-xs"> 
+				<th>{{agile_translate "campaigns" "soft-bounces"}}<span class="v-top m-l-n-xs"> 
 						<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top" style="height: 6px;" rel="popover"
 							data-placement="right" data-title:" data-content="A soft bounce occurs when the sender's email box is full or for other reasons."
 							id="element" data-trigger="hover" />
 					</span>
 				</th>
-				<th>Spam Complaints</th>
+				<th>{{agile_translate "campaigns" "spam-complaints"}}</th>
 			</tr>
             <tr>
 				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>

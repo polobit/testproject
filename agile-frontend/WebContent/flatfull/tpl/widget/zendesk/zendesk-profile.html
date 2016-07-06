@@ -15,12 +15,12 @@
 		<a class="text-cap text-base m-b-xs">{{user_info.email}}</a>
 	{{/if}}
 </div>
-<div class="clearfix"><a  class="btn btn-xs btn-default" id="add_ticket">New Ticket</a></div>						
+<div class="clearfix"><a  class="btn btn-xs btn-default" id="add_ticket">{{agile_translate "tickets" "new-ticket"}}</a></div>						
 </div>
 <div class="clearfix" id="add-ticket-error-panel" style="display:none; color:red;">
 </div>
 <div class="wrapper-sm b-t b-light">
-	<h4 class="h4 text-sm">Tickets</h4>
+	<h4 class="h4 text-sm">{{agile_translate "report-view" "tickets"}}</h4>
 </div>
 <ul class="list-group m-n text-base" id="all_tickets_panel">
 	
@@ -45,15 +45,15 @@
 				<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{created_at}}">{{created_at}}</time></small>
 			</div>
 			<div class="sub_header_tab_link zendesk_tab_link  m-n" style="float:left;display:none;">
-				<div><a href="#show" class="btn btn-xs btn-default" ticket_status="{{status}}" ticket_id="{{id}}" id="ticket_show" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">Show</a></div>
-				<div><a class="l_border btn btn-xs btn-default" href="#update" update_id="{{id}}" id="ticket_update" rel="tooltip" title="Update ticket in zendesk">Comment</a></div>										
+				<div><a href="#show" class="btn btn-xs btn-default" ticket_status="{{status}}" ticket_id="{{id}}" id="ticket_show" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">{{agile_translate "widgets" "show"}}</a></div>
+				<div><a class="l_border btn btn-xs btn-default" href="#update" update_id="{{id}}" id="ticket_update" rel="tooltip" title="Update ticket in zendesk">{{agile_translate "widgets" "comment"}}</a></div>										
 			</div>
 			<div class="clearfix"></div>
 		</li>
 	{{/each}}
 {{else}}
 	{{#if_equals this "There are no tickets for this user"}}
-		<li class="list-group-item r-none b-l-none b-r-none" >No tickets</li>
+		<li class="list-group-item r-none b-l-none b-r-none" >{{agile_translate "widgets" "no-tickets"}}</li>
 	{{else}}
 		<li class="list-group-item r-none b-l-none b-r-none word-break">{{this}}</li>
 	{{/if_equals}}
@@ -64,15 +64,15 @@
 	<div>
 		<form  id="zendesk_login_form" name="zendesk_login_form" method="post">
 	    	<fieldset>
-				<p>View and respond to support tickets from contact using your Zendesk account.</p>
+				<p>{{agile_translate "widgets" "zendesk-profile-desc"}}</p>
 				
 				<label>Enter your Zendesk details </label>
 				<div class="control-group form-group"><div class="controls"><input type="url" id="zendesk_url" class="input-medium required widget_input_box form-control" placeholder="https://yourdomain.zendesk.com" value="" name="zendesk_url"></input></div></div>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="zendesk_username" class="input-medium required widget_input_box form-control"  placeholder="User Name" value="" name="zendesk_username"></input></div></div>
 				<div class="control-group form-group"><div class="controls"><input type="password" id="zendesk_password" class="input-medium required widget_input_box form-control"  placeholder="Password" value="" name="zendesk_password"></input></div></div>	
 				<div class="text-center">		
-				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_translate "modals" "save"}}</a>
 				</div>
 			 </fieldset>
 	    </form>
@@ -118,7 +118,7 @@
 	        </form>
 	    </div>
 	    <div class="modal-footer">
-	        <a href="#" class="btn btn-sm btn-primary" id="send_request">Send</a>
+	        <a href="#" class="btn btn-sm btn-primary" id="send_request">{{agile_translate "tasks" "Send"}}</a>
 	        <span class="save-status"></span>
 	    </div>
 </div>
@@ -143,27 +143,27 @@
 							<td class="p-xs">{{id}}</td>
 						</tr>					
 						<tr>
-							<th class="p-xs">Created At</th>
+							<th class="p-xs">{{agile_translate "widgets" "created-at"}}</th>
 							<td class="p-xs">{{string_to_date "mm-dd-yyyy" created_at}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">Updated At</th>
+							<th class="p-xs">{{agile_translate "widgets" "updated-at"}}</th>
 							<td class="p-xs">{{string_to_date "mm-dd-yyyy" updated_at}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">Status</th>
+							<th class="p-xs">{{agile_translate "widgets" "status"}}</th>
 							<td class="p-xs">{{status}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">Url</th>
+							<th class="p-xs">{{agile_translate "companies-edit" "url"}}</th>
 							<td class="p-xs"><a href="{{url}}" target="_blank">{{url}}</a></td>
 						</tr>
 						<tr>
-							<th class="p-xs">Subject</th>
+							<th class="p-xs">{{agile_translate "widgets" "subject"}}</th>
 							<td class="p-xs">{{subject}}</td>
 						</tr>
 						<tr>
-							<th class="p-xs">Description</th>
+							<th class="p-xs">{{agile_translate "other" "description"}}</th>
 							{{#if desc_len}}	
 								<td class="p-xs">
 									<div style="height: 140px;overflow-y: scroll;"> 

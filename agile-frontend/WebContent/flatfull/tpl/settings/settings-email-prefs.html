@@ -46,19 +46,19 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		<center>
 			{{#if id}}
                 <div class="">
-				<a class="btn btn-sm btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>Disable</a>
-				<a class="btn btn-sm btn-default" href="#imap/{{id}}">Settings</a>
+				<a class="btn btn-sm btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>{{agile_translate "web-rules" "disable"}}</a>
+				<a class="btn btn-sm btn-default" href="#imap/{{id}}">{{agile_translate "preferences" "settings"}}</a>
                 </div>
 			{{else}}
 			<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
+				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_translate "contact-details" "please"}}<strong><a class="text-info" href="#subscribe">{{agile_translate "widgets" "upgrade"}}</a></strong> {{agile_translate "widgets" "to-enterprise-plan"}}</div>
 				{{/if_non_pro_plan}}
-				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>-->
+				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">{{agile_translate "prefs-email" "enable"}}</a>-->
 				
 				{{else}}
-				<a class="btn btn-sm btn-default" href="#imap">Enable</a>
+				<a class="btn btn-sm btn-default" href="#imap">{{agile_translate "prefs-email" "enable"}}</a>
 				{{/has_email_account_limit_reached}}
 			</div>
 			{{/if}}
@@ -88,23 +88,22 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 		   </div>
 			{{else}}
 			<div class="m-b-sm" rel="tooltip" title="See all emails related to a contact from your Office365 account.">
-				See all emails related to a contact from your Office365 account.
-			</div>
+				{{agile_translate "prefs-email" "office365-content"}}</div>
 			{{/if}}
 		</div>
         <center>
 			{{#if id}}
-				<a class="btn btn-sm btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>Disable</a>
-				<a class="btn btn-sm btn-default" href="#office/{{id}}">Settings</a>
+				<a class="btn btn-sm btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>{{agile_translate "web-rules" "disable"}}</a>
+				<a class="btn btn-sm btn-default" href="#office/{{id}}">{{agile_translate "preferences" "settings"}}</a>
 			{{else}}
 				<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>				
+				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_translate "contact-details" "please"}}<strong><a class="text-info" href="#subscribe">{{agile_translate "widgets" "upgrade"}}</a></strong> {{agile_translate "widgets" "to-enterprise-plan"}}</div>				
 				{{/if_non_pro_plan}}
-				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
+				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">{{agile_translate "prefs-email" "enable"}}</a>-->
 				{{else}}
-				<a class="btn btn-sm btn-default" href="#office">Enable</a>
+				<a class="btn btn-sm btn-default" href="#office">{{agile_translate "prefs-email" "enable"}}</a>
 				{{/has_email_account_limit_reached}}
 				</div>
 			{{/if}}

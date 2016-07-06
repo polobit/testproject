@@ -4,15 +4,15 @@
     <div class="well">
         <form id="tagsRemoveBulkForm" class="form-horizontal">
             <fieldset>
-                <legend>Remove tags from selected contacts</legend>
+                <legend>{{agile_translate "contacts-view" "remove-tags-from-selected-contacts"}}</legend>
                 <div class="control-group form-group">         
-                    <label class="control-label col-sm-2">Enter Tags <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{agile_translate "contacts-view" "enter-tags"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-10">
                         <div class="pull-left">
                         <ul name="tags" class= "tagsinput tags p-n"></ul>
                         </div>              
                         <input name="tags" type="text" id="removeBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma"/>
-						<span class="error-tags text-danger" style="display:none;">This field is required.</span>
+						<span class="error-tags text-danger" style="display:none;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
 	<input class="hide"/>      
               </div>
                 </div>
@@ -20,8 +20,8 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
                 <div class="form-actions">          
-					<a href="#contacts" class="btn btn-sm btn-danger">Close</a>
-                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">Remove</a> 
+					<a href="#contacts" class="btn btn-sm btn-danger">{{agile_translate "contact-details" "CLOSE"}}</a>
+                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">{{agile_translate "contacts-view" "remove"}}</a> 
                     <span class="save-status"></span>
                 </div>
 </div>
@@ -38,15 +38,15 @@
     <div class="well">
         <form id="tagsRemoveBulkForm" class="form-horizontal">
             <fieldset>
-                <legend>Remove tags from selected companies</legend>
+                <legend>{{agile_translate "companies-view" "remove-tags-from-selected-companies"}}</legend>
                 <div class="control-group form-group">         
-                    <label class="control-label col-sm-2">Enter Tags <span class="field_req">*</span></label>
+                    <label class="control-label col-sm-2">{{agile_translate "contacts-view" "enter-tags"}}<span class="field_req">*</span></label>
                     <div class="controls col-sm-10">
                         <div class="pull-left">
                         <ul name="tags" class= "tagsinput tags p-n"></ul>
                         </div>              
                         <input name="tags" type="text" id="removeBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma"/>
-                        <span class="error-tags text-danger" style="display:none;">This field is required.</span>
+                        <span class="error-tags text-danger" style="display:none;">{{agile_translate "validation-msgs" "this-field-is-required"}}</span>
     <input class="hide"/>      
               </div>
                 </div>
@@ -54,8 +54,8 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
                 <div class="form-actions">          
-                    <a href="#companies" class="btn btn-sm btn-danger">Close</a>
-                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">Remove</a> 
+                    <a href="#companies" class="btn btn-sm btn-danger">{{agile_translate "contact-details" "CLOSE"}}</a>
+                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">{{agile_translate "contacts-view" "remove"}}</a> 
                     <span class="save-status"></span>
                 </div>
 </div>

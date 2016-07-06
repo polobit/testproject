@@ -2,14 +2,14 @@
 	<div>
 		<form  id="helpscout_login_form" name="helpscout_login_form">
 	    	<fieldset>
-				<p >Help Scout is a help desk for teams that insist on a delightful customer experience. </p>
+				<p >{{agile_translate "widgets" "helpscout-profile-desc"}}</p>
 				
-				<label>Enter your API key</label>
+				<label>{{agile_translate "widgets" "enter-your-api-key"}}</label>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="helpscout_api_key" class="input-medium required form-control" placeholder="API Key" value="" name="helpscout_api_key" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="save_api_key" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
-				<p class="p-xs">Don't have an API key? <a href="https://www.helpscout.net" target="_blank" class="text-info"> SignUp </a></p>
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+				<a href="#" id="save_api_key" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_translate "modals" "save"}}</a>
+				<p class="p-xs">Don't have an API key? <a href="https://www.helpscout.net" target="_blank" class="text-info"> {{agile_translate "widgets" "signup"}}</a></p>
 				</div>
      </div>
 			</fieldset>
@@ -31,15 +31,15 @@
 </div>
 <div class="clearfix"></div>
 <div class="clearfix m-t-xs">
-	<a  id="add_conv" class="btn btn-xs btn-default">New Conversation</a>
-	<p id="helpscout_loading" style="display:none;" >Please wait...</p>
-	<p id="helpscout_error" style="display:none;" >Please Try agian.</p>
+	<a  id="add_conv" class="btn btn-xs btn-default">{{agile_translate "widgets" "new-conversation"}}</a>
+	<p id="helpscout_loading" style="display:none;" >{{agile_translate "widgets" "please-wait"}}</p>
+	<p id="helpscout_error" style="display:none;" >{{agile_translate "widgets" "please-try-agian"}}</p>
 </div>						
 </div>
 <div class="clearfix" id="add-conv-error-panel" style="display:none;">
 </div>
 <div class="wrapper-sm b-t b-light">
-	<h4 class="h4 text-sm m-t-none m-b-none">Conversations</h4>
+	<h4 class="h4 text-sm m-t-none m-b-none">{{agile_translate "widgets" "conversations"}}</h4>
 </div>
 <ul class="list-group m-b-none text-base" id="all_conv_panel">
 	
@@ -153,7 +153,7 @@
 	        </form>
 	    </div>
 	    <div class="modal-footer">
-	        <a class="btn btn-sm btn-primary" id="helpscout_send_request">Save</a>
+	        <a class="btn btn-sm btn-primary" id="helpscout_send_request">{{agile_translate "modals" "save"}}</a>
 	        <span class="save-status"></span>
 	    </div>
 	</div>

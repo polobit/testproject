@@ -8,13 +8,12 @@
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">You have no notes for {{contactShortName}}.</h4>
                     <div class="text">
-                        You can save specific information about {{#isCompany}}companies{{else}}contacts{{/isCompany}} as a Note.
-                    </div>
+                        You can save specific information about {{#isCompany}}companies{{else}}contacts{{/isCompany}} {{agile_translate "contact-details" "as-a-note"}}</div>
 					<div class="btn-group">
-            			<a href="#noteModal" data-toggle="modal" class="btn m-t-xs btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
+            			<a href="#noteModal" data-toggle="modal" class="btn m-t-xs btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;{{agile_translate "deal-view" "add-note"}}</a>
             			<button class="btn dropdown-toggle m-t-xs btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
 						<ul class="dropdown-menu pull-right" style="padding:2px" role="menu">
-							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;Add Call-log</a> </li>
+							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;{{agile_translate "contact-details" "add-call-log"}}</a> </li>
 						</ul>
 					</div>
                 </div>
@@ -26,10 +25,10 @@
 {{#if this.length}}
 <div class="m-b-md m-t-md m-r-sm" align="right">
 <div class="btn-group" align="right">
-   <a href="#noteModal" data-toggle="modal" class="btn btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;Add Note</a>
+   <a href="#noteModal" data-toggle="modal" class="btn btn-default btn-sm btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>&nbsp;{{agile_translate "deal-view" "add-note"}}</a>
                			<button class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
 						<ul class="dropdown-menu pull-right" style="padding:2px" role="menu">
-							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;Add Call-log</a> </li>
+							<li style="padding:0px; text-align: center;"><a href="javascript:void(0)" class="show-logPhone ">&nbsp;{{agile_translate "contact-details" "add-call-log"}}</a> </li>
 						</ul>
 						</div>
 						</div>

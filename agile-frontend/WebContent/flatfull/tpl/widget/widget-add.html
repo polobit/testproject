@@ -5,7 +5,7 @@
    <center>  
     <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle; display:inline-block;">
     <span style="margin-top:6px; display:inline-block;"><img src="{{logo_url}}"  class="img-responsive inline-block" 
-    style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">SIP</span>
+    style="margin-right: 4px; margin-top:-5px; width:25px; height:25px;">{{agile_translate "widgets" "SIP"}}</span>
     </span>
 
    </center>
@@ -14,20 +14,20 @@
      <center>    
        <span style="font-size: 24px; height: 47px; text-align:center;vertical-align: middle;">
     <span style="margin-top:6px; display:inline-block; padding-bottom: 7px;">
-    <img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">Call Script</span>
+    <img src="{{logo_url}}" class="img-responsive inline-block" style="margin-right: 4px; margin-top:-3px; width:25px; height:25px;">{{agile_translate "widgets" "call-script"}}</span>
     </span>
      </center>  
     {{else}}
 			{{#if_equals name "Bria"}}
 				<center>  
-  				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
-				<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+  				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{agile_translate "widgets" "bria"}}</span></span>
+				<span class="label label-sm bg-danger" style="margin: 5px;">{{agile_translate "deal-view" "beta"}}</span>
 				</center>  
         	{{else}}
 			{{#if_equals name "Skype"}}
 				<center>  
-  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
-				<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{agile_translate "contact-edit" "skype"}}</span></span>
+				<span class="label label-sm bg-danger" style="margin: 5px;">{{agile_translate "deal-view" "beta"}}</span>
 				</center>  
         	{{else}}
         	{{#if_equals name "Braintree"}}
@@ -35,7 +35,7 @@
   				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
   					<img src="{{logo_url}}" style="height: 47px;">
   				</span>
-				<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+				<span class="label label-sm bg-danger" style="margin: 5px;">{{agile_translate "deal-view" "beta"}}</span>
 				</center>  
         	{{else}}
       <center> 
@@ -63,12 +63,12 @@
 	{{#if_equals name "Bria"}}
 		<br/>
 		<span style="font-size: 12px;position: relative;top: 2px;">*</span>
-		<span style="font-size: 10px;">Support for Windows only</span>
+		<span style="font-size: 10px;">{{agile_translate "widgets" "support-for-windows-only"}}</span>
     {{else}}
 	{{#if_equals name "Skype"}}
 		<br/>
 		<span style="font-size: 12px;position: relative;top: 2px;">*</span>
-		<span style="font-size: 10px;">Support for Windows only</span>
+		<span style="font-size: 10px;">{{agile_translate "widgets" "support-for-windows-only"}}</span>
 	{{/if_equals}}
 	{{/if_equals}}
 
@@ -79,33 +79,32 @@
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
 					<div class="btn-group inline-block">
-        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
+        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">{{agile_translate "contact-details" "delete"}}</a>
         				<a class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 						<ul class="dropdown-menu text-base">
-							<li><a id="remove-widget" widget-name="{{name}}">Uninstall</a></li>
+							<li><a id="remove-widget" widget-name="{{name}}">{{agile_translate "widgets" "uninstall"}}</a></li>
 						</ul>
 					</div>
-					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
+					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">{{agile_translate "preferences" "settings"}}</a>-->
     		{{else}}
-    			<a class="btn btn-sm btn-default install-custom-widget" href="#Custom-widget" widget-name="{{name}}">Add</a>
-				<a class="btn btn-sm btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>    		
+    			<a class="btn btn-sm btn-default install-custom-widget" href="#Custom-widget" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
+				<a class="btn btn-sm btn-danger" id="remove-widget" widget-name="{{name}}">{{agile_translate "widgets" "uninstall"}}</a>    		
 			{{/if}}
 		{{else}}
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
 				{{#if_equals name "CallScript"}}  
-                   <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                   <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">{{agile_translate "preferences" "settings"}}</a>
                 {{else}}{{#if_equals name "Twilio"}}
                            <a></a>
                         {{else}}
-				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">{{agile_translate "preferences" "settings"}}</a>
                         {{/if_equals}}
                 {{/if_equals}}
-    			<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>
+    			<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">{{agile_translate "contact-details" "delete"}}</a>
 				{{#if_equals name "Bria"}}
 					<div class="text-center m-t-sm ">
-							Download
-							<a href="#" class="text-info" target="_blank" id="downloadCallJar"> executable </a>
+							{{agile_translate "widgets" "download"}}<a href="#" class="text-info" target="_blank" id="downloadCallJar"> {{agile_translate "widgets" "executable"}}</a>
 							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download executable and run it in your system to establish a connection between your Bria client and Agile CRM. Please note that you should already be logged in with selected Bria client before running this executable file."></i>
 					</div>
 				{{/if_equals}}
@@ -113,8 +112,7 @@
 				{{#if_equals name "Skype"}}
 
 					<div class="text-center m-t-sm ">
-							Download
-							<a href="#" class="text-info" target="_blank" id="downloadCallJar" widget-name="Skype"> executable </a>
+							{{agile_translate "widgets" "download"}}<a href="#" class="text-info" target="_blank" id="downloadCallJar" widget-name="Skype"> {{agile_translate "widgets" "executable"}}</a>
 							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download executable and run it in your system to establish a connection between your Skype client and Agile CRM. Please note that you should already be logged in with Skype client before running this executable file."></i>
 					</div>
 				{{/if_equals}}
@@ -125,25 +123,25 @@
 					{{#if_equals widget_type "SOCIAL"}}
 						{{#isAdmin}}
 							{{#if_equals name "Sip"}}
-								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 							{{else}}
 								{{#if_equals name "TwilioIO"}}
-									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 								{{else}}	
 									{{#if_equals name "Bria"}}
-										<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+										<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 									{{else}}
 										{{#if_equals name "Skype"}}
-												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 											{{else}}
 								<div class="btn-group">
-  									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
+    									<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
+    									<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   									</ul>
 								</div>
 										{{/if_equals}}
@@ -151,7 +149,7 @@
 							 {{/if_equals}}
 						  {{/if_equals}}
 						{{else}}
-							<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+							<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 						{{/isAdmin}}
 						<div class="clearfix"></div>
 					{{else}}
@@ -159,25 +157,25 @@
                                {{#if_equals name "CallScript"}}
                                  {{#isAdmin}}
 									{{#if_equals name "Sip"}}
-										<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+										<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 									{{else}}
 										{{#if_equals name "TwilioIO"}}
-											<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+											<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 											{{else}}	
 												{{#if_equals name "Bria"}}
-													<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+													<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 												{{else}}	
 												{{#if_equals name "Skype"}}
-												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 											{{else}}																			
 											<div class="btn-group">
-  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
   												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     												<span class="caret"></span>
-    												<span class="sr-only">Toggle Dropdown</span>
+    												<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   												</a>
   												<ul class="dropdown-menu" role="menu">
-    												<li><a class="btn btn-sm add_to_all" href="#callscript" widget-name="{{name}}">Add for all users</a></li>    									
+    												<li><a class="btn btn-sm add_to_all" href="#callscript" widget-name="{{name}}">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   												</ul>
 											</div>
 												{{/if_equals}}
@@ -185,7 +183,7 @@
 										{{/if_equals}}
 									{{/if_equals}}
 									{{else}}
-										<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+										<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 									{{/isAdmin}}
 									<div class="clearfix"></div>
                                {{else}}{{#if_equals name "Twilio"}}
@@ -193,25 +191,25 @@
                                        {{else}}
                                             {{#isAdmin}}				
 											{{#if_equals name "Sip"}}
-													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 											{{else}}
 												{{#if_equals name "TwilioIO"}}
-													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 											{{else}}		
 												{{#if_equals name "Bria"}}
-													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 											{{else}}
 												{{#if_equals name "Skype"}}
-													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 											{{else}}											
 												<div class="btn-group">
-  													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+  													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
   													<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     													<span class="caret"></span>
-    													<span class="sr-only">Toggle Dropdown</span>
+    													<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   													</a>
   													<ul class="dropdown-menu" role="menu">
-    													<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
+    													<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   													</ul>
 												</div>
 												{{/if_equals}}
@@ -219,7 +217,7 @@
 											{{/if_equals}}
 										{{/if_equals}}
 											{{else}}
-												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 											{{/isAdmin}}
 											<div class="clearfix"></div> 
 							           {{/if_equals}}
@@ -227,25 +225,25 @@
 							   {{else}}							   
 							   {{#isAdmin}}			
 									{{#if_equals name "Sip"}}
-										<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+										<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 									{{else}}
 										{{#if_equals name "TwilioIO"}}
-											<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+											<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 									{{else}}	
 										{{#if_equals name "Bria"}}
-													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 									{{else}}
 												{{#if_equals name "Skype"}}
-													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 									{{else}}	
 											<div class="btn-group">										
-  												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+  												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
   												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     												<span class="caret"></span>
-    												<span class="sr-only">Toggle Dropdown</span>
+    												<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   												</a>
   												<ul class="dropdown-menu" role="menu">
-    												<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
+    												<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   												</ul>
 											</div>
 												{{/if_equals}}
@@ -253,7 +251,7 @@
 										{{/if_equals}}
 									{{/if_equals}}
 								{{else}}
-									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_translate "other" "add"}}</a>
 								{{/isAdmin}} 
 								<div class="clearfix"></div>							   
 					{{/if_equals}}
@@ -262,41 +260,40 @@
 					{{#if_equals widget_type "CALL"}}
 						<div>
 							<div style="display:inline;display:none;width: 85%;left: 8%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade alert widget-alert fade in p-xs m-b-xs pos-abs">
-								Requires Regular or Pro plan <strong><a href="#subscribe-plan" class='c-p'>upgrade</a></strong>.
+								{{agile_translate "widgets" "requires-regular-or-pro-plan"}}<strong><a href="#subscribe-plan" class='c-p'>{{agile_translate "widgets" "upgrade"}}</a></strong>.
 							</div>
 						</div>
 						<div class="clearfix"></div>
 					{{else}}
 						<div>
 							<div class="alert widget-alert fade in {{name}}-upgrade p-xs m-b-xs pos-abs" style="display:inline;display:none;width: 85%;left: 8%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;">
-								Please <strong><a href="#subscribe-plan" class='c-p'>upgrade</a></strong> to add more widgets.
-							</div>
+								{{agile_translate "contact-details" "please"}}<strong><a href="#subscribe-plan" class='c-p'>{{agile_translate "widgets" "upgrade"}}</a></strong> {{agile_translate "widgets" "to-add-more-widgets"}}</div>
 						</div>
 					<div class="clearfix"></div>
 					{{/if_equals}}  
 					<div style="/*margin: 40px auto; width: 50%;*/ display:inline;">
 					{{#isAdmin}}
 						{{#if_equals name "Sip"}}
-							<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+							<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_translate "other" "add"}}</a>
 						{{else}}
 							{{#if_equals name "TwilioIO"}}
-								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_translate "other" "add"}}</a>
 						{{else}}	
 							{{#if_equals name "Bria"}}
-								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_translate "other" "add"}}</a>
 						{{else}}
 							{{#if_equals name "Skype"}}
-								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_translate "other" "add"}}</a>
 								{{else}}	
 									
 								<div class="btn-group">										
-  									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+  									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_translate "other" "add"}}</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
+    									<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">    							
-										<li><a class="btn btn-sm _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add for all users</a></li>    									
+										<li><a class="btn btn-sm _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   									</ul>
 								</div>
 								{{/if_equals}}
@@ -304,7 +301,7 @@
 							{{/if_equals}}
 						{{/if_equals}}
 					{{else}}
-						<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+						<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_translate "other" "add"}}</a>
 					{{/isAdmin}} 					                 						
 					<div class="clearfix"></div>
 				{{/if}}
@@ -327,12 +324,12 @@
        	 <li><a href="#ecommerce-tab" data-toggle="tab"><i class="icon icon-basket-loaded"></i></a></li>
          <li><a href="#custom-widget-tab" data-toggle="tab"><i class="icon icon-drawer"></i></a></li>
        {{else}}
-       	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">Telephony</a></li>
-       	 <li><a href="#support-tab" data-toggle="tab">Support</a></li>
-       	 <li><a href="#billing-tab" data-toggle="tab">Billing</a></li>
-       	 <li><a href="#social-tab" data-toggle="tab">Social</a></li>
-       	 <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
-         <li><a href="#custom-widget-tab" data-toggle="tab">Custom</a></li>
+       	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">{{agile_translate "widgets" "telephony"}}</a></li>
+       	 <li><a href="#support-tab" data-toggle="tab">{{agile_translate "menu" "support"}}</a></li>
+       	 <li><a href="#billing-tab" data-toggle="tab">{{agile_translate "widgets" "billing"}}</a></li>
+       	 <li><a href="#social-tab" data-toggle="tab">{{agile_translate "widgets" "social"}}</a></li>
+       	 <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_translate "campaigns" "ecommerce"}}</a></li>
+         <li><a href="#custom-widget-tab" data-toggle="tab">{{agile_translate "campaigns" "custom"}}</a></li>
          {{/is_mobile}}
        </ul>
 	</div>
@@ -364,22 +361,21 @@
     				</div>
     				<div class="panel-body">
     					<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip" title="You can now develop your own custom widget in javascript or any backend server language.">
-							You can now develop your own custom widget in javascript or any backend server language.
-						</div>
+							{{agile_translate "widgets" "custom-widget-desc"}}</div>
     					 <div class="text-center">
 							{{#isAdmin}}											
 								<div class="btn-group" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
+  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">{{agile_translate "widgets" "add-custom-widget"}}</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
+    									<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all users</a></li>    									
+    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   									</ul>
 								</div>
 							{{else}}
-								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
+								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">{{agile_translate "widgets" "add-custom-widget"}}</a>
 							{{/isAdmin}}
 						</div>
 					</div>
@@ -400,7 +396,7 @@
 <div class="col-md-12">
     <div class="row">
 	<div class="col-md-12">
-     		<h4 class="m-b"> Social <small>Know your customer social activity</small></h4>
+     		<h4 class="m-b"> {{agile_translate "widgets" "social"}}<small>Know your customer social activity</small></h4>
            
        
                 <div id="social" class="row">
@@ -410,7 +406,7 @@
 	<div class="row">
 	<div class="col-md-12">
     
-            <h4 class="m-b">Customer Support <small>View tickets and chats</small></h4>
+            <h4 class="m-b">Customer {{agile_translate "menu" "support"}}<small>View tickets and chats</small></h4>
       
                 <div id="support" class="row">
                 </div>
@@ -419,7 +415,7 @@
 	<div class="row">
 	<div class="col-md-12" style="display:none;">
       
-            <h4 class="m-b">Email <small>Send and Receive Email</small></h4>
+            <h4 class="m-b">{{agile_translate "modals" "email"}}<small>Send and Receive {{agile_translate "modals" "email"}}</small></h4>
        
                 <div id="email" class="row">
                 </div>
@@ -428,7 +424,7 @@
 	<div class="row">
     <div class="col-md-12">
 
-            <h4 class="m-b">Calling <small>Make & Receive calls from Agile</small></h4>
+            <h4 class="m-b">Calling <small>Make & Receive calls from {{agile_translate "contact-details" "agile"}}</small></h4>
         
                 <div id="call" class="row">
                 </div>
@@ -437,7 +433,7 @@
 	<div class="row">
     <div class="col-md-12">
         
-            <h4 class="m-b">Billing <small>View and send invoices</small></h4>
+            <h4 class="m-b">{{agile_translate "widgets" "billing"}}<small>View and send invoices</small></h4>
       
                 <div id="billing" class="row">
                 </div>
@@ -446,7 +442,7 @@
 	<div class="row">
   <div class="col-md-12">
         
-            <h4 class="m-b">Ecommerce <small>View Customer Orders Details</small></h4>
+            <h4 class="m-b">{{agile_translate "campaigns" "ecommerce"}}<small>View Customer Orders Details</small></h4>
       
                 <div id="ecommerce" class="row">
                 </div>
@@ -456,7 +452,7 @@
 	<div class="row">
 	<div class="col-md-12">
 	
-            <h4 class="m-b">Custom Widgets <small>Add your widgets</small></h4>
+            <h4 class="m-b">Custom {{agile_translate "preferences" "widgets"}}<small>Add your widgets</small></h4>
        
 			<div id="custom" class="row">
 				<div class="col-md-4" id="custom-widget" >
@@ -467,17 +463,17 @@
     					 <div class="text-center">
 							{{#isAdmin}}											
 								<div class="btn-group m-t-md" id="custom-widget-btn">
-  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
+  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">{{agile_translate "widgets" "add-custom-widget"}}</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     									<span class="caret"></span>
-    									<span class="sr-only">Toggle Dropdown</span>
+    									<span class="sr-only">{{agile_translate "widgets" "toggle-dropdown"}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all users</a></li>    									
+    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">{{agile_translate "widgets" "add-for-all-users"}}</a></li>    									
   									</ul>
 								</div>
 							{{else}}
-								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
+								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">{{agile_translate "widgets" "add-custom-widget"}}</a>
 							{{/isAdmin}}
 						</div>
 					</div>
@@ -491,7 +487,7 @@
 
 <script id="add-custom-widget-template" type="text/html">
 	<div class="panel panel-default">
-	<div class="panel-heading font-bold"><h4 class="h4">Enter custom widget details</h4></div>
+	<div class="panel-heading font-bold"><h4 class="h4">{{agile_translate "widgets" "enter-custom-widget-details"}}</h4></div>
 	<div class="panel-body">
 		<form  id="custom_widget_form" name="custom_widget_login_form" method="post">
 	    	<fieldset>
@@ -502,12 +498,12 @@
 				<div class="control-group form-group"><div class="controls"><input type="text" id="description" class="input-medium required widget_input_box form-control"  placeholder="Description" value="" name="description"></input></div></div>
 				<div class="control-group form-group"><div class="controls">
 				<select name="script_type" id="script_type" class="required form-control" >
-					<option value="script">HTML</option> 
-					<option value="url">URL</option> 
+					<option value="script">{{agile_translate "widgets" "html"}}</option> 
+					<option value="url">{{agile_translate "widgets" "url"}}</option> 
 				</select></div></div>
 				<div class="control-group form-group"><div class="controls">
 					<span id="script_div">
-						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a></span>
+						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget {{agile_translate "admin-settings-integrations" "JS-API"}}</a></span>
 						<textarea rows="4" class="required form-control" name="script" id="script" value="" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
 					</span>
 					<span id="url_div" style="display:none;">
@@ -518,8 +514,8 @@
 				<div class="control-group form-group"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box form-control"  placeholder="Logo URL" value="" name="logo_url"></input></div></div>
 				<div class="control-group form-group"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box form-control"  placeholder="Mini logo URL" value="" name="mini_logo_url"></input></div></div>
 				<div class="form-actions m-t text-center">
-					<a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">Cancel</a>
-               		<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Install</a>
+					<a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
+               		<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">{{agile_translate "widgets" "install"}}</a>
              	</div>
 			 </fieldset>
 	    </form>
@@ -529,9 +525,8 @@
 
 <script id="revoke-access-template" type="text/html">
 <div>
-	Revoke access to the previous account.
-	<p class="m-t text-center" >
-		<a class='btn btn-sm btn-danger revoke-widget text-l-none' widget-name="{{name}}">Revoke Access</a> 
+	{{agile_translate "widgets" "revoke-access-to-the-previous-account"}}<p class="m-t text-center" >
+		<a class='btn btn-sm btn-danger revoke-widget text-l-none' widget-name="{{name}}">{{agile_translate "widgets" "revoke-access"}}</a> 
 	</p>
 </div>
 </script>
@@ -540,12 +535,12 @@
 <script id="widget-settings-template" type="text/html">
 	<div class="tab-container m-b-none widgets_inner">
        <ul class="nav nav-tabs">
-       	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">Telephony</a></li>
-       	 <li><a href="#support-tab" data-toggle="tab">Support</a></li>
-       	 <li><a href="#billing-tab" data-toggle="tab">Billing</a></li>
-       	 <li><a href="#social-tab" data-toggle="tab">Social</a></li>
-       	 <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
-         <li><a href="#custom-widget-tab" data-toggle="tab">Custom</a></li>
+       	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">{{agile_translate "widgets" "telephony"}}</a></li>
+       	 <li><a href="#support-tab" data-toggle="tab">{{agile_translate "menu" "support"}}</a></li>
+       	 <li><a href="#billing-tab" data-toggle="tab">{{agile_translate "widgets" "billing"}}</a></li>
+       	 <li><a href="#social-tab" data-toggle="tab">{{agile_translate "widgets" "social"}}</a></li>
+       	 <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_translate "campaigns" "ecommerce"}}</a></li>
+         <li><a href="#custom-widget-tab" data-toggle="tab">{{agile_translate "campaigns" "custom"}}</a></li>
        </ul>
 	</div>
 
@@ -563,14 +558,14 @@
 			    {{else}}
 					{{#if_equals name "Bria"}}
 						<center>
-							<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
-								<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+							<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{agile_translate "widgets" "bria"}}</span></span>
+								<span class="label label-sm bg-danger" style="margin: 5px;">{{agile_translate "deal-view" "beta"}}</span>
 						</center>
 			     {{else}}
 					{{#if_equals name "Skype"}}
 							<center>
-								<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Skype</span></span>
-								<span class="label label-sm bg-danger" style="margin: 5px;">Beta</span>
+								<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">{{agile_translate "contact-edit" "skype"}}</span></span>
+								<span class="label label-sm bg-danger" style="margin: 5px;">{{agile_translate "deal-view" "beta"}}</span>
 							</center>
 			        	{{else}}
 			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" /></center>
@@ -590,12 +585,12 @@
 
 <script id="widget-settings-error-template" type="text/html">
 <div>{{show_link_in_statement error_message}}</div>
-<a href="{{error_url}}" class"text-l-none" widget-name="{{name}}">Try again</a>
+<a href="{{error_url}}" class"text-l-none" widget-name="{{name}}">{{agile_translate "widgets" "try-again"}}</a>
 </script>
 <script id="custom-widget-settings-template" type="text/html">
 <div class="panel panel-heading widget-edit">
 	<div class="panel-heading">
-		<h4 class="h4">Edit custom widget details</h4>
+		<h4 class="h4">{{agile_translate "widgets" "edit-custom-widget-details"}}</h4>
 	</div>
 <div class="panel-body">
 		<form class="b-b-none m-t-n-sm m-b-none" id="custom_widget_form" name="custom_widget_login_form" method="post">
@@ -605,12 +600,12 @@
 				<div class="control-group m-b-none"><div class="controls"><input type="text" id="description" class="input-medium required widget_input_box form-control" style="width:90%"  value={{description}} name="description"></input></div></div>
 				<div class="control-group m-b-none"><div class="controls">
 				<select name="script_type" id="script_type" class="required form-control w-half">
-					<option value="script">HTML</option> 
-					<option value="url">URL</option> 
+					<option value="script">{{agile_translate "widgets" "html"}}</option> 
+					<option value="url">{{agile_translate "widgets" "url"}}</option> 
 				</select></div></div>
 				<div class="control-group m-b-none"><div class="controls">
 					<span id="script_div">
-						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a></span>
+						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget {{agile_translate "admin-settings-integrations" "JS-API"}}</a></span>
 						<textarea rows="4" class="required" name="script" id="script" value={{script}} placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
 					</span>
 					<span id="url_div" style="display:none;">
@@ -621,8 +616,8 @@
 				<div class="control-group m-b-none"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Logo URL" value={{logo_url}} name="logo_url"></input></div></div>
 				<div class="control-group m-b-none"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Mini logo URL" value={{mini_logo_url}} name="mini_logo_url"></input></div></div>
 				<div class="form-actions p-t p-r-md p-b-none p-l-md m-t m-b-none">
-               		<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">Save</a>
-               		<a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">Cancel</a>
+               		<a id="save_custom_widget" type="submit" class="save btn btn-sm btn-primary">{{agile_translate "modals" "save"}}</a>
+               		<a type="reset" id="cancel_custom_widget" class="btn btn-default btn-sm">{{agile_translate "other" "cancel"}}</a>
              	</div>
 			 </fieldset>
 	    </form>

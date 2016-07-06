@@ -30,8 +30,7 @@
 {{#if this.length}}
 	<div  align="right">
 		<a href="#" class="deal-add-contact btn btn-sm btn-primary  pos-rlt m-b-md m-r-sm m-t-md">
-			<span><i class="icon-plus-sign"></i></span> Add Contact
-		</a>
+			<span><i class="icon-plus-sign"></i></span> {{agile_translate "modals" "add-contact"}}</a>
 	</div>
 
 	
@@ -41,10 +40,10 @@
 				<thead>
 					<tr>
 					<th style="width:0%"></th>
-						<th style="width:40%;">Name</th>
-						<th style="width:20%;">Type</th>
-						<th style="width:20%;">Score</th>
-						<th style="width:20%;">Phone</th>
+						<th style="width:40%;">{{agile_translate "deal-view" "name"}}</th>
+						<th style="width:20%;">{{agile_translate "contacts-view" "type"}}</th>
+						<th style="width:20%;">{{agile_translate "report-add" "score"}}</th>
+						<th style="width:20%;">{{agile_translate "contacts-view" "Phone"}}</th>
 					</tr>
 				</thead>
 				<tbody id="deal-related-model-list" class="deal-related-model-list agile-edit-row "
@@ -60,13 +59,11 @@
                     	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
-                    	<h4 class="m-t-none">Deal is not associated with any person/contact. </h4>
+                    	<h4 class="m-t-none">{{agile_translate "deal-view" "deal-not-associated-with-contact"}}</h4>
                     	<div class="text">
-							All Contacts which are related to this deal are shown here.
-							<br/>
+							{{agile_translate "deal-view" "all-contact-deal-shown-here"}}<br/>
 							<a href="#" class="deal-add-contact btn btn-default btn-sm m-t-xs left">
-								<i class="icon-plus-sign"></i> Add Contact
-							</a>
+								<i class="icon-plus-sign"></i> {{agile_translate "modals" "add-contact"}}</a>
                     	</div>
                 	</div>
 					<div class="clearfix">
