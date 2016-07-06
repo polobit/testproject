@@ -279,10 +279,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <nav  class="navi clearfix" id="agile-menu-navigation-container">
   	<ul class="nav">
-  	<li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-     <span>Loading ...</span>
-   </li>
-   
+  	
 	<!-- Sales menu -->  	
   <%if(domainUser.role == ROLE.SALES){ %>
    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
