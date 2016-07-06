@@ -1108,7 +1108,7 @@ public class CSVUtil
 	    return;
 	}
 	// remove header information form csv
-	deals.remove(0);
+	String[] dealHeader =  deals.remove(0);
 
 	// Creates domain user key, which is set as a contact owner
 	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
@@ -1122,6 +1122,7 @@ public class CSVUtil
 	while (it.hasNext())
 	{
 	    Opportunity opportunity = new Opportunity();
+	    Set<Long> noteId = new TreeSet<>();
 	    String[] dealPropValues = it.next();
 	    String mileStoneValue = null;
 	    boolean trackFound = false;
@@ -1362,8 +1363,10 @@ public class CSVUtil
 			else if (value.equalsIgnoreCase("note"))
 			{
 			    Note note = new Note();
+			    note.subject = dealHeader[i];
 			    note.description = dealPropValues[i];
 			    note.save();
+			    noteId.add(note.id);
 			}
 			else if(value.equalsIgnoreCase("dealSource"))
 			{
@@ -1410,6 +1413,11 @@ public class CSVUtil
 
 	    }
 
+	    //setting related notes in deals if any is present 
+	    
+	    if(noteId != null && noteId.size() > 0){
+	    	opportunity.setRelatedNotes(noteId);
+	    }
 	    opportunity.setOpportunityOwner(ownerKey);
 
 	    // case2: if track is mapped and milestone is not mapped then deal
