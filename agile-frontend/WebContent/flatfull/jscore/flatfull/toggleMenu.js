@@ -309,7 +309,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 function initRolehandlers(){
 
 	// Reset active state from DomainUser.role
-	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").closest("li").addClass("active");
+	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").addClass("active");
 
 	// Menu Items select
 	$(".menu-service-select").unbind("click").click(function(e){
@@ -338,11 +338,6 @@ function initRolehandlers(){
  						error: function(model, response){
 							console.log("error");
  						}});
-
- 			// Update active class
- 			var $liitems = $(".menu-service-select").closest("li");
- 			$liitems.removeClass("active");
- 			$liitems.find("a[data-service-name='" + serviceName + "']").closest("li").addClass("active");
 
  			// Close popup
  			// $("div.app-content-body div:first-child").click();
