@@ -57,6 +57,26 @@ public class SearchAPI
 	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResultsWithCompany(keyword, Integer.parseInt(count),
 		cursor, type);
     }
+    
+    /*
+     * Method for search list
+     */
+    @Path("/seachlist")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Collection search(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
+    {
+	// If user didn't give the page size, set it to 10 by default. This
+	// condition is to use this call in the API calls.
+	if (StringUtils.isEmpty(count))
+	    count = "10";
+	
+	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
+			cursor, type);
+    }
+    
+    
 
     @Path("{keyword}")
     @GET

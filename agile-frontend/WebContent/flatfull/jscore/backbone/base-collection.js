@@ -509,10 +509,44 @@ var Base_Collection_View = Backbone.View
 					appendItemCallback($(this.el));
 				
 
-				if ($('table', this.el).hasClass('onlySorting'))
+				if ($('table', this.el).length != 0){
+			
+				append_checkboxes(this.model_list_element);
+
+				//endFunctionTimer("appendItemOnAddEvent");
+				}
+			},
+
+			appendItemsOnAddEvent : function(modalsArray)
+			{
+				//startFunctionTimer("appendItemsOnAddEvent");
+				this.model_list_element_fragment = document.createDocumentFragment();
+
+				this.model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
+
+
+				/*
+				 * Iterates through each model in the collection and creates a
+				 * view for each model and adds it to model-list
+				 */
+				 var that = this;
+				$.each(modalsArray, function(key, item)
+				{ // in case collection is not empty
+
+					that.appendItem(item);
+				});
+
+				$(this.model_list_element).append(this.model_list_element_fragment);
+
+				if ($('table').hasClass('onlySorting'))
 					return;
 
 				append_checkboxes(this.model_list_element);
+				var appendItemCallback = this.options.appendItemCallback;
+
+				if (appendItemCallback && typeof (appendItemCallback) === "function")
+					appendItemCallback($(this.el));
+				//endFunctionTimer("appendItemsOnAddEvent");
 
 			},
 			/**

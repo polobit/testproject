@@ -210,8 +210,8 @@
 </div> 
 
 						<ul class="nav navbar-nav agile-menu">
-							<li class="nav-bar-search">
-								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
+							<li class="nav-bar-search m-r" >
+								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift p-r-none">
 					<div class="input-group">
 							<input id="searchText" type="text"
 										data-provide="typeahead"
@@ -220,13 +220,17 @@
 										
 										 <!-- <input id="search-results" 
 										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
+					</div>
 				</form>
-				<form id="advanced-search-filter">
 
-                <span class="input-group-btn">
+				<form id="advanced-search-filter" class="pull-right m-t-sm">
+
+                <span class="input-group-btn inline-block">
                 <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
+
+                <!--<img onclick="startDictation()" src="https://i.imgur.com/cHidSVu.gif" class="btn btn-sm bg-light" style="width:30px;height:30px;padding:0px">-->
                 <button class="dropdown-toggle btn btn-sm bg-light rounded searchFilterDropdown" data-toggle="dropdown" style="height:30px;border-top-right-radius: 500px;border-bottom-right-radius: 500px;"><i style="opacity:0.7;" class="fa fa-filter"></i></button>
-							<ul class=" dropdown-menu animated fadeInRight multiple-checkbox" name="fields_set" id="advanced-search-fields-group">           			
+							<ul class="dropdown-menu animated fadeInRight multiple-checkbox" name="fields_set" id="advanced-search-fields-group">           			
                 			
                 			<li>
 		       		  		<a href="javascript:void(0);" class="p-b-none">
@@ -259,10 +263,9 @@
                 			
                 			</ul>
               </span>
-              </div>				
+              			
 								</form>
 							</li>
-
 							
 
 
