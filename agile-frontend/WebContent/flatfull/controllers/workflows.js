@@ -525,8 +525,7 @@ var WorkflowsRouter = Backbone.Router
 
 				$('#content').html(this.triggersCollectionView.el);
 
-				$(".active").removeClass("active");
-				$("#workflowsmenu").addClass("active");
+				make_menu_item_active("triggersmenu");
 			},
 
 			/**
