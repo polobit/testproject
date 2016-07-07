@@ -16,13 +16,12 @@ var DocumentsRouter = Backbone.Router.extend({
 	{
 
 		var sortKey = _agile_get_prefs("Documentssort_Key");
-				if(sortKey == undefined || sortKey == null){
+				if(sortKey == undefined || sortKey == null)
+				{
 					sortKey = "name";
 					_agile_set_prefs("Documentssort_Key", sortKey);
 				}
-		 // Fetches documents as list
-		this.DocumentCollectionView = new Document_Collection_Events({ url : 'core/api/documents', sort_collection : false ,templateKey : "documents", cursor : true, page_size : 20,
-			individual_tag_name : 'tr', order_by : sortKey ,  postRenderCallback : function(el)
+		var documentsStaticModelview = new Document_Model_Events({url : 'core/api/documents',template : "documents-static", data : {}, isNew : true,order_by : sortKey , postRenderCallback : function(el)
 			{
 				includeTimeAgo(el);
 				updateSortKeyTemplate(sortKey, el);
@@ -36,17 +35,9 @@ var DocumentsRouter = Backbone.Router.extend({
 					printSortByName("Name",el);
 
 				
-			}, appendItemCallback : function(el)
-			{
-				// To show timeago for models appended by infini scroll
-				includeTimeAgo(el);
-			} });
+			}})
+		$('#content').html(documentsStaticModelview.render().el);
 
-		this.DocumentCollectionView.collection.fetch();
-
-		// Shows deals as list view
-		$('#content').html(this.DocumentCollectionView.render().el);
-
-		$(".active").removeClass("active");
-		$("#documentsmenu").addClass("active");
+		 // Fetches documents as list
+		documentsCollection (sortKey);
 	} });
