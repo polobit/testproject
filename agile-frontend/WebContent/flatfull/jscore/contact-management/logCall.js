@@ -403,7 +403,7 @@ function saveLogPhone(form, modal, element, logPhone)
 					contactDetailsObj = agile_crm_get_contact();	
 				}
 				var data1 ={};
-				data1.url = "/core/api/notes/save_logPhoneActivity";
+				data1.url = "/core/api/notes/save_logPhoneActivity?note_id="+logPhone.id;
 				data1.id = contactDetailsObj.id;
 				data1.callType = logPhone.callType;
 				data1.number = logPhone.phone;
@@ -416,6 +416,32 @@ function saveLogPhone(form, modal, element, logPhone)
 				console.log("activities not saved AS CONTACT NOT FOUND");
 			}
 			
+		}
+		else
+		{
+			try{
+				var contactDetailsObj;
+				if(CallLogVariables.id){
+					contactDetailsObj = CallLogVariables.id;
+				}else{
+					contactDetailsObj = agile_crm_get_contact();	
+				}
+				var data1 ={};
+				data1.url = "/core/api/notes/update_logPhoneActivity?note_id="+
+				logPhone.id+'&subject='+logPhone.subject;
+				data1.id = contactDetailsObj.id;
+				data1.callType = logPhone.callType;
+				data1.number = logPhone.phone;
+				data1.status = logPhone.status;
+				data1.duration = logPhone.duration;
+				data1.widget = $("#callWidgetName",form).val();
+				CallLogVariables.callActivitySaved = true;
+				saveLogPhoneActivity(data1);
+
+
+			}catch(e){
+				console.log("activities not saved AS CONTACT NOT FOUND");
+			}
 		}
 		
 		modal.modal('hide');

@@ -192,7 +192,7 @@ function saveCallActivitySkype(call){
 	}
 }
 
-function saveCallNoteSkype(){
+function saveCallNoteSkype(call){
 	
 	
 	if(	globalCallForActivity.justCalledId == globalCallForActivity.justSavedCalledIDForNote){
@@ -268,7 +268,7 @@ function saveCallNoteSkype(){
 				agile_type_ahead("note_related_to", el, contacts_typeahead);*/
 	    	}else{
 	    		var note = {"subject" : noteSub, "message" : "", "contactid" : id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
-				autosaveNoteByUser(note);
+				autosaveNoteByUser(note,call,"/core/api/widgets/skype");
 	    	}
 	    });
 	}else{
@@ -304,7 +304,7 @@ function saveCallNoteSkype(){
 					});
 				}else{
 					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number, "callType": "outbound-dial", "status": callStatus, "duration" : 0 };
-					autosaveNoteByUser(note);
+					autosaveNoteByUser(note,call,"/core/api/widgets/skype");
 				}
 		}else{
 				resetCallLogVariables();
