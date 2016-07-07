@@ -923,12 +923,12 @@ public class DomainUserUtil
     	map.put("Recruiter", ROLE.SALES);
     	map.put("Developer", ROLE.SALES);
     	map.put("Other", ROLE.SALES);
+    	map.put("Consultant", ROLE.SALES);
     	
     	map.put("VP, Marketing", ROLE.MARKETING);
     	map.put("Marketing Manager", ROLE.MARKETING);
     	
     	map.put("Customer Success Manager", ROLE.SERVICE);
-    	map.put("Consultant", ROLE.SERVICE);
     	
     	if(!map.containsKey(selectedRole))
     		return ROLE.SALES;

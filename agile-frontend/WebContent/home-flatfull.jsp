@@ -321,12 +321,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES)){
   %>
-   <li id="casesmenu">
+   <!-- <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
-  </li>
+  </li>  -->
   <%
       }
   %>
@@ -343,6 +343,59 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
         }
   %>  
+  
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CALENDAR)){
+  %>
+  
+  <li id="calendarmenu">
+    <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
+    	<i class="icon icon-calendar"></i> 
+    	<span>Calendar</span> 
+    </a>
+  </li>
+  <%
+        }
+  %>  
+  
+  <li id="tasksmenu">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+    </a>
+  </li>
+
+  <li id="schedulingmenu">
+    <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Online Calendar</span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span>Activities</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Reports</span>
+    </a>
+  </li> 
+    <%
+          }
+    %> 
   
   <!-- End of Sales menu -->
   <%} %>
@@ -362,6 +415,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a  href="#workflows">
       <i class="icon icon-sitemap"></i>
       <span>Campaigns</span>
+    </a>
+  </li>
+
+  <li id="triggersmenu">
+    <a  href="#triggers">
+      <i class="icon icon-sitemap"></i>
+      <span>Triggers</span>
     </a>
   </li>
     <%
@@ -403,6 +463,19 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Landing Pages</span>
     </a>
   </li>
+  <li id="formsmenu">
+    <a  href="#forms">
+       <i class="icon-large1 icon-screenshot"></i>
+      <span>Forms</span>  
+    </a>
+  </li>
+  <li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="fa fa-file-code-o"></i>
+      <span>Email Templates</span>
+    </a>
+  </li>
+
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
@@ -448,6 +521,57 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span style="padding-top: 9%;">Help Desk</span>
     </a>
   </li>
+  <li id="ticketgroupsmenu">
+    <a href="#ticket-groups">
+      <i class="icon icon-ticket"></i>
+      <span style="padding-top: 9%;">Groups</span>
+    </a>
+  </li>
+  <li id="ticketlabelsmenu">
+    <a href="#ticket-labels">
+      <i class="icon icon-ticket"></i>
+      <span style="padding-top: 9%;">Labels</span>
+    </a>
+  </li>
+  <li id="ticketcannedmessagesmenu">
+    <a href="#canned-responses">
+      <i class="icon icon-ticket"></i>
+      <span style="padding-top: 9%;">Canned Responses</span>
+    </a>
+  </li>
+  <li id="ticketviewsmenu">
+    <a href="#ticket-views">
+      <i class="icon icon-ticket"></i>
+      <span style="padding-top: 9%;">Views</span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span>Activities</span>
+    </a>
+  </li>
+    <%
+          }
+    %>
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+    %>
+  <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Reports</span>
+    </a>
+  </li> 
+    <%
+          }
+    %> 
+
+
   <%
       }
   %>  
