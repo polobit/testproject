@@ -293,22 +293,73 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	    });
 	});
 	// initializing need help popover for header page
-   $(".need_help").popover({ placement : $(this).attr("data-placement"),
+   $(".need_help").popover({ 
+   					placement : $(this).attr("data-placement"),
 					html:true,
 					container: 'body'
 				}).on("click", function(){
-						var $this = $('.popover').find("#need_help_header");
-						$this.each(function(index, ele){
-							var popoverEle = $(ele);
-							if(popoverEle.hasClass("custom_menu_items_class"))
-								popoverEle.closest(".popover").addClass("grid_custom_popover");
-							else 
-								popoverEle.closest(".popover").addClass("custom_popover");
-						});
-    			   }); 
-
+						initRolehandlers();
+    			}).on("show.bs.popover", function(e){ 
+    				var $target = $(e.target);
+    				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));
+    			}); 
    });
 
+// Click handlers to role menu items
+function initRolehandlers(){
+
+	// Reset active state from DomainUser.role
+	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").closest("li").addClass("active");
+
+	// Menu Items select
+	$(".menu-service-select").unbind("click").click(function(e){
+ 			e.preventDefault();
+
+ 			var serviceName = $(this).attr("data-service-name");
+ 			if(!serviceName)
+ 				  return;
+
+ 			var dashboardName = $(this).attr("data-dashboard");
+ 			if(!dashboardName)
+ 				 dashboardName = "dashboard";
+
+ 			// Update user with the current service
+ 			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = serviceName;
+
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save( json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
+
+ 			// Update active class
+ 			var $liitems = $(".menu-service-select").closest("li");
+ 			$liitems.removeClass("active");
+ 			$liitems.find("a[data-service-name='" + serviceName + "']").closest("li").addClass("active");
+
+ 			// Close popup
+ 			// $("div.app-content-body div:first-child").click();
+ 			$(this).parents(".popover").popover('hide');
+
+ 			// Update dashboard name here
+ 			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
+ 			
+ 			// Update UI
+ 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items"));
+
+ 			// Call dashboard route
+ 			Backbone.history.navigate("#navigate-dashboard", {
+                trigger: true
+            });
+	});
+}
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){

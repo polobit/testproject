@@ -1,23 +1,17 @@
 <script id="sales-menu-items-template" type="text/html">
 
 <ul class="nav">
-              <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-                <span>Sales</span>
-              </li>
-        
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
-  %>      
-  <li id="contactsmenu">
-    <a  href="#contacts">
-      <i class="icon icon-user"></i>
-      <span>Contacts</span>
-    </a>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+    <span>Sales</span>
   </li>
-  <%
-      }
-  %>
-
+  {{#hasRestrictedMenuScope "CONTACT"}} {{else}}
+    <li id="contactsmenu">
+      <a  href="#contacts">
+        <i class="icon icon-user"></i>
+        <span>Contacts</span>
+      </a>
+    </li>
+  {{/hasRestrictedMenuScope}} 
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
@@ -25,49 +19,37 @@
     </a>
   </li>
 
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
-  %>
+  {{#hasRestrictedMenuScope "DEALS"}} {{else}}
    <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
       <span>Deals</span>
     </a>
   </li>
-  <%
-      }
-  %>
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES)){
-  %>
+  {{/hasRestrictedMenuScope}} 
+  
+
+  {{#hasRestrictedMenuScope "CASES"}} {{else}}
    <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
   </li>
-  <%
-      }
-  %>
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
-  %>
-  
+  {{/hasRestrictedMenuScope}} 
+
+  {{#hasRestrictedMenuScope "DOCUMENT"}} {{else}}
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
-      <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
+      <span>Documents</span>
     </a>
   </li>
-  <%
-        }
-  %>  
+  {{/hasRestrictedMenuScope}}  
 
   </ul>
 
 </script>
-
-
 
 <script id="marketing-menu-items-template" type="text/html">
 
@@ -77,42 +59,34 @@
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
-   <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
-   %>
-   <li id="workflowsmenu">
-    <a  href="#workflows">
-      <i class="icon icon-sitemap"></i>
-      <span>Campaigns</span>
-    </a>
-  </li>
-    <%
-        }
-    %>
-    <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
-   %>
-   <li id="socialsuitemenu">
-    <a  href="#social">
-      <i class="icon-bubbles"></i>
-      <span>Social</span>
-    </a>
-  </li>
-    <%
-          }
-    %>
-    <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
-    %>
-   <li id="web-rules-menu">
-    <a  href="#web-rules">
-      <i class="icon icon-globe"></i>
-      <span>Web Rules</span>
-    </a>
-  </li>
-    <%
-          }
-    %>
+
+   {{#hasRestrictedMenuScope "CAMPAIGN"}} {{else}}
+    <li id="workflowsmenu">
+      <a  href="#workflows">
+        <i class="icon icon-sitemap"></i>
+        <span>Campaigns</span>
+      </a>
+    </li>
+   {{/hasRestrictedMenuScope}}
+
+   {{#hasRestrictedMenuScope "SOCIAL"}} {{else}}
+    <li id="socialsuitemenu">
+      <a  href="#social">
+        <i class="icon-bubbles"></i>
+        <span>Social</span>
+      </a>
+    </li>
+   {{/hasRestrictedMenuScope}}
+
+   {{#hasRestrictedMenuScope "WEBRULE"}} {{else}}
+    <li id="web-rules-menu">
+      <a  href="#web-rules">
+        <i class="icon icon-globe"></i>
+        <span>Web Rules</span>
+      </a>
+    </li>
+   {{/hasRestrictedMenuScope}}
+  
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-large icon-screenshot"></i>
@@ -125,31 +99,24 @@
       <span>Landing Pages</span>
     </a>
   </li>
-    <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
-    %>
+
+  {{#hasRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">
-    <a  href="#activities">
-      <i class="icon-speedometer icon-white"></i>
-      <span>Activities</span>
-    </a>
-  </li>
-    <%
-          }
-    %>
-    <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
-    %>
-  <li id="reportsmenu">
-    <a  href="#reports">
-      <i class="icon-bar-chart icon-white"></i>
-      <span>Reports</span>
-    </a>
-  </li> 
-    <%
-          }
-    %> 
-  
+      <a  href="#activities">
+        <i class="icon-speedometer icon-white"></i>
+        <span>Activities</span>
+      </a>
+    </li>
+   {{/hasRestrictedMenuScope}}
+    
+   {{#hasRestrictedMenuScope "REPORT"}} {{else}}
+    <li id="reportsmenu">
+      <a  href="#reports">
+        <i class="icon-bar-chart icon-white"></i>
+        <span>Reports</span>
+      </a>
+    </li> 
+   {{/hasRestrictedMenuScope}}
              
   </ul>
 
@@ -159,27 +126,20 @@
 <script id="service-menu-items-template" type="text/html">
 
 <ul class="nav">
-  
-  <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
-  <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
-                      <span> Help </span></a></li> -->
+ 
   <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>Service</span>
   </li>
-  
-  <li id="tickets">
-    <a href="#tickets">
-      <i class="icon icon-ticket"></i>
-      <span style="padding-top: 9%;">Help Desk</span>
-    </a>
-  </li>
-  <%
-      }
-  %>             
-  </ul>
+
+  {{#hasRestrictedMenuScope "HELPDESK"}} {{else}}
+    <li id="tickets">
+      <a href="#tickets">
+        <i class="icon icon-ticket"></i>
+        <span style="padding-top: 9%;">Help Desk</span>
+      </a>
+    </li>
+   {{/hasRestrictedMenuScope}}         
+</ul>
 
 </script>

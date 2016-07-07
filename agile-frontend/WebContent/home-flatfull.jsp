@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.user.DomainUser.ROLE"%>
 <%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
@@ -276,11 +277,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
           <div class="aside-wrap">
         <div class="navi-wrap">
   
-  <nav  class="navi clearfix">
-            <ul class="nav">
-              <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-                <span>Sales</span>
-              </li>
+  <nav  class="navi clearfix" id="agile-menu-navigation-container">
+  	<ul class="nav">
+  	
+	<!-- Sales menu -->  	
+  <%if(domainUser.role == ROLE.SALES){ %>
+   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+     <span>Sales</span>
+   </li>
         
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
@@ -339,9 +343,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
         }
   %>  
+  
+  <!-- End of Sales menu -->
+  <%} %>
 
-  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li>
-    <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+  
+  <!--  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li> -->
+  
+  <!-- Marketing menu -->  	
+  <%if(domainUser.role == ROLE.MARKETING){ %>
+  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>Marketing</span>
               </li>
    <%
@@ -416,11 +427,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %> 
+    
+  <!-- End of Marketing menu -->
+  <%} %>
   
-  <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
-  <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
-                      <span> Help </span></a></li> -->
-  <li class="line dk m-t-none m-b-none" style="height: 1px;"></li>
+  <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
+  <!-- Service menu -->  	
+  <%if(domainUser.role == ROLE.SERVICE){ %>
+  
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
   %>
@@ -436,7 +450,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
   <%
       }
-  %>             
+  %>  
+  
+  <!-- End of Service menu -->
+  <%} %>
+             
   </ul>
 
 

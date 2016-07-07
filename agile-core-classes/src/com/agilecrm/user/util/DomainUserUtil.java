@@ -20,6 +20,7 @@ import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.DomainUser.ROLE;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -906,5 +907,33 @@ public class DomainUserUtil
 		// Checks the condition is userfingerprint present in the list or not
 		return finger_prints.contains(user_finger_print);
 	}
+    
+    /**
+     * Returns selected role 
+     * @param selectedRole
+     * @return
+     */
+    public static ROLE getDomainUserRole(String selectedRole){
+    	Map<String, ROLE> map = new HashMap<String, ROLE>();
+    	map.put("CEO", ROLE.SALES);
+    	map.put("VP", ROLE.SALES);
+    	map.put("VP, Sales", ROLE.SALES);
+    	map.put("Sales Manager", ROLE.SALES);
+    	map.put("Reseller", ROLE.SALES);
+    	map.put("Recruiter", ROLE.SALES);
+    	map.put("Developer", ROLE.SALES);
+    	map.put("Other", ROLE.SALES);
+    	
+    	map.put("VP, Marketing", ROLE.MARKETING);
+    	map.put("Marketing Manager", ROLE.MARKETING);
+    	
+    	map.put("Customer Success Manager", ROLE.SERVICE);
+    	map.put("Consultant", ROLE.SERVICE);
+    	
+    	if(!map.containsKey(selectedRole))
+    		return ROLE.SALES;
+    	
+    	return map.get(selectedRole);
+    }
 	
 }
