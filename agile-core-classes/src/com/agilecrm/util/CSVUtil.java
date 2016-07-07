@@ -1362,11 +1362,15 @@ public class CSVUtil
 			}
 			else if (value.equalsIgnoreCase("note"))
 			{
-			    Note note = new Note();
-			    note.subject = dealHeader[i];
-			    note.description = dealPropValues[i];
-			    note.save();
-			    noteId.add(note.id);
+				try{
+					  Note note = new Note();
+					    note.subject = dealHeader[i];
+					    note.description = dealPropValues[i];
+					    note.save();
+					    noteId.add(note.id);
+				}catch(Exception e){
+					System.out.println("note not saved for header while saving deals from import" + dealHeader[i]);
+				}
 			}
 			else if(value.equalsIgnoreCase("dealSource"))
 			{
