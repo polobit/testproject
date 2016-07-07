@@ -374,7 +374,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="web-rules-menu">
     <a  href="#web-rules">
       <i class="icon icon-globe"></i>
-      <span>Web Rules</span>
+      <span>Web PopUps</span>
     </a>
   </li>
     <%
