@@ -54,12 +54,18 @@ public class Authorization
 	    dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
 	    
 	    httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+	    
+	    System.setProperty(SystemProperty.applicationId.key(), Globals.PROJECT_NAME);
 	}
 	catch (IOException | GeneralSecurityException e)
 	{
-	    
+	    System.setProperty(SystemProperty.applicationId.key(), Globals.PROJECT_NAME);
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	}
+	catch (Exception e)
+	{
+	    System.setProperty(SystemProperty.applicationId.key(), Globals.PROJECT_NAME);
 	}
 	
     }
@@ -121,7 +127,6 @@ public class Authorization
 	try
 	{
 	    Credential cred = getCredentials();
-	    System.setProperty(SystemProperty.applicationId.key(), Globals.PROJECT_NAME);
 	    Taskqueue tq = new Taskqueue.Builder(httpTransport, JSON_FACTORY, cred)
 		    .setApplicationName(Globals.PROJECT_NAME)
 		    .setTaskqueueRequestInitializer(new TaskqueueRequestInitializer()

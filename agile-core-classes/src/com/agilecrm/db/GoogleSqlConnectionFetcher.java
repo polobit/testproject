@@ -32,8 +32,20 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
     private static ComboPooledDataSource cpds3 = null;
     private static ComboPooledDataSource sandbox_cpds = null;
     
-    private static final String CLOUD_APP_ID = "agile-crm-cloud";
+    private static final String PRODUCTION_APP_ID = "agile-crm-cloud";
     private static final String SANDBOX_APP_ID = "agilecrmbeta";
+    private static final String CAMPAIGN_LOGS_DB_NAME = "stats2";
+    
+    private static final String SQL_SHARD1_GOOGLE_URL = "jdbc:google:mysql://agiledbs:campaign-logs-shard-1/stats2?user=root&password=sqlrocks123";
+    private static final String SQL_SHARD2_GOOGLE_URL = "jdbc:google:mysql://agiledbs:campaign-logs-shard-2/stats2?user=root&password=sqlrocks123";
+    private static final String SQL_SHARD3_GOOGLE_URL = "jdbc:google:mysql://agiledbs:campaign-logs-shard-3/stats2?user=root&password=sqlrocks123";
+    
+    private static final String SQL_SHARD1_URL = "jdbc:mysql://173.194.233.191:3306/stats2?user=root&password=sqlrocks123";
+    private static final String SQL_SHARD2_URL = "jdbc:mysql://173.194.228.39:3306/stats2?user=root&password=sqlrocks123";
+    private static final String SQL_SHARD3_URL = "jdbc:mysql://173.194.232.240:3306/stats2?user=root&password=sqlrocks123";
+    
+    private static final String SANDBOX_SQL_GOOGLE_URL = "jdbc:google:mysql://agiledbs:campaign-logs-sandbox/stats2?user=root&password=sqlrocks123";
+    private static final String SANDBOX_SQL_URL = "jdbc:mysql://173.194.107.65:3306/stats2?user=root&password=sqlrocks123";
     
     // private GoogleSqlConnectionFetcher()
     // {
@@ -71,7 +83,7 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	
 	if (StringUtils.isNotBlank(applicationId))
 	{
-	    if (StringUtils.equals(applicationId, CLOUD_APP_ID))
+	    if (StringUtils.equals(applicationId, PRODUCTION_APP_ID))
 		conn = getSqlConnectionFromPool(domain);
 	    else if (StringUtils.equals(applicationId, SANDBOX_APP_ID))
 		conn = getSandboxConnectionFromPool();
@@ -158,7 +170,7 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	
 	if (StringUtils.isNotBlank(applicationId))
 	{
-	    if (StringUtils.equals(applicationId, CLOUD_APP_ID))
+	    if (StringUtils.equals(applicationId, PRODUCTION_APP_ID))
 		conn = getSqlConnection(domain);
 	    else if (StringUtils.equals(applicationId, SANDBOX_APP_ID))
 		conn = getSandboxSqlConnection();
@@ -217,51 +229,51 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
     // return conn;
     // }
     
-    private Connection getSandboxSqlServerConnection()
-    {
-	String url = null;
-	Connection conn = null;
-	
-	try
-	{
-	    if (SystemProperty.environment.value() != null
-		    && SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
-	    {
-		// Load the class that provides the new "jdbc:google:mysql://"
-		// prefix.
-		Class.forName("com.mysql.jdbc.GoogleDriver");
-		url = "jdbc:google:mysql://agiledbs:campaign-logs-sandbox/stats2?user=root&password=sqlrocks123";
-		System.out.println("Google sql url is " + url);
-	    }
-	    else
-	    {
-		Class.forName("com.mysql.jdbc.Driver");
-		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
-		// Alternatively, connect to a Google Cloud SQL instance using:
-		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.err.println(e.getMessage());
-	}
-	
-	try
-	{
-	    System.out.println("The connection url is  " + url);
-	    Long startTime = System.currentTimeMillis();
-	    conn = DriverManager.getConnection(url);
-	    System.out.println(conn.isClosed());
-	    System.out.println("Time taken to get sql connection  : " + (System.currentTimeMillis() - startTime));
-	}
-	catch (Exception ex)
-	{
-	    System.out.println(" Error getting the connection object " + ex.getMessage());
-	    ex.printStackTrace();
-	}
-	
-	return conn;
-    }
+//    private Connection getSandboxSqlServerConnection()
+//    {
+//	String url = null;
+//	Connection conn = null;
+//	
+//	try
+//	{
+//	    if (SystemProperty.environment.value() != null
+//		    && SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
+//	    {
+//		// Load the class that provides the new "jdbc:google:mysql://"
+//		// prefix.
+//		Class.forName("com.mysql.jdbc.GoogleDriver");
+//		url = "jdbc:google:mysql://agiledbs:campaign-logs-sandbox/stats2?user=root&password=sqlrocks123";
+//		System.out.println("Google sql url is " + url);
+//	    }
+//	    else
+//	    {
+//		Class.forName("com.mysql.jdbc.Driver");
+//		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
+//		// Alternatively, connect to a Google Cloud SQL instance using:
+//		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
+//	    }
+//	}
+//	catch (Exception e)
+//	{
+//	    System.err.println(e.getMessage());
+//	}
+//	
+//	try
+//	{
+//	    System.out.println("The connection url is  " + url);
+//	    Long startTime = System.currentTimeMillis();
+//	    conn = DriverManager.getConnection(url);
+//	    System.out.println(conn.isClosed());
+//	    System.out.println("Time taken to get sql connection  : " + (System.currentTimeMillis() - startTime));
+//	}
+//	catch (Exception ex)
+//	{
+//	    System.out.println(" Error getting the connection object " + ex.getMessage());
+//	    ex.printStackTrace();
+//	}
+//	
+//	return conn;
+//    }
     
     // private Connection getSandboxSqlServerConnectionFromPool() throws
     // SQLException, PropertyVetoException
@@ -345,7 +357,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
     private Connection getFirstShardConnectionFromPool() throws PropertyVetoException, SQLException
     {
 	
-	String url = "jdbc:mysql://173.194.233.191:3306/stats?user=root&password=sqlrocks123";
+	// String url =
+	// "jdbc:mysql://173.194.233.191:3306/stats2?user=root&password=sqlrocks123";
 	
 	if (cpds1 != null)
 	    return cpds1.getConnection();
@@ -358,12 +371,12 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	// "OFF");
 	System.setProperties(property);
 	cpds1 = new ComboPooledDataSource();
-	cpds1.setDataSourceName("stats2");
+	cpds1.setDataSourceName(CAMPAIGN_LOGS_DB_NAME);
 	cpds1.setDriverClass("com.mysql.jdbc.Driver");
 	// loads the jdbc driver
 	// cpds.setJdbcUrl("jdbc:mysql://localhost:3306/stats?user=root&password=mysql123");
 	// jdbc:mysql://localhost:3306/stats?user=root&password=mysql123
-	cpds1.setJdbcUrl(url);
+	cpds1.setJdbcUrl(SQL_SHARD1_URL);
 	// cpds.setUser("root");
 	// firstShardConnectionPool.setPassword("mysql123");
 	
@@ -383,7 +396,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
     private Connection getSecondShardConnectionFromPool() throws SQLException, PropertyVetoException
     {
 	
-	String url = "jdbc:mysql://173.194.228.39:3306/stats?user=root&password=sqlrocks123";
+	// String url =
+	// "jdbc:mysql://173.194.228.39:3306/stats2?user=root&password=sqlrocks123";
 	
 	if (cpds2 != null)
 	    return cpds2.getConnection();
@@ -396,12 +410,12 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	// "OFF");
 	System.setProperties(property);
 	cpds2 = new ComboPooledDataSource();
-	cpds2.setDataSourceName("stats2");
+	cpds2.setDataSourceName(CAMPAIGN_LOGS_DB_NAME);
 	cpds2.setDriverClass("com.mysql.jdbc.Driver");
 	// loads the jdbc driver
 	// cpds.setJdbcUrl("jdbc:mysql://localhost:3306/stats?user=root&password=mysql123");
 	// jdbc:mysql://localhost:3306/stats?user=root&password=mysql123
-	cpds2.setJdbcUrl(url);
+	cpds2.setJdbcUrl(SQL_SHARD2_URL);
 	// cpds.setUser("root");
 	// firstShardConnectionPool.setPassword("mysql123");
 	
@@ -420,7 +434,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
     
     private Connection getThirdShardConnectionFromPool() throws SQLException, PropertyVetoException
     {
-	String url = "jdbc:mysql://173.194.232.240:3306/stats?user=root&password=sqlrocks123";
+	// String url =
+	// "jdbc:mysql://173.194.232.240:3306/stats2?user=root&password=sqlrocks123";
 	
 	if (cpds3 != null)
 	    return cpds3.getConnection();
@@ -433,12 +448,12 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	// "OFF");
 	System.setProperties(property);
 	cpds3 = new ComboPooledDataSource();
-	cpds3.setDataSourceName("stats2");
+	cpds3.setDataSourceName(CAMPAIGN_LOGS_DB_NAME);
 	cpds3.setDriverClass("com.mysql.jdbc.Driver");
 	// loads the jdbc driver
 	// cpds.setJdbcUrl("jdbc:mysql://localhost:3306/stats?user=root&password=mysql123");
 	// jdbc:mysql://localhost:3306/stats?user=root&password=mysql123
-	cpds3.setJdbcUrl(url);
+	cpds3.setJdbcUrl(SQL_SHARD3_URL);
 	// cpds.setUser("root");
 	// firstShardConnectionPool.setPassword("mysql123");
 	
@@ -457,97 +472,35 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
     
     private Connection getFirstShardConnection()
     {
-	String url = null;
-	Connection conn = null;
-	
-	try
-	{
-	    if (SystemProperty.environment.value() != null
-		    && SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
-	    {
-		// Load the class that provides the new "jdbc:google:mysql://"
-		// prefix.
-		Class.forName("com.mysql.jdbc.GoogleDriver");
-		url = "jdbc:google:mysql://agiledbs:campaign-logs-shard-1/stats2?user=root&password=sqlrocks123";
-		System.out.println("Google sql url is " + url);
-	    }
-	    else
-	    {
-		Class.forName("com.mysql.jdbc.Driver");
-		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
-		// Alternatively, connect to a Google Cloud SQL instance using:
-		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.err.println(e.getMessage());
-	}
-	
-	try
-	{
-	    System.out.println("The connection url is  " + url);
-	    Long startTime = System.currentTimeMillis();
-	    conn = DriverManager.getConnection(url);
-	    System.out.println(conn.isClosed());
-	    System.out.println("Time taken to get sql connection  : " + (System.currentTimeMillis() - startTime));
-	}
-	catch (Exception ex)
-	{
-	    System.out.println(" Error getting the connection object " + ex.getMessage());
-	    ex.printStackTrace();
-	}
-	
+	Connection conn = getConnectionFromShard(SQL_SHARD1_GOOGLE_URL);
 	return conn;
     }
     
     private Connection getSecondShardConnection()
     {
-	String url = null;
-	Connection conn = null;
-	
-	try
-	{
-	    if (SystemProperty.environment.value() != null
-		    && SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
-	    {
-		// Load the class that provides the new "jdbc:google:mysql://"
-		// prefix.
-		Class.forName("com.mysql.jdbc.GoogleDriver");
-		url = "jdbc:google:mysql://agiledbs:campaign-logs-shard-2/stats2?user=root&password=sqlrocks123";
-		System.out.println("Google sql url is " + url);
-	    }
-	    else
-	    {
-		Class.forName("com.mysql.jdbc.Driver");
-		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
-		// Alternatively, connect to a Google Cloud SQL instance using:
-		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.err.println(e.getMessage());
-	}
-	
-	try
-	{
-	    System.out.println("The connection url is  " + url);
-	    Long startTime = System.currentTimeMillis();
-	    conn = DriverManager.getConnection(url);
-	    System.out.println(conn.isClosed());
-	    System.out.println("Time taken to get sql connection  : " + (System.currentTimeMillis() - startTime));
-	}
-	catch (Exception ex)
-	{
-	    System.out.println(" Error getting the connection object " + ex.getMessage());
-	    ex.printStackTrace();
-	}
-	
+	Connection conn = getConnectionFromShard(SQL_SHARD2_GOOGLE_URL);
 	return conn;
     }
     
     private Connection getThirdShardConnection()
+    {
+	Connection conn = getConnectionFromShard(SQL_SHARD3_GOOGLE_URL);
+	return conn;
+    }
+    
+    /**
+     * This method is responsible for creating the connection to sandbox mysql
+     * server.
+     * 
+     * @return
+     */
+    private Connection getSandboxSqlConnection()
+    {
+	Connection conn = getConnectionFromShard(SANDBOX_SQL_GOOGLE_URL);
+	return conn;
+    }
+    
+    private Connection getConnectionFromShard(String shardURL)
     {
 	String url = null;
 	Connection conn = null;
@@ -560,13 +513,13 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 		// Load the class that provides the new "jdbc:google:mysql://"
 		// prefix.
 		Class.forName("com.mysql.jdbc.GoogleDriver");
-		url = "jdbc:google:mysql://agiledbs:campaign-logs-shard-3/stats2?user=root&password=sqlrocks123";
+		url = shardURL;
 		System.out.println("Google sql url is " + url);
 	    }
 	    else
 	    {
 		Class.forName("com.mysql.jdbc.Driver");
-		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
+		url = "jdbc:mysql://localhost:3306/stats2?user=root&password=mysql123";
 		// Alternatively, connect to a Google Cloud SQL instance using:
 		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
 	    }
@@ -603,7 +556,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
      */
     private Connection getSandboxConnectionFromPool() throws PropertyVetoException, SQLException
     {
-	String url = "jdbc:mysql://173.194.107.65:3306/stats2?user=root&password=sqlrocks123";
+	// String url =
+	// "jdbc:mysql://173.194.107.65:3306/stats2?user=root&password=sqlrocks123";
 	
 	if (sandbox_cpds != null)
 	    return sandbox_cpds.getConnection();
@@ -616,12 +570,12 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	// "OFF");
 	System.setProperties(property);
 	sandbox_cpds = new ComboPooledDataSource();
-	sandbox_cpds.setDataSourceName("stats2");
+	sandbox_cpds.setDataSourceName(CAMPAIGN_LOGS_DB_NAME);
 	sandbox_cpds.setDriverClass("com.mysql.jdbc.Driver");
 	// loads the jdbc driver
 	// cpds.setJdbcUrl("jdbc:mysql://localhost:3306/stats?user=root&password=mysql123");
 	// jdbc:mysql://localhost:3306/stats?user=root&password=mysql123
-	sandbox_cpds.setJdbcUrl(url);
+	sandbox_cpds.setJdbcUrl(SANDBOX_SQL_URL);
 	// cpds.setUser("root");
 	// firstShardConnectionPool.setPassword("mysql123");
 	
@@ -636,63 +590,6 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	System.out.println(sandbox_cpds.getMaxStatementsPerConnection());
 	System.out.println(sandbox_cpds.getMaxIdleTime());
 	return sandbox_cpds.getConnection();
-    }
-    
-    /**
-     * This method is responsible for creating the connection to sandbox mysql
-     * server.
-     * 
-     * @return
-     */
-    private Connection getSandboxSqlConnection()
-    {
-	String url = null;
-	Connection conn = null;
-	
-	try
-	{
-	    if (SystemProperty.environment.value() != null
-		    && SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
-	    {
-		// Load the class that provides the new "jdbc:google:mysql://"
-		// prefix.
-		Class.forName("com.mysql.jdbc.GoogleDriver");
-		url = "jdbc:google:mysql://agiledbs:campaign-logs-sandbox/stats2?user=root&password=sqlrocks123";
-		System.out.println("Google sql url is " + url);
-	    }
-	    else
-	    {
-		Class.forName("com.mysql.jdbc.Driver");
-		url = "jdbc:mysql://localhost:3306/stats2?user=ramesh&password=ramesh123";
-		// Alternatively, connect to a Google Cloud SQL instance using:
-		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
-		
-		// Class.forName("com.mysql.jdbc.GoogleDriver");
-		// url =
-		// "jdbc:google:mysql://agiledbs:campaign-logs-sandbox-2/stats2?user=root";
-		// System.out.println("Google sql url is " + url);
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.err.println(e.getMessage());
-	}
-	
-	try
-	{
-	    System.out.println("The connection url is  " + url);
-	    Long startTime = System.currentTimeMillis();
-	    conn = DriverManager.getConnection(url);
-	    System.out.println(conn.isClosed());
-	    System.out.println("Time taken to get sql connection  : " + (System.currentTimeMillis() - startTime));
-	}
-	catch (Exception ex)
-	{
-	    System.out.println(" Error getting the connection object " + ex.getMessage());
-	    ex.printStackTrace();
-	}
-	
-	return conn;
     }
     
     // private static final class GoogleSqlConnectionFetherHolder
