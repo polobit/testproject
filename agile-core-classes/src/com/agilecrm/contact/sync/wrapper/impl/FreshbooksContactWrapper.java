@@ -10,6 +10,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.util.CountryUtil;
 
 /**
  * @author jitendra
@@ -244,7 +245,7 @@ public class FreshbooksContactWrapper extends ContactWrapper
 	    }
 	    if (!StringUtils.isEmpty(country) && !country.equals("undefined"))
 	    {
-		address.put("country", country);
+	    CountryUtil.setCountryCode(address, null, country);
 	    }
 	    // check if primary address is null or empty then create alternative
 	    // address
@@ -282,7 +283,7 @@ public class FreshbooksContactWrapper extends ContactWrapper
 		}
 		if (!StringUtils.isEmpty(scountry) && !scountry.equals("undefined"))
 		{
-		    address.put("country", scountry);
+			CountryUtil.setCountryCode(address, null, scountry);
 		}
 	    }
 
