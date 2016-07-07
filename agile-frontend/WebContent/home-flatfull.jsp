@@ -367,7 +367,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
   <li id="schedulingmenu">
     <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
-      <i class="icon-list" data-original-title="" title=""></i>
+      <i class="icon-tag" data-original-title="" title=""></i>
       <span>Online Calendar</span>
     </a>
   </li>
@@ -420,7 +420,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
   <li id="triggersmenu">
     <a  href="#triggers">
-      <i class="icon icon-sitemap"></i>
+      <i class="icon icon-magic-wand"></i>
       <span>Triggers</span>
     </a>
   </li>
@@ -465,13 +465,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
   <li id="formsmenu">
     <a  href="#forms">
-       <i class="icon-large1 icon-screenshot"></i>
+       <i class="icon-large1 icon-docs"></i>
       <span>Forms</span>  
     </a>
   </li>
   <li id="email-templates-menu">
     <a href="#email-templates">
-      <i class="fa fa-file-code-o"></i>
+      <i class="fa icon-envelope-letter"></i>
       <span>Email Templates</span>
     </a>
   </li>
@@ -523,25 +523,25 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
   <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
-      <i class="icon icon-ticket"></i>
+      <i class="icon icon-users"></i>
       <span style="padding-top: 9%;">Groups</span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
     <a href="#ticket-labels">
-      <i class="icon icon-ticket"></i>
+      <i class="icon icon-flag"></i>
       <span style="padding-top: 9%;">Labels</span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
     <a href="#canned-responses">
-      <i class="icon icon-ticket"></i>
+      <i class="icon icon-cursor"></i>
       <span style="padding-top: 9%;">Canned Responses</span>
     </a>
   </li>
   <li id="ticketviewsmenu">
     <a href="#ticket-views">
-      <i class="icon icon-ticket"></i>
+      <i class="icon icon-directions"></i>
       <span style="padding-top: 9%;">Views</span>
     </a>
   </li>
