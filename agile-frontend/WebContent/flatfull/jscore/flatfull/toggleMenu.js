@@ -293,22 +293,16 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	    });
 	});
 	// initializing need help popover for header page
-   $(".need_help").popover({ placement : $(this).attr("data-placement"),
+   $(".need_help").popover({ 
+   					placement : $(this).attr("data-placement"),
 					html:true,
 					container: 'body'
 				}).on("click", function(){
-						var $this = $('.popover').find("#need_help_header");
-						$this.each(function(index, ele){
-							var popoverEle = $(ele);
-							if(popoverEle.hasClass("custom_menu_items_class"))
-								popoverEle.closest(".popover").addClass("grid_custom_popover");
-							else 
-								popoverEle.closest(".popover").addClass("custom_popover");
-						});
-
 						initRolehandlers();
-    }); 
-
+    			}).on("show.bs.popover", function(e){ 
+    				var $target = $(e.target);
+    				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));
+    			}); 
    });
 
 // Click handlers to role menu items
@@ -349,6 +343,10 @@ function initRolehandlers(){
  			var $liitems = $(".menu-service-select").closest("li");
  			$liitems.removeClass("active");
  			$liitems.find("a[data-service-name='" + serviceName + "']").closest("li").addClass("active");
+
+ 			// Close popup
+ 			// $("div.app-content-body div:first-child").click();
+ 			$(this).parents(".popover").popover('hide');
 
  			// Update dashboard name here
  			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
