@@ -36,6 +36,8 @@ public class OpportunitySchemaUpdateStats
 	public Integer total;
 	
 	public String failedIds;
+	
+	public Long updated_time = 0L;
 
 	
 	private static ObjectifyGenericDao<OpportunitySchemaUpdateStats> dao = new ObjectifyGenericDao<OpportunitySchemaUpdateStats>(
@@ -46,6 +48,7 @@ public class OpportunitySchemaUpdateStats
 	 */
 	public void save()
 	{
+		this.updated_time = System.currentTimeMillis() / 1000 ; 
 		dao.put(this);
 	}
 

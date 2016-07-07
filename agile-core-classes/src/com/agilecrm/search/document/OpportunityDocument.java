@@ -240,7 +240,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 			fieldLabelsSet.add("expected_value");
 		}
 		
-		doc.addField(Field.newBuilder().setName("milestone").setText(opportunity.milestone));
+		doc.addField(Field.newBuilder().setName("milestone").setText(SearchUtil.normalizeString(opportunity.milestone)));
 		
 		fieldLabelsSet.add("milestone");
 		
