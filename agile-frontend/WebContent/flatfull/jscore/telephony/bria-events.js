@@ -153,6 +153,7 @@ function saveCallNoteBria(){
 	var number = globalCallForActivity.callNumber;
 	var callId = globalCallForActivity.callId;
 	var duration = globalCallForActivity.duration;
+	var cntId = globalCallForActivity.contactedId;
 	var contact;
 	var desc;
 	resetglobalCallForActivityVariables();
@@ -221,7 +222,6 @@ function saveCallNoteBria(){
 	    	}
 	    });
 	}else{
-		var cntId = globalCall.contactedId;
 		if(cntId){
 				if( callStatus == "Answered"){
 					twilioIOSaveContactedTime(cntId);

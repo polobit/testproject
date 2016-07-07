@@ -366,6 +366,7 @@ Proceed to Pay
 		<i class="fa fa-lock"></i> All transactions are secure and encrypted, and we never store your credit card information
 </small>
 		</div>
+	{{#isAdmin}}
 	{{#check_plan "FREE"}}
 	{{else}}
 	{{#is_trial_exist billingData}}
@@ -374,6 +375,7 @@ Proceed to Pay
 	<a href="#"  id="cancel-account-request" data="{{getSubscriptionDate billingData}}" class="pull-right text-xs text-info p-r">Cancel Subscription</a>
 	{{/is_trial_exist}}
 	{{/check_plan}}
+	{{/isAdmin}}
 		 <!-- End of col-sm-offset-4 col-sm-8 -->
 	</div> <!-- End of row -->
 
@@ -582,9 +584,11 @@ Proceed to Pay
 </div>
 </div>
 <!-- Detailed Info div end -->
+{{#isAdmin}}
 {{#getSubscriptionBasedOnPlan billingData emailPlan}}
 	<a href="#" class="text-info text-xs pull-right p-r" id="cancel_email_plan">Cancel Email Subscription</a> 
 {{/getSubscriptionBasedOnPlan}}
+{{/isAdmin}}
 </div>
 
 </div> 

@@ -213,7 +213,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <div id="background-flyout-panel" class="hidden">
                                         <div class="bl-panel-header clearfix"><div class="name">{{ 'background' | translate }}</div><div class="bl-panel-btns" ng-click="closePanel"><i class="icon icon-cancel"></i></div></div>
                                         <div ng-controller="MediaManagerController">
-                                            <button type="button" ng-file-select="onFileSelect($files, 'bg')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
+                                            <button id= "upload-image-lp" type="button" ng-file-select="onFileSelect($files, 'bg')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
                                         </div>
                                         <div id="texturePresets">
                                             <!-- <h5 style="dispaly:none">{{ 'textures' | translate }}</h5> -->
@@ -242,7 +242,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                             </div>
                                         </div>
                                         <div id="gradientPresets">
-                                            <h5>{{ 'gradients' | translate }}</h5>
+                                            <!-- <h5>{{ 'gradients' | translate }}</h5> -->
                                             <ul class="img-presets-list" bl-pretty-scrollbar>
                                                 <li ng-repeat="gradient in gradients track by $index">
                                                     <div class="preset" ng-click="selectPreset($event)" ng-style="{ 'background-image': gradient }"></div>

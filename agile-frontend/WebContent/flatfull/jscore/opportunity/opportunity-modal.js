@@ -47,6 +47,7 @@ $(function()
 		$(".deal-add-note", $("#opportunityModal")).show();
 		// Hide the Note label.
 		$(".deal-note-label").hide();
+		$("#color1", $("#opportunityModal")).attr('value','#FFFFFF');
 
 	});
 
@@ -54,7 +55,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityUpdateModal').on('hide.bs.modal', function()
+	$('#opportunityUpdateModal').on('hidden.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field

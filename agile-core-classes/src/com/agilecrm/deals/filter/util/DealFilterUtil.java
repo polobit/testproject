@@ -89,6 +89,11 @@ public class DealFilterUtil {
 	    rule.CONDITION = RuleCondition.EQUALS;
 	    rule.RHS = "Opportunity";
 	    filter.rules.add(rule);
+	    rule = new SearchRule();
+	    rule.LHS = "schema_version";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = "1.0";	    
+	    filter.rules.add(rule);
 
 	    // Sets ACL condition
 	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Opportunity.toString(), filter.rules, null);
@@ -247,15 +252,24 @@ public class DealFilterUtil {
     		switch (closeDateFilter) {
 			case "ON":
 				rule.CONDITION = SearchRule.RuleCondition.ON;
-				rule.RHS = String.valueOf(dealFilter.close_date_start * 1000);
+				if(dealFilter.close_date_start != null)
+				{
+					rule.RHS = String.valueOf(dealFilter.close_date_start * 1000);
+				}
 				break;
 			case "AFTER":
 				rule.CONDITION = SearchRule.RuleCondition.AFTER;
-				rule.RHS = String.valueOf(dealFilter.close_date_start  * 1000);
+				if(dealFilter.close_date_start != null)
+				{
+					rule.RHS = String.valueOf(dealFilter.close_date_start  * 1000);
+				}
 				break;
 			case "BEFORE":
 				rule.CONDITION = SearchRule.RuleCondition.BEFORE;
-				rule.RHS = String.valueOf(dealFilter.close_date_start  * 1000);
+				if(dealFilter.close_date_start != null)
+				{
+					rule.RHS = String.valueOf(dealFilter.close_date_start  * 1000);
+				}
 				break;
 			case "LAST":
 				rule.CONDITION = SearchRule.RuleCondition.LAST;
@@ -267,11 +281,20 @@ public class DealFilterUtil {
 				break;
 			default:
 				rule.CONDITION = SearchRule.RuleCondition.BETWEEN;
-				rule.RHS = String.valueOf(dealFilter.close_date_start  * 1000);
-				rule.RHS_NEW = String.valueOf(dealFilter.close_date_end  * 1000);
+				if(dealFilter.close_date_start != null)
+				{
+					rule.RHS = String.valueOf(dealFilter.close_date_start  * 1000);
+				}
+				if(dealFilter.close_date_end != null)
+				{
+					rule.RHS_NEW = String.valueOf(dealFilter.close_date_end  * 1000);
+				}
 				break;
 			}
-    		andRules.add(rule);
+    		if(rule.RHS != null)
+    		{
+    			andRules.add(rule);
+    		}
     	}
     	if(dealFilter.archived != null)
     	{

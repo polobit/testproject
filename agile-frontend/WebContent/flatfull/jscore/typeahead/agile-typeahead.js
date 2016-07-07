@@ -45,7 +45,6 @@ var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
  */
 function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail, page_size)
 {
-
 	// Turn off browser default auto complete
 	$('#' + id, el).attr("autocomplete", "off");
 	if (!url)
@@ -258,8 +257,11 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							this.shown = true;
 
 							var searchToken = $('#searchText').val();
-							var appenditem = '<li><a href="#contacts/search/'+searchToken+'"><p align="center"><b>More...</b></p></a></li>';
-							//$('body').find('#more-results').html(appenditem);
+							var appenditem = '';
+							if(id == "searchText"){
+								appenditem = '<li><a href="#contacts/search/'+searchToken+'"><p align="center"><b>More...</b></p></a></li>';
+							}
+							$('body').find('#more-results').html(appenditem);
 
 							//Sets modal backdrop height to sum of modal dialog height and related contacts drop down height after render the related contacts
 							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+$('ul.dropdown-menu',$('.modal:visible')).height());

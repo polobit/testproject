@@ -954,7 +954,7 @@ $('.portlet_body')
 				_agile_delete_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 				loadPortlets("DashBoard", $('#content'));
 		    }
-		    else if(id=="MarketingDashboard"){
+		    else if(id=="MarketingDashboard" || id == "SalesDashboard"){
 				e.preventDefault();
 				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
 				gridster = undefined;
@@ -984,6 +984,10 @@ $('.portlet_body')
 		    if(id== "MarketingDashboard"){
 		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
 		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
+		    }
+		    if(id == "SalesDashboard"){
+		    	$('#dashboard-desc').text("Welcome to Agile CRM Sales Dashboard.");
+		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Sales Dashboard.");
 		    }
 		    if(id == "Dashboard")
 		    {

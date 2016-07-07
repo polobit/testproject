@@ -173,7 +173,6 @@ position:fixed!important;
 
 </style>
 
-<!-- <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script> -->
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 
@@ -227,7 +226,7 @@ if(isSafari && isWin)
 <label class="col-sm-3 control-label">&nbsp;</label>
 <div class="col-sm-6">
 	<div class="input-prepend input-append input-group">
-	<input id='subdomain' type="text" required placeholder="Domain" title="Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter."  name="subdomain"  class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" minlength="4" maxlength="20" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
+	<input id='subdomain' type="text" required placeholder="Domain" title="Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter. Cannot contain special characters other than '_' and '-'."  name="subdomain"  class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" minlength="4" maxlength="20" pattern="^[a-zA-Z][a-zA-Z0-9-_]{3,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
 	id="app_address">.agilecrm.com</span>
 	</div>
 	
@@ -363,7 +362,6 @@ $(document).ready(function(){
 	}
 
 	// Pre load dashlet files when don is active
-	preload_dashlet_libs();
 	$('#account_timezone').val(jstz.determine().name());
 	var telInput = $("#login_phone_number"),
 	  errorMsg = $("#error-msg"),
@@ -387,9 +385,19 @@ $(document).ready(function(){
 
 function preload_dashlet_libs(){ 
 	
-	setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
+	setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min-1.js?_=<%=_AGILE_VERSION%>', 
+									'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-1.js?_=<%=_AGILE_VERSION%>', 
+									'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-2.js?_=<%=_AGILE_VERSION%>', 
+									'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-3.js?_=<%=_AGILE_VERSION%>', 
+									'<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min-4.js?_=<%=_AGILE_VERSION%>', 
+									'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', 
+									'<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')
+						}, 5000);
 }
 
 </script>
+
+<!-- Preload JS files in separate iframe. Will throw errors. -->
+<iframe height="0" width="0" style="display:none; border: 0px;" src="preloadJSFiles.htm"></iframe>
 
 </body>

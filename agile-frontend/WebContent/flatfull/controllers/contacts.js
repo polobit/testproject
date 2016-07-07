@@ -112,8 +112,14 @@ var ContactsRouter = Backbone.Router.extend({
 		if(dashboard_name==="MarketingDashboard"){
 
 			dashboardJSON["id"] = "MarketingDashboard";
-			dashboardJSON["name"] = "Marketing Dashboard";
+			dashboardJSON["name"] = "Marketing";
 			dashboardJSON["description"] = "Welcome to Agile CRM Marketing Automation.";
+
+		}else if(dashboard_name == "SalesDashboard"){
+
+			dashboardJSON["id"] = "SalesDashboard";
+			dashboardJSON["name"] = "Sales";
+			dashboardJSON["description"] = "Welcome to Agile CRM Sales Dashboard.";
 
 		}else if(!dashboardJSON["id"])
 		{
