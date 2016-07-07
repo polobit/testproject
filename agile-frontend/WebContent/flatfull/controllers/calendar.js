@@ -100,8 +100,7 @@ tasks : function()
 			initOwnerslist();
 		}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
 
-		$(".active").removeClass("active");
-		$("#calendarmenu").addClass("active");
+		make_menu_item_active("tasksmenu");
 
 	}, "#content");
 },

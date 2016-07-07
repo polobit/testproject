@@ -356,6 +356,7 @@
 		 			callback();
 		 	});
 		});
+		make_menu_item_active("ticketgroupsmenu");
 	},
 
 	/**
@@ -491,6 +492,8 @@
 		 			callback();
 		 	});
 		});
+
+		make_menu_item_active("ticketlabelsmenu");
 	 },
 
 	/**
@@ -586,6 +589,8 @@
 		 			callback();
 		 	});
 		});
+
+		make_menu_item_active("ticketviewsmenu");
 	 },
 
 	/**
@@ -690,6 +695,7 @@
 				});
 		 	});
 		});
+		make_menu_item_active("ticketcannedmessagesmenu");
 	},
 
 	/**

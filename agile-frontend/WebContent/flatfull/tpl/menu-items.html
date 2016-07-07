@@ -30,12 +30,12 @@
   
 
   {{#hasRestrictedMenuScope "CASES"}} {{else}}
-   <li id="casesmenu">
+   <!-- <li id="casesmenu">
     <a  href="#cases">
       <i class="icon icon-folder"></i>
       <span>Cases</span>
     </a>
-  </li>
+  </li> -->
   {{/hasRestrictedMenuScope}} 
 
   {{#hasRestrictedMenuScope "DOCUMENT"}} {{else}}
@@ -45,7 +45,48 @@
       <span>Documents</span>
     </a>
   </li>
+  {{/hasRestrictedMenuScope}} 
+
+  {{#hasRestrictedMenuScope "CALENDAR"}} {{else}}
+   <li id="calendarmenu">
+    <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
+      <i class="icon icon-calendar"></i> 
+      <span>Calendar</span> 
+    </a>
+  </li>
   {{/hasRestrictedMenuScope}}  
+  
+  <li id="tasksmenu">
+    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+      <i class="icon-list" data-original-title="" title=""></i>
+      <span>Tasks</span>
+    </a>
+  </li>
+
+  <li id="schedulingmenu">
+    <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
+      <i class="icon-tag" data-original-title="" title=""></i>
+      <span>Online Calendar</span>
+    </a>
+  </li>
+
+  {{#hasRestrictedMenuScope "ACTIVITY"}} {{else}}
+   <li id="activitiesmenu">
+    <a  href="#activities">
+      <i class="icon-speedometer icon-white"></i>
+      <span>Activities</span>
+    </a>
+  </li>
+  {{/hasRestrictedMenuScope}}
+
+  {{#hasRestrictedMenuScope "REPORT"}} {{else}}
+   <li id="reportsmenu">
+    <a  href="#reports">
+      <i class="icon-bar-chart icon-white"></i>
+      <span>Reports</span>
+    </a>
+  </li>
+  {{/hasRestrictedMenuScope}}
 
   </ul>
 
@@ -65,6 +106,12 @@
       <a  href="#workflows">
         <i class="icon icon-sitemap"></i>
         <span>Campaigns</span>
+      </a>
+    </li>
+    <li id="triggersmenu">
+      <a  href="#triggers">
+        <i class="icon icon-magic-wand"></i>
+        <span>Triggers</span>
       </a>
     </li>
    {{/hasRestrictedMenuScope}}
@@ -97,6 +144,19 @@
     <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
       <span>Landing Pages</span>
+    </a>
+  </li>
+
+  <li id="formsmenu">
+    <a  href="#forms">
+       <i class="icon-large1 icon-docs"></i>
+      <span>Forms</span>  
+    </a>
+  </li>
+  <li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="fa icon-envelope-letter"></i>
+      <span>Email Templates</span>
     </a>
   </li>
 
@@ -139,7 +199,50 @@
         <span style="padding-top: 9%;">Help Desk</span>
       </a>
     </li>
-   {{/hasRestrictedMenuScope}}         
+
+    <li id="ticketgroupsmenu">
+    <a href="#ticket-groups">
+      <i class="icon icon-users"></i>
+      <span style="padding-top: 9%;">Groups</span>
+    </a>
+  </li>
+  <li id="ticketlabelsmenu">
+    <a href="#ticket-labels">
+      <i class="icon icon-flag"></i>
+      <span style="padding-top: 9%;">Labels</span>
+    </a>
+  </li>
+  <li id="ticketcannedmessagesmenu">
+    <a href="#canned-responses">
+      <i class="icon icon-cursor"></i>
+      <span style="padding-top: 9%;">Canned Responses</span>
+    </a>
+  </li>
+  <li id="ticketviewsmenu">
+    <a href="#ticket-views">
+      <i class="icon icon-directions"></i>
+      <span style="padding-top: 9%;">Views</span>
+    </a>
+  </li>
+   {{/hasRestrictedMenuScope}} 
+
+   {{#hasRestrictedMenuScope "ACTIVITY"}} {{else}}
+    <li id="activitiesmenu">
+      <a  href="#activities">
+        <i class="icon-speedometer icon-white"></i>
+        <span>Activities</span>
+      </a>
+    </li>
+   {{/hasRestrictedMenuScope}}
+    
+   {{#hasRestrictedMenuScope "REPORT"}} {{else}}
+    <li id="reportsmenu">
+      <a  href="#reports">
+        <i class="icon-bar-chart icon-white"></i>
+        <span>Reports</span>
+      </a>
+    </li> 
+   {{/hasRestrictedMenuScope}}        
 </ul>
 
 </script>

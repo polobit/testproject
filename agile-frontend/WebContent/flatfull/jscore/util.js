@@ -845,3 +845,8 @@ function updateSortKeyTemplate(sort_key, el) {
 		
 	}
 }
+
+function make_menu_item_active(ele_id){
+    $(".active").removeClass("active");
+	$("#" + ele_id).addClass("active");
+}
