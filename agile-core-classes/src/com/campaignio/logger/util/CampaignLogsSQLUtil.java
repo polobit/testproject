@@ -309,7 +309,7 @@ public class CampaignLogsSQLUtil
 	else
 	{
 	    logs = "SELECT campaign_id, subscriber_id, campaign_name, log_time, log_type,message, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs "
-			+ " USE INDEX(domain_logtype_logtime_index) WHERE domain = '"
+			+ " WHERE domain = '"
 			+ domain
 			+ "' AND log_type = '"
 			+ log_type.toUpperCase() + "' ORDER BY time DESC LIMIT " + page_size + " OFFSET " + cursor;
@@ -447,69 +447,69 @@ public class CampaignLogsSQLUtil
 	
     }
     
-    /**
-     * Takes list of string arrays and create a batch request and persists in
-     * DB. It returns number of succefull insertions
-     * 
-     * @param listOfLogs
-     * @return
-     */
-    public static int[] addCampaignLogsToNewInstance(List<Object[]> listOfLogs)
-    {
-	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES(?, ?, ?, ?, ?, ?, ?)";
-	Connection conn = null;
-	PreparedStatement statement = null;
-	int[] resultFlags = new int[listOfLogs.size()];
-	try
-	{
-	    statement = GoogleSQL.getPreparedStatementFromNewInstance(insertToLogs);
-	    conn = statement.getConnection();
-	    conn.setAutoCommit(false);
-	    
-	    Long start_time = System.currentTimeMillis();
-	    for (Object[] log : listOfLogs)
-	    {
-		for (int i = 1; i <= log.length; i++)
-		{
-		    statement.setObject(i, log[i - 1]);
-		}
-		
-		statement.addBatch();
-		
-	    }
-	    
-	    System.out.println("time taken to add batch requests : " + (System.currentTimeMillis() - start_time));
-	    
-	    start_time = System.currentTimeMillis();
-	    resultFlags = statement.executeBatch();
-	    System.out.println("time taken to add batch  completed: " + (System.currentTimeMillis() - start_time));
-	    
-	}
-	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	finally
-	{
-	    
-	    try
-	    {
-		conn.commit();
-		statement.close();
-		if (conn != null)
-		    conn.close();
-	    }
-	    catch (SQLException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	}
-	
-	return resultFlags;
-	
-    }
+//    /**
+//     * Takes list of string arrays and create a batch request and persists in
+//     * DB. It returns number of succefull insertions
+//     * 
+//     * @param listOfLogs
+//     * @return
+//     */
+//    public static int[] addCampaignLogsToNewInstance(List<Object[]> listOfLogs)
+//    {
+//	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES(?, ?, ?, ?, ?, ?, ?)";
+//	Connection conn = null;
+//	PreparedStatement statement = null;
+//	int[] resultFlags = new int[listOfLogs.size()];
+//	try
+//	{
+//	    statement = GoogleSQL.getPreparedStatementFromNewInstance(insertToLogs);
+//	    conn = statement.getConnection();
+//	    conn.setAutoCommit(false);
+//	    
+//	    Long start_time = System.currentTimeMillis();
+//	    for (Object[] log : listOfLogs)
+//	    {
+//		for (int i = 1; i <= log.length; i++)
+//		{
+//		    statement.setObject(i, log[i - 1]);
+//		}
+//		
+//		statement.addBatch();
+//		
+//	    }
+//	    
+//	    System.out.println("time taken to add batch requests : " + (System.currentTimeMillis() - start_time));
+//	    
+//	    start_time = System.currentTimeMillis();
+//	    resultFlags = statement.executeBatch();
+//	    System.out.println("time taken to add batch  completed: " + (System.currentTimeMillis() - start_time));
+//	    
+//	}
+//	catch (Exception e)
+//	{
+//	    // TODO Auto-generated catch block
+//	    e.printStackTrace();
+//	}
+//	finally
+//	{
+//	    
+//	    try
+//	    {
+//		conn.commit();
+//		statement.close();
+//		if (conn != null)
+//		    conn.close();
+//	    }
+//	    catch (SQLException e)
+//	    {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    }
+//	}
+//	
+//	return resultFlags;
+//	
+//    }
     
     /**
      * Fetches Contact Activities (Both Page Views and Campaign Logs) Fetches
@@ -647,7 +647,7 @@ public class CampaignLogsSQLUtil
     {
 	if(StringUtils.isBlank(timestamp))
 	{
-	    timestamp = "NOW()";
+	    timestamp = "NOW(3)";
 	}
 	else
 	{
