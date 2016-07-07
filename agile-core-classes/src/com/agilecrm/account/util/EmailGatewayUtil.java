@@ -222,7 +222,7 @@ public class EmailGatewayUtil
 	else if(emailGateway.email_api.equals(EMAIL_API.SES))
 		response = AmazonSESUtil.verifySESKeys(emailGateway.api_user, emailGateway.api_key, emailGateway.regions);
 	else if(emailGateway.email_api.equals(EMAIL_API.MAILGUN))
-		response=MailgunUtil.checkMailgunAutorization(emailGateway.api_key, emailGateway.api_user);
+		response=MailgunUtil.checkMailgunAuthorization(emailGateway.api_key, emailGateway.api_user);
 	try
 	{
 	    // Handle JSON parse exception
@@ -243,7 +243,7 @@ public class EmailGatewayUtil
 	
 	//Mailgun Error
 	 if(response==null || response.contains("401"))
-		 throw new Exception("Error Saving: Mailgun API Key or Domain Name is Invalid..." );
+		 throw new Exception("Error Saving: Mailgun API Key or Domain Name is Invalid." );
 
     }
 

@@ -33,7 +33,7 @@ import com.thirdparty.mailgun.util.MailgunUtil;
  */
 
 public class MailgunWebhookUtil {
-	
+
 	public static final String AGILE_MAILGUN_WEBHOOK_URL = "https://prashannjeet.agilecrm.com/backend/mailgunwebhook";
 
 	public static final String KEY = "api";
@@ -41,129 +41,135 @@ public class MailgunWebhookUtil {
 	public static final String URL = "url";
 	public static final String DESCRIPTION = "description";
 	public static final String EVENTS = "events";
-	
-	public static final String MAILGUN_WEBHOOK_BASE_URl="https://api.mailgun.net/v3/domains/";
-	
+
+	public static final String MAILGUN_WEBHOOK_BASE_URl = "https://api.mailgun.net/v3/domains/";
+
 	/**
 	 * Add hard bounce webhook to Mailgun account
 	 * 
 	 * @param apiKey
-	 *            - Mailgun  API Key
+	 *            - Mailgun API Key
 	 * @param domainName
-	 * 			  - Mailgun domain/sub domain name
+	 *            - Mailgun domain/sub domain name
 	 */
-	public static String addWebhook(String apiKey, String domainName)
-	{
+	public static String addWebhook(String apiKey, String domainName) {
 		// If API key is empty return
 		if (StringUtils.isBlank(apiKey))
-			 return "API Key is empty.";
-			
+			return "API Key is empty.";
+
 		// If Domain Name is empty return
 		if (StringUtils.isBlank(apiKey))
 			return "Domain Name is empty.";
-		
+
 		// If exists already return
 		if (isWebhookAlreadyExists(apiKey, domainName))
-			return "Agile Mailgun Webhook already exists for given api key or  " + apiKey;
-	
-		try
-		{
-		   Client client = new Client();
-	       client.addFilter(new HTTPBasicAuthFilter(KEY,apiKey));
-	       WebResource webResource = client.resource(MAILGUN_WEBHOOK_BASE_URl + domainName+ "/webhooks");
+			return "Agile Mailgun Webhook already exists for given api key or  "
+					+ apiKey;
 
-		   MultivaluedMapImpl formData = new MultivaluedMapImpl();
+		try {
+			Client client = new Client();
+			client.addFilter(new HTTPBasicAuthFilter(KEY, apiKey));
+			WebResource webResource = client.resource(MAILGUN_WEBHOOK_BASE_URl
+					+ domainName + "/webhooks");
 
-	       formData.add("url", AGILE_MAILGUN_WEBHOOK_URL);
-	       
-		   //This is for bounce events webhook
-	       formData.add("id", "bounce");
-	       webResource.type(MediaType.APPLICATION_FORM_URLENCODED). post(ClientResponse.class, formData).toString();
-	       
-	       //This for Dropped event webhooks
-	       formData.remove("id");
-	       formData.add("id", "drop");
-	       webResource.type(MediaType.APPLICATION_FORM_URLENCODED). post(ClientResponse.class, formData).toString();
-	       
-	     //This for Spam compaint event webhooks
-	       formData.remove("id");
-	       formData.add("id", "spam");
-	       return webResource.type(MediaType.APPLICATION_FORM_URLENCODED). post(ClientResponse.class, formData).toString();
-		}
-		catch (Exception e)
-		{
-			System.err.println("Exception occured while adding mailgun Agile webhook..." + e.getMessage());
+			MultivaluedMapImpl formData = new MultivaluedMapImpl();
+
+			formData.add("url", AGILE_MAILGUN_WEBHOOK_URL);
+
+			// This is for bounce events webhook
+			formData.add("id", "bounce");
+			webResource.type(MediaType.APPLICATION_FORM_URLENCODED)
+					.post(ClientResponse.class, formData).toString();
+
+			// This for Dropped event webhooks
+			formData.remove("id");
+			formData.add("id", "drop");
+			webResource.type(MediaType.APPLICATION_FORM_URLENCODED)
+					.post(ClientResponse.class, formData).toString();
+
+			// This for Spam compaint event webhooks
+			formData.remove("id");
+			formData.add("id", "spam");
+			return webResource.type(MediaType.APPLICATION_FORM_URLENCODED)
+					.post(ClientResponse.class, formData).toString();
+		} catch (Exception e) {
+			System.err
+					.println("Exception occured while adding mailgun Agile webhook..."
+							+ e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Delete webhooks from Mailgun account
 	 * 
 	 * @param apiKey
-	 *            - Mailgun  API Key
+	 *            - Mailgun API Key
 	 * @param domainName
-	 * 			  - Mailgun domain/sub domain name
+	 *            - Mailgun domain/sub domain name
 	 */
-	public static String deleteWebhook(String apiKey, String domainName)
-	{
+	public static String deleteWebhook(String apiKey, String domainName) {
 		// If API key is empty return
 		if (StringUtils.isBlank(apiKey))
-			 return "API Key is empty.";
-			
+			return "API Key is empty.";
+
 		// If Domain Name is empty return
 		if (StringUtils.isBlank(apiKey))
 			return "Domain Name is empty.";
-		
-		// If exists 
-		if (isWebhookAlreadyExists(apiKey, domainName))
-		{
-			try
-			{
-			   Client client = new Client();
-		       client.addFilter(new HTTPBasicAuthFilter(KEY,apiKey));
-		       WebResource webResourceBounce = client.resource(MAILGUN_WEBHOOK_BASE_URl + domainName+ "/webhooks/bounce");
-		       WebResource webResourceDrop = client.resource(MAILGUN_WEBHOOK_BASE_URl+ domainName+ "/webhooks/drop");
-		       WebResource webResourceSpam = client.resource(MAILGUN_WEBHOOK_BASE_URl + domainName+ "/webhooks/spam");
-		       
-		        webResourceBounce.delete(ClientResponse.class);
-		        webResourceDrop.delete(ClientResponse.class);
-		        webResourceSpam.delete(ClientResponse.class);
-		        
-		        return "Mailgun Webhooks URl Deleted Successfully..";
-			}
-			catch (Exception e)
-			{
-				System.err.println("Exception occured while adding mailgun Agile webhook..." + e.getMessage());
+
+		// If exists
+		if (isWebhookAlreadyExists(apiKey, domainName)) {
+			try {
+				Client client = new Client();
+				client.addFilter(new HTTPBasicAuthFilter(KEY, apiKey));
+				WebResource webResourceBounce = client
+						.resource(MAILGUN_WEBHOOK_BASE_URl + domainName
+								+ "/webhooks/bounce");
+				WebResource webResourceDrop = client
+						.resource(MAILGUN_WEBHOOK_BASE_URl + domainName
+								+ "/webhooks/drop");
+				WebResource webResourceSpam = client
+						.resource(MAILGUN_WEBHOOK_BASE_URl + domainName
+								+ "/webhooks/spam");
+
+				webResourceBounce.delete(ClientResponse.class);
+				webResourceDrop.delete(ClientResponse.class);
+				webResourceSpam.delete(ClientResponse.class);
+
+				return "Mailgun Webhooks URl Deleted Successfully..";
+			} catch (Exception e) {
+				System.err
+						.println("Exception occured while adding mailgun Agile webhook..."
+								+ e.getMessage());
 				e.printStackTrace();
 				return null;
 			}
-	    }
+		}
 		return null;
-		
+
 	}
-	
+
 	/**
 	 * Verifies whether Agile Mailgun webhook exists for given Mailgun api
 	 * account
 	 * 
 	 * @param apiKey
 	 *            - Mailgun apiKey
-	 * @param domainName         
+	 * @param domainName
 	 *            -Mailgun Domain name
 	 * @return boolean
 	 */
-	public static boolean isWebhookAlreadyExists(String apiKey, String domainName)
-	{
+	public static boolean isWebhookAlreadyExists(String apiKey,
+			String domainName) {
 		// If Agile webhooks doesn't exists
 		if (getAgileWebhook(apiKey, domainName) == null)
 			return false;
 
 		return true;
 	}
-	
+
 	/**
 	 * Returns Agile webhook JSONObject
 	 * 
@@ -173,26 +179,28 @@ public class MailgunWebhookUtil {
 	 *            - Mailgun Domain Name
 	 * @return JSONObject
 	 */
-	private static JSONObject getAgileWebhook(String apiKey, String domainName)
-	{
+	private static JSONObject getAgileWebhook(String apiKey, String domainName) {
 		// Fetch all webhooks
 		JSONObject webhooks = getAllWebhooks(apiKey, domainName);
-			System.out.println(webhooks.toString());
-		try
-		{    
-			if(webhooks.has("webhooks"))
-			{  
-				if(webhooks.getJSONObject("webhooks").getJSONObject("bounce").getString("url").equals(AGILE_MAILGUN_WEBHOOK_URL))
-					 return webhooks;
-				else if(webhooks.getJSONObject("webhooks").getJSONObject("drop").getString("url").equals(AGILE_MAILGUN_WEBHOOK_URL))
-					 return webhooks;
-				else if(webhooks.getJSONObject("webhooks").getJSONObject("spam").getString("url").equals(AGILE_MAILGUN_WEBHOOK_URL))
-					 return webhooks;
+		System.out.println(webhooks.toString());
+		try {
+			if (webhooks.has("webhooks")) {
+				if (webhooks.getJSONObject("webhooks").getJSONObject("bounce")
+						.getString("url").equals(AGILE_MAILGUN_WEBHOOK_URL))
+					return webhooks;
+				else if (webhooks.getJSONObject("webhooks")
+						.getJSONObject("drop").getString("url")
+						.equals(AGILE_MAILGUN_WEBHOOK_URL))
+					return webhooks;
+				else if (webhooks.getJSONObject("webhooks")
+						.getJSONObject("spam").getString("url")
+						.equals(AGILE_MAILGUN_WEBHOOK_URL))
+					return webhooks;
 			}
-		}
-		catch (Exception e)
-		{
-			System.err.println("Exception occured while checking Agile webhook..." + e.getMessage());
+		} catch (Exception e) {
+			System.err
+					.println("Exception occured while checking Agile webhook..."
+							+ e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
@@ -204,50 +212,51 @@ public class MailgunWebhookUtil {
 	 * Returns all available webhooks for given Mailgun api key account
 	 * 
 	 * @param apiKey
-	 *            - Mailgun api key
-	 *            -Mailgun Domain Name
+	 *            - Mailgun api key -Mailgun Domain Name
 	 * @return String
 	 */
-	public static JSONObject getAllWebhooks(String apiKey, String domainName)
-	{
+	public static JSONObject getAllWebhooks(String apiKey, String domainName) {
 		JSONObject response = null;
 
-		try
-		{
-			   Client client = new Client();
-		       client.addFilter(new HTTPBasicAuthFilter(KEY,apiKey));
-		       WebResource webResource = client.resource("https://api.mailgun.net/v3/domains/" + domainName+ "/webhooks");
-		       
-		       //Getting all webhooks from Mailgun in Json Format
-		       ClientResponse clientResponse=webResource.get(ClientResponse.class);
-		       InputStream inputSrem = clientResponse.getEntityInputStream();
-			    
-			    BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputSrem, "UTF-8"));
-			    StringBuilder responseStrBuilder = new StringBuilder();
-			    
-			    String inputStr;
-			    while ((inputStr = streamReader.readLine()) != null)
-			           responseStrBuilder.append(inputStr);
+		try {
+			Client client = new Client();
+			client.addFilter(new HTTPBasicAuthFilter(KEY, apiKey));
+			WebResource webResource = client
+					.resource("https://api.mailgun.net/v3/domains/"
+							+ domainName + "/webhooks");
 
-			     JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
-		      
-			     return jsonObject;
-		}
-		catch (Exception e)
-		{
-			System.err.println("Exception occured while fetching all webhooks from Mailgun..." + e.getMessage());
+			// Getting all webhooks from Mailgun in Json Format
+			ClientResponse clientResponse = webResource
+					.get(ClientResponse.class);
+			InputStream inputSrem = clientResponse.getEntityInputStream();
+
+			BufferedReader streamReader = new BufferedReader(
+					new InputStreamReader(inputSrem, "UTF-8"));
+			StringBuilder responseStrBuilder = new StringBuilder();
+
+			String inputStr;
+			while ((inputStr = streamReader.readLine()) != null)
+				responseStrBuilder.append(inputStr);
+
+			JSONObject jsonObject = new JSONObject(
+					responseStrBuilder.toString());
+
+			return jsonObject;
+		} catch (Exception e) {
+			System.err
+					.println("Exception occured while fetching all webhooks from Mailgun..."
+							+ e.getMessage());
 			e.printStackTrace();
 		}
 
 		return response;
 	}
-	
-	public static void main(String asd[]) throws IOException, JSONException
-	{
-	  System.out.println(MailgunWebhookUtil.addWebhook("key-ca81c2c2b8f1ee11722c082c6f7fb287", "sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org"));
-		//java.net.URL rul=new java.net.URL("https://api.mailgun.net/v3/sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org/log");
-		//System.out.println(MailgunUtil.checkMailgunAutorization("key-ca81c2c2b8f1ee11722c082c6f7fb28", "sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org"));
+
+	public static void main(String asd[]) throws IOException, JSONException {
+		System.out.println(MailgunWebhookUtil.addWebhook(
+				"key-ca81c2c2b8f1ee11722c082c6f7fb287",
+				"sandboxc187f63f5f25412fbd8e5c1d757431b3.mailgun.org"));
+		
 	}
-	
 
 }

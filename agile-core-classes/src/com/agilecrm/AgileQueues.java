@@ -79,5 +79,8 @@ public class AgileQueues
 	
 	//Deals update to textsearch queue
 	public static final String DEALS_SCHEMA_CHANGE_QUEUE = "deals-schema-change-queue";
+	
+	//Email attachemnt queue for send an attachment
+	public static final String EMAIL_ATTACHEMNT_QUEUE = "email-attachment-queue";
 
 }
