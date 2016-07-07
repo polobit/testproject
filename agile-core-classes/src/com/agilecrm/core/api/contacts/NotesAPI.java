@@ -58,7 +58,7 @@ public class NotesAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Note saveNote(Note note)
     {
-	List<String> conIds = note.contact_ids;
+	List<String> conIds = note.getContact_ids();
     List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
     if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
     {
@@ -132,7 +132,7 @@ public class NotesAPI
 		}
     	
     }
-	List<String> conIds = note.contact_ids;
+	List<String> conIds = note.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
