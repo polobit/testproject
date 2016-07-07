@@ -509,11 +509,11 @@ var Base_Collection_View = Backbone.View
 				if (appendItemCallback && typeof (appendItemCallback) === "function")
 					appendItemCallback($(this.el));
 
-				if ($('table', this.el).hasClass('onlySorting'))
-					return;
-
+				if ($('table', this.el).length != 0){
+			
 				append_checkboxes(this.model_list_element);
 				//endFunctionTimer("appendItemOnAddEvent");
+				}
 			},
 
 			appendItemsOnAddEvent : function(modalsArray)
@@ -536,6 +536,10 @@ var Base_Collection_View = Backbone.View
 				});
 
 				$(this.model_list_element).append(this.model_list_element_fragment);
+
+				if ($('table').hasClass('onlySorting'))
+					return;
+
 				append_checkboxes(this.model_list_element);
 				var appendItemCallback = this.options.appendItemCallback;
 
