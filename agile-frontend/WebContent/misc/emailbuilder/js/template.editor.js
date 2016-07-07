@@ -293,6 +293,18 @@ function handleObjects() {
                             $('input.social-check[name=youtube]').prop('checked', false);
                         }
 
+                        if (self.find('a.instagram').is(":visible")) {
+                            $('input.social-check[name=instagram]').prop('checked', true);
+                        } else {
+                            $('input.social-check[name=instagram]').prop('checked', false);
+                        }
+
+                        if (self.find('a.pinterest').is(":visible")) {
+                            $('input.social-check[name=pinterest]').prop('checked', true);
+                        } else {
+                            $('input.social-check[name=pinterest]').prop('checked', false);
+                        }
+
 
                         $('input.social-input[name="facebook"]').val(self.find('a.facebook').attr('href'));
 
@@ -301,6 +313,10 @@ function handleObjects() {
                         $('input.social-input[name="linkedin"]').val(self.find('a.linkedin').attr('href'));
 
                         $('input.social-input[name="youtube"]').val(self.find('a.youtube').attr('href'));
+
+                        $('input.social-input[name="instagram"]').val(self.find('a.instagram').attr('href'));
+
+                        $('input.social-input[name="pinterest"]').val(self.find('a.pinterest').attr('href'));
 
                         hideAllSettings();
                         $('#social-links').show();
