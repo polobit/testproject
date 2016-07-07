@@ -1669,13 +1669,13 @@ public class PortletUtil {
     	         } */
 			if(campaignType.equalsIgnoreCase("All"))	 
 				 query  =  "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+ 
-									" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+									" FROM stats2.campaign_logs "+
 									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED', 'EMAIL_SPAM', 'EMAIL_SENDING_SKIPPED', 'EMAIL_HARD_BOUNCED', 'EMAIL_SOFT_BOUNCED')"+
 									" AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " +
 										 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
 			else
 				 query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
-									"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+									"FROM stats2.campaign_logs "+
 									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED', 'EMAIL_SPAM', 'EMAIL_SENDING_SKIPPED', 'EMAIL_HARD_BOUNCED', 'EMAIL_SOFT_BOUNCED')"+
 									"AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
 									"AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type " ;
