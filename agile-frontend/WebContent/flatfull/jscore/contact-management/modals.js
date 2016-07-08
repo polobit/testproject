@@ -58,7 +58,7 @@ $(function(){
 				$('.date_input', $(target)).attr("placeholder","Select Date");
 		    
 				$('.date_input', $(target)).datepicker({
-					format: CURRENT_USER_PREFS.dateFormat
+					format: CURRENT_USER_PREFS.dateFormat, autoclose: true
 				});
 
 				$('.contact_input', $('#companyModal')).each(function(){

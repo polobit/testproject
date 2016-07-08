@@ -8,7 +8,7 @@
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">You have no tasks for {{contactShortName}}.</h4>
                     <div class="text">
-                        You can add a task related to a contact for calling, email, follow-up etc.
+                        You can add a task related to a {{#isCompany}}companies{{else}}contacts{{/isCompany}}  for calling, email, follow-up etc.
                     </div>
                     <a href="#" class="btn blue btn-slate-action btn-default btn-sm contact-add-task m-t-xs"><i class="icon-plus-sign"></i>  Add Task</a>
                 </div>
@@ -69,7 +69,7 @@
 							<a  href="#contact/{{id}}" data="{{id}}" class="popover_contact text-capitalize">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a  href="#company/{{id}}" data="{{id}}" class="text-capitalize popover_contact">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
+        					<a  href="#company/{{id}}" data="{{id}}" class="text-info text-capitalize popover_contact">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		

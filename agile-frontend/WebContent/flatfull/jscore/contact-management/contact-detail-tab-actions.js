@@ -114,7 +114,7 @@ var contact_details_documentandtasks_actions = {
 			    	$('#color1', el).colorPicker();
 				}
 
-				var colorcode = "#808080";
+				var colorcode = "#FFFFFF";
 			    $('#color1' , el).attr('value', colorcode);
 			    $('.colorPicker-picker', el).css("background-color", colorcode); 
 			    // Disable color input field
@@ -177,7 +177,7 @@ var contact_details_documentandtasks_actions = {
 
 				// Enable the datepicker
 
-				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+				$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 
 				var json = null;

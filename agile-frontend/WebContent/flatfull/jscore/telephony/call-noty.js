@@ -320,6 +320,14 @@ function showBriaCallNoty(message){
 				console.log("contact or id not found to make popup..");
 				return;
 		}
+		if(globalCall.callDirection && globalCall.callDirection == "Incoming"){
+			if(!globalCallForActivity.answeredByTab){
+				closeCallNoty(true);
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+				return;
+			}
+		}
 
 		_getMessageBria(message);
 		ShowWidgetCallNoty(message);
@@ -343,6 +351,14 @@ function showSkypeCallNoty(message){
 			return;
 		}
 		
+		if(globalCall.callDirection && globalCall.callDirection == "Incoming"){
+			if(!globalCallForActivity.answeredByTab){
+				closeCallNoty(true);
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+				return;
+			}
+		}
 		_getMessageSkype(message);
 		ShowWidgetCallNoty(message);
 		return;
@@ -359,7 +375,9 @@ function showCallNotyMessage(message,type,position,timeout){
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var w = widgetName;
-	var c = contact;
+	//var c = contact;
+	var c = {};
+	$.extend(c,contact);
 	var s = status;
 	var n = number;
 	var arr = btns;
@@ -383,10 +401,20 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		}else if(widgetName == "bria" || widgetName == "skype"){
 			makeDraggableDialpad("bria-widgetdialpad",{},$('.noty_buttons'));
 		}
+		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(contact)){
+			$("#draggable_noty #call-noty-l2").find(".internal-col").prepend("<div id='' class='noty_call_callScript btn btn-sm btn-default p-xs'>CS</div>");
+			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
+		}
+		
 	}else if(s == "dialing"){
 		$("#draggable_noty .draggable_noty_notes").html("");
+		
 	}else if(s == "connecting" || s == "outgoing" || s == "ringing" || s == "incoming"){
 		$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
+		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(contact)){
+			$("#draggable_noty #call-noty-l2").find(".internal-col").prepend("<div id='' class='noty_call_callScript btn btn-sm btn-default p-xs'>CS</div>");
+			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
+		}
 	}
 	
 	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed"){

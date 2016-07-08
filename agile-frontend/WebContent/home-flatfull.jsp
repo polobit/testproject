@@ -673,7 +673,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </aside>
 <div class="app-content" id="agilecrm-container">
 <div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
-<div id="draggable_noty" style = "height:0px;position: absolute!important;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div></div>
+<div id="draggable_noty" style = "height:0px;position: absolute!important;"><div style="z-index: 10000;position: relative;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div><div class="draggable_noty_callScript" style="display:none;"></div></div></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
 <script type="text/javascript">
 // In mobile browsers, don't show animation bar
@@ -848,37 +848,45 @@ if(!HANDLEBARS_PRECOMPILATION){
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _agile_get_file_hash('js-all-min.js')+"_"}, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js'));
+
+head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-1.js' + "?_=" + _agile_get_file_hash('js-all-min-1.js')}, 
+		{'js-core-2': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-2.js' + "?_=" + _agile_get_file_hash('js-all-min-2.js')}, 
+		{'js-core-3': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-3.js' + "?_=" + _agile_get_file_hash('js-all-min-3.js')}, 
+		{'js-core-4': CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min-4.js' + "?_=" + _agile_get_file_hash('js-all-min-4.js')}, 
+		CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "contact-view.js" + "?_=" + _agile_get_file_hash('contact-view.js')], function(){
+			console.log("All files loaded. Now continuing with script");
+			try{
+				$('[data-toggle="tooltip"]').tooltip();  
+				//Code to display alerts of widgets.
+				showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+			} catch(e) {
+				//Do nothing
+			}
+			 
+			//Resting the variables.
+			<% session.removeAttribute("widgetMsgType");
+			session.removeAttribute("widgetMsg"); 
+			%>
+			
+			try{
+				var sig = CURRENT_USER_PREFS.signature;
+				sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+				CURRENT_USER_PREFS.signature = sig;
+			} catch(e) {
+				
+			}
+
+			//Turn off all animations if this is mobile
+			if( agile_is_mobile_browser() )
+			{
+				$("body")[0].addClass('disable-anim');
+			}
+	});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
-head.ready(["core"], function(){
-
-   try{
-      $('[data-toggle="tooltip"]').tooltip();  
-      //Code to display alerts of widgets.
-      showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
-   }catch(e){}
-	 
-	//Resting the variables.
-	<% session.removeAttribute("widgetMsgType");
-	   session.removeAttribute("widgetMsg"); 
-  %>
 	
-	try{
-      var sig = CURRENT_USER_PREFS.signature;
-      sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-      CURRENT_USER_PREFS.signature = sig;
-	}catch(e){}
+}); //End of head.ready() function. Check above.
 
-	//Turn off all animations if this is mobile
-	if( agile_is_mobile_browser() )
-	{
-		$("body")[0].addClass('disable-anim');
-	}
-	
-});
-
-});    
 function load_globalize()
 {
 

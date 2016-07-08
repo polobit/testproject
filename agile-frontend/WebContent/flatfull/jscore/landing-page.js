@@ -63,7 +63,9 @@ function initializeLandingPageListeners(pageId) {
 		e.preventDefault();
 		var triggeringElement = $(this).data("trigger");
     	var landingPageIframe = document.getElementById('landingPageBuilder').contentWindow;
-    	landingPageIframe.$(triggeringElement).trigger("click");
+    	if($('.lpPreviewView span').text()!=="Close"){
+    		landingPageIframe.$(triggeringElement).trigger("click");
+    	}    	
     	var deviceClass = $(this).data("deviceclass");
     	landingPageIframe.$("#preview-frame").removeClass("xs-width sm-width md-width full-width");
     	landingPageIframe.$("#preview-frame").addClass(deviceClass);

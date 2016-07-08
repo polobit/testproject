@@ -98,7 +98,7 @@ baseBuilderElements.push({
 	      '</dl>',
  	types: ['flow', 'sectioning root'],
  	validChildren: ['dt', 'dd'],
- 	category: 'typography',
+ 	category: 'components',
  	previewScale: '0.4',
 	scaleDragPreview: false,
     icon: 'menu-outline'
@@ -136,7 +136,7 @@ baseBuilderElements.push({
  	html: '<ul><li>List item #1</li><li>List item #2</li><li>List item #3</li><ul>',
  	types: ['flow'],
  	validChildren: ['li'],
- 	category: 'typography',
+ 	category: 'components',
     icon: 'th-list'
 });
 

@@ -449,12 +449,15 @@ public class CSVUtil
 			    if (addressField != null && addressField.value != null)
 			    {
 				addressJSON = new JSONObject(addressField.value);
-				addressJSON.put(field.value, csvValues[j]);
+				
+				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+				
 				addressField.value = addressJSON.toString();
 			    }
 			    else
 			    {
-				addressJSON.put(field.value, csvValues[j]);
+			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+			    
 				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 					field.type.toString()));
 			    }
@@ -516,6 +519,8 @@ public class CSVUtil
 		    }
 
 		    tempContact.properties.add(field);
+		    tempContact.source = "import" ;
+		    System.out.println("temp contact source is "+tempContact.source);
 
 		}// end of inner for loop
 
@@ -745,9 +750,14 @@ public class CSVUtil
 
 	// creates contacts by iterating contact properties
 
+   
+    
 	for (String[] csvValues : companies)
 	{
 
+		 // Set to hold the notes column positions so they can be created
+	    // after a contact is created.
+	    Set<Integer> notes_positions = new TreeSet<Integer>();
 	    Contact tempContact = new Contact();
 	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
 
@@ -783,6 +793,11 @@ public class CSVUtil
 
 		// Trims content of field to 490 characters. It should not
 		// be trimmed for notes
+		 if ("note".equals(field.name))
+		    {
+			notes_positions.add(j);
+			continue;
+		    }
 		csvValues[j] = checkAndTrimValue(csvValue);
 
 		if ("tags".equals(field.name))
@@ -827,12 +842,12 @@ public class CSVUtil
 			if (addressField != null && addressField.value != null)
 			{
 			    addressJSON = new JSONObject(addressField.value);
-			    addressJSON.put(field.value, csvValues[j]);
+			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
 			    addressField.value = addressJSON.toString();
 			}
 			else
 			{
-			    addressJSON.put(field.value, csvValues[j]);
+				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
 			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
 				    field.subtype.toString()));
 			}
@@ -948,6 +963,28 @@ public class CSVUtil
 		savedCompany++;
 	    }
 
+	    
+	    try
+	    {
+
+		// Creates notes, set CSV heading as subject and value as
+		// description.
+		for (Integer i : notes_positions)
+		{
+		    Note note = new Note();
+		    note.subject = headings[i];
+		    note.description = csvValues[i];
+		    note.addRelatedContacts(String.valueOf(tempContact.id));
+
+		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+		    note.save();
+		}
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("exception while saving contacts");
+		e.printStackTrace();
+	    }
 	}
 
 	buildCSVImportStatus(status, ImportStatus.TOTAL, companies.size());

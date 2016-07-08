@@ -397,7 +397,8 @@ function get_merge_field_objs()
 	//Return json if path isn't email-template
 	if(Current_Route.indexOf('emailbuilder-add') == -1 && 
 		Current_Route.indexOf('email-template-add') == -1 &&
-		Current_Route.indexOf('emailbuilder/') == -1)
+		Current_Route.indexOf('emailbuilder/') == -1 && 
+		Current_Route.indexOf('email-template/') == -1)
 		return json;
 
 	var ticket_merge_fields = {

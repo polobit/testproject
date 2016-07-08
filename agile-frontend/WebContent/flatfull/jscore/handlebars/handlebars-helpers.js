@@ -1131,6 +1131,8 @@ $(function()
 							element = "";
 							cls = "compactcontact";
 						}
+						if(element == "basic_info")
+							element = "Basic Info";
 					}
 			}
 
@@ -1397,6 +1399,25 @@ $(function()
 		
 		return options.inverse(this);
 	});
+
+
+	/*Handlebars.registerHelper('property_json_is_remote_addr', function(name, properties, options)
+	{
+
+        var value = getPropertyValue(properties, name);
+        if(!value)
+        {
+        	return options.inverse(this);
+        }
+        try{
+        	value = JSON.parse(value);
+        }catch(e){}
+
+		if (value && Object.keys(value) && Object.keys(value).length == 1 && value.remote_add!=undefined)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});*/
 
 	/**
 	 * returns online scheduling url of current user
@@ -1749,6 +1770,16 @@ $(function()
 		}
 	});
 
+	Handlebars.registerHelper('getCurrentCompanyProperty', function(value)
+	{
+		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties')
+			console.log(App_Companies.companyDetailView.model.toJSON());
+			return getPropertyValue(contact_properties, value);
+		}
+	});
+
 	Handlebars.registerHelper('safe_string', function(data)
 	{
 		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
@@ -1844,7 +1875,7 @@ $(function()
 
 	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && Current_Route.indexOf("contact/") == 0)
 		{
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
 			var currentContactEntity = getPropertyValue(contact_properties, key);
@@ -1863,6 +1894,29 @@ $(function()
 			}
 
 			if (currentContactEntity == contactEntity)
+				return options.fn(this);
+
+			return options.inverse(this)
+		}
+		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model && Current_Route.indexOf("company/") == 0)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties');
+			var currentContactEntity = getPropertyValue(contact_properties, key);
+			var contactEntity = getPropertyValue(properties, key);
+
+			if (!currentContactEntity || !contactEntity)
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Companies.companyDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
+			}
+
+			if (currentContactEntity && contactEntity && currentContactEntity.toLowerCase() == contactEntity.toLowerCase())
 				return options.fn(this);
 
 			return options.inverse(this)
@@ -4010,33 +4064,6 @@ $(function()
 		}
 	});
 
-	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
-	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-			var currentContactEntity = getPropertyValue(contact_properties, key);
-			var contactEntity = getPropertyValue(properties, key);
-
-			if (!currentContactEntity || !contactEntity)
-			{
-				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
-				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
-			}
-			
-			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
-			{
-				currentContactEntity = getPropertyValue(contact_properties, "name") ;
-				contactEntity = getPropertyValue(properties, "name");
-			}
-
-			if (currentContactEntity == contactEntity)
-				return options.fn(this);
-
-			return options.inverse(this)
-		}
-	});
-
 	Handlebars.registerHelper('containString', function(value, target, options)
 	{
 		if (target.search(value) != -1)
@@ -5947,6 +5974,8 @@ $(function()
 			portlet_name = "Visits";
 		else if(p_name=='Referralurl stats')
  			portlet_name = "Referral URL Stats";
+ 		else if (p_name == 'Lost Deal Analysis')
+			portlet_name = "Deals Lost by Reason";
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -6636,6 +6665,8 @@ $(function()
 							element = "";
 							cls = "compactcontact";
 						}
+						if(element == "basic_info")
+							element = "Basic Info";
 					}
 			}
 		else if(element == "url")
@@ -7274,7 +7305,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 	{
 		var options_el = "";
 		if(type == 'portlet'){
-			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing Dashboard</option>"; 
+			options_el +="<option value='MarketingDashboard' lass='user-dashboard' title='Marketing Dashboard'>Marketing</option>"
+						+ "<option value='SalesDashboard' class='user-dashboard' title='Sales Dashboard'>Sales</option>"; 
 		}
 		if(CURRENT_USER_DASHBOARDS)
 		{
@@ -7337,7 +7369,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
-						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
+						options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
+						options_el += "<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales </a></li>";					
 						options_el += "<li class='divider'></li>";
 						options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
 					}
@@ -7349,7 +7382,8 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
 				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>Dashboard</a></li>";
-				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing Dashboard</a></li>";
+				options_el += "<li><a id='MarketingDashboard' title='Marketing Dashboard' class='user-defined-dashboard' href='#'>Marketing</a></li>";
+				options_el += "<li><a id='SalesDashboard' title='Sales Dashboard' class='user-defined-dashboard' href='#'>Sales</a></li>";
 				options_el += "<li class='divider'></li>";	
 				options_el += "<li><a id='dashboards' href='#dashboards'>Manage Dashboards</a></li>";
 			}			

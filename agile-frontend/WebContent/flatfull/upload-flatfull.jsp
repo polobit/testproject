@@ -127,10 +127,6 @@ function isValid(){
 
 		});
 
-function agile_is_mobile_browser(){
-   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-   }
-
 (function()
  	{
  		if(agile_is_mobile_browser()){

@@ -32,10 +32,6 @@ var Helpcenter_Util = {
 		App_Helpcenter.searchArticle($('#hc_query').val());
 	}
 };
-function append_checkboxes()
-{
-	return;
-}
 
 function showTransitionBar()
 {

@@ -1083,7 +1083,7 @@ class="icon-plus"></i> <span >Add</span></a>
 </div>				
 				<!--  starting section 5 -->		
 	
-<div class="wrapper p-b-s" id="contacts-type-custom-fields" style="padding-top:10px;"></div>	
+<div class="wrapper p-b-s hidden" id="contacts-type-custom-fields" style="padding-top:10px;  padding-bottom: 5px;"></div>	
 		
 
 			 {{#property_is_exists "phone" properties}}
@@ -1345,6 +1345,7 @@ class="icon-plus"></i> <span >Add</span></a>
 				
 									
 				{{#property_json_is_not_empty "address" properties}}
+				
 				 <div class=" wrapper hidden-sm hidden-xs" style="padding-top:0px;">
   						<div class="panel panel-default m-b-none">
     						<div class="panel-body">
@@ -1363,7 +1364,8 @@ class="icon-plus"></i> <span >Add</span></a>
                                      </div>   
                                      </div>
 									 </div>
-									 </div>                                     
+									  </div>
+                              
                                      {{/property_json_is_not_empty}}
                                       
 									{{/property_is_exists}}
@@ -1372,8 +1374,6 @@ class="icon-plus"></i> <span >Add</span></a>
 
 							<div class="clearfix"></div>
                             </div>	
-
-	
                   
 							
 				<!-- ending section 5 -->	

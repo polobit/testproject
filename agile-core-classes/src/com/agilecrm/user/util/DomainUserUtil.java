@@ -21,6 +21,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessScopes;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterable;
@@ -224,7 +225,7 @@ public class DomainUserUtil
 
 	try
 	{
-	    List<DomainUser> domainUsers = dao.listByProperty("domain", domain);
+	    List<DomainUser> domainUsers = (VersioningUtil.isDevelopmentEnv()) ? dao.fetchAll() : dao.listByProperty("domain", domain);
 
 	    // Now sort by name.
 	    Collections.sort(domainUsers, new Comparator<DomainUser>()
@@ -804,6 +805,33 @@ public class DomainUserUtil
 	    searchMap.put("domain", domain);
 
 	    return dao.listByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting admin users..." + e.getMessage());
+	    return null;
+	}
+	finally
+	{
+
+	    NamespaceManager.set(oldnamespace);
+	}
+    }
+    
+    public static List<Key<DomainUser>> getAllAdminUsersKeys(String domain)
+    {
+	String oldnamespace = NamespaceManager.get();
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("is_admin", true);
+	    searchMap.put("domain", domain);
+
+	    return dao.listKeysByProperty(searchMap);
 	}
 	catch (Exception e)
 	{

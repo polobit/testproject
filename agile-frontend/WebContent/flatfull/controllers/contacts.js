@@ -112,8 +112,14 @@ var ContactsRouter = Backbone.Router.extend({
 		if(dashboard_name==="MarketingDashboard"){
 
 			dashboardJSON["id"] = "MarketingDashboard";
-			dashboardJSON["name"] = "Marketing Dashboard";
+			dashboardJSON["name"] = "Marketing";
 			dashboardJSON["description"] = "Welcome to Agile CRM Marketing Automation.";
+
+		}else if(dashboard_name == "SalesDashboard"){
+
+			dashboardJSON["id"] = "SalesDashboard";
+			dashboardJSON["name"] = "Sales";
+			dashboardJSON["description"] = "Welcome to Agile CRM Sales Dashboard.";
 
 		}else if(!dashboardJSON["id"])
 		{
@@ -1288,7 +1294,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					// Add placeholder and date picker to date custom fields
 					$('.date_input').attr("placeholder", "Select Date");
 
-					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
 					// To set typeahead for tags
 					setup_tags_typeahead();
@@ -1631,6 +1637,14 @@ function addTypeCustomData(contactId, el){
 								
 							}
 						});
-	customFieldsView.collection.fetch();
+	customFieldsView.collection.fetch({
+
+		success : function(data){
+			if(data.length){
+				$('#contacts-type-custom-fields' , el).removeClass('hidden');
+			}
+		}
+	});
 	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
+	
 }

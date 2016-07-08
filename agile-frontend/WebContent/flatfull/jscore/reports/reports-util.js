@@ -83,7 +83,7 @@ load_contacts : function(el)
 
 	}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
-	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 	{
 		scramble_input_names($(el).find('div#report-settings'));
 		chainFiltersForContact(el, undefined, function()

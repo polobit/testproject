@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
+import com.agilecrm.util.CountryUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -86,6 +90,9 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				
 				for (Contact contact : contacts_list)
 				{
+					//Updates old contact countries with country code
+					updateCountry(contact);
+					
 					contact.updated_time = System.currentTimeMillis() / 1000;
 					//builderObjects.add(contactDocuments.buildDocument(contact));
 					try {
@@ -190,6 +197,43 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			e.printStackTrace();
 		} finally {
 			NamespaceManager.set(domain);
+		}
+	}
+	
+	private void updateCountry(Contact contact)
+	{
+		List<ContactField> contactFieldsList = contact.properties;
+		if(contactFieldsList != null)
+		{
+			for(ContactField conField : contactFieldsList)
+			{
+				if (Contact.ADDRESS.equals(conField.name))
+				{
+				    ContactField addressField = contact.getContactField(contact.ADDRESS);
+				    try
+				    {
+						if (addressField != null && addressField.value != null)
+						{
+							JSONObject  addressJSON = new JSONObject(addressField.value);
+							if(addressJSON != null && addressJSON.has("country"))
+							{
+								String contactCountry = addressJSON.getString("country");
+								CountryUtil.setCountryCode(addressJSON, null, contactCountry);
+							}
+						    addressField.value = addressJSON.toString();
+						}
+				    }
+				    catch (JSONException e)
+				    {
+				    	e.printStackTrace();
+				    }
+				    catch (Exception e)
+				    {
+				    	e.printStackTrace();
+				    }
+				    break;
+				}
+			}
 		}
 	}
 }

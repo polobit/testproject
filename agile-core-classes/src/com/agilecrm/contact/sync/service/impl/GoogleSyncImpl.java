@@ -17,6 +17,7 @@ import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.TwoWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.GoogleContactWrapperImpl;
+import com.agilecrm.contact.util.ContactUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.contacts.ContactsService;
@@ -355,7 +356,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		continue;
 	    }
 
-	   wrapContactToAgileSchemaAndSave(entry);
+	    			wrapContactToAgileSchemaAndSave(entry);
+	    
+	    
 	}
 
 	System.out.println(NamespaceManager.get() + " , " + etag + " , " + index + " , "

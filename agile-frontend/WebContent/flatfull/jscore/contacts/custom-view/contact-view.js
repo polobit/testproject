@@ -98,7 +98,13 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 							}, null);
 						}
 						else if(isContactTypeCustomField(customContactfields,property)){
-							var contactIdsJSON = JSON.parse(property.value);
+							var contactIdsJSON =  [];
+							try{ 
+								contactIdsJSON = JSON.parse(property.value);
+							}catch(err){
+								console.log("no contact ids found");
+								console.log(err.message);
+							}
 							var referenceContactIds = "";
 							$.each(contactIdsJSON, function(index, val){
 								referenceContactIds += val+",";
@@ -136,7 +142,13 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 							});
 						}
 						else if(isCompanyTypeCustomField(customCompanyfields,property)){
-							var contactIdsJSON = JSON.parse(property.value);
+							var contactIdsJSON =  [];
+							try{ 
+								contactIdsJSON = JSON.parse(property.value);
+							}catch(err){
+								console.log("no contact ids found");
+								console.log(err.message);
+							}
 							var referenceContactIds = "";
 							$.each(contactIdsJSON, function(index, val){
 								referenceContactIds += val+",";

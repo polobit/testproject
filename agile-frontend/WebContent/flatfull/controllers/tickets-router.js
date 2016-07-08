@@ -11,6 +11,7 @@
 		"tickets/filter/:id" : "ticketsByFilter",
 		"tickets/filter/:id/ticket/:id" : "ticketDetailsByFilter",
 
+		/*Ticket details*/
 		"ticket/:id" : "ticketDetails",
 
 		/* Ticket bulk actions*/
@@ -603,7 +604,7 @@
 	 				window : "ticket-views",
 	 				postRenderCallback : function(el) {
 
-	 					head.js('lib/agile.jquery.chained.min.js', function()
+	 					head.js('lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 	 					{
 	 						Ticket_Filters.initChaining(el);
 	 					});
@@ -643,7 +644,7 @@
 	 				window : "ticket-views",
 	 				postRenderCallback : function(el, data) {
 
-	 					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+	 					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js?_='+_agile_get_file_hash("agile.jquery.chained.min.js"), function()
 	 					{
 	 						Ticket_Filters.initChaining(el, data);
 	 					});

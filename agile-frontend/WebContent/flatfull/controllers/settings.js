@@ -42,7 +42,8 @@ var SettingsRouter = Backbone.Router
 			"gmail/:id" : "gmailShare",
 
 			/* Email templates */
-			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
+			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
+			"email-template/:id" : "emailTemplateEdit",
 
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",

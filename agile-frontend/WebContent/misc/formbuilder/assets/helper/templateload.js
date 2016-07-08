@@ -15,7 +15,7 @@ define([
 				saveform = JSON.parse(data.formJson);
 				console.log(saveform);
 				saveform[0].fields.agiledomain.value = window.location.hostname.split('.')[0];
-				saveform[0].fields.agileapi.value = api.api_key;
+				saveform[0].fields.agileapi.value = api.js_api_key;
 				console.log(saveform);
 				
 				//Loads form view in form.jsp page

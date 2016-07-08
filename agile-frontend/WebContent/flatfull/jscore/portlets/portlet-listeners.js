@@ -954,7 +954,7 @@ $('.portlet_body')
 				_agile_delete_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 				loadPortlets("DashBoard", $('#content'));
 		    }
-		    else if(id=="MarketingDashboard"){
+		    else if(id=="MarketingDashboard" || id == "SalesDashboard"){
 				e.preventDefault();
 				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
 				gridster = undefined;
@@ -985,6 +985,10 @@ $('.portlet_body')
 		    	$('#dashboard-desc').text("Welcome to Agile CRM Marketing Automation.");
 		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Marketing Automation.");
 		    }
+		    if(id == "SalesDashboard"){
+		    	$('#dashboard-desc').text("Welcome to Agile CRM Sales Dashboard.");
+		    	$('#dashboard-desc').attr("title", "Welcome to Agile CRM Sales Dashboard.");
+		    }
 		    if(id == "Dashboard")
 		    {
 		    	$('#dashboard-desc').text("Welcome to Agile CRM");
@@ -1013,7 +1017,7 @@ $('.portlet_body')
 	
 			}
         else{
-			var eventDate = $('#start_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+			var eventDate = $('#start_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
 		{
 			// If event start date is changed and end date is less than start date,
 			// change the value of the end date to start date.
@@ -1031,7 +1035,7 @@ $('.portlet_body')
 		});
 
 
-		$('#end_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#end_date',el).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 			}
 		}
 		else

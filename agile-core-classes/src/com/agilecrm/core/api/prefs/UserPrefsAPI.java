@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -62,28 +64,28 @@ public class UserPrefsAPI
 		{
 			// Get UserPrefs of user who is logged in
 			UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+		    userPrefs.name = prefs.name;
+		    userPrefs.pic = prefs.pic;
+		    userPrefs.signature = prefs.signature;
+		    userPrefs.template = prefs.template;
+		    userPrefs.width = prefs.width;
+		    userPrefs.task_reminder = prefs.task_reminder;
+		    userPrefs.event_reminder = prefs.event_reminder;
+		    userPrefs.dateFormat = prefs.dateFormat;
+		    userPrefs.timezone = prefs.timezone;
+		    userPrefs.currency = prefs.currency;
+		    userPrefs.keyboard_shotcuts = prefs.keyboard_shotcuts;
+		    userPrefs.calendar_wk_start_day = prefs.calendar_wk_start_day;
+	
+				userPrefs.save();
+				return userPrefs;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
 
-	    userPrefs.name = prefs.name;
-	    userPrefs.pic = prefs.pic;
-	    userPrefs.signature = prefs.signature;
-	    userPrefs.template = prefs.template;
-	    userPrefs.width = prefs.width;
-	    userPrefs.task_reminder = prefs.task_reminder;
-	    userPrefs.event_reminder = prefs.event_reminder;
-	    userPrefs.dateFormat = prefs.dateFormat;
-	    userPrefs.timezone = prefs.timezone;
-	    userPrefs.currency = prefs.currency;
-	    userPrefs.keyboard_shotcuts = prefs.keyboard_shotcuts;
-	    userPrefs.calendar_wk_start_day = prefs.calendar_wk_start_day;
-
-			userPrefs.save();
-			return userPrefs;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
 	}
 
 	/**

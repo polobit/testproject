@@ -1394,7 +1394,8 @@ var Tickets = {
 		{
 			$('#ticket_change_sla', el).datepicker({ 
 				drops: "down", 
-				dateFormat : CURRENT_USER_PREFS.dateFormat
+				dateFormat : CURRENT_USER_PREFS.dateFormat,
+				autoclose: true
 			}).on('changeDate', function(ev)
 			{
 				//to get the time value 
