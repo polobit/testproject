@@ -117,7 +117,7 @@ public class UpdateDealsOfDomainDeferredTask implements DeferredTask
 						builderObjects.clear();
 					}*/
 				}
-				Opportunity.dao.putAll(deals_list);
+				//Opportunity.dao.putAll(deals_list);
 
 				if(builderObjects.size() > 0) {
 					search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
