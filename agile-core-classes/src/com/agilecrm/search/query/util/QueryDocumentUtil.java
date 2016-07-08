@@ -143,7 +143,7 @@ public class QueryDocumentUtil {
 					 * Build query by passing condition old query and new query
 					 */
 					// double quotes for exact match of value.
-					if ("tags".equals(lhs)) {
+					if ("tags".equals(lhs) || "milestone".equals(lhs)) {
 						value = SearchUtil.normalizeTag(value);
 					} else {
 						value = SearchUtil.normalizeString(value);
@@ -154,7 +154,7 @@ public class QueryDocumentUtil {
 						|| condition.equals(SearchRule.RuleCondition.CONTAINS)) {
 					query = buildNestedCondition(joinCondition, query, newQuery);
 				} else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS)) {
-					if ("tags".equals(lhs)) {
+					if ("tags".equals(lhs) || "milestone".equals(lhs)) {
 						value = SearchUtil.normalizeTag(value);
 					} else {
 						value = SearchUtil.normalizeString(value);

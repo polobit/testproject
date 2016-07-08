@@ -150,7 +150,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 			webrulePreview: function(e){
 				e.preventDefault();
 				var that = $(e.currentTarget);
-				_agile_require_js("https://s3.amazonaws.com/agilecrm/web-rules-static/agile-webrules-min.js", function(){
+				_agile_require_js("https://s3.amazonaws.com/agilecrm/web-rules-static/agile-webrules-min-26-4.js", function(){
 
 					// Serializes webrule action to show preview
 					var action = serializeChainedElement($(that).closest('table'));
