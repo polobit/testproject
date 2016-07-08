@@ -37,7 +37,7 @@ pageEncoding="UTF-8"%>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Helpcenter | Agile CRM</title>
+<title>Knowledge Base</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -192,7 +192,7 @@ var IS_FLUIDd = <%=is_fluidd %>
 
 var HANDLEBARS_LIBd = LOCAL_SERVERd ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
-head.load(LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSIONd, function(){
+head.load(LIB_PATHd + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSIONd, function(){
         load_globalize();
 });
 
@@ -220,7 +220,7 @@ $('body').css('background-image', 'none');
 
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATHd +'helpcenter-all-min.js' + "?_=" + _AGILE_VERSIONd});
+head.js({"core" :   CLOUDFRONT_PATHd + 'jscore/min/' + FLAT_FULL_PATHd +'helpcenter-all-min.js' + "?_=" + _AGILE_VERSIONd});
 
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSIONd});
 head.ready(["core"], function(){

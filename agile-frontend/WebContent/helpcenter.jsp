@@ -42,15 +42,13 @@
 
 <%@page	import="com.agilecrm.db.ObjectifyGenericDao"%>
 <%@page	import="com.agilecrm.account.APIKey"%>
-
-  // Download the template the user likes
   
   <%
   Long  landingpageid = new LandingPageKnowledgebase().getkbLandingpageid() ;
 
-	if(landingpageid == null)%>
+	if(landingpageid == null){%>
 		<%@ include file="/knowledgebase.jsp"%>
-	
+	<%}%> 
 	
 	<% System.out.println(landingpageid + "test");
 

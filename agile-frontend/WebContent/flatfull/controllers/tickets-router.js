@@ -1039,10 +1039,7 @@
 											var kblpid =_agile_get_prefs("kbid");
 											$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
 											$('#template_id',el).data('id',kb_id);
-											if(kblpid != ''){
-												$(".access_kb",el).removeAttr('disabled');
-												
-											}													
+																							
 								}, optionTemplate, false, el,"Select Landing Page");
 										
 							$('#template_id',el).on('change', function (e) {
@@ -1060,7 +1057,6 @@
 										$('#template_id',el).data('id','')
 									}
 								});									
-									$(".access_kb",el).attr('disabled','disabled');
 									_agile_set_prefs('kbid','');
 									return;
 								}
@@ -1075,7 +1071,7 @@
 									type = "PUT";
 									kblp_json.id = $('#template_id',el).data('id') ;
 								}	
-								$(".access_kb",el).removeAttr('disabled');
+								
 								$.ajax({ 
 									type : type, 
 									url : '/core/api/knowledgebase/KBlandingpage', 
